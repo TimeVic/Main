@@ -1,0 +1,45 @@
+# PHP
+# Test and package your PHP project.
+# Add steps that run tests, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/php
+
+trigger:
+  - master
+  - dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Testing'
+  Environment: 'Testing'
+
+steps:
+  - task: DockerCompose@0
+    displayName: "Run a Docker Compose command"
+    inputs:
+      dockerComposeFile: "devops/test/docker-compose.yml"
+      dockerComposeCommand: "up --abort-on-container-exit"
+
+  - task: PublishTestResults@2
+    displayName: "Publish Test Results"
+    inputs:
+      testResultsFormat: VSTest
+      testResultsFiles: "/opt/vsts/work/_temp/*.trx"
+      mergeTestResults: true
+      failTaskOnFailedTests: true
+
+  - task: DotNetCoreCLI@2
+    displayName: Unit Tests
+    inputs:
+      command: test
+      projects: '**OffLogs.Api.Tests.Unit/*.csproj'
+      arguments: '--logger --configuration $(buildConfiguration) --verbosity=normal'
+
+  - task: PublishTestResults@2
+    displayName: "Publish Test Results"
+    inputs:
+      testResultsFormat: xUnit
+      testResultsFiles: "**OffLogs.Api.Tests.Unit/*.xml"
+      mergeTestResults: true
+      failTaskOnFailedTests: true
