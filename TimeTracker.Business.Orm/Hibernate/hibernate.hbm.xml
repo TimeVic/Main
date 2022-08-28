@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
+
+    <!-- an ISessionFactory instance -->
+    <session-factory>
+        <!-- properties -->
+        <property name="dialect">NHibernate.Dialect.PostgreSQL83Dialect</property>
+        <property name="query.substitutions">true=1, false=0</property>
+
+        <!-- mapping files -->
+      <!-- <mapping assembly="OffLogs.Business" /> -->
+    </session-factory>
+</hibernate-configuration>
