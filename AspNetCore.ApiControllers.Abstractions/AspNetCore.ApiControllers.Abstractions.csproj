@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Api.Requests.Abstractions\Api.Requests.Abstractions.csproj" />
+      <ProjectReference Include="..\Persistence.Transactions.Behaviors\Persistence.Transactions.Behaviors.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    </ItemGroup>
+
+</Project>
