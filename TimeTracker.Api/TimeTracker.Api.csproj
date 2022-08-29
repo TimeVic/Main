@@ -7,8 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TimeTracker.Business.Common\TimeTracker.Business.Common.csproj" />
-      <ProjectReference Include="..\TimeTracker.Business\TimeTracker.Business.csproj" />
+        <ProjectReference Include="..\Api.Requests.Abstractions\Api.Requests.Abstractions.csproj" />
+        <ProjectReference Include="..\AspNetCore.ApiControllers.Abstractions\AspNetCore.ApiControllers.Abstractions.csproj" />
+        <ProjectReference Include="..\Persistence.Transactions.Behaviors\Persistence.Transactions.Behaviors.csproj" />
+        <ProjectReference Include="..\TimeTracker.Business.Common\TimeTracker.Business.Common.csproj" />
+        <ProjectReference Include="..\TimeTracker.Business\TimeTracker.Business.csproj" />
+        <InternalsVisibleTo Include="TimeTracker.Tests.Integration.Api" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Controllers\Public" />
     </ItemGroup>
 
 </Project>
