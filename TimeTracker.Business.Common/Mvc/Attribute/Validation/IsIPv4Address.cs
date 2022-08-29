@@ -40,7 +40,6 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
                     }
 
                 }
-
                 return ValidationResult.Success;
             }
 
