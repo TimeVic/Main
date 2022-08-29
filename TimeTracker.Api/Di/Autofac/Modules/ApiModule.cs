@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using Api.Requests.Abstractions;
+using Autofac;
 
 namespace TimeTracker.Api.Di.Autofac.Modules
 {
@@ -10,31 +11,31 @@ namespace TimeTracker.Api.Di.Autofac.Modules
             //     .RegisterType<RequestService>()
             //     .As<IRequestService>()
             //     .InstancePerLifetimeScope();
-            //
-            // builder
-            //     .RegisterType<HttpContextAccessor>()
-            //     .As<IHttpContextAccessor>()
-            //     .InstancePerLifetimeScope();
-            //
-            // builder
-            //     .RegisterAssemblyTypes(typeof(ApiAssemblyMarker).Assembly)
-            //     .AsClosedTypesOf(typeof(IAsyncRequestHandler<>))
-            //     .InstancePerDependency();
-            //
-            // builder
-            //     .RegisterAssemblyTypes(typeof(ApiAssemblyMarker).Assembly)
-            //     .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>))
-            //     .InstancePerDependency();
-            //
-            // builder
-            //     .RegisterType<ScopedAsyncRequestHandlerFactory>()
-            //     .As<IAsyncRequestHandlerFactory>()
-            //     .InstancePerLifetimeScope();
-            //
-            // builder
-            //     .RegisterType<DefaultAsyncRequestBuilder>()
-            //     .As<IAsyncRequestBuilder>()
-            //     .InstancePerLifetimeScope();
+            
+            builder
+                .RegisterType<HttpContextAccessor>()
+                .As<IHttpContextAccessor>()
+                .InstancePerLifetimeScope();
+            
+            builder
+                .RegisterAssemblyTypes(typeof(ApiAssemblyMarker).Assembly)
+                .AsClosedTypesOf(typeof(IAsyncRequestHandler<>))
+                .InstancePerDependency();
+            
+            builder
+                .RegisterAssemblyTypes(typeof(ApiAssemblyMarker).Assembly)
+                .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>))
+                .InstancePerDependency();
+            
+            builder
+                .RegisterType<ScopedAsyncRequestHandlerFactory>()
+                .As<IAsyncRequestHandlerFactory>()
+                .InstancePerLifetimeScope();
+            
+            builder
+                .RegisterType<DefaultAsyncRequestBuilder>()
+                .As<IAsyncRequestBuilder>()
+                .InstancePerLifetimeScope();
         }
     }
 }

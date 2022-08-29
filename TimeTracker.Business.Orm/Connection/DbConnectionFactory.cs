@@ -10,7 +10,7 @@ namespace TimeTracker.Business.Orm.Connection
 {
     public class DbConnectionFactory : IDbConnectionFactory
     {
-        private readonly string _dbNamespace = "OffLogs.Business.Orm.Hibernate";
+        private readonly string _dbNamespace = "TimeTracker.Business.Orm.Hibernate";
         private readonly IConfiguration _configuration;
         private ISessionFactory? _sessionFactory = null;
 

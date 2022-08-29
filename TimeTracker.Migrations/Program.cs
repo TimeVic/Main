@@ -44,7 +44,7 @@ namespace TimeTracker.Migrations
                 from t in Assembly.GetExecutingAssembly().GetTypes()
                 where t.IsClass 
                     && t.Namespace != null 
-                    && t.Namespace.Contains("OffLogs.Migrations")
+                    && t.Namespace.Contains("TimeTracker.Migrations")
                 select t.Assembly
             );
 

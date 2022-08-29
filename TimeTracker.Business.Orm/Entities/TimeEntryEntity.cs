@@ -28,7 +28,7 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual DateTime StartTime { get; set; }
         
         [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "start_time", SqlType = "datetime", NotNull = false)]
+        [Column(Name = "end_time", SqlType = "datetime", NotNull = false)]
         public virtual DateTime? EndTime { get; set; }
         
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
@@ -50,7 +50,7 @@ namespace TimeTracker.Business.Orm.Entities
         
         [ManyToOne(
             ClassType = typeof(ProjectEntity), 
-            Column = "workspace_id", 
+            Column = "project_id", 
             Lazy = Laziness.False,
             Fetch = FetchMode.Join,
             Cascade = "none"

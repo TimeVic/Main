@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TimeTracker.Api\TimeTracker.Api.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Orm\TimeTracker.Business.Orm.csproj" />
     </ItemGroup>
 
 </Project>
