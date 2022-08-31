@@ -39,6 +39,18 @@ public class QueueDao: IQueueDao
         await _session.SaveAsync(queueItem, cancellationToken);
     }
     
+    public async Task<QueueEntity?> GetById(
+        long id,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var query = _session.Query<QueueEntity>()
+            .Where(item => item.Id == id);
+        return await query
+            .OrderBy(item => item.CreateTime)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+    }
+    
     public async Task<QueueEntity?> GetTop(
         QueueChannel? channel = null,
         CancellationToken cancellationToken = default
@@ -80,6 +92,11 @@ public class QueueDao: IQueueDao
         CancellationToken cancellationToken = default
     )
     {
+        if (item.Status != QueueStatus.InProcess)
+        {
+            throw new Exception("This item already processed");
+        }
+
         if (string.IsNullOrEmpty(error))
         {
             item.Status = QueueStatus.Success;

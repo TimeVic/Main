@@ -6,6 +6,11 @@ namespace TimeTracker.Business.Orm.Dao;
 
 public interface IQueueDao: IScopedDomainService, IDisposable
 {
+    Task<QueueEntity?> GetById(
+        long id,
+        CancellationToken cancellationToken = default
+    );
+    
     Task Push<T>(
         T context,
         QueueChannel channel = QueueChannel.Default,
@@ -13,4 +18,10 @@ public interface IQueueDao: IScopedDomainService, IDisposable
     ) where T: struct;
 
     Task<QueueEntity?> GetTop(QueueChannel? channel = null, CancellationToken cancellationToken = default);
+
+    Task MarkAsProcessed(
+        QueueEntity item,
+        string? error = null,
+        CancellationToken cancellationToken = default
+    );
 }
