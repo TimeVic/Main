@@ -12,7 +12,7 @@ public class BaseTest: IDisposable
 {
     protected readonly IDbSessionProvider DbSessionProvider;
     private readonly IContainer _serviceProvider;
-    private readonly ILifetimeScope _scope;
+    protected readonly ILifetimeScope Scope;
 
     public BaseTest()
     {
@@ -27,14 +27,14 @@ public class BaseTest: IDisposable
         
         builder.RegisterAssemblyModules(typeof(BusinessAssemblyMarker).Assembly);
         _serviceProvider = builder.Build();
-        _scope = _serviceProvider.BeginLifetimeScope();
+        Scope = _serviceProvider.BeginLifetimeScope();
         
-        DbSessionProvider = _scope.Resolve<IDbSessionProvider>();
+        DbSessionProvider = Scope.Resolve<IDbSessionProvider>();
     }
 
     public void Dispose()
     {
-        _scope.Dispose();
+        Scope.Dispose();
         _serviceProvider.Dispose();
     }
 }

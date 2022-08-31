@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Autofac" Version="6.4.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
       <PackageReference Include="NHibernate" Version="5.3.12" />
@@ -21,7 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Dao" />
       <Folder Include="Hibernate\Queries" />
     </ItemGroup>
 
