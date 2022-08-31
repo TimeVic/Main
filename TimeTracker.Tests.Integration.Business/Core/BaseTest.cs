@@ -30,11 +30,10 @@ public class BaseTest: IDisposable
             .ReadFrom.Configuration(configuration);
         builder.RegisterSerilog(serilogConfiguration);
         
-        builder.RegisterAssemblyModules(new []
-        {
+        builder.RegisterAssemblyModules(
             typeof(BusinessAssemblyMarker).Assembly,
             typeof(BusinessTestingAssemblyMarker).Assembly
-        });
+        );
         
         // Register fackers
         builder.RegisterType<FakeEmailSendingService>()
@@ -48,6 +47,12 @@ public class BaseTest: IDisposable
         EmailSendingService = Scope.Resolve<IEmailSendingService>() as FakeEmailSendingService;
     }
 
+    protected async Task CommitDbChanges()
+    { 
+        await DbSessionProvider.PerformCommitAsync();
+        DbSessionProvider.CurrentSession.Clear();
+    }
+    
     public void Dispose()
     {
         Scope.Dispose();

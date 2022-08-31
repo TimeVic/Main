@@ -25,5 +25,8 @@ public class CreatePendingUserTest: BaseTest
         
         var user = await _userDao.CreatePendingUser(fakeUser.Email);
         Assert.True(user.Id > 0);
+        Assert.NotEmpty(user.VerificationToken);
+        Assert.NotEmpty(user.Email);
+        Assert.Null(user.VerificationTime);
     }
 }

@@ -32,6 +32,7 @@ public class UserDao: IUserDao
     {
         var user = new UserEntity
         {
+            UserName = "",
             Email = email.Trim().ToLower(),
             VerificationToken = SecurityUtil.GetRandomString(32),
             PasswordHash = new byte[] {},
