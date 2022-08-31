@@ -10,12 +10,12 @@ public interface IQueueDao: IScopedDomainService, IDisposable
         long id,
         CancellationToken cancellationToken = default
     );
-    
-    Task Push<T>(
-        T context,
+
+    Task Push(
+        object context,
         QueueChannel channel = QueueChannel.Default,
         CancellationToken cancellationToken = default
-    ) where T: struct;
+    );
 
     Task<QueueEntity?> GetTop(QueueChannel? channel = null, CancellationToken cancellationToken = default);
 

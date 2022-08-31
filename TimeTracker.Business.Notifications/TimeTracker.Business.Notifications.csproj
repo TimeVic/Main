@@ -25,4 +25,13 @@
       <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Templates\Emails\en\_EmailLayout.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\_EmailLayout.htm" />
+      <None Remove="Templates\Emails\en\EmailVerificationNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\EmailVerificationNotification.htm" />
+      <None Remove="Templates\Emails\en\TestNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\TestNotification.htm" />
+    </ItemGroup>
+
 </Project>

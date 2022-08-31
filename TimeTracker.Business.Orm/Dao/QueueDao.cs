@@ -19,11 +19,11 @@ public class QueueDao: IQueueDao
         _session = sessionProvider.CreateSession();
     }
 
-    public async Task Push<T>(
-        T context,
+    public async Task Push(
+        object context,
         QueueChannel channel = QueueChannel.Default,
         CancellationToken cancellationToken = default
-    ) where T: struct
+    )
     {
         var contextType = context.GetType();
         var typeString = string.Join(".", contextType.Namespace, contextType.Name);
