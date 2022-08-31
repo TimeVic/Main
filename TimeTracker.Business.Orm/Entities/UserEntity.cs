@@ -11,7 +11,7 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "id", SqlType = "bigint", NotNull = true)]
         public virtual long Id { get; set; }
         
-        [Property(NotNull = true)]
+        [Property(NotNull = false)]
         [Column(Name = "user_name", Length = 200, NotNull = false)]
         public virtual string UserName { get; set; }
         

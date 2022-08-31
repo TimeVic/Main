@@ -27,6 +27,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Persistence.Transactions.Behaviors\Persistence.Transactions.Behaviors.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Testing\TimeTracker.Business.Testing.csproj" />
       <ProjectReference Include="..\TimeTracker.Business\TimeTracker.Business.csproj" />
     </ItemGroup>
 

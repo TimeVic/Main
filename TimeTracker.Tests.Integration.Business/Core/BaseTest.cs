@@ -6,6 +6,7 @@ using Serilog.Extensions.Autofac.DependencyInjection;
 using TimeTracker.Business;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Notifications.Services;
+using TimeTracker.Business.Testing;
 
 namespace TimeTracker.Tests.Integration.Business.Core;
 
@@ -29,7 +30,11 @@ public class BaseTest: IDisposable
             .ReadFrom.Configuration(configuration);
         builder.RegisterSerilog(serilogConfiguration);
         
-        builder.RegisterAssemblyModules(typeof(BusinessAssemblyMarker).Assembly);
+        builder.RegisterAssemblyModules(new []
+        {
+            typeof(BusinessAssemblyMarker).Assembly,
+            typeof(BusinessTestingAssemblyMarker).Assembly
+        });
         
         // Register fackers
         builder.RegisterType<FakeEmailSendingService>()

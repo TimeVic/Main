@@ -81,7 +81,7 @@ node('lampego-web-1') {
             envVariables.put('Smtp__UserName', USER_NAME)
             envVariables.put('Smtp__Password', PASSWORD)
             envVariables.put('Smtp__From__Name', 'TimeVic')
-            envVariables.put('Smtp__From__Email', 'support@timevic.com')
+            envVariables.put('Smtp__From__Email', 'no-reply@timevic.com')
             envVariables.put('Smtp__Port', '465')
             envVariables.put('Smtp__EnableSsl', 'true')
         }
