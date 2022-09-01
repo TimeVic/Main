@@ -3,6 +3,7 @@ using Notification.Abstractions;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Notifications;
 using TimeTracker.Business.Notifications.Senders;
+using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -67,6 +68,10 @@ public class QueueService: IQueueService
         if (IsContext<TestNotificationContext>(contextType))
         {
             await SendNotification<TestNotificationContext>(queueItem);
+        }
+        if (IsContext<RegistrationNotificationContext>(contextType))
+        {
+            await SendNotification<RegistrationNotificationContext>(queueItem);
         }
         else
         {

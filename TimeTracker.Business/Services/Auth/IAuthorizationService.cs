@@ -1,9 +1,8 @@
 ﻿using Domain.Abstractions;
-using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Services.Auth;
 
 public interface IAuthorizationService: IDomainService
 {
-    Task<UserEntity> CreatePendingUser(string email);
+    Task<string> Login(string email, string password);
 }

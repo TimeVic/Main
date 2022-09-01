@@ -6,6 +6,10 @@ namespace TimeTracker.Business.Orm.Dao;
 public interface IUserDao: IDomainService
 {
     Task<UserEntity?> GetExistsByUserName(string userName);
-    Task<UserEntity?> GetExistsByEmail(string email);
+    
+    Task<UserEntity?> GetByEmail(string email);
+    
     Task<UserEntity> CreatePendingUser(string email);
+
+    Task<UserEntity?> GetByVerificationToken(string token);
 }

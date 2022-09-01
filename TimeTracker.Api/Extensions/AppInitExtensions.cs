@@ -1,16 +1,13 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
-using TimeTracker.Api;
 using TimeTracker.Business.Extensions;
 
-namespace OffLogs.Api.Extensions
+namespace TimeTracker.Api.Extensions
 {
     public static class AppInitExtensions
     {

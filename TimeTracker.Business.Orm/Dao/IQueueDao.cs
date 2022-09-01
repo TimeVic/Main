@@ -24,4 +24,6 @@ public interface IQueueDao: IScopedDomainService, IDisposable
         string? error = null,
         CancellationToken cancellationToken = default
     );
+
+    Task<int> CompleteAllPending(CancellationToken cancellationToken = default);
 }

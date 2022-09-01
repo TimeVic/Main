@@ -1,9 +1,9 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using OffLogs.Api.Extensions;
 using Serilog;
 using TimeTracker.Api;
 using TimeTracker.Api.Di.Autofac.Modules;
+using TimeTracker.Api.Extensions;
 using TimeTracker.Api.Middleware;
 using TimeTracker.Business;
 using TimeTracker.Business.Helpers;

@@ -21,10 +21,17 @@ public class UserDao: IUserDao
             .FirstOrDefaultAsync();
     }
     
-    public async Task<UserEntity?> GetExistsByEmail(string email)
+    public async Task<UserEntity?> GetByEmail(string email)
     {
         return await _sessionProvider.CurrentSession.Query<UserEntity>()
             .Where(item => item.Email == email.Trim().ToLower())
+            .FirstOrDefaultAsync();
+    }
+    
+    public async Task<UserEntity?> GetByVerificationToken(string token)
+    {
+        return await _sessionProvider.CurrentSession.Query<UserEntity>()
+            .Where(item => item.VerificationToken == token)
             .FirstOrDefaultAsync();
     }
     
@@ -32,9 +39,9 @@ public class UserDao: IUserDao
     {
         var user = new UserEntity
         {
-            UserName = "",
             Email = email.Trim().ToLower(),
             VerificationToken = SecurityUtil.GetRandomString(32),
+            VerificationTime = null,
             PasswordHash = new byte[] {},
             PasswordSalt = new byte[] {},
             CreateTime = DateTime.UtcNow,

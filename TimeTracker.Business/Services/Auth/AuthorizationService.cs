@@ -1,35 +1,35 @@
-﻿using TimeTracker.Business.Exceptions.Api;
-using TimeTracker.Business.Notifications.Senders.User;
+﻿using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Extensions;
 
 namespace TimeTracker.Business.Services.Auth;
 
 public class AuthorizationService: IAuthorizationService
 {
     private readonly IUserDao _userDao;
-    private readonly IQueueService _queueService;
+    private readonly IJwtAuthService _jwtAuthService;
 
-    public AuthorizationService(IUserDao userDao, IQueueService queueService)
+    public AuthorizationService(IUserDao userDao, IJwtAuthService jwtAuthService)
     {
         _userDao = userDao;
-        _queueService = queueService;
+        _jwtAuthService = jwtAuthService;
     }
 
-    public async Task<UserEntity> CreatePendingUser(string email)
+    public async Task<string> Login(string email, string password)
     {
-        var existsUser = await _userDao.GetExistsByUserName(email);
-        if (existsUser != null)
+        var user = await _userDao.GetByEmail(email);
+        if (user is not { IsActivated: true })
         {
-            throw new RecordIsExistsException();
+            throw new RecordNotFoundException();
         }
-        var user = await _userDao.CreatePendingUser(email);
-        await _queueService.PushNotification(new RegistrationNotificationContext()
+        var passwordHash = SecurityUtil.GeneratePasswordHash(password, user.PasswordSalt);
+        var isLoggedIn = user.PasswordHash.CompareTo(passwordHash);
+        if (!isLoggedIn)
         {
-            ToAddress = user.Email,
-            VerificationToken = user.VerificationToken
-        });
-        return user;
+            throw new UserNotAuthorizedException();
+        }
+
+        return _jwtAuthService.BuildJwt(user.Id);
     }
 }

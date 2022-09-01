@@ -109,6 +109,14 @@ public class QueueDao: IQueueDao
         await _session.SaveAsync(item, cancellationToken);
     }
 
+    public async Task<int> CompleteAllPending(CancellationToken cancellationToken = default)
+    {
+        return await _session.Query<QueueEntity>()
+            .UpdateAsync(item => new {
+                Status = QueueStatus.Success
+            }, cancellationToken: cancellationToken);
+    }
+    
     public void Dispose()
     {
         _session.Flush();

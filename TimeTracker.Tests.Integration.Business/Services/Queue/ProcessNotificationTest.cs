@@ -1,7 +1,6 @@
 using Autofac;
 using TimeTracker.Business.Notifications.Senders;
 using TimeTracker.Business.Orm.Constants;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Tests.Integration.Business.Core;
 

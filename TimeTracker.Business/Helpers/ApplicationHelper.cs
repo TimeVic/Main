@@ -54,7 +54,7 @@ namespace TimeTracker.Business.Helpers
                 //         configuration.GetValue<string>("Smtp:Password")
                 //     ),
                 //     EmailSubject =
-                //         "OffLogs System Error: {Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}",
+                //         "TimeVic System Error: {Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}",
                 //     EnableSsl = configuration.GetValue<bool>("Smtp:EnableSsl"),
                 //     Port = configuration.GetValue<int>("Smtp:Port")
                 // };

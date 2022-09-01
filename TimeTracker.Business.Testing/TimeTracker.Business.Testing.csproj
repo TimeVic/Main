@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Domain.Abstractions\Domain.Abstractions.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Orm\TimeTracker.Business.Orm.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business\TimeTracker.Business.csproj" />
     </ItemGroup>
 
     <ItemGroup>
