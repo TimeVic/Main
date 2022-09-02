@@ -28,7 +28,7 @@ public class CreatePendingUserTest: BaseTest
     }
 
     [Fact]
-    public async Task ShouldProcessNotification()
+    public async Task ShouldCreateAndSendNotification()
     {
         var expectedEmail = _userFactory.Generate().Email;
         
@@ -37,6 +37,24 @@ public class CreatePendingUserTest: BaseTest
         Assert.False(user.IsActivated);
         Assert.Equal(expectedEmail.ToLower(), user.Email);
 
+        var actualProcessedCounter = await _queueService.Process(QueueChannel.Notifications);
+        Assert.True(actualProcessedCounter > 0);
+        
+        Assert.True(EmailSendingService.IsEmailSent);
+        var actualEmail = EmailSendingService.SentMessages.FirstOrDefault();
+        Assert.Contains(user.Email, actualEmail.To);
+    }
+    
+    [Fact]
+    public async Task ShouldReSendNotificationIfExists()
+    {
+        var expectedEmail = _userFactory.Generate().Email;
+        
+        var user = await _authService.CreatePendingUser(expectedEmail);
+        await _queueService.Process(QueueChannel.Notifications);
+        EmailSendingService.Reset();
+
+        await _authService.CreatePendingUser(expectedEmail);
         var actualProcessedCounter = await _queueService.Process(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         

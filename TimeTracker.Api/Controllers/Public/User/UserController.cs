@@ -6,6 +6,8 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 
 namespace TimeTracker.Api.Controllers.Public.User;
 
+[ApiController]
+[Route("/[controller]")]
 public class UserController : MainApiControllerBase
 {
     public UserController(

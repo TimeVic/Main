@@ -1,17 +1,10 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using Persistence.Transactions.Behaviors;
-using TimeTracker.Business;
 using TimeTracker.Business.Notifications.Services;
 using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Testing;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 

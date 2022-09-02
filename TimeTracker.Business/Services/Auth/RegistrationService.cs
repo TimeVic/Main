@@ -21,11 +21,11 @@ public class RegistrationService: IRegistrationService
     public async Task<UserEntity> CreatePendingUser(string email)
     {
         var existsUser = await _userDao.GetByEmail(email);
-        if (existsUser != null)
+        if (existsUser is { IsActivated: true })
         {
             throw new RecordIsExistsException();
         }
-        var user = await _userDao.CreatePendingUser(email);
+        var user = existsUser ?? await _userDao.CreatePendingUser(email);
         await _queueService.PushNotification(new RegistrationNotificationContext()
         {
             ToAddress = user.Email,
