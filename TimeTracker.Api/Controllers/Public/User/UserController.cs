@@ -18,6 +18,14 @@ public class UserController : MainApiControllerBase
     {
     }
 
+    [HttpPost("login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Login([FromBody] LoginRequest request)
+        => this.RequestAsync()
+            .For<LoginResponseDto>()
+            .With(request);
+    
     [HttpPost("registration/step1")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

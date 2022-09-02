@@ -33,7 +33,7 @@ public class LoginTest: BaseTest
         var expectedPassword = "some password";
         var user = _userSeeder.CreateActivatedAsync(expectedPassword).Result;
         
-        var jwtToken = await _authService.Login(user.Email, expectedPassword);
+        var (jwtToken, _) = await _authService.Login(user.Email, expectedPassword);
         
         Assert.True(_jwtService.IsValidJwt(jwtToken));
         Assert.Equal(user.Id, _jwtService.GetUserId(jwtToken));

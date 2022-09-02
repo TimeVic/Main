@@ -34,6 +34,8 @@
       <EmbeddedResource Include="Templates\Emails\en\TestNotification.htm" />
       <None Remove="Templates\Emails\en\RegistrationNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\RegistrationNotification.htm" />
+      <None Remove="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
     </ItemGroup>
 
 </Project>

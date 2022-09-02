@@ -7,11 +7,11 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
     public class LoginRequest : IRequest<LoginResponseDto>
     {
         [Required]
-        [StringLength(5048, MinimumLength = 50)]
-        public string Pem { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
         
         [Required]
-        [StringLength(256, MinimumLength = 3)]
+        [StringLength(256, MinimumLength = 6)]
         public string Password { get; set; }
         
         [Required]

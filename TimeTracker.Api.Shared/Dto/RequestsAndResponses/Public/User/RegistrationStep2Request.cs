@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
+using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
 {
@@ -12,5 +13,9 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
         [Required]
         [StringLength(512, MinimumLength = 10)]
         public string Token { get; set; }
+        
+        [Required]
+        [IsReCaptcha]
+        public string ReCaptcha { get; set; }
     }
 }

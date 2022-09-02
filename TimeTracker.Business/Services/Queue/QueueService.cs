@@ -73,6 +73,10 @@ public class QueueService: IQueueService
         {
             await SendNotification<RegistrationNotificationContext>(queueItem);
         }
+        if (IsContext<EmailVerifiedNotificationContext>(contextType))
+        {
+            await SendNotification<EmailVerifiedNotificationContext>(queueItem);
+        }
         else
         {
             _logger.LogError(errorMessage);

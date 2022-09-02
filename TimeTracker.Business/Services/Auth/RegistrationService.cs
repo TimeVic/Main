@@ -1,4 +1,5 @@
-﻿using TimeTracker.Business.Common.Utils;
+﻿using Microsoft.Extensions.Configuration;
+using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Exceptions.Api;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Dao;
@@ -11,11 +12,13 @@ public class RegistrationService: IRegistrationService
 {
     private readonly IUserDao _userDao;
     private readonly IQueueService _queueService;
+    private readonly string _frontendUrl;
 
-    public RegistrationService(IUserDao userDao, IQueueService queueService)
+    public RegistrationService(IUserDao userDao, IQueueService queueService, IConfiguration configuration)
     {
         _userDao = userDao;
         _queueService = queueService;
+        _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
     }
 
     public async Task<UserEntity> CreatePendingUser(string email)
@@ -26,11 +29,11 @@ public class RegistrationService: IRegistrationService
             throw new RecordIsExistsException();
         }
         var user = existsUser ?? await _userDao.CreatePendingUser(email);
-        await _queueService.PushNotification(new RegistrationNotificationContext()
-        {
-            ToAddress = user.Email,
-            VerificationToken = user.VerificationToken
-        });
+        await _queueService.PushNotification(new RegistrationNotificationContext(
+            user.Email,
+            _frontendUrl,
+            user.VerificationToken
+        ));
         return user;
     }
     

@@ -2,6 +2,7 @@
 using TimeTracker.Business.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Services.Auth;
 
@@ -16,7 +17,7 @@ public class AuthorizationService: IAuthorizationService
         _jwtAuthService = jwtAuthService;
     }
 
-    public async Task<string> Login(string email, string password)
+    public async Task<(string token, UserEntity user)> Login(string email, string password)
     {
         var user = await _userDao.GetByEmail(email);
         if (user is not { IsActivated: true })
@@ -30,6 +31,9 @@ public class AuthorizationService: IAuthorizationService
             throw new UserNotAuthorizedException();
         }
 
-        return _jwtAuthService.BuildJwt(user.Id);
+        return (
+            _jwtAuthService.BuildJwt(user.Id),
+            user
+        );
     }
 }
