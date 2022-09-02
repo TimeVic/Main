@@ -1,28 +1,43 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Orm.Connection;
+using TimeTracker.Business;
+using TimeTracker.Business.Notifications.Services;
+using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Testing;
+using TimeTracker.Business.Testing.Factories;
+using TimeTracker.Business.Testing.Seeders.Entity;
 
 namespace TimeTracker.Tests.Integration.Api.Core;
 
-public class BaseTest
+public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposable
 {
+    protected readonly ApiCustomWebApplicationFactory _factory;
+    
+    protected readonly IServiceProvider ServiceProvider;
     protected readonly HttpClient HttpClient;
     protected readonly IDbSessionProvider DbSessionProvider;
+    protected readonly IUserSeeder UserSeeder;
+    protected readonly IDataFactory<UserEntity> UserFactory;
+    protected readonly FakeEmailSendingService EmailSendingService;
 
-    public BaseTest()
+    public BaseTest(ApiCustomWebApplicationFactory factory)
     {
-        var application = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                // ... Configure test services
-            });
-        DbSessionProvider = application.Services.GetRequiredService<IDbSessionProvider>();
-
-        HttpClient = application.CreateClient();
+        _factory = factory;
+        HttpClient = _factory.CreateClient();
+        
+        DbSessionProvider = _factory.Services.GetRequiredService<IDbSessionProvider>();
+        UserSeeder = _factory.Services.GetRequiredService<IUserSeeder>();
+        UserFactory = _factory.Services.GetRequiredService<IDataFactory<UserEntity>>();
+        EmailSendingService = _factory.Services.GetRequiredService<IEmailSendingService>() as FakeEmailSendingService;
+        ServiceProvider = _factory.Services;
     }
     
     public void Dispose()

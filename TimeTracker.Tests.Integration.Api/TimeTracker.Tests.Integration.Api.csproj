@@ -25,12 +25,21 @@
     <ItemGroup>
       <ProjectReference Include="..\TimeTracker.Api\TimeTracker.Api.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Orm\TimeTracker.Business.Orm.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Testing\TimeTracker.Business.Testing.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <None Update="xunit.runner.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="appsettings.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

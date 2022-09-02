@@ -5,11 +5,7 @@ using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
 {
     public class RegistrationStep1Request : IRequest
-    {
-        [Required]
-        [IsUserName]
-        public string UserName { get; set; }
-        
+    {   
         [Required]
         [EmailAddress]
         public string Email { get; set; }
