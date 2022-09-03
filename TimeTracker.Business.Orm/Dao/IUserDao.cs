@@ -8,6 +8,8 @@ public interface IUserDao: IDomainService
     Task<UserEntity?> GetExistsByUserName(string userName);
     
     Task<UserEntity?> GetByEmail(string email);
+
+    Task<UserEntity?> GetById(long id);
     
     Task<UserEntity> CreatePendingUser(string email);
 

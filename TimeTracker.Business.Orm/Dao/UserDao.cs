@@ -28,6 +28,13 @@ public class UserDao: IUserDao
             .FirstOrDefaultAsync();
     }
     
+    public async Task<UserEntity?> GetById(long id)
+    {
+        return await _sessionProvider.CurrentSession.Query<UserEntity>()
+            .Where(item => item.Id == id)
+            .FirstOrDefaultAsync();
+    }
+    
     public async Task<UserEntity?> GetByVerificationToken(string token)
     {
         return await _sessionProvider.CurrentSession.Query<UserEntity>()
