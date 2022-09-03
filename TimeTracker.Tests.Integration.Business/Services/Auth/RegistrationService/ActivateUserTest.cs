@@ -1,0 +1,68 @@
+using Autofac;
+using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Exceptions.Api;
+using TimeTracker.Business.Orm.Constants;
+using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.Auth;
+using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Testing.Factories;
+using TimeTracker.Tests.Integration.Business.Core;
+
+namespace TimeTracker.Tests.Integration.Business.Services.Auth.RegistrationService;
+
+public class ActivateUserTest: BaseTest
+{
+    private readonly IRegistrationService _registrationService;
+    private readonly IDataFactory<UserEntity> _userFactory;
+    private readonly IQueueService _queueService;
+    private readonly IQueueDao _queueDao;
+
+    public ActivateUserTest(): base()
+    {
+        _registrationService = Scope.Resolve<IRegistrationService>();
+        _userFactory = Scope.Resolve<IDataFactory<UserEntity>>();
+        _queueService = Scope.Resolve<IQueueService>();
+        _queueDao = Scope.Resolve<IQueueDao>();
+
+        _queueDao.CompleteAllPending();
+    }
+
+    [Fact]
+    public async Task ShouldActivateUserByToken()
+    {
+        var expectedPassword = "some password";
+        var expectedEmail = _userFactory.Generate().Email;
+        
+        var user = await _registrationService.CreatePendingUser(expectedEmail);
+        var activatedUser = await _registrationService.ActivateUser(user.VerificationToken, expectedPassword);
+        
+        Assert.Null(activatedUser.VerificationToken);
+        Assert.NotNull(activatedUser.VerificationTime);
+
+        Assert.NotNull(activatedUser.PasswordSalt);
+        var expectedPasswordHash = SecurityUtil.GeneratePasswordHash(expectedPassword, activatedUser.PasswordSalt);
+        Assert.Equal(
+            expectedPasswordHash,
+            activatedUser.PasswordHash
+        );
+        Assert.True(activatedUser.IsActivated);
+        
+        
+        var actualProcessedCounter = await _queueService.Process(QueueChannel.Notifications);
+        Assert.True(actualProcessedCounter > 0);
+        
+        Assert.True(EmailSendingService.IsEmailSent);
+        var actualEmail = EmailSendingService.SentMessages.FirstOrDefault();
+        Assert.Contains(user.Email, actualEmail.To);
+    }
+    
+    [Fact]
+    public async Task ShouldThrowExceptionIfNotFound()
+    {
+        await Assert.ThrowsAsync<RecordNotFoundException>(async () =>
+        {
+            await _registrationService.ActivateUser("fake token", "fake password");
+        });
+    }
+}

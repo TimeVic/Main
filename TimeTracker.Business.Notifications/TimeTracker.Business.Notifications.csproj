@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.6\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.6\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Domain.Abstractions\Domain.Abstractions.csproj" />
+      <ProjectReference Include="..\Notification.Abstractions\Notification.Abstractions.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Templates\Emails\en\_EmailLayout.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\_EmailLayout.htm" />
+      <None Remove="Templates\Emails\en\EmailVerificationNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\EmailVerificationNotification.htm" />
+      <None Remove="Templates\Emails\en\TestNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\TestNotification.htm" />
+      <None Remove="Templates\Emails\en\RegistrationNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\RegistrationNotification.htm" />
+      <None Remove="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
+    </ItemGroup>
+
+</Project>

@@ -12,7 +12,7 @@ namespace TimeTracker.Migrations.Migrations
             
             Create.Table("users")
                 .WithColumn("id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("user_name").AsString(200).Unique()
+                .WithColumn("user_name").AsString(200).Nullable()
                 .WithColumn("email").AsString(200).Unique()
                 .WithColumn("verification_token").AsString(512).Nullable()
                 .WithColumn("verification_time").AsDateTime().Nullable()

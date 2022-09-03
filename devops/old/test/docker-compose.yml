@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  tests:
+    build:
+      context: ./../../
+      dockerfile: devops/test/test/Dockerfile
+    environment:
+      ConnectionStrings__DefaultConnection: 'User ID=postgres;Password=P@ssW0rd!;Host=database;Port=5432;Database=postgres;Pooling=true;'
+      Kafka__Servers: 'kafka:9094'
+      Hibernate__IsShowSql: 'false'
+    volumes:
+      - /opt/vsts/work/_temp:/var/temp
+    depends_on:
+      - database
+      - zookeeper
+      - kafka
+    
+  database:
+    container_name: timevic-local-postgres
+    image: postgres:13.2
+    environment:
+      POSTGRES_PASSWORD: "P@ssW0rd!"
+  zookeeper:
+    container_name: timevic-local-zookeeper
+    build:
+      context: ./../common/
+      dockerfile: zookeeper/Dockerfile
+      args:
+        BUILD_COMMAND: build
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    build:
+      context: ./../common/
+      dockerfile: kafka/Dockerfile
+      args:
+        BUILD_COMMAND: build
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INSIDE://:9092,OUTSIDE://:9094
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://kafka:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+    ports:
+      - 29092:9094

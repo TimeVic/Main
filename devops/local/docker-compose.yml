@@ -1,0 +1,26 @@
+version: "3.8"
+
+volumes:
+  postgres-volume: {}
+  kafka-volume: {}
+  kafka-2-volume: {}
+  zookeeper-volume: {}
+  redis-volume: {}
+
+services:
+  postgres:
+    container_name: timevic-local-postgres
+    image: postgres:13.3
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+  redis:
+    image: redis:7-bullseye
+    container_name: timevic-local-redis
+    ports:
+      - "6111:6379"
+    volumes:
+      - redis-volume:/data

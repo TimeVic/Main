@@ -22,16 +22,7 @@ namespace TimeTracker.Business.Orm.Connection
             get {
                 if (_session == null || !_session.IsOpen)
                 {
-                    if (_isShowSql)
-                    {
-                        _session = _sessionFactory.WithOptions()
-                            .Interceptor(new SqlQueryInterceptor())
-                            .OpenSession();
-                    }
-                    else
-                    {
-                        _session = _sessionFactory.OpenSession();
-                    }
+                    _session = CreateSession();
                 }
 
                 lock (_session)
@@ -83,21 +74,16 @@ namespace TimeTracker.Business.Orm.Connection
             _transaction?.Dispose();
             _transaction = null;
         }
-        
-        public async Task RefreshEntityAsync(object entity, CancellationToken cancellationToken = default)
+
+        public ISession CreateSession()
         {
-            if (_session != null && _session.IsOpen)
+            if (_isShowSql)
             {
-                try
-                {
-                    await _session.RefreshAsync(entity, cancellationToken);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e.Message, e);
-                    throw;
-                }
+                return _sessionFactory.WithOptions()
+                    .Interceptor(new SqlQueryInterceptor())
+                    .OpenSession();
             }
+            return _sessionFactory.OpenSession();
         }
         
         #region IDisposable implementation

@@ -11,9 +11,9 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "id", SqlType = "bigint", NotNull = true)]
         public virtual long Id { get; set; }
         
-        [Property(NotNull = true)]
+        [Property(NotNull = false)]
         [Column(Name = "user_name", Length = 200, NotNull = false)]
-        public virtual string UserName { get; set; }
+        public virtual string? UserName { get; set; }
         
         [Property(NotNull = false)]
         [Column(Name = "email", Length = 200, NotNull = true)]
@@ -21,7 +21,7 @@ namespace TimeTracker.Business.Orm.Entities
 
         [Property(NotNull = false)]
         [Column(Name = "verification_token", Length = 512, NotNull = false)]
-        public virtual string VerificationToken { get; set; }
+        public virtual string? VerificationToken { get; set; }
 
         [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "verification_time", SqlType = "datetime", NotNull = false)]
@@ -29,11 +29,11 @@ namespace TimeTracker.Business.Orm.Entities
         
         [Property(NotNull = true)]
         [Column(Name = "password_salt", SqlType = "bytea", NotNull = true)]
-        public virtual byte[] PasswordSalt { get; set; }
+        public virtual byte[]? PasswordSalt { get; set; }
         
         [Property(NotNull = true)]
         [Column(Name = "password_hash", SqlType = "bytea", NotNull = true)]
-        public virtual byte[] PasswordHash { get; set; }
+        public virtual byte[]? PasswordHash { get; set; }
         
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
@@ -51,5 +51,7 @@ namespace TimeTracker.Business.Orm.Entities
         [Key(Column = "user_id")]
         [OneToMany(ClassType = typeof(WorkspaceEntity))]
         public virtual ICollection<WorkspaceEntity> Workspaces { get; set; } = new List<WorkspaceEntity>();
+        
+        public virtual bool IsActivated => VerificationTime.HasValue;
     }
 }

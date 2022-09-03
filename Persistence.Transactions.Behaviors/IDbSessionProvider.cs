@@ -9,12 +9,6 @@ namespace Persistence.Transactions.Behaviors
     {
         ISession CurrentSession { get; }
 
-        /// <summary>
-        /// Re-read the state of the given instance from the underlying database.
-        /// </summary>
-        /// <param name="obj">A persistent instance</param>
-        /// <param name="entity"></param>
-        /// <param name="cancellationToken"></param>
-        Task RefreshEntityAsync(object entity, CancellationToken cancellationToken = default);
+        ISession CreateSession();
     }
 }
