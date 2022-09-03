@@ -1,6 +1,8 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Business.Exceptions.Api;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
@@ -37,5 +39,19 @@ public class LoginTest: BaseTest
         Assert.True(_jwtService.IsValidJwt(responseData.Token));
         Assert.True(responseData.User.Id > 0);
         Assert.NotEmpty(responseData.User.Email);
+    }
+    
+    [Fact]
+    public async Task ShouldFailIfIncorrectPassword()
+    {
+        var user = await UserSeeder.CreateActivatedAsync();
+        var response = await PostRequestAsAnonymousAsync(Url, new LoginRequest()
+        {
+            Email = user.Email,
+            Password = "some incorrect password",
+            ReCaptcha = "captcha"
+        });
+        var responseData = await response.GetJsonErrorAsync();
+        Assert.Equal(new UserNotAuthorizedException().GetTypeName(), responseData.Type);
     }
 }

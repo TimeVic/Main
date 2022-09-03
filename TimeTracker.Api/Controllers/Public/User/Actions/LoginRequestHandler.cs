@@ -8,11 +8,11 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
 {
     public class LoginRequestHandler : IAsyncRequestHandler<LoginRequest, LoginResponseDto>
     {
-        private readonly Mapper _mapper;
+        private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
         public LoginRequestHandler(
-            Mapper mapper,
+            IMapper mapper,
             IAuthorizationService authorizationService
         )
         {
