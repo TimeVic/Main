@@ -6,4 +6,6 @@ namespace TimeTracker.Business.Testing.Seeders.Entity;
 public interface IUserSeeder: IDomainService
 {
     Task<UserEntity> CreateActivatedAsync(string password = "test password");
+
+    Task<(string token, UserEntity user)> CreateAuthorizedAsync(string password = "test password");
 }

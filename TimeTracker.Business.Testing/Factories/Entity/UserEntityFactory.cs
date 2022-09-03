@@ -3,11 +3,11 @@ using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Testing.Factories.Entity
 {
-    internal class UserActivityTaskTagFactory : IDataFactory<UserEntity>
+    internal class UserEntityFactory : IDataFactory<UserEntity>
     {
         private readonly Faker<UserEntity> _factory;
 
-        public UserActivityTaskTagFactory()
+        public UserEntityFactory()
         {
             _factory = new Faker<UserEntity>()
                 .RuleFor(fake => fake.UserName, fake => fake.Random.String2(100))
