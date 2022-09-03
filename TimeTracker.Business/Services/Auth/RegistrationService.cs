@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Exceptions.Api;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Resources;
 using TimeTracker.Business.Services.Queue;
 
 namespace TimeTracker.Business.Services.Auth;
@@ -12,12 +14,19 @@ public class RegistrationService: IRegistrationService
 {
     private readonly IUserDao _userDao;
     private readonly IQueueService _queueService;
+    private readonly IWorkspaceDao _workspaceDao;
     private readonly string _frontendUrl;
 
-    public RegistrationService(IUserDao userDao, IQueueService queueService, IConfiguration configuration)
+    public RegistrationService(
+        IUserDao userDao,
+        IQueueService queueService,
+        IConfiguration configuration,
+        IWorkspaceDao workspaceDao
+    )
     {
         _userDao = userDao;
         _queueService = queueService;
+        _workspaceDao = workspaceDao;
         _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
     }
 
@@ -54,6 +63,8 @@ public class RegistrationService: IRegistrationService
 
         user.PasswordSalt = SecurityUtil.GenerateSalt(32);
         user.PasswordHash = SecurityUtil.GeneratePasswordHash(password, user.PasswordSalt);
+
+        await _workspaceDao.CreateWorkspace(user, UserResources.DefaultWorkspaceName);
         
         await _queueService.PushNotification(new EmailVerifiedNotificationContext()
         {
