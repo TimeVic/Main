@@ -65,4 +65,25 @@ public class ActivateUserTest: BaseTest
             await _registrationService.ActivateUser("fake token", "fake password");
         });
     }
+    
+    [Fact]
+    public async Task ShouldCreateDefaultWorkspace()
+    {
+        var expectedPassword = "some password";
+        var expectedEmail = _userFactory.Generate().Email;
+        
+        var user = await _registrationService.CreatePendingUser(expectedEmail);
+        var activatedUser = await _registrationService.ActivateUser(user.VerificationToken, expectedPassword);
+        await CommitDbChanges();
+        
+        Assert.Equal(1, activatedUser.Workspaces.Count);
+        Assert.Contains(activatedUser.Workspaces, item =>
+        {
+            return item.Name.ToLower().Contains("my workspace");
+        });
+        Assert.All(activatedUser.Workspaces, item =>
+        {
+            Assert.True(item.Id > 0);
+        });
+    }
 }
