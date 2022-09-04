@@ -18,8 +18,8 @@ public class TimeEntryDao: ITimeEntryDao
 
     public async Task<TimeEntryEntity> StartNewAsync(
         WorkspaceEntity workspace,
-        bool isBillable,
-        string description = "",
+        bool isBillable = false,
+        string? description = "",
         long? projectId = null
     )
     {

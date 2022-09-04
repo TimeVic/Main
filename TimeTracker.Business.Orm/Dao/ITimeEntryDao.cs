@@ -8,7 +8,7 @@ public interface ITimeEntryDao: IDomainService
 {
     Task<TimeEntryEntity> StartNewAsync(
         WorkspaceEntity workspace,
-        bool isBillable,
+        bool isBillable = false,
         string? description = null,
         long? projectId = null
     );
