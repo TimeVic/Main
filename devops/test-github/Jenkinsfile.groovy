@@ -48,6 +48,7 @@ node('testing-node') {
             runStage(Stage.BUILD) {
                 sh 'echo "{}" > appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
                 sh 'dotnet build --'
             }
@@ -73,10 +74,14 @@ node('testing-node') {
             }
 
             runStage(Stage.RUN_API_UNIT_TESTS) {
-                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api.Tests'
+                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Unit.Business'
             }
             
-            runStage(Stage.RUN_INTEGRATION_TESTS) {
+            runStage(Stage.RUN_INTEGRATION_TESTS_1) {
+                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Business'
+            }
+
+            runStage(Stage.RUN_INTEGRATION_TESTS_2) {
                 sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api'
             }
         }
@@ -97,7 +102,8 @@ enum Stage {
     RUN_MIGRATIONS('Run migrations'),
     RUN_API_UNIT_TESTS('Run API unit tests'),
     RUN_BUSINESS_LOGIC_UNIT_TESTS('Run Business logic unit tests'),
-    RUN_INTEGRATION_TESTS('Run integration tests'),
+    RUN_INTEGRATION_TESTS_1('Run integration tests'),
+    RUN_INTEGRATION_TESTS_1('Run integration tests'),
 
 //    SAVE_ARTIFACTS('Save artifacts'),
 
