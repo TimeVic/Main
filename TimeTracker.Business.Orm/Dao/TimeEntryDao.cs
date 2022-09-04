@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Exceptions;
@@ -18,8 +21,22 @@ public class TimeEntryDao: ITimeEntryDao
 
     public async Task<TimeEntryEntity?> GetByIdAsync(long? id)
     {
-        return await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
-            .FirstOrDefaultAsync(item => item.Id == id);
+        return await _sessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(id);
+    }
+    
+    public async Task<ListDto<TimeEntryEntity>> GetListAsync(WorkspaceEntity workspace, int page)
+    {
+        var query = _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+            .Where(item => item.Workspace.Id == workspace.Id);
+        
+        var offset = PaginationUtils.CalculateOffset(page);
+        var items = await query.Skip(offset)
+            .Take(GlobalConstants.ListPageSize)
+            .ToListAsync();
+        return new ListDto<TimeEntryEntity>(
+            items,
+            await query.CountAsync()
+        );
     }
     
     public async Task<TimeEntryEntity> StartNewAsync(
