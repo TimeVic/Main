@@ -103,7 +103,7 @@ enum Stage {
     RUN_API_UNIT_TESTS('Run API unit tests'),
     RUN_BUSINESS_LOGIC_UNIT_TESTS('Run Business logic unit tests'),
     RUN_INTEGRATION_TESTS_1('Run integration tests'),
-    RUN_INTEGRATION_TESTS_1('Run integration tests'),
+    RUN_INTEGRATION_TESTS_2('Run integration tests'),
 
 //    SAVE_ARTIFACTS('Save artifacts'),
 
