@@ -63,12 +63,12 @@ namespace TimeTracker.Migrations.Migrations
                 .WithColumn("id").AsInt64().PrimaryKey().Identity()
                 .WithColumn("workspace_id").AsInt64()
                 .WithColumn("project_id").AsInt64().Nullable()
-                .WithColumn("description").AsString(1000)
+                .WithColumn("description").AsString(1000).Nullable()
                 .WithColumn("hourly_rate").AsDecimal(8, 2).Nullable()
                 .WithColumn("is_billable").AsBoolean().WithDefaultValue(false)
                 
                 .WithColumn("start_time").AsCustom("timestamptz").NotNullable()
-                .WithColumn("end_time").AsCustom("timestamptz").NotNullable()
+                .WithColumn("end_time").AsCustom("timestamptz").Nullable()
                 
                 .WithColumn("create_time").AsCustom("timestamptz").NotNullable()
                 .WithColumn("update_time").AsCustom("timestamptz").NotNullable();
@@ -78,7 +78,7 @@ namespace TimeTracker.Migrations.Migrations
                 .ToTable("workspaces").PrimaryColumn("id");
             
             Create.ForeignKey()
-                .FromTable("time_entries").ForeignColumn("workspace_id")
+                .FromTable("time_entries").ForeignColumn("project_id")
                 .ToTable("projects").PrimaryColumn("id");
             
             base.Up();

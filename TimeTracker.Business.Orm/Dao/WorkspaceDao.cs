@@ -1,4 +1,5 @@
-﻿using Persistence.Transactions.Behaviors;
+﻿using NHibernate.Linq;
+using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Orm.Dao;
@@ -24,5 +25,13 @@ public class WorkspaceDao: IWorkspaceDao
         user.Workspaces.Add(workspace);
         await _sessionProvider.CurrentSession.SaveAsync(user);
         return workspace;
+    }
+    
+    public async Task<bool> HasActiveTimeEntriesAsync(WorkspaceEntity workspace)
+    {
+        return await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+            .Where(item => item.Workspace.Id == workspace.Id)
+            .Where(item => item.EndTime == null)
+            .AnyAsync();
     }
 }

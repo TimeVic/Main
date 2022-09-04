@@ -11,9 +11,9 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "id", SqlType = "bigint", NotNull = true)]
         public virtual long Id { get; set; }
         
-        [Property(NotNull = true)]
-        [Column(Name = "description", Length = 1000, NotNull = true)]
-        public virtual string Description { get; set; }
+        [Property(NotNull = false)]
+        [Column(Name = "description", Length = 1000, NotNull = false)]
+        public virtual string? Description { get; set; }
         
         [Property(NotNull = false)]
         [Column(Name = "hourly_rate", NotNull = false)]
@@ -51,10 +51,14 @@ namespace TimeTracker.Business.Orm.Entities
         [ManyToOne(
             ClassType = typeof(ProjectEntity), 
             Column = "project_id", 
-            Lazy = Laziness.False,
+            Lazy = Laziness.Proxy,
             Fetch = FetchMode.Join,
             Cascade = "none"
         )]
-        public virtual ProjectEntity Project { get; set; }
+        public virtual ProjectEntity? Project { get; set; }
+        
+        public virtual bool IsActive => EndTime == null;
+        
+        public virtual bool IsNew => Id == 0;
     }
 }

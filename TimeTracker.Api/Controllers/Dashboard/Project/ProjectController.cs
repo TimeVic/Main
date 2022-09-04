@@ -24,7 +24,7 @@ public class ProjectController : MainApiControllerBase
     [HttpPost("add")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Login([FromBody] AddRequest request)
+    public Task<IActionResult> Add([FromBody] AddRequest request)
         => this.RequestAsync()
             .For<ProjectDto>()
             .With(request);

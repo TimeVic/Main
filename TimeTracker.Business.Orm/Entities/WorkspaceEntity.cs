@@ -48,5 +48,23 @@ namespace TimeTracker.Business.Orm.Entities
         [Key(Column = "workspace_id")]
         [OneToMany(ClassType = typeof(ProjectEntity))]
         public virtual ICollection<ProjectEntity> Projects { get; set; } = new List<ProjectEntity>();
+        
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.Extra,
+            Cascade = "none"
+        )]
+        [Key(Column = "workspace_id")]
+        [OneToMany(ClassType = typeof(TimeEntryEntity))]
+        public virtual ICollection<TimeEntryEntity> TimeEntries { get; set; } = new List<TimeEntryEntity>();
+
+        public virtual bool ContainsProject(ProjectEntity? project)
+        {
+            if (project == null)
+            {
+                return false;
+            }
+            return Projects.Any(item => item.Id == project.Id);
+        }
     }
 }

@@ -25,4 +25,13 @@ public class ProjectDao: IProjectDao
         await _sessionProvider.CurrentSession.SaveAsync(workspace);
         return project;
     }
+    
+    public async Task<ICollection<ProjectEntity>> GetByUser(UserEntity user)
+    {
+        WorkspaceEntity workspaceAlias = null;
+        var query = _sessionProvider.CurrentSession.QueryOver<ProjectEntity>()
+            .Inner.JoinAlias(item => item.Workspace, () => workspaceAlias)
+            .And(() => workspaceAlias.User.Id == user.Id);
+        return await query.ListAsync();
+    }
 }
