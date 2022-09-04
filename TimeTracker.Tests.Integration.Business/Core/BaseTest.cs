@@ -49,6 +49,8 @@ public class BaseTest: IDisposable
         EmailSendingService = Scope.Resolve<IEmailSendingService>() as FakeEmailSendingService;
         
         _queueDao = Scope.Resolve<IQueueDao>();
+        // Clear queue
+        _queueDao.CompleteAllPending();
     }
 
     protected async Task CommitDbChanges()
@@ -59,9 +61,6 @@ public class BaseTest: IDisposable
     
     public void Dispose()
     {
-        // Clear queue
-        _queueDao.CompleteAllPending();
-        
         Scope.Dispose();
         _serviceProvider.Dispose();
     }
