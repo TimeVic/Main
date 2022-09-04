@@ -58,5 +58,7 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual ProjectEntity? Project { get; set; }
         
         public virtual bool IsActive => EndTime == null;
+        
+        public virtual bool IsNew => Id == 0;
     }
 }

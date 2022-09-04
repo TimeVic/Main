@@ -16,6 +16,12 @@ public class TimeEntryDao: ITimeEntryDao
         _sessionProvider = sessionProvider;
     }
 
+    public async Task<TimeEntryEntity?> GetByIdAsync(long? id)
+    {
+        return await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+            .FirstOrDefaultAsync(item => item.Id == id);
+    }
+    
     public async Task<TimeEntryEntity> StartNewAsync(
         WorkspaceEntity workspace,
         bool isBillable = false,
@@ -46,9 +52,7 @@ public class TimeEntryDao: ITimeEntryDao
 
     public async Task<TimeEntryEntity?> StopActiveAsync(WorkspaceEntity workspace)
     {
-        var activeTimeEntry = await workspace.TimeEntries.AsQueryable()
-            .Where(entry => entry.EndTime == null)
-            .FirstOrDefaultAsync();
+        var activeTimeEntry = await GetActiveEntryAsync(workspace);
         if (activeTimeEntry != null)
         {
             activeTimeEntry.EndTime = DateTime.UtcNow;
@@ -70,7 +74,7 @@ public class TimeEntryDao: ITimeEntryDao
 
         if (timeEntryDto.EndTime < timeEntryDto.StartTime)
         {
-            throw new ValidationException("EndTime can not be less than StartTime");
+            throw new DataInconsistentException("EndTime can not be less than StartTime");
         }
 
         var timeEntry = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
@@ -90,9 +94,36 @@ public class TimeEntryDao: ITimeEntryDao
         timeEntry.HourlyRate = timeEntryDto.HourlyRate;
         timeEntry.IsBillable = timeEntryDto.IsBillable;
         timeEntry.StartTime = timeEntryDto.StartTime;
-        timeEntry.EndTime = timeEntryDto.EndTime;
+        if (timeEntry.IsNew || !timeEntry.IsActive)
+        {
+            timeEntry.EndTime = timeEntryDto.EndTime;    
+        }
 
         await _sessionProvider.CurrentSession.SaveAsync(timeEntry);
         return timeEntry;
+    }
+
+    public async Task<bool> HasAccessAsync(UserEntity user, TimeEntryEntity? entity)
+    {
+        if (entity == null)
+        {
+            return false;
+        }
+
+        TimeEntryEntity timeEntryAlias = null;
+        var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<WorkspaceEntity>()
+            .Inner.JoinAlias(item => item.TimeEntries, () => timeEntryAlias)
+                .Where(item => item.User.Id == user.Id)
+                .And(() => timeEntryAlias.Id == entity.Id)
+            .RowCountAsync();
+        return itemsWithAccessCount > 0;
+    }
+    
+    public async Task<TimeEntryEntity?> GetActiveEntryAsync(WorkspaceEntity workspace)
+    {
+        return await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+            .Where(entry => entry.EndTime == null)
+            .Where(entry => entry.Workspace.Id == workspace.Id)
+            .FirstOrDefaultAsync();
     }
 }

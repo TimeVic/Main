@@ -3,6 +3,7 @@ using TimeTracker.Business.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Exceptions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
@@ -97,6 +98,47 @@ public class SetTest: BaseTest
     }
     
     [Fact]
+    public async Task DatesShouldNotBeUpdatedForActiveItem()
+    {
+        var fakeTimeEntry = _timeEntryFactory.Generate();
+        var initialDto = new TimeEntryCreationDto()
+        {
+            Description = fakeTimeEntry.Description,
+            EndTime = fakeTimeEntry.EndTime.Value,
+            StartTime = fakeTimeEntry.StartTime,
+            HourlyRate = fakeTimeEntry.HourlyRate,
+            IsBillable = fakeTimeEntry.IsBillable
+        };
+        
+        var user = await _userSeeder.CreateActivatedAsync();
+        var initialWorkspace = user.Workspaces.First();
+        var initialProject = await _projectDao.Create(initialWorkspace, "Test project1");
+        
+        var initialEntry = await _timeEntryDao.StartNewAsync(
+            initialWorkspace,
+            fakeTimeEntry.IsBillable,
+            fakeTimeEntry.Description,
+            initialProject.Id
+        );
+        
+        var fakeTimeEntry2 = _timeEntryFactory.Generate();
+        var expectedDto = new TimeEntryCreationDto()
+        {
+            Id = initialEntry.Id,
+            Description = fakeTimeEntry2.Description,
+            EndTime = fakeTimeEntry2.EndTime.Value,
+            StartTime = fakeTimeEntry2.StartTime,
+            HourlyRate = fakeTimeEntry2.HourlyRate,
+            IsBillable = fakeTimeEntry2.IsBillable
+        };
+        var expectedProject = await _projectDao.Create(initialWorkspace, "Test project2");
+        var actualEntry = await _timeEntryDao.SetAsync(initialWorkspace, expectedDto, expectedProject);
+        
+        Assert.Null(actualEntry.EndTime);
+        Assert.Equal(initialEntry.StartTime, actualEntry.StartTime);
+    }
+    
+    [Fact]
     public async Task ShouldThrowExceptionIfEndTimeLess()
     {
         var fakeTimeEntry = _timeEntryFactory.Generate();
@@ -112,7 +154,7 @@ public class SetTest: BaseTest
         var user = await _userSeeder.CreateActivatedAsync();
         var expectWorkspace = user.Workspaces.First();
 
-        await Assert.ThrowsAsync<ValidationException>(async () =>
+        await Assert.ThrowsAsync<DataInconsistentException>(async () =>
         {
             await _timeEntryDao.SetAsync(expectWorkspace, expectedDto);
         });

@@ -24,10 +24,12 @@ public class StopTest: BaseTest
     private readonly WorkspaceEntity _defaultWorkspace;
     private readonly IProjectDao _projectDao;
     private readonly ITimeEntryDao _timeEntryDao;
+    private readonly IWorkspaceDao _workspaceDao;
 
     public StopTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _timeEntryFactory = ServiceProvider.GetRequiredService<IDataFactory<TimeEntryEntity>>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
@@ -61,7 +63,7 @@ public class StopTest: BaseTest
         Assert.NotNull(actualDto.EndTime);
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_defaultWorkspace);
-        Assert.False(_defaultWorkspace.HasActiveEntry);
+        Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
     }
     
     [Fact]

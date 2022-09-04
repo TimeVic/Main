@@ -66,7 +66,5 @@ namespace TimeTracker.Business.Orm.Entities
             }
             return Projects.Any(item => item.Id == project.Id);
         }
-        
-        public virtual bool HasActiveEntry => TimeEntries.AsQueryable().Any(item => item.EndTime == null);
     }
 }

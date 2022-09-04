@@ -37,4 +37,12 @@ public class TimeEntry : MainApiControllerBase
         => this.RequestAsync()
             .For<TimeEntryDto>()
             .With(request);
+    
+    [HttpPost("set")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Set([FromBody] SetRequest request)
+        => this.RequestAsync()
+            .For<TimeEntryDto>()
+            .With(request);
 }

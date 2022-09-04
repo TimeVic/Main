@@ -6,6 +6,8 @@ namespace TimeTracker.Business.Orm.Dao;
 
 public interface ITimeEntryDao: IDomainService
 {
+    Task<TimeEntryEntity?> GetByIdAsync(long? id);
+    
     Task<TimeEntryEntity> StartNewAsync(
         WorkspaceEntity workspace,
         bool isBillable = false,
@@ -20,4 +22,8 @@ public interface ITimeEntryDao: IDomainService
         TimeEntryCreationDto timeEntryDto,
         ProjectEntity? project = null
     );
+
+    Task<bool> HasAccessAsync(UserEntity user, TimeEntryEntity? entity);
+
+    Task<TimeEntryEntity?> GetActiveEntryAsync(WorkspaceEntity workspace);
 }
