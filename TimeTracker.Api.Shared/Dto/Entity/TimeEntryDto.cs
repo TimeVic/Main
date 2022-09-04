@@ -6,7 +6,7 @@ public class TimeEntryDto : IResponse
 {
     public long Id { get; set; }
     
-    public string Description { get; set; }
+    public string? Description { get; set; }
     
     public decimal? HourlyRate { get; set; }
     
@@ -16,5 +16,5 @@ public class TimeEntryDto : IResponse
     
     public DateTime? EndTime { get; set; }
     
-    public ProjectDto Project { get; set; }
+    public ProjectDto? Project { get; set; }
 }

@@ -63,7 +63,7 @@ namespace TimeTracker.Migrations.Migrations
                 .WithColumn("id").AsInt64().PrimaryKey().Identity()
                 .WithColumn("workspace_id").AsInt64()
                 .WithColumn("project_id").AsInt64().Nullable()
-                .WithColumn("description").AsString(1000)
+                .WithColumn("description").AsString(1000).Nullable()
                 .WithColumn("hourly_rate").AsDecimal(8, 2).Nullable()
                 .WithColumn("is_billable").AsBoolean().WithDefaultValue(false)
                 

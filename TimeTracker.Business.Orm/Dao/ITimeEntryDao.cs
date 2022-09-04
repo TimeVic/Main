@@ -9,7 +9,7 @@ public interface ITimeEntryDao: IDomainService
     Task<TimeEntryEntity> StartNewAsync(
         WorkspaceEntity workspace,
         bool isBillable,
-        string description = "",
+        string? description = null,
         long? projectId = null
     );
     

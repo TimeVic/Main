@@ -39,15 +39,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var workspace = user.Workspaces.FirstOrDefault(item => item.Id == request.WorkspaceId);
+            var workspace = user.GetWorkspaceById(request.WorkspaceId);
             if (workspace == null)
             {
                 throw new RecordNotFoundException("Workspace not found");
             }
-            // var project = await _projectDao.Create(workspace, request.Name);
-            // await _sessionProvider.PerformCommitAsync();
+
+            var timeEntry = await _timeEntryDao.StartNewAsync(
+                workspace,
+                request.IsBillable,
+                request.Description,
+                request.ProjectId
+            );
+            await _sessionProvider.PerformCommitAsync();
             
-            return _mapper.Map<TimeEntryDto>(null);
+            return _mapper.Map<TimeEntryDto>(timeEntry);
         }
     }
 }

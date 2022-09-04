@@ -15,9 +15,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         public long? ProjectId { get; set; }
         
         [StringLength(1000)]
-        public string Description { get; set; }
-        
-        public DateTime StartTime { get; set; }
+        public string? Description { get; set; } 
         
         public bool IsBillable { get; set; }
     }
