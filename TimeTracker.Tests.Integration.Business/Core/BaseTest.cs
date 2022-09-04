@@ -6,6 +6,7 @@ using Serilog.Extensions.Autofac.DependencyInjection;
 using TimeTracker.Business;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Notifications.Services;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Testing;
 
 namespace TimeTracker.Tests.Integration.Business.Core;
@@ -17,6 +18,7 @@ public class BaseTest: IDisposable
     protected readonly ILifetimeScope Scope;
     
     private readonly IContainer _serviceProvider;
+    private readonly IQueueDao _queueDao;
 
     public BaseTest()
     {
@@ -45,6 +47,8 @@ public class BaseTest: IDisposable
         
         DbSessionProvider = Scope.Resolve<IDbSessionProvider>();
         EmailSendingService = Scope.Resolve<IEmailSendingService>() as FakeEmailSendingService;
+        
+        _queueDao = Scope.Resolve<IQueueDao>();
     }
 
     protected async Task CommitDbChanges()
@@ -55,6 +59,9 @@ public class BaseTest: IDisposable
     
     public void Dispose()
     {
+        // Clear queue
+        _queueDao.CompleteAllPending();
+        
         Scope.Dispose();
         _serviceProvider.Dispose();
     }
