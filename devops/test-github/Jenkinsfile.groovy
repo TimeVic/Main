@@ -11,30 +11,14 @@ node('testing-node') {
     String postresUserPassword = 'postgres'
 
     Map<String, String> containerEnvVars = [
-        // Zookeeper
-        'ZOOKEEPER_CLIENT_PORT': 2181,
-        'ZOOKEEPER_TICK_TIME': 2000,
-    
-        // Kafka
-        'KAFKA_HOME': "./devops/common/binable/kafka",
-        'KAFKA_BROKER_ID': 1,
-        'KAFKA_ZOOKEEPER_CONNECT': "localhost:2181",
-        'KAFKA_LISTENERS': "INSIDE://:9092,OUTSIDE://:9094",
-        'KAFKA_ADVERTISED_LISTENERS': "INSIDE://:9092,OUTSIDE://localhost:9094",
-        'KAFKA_LISTENER_SECURITY_PROTOCOL_MAP': "INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT",
-        'KAFKA_INTER_BROKER_LISTENER_NAME': "INSIDE",
-    
+
         // Postgres
         'POSTGRES_CONNECTION_RETRIES': 5,
         'POSTGRES_USER': postresUserPassword,
         'POSTGRES_PASSWORD': postresUserPassword,
         'POSTGRES_DATABASE': "template1",
 
-        // Redis
-        'Redis__Server': "localhost:6379",
-
         'ConnectionStrings__DefaultConnection': "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres;Pooling=true;Include Error Detail=true;Log Parameters=true;",
-        'Kafka__Servers': "localhost:9094",
         'Hibernate__IsShowSql': "false"
     ]
 
@@ -64,26 +48,9 @@ node('testing-node') {
             runStage(Stage.BUILD) {
                 sh 'echo "{}" > appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
                 sh 'dotnet build --'
-            }
-
-            runStage(Stage.ASSIGN_PERMISSIONS) {
-                sh 'chmod -R 700 $KAFKA_HOME'
-                sh 'chmod -R 700 ./devops/common/kafka/boot.sh'
-                sh 'chmod -R 770 ./devops/common/zookeeper/boot.sh'
-            }
-
-            runStage(Stage.INIT_ZOOKEEPER) {
-                sh './devops/common/zookeeper/boot.sh &'
-                sh 'until nc -z localhost 2181; do sleep 1; done'
-                echo "Zookeeper is started"
-            }
-
-            runStage(Stage.INIT_KAFKA) {
-                sh './devops/common/kafka/boot.sh &'
-                sh 'until nc -z localhost 9094; do sleep 1; done'
-                echo "Kafka is started"
             }
 
             runStage(Stage.INIT_DB) {
@@ -107,10 +74,14 @@ node('testing-node') {
             }
 
             runStage(Stage.RUN_API_UNIT_TESTS) {
-                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api.Tests'
+                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Unit.Business'
             }
             
-            runStage(Stage.RUN_INTEGRATION_TESTS) {
+            runStage(Stage.RUN_INTEGRATION_TESTS_1) {
+                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Business'
+            }
+
+            runStage(Stage.RUN_INTEGRATION_TESTS_2) {
                 sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api'
             }
         }
@@ -126,15 +97,13 @@ enum Stage {
     CLEAN('Clean'),
     CHECKOUT('Checkout'),
     BUILD('Build projects'),
-    ASSIGN_PERMISSIONS('Assign Permissions'),
-    INIT_ZOOKEEPER('Init Zookeeper'),
-    INIT_KAFKA('Init Kafka'),
     INIT_DB('Init DB'),
     INIT_REDIS('Init Redis'),
     RUN_MIGRATIONS('Run migrations'),
     RUN_API_UNIT_TESTS('Run API unit tests'),
     RUN_BUSINESS_LOGIC_UNIT_TESTS('Run Business logic unit tests'),
-    RUN_INTEGRATION_TESTS('Run integration tests'),
+    RUN_INTEGRATION_TESTS_1('Run integration tests'),
+    RUN_INTEGRATION_TESTS_2('Run integration tests'),
 
 //    SAVE_ARTIFACTS('Save artifacts'),
 

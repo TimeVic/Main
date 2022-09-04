@@ -21,6 +21,8 @@ public class TimeEntryDao: ITimeEntryDao
 
     public async Task<TimeEntryEntity?> GetByIdAsync(long? id)
     {
+        if (id == null)
+            return null;
         return await _sessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(id);
     }
     

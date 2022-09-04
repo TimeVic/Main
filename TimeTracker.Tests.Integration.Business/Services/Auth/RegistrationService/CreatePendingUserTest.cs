@@ -68,7 +68,8 @@ public class CreatePendingUserTest: BaseTest
     {
         var expectedEmail = _userFactory.Generate().Email;
         
-        await _authService.CreatePendingUser(expectedEmail);
+        var actualUser = await _authService.CreatePendingUser(expectedEmail);
+        await _authService.ActivateUser(actualUser.VerificationToken, "some password");
 
         await Assert.ThrowsAsync<RecordIsExistsException>(async () =>
         {
