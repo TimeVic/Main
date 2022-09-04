@@ -50,7 +50,7 @@ public class BaseTest: IDisposable
         
         _queueDao = Scope.Resolve<IQueueDao>();
         // Clear queue
-        _queueDao.CompleteAllPending();
+        _queueDao.CompleteAllPending().Wait();
     }
 
     protected async Task CommitDbChanges()
