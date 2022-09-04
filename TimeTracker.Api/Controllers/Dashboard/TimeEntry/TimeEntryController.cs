@@ -3,6 +3,7 @@ using AspNetCore.ApiControllers.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
@@ -44,5 +45,13 @@ public class TimeEntry : MainApiControllerBase
     public Task<IActionResult> Set([FromBody] SetRequest request)
         => this.RequestAsync()
             .For<TimeEntryDto>()
+            .With(request);
+    
+    [HttpPost("list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> List([FromBody] GetListRequest request)
+        => this.RequestAsync()
+            .For<PaginatedListDto<TimeEntryDto>>()
             .With(request);
 }

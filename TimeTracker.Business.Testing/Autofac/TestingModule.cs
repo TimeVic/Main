@@ -1,4 +1,5 @@
 using Autofac;
+using Domain.Abstractions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 
@@ -15,7 +16,8 @@ public class TestingModule : Module
         
         builder
             .RegisterAssemblyTypes(typeof(BusinessTestingAssemblyMarker).Assembly)
-            .As<IUserSeeder>()
+            .AssignableTo<IDomainService>()
+            .AsImplementedInterfaces()
             .InstancePerDependency();
     }
 }
