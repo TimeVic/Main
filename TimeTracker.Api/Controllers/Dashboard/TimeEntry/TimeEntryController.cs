@@ -5,27 +5,28 @@ using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 
-namespace TimeTracker.Api.Controllers.Dashboard.Project;
+namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry;
 
 [ApiController]
 [Authorize]
-[Route("/dashboard/[controller]")]
-public class ProjectController : MainApiControllerBase
+[Route("/dashboard/time-entry")]
+public class TimeEntry : MainApiControllerBase
 {
-    public ProjectController(
+    public TimeEntry(
         IAsyncRequestBuilder asyncRequestBuilder, 
         IDbSessionProvider commitPerformer,
-        ILogger<ProjectController> logger
+        ILogger<TimeEntry> logger
     ) : base(asyncRequestBuilder, commitPerformer, logger)
     {
     }
 
-    [HttpPost("add")]
+    [HttpPost("start")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Add([FromBody] AddRequest request)
+    public Task<IActionResult> Start([FromBody] StartRequest request)
         => this.RequestAsync()
-            .For<ProjectDto>()
+            .For<TimeEntryDto>()
             .With(request);
 }

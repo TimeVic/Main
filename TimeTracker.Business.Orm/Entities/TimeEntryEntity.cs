@@ -51,10 +51,12 @@ namespace TimeTracker.Business.Orm.Entities
         [ManyToOne(
             ClassType = typeof(ProjectEntity), 
             Column = "project_id", 
-            Lazy = Laziness.False,
+            Lazy = Laziness.Proxy,
             Fetch = FetchMode.Join,
             Cascade = "none"
         )]
-        public virtual ProjectEntity Project { get; set; }
+        public virtual ProjectEntity? Project { get; set; }
+        
+        public virtual bool IsActive => EndTime == null;
     }
 }
