@@ -37,4 +37,8 @@
       <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\Landing\User\Registration\Step1.razor" />
+    </ItemGroup>
+
 </Project>

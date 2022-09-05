@@ -4,7 +4,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.Validation;
 
-namespace TimeTracker.Web.Pages.User.Registration;
+namespace TimeTracker.Web.Pages.Landing.User.Registration;
 
 public partial class Step1
 {
