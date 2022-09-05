@@ -32,12 +32,12 @@ public class QueueService: IQueueService
         await _queueDao.Push(context, QueueChannel.Notifications);
     }
     
-    public async Task<int> Process(QueueChannel channel)
+    public async Task<int> Process(QueueChannel channel, CancellationToken cancellationToken = default)
     {
         var processedCounter = 0;
         while (true)
         {
-            var queueItem = await _queueDao.GetTop(channel);
+            var queueItem = await _queueDao.GetTop(channel, cancellationToken);
             if (queueItem == null)
             {
                 break;
@@ -45,7 +45,7 @@ public class QueueService: IQueueService
 
             if (channel == QueueChannel.Notifications)
             {
-                await ProcessNotificationItem(queueItem);
+                await ProcessNotificationItem(queueItem, cancellationToken);
                 processedCounter++;
             }
             else
@@ -57,7 +57,7 @@ public class QueueService: IQueueService
         return processedCounter;
     }
 
-    private async Task ProcessNotificationItem(QueueEntity queueItem)
+    private async Task ProcessNotificationItem(QueueEntity queueItem, CancellationToken cancellationToken = default)
     {
         var errorMessage = $"Incorrect notification context: {queueItem.ContextType}";
         var contextType = GetContextType(queueItem, typeof(BusinessNotificationsAssemblyMarker));
@@ -67,15 +67,15 @@ public class QueueService: IQueueService
         }
         if (IsContext<TestNotificationContext>(contextType))
         {
-            await SendNotification<TestNotificationContext>(queueItem);
+            await SendNotification<TestNotificationContext>(queueItem, cancellationToken);
         }
         if (IsContext<RegistrationNotificationContext>(contextType))
         {
-            await SendNotification<RegistrationNotificationContext>(queueItem);
+            await SendNotification<RegistrationNotificationContext>(queueItem, cancellationToken);
         }
         if (IsContext<EmailVerifiedNotificationContext>(contextType))
         {
-            await SendNotification<EmailVerifiedNotificationContext>(queueItem);
+            await SendNotification<EmailVerifiedNotificationContext>(queueItem, cancellationToken);
         }
         else
         {
@@ -83,7 +83,7 @@ public class QueueService: IQueueService
         }
     }
     
-    private Type GetContextType(QueueEntity queueItem, Type markerType)
+    private static Type GetContextType(QueueEntity queueItem, Type markerType)
     {
         var activationResult = Activator.CreateInstance(
             markerType.Assembly.GetName().Name,
@@ -92,12 +92,12 @@ public class QueueService: IQueueService
         return activationResult.Unwrap().GetType();
     }
 
-    private bool IsContext<TConext>(Type contextType) where TConext: INotificationContext
+    private static bool IsContext<TConext>(Type contextType) where TConext: INotificationContext
     {
         return contextType == typeof(TConext);
     }
     
-    private async Task SendNotification<TConext>(QueueEntity queueEntity) where TConext: INotificationContext
+    private async Task SendNotification<TConext>(QueueEntity queueEntity, CancellationToken cancellationToken = default) where TConext: INotificationContext
     {
         var context = JsonHelper.DeserializeObject<TConext>(queueEntity.ContextData);
         if (context == null)
@@ -106,6 +106,6 @@ public class QueueService: IQueueService
             return;
         }
 
-        await _notificationBuilder.SendAsync(context);
+        await _notificationBuilder.SendAsync(context, cancellationToken);
     }
 }

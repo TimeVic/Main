@@ -8,5 +8,5 @@ public interface IQueueService: IDomainService
 {
     Task PushNotification(INotificationContext context);
 
-    Task<int> Process(QueueChannel channel);
+    Task<int> Process(QueueChannel channel, CancellationToken cancellationToken = default);
 }
