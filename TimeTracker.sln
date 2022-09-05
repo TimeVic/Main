@@ -46,6 +46,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Tests.Unit.Busi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.WorkerServices", "TimeTracker.WorkerServices\TimeTracker.WorkerServices.csproj", "{E5798432-71B3-4B8F-8F0A-E405F873B91D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Web", "TimeTracker.Web\TimeTracker.Web.csproj", "{5FAEEFCE-623F-465B-B789-5B532F6365C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +134,10 @@ Global
 		{E5798432-71B3-4B8F-8F0A-E405F873B91D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5798432-71B3-4B8F-8F0A-E405F873B91D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5798432-71B3-4B8F-8F0A-E405F873B91D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FAEEFCE-623F-465B-B789-5B532F6365C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FAEEFCE-623F-465B-B789-5B532F6365C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FAEEFCE-623F-465B-B789-5B532F6365C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FAEEFCE-623F-465B-B789-5B532F6365C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A0B3A29D-0064-4CA1-8B54-E2F74A1AECE7} = {EEEB1AA4-B6FE-4153-9CCB-565250FC147E}
