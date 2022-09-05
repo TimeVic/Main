@@ -4,7 +4,10 @@ using Majorsoft.Blazor.WebAssembly.Logging.Console;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
+using TimeTracker.Business.Common.Services.Web.ReCaptcha;
 using TimeTracker.Web;
+using TimeTracker.Web.Services;
+using TimeTracker.Web.Services.Http;
 
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -28,7 +31,9 @@ builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
 
 // Custom services
-// builder.Services.AddScoped<ILocalizationService, LocalizationService>();
+builder.Services.AddScoped<IApiService, ApiService>();
+builder.Services.AddScoped<IReCaptchaService, ReCaptchaService>();
+builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 
 // Store
 builder.Services.AddFluxor(

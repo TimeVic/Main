@@ -3,7 +3,7 @@ using AspNetCore.ApiControllers.Abstractions;
 using Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Api;
 
 namespace TimeTracker.Api.Controllers;
 

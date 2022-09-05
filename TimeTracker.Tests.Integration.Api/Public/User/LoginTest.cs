@@ -1,7 +1,7 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
-using TimeTracker.Business.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Services.Auth;
