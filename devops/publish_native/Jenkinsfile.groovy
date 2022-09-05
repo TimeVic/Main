@@ -7,18 +7,18 @@ public Map<String, String> envVariables = new HashMap<String, String>()
 
 def mainContainer = new DockerContainer(
     name: 'timevic-main-production',
-    dockerFile: 'devops/publish_native/image/common/Dockerfile',
+    dockerFile: 'devops/publish_native/common/Dockerfile',
 );
 
 def migrationContainer = new DockerContainer(
     name: 'timevic-main-production',
-    dockerFile: 'devops/publish_native/image/common/Dockerfile',
+    dockerFile: 'devops/publish_native/common/Dockerfile',
     isRunAlways: false,
     isRunInBackground: false,
 );
 def webAppContainer = new DockerContainer(
     name: 'timevic-web-production',
-    dockerFile: 'devops/publish_native/image/web/Dockerfile',
+    dockerFile: 'devops/publish_native/web/Dockerfile',
 );
 
 properties([
