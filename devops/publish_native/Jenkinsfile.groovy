@@ -25,7 +25,7 @@ properties([
     disableConcurrentBuilds()
 ])
 
-node('lampego-web-1') {
+node('lm-web-1') {
     env.ENVIRONMENT = "Development"
 
     stage('CleanUp Docker') {
@@ -58,13 +58,6 @@ node('lampego-web-1') {
 
         // Redis
         envVariables.put('Redis__Server', '10.10.0.2:6379')
-
-        // Kafka
-        envVariables.put('Kafka__Servers', '10.10.0.2:29092,10.10.0.2:29093')
-        envVariables.put('Kafka__ProducerId', 'timevic-reducer')
-        envVariables.put('Kafka__ConsumerClientId', 'timevic-client')
-        envVariables.put('Kafka__Topic__Logs', 'timevic-production-logs')
-        envVariables.put('Kafka__Topic__Notifications', 'timevic-notification-logs')
     
         withCredentials([
                 usernamePassword(credentialsId: "timevic_production_db_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
@@ -88,9 +81,6 @@ node('lampego-web-1') {
         withCredentials([string(credentialsId: "timevic_production_user_jwt", variable: 'AUTH_SECRET')]) {
             envVariables.put('App__Auth__SymmetricSecurityKey', AUTH_SECRET)
         }
-        withCredentials([string(credentialsId: "timevic_production_application_jwt", variable: 'AUTH_SECRET')]) {
-            envVariables.put('App__Application__SymmetricSecurityKey', AUTH_SECRET)
-        }
         withCredentials([string(credentialsId: "timevic_production_recaptcha_secret", variable: 'AUTH_SECRET')]) {
             envVariables.put('ReCaptcha__Secret', AUTH_SECRET)
         }
@@ -106,17 +96,7 @@ node('lampego-web-1') {
 
     stage('Run common API') {
         mainContainer.tagName = 'timevic-api';
-        mainContainer.port = '6105:80';
-        dockerHelper.stopContainer(mainContainer)
-        
-        mainContainer.envVariables = envVariables.clone()
-        mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Api')
-        dockerHelper.runContainer(mainContainer)
-    }
-
-    stage('Run frontend API') {
-        mainContainer.tagName = 'timevic-api-frontend';
-        mainContainer.port = '6106:80';
+        mainContainer.port = '6200:80';
         dockerHelper.stopContainer(mainContainer)
         
         mainContainer.envVariables = envVariables.clone()
@@ -130,12 +110,12 @@ node('lampego-web-1') {
         dockerHelper.stopContainer(mainContainer)
         
         mainContainer.envVariables = envVariables.clone()
-        mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerService')
+        mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerServices')
         dockerHelper.runContainer(mainContainer)
     }
 
     stage('Run web app') {
-        webAppContainer.port = '6107:80';
+        webAppContainer.port = '6201:80';
         dockerHelper.stopContainer(webAppContainer)
         dockerHelper.runContainer(webAppContainer)
     } 
