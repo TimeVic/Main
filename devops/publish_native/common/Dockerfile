@@ -13,7 +13,8 @@ ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
 
 RUN echo "{}" > appsettings.Local.json
-RUN echo "{}" > TimeTracker.Integration.Tests.Api/appsettings.Local.json
+RUN echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json
+RUN echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json
 RUN echo "{}" > TimeTracker.Api/appsettings.Local.json
 RUN echo "{}" > TimeTracker.Migrations/appsettings.Local.json
 
