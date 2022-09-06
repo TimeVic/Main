@@ -1,0 +1,38 @@
+﻿@page "/registration/verification/{verificationToken}"
+
+@using Microsoft.AspNetCore.Components
+@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
+
+@inherits BaseComponent
+
+<div class="row d-flex px-3 justify-content-center">
+    <div class="col-xl-4 p-3">
+        <RadzenCard>
+            <h2 class="mb-4">Registration. Step 2</h2>
+            
+            <RadzenTemplateForm TItem="RegistrationStep2Request" Data="@model" Submit="HandleSubmit">
+                <DataAnnotationsValidator/>
+                <ValidationSummary/>
+
+                <div class="row">
+                    <RadzenLabel
+                        Text="Enter your password"
+                        class="col-sm-3 mb-3"/>
+                    <RadzenPassword
+                        @bind-Value="model.Password"
+                        Class="w-100 mb-3 col"/>
+                </div>
+                @if (!_isLoading)
+                {
+                    <RadzenButton
+                        ButtonType="ButtonType.Submit"
+                        Text="Continue"/>
+                }
+            </RadzenTemplateForm>
+            @if (_isLoading)
+            {
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+            }
+        </RadzenCard>
+    </div>
+</div>
