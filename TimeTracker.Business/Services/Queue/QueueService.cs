@@ -83,13 +83,13 @@ public class QueueService: IQueueService
         }
     }
     
-    private static Type GetContextType(QueueEntity queueItem, Type markerType)
+    private static Type? GetContextType(QueueEntity queueItem, Type markerType)
     {
         var activationResult = Activator.CreateInstance(
             markerType.Assembly.GetName().Name,
             queueItem.ContextType
         );
-        return activationResult.Unwrap().GetType();
+        return activationResult?.Unwrap()?.GetType();
     }
 
     private static bool IsContext<TConext>(Type contextType) where TConext: INotificationContext
