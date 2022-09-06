@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using TimeTracker.Business;
+using TimeTracker.Business.Notifications;
 
 namespace TimeTracker.WorkerServices;
 
@@ -24,6 +25,8 @@ public class Startup
     {
         containerBuilder
             .RegisterAssemblyModules(typeof(BusinessAssemblyMarker).Assembly);
+        containerBuilder
+            .RegisterAssemblyModules(typeof(BusinessNotificationsAssemblyMarker).Assembly);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
