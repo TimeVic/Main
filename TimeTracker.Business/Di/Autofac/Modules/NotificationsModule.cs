@@ -1,8 +1,8 @@
 ﻿using Autofac;
 using Notification.Abstractions;
-using TimeTracker.Business.Notifications;
+using TimeTracker.Business.Notifications.Services;
 
-namespace TimeTracker.Business.Di.Autofac.Modules
+namespace TimeTracker.Business.Notifications.Di.Modules
 {
     public class NotificationsModule : Module
     {
