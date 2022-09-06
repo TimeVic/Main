@@ -1,8 +1,9 @@
 ﻿using Autofac;
 using Notification.Abstractions;
+using TimeTracker.Business.Notifications;
 using TimeTracker.Business.Notifications.Services;
 
-namespace TimeTracker.Business.Notifications.Di.Modules
+namespace TimeTracker.Business.Di.Autofac.Modules
 {
     public class NotificationsModule : Module
     {
@@ -22,6 +23,11 @@ namespace TimeTracker.Business.Notifications.Di.Modules
                 .RegisterType<DefaultAsyncNotificationBuilder>()
                 .As<IAsyncNotificationBuilder>()
                 .InstancePerLifetimeScope();
+            
+            builder
+                .RegisterType<EmailSendingService>()
+                .As<IEmailSendingService>()
+                .SingleInstance();
         }
     }
 }

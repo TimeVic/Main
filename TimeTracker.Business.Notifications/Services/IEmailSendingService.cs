@@ -3,7 +3,7 @@ using TimeTracker.Business.Notifications.Core.Emails;
 
 namespace TimeTracker.Business.Notifications.Services
 {
-    public interface IEmailSendingService : IDomainService
+    public interface IEmailSendingService
     {
         public string SendEmail(
             string to,
