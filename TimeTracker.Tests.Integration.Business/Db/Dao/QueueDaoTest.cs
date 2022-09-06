@@ -18,7 +18,7 @@ public class QueueDaoTest: BaseTest
     public QueueDaoTest(): base()
     {
         _queueDao = Scope.Resolve<IQueueDao>();
-        _queueDao.CompleteAllPending();
+        _queueDao.CompleteAllPending().Wait();
     }
 
     [Fact]
