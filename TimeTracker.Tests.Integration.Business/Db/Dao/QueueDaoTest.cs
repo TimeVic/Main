@@ -18,6 +18,7 @@ public class QueueDaoTest: BaseTest
     public QueueDaoTest(): base()
     {
         _queueDao = Scope.Resolve<IQueueDao>();
+        _queueDao.CompleteAllPending();
     }
 
     [Fact]
@@ -124,5 +125,12 @@ public class QueueDaoTest: BaseTest
         {
             await _queueDao.MarkAsProcessed(actualItem);
         });
+    }
+    
+    [Fact]
+    public async Task ShouldDoAnythingIfPendingNotFound()
+    {
+        var actualItem = await _queueDao.GetTop(QueueChannel.Default);
+        Assert.Null(actualItem);
     }
 }
