@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
 using AspNetCore.ApiControllers.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 
 namespace TimeTracker.Api.Controllers.Public.User;
@@ -39,4 +40,12 @@ public class UserController : MainApiControllerBase
         => this.RequestAsync()
             .For<RegistrationStep2ResponseDto>()
             .With(request);
+    
+    [HttpGet("check-is-logged-in")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public Task<IActionResult> CheckIsLoggedIn([FromQuery] CheckIsLoggedInRequest request)
+        => this.RequestAsync(request);
 }

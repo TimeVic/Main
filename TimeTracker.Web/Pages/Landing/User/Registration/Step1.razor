@@ -1,0 +1,36 @@
+﻿@page "/registration/step1"
+
+@using TimeTracker.Web.Pages.Landing.Shared;
+@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
+
+@inherits BaseComponent
+@layout Layout
+
+<div class="row d-flex px-3 justify-content-center">
+    <div class="col-xl-4 p-3">
+        <RadzenCard>
+            <h2 class="mb-4">Registration</h2>
+            <RadzenTemplateForm TItem="RegistrationStep1Request" Data="@model" Submit="HandleSubmit">
+                <DataAnnotationsValidator/>
+                <ValidationSummary/>
+
+                <div class="mb-2">
+                    <RadzenLabel
+                        Text="Enter your email"
+                        class="col-sm-3 mb-3"/>
+                    <RadzenTextBox @bind-Value="model.Email" Class="w-100 mb-3 col"/>
+                </div>
+                @if (_isLoading)
+                {
+                    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+                }
+                else
+                {
+                    <RadzenButton
+                        ButtonType="ButtonType.Submit"
+                        Text="Send verification email"/>
+                }
+            </RadzenTemplateForm>
+        </RadzenCard>
+    </div>
+</div>

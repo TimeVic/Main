@@ -72,9 +72,12 @@ public class QueueDao: IQueueDao
                 .OrderBy(item => item.CreateTime)
                 .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
-            result.Status = QueueStatus.InProcess;
-            await _session.SaveAsync(result, cancellationToken);
-            
+            if (result != null)
+            {
+                result.Status = QueueStatus.InProcess;
+                await _session.SaveAsync(result, cancellationToken);    
+            }
+
             await transaction.CommitAsync(cancellationToken);
             return result;
         }

@@ -1,0 +1,44 @@
+﻿@inherits BaseComponent
+
+<RadzenHeader>
+    <div class="row justify-content-start align-items-center p-1">
+        <div class="col-5 d-flex align-items-center">
+            <a class="navbar-brand" href="#">
+                <img src="/img/logo/64.png" alt="" class="d-inline-block">
+                <b>TimeVic</b>
+            </a>
+        </div>
+        <div class="col-7 d-flex align-items-center justify-content-end">
+            <div class="d-md-inline-flex align-items-center">
+                @if (AuthState.Value.IsLoggedIn)
+                {
+                    <RadzenLink
+                        Path="@SiteUrl.DashboardBase"
+                        Text="Dashboard"/>
+                }
+                else
+                {
+                    <RadzenLink
+                        Path="@SiteUrl.Login"
+                        Text="Login"/>
+                    <RadzenLink
+                        Path="@SiteUrl.Registration_Step1"
+                        Text="Sign Up"
+                        class="ml-3"/>
+                }
+            </div>
+            @if (AuthState.Value.IsLoggedIn)
+            {
+                <RadzenProfileMenu Click="OnClickUserMenu">
+                    <Template>
+                        <RadzenGravatar Email="user@example.com">
+                        </RadzenGravatar>
+                    </Template>
+                    <ChildContent>
+                        <RadzenProfileMenuItem Text="Logout" Value="logout" Icon="logout"></RadzenProfileMenuItem>
+                    </ChildContent>
+                </RadzenProfileMenu>    
+            }
+        </div>
+    </div>
+</RadzenHeader>

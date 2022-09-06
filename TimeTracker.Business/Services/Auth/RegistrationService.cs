@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Utils;
-using TimeTracker.Business.Exceptions.Api;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;

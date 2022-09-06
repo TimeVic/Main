@@ -1,5 +1,4 @@
 using Autofac;
-using TimeTracker.Business.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;

@@ -27,4 +27,18 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages\Dashboard" />
+      <Folder Include="Store" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TimeTracker.Api.Shared\TimeTracker.Api.Shared.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\Landing\User\Registration\Step1.razor" />
+    </ItemGroup>
+
 </Project>

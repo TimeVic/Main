@@ -1,5 +1,5 @@
-﻿using TimeTracker.Business.Common.Utils;
-using TimeTracker.Business.Exceptions.Api;
+﻿using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
