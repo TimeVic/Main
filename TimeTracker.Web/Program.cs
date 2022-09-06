@@ -4,10 +4,10 @@ using Majorsoft.Blazor.WebAssembly.Logging.Console;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
-using TimeTracker.Business.Common.Services.Web.ReCaptcha;
 using TimeTracker.Web;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.Validation;
 
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
