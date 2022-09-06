@@ -25,10 +25,15 @@ public class UserSeeder: IUserSeeder
         _jwtAuthService = jwtAuthService;
     }
 
-    public async Task<UserEntity> CreateActivatedAsync(string password = "test password")
+    public async Task<UserEntity> CreatePendingAsync()
     {
         var user = _userFactory.Generate();
-        user = await _registrationService.CreatePendingUser(user.Email);
+        return await _registrationService.CreatePendingUser(user.Email);
+    }
+
+    public async Task<UserEntity> CreateActivatedAsync(string password = "test password")
+    {
+        var user = await CreatePendingAsync();
         user = await _registrationService.ActivateUser(user.VerificationToken, password);
         await _dbSessionProvider.PerformCommitAsync();
         return user;
