@@ -59,37 +59,37 @@ public class QueueService: IQueueService
 
     private async Task ProcessNotificationItem(QueueEntity queueItem, CancellationToken cancellationToken = default)
     {
-        var errorMessage = $"Incorrect notification context: {queueItem.ContextType}";
         var contextType = GetContextType(queueItem, typeof(BusinessNotificationsAssemblyMarker));
         if (contextType == null)
         {
-            _logger.LogError(errorMessage);
+            _logger.LogError($"Notification context was not found in assembly: {queueItem.ContextType}");
+            return;
         }
         if (IsContext<TestNotificationContext>(contextType))
         {
             await SendNotification<TestNotificationContext>(queueItem, cancellationToken);
         }
-        if (IsContext<RegistrationNotificationContext>(contextType))
+        else if (IsContext<RegistrationNotificationContext>(contextType))
         {
             await SendNotification<RegistrationNotificationContext>(queueItem, cancellationToken);
         }
-        if (IsContext<EmailVerifiedNotificationContext>(contextType))
+        else if (IsContext<EmailVerifiedNotificationContext>(contextType))
         {
             await SendNotification<EmailVerifiedNotificationContext>(queueItem, cancellationToken);
         }
         else
         {
-            _logger.LogError(errorMessage);
+            _logger.LogError($"Incorrect notification context: {queueItem.ContextType}");
         }
     }
     
-    private static Type GetContextType(QueueEntity queueItem, Type markerType)
+    private static Type? GetContextType(QueueEntity queueItem, Type markerType)
     {
         var activationResult = Activator.CreateInstance(
             markerType.Assembly.GetName().Name,
             queueItem.ContextType
         );
-        return activationResult.Unwrap().GetType();
+        return activationResult?.Unwrap()?.GetType();
     }
 
     private static bool IsContext<TConext>(Type contextType) where TConext: INotificationContext
