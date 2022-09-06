@@ -70,13 +70,8 @@ node('lm-web-1') {
         withCredentials([
                 usernamePassword(credentialsId: "timevic_production_smtp_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
         ]) {
-            envVariables.put('Smtp__Server', 'smtp-pulse.com')
             envVariables.put('Smtp__UserName', USER_NAME)
             envVariables.put('Smtp__Password', PASSWORD)
-            envVariables.put('Smtp__From__Name', 'TimeVic')
-            envVariables.put('Smtp__From__Email', 'no-reply@timevic.com')
-            envVariables.put('Smtp__Port', '465')
-            envVariables.put('Smtp__EnableSsl', 'true')
         }
         withCredentials([string(credentialsId: "timevic_production_user_jwt", variable: 'AUTH_SECRET')]) {
             envVariables.put('App__Auth__SymmetricSecurityKey', AUTH_SECRET)
