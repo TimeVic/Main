@@ -19,7 +19,7 @@ public class PushNotificationTest: BaseTest
     {
         var testContext = new TestNotificationContext()
         {
-            ToAddress = "test@test.com"
+            ToAddress = "lampego@gmail.com"
         };
 
         await _queueService.PushNotification(testContext);
