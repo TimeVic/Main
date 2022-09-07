@@ -44,7 +44,7 @@ public partial class Login
             var loginResponse = await _apiService.LoginAsync(model);
             if (!string.IsNullOrEmpty(loginResponse.Token))
             {
-                _authorizationService.Login(loginResponse.Token);
+                _authorizationService.Login(loginResponse.Token, loginResponse.User);
                 _navigationManager.NavigateTo(SiteUrl.DashboardBase);
             }
         }

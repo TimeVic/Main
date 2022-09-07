@@ -21,12 +21,15 @@ public class TimeParsingServiceTest: BaseTest
     }
 
     [Theory]
+    [InlineData("", "0:00")]
     [InlineData("1", "1:00")]
     [InlineData("10", "10:00")]
     [InlineData("25", "0:00")]
+    [InlineData("24", "0:00")]
     [InlineData("1061", "11:00")]
     [InlineData("0060", "1:00")]
     [InlineData("0002", "0:02")]
+    [InlineData("123", "12:30")]
     public void ShouldFormatTime(string actual, string expect)
     {
         Assert.Equal(expect, _timeParsingService.FormatTime(actual));

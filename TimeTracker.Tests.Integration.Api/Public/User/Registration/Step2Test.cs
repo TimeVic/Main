@@ -47,6 +47,7 @@ public class Step2Test: BaseTest
         var responseData = await response.GetJsonDataAsync<RegistrationStep2ResponseDto>();
         Assert.True(_jwtService.IsValidJwt(responseData.JwtToken));
         Assert.Equal(user.Id, _jwtService.GetUserId(responseData.JwtToken));
+        Assert.NotNull(responseData.User);
         
         await _queueService.Process(QueueChannel.Notifications);
         Assert.True(EmailSendingService.IsEmailSent);

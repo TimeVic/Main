@@ -8,4 +8,13 @@ public class ApiUrl
     public const string RegistrationStep1 = "user/registration/step1";
     public const string RegistrationStep2 = "user/registration/step2";
     #endregion
+    
+    #region Time Entry
+    
+    public const string TimeEntryStart = "dashboard/time-entry/start";
+    public const string TimeEntryStop = "dashboard/time-entry/stop";
+    public const string TimeEntrySet = "dashboard/time-entry/set";
+    public const string TimeEntryGetList = "dashboard/time-entry/list";
+    
+    #endregion
 }
