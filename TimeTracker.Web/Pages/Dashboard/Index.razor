@@ -1,0 +1,13 @@
+﻿@page "/dashboard"
+
+@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Web.Shared.Components.TimeEntry
+
+@inherits BaseComponent
+@layout Layout
+
+<h1>Dashboard</h1>
+
+<TimeEntryForm/>
+
+<SurveyPrompt Title="How is Blazor working for you?"/>

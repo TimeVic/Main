@@ -1,0 +1,27 @@
+﻿@inherits BaseLayout
+
+<RadzenLayout>
+    <MainHeader/>
+    <RadzenBody>
+        Is logged in: @AuthState.Value.IsLoggedIn
+        <div class="container-fluid">
+            @Body
+        </div>
+        @if (!IsShowReCaptcha)
+        {
+            <style>
+                    .grecaptcha-badge {
+                        visibility: hidden;
+                    }
+                </style>
+        }
+    </RadzenBody>
+    <RadzenFooter>
+        <Footer></Footer>
+    </RadzenFooter>
+</RadzenLayout>
+
+<RadzenContextMenu/>
+<RadzenDialog />
+<RadzenTooltip />
+<RadzenNotification/>
