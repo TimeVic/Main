@@ -13,12 +13,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry;
 [ApiController]
 [Authorize]
 [Route("/dashboard/time-entry")]
-public class TimeEntry : MainApiControllerBase
+public class TimeEntryController : MainApiControllerBase
 {
-    public TimeEntry(
+    public TimeEntryController(
         IAsyncRequestBuilder asyncRequestBuilder, 
         IDbSessionProvider commitPerformer,
-        ILogger<TimeEntry> logger
+        ILogger<TimeEntryController> logger
     ) : base(asyncRequestBuilder, commitPerformer, logger)
     {
     }
