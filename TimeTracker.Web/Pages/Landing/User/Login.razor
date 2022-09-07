@@ -1,4 +1,4 @@
-﻿@page "/registration/step1"
+﻿@page "/login"
 
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
 @using TimeTracker.Web.Pages.Landing.Shared
@@ -9,8 +9,8 @@
 <div class="row d-flex px-3 justify-content-center">
     <div class="col-xl-4 p-3">
         <RadzenCard>
-            <h2 class="mb-4">Registration</h2>
-            <RadzenTemplateForm TItem="RegistrationStep1Request" Data="@model" Submit="HandleSubmit">
+            <h2 class="mb-4">Sign In</h2>
+            <RadzenTemplateForm TItem="LoginRequest" Data="@model" Submit="HandleSubmit">
                 <DataAnnotationsValidator/>
                 <ValidationSummary/>
 
@@ -20,6 +20,12 @@
                         class="col-lg-12 col-sm-3 mb-3"/>
                     <RadzenTextBox @bind-Value="model.Email" Class="w-100 mb-3 col"/>
                 </div>
+                <div class="mb-2">
+                    <RadzenLabel
+                        Text="Your password"
+                        class="col-lg-12 col-sm-3 mb-3"/>
+                    <RadzenPassword @bind-Value="model.Password" Class="w-100 mb-3 col"/>
+                </div>
                 @if (_isLoading)
                 {
                     <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
@@ -28,7 +34,7 @@
                 {
                     <RadzenButton
                         ButtonType="ButtonType.Submit"
-                        Text="Send verification email"/>
+                        Text="Login"/>
                 }
             </RadzenTemplateForm>
         </RadzenCard>
