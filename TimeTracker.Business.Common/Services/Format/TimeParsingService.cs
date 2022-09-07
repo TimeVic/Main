@@ -10,21 +10,29 @@ public class TimeParsingService: ITimeParsingService
     public string FormatTime(string timeString)
     {
         var cleanedTime = _cleanUpRegex.Replace(timeString, "");
-        var hours = int.Parse(
-            cleanedTime.Substring(
-                0,
-                cleanedTime.Length >= 2 ? 2 : cleanedTime.Length
-            )    
-        );
+        var hoursLength = cleanedTime.Length >= 2 ? 2 : cleanedTime.Length;
+        var hours = 0;
+        if (hoursLength > 0)
+        {
+            hours = int.Parse(
+                cleanedTime.Substring(
+                    0,
+                    hoursLength
+                )    
+            );            
+        }
+
         int minutes = 0;
         if (cleanedTime.Length >= 3)
         {
-            minutes = int.Parse(
-                cleanedTime.Substring(
-                    2,
-                    cleanedTime.Length >= 4 ? 2 : cleanedTime.Length
-                )    
-            );    
+            var minusLength = cleanedTime.Length - hoursLength;
+            var minutesString = cleanedTime.Substring(
+                2,
+                minusLength >= 2 ? 2 : minusLength
+            );
+            if (minutesString.Length == 1)
+                minutesString += "0";
+            minutes = int.Parse(minutesString);
         }
         minutes = minutes >= 60 ? 60 : minutes;
         if (minutes == 60)
@@ -32,7 +40,7 @@ public class TimeParsingService: ITimeParsingService
             minutes = 0;
             hours++;
         }
-        hours = hours > 24 ? 00 : hours;
+        hours = hours >= 24 ? 00 : hours;
 
         return $"{hours:0}:{minutes:00}";
     }

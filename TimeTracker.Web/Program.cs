@@ -4,6 +4,7 @@ using Majorsoft.Blazor.WebAssembly.Logging.Console;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
+using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Web;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Http;
@@ -34,6 +35,7 @@ builder.Services.AddScoped<ContextMenuService>();
 builder.Services.AddScoped<IApiService, ApiService>();
 builder.Services.AddScoped<IReCaptchaService, ReCaptchaService>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
+builder.Services.AddScoped<ITimeParsingService, TimeParsingService>();
 
 // Store
 builder.Services.AddFluxor(
