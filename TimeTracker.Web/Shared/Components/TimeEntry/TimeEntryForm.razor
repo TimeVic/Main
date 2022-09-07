@@ -1,5 +1,30 @@
-﻿@using TimeTracker.Web.Shared.Components.Form
+﻿@inherits BaseComponent
 
-<h3>TimeEntryForm</h3>
+@using TimeTracker.Web.Shared.Components.Form
 
-<TimeInput/>
+<div class="row d-flex px-3 justify-content-center w-time-form">
+    <RadzenCard Class="w-100 d-flex">
+        <div class="w-100 d-flex justify-content-start">
+            @if (_state.Value.HasActiveEntry)
+            {
+                <RadzenButton
+                    ButtonStyle="ButtonStyle.Secondary"
+                    Class="mr-3"
+                    Click="@(StopTimeEntry)"
+                    Text="Stop"/>
+            }
+            else
+            {
+                <RadzenButton
+                    ButtonStyle="ButtonStyle.Success"
+                    Click="@(StartTimeEntry)"
+                    Class="mr-3"
+                    Text="Start"/>
+            }
+            <div class="w-time-inputs justify-content-between d-flex">
+                <TimeInput Value="DateTimeOffset.MinValue"/>
+                <TimeInput Value="DateTimeOffset.MinValue"/>
+            </div>
+        </div>
+    </RadzenCard>
+</div>

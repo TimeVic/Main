@@ -1,4 +1,5 @@
 using Fluxor;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
@@ -44,18 +45,18 @@ namespace TimeTracker.Web.Services
             var loginData = await _apiService.LoginAsync(model);
             if (loginData != null)
             {
-                Login(loginData?.Token);
+                Login(loginData?.Token, loginData?.User);
                 return true;
             }
 
             return false;
         }
         
-        public void Login(string jwtToken)
+        public void Login(string jwtToken, UserDto user)
         {
             if (!string.IsNullOrEmpty(jwtToken))
             {
-                _dispatcher.Dispatch(new LoginAction(jwtToken));
+                _dispatcher.Dispatch(new LoginAction(jwtToken, user));
                 _dispatcher.Dispatch(new PersistDataAction());
             }
         }

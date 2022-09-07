@@ -25,10 +25,9 @@
       <Content Update="wwwroot\appsettings.Development.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Store" />
+      <Content Include="Shared\Components\TimeEntry\TimeEntryForm.razor.less">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

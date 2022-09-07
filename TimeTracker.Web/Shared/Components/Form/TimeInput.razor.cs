@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using TimeTracker.Business.Common.Services.Format;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Shared.Components.Form;
 
@@ -11,7 +12,7 @@ public partial class TimeInput
         get => DateTimeOffset.Parse(_valueString);
         set
         {
-            _valueString = value.ToString("hh:mm");
+            _valueString = value.ToString("HH:mm");
         }
     }
 
