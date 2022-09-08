@@ -13,7 +13,7 @@ using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 {
-    public class GetListRequestHandler : IAsyncRequestHandler<GetListRequest, PaginatedListDto<TimeEntryDto>>
+    public class GetListRequestHandler : IAsyncRequestHandler<GetListRequest, GetListResponse>
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
@@ -33,7 +33,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _timeEntryDao = timeEntryDao;
         }
     
-        public async Task<PaginatedListDto<TimeEntryDto>> ExecuteAsync(GetListRequest request)
+        public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
@@ -44,10 +44,15 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             }
 
             var listDto = await _timeEntryDao.GetListAsync(workspace, request.Page);
-            return new PaginatedListDto<TimeEntryDto>(
-                _mapper.Map<ICollection<TimeEntryDto>>(listDto.Items),
-                listDto.TotalCount
-            );
+            var activeTimeEntry = await _timeEntryDao.GetActiveEntryAsync(workspace);
+            return new GetListResponse
+            {
+                List = new PaginatedListDto<TimeEntryDto>(
+                    _mapper.Map<ICollection<TimeEntryDto>>(listDto.Items),
+                    listDto.TotalCount
+                ),
+                ActiveTimeEntry = _mapper.Map<TimeEntryDto>(activeTimeEntry)
+            };
         }
     }
 }
