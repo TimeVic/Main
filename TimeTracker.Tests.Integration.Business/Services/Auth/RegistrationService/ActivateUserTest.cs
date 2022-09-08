@@ -47,6 +47,8 @@ public class ActivateUserTest: BaseTest
             activatedUser.PasswordHash
         );
         Assert.True(activatedUser.IsActivated);
+        Assert.NotNull(activatedUser.DefaultWorkspace);
+        Assert.True(activatedUser.DefaultWorkspace.IsDefault);
         
         
         var actualProcessedCounter = await _queueService.Process(QueueChannel.Notifications);

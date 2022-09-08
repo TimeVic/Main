@@ -5,7 +5,7 @@ namespace TimeTracker.Business.Orm.Dao;
 
 public interface IWorkspaceDao: IDomainService
 {
-    Task<WorkspaceEntity> CreateWorkspace(UserEntity user, string name);
+    Task<WorkspaceEntity> CreateWorkspace(UserEntity user, string name, bool isDefault = false);
 
     Task<bool> HasActiveTimeEntriesAsync(WorkspaceEntity workspace);
 }

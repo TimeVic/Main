@@ -15,6 +15,10 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "name", Length = 200, NotNull = true)]
         public virtual string Name { get; set; }
         
+        [Property(NotNull = true)]
+        [Column(Name = "is_default", NotNull = true)]
+        public virtual bool IsDefault { get; set; }
+        
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }
