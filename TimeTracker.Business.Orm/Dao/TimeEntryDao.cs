@@ -26,6 +26,11 @@ public class TimeEntryDao: ITimeEntryDao
         return await _sessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(id);
     }
     
+    public async Task DeleteAsync(TimeEntryEntity timeEntry)
+    {
+        await _sessionProvider.CurrentSession.DeleteAsync(timeEntry);
+    }    
+    
     public async Task<ListDto<TimeEntryEntity>> GetListAsync(WorkspaceEntity workspace, int page)
     {
         var query = _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
