@@ -23,10 +23,12 @@ public class GetListTest: BaseTest
     private readonly string _jwtToken;
     private readonly WorkspaceEntity _defaultWorkspace;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
+    private readonly ITimeEntryDao _timeEntryDao;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
+        _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
         _defaultWorkspace = _user.Workspaces.First();
     }
@@ -55,10 +57,10 @@ public class GetListTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualDto = await response.GetJsonDataAsync<PaginatedListDto<TimeEntryDto>>();
-        Assert.Equal(expectedCounter, actualDto.TotalCount);
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter, actualDto.List.TotalCount);
         
-        Assert.All(actualDto.Items, item =>
+        Assert.All(actualDto.List.Items, item =>
         {
             Assert.True(item.Id > 0);
             Assert.NotNull(item.Project);
@@ -66,5 +68,24 @@ public class GetListTest: BaseTest
             Assert.True(item.StartTime > DateTime.MinValue);
             Assert.True(item.EndTime > DateTime.MinValue);
         });
+    }
+    
+    [Fact]
+    public async Task ShouldReceiveListWithTimeActiveTimeEntry()
+    {
+        var expectedCounter = 15;
+        await _timeEntrySeeder.CreateSeveralAsync(_user, expectedCounter);
+        await _timeEntryDao.StartNewAsync(_defaultWorkspace);
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id,
+            Page = 1
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.NotNull(actualDto.ActiveTimeEntry);
+        Assert.True(actualDto.ActiveTimeEntry.Id > 0);
     }
 }

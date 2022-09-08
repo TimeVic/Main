@@ -58,6 +58,6 @@ public class TimeEntryController : MainApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> List([FromBody] GetListRequest request)
         => this.RequestAsync()
-            .For<PaginatedListDto<TimeEntryDto>>()
+            .For<GetListResponse>()
             .With(request);
 }

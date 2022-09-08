@@ -5,13 +5,9 @@ using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 
-public class GetListRequest: IRequest<GetListResponse>
+public class GetListResponse: IResponse
 {
-    [Required]
-    [IsPositive]
-    public int Page { get; set; }
+    public PaginatedListDto<TimeEntryDto> List { get; set; }
     
-    [Required]
-    [IsPositive]
-    public long WorkspaceId { get; set; }
+    public TimeEntryDto? ActiveTimeEntry { get; set; }
 }
