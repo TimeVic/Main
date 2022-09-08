@@ -11,14 +11,8 @@ public class AuthState
     public string Jwt { get; set; }
     
     public UserDto User { get; set; }
-
-    public long CurrentWorkspaceId { get; set; } = 1;
+    
+    public WorkspaceDto Workspace { get; set; }
 
     public AuthState() { }
-    
-    public AuthState(string jwt, UserDto user)
-    {
-        Jwt = jwt;
-        User = user;
-    }
 }

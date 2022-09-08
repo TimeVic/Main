@@ -17,4 +17,6 @@ public class TimeEntryDto : IResponse
     public DateTime? EndTime { get; set; }
     
     public ProjectDto? Project { get; set; }
+
+    public bool IsActive => EndTime == null;
 }

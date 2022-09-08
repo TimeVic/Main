@@ -7,12 +7,17 @@ public class AuthReducers
     [ReducerMethod(typeof(LogoutAction))]
     public static AuthState ReduceLogoutActionAction(AuthState state)
     {
-        return new AuthState(null, null);
+        return new AuthState();
     }
     
     [ReducerMethod]
     public static AuthState ReduceLoginActionAction(AuthState state, LoginAction action)
     {
-        return new AuthState(action.Jwt, action.User);
+        return new AuthState()
+        {
+            Jwt = action.Jwt,
+            Workspace = action.Workspace,
+            User = action.User
+        };
     }
 }

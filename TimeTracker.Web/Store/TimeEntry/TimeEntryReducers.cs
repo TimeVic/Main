@@ -13,4 +13,17 @@ public class TimeEntryReducers
             ActiveEntry = action.TimeEntry
         };
     }
+    
+    [ReducerMethod]
+    public static TimeEntryState SetActiveTimeEntryActionReducer(TimeEntryState state, SetTimeEntryListItemsAction action)
+    {
+        return state with
+        {
+            List = action.List.Items,
+            TotalCount = action.List.TotalCount,
+            TotalPages = action.List.TotalPages,
+            HasMoreItems = action.List.IsHasMore,
+            ActiveEntry = action.List.Items.FirstOrDefault(item => item.IsActive)
+        };
+    }
 }

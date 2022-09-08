@@ -3,6 +3,7 @@ using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Web.Core.Exceptions;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Services.Http
 {

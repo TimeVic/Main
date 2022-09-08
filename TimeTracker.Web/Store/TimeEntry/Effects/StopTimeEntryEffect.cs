@@ -28,7 +28,7 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
         {
             await _apiService.TimeEntryStopAsync(new StopRequest()
             {
-                WorkspaceId = _authState.Value.CurrentWorkspaceId
+                WorkspaceId = _authState.Value.Workspace.Id
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(null));
         }
