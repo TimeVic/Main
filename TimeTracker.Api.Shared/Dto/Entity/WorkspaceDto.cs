@@ -6,5 +6,7 @@ public class WorkspaceDto : IResponse
 {
     public long Id { get; set; }
     
-    public virtual string Name { get; set; }
+    public string Name { get; set; }
+    
+    public bool IsDefault { get; set; }
 }

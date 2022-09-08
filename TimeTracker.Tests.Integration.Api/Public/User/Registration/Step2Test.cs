@@ -48,6 +48,8 @@ public class Step2Test: BaseTest
         Assert.True(_jwtService.IsValidJwt(responseData.JwtToken));
         Assert.Equal(user.Id, _jwtService.GetUserId(responseData.JwtToken));
         Assert.NotNull(responseData.User);
+        Assert.NotNull(responseData.User.DefaultWorkspace);
+        Assert.True(responseData.User.DefaultWorkspace.IsDefault);
         
         await _queueService.Process(QueueChannel.Notifications);
         Assert.True(EmailSendingService.IsEmailSent);
