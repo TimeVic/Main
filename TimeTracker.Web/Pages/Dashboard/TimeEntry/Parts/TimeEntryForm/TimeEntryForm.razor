@@ -22,8 +22,14 @@
                     Text="Start"/>
             }
             <div class="w-time-inputs justify-content-between d-flex">
-                <TimeInput Value="DateTimeOffset.MinValue"/>
-                <TimeInput Value="DateTimeOffset.MinValue"/>
+                @if (_state.Value.HasActiveEntry)
+                {
+                    <TimeInput Value="@_state.Value.ActiveEntry.StartTime.TimeOfDay"/>
+                }
+                <TimeCounter 
+                    Value="@_state.Value.ActiveEntry?.StartTime" 
+                    IsActive="@_state.Value.HasActiveEntry"
+                    Class="@(_state.Value.HasActiveEntry ? "ml-3" : "")"/>
             </div>
         </div>
     </RadzenCard>

@@ -6,5 +6,9 @@ public interface ITimeParsingService: IDomainService
 {
     string FormatTime(string timeString);
 
-    DateTimeOffset ParseTime(string timeString);
+    TimeSpan ParseTime(string timeString);
+
+    TimeSpan GetTimeSpanFromDateTime(DateTime dateTime);
+
+    string TimeSpanToTimeString(TimeSpan timeSpan, bool isAddSecond = false);
 }

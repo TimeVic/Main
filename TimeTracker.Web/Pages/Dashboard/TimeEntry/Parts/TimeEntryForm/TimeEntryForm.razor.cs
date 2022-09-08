@@ -1,9 +1,8 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using TimeTracker.Web.Core.Components;
 using TimeTracker.Web.Store.TimeEntry;
 
-namespace TimeTracker.Web.Shared.Components.TimeEntry;
+namespace TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts.TimeEntryForm;
 
 public partial class TimeEntryForm
 {

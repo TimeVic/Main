@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using TimeTracker.Business.Common.Services.Format;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Shared.Components.Form;
@@ -7,17 +8,20 @@ namespace TimeTracker.Web.Shared.Components.Form;
 public partial class TimeInput
 {
     [Parameter]
-    public DateTimeOffset Value
+    public bool IsDisabled { get; set; }
+
+    [Parameter]
+    public TimeSpan Value
     {
-        get => DateTimeOffset.Parse(_valueString);
+        get => TimeSpan.Parse(_valueString);
         set
         {
-            _valueString = value.ToString("HH:mm");
+            _valueString = _timeParsingService.TimeSpanToTimeString(value);
         }
     }
 
     [Parameter]
-    public EventCallback<DateTimeOffset> ValueChanged { get; set; }
+    public EventCallback<TimeSpan> ValueChanged { get; set; }
 
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
@@ -27,6 +31,6 @@ public partial class TimeInput
     private void OnChangeValue(string timeString)
     {
         _valueString = _timeParsingService.FormatTime(timeString);
-        ValueChanged.InvokeAsync(DateTimeOffset.Parse(_valueString));
+        ValueChanged.InvokeAsync(TimeSpan.Parse(_valueString));
     }
 }

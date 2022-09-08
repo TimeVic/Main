@@ -19,11 +19,11 @@ public class TimeEntryReducers
     {
         return state with
         {
-            List = action.List.Items,
-            TotalCount = action.List.TotalCount,
-            TotalPages = action.List.TotalPages,
-            HasMoreItems = action.List.IsHasMore,
-            ActiveEntry = action.List.Items.FirstOrDefault(item => item.IsActive)
+            List = action.Response.List.Items,
+            TotalCount = action.Response.List.TotalCount,
+            TotalPages = action.Response.List.TotalPages,
+            HasMoreItems = action.Response.List.IsHasMore,
+            ActiveEntry = action.Response.ActiveTimeEntry
         };
     }
 }

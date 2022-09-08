@@ -15,6 +15,10 @@ public class TimeEntryDto : IResponse
     public DateTime StartTime { get; set; }
     
     public DateTime? EndTime { get; set; }
+
+    public TimeSpan StartTimeOffset => StartTime.TimeOfDay;    
+    
+    public TimeSpan? EndTimeOffset => EndTime?.TimeOfDay;
     
     public ProjectDto? Project { get; set; }
 

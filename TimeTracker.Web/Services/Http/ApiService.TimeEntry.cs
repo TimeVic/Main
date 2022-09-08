@@ -42,9 +42,9 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
-        public async Task<PaginatedListDto<TimeEntryDto>> TimeEntryGetListAsync(GetListRequest model)
+        public async Task<GetListResponse> TimeEntryGetListAsync(GetListRequest model)
         {
-            var response = await PostAuthorizedAsync<PaginatedListDto<TimeEntryDto>>(ApiUrl.TimeEntryGetList, model);
+            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TimeEntryGetList, model);
             if (response == null)
             {
                 throw new ServerErrorException();
