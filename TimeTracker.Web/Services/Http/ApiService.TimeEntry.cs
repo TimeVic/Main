@@ -51,5 +51,13 @@ namespace TimeTracker.Web.Services.Http
 
             return response;
         }
+        
+        public async Task TimeEntryDeleteAsync(long id)
+        {
+            await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntryDelete, new DeleteRequest()
+            {
+                TimeEntryId = id
+            });
+        }
     }
 }

@@ -25,6 +25,7 @@ namespace TimeTracker.Web.Services.Http
         Task<TimeEntryDto> TimeEntryStopAsync(StopRequest model);
         Task<TimeEntryDto> TimeEntrySetAsync(SetRequest model);
         Task<PaginatedListDto<TimeEntryDto>> TimeEntryGetListAsync(GetListRequest model);
+        Task TimeEntryDeleteAsync(long id);
 
         #endregion
     }
