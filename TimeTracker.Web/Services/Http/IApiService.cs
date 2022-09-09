@@ -22,7 +22,7 @@ namespace TimeTracker.Web.Services.Http
         #region TimeEntry
 
         Task<TimeEntryDto> TimeEntryStartAsync(StartRequest model);
-        Task<TimeEntryDto> TimeEntryStopAsync(StopRequest model);
+        Task TimeEntryStopAsync(StopRequest model);
         Task<TimeEntryDto> TimeEntrySetAsync(SetRequest model);
         Task<GetListResponse> TimeEntryGetListAsync(GetListRequest model);
         Task TimeEntryDeleteAsync(long id);

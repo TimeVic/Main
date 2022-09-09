@@ -1,0 +1,10 @@
+﻿@inherits BaseComponent
+
+@using TimeTracker.Web.Shared.Components.Form
+
+<div class="row d-flex px-3 justify-content-center w-time-form mt-3">
+    @foreach (var item in _state.Value.List)
+    {
+        <TimeEntryListItem Item="item"/>
+    }
+</div>

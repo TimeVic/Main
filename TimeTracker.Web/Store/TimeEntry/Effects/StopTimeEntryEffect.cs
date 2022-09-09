@@ -31,6 +31,7 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
                 WorkspaceId = _authState.Value.Workspace.Id
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(null));
+            dispatcher.Dispatch(new LoadTimeEntryListAction(1));
         }
         catch (Exception e)
         {

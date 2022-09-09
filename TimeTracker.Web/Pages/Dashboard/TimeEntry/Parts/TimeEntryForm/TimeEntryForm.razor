@@ -22,15 +22,6 @@
                     Text="Start"/>
             }
             <div class="w-time-inputs justify-content-between d-flex">
-                @if (!_state.Value.HasActiveEntry)
-                {
-                    <TimeInput 
-                        Value="@TimeSpan.Zero"
-                        ValueChanged="@(async time => await OnChangeStartTime(time))"/>
-                    <TimeInput 
-                        Value="@TimeSpan.Zero"
-                        ValueChanged="@(async time => await OnChangeEndTime(time))"/>
-                }
                 <TimeCounter
                     Value="@_state.Value.ActiveEntry?.StartTime" 
                     IsActive="@_state.Value.HasActiveEntry"

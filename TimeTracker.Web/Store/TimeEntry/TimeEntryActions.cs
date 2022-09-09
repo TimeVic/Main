@@ -14,4 +14,4 @@ public record struct LoadTimeEntryListAction(int Page = 1);
 
 public record struct SetTimeEntryListItemsAction(GetListResponse Response);
 
-public record struct SetEntryListAction(TimeEntryDto TimeEntry);
+public record struct SetTimeEntryAction(TimeEntryDto TimeEntry);

@@ -12,8 +12,8 @@ public record TimeEntryState
     }
     
     public TimeEntryDto? ActiveEntry { get; set; }
-    
-    public ICollection<TimeEntryDto> List { get; set; }
+
+    public ICollection<TimeEntryDto> List { get; set; } = new List<TimeEntryDto>();
     
     public int TotalCount { get; set; }
     

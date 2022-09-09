@@ -37,8 +37,4 @@
       <AdditionalFiles Include="Pages\Landing\User\Registration\Step1.razor" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Pages\Dashboard\TimeEntry\Parts" />
-    </ItemGroup>
-
 </Project>

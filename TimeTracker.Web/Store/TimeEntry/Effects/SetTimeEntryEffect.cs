@@ -5,7 +5,7 @@ using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.TimeEntry.Effects;
 
-public class SetTimeEntryEffect: Effect<StartTimeEntryAction>
+public class SetTimeEntryEffect: Effect<SetTimeEntryAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IApiService _apiService;
@@ -22,11 +22,11 @@ public class SetTimeEntryEffect: Effect<StartTimeEntryAction>
         _logger = logger;
     }
 
-    public override async Task HandleAsync(StartTimeEntryAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(SetTimeEntryAction action, IDispatcher dispatcher)
     {
         try
         {
-            var response = await _apiService.TimeEntryStartAsync(new StartRequest()
+            var response = await _apiService.TimeEntrySetAsync(new SetRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id
             });
