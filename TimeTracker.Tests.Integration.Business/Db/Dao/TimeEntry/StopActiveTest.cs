@@ -28,8 +28,10 @@ public class StopActiveTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(workspace, true);
         Assert.Null(activeEntry.EndTime);
         
-        var stoppedEntry = await _timeEntryDao.StopActiveAsync(workspace);
-        Assert.NotNull(stoppedEntry.EndTime);
+        await _timeEntryDao.StopActiveAsync(workspace);
+
+        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+        Assert.NotNull(activeEntry.EndTime);
     }
     
     [Fact]
@@ -42,7 +44,8 @@ public class StopActiveTest: BaseTest
         Assert.Null(activeEntry.EndTime);
         
         var workspace2 = user.Workspaces.Last();
-        var stoppedEntry = await _timeEntryDao.StopActiveAsync(workspace2);
+        await _timeEntryDao.StopActiveAsync(workspace2);
+        var stoppedEntry = await _timeEntryDao.GetActiveEntryAsync(workspace2);
         Assert.Null(stoppedEntry);
     }
     
@@ -51,8 +54,9 @@ public class StopActiveTest: BaseTest
     {
         var user = await _userSeeder.CreateActivatedAsync();
         var workspace1 = user.Workspaces.First();
-        await _timeEntryDao.StartNewAsync(workspace1, true);
-        var stoppedEntry = await _timeEntryDao.StopActiveAsync(workspace1);
-        Assert.True(stoppedEntry.EndTime >= stoppedEntry.StartTime);
+        var startedEntry = await _timeEntryDao.StartNewAsync(workspace1, true);
+        await _timeEntryDao.StopActiveAsync(workspace1);
+        await DbSessionProvider.CurrentSession.RefreshAsync(startedEntry);
+        Assert.True(startedEntry.EndTime >= startedEntry.StartTime);
     }
 }

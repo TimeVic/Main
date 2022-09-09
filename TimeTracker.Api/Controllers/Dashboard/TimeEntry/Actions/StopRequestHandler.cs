@@ -9,7 +9,7 @@ using TimeTracker.Business.Services.Http;
 
 namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 {
-    public class StopRequestHandler : IAsyncRequestHandler<StopRequest, TimeEntryDto>
+    public class StopRequestHandler : IAsyncRequestHandler<StopRequest>
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
@@ -35,7 +35,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _timeEntryDao = timeEntryDao;
         }
     
-        public async Task<TimeEntryDto> ExecuteAsync(StopRequest request)
+        public async Task ExecuteAsync(StopRequest request)
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
@@ -45,8 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new RecordNotFoundException("Workspace not found");
             }
 
-            var timeEntry = await _timeEntryDao.StopActiveAsync(workspace);
-            return _mapper.Map<TimeEntryDto>(timeEntry);
+            await _timeEntryDao.StopActiveAsync(workspace);
         }
     }
 }

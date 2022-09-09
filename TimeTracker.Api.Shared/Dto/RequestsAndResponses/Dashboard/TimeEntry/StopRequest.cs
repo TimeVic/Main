@@ -5,7 +5,7 @@ using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
 {
-    public class StopRequest : IRequest<TimeEntryDto>
+    public class StopRequest : IRequest
     {
         [Required]
         [IsPositive]

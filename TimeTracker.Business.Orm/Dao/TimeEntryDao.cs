@@ -74,15 +74,14 @@ public class TimeEntryDao: ITimeEntryDao
         return entry;
     }
 
-    public async Task<TimeEntryEntity?> StopActiveAsync(WorkspaceEntity workspace)
+    public async Task StopActiveAsync(WorkspaceEntity workspace)
     {
-        var activeTimeEntry = await GetActiveEntryAsync(workspace);
-        if (activeTimeEntry != null)
-        {
-            activeTimeEntry.EndTime = DateTime.UtcNow;
-            await _sessionProvider.CurrentSession.SaveAsync(activeTimeEntry);
-        }
-        return activeTimeEntry;
+        await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+            .Where(item => item.Workspace.Id == workspace.Id)
+            .UpdateAsync(entity => new TimeEntryEntity()
+            {
+                EndTime = DateTime.UtcNow
+            });
     }
     
     public async Task<TimeEntryEntity> SetAsync(

@@ -35,9 +35,7 @@ public class TimeEntryController : MainApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Stop([FromBody] StopRequest request)
-        => this.RequestAsync()
-            .For<TimeEntryDto>()
-            .With(request);
+        => this.RequestAsync(request);
     
     [HttpPost("set")]
     [ProducesResponseType(StatusCodes.Status200OK)]

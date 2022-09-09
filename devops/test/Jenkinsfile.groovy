@@ -118,7 +118,6 @@ enum Stage {
     RUN_MIGRATIONS('Run migrations'),
     RUN_API_UNIT_TESTS('Run API unit tests'),
     RUN_BUSINESS_LOGIC_UNIT_TESTS('Run Business logic unit tests'),
-    RUN_INTEGRATION_TESTS('Run integration tests'),
 
 //    SAVE_ARTIFACTS('Save artifacts'),
 
