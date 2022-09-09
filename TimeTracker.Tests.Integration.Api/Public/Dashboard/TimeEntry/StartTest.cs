@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
+using NHibernate.Linq;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
@@ -59,6 +60,25 @@ public class AddTest: BaseTest
         Assert.Null(actualDto.EndTime);
         Assert.Null(actualDto.Project);
         Assert.Null(actualDto.HourlyRate);
+    }
+    
+    [Fact]
+    public async Task ShouldNotStart2ItemsIfRequestIsAsync()
+    {
+        await PostRequestAsync(Url, _jwtToken, new StartRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id
+        });
+        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var activeRecordsCount = await DbSessionProvider.CurrentSession.Query<TimeEntryEntity>()
+            .Where(item => item.EndTime == null && item.Workspace.Id == _defaultWorkspace.Id)
+            .CountAsync();
+        Assert.Equal(1, activeRecordsCount);
     }
     
     [Fact]

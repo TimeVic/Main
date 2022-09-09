@@ -73,7 +73,7 @@ node('testing-node') {
                 sh 'dotnet run --no-restore --no-build --project ./TimeTracker.Migrations'
             }
 
-            runStage(Stage.RUN_API_UNIT_TESTS) {
+            runStage(Stage.RUN_UNIT_TESTS) {
                 sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Unit.Business'
             }
             
@@ -100,10 +100,9 @@ enum Stage {
     INIT_DB('Init DB'),
     INIT_REDIS('Init Redis'),
     RUN_MIGRATIONS('Run migrations'),
-    RUN_API_UNIT_TESTS('Run API unit tests'),
-    RUN_BUSINESS_LOGIC_UNIT_TESTS('Run Business logic unit tests'),
-    RUN_INTEGRATION_TESTS_1('Run integration tests'),
-    RUN_INTEGRATION_TESTS_2('Run integration tests'),
+    RUN_UNIT_TESTS('Run unit tests'),
+    RUN_INTEGRATION_TESTS_1('Run business logic integration tests'),
+    RUN_INTEGRATION_TESTS_2('Run API integration tests'),
 
 //    SAVE_ARTIFACTS('Save artifacts'),
 

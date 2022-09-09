@@ -39,7 +39,8 @@ public class StartNewTest: BaseTest
         
         var actualEntry = await _timeEntryDao.StartNewAsync(workspace1, true);
         Assert.NotEqual(activeEntry.Id, actualEntry.Id);
-        
+
+        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
         Assert.NotNull(activeEntry.EndTime);
     }
     

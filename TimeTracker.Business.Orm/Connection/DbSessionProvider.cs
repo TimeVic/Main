@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Data;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHibernate;
 using Persistence.Transactions.Behaviors;
@@ -29,7 +30,9 @@ namespace TimeTracker.Business.Orm.Connection
                 {
                     if (_transaction == null || !_transaction.IsActive)
                     {
-                        _transaction = _session.BeginTransaction();
+                        _transaction = _session.BeginTransaction(
+                            IsolationLevel.ReadCommitted    
+                        );
                     }    
                 }
                 return _session;
