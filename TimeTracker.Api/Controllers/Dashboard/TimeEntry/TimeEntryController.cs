@@ -3,9 +3,7 @@ using AspNetCore.ApiControllers.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
-using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 
 namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry;
