@@ -28,4 +28,12 @@ public class ProjectController : MainApiControllerBase
         => this.RequestAsync()
             .For<ProjectDto>()
             .With(request);
+    
+    [HttpPost("list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Add([FromBody] GetListRequest request)
+        => this.RequestAsync()
+            .For<GetListResponse>()
+            .With(request);
 }
