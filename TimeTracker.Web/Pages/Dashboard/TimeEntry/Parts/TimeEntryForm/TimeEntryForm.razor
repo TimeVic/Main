@@ -1,6 +1,7 @@
 ﻿@inherits BaseComponent
 
 @using TimeTracker.Web.Shared.Components.Form
+@using TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts
 
 <div class="row d-flex px-3 justify-content-center w-time-form">
     <RadzenCard Class="w-100 d-flex">
@@ -22,10 +23,9 @@
                     Text="Start"/>
             }
             <div class="w-time-inputs justify-content-between d-flex">
-                <TimeCounter
+                <TimeCounterField
                     Value="@_state.Value.ActiveEntry?.StartTime" 
-                    IsActive="@_state.Value.HasActiveEntry"
-                    Class="@(_state.Value.HasActiveEntry ? "ml-3" : "")"/>
+                    IsActive="@_state.Value.HasActiveEntry"/>
             </div>
         </div>
     </RadzenCard>

@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Web.Core.Helpers;
 
-namespace TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts.TimeEntryForm;
+namespace TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts;
 
-public partial class TimeCounter: IDisposable
+public partial class TimeCounterField: IDisposable
 {
     [Parameter]
     public bool IsActive { get; set; } = true;

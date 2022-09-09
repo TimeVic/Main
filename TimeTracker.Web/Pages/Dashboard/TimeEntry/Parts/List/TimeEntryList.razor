@@ -5,6 +5,10 @@
 <div class="row d-flex px-3 justify-content-center w-time-form mt-3">
     @foreach (var item in _state.Value.List)
     {
+        if (item.IsActive)
+        {
+            continue;
+        }
         <TimeEntryListItem Item="item"/>
     }
 </div>

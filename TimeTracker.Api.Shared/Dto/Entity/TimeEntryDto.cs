@@ -23,4 +23,6 @@ public class TimeEntryDto : IResponse
     public ProjectDto? Project { get; set; }
 
     public bool IsActive => EndTime == null;
+    
+    public TimeSpan Duration => EndTime == null ? TimeSpan.Zero : EndTime.Value - StartTime;
 }
