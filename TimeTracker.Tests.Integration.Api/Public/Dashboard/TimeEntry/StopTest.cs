@@ -56,11 +56,6 @@ public class StopTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.Equal(expectedEntry.Id, actualDto.Id);
-        Assert.True(actualDto.EndTime >= actualDto.StartTime);
-        Assert.NotNull(actualDto.EndTime);
-
         await DbSessionProvider.CurrentSession.RefreshAsync(_defaultWorkspace);
         Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
     }

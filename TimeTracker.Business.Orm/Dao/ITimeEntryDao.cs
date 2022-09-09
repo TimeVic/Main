@@ -18,7 +18,7 @@ public interface ITimeEntryDao: IDomainService
         long? projectId = null
     );
     
-    Task<TimeEntryEntity?> StopActiveAsync(WorkspaceEntity workspace);
+    Task StopActiveAsync(WorkspaceEntity workspace);
 
     Task<TimeEntryEntity> SetAsync(
         WorkspaceEntity workspace,
