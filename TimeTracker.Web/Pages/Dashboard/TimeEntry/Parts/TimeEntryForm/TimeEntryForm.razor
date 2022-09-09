@@ -22,11 +22,13 @@
                     Class="mr-3"
                     Text="Start"/>
             }
-            <div class="w-time-inputs justify-content-between d-flex">
-                <TimeCounterField
-                    Value="@_state.Value.ActiveEntry?.StartTime" 
-                    IsActive="@_state.Value.HasActiveEntry"/>
-            </div>
+            <TimeCounterField
+                Value="@_state.Value.ActiveEntry?.StartTime"
+                IsActive="@_state.Value.HasActiveEntry"/>
+            <RadzenTextBox
+                Class="ml-1"
+                Value="@_state.Value.ActiveEntry?.Description"
+                ValueChanged="@(async value => await OnChangeDescription(value))"/>
         </div>
     </RadzenCard>
 </div>

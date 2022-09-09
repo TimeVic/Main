@@ -29,4 +29,9 @@ public partial class TimeEntryForm
     {
         await Task.CompletedTask;
     }
+
+    private async Task OnChangeDescription(string value)
+    {
+        await Task.CompletedTask;
+    }
 }

@@ -1,0 +1,27 @@
+﻿@using OffLogs.Api.Common.Dto.Entities
+@using Newtonsoft.Json
+@using OffLogs.Business.Common.Constants
+
+<RadzenDropDownDataGrid
+    @ref="_listReference"
+    PageSize="GlobalConstants.ListPageSize"
+    AllowClear="true"
+    TValue="long"
+    Class="@("w-100 " + Class)"
+    LoadData="@LoadData"
+    AllowFiltering="false"
+    AllowSorting="false"
+    AllowVirtualization="true"
+    Count="@_count"
+    Data="@_listToShow"
+    TextProperty="Name"
+    ValueProperty="Id"
+    Placeholder="@Placeholder"
+    Value="@_selectedId"
+    ValueChanged="async (value) => await OnValueChanged(value)">
+
+    <Columns>
+        <RadzenDropDownDataGridColumn Property="Id" Title="ID"/>
+        <RadzenDropDownDataGridColumn Property="Name" Title="Application Name"/>
+    </Columns>
+</RadzenDropDownDataGrid>
