@@ -1,27 +1,27 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
 
-namespace TimeTracker.Tests.Integration.Api.Public.Dashboard.TimeEntry;
+namespace TimeTracker.Tests.Integration.Api.Public.Dashboard.Project;
 
 public class GetListTest: BaseTest
 {
-    private readonly string Url = "/dashboard/time-entry/list";
+    private readonly string Url = "/dashboard/project/list";
     
     private readonly UserEntity _user;
     private readonly string _jwtToken;
     private readonly WorkspaceEntity _defaultWorkspace;
-    private readonly ITimeEntrySeeder _timeEntrySeeder;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
-        _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
         _defaultWorkspace = _user.Workspaces.First();
@@ -42,7 +42,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveList()
     {
         var expectedCounter = 15;
-        await _timeEntrySeeder.CreateSeveralAsync(_user, expectedCounter);
+        await _projectSeeder.CreateSeveralAsync(_user, expectedCounter);
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
@@ -52,34 +52,12 @@ public class GetListTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.Equal(expectedCounter, actualDto.List.TotalCount);
+        Assert.Equal(expectedCounter, actualDto.TotalCount);
         
-        Assert.All(actualDto.List.Items, item =>
+        Assert.All(actualDto.Items, item =>
         {
             Assert.True(item.Id > 0);
-            Assert.NotNull(item.Project);
-            Assert.NotEmpty(item.Description);
-            Assert.True(item.StartTime > DateTime.MinValue);
-            Assert.True(item.EndTime > DateTime.MinValue);
+            Assert.NotEmpty(item.Name);
         });
-    }
-    
-    [Fact]
-    public async Task ShouldReceiveListWithTimeActiveTimeEntry()
-    {
-        var expectedCounter = 15;
-        await _timeEntrySeeder.CreateSeveralAsync(_user, expectedCounter);
-        await _timeEntryDao.StartNewAsync(_defaultWorkspace);
-        
-        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
-        {
-            WorkspaceId = _defaultWorkspace.Id,
-            Page = 1
-        });
-        response.EnsureSuccessStatusCode();
-
-        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.NotNull(actualDto.ActiveTimeEntry);
-        Assert.True(actualDto.ActiveTimeEntry.Id > 0);
     }
 }

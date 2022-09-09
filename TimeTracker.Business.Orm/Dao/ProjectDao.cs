@@ -1,4 +1,8 @@
-﻿using Persistence.Transactions.Behaviors;
+﻿using NHibernate.Linq;
+using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Orm.Dao;
@@ -33,5 +37,21 @@ public class ProjectDao: IProjectDao
             .Inner.JoinAlias(item => item.Workspace, () => workspaceAlias)
             .And(() => workspaceAlias.User.Id == user.Id);
         return await query.ListAsync();
+    }
+    
+    public async Task<ListDto<ProjectEntity>> GetListAsync(WorkspaceEntity workspace, int page)
+    {
+        var query = _sessionProvider.CurrentSession.Query<ProjectEntity>()
+            .Where(item => item.Workspace.Id == workspace.Id);
+        
+        var offset = PaginationUtils.CalculateOffset(page);
+        var items = await query.Skip(offset)
+            .Take(GlobalConstants.ListPageSize)
+            .OrderByDescending(item => item.Name)
+            .ToListAsync();
+        return new ListDto<ProjectEntity>(
+            items,
+            await query.CountAsync()
+        );
     }
 }
