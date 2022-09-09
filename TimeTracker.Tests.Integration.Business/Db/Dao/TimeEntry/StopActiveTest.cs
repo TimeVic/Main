@@ -30,8 +30,8 @@ public class StopActiveTest: BaseTest
         
         await _timeEntryDao.StopActiveAsync(workspace);
 
-        var actualEntry = await _timeEntryDao.GetByIdAsync(activeEntry.Id);
-        Assert.NotNull(actualEntry.EndTime);
+        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+        Assert.NotNull(activeEntry.EndTime);
     }
     
     [Fact]
@@ -56,7 +56,7 @@ public class StopActiveTest: BaseTest
         var workspace1 = user.Workspaces.First();
         var startedEntry = await _timeEntryDao.StartNewAsync(workspace1, true);
         await _timeEntryDao.StopActiveAsync(workspace1);
-        var actualEntry = await _timeEntryDao.GetByIdAsync(startedEntry.Id);
-        Assert.True(actualEntry.EndTime >= actualEntry.StartTime);
+        await DbSessionProvider.CurrentSession.RefreshAsync(startedEntry);
+        Assert.True(startedEntry.EndTime >= startedEntry.StartTime);
     }
 }
