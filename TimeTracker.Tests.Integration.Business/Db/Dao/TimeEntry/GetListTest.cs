@@ -54,4 +54,18 @@ public class GetListTest: BaseTest
         var actualList = await _timeEntryDao.GetListAsync(workspace, 1);
         Assert.Equal(expectedCounter, actualList.TotalCount);
     }
+    
+    [Fact]
+    public async Task ShouldSortList()
+    {
+        var user = await _userSeeder.CreateActivatedAsync();
+        var workspace = user.Workspaces.First();
+        await _timeEntrySeeder.CreateSeveralAsync(user, 3);
+
+        var actualList = await _timeEntryDao.GetListAsync(workspace, 1);
+
+        var actualFirst = actualList.Items.First();
+        var actualLast = actualList.Items.Last();
+        Assert.True(actualFirst.StartTime > actualLast.StartTime);
+    }
 }
