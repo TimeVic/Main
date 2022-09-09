@@ -18,4 +18,15 @@ public partial class TimeEntryForm
     {
         Dispatcher.Dispatch(new StopActiveTimeEntryAction());
     }
+    
+    private async Task OnChangeStartTime(TimeSpan startTime)
+    {
+        
+        await Task.CompletedTask;
+    }
+
+    private async Task OnChangeEndTime(TimeSpan time)
+    {
+        await Task.CompletedTask;
+    }
 }
