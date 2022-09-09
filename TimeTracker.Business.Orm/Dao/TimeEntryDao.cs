@@ -77,7 +77,9 @@ public class TimeEntryDao: ITimeEntryDao
     public async Task StopActiveAsync(WorkspaceEntity workspace)
     {
         await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
-            .Where(item => item.Workspace.Id == workspace.Id)
+            .Where(
+                item => item.Workspace.Id == workspace.Id && item.EndTime == null
+            )
             .UpdateAsync(entity => new TimeEntryEntity()
             {
                 EndTime = DateTime.UtcNow
