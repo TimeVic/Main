@@ -1,7 +1,7 @@
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses;
 
 namespace TimeTracker.Web.Services.Http
 {
@@ -21,11 +21,18 @@ namespace TimeTracker.Web.Services.Http
         
         #region TimeEntry
 
-        Task<TimeEntryDto> TimeEntryStartAsync(StartRequest model);
-        Task<TimeEntryDto> TimeEntryStopAsync(StopRequest model);
-        Task<TimeEntryDto> TimeEntrySetAsync(SetRequest model);
-        Task<PaginatedListDto<TimeEntryDto>> TimeEntryGetListAsync(GetListRequest model);
+        Task<TimeEntryDto> TimeEntryStartAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.StartRequest model);
+        Task TimeEntryStopAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.StopRequest model);
+        Task<TimeEntryDto> TimeEntrySetAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.SetRequest model);
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetListResponse> TimeEntryGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetListRequest model);
         Task TimeEntryDeleteAsync(long id);
+
+        #endregion
+        
+        #region Project
+
+        Task<ProjectDto> ProjectAddAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project.AddRequest model);
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project.GetListResponse> ProjectGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project.GetListRequest model);
 
         #endregion
     }

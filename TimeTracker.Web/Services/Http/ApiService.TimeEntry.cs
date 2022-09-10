@@ -3,6 +3,7 @@ using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Web.Core.Exceptions;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Services.Http
 {
@@ -19,15 +20,9 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
-        public async Task<TimeEntryDto> TimeEntryStopAsync(StopRequest model)
+        public async Task TimeEntryStopAsync(StopRequest model)
         {
-            var response = await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntryStop, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntryStop, model);
         }
         
         public async Task<TimeEntryDto> TimeEntrySetAsync(SetRequest model)
@@ -41,9 +36,9 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
-        public async Task<PaginatedListDto<TimeEntryDto>> TimeEntryGetListAsync(GetListRequest model)
+        public async Task<GetListResponse> TimeEntryGetListAsync(GetListRequest model)
         {
-            var response = await PostAuthorizedAsync<PaginatedListDto<TimeEntryDto>>(ApiUrl.TimeEntryGetList, model);
+            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TimeEntryGetList, model);
             if (response == null)
             {
                 throw new ServerErrorException();

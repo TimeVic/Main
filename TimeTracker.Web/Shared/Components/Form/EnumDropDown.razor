@@ -1,0 +1,21 @@
+﻿@using TimeTracker.Web.Core.Helpers
+
+@typeparam TItem where TItem: struct, IConvertible
+
+<RadzenDropDown
+    AllowClear="true"
+    TValue="TItem"
+    Class="@("w-100 " + Class)"
+    AllowFiltering="false"
+    AllowVirtualization="false"
+    Data="@_list"
+    TextProperty="Name"
+    ValueProperty="Id"
+    Placeholder="@Placeholder"
+    Value="@_value"
+    ValueChanged="OnItemSelected">
+
+    <Template Context="value">
+        <text>@(EnumHelpers.GetDisplayName(typeof(TItem), value))</text>
+    </Template>
+</RadzenDropDown>

@@ -1,0 +1,32 @@
+﻿@inherits BaseComponent
+
+@using TimeTracker.Web.Shared.Components.Form
+
+<RadzenCard Class="w-100 mb-3">
+    <div class="row d-flex">
+        <div class="col-4 d-flex justify-content-start">
+            <DurationField 
+                Value="@Item.Duration"
+                Class="mr-1" />
+            <TimeInput
+                Class="mr-1"
+                Value="@Item.StartTime.TimeOfDay"
+                ValueChanged="@(async time => await OnChangeStartTime(time))"/>
+            <div class="fw-bold pt-2 text-center">
+                <RadzenIcon Icon="code"/>
+            </div>
+            <TimeInput
+                Class="ml-1"
+                Value="@Item.EndTime.Value.TimeOfDay"
+                ValueChanged="@(async time => await OnChangeEndTime(time))"/>
+            
+            <ProjectsDropDown
+                Class="ml-1"/>
+
+            <RadzenTextBox
+                Class="ml-1"
+                Value="@Item.Description"/>
+            
+        </div>
+    </div>
+</RadzenCard>

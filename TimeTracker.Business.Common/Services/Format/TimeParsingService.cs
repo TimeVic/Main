@@ -45,9 +45,22 @@ public class TimeParsingService: ITimeParsingService
         return $"{hours:0}:{minutes:00}";
     }
     
-    public DateTimeOffset ParseTime(string timeString)
+    public TimeSpan ParseTime(string timeString)
     {
         var formattedTime = FormatTime(timeString);
-        return DateTimeOffset.Parse(formattedTime);
+        return TimeSpan.Parse(formattedTime);
+    }
+    
+    public TimeSpan GetTimeSpanFromDateTime(DateTime dateTime)
+    {
+        return TimeSpan.Parse(dateTime.ToString("HH:mm"));
+    }
+    
+    public string TimeSpanToTimeString(TimeSpan timeSpan, bool isAddSecond = false)
+    {
+        return $"{Math.Abs(timeSpan.Hours):0}:{Math.Abs(timeSpan.Minutes):00}"
+            + (
+                isAddSecond ? $":{Math.Abs(timeSpan.Seconds):00}" : ""
+            );
     }
 }

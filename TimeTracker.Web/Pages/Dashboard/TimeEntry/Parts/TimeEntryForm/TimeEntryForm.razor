@@ -1,0 +1,43 @@
+﻿@inherits BaseComponent
+
+@using TimeTracker.Web.Shared.Components.Form
+@using TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts
+
+<div class="row d-flex px-3 justify-content-center w-time-form">
+    <RadzenCard Class="w-100 d-flex">
+        <div class="w-100 d-flex justify-content-start">
+            @if (_state.Value.HasActiveEntry)
+            {
+                <RadzenButton
+                    ButtonStyle="ButtonStyle.Secondary"
+                    Class="mr-1"
+                    Click="@(StopTimeEntry)"
+                    Text="Stop"/>
+            }
+            else
+            {
+                <RadzenButton
+                    ButtonStyle="ButtonStyle.Success"
+                    Click="@(StartTimeEntry)"
+                    Class="mr-1"
+                    Text="Start"/>
+            }
+            <TimeCounterField
+                Class="mr-1"
+                Value="@_state.Value.ActiveEntry?.StartTime"
+                IsActive="@_state.Value.HasActiveEntry"/>
+            
+            <ProjectsDropDown
+                Disabled="!_state.Value.HasActiveEntry"
+                Value="@(_state.Value.ActiveEntry?.Project?.Id ?? 0)"
+                SelectedItemChanged="OnChangeProject"
+                Class="mr-1"/>
+            
+            <RadzenTextBox
+                Class="mr-1"
+                Disabled="!_state.Value.HasActiveEntry"
+                Value="@_state.Value.ActiveEntry?.Description"
+                ValueChanged="OnChangeDescription"/>
+        </div>
+    </RadzenCard>
+</div>

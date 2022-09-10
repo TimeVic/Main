@@ -28,7 +28,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
         {
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
             {
-                WorkspaceId = _authState.Value.CurrentWorkspaceId
+                WorkspaceId = _authState.Value.Workspace.Id
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(response));
         }

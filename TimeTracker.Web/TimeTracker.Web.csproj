@@ -25,9 +25,6 @@
       <Content Update="wwwroot\appsettings.Development.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
-      <Content Include="Shared\Components\TimeEntry\TimeEntryForm.razor.less">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -36,6 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <AdditionalFiles Include="Pages\Dashboard\TimeEntry\Parts\TimeEntryForm\TimeEntryForm.razor" />
       <AdditionalFiles Include="Pages\Landing\User\Registration\Step1.razor" />
     </ItemGroup>
 

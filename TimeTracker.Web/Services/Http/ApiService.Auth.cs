@@ -1,6 +1,7 @@
 ﻿using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Core.Exceptions;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Services.Http
 {
@@ -19,12 +20,15 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<bool> CheckIsLoggedInAsync(string token)
         {
-            var response = await GetAsync(ApiUrl.UserCheckIsLoggedIn, null, token);
-            if (string.IsNullOrEmpty(response))
+            try
             {
-                throw new ServerErrorException();
+                await GetAsync(ApiUrl.UserCheckIsLoggedIn, null, token);
+                return true;
             }
-            return true;
+            catch (Exception e)
+            {
+                return false;
+            }
         }
         
         public async Task<bool> RegistrationStep1Async(RegistrationStep1Request model)

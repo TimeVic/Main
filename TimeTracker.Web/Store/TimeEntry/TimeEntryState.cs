@@ -12,4 +12,14 @@ public record TimeEntryState
     }
     
     public TimeEntryDto? ActiveEntry { get; set; }
+
+    public ICollection<TimeEntryDto> List { get; set; } = new List<TimeEntryDto>();
+    
+    public int TotalCount { get; set; }
+    
+    public int TotalPages { get; set; }
+    
+    public bool HasMoreItems { get; set; }
+    
+    public bool IsListLoading { get; set; }
 }

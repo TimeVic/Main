@@ -1,6 +1,7 @@
 using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common.Actions;
@@ -34,7 +35,7 @@ namespace TimeTracker.Web.Services
             await Task.CompletedTask;
         }
 
-        public string GetJwt()
+        public string? GetJwt()
         {
             var store = _serviceProvider.GetService<IState<AuthState>>();
             return store?.Value.Jwt?.Trim();
@@ -56,7 +57,7 @@ namespace TimeTracker.Web.Services
         {
             if (!string.IsNullOrEmpty(jwtToken))
             {
-                _dispatcher.Dispatch(new LoginAction(jwtToken, user));
+                _dispatcher.Dispatch(new LoginAction(jwtToken, user, user.DefaultWorkspace));
                 _dispatcher.Dispatch(new PersistDataAction());
             }
         }
