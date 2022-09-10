@@ -73,15 +73,15 @@ public class TimeParsingServiceTest: BaseTest
             _timeParsingService.TimeSpanToTimeString(TimeSpan.FromHours(1))
         );
 
-        var timeSpanFromTime = DateTime.Parse("2020-04-30T00:00:00.000Z").AddDays(-2).TimeOfDay;
+        var timeSpanFromTime = DateTime.Parse("2020-04-30T03:00:00.000Z").ToUniversalTime().AddDays(-2).TimeOfDay;
         Assert.Equal(
             "3:00", 
             _timeParsingService.TimeSpanToTimeString(timeSpanFromTime)
         );
         
-        timeSpanFromTime = DateTime.Parse("2020-04-30T12:11:10.000Z").TimeOfDay;
+        timeSpanFromTime = DateTime.Parse("2020-04-30T12:11:10.000Z").ToUniversalTime().TimeOfDay;
         Assert.Equal(
-            "15:11:10", 
+            "12:11:10", 
             _timeParsingService.TimeSpanToTimeString(timeSpanFromTime, true)
         );
     }
