@@ -11,7 +11,7 @@
         AllowSorting="false"
         EditMode="DataGridEditMode.Single"
         PageSize="@GlobalConstants.ListPageSize"
-        Data="@_state.Value.List"
+        Data="@_state.Value.ListToShow"
         AllowPaging="true"
         IsLoading="@_state.Value.IsListLoading"
         Count="@_state.Value.TotalCount"
@@ -26,9 +26,13 @@
                         Value="@entry.Duration"/>
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Date" Width="40px">
+            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Date" Width="60px">
                 <Template Context="entry">
-                    @entry.Date.ToShortDateString()
+                    <RadzenDatePicker 
+                        @bind-Value="@entry.Date"
+                        Change="async date => await OnChangeItemDateAsync(entry, date)"
+                        DateFormat="d"
+                        Class="w-100"/>
                 </Template>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="TimeEntryDto" Title="Period" Width="80px">
@@ -61,6 +65,15 @@
                         Class="ml-1"
                         ValueChanged="async description => await OnChangeDescription(entry, description)"
                         Value="@entry.Description"/>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TimeEntryDto" Title="" Width="30px">
+                <Template Context="entry">
+                    <RadzenButton
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Danger"
+                        Icon="delete"
+                        Click="async () => await OnDeleteItemAsync(entry)"/>
                 </Template>
             </RadzenDataGridColumn>
         </Columns>

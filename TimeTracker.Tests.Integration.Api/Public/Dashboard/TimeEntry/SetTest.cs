@@ -107,6 +107,7 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.Description, actualDto.Description);
         Assert.Equal(fakeEntry.IsBillable, actualDto.IsBillable);
         Assert.Equal(fakeEntry.HourlyRate, actualDto.HourlyRate);
+        Assert.Equal(fakeEntry.Date, actualDto.Date);
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
         
         Assert.True(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));

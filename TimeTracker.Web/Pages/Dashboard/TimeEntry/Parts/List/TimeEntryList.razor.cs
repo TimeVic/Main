@@ -5,6 +5,7 @@ using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Store.TimeEntry;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts.List;
 
@@ -49,10 +50,36 @@ public partial class TimeEntryList
         await Task.CompletedTask;
     }
     
+    private async Task OnChangeItemDateAsync(TimeEntryDto item, DateTime? date)
+    {
+        if (!date.HasValue)
+            return;
+        Debug.Log(date);
+        item.Date = date.Value;
+        await UpdateTimeEntry(item);
+    }
+    
     private async Task UpdateTimeEntry(TimeEntryDto entry)
     {
         Dispatcher.Dispatch(new UpdateTimeEntryAction(entry));
         Dispatcher.Dispatch(new SaveTimeEntryAction(entry));
         await Task.CompletedTask;
+    }
+
+    private async Task OnDeleteItemAsync(TimeEntryDto item)
+    {
+        var isOk = await DialogService.Confirm(
+            "Are you sure you want to remove this item?",
+            "Delete confirmation",
+            new ConfirmOptions()
+            {
+                OkButtonText = "Delete",
+                CancelButtonText = "Cancel"
+            }
+        );
+        if (isOk.HasValue && isOk.Value)
+        {
+            Dispatcher.Dispatch(new DeleteTimeEntryAction(item.Id));
+        }
     }
 }

@@ -15,6 +15,8 @@ public record TimeEntryState
 
     public ICollection<TimeEntryDto> List { get; set; } = new List<TimeEntryDto>();
     
+    public ICollection<TimeEntryDto> ListToShow => List.Where(item => !item.IsActive).ToList();
+
     public int TotalCount { get; set; }
     
     public int TotalPages { get; set; }
