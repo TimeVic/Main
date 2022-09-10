@@ -1,4 +1,5 @@
 using Autofac;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Testing.Factories;
@@ -26,6 +27,11 @@ public class StartNewTest: BaseTest
         var user = await _userSeeder.CreateActivatedAsync();
         var workspace = user.Workspaces.First();
         var activeEntry = await _timeEntryDao.StartNewAsync(workspace, true);
+        Assert.Equal(DateTime.UtcNow.StartOfDay(), activeEntry.Date);
+        Assert.Null(activeEntry.EndTime);
+
+        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+        Assert.Equal(DateTime.UtcNow.StartOfDay(), activeEntry.Date);
         Assert.Null(activeEntry.EndTime);
     }
     

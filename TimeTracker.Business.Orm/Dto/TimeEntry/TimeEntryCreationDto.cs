@@ -10,7 +10,9 @@ public class TimeEntryCreationDto
     
     public bool IsBillable { get; set; }
     
-    public virtual DateTime StartTime { get; set; }
+    public virtual TimeSpan StartTime { get; set; }
     
-    public virtual DateTime? EndTime { get; set; }
+    public virtual TimeSpan? EndTime { get; set; }
+    
+    public virtual DateTime Date { get; set; }
 }

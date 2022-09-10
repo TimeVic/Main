@@ -56,7 +56,8 @@ public class AddTest: BaseTest
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.True(actualDto.Id > 0);
         Assert.Null(actualDto.Description);
-        Assert.True(actualDto.StartTime < DateTime.UtcNow);
+        Assert.True(actualDto.StartTime < DateTime.UtcNow.TimeOfDay);
+        Assert.True(actualDto.Date > DateTime.MinValue);
         Assert.Null(actualDto.EndTime);
         Assert.Null(actualDto.Project);
         Assert.Null(actualDto.HourlyRate);

@@ -23,13 +23,17 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "is_billable", NotNull = false)]
         public virtual bool IsBillable { get; set; }
         
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "start_time", SqlType = "datetime", NotNull = true)]
-        public virtual DateTime StartTime { get; set; }
+        [Property(NotNull = true, TypeType = typeof(DateType))]
+        [Column(Name = "date", SqlType = "date", NotNull = true)]
+        public virtual DateTime Date { get; set; }
         
-        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "end_time", SqlType = "datetime", NotNull = false)]
-        public virtual DateTime? EndTime { get; set; }
+        [Property(NotNull = true, TypeType = typeof(TimeAsTimeSpanType))]
+        [Column(Name = "start_time", SqlType = "time", NotNull = true)]
+        public virtual TimeSpan StartTime { get; set; }
+        
+        [Property(NotNull = false, TypeType = typeof(TimeAsTimeSpanType))]
+        [Column(Name = "end_time", SqlType = "time", NotNull = false)]
+        public virtual TimeSpan? EndTime { get; set; }
         
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]

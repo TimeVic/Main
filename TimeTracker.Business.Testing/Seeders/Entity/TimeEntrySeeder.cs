@@ -40,6 +40,7 @@ public class TimeEntrySeeder: ITimeEntrySeeder
                     Description = fakeEntry.Description,
                     EndTime = fakeEntry.EndTime.Value,
                     StartTime = fakeEntry.StartTime,
+                    Date = fakeEntry.Date,
                     HourlyRate = fakeEntry.HourlyRate,
                     IsBillable = fakeEntry.IsBillable
                 },
