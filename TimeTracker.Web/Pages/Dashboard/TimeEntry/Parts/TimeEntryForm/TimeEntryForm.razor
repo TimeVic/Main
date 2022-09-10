@@ -28,12 +28,16 @@
                 IsActive="@_state.Value.HasActiveEntry"/>
             
             <ProjectsDropDown
+                Disabled="!_state.Value.HasActiveEntry"
+                Value="@(_state.Value.ActiveEntry?.Project?.Id ?? 0)"
+                SelectedItemChanged="OnChangeProject"
                 Class="mr-1"/>
             
             <RadzenTextBox
                 Class="mr-1"
+                Disabled="!_state.Value.HasActiveEntry"
                 Value="@_state.Value.ActiveEntry?.Description"
-                ValueChanged="@(async value => await OnChangeDescription(value))"/>
+                ValueChanged="OnChangeDescription"/>
         </div>
     </RadzenCard>
 </div>

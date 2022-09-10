@@ -25,4 +25,14 @@ public class TimeEntryDto : IResponse
     public bool IsActive => EndTime == null;
     
     public TimeSpan Duration => EndTime == null ? TimeSpan.Zero : EndTime.Value - StartTime;
+
+    public void UpdateFrom(TimeEntryDto fromEntry)
+    {
+        Description = fromEntry.Description;
+        Project = fromEntry.Project;
+        EndTime = fromEntry.EndTime;
+        StartTime = fromEntry.StartTime;
+        HourlyRate = fromEntry.HourlyRate;
+        IsBillable = fromEntry.IsBillable;
+    }
 }

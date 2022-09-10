@@ -11,6 +11,9 @@ namespace TimeTracker.Web.Shared.Components.Form;
 
 public partial class ProjectsDropDown
 {
+    [Parameter] 
+    public bool Disabled { get; set; }
+
     [Parameter]
     public long Value
     {

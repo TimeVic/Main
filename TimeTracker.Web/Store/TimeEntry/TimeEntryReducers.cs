@@ -15,7 +15,7 @@ public class TimeEntryReducers
     }
     
     [ReducerMethod]
-    public static TimeEntryState SetActiveTimeEntryActionReducer(TimeEntryState state, SetTimeEntryListItemsAction action)
+    public static TimeEntryState SetTimeEntryListItemsActionReducer(TimeEntryState state, SetTimeEntryListItemsAction action)
     {
         return state with
         {
@@ -34,5 +34,21 @@ public class TimeEntryReducers
         {
             IsListLoading = action.IsLoading
         };
+    }
+    
+    [ReducerMethod]
+    public static TimeEntryState UpdateTimeEntryActionReducer(TimeEntryState state, UpdateTimeEntryAction action)
+    {
+        var timeEntry = state.List.FirstOrDefault(item => item.Id == action.TimeEntry.Id);
+        if (timeEntry != null)
+        {
+            timeEntry.UpdateFrom(action.TimeEntry);
+        }
+        if (state.ActiveEntry != null && state.ActiveEntry?.Id == action.TimeEntry.Id)
+        {
+            state.ActiveEntry.UpdateFrom(action.TimeEntry);
+        }
+
+        return state;
     }
 }

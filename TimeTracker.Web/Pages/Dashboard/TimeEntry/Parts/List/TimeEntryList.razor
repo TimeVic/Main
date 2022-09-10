@@ -37,20 +37,21 @@
                         <TimeInput
                             Class="mr-1"
                             Value="@entry.StartTime.TimeOfDay"
-                            ValueChanged="@(async time => await OnChangeStartTime(time))"/>
+                            ValueChanged="@(async time => await OnChangeStartTime(entry, time))"/>
                         <div class="fw-bold pt-2 text-center">
                             <RadzenIcon Icon="code"/>
                         </div>
                         <TimeInput
                             Class="ml-1"
                             Value="@entry.EndTime.Value.TimeOfDay"
-                            ValueChanged="@(async time => await OnChangeEndTime(time))"/>
+                            ValueChanged="@(async time => await OnChangeEndTime(entry, time))"/>
                     </div>
                 </Template>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="TimeEntryDto" Title="Project" Width="80px">
                 <Template Context="entry">
                     <ProjectsDropDown
+                        SelectedItemChanged="async project => await OnChangeProject(entry, project)"
                         Class="ml-1"/>
                 </Template>
             </RadzenDataGridColumn>
@@ -58,6 +59,7 @@
                 <Template Context="entry">
                     <RadzenTextBox
                         Class="ml-1"
+                        ValueChanged="async description => await OnChangeDescription(entry, description)"
                         Value="@entry.Description"/>
                 </Template>
             </RadzenDataGridColumn>
