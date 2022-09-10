@@ -12,5 +12,5 @@ public class TimeEntryCreationDto
     
     public virtual DateTime StartTime { get; set; }
     
-    public virtual DateTime EndTime { get; set; }
+    public virtual DateTime? EndTime { get; set; }
 }
