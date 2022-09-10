@@ -92,7 +92,7 @@ public class SetTest: BaseTest
             Id = expectedEntry.Id,
             WorkspaceId = _defaultWorkspace.Id,
             Description = fakeEntry.Description,
-            EndTime = fakeEntry.EndTime.Value,
+            EndTime = null,
             StartTime = fakeEntry.StartTime,
             HourlyRate = fakeEntry.HourlyRate,
             IsBillable = fakeEntry.IsBillable,
@@ -102,7 +102,7 @@ public class SetTest: BaseTest
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.True(actualDto.Id > 0);
-        Assert.Equal(expectedEntry.EndTime, actualDto.EndTime);
+        Assert.Null(actualDto.EndTime);
         Assert.Equal(fakeEntry.StartTime, actualDto.StartTime);
         Assert.Equal(fakeEntry.Description, actualDto.Description);
         Assert.Equal(fakeEntry.IsBillable, actualDto.IsBillable);

@@ -25,6 +25,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
     
         public DateTime StartTime { get; set; }
     
-        public DateTime EndTime { get; set; }
+        public DateTime? EndTime { get; set; }
     }
 }
