@@ -26,4 +26,13 @@ public class TimeEntryReducers
             ActiveEntry = action.Response.ActiveTimeEntry
         };
     }
+    
+    [ReducerMethod]
+    public static TimeEntryState SetTimeEntryIsListLoadingReducer(TimeEntryState state, SetTimeEntryIsListLoading action)
+    {
+        return state with
+        {
+            IsListLoading = action.IsLoading
+        };
+    }
 }

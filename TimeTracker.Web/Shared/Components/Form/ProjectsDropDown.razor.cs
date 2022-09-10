@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Fluxor;
+using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Shared.Components.Form;
 
@@ -32,6 +35,9 @@ public partial class ProjectsDropDown
     
     [Inject]
     public IApiService _apiService { get; set; }
+    
+    [Inject]
+    public IState<AuthState> _authState { get; set; }
     
     private ICollection<ProjectDto> _list = new List<ProjectDto>();
 
@@ -82,8 +88,9 @@ public partial class ProjectsDropDown
         }
 
         _page += 1;
-        var response = await _apiService.GetApplicationsAsync(new GetListRequest()
+        var response = await _apiService.ProjectGetListAsync(new GetListRequest()
         {
+            WorkspaceId = _authState.Value.Workspace.Id,
             Page = _page
         });
         if (response == null)

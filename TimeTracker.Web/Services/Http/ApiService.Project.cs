@@ -1,17 +1,15 @@
 ﻿using TimeTracker.Api.Shared.Constants;
-using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Web.Core.Exceptions;
-using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<TimeEntryDto> TimeEntryStartAsync(StartRequest model)
+        public async Task<ProjectDto> ProjectAddAsync(AddRequest model)
         {
-            var response = await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntryStart, model);
+            var response = await PostAuthorizedAsync<ProjectDto>(ApiUrl.ProjectAdd, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -20,39 +18,15 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
-        public async Task TimeEntryStopAsync(StopRequest model)
+        public async Task<GetListResponse> ProjectGetListAsync(GetListRequest model)
         {
-            await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntryStop, model);
-        }
-        
-        public async Task<TimeEntryDto> TimeEntrySetAsync(SetRequest model)
-        {
-            var response = await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntrySet, model);
+            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.ProjectList, model);
             if (response == null)
             {
                 throw new ServerErrorException();
             }
 
             return response;
-        }
-        
-        public async Task<GetListResponse> TimeEntryGetListAsync(GetListRequest model)
-        {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TimeEntryGetList, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
-        }
-        
-        public async Task TimeEntryDeleteAsync(long id)
-        {
-            await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntryDelete, new DeleteRequest()
-            {
-                TimeEntryId = id
-            });
         }
     }
 }

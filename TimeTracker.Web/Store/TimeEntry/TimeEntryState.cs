@@ -20,4 +20,6 @@ public record TimeEntryState
     public int TotalPages { get; set; }
     
     public bool HasMoreItems { get; set; }
+    
+    public bool IsListLoading { get; set; }
 }

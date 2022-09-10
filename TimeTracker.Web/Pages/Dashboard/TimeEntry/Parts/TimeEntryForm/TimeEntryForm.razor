@@ -10,7 +10,7 @@
             {
                 <RadzenButton
                     ButtonStyle="ButtonStyle.Secondary"
-                    Class="mr-3"
+                    Class="mr-1"
                     Click="@(StopTimeEntry)"
                     Text="Stop"/>
             }
@@ -19,14 +19,19 @@
                 <RadzenButton
                     ButtonStyle="ButtonStyle.Success"
                     Click="@(StartTimeEntry)"
-                    Class="mr-3"
+                    Class="mr-1"
                     Text="Start"/>
             }
             <TimeCounterField
+                Class="mr-1"
                 Value="@_state.Value.ActiveEntry?.StartTime"
                 IsActive="@_state.Value.HasActiveEntry"/>
+            
+            <ProjectsDropDown
+                Class="mr-1"/>
+            
             <RadzenTextBox
-                Class="ml-1"
+                Class="mr-1"
                 Value="@_state.Value.ActiveEntry?.Description"
                 ValueChanged="@(async value => await OnChangeDescription(value))"/>
         </div>

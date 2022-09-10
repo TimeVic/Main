@@ -18,4 +18,11 @@ public class ApiUrl
     public const string TimeEntryDelete = "dashboard/time-entry/delete";
     
     #endregion
+    
+    #region Project
+    
+    public const string ProjectAdd = "dashboard/project/add";
+    public const string ProjectList = "dashboard/project/list";
+    
+    #endregion
 }

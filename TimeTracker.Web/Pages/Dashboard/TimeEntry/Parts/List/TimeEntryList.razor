@@ -1,14 +1,66 @@
 ﻿@inherits BaseComponent
 
 @using TimeTracker.Web.Shared.Components.Form
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
 
 <div class="row d-flex px-3 justify-content-center w-time-form mt-3">
-    @foreach (var item in _state.Value.List)
-    {
-        if (item.IsActive)
-        {
-            continue;
-        }
-        <TimeEntryListItem Item="item"/>
-    }
+    <RadzenDataGrid
+        @ref="@_grid"
+        TItem="TimeEntryDto"
+        AllowSorting="false"
+        EditMode="DataGridEditMode.Single"
+        PageSize="@GlobalConstants.ListPageSize"
+        Data="@_state.Value.List"
+        AllowPaging="true"
+        IsLoading="@_state.Value.IsListLoading"
+        Count="@_state.Value.TotalCount"
+        LoadData="@OnLoadList"
+        ShowPagingSummary="true"
+        ColumnWidth="200px">
+
+        <Columns>
+            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Duration" Width="40px">
+                <Template Context="entry">
+                    <DurationField
+                        Value="@entry.Duration"/>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Date" Width="40px">
+                <Template Context="entry">
+                    @entry.StartTime.ToShortDateString()
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Period" Width="80px">
+                <Template Context="entry">
+                    <div class="d-flex justify-content-start">
+                        <TimeInput
+                            Class="mr-1"
+                            Value="@entry.StartTime.TimeOfDay"
+                            ValueChanged="@(async time => await OnChangeStartTime(time))"/>
+                        <div class="fw-bold pt-2 text-center">
+                            <RadzenIcon Icon="code"/>
+                        </div>
+                        <TimeInput
+                            Class="ml-1"
+                            Value="@entry.EndTime.Value.TimeOfDay"
+                            ValueChanged="@(async time => await OnChangeEndTime(time))"/>
+                    </div>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Project" Width="80px">
+                <Template Context="entry">
+                    <ProjectsDropDown
+                        Class="ml-1"/>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Description" Width="200px">
+                <Template Context="entry">
+                    <RadzenTextBox
+                        Class="ml-1"
+                        Value="@entry.Description"/>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
 </div>

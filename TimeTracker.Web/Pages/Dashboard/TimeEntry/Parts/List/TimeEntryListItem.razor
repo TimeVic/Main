@@ -19,14 +19,14 @@
                 Class="ml-1"
                 Value="@Item.EndTime.Value.TimeOfDay"
                 ValueChanged="@(async time => await OnChangeEndTime(time))"/>
+            
+            <ProjectsDropDown
+                Class="ml-1"/>
 
-        </div>
-        <div class="col-2">
-            Project
-        </div>
-        <div class="col">
             <RadzenTextBox
+                Class="ml-1"
                 Value="@Item.Description"/>
+            
         </div>
     </div>
 </RadzenCard>
