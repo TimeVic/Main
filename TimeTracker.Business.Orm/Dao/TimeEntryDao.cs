@@ -34,12 +34,13 @@ public class TimeEntryDao: ITimeEntryDao
     public async Task<ListDto<TimeEntryEntity>> GetListAsync(WorkspaceEntity workspace, int page)
     {
         var query = _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+            .OrderByDescending(item => item.StartTime)
             .Where(item => item.Workspace.Id == workspace.Id);
         
         var offset = PaginationUtils.CalculateOffset(page);
-        var items = await query.Skip(offset)
+        var items = await query
+            .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
-            .OrderByDescending(item => item.StartTime)
             .ToListAsync();
         return new ListDto<TimeEntryEntity>(
             items,
