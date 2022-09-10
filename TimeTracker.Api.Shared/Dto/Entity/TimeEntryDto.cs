@@ -12,14 +12,12 @@ public class TimeEntryDto : IResponse
     
     public bool IsBillable { get; set; }
     
-    public DateTime StartTime { get; set; }
+    public DateTime Date { get; set; }
     
-    public DateTime? EndTime { get; set; }
+    public TimeSpan StartTime { get; set; }
+    
+    public TimeSpan? EndTime { get; set; }
 
-    public TimeSpan StartTimeOffset => StartTime.TimeOfDay;    
-    
-    public TimeSpan? EndTimeOffset => EndTime?.TimeOfDay;
-    
     public ProjectDto? Project { get; set; }
 
     public bool IsActive => EndTime == null;

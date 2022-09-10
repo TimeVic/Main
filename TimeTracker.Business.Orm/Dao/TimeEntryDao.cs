@@ -3,6 +3,7 @@ using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
@@ -34,7 +35,7 @@ public class TimeEntryDao: ITimeEntryDao
     public async Task<ListDto<TimeEntryEntity>> GetListAsync(WorkspaceEntity workspace, int page)
     {
         var query = _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
-            .OrderByDescending(item => item.StartTime)
+            .OrderByDescending(item => item.Date).ThenByDescending(item => item.StartTime)
             .Where(item => item.Workspace.Id == workspace.Id);
         
         var offset = PaginationUtils.CalculateOffset(page);
@@ -61,7 +62,8 @@ public class TimeEntryDao: ITimeEntryDao
         {
             IsBillable = isBillable,
             Description = description,
-            StartTime = DateTime.UtcNow,
+            Date = DateTime.UtcNow.StartOfDay(),
+            StartTime = DateTime.UtcNow.TimeOfDay,
             EndTime = null,
             Workspace = workspace,
             CreateTime = DateTime.UtcNow,
@@ -84,7 +86,7 @@ public class TimeEntryDao: ITimeEntryDao
             )
             .UpdateAsync(entity => new TimeEntryEntity()
             {
-                EndTime = DateTime.UtcNow
+                EndTime = DateTime.UtcNow.TimeOfDay
             });
     }
     
@@ -121,6 +123,7 @@ public class TimeEntryDao: ITimeEntryDao
         timeEntry.HourlyRate = timeEntryDto.HourlyRate;
         timeEntry.IsBillable = timeEntryDto.IsBillable;
         timeEntry.StartTime = timeEntryDto.StartTime;
+        timeEntry.Date = timeEntryDto.Date;
         if (timeEntry.IsNew || !timeEntry.IsActive)
         {
             timeEntry.EndTime = timeEntryDto.EndTime;    

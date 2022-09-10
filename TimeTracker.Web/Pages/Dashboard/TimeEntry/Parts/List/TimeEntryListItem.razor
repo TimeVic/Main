@@ -10,14 +10,14 @@
                 Class="mr-1" />
             <TimeInput
                 Class="mr-1"
-                Value="@Item.StartTime.TimeOfDay"
+                Value="@Item.StartTime"
                 ValueChanged="@(async time => await OnChangeStartTime(time))"/>
             <div class="fw-bold pt-2 text-center">
                 <RadzenIcon Icon="code"/>
             </div>
             <TimeInput
                 Class="ml-1"
-                Value="@Item.EndTime.Value.TimeOfDay"
+                Value="@Item.EndTime.Value"
                 ValueChanged="@(async time => await OnChangeEndTime(time))"/>
             
             <ProjectsDropDown

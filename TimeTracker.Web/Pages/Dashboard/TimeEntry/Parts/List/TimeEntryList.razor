@@ -28,7 +28,7 @@
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="TimeEntryDto" Title="Date" Width="40px">
                 <Template Context="entry">
-                    @entry.StartTime.ToShortDateString()
+                    @entry.Date.ToShortDateString()
                 </Template>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="TimeEntryDto" Title="Period" Width="80px">
@@ -36,14 +36,14 @@
                     <div class="d-flex justify-content-start">
                         <TimeInput
                             Class="mr-1"
-                            Value="@entry.StartTime.TimeOfDay"
+                            Value="@entry.StartTime"
                             ValueChanged="@(async time => await OnChangeStartTime(entry, time))"/>
                         <div class="fw-bold pt-2 text-center">
                             <RadzenIcon Icon="code"/>
                         </div>
                         <TimeInput
                             Class="ml-1"
-                            Value="@entry.EndTime.Value.TimeOfDay"
+                            Value="@entry.EndTime.Value"
                             ValueChanged="@(async time => await OnChangeEndTime(entry, time))"/>
                     </div>
                 </Template>

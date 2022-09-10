@@ -11,25 +11,21 @@ public partial class TimeCounterField: IDisposable
     public bool IsActive { get; set; } = true;
 
     [Parameter]
-    public DateTime? Value
+    public TimeSpan? Value
     {
         get => _startTime;
         set
         {
-            _startTime = value ?? DateTime.UtcNow.StartOfDay();
-            _compensationDiff = DateTime.UtcNow < _startTime.Value ? (_startTime.Value - DateTime.UtcNow).Seconds : 0;
+            _startTime = value ?? DateTime.UtcNow.TimeOfDay;
         }
     }
 
     [Parameter]
     public string Class { get; set; }
 
-    private DateTime? _startTime;
+    private TimeSpan? _startTime;
     private TimeSpan _currentDuration = TimeSpan.MinValue;
     private System.Timers.Timer _timer;
-    
-    //compensation for the difference between server and client time
-    private int _compensationDiff = 0;
 
     private string _durationString
     {
@@ -60,7 +56,7 @@ public partial class TimeCounterField: IDisposable
     {
         if (_startTime != null)
         {
-            _currentDuration = (DateTime.UtcNow - _startTime.Value).Add(TimeSpan.FromSeconds(_compensationDiff));
+            _currentDuration = (DateTime.UtcNow.TimeOfDay - _startTime.Value);
         }
         StateHasChanged();
     }

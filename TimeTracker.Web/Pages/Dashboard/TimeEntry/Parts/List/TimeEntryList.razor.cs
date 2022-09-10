@@ -23,14 +23,14 @@ public partial class TimeEntryList
 
     private async Task OnChangeStartTime(TimeEntryDto item, TimeSpan time)
     {
-        item.StartTime = item.StartTime.StartOfDay().Add(time);
+        item.StartTime = item.StartTime.Add(time);
         await UpdateTimeEntry(item);
         await Task.CompletedTask;
     }
 
     private async Task OnChangeEndTime(TimeEntryDto item, TimeSpan time)
     {
-        item.EndTime = item.EndTime.Value.StartOfDay().Add(time);
+        item.EndTime = item.EndTime.Value.Add(time);
         await UpdateTimeEntry(item);
         await Task.CompletedTask;
     }

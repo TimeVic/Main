@@ -23,8 +23,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
     
         public bool IsBillable { get; set; }
     
-        public DateTime StartTime { get; set; }
+        public TimeSpan StartTime { get; set; }
     
-        public DateTime? EndTime { get; set; }
+        public TimeSpan? EndTime { get; set; }
+        
+        public DateTime Date { get; set; }
     }
 }

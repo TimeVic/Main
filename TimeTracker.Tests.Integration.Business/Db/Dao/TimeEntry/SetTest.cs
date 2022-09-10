@@ -144,8 +144,8 @@ public class SetTest: BaseTest
         var expectedDto = new TimeEntryCreationDto()
         {
             Description = fakeTimeEntry.Description,
-            StartTime = DateTime.UtcNow,
-            EndTime = DateTime.UtcNow.AddMinutes(-1),
+            StartTime = TimeSpan.FromMinutes(120),
+            EndTime = TimeSpan.FromMinutes(119),
             HourlyRate = fakeTimeEntry.HourlyRate,
             IsBillable = fakeTimeEntry.IsBillable
         };

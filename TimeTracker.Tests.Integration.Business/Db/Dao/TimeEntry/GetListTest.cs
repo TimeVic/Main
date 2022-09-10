@@ -35,7 +35,7 @@ public class GetListTest: BaseTest
         {
             Assert.True(item.Id > 0);
             Assert.True(item.CreateTime > DateTime.MinValue);
-            Assert.True(item.EndTime > DateTime.MinValue);
+            Assert.True(item.EndTime > TimeSpan.MinValue);
             Assert.NotNull(item.Project);
         });
     }
