@@ -2,11 +2,9 @@
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 
-public class ProjectDto : IResponse
+public class ClientDto : IResponse
 {
     public long Id { get; set; }
     
     public string Name { get; set; }
-    
-    public ClientDto Client { get; set; }
 }
