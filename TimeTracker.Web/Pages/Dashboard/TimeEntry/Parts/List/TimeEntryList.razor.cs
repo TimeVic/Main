@@ -22,16 +22,16 @@ public partial class TimeEntryList
         return Task.CompletedTask;
     }
 
-    private async Task OnChangeStartTime(TimeEntryDto item, TimeSpan time)
+    private async Task OnChangeStartTime(TimeEntryDto item, TimeSpan startTime)
     {
-        item.StartTime = item.StartTime.Add(time);
+        item.StartTime = startTime > item.EndTime ? item.EndTime.Value : startTime;
         await UpdateTimeEntry(item);
         await Task.CompletedTask;
     }
 
-    private async Task OnChangeEndTime(TimeEntryDto item, TimeSpan time)
+    private async Task OnChangeEndTime(TimeEntryDto item, TimeSpan endTime)
     {
-        item.EndTime = item.EndTime.Value.Add(time);
+        item.EndTime = endTime < item.StartTime ? item.StartTime : endTime;
         await UpdateTimeEntry(item);
         await Task.CompletedTask;
     }
@@ -54,7 +54,6 @@ public partial class TimeEntryList
     {
         if (!date.HasValue)
             return;
-        Debug.Log(date);
         item.Date = date.Value;
         await UpdateTimeEntry(item);
     }
