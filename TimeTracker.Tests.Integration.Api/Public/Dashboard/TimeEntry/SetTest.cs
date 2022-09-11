@@ -96,7 +96,8 @@ public class SetTest: BaseTest
             StartTime = fakeEntry.StartTime,
             HourlyRate = fakeEntry.HourlyRate,
             IsBillable = fakeEntry.IsBillable,
-            ProjectId = expectedProject.Id
+            ProjectId = expectedProject.Id,
+            Date = fakeEntry.Date
         });
         response.EnsureSuccessStatusCode();
 
@@ -107,6 +108,7 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.Description, actualDto.Description);
         Assert.Equal(fakeEntry.IsBillable, actualDto.IsBillable);
         Assert.Equal(fakeEntry.HourlyRate, actualDto.HourlyRate);
+        Assert.Equal(fakeEntry.Date, actualDto.Date);
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
         
         Assert.True(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));

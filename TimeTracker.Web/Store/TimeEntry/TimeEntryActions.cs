@@ -19,3 +19,7 @@ public record struct SaveTimeEntryAction(TimeEntryDto TimeEntry);
 public record struct UpdateTimeEntryAction(TimeEntryDto TimeEntry);
 
 public record struct SetTimeEntryIsListLoading(bool IsLoading);
+
+public record struct DeleteTimeEntryAction(long EntryId);
+
+public record struct DeleteTimeEntryFromListAction(long EntryId);

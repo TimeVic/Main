@@ -35,6 +35,7 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
                 Id = action.TimeEntry.Id,
                 WorkspaceId = _authState.Value.Workspace.Id,
                 Description = action.TimeEntry.Description,
+                Date = action.TimeEntry.Date,
                 ProjectId = action.TimeEntry.Project?.Id,
                 EndTime = action.TimeEntry.EndTime,
                 StartTime = action.TimeEntry.StartTime,

@@ -51,4 +51,14 @@ public class TimeEntryReducers
 
         return state;
     }
+    
+    [ReducerMethod]
+    public static TimeEntryState DeleteTimeEntryFromListActionReducer(TimeEntryState state, DeleteTimeEntryFromListAction action)
+    {
+        return state with
+        {
+            List = state.List.Where(item => item.Id != action.EntryId).ToList(),
+            TotalCount = state.TotalCount > 0 ? --state.TotalCount : 0
+        };
+    }
 }

@@ -123,7 +123,10 @@ public class TimeEntryDao: ITimeEntryDao
         timeEntry.HourlyRate = timeEntryDto.HourlyRate;
         timeEntry.IsBillable = timeEntryDto.IsBillable;
         timeEntry.StartTime = timeEntryDto.StartTime;
-        timeEntry.Date = timeEntryDto.Date;
+        if (timeEntryDto.Date > DateTime.MinValue)
+        {
+            timeEntry.Date = timeEntryDto.Date;    
+        }
         if (timeEntry.IsNew || !timeEntry.IsActive)
         {
             timeEntry.EndTime = timeEntryDto.EndTime;    
