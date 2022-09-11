@@ -18,6 +18,7 @@
         AllowSorting="false"
         EditMode="DataGridEditMode.Single"
         PageSize="@GlobalConstants.ListPageSize"
+        RowUpdate="@OnUpdateRow"
         Data="@_state.Value.SortedList"
         AllowPaging="true"
         IsLoading="@_state.Value.IsListLoading"
