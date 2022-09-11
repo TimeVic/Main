@@ -35,5 +35,12 @@ namespace TimeTracker.Web.Services.Http
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project.GetListResponse> ProjectGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project.GetListRequest model);
 
         #endregion
+
+        #region Client
+
+        Task<ClientDto> ClientAddAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client.AddRequest model);
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client.GetListResponse> ClientGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client.GetListRequest model);
+
+        #endregion
     }
 }

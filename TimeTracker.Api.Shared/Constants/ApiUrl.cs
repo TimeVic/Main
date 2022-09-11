@@ -25,4 +25,11 @@ public class ApiUrl
     public const string ProjectList = "dashboard/project/list";
     
     #endregion
+    
+    #region Client
+    
+    public const string ClientAdd = "dashboard/client/add";
+    public const string ClientList = "dashboard/client/list";
+    
+    #endregion
 }
