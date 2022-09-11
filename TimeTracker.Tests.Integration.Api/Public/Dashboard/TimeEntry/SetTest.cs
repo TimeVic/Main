@@ -96,7 +96,8 @@ public class SetTest: BaseTest
             StartTime = fakeEntry.StartTime,
             HourlyRate = fakeEntry.HourlyRate,
             IsBillable = fakeEntry.IsBillable,
-            ProjectId = expectedProject.Id
+            ProjectId = expectedProject.Id,
+            Date = fakeEntry.Date
         });
         response.EnsureSuccessStatusCode();
 

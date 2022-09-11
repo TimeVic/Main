@@ -1,4 +1,5 @@
 using Bogus;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Testing.Factories.Entity
@@ -15,7 +16,7 @@ namespace TimeTracker.Business.Testing.Factories.Entity
                 .RuleFor(fake => fake.IsBillable, fake => true)
                 .RuleFor(fake => fake.StartTime, fake => DateTime.UtcNow.AddHours(-2).TimeOfDay)
                 .RuleFor(fake => fake.EndTime, fake => DateTime.UtcNow.TimeOfDay)
-                .RuleFor(fake => fake.Date, fake => DateTime.UtcNow)
+                .RuleFor(fake => fake.Date, fake => DateTime.UtcNow.StartOfDay())
                 .RuleFor(fake => fake.CreateTime, fake => fake.Date.Past())
                 .RuleFor(fake => fake.UpdateTime, fake => fake.Date.Past());
         }
