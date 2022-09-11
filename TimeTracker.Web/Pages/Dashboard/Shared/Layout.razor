@@ -4,6 +4,10 @@
 {
     <RadzenLayout>
         <MainHeader/>
+        @if (IsShowMainMenu)
+        {
+            <NavMenu/>
+        }
         <RadzenBody>
             <div class="container-fluid">
                 @Body

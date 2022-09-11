@@ -1,0 +1,23 @@
+﻿@using TimeTracker.Web.Store.Auth
+@inherits BaseComponent
+
+<RadzenSidebar>
+    <RadzenPanelMenu>
+        <RadzenPanelMenuItem
+            Icon="dashboard"
+            Text="Dashboard"
+            Path="@SiteUrl.DashboardBase"/>
+        <RadzenPanelMenuItem
+            Icon="apps"
+            Text="Track Time"
+            Path="@SiteUrl.Dashboard_TimeEntry"/>
+        <RadzenPanelMenuItem
+            Icon="chrome_reader_mode"
+            Text="Projects"
+            Path="@SiteUrl.Dashboard_Projects"/>
+        <RadzenPanelMenuItem
+            Icon="assignment_ind"
+            Text="Clients"
+            Path="@SiteUrl.Dashboard_Clients"/>
+    </RadzenPanelMenu>
+</RadzenSidebar>

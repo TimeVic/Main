@@ -15,4 +15,7 @@ public static class SiteUrl
     #endregion
     
     public static readonly string DashboardBase = "/dashboard";
+    public static readonly string Dashboard_TimeEntry = "/dashboard/time-entry";
+    public static readonly string Dashboard_Projects = "/dashboard/project";
+    public static readonly string Dashboard_Clients = "/dashboard/client";
 }
