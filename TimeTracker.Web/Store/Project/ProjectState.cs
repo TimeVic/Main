@@ -15,4 +15,27 @@ public record ProjectState
     public bool HasMoreItems { get; set; }
     
     public bool IsListLoading { get; set; }
+    
+    public bool HasItemToAdd
+    {
+        get => ItemToAdd != null;
+    }
+    
+    public ProjectDto ItemToAdd
+    {
+        get => List.FirstOrDefault(item => item.Id == 0);
+    }
+    
+    public ICollection<ProjectDto> SortedList
+    {
+        get
+        {
+            var query = List.AsQueryable();
+            if (HasItemToAdd)
+            {
+                query = query.OrderBy(item => item.Id);
+            }
+            return query.ToList();
+        }
+    }
 }

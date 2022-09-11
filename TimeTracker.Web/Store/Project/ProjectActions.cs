@@ -8,3 +8,7 @@ public record struct LoadProjectListAction(int Skip = 1);
 public record struct SetProjectListItemsAction(GetListResponse Response);
 
 public record struct SetProjectIsListLoading(bool IsLoading);
+
+public record struct AddEmptyProjectListItemAction();
+
+public record struct RemoveEmptyProjectListItemAction();

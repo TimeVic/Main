@@ -1,4 +1,5 @@
 ﻿using Fluxor;
+using TimeTracker.Api.Shared.Dto.Entity;
 
 namespace TimeTracker.Web.Store.Project;
 
@@ -25,4 +26,31 @@ public class ProjectReducers
             IsListLoading = action.IsLoading
         };
     }
+    
+    #region Add new item
+    
+    [ReducerMethod(typeof(AddEmptyProjectListItemAction))]
+    public static ProjectState AddEmptyProjectListItemActionAction(ProjectState state)
+    {
+        var newList = state.SortedList.ToList();
+        newList.Add(new ProjectDto()
+        {
+            Id = 0
+        });
+        return state with
+        {
+            List = newList
+        };
+    }
+    
+    [ReducerMethod(typeof(RemoveEmptyProjectListItemAction))]
+    public static ProjectState RemoveEmptyProjectListItemActionAction(ProjectState state)
+    {
+        return state with
+        {
+            List = state.List.Where(item => item.Id != 0).ToList()
+        };
+    }
+    
+    #endregion
 }
