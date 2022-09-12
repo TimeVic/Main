@@ -1,0 +1,21 @@
+﻿@inherits BaseComponent
+
+@using TimeTracker.Business.Common.Constants
+
+<RadzenDropDown
+    @ref="_listReference"
+    Disabled="Disabled"
+    AllowClear="true"
+    TValue="long"
+    Class="@("w-100 " + Class)"
+    AllowFiltering="false"
+    AllowSorting="false"
+    AllowVirtualization="true"
+    Count="@_state.Value.TotalCount"
+    Data="@_state.Value.List"
+    TextProperty="Name"
+    ValueProperty="Id"
+    Placeholder="@Placeholder"
+    Value="@_selectedId"
+    ValueChanged="async (value) => await OnValueChanged(value)">
+</RadzenDropDown>
