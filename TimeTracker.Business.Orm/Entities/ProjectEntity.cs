@@ -49,6 +49,17 @@ namespace TimeTracker.Business.Orm.Entities
             Lazy = Laziness.False,
             Cascade = "none"
         )]
-        public virtual ClientEntity Client { get; set; }
+        public virtual ClientEntity? Client { get; set; }
+
+        public void SetClient(ClientEntity? client)
+        {
+            if (Client?.Id == client?.Id)
+            {
+                return;
+            }
+
+            Client = client;
+            client.Projects.Add(this);
+        }
     }
 }

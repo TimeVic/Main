@@ -39,6 +39,16 @@ public class ProjectDao: IProjectDao
         return await query.ListAsync();
     }
     
+    public async Task<ProjectEntity?> GetById(long? projectId)
+    {
+        if (projectId == null)
+            return null;
+
+        return await _sessionProvider.CurrentSession.Query<ProjectEntity>()
+            .Where(item => item.Id == projectId)
+            .FirstOrDefaultAsync();
+    }
+    
     public async Task<ListDto<ProjectEntity>> GetListAsync(WorkspaceEntity workspace)
     {
         var query = _sessionProvider.CurrentSession.Query<ProjectEntity>()

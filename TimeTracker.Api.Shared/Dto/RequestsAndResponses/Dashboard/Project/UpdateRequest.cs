@@ -11,14 +11,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
         [Required]
         [IsPositive]
         public long ProjectId { get; set; }
-        
+
         [Required]
         [IsPositive]
-        public long WorkspaceId { get; set; }
-        
-        [Required]
-        [IsPositive]
-        public long ClientId { get; set; }
+        public long? ClientId { get; set; }
         
         [Required]
         [StringLength(256, MinimumLength = 2)]
@@ -28,7 +24,5 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
         
         [IsPositive]
         public decimal? DefaultHourlyRate { get; set; }
-        
-        public bool IsArchived { get; set; }
     }
 }

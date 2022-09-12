@@ -41,7 +41,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
             {
                 throw new RecordNotFoundException("Workspace not found");
             }
-            var client = await _clientDao.Create(workspace, request.Name);
+            var client = await _clientDao.CreateAsync(workspace, request.Name);
             await _sessionProvider.PerformCommitAsync();
             
             return _mapper.Map<ClientDto>(client);

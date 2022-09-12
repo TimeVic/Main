@@ -6,9 +6,13 @@ namespace TimeTracker.Business.Orm.Dao;
 
 public interface IClientDao: IDomainService
 {
-    Task<ClientEntity> Create(WorkspaceEntity workspace, string name);
+    Task<ClientEntity> CreateAsync(WorkspaceEntity workspace, string name);
 
     Task<ICollection<ClientEntity>> GetByUser(UserEntity user);
 
     Task<ListDto<ClientEntity>> GetListAsync(WorkspaceEntity workspace, int page);
+
+    Task<ClientEntity?> GetById(long? clientId);
+
+    Task<bool> HasAccessAsync(UserEntity user, ClientEntity? entity);
 }

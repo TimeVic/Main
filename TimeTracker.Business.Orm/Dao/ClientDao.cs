@@ -16,7 +16,7 @@ public class ClientDao: IClientDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<ClientEntity> Create(WorkspaceEntity workspace, string name)
+    public async Task<ClientEntity> CreateAsync(WorkspaceEntity workspace, string name)
     {
         var entity = new ClientEntity()
         {
@@ -39,6 +39,16 @@ public class ClientDao: IClientDao
         return await query.ListAsync();
     }
     
+    public async Task<ClientEntity?> GetById(long? clientId)
+    {
+        if (clientId == null)
+            return null;
+
+        return await _sessionProvider.CurrentSession.Query<ClientEntity>()
+            .Where(item => item.Id == clientId)
+            .FirstOrDefaultAsync();
+    }
+    
     public async Task<ListDto<ClientEntity>> GetListAsync(WorkspaceEntity workspace, int page)
     {
         var query = _sessionProvider.CurrentSession.Query<ClientEntity>()
@@ -53,5 +63,21 @@ public class ClientDao: IClientDao
             items,
             await query.CountAsync()
         );
+    }
+    
+    public async Task<bool> HasAccessAsync(UserEntity user, ClientEntity? entity)
+    {
+        if (entity == null)
+        {
+            return false;
+        }
+
+        ClientEntity clientEntity = null;
+        var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<WorkspaceEntity>()
+            .Inner.JoinAlias(item => item.Clients, () => clientEntity)
+            .Where(item => item.User.Id == user.Id)
+            .And(() => clientEntity.Id == entity.Id)
+            .RowCountAsync();
+        return itemsWithAccessCount > 0;
     }
 }

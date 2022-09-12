@@ -10,6 +10,8 @@ public interface IProjectDao: IDomainService
 
     Task<ICollection<ProjectEntity>> GetByUser(UserEntity user);
 
+    Task<ProjectEntity?> GetById(long? projectId);
+
     Task<ListDto<ProjectEntity>> GetListAsync(WorkspaceEntity workspace);
 
     Task<bool> HasAccessAsync(UserEntity user, ProjectEntity? entity);

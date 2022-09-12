@@ -28,7 +28,7 @@ public class ClientSeeder: IClientSeeder
         for (int i = 0; i < count; i++)
         {
             var fakeEntry = _projectFactory.Generate();
-            var entry = await _clientDao.Create(workspace, fakeEntry.Name);;
+            var entry = await _clientDao.CreateAsync(workspace, fakeEntry.Name);;
             result.Add(entry);
         }
 
