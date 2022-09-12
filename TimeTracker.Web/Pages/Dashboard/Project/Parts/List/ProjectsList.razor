@@ -1,0 +1,71 @@
+﻿@inherits BaseComponent
+
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
+
+<div class="row d-flex px-3 justify-content-center w-time-form mt-3">
+
+    <RadzenButton
+        Icon="add_circle_outline"
+        class="mb-3"
+        Text="Add project"
+        Click="@InsertRow"
+        Disabled="@_state.Value.HasItemToAdd"/>
+
+    <RadzenDataGrid
+        @ref="@_grid"
+        TItem="ProjectDto"
+        AllowSorting="false"
+        EditMode="DataGridEditMode.Single"
+        PageSize="@GlobalConstants.ListPageSize"
+        RowUpdate="@OnUpdateRow"
+        Data="@_state.Value.SortedList"
+        AllowPaging="false"
+        IsLoading="@_state.Value.IsListLoading"
+        Count="@_state.Value.TotalCount"
+        ColumnWidth="200px">
+
+        <Columns>
+            <RadzenDataGridColumn TItem="ProjectDto" Property="Name" Title="Name">
+                <EditTemplate Context="app">
+                    <RadzenTextBox @bind-Value="@app.Name" Style="width:100%; display: block" Name="Name"/>
+                    <RadzenLengthValidator
+                        Component="Name"
+                        Min="3"
+                        Max="255"
+                        Style="position: absolute"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn
+                TItem="ProjectDto"
+                Context="app" Filterable="false"
+                Sortable="false"
+                TextAlign="TextAlign.Center"
+                Width="120px">
+
+                <Template Context="item">
+
+                    <RadzenButton
+                        Icon="edit"
+                        ButtonStyle="ButtonStyle.Light"
+                        Click="@(args => EditRow(item))"
+                        @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="item">
+
+                    <RadzenButton
+                        Icon="check"
+                        ButtonStyle="ButtonStyle.Primary"
+                        Click="@(() => OnClickSaveRow(item))"/>
+
+                    <RadzenButton
+                        Icon="close"
+                        ButtonStyle="ButtonStyle.Light"
+                        Click="@(() => OnClickCancelEditMode(item))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</div>

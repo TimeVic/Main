@@ -10,5 +10,5 @@ public interface IProjectDao: IDomainService
 
     Task<ICollection<ProjectEntity>> GetByUser(UserEntity user);
 
-    Task<ListDto<ProjectEntity>> GetListAsync(WorkspaceEntity workspace, int page);
+    Task<ListDto<ProjectEntity>> GetListAsync(WorkspaceEntity workspace);
 }

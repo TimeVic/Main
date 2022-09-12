@@ -6,6 +6,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Project;
 
 namespace TimeTracker.Web.Shared.Components.Form;
 
@@ -42,82 +43,24 @@ public partial class ProjectsDropDown
     [Inject]
     public IState<AuthState> _authState { get; set; }
     
-    private ICollection<ProjectDto> _list = new List<ProjectDto>();
-
-    private ICollection<ProjectDto> _listToShow = new List<ProjectDto>();
-
-    private int _count = 0;
+    [Inject]
+    public IState<ProjectState> _state { get; set; }
     
-    private int _page = 0;
-    
-    private bool _hasMore = true;
-    
-    private int _skip = 0;
-    
-    private int _take = 0;
-
-    private ProjectDto _selectedItem;
+    private ProjectDto? _selectedItem;
 
     private long _selectedId = 0;
     
-    private RadzenDropDownDataGrid<long> _listReference;
+    private RadzenDropDown<long> _listReference;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await LoadNextList();
-    }
-
-    private async Task LoadData(LoadDataArgs filter)
-    {
-        await LoadNextList();
-        var query = _list.AsQueryable();
-        if (filter.Skip.HasValue)
-        {
-            query = query.Skip(filter.Skip.Value);
-        }
-        if (filter.Top.HasValue)
-        {
-            query = query.Take(filter.Top.Value);
-        }
-        _listToShow = query.ToList();
-    }
-
-    private async Task LoadNextList()
-    {
-        if (!_hasMore)
-        {
-            return;
-        }
-
-        _page += 1;
-        var response = await _apiService.ProjectGetListAsync(new GetListRequest()
-        {
-            WorkspaceId = _authState.Value.Workspace.Id,
-            Page = _page
-        });
-        if (response == null)
-        {
-            return;
-        }
-
-        _hasMore = response.IsHasMore;
-        _count = response.TotalCount;
-        lock (_list)
-        {
-            _list = _list.Concat(response.Items).ToList();
-        }
-        var selectedItem = _list.FirstOrDefault(item => item.Id == _selectedId);
-        long.TryParse(_listReference.SelectedValue?.ToString(), out var selectedValue);
-        if (selectedItem != null && selectedValue != _selectedId)
-        {
-            await _listReference.SelectItem(selectedItem);    
-        }
+        Dispatcher.Dispatch(new LoadProjectListAction());
     }
     
     private Task OnValueChanged(long selectedId)
     {
-        _selectedItem = _list.FirstOrDefault(item => item.Id == selectedId);
+        _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == selectedId);
         SelectedItemChanged.InvokeAsync(_selectedItem);
         ValueChanged.InvokeAsync(selectedId);
         return Task.CompletedTask;

@@ -55,6 +55,7 @@
             <RadzenDataGridColumn TItem="TimeEntryDto" Title="Project" Width="80px">
                 <Template Context="entry">
                     <ProjectsDropDown
+                        Value="@(entry.Project?.Id ?? 0)"
                         SelectedItemChanged="async project => await OnChangeProject(entry, project)"
                         Class="ml-1"/>
                 </Template>

@@ -3,27 +3,21 @@
 @using Newtonsoft.Json
 @using TimeTracker.Business.Common.Constants
 
-<RadzenDropDownDataGrid
+<RadzenDropDown
     @ref="_listReference"
     Disabled="Disabled"
     PageSize="GlobalConstants.ListPageSize"
     AllowClear="true"
     TValue="long"
     Class="@("w-100 " + Class)"
-    LoadData="@LoadData"
     AllowFiltering="false"
     AllowSorting="false"
     AllowVirtualization="true"
-    Count="@_count"
-    Data="@_listToShow"
+    Count="@_state.Value.TotalCount"
+    Data="@_state.Value.List"
     TextProperty="Name"
     ValueProperty="Id"
     Placeholder="@Placeholder"
     Value="@_selectedId"
     ValueChanged="async (value) => await OnValueChanged(value)">
-
-    <Columns>
-        <RadzenDropDownDataGridColumn Property="Id" Title="ID"/>
-        <RadzenDropDownDataGridColumn Property="Name" Title="Application Name"/>
-    </Columns>
-</RadzenDropDownDataGrid>
+</RadzenDropDown>
