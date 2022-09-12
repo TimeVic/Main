@@ -1,16 +1,15 @@
 ﻿using Fluxor;
 using Radzen;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
-using TimeTracker.Business.Common.Utils;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 
-namespace TimeTracker.Web.Store.Project.Effects;
+namespace TimeTracker.Web.Store.Client.Effects;
 
-public class AddEffect: Effect<SaveEmptyProjectListItemAction>
+public class AddEffect: Effect<SaveEmptyClientListItemAction>
 {
     private readonly IState<AuthState> _authState;
-    private readonly IState<ProjectState> _state;
+    private readonly IState<ClientState> _state;
     private readonly IApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
     private readonly NotificationService _notificationService;
@@ -18,7 +17,7 @@ public class AddEffect: Effect<SaveEmptyProjectListItemAction>
     public AddEffect(
         IApiService apiService,
         IState<AuthState> authState,
-        IState<ProjectState> state,
+        IState<ClientState> state,
         ILogger<LoadListEffect> logger,
         NotificationService notificationService
     )
@@ -30,7 +29,7 @@ public class AddEffect: Effect<SaveEmptyProjectListItemAction>
         _notificationService = notificationService;
     }
 
-    public override async Task HandleAsync(SaveEmptyProjectListItemAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(SaveEmptyClientListItemAction action, IDispatcher dispatcher)
     {
         try
         {
@@ -39,18 +38,18 @@ public class AddEffect: Effect<SaveEmptyProjectListItemAction>
                 return;
             }
 
-            await _apiService.ProjectAddAsync(new AddRequest()
+            await _apiService.ClientAddAsync(new AddRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
                 Name = _state.Value.ItemToAdd.Name
             });
-            dispatcher.Dispatch(new RemoveEmptyProjectListItemAction());
-            dispatcher.Dispatch(new LoadProjectListAction(true));
+            dispatcher.Dispatch(new RemoveEmptyClientListItemAction());
+            dispatcher.Dispatch(new LoadClientListAction(true));
             
             _notificationService.Notify(new NotificationMessage()
             {
                 Severity = NotificationSeverity.Info,
-                Summary = "New project was added"
+                Summary = "New Client was added"
             });
         }
         catch (Exception e)
@@ -59,7 +58,7 @@ public class AddEffect: Effect<SaveEmptyProjectListItemAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetProjectIsListLoading(false));
+            dispatcher.Dispatch(new SetClientIsListLoading(false));
         }
     }
 }
