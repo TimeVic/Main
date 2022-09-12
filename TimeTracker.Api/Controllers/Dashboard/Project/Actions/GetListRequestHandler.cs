@@ -38,7 +38,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
                 throw new RecordNotFoundException(nameof(request.WorkspaceId));
             }
 
-            var listDto = await _projectDao.GetListAsync(workspace, request.Page);
+            var listDto = await _projectDao.GetListAsync(workspace);
             return new GetListResponse(
                 _mapper.Map<ICollection<ProjectDto>>(listDto.Items),
                 listDto.TotalCount

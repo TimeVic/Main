@@ -1,4 +1,5 @@
 ﻿using Fluxor;
+using Radzen;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Web.Services.Http;
@@ -6,42 +7,51 @@ using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.Project.Effects;
 
-public class LoadListEffect: Effect<LoadProjectListAction>
+public class AddEffect: Effect<SaveEmptyProjectListItemAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<ProjectState> _state;
     private readonly IApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
+    private readonly NotificationService _notificationService;
 
-    public LoadListEffect(
+    public AddEffect(
         IApiService apiService,
         IState<AuthState> authState,
         IState<ProjectState> state,
-        ILogger<LoadListEffect> logger
+        ILogger<LoadListEffect> logger,
+        NotificationService notificationService
     )
     {
         _apiService = apiService;
         _authState = authState;
         _state = state;
         _logger = logger;
+        _notificationService = notificationService;
     }
 
-    public override async Task HandleAsync(LoadProjectListAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(SaveEmptyProjectListItemAction action, IDispatcher dispatcher)
     {
         try
         {
-            var isLoad = action.IsReload || !action.IsReload && !_state.Value.IsLoaded;
-            if (!isLoad)
+            if (_state.Value.ItemToAdd == null)
             {
                 return;
             }
 
-            dispatcher.Dispatch(new SetProjectIsListLoading(true));
-            var response = await _apiService.ProjectGetListAsync(new GetListRequest()
+            await _apiService.ProjectAddAsync(new AddRequest()
             {
-                WorkspaceId = _authState.Value.Workspace.Id
+                WorkspaceId = _authState.Value.Workspace.Id,
+                Name = _state.Value.ItemToAdd.Name
             });
-            dispatcher.Dispatch(new SetProjectListItemsAction(response));
+            dispatcher.Dispatch(new RemoveEmptyProjectListItemAction());
+            dispatcher.Dispatch(new LoadProjectListAction());
+            
+            _notificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Info,
+                Summary = "New project was added"
+            });
         }
         catch (Exception e)
         {

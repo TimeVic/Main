@@ -20,11 +20,9 @@
         PageSize="@GlobalConstants.ListPageSize"
         RowUpdate="@OnUpdateRow"
         Data="@_state.Value.SortedList"
-        AllowPaging="true"
+        AllowPaging="false"
         IsLoading="@_state.Value.IsListLoading"
         Count="@_state.Value.TotalCount"
-        LoadData="@OnLoadList"
-        ShowPagingSummary="true"
         ColumnWidth="200px">
 
         <Columns>
@@ -38,16 +36,6 @@
                         Style="position: absolute"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="ProjectDto" Title="" Width="30px">
-                <Template Context="entry">
-                    <RadzenButton
-                        Size="ButtonSize.Small"
-                        ButtonStyle="ButtonStyle.Danger"
-                        Icon="delete"
-                        Disabled="true"
-                        Click="async () => await OnDeleteItemAsync(entry)"/>
-                </Template>
-            </RadzenDataGridColumn>
             <RadzenDataGridColumn
                 TItem="ProjectDto"
                 Context="app" Filterable="false"
@@ -55,26 +43,26 @@
                 TextAlign="TextAlign.Center"
                 Width="120px">
 
-                <Template Context="app">
+                <Template Context="item">
 
                     <RadzenButton
                         Icon="edit"
                         ButtonStyle="ButtonStyle.Light"
-                        Click="@(args => EditRow(app))"
+                        Click="@(args => EditRow(item))"
                         @onclick:stopPropagation="true">
                     </RadzenButton>
                 </Template>
-                <EditTemplate Context="app">
+                <EditTemplate Context="item">
 
                     <RadzenButton
                         Icon="check"
                         ButtonStyle="ButtonStyle.Primary"
-                        Click="@((args) => OnClickSaveRow(app))"/>
+                        Click="@(() => OnClickSaveRow(item))"/>
 
                     <RadzenButton
                         Icon="close"
                         ButtonStyle="ButtonStyle.Light"
-                        Click="@((args) => OnClickCancelEditMode(app))">
+                        Click="@(() => OnClickCancelEditMode(item))">
                     </RadzenButton>
                 </EditTemplate>
             </RadzenDataGridColumn>

@@ -39,14 +39,12 @@ public class ProjectDao: IProjectDao
         return await query.ListAsync();
     }
     
-    public async Task<ListDto<ProjectEntity>> GetListAsync(WorkspaceEntity workspace, int page)
+    public async Task<ListDto<ProjectEntity>> GetListAsync(WorkspaceEntity workspace)
     {
         var query = _sessionProvider.CurrentSession.Query<ProjectEntity>()
             .Where(item => item.Workspace.Id == workspace.Id);
         
-        var offset = PaginationUtils.CalculateOffset(page);
-        var items = await query.Skip(offset)
-            .Take(GlobalConstants.ListPageSize)
+        var items = await query
             .OrderByDescending(item => item.Name)
             .ToListAsync();
         return new ListDto<ProjectEntity>(

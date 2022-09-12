@@ -15,11 +15,11 @@ public partial class ProjectsList
     private IState<ProjectState> _state { get; set; }
     
     private RadzenDataGrid<ProjectDto> _grid;
-    
-    private Task OnLoadList(LoadDataArgs arg)
+
+    protected override async Task OnInitializedAsync()
     {
-        Dispatcher.Dispatch(new LoadProjectListAction(arg.Skip ?? 0));
-        return Task.CompletedTask;
+        await base.OnInitializedAsync();
+        Dispatcher.Dispatch(new LoadProjectListAction(true));
     }
 
     private async Task OnDeleteItemAsync(ProjectDto value)
@@ -52,18 +52,12 @@ public partial class ProjectsList
     
     private async Task OnUpdateRow(ProjectDto item)
     {
-        Dispatcher.Dispatch(new RemoveEmptyProjectListItemAction());
         if (item.Id > 0)
         {
             // await UpdateApplication(item);
             return;
         }
 
-        // Dispatcher.Dispatch(new AddApplicationAction(app.Name));
-        NotificationService.Notify(new NotificationMessage()
-        {
-            Severity = NotificationSeverity.Info,
-            Summary = "New project was added"
-        });
+        Dispatcher.Dispatch(new SaveEmptyProjectListItemAction());
     }
 }

@@ -15,13 +15,15 @@ public record ProjectState
     public bool HasMoreItems { get; set; }
     
     public bool IsListLoading { get; set; }
+
+    public bool IsLoaded { get; set; } = false;
     
     public bool HasItemToAdd
     {
         get => ItemToAdd != null;
     }
     
-    public ProjectDto ItemToAdd
+    public ProjectDto? ItemToAdd
     {
         get => List.FirstOrDefault(item => item.Id == 0);
     }

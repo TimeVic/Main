@@ -26,7 +26,7 @@ public class GetListTest: BaseTest
         var workspace = user.Workspaces.First();
         await _projectSeeder.CreateSeveralAsync(user, expectedCounter);
 
-        var actualList = await _projectDao.GetListAsync(workspace, 1);
+        var actualList = await _projectDao.GetListAsync(workspace);
         Assert.Equal(expectedCounter, actualList.TotalCount);
         
         Assert.All(actualList.Items, item =>
@@ -47,7 +47,7 @@ public class GetListTest: BaseTest
         var user2 = await _userSeeder.CreateActivatedAsync();
         await _projectSeeder.CreateSeveralAsync(user2, 15);
         
-        var actualList = await _projectDao.GetListAsync(workspace, 1);
+        var actualList = await _projectDao.GetListAsync(workspace);
         Assert.Equal(expectedCounter, actualList.TotalCount);
     }
 }

@@ -14,10 +14,11 @@ public class ProjectReducers
             List = action.Response.Items,
             TotalCount = action.Response.TotalCount,
             TotalPages = action.Response.TotalPages,
-            HasMoreItems = action.Response.IsHasMore
+            HasMoreItems = action.Response.IsHasMore,
+            IsLoaded = true
         };
     }
-    
+
     [ReducerMethod]
     public static ProjectState SetProjectIsListLoadingReducer(ProjectState state, SetProjectIsListLoading action)
     {
@@ -35,11 +36,13 @@ public class ProjectReducers
         var newList = state.SortedList.ToList();
         newList.Add(new ProjectDto()
         {
-            Id = 0
+            Id = 0,
+            Name = ""
         });
         return state with
         {
-            List = newList
+            List = newList,
+            TotalCount = ++state.TotalCount
         };
     }
     
@@ -48,7 +51,8 @@ public class ProjectReducers
     {
         return state with
         {
-            List = state.List.Where(item => item.Id != 0).ToList()
+            List = state.List.Where(item => item.Id != 0).ToList(),
+            TotalCount = --state.TotalCount
         };
     }
     

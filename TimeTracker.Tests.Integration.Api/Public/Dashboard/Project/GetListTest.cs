@@ -32,8 +32,7 @@ public class GetListTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
-            Page = 1
+            WorkspaceId = _defaultWorkspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -46,8 +45,7 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
-            Page = 1
+            WorkspaceId = _defaultWorkspace.Id
         });
         response.EnsureSuccessStatusCode();
 
