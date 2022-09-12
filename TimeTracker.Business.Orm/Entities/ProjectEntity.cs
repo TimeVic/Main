@@ -14,6 +14,18 @@ namespace TimeTracker.Business.Orm.Entities
         [Property(NotNull = true)]
         [Column(Name = "name", Length = 200, NotNull = true)]
         public virtual string Name { get; set; }
+
+        [Property(NotNull = true)]
+        [Column(Name = "is_billable_by_default", NotNull = true)]
+        public virtual bool IsBillableByDefault { get; set; } = true;
+        
+        [Property(NotNull = false)]
+        [Column(Name = "default_hourly_rate", NotNull = false)]
+        public virtual decimal? DefaultHourlyRate { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "is_archived", NotNull = true)]
+        public virtual bool IsArchived { get; set; } = false;
         
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]

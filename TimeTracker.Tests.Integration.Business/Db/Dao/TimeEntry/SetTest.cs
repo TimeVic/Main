@@ -41,7 +41,7 @@ public class SetTest: BaseTest
         
         var user = await _userSeeder.CreateActivatedAsync();
         var expectWorkspace = user.Workspaces.First();
-        var expectProject = await _projectDao.Create(expectWorkspace, "Test project");
+        var expectProject = await _projectDao.CreateAsync(expectWorkspace, "Test project");
         
         var newEntry = await _timeEntryDao.SetAsync(expectWorkspace, expectedDto, expectProject);
         Assert.True(newEntry.Id > 0);
@@ -69,7 +69,7 @@ public class SetTest: BaseTest
         
         var user = await _userSeeder.CreateActivatedAsync();
         var initialWorkspace = user.Workspaces.First();
-        var initialProject = await _projectDao.Create(initialWorkspace, "Test project1");
+        var initialProject = await _projectDao.CreateAsync(initialWorkspace, "Test project1");
         
         var initialEntry = await _timeEntryDao.SetAsync(initialWorkspace, initialDto, initialProject);
         
@@ -83,7 +83,7 @@ public class SetTest: BaseTest
             HourlyRate = fakeTimeEntry2.HourlyRate,
             IsBillable = fakeTimeEntry2.IsBillable
         };
-        var expectedProject = await _projectDao.Create(initialWorkspace, "Test project2");
+        var expectedProject = await _projectDao.CreateAsync(initialWorkspace, "Test project2");
         var actualEntry = await _timeEntryDao.SetAsync(initialWorkspace, expectedDto, expectedProject);
         
         Assert.Equal(initialEntry.Id, actualEntry.Id);
@@ -111,7 +111,7 @@ public class SetTest: BaseTest
         
         var user = await _userSeeder.CreateActivatedAsync();
         var initialWorkspace = user.Workspaces.First();
-        var initialProject = await _projectDao.Create(initialWorkspace, "Test project1");
+        var initialProject = await _projectDao.CreateAsync(initialWorkspace, "Test project1");
         
         var initialEntry = await _timeEntryDao.StartNewAsync(
             initialWorkspace,
@@ -130,7 +130,7 @@ public class SetTest: BaseTest
             HourlyRate = fakeTimeEntry2.HourlyRate,
             IsBillable = fakeTimeEntry2.IsBillable
         };
-        var expectedProject = await _projectDao.Create(initialWorkspace, "Test project2");
+        var expectedProject = await _projectDao.CreateAsync(initialWorkspace, "Test project2");
         var actualEntry = await _timeEntryDao.SetAsync(initialWorkspace, expectedDto, expectedProject);
         
         Assert.Null(actualEntry.EndTime);

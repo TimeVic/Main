@@ -6,23 +6,26 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.Http;
+using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
 {
-    public class AddRequestHandler : IAsyncRequestHandler<AddRequest, ProjectDto>
+    public class UpdateRequestHandler : IAsyncRequestHandler<AddRequest, ProjectDto>
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
+        private readonly ISecurityManager _securityManager;
 
-        public AddRequestHandler(
+        public UpdateRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
             IProjectDao projectDao,
-            IDbSessionProvider sessionProvider
+            IDbSessionProvider sessionProvider,
+            ISecurityManager securityManager
         )
         {
             _mapper = mapper;
@@ -30,6 +33,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             _userDao = userDao;
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
+            _securityManager = securityManager;
         }
     
         public async Task<ProjectDto> ExecuteAsync(AddRequest request)
