@@ -33,14 +33,19 @@ public class TimeEntryService : ITimeEntryService
         _queueService = queueService;
     }
 
-    public async Task StopActiveEntriesFromPastDayAsync()
+    public async Task StopActiveEntriesFromPastDayAsync(CancellationToken cancellationToken = default)
     {
         try
         {
             TimeEntryEntity? activeEntity = null;
             while (true)
             {
-                activeEntity = await _timeEntryDao.GetActiveEntryForPastDay();
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+
+                activeEntity = await _timeEntryDao.GetActiveEntryForPastDay(null, cancellationToken);
                 if (activeEntity == null)
                 {
                     break;
@@ -50,7 +55,7 @@ public class TimeEntryService : ITimeEntryService
                 await _queueService.PushNotificationAsync(
                     new TimeEntryAutoStoppedNotificationContext(activeEntity.Workspace.User.Email)
                 );
-                await _sessionProvider.PerformCommitAsync();
+                await _sessionProvider.PerformCommitAsync(cancellationToken);
 
                 await _timeEntryDao.StartNewAsync(
                     activeEntity.Workspace,

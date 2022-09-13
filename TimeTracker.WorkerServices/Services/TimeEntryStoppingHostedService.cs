@@ -10,7 +10,7 @@ namespace TimeTracker.WorkerServices.Services
         private readonly ITimeEntryService _timeEntryService;
         
         public TimeEntryStoppingHostedService(
-            ILogger<ABackgroundService> logger,
+            ILogger<TimeEntryStoppingHostedService> logger,
             ITimeEntryService timeEntryService
         ) : base(logger)
         {
@@ -18,16 +18,11 @@ namespace TimeTracker.WorkerServices.Services
             ServiceName = "NotificationProcessingHostedService";
         }
 
-        protected virtual string GetCrontabExpression() => "1 0 * * *";
+        protected virtual string GetCrontabExpression() => "* * * * *";
         
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
         {
-            LogDebug($"Time entry processing worker started at: {DateTime.Now}");
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                await _timeEntryService.StopActiveEntriesFromPastDayAsync();
-                await Task.Delay(1000, cancellationToken);
-            }
+            await _timeEntryService.StopActiveEntriesFromPastDayAsync(cancellationToken);
         }
     }
 }

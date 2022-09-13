@@ -4,5 +4,5 @@ namespace TimeTracker.Business.Services.TimeEntry;
 
 public interface ITimeEntryService: IDomainService
 {
-    Task StopActiveEntriesFromPastDayAsync();
+    Task StopActiveEntriesFromPastDayAsync(CancellationToken cancellationToken = default);
 }
