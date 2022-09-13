@@ -56,15 +56,32 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
     public async Task ShouldNotStopActiveForCurrentDay()
     {
         var activeEntry = await _timeEntryDao.StartNewAsync(_workspace, true);
-        var activeEntry2 = await _timeEntryDao.StartNewAsync(_workspace, true);
-        activeEntry.Date = DateTime.UtcNow.AddDays(-1);
+        
+        await _timeEntryService.StopActiveEntriesFromPastDayAsync();
+        
+        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+        Assert.True(activeEntry.IsActive);
+    }
+    
+    [Fact]
+    public async Task ShouldStartNewAfterPreviousWasStopped()
+    {
+        var previousEntry = await _timeEntryDao.StartNewAsync(_workspace, true);
+        previousEntry.Date = DateTime.UtcNow.AddDays(-1);
         await DbSessionProvider.PerformCommitAsync();
 
         await _timeEntryService.StopActiveEntriesFromPastDayAsync();
         
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry2);
-        Assert.NotNull(activeEntry.EndTime);
-        Assert.Null(activeEntry2.EndTime);
+        await DbSessionProvider.CurrentSession.RefreshAsync(previousEntry);
+        Assert.False(previousEntry.IsActive);
+
+        var newEntry = await _timeEntryDao.GetActiveEntryAsync(_workspace);
+        Assert.NotNull(newEntry);
+        Assert.True(newEntry.IsActive);
+        
+        Assert.Equal(previousEntry.Description, newEntry.Description);
+        Assert.Equal(previousEntry.IsBillable, newEntry.IsBillable);
+        Assert.Equal(previousEntry.HourlyRate, newEntry.HourlyRate);
+        Assert.Equal(previousEntry.Project?.Id, newEntry.Project?.Id);
     }
 }

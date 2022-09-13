@@ -47,12 +47,17 @@ public class TimeEntryService : ITimeEntryService
                 }
 
                 activeEntity.EndTime = EndOfDay;
-                
                 await _queueService.PushNotificationAsync(
                     new TimeEntryAutoStoppedNotificationContext(activeEntity.Workspace.User.Email)
                 );
-                
                 await _sessionProvider.PerformCommitAsync();
+
+                await _timeEntryDao.StartNewAsync(
+                    activeEntity.Workspace,
+                    activeEntity.IsBillable,
+                    activeEntity.Description,
+                    activeEntity.Project?.Id
+                );
             }
         }
         catch (Exception e)

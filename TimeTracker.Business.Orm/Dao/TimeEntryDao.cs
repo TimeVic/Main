@@ -55,7 +55,8 @@ public class TimeEntryDao: ITimeEntryDao
         WorkspaceEntity workspace,
         bool isBillable = false,
         string? description = "",
-        long? projectId = null
+        long? projectId = null,
+        decimal? hourlyRate = null
     )
     {
         await StopActiveAsync(workspace);
@@ -75,6 +76,7 @@ public class TimeEntryDao: ITimeEntryDao
         {
             entry.Project = workspace.Projects.FirstOrDefault(item => item.Id == projectId);
         }
+        entry.HourlyRate = hourlyRate ?? entry.Project?.DefaultHourlyRate;
         await _sessionProvider.CurrentSession.SaveAsync(entry);
 
         return entry;
