@@ -19,6 +19,7 @@ public class Startup
     public virtual void ConfigureServices(IServiceCollection services)
     {
         services.AddHostedService<Services.NotificationProcessingHostedService>();
+        services.AddHostedService<Services.TimeEntryStoppingHostedService>();
     }
 
     public void ConfigureContainer(ContainerBuilder containerBuilder)
