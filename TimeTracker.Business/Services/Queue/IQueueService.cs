@@ -6,7 +6,7 @@ namespace TimeTracker.Business.Services.Queue;
 
 public interface IQueueService: IDomainService
 {
-    Task PushNotification(INotificationContext context);
+    Task PushNotificationAsync(INotificationContext context);
 
-    Task<int> Process(QueueChannel channel, CancellationToken cancellationToken = default);
+    Task<int> ProcessAsync(QueueChannel channel, CancellationToken cancellationToken = default);
 }

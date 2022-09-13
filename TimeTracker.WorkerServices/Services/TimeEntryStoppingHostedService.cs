@@ -1,29 +1,31 @@
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Services.TimeEntry;
 using TimeTracker.WorkerServices.Core;
 
 namespace TimeTracker.WorkerServices.Services
 {
-    internal class NotificationProcessingHostedService : ABackgroundService
+    internal class TimeEntryStoppingHostedService : ABackgroundService
     {
-        private readonly IQueueService _queueService;
-
-        public NotificationProcessingHostedService(
+        private readonly ITimeEntryService _timeEntryService;
+        
+        public TimeEntryStoppingHostedService(
             ILogger<ABackgroundService> logger,
-            IQueueService queueService
+            ITimeEntryService timeEntryService
         ) : base(logger)
         {
-            _queueService = queueService;
+            _timeEntryService = timeEntryService;
             ServiceName = "NotificationProcessingHostedService";
         }
 
+        protected virtual string GetCrontabExpression() => "1 0 * * *";
+        
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
         {
-            LogDebug($"Notifications processing worker started at: {DateTime.Now}");
+            LogDebug($"Time entry processing worker started at: {DateTime.Now}");
             while (!cancellationToken.IsCancellationRequested)
             {
-                await _queueService.ProcessAsync(QueueChannel.Default, cancellationToken);
-                await _queueService.ProcessAsync(QueueChannel.Notifications, cancellationToken);
+                await _timeEntryService.StopActiveEntriesFromPastDayAsync();
                 await Task.Delay(1000, cancellationToken);
             }
         }

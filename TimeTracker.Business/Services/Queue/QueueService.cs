@@ -3,6 +3,7 @@ using Notification.Abstractions;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Notifications;
 using TimeTracker.Business.Notifications.Senders;
+using TimeTracker.Business.Notifications.Senders.TimeEntry;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
@@ -27,12 +28,12 @@ public class QueueService: IQueueService
         _notificationBuilder = notificationBuilder;
     }
 
-    public async Task PushNotification(INotificationContext context)
+    public async Task PushNotificationAsync(INotificationContext context)
     {
         await _queueDao.Push(context, QueueChannel.Notifications);
     }
     
-    public async Task<int> Process(QueueChannel channel, CancellationToken cancellationToken = default)
+    public async Task<int> ProcessAsync(QueueChannel channel, CancellationToken cancellationToken = default)
     {
         var processedCounter = 0;
         while (true)
@@ -76,6 +77,10 @@ public class QueueService: IQueueService
         else if (IsContext<EmailVerifiedNotificationContext>(contextType))
         {
             await SendNotification<EmailVerifiedNotificationContext>(queueItem, cancellationToken);
+        }
+        else if (IsContext<TimeEntryAutoStoppedNotificationContext>(contextType))
+        {
+            await SendNotification<TimeEntryAutoStoppedNotificationContext>(queueItem, cancellationToken);
         }
         else
         {

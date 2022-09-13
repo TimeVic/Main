@@ -51,7 +51,7 @@ public class ActivateUserTest: BaseTest
         Assert.True(activatedUser.DefaultWorkspace.IsDefault);
         
         
-        var actualProcessedCounter = await _queueService.Process(QueueChannel.Notifications);
+        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(EmailSendingService.IsEmailSent);

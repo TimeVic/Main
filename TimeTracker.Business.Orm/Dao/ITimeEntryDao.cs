@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using NHibernate;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
@@ -31,4 +32,9 @@ public interface ITimeEntryDao: IDomainService
     Task<TimeEntryEntity?> GetActiveEntryAsync(WorkspaceEntity workspace);
 
     Task<ListDto<TimeEntryEntity>> GetListAsync(WorkspaceEntity workspace, int page);
+    
+    Task<TimeEntryEntity?> GetActiveEntryForPastDay(
+        ISession? session = null,
+        CancellationToken cancellationToken = default
+    );
 }
