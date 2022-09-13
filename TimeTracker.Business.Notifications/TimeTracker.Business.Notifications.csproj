@@ -28,6 +28,7 @@
 
     <ItemGroup>
       <None Remove="Templates\Emails\en\_EmailLayout.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\TimeEntryAutoStoppedNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\_EmailLayout.htm" />
       <None Remove="Templates\Emails\en\EmailVerificationNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\EmailVerificationNotification.htm" />

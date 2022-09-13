@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using NHibernate;
 using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Connection;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
@@ -158,5 +160,18 @@ public class TimeEntryDao: ITimeEntryDao
             .Where(entry => entry.EndTime == null)
             .Where(entry => entry.Workspace.Id == workspace.Id)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<TimeEntryEntity?> GetActiveEntryForPastDay(
+        ISession? session = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        session = session ?? _sessionProvider.CurrentSession;
+        return await session.Query<TimeEntryEntity>()
+            .FirstOrDefaultAsync(
+                entry => entry.EndTime == null && entry.Date < DateTime.UtcNow,
+                cancellationToken: cancellationToken
+            );
     }
 }

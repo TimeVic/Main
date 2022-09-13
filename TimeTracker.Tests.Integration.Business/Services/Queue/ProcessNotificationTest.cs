@@ -33,9 +33,9 @@ public class ProcessNotificationTest: BaseTest
             ToAddress = "test@test.com"
         };
 
-        await _queueService.PushNotification(testContext);
+        await _queueService.PushNotificationAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.Process(QueueChannel.Notifications);
+        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(EmailSendingService.IsEmailSent);
@@ -54,9 +54,9 @@ public class ProcessNotificationTest: BaseTest
             expectedUser.VerificationToken
         );
 
-        await _queueService.PushNotification(testContext);
+        await _queueService.PushNotificationAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.Process(QueueChannel.Notifications);
+        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(EmailSendingService.IsEmailSent);

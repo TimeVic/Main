@@ -22,6 +22,6 @@ public class PushNotificationTest: BaseTest
             ToAddress = "test@test.com"
         };
 
-        await _queueService.PushNotification(testContext);
+        await _queueService.PushNotificationAsync(testContext);
     }
 }

@@ -38,7 +38,7 @@ public class RegistrationService: IRegistrationService
             throw new RecordIsExistsException();
         }
         var user = existsUser ?? await _userDao.CreatePendingUser(email);
-        await _queueService.PushNotification(new RegistrationNotificationContext(
+        await _queueService.PushNotificationAsync(new RegistrationNotificationContext(
             user.Email,
             _frontendUrl,
             user.VerificationToken
@@ -66,7 +66,7 @@ public class RegistrationService: IRegistrationService
 
         await _workspaceDao.CreateWorkspace(user, UserResources.DefaultWorkspaceName, true);
         
-        await _queueService.PushNotification(new EmailVerifiedNotificationContext()
+        await _queueService.PushNotificationAsync(new EmailVerifiedNotificationContext()
         {
             ToAddress = user.Email
         });
