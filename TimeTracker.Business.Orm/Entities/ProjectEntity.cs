@@ -51,7 +51,7 @@ namespace TimeTracker.Business.Orm.Entities
         )]
         public virtual ClientEntity? Client { get; set; }
 
-        public void SetClient(ClientEntity? client)
+        public virtual void SetClient(ClientEntity? client)
         {
             if (Client?.Id == client?.Id)
             {
@@ -59,7 +59,7 @@ namespace TimeTracker.Business.Orm.Entities
             }
 
             Client = client;
-            client.Projects.Add(this);
+            client?.Projects.Add(this);
         }
     }
 }

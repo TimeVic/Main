@@ -49,9 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             }
             var client = project.Workspace.Clients.FirstOrDefault(item => item.Id == request.ClientId);
             project.SetClient(client);
-            project.Name = request.Name;
-            project.IsBillableByDefault = request.IsBillableByDefault;
-            project.DefaultHourlyRate = request.DefaultHourlyRate;
+            project = _mapper.Map(request, project);
             await _sessionProvider.CurrentSession.SaveAsync(project);
             
             return _mapper.Map<ProjectDto>(project);

@@ -24,6 +24,11 @@ public class ClientSeeder: IClientSeeder
     public async Task<ICollection<ClientEntity>> CreateSeveralAsync(UserEntity user, int count = 1)
     {
         var workspace = user.Workspaces.First();
+        return await CreateSeveralAsync(workspace, count);
+    }
+
+    public async Task<ICollection<ClientEntity>> CreateSeveralAsync(WorkspaceEntity workspace, int count = 1)
+    {
         var result = new List<ClientEntity>();
         for (int i = 0; i < count; i++)
         {
@@ -34,7 +39,7 @@ public class ClientSeeder: IClientSeeder
 
         return result;
     }
-
+    
     public async Task<ICollection<ClientEntity>> CreateSeveralAsync(int count = 1)
     {
         var user = await _userSeeder.CreateActivatedAsync();
