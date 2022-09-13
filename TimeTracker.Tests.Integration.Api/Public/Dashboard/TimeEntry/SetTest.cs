@@ -51,7 +51,7 @@ public class SetTest: BaseTest
     public async Task ShouldCreateNewTimeEntry()
     {
         var fakeEntry = _timeEntryFactory.Generate();
-        var expectedProject = await _projectDao.Create(_defaultWorkspace, "Test");
+        var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
         await CommitDbChanges();
         // var expectedEntry = await _timeEntryDao.StartNewAsync(_defaultWorkspace);
         
@@ -83,7 +83,7 @@ public class SetTest: BaseTest
     public async Task ShouldUpdateActiveEntry()
     {
         var fakeEntry = _timeEntryFactory.Generate();
-        var expectedProject = await _projectDao.Create(_defaultWorkspace, "Test");
+        var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
         await CommitDbChanges();
         var expectedEntry = await _timeEntryDao.StartNewAsync(_defaultWorkspace);
         

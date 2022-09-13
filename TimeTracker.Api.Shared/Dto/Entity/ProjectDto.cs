@@ -8,5 +8,11 @@ public class ProjectDto : IResponse
     
     public string Name { get; set; }
     
+    public bool IsBillableByDefault { get; set; }
+    
+    public decimal? DefaultHourlyRate { get; set; }
+    
+    public bool IsArchived { get; set; }
+    
     public ClientDto Client { get; set; }
 }

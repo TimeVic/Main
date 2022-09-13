@@ -29,6 +29,14 @@ public class ProjectController : MainApiControllerBase
             .For<ProjectDto>()
             .With(request);
     
+    [HttpPost("update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Add([FromBody] UpdateRequest request)
+        => this.RequestAsync()
+            .For<ProjectDto>()
+            .With(request);
+    
     [HttpPost("list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
