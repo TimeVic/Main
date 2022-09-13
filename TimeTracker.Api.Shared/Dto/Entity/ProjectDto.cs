@@ -14,5 +14,5 @@ public class ProjectDto : IResponse
     
     public bool IsArchived { get; set; }
     
-    public ClientDto Client { get; set; }
+    public ClientDto? Client { get; set; }
 }

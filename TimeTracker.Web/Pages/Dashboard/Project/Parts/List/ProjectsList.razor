@@ -5,8 +5,6 @@
 
 <div class="row d-flex px-3 justify-content-center w-time-form mt-3">
 
-    <ClientsDropDown/>
-    
     <RadzenButton
         Icon="add_circle_outline"
         class="mb-3"
@@ -47,12 +45,24 @@
 
                 <Template Context="item">
 
-                    <RadzenButton
-                        Icon="edit"
-                        ButtonStyle="ButtonStyle.Light"
-                        Click="@(args => EditRow(item))"
-                        @onclick:stopPropagation="true">
-                    </RadzenButton>
+                    @if (item.Id == 0)
+                    {
+                        <RadzenButton
+                            Icon="edit"
+                            ButtonStyle="ButtonStyle.Light"
+                            Click="@(args => EditNewRow(item))"
+                            @onclick:stopPropagation="true">
+                        </RadzenButton>    
+                    }
+                    else
+                    {
+                        <RadzenButton
+                            Icon="edit"
+                            ButtonStyle="ButtonStyle.Light"
+                            Click="@(args => NavigateToProduct(item))"
+                            @onclick:stopPropagation="true">
+                        </RadzenButton>
+                    }
                 </Template>
                 <EditTemplate Context="item">
 

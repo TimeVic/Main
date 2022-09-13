@@ -23,5 +23,14 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
         
         [IsPositive]
         public decimal? DefaultHourlyRate { get; set; }
+
+        public void Fill(ProjectDto project)
+        {
+            ProjectId = project.Id;
+            ClientId = project.Client?.Id;
+            Name = project.Name;
+            IsBillableByDefault = project.IsBillableByDefault;
+            DefaultHourlyRate = project.DefaultHourlyRate;
+        }
     }
 }

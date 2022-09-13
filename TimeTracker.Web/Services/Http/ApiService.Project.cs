@@ -17,7 +17,18 @@ namespace TimeTracker.Web.Services.Http
 
             return response;
         }
-        
+
+        public async Task<ProjectDto> ProjectUpdateAsync(UpdateRequest model)
+        {
+            var response = await PostAuthorizedAsync<ProjectDto>(ApiUrl.ProjectUpdate, model);
+            if (response == null)
+            {
+                throw new ServerErrorException();
+            }
+
+            return response;
+        }
+
         public async Task<GetListResponse> ProjectGetListAsync(GetListRequest model)
         {
             var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.ProjectList, model);

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Project;
 using TimeTracker.Web.Store.TimeEntry;
@@ -31,10 +32,10 @@ public partial class ProjectsList
     {
         Dispatcher.Dispatch(new AddEmptyProjectListItemAction());
         // await _grid.GoToPage(0);
-        await EditRow(_state.Value.ItemToAdd);
+        await EditNewRow(_state.Value.ItemToAdd);
     }
     
-    private async Task EditRow(ProjectDto item)
+    private async Task EditNewRow(ProjectDto item)
     {
         await _grid.EditRow(item);
     }
@@ -52,12 +53,12 @@ public partial class ProjectsList
     
     private async Task OnUpdateRow(ProjectDto item)
     {
-        if (item.Id > 0)
-        {
-            // await UpdateApplication(item);
-            return;
-        }
-
         Dispatcher.Dispatch(new SaveEmptyProjectListItemAction());
+    }
+    
+    private Task NavigateToProduct(ProjectDto item)
+    {
+        NavigationManager.NavigateTo(string.Format(SiteUrl.Dashboard_Project, item.Id));
+        return Task.CompletedTask;
     }
 }
