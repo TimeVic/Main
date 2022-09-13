@@ -28,7 +28,7 @@ public class ProjectSeeder: IProjectSeeder
         for (int i = 0; i < count; i++)
         {
             var fakeEntry = _projectFactory.Generate();
-            var entry = await _projectDao.Create(workspace, fakeEntry.Name);;
+            var entry = await _projectDao.CreateAsync(workspace, fakeEntry.Name);;
             result.Add(entry);
         }
 

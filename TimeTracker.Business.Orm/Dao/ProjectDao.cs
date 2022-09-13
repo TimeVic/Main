@@ -16,7 +16,7 @@ public class ProjectDao: IProjectDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<ProjectEntity> Create(WorkspaceEntity workspace, string name)
+    public async Task<ProjectEntity> CreateAsync(WorkspaceEntity workspace, string name)
     {
         var project = new ProjectEntity()
         {
@@ -39,6 +39,16 @@ public class ProjectDao: IProjectDao
         return await query.ListAsync();
     }
     
+    public async Task<ProjectEntity?> GetById(long? projectId)
+    {
+        if (projectId == null)
+            return null;
+
+        return await _sessionProvider.CurrentSession.Query<ProjectEntity>()
+            .Where(item => item.Id == projectId)
+            .FirstOrDefaultAsync();
+    }
+    
     public async Task<ListDto<ProjectEntity>> GetListAsync(WorkspaceEntity workspace)
     {
         var query = _sessionProvider.CurrentSession.Query<ProjectEntity>()
@@ -51,5 +61,21 @@ public class ProjectDao: IProjectDao
             items,
             await query.CountAsync()
         );
+    }
+    
+    public async Task<bool> HasAccessAsync(UserEntity user, ProjectEntity? entity)
+    {
+        if (entity == null)
+        {
+            return false;
+        }
+
+        ProjectEntity projectAlias = null;
+        var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<WorkspaceEntity>()
+            .Inner.JoinAlias(item => item.Projects, () => projectAlias)
+            .Where(item => item.User.Id == user.Id)
+            .And(() => projectAlias.Id == entity.Id)
+            .RowCountAsync();
+        return itemsWithAccessCount > 0;
     }
 }

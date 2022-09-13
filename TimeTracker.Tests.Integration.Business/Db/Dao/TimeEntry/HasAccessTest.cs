@@ -37,7 +37,7 @@ public class HasAccessTest: BaseTest
         
         var user = await _userSeeder.CreateActivatedAsync();
         var expectWorkspace = user.Workspaces.First();
-        var expectProject = await _projectDao.Create(expectWorkspace, "Test project");
+        var expectProject = await _projectDao.CreateAsync(expectWorkspace, "Test project");
         
         var expectedEntry = await _timeEntryDao.SetAsync(expectWorkspace, expectedDto, expectProject);
         

@@ -86,7 +86,7 @@ public class AddTest: BaseTest
     public async Task ShouldStartFilled()
     {
         var fakeTimeEntry = _timeEntryFactory.Generate();
-        var project = await _projectDao.Create(_defaultWorkspace, "Test project");
+        var project = await _projectDao.CreateAsync(_defaultWorkspace, "Test project");
         await CommitDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
