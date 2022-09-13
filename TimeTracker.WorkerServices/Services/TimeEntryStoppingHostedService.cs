@@ -24,5 +24,6 @@ namespace TimeTracker.WorkerServices.Services
         {
             await _timeEntryService.StopActiveEntriesFromPastDayAsync(cancellationToken);
         }
+        
     }
 }
