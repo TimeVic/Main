@@ -64,5 +64,7 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual bool IsActive => EndTime == null;
         
         public virtual bool IsNew => Id == 0;
+        
+        public virtual TimeSpan Duration => EndTime != null ? EndTime.Value - StartTime : TimeSpan.Zero;
     }
 }

@@ -10,6 +10,8 @@ namespace TimeTracker.Business.Services.TimeEntry;
 
 public class TimeEntryService : ITimeEntryService
 {
+    private readonly TimeSpan _notificationSendingDuration = TimeSpan.FromHours(8);
+    
     private readonly IDbSessionProvider _sessionProvider;
     private readonly ILogger<TimeEntryService> _logger;
     private readonly ITimeEntryDao _timeEntryDao;
@@ -33,26 +35,39 @@ public class TimeEntryService : ITimeEntryService
         _queueService = queueService;
     }
 
-    public async Task StopActiveEntriesFromPastDayAsync()
+    public async Task StopActiveEntriesFromPastDayAsync(CancellationToken cancellationToken = default)
     {
         try
         {
             TimeEntryEntity? activeEntity = null;
             while (true)
             {
-                activeEntity = await _timeEntryDao.GetActiveEntryForPastDay();
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    break;
+                }
+
+                activeEntity = await _timeEntryDao.GetActiveEntryForPastDay(null, cancellationToken);
                 if (activeEntity == null)
                 {
                     break;
                 }
 
                 activeEntity.EndTime = EndOfDay;
-                
-                await _queueService.PushNotificationAsync(
-                    new TimeEntryAutoStoppedNotificationContext(activeEntity.Workspace.User.Email)
+                if (activeEntity.Duration >= _notificationSendingDuration)
+                {
+                    await _queueService.PushNotificationAsync(
+                        new TimeEntryAutoStoppedNotificationContext(activeEntity.Workspace.User.Email)
+                    );    
+                }
+                await _sessionProvider.PerformCommitAsync(cancellationToken);
+
+                await _timeEntryDao.StartNewAsync(
+                    activeEntity.Workspace,
+                    activeEntity.IsBillable,
+                    activeEntity.Description,
+                    activeEntity.Project?.Id
                 );
-                
-                await _sessionProvider.PerformCommitAsync();
             }
         }
         catch (Exception e)

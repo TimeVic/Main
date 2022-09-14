@@ -13,12 +13,14 @@ public class StartNewTest: BaseTest
     private readonly IUserSeeder _userSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IWorkspaceDao _workspaceDao;
+    private readonly IProjectDao _projectDao;
 
     public StartNewTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
+        _projectDao = Scope.Resolve<IProjectDao>();
     }
 
     [Fact]
@@ -63,5 +65,27 @@ public class StartNewTest: BaseTest
         Assert.NotEqual(activeEntryFor1.Id, activeEntryFor2.Id);
         Assert.True(activeEntryFor1.IsActive);
         Assert.True(activeEntryFor2.IsActive);
+    }
+    
+    [Fact]
+    public async Task HourlyRateShouldBePastedFromProjectIfNull()
+    {
+        var expectHourlyRate = 123.56m;
+        
+        var user = await _userSeeder.CreateActivatedAsync();
+        var workspace = user.Workspaces.First();
+        var project = await _projectDao.CreateAsync(workspace, "test");
+        project.DefaultHourlyRate = expectHourlyRate;
+        project.IsBillableByDefault = true;
+        await DbSessionProvider.PerformCommitAsync();
+        
+        var activeEntry = await _timeEntryDao.StartNewAsync(
+            workspace, 
+            true,
+            "",
+            project.Id
+        );
+        Assert.Equal(project.DefaultHourlyRate, activeEntry.HourlyRate);
+        Assert.True(activeEntry.IsBillable);
     }
 }

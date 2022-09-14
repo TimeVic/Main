@@ -16,7 +16,8 @@ public interface ITimeEntryDao: IDomainService
         WorkspaceEntity workspace,
         bool isBillable = false,
         string? description = null,
-        long? projectId = null
+        long? projectId = null,
+        decimal? hourlyRate = null
     );
     
     Task StopActiveAsync(WorkspaceEntity workspace);

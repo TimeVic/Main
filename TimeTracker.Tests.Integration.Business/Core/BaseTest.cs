@@ -18,7 +18,7 @@ public class BaseTest: IDisposable
     protected readonly ILifetimeScope Scope;
     
     private readonly IContainer _serviceProvider;
-    private readonly IQueueDao _queueDao;
+    protected readonly IQueueDao _queueDao;
 
     public BaseTest()
     {
@@ -49,8 +49,7 @@ public class BaseTest: IDisposable
         EmailSendingService = Scope.Resolve<IEmailSendingService>() as FakeEmailSendingService;
         
         _queueDao = Scope.Resolve<IQueueDao>();
-        // Clear queue
-        _queueDao.CompleteAllPending().Wait();
+        EmailSendingService.Reset();
     }
 
     protected async Task CommitDbChanges()

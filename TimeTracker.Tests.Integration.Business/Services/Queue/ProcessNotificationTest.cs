@@ -23,6 +23,7 @@ public class ProcessNotificationTest: BaseTest
         _queueService = Scope.Resolve<IQueueService>();
         _userFactory = Scope.Resolve<IDataFactory<UserEntity>>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
+        _queueDao.CompleteAllPending().Wait();
     }
 
     [Fact]
