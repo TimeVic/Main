@@ -34,10 +34,25 @@ namespace TimeTracker.Business.Orm.Entities
         [Bag(
             Inverse = true,
             Lazy = CollectionLazy.Extra,
-            Cascade = "all-delete-orphan"
+            Cascade = "none"
         )]
         [Key(Column = "client_id")]
         [OneToMany(ClassType = typeof(ProjectEntity))]
         public virtual ICollection<ProjectEntity> Projects { get; set; } = new List<ProjectEntity>();
+        
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.Extra,
+            Cascade = "none"
+        )]
+        [Key(Column = "client_id")]
+        [OneToMany(ClassType = typeof(PaymentEntity))]
+        public virtual ICollection<PaymentEntity> Payments { get; set; } = new List<PaymentEntity>();
+
+        public virtual void AddPayment(PaymentEntity payment)
+        {
+            Payments.Add(payment);
+            payment.Client = this;
+        }
     }
 }
