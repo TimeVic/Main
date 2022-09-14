@@ -10,6 +10,8 @@ namespace TimeTracker.Business.Services.TimeEntry;
 
 public class TimeEntryService : ITimeEntryService
 {
+    private readonly TimeSpan _notificationSendingDuration = TimeSpan.FromHours(8);
+    
     private readonly IDbSessionProvider _sessionProvider;
     private readonly ILogger<TimeEntryService> _logger;
     private readonly ITimeEntryDao _timeEntryDao;
@@ -52,9 +54,12 @@ public class TimeEntryService : ITimeEntryService
                 }
 
                 activeEntity.EndTime = EndOfDay;
-                await _queueService.PushNotificationAsync(
-                    new TimeEntryAutoStoppedNotificationContext(activeEntity.Workspace.User.Email)
-                );
+                if (activeEntity.Duration >= _notificationSendingDuration)
+                {
+                    await _queueService.PushNotificationAsync(
+                        new TimeEntryAutoStoppedNotificationContext(activeEntity.Workspace.User.Email)
+                    );    
+                }
                 await _sessionProvider.PerformCommitAsync(cancellationToken);
 
                 await _timeEntryDao.StartNewAsync(
