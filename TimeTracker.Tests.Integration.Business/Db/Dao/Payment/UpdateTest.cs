@@ -7,7 +7,7 @@ using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Db.Dao.Payment;
 
-public class CreateTest: BaseTest
+public class UpdateTest: BaseTest
 {
     private readonly IUserSeeder _userSeeder;
     private readonly IWorkspaceDao _workspaceDao;
@@ -20,7 +20,7 @@ public class CreateTest: BaseTest
     private readonly WorkspaceEntity _workspace;
     private readonly IProjectDao _projectDao;
 
-    public CreateTest(): base()
+    public UpdateTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _clientDao = Scope.Resolve<IClientDao>();
@@ -35,26 +35,40 @@ public class CreateTest: BaseTest
     }
 
     [Fact]
-    public async Task ShouldCreate()
+    public async Task ShouldUpdate()
     {
-        var expectPayment = _paymentFactory.Generate(); 
-        var expectClient = await _clientDao.CreateAsync(_workspace, "Test");
+        var payment = _paymentFactory.Generate();
+        var client = await _clientDao.CreateAsync(_workspace, "Test");
+        var project = await _projectDao.CreateAsync(_workspace, "Test");
+        project.SetClient(client);
+        
+        var expectedPayment = _paymentFactory.Generate();
+        var expectClient = await _clientDao.CreateAsync(_workspace, "Test2");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
         expectProject.SetClient(expectClient);
         await DbSessionProvider.PerformCommitAsync();
 
         var actualPayment = await _paymentDao.CreateAsync(
+            client,
+            payment.Amount,
+            payment.PaymentTime,
+            project.Id,
+            payment.Description
+        );
+        
+        actualPayment = await _paymentDao.UpdatePaymentAsync(
+            actualPayment.Id,
             expectClient,
-            expectPayment.Amount,
-            expectPayment.PaymentTime,
+            expectedPayment.Amount,
+            expectedPayment.PaymentTime,
             expectProject.Id,
-            expectPayment.Description
+            expectedPayment.Description
         );
         
         Assert.True(actualPayment.Id > 0);
-        Assert.Equal(expectPayment.Amount, actualPayment.Amount);
-        Assert.Equal(expectPayment.Description, actualPayment.Description);
-        Assert.Equal(expectPayment.PaymentTime, actualPayment.PaymentTime);
+        Assert.Equal(expectedPayment.Amount, actualPayment.Amount);
+        Assert.Equal(expectedPayment.Description, actualPayment.Description);
+        Assert.Equal(expectedPayment.PaymentTime, actualPayment.PaymentTime);
         Assert.Equal(expectProject.Id, actualPayment.Project.Id);
         Assert.Equal(expectClient.Id, actualPayment.Client.Id);
     }
@@ -62,19 +76,34 @@ public class CreateTest: BaseTest
     [Fact]
     public async Task ShouldNotAddProjectNotForCurrentClient()
     {
-        var expectPayment = _paymentFactory.Generate(); 
-        var expectClient = await _clientDao.CreateAsync(_workspace, "Test");
+        var payment = _paymentFactory.Generate();
+        var client = await _clientDao.CreateAsync(_workspace, "Test");
+        var project = await _projectDao.CreateAsync(_workspace, "Test");
+        project.SetClient(client);
+        
+        var expectedPayment = _paymentFactory.Generate();
+        var expectClient = await _clientDao.CreateAsync(_workspace, "Test2");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
         await DbSessionProvider.PerformCommitAsync();
-       
+
         var actualPayment = await _paymentDao.CreateAsync(
-            expectClient,
-            expectPayment.Amount,
-            expectPayment.PaymentTime,
-            expectProject.Id,
-            expectPayment.Description
+            client,
+            payment.Amount,
+            payment.PaymentTime,
+            project.Id,
+            payment.Description
         );
         
+        actualPayment = await _paymentDao.UpdatePaymentAsync(
+            actualPayment.Id,
+            expectClient,
+            expectedPayment.Amount,
+            expectedPayment.PaymentTime,
+            expectProject.Id,
+            expectedPayment.Description
+        );
+        
+        Assert.True(actualPayment.Id > 0);
         Assert.Null(actualPayment.Project);
     }
 }
