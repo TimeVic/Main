@@ -24,9 +24,12 @@ public class PaymentDao: IPaymentDao
 
         UserEntity userAlias = null;
         WorkspaceEntity workspaceAlias = null;
-        var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<ClientEntity>()
-            .Inner.JoinAlias(item => item.Workspace, () => workspaceAlias)
+        ClientEntity clientAlias = null;
+        var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<PaymentEntity>()
+            .Inner.JoinAlias(item => item.Client, () => clientAlias)
+            .Inner.JoinAlias(() => clientAlias.Workspace, () => workspaceAlias)
             .Inner.JoinAlias(item => workspaceAlias.User, () => userAlias)
+            .And(() => userAlias.Id == user.Id)
             .And(item => item.Id == entity.Id)
             .RowCountAsync();
         return itemsWithAccessCount > 0;

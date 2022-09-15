@@ -51,6 +51,6 @@ public class HasAccessTest: BaseTest
         var payment = (await _paymentSeeder.CreateSeveralAsync()).First();
 
         var hasAccess = await _paymentDao.HasAccessAsync(_user, payment);
-        Assert.True(hasAccess);
+        Assert.False(hasAccess);
     }
 }

@@ -37,6 +37,12 @@ public class PaymentController : MainApiControllerBase
             .For<PaymentDto>()
             .With(request);
     
+    [HttpPost("delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Set([FromBody] DeleteRequest request)
+        => this.RequestAsync(request);
+    
     [HttpPost("list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
