@@ -14,18 +14,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
         private readonly IRequestService _requestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
+        private readonly IPaymentDao _paymentDao;
 
         public GetListRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
-            IProjectDao projectDao
+            IProjectDao projectDao,
+            IPaymentDao paymentDao
         )
         {
             _mapper = mapper;
             _requestService = requestService;
             _userDao = userDao;
             _projectDao = projectDao;
+            _paymentDao = paymentDao;
         }
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
@@ -38,9 +41,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
                 throw new RecordNotFoundException(nameof(request.WorkspaceId));
             }
 
-            var listDto = await _projectDao.GetListAsync(workspace);
+            var listDto = await _paymentDao.GetListAsync(workspace, request.Page);
             return new GetListResponse(
-                new List<PaymentDto>(),// _mapper.Map<ICollection<ProjectDto>>(listDto.Items),
+                _mapper.Map<ICollection<PaymentDto>>(listDto.Items),
                 listDto.TotalCount
             );
         }

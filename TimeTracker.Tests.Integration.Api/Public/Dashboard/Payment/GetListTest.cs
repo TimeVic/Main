@@ -16,7 +16,7 @@ namespace TimeTracker.Tests.Integration.Api.Public.Dashboard.Payment;
 
 public class GetListTest: BaseTest
 {
-    private readonly string Url = "/dashboard/payment/update";
+    private readonly string Url = "/dashboard/payment/list";
     
     private readonly UserEntity _user;
     private readonly IDataFactory<PaymentEntity> _factory;
@@ -27,7 +27,6 @@ public class GetListTest: BaseTest
     private readonly IProjectDao _projectDao;
     private readonly ProjectEntity _project;
     private readonly IPaymentSeeder _paymentSeeder;
-    private readonly PaymentEntity _payment;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -38,71 +37,62 @@ public class GetListTest: BaseTest
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _workspace = _user.DefaultWorkspace;
-        _payment = _paymentSeeder.CreateSeveralAsync(_user, 1).Result.First();
+        _client = _clientDao.CreateAsync(_workspace, "Test new client").Result;
+        _project = _projectDao.CreateAsync(_workspace, "Test new project").Result;
+        _project.SetClient(_client);
+        DbSessionProvider.PerformCommitAsync().Wait();
     }
 
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var expectPayment = _factory.Generate();
-        var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
+        var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
         {
-            PaymentId = _payment.Id,
-            ClientId = _payment.Client.Id,
-            Amount = expectPayment.Amount,
-            Description = expectPayment.Description,
-            PaymentTime = expectPayment.PaymentTime,
-            ProjectId = _payment.Project.Id,
+            WorkspaceId = _workspace.Id,
+            Page = 1
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
     
     [Fact]
-    public async Task ShouldUpdate()
+    public async Task ShouldReceiveList()
     {
-        var expectPayment = _factory.Generate();
-        var expectedClient = await _clientDao.CreateAsync(_workspace, "Test new client");
-        var expectProject = await _projectDao.CreateAsync(_workspace, "Test new project");
-        expectProject.SetClient(expectedClient);
-        await DbSessionProvider.PerformCommitAsync();
+        var expectedTotal = 21;
+        await _paymentSeeder.CreateSeveralAsync(_client, _project, expectedTotal);
         
-        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            PaymentId = _payment.Id,
-            ClientId = expectedClient.Id,
-            Amount = expectPayment.Amount,
-            Description = expectPayment.Description,
-            PaymentTime = expectPayment.PaymentTime,
-            ProjectId = expectProject.Id
+            WorkspaceId = _workspace.Id,
+            Page = 1
         });
-        await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
-        var actualPayment = await response.GetJsonDataAsync<PaymentDto>();
-        Assert.True(actualPayment.Id > 0);
-        Assert.Equal(expectedClient.Id, actualPayment.Client.Id);
-        Assert.Equal(expectProject.Id, actualPayment.Project.Id);
-        Assert.Equal(expectPayment.Amount, actualPayment.Amount);
-        Assert.Equal(expectPayment.Description, actualPayment.Description);
-        Assert.Equal(expectPayment.PaymentTime, actualPayment.PaymentTime);
+        var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedTotal, actualResponse.TotalCount);
+        
+        Assert.All(actualResponse.Items, item =>
+        {
+            Assert.True(item.Id > 0);
+            Assert.Equal(_client.Id, item.Client.Id);
+            Assert.Equal(_project.Id, item.Project.Id);
+            Assert.True(item.Amount > 0);
+            Assert.NotEmpty(item.Description);
+            Assert.True(item.PaymentTime > DateTime.MinValue);
+        });
+        
     }
     
     [Fact]
     public async Task ShouldNotUpdateIfHasNoAccess()
     {
-        var expectPayment = _factory.Generate();
         var (otherJwtToken, otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
         
-        var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()
+        var response = await PostRequestAsync(Url, otherJwtToken, new GetListRequest()
         {
-            PaymentId = _payment.Id,
-            ClientId = _payment.Client.Id,
-            Amount = expectPayment.Amount,
-            Description = expectPayment.Description,
-            PaymentTime = expectPayment.PaymentTime,
-            ProjectId = _payment.Project.Id
+            WorkspaceId = _workspace.Id,
+            Page = 1
         });
         var errorResponse = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.Type);
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), errorResponse.Type);
     }
 }

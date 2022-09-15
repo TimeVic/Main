@@ -9,4 +9,8 @@ public class GetListRequest: IRequest<GetListResponse>
     [Required]
     [IsPositive]
     public long WorkspaceId { get; set; }
+    
+    [Required]
+    [IsPositive]
+    public int Page { get; set; }
 }
