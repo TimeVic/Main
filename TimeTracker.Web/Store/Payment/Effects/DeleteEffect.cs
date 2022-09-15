@@ -36,7 +36,6 @@ public class DeleteEffect: Effect<DeletePaymentAction>
             await _apiService.PaymentDeleteAsync(action.PaymentId);
             dispatcher.Dispatch(new RemoveEmptyPaymentListItemAction());
             dispatcher.Dispatch(new RemovePaymentListItemAction(action.PaymentId));
-            dispatcher.Dispatch(new LoadPaymentListAction(true));
             
             _notificationService.Notify(new NotificationMessage()
             {

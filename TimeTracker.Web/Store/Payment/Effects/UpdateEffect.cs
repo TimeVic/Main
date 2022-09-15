@@ -27,7 +27,7 @@ public class UpdateEffect: Effect<SavePaymentListItemAction>
     {
         try
         {
-            var payment = await _apiService.PaymentUpdateAsync(new UpdateRequest()
+            await _apiService.PaymentUpdateAsync(new UpdateRequest()
             {
                 PaymentId = action.Payment.Id,
                 ClientId = action.Payment.Client.Id,
@@ -36,7 +36,6 @@ public class UpdateEffect: Effect<SavePaymentListItemAction>
                 Description = action.Payment.Description,
                 PaymentTime = action.Payment.PaymentTime
             });
-            dispatcher.Dispatch(new SetPaymentListItemAction(payment));
             dispatcher.Dispatch(new LoadPaymentListAction(true));
             
             _notificationService.Notify(new NotificationMessage()

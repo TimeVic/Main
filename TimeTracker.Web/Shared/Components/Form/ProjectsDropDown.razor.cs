@@ -33,7 +33,10 @@ public partial class ProjectsDropDown
     
     [Parameter]
     public string Class { get; set; }
-    
+
+    [Parameter]
+    public long ClientId { get; set; }
+
     [Inject]
     public ILogger<ProjectDto> _logger { get; set; }
     
@@ -51,7 +54,21 @@ public partial class ProjectsDropDown
     private long _selectedId = 0;
     
     private RadzenDropDown<long> _listReference;
-    
+
+    private ICollection<ProjectDto> _list
+    {
+        get
+        {
+            var list = _state.Value.List;
+            if (ClientId == 0)
+            {
+                return list;
+            }
+
+            return list.Where(item => item.Client?.Id == ClientId).ToList();
+        }
+    }
+
     private Task OnValueChanged(long selectedId)
     {
         _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == selectedId);

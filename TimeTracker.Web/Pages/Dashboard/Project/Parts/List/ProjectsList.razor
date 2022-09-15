@@ -36,6 +36,16 @@
                         Style="position: absolute"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="ProjectDto" Title="Client">
+                <Template Context="item">
+                    @item.Client?.Name
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="ProjectDto" Title="Hourly Rate">
+                <Template Context="item">
+                    @item.DefaultHourlyRate?.ToString("0.00")
+                </Template>
+            </RadzenDataGridColumn>
             <RadzenDataGridColumn
                 TItem="ProjectDto"
                 Context="app" Filterable="false"
@@ -52,7 +62,7 @@
                             ButtonStyle="ButtonStyle.Light"
                             Click="@(args => EditNewRow(item))"
                             @onclick:stopPropagation="true">
-                        </RadzenButton>    
+                        </RadzenButton>
                     }
                     else
                     {

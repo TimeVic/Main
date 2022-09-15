@@ -36,10 +36,10 @@ public class ApiUrl
     
     #region Payment
     
-    public const string PaymentAdd = "dashboard/client/add";
-    public const string PaymentUpdate = "dashboard/client/payment";
-    public const string PaymentDelete = "dashboard/client/delete";
-    public const string PaymentList = "dashboard/client/list";
+    public const string PaymentAdd = "dashboard/payment/add";
+    public const string PaymentUpdate = "dashboard/payment/payment";
+    public const string PaymentDelete = "dashboard/payment/delete";
+    public const string PaymentList = "dashboard/payment/list";
     
     #endregion
 }

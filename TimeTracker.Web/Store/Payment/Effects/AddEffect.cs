@@ -1,6 +1,7 @@
 ﻿using Fluxor;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 
@@ -33,12 +34,13 @@ public class AddEffect: Effect<SaveEmptyPaymentListItemAction>
     {
         try
         {
+            Debug.Log(_state.Value.ItemToAdd);
             if (_state.Value.ItemToAdd == null)
             {
                 return;
             }
 
-            var payment = await _apiService.PaymentAddAsync(new AddRequest()
+            await _apiService.PaymentAddAsync(new AddRequest()
             {
                 ClientId = _state.Value.ItemToAdd.Client.Id,
                 ProjectId = _state.Value.ItemToAdd.Project?.Id,
@@ -47,7 +49,6 @@ public class AddEffect: Effect<SaveEmptyPaymentListItemAction>
                 PaymentTime = _state.Value.ItemToAdd.PaymentTime
             });
             dispatcher.Dispatch(new RemoveEmptyPaymentListItemAction());
-            dispatcher.Dispatch(new SetPaymentListItemAction(payment));
             dispatcher.Dispatch(new LoadPaymentListAction(true));
             
             _notificationService.Notify(new NotificationMessage()

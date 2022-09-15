@@ -64,7 +64,10 @@ public class ClientReducers
         newList.Add(new PaymentDto()
         {
             Id = 0,
-            Description = ""
+            Description = "",
+            PaymentTime = DateTime.Now,
+            Amount = 0,
+            Client = new ClientDto() { Id = 0 }
         });
         return state with
         {
