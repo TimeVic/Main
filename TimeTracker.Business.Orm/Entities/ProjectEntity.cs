@@ -51,6 +51,15 @@ namespace TimeTracker.Business.Orm.Entities
         )]
         public virtual ClientEntity? Client { get; set; }
 
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.Extra,
+            Cascade = "none"
+        )]
+        [Key(Column = "project_id")]
+        [OneToMany(ClassType = typeof(PaymentEntity))]
+        public virtual ICollection<PaymentEntity> Payments { get; set; } = new List<PaymentEntity>();
+
         public virtual void SetClient(ClientEntity? client)
         {
             if (Client?.Id == client?.Id)
@@ -60,6 +69,12 @@ namespace TimeTracker.Business.Orm.Entities
 
             Client = client;
             client?.Projects.Add(this);
+        }
+        
+        public virtual void AddPayment(PaymentEntity payment)
+        {
+            Payments.Add(payment);
+            payment.Project = this;
         }
     }
 }

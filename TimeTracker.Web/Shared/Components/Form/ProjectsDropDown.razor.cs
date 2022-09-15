@@ -51,12 +51,6 @@ public partial class ProjectsDropDown
     private long _selectedId = 0;
     
     private RadzenDropDown<long> _listReference;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        Dispatcher.Dispatch(new LoadProjectListAction());
-    }
     
     private Task OnValueChanged(long selectedId)
     {

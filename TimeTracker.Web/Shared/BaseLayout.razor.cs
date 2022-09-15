@@ -4,6 +4,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Store.Auth;
@@ -71,15 +72,23 @@ public partial class BaseLayout
         {
             CheckIsLoggedInAndRedirect();
         };
-        AuthState.StateChanged += (sender, args) =>
+        AuthState.StateChanged += async (sender, args) =>
         {
             CheckIsLoggedInAndRedirect();
+            if (AuthState.Value.IsLoggedIn)
+            {
+                await OnAppInitializedAsync();
+            }
         };
         ReCaptchaService.IsShowChanged += OnReCaptchaShowChanged;
         IsShowReCaptcha = ReCaptchaService.GetIsEnabled();
         
         await AuthService.CheckIsLoggedInAsync();
         CheckIsLoggedInAndRedirect();
+        if (AuthState.Value.IsLoggedIn)
+        {
+            await OnAppInitializedAsync();
+        }
     }
 
     public void Dispose()
@@ -104,5 +113,10 @@ public partial class BaseLayout
             NavigationManager.NavigateTo("/login");
         }
         StateHasChanged();
+    }
+
+    protected virtual Task OnAppInitializedAsync()
+    {
+        return Task.CompletedTask;
     }
 }

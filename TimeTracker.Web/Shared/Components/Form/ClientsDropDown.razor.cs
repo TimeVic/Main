@@ -53,12 +53,6 @@ public partial class ClientsDropDown
     
     private RadzenDropDown<long> _listReference;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        Dispatcher.Dispatch(new LoadClientListAction());
-    }
-    
     private Task OnValueChanged(long selectedId)
     {
         _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == selectedId);
