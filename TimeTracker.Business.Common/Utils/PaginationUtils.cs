@@ -4,6 +4,8 @@ namespace TimeTracker.Business.Common.Utils;
 
 public static class PaginationUtils
 {
+    public static int DefaultPageSize => GlobalConstants.ListPageSize;
+    
     public static int CalculatePage(int skip, int pageSize = GlobalConstants.ListPageSize)
     {
         var page = (int) Math.Ceiling((decimal) (skip / pageSize));

@@ -10,16 +10,19 @@ public class SecurityManager: ISecurityManager
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IProjectDao _projectDao;
     private readonly IClientDao _clientDao;
+    private readonly IPaymentDao _paymentDao;
 
     public SecurityManager(
         ITimeEntryDao timeEntryDao,
         IProjectDao projectDao,
-        IClientDao clientDao
+        IClientDao clientDao,
+        IPaymentDao paymentDao
     )
     {
         _timeEntryDao = timeEntryDao;
         _projectDao = projectDao;
         _clientDao = clientDao;
+        _paymentDao = paymentDao;
     }
 
     public async Task<bool> HasAccess<TEntity>(AccessLevel accessLevel, UserEntity user, TEntity? entity)
@@ -38,6 +41,10 @@ public class SecurityManager: ISecurityManager
         if (entity is ClientEntity clientEntity)
         {
             return await _clientDao.HasAccessAsync(user, clientEntity);
+        }
+        if (entity is PaymentEntity paymentEntity)
+        {
+            return await _paymentDao.HasAccessAsync(user, paymentEntity);
         }
 
         throw new NotImplementedException($"Security checking not implemented for {entity?.GetTypeName()}");

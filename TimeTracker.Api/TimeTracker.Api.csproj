@@ -18,8 +18,4 @@
         <InternalsVisibleTo Include="TimeTracker.Tests.Integration.Api" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Controllers\Dashboard\Payments" />
-    </ItemGroup>
-
 </Project>
