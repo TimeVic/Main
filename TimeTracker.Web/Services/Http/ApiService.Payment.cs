@@ -29,9 +29,12 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
-        public async Task PaymentDeleteAsync(DeleteRequest model)
+        public async Task PaymentDeleteAsync(long paymentId)
         {
-            await PostAuthorizedAsync<object>(ApiUrl.PaymentDelete, model);
+            await PostAuthorizedAsync<object>(ApiUrl.PaymentDelete, new DeleteRequest()
+            {
+                PaymentId = paymentId
+            });
         }
         
         public async Task<GetListResponse> PaymentGetListAsync(GetListRequest model)

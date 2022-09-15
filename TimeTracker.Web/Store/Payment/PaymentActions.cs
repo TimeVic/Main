@@ -18,3 +18,7 @@ public record struct RemoveEmptyPaymentListItemAction();
 public record struct SaveEmptyPaymentListItemAction();
 
 public record struct SavePaymentListItemAction(PaymentDto Payment);
+
+public record struct DeletePaymentAction(long PaymentId);
+
+public record struct RemovePaymentListItemAction(long PaymentId);

@@ -6,43 +6,42 @@ using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.Payment.Effects;
 
-public class UpdateEffect: Effect<SavePaymentListItemAction>
+public class DeleteEffect: Effect<DeletePaymentAction>
 {
+    private readonly IState<AuthState> _authState;
+    private readonly IState<PaymentState> _state;
     private readonly IApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
     private readonly NotificationService _notificationService;
 
-    public UpdateEffect(
+    public DeleteEffect(
         IApiService apiService,
+        IState<AuthState> authState,
+        IState<PaymentState> state,
         ILogger<LoadListEffect> logger,
         NotificationService notificationService
     )
     {
         _apiService = apiService;
+        _authState = authState;
+        _state = state;
         _logger = logger;
         _notificationService = notificationService;
     }
 
-    public override async Task HandleAsync(SavePaymentListItemAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(DeletePaymentAction action, IDispatcher dispatcher)
     {
         try
         {
-            var payment = await _apiService.PaymentUpdateAsync(new UpdateRequest()
-            {
-                PaymentId = action.Payment.Id,
-                ClientId = action.Payment.Client.Id,
-                ProjectId = action.Payment.Project?.Id,
-                Amount = action.Payment.Amount,
-                Description = action.Payment.Description,
-                PaymentTime = action.Payment.PaymentTime
-            });
-            dispatcher.Dispatch(new SetPaymentListItemAction(payment));
+            await _apiService.PaymentDeleteAsync(action.PaymentId);
+            dispatcher.Dispatch(new RemoveEmptyPaymentListItemAction());
+            dispatcher.Dispatch(new RemovePaymentListItemAction(action.PaymentId));
             dispatcher.Dispatch(new LoadPaymentListAction(true));
             
             _notificationService.Notify(new NotificationMessage()
             {
                 Severity = NotificationSeverity.Info,
-                Summary = "Payment was updated"
+                Summary = "New Payment was added"
             });
         }
         catch (Exception e)

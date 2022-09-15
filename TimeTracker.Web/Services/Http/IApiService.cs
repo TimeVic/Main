@@ -48,7 +48,7 @@ namespace TimeTracker.Web.Services.Http
 
         Task<PaymentDto> PaymentAddAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment.AddRequest model);
         Task<PaymentDto> PaymentUpdateAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment.UpdateRequest model);
-        Task PaymentDeleteAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment.DeleteRequest model);
+        Task PaymentDeleteAsync(long paymentId);
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment.GetListResponse> PaymentGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment.GetListRequest model);
 
         #endregion
