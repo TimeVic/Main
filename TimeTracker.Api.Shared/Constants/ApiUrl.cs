@@ -33,4 +33,13 @@ public class ApiUrl
     public const string ClientList = "dashboard/client/list";
     
     #endregion
+    
+    #region Payment
+    
+    public const string PaymentAdd = "dashboard/payment/add";
+    public const string PaymentUpdate = "dashboard/payment/payment";
+    public const string PaymentDelete = "dashboard/payment/delete";
+    public const string PaymentList = "dashboard/payment/list";
+    
+    #endregion
 }

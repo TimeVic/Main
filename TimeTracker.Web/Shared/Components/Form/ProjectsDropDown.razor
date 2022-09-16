@@ -1,6 +1,7 @@
 ﻿@inherits BaseComponent
 
 @using Newtonsoft.Json
+@using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
 
 <RadzenDropDown
@@ -13,11 +14,22 @@
     AllowFiltering="false"
     AllowSorting="false"
     AllowVirtualization="true"
-    Count="@_state.Value.TotalCount"
-    Data="@_state.Value.List"
+    Data="@_list"
     TextProperty="Name"
     ValueProperty="Id"
     Placeholder="@Placeholder"
     Value="@_selectedId"
     ValueChanged="async (value) => await OnValueChanged(value)">
+    <Template>
+        @{
+            var project = context as ProjectDto;
+        }
+        <div>@project.Name</div>
+        @if (project.Client != null)
+        {
+            <RadzenText class="mt-2 d-block" TextStyle="TextStyle.Caption">
+                @project.Client?.Name
+            </RadzenText>
+        }
+    </Template>
 </RadzenDropDown>
