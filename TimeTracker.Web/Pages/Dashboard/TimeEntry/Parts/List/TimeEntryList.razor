@@ -13,6 +13,7 @@
         PageSize="@GlobalConstants.ListPageSize"
         Data="@_state.Value.ListToShow"
         AllowPaging="true"
+        RowUpdate="@OnUpdateRow"
         IsLoading="@_state.Value.IsListLoading"
         Count="@_state.Value.TotalCount"
         LoadData="@OnLoadList"
@@ -20,28 +21,59 @@
         ColumnWidth="200px">
 
         <Columns>
-            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Duration" Width="40px">
+            <RadzenDataGridColumn
+                TItem="TimeEntryDto"
+                Title="Duration"
+                Width="60px"
+                TextAlign="TextAlign.Center">
+                
                 <Template Context="entry">
+                    @_timeParsingService.TimeSpanToTimeString(entry.Duration, true)
+                </Template>
+                <EditTemplate Context="entry">
                     <DurationField
                         Value="@entry.Duration"/>
-                </Template>
+                </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Date" Width="60px">
+            
+            <RadzenDataGridColumn
+                TItem="TimeEntryDto"
+                Title="Date"
+                Width="100px"
+                TextAlign="TextAlign.Center">
+                
                 <Template Context="entry">
-                    <RadzenDatePicker 
+                    @entry.Date.ToString("d")
+                </Template>
+                <EditTemplate Context="entry">
+                    <RadzenDatePicker
                         @bind-Value="@entry.Date"
-                        Change="async date => await OnChangeItemDateAsync(entry, date)"
                         DateFormat="d"
                         Class="w-100"/>
-                </Template>
+                </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Period" Width="80px">
+            
+            <RadzenDataGridColumn
+                TItem="TimeEntryDto"
+                Title="Period"
+                Width="100px"
+                TextAlign="TextAlign.Center">
+                
                 <Template Context="entry">
+                    <div class="d-flex justify-content-center">
+                        @_timeParsingService.TimeSpanToTimeString(entry.StartTime)
+                        <div class="fw-bold pr-2 pl-2 text-center">
+                            -
+                        </div>
+                        @_timeParsingService.TimeSpanToTimeString(entry.EndTime.Value)
+                    </div>
+                </Template>
+                <EditTemplate Context="entry">
                     <div class="d-flex justify-content-start">
                         <TimeInput
                             Class="mr-1"
                             Value="@entry.StartTime"
-                            ValueChanged="@(async time => await OnChangeStartTime(entry, time))"/>
+                            ValueChanged="@(time => OnChangeStartTime(entry, time))"/>
                         <div class="fw-bold pt-2 text-center">
                             <RadzenIcon Icon="code"/>
                         </div>
@@ -50,32 +82,73 @@
                             Value="@entry.EndTime.Value"
                             ValueChanged="@(async time => await OnChangeEndTime(entry, time))"/>
                     </div>
-                </Template>
+                </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Project" Width="80px">
+            
+            <RadzenDataGridColumn
+                TItem="TimeEntryDto"
+                Title="Project"
+                Width="120px">
+                
                 <Template Context="entry">
+                    @entry.Project?.Name
+                </Template>
+                <EditTemplate Context="entry">
                     <ProjectsDropDown
                         Value="@(entry.Project?.Id ?? 0)"
-                        SelectedItemChanged="async project => await OnChangeProject(entry, project)"
                         Class="ml-1"/>
-                </Template>
+                </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TimeEntryDto" Title="Description" Width="200px">
+            
+            <RadzenDataGridColumn
+                TItem="TimeEntryDto"
+                Title="Description"
+                Width="200px">
+                
                 <Template Context="entry">
+                    @entry.Description
+                </Template>
+                <EditTemplate Context="entry">
                     <RadzenTextBox
                         Class="ml-1"
-                        ValueChanged="async description => await OnChangeDescription(entry, description)"
-                        Value="@entry.Description"/>
-                </Template>
+                        @bind-Value="@entry.Description"/>
+                </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TimeEntryDto" Title="" Width="30px">
+            
+            <RadzenDataGridColumn
+                TItem="TimeEntryDto"
+                Title=""
+                Width="60px">
+                
                 <Template Context="entry">
+                    <RadzenButton
+                        Icon="edit"
+                        ButtonStyle="ButtonStyle.Light"
+                        Size="ButtonSize.Small"
+                        Click="@(args => EditRow(entry))"
+                        @onclick:stopPropagation="true">
+                    </RadzenButton>
                     <RadzenButton
                         Size="ButtonSize.Small"
                         ButtonStyle="ButtonStyle.Danger"
                         Icon="delete"
                         Click="async () => await OnDeleteItemAsync(entry)"/>
                 </Template>
+                <EditTemplate Context="item">
+
+                    <RadzenButton
+                        Icon="check"
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Primary"
+                        Click="@(() => OnClickSaveRow(item))"/>
+
+                    <RadzenButton
+                        Icon="close"
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Light"
+                        Click="@(() => OnClickCancelEditMode(item))">
+                    </RadzenButton>
+                </EditTemplate>
             </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>

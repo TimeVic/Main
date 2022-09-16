@@ -1,7 +1,9 @@
 ﻿
 <div class="w-input-time @Class">
     <RadzenTextBox
+        @onchange:stopPropagation
         Disabled="IsDisabled"
         Change="@(OnChangeValue)"
+        Style="text-align: center;"
         Value="@_valueString"/>
 </div>
