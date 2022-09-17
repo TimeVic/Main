@@ -83,20 +83,28 @@
                 <Template Context="item">
 
                     <RadzenButton
+                        Size="ButtonSize.Small"
                         Icon="edit"
                         ButtonStyle="ButtonStyle.Light"
                         Click="@(args => EditRow(item))"
                         @onclick:stopPropagation="true">
                     </RadzenButton>
+                    <RadzenButton
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Danger"
+                        Icon="delete"
+                        Click="async () => await OnDeleteItemAsync(item)"/>
                 </Template>
                 <EditTemplate Context="item">
 
                     <RadzenButton
+                        Size="ButtonSize.Small"
                         Icon="check"
                         ButtonStyle="ButtonStyle.Primary"
                         Click="@(() => OnClickSaveRow(item))"/>
 
                     <RadzenButton
+                    Size="ButtonSize.Small"
                         Icon="close"
                         ButtonStyle="ButtonStyle.Light"
                         Click="@(() => OnClickCancelEditMode(item))">
