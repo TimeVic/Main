@@ -96,6 +96,7 @@
                 <EditTemplate Context="entry">
                     <ProjectsDropDown
                         Value="@(entry.Project?.Id ?? 0)"
+                        SelectedItemChanged="project => entry.Project = project"
                         Class="ml-1"/>
                 </EditTemplate>
             </RadzenDataGridColumn>

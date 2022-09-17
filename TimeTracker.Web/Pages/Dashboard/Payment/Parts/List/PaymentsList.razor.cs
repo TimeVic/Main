@@ -22,9 +22,21 @@ public partial class PaymentsList
         Dispatcher.Dispatch(new LoadPaymentListAction(true));
     }
 
-    private async Task OnDeleteItemAsync(PaymentDto value)
+    private async Task OnDeleteItemAsync(PaymentDto item)
     {
-        await Task.CompletedTask;
+        var isOk = await DialogService.Confirm(
+            "Are you sure you want to remove this item?",
+            "Delete confirmation",
+            new ConfirmOptions()
+            {
+                OkButtonText = "Delete",
+                CancelButtonText = "Cancel"
+            }
+        );
+        if (isOk.HasValue && isOk.Value)
+        {
+            Dispatcher.Dispatch(new DeletePaymentAction(item.Id));
+        }
     }
     
     private async Task InsertRow()

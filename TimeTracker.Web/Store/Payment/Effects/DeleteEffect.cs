@@ -40,7 +40,7 @@ public class DeleteEffect: Effect<DeletePaymentAction>
             _notificationService.Notify(new NotificationMessage()
             {
                 Severity = NotificationSeverity.Info,
-                Summary = "New Payment was added"
+                Summary = "Payment was deleted"
             });
         }
         catch (Exception e)
