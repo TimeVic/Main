@@ -23,14 +23,20 @@ public class TimeParsingServiceTest: BaseTest
 
     [Theory]
     [InlineData("", "0:00")]
-    [InlineData("1", "1:00")]
-    [InlineData("10", "10:00")]
-    [InlineData("25", "0:00")]
-    [InlineData("24", "0:00")]
-    [InlineData("1061", "11:00")]
+    [InlineData("1", "0:01")]
+    [InlineData("10", "0:10")]
+    [InlineData("25", "0:25")]
+    [InlineData("24", "0:24")]
+    [InlineData("1061", "11:01")]
     [InlineData("0060", "1:00")]
     [InlineData("0002", "0:02")]
-    [InlineData("123", "12:30")]
+    [InlineData("123", "1:23")]
+    [InlineData("3:26", "3:26")]
+    [InlineData("60", "1:00")]
+    [InlineData("65", "1:05")]
+    [InlineData("99", "1:39")]
+    [InlineData("199", "2:39")]
+    [InlineData("043", "0:43")]
     public void ShouldFormatTime(string actual, string expect)
     {
         Assert.Equal(expect, _timeParsingService.FormatTime(actual));
@@ -39,10 +45,10 @@ public class TimeParsingServiceTest: BaseTest
     [Fact]
     public void ShouldParseTime()
     {
-        Assert.Equal(TimeSpan.Parse("1:00"), _timeParsingService.ParseTime("1"));
-        Assert.Equal(TimeSpan.Parse("10:00"), _timeParsingService.ParseTime("10"));
-        Assert.Equal(TimeSpan.Parse("0:00"), _timeParsingService.ParseTime("25"));
-        Assert.Equal(TimeSpan.Parse("11:00"), _timeParsingService.ParseTime("1061"));
+        Assert.Equal(TimeSpan.Parse("0:01"), _timeParsingService.ParseTime("1"));
+        Assert.Equal(TimeSpan.Parse("0:10"), _timeParsingService.ParseTime("10"));
+        Assert.Equal(TimeSpan.Parse("0:25"), _timeParsingService.ParseTime("25"));
+        Assert.Equal(TimeSpan.Parse("11:01"), _timeParsingService.ParseTime("1061"));
         Assert.Equal(TimeSpan.Parse("1:00"), _timeParsingService.ParseTime("0060"));
     }
     

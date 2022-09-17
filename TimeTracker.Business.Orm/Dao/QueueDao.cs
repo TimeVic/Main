@@ -25,18 +25,29 @@ public class QueueDao: IQueueDao
         CancellationToken cancellationToken = default
     )
     {
-        var contextType = context.GetType();
-        var typeString = string.Join(".", contextType.Namespace, contextType.Name);
-        var queueItem = new QueueEntity
+        using var transaction = _session.BeginTransaction();
+
+        try
         {
-            Channel = channel,
-            Status = QueueStatus.Pending,
-            ContextType = typeString,
-            ContextData = JsonHelper.SerializeToString(context),
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
-        };
-        await _session.SaveAsync(queueItem, cancellationToken);
+            var contextType = context.GetType();
+            var typeString = string.Join(".", contextType.Namespace, contextType.Name);
+            var queueItem = new QueueEntity
+            {
+                Channel = channel,
+                Status = QueueStatus.Pending,
+                ContextType = typeString,
+                ContextData = JsonHelper.SerializeToString(context),
+                CreateTime = DateTime.UtcNow,
+                UpdateTime = DateTime.UtcNow
+            };
+            await _session.SaveAsync(queueItem, cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            _logger.LogError(e, e.Message);
+        }
     }
     
     public async Task<QueueEntity?> GetById(

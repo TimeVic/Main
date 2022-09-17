@@ -26,11 +26,13 @@ public class TimeEntryDto : IResponse
 
     public void UpdateFrom(TimeEntryDto fromEntry)
     {
+        Id = fromEntry.Id;
         Description = fromEntry.Description;
         Project = fromEntry.Project;
         EndTime = fromEntry.EndTime;
         StartTime = fromEntry.StartTime;
         HourlyRate = fromEntry.HourlyRate;
+        Date = fromEntry.Date;
         IsBillable = fromEntry.IsBillable;
     }
 }
