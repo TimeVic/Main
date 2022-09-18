@@ -32,7 +32,4 @@
       <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-    </ItemGroup>
-
 </Project>
