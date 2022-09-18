@@ -12,8 +12,8 @@ public interface IPaymentDao: IDomainService
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
-        long? projectId,
-        string? description
+        long? projectId = null,
+        string? description = null
     );
 
     Task<PaymentEntity?> UpdatePaymentAsync(

@@ -33,11 +33,9 @@ public class PaymentSeeder: IPaymentSeeder
     
     public async Task<ICollection<PaymentEntity>> CreateSeveralAsync(UserEntity user, int count = 1)
     {
-        var client = (await _clientSeeder.CreateSeveralAsync(user, 1)).First();
         var project = (await _projectSeeder.CreateSeveralAsync(user)).First();
-        project.SetClient(client);
         await _sessionProvider.PerformCommitAsync();
-        return await CreateSeveralAsync(client, project, count);
+        return await CreateSeveralAsync(project.Client, project, count);
     }
 
     public async Task<ICollection<PaymentEntity>> CreateSeveralAsync(ClientEntity client, ProjectEntity? project, int count = 1)

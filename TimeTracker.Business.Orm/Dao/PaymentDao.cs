@@ -49,8 +49,8 @@ public class PaymentDao: IPaymentDao
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
-        long? projectId,
-        string? description
+        long? projectId = null,
+        string? description = null
     )
     {
         var entity = new PaymentEntity()
