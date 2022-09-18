@@ -68,6 +68,7 @@ public class TimeEntryService : ITimeEntryService
                     activeEntity.Description,
                     activeEntity.Project?.Id
                 );
+                await _sessionProvider.PerformCommitAsync(cancellationToken);
             }
         }
         catch (Exception e)
