@@ -39,6 +39,7 @@ public class UpdateTest: BaseTest
 
         _workspace = _user.DefaultWorkspace;
         _payment = _paymentSeeder.CreateSeveralAsync(_user, 1).Result.First();
+        DbSessionProvider.PerformCommitAsync().Wait();
     }
 
     [Fact]
