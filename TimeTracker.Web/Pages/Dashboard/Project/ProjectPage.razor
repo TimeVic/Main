@@ -7,52 +7,54 @@
 
 @layout Layout
 
-<div class="px-3">
+<RadzenPanel Style="margin: 10px auto;">
+    <div class="px-3">
+        <RadzenBreadCrumb class="mb-3">
+            <RadzenBreadCrumbItem Path="@SiteUrl.Dashboard_Projects" Text="Projects"/>
+            <RadzenBreadCrumbItem Text="Edit project"/>
+        </RadzenBreadCrumb>
 
-    <RadzenBreadCrumb class="mb-3">
-        <RadzenBreadCrumbItem Path="@SiteUrl.Dashboard_Projects" Text="Projects"/>
-        <RadzenBreadCrumbItem Text="Edit project"/>
-    </RadzenBreadCrumb>
+        <RadzenCard>
+            <h2 class="mb-4">@(model.Name)</h2>
+            <RadzenTemplateForm TItem="UpdateRequest" Data="@model" Submit="HandleSubmit">
+                <DataAnnotationsValidator/>
+                <ValidationSummary/>
 
-    <RadzenCard>
-        <h2 class="mb-4">@(model.Name)</h2>
-        <RadzenTemplateForm TItem="UpdateRequest" Data="@model" Submit="HandleSubmit">
-            <DataAnnotationsValidator/>
-            <ValidationSummary/>
-
-            <div class="mb-2 row">
-                <RadzenLabel
-                    Text="Project name"
-                    class="col-sm-3 fw-bold"/>
-                <RadzenTextBox @bind-Value="@model.Name" Class="col"/>
-            </div>
-            <div class="mb-2 row">
-                <RadzenLabel
-                    Text="Client"
-                    class="col-sm-3 fw-bold"/>
-                <div class="col">
-                    <ClientsDropDown Value="@(model.ClientId ?? 0)" ValueChanged="OnChangeClient"/>
+                <div class="mb-2 row">
+                    <RadzenLabel
+                        Text="Project name"
+                        class="col-sm-3 fw-bold"/>
+                    <RadzenTextBox @bind-Value="@model.Name" Class="col"/>
                 </div>
-            </div>
-            <div class="mb-2">
-                <RadzenCheckBox @bind-Value="@model.IsBillableByDefault"/>
-                <RadzenLabel
-                    Text="Billable by default"/>
-            </div>
-            <div class="mb-2 row">
-                <RadzenLabel
-                    Text="Default hourly rate"
-                    class="col-sm-3 fw-bold"/>
-                <RadzenNumeric @bind-Value="@model.DefaultHourlyRate" Class="col"/>
-            </div>
-            <RadzenButton
-                Click="OnClickBackButton"
-                ButtonStyle="ButtonStyle.Light"
-                Text="Back"/>
-            <RadzenButton
-                ButtonType="ButtonType.Submit"
-                Disabled="@_isLoading"
-                Text="Save"/>
-        </RadzenTemplateForm>
-    </RadzenCard>
-</div>
+                <div class="mb-2 row">
+                    <RadzenLabel
+                        Text="Client"
+                        class="col-sm-3 fw-bold"/>
+                    <div class="col">
+                        <ClientsDropDown Value="@(model.ClientId ?? 0)" ValueChanged="OnChangeClient"/>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <RadzenCheckBox @bind-Value="@model.IsBillableByDefault"/>
+                    <RadzenLabel
+                        Text="Billable by default"/>
+                </div>
+                <div class="mb-2 row">
+                    <RadzenLabel
+                        Text="Default hourly rate"
+                        class="col-sm-3 fw-bold"/>
+                    <RadzenNumeric @bind-Value="@model.DefaultHourlyRate" Class="col"/>
+                </div>
+                <RadzenButton
+                    Click="OnClickBackButton"
+                    ButtonStyle="ButtonStyle.Light"
+                    Text="Back"/>
+                <RadzenButton
+                    ButtonType="ButtonType.Submit"
+                    Disabled="@_isLoading"
+                    Text="Save"/>
+            </RadzenTemplateForm>
+        </RadzenCard>
+    </div>
+
+</RadzenPanel>
