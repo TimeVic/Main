@@ -49,7 +49,7 @@ public partial class TimeEntryForm
     private async Task UpdateTimeEntry(TimeEntryDto entry)
     {
         Dispatcher.Dispatch(new UpdateTimeEntryAction(entry));
-        Dispatcher.Dispatch(new SaveTimeEntryAction(entry));
+        Dispatcher.Dispatch(new SaveTimeEntryAction(entry, true));
         await Task.CompletedTask;
     }
 }

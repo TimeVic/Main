@@ -26,7 +26,7 @@
                 Title="Duration"
                 Width="60px"
                 TextAlign="TextAlign.Center">
-                
+
                 <Template Context="entry">
                     @_timeParsingService.TimeSpanToTimeString(entry.Duration, true)
                 </Template>
@@ -35,13 +35,13 @@
                         Value="@entry.Duration"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
-            
+
             <RadzenDataGridColumn
                 TItem="TimeEntryDto"
                 Title="Date"
                 Width="100px"
                 TextAlign="TextAlign.Center">
-                
+
                 <Template Context="entry">
                     @entry.Date.ToString("d")
                 </Template>
@@ -52,13 +52,13 @@
                         Class="w-100"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
-            
+
             <RadzenDataGridColumn
                 TItem="TimeEntryDto"
                 Title="Period"
                 Width="100px"
                 TextAlign="TextAlign.Center">
-                
+
                 <Template Context="entry">
                     <div class="d-flex justify-content-center">
                         @_timeParsingService.TimeSpanToTimeString(entry.StartTime)
@@ -84,14 +84,22 @@
                     </div>
                 </EditTemplate>
             </RadzenDataGridColumn>
-            
+
             <RadzenDataGridColumn
                 TItem="TimeEntryDto"
                 Title="Project"
                 Width="120px">
-                
+
                 <Template Context="entry">
                     @entry.Project?.Name
+                    @if (entry.Project?.Client != null)
+                    {
+                        <RadzenText 
+                            class="d-block" 
+                            TextStyle="TextStyle.Caption">
+                            <b>@entry.Project?.Client?.Name</b>
+                        </RadzenText>
+                    }
                 </Template>
                 <EditTemplate Context="entry">
                     <ProjectsDropDown
@@ -100,12 +108,12 @@
                         Class="ml-1"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
-            
+
             <RadzenDataGridColumn
                 TItem="TimeEntryDto"
                 Title="Description"
                 Width="200px">
-                
+
                 <Template Context="entry">
                     @entry.Description
                 </Template>
@@ -115,12 +123,37 @@
                         @bind-Value="@entry.Description"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
-            
+
+            <RadzenDataGridColumn
+                TItem="TimeEntryDto"
+                Title="Billable"
+                Width="60px">
+
+                <Template Context="entry">
+                    <RadzenText class="d-block" TextStyle="TextStyle.Caption">
+                        <RadzenCheckBox
+                            Disabled="true"
+                            Class="ml-1"
+                            @bind-Value="@entry.IsBillable"/>
+                        @if (entry.HourlyRate != null)
+                        {
+                            <text>(rate: @entry.HourlyRate?.ToString("0.##"))</text>
+                        }
+
+                    </RadzenText>
+                </Template>
+                <EditTemplate Context="entry">
+                    <RadzenCheckBox
+                        Class="ml-1"
+                        @bind-Value="@entry.IsBillable"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
             <RadzenDataGridColumn
                 TItem="TimeEntryDto"
                 Title=""
                 Width="60px">
-                
+
                 <Template Context="entry">
                     <RadzenButton
                         Icon="edit"
