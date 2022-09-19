@@ -42,4 +42,10 @@ public class ApiUrl
     public const string PaymentList = "dashboard/payment/list";
     
     #endregion
+    
+    #region Report
+    
+    public const string ReportPayments = "dashboard/report/payments";
+    
+    #endregion
 }

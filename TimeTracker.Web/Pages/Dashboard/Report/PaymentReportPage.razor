@@ -1,10 +1,102 @@
 ﻿@page "/dashboard/report/payments"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Api.Shared.Dto.Model
 
 @inherits BaseComponent
 @layout Layout
 
 <RadzenPanel Style="margin: 10px auto;">
-    Hello
+    @if (_state.Value.IsLoading)
+    {
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+    }
+    else
+    {
+        foreach (var groupItem in _grouppedItems)
+        {
+            var clientId = groupItem.Key;
+            var clientDataItem = groupItem.First();
+            var clientName = clientDataItem.ClientName;
+            var clientAmount = clientDataItem.PaidAmountByClient;
+            var unpaidAmount = clientDataItem.UnpaidAmount;
+            var totalAmount = clientDataItem.Amount;
+
+            <RadzenText
+                TextStyle="TextStyle.H5"
+                TagName="TagName.H3"
+                class="mt-4">
+                @if (string.IsNullOrEmpty(clientName))
+                {
+                    clientName = "Other projects";
+                }
+                @clientName
+            </RadzenText>
+
+            <RadzenDataGrid
+                AllowFiltering="false"
+                AllowPaging="false"
+                AllowSorting="false"
+                Data="@groupItem"
+                TItem="PaymentsReportItemDto"
+                FooterCellRender="@(args => OnFooterCellRender(args, clientDataItem))"
+                ColumnWidth="200px">
+
+                <Columns>
+                    <RadzenDataGridColumn
+                        TItem="PaymentsReportItemDto"
+                        Property="ProjectName"
+                        Title="Project">
+                        <FooterTemplate>
+                            @{
+                                var bgColor = unpaidAmount < 0 ? "var(--rz-series-4)" : "var(--rz-series-8)";
+                                var style = $@"
+                                                margin: -8px;
+                                                padding: 7px;
+                                                color: var(--rz-white); 
+                                                background-color: {bgColor};
+                                            ";
+                            }
+                            <div style="@style.Trim()">
+                                Unpaid:
+                                <b>
+                                    @((unpaidAmount > 0) ? "+" : "")@unpaidAmount.ToString("0.00")
+                                </b>
+                            </div>
+                        </FooterTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn
+                        TItem="PaymentsReportItemDto"
+                        Property="TotalDuration"
+                        Title="TotalDuration">
+                        <Template Context="item">
+                            @item.TotalDuration.ToString("g")
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn
+                        TItem="PaymentsReportItemDto"
+                        Property="Amount"
+                        Title="Amount">
+                        <Template Context="item">
+                            @item.Amount.ToString("0.00")
+                        </Template>
+                        <FooterTemplate>
+                            Total: <b>@totalAmount.ToString("0.00")</b>
+                        </FooterTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn
+                        TItem="PaymentsReportItemDto"
+                        Property="Paid"
+                        Title="Paid">
+                        <Template Context="item">
+                            @item.PaidAmountByProject.ToString("0.00")
+                        </Template>
+                        <FooterTemplate>
+                            Total: <b>@clientAmount.ToString("0.00")</b>
+                        </FooterTemplate>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        }
+    }
 </RadzenPanel>

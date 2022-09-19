@@ -52,5 +52,11 @@ namespace TimeTracker.Web.Services.Http
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment.GetListResponse> PaymentGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment.GetListRequest model);
 
         #endregion
+        
+        #region Report
+
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report.PaymentReportResponse> ReportsGetPaymentsReportAsync(long workspaceId);
+
+        #endregion
     }
 }
