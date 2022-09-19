@@ -29,7 +29,6 @@ public partial class TimeEntryList
 
     private void OnChangeStartTime(TimeEntryDto item, TimeSpan startTime)
     {
-        Debug.Log(startTime, item.EndTime);
         item.StartTime = startTime > item.EndTime ? item.EndTime.Value : startTime;
     }
 
@@ -49,7 +48,7 @@ public partial class TimeEntryList
     private async Task UpdateTimeEntry(TimeEntryDto entry)
     {
         Dispatcher.Dispatch(new UpdateTimeEntryAction(entry));
-        Dispatcher.Dispatch(new SaveTimeEntryAction(entry));
+        Dispatcher.Dispatch(new SaveTimeEntryAction(entry, false));
         await Task.CompletedTask;
     }
 

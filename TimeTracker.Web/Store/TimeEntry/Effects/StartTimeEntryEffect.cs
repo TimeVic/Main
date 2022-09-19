@@ -2,6 +2,7 @@
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Project;
 
 namespace TimeTracker.Web.Store.TimeEntry.Effects;
 

@@ -14,7 +14,7 @@ public record struct LoadTimeEntryListAction(int Skip = 1);
 
 public record struct SetTimeEntryListItemsAction(GetListResponse Response);
 
-public record struct SaveTimeEntryAction(TimeEntryDto TimeEntry);
+public record struct SaveTimeEntryAction(TimeEntryDto TimeEntry, bool IsSetProjectDefaults = false);
 
 public record struct UpdateTimeEntryAction(TimeEntryDto TimeEntry);
 
