@@ -84,7 +84,6 @@ public class PaymentReportTest: BaseTest
             Assert.True(item.ClientId > 0);
             Assert.True(item.ProjectId > 0);
             Assert.True(item.TotalDuration > TimeSpan.MinValue);
-            Assert.True(item.UnpaidAmount > 0);
             Assert.True(item.PaidAmountByClient > 0);
             Assert.True(item.PaidAmountByProject > 0);
             Assert.NotEmpty(item.ClientName);
