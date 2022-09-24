@@ -40,9 +40,4 @@ public class ProjectPaymentsReportItemDto
     {
         get => TimeSpan.FromSeconds((double)TotalDurationAsEpoch);
     }
-    
-    public decimal UnpaidAmount
-    {
-        get => PaidAmountByClient - Amount;
-    }
 }
