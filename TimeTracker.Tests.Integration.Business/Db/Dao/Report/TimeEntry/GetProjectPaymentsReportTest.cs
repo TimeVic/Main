@@ -160,69 +160,8 @@ public class GetProjectPaymentsReportTest: BaseTest
         Assert.Equal(150, Math.Round(actualForProject1.Amount));
         Assert.Equal(77, actualForProject1.PaidAmountByClient);
         Assert.Equal(45, actualForProject1.PaidAmountByProject);
-        Assert.Equal(-73, actualForProject1.UnpaidAmount);
         Assert.Equal(TimeSpan.FromHours(15), actualForProject1.TotalDuration);
         Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
         Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
-    }
-    
-    [Fact]
-    public async Task ShouldCalculateUnpaidAmount()
-    {
-        var projects = await _projectSeederSeeder.CreateSeveralAsync(_user, 2);
-        await DbSessionProvider.PerformCommitAsync();
-        var project1 = projects.First();
-        await _timeEntryDao.SetAsync(_workspace, new TimeEntryCreationDto()
-        {
-            Date = DateTime.UtcNow,
-            StartTime = TimeSpan.FromHours(10),
-            EndTime = TimeSpan.FromHours(15),
-            IsBillable = true,
-            HourlyRate = 10
-        }, project1);
-        
-        await _paymentDao.CreateAsync(
-            project1.Client,
-            20,
-            DateTime.UtcNow,
-            project1.Id,
-            ""
-        );
-        
-        var result = await _reportsDao.GetProjectPaymentsReport(_workspace.Id);
-
-        var actualForProject1 = result.FirstOrDefault(item => item.ProjectId == project1.Id);
-        Assert.NotNull(actualForProject1);
-        Assert.Equal(-30, actualForProject1.UnpaidAmount);
-    }
-    
-    [Fact]
-    public async Task ShouldCalculateUnpaidAmountIfAllTimeWasPaid()
-    {
-        var projects = await _projectSeederSeeder.CreateSeveralAsync(_user, 2);
-        await DbSessionProvider.PerformCommitAsync();
-        var project1 = projects.First();
-        await _timeEntryDao.SetAsync(_workspace, new TimeEntryCreationDto()
-        {
-            Date = DateTime.UtcNow,
-            StartTime = TimeSpan.FromHours(10),
-            EndTime = TimeSpan.FromHours(15),
-            IsBillable = true,
-            HourlyRate = 10
-        }, project1);
-        
-        await _paymentDao.CreateAsync(
-            project1.Client,
-            120,
-            DateTime.UtcNow,
-            project1.Id,
-            ""
-        );
-        
-        var result = await _reportsDao.GetProjectPaymentsReport(_workspace.Id);
-
-        var actualForProject1 = result.FirstOrDefault(item => item.ProjectId == project1.Id);
-        Assert.NotNull(actualForProject1);
-        Assert.Equal(70, actualForProject1.UnpaidAmount);
     }
 }

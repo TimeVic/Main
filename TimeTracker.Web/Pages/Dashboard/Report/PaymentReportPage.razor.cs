@@ -28,8 +28,20 @@ public partial class PaymentReportPage
         Debug.Log(args.Column.Property);
         if (args.Column.Property == "ProjectName")
         {
-            args.Attributes.Add("style", $"background-color: {(data.UnpaidAmount < 0 ? "var(--rz-danger)" : "var(--rz-success)")};");
+            var unpaidAmount = GetClientUnpaidAmount(data.ClientId ?? 0);
+            args.Attributes.Add("style", $"background-color: {(unpaidAmount < 0 ? "var(--rz-danger)" : "var(--rz-success)")};");
             args.Attributes.Add("colspan", 2);
         }
+    }
+
+    private decimal GetClientTotalAmount(long clientId)
+    {
+        return _state.Value.PaymentReportItems.Where(item => item.ClientId == clientId).Sum(item => item.Amount);
+    }
+    
+    private decimal GetClientUnpaidAmount(long clientId)
+    {
+        var paidAmount = _state.Value.PaymentReportItems.FirstOrDefault(item => item.ClientId == clientId)?.PaidAmountByClient ?? 0;
+        return paidAmount - GetClientTotalAmount(clientId);
     }
 }

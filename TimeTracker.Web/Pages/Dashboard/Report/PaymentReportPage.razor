@@ -15,12 +15,12 @@
     {
         foreach (var groupItem in _grouppedItems)
         {
-            var clientId = groupItem.Key;
+            var clientId = groupItem.Key ?? 0;
             var clientDataItem = groupItem.First();
             var clientName = clientDataItem.ClientName;
             var clientAmount = clientDataItem.PaidAmountByClient;
-            var unpaidAmount = clientDataItem.UnpaidAmount;
-            var totalAmount = clientDataItem.Amount;
+            var unpaidAmount = GetClientUnpaidAmount(clientId);
+            var totalAmount = GetClientTotalAmount(clientId);
 
             <RadzenText
                 TextStyle="TextStyle.H5"
@@ -68,9 +68,9 @@
                     <RadzenDataGridColumn
                         TItem="PaymentsReportItemDto"
                         Property="TotalDuration"
-                        Title="TotalDuration">
+                        Title="Total Duration">
                         <Template Context="item">
-                            @item.TotalDuration.ToString("g")
+                            @item.TotalDuration.ToString("dd\\.hh\\:mm\\:ss")
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn

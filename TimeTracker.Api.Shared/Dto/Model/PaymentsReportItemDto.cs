@@ -17,6 +17,4 @@ public class PaymentsReportItemDto
     public decimal PaidAmountByProject { get; set; }
     
     public TimeSpan TotalDuration { get; set; }
-
-    public decimal UnpaidAmount { get; set; }
 }
