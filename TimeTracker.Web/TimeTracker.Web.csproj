@@ -32,4 +32,9 @@
       <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\img\logo\black" />
+      <Folder Include="wwwroot\img\logo\color" />
+    </ItemGroup>
+
 </Project>

@@ -23,3 +23,9 @@ window.getReCaptchaToken = function (siteKey) {
         });
     });
 };
+
+window.setFavicon = function (isColor) {
+    const element = document.querySelectorAll('[rel=icon]')[0];
+    const dir = isColor ? 'color' : 'black';
+    element.setAttribute('href', `/img/logo/${dir}/clock-256.png`)
+};

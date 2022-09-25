@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Core.Helpers;
@@ -10,6 +11,7 @@ using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common;
 using TimeTracker.Web.Store.Common.Actions;
+using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Shared;
 
@@ -31,8 +33,14 @@ public partial class BaseLayout
     protected IState<CommonState> CommonState { get; set; }
     
     [Inject]
+    protected IState<TimeEntryState> TimeEntryState { get; set; }
+    
+    [Inject]
     protected IDispatcher Dispatcher { get; set; }
 
+    [Inject]
+    protected IJSRuntime Js { get; set; }
+    
     protected bool IsRedirectIfNotLoggedIn = true;
 
     protected bool IsShowMainMenu => AuthState.Value.IsLoggedIn
@@ -62,6 +70,10 @@ public partial class BaseLayout
             {
                 await InitAppAsync();
             }
+        };
+        TimeEntryState.StateChanged += async (sender, args) =>
+        {
+            await Js.InvokeAsync<object>("window.setFavicon", TimeEntryState.Value.HasActiveEntry);
         };
         Dispatcher.Dispatch(new LoadPersistedDataAction());
     }
