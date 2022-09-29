@@ -110,7 +110,7 @@ public class ClickUpClient: IClickUpClient
         );
         
         var queryParams = HttpUtility.ParseQueryString(string.Empty);
-        queryParams.Add("custom_task_ids", isCustomTaskIds.ToString());
+        queryParams.Add("custom_task_ids", isCustomTaskIds.ToString().ToLower());
         queryParams.Add("team_id", teamId);
         var url = new UriBuilder(
             $"{BaseUrl}/task/{taskId}/time"
