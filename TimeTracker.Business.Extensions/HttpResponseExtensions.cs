@@ -7,7 +7,14 @@ namespace TimeTracker.Business.Extensions
         public static async Task<T?> GetJsonDataAsync<T>(this HttpResponseMessage response)
         {
             var stringData = await response.GetDataAsStringAsync();
-            return JsonHelper.DeserializeObject<T>(stringData);
+            try
+            {
+                return JsonHelper.DeserializeObject<T>(stringData);
+            }
+            catch (Exception _)
+            {
+                return default;
+            }
         }
         
         public static async Task<object?> GetJsonDataAsync(this HttpResponseMessage response)

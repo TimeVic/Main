@@ -102,7 +102,8 @@ public class SendNewTimeEntityTest: BaseTest
             Id = activeEntry.Id,
             StartTime = DateTime.UtcNow.TimeOfDay,
             EndTime = DateTime.UtcNow.AddMilliseconds(5).TimeOfDay,
-            Description = "Test"
+            Description = "Test",
+            TaskId = activeEntry.TaskId
         });
         var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
         Assert.False(actualResponse.Value.IsError);

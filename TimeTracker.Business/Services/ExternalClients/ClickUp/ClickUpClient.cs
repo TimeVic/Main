@@ -29,6 +29,11 @@ public class ClickUpClient: IClickUpClient
             _logger.LogError("TimeEntry is active");
             return null;
         }
+        if (string.IsNullOrEmpty(timeEntry.TaskId))
+        {
+            _logger.LogError("TimeEntry does not contain TaskId: {TimeEntryId}", timeEntry.Id);
+            return null;
+        }
         
         var httpClient = _newHttpClient;
         var settings = timeEntry.Workspace.GetClickUpSettings(timeEntry.User.Id);
