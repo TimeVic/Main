@@ -34,9 +34,9 @@
                 Class="mr-1"/>
             
             <RadzenTextBox
-                Class="mr-1 col"
+                Class="mr-1 col-1"
                 Disabled="!_state.Value.HasActiveEntry"
-                Value="@_state.Value.ActiveEntry?.Description"
+                Value="@_state.Value.ActiveEntry?.TaskId"
                 ValueChanged="OnChangeTaskId"/>
             
             <RadzenTextBox

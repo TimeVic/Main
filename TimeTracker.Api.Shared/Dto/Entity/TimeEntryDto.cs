@@ -36,5 +36,6 @@ public class TimeEntryDto : IResponse
         HourlyRate = fromEntry.HourlyRate;
         Date = fromEntry.Date;
         IsBillable = fromEntry.IsBillable;
+        TaskId = fromEntry.TaskId;
     }
 }
