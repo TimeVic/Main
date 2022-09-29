@@ -81,6 +81,16 @@ node('lm-web-1') {
         }
     }
 
+    stage('Stop containers') {
+        dockerHelper.stopContainer(webAppContainer)
+
+        mainContainer.tagName = 'timevic-api';
+        dockerHelper.stopContainer(mainContainer)
+    
+        mainContainer.tagName = 'timevic-worker';
+        dockerHelper.stopContainer(mainContainer)
+    }
+
     stage('Run migrations') {
         dockerHelper.stopContainer(migrationContainer)
             
@@ -92,7 +102,6 @@ node('lm-web-1') {
     stage('Run common API') {
         mainContainer.tagName = 'timevic-api';
         mainContainer.port = '6200:80';
-        dockerHelper.stopContainer(mainContainer)
         
         mainContainer.envVariables = envVariables.clone()
         mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Api')
@@ -102,7 +111,6 @@ node('lm-web-1') {
     stage('Run worker') {
         mainContainer.tagName = 'timevic-worker';
         mainContainer.port = '';
-        dockerHelper.stopContainer(mainContainer)
         
         mainContainer.envVariables = envVariables.clone()
         mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerServices')
@@ -111,7 +119,6 @@ node('lm-web-1') {
 
     stage('Run web app') {
         webAppContainer.port = '6201:80';
-        dockerHelper.stopContainer(webAppContainer)
         dockerHelper.runContainer(webAppContainer)
     } 
 }
