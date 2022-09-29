@@ -43,7 +43,7 @@ node('testing-node') {
         
         runStage(Stage.SET_VARS) {
             withCredentials([string(credentialsId: "timevic_testing_clickup_secret_key", variable: 'AUTH_SECRET')]) {
-                envVariables.put('Integration__ClickUp__SecurityKey', AUTH_SECRET)
+                containerEnvVars.put('Integration__ClickUp__SecurityKey', AUTH_SECRET)
             }
         }
 
