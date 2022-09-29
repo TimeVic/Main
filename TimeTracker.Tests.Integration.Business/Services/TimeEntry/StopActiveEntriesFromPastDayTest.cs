@@ -47,6 +47,9 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
         Assert.Equal(59, activeEntry.EndTime.Value.Minutes);
         Assert.Equal(59, activeEntry.EndTime.Value.Seconds);
         Assert.Equal(999, activeEntry.EndTime.Value.Milliseconds);
+
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        Assert.True(processedCounter == 1);
     }
     
     [Fact]

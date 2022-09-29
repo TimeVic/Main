@@ -81,6 +81,7 @@ public class TimeEntryService : ITimeEntryService
                     );    
                 }
                 await _sessionProvider.PerformCommitAsync(cancellationToken);
+                await _queueService.PushDefaultAsync(new IntegrationAppQueueItemContext(activeEntity.Id));
 
                 await _timeEntryDao.StartNewAsync(
                     activeEntity.User,

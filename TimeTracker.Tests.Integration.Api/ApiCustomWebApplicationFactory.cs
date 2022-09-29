@@ -8,6 +8,7 @@ using Serilog;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Notifications.Services;
+using TimeTracker.Business.Services.ExternalClients.ClickUp;
 
 namespace TimeTracker.Tests.Integration.Api;
 

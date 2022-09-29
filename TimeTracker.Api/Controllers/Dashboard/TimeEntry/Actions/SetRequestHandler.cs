@@ -66,6 +66,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 {
                     Id = timeEntry?.Id,
                     Description = request.Description,
+                    TaskId = request.TaskId,
                     StartTime = request.StartTime,
                     EndTime = request.EndTime,
                     HourlyRate = request.HourlyRate,

@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
@@ -23,6 +24,8 @@ public class StopTest: BaseTest
     private readonly IProjectDao _projectDao;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IWorkspaceDao _workspaceDao;
+    private readonly IQueueDao _queueDao;
+    private readonly IQueueService _queueService;
 
     public StopTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -30,8 +33,13 @@ public class StopTest: BaseTest
         _workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _timeEntryFactory = ServiceProvider.GetRequiredService<IDataFactory<TimeEntryEntity>>();
+        _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
+        _queueService = ServiceProvider.GetRequiredService<IQueueService>();
+        
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
         _defaultWorkspace = _user.Workspaces.First();
+        
+        _queueDao.CompleteAllPending().Wait();
     }
 
     [Fact]
@@ -57,6 +65,9 @@ public class StopTest: BaseTest
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_defaultWorkspace);
         Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
+        
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        Assert.True(processedCounter > 0);
     }
     
     [Fact]
@@ -70,5 +81,8 @@ public class StopTest: BaseTest
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.Null(actualDto);
+        
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        Assert.True(processedCounter == 0);
     }
 }

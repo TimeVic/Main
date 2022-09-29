@@ -142,6 +142,7 @@ public class TimeEntryDao: ITimeEntryDao
             };
         }
         timeEntry.Project = project;
+        timeEntry.TaskId = timeEntryDto.TaskId;
         timeEntry.Description = timeEntryDto.Description;
         timeEntry.HourlyRate = timeEntryDto.HourlyRate;
         timeEntry.IsBillable = timeEntryDto.IsBillable;
