@@ -50,6 +50,12 @@ node('testing-node') {
             checkout scm
         }
         
+        runStage(Stage.SET_VARS) {
+            withCredentials([string(credentialsId: "timevic_testing_clickup_secret_key", variable: 'AUTH_SECRET')]) {
+                envVariables.put('Integration__ClickUp__SecurityKey', AUTH_SECRET)
+            }
+        }
+
         def testImage = docker.build('timevic-test-image', '--file=./devops/test/Dockerfile .')
         String containerEnvVarString = mapToEnvVars(containerEnvVars)
         testImage.inside(containerEnvVarString.concat(" --network=$networkId")) {
@@ -112,6 +118,7 @@ enum Stage {
     CLEAN('Clean'),
     CHECKOUT('Checkout'),
     BUILD('Build projects'),
+    SET_VARS('Set environment vars'),
     ASSIGN_PERMISSIONS('Assign Permissions'),
     INIT_ZOOKEEPER('Init Zookeeper'),
     INIT_KAFKA('Init Kafka'),
