@@ -37,6 +37,12 @@
                 Class="mr-1 col"
                 Disabled="!_state.Value.HasActiveEntry"
                 Value="@_state.Value.ActiveEntry?.Description"
+                ValueChanged="OnChangeTaskId"/>
+            
+            <RadzenTextBox
+                Class="mr-1 col"
+                Disabled="!_state.Value.HasActiveEntry"
+                Value="@_state.Value.ActiveEntry?.Description"
                 ValueChanged="OnChangeDescription"/>
         </div>
     </RadzenCard>

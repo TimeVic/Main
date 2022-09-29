@@ -32,6 +32,13 @@ public partial class TimeEntryForm
         await Task.CompletedTask;
     }
 
+    private async Task OnChangeTaskId(string value)
+    {
+        _state.Value.ActiveEntry.TaskId = value;
+        await UpdateTimeEntry(_state.Value.ActiveEntry);
+        await Task.CompletedTask;
+    }
+    
     private async Task OnChangeDescription(string value)
     {
         _state.Value.ActiveEntry.Description = value;

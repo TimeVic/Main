@@ -111,6 +111,22 @@
 
             <RadzenDataGridColumn
                 TItem="TimeEntryDto"
+                Title="Task ID"
+                Width="100px">
+
+                <Template Context="entry">
+                    @entry.TaskId
+                </Template>
+                <EditTemplate Context="entry">
+                    <RadzenTextBox
+                        Class="ml-1"
+                        MaxLength="500"
+                        @bind-Value="@entry.TaskId"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn
+                TItem="TimeEntryDto"
                 Title="Description"
                 Width="200px">
 
