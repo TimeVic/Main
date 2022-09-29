@@ -40,8 +40,8 @@ public class CreatePendingUserTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingService.IsEmailSent);
-        var actualEmail = EmailSendingService.SentMessages.FirstOrDefault();
+        Assert.True(EmailSendingServiceMock.IsEmailSent);
+        var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(user.Email, actualEmail.To);
     }
     
@@ -52,14 +52,14 @@ public class CreatePendingUserTest: BaseTest
         
         var user = await _authService.CreatePendingUser(expectedEmail);
         await _queueService.ProcessAsync(QueueChannel.Notifications);
-        EmailSendingService.Reset();
+        EmailSendingServiceMock.Reset();
 
         await _authService.CreatePendingUser(expectedEmail);
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingService.IsEmailSent);
-        var actualEmail = EmailSendingService.SentMessages.FirstOrDefault();
+        Assert.True(EmailSendingServiceMock.IsEmailSent);
+        var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(user.Email, actualEmail.To);
     }
     

@@ -29,7 +29,7 @@ public class ProcessNotificationTest: BaseTest
     [Fact]
     public async Task ShouldProcessNotification()
     {
-        var testContext = new TestNotificationContext()
+        var testContext = new TestNotificationItemContext()
         {
             ToAddress = "test@test.com"
         };
@@ -39,8 +39,8 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingService.IsEmailSent);
-        var actualEmail = EmailSendingService.SentMessages.FirstOrDefault();
+        Assert.True(EmailSendingServiceMock.IsEmailSent);
+        var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(testContext.ToAddress, actualEmail.To);
     }
     
@@ -49,7 +49,7 @@ public class ProcessNotificationTest: BaseTest
     {
         var fakeUser = _userFactory.Generate();
         var expectedUser = await _userSeeder.CreatePendingAsync();
-        var testContext = new RegistrationNotificationContext(
+        var testContext = new RegistrationNotificationItemContext(
             fakeUser.Email,
             "http://fron.url",
             expectedUser.VerificationToken
@@ -60,8 +60,8 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingService.IsEmailSent);
-        var actualEmail = EmailSendingService.SentMessages.LastOrDefault();
+        Assert.True(EmailSendingServiceMock.IsEmailSent);
+        var actualEmail = EmailSendingServiceMock.SentMessages.LastOrDefault();
         Assert.Contains(testContext.ToAddress, actualEmail.To);
         Assert.Contains(expectedUser.VerificationToken, actualEmail.Body);
     }

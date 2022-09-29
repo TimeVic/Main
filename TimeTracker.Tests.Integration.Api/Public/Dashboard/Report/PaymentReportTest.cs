@@ -1,11 +1,11 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Report;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
 
@@ -51,7 +51,7 @@ public class PaymentReportTest: BaseTest
         var projects = await _projectDao.CreateSeveralAsync(_user, 2);
         await DbSessionProvider.PerformCommitAsync();
         var project1 = projects.First();
-        await _timeEntryDao.SetAsync(_defaultWorkspace, new TimeEntryCreationDto()
+        await _timeEntryDao.SetAsync(_user, _defaultWorkspace, new TimeEntryCreationDto()
         {
             Date = DateTime.UtcNow,
             StartTime = TimeSpan.FromHours(10),

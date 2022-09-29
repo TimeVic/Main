@@ -1,9 +1,9 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
 
@@ -70,7 +70,7 @@ public class GetListTest: BaseTest
     {
         var expectedCounter = 15;
         await _timeEntrySeeder.CreateSeveralAsync(_user, expectedCounter);
-        await _timeEntryDao.StartNewAsync(_defaultWorkspace);
+        await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {

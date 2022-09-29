@@ -34,6 +34,7 @@ public class TimeEntrySeeder: ITimeEntrySeeder
         {
             var fakeEntry = _timeEntryFactory.Generate();
             var entry = await _timeEntryDao.SetAsync(
+                user,
                 workspace,
                 new TimeEntryCreationDto()
                 {

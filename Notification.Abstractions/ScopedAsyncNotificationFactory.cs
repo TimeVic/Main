@@ -12,7 +12,7 @@ namespace Notification.Abstractions
             _scope = scope ?? throw new ArgumentNullException(nameof(scope));
         }
 
-        public IAsyncNotification<TNotificationContext> Create<TNotificationContext>() where TNotificationContext : INotificationContext
+        public IAsyncNotification<TNotificationContext> Create<TNotificationContext>() where TNotificationContext : INotificationItemContext
         {
             return _scope.Resolve<IAsyncNotification<TNotificationContext>>();
         }

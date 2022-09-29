@@ -43,7 +43,7 @@ public class SetTest: BaseTest
         var expectWorkspace = user.Workspaces.First();
         var expectProject = await _projectDao.CreateAsync(expectWorkspace, "Test project");
         
-        var newEntry = await _timeEntryDao.SetAsync(expectWorkspace, expectedDto, expectProject);
+        var newEntry = await _timeEntryDao.SetAsync(user, expectWorkspace, expectedDto, expectProject);
         Assert.True(newEntry.Id > 0);
         Assert.Equal(expectWorkspace.Id, newEntry.Workspace.Id);
         Assert.Equal(expectProject.Id, newEntry.Project.Id);
@@ -71,7 +71,7 @@ public class SetTest: BaseTest
         var initialWorkspace = user.Workspaces.First();
         var initialProject = await _projectDao.CreateAsync(initialWorkspace, "Test project1");
         
-        var initialEntry = await _timeEntryDao.SetAsync(initialWorkspace, initialDto, initialProject);
+        var initialEntry = await _timeEntryDao.SetAsync(user, initialWorkspace, initialDto, initialProject);
         
         var fakeTimeEntry2 = _timeEntryFactory.Generate();
         var expectedDto = new TimeEntryCreationDto()
@@ -84,7 +84,7 @@ public class SetTest: BaseTest
             IsBillable = fakeTimeEntry2.IsBillable
         };
         var expectedProject = await _projectDao.CreateAsync(initialWorkspace, "Test project2");
-        var actualEntry = await _timeEntryDao.SetAsync(initialWorkspace, expectedDto, expectedProject);
+        var actualEntry = await _timeEntryDao.SetAsync(user, initialWorkspace, expectedDto, expectedProject);
         
         Assert.Equal(initialEntry.Id, actualEntry.Id);
         Assert.Equal(initialWorkspace.Id, actualEntry.Workspace.Id);
@@ -114,6 +114,7 @@ public class SetTest: BaseTest
         var initialProject = await _projectDao.CreateAsync(initialWorkspace, "Test project1");
         
         var initialEntry = await _timeEntryDao.StartNewAsync(
+            user,
             initialWorkspace,
             fakeTimeEntry.IsBillable,
             fakeTimeEntry.Description,
@@ -131,7 +132,7 @@ public class SetTest: BaseTest
             IsBillable = fakeTimeEntry2.IsBillable
         };
         var expectedProject = await _projectDao.CreateAsync(initialWorkspace, "Test project2");
-        var actualEntry = await _timeEntryDao.SetAsync(initialWorkspace, expectedDto, expectedProject);
+        var actualEntry = await _timeEntryDao.SetAsync(user, initialWorkspace, expectedDto, expectedProject);
         
         Assert.Null(actualEntry.EndTime);
         Assert.Equal(initialEntry.StartTime, actualEntry.StartTime);
@@ -155,7 +156,7 @@ public class SetTest: BaseTest
 
         await Assert.ThrowsAsync<DataInconsistentException>(async () =>
         {
-            await _timeEntryDao.SetAsync(expectWorkspace, expectedDto);
+            await _timeEntryDao.SetAsync(user, expectWorkspace, expectedDto);
         });
     }
 }

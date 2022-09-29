@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Business.Orm.Connection;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
@@ -16,10 +15,12 @@ namespace TimeTracker.Business.Orm.Dao;
 public class TimeEntryDao: ITimeEntryDao
 {
     private readonly IDbSessionProvider _sessionProvider;
+    private readonly ILogger<TimeEntryDao> _logger;
 
-    public TimeEntryDao(IDbSessionProvider sessionProvider)
+    public TimeEntryDao(IDbSessionProvider sessionProvider, ILogger<TimeEntryDao> logger)
     {
         _sessionProvider = sessionProvider;
+        _logger = logger;
     }
 
     public async Task<TimeEntryEntity?> GetByIdAsync(long? id)
@@ -52,6 +53,7 @@ public class TimeEntryDao: ITimeEntryDao
     }
     
     public async Task<TimeEntryEntity> StartNewAsync(
+        UserEntity user,
         WorkspaceEntity workspace,
         bool isBillable = false,
         string? description = "",
@@ -59,6 +61,8 @@ public class TimeEntryDao: ITimeEntryDao
         decimal? hourlyRate = null
     )
     {
+        user.EnsureThatHasWorkspace(workspace);
+        
         await StopActiveAsync(workspace);
         
         var entry = new TimeEntryEntity
@@ -69,6 +73,7 @@ public class TimeEntryDao: ITimeEntryDao
             StartTime = DateTime.UtcNow.TimeOfDay,
             EndTime = null,
             Workspace = workspace,
+            User = user,
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow
         };
@@ -82,24 +87,37 @@ public class TimeEntryDao: ITimeEntryDao
         return entry;
     }
 
-    public async Task StopActiveAsync(WorkspaceEntity workspace)
+    public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace)
     {
-        await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+        var activeTimeEntries = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
             .Where(
                 item => item.Workspace.Id == workspace.Id && item.EndTime == null
             )
-            .UpdateAsync(entity => new TimeEntryEntity()
-            {
-                EndTime = DateTime.UtcNow.TimeOfDay
-            });
+            .ToListAsync();
+        if (activeTimeEntries.Count() > 1)
+        {
+            _logger.LogError(
+                "Workspace contains more than one active time entry. WorkspaceId: {WorkspaceId}",
+                workspace.Id
+            );
+        }
+
+        foreach (var timeEntry in activeTimeEntries)
+        {
+            timeEntry.EndTime = DateTime.UtcNow.TimeOfDay;
+            await _sessionProvider.CurrentSession.SaveAsync(timeEntry);
+        }
+        return activeTimeEntries;
     }
     
     public async Task<TimeEntryEntity> SetAsync(
+        UserEntity user,
         WorkspaceEntity workspace, 
         TimeEntryCreationDto timeEntryDto, 
         ProjectEntity? project = null
     )
     {
+        user.EnsureThatHasWorkspace(workspace);
         if (project != null && !workspace.ContainsProject(project))
         {
             throw new DataInconsistentException("Incorrect ProjectId");
@@ -118,11 +136,13 @@ public class TimeEntryDao: ITimeEntryDao
             timeEntry = new TimeEntryEntity()
             {
                 Workspace = workspace,
+                User = user,
                 CreateTime = DateTime.UtcNow,
                 UpdateTime = DateTime.UtcNow
             };
         }
         timeEntry.Project = project;
+        timeEntry.TaskId = timeEntryDto.TaskId;
         timeEntry.Description = timeEntryDto.Description;
         timeEntry.HourlyRate = timeEntryDto.HourlyRate;
         timeEntry.IsBillable = timeEntryDto.IsBillable;

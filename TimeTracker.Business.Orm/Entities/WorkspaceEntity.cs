@@ -55,13 +55,48 @@ namespace TimeTracker.Business.Orm.Entities
         
         [Bag(
             Inverse = true,
-            Lazy = CollectionLazy.Extra,
+            Lazy = CollectionLazy.True,
             Cascade = "none"
         )]
         [Key(Column = "workspace_id")]
         [OneToMany(ClassType = typeof(TimeEntryEntity))]
         public virtual ICollection<TimeEntryEntity> TimeEntries { get; set; } = new List<TimeEntryEntity>();
+        
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.True,
+            Cascade = "none"
+        )]
+        [Key(Column = "workspace_id")]
+        [OneToMany(ClassType = typeof(WorkspaceSettingsClickUpEntity))]
+        public virtual ICollection<WorkspaceSettingsClickUpEntity> SettingsClickUp { get; set; } = new List<WorkspaceSettingsClickUpEntity>();
+        
+        #region Other
 
+        public virtual WorkspaceSettingsClickUpEntity? GetClickUpSettings(long userId)
+        {
+            return SettingsClickUp.FirstOrDefault(
+                item => item.User.Id == userId
+            );
+        }
+
+        public virtual WorkspaceSettingsClickUpEntity? GetClickUpSettings(UserEntity user)
+        {
+            return GetClickUpSettings(user.Id);
+        }
+        
+        public virtual bool IsIntegrationClickUpActive(long userId)
+        {
+            var foundIntegration = GetClickUpSettings(userId);
+            if (foundIntegration != null)
+            {
+                return !string.IsNullOrEmpty(foundIntegration.SecurityKey)
+                    && !string.IsNullOrEmpty(foundIntegration.TeamId);
+            }
+
+            return false;
+        }
+        
         public virtual bool ContainsProject(ProjectEntity? project)
         {
             if (project == null)
@@ -70,5 +105,7 @@ namespace TimeTracker.Business.Orm.Entities
             }
             return Projects.Any(item => item.Id == project.Id);
         }
+        
+        #endregion
     }
 }

@@ -30,7 +30,7 @@ public class Step1Test: BaseTest
         response.EnsureSuccessStatusCode();
 
         await _queueService.ProcessAsync(QueueChannel.Notifications);
-        Assert.True(EmailSendingService.IsEmailSent);
+        Assert.True(EmailSendingServiceMock.IsEmailSent);
     }
     
     [Fact]

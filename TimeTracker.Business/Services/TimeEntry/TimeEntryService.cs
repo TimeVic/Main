@@ -3,8 +3,10 @@ using NHibernate;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Notifications.Senders.TimeEntry;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Services.Queue.Handlers;
 
 namespace TimeTracker.Business.Services.TimeEntry;
 
@@ -35,6 +37,24 @@ public class TimeEntryService : ITimeEntryService
         _queueService = queueService;
     }
 
+    public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace)
+    {
+        var timeEntries = await _timeEntryDao.StopActiveAsync(workspace);
+        foreach (var timeEntry in timeEntries)
+        {
+            await _queueService.PushDefaultAsync(new IntegrationAppQueueItemContext(timeEntry.Id));
+        }
+
+        return timeEntries;
+    }
+
+    public async Task<TimeEntryEntity> SetAsync(UserEntity user, WorkspaceEntity workspace, TimeEntryCreationDto timeEntryDto, ProjectEntity? project = null)
+    {
+        var timeEntry = await _timeEntryDao.SetAsync(user, workspace, timeEntryDto, project);
+        await _queueService.PushDefaultAsync(new IntegrationAppQueueItemContext(timeEntry.Id));
+        return timeEntry;
+    }
+
     public async Task StopActiveEntriesFromPastDayAsync(CancellationToken cancellationToken = default)
     {
         try
@@ -57,12 +77,14 @@ public class TimeEntryService : ITimeEntryService
                 if (activeEntity.Duration >= _notificationSendingDuration)
                 {
                     await _queueService.PushNotificationAsync(
-                        new TimeEntryAutoStoppedNotificationContext(activeEntity.Workspace.User.Email)
+                        new TimeEntryAutoStoppedNotificationItemContext(activeEntity.Workspace.User.Email)
                     );    
                 }
                 await _sessionProvider.PerformCommitAsync(cancellationToken);
+                await _queueService.PushDefaultAsync(new IntegrationAppQueueItemContext(activeEntity.Id));
 
                 await _timeEntryDao.StartNewAsync(
+                    activeEntity.User,
                     activeEntity.Workspace,
                     activeEntity.IsBillable,
                     activeEntity.Description,

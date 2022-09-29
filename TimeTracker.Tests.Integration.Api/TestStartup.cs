@@ -4,6 +4,7 @@ using TimeTracker.Api;
 using TimeTracker.Business;
 using TimeTracker.Business.Common.Services.Web.ReCaptcha;
 using TimeTracker.Business.Notifications.Services;
+using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Testing;
 
 namespace TimeTracker.Tests.Integration.Api;
@@ -22,6 +23,7 @@ public class TestStartup: Startup
             typeof(BusinessTestingAssemblyMarker).Assembly
         );
         builder.RegisterType<FakeReCaptchaService>().As<IReCaptchaService>().InstancePerDependency();
-        builder.RegisterType<FakeEmailSendingService>().As<IEmailSendingService>().InstancePerLifetimeScope();
+        builder.RegisterType<EmailSendingServiceMock>().As<IEmailSendingService>().InstancePerLifetimeScope();
+        builder.RegisterType<ClickUpClientMock>().As<IClickUpClient>().InstancePerLifetimeScope();
     }
 }

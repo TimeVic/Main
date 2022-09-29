@@ -12,8 +12,6 @@ public class GetProjectPaymentsReportTest: BaseTest
 {
     private readonly IUserSeeder _userSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
-    private readonly IWorkspaceDao _workspaceDao;
-    private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly ITimeEntryReportsDao _reportsDao;
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
@@ -23,10 +21,8 @@ public class GetProjectPaymentsReportTest: BaseTest
     public GetProjectPaymentsReportTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
-        _timeEntrySeeder = Scope.Resolve<ITimeEntrySeeder>();
         _projectSeederSeeder = Scope.Resolve<IProjectSeeder>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
-        _workspaceDao = Scope.Resolve<IWorkspaceDao>();
         _paymentDao = Scope.Resolve<IPaymentDao>();
         _reportsDao = Scope.Resolve<ITimeEntryReportsDao>();
 
@@ -42,7 +38,7 @@ public class GetProjectPaymentsReportTest: BaseTest
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
         {
-            await _timeEntryDao.SetAsync(_workspace, new TimeEntryCreationDto()
+            await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
                 Date = DateTime.UtcNow,
                 StartTime = TimeSpan.FromHours(10),
@@ -55,7 +51,7 @@ public class GetProjectPaymentsReportTest: BaseTest
         var project2 = projects.Last();
         for (int i = 0; i < 3; i++)
         {
-            await _timeEntryDao.SetAsync(_workspace, new TimeEntryCreationDto()
+            await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
                 Date = DateTime.UtcNow,
                 StartTime = TimeSpan.FromHours(1),
@@ -67,7 +63,7 @@ public class GetProjectPaymentsReportTest: BaseTest
 
         for (int i = 0; i < 4; i++)
         {
-            await _timeEntryDao.SetAsync(_workspace, new TimeEntryCreationDto()
+            await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
                 Date = DateTime.UtcNow,
                 StartTime = TimeSpan.FromHours(1),
@@ -121,7 +117,7 @@ public class GetProjectPaymentsReportTest: BaseTest
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
         {
-            await _timeEntryDao.SetAsync(_workspace, new TimeEntryCreationDto()
+            await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
                 Date = DateTime.UtcNow,
                 StartTime = TimeSpan.FromHours(10),

@@ -8,7 +8,6 @@ using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
-using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
@@ -36,7 +35,7 @@ public class DeleteTest: BaseTest
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_defaultWorkspace);
+        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
         
         var response = await PostRequestAsAnonymousAsync(Url, new DeleteRequest()
         {
@@ -49,7 +48,7 @@ public class DeleteTest: BaseTest
     public async Task ShouldDeleteActiveEntry()
     {
         await CommitDbChanges();
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_defaultWorkspace);
+        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
         
         var response = await PostRequestAsync(Url, _jwtToken, new DeleteRequest()
         {

@@ -7,22 +7,28 @@ using TimeTracker.Business;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Notifications.Services;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Testing;
 
 namespace TimeTracker.Tests.Integration.Business.Core;
 
-public class BaseTest: IDisposable
+public abstract class BaseTest: IDisposable
 {
     protected readonly IDbSessionProvider DbSessionProvider;
-    protected readonly FakeEmailSendingService EmailSendingService;
+    protected readonly EmailSendingServiceMock EmailSendingServiceMock;
     protected readonly ILifetimeScope Scope;
     
     private readonly IContainer _serviceProvider;
     protected readonly IQueueDao _queueDao;
 
-    public BaseTest()
+    protected bool IsFakeIntegrations = true;
+
+    public BaseTest(bool isFakeIntegrations = true)
     {
+        IsFakeIntegrations = isFakeIntegrations;
+        
         var configuration = ApplicationHelper.BuildConfiguration();
+
         var builder = new ContainerBuilder();
         builder.RegisterInstance(configuration)
             .As<IConfiguration>()
@@ -38,18 +44,25 @@ public class BaseTest: IDisposable
         );
         
         // Register fackers
-        builder.RegisterType<FakeEmailSendingService>()
+        builder.RegisterType<EmailSendingServiceMock>()
             .As<IEmailSendingService>()
             .InstancePerLifetimeScope();
-        
+
+        if (IsFakeIntegrations)
+        {
+            builder.RegisterType<ClickUpClientMock>()
+                .As<IClickUpClient>()
+                .SingleInstance();
+        }
+
         _serviceProvider = builder.Build();
         Scope = _serviceProvider.BeginLifetimeScope();
         
         DbSessionProvider = Scope.Resolve<IDbSessionProvider>();
-        EmailSendingService = Scope.Resolve<IEmailSendingService>() as FakeEmailSendingService;
+        EmailSendingServiceMock = Scope.Resolve<IEmailSendingService>() as EmailSendingServiceMock;
         
         _queueDao = Scope.Resolve<IQueueDao>();
-        EmailSendingService.Reset();
+        EmailSendingServiceMock.Reset();
     }
 
     protected async Task CommitDbChanges()

@@ -35,6 +35,14 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "end_time", SqlType = "time", NotNull = false)]
         public virtual TimeSpan? EndTime { get; set; }
         
+        [Property(NotNull = false)]
+        [Column(Name = "task_id", Length = 512, NotNull = false)]
+        public virtual string? TaskId { get; set; }
+        
+        [Property(NotNull = false)]
+        [Column(Name = "clickup_id", NotNull = false)]
+        public virtual long? ClickUpId { get; set; }
+        
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }
@@ -60,6 +68,15 @@ namespace TimeTracker.Business.Orm.Entities
             Cascade = "none"
         )]
         public virtual ProjectEntity? Project { get; set; }
+        
+        [ManyToOne(
+            ClassType = typeof(UserEntity), 
+            Column = "user_id", 
+            Lazy = Laziness.Proxy,
+            Fetch = FetchMode.Join,
+            Cascade = "none"
+        )]
+        public virtual UserEntity User { get; set; }
         
         public virtual bool IsActive => EndTime == null;
         

@@ -11,6 +11,7 @@ namespace TimeTracker.Business.Testing.Factories.Entity
         public TimeEntryEntityFactory()
         {
             _factory = new Faker<TimeEntryEntity>()
+                .RuleFor(fake => fake.TaskId, fake => fake.Random.String2(6))
                 .RuleFor(fake => fake.Description, fake => fake.Lorem.Lines(2))
                 .RuleFor(fake => fake.HourlyRate, fake => fake.Random.Decimal(0, 3))
                 .RuleFor(fake => fake.IsBillable, fake => true)

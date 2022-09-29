@@ -6,6 +6,8 @@ public class TimeEntryDto : IResponse
 {
     public long Id { get; set; }
     
+    public string? TaskId { get; set; }
+    
     public string? Description { get; set; }
     
     public decimal? HourlyRate { get; set; }

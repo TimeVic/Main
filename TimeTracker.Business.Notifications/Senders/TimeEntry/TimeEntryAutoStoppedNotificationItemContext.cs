@@ -4,13 +4,13 @@ using Notification.Abstractions;
 
 namespace TimeTracker.Business.Notifications.Senders.TimeEntry
 {
-    public class TimeEntryAutoStoppedNotificationContext : INotificationContext
+    public class TimeEntryAutoStoppedNotificationItemContext : INotificationItemContext
     {
         public string ToAddress { get; set; }
 
-        public TimeEntryAutoStoppedNotificationContext() {}
+        public TimeEntryAutoStoppedNotificationItemContext() {}
 
-        public TimeEntryAutoStoppedNotificationContext(
+        public TimeEntryAutoStoppedNotificationItemContext(
             string toAddress    
         )
         {

@@ -19,7 +19,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     protected readonly IDbSessionProvider DbSessionProvider;
     protected readonly IUserSeeder UserSeeder;
     protected readonly IDataFactory<UserEntity> UserFactory;
-    protected readonly FakeEmailSendingService EmailSendingService;
+    protected readonly EmailSendingServiceMock EmailSendingServiceMock;
 
     public BaseTest(ApiCustomWebApplicationFactory factory)
     {
@@ -29,7 +29,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         DbSessionProvider = _factory.Services.GetRequiredService<IDbSessionProvider>();
         UserSeeder = _factory.Services.GetRequiredService<IUserSeeder>();
         UserFactory = _factory.Services.GetRequiredService<IDataFactory<UserEntity>>();
-        EmailSendingService = _factory.Services.GetRequiredService<IEmailSendingService>() as FakeEmailSendingService;
+        EmailSendingServiceMock = _factory.Services.GetRequiredService<IEmailSendingService>() as EmailSendingServiceMock;
         ServiceProvider = _factory.Services;
     }
     

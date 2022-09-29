@@ -2,11 +2,11 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
-using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Public.User.Registration;
@@ -52,8 +52,8 @@ public class Step2Test: BaseTest
         Assert.True(responseData.User.DefaultWorkspace.IsDefault);
         
         await _queueService.ProcessAsync(QueueChannel.Notifications);
-        Assert.True(EmailSendingService.IsEmailSent);
-        Assert.Contains(EmailSendingService.SentMessages, message =>
+        Assert.True(EmailSendingServiceMock.IsEmailSent);
+        Assert.Contains(EmailSendingServiceMock.SentMessages, message =>
         {
             return message.Body.Contains("is verified");
         });

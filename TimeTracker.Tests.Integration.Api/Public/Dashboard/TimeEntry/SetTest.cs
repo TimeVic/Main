@@ -1,13 +1,16 @@
 using System.Net;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Integrations;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.Queue;
-using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Api.Core;
 
@@ -16,7 +19,7 @@ namespace TimeTracker.Tests.Integration.Api.Public.Dashboard.TimeEntry;
 public class SetTest: BaseTest
 {
     private readonly string Url = "/dashboard/time-entry/set";
-    
+
     private readonly UserEntity _user;
     private readonly IDataFactory<TimeEntryEntity> _timeEntryFactory;
     private readonly string _jwtToken;
@@ -24,21 +27,28 @@ public class SetTest: BaseTest
     private readonly IProjectDao _projectDao;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IWorkspaceDao _workspaceDao;
-
+    private readonly IQueueDao _queueDao;
+    private readonly IQueueService _queueService;
+    
     public SetTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _timeEntryFactory = ServiceProvider.GetRequiredService<IDataFactory<TimeEntryEntity>>();
+        _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
+        _queueService = ServiceProvider.GetRequiredService<IQueueService>();
+        
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
         _defaultWorkspace = _user.Workspaces.First();
+        
+        _queueDao.CompleteAllPending().Wait();
     }
 
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_defaultWorkspace);
+        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
         
         var response = await PostRequestAsAnonymousAsync(Url, new SetRequest()
         {
@@ -77,6 +87,9 @@ public class SetTest: BaseTest
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
         
         Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
+
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        Assert.True(processedCounter > 0);
     }
     
     [Fact]
@@ -85,7 +98,7 @@ public class SetTest: BaseTest
         var fakeEntry = _timeEntryFactory.Generate();
         var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
         await CommitDbChanges();
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_defaultWorkspace);
+        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
         
         var response = await PostRequestAsync(Url, _jwtToken, new SetRequest()
         {
@@ -97,7 +110,8 @@ public class SetTest: BaseTest
             HourlyRate = fakeEntry.HourlyRate,
             IsBillable = fakeEntry.IsBillable,
             ProjectId = expectedProject.Id,
-            Date = fakeEntry.Date
+            Date = fakeEntry.Date,
+            TaskId = fakeEntry.TaskId,
         });
         response.EnsureSuccessStatusCode();
 
@@ -110,7 +124,9 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.HourlyRate, actualDto.HourlyRate);
         Assert.Equal(fakeEntry.Date, actualDto.Date);
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
+        Assert.Equal(fakeEntry.TaskId, actualDto.TaskId);
         
-        Assert.True(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        Assert.True(processedCounter > 0);
     }
 }

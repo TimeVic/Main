@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Autofac;
+using Domain.Abstractions;
+using Microsoft.Extensions.Logging;
 using Notification.Abstractions;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Notifications;
@@ -8,6 +10,7 @@ using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.Queue.Handlers;
 
 namespace TimeTracker.Business.Services.Queue;
 
@@ -16,21 +19,29 @@ public class QueueService: IQueueService
     private readonly IQueueDao _queueDao;
     private readonly ILogger<QueueService> _logger;
     private readonly IAsyncNotificationBuilder _notificationBuilder;
+    private readonly ILifetimeScope _scope;
 
     public QueueService(
         IQueueDao queueDao,
         ILogger<QueueService> logger,
-        IAsyncNotificationBuilder notificationBuilder
+        IAsyncNotificationBuilder notificationBuilder,
+        ILifetimeScope scope
     )
     {
         _queueDao = queueDao;
         _logger = logger;
         _notificationBuilder = notificationBuilder;
+        _scope = scope;
     }
 
-    public async Task PushNotificationAsync(INotificationContext context)
+    public async Task PushDefaultAsync(IQueueItemContext itemContext)
     {
-        await _queueDao.Push(context, QueueChannel.Notifications);
+        await _queueDao.Push(itemContext, QueueChannel.Default);
+    }
+    
+    public async Task PushNotificationAsync(INotificationItemContext itemContext)
+    {
+        await _queueDao.Push(itemContext, QueueChannel.Notifications);
     }
     
     public async Task<int> ProcessAsync(QueueChannel channel, CancellationToken cancellationToken = default)
@@ -49,6 +60,11 @@ public class QueueService: IQueueService
                 await ProcessNotificationItem(queueItem, cancellationToken);
                 processedCounter++;
             }
+            if (channel == QueueChannel.Default)
+            {
+                await ProcessDefaultItem(queueItem, cancellationToken);
+                processedCounter++;
+            }
             else
             {
                 _logger.LogError("Channel handler is not exists: {Channel}", channel);
@@ -58,6 +74,24 @@ public class QueueService: IQueueService
         return processedCounter;
     }
 
+    private async Task ProcessDefaultItem(QueueEntity queueItem, CancellationToken cancellationToken = default)
+    {
+        var contextType = GetContextType(queueItem, typeof(BusinessAssemblyMarker));
+        if (contextType == null)
+        {
+            _logger.LogError($"Queue context was not found in assembly: {queueItem.ContextType}");
+            return;
+        }
+        if (IsContext<IntegrationAppQueueItemContext>(contextType))
+        {
+            await HandleQueueItem<IntegrationAppQueueItemContext>(queueItem, cancellationToken);
+        }
+        else
+        {
+            _logger.LogError($"Incorrect queue context: {queueItem.ContextType}");
+        }
+    }
+    
     private async Task ProcessNotificationItem(QueueEntity queueItem, CancellationToken cancellationToken = default)
     {
         var contextType = GetContextType(queueItem, typeof(BusinessNotificationsAssemblyMarker));
@@ -66,28 +100,28 @@ public class QueueService: IQueueService
             _logger.LogError($"Notification context was not found in assembly: {queueItem.ContextType}");
             return;
         }
-        if (IsContext<TestNotificationContext>(contextType))
+        if (IsContext<TestNotificationItemContext>(contextType))
         {
-            await SendNotification<TestNotificationContext>(queueItem, cancellationToken);
+            await SendNotification<TestNotificationItemContext>(queueItem, cancellationToken);
         }
-        else if (IsContext<RegistrationNotificationContext>(contextType))
+        else if (IsContext<RegistrationNotificationItemContext>(contextType))
         {
-            await SendNotification<RegistrationNotificationContext>(queueItem, cancellationToken);
+            await SendNotification<RegistrationNotificationItemContext>(queueItem, cancellationToken);
         }
-        else if (IsContext<EmailVerifiedNotificationContext>(contextType))
+        else if (IsContext<EmailVerifiedNotificationItemContext>(contextType))
         {
-            await SendNotification<EmailVerifiedNotificationContext>(queueItem, cancellationToken);
+            await SendNotification<EmailVerifiedNotificationItemContext>(queueItem, cancellationToken);
         }
-        else if (IsContext<TimeEntryAutoStoppedNotificationContext>(contextType))
+        else if (IsContext<TimeEntryAutoStoppedNotificationItemContext>(contextType))
         {
-            await SendNotification<TimeEntryAutoStoppedNotificationContext>(queueItem, cancellationToken);
+            await SendNotification<TimeEntryAutoStoppedNotificationItemContext>(queueItem, cancellationToken);
         }
         else
         {
             _logger.LogError($"Incorrect notification context: {queueItem.ContextType}");
         }
     }
-    
+
     private static Type? GetContextType(QueueEntity queueItem, Type markerType)
     {
         var activationResult = Activator.CreateInstance(
@@ -97,12 +131,12 @@ public class QueueService: IQueueService
         return activationResult?.Unwrap()?.GetType();
     }
 
-    private static bool IsContext<TConext>(Type contextType) where TConext: INotificationContext
+    private static bool IsContext<TConext>(Type contextType) where TConext: IQueueItemContext
     {
         return contextType == typeof(TConext);
     }
     
-    private async Task SendNotification<TConext>(QueueEntity queueEntity, CancellationToken cancellationToken = default) where TConext: INotificationContext
+    private async Task SendNotification<TConext>(QueueEntity queueEntity, CancellationToken cancellationToken = default) where TConext: INotificationItemContext
     {
         var context = JsonHelper.DeserializeObject<TConext>(queueEntity.ContextData);
         if (context == null)
@@ -112,5 +146,17 @@ public class QueueService: IQueueService
         }
 
         await _notificationBuilder.SendAsync(context, cancellationToken);
+    }
+    
+    private async Task HandleQueueItem<TConext>(QueueEntity queueEntity, CancellationToken cancellationToken = default) where TConext: IQueueItemContext
+    {
+        var context = JsonHelper.DeserializeObject<TConext>(queueEntity.ContextData);
+        if (context == null)
+        {
+            _logger.LogError("Notification context parsing error: {Type}", typeof(TConext));
+            return;
+        }
+
+        await _scope.Resolve<IAsyncQueueHandler<TConext>>().HandleAsync(context, cancellationToken);
     }
 }

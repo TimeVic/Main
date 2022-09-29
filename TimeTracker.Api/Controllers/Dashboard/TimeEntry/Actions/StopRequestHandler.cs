@@ -6,33 +6,25 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.Http;
+using TimeTracker.Business.Services.TimeEntry;
 
 namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 {
     public class StopRequestHandler : IAsyncRequestHandler<StopRequest>
     {
-        private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
         private readonly IUserDao _userDao;
-        private readonly IProjectDao _projectDao;
-        private readonly IDbSessionProvider _sessionProvider;
-        private readonly ITimeEntryDao _timeEntryDao;
+        private readonly ITimeEntryService _timeEntryService;
 
         public StopRequestHandler(
-            IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
-            IProjectDao projectDao,
-            IDbSessionProvider sessionProvider,
-            ITimeEntryDao timeEntryDao
+            ITimeEntryService timeEntryService
         )
         {
-            _mapper = mapper;
             _requestService = requestService;
             _userDao = userDao;
-            _projectDao = projectDao;
-            _sessionProvider = sessionProvider;
-            _timeEntryDao = timeEntryDao;
+            _timeEntryService = timeEntryService;
         }
     
         public async Task ExecuteAsync(StopRequest request)
@@ -45,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new RecordNotFoundException("Workspace not found");
             }
 
-            await _timeEntryDao.StopActiveAsync(workspace);
+            await _timeEntryService.StopActiveAsync(workspace);
         }
     }
 }

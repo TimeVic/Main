@@ -4,7 +4,7 @@ using TimeTracker.Business.Notifications.Services;
 
 namespace TimeTracker.Business.Notifications.Senders.TimeEntry
 {
-    public class TimeEntryAutoStoppedNotificationSender : IAsyncNotification<TimeEntryAutoStoppedNotificationContext>
+    public class TimeEntryAutoStoppedNotificationSender : IAsyncNotification<TimeEntryAutoStoppedNotificationItemContext>
     {
         private readonly IEmailSendingService _emailSendingService;
         private readonly EmailFactory _emailFactory;
@@ -16,12 +16,12 @@ namespace TimeTracker.Business.Notifications.Senders.TimeEntry
         }
 
         public Task SendAsync(
-            TimeEntryAutoStoppedNotificationContext commandContext, 
+            TimeEntryAutoStoppedNotificationItemContext commandItemContext, 
             CancellationToken cancellationToken = default
         )
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("TimeEntryAutoStoppedNotification.htm");
-            _emailSendingService.SendEmail(commandContext.ToAddress, emailBuilder, null);
+            _emailSendingService.SendEmail(commandItemContext.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
     }

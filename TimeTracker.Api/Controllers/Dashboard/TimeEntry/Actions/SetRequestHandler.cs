@@ -9,6 +9,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.TimeEntry;
 
 namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 {
@@ -18,8 +19,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         private readonly IRequestService _requestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
-        private readonly IDbSessionProvider _sessionProvider;
         private readonly ITimeEntryDao _timeEntryDao;
+        private readonly ITimeEntryService _timeEntryService;
         private readonly ISecurityManager _securityManager;
 
         public SetRequestHandler(
@@ -27,8 +28,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             IRequestService requestService,
             IUserDao userDao,
             IProjectDao projectDao,
-            IDbSessionProvider sessionProvider,
             ITimeEntryDao timeEntryDao,
+            ITimeEntryService timeEntryService,
             ISecurityManager securityManager
         )
         {
@@ -36,8 +37,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _requestService = requestService;
             _userDao = userDao;
             _projectDao = projectDao;
-            _sessionProvider = sessionProvider;
             _timeEntryDao = timeEntryDao;
+            _timeEntryService = timeEntryService;
             _securityManager = securityManager;
         }
     
@@ -58,12 +59,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             }
 
             var userProjects = await _projectDao.GetByUser(user);
-            timeEntry = await _timeEntryDao.SetAsync(
+            timeEntry = await _timeEntryService.SetAsync(
+                user,
                 workspace,
                 new TimeEntryCreationDto()
                 {
                     Id = timeEntry?.Id,
                     Description = request.Description,
+                    TaskId = request.TaskId,
                     StartTime = request.StartTime,
                     EndTime = request.EndTime,
                     HourlyRate = request.HourlyRate,

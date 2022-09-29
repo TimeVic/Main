@@ -13,6 +13,7 @@ public interface ITimeEntryDao: IDomainService
     Task DeleteAsync(TimeEntryEntity timeEntry);
     
     Task<TimeEntryEntity> StartNewAsync(
+        UserEntity user,
         WorkspaceEntity workspace,
         bool isBillable = false,
         string? description = null,
@@ -20,9 +21,10 @@ public interface ITimeEntryDao: IDomainService
         decimal? hourlyRate = null
     );
     
-    Task StopActiveAsync(WorkspaceEntity workspace);
+    Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace);
 
     Task<TimeEntryEntity> SetAsync(
+        UserEntity user,
         WorkspaceEntity workspace,
         TimeEntryCreationDto timeEntryDto,
         ProjectEntity? project = null
