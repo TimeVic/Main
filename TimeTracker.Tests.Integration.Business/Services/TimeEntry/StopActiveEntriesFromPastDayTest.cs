@@ -93,7 +93,7 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
         await _timeEntryService.StopActiveEntriesFromPastDayAsync();
         
         await _queueService.ProcessAsync(QueueChannel.Notifications);
-        Assert.False(EmailSendingService.IsEmailSent);
+        Assert.False(EmailSendingServiceMock.IsEmailSent);
     }
     
     [Fact]
@@ -107,8 +107,8 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
         await _timeEntryService.StopActiveEntriesFromPastDayAsync();
         
         await _queueService.ProcessAsync(QueueChannel.Notifications);
-        Assert.True(EmailSendingService.IsEmailSent);
-        var actualEmail = EmailSendingService.SentMessages.FirstOrDefault();
+        Assert.True(EmailSendingServiceMock.IsEmailSent);
+        var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(_user.Email, actualEmail.To);
     }
 }

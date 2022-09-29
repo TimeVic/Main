@@ -10,6 +10,7 @@ using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.Queue.Handlers;
 
 namespace TimeTracker.Business.Services.Queue;
 
@@ -81,9 +82,9 @@ public class QueueService: IQueueService
             _logger.LogError($"Queue context was not found in assembly: {queueItem.ContextType}");
             return;
         }
-        if (IsContext<TestNotificationItemContext>(contextType))
+        if (IsContext<IntegrationAppQueueItemContext>(contextType))
         {
-            await HandleQueueItem<TestNotificationItemContext>(queueItem, cancellationToken);
+            await HandleQueueItem<IntegrationAppQueueItemContext>(queueItem, cancellationToken);
         }
         else
         {
@@ -130,7 +131,7 @@ public class QueueService: IQueueService
         return activationResult?.Unwrap()?.GetType();
     }
 
-    private static bool IsContext<TConext>(Type contextType) where TConext: INotificationItemContext
+    private static bool IsContext<TConext>(Type contextType) where TConext: IQueueItemContext
     {
         return contextType == typeof(TConext);
     }

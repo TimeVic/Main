@@ -20,8 +20,8 @@ public class SendNewTimeEntityTest: BaseTest
     private readonly IWorkspaceSettingsDao _workspaceSettingsDao;
     private readonly string _securityKey;
 
-    private const string TeamId = "30321216";
-    private const string TaskId = "30cnfm7";
+    private readonly string _teamId;
+    private readonly string _taskId;
     
     public SendNewTimeEntityTest(): base(false)
     {
@@ -30,9 +30,12 @@ public class SendNewTimeEntityTest: BaseTest
         
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
+        
         var configuration = Scope.Resolve<IConfiguration>();
-
         _securityKey = configuration.GetValue<string>("Integration:ClickUp:SecurityKey");
+        _teamId = configuration.GetValue<string>("Integration:ClickUp:TeamId");
+        _taskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
+        
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _user.Workspaces.First();
         // Clear queue
@@ -42,7 +45,7 @@ public class SendNewTimeEntityTest: BaseTest
             _user,
             _workspace,
             _securityKey,
-            TeamId,
+            _teamId,
             true
         ).Wait();
     }
@@ -51,9 +54,10 @@ public class SendNewTimeEntityTest: BaseTest
     public async Task ShouldSendNewTimeEntry()
     {
         var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
-        activeEntry.TaskId = TaskId;
+        activeEntry.TaskId = _taskId;
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace);
+        await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
         
         var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
@@ -69,6 +73,7 @@ public class SendNewTimeEntityTest: BaseTest
         activeEntry.TaskId = "fake";
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace);
+        await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
         
         var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
@@ -80,21 +85,23 @@ public class SendNewTimeEntityTest: BaseTest
     public async Task ShouldUpdateExistsTimeEntry()
     {
         var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
-        activeEntry.TaskId = TaskId;
+        activeEntry.TaskId = _taskId;
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace);
+        await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
         
         var creatingResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
         Assert.False(creatingResponse.Value.IsError);
         activeEntry.ClickUpId = creatingResponse.Value.Id;
         await DbSessionProvider.CurrentSession.SaveAsync(activeEntry);
+        await CommitDbChanges();
         
         activeEntry = await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
             Id = activeEntry.Id,
             StartTime = DateTime.UtcNow.TimeOfDay,
-            EndTime = DateTime.UtcNow.TimeOfDay,
+            EndTime = DateTime.UtcNow.AddMilliseconds(5).TimeOfDay,
             Description = "Test"
         });
         var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);

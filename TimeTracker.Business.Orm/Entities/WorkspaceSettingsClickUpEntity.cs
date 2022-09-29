@@ -4,7 +4,7 @@ using NHibernate.Type;
 
 namespace TimeTracker.Business.Orm.Entities
 {
-    [Class(Table = "workspace_integration_clickups")]
+    [Class(Table = "workspace_setting_clickups")]
     public class WorkspaceSettingsClickUpEntity: IEntity
     {
         [Id(Name = "Id", Generator = "native")]

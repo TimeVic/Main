@@ -4,7 +4,7 @@ using TimeTracker.Business.Services.ExternalClients.ClickUp.Model;
 
 namespace TimeTracker.Business.Services.ExternalClients.ClickUp;
 
-public interface IClickUpClient: IDomainService
+public interface IClickUpClient
 {
     Task<SetTimeEntryResponseDto?> SendTimeEntryAsync(TimeEntryEntity timeEntry);
 }

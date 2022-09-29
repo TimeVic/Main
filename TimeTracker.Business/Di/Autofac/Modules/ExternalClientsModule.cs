@@ -1,17 +1,18 @@
 ﻿using Autofac;
 using Domain.Abstractions;
 using TimeTracker.Business.Notifications;
+using TimeTracker.Business.Services.ExternalClients.ClickUp;
 
 namespace TimeTracker.Business.Di.Autofac.Modules
 {
-    public class QueueModule : Module
+    public class ExternalClientsModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterAssemblyTypes(typeof(BusinessAssemblyMarker).Assembly)
-                .AsClosedTypesOf(typeof(IAsyncQueueHandler<>))
-                .InstancePerDependency();
+                .RegisterType<ClickUpClient>()
+                .As<IClickUpClient>()
+                .SingleInstance();
         }
     }
 }

@@ -22,6 +22,6 @@ public class TestStartup: Startup
             typeof(BusinessTestingAssemblyMarker).Assembly
         );
         builder.RegisterType<FakeReCaptchaService>().As<IReCaptchaService>().InstancePerDependency();
-        builder.RegisterType<FakeEmailSendingService>().As<IEmailSendingService>().InstancePerLifetimeScope();
+        builder.RegisterType<EmailSendingServiceMock>().As<IEmailSendingService>().InstancePerLifetimeScope();
     }
 }

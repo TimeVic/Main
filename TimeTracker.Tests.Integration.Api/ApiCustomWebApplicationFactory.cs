@@ -30,7 +30,7 @@ public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
                     .ConfigureTestServices(services => 
                     {
                         services.AddHttpContextAccessor();
-                        services.AddScoped<IEmailSendingService, FakeEmailSendingService>();
+                        services.AddScoped<IEmailSendingService, EmailSendingServiceMock>();
                         // We can further customize our application setup here.
                     })
                     .ConfigureAppConfiguration(builder =>

@@ -25,6 +25,7 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
         if (clickUpSettings == null)
         {
             clickUpSettings = new WorkspaceSettingsClickUpEntity();
+            clickUpSettings.User = user;
             clickUpSettings.Workspace = workspace;
             workspace.SettingsClickUp.Add(clickUpSettings);
             clickUpSettings.CreateTime = DateTime.UtcNow;
@@ -35,6 +36,6 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
         clickUpSettings.IsCustomTaskIds = isCustomTaskIds;
         await _sessionProvider.CurrentSession.SaveAsync(clickUpSettings);
         
-        return clickUpSettings;
+            return clickUpSettings;
     }
 }
