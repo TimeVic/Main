@@ -104,7 +104,9 @@ public class ClickUpClient: IClickUpClient
     private string BuildTimeEntryUri(string teamId, string taskId, bool isCustomTaskIds, long? timeEntryId = null)
     {
         teamId = HttpUtility.UrlEncode(teamId);
-        taskId = HttpUtility.UrlEncode(taskId);
+        taskId = HttpUtility.UrlEncode(
+            CleanUpTaskId(taskId, isCustomTaskIds)
+        );
         
         var queryParams = HttpUtility.ParseQueryString(string.Empty);
         queryParams.Add("custom_task_ids", isCustomTaskIds.ToString());
@@ -115,5 +117,15 @@ public class ClickUpClient: IClickUpClient
         );
         url.Query = queryParams.ToString();
         return url.ToString();
+    }
+
+    public static string CleanUpTaskId(string taskId, bool isCustomTaskId)
+    {
+        taskId = taskId.Trim();
+        if (!isCustomTaskId && taskId.StartsWith("#"))
+        {
+            return taskId.TrimStart('#');
+        }
+        return taskId;
     }
 }

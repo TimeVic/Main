@@ -108,4 +108,20 @@ public class SendNewTimeEntityTest: BaseTest
         var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
         Assert.False(actualResponse.Value.IsError);
     }
+
+    [Fact]
+    public void ShouldRemoveFirstSymbolFromId()
+    {
+        var taskId = " #abd123 ";
+        var actualTaskId = ClickUpClient.CleanUpTaskId(taskId, false);
+        Assert.Equal("abd123", actualTaskId);
+    }
+    
+    [Fact]
+    public void ShouldNotRemoveFirstSymbolFromId()
+    {
+        var expectedTaskId = " #abd123 ";
+        var actualTaskId = ClickUpClient.CleanUpTaskId(expectedTaskId, true);
+        Assert.Equal(expectedTaskId.Trim(), actualTaskId);
+    }
 }
