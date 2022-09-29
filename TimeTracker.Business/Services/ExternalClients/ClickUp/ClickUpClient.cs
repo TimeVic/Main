@@ -57,6 +57,7 @@ public class ClickUpClient: IClickUpClient
             settings.IsCustomTaskIds,
             timeEntry.ClickUpId
         );
+        _logger.LogDebug("ClickUp. Send request to: {Uri}", uri);
         HttpResponseMessage response;
         if (timeEntry.ClickUpId.HasValue)
         {
