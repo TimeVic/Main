@@ -41,6 +41,12 @@ node('testing-node') {
             checkout scm
         }
         
+        runStage(Stage.SET_VARS) {
+            withCredentials([string(credentialsId: "timevic_testing_clickup_secret_key", variable: 'AUTH_SECRET')]) {
+                envVariables.put('Integration__ClickUp__SecurityKey', AUTH_SECRET)
+            }
+        }
+
         def testImage = docker.build('timevic-test-image', '--file=./devops/test/Dockerfile .')
         String containerEnvVarString = mapToEnvVars(containerEnvVars)
         testImage.inside(containerEnvVarString.concat(" --network=$networkId")) {
@@ -96,6 +102,7 @@ enum Stage {
     UPDATE_GIT_STATUS('Update git status'),
     CLEAN('Clean'),
     CHECKOUT('Checkout'),
+    SET_VARS('Set environment vars'),
     BUILD('Build projects'),
     INIT_DB('Init DB'),
     INIT_REDIS('Init Redis'),
