@@ -29,7 +29,7 @@ public class ProcessNotificationTest: BaseTest
     [Fact]
     public async Task ShouldProcessNotification()
     {
-        var testContext = new TestNotificationContext()
+        var testContext = new TestNotificationItemContext()
         {
             ToAddress = "test@test.com"
         };
@@ -49,7 +49,7 @@ public class ProcessNotificationTest: BaseTest
     {
         var fakeUser = _userFactory.Generate();
         var expectedUser = await _userSeeder.CreatePendingAsync();
-        var testContext = new RegistrationNotificationContext(
+        var testContext = new RegistrationNotificationItemContext(
             fakeUser.Email,
             "http://fron.url",
             expectedUser.VerificationToken

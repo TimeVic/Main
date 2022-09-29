@@ -7,7 +7,6 @@ using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
-using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Api.Core;
 
@@ -38,7 +37,7 @@ public class SetTest: BaseTest
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_defaultWorkspace);
+        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
         
         var response = await PostRequestAsAnonymousAsync(Url, new SetRequest()
         {
@@ -85,7 +84,7 @@ public class SetTest: BaseTest
         var fakeEntry = _timeEntryFactory.Generate();
         var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
         await CommitDbChanges();
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_defaultWorkspace);
+        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
         
         var response = await PostRequestAsync(Url, _jwtToken, new SetRequest()
         {

@@ -35,7 +35,7 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
     [Fact]
     public async Task ShouldStopActiveTimeEntryForPastDay()
     {
-        var activeEntry = await _timeEntryDao.StartNewAsync(_workspace, true);
+        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
         activeEntry.Date = DateTime.UtcNow.AddDays(-1);
         await DbSessionProvider.PerformCommitAsync();
 
@@ -52,7 +52,7 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
     [Fact]
     public async Task ShouldNotStopActiveForCurrentDay()
     {
-        var activeEntry = await _timeEntryDao.StartNewAsync(_workspace, true);
+        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
         
         await _timeEntryService.StopActiveEntriesFromPastDayAsync();
         
@@ -63,7 +63,7 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
     [Fact]
     public async Task ShouldStartNewAfterPreviousWasStopped()
     {
-        var previousEntry = await _timeEntryDao.StartNewAsync(_workspace, true);
+        var previousEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
         previousEntry.Date = DateTime.UtcNow.AddDays(-1);
         await DbSessionProvider.PerformCommitAsync();
 
@@ -85,7 +85,7 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
     [Fact]
     public async Task ShouldNotSendNotificationIfDurationLessThan8Hours()
     {
-        var previousEntry = await _timeEntryDao.StartNewAsync(_workspace, true);
+        var previousEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
         previousEntry.Date = DateTime.UtcNow.AddDays(-1);
         previousEntry.StartTime = TimeSpan.FromHours(23 - 7);
         await DbSessionProvider.PerformCommitAsync();
@@ -99,7 +99,7 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
     [Fact]
     public async Task ShouldNotSendNotificationIfDurationMoreThan8Hours()
     {
-        var previousEntry = await _timeEntryDao.StartNewAsync(_workspace, true);
+        var previousEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
         previousEntry.Date = DateTime.UtcNow.AddDays(-1);
         previousEntry.StartTime = TimeSpan.FromHours(10);
         await DbSessionProvider.PerformCommitAsync();

@@ -16,7 +16,7 @@ namespace TimeTracker.Business.Extensions
         {
             return (long)(
                 d - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
-            ).TotalSeconds;
+            ).TotalMilliseconds;
         }
 
         public static string TimeAgo(this DateTime dt)

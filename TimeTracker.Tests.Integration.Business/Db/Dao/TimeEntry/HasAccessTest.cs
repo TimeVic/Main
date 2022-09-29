@@ -39,7 +39,7 @@ public class HasAccessTest: BaseTest
         var expectWorkspace = user.Workspaces.First();
         var expectProject = await _projectDao.CreateAsync(expectWorkspace, "Test project");
         
-        var expectedEntry = await _timeEntryDao.SetAsync(expectWorkspace, expectedDto, expectProject);
+        var expectedEntry = await _timeEntryDao.SetAsync(user, expectWorkspace, expectedDto, expectProject);
         
         var hasAccess = await _timeEntryDao.HasAccessAsync(user, expectedEntry);
         Assert.True(hasAccess);
@@ -58,7 +58,7 @@ public class HasAccessTest: BaseTest
         var user = await _userSeeder.CreateActivatedAsync();
         var expectWorkspace = await _workspaceDao.CreateWorkspace(user, "New");
         
-        var expectedEntry = await _timeEntryDao.SetAsync(expectWorkspace, expectedDto);
+        var expectedEntry = await _timeEntryDao.SetAsync(user, expectWorkspace, expectedDto);
         
         var hasAccess = await _timeEntryDao.HasAccessAsync(user, expectedEntry);
         Assert.True(hasAccess);
@@ -77,7 +77,7 @@ public class HasAccessTest: BaseTest
         var ownedUser = await _userSeeder.CreateActivatedAsync();
         var expectWorkspace = await _workspaceDao.CreateWorkspace(ownedUser, "New");
         
-        var expectedEntry = await _timeEntryDao.SetAsync(expectWorkspace, expectedDto);
+        var expectedEntry = await _timeEntryDao.SetAsync(ownedUser, expectWorkspace, expectedDto);
         
         var anotherUser = await _userSeeder.CreateActivatedAsync();
         var hasAccess = await _timeEntryDao.HasAccessAsync(anotherUser, expectedEntry);

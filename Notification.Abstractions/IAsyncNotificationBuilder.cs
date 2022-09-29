@@ -10,6 +10,6 @@ namespace Notification.Abstractions
     public interface IAsyncNotificationBuilder
     {
         Task SendAsync<INotificationContext>(INotificationContext commandContext, CancellationToken cancellationToken = default) 
-            where INotificationContext : Abstractions.INotificationContext;
+            where INotificationContext : Abstractions.INotificationItemContext;
     }
 }

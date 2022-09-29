@@ -2,11 +2,11 @@
 
 namespace TimeTracker.Business.Notifications.Senders
 {
-    public class TestNotificationContext : INotificationContext
+    public class TestNotificationItemContext : INotificationItemContext
     {
-        public TestNotificationContext() {}
+        public TestNotificationItemContext() {}
 
-        public TestNotificationContext(string toAddress)
+        public TestNotificationItemContext(string toAddress)
         {
             ToAddress = toAddress;
         }

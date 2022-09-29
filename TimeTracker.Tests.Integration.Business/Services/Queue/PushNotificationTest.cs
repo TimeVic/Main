@@ -17,7 +17,7 @@ public class PushNotificationTest: BaseTest
     [Fact]
     public async Task ShouldProduce()
     {
-        var testContext = new TestNotificationContext()
+        var testContext = new TestNotificationItemContext()
         {
             ToAddress = "test@test.com"
         };

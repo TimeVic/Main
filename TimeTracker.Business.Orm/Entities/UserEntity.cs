@@ -1,6 +1,7 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
+using TimeTracker.Business.Common.Exceptions.Common;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -52,6 +53,15 @@ namespace TimeTracker.Business.Orm.Entities
         [OneToMany(ClassType = typeof(WorkspaceEntity))]
         public virtual ICollection<WorkspaceEntity> Workspaces { get; set; } = new List<WorkspaceEntity>();
         
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.Extra,
+            Cascade = "all-delete-orphan"
+        )]
+        [Key(Column = "user_id")]
+        [OneToMany(ClassType = typeof(TimeEntryEntity))]
+        public virtual ICollection<TimeEntryEntity> TimeEntries { get; set; } = new List<TimeEntryEntity>();
+        
         public virtual bool IsActivated => VerificationTime.HasValue;
         
         public virtual WorkspaceEntity DefaultWorkspace => Workspaces
@@ -61,6 +71,16 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual WorkspaceEntity? GetWorkspaceById(long workspaceId)
         {
             return Workspaces.FirstOrDefault(item => item.Id == workspaceId);
+        }
+        
+        public virtual void EnsureThatHasWorkspace(WorkspaceEntity workspace)
+        {
+            if (GetWorkspaceById(workspace.Id) == null)
+            {
+                throw new DataInconsistencyException(
+                    $"User does not have workspace: UserId: {Id}, WorkspaceId: {workspace.Id}"
+                );
+            }
         }
     }
 }

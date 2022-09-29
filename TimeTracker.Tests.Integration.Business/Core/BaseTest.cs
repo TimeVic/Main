@@ -20,9 +20,17 @@ public class BaseTest: IDisposable
     private readonly IContainer _serviceProvider;
     protected readonly IQueueDao _queueDao;
 
+    private bool IsFakeIntegrations = true;
+
+    public BaseTest(bool isFakeIntegrations): base()
+    {
+        IsFakeIntegrations = isFakeIntegrations;
+    }
+
     public BaseTest()
     {
         var configuration = ApplicationHelper.BuildConfiguration();
+
         var builder = new ContainerBuilder();
         builder.RegisterInstance(configuration)
             .As<IConfiguration>()

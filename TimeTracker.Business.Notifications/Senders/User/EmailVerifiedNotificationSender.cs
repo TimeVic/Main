@@ -4,7 +4,7 @@ using TimeTracker.Business.Notifications.Services;
 
 namespace TimeTracker.Business.Notifications.Senders.User
 {
-    public class EmailVerifiedNotificationSender : IAsyncNotification<EmailVerifiedNotificationContext>
+    public class EmailVerifiedNotificationSender : IAsyncNotification<EmailVerifiedNotificationItemContext>
     {
         private readonly IEmailSendingService _emailSendingService;
         private readonly EmailFactory _emailFactory;
@@ -16,13 +16,13 @@ namespace TimeTracker.Business.Notifications.Senders.User
         }
 
         public Task SendAsync(
-            EmailVerifiedNotificationContext commandContext, 
+            EmailVerifiedNotificationItemContext commandItemContext, 
             CancellationToken cancellationToken = default
         )
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("UserEmailVerifiedNotification.htm");
-            emailBuilder.AddPlaceholder("email", commandContext.VerifiedEmail);
-            _emailSendingService.SendEmail(commandContext.ToAddress, emailBuilder, null);
+            emailBuilder.AddPlaceholder("email", commandItemContext.VerifiedEmail);
+            _emailSendingService.SendEmail(commandItemContext.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
     }

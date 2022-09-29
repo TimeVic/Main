@@ -20,7 +20,7 @@ namespace Notification.Abstractions
             INotificationContext commandContext,
             CancellationToken cancellationToken = default
         )
-            where INotificationContext : Abstractions.INotificationContext
+            where INotificationContext : Abstractions.INotificationItemContext
         {
             return _asyncNotificationFactory.Create<INotificationContext>().SendAsync(commandContext, cancellationToken);
         }

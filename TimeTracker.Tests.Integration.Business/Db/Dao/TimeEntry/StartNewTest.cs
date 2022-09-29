@@ -28,7 +28,7 @@ public class StartNewTest: BaseTest
     {
         var user = await _userSeeder.CreateActivatedAsync();
         var workspace = user.Workspaces.First();
-        var activeEntry = await _timeEntryDao.StartNewAsync(workspace, true);
+        var activeEntry = await _timeEntryDao.StartNewAsync(user, workspace, true);
         Assert.Equal(DateTime.UtcNow.StartOfDay(), activeEntry.Date);
         Assert.Null(activeEntry.EndTime);
 
@@ -42,10 +42,10 @@ public class StartNewTest: BaseTest
     {
         var user = await _userSeeder.CreateActivatedAsync();
         var workspace1 = user.Workspaces.First();
-        var activeEntry = await _timeEntryDao.StartNewAsync(workspace1, true);
+        var activeEntry = await _timeEntryDao.StartNewAsync(user, workspace1, true);
         Assert.Null(activeEntry.EndTime);
         
-        var actualEntry = await _timeEntryDao.StartNewAsync(workspace1, true);
+        var actualEntry = await _timeEntryDao.StartNewAsync(user, workspace1, true);
         Assert.NotEqual(activeEntry.Id, actualEntry.Id);
 
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
@@ -58,9 +58,9 @@ public class StartNewTest: BaseTest
         var user = await _userSeeder.CreateActivatedAsync();
         await _workspaceDao.CreateWorkspace(user, "Test");
         var workspace1 = user.Workspaces.First();
-        var activeEntryFor1 = await _timeEntryDao.StartNewAsync(workspace1, true);
+        var activeEntryFor1 = await _timeEntryDao.StartNewAsync(user, workspace1, true);
         var workspace2 = user.Workspaces.Last();
-        var activeEntryFor2 = await _timeEntryDao.StartNewAsync(workspace2, true);
+        var activeEntryFor2 = await _timeEntryDao.StartNewAsync(user, workspace2, true);
         
         Assert.NotEqual(activeEntryFor1.Id, activeEntryFor2.Id);
         Assert.True(activeEntryFor1.IsActive);
@@ -80,6 +80,7 @@ public class StartNewTest: BaseTest
         await DbSessionProvider.PerformCommitAsync();
         
         var activeEntry = await _timeEntryDao.StartNewAsync(
+            user,
             workspace, 
             true,
             "",
