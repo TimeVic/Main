@@ -56,4 +56,12 @@ public class TimeEntryController : MainApiControllerBase
         => this.RequestAsync()
             .For<GetListResponse>()
             .With(request);
+    
+    [HttpPost("filtered-list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> List([FromBody] GetFilteredListRequest request)
+        => this.RequestAsync()
+            .For<GetFilteredListResponse>()
+            .With(request);
 }
