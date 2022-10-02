@@ -5,13 +5,14 @@ using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Web.Store.TimeEntry;
-using TimeTracker.Business.Extensions;
-using TimeTracker.Web.Core.Helpers;
 
-namespace TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts.List;
+namespace TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
 
 public partial class TimeEntryList
 {
+    [Parameter]
+    public bool IsFilteredList { get; set; } = false;
+    
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
     
@@ -21,9 +22,20 @@ public partial class TimeEntryList
     private RadzenDataGrid<TimeEntryDto> _grid;
     private TimeEntryDto _modelToEdit = new();
 
+    private ICollection<TimeEntryDto> _list => IsFilteredList ? _state.Value.FilteredList : _state.Value.ListToShow;
+    
+    private int _totalCounter => IsFilteredList ? _state.Value.FilteredTotalCount : _state.Value.TotalCount;
+
     private Task OnLoadList(LoadDataArgs arg)
     {
-        Dispatcher.Dispatch(new LoadTimeEntryListAction(arg.Skip ?? 0));
+        if (IsFilteredList)
+        {
+            Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction(arg.Skip ?? 0));    
+        }
+        else
+        {
+            Dispatcher.Dispatch(new LoadTimeEntryListAction(arg.Skip ?? 0));
+        }
         return Task.CompletedTask;
     }
 
@@ -82,14 +94,12 @@ public partial class TimeEntryList
 
     private void OnClickCancelEditMode(TimeEntryDto item)
     {
-        Debug.Log("OnClickCancelEditMode");
         item.UpdateFrom(_modelToEdit);
         _grid.CancelEditRow(item);
     }
     
     private async Task OnUpdateRow(TimeEntryDto item)
     {
-        Debug.Log("OnUpdateRow");
         await UpdateTimeEntry(item);
     }
 }

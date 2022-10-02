@@ -24,4 +24,29 @@ public record TimeEntryState
     public bool HasMoreItems { get; set; }
     
     public bool IsListLoading { get; set; }
+
+    #region Filtered
+    
+    public TimeEntryFilterState Filter { get; set; } = new();
+    
+    public ICollection<TimeEntryDto> FilteredList { get; set; } = new List<TimeEntryDto>();
+    
+    public int FilteredTotalCount { get; set; }
+    
+    public int FilteredTotalPages { get; set; }
+    
+    public bool FilteredHasMoreItems { get; set; }
+    
+    #endregion
+}
+
+public record TimeEntryFilterState
+{
+    public long? ClientId { get; set; }
+    
+    public long? ProjectId { get; set; }
+
+    public string? Search { get; set; } = "";
+    
+    public bool? IsBillable { get; set; }
 }

@@ -15,6 +15,7 @@ public class ApiUrl
     public const string TimeEntryStop = "dashboard/time-entry/stop";
     public const string TimeEntrySet = "dashboard/time-entry/set";
     public const string TimeEntryGetList = "dashboard/time-entry/list";
+    public const string TimeEntryGetFilteredList = "dashboard/time-entry/filtered-list";
     public const string TimeEntryDelete = "dashboard/time-entry/delete";
     
     #endregion

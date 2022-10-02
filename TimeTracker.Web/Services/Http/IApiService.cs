@@ -25,6 +25,10 @@ namespace TimeTracker.Web.Services.Http
         Task TimeEntryStopAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.StopRequest model);
         Task<TimeEntryDto> TimeEntrySetAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.SetRequest model);
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetListResponse> TimeEntryGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetListRequest model);
+
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetFilteredListResponse>
+            TimeEntryGetFilteredListAsync(
+                TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetFilteredListRequest model);
         Task TimeEntryDeleteAsync(long id);
 
         #endregion

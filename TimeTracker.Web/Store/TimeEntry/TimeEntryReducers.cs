@@ -61,4 +61,29 @@ public class TimeEntryReducers
             TotalCount = state.TotalCount > 0 ? --state.TotalCount : 0
         };
     }
+    
+    #region Filtered List
+    
+    [ReducerMethod]
+    public static TimeEntryState SetTimeEntryFilterReducer(TimeEntryState state, SetTimeEntryFilterAction action)
+    {
+        return state with
+        {
+            Filter = action.Filter
+        };
+    }
+    
+    [ReducerMethod]
+    public static TimeEntryState SetTimeEntryFilteredListItemsActionReducer(TimeEntryState state, SetTimeEntryFilteredListItemsAction action)
+    {
+        return state with
+        {
+            FilteredList = action.Response.Items,
+            FilteredTotalCount = action.Response.TotalCount,
+            FilteredTotalPages = action.Response.TotalPages,
+            FilteredHasMoreItems = action.Response.IsHasMore,
+        };
+    }
+    
+    #endregion
 }
