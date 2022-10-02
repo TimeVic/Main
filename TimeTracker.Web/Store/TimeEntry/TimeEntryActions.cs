@@ -28,7 +28,7 @@ public record struct DeleteTimeEntryFromListAction(long EntryId);
 
 public record struct LoadTimeEntryFilteredListAction(int Skip = 1);
 
-public record struct SetTimeEntryFilter(TimeEntryFilterState Filter);
+public record struct SetTimeEntryFilterAction(TimeEntryFilterState Filter);
 
 public record struct SetTimeEntryFilteredListItemsAction(GetFilteredListResponse Response);
 

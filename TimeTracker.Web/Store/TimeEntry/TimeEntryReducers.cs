@@ -65,7 +65,7 @@ public class TimeEntryReducers
     #region Filtered List
     
     [ReducerMethod]
-    public static TimeEntryState SetTimeEntryFilterReducer(TimeEntryState state, SetTimeEntryFilter action)
+    public static TimeEntryState SetTimeEntryFilterReducer(TimeEntryState state, SetTimeEntryFilterAction action)
     {
         return state with
         {
