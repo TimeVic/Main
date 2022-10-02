@@ -23,3 +23,13 @@ public record struct SetTimeEntryIsListLoading(bool IsLoading);
 public record struct DeleteTimeEntryAction(long EntryId);
 
 public record struct DeleteTimeEntryFromListAction(long EntryId);
+
+#region Filtered
+
+public record struct LoadTimeEntryFilteredListAction(int Skip = 1);
+
+public record struct SetTimeEntryFilter(TimeEntryFilterState Filter);
+
+public record struct SetTimeEntryFilteredListItemsAction(GetFilteredListResponse Response);
+
+#endregion

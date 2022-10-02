@@ -11,11 +11,11 @@
         AllowSorting="false"
         EditMode="DataGridEditMode.Single"
         PageSize="@GlobalConstants.ListPageSize"
-        Data="@_state.Value.ListToShow"
+        Data="@_list"
         AllowPaging="true"
         RowUpdate="@OnUpdateRow"
         IsLoading="@_state.Value.IsListLoading"
-        Count="@_state.Value.TotalCount"
+        Count="@_totalCounter"
         LoadData="@OnLoadList"
         ShowPagingSummary="true"
         ColumnWidth="200px">

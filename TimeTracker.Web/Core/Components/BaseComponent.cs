@@ -22,7 +22,7 @@ public class BaseComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     
     [Inject]
     protected NavigationManager NavigationManager { get; set; }
-    
+
     #region Radzen
     
     [Inject] 

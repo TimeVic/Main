@@ -1,7 +1,7 @@
-﻿@page "/dashboard/time-entry"
+﻿@page "/dashboard/report/time-entries"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
-@using TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts.TimeEntryForm
+@using TimeTracker.Web.Pages.Dashboard.Report.TimeEntry.Parts
 @using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
 
 @inherits BaseComponent
@@ -9,7 +9,7 @@
 
 <RadzenPanel Style="margin: 10px auto;">
     <ChildContent>
-        <TimeEntryForm/>
-        <TimeEntryList/>
+        <FilterForm/>
+        <TimeEntryList IsFilteredList="@true"/>
     </ChildContent>
 </RadzenPanel>
