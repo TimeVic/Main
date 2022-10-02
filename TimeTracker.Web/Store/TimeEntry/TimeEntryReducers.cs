@@ -78,7 +78,7 @@ public class TimeEntryReducers
     {
         return state with
         {
-            FilteredList = action.Response.Items,
+            FilteredList = action.Response.Items.Where(item => !item.IsActive).ToList(),
             FilteredTotalCount = action.Response.TotalCount,
             FilteredTotalPages = action.Response.TotalPages,
             FilteredHasMoreItems = action.Response.IsHasMore,

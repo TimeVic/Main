@@ -4,7 +4,7 @@
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
 
-<div class="row d-flex px-3 justify-content-center w-time-form mt-3">
+<div class="row d-flex px-3 justify-content-center w-time-entry-list mt-3">
     <RadzenDataGrid
         @ref="@_grid"
         TItem="TimeEntryDto"
@@ -150,12 +150,8 @@
                         <RadzenCheckBox
                             Disabled="true"
                             Class="ml-1"
-                            @bind-Value="@entry.IsBillable"/>
-                        @if (entry.HourlyRate != null)
-                        {
-                            <text>(rate: @entry.HourlyRate?.ToString("0.##"))</text>
-                        }
-
+                            @bind-Value="@entry.IsBillable"
+                            MouseEnter="(args) => ShowBillableRateTooltip(args, entry)"/>
                     </RadzenText>
                 </Template>
                 <EditTemplate Context="entry">
