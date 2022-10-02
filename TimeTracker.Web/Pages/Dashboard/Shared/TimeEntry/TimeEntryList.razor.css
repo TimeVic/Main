@@ -1,0 +1,7 @@
+.w-time-entry-list ::deep td {
+  padding: 0.3rem;
+}
+.w-time-entry-list ::deep .rz-cell-data {
+  font-size: 12px;
+}
+/*# sourceMappingURL=TimeEntryList.razor.css.map */

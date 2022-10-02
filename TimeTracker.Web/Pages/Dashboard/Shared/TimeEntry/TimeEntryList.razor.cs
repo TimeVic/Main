@@ -19,6 +19,9 @@ public partial class TimeEntryList
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
     
+    [Inject] 
+    private TooltipService _tooltipService { get; set; }
+    
     private RadzenDataGrid<TimeEntryDto> _grid;
     private TimeEntryDto _modelToEdit = new();
 
@@ -101,5 +104,17 @@ public partial class TimeEntryList
     private async Task OnUpdateRow(TimeEntryDto item)
     {
         await UpdateTimeEntry(item);
+    }
+
+    private void ShowBillableRateTooltip(ElementReference elementReference, TimeEntryDto entry)
+    {
+        if (!entry.HourlyRate.HasValue)
+        {
+            return;
+        }
+        _tooltipService.Open(elementReference, $"Hourly rate: {entry.HourlyRate?.ToString("0.##")}", new TooltipOptions()
+        {
+            Position = TooltipPosition.Left
+        });
     }
 }

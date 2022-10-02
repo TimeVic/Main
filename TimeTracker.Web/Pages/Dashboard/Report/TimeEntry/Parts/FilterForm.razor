@@ -1,21 +1,22 @@
 ﻿@inherits BaseComponent
 
-<div class="row d-flex px-3 justify-content-center w-time-form">
+<div class="row d-flex px-3 justify-content-center">
     <RadzenCard Class="w-100 d-flex">
         <div class="w-100 d-flex justify-content-start">
             <ClientsDropDown 
                 Value="@(_state.Value.Filter.ClientId ?? 0)" 
-                Class="mr-1"
+                Class="mr-1 col"
                 ValueChanged="OnChangeClient"/>
 
             <ProjectsDropDown
                 Value="@(_state.Value.Filter.ProjectId ?? 0)"
                 ClientId="@(_state.Value.Filter.ClientId ?? 0)"
                 ValueChanged="OnChangeProject"
-                Class="mr-1"/>
+                Class="mr-1 col"/>
 
             <RadzenTextBox
                 Class="mr-1 col"
+                Placeholder="Search"
                 Value="@_state.Value.Filter.Search"
                 ValueChanged="OnChangeSearch"/>
         </div>
