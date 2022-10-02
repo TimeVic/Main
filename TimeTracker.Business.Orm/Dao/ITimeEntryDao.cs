@@ -34,7 +34,7 @@ public interface ITimeEntryDao: IDomainService
 
     Task<TimeEntryEntity?> GetActiveEntryAsync(WorkspaceEntity workspace);
 
-    Task<ListDto<TimeEntryEntity>> GetListAsync(WorkspaceEntity workspace, int page);
+    Task<ListDto<TimeEntryEntity>> GetListAsync(WorkspaceEntity workspace, int page, FilterDataDto? filter = null);
     
     Task<TimeEntryEntity?> GetActiveEntryForPastDay(
         ISession? session = null,

@@ -25,10 +25,10 @@ public class TimeEntrySeeder: ITimeEntrySeeder
         _projectDao = projectDao;
     }
 
-    public async Task<ICollection<TimeEntryEntity>> CreateSeveralAsync(UserEntity user, int count = 1)
+    public async Task<ICollection<TimeEntryEntity>> CreateSeveralAsync(UserEntity user, int count = 1, ProjectEntity? project = null)
     {
         var workspace = user.Workspaces.First();
-        var project = await _projectDao.CreateAsync(workspace, "Test project name");
+        project ??= await _projectDao.CreateAsync(workspace, "Test project name");
         var result = new List<TimeEntryEntity>();
         for (int i = 0; i < count; i++)
         {

@@ -35,12 +35,40 @@ public class TimeEntryDao: ITimeEntryDao
         await _sessionProvider.CurrentSession.DeleteAsync(timeEntry);
     }    
     
-    public async Task<ListDto<TimeEntryEntity>> GetListAsync(WorkspaceEntity workspace, int page)
+    public async Task<ListDto<TimeEntryEntity>> GetListAsync(
+        WorkspaceEntity workspace,
+        int page,
+        FilterDataDto? filter = null
+    )
     {
         var query = _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
             .OrderByDescending(item => item.Date).ThenByDescending(item => item.StartTime)
             .Where(item => item.Workspace.Id == workspace.Id);
-        
+        if (filter != null)
+        {
+            if (filter.ClientId.HasValue)
+            {
+                query = query.Where(item => item.Project.Client.Id == filter.ClientId);
+            }
+            if (filter.ProjectId.HasValue)
+            {
+                query = query.Where(item => item.Project.Id == filter.ProjectId);
+            }
+            if (filter.IsBillable.HasValue)
+            {
+                query = query.Where(item => item.IsBillable == filter.IsBillable);
+            }
+            if (!string.IsNullOrEmpty(filter.Search))
+            {
+                query = query.Where(
+                    item => (
+                        item.Description.ToLower().Contains(filter.Search.ToLower())
+                        || item.TaskId.ToLower().Contains(filter.Search.ToLower())
+                    )
+                );
+            }
+        }
+
         var offset = PaginationUtils.CalculateOffset(page);
         var items = await query
             .Skip(offset)
