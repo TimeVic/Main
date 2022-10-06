@@ -20,4 +20,6 @@ public interface IWorkspaceAccessService: IDomainService
         MembershipAccessType access,
         ICollection<ProjectEntity>? projects = null
     );
+
+    Task<bool> RemoveAccessAsync(WorkspaceEntity workspace, UserEntity user);
 }

@@ -80,4 +80,18 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         await _sessionProvider.CurrentSession.SaveAsync(membership);
         return membership;
     }
+    
+    public async Task<bool> RemoveAccessAsync(WorkspaceEntity workspace, UserEntity user)
+    {
+        var membership = workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id);
+        if (membership != null)
+        {
+            membership.Workspace = null;
+            workspace.Memberships.Remove(membership);
+            await _sessionProvider.CurrentSession.SaveAsync(membership);
+            return true;
+        }
+
+        return false;
+    }
 }
