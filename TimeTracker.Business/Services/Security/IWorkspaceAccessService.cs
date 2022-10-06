@@ -7,9 +7,16 @@ namespace TimeTracker.Business.Services.Security;
 
 public interface IWorkspaceAccessService: IDomainService
 {
-    public Task<WorkspaceMembershipEntity> ShareAccess(
+    public Task<WorkspaceMembershipEntity> ShareAccessAsync(
         WorkspaceEntity workspace,
         UserEntity user,
+        MembershipAccessType access,
+        ICollection<ProjectEntity>? projects = null
+    );
+
+    Task<WorkspaceMembershipEntity> ShareAccessAsync(
+        WorkspaceEntity workspace,
+        string email,
         MembershipAccessType access,
         ICollection<ProjectEntity>? projects = null
     );
