@@ -1,6 +1,7 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
+using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -70,6 +71,15 @@ namespace TimeTracker.Business.Orm.Entities
         [Key(Column = "workspace_id")]
         [OneToMany(ClassType = typeof(WorkspaceSettingsClickUpEntity))]
         public virtual ICollection<WorkspaceSettingsClickUpEntity> SettingsClickUp { get; set; } = new List<WorkspaceSettingsClickUpEntity>();
+        
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.True,
+            Cascade = "all-delete-orphan"
+        )]
+        [Key(Column = "workspace_id")]
+        [OneToMany(ClassType = typeof(WorkspaceMembershipEntity))]
+        public virtual ICollection<WorkspaceMembershipEntity> Memberships { get; set; } = new List<WorkspaceMembershipEntity>();
         
         #region Other
 
