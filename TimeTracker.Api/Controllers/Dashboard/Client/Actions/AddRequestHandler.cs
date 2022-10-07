@@ -6,6 +6,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.Http;
+using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
 {
@@ -16,13 +17,15 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
         private readonly IUserDao _userDao;
         private readonly IClientDao _clientDao;
         private readonly IDbSessionProvider _sessionProvider;
+        private readonly ISecurityManager _securityManager;
 
         public AddRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
             IClientDao clientDao,
-            IDbSessionProvider sessionProvider
+            IDbSessionProvider sessionProvider,
+            ISecurityManager securityManager
         )
         {
             _mapper = mapper;
@@ -30,6 +33,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
             _userDao = userDao;
             _clientDao = clientDao;
             _sessionProvider = sessionProvider;
+            _securityManager = securityManager;
         }
     
         public async Task<ClientDto> ExecuteAsync(AddRequest request)
