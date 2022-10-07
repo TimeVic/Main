@@ -69,7 +69,7 @@ public class GetListTest: BaseTest
         await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
         var otherWorkspace = await _workspaceDao.CreateWorkspace(_user, "Test 2");
         var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
-        await _paymentSeeder.CreateSeveralAsync(otherClient, null, 15);
+        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherClient, null, 15);
         
         var listModel = await _paymentDao.GetListAsync(_user.DefaultWorkspace, 1);
         Assert.Equal(expectedTotal, listModel.Items.Count);

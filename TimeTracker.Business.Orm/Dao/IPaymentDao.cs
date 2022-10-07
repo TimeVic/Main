@@ -9,6 +9,8 @@ public interface IPaymentDao: IDomainService
     Task<PaymentEntity?> GetById(long? id);
     
     Task<PaymentEntity> CreateAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,

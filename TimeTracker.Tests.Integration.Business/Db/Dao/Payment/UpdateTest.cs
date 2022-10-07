@@ -49,6 +49,8 @@ public class UpdateTest: BaseTest
         await DbSessionProvider.PerformCommitAsync();
 
         var actualPayment = await _paymentDao.CreateAsync(
+            _workspace,
+            _user,
             client,
             payment.Amount,
             payment.PaymentTime,
@@ -87,6 +89,8 @@ public class UpdateTest: BaseTest
         await DbSessionProvider.PerformCommitAsync();
 
         var actualPayment = await _paymentDao.CreateAsync(
+            _workspace,
+            _user,
             client,
             payment.Amount,
             payment.PaymentTime,

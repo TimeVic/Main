@@ -58,16 +58,10 @@ public class HasAccessToClientTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldHasNoAccessIfProjectWasNotSharedForUser()
+    public async Task ShouldHasNoAccessIfClientWasNotSharedForUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
         var client = await _clientDao.CreateAsync(_ownWorkspace, "Test 1");
-
-        await _workspaceAccessService.ShareAccessAsync(
-            _ownWorkspace,
-            otherUser,
-            MembershipAccessType.User
-        );
         
         var hasAccess = await _securityManager.HasAccess(AccessLevel.Read, otherUser, client);
         Assert.False(hasAccess);
@@ -77,7 +71,7 @@ public class HasAccessToClientTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldHasOnlyReadAccessIfProjectWasSharedForUser()
+    public async Task ShouldHasOnlyReadAccessIfClientWasSharedForUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
         var client = await _clientDao.CreateAsync(_ownWorkspace, "Test 1");

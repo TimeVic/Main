@@ -9,6 +9,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment
     {
         [Required]
         [IsPositive]
+        public long WorkspaceId { get; set; }
+        
+        [Required]
+        [IsPositive]
         public long ClientId { get; set; }
         
         [IsPositive]

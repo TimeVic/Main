@@ -58,7 +58,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveList()
     {
         var expectedTotal = 21;
-        await _paymentSeeder.CreateSeveralAsync(_client, _project, expectedTotal);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _client, _project, expectedTotal);
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {

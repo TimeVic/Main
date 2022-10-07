@@ -33,18 +33,34 @@ public class PaymentSeeder: IPaymentSeeder
     
     public async Task<ICollection<PaymentEntity>> CreateSeveralAsync(UserEntity user, int count = 1)
     {
-        var project = (await _projectSeeder.CreateSeveralAsync(user)).First();
+        var workspace = user.DefaultWorkspace;
+        var project = (await _projectSeeder.CreateSeveralAsync(workspace, user)).First();
         await _sessionProvider.PerformCommitAsync();
-        return await CreateSeveralAsync(project.Client, project, count);
+        return await CreateSeveralAsync(workspace, user, project.Client, project, count);
+    }
+    
+    public async Task<ICollection<PaymentEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1)
+    {
+        var project = (await _projectSeeder.CreateSeveralAsync(workspace, user)).First();
+        await _sessionProvider.PerformCommitAsync();
+        return await CreateSeveralAsync(workspace, user, project.Client, project, count);
     }
 
-    public async Task<ICollection<PaymentEntity>> CreateSeveralAsync(ClientEntity client, ProjectEntity? project, int count = 1)
+    public async Task<ICollection<PaymentEntity>> CreateSeveralAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        ClientEntity client,
+        ProjectEntity? project,
+        int count = 1
+    )
     {
         var result = new List<PaymentEntity>();
         for (int i = 0; i < count; i++)
         {
             var fakeEntry = _dataFactory.Generate();
             var entry = await _paymentDao.CreateAsync(
+                workspace,
+                user,
                 client, 
                 fakeEntry.Amount,
                 fakeEntry.PaymentTime,
