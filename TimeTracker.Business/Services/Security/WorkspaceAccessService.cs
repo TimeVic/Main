@@ -123,6 +123,11 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         {
             return null;
         }
+        if (member.Access == MembershipAccessType.Manager)
+        {
+            return member.Access;
+        }
+
         var hasUserAccess = await member.ProjectAccesses.AsQueryable().AnyAsync(
             item => item.Project.Id == project.Id
         );
@@ -133,13 +138,13 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         return null;
     }
     
-    private async Task<WorkspaceMembershipEntity?> GetMembershipAsync(
+    private Task<WorkspaceMembershipEntity?> GetMembershipAsync(
         UserEntity user, 
         WorkspaceEntity workspace
     )
     {
-        return await workspace.Memberships
-            .AsQueryable()
-            .FirstOrDefaultAsync(item => item.User.Id == user.Id);
+        return Task.FromResult(
+            workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id)    
+        );
     }
 }

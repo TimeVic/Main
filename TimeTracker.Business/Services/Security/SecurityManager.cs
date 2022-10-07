@@ -60,7 +60,7 @@ public class SecurityManager: ISecurityManager
     private async Task<bool> HasAccessToClientAsync(AccessLevel accessLevel, UserEntity user, ClientEntity client)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, client.Workspace);
-        return accessType == MembershipAccessType.User 
+        return accessType == MembershipAccessType.Owner 
             || accessType == MembershipAccessType.Manager
             || (
                 accessLevel == AccessLevel.Read 
@@ -71,7 +71,7 @@ public class SecurityManager: ISecurityManager
     private async Task<bool> HasAccessToProject(AccessLevel accessLevel, UserEntity user, ProjectEntity project)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, project);
-        return accessType == MembershipAccessType.User 
+        return accessType == MembershipAccessType.Owner 
             || accessType == MembershipAccessType.Manager
             || (
                 accessLevel == AccessLevel.Read 
