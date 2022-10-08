@@ -1,5 +1,6 @@
 ﻿using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
@@ -46,6 +47,8 @@ public class PaymentDao: IPaymentDao
     }
     
     public async Task<PaymentEntity> CreateAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
@@ -53,8 +56,15 @@ public class PaymentDao: IPaymentDao
         string? description = null
     )
     {
+        if (workspace.Clients.All(item => item.Id != client.Id))
+        {
+            throw new DataInconsistencyException($"This workspace does not contain client: {client.Id}");
+        }
+
         var entity = new PaymentEntity()
         {
+            Workspace = workspace,
+            User = user,
             Amount = amount,
             PaymentTime = paymentTime,
             Description = description,

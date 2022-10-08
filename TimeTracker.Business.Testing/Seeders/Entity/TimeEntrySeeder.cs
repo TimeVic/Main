@@ -28,6 +28,17 @@ public class TimeEntrySeeder: ITimeEntrySeeder
     public async Task<ICollection<TimeEntryEntity>> CreateSeveralAsync(UserEntity user, int count = 1, ProjectEntity? project = null)
     {
         var workspace = user.Workspaces.First();
+        return await CreateSeveralAsync(workspace, user, count, project);
+    }
+
+    public async Task<ICollection<TimeEntryEntity>> CreateSeveralAsync(int count = 1)
+    {
+        var user = await _userSeeder.CreateActivatedAsync();
+        return await CreateSeveralAsync(user);
+    }
+    
+    public async Task<ICollection<TimeEntryEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1, ProjectEntity? project = null)
+    {
         project ??= await _projectDao.CreateAsync(workspace, "Test project name");
         var result = new List<TimeEntryEntity>();
         for (int i = 0; i < count; i++)
@@ -51,11 +62,5 @@ public class TimeEntrySeeder: ITimeEntrySeeder
         }
 
         return result;
-    }
-
-    public async Task<ICollection<TimeEntryEntity>> CreateSeveralAsync(int count = 1)
-    {
-        var user = await _userSeeder.CreateActivatedAsync();
-        return await CreateSeveralAsync(user);
     }
 }

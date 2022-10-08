@@ -14,4 +14,8 @@ public interface IUserDao: IDomainService
     Task<UserEntity> CreatePendingUser(string email);
 
     Task<UserEntity?> GetByVerificationToken(string token);
+
+    Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, long workspaceId);
+
+    Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user);
 }

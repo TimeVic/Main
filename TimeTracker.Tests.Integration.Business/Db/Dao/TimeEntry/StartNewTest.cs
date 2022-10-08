@@ -57,7 +57,7 @@ public class StartNewTest: BaseTest
     public async Task ShouldStartNewForOtherWorkspaceAndDotNotStopForCurrent()
     {
         var user = await _userSeeder.CreateActivatedAsync();
-        await _workspaceDao.CreateWorkspace(user, "Test");
+        await _workspaceDao.CreateWorkspaceAsync(user, "Test");
         var workspace1 = user.Workspaces.First();
         var activeEntryFor1 = await _timeEntryDao.StartNewAsync(user, workspace1, true);
         var workspace2 = user.Workspaces.Last();

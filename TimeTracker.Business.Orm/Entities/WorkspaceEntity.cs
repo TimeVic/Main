@@ -116,6 +116,11 @@ namespace TimeTracker.Business.Orm.Entities
             return Projects.Any(item => item.Id == project.Id);
         }
         
+        public virtual bool IsOwner(UserEntity user)
+        {
+            return User.Id == user.Id;
+        }
+        
         #endregion
     }
 }

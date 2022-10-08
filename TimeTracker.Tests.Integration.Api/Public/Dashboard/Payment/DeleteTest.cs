@@ -62,7 +62,6 @@ public class DeleteTest: BaseTest
     public async Task ShouldNotUpdateIfHasNoAccess()
     {
         var (otherJwtToken, otherUser) = await UserSeeder.CreateAuthorizedAsync();
-        
         var response = await PostRequestAsync(Url, otherJwtToken, new DeleteRequest()
         {
             PaymentId = _payment.Id

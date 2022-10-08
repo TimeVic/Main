@@ -128,6 +128,8 @@ public class GetProjectPaymentsReportTest: BaseTest
         }
 
         await _paymentDao.CreateAsync(
+            _workspace,
+            _user,
             project1.Client,
             25,
             DateTime.UtcNow,
@@ -135,6 +137,8 @@ public class GetProjectPaymentsReportTest: BaseTest
             ""
         );
         await _paymentDao.CreateAsync(
+            _workspace,
+            _user,
             project1.Client,
             20,
             DateTime.UtcNow,
@@ -142,6 +146,8 @@ public class GetProjectPaymentsReportTest: BaseTest
             ""
         );
         await _paymentDao.CreateAsync(
+            _workspace,
+            _user,
             project1.Client,
             32,
             DateTime.UtcNow

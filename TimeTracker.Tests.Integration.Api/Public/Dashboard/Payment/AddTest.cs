@@ -45,6 +45,7 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
+            WorkspaceId = _workspace.Id,
             ClientId = _client.Id,
             Amount = payment.Amount,
             Description = payment.Description,
@@ -60,6 +61,7 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
+            WorkspaceId = _workspace.Id,
             ClientId = _client.Id,
             Amount = payment.Amount,
             Description = payment.Description,

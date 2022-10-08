@@ -22,4 +22,15 @@ public interface IWorkspaceAccessService: IDomainService
     );
 
     Task<bool> RemoveAccessAsync(WorkspaceEntity workspace, UserEntity user);
+    
+    Task<MembershipAccessType?> GetAccessTypeAsync(
+        UserEntity user,
+        WorkspaceEntity entryWorkspace,
+        ProjectEntity? project = null
+    );
+
+    Task<MembershipAccessType?> GetAccessTypeAsync(
+        UserEntity user,
+        ProjectEntity project
+    );
 }

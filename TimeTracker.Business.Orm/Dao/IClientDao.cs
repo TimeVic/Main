@@ -12,7 +12,7 @@ public interface IClientDao: IDomainService
 
     Task<ListDto<ClientEntity>> GetListAsync(WorkspaceEntity workspace, int page);
 
-    Task<ClientEntity?> GetById(long? clientId);
+    Task<ClientEntity?> GetById(long? clientId, WorkspaceEntity? workspace = null);
 
     Task<bool> HasAccessAsync(UserEntity user, ClientEntity? entity);
 }

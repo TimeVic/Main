@@ -1,4 +1,5 @@
-﻿using Persistence.Transactions.Behaviors;
+﻿using NHibernate.Linq;
+using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -93,5 +94,57 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         }
 
         return false;
+    }
+
+    public async Task<MembershipAccessType?> GetAccessTypeAsync(
+        UserEntity user, 
+        WorkspaceEntity workspace,
+        ProjectEntity? project = null
+    )
+    {
+        if (workspace.IsOwner(user))
+        {
+            return MembershipAccessType.Owner;
+        }
+
+        var member = await GetMembershipAsync(user, workspace);
+        return member?.Access;
+    }
+    
+    public async Task<MembershipAccessType?> GetAccessTypeAsync(UserEntity user, ProjectEntity project)
+    {
+        if (project.Workspace.IsOwner(user))
+        {
+            return MembershipAccessType.Owner;
+        }
+
+        var member = await GetMembershipAsync(user, project.Workspace);
+        if (member == null)
+        {
+            return null;
+        }
+        if (member.Access == MembershipAccessType.Manager)
+        {
+            return member.Access;
+        }
+
+        var hasUserAccess = await member.ProjectAccesses.AsQueryable().AnyAsync(
+            item => item.Project.Id == project.Id
+        );
+        if (hasUserAccess)
+        {
+            return MembershipAccessType.User;
+        }
+        return null;
+    }
+    
+    private Task<WorkspaceMembershipEntity?> GetMembershipAsync(
+        UserEntity user, 
+        WorkspaceEntity workspace
+    )
+    {
+        return Task.FromResult(
+            workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id)    
+        );
     }
 }

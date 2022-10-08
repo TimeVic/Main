@@ -13,7 +13,7 @@ public class WorkspaceDao: IWorkspaceDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<WorkspaceEntity> CreateWorkspace(UserEntity user, string name, bool isDefault = false)
+    public async Task<WorkspaceEntity> CreateWorkspaceAsync(UserEntity user, string name, bool isDefault = false)
     {
         var workspace = new WorkspaceEntity()
         {

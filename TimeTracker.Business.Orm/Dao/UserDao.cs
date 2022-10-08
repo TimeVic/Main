@@ -2,6 +2,7 @@
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 
 namespace TimeTracker.Business.Orm.Dao;
 
@@ -56,5 +57,20 @@ public class UserDao: IUserDao
         };
         await _sessionProvider.CurrentSession.SaveAsync(user);
         return user;
+    }
+    
+    public async Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, long workspaceId)
+    {
+        var allWorkspaces = await GetUsersWorkspaces(user);
+        return allWorkspaces.FirstOrDefault(item => item.Id == workspaceId);
+    }
+    
+    public async Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user)
+    {
+        var ownedWorkspaces = user.Workspaces;
+        var otherWorkspaces = await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Select(item => item.Workspace)
+            .ToListAsync();
+        return ownedWorkspaces.Concat(otherWorkspaces).ToList();
     }
 }

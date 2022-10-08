@@ -48,6 +48,7 @@ public class UpdateTest: BaseTest
         var expectPayment = _factory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
+            WorkspaceId = _workspace.Id,
             PaymentId = _payment.Id,
             ClientId = _payment.Client.Id,
             Amount = expectPayment.Amount,
@@ -69,6 +70,7 @@ public class UpdateTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
+            WorkspaceId = _workspace.Id,
             PaymentId = _payment.Id,
             ClientId = expectedClient.Id,
             Amount = expectPayment.Amount,
@@ -96,6 +98,7 @@ public class UpdateTest: BaseTest
         
         var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()
         {
+            WorkspaceId = _workspace.Id,
             PaymentId = _payment.Id,
             ClientId = _payment.Client.Id,
             Amount = expectPayment.Amount,

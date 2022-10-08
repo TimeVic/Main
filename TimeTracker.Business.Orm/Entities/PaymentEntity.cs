@@ -46,5 +46,21 @@ namespace TimeTracker.Business.Orm.Entities
             Cascade = "none"
         )]
         public virtual ClientEntity Client { get; set; }
+        
+        [ManyToOne(
+            ClassType = typeof(UserEntity), 
+            Column = "user_id", 
+            Lazy = Laziness.False,
+            Cascade = "none"
+        )]
+        public virtual UserEntity User { get; set; }
+        
+        [ManyToOne(
+            ClassType = typeof(WorkspaceEntity), 
+            Column = "workspace_id", 
+            Lazy = Laziness.False,
+            Cascade = "none"
+        )]
+        public virtual WorkspaceEntity Workspace { get; set; }
     }
 }

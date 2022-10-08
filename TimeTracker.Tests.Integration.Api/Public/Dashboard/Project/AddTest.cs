@@ -71,6 +71,6 @@ public class AddTest: BaseTest
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
     }
 }

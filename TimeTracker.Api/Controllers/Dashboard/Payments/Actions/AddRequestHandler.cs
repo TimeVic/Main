@@ -45,12 +45,19 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var client = await _clientDao.GetById(request.ClientId);
-            if (client == null || !await _securityManager.HasAccess(AccessLevel.Write, user, client))
+            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            if (
+                workspace == null 
+                || client == null 
+                || !await _securityManager.HasAccess(AccessLevel.Write, user, workspace)
+            )
             {
                 throw new HasNoAccessException();
             }
 
             var payment = await _paymentDao.CreateAsync(
+                workspace,
+                user,
                 client,
                 request.Amount,
                 request.PaymentTime,

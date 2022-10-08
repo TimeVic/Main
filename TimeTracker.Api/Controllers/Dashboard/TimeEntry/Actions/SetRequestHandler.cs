@@ -46,10 +46,10 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var workspace = user.GetWorkspaceById(request.WorkspaceId);
-            if (workspace == null)
+            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
-                throw new RecordNotFoundException(nameof(request.WorkspaceId));
+                throw new HasNoAccessException();
             }
 
             var timeEntry = await _timeEntryDao.GetByIdAsync(request.Id);

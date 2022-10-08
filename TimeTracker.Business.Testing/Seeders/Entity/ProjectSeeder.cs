@@ -27,6 +27,17 @@ public class ProjectSeeder: IProjectSeeder
     public async Task<ICollection<ProjectEntity>> CreateSeveralAsync(UserEntity user, int count = 1)
     {
         var workspace = user.Workspaces.First();
+        return await CreateSeveralAsync(workspace, user, count);
+    }
+
+    public async Task<ICollection<ProjectEntity>> CreateSeveralAsync(int count = 1)
+    {
+        var user = await _userSeeder.CreateActivatedAsync();
+        return await CreateSeveralAsync(user);
+    }
+    
+    public async Task<ICollection<ProjectEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1)
+    {
         var result = new List<ProjectEntity>();
         var client = (await _clientSeeder.CreateSeveralAsync(workspace)).First();
         for (int i = 0; i < count; i++)
@@ -38,11 +49,5 @@ public class ProjectSeeder: IProjectSeeder
         }
 
         return result;
-    }
-
-    public async Task<ICollection<ProjectEntity>> CreateSeveralAsync(int count = 1)
-    {
-        var user = await _userSeeder.CreateActivatedAsync();
-        return await CreateSeveralAsync(user);
     }
 }

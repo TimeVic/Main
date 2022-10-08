@@ -61,6 +61,8 @@ public class PaymentReportTest: BaseTest
         }, project1);
         
         await _paymentDao.CreateAsync(
+            _defaultWorkspace, 
+            _user, 
             project1.Client,
             120,
             DateTime.UtcNow,
