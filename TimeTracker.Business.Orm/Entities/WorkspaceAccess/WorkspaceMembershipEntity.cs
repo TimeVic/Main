@@ -28,6 +28,7 @@ namespace TimeTracker.Business.Orm.Entities.WorkspaceAccess
             ClassType = typeof(WorkspaceEntity), 
             Column = "workspace_id", 
             Lazy = Laziness.False,
+            Fetch = FetchMode.Join,
             Cascade = "none"
         )]
         public virtual WorkspaceEntity Workspace { get; set; }
@@ -35,8 +36,8 @@ namespace TimeTracker.Business.Orm.Entities.WorkspaceAccess
         [ManyToOne(
             ClassType = typeof(UserEntity), 
             Column = "user_id", 
-            Lazy = Laziness.False,
-            Cascade = "none"
+            Lazy = Laziness.Proxy,
+            Cascade = "all"
         )]
         public virtual UserEntity User { get; set; }
         

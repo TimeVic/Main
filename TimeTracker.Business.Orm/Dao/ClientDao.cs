@@ -39,14 +39,18 @@ public class ClientDao: IClientDao
         return await query.ListAsync();
     }
     
-    public async Task<ClientEntity?> GetById(long? clientId)
+    public async Task<ClientEntity?> GetById(long? clientId, WorkspaceEntity? workspace = null)
     {
         if (clientId == null)
             return null;
+        var query = _sessionProvider.CurrentSession.Query<ClientEntity>()
+            .Where(item => item.Id == clientId);
+        if (workspace != null)
+        {
+            query = query.Where(item => item.Workspace.Id == workspace.Id);
+        }
 
-        return await _sessionProvider.CurrentSession.Query<ClientEntity>()
-            .Where(item => item.Id == clientId)
-            .FirstOrDefaultAsync();
+        return await query.FirstOrDefaultAsync();
     }
     
     public async Task<ListDto<ClientEntity>> GetListAsync(WorkspaceEntity workspace, int page)

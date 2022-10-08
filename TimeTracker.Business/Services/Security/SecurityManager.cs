@@ -1,6 +1,7 @@
 ﻿using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Services.Security;
@@ -8,19 +9,28 @@ namespace TimeTracker.Business.Services.Security;
 public class SecurityManager: ISecurityManager
 {
     private readonly IWorkspaceAccessService _workspaceAccessService;
+    private readonly IUserDao _userDao;
 
     public SecurityManager(
-        IWorkspaceAccessService workspaceAccessService
+        IWorkspaceAccessService workspaceAccessService,
+        IUserDao userDao
     )
     {
         _workspaceAccessService = workspaceAccessService;
+        _userDao = userDao;
     }
-
+    
     public async Task<bool> HasAccess<TEntity>(AccessLevel accessLevel, UserEntity user, TEntity? entity)
     {
         if (entity == null)
             return false;
         
+        if (entity is WorkspaceEntity workspaceEntity)
+        {
+            // This validation is used to perform basic actions in
+            // the workplace. Such as adding clients, projects, and so on.
+            return await HasAccessToWorkspace(accessLevel, user, workspaceEntity);
+        }
         if (entity is TimeEntryEntity entryEntity)
         {
             return await HasAccessToTimeEntry(accessLevel, user, entryEntity);
@@ -39,6 +49,30 @@ public class SecurityManager: ISecurityManager
         }
 
         throw new NotImplementedException($"Security checking not implemented for {entity?.GetTypeName()}");
+    }
+
+    private async Task<bool> HasAccessToWorkspace(AccessLevel accessLevel, UserEntity user, WorkspaceEntity workspace)
+    {
+        var usersWorkspaces = await _userDao.GetUsersWorkspace(user, workspace.Id);
+        if (usersWorkspaces == null)
+        {
+            // The user does not belong to any workplace
+            return false;
+        }
+
+        var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+        return (
+            accessLevel == AccessLevel.Write
+            && accessType
+                is MembershipAccessType.Owner
+                or MembershipAccessType.Manager
+        ) || (
+            accessLevel == AccessLevel.Read
+            && accessType
+                is MembershipAccessType.Owner
+                or MembershipAccessType.Manager
+                or MembershipAccessType.User
+        );
     }
 
     private async Task<bool> HasAccessToTimeEntry(AccessLevel accessLevel, UserEntity user, TimeEntryEntity timeEntry)

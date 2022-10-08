@@ -43,7 +43,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             var user = await _userDao.GetById(userId);
 
             var project = await _projectDao.GetById(request.ProjectId);
-            if (project == null || !await _securityManager.HasAccess(AccessLevel.Write, user, project))
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
             {
                 throw new HasNoAccessException();
             }

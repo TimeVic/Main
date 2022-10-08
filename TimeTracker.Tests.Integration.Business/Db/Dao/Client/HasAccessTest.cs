@@ -42,7 +42,7 @@ public class HasAccessTest: BaseTest
         var fakeProject = _clientFactory.Generate();
 
         var user = await _userSeeder.CreateActivatedAsync();
-        var expectWorkspace = await _workspaceDao.CreateWorkspace(user, "New");
+        var expectWorkspace = await _workspaceDao.CreateWorkspaceAsync(user, "New");
         
         var expectedProject = await _clientDao.CreateAsync(expectWorkspace, fakeProject.Name);
         
@@ -56,7 +56,7 @@ public class HasAccessTest: BaseTest
         var fakeProject = _clientFactory.Generate();
         
         var ownedUser = await _userSeeder.CreateActivatedAsync();
-        var expectWorkspace = await _workspaceDao.CreateWorkspace(ownedUser, "New");
+        var expectWorkspace = await _workspaceDao.CreateWorkspaceAsync(ownedUser, "New");
         
         var expectedProject = await _clientDao.CreateAsync(expectWorkspace, fakeProject.Name);
         

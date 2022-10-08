@@ -3,6 +3,7 @@ using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.Http;
@@ -40,11 +41,16 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var workspace = user.Workspaces.FirstOrDefault(item => item.Id == request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (workspace == null)
             {
                 throw new RecordNotFoundException("Workspace not found");
             }
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
+            {
+                throw new HasNoAccessException();
+            }
+
             var client = await _clientDao.CreateAsync(workspace, request.Name);
             await _sessionProvider.PerformCommitAsync();
             

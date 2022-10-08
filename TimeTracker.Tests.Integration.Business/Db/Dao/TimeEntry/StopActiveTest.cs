@@ -39,7 +39,7 @@ public class StopActiveTest: BaseTest
     public async Task ShouldNotStopForOtherWorkspace()
     {
         var user = await _userSeeder.CreateActivatedAsync();
-        await _workspaceDao.CreateWorkspace(user, "Test");
+        await _workspaceDao.CreateWorkspaceAsync(user, "Test");
         var workspace1 = user.Workspaces.First();
         var activeEntry = await _timeEntryDao.StartNewAsync(user, workspace1, true);
         Assert.Null(activeEntry.EndTime);

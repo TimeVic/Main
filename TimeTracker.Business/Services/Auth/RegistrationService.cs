@@ -64,7 +64,7 @@ public class RegistrationService: IRegistrationService
         user.PasswordSalt = SecurityUtil.GenerateSalt(32);
         user.PasswordHash = SecurityUtil.GeneratePasswordHash(password, user.PasswordSalt);
 
-        await _workspaceDao.CreateWorkspace(user, UserResources.DefaultWorkspaceName, true);
+        await _workspaceDao.CreateWorkspaceAsync(user, UserResources.DefaultWorkspaceName, true);
         
         await _queueService.PushNotificationAsync(new EmailVerifiedNotificationItemContext()
         {

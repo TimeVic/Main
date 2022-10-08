@@ -29,8 +29,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
+            var allWorkspaces = await _userDao.GetUsersWorkspaces(user);
             return new PaginatedListDto<WorkspaceDto>(
-                _mapper.Map<ICollection<WorkspaceDto>>(user.Workspaces),
+                _mapper.Map<ICollection<WorkspaceDto>>(allWorkspaces),
                 user.Workspaces.Count
             );
         }

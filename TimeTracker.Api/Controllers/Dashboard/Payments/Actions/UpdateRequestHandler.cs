@@ -44,13 +44,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
+            var payment = await _paymentDao.GetById(request.PaymentId);
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, payment))
+            {
+                throw new HasNoAccessException();
+            }
             var client = await _clientDao.GetById(request.ClientId);
-            if (client == null || !await _securityManager.HasAccess(AccessLevel.Write, user, client))
+            if (
+                client == null
+                || !await _securityManager.HasAccess(AccessLevel.Read, user, client)
+            )
             {
                 throw new HasNoAccessException();
             }
 
-            var payment = await _paymentDao.UpdatePaymentAsync(
+            payment = await _paymentDao.UpdatePaymentAsync(
                 request.PaymentId,
                 client,
                 request.Amount,
@@ -59,7 +67,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
                 request.Description
             );
             await _sessionProvider.PerformCommitAsync();
-            
             return _mapper.Map<PaymentDto>(payment);
         }
     }

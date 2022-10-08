@@ -89,8 +89,6 @@ public class TimeEntryDao: ITimeEntryDao
         decimal? hourlyRate = null
     )
     {
-        user.EnsureThatHasWorkspace(workspace);
-        
         await StopActiveAsync(workspace);
         
         var entry = new TimeEntryEntity
@@ -145,7 +143,6 @@ public class TimeEntryDao: ITimeEntryDao
         ProjectEntity? project = null
     )
     {
-        user.EnsureThatHasWorkspace(workspace);
         if (project != null && !workspace.ContainsProject(project))
         {
             throw new DataInconsistentException("Incorrect ProjectId");

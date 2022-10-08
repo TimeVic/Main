@@ -3,9 +3,11 @@ using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.Http;
+using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 {
@@ -17,6 +19,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
         private readonly ITimeEntryDao _timeEntryDao;
+        private readonly ISecurityManager _securityManager;
 
         public StartRequestHandler(
             IMapper mapper,
@@ -24,7 +27,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             IUserDao userDao,
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
-            ITimeEntryDao timeEntryDao
+            ITimeEntryDao timeEntryDao,
+            ISecurityManager securityManager
         )
         {
             _mapper = mapper;
@@ -33,16 +37,17 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
             _timeEntryDao = timeEntryDao;
+            _securityManager = securityManager;
         }
     
         public async Task<TimeEntryDto> ExecuteAsync(StartRequest request)
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var workspace = user.GetWorkspaceById(request.WorkspaceId);
-            if (workspace == null)
+            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
-                throw new RecordNotFoundException("Workspace not found");
+                throw new HasNoAccessException();
             }
 
             var timeEntry = await _timeEntryDao.StartNewAsync(

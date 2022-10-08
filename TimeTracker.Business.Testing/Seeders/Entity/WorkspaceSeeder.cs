@@ -24,7 +24,7 @@ public class WorkspaceSeeder: IWorkspaceSeeder
         for (int i = 0; i < count; i++)
         {
             var fakeEntry = _workspaceFactory.Generate();
-            var entry = await _workspaceDao.CreateWorkspace(user, fakeEntry.Name);
+            var entry = await _workspaceDao.CreateWorkspaceAsync(user, fakeEntry.Name);
             result.Add(entry);
         }
 

@@ -56,7 +56,7 @@ public class HasAccessTest: BaseTest
         };
         
         var user = await _userSeeder.CreateActivatedAsync();
-        var expectWorkspace = await _workspaceDao.CreateWorkspace(user, "New");
+        var expectWorkspace = await _workspaceDao.CreateWorkspaceAsync(user, "New");
         
         var expectedEntry = await _timeEntryDao.SetAsync(user, expectWorkspace, expectedDto);
         
@@ -75,7 +75,7 @@ public class HasAccessTest: BaseTest
         };
         
         var ownedUser = await _userSeeder.CreateActivatedAsync();
-        var expectWorkspace = await _workspaceDao.CreateWorkspace(ownedUser, "New");
+        var expectWorkspace = await _workspaceDao.CreateWorkspaceAsync(ownedUser, "New");
         
         var expectedEntry = await _timeEntryDao.SetAsync(ownedUser, expectWorkspace, expectedDto);
         
