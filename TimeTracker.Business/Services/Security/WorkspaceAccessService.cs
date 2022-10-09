@@ -82,16 +82,6 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         await _sessionProvider.CurrentSession.SaveAsync(membership);
         return membership;
     }
-    
-    public async Task<bool> RemoveAccessAsync(WorkspaceEntity workspace, UserEntity user)
-    {
-        var counter = await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
-            .Where(
-                item => item.User.Id == user.Id && item.Workspace.Id == workspace.Id
-            )
-            .DeleteAsync();
-        return counter > 0;
-    }
 
     public async Task<bool> RemoveAccessAsync(long membershipId)
     {

@@ -22,8 +22,6 @@ public interface IWorkspaceAccessService: IDomainService
         ICollection<ProjectEntity>? projects = null
     );
 
-    Task<bool> RemoveAccessAsync(WorkspaceEntity workspace, UserEntity user);
-
     Task<bool> RemoveAccessAsync(long membershipId);
     
     Task<MembershipAccessType?> GetAccessTypeAsync(
