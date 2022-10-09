@@ -10,4 +10,6 @@ public class WorkspaceMembershipDto : IResponse
     public MembershipAccessType Access { get; set; }
     
     public UserDto User { get; set; }
+
+    public ICollection<ProjectDto> Projects { get; set; } = new List<ProjectDto>();
 }

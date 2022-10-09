@@ -64,19 +64,30 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         membership.Access = access;
 
         projects ??= new List<ProjectEntity>();
-        membership.ProjectAccesses.Clear();
         if (projects.Any() && membership.Access != MembershipAccessType.Manager)
         {
+            // Add new items
             foreach (var project in projects)
             {
-                var projectAccess = new WorkspaceMembershipProjectAccessEntity()
+                if (membership.ProjectAccesses.All(item => item.Project.Id != project.Id))
                 {
-                    Project = project,
-                    CreateTime = DateTime.UtcNow,
-                    UpdateTime = DateTime.UtcNow,
-                    WorkspaceMembership = membership
-                };
-                membership.ProjectAccesses.Add(projectAccess);
+                    var projectAccess = new WorkspaceMembershipProjectAccessEntity()
+                    {
+                        Project = project,
+                        CreateTime = DateTime.UtcNow,
+                        UpdateTime = DateTime.UtcNow,
+                        WorkspaceMembership = membership
+                    };
+                    membership.ProjectAccesses.Add(projectAccess);
+                }
+            }
+            // Remove deleted items
+            foreach (var projectAccess in membership.ProjectAccesses.ToList())
+            {
+                if (projects.All(item => item.Id != projectAccess.Project.Id))
+                {
+                    membership.ProjectAccesses.Remove(projectAccess);
+                }
             }
         }
         await _sessionProvider.CurrentSession.SaveAsync(membership);

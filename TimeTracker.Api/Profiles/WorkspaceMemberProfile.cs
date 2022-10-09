@@ -9,6 +9,14 @@ public class WorkspaceMemberProfile : Profile
 {
     public WorkspaceMemberProfile()
     {
-        CreateMap<WorkspaceMembershipEntity, WorkspaceMembershipDto>();
+        CreateMap<WorkspaceMembershipEntity, WorkspaceMembershipDto>()
+            .ForMember(
+                dest => dest.Projects,
+                opt => opt.MapFrom(
+                    src => src.ProjectAccesses.Select(
+                        item => item.Project
+                    )
+                )
+            );
     }
 }

@@ -47,7 +47,7 @@ namespace TimeTracker.Business.Orm.Entities
         
         [Bag(
             Inverse = true,
-            Lazy = CollectionLazy.Extra,
+            Lazy = CollectionLazy.True,
             Cascade = "all-delete-orphan"
         )]
         [Key(Column = "workspace_id")]

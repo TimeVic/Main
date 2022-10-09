@@ -29,6 +29,14 @@ public class WorkspaceMembershipController : MainApiControllerBase
             .For<WorkspaceMembershipDto>()
             .With(request);
     
+    [HttpPost("update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Update([FromBody] UpdateRequest request)
+        => this.RequestAsync()
+            .For<WorkspaceMembershipDto>()
+            .With(request);
+    
     [HttpPost("list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

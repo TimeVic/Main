@@ -42,7 +42,7 @@ public class WorkspaceDao: IWorkspaceDao
     
     public async Task<ListDto<WorkspaceMembershipEntity>> GetMembershipsAsync(WorkspaceEntity workspace, int page)
     {
-        var query =_sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+        var query = _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
             .Where(item => item.Workspace.Id == workspace.Id);
         
         var offset = PaginationUtils.CalculateOffset(page);
@@ -54,5 +54,12 @@ public class WorkspaceDao: IWorkspaceDao
             items,
             await query.CountAsync()
         );
+    }
+    
+    public async Task<WorkspaceMembershipEntity> GetMembershipAsync(long id)
+    {
+        return await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Where(item => item.Id == id)
+            .FirstOrDefaultAsync();
     }
 }
