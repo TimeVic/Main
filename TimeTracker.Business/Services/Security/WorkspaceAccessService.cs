@@ -1,5 +1,6 @@
 ﻿using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;

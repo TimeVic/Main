@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Business.Orm.Constants;
+﻿namespace TimeTracker.Business.Common.Constants;
 
 public enum MembershipAccessType
 {

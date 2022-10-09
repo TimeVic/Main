@@ -1,6 +1,10 @@
 ﻿using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 
 namespace TimeTracker.Business.Orm.Dao;
 
@@ -34,5 +38,21 @@ public class WorkspaceDao: IWorkspaceDao
             .Where(item => item.Workspace.Id == workspace.Id)
             .Where(item => item.EndTime == null)
             .AnyAsync();
+    }
+    
+    public async Task<ListDto<WorkspaceMembershipEntity>> GetMembershipsAsync(WorkspaceEntity workspace, int page)
+    {
+        var query =_sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Where(item => item.Workspace.Id == workspace.Id);
+        
+        var offset = PaginationUtils.CalculateOffset(page);
+        var items = await query
+            .Skip(offset)
+            .Take(GlobalConstants.ListPageSize)
+            .ToListAsync();
+        return new ListDto<WorkspaceMembershipEntity>(
+            items,
+            await query.CountAsync()
+        );
     }
 }

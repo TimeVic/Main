@@ -8,5 +8,5 @@ public class UserDto
     
     public string Email { get; set; }
     
-    public WorkspaceDto DefaultWorkspace { get; set; }
+    public WorkspaceDto? DefaultWorkspace { get; set; }
 }

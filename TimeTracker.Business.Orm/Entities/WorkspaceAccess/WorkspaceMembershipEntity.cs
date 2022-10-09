@@ -1,6 +1,7 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
 
 namespace TimeTracker.Business.Orm.Entities.WorkspaceAccess
