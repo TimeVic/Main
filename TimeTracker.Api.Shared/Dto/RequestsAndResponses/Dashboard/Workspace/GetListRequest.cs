@@ -7,7 +7,4 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 
 public class GetListRequest: IRequest<PaginatedListDto<WorkspaceDto>>
 {
-    [Required]
-    [IsPositive]
-    public long WorkspaceId { get; set; }
 }
