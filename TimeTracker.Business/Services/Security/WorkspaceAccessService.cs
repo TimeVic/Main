@@ -1,5 +1,6 @@
 ﻿using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -81,21 +82,18 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         await _sessionProvider.CurrentSession.SaveAsync(membership);
         return membership;
     }
-    
-    public async Task<bool> RemoveAccessAsync(WorkspaceEntity workspace, UserEntity user)
+
+    public async Task<bool> RemoveAccessAsync(long membershipId)
     {
-        var membership = workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id);
-        if (membership != null)
-        {
-            membership.Workspace = null;
-            workspace.Memberships.Remove(membership);
-            await _sessionProvider.CurrentSession.SaveAsync(membership);
-            return true;
-        }
-
-        return false;
+        await _sessionProvider.CurrentSession.Query<WorkspaceMembershipProjectAccessEntity>()
+            .Where(item => item.WorkspaceMembership.Id == membershipId)
+            .DeleteAsync();
+        var counter = await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Where(item => item.Id == membershipId)
+            .DeleteAsync();
+        return counter > 0;
     }
-
+    
     public async Task<MembershipAccessType?> GetAccessTypeAsync(
         UserEntity user, 
         WorkspaceEntity workspace,

@@ -1,4 +1,5 @@
 using Autofac;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -46,7 +47,7 @@ public class RemoveAccessTest: BaseTest
         await DbSessionProvider.PerformCommitAsync();
         Assert.Equal(_workspace.Id, actualMembership.Workspace.Id);
 
-        var isRemoved = await _workspaceAccessService.RemoveAccessAsync(_workspace, expectedUser);
+        var isRemoved = await _workspaceAccessService.RemoveAccessAsync(actualMembership.Id);
         Assert.True(isRemoved);
         await DbSessionProvider.PerformCommitAsync();
 

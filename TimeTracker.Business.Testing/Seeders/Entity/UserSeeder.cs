@@ -31,6 +31,17 @@ public class UserSeeder: IUserSeeder
         return await _registrationService.CreatePendingUser(user.Email);
     }
 
+    public async Task<ICollection<UserEntity>> CreateActivatedAsync(int counter, string password = "test password")
+    {
+        var users = new List<UserEntity>();
+        for (int i = 0; i < counter; i++)
+        {
+            users.Add(await CreateActivatedAsync(password));
+        }
+
+        return users;
+    }
+    
     public async Task<UserEntity> CreateActivatedAsync(string password = "test password")
     {
         var user = await CreatePendingAsync();

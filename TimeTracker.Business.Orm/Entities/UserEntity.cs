@@ -47,7 +47,7 @@ namespace TimeTracker.Business.Orm.Entities
         
         [Bag(
             Inverse = true,
-            Lazy = CollectionLazy.Extra,
+            Lazy = CollectionLazy.True,
             Cascade = "all-delete-orphan"
         )]
         [Key(Column = "user_id")]
@@ -74,8 +74,8 @@ namespace TimeTracker.Business.Orm.Entities
         
         public virtual bool IsActivated => VerificationTime.HasValue;
         
-        public virtual WorkspaceEntity DefaultWorkspace => Workspaces
+        public virtual WorkspaceEntity? DefaultWorkspace => Workspaces
             .AsQueryable()
-            .First(item => item.IsDefault);
+            .FirstOrDefault(item => item.IsDefault);
     }
 }

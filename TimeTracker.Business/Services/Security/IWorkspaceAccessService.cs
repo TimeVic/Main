@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
@@ -21,7 +22,7 @@ public interface IWorkspaceAccessService: IDomainService
         ICollection<ProjectEntity>? projects = null
     );
 
-    Task<bool> RemoveAccessAsync(WorkspaceEntity workspace, UserEntity user);
+    Task<bool> RemoveAccessAsync(long membershipId);
     
     Task<MembershipAccessType?> GetAccessTypeAsync(
         UserEntity user,

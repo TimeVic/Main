@@ -1,6 +1,7 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
 
 namespace TimeTracker.Business.Orm.Entities.WorkspaceAccess
@@ -37,14 +38,14 @@ namespace TimeTracker.Business.Orm.Entities.WorkspaceAccess
             ClassType = typeof(UserEntity), 
             Column = "user_id", 
             Lazy = Laziness.Proxy,
-            Cascade = "all"
+            Cascade = "none"
         )]
         public virtual UserEntity User { get; set; }
         
         [Bag(
             Inverse = true,
             Lazy = CollectionLazy.Extra,
-            Cascade = "all"
+            Cascade = "all-delete-orphan"
         )]
         [Key(Column = "workspace_membership_id")]
         [OneToMany(ClassType = typeof(WorkspaceMembershipProjectAccessEntity))]
