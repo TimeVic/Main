@@ -37,6 +37,12 @@ public class WorkspaceMembershipController : MainApiControllerBase
             .For<WorkspaceMembershipDto>()
             .With(request);
     
+    [HttpPost("delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Update([FromBody] DeleteRequest request)
+        => this.RequestAsync(request);
+    
     [HttpPost("list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -26,6 +26,8 @@ public class AddTest: BaseTest
     
     private readonly UserEntity _newUser;
     private readonly WorkspaceEntity _workspace;
+    private string _otherJwtToken;
+    private UserEntity _otherUser;
 
     public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -36,6 +38,8 @@ public class AddTest: BaseTest
 
         _newUser = _userFactory.Generate();
         _workspace = _user.DefaultWorkspace;
+        
+        (_otherJwtToken, _otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]
@@ -72,7 +76,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Email = _newUser.Email,
-            WorkspaceId = _workspace.Id
+            WorkspaceId = _otherUser.DefaultWorkspace.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();

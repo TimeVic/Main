@@ -64,30 +64,19 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         membership.Access = access;
 
         projects ??= new List<ProjectEntity>();
+        membership.ProjectAccesses.Clear();
         if (projects.Any() && membership.Access != MembershipAccessType.Manager)
         {
-            // Add new items
             foreach (var project in projects)
             {
-                if (membership.ProjectAccesses.All(item => item.Project.Id != project.Id))
+                var projectAccess = new WorkspaceMembershipProjectAccessEntity()
                 {
-                    var projectAccess = new WorkspaceMembershipProjectAccessEntity()
-                    {
-                        Project = project,
-                        CreateTime = DateTime.UtcNow,
-                        UpdateTime = DateTime.UtcNow,
-                        WorkspaceMembership = membership
-                    };
-                    membership.ProjectAccesses.Add(projectAccess);
-                }
-            }
-            // Remove deleted items
-            foreach (var projectAccess in membership.ProjectAccesses.ToList())
-            {
-                if (projects.All(item => item.Id != projectAccess.Project.Id))
-                {
-                    membership.ProjectAccesses.Remove(projectAccess);
-                }
+                    Project = project,
+                    CreateTime = DateTime.UtcNow,
+                    UpdateTime = DateTime.UtcNow,
+                    WorkspaceMembership = membership
+                };
+                membership.ProjectAccesses.Add(projectAccess);
             }
         }
         await _sessionProvider.CurrentSession.SaveAsync(membership);
@@ -96,18 +85,25 @@ public class WorkspaceAccessService: IWorkspaceAccessService
     
     public async Task<bool> RemoveAccessAsync(WorkspaceEntity workspace, UserEntity user)
     {
-        var membership = workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id);
-        if (membership != null)
-        {
-            membership.Workspace = null;
-            workspace.Memberships.Remove(membership);
-            await _sessionProvider.CurrentSession.SaveAsync(membership);
-            return true;
-        }
-
-        return false;
+        var counter = await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Where(
+                item => item.User.Id == user.Id && item.Workspace.Id == workspace.Id
+            )
+            .DeleteAsync();
+        return counter > 0;
     }
 
+    public async Task<bool> RemoveAccessAsync(long membershipId)
+    {
+        await _sessionProvider.CurrentSession.Query<WorkspaceMembershipProjectAccessEntity>()
+            .Where(item => item.WorkspaceMembership.Id == membershipId)
+            .DeleteAsync();
+        var counter = await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Where(item => item.Id == membershipId)
+            .DeleteAsync();
+        return counter > 0;
+    }
+    
     public async Task<MembershipAccessType?> GetAccessTypeAsync(
         UserEntity user, 
         WorkspaceEntity workspace,
