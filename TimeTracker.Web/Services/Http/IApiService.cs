@@ -2,6 +2,7 @@ using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses;
+using TimeTracker.Business.Common.Constants;
 
 namespace TimeTracker.Web.Services.Http
 {
@@ -60,6 +61,25 @@ namespace TimeTracker.Web.Services.Http
         #region Report
 
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report.PaymentReportResponse> ReportsGetPaymentsReportAsync(long workspaceId);
+
+        #endregion
+        
+        #region WorkspaceMembership
+
+        Task<WorkspaceMembershipDto> WorkspaceMembershipAddAsync(long workspaceId, string email);
+
+        Task<WorkspaceMembershipDto> WorkspaceMembershipUpdateAsync(
+            long membershipId,
+            MembershipAccessType access,
+            ICollection<long> projectIds
+        );
+
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.GetListResponse>
+            WorkspaceMembershipGetListAsync(
+                TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.GetListRequest model
+            );
+
+        Task WorkspaceMembershipDeleteAsync(long membershipId);
 
         #endregion
     }
