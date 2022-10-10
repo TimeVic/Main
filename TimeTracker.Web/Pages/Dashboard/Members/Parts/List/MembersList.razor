@@ -40,11 +40,11 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Projects">
+                <Template Context="item">
+                    @string.Join(", ", item.Projects.Select(project => project.Name))
+                </Template>
                 <EditTemplate Context="item">
-                    <EnumDropDown
-                        TItem="MembershipAccessType"
-                        Style="width:100%; display: block"
-                        Name="Name"/>
+                    <ProjectsMultipleDropDown />
                 </EditTemplate>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn
