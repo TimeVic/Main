@@ -162,4 +162,21 @@ public class UpdateTest: BaseTest
         var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
         Assert.Equal(3, actualMembership.Projects.Count);
     }
+    
+    [Fact]
+    public async Task ShouldUpdateMembershipForOtherUser()
+    {
+        var expectAccess = MembershipAccessType.Manager;
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            MembershipId = _membership.Id,
+            Access = expectAccess,
+            ProjectIds = _projects.Select(item => item.Id).ToArray()
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
+        Assert.True(actualMembership.Id > 0);
+        Assert.Equal(_otherUser.Id, actualMembership.User.Id);
+    }
 }
