@@ -12,3 +12,5 @@ public record struct SetListItemAction(ClientDto Client);
 public record struct SetIsListLoading(bool IsLoading);
 
 public record struct AddNewMemberAction(string Email);
+
+public record struct DeleteMemberAction(WorkspaceMembershipDto Membership);

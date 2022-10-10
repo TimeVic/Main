@@ -62,17 +62,13 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task WorkspaceMembershipDeleteAsync(long membershipId)
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(
+            await PostAuthorizedAsync<object>(
                 ApiUrl.WorkspaceMembershipDelete,
                 new DeleteRequest()
                 {
                     MembershipId = membershipId
                 }
             );
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
         }
     }
 }

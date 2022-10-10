@@ -17,27 +17,4 @@ public record WorkspaceMembershipsState
     public bool IsListLoading { get; set; }
 
     public bool IsLoaded { get; set; } = false;
-    
-    public bool HasItemToAdd
-    {
-        get => ItemToAdd != null;
-    }
-    
-    public WorkspaceMembershipDto? ItemToAdd
-    {
-        get => List.FirstOrDefault(item => item.Id == 0);
-    }
-    
-    public ICollection<WorkspaceMembershipDto> SortedList
-    {
-        get
-        {
-            var query = List.AsQueryable();
-            if (HasItemToAdd)
-            {
-                query = query.OrderBy(item => item.Id);
-            }
-            return query.ToList();
-        }
-    }
 }

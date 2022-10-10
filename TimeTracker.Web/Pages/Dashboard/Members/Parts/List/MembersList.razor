@@ -8,36 +8,47 @@
     <RadzenButton
         Icon="add_circle_outline"
         class="mb-3"
-        Text="Add client"
-        Click="@InsertRow"
-        Disabled="@_state.Value.HasItemToAdd"/>
+        Text="Add member"
+        Click="ShowAddModal"/>
 
     <RadzenDataGrid
         @ref="@_grid"
-        TItem="ClientDto"
+        TItem="WorkspaceMembershipDto"
         AllowSorting="false"
         EditMode="DataGridEditMode.Single"
         PageSize="@GlobalConstants.ListPageSize"
         RowUpdate="@OnUpdateRow"
-        Data="@_state.Value.SortedList"
+        Data="@_state.Value.List"
         AllowPaging="false"
         IsLoading="@_state.Value.IsListLoading"
         Count="@_state.Value.TotalCount"
         ColumnWidth="200px">
 
         <Columns>
-            <RadzenDataGridColumn TItem="ClientDto" Property="Name" Title="Name">
-                <EditTemplate Context="app">
-                    <RadzenTextBox @bind-Value="@app.Name" Style="width:100%; display: block" Name="Name"/>
-                    <RadzenLengthValidator
-                        Component="Name"
-                        Min="3"
-                        Max="255"
-                        Style="position: absolute"/>
+            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="User">
+                <Template Context="item">
+                    @item.User.Email
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Access">
+
+                <EditTemplate Context="item">
+                    <EnumDropDown
+                        TItem="MembershipAccessType"
+                        Style="width:100%; display: block"
+                        Name="Name"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Projects">
+                <EditTemplate Context="item">
+                    <EnumDropDown
+                        TItem="MembershipAccessType"
+                        Style="width:100%; display: block"
+                        Name="Name"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn
-                TItem="ClientDto"
+                TItem="WorkspaceMembershipDto"
                 Context="app" Filterable="false"
                 Sortable="false"
                 TextAlign="TextAlign.Center"
@@ -46,11 +57,17 @@
                 <Template Context="item">
 
                     <RadzenButton
+                        Size="ButtonSize.Small"
                         Icon="edit"
                         ButtonStyle="ButtonStyle.Light"
                         Click="@(args => EditRow(item))"
                         @onclick:stopPropagation="true">
                     </RadzenButton>
+                    <RadzenButton
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Danger"
+                        Icon="delete"
+                        Click="async () => await OnDeleteItemAsync(item)"/>
                 </Template>
                 <EditTemplate Context="item">
 
