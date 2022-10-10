@@ -71,7 +71,7 @@ namespace TimeTracker.Web.Services.Http
         Task<WorkspaceMembershipDto> WorkspaceMembershipUpdateAsync(
             long membershipId,
             MembershipAccessType access,
-            ICollection<long> projectIds
+            ICollection<long>? projectIds
         );
 
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.GetListResponse>

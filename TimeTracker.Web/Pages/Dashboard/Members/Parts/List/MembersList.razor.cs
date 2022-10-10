@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Shared.Components.Form;
@@ -64,14 +65,12 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
     
         private async Task OnUpdateRow(WorkspaceMembershipDto item)
         {
-            Debug.Log(item, _selectedProjects);
-            if (item.Id > 0)
+            Dispatcher.Dispatch(new UpdateMemberAction()
             {
-                // await UpdateApplication(item);
-                return;
-            }
-
-            // Dispatcher.Dispatch(new SaveEmptyClientListItemAction());
+                MembershipId = item.Id,
+                Access = item.Access,
+                Projects = _selectedProjects.ToList()
+            });
         }
         
         private async Task ShowAddModal()

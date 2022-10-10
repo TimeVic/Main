@@ -52,7 +52,16 @@
                     }
                     else
                     {
-                        <text>@string.Join(", ", item.Projects.Select(project => project.Name))</text>
+                        if (item.Projects?.Count() == 0)
+                        {
+                            <text>Project not selected</text>
+                        }
+                        else
+                        {
+                            <ProjectsMultipleDropDown
+                                Disabled="true"
+                                Value="@(item.Projects?.Select(item => item.Id) ?? new List<long>())"/>    
+                        }
                     }
                 </Template>
                 <EditTemplate Context="item">
