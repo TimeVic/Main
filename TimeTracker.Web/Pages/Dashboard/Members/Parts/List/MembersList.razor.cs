@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Shared.Components.Form;
 using TimeTracker.Web.Store.WorkspaceMemberships;
 
 namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
@@ -13,6 +16,12 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
         private IState<WorkspaceMembershipsState> _state { get; set; }
     
         private RadzenDataGrid<WorkspaceMembershipDto> _grid;
+        private IEnumerable<ProjectDto> _selectedProjects = new List<ProjectDto>();
+        private ICollection<MembershipAccessType> _allowedAccessLevels = new List<MembershipAccessType>()
+        {
+            MembershipAccessType.User,
+            MembershipAccessType.Manager
+        };
 
         protected override async Task OnInitializedAsync()
         {
@@ -50,12 +59,12 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
 
         private void OnClickCancelEditMode(WorkspaceMembershipDto item)
         {
-            // Dispatcher.Dispatch(new RemoveEmptyClientListItemAction());
             _grid.CancelEditRow(item);
         }
     
         private async Task OnUpdateRow(WorkspaceMembershipDto item)
         {
+            Debug.Log(item, _selectedProjects);
             if (item.Id > 0)
             {
                 // await UpdateApplication(item);
@@ -71,6 +80,11 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
                 "Add new member",
                 options: new DialogOptions { Width = "400px", Height = "300px", Resizable = true, Draggable = false }
             );
+        }
+        
+        private void OnProjectsChanged(IEnumerable<ProjectDto> projects)
+        {
+            _selectedProjects = projects;
         }
     }
 }

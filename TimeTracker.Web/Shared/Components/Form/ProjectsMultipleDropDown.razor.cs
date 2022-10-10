@@ -19,7 +19,16 @@ public partial class ProjectsMultipleDropDown
     public IEnumerable<long> Value
     {
         get => _selectedIds;
-        set => _selectedIds = value;
+        set
+        {
+            if (
+                _selectedIds.Count() != value.Count()
+                || !_selectedIds.All(value.Contains)
+            )
+            {
+                _selectedIds = value;
+            }
+        }
     }
     
     [Parameter]

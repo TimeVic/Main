@@ -10,7 +10,7 @@ public partial class EnumDropDown<TItem>
         get => _value;
         set => _value = value;
     }
-    
+
     [Parameter]
     public EventCallback<TItem> ValueChanged { get; set; }
 
@@ -20,13 +20,28 @@ public partial class EnumDropDown<TItem>
     [Parameter]
     public string Class { get; set; }
     
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public bool AllowClear { get; set; } = false;
+    
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public ICollection<TItem> AllowedValues { get; set; } = new List<TItem>();
+    
     private List<TItem> _list;
     private TItem _value;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _list = Enum.GetValues(typeof(TItem)).Cast<TItem>().ToList();
+        _list = Enum.GetValues(typeof(TItem))
+            .Cast<TItem>()
+            .Where(item => AllowedValues.Count == 0 || AllowedValues.Contains(item))
+            .ToList();
     }
     
     private void OnItemSelected(TItem level)

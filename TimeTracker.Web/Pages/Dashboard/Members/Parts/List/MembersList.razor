@@ -2,6 +2,7 @@
 
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
+@using TimeTracker.Business.Extensions
 
 <div class="row d-flex px-3 justify-content-center w-time-form mt-3">
 
@@ -30,21 +31,34 @@
                     @item.User.Email
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Access">
-
+            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Access Level">
+                <Template Context="item">
+                    @item.Access.GetDisplayName()
+                </Template>
                 <EditTemplate Context="item">
                     <EnumDropDown
                         TItem="MembershipAccessType"
-                        Style="width:100%; display: block"
-                        Name="Name"/>
+                        AllowClear="false"
+                        AllowedValues="_allowedAccessLevels"
+                        @bind-Value="item.Access"
+                        Name="Access level"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Projects">
                 <Template Context="item">
-                    @string.Join(", ", item.Projects.Select(project => project.Name))
+                    @if (item.Access is MembershipAccessType.Manager or MembershipAccessType.Owner)
+                    {
+                        <text>All</text>
+                    }
+                    else
+                    {
+                        <text>@string.Join(", ", item.Projects.Select(project => project.Name))</text>
+                    }
                 </Template>
                 <EditTemplate Context="item">
-                    <ProjectsMultipleDropDown />
+                    <ProjectsMultipleDropDown
+                        Value="@(item.Projects?.Select(item => item.Id) ?? new List<long>())"
+                        SelectedItemsChanged="OnProjectsChanged"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn
