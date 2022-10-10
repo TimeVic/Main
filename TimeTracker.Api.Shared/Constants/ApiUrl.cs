@@ -58,4 +58,10 @@ public class ApiUrl
     public const string WorkspaceMembershipList = "dashboard/workspace/membership/list";
     
     #endregion
+    
+    #region Workspace
+    
+    public const string WorkspaceList = "dashboard/workspace/list";
+    
+    #endregion
 }

@@ -1,5 +1,7 @@
 ﻿@inherits BaseComponent
 
+@using TimeTracker.Web.Shared.Components.Layout
+
 <RadzenHeader>
     <div class="row justify-content-start align-items-center p-1">
         <div class="col-5 d-flex align-items-center">
@@ -15,6 +17,7 @@
                     <RadzenLink
                         Path="@SiteUrl.DashboardBase"
                         Text="Dashboard"/>
+                    <WorkspaceMenu/>
                 }
                 else
                 {
