@@ -69,6 +69,7 @@ public class UserDao: IUserDao
     {
         var ownedWorkspaces = user.Workspaces;
         var otherWorkspaces = await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Where(item => item.User.Id == user.Id)
             .Select(item => item.Workspace)
             .ToListAsync();
         return ownedWorkspaces.Concat(otherWorkspaces).ToList();
