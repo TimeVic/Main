@@ -57,7 +57,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
             }
             var workspaceMembership = await _workspaceAccessService.ShareAccessAsync(
                 membership.Workspace,
-                user,
+                membership.User,
                 request.Access,
                 projects
             );
