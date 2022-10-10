@@ -3,7 +3,7 @@
 @typeparam TItem where TItem: struct, IConvertible
 
 <RadzenDropDown
-    AllowClear="true"
+    AllowClear="AllowClear"
     TValue="TItem"
     Class="@("w-100 " + Class)"
     AllowFiltering="false"
@@ -13,6 +13,8 @@
     ValueProperty="Id"
     Placeholder="@Placeholder"
     Value="@_value"
+    Name="@Name"
+    Style="@Style"
     ValueChanged="OnItemSelected">
 
     <Template Context="value">

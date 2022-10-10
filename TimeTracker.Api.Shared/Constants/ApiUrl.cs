@@ -49,4 +49,13 @@ public class ApiUrl
     public const string ReportPayments = "dashboard/report/payments";
     
     #endregion
+    
+    #region Workspace Membership
+    
+    public const string WorkspaceMembershipAdd = "dashboard/workspace/membership/add";
+    public const string WorkspaceMembershipUpdate = "dashboard/workspace/membership/update";
+    public const string WorkspaceMembershipDelete = "dashboard/workspace/membership/delete";
+    public const string WorkspaceMembershipList = "dashboard/workspace/membership/list";
+    
+    #endregion
 }

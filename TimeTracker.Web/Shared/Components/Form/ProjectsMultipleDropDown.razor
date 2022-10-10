@@ -1,0 +1,41 @@
+﻿@inherits BaseComponent
+
+@using Newtonsoft.Json
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
+
+<div class="@(Class + " w-dropdown-projects-multiple")">
+    
+    <RadzenDropDown
+        @ref="_listReference"
+        Disabled="Disabled"
+        PageSize="GlobalConstants.ListPageSize"
+        AllowClear="true"
+        AllowSelectAll="false"
+        TValue="IEnumerable<long>"
+        AllowFiltering="false"
+        AllowSorting="false"
+        AllowVirtualization="true"
+        Multiple="true"
+        MaxSelectedLabels="10"
+        Chips="true"
+        Data="@_list"
+        TextProperty="Name"
+        ValueProperty="Id"
+        Placeholder="@Placeholder"
+        Value="@_selectedIds"
+        ValueChanged="async (value) => await OnValueChanged(value)">
+        <Template>
+            @{
+                var project = context as ProjectDto;
+            }
+            <div>@project.Name</div>
+            @if (project.Client != null)
+            {
+                <RadzenText class="mt-2 d-block" TextStyle="TextStyle.Caption">
+                    @project.Client?.Name
+                </RadzenText>
+            }
+        </Template>
+    </RadzenDropDown>
+</div>

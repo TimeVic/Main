@@ -62,3 +62,8 @@ a, .btn-link {
 .blazor-error-boundary::after {
     content: "An error has occurred."
 }
+
+.rz-multiselect-panel.rz-popup .rz-multiselect-item {
+    display: flex !important;
+    justify-content: flex-start !important;
+}
