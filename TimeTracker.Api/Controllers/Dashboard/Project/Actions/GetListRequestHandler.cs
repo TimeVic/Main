@@ -17,13 +17,15 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly ISecurityManager _securityManager;
+        private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public GetListRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
             IProjectDao projectDao,
-            ISecurityManager securityManager
+            ISecurityManager securityManager,
+            IWorkspaceAccessService workspaceAccessService
         )
         {
             _mapper = mapper;
@@ -31,6 +33,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             _userDao = userDao;
             _projectDao = projectDao;
             _securityManager = securityManager;
+            _workspaceAccessService = workspaceAccessService;
         }
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
@@ -43,7 +46,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
                 throw new HasNoAccessException();
             }
 
-            var listDto = await _projectDao.GetListAsync(workspace);
+            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+
+            var listDto = await _projectDao.GetListAsync(workspace, user, userAccess);
             return new GetListResponse(
                 _mapper.Map<ICollection<ProjectDto>>(listDto.Items),
                 listDto.TotalCount

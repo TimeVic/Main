@@ -1,6 +1,7 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
+using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -59,6 +60,15 @@ namespace TimeTracker.Business.Orm.Entities
         [Key(Column = "project_id")]
         [OneToMany(ClassType = typeof(PaymentEntity))]
         public virtual ICollection<PaymentEntity> Payments { get; set; } = new List<PaymentEntity>();
+        
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.Extra,
+            Cascade = "none"
+        )]
+        [Key(Column = "project_id")]
+        [OneToMany(ClassType = typeof(WorkspaceMembershipProjectAccessEntity))]
+        public virtual ICollection<WorkspaceMembershipProjectAccessEntity> MembershipProjectAccess { get; set; } = new List<WorkspaceMembershipProjectAccessEntity>();
 
         public virtual void SetClient(ClientEntity? client)
         {

@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
 
@@ -12,7 +13,11 @@ public interface IProjectDao: IDomainService
 
     Task<ProjectEntity?> GetById(long? projectId);
 
-    Task<ListDto<ProjectEntity>> GetListAsync(WorkspaceEntity workspace);
+    Task<ListDto<ProjectEntity>> GetListAsync(
+        WorkspaceEntity workspace,
+        UserEntity? user = null,
+        MembershipAccessType? accessType = null
+    );
 
     Task<bool> HasAccessAsync(UserEntity user, ProjectEntity? entity);
 }
