@@ -4,7 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 namespace TimeTracker.Web.Store.Auth;
 
 [FeatureState]
-public class AuthState
+public record AuthState
 {
     public bool IsLoggedIn => !string.IsNullOrEmpty(Jwt);
 

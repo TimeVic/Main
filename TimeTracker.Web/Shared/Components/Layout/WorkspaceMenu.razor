@@ -1,0 +1,18 @@
+﻿@inherits BaseComponent
+
+@if (_workpsaceState.Value.IsLoaded)
+{
+    <RadzenMenu class="ml-3 mr-3">
+        <RadzenMenuItem Text="@_authState.Value.Workspace.Name" Icon="event_seat">
+            @foreach (var workspace in _workpsaceState.Value.List)
+            {
+                <RadzenMenuItem Text="@workspace.Name" Click="() => OnClickToMenuItem(workspace)"/>    
+            }
+            <RadzenMenuItem 
+                Text="Manage"
+                Icon="build"
+                Path="@SiteUrl.Workspace_List"
+            />
+        </RadzenMenuItem>
+    </RadzenMenu>    
+}

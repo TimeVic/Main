@@ -1,6 +1,4 @@
-﻿using TimeTracker.Web.Store.Client;
-using TimeTracker.Web.Store.Project;
-
+﻿
 namespace TimeTracker.Web.Pages.Dashboard.Shared;
 
 public partial class Layout
@@ -13,8 +11,9 @@ public partial class Layout
     
     protected override Task OnAppInitializedAsync()
     {
-        Dispatcher.Dispatch(new LoadProjectListAction(false));
-        Dispatcher.Dispatch(new LoadClientListAction(false));
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadProjectListAction(false));
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Client.LoadClientListAction(false));
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Workspace.LoadListAction(false));
         return Task.CompletedTask;
     }
 }

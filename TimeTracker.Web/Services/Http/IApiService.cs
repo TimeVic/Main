@@ -82,5 +82,11 @@ namespace TimeTracker.Web.Services.Http
         Task WorkspaceMembershipDeleteAsync(long membershipId);
 
         #endregion
+        
+        #region Workspace
+        
+        Task<PaginatedListDto<WorkspaceDto>> WorkspaceGetListAsync();
+        
+        #endregion
     }
 }
