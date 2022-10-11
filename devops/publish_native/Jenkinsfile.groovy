@@ -52,7 +52,8 @@ node('lm-web-1') {
         dockerHelper.buildContainer(webAppContainer)
     }
 
-    stage('Set environment vars') {    
+    stage('Set environment vars') {
+        envVariables.put('App__FrontendUrl', 'https://timevic.com')
         envVariables.put('Serilog__IsSendEmailIfError', 'false')
         envVariables.put('Serilog__MinimumLevel__Default', 'Debug')
 
