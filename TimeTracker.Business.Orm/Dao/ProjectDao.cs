@@ -65,7 +65,8 @@ public class ProjectDao: IProjectDao
 
         if (
             user != null 
-            && accessType is not MembershipAccessType.Manager or MembershipAccessType.Owner
+            && accessType != MembershipAccessType.Manager 
+            && accessType != MembershipAccessType.Owner
         )
         {
             // Is not owner
