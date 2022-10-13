@@ -14,5 +14,15 @@ public interface IUserSeeder: IDomainService
     
     Task<(string token, UserEntity user)> CreateAuthorizedAsync(string password = "test password");
 
-    Task<UserEntity> CreateActivatedAndShareAsync(WorkspaceEntity workspace, MembershipAccessType access = MembershipAccessType.User);
+    Task<UserEntity> CreateActivatedAndShareAsync(
+        WorkspaceEntity workspace,
+        MembershipAccessType access = MembershipAccessType.User,
+        ICollection<ProjectEntity>? projects = null
+    );
+
+    Task<(string token, UserEntity user)> CreateAuthorizedAndShareAsync(
+        WorkspaceEntity workspace,
+        MembershipAccessType access = MembershipAccessType.User,
+        ICollection<ProjectEntity>? projects = null
+    );
 }
