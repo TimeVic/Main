@@ -1,6 +1,8 @@
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Auth;
+using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Testing.Factories;
 
 namespace TimeTracker.Business.Testing.Seeders.Entity;
@@ -9,6 +11,7 @@ public class UserSeeder: IUserSeeder
 {
     private readonly IDataFactory<UserEntity> _userFactory;
     private readonly IJwtAuthService _jwtAuthService;
+    private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IDbSessionProvider _dbSessionProvider;
     private readonly IRegistrationService _registrationService;
 
@@ -16,13 +19,15 @@ public class UserSeeder: IUserSeeder
         IDbSessionProvider dbSessionProvider,
         IRegistrationService registrationService,
         IDataFactory<UserEntity> userFactory,
-        IJwtAuthService jwtAuthService
+        IJwtAuthService jwtAuthService,
+        IWorkspaceAccessService workspaceAccessService
     )
     {
         _dbSessionProvider = dbSessionProvider;
         _registrationService = registrationService;
         _userFactory = userFactory;
         _jwtAuthService = jwtAuthService;
+        _workspaceAccessService = workspaceAccessService;
     }
 
     public async Task<UserEntity> CreatePendingAsync()
@@ -57,5 +62,17 @@ public class UserSeeder: IUserSeeder
             _jwtAuthService.BuildJwt(user.Id),
             user
         );
+    }
+    
+    public async Task<UserEntity> CreateActivatedAndShareAsync(
+        WorkspaceEntity workspace,
+        MembershipAccessType access = MembershipAccessType.User
+    )
+    {
+        var user = await CreatePendingAsync();
+        user = await _registrationService.ActivateUser(user.VerificationToken, "Test password");
+        await _dbSessionProvider.PerformCommitAsync();
+        await _workspaceAccessService.ShareAccessAsync(workspace, user, access);
+        return user;
     }
 }

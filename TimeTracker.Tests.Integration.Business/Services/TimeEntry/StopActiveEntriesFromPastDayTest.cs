@@ -75,7 +75,7 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
         await DbSessionProvider.CurrentSession.RefreshAsync(previousEntry);
         Assert.False(previousEntry.IsActive);
 
-        var newEntry = await _timeEntryDao.GetActiveEntryAsync(_workspace);
+        var newEntry = await _timeEntryDao.GetActiveEntryAsync(_workspace, _user);
         Assert.NotNull(newEntry);
         Assert.True(newEntry.IsActive);
         

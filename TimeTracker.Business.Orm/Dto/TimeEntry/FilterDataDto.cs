@@ -9,4 +9,6 @@ public class FilterDataDto
     public string? Search { get; set; }
     
     public bool? IsBillable { get; set; }
+    
+    public long? UserId { get; set; }
 }

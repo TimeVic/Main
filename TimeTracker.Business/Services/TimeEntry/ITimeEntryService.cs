@@ -6,7 +6,7 @@ namespace TimeTracker.Business.Services.TimeEntry;
 
 public interface ITimeEntryService: IDomainService
 {
-    Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace);
+    Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace, UserEntity user);
 
     Task<TimeEntryEntity> SetAsync(
         UserEntity user,

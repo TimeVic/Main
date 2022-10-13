@@ -1,6 +1,8 @@
 using Autofac;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
@@ -12,12 +14,14 @@ public class StopActiveTest: BaseTest
     private readonly IUserSeeder _userSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IWorkspaceDao _workspaceDao;
+    private readonly IWorkspaceAccessService _workspaceAccessService;
 
     public StopActiveTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
+        _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
     }
 
     [Fact]
@@ -28,11 +32,37 @@ public class StopActiveTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(user, workspace, true);
         Assert.Null(activeEntry.EndTime);
         
-        await _timeEntryDao.StopActiveAsync(workspace);
+        await _timeEntryDao.StopActiveAsync(workspace, user);
         await CommitDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
         Assert.NotNull(activeEntry.EndTime);
+    }
+    
+    [Fact]
+    public async Task ShouldStopActiveOnlyForCurrentUser()
+    {
+        var user = await _userSeeder.CreateActivatedAsync();
+        var workspace = user.Workspaces.First();
+        var activeEntry = await _timeEntryDao.StartNewAsync(user, workspace);
+
+        var otherUser = await _userSeeder.CreateActivatedAsync();
+        await _workspaceAccessService.ShareAccessAsync(workspace, otherUser, MembershipAccessType.User);
+        var otherActiveEntry = await _timeEntryDao.StartNewAsync(otherUser, workspace);
+
+        var activeEntries = await _timeEntryDao.GetActiveEntriesAsync(workspace);
+        Assert.Equal(2, activeEntries.Count);
+        
+        await _timeEntryDao.StopActiveAsync(workspace, user);
+        await CommitDbChanges();
+
+        activeEntries = await _timeEntryDao.GetActiveEntriesAsync(workspace);
+        Assert.Equal(1, activeEntries.Count);
+        
+        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+        Assert.NotNull(activeEntry.EndTime);
+        await DbSessionProvider.CurrentSession.RefreshAsync(otherActiveEntry);
+        Assert.Null(otherActiveEntry.EndTime);
     }
     
     [Fact]
@@ -45,8 +75,8 @@ public class StopActiveTest: BaseTest
         Assert.Null(activeEntry.EndTime);
         
         var workspace2 = user.Workspaces.Last();
-        await _timeEntryDao.StopActiveAsync(workspace2);
-        var stoppedEntry = await _timeEntryDao.GetActiveEntryAsync(workspace2);
+        await _timeEntryDao.StopActiveAsync(workspace2, user);
+        var stoppedEntry = await _timeEntryDao.GetActiveEntryAsync(workspace2, user);
         Assert.Null(stoppedEntry);
     }
     
@@ -56,7 +86,7 @@ public class StopActiveTest: BaseTest
         var user = await _userSeeder.CreateActivatedAsync();
         var workspace1 = user.Workspaces.First();
         var startedEntry = await _timeEntryDao.StartNewAsync(user, workspace1, true);
-        await _timeEntryDao.StopActiveAsync(workspace1);
+        await _timeEntryDao.StopActiveAsync(workspace1, user);
         await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(startedEntry);
         Assert.True(startedEntry.EndTime >= startedEntry.StartTime);

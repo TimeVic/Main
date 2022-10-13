@@ -37,9 +37,9 @@ public class TimeEntryService : ITimeEntryService
         _queueService = queueService;
     }
 
-    public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace)
+    public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace, UserEntity user)
     {
-        var timeEntries = await _timeEntryDao.StopActiveAsync(workspace);
+        var timeEntries = await _timeEntryDao.StopActiveAsync(workspace, user);
         foreach (var timeEntry in timeEntries)
         {
             await _queueService.PushDefaultAsync(new IntegrationAppQueueItemContext(timeEntry.Id));

@@ -58,6 +58,10 @@ public class TimeEntryDao: ITimeEntryDao
             {
                 query = query.Where(item => item.IsBillable == filter.IsBillable);
             }
+            if (filter.UserId.HasValue)
+            {
+                query = query.Where(item => item.User.Id == filter.UserId);
+            }
             if (!string.IsNullOrEmpty(filter.Search))
             {
                 query = query.Where(
@@ -89,7 +93,7 @@ public class TimeEntryDao: ITimeEntryDao
         decimal? hourlyRate = null
     )
     {
-        await StopActiveAsync(workspace);
+        await StopActiveAsync(workspace, user);
         
         var entry = new TimeEntryEntity
         {
@@ -113,14 +117,16 @@ public class TimeEntryDao: ITimeEntryDao
         return entry;
     }
 
-    public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace)
+    public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace, UserEntity user)
     {
         var activeTimeEntries = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
             .Where(
-                item => item.Workspace.Id == workspace.Id && item.EndTime == null
+                item => item.Workspace.Id == workspace.Id 
+                    && item.User.Id == user.Id
+                    && item.EndTime == null
             )
             .ToListAsync();
-        if (activeTimeEntries.Count() > 1)
+        if (activeTimeEntries.Count > 1)
         {
             _logger.LogError(
                 "Workspace contains more than one active time entry. WorkspaceId: {WorkspaceId}",
@@ -201,12 +207,21 @@ public class TimeEntryDao: ITimeEntryDao
         return itemsWithAccessCount > 0;
     }
     
-    public async Task<TimeEntryEntity?> GetActiveEntryAsync(WorkspaceEntity workspace)
+    public async Task<TimeEntryEntity?> GetActiveEntryAsync(WorkspaceEntity workspace, UserEntity user)
     {
         return await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
             .Where(entry => entry.EndTime == null)
             .Where(entry => entry.Workspace.Id == workspace.Id)
+            .Where(entry => entry.User.Id == user.Id)
             .FirstOrDefaultAsync();
+    }
+    
+    public async Task<ICollection<TimeEntryEntity>> GetActiveEntriesAsync(WorkspaceEntity workspace)
+    {
+        return await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+            .Where(entry => entry.EndTime == null)
+            .Where(entry => entry.Workspace.Id == workspace.Id)
+            .ToListAsync();
     }
 
     public async Task<TimeEntryEntity?> GetActiveEntryForPastDay(
