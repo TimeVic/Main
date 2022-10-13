@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -18,9 +19,11 @@ public class GetListTest: BaseTest
     private readonly WorkspaceEntity _defaultWorkspace;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly ITimeEntryDao _timeEntryDao;
+    private readonly IUserSeeder _userSeeder;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
+        _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
@@ -63,6 +66,31 @@ public class GetListTest: BaseTest
             Assert.True(item.EndTime > TimeSpan.MinValue);
             Assert.True(item.Date > DateTime.MinValue);
         });
+    }
+    
+    [Fact]
+    public async Task ShouldReceiveOnlyForCurrentUserList()
+    {
+        var workspace = _user.DefaultWorkspace;
+        var expectedCounter = 15;
+        await _timeEntrySeeder.CreateSeveralAsync(_user, expectedCounter);
+        await _timeEntryDao.StartNewAsync(_user, workspace);
+     
+        var otherUser = await _userSeeder.CreateActivatedAndShareAsync(workspace);
+        await _timeEntrySeeder.CreateSeveralAsync(workspace, otherUser, expectedCounter);
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id,
+            Page = 1
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter + 1, actualDto.List.TotalCount);
+
+        var activeEntry = await _timeEntryDao.GetActiveEntryAsync(workspace, _user);
+        Assert.Equal(activeEntry.Id, actualDto.ActiveTimeEntry.Id);
     }
     
     [Fact]

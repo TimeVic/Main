@@ -42,7 +42,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new HasNoAccessException();
             }
 
-            await _timeEntryService.StopActiveAsync(workspace);
+            await _timeEntryService.StopActiveAsync(workspace, user);
         }
     }
 }

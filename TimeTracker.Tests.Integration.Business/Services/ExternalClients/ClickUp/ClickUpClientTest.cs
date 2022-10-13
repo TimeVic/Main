@@ -56,7 +56,7 @@ public class SendNewTimeEntityTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
         activeEntry.TaskId = _taskId;
         await DbSessionProvider.PerformCommitAsync();
-        await _timeEntryDao.StopActiveAsync(_workspace);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user);
         await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
         
@@ -72,7 +72,7 @@ public class SendNewTimeEntityTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
         activeEntry.TaskId = "fake";
         await DbSessionProvider.PerformCommitAsync();
-        await _timeEntryDao.StopActiveAsync(_workspace);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user);
         await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
         
@@ -87,7 +87,7 @@ public class SendNewTimeEntityTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
         activeEntry.TaskId = _taskId;
         await DbSessionProvider.PerformCommitAsync();
-        await _timeEntryDao.StopActiveAsync(_workspace);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user);
         await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
         

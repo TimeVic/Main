@@ -21,7 +21,7 @@ public interface ITimeEntryDao: IDomainService
         decimal? hourlyRate = null
     );
     
-    Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace);
+    Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace, UserEntity user);
 
     Task<TimeEntryEntity> SetAsync(
         UserEntity user,
@@ -32,7 +32,9 @@ public interface ITimeEntryDao: IDomainService
 
     Task<bool> HasAccessAsync(UserEntity user, TimeEntryEntity? entity);
 
-    Task<TimeEntryEntity?> GetActiveEntryAsync(WorkspaceEntity workspace);
+    Task<TimeEntryEntity?> GetActiveEntryAsync(WorkspaceEntity workspace, UserEntity user);
+
+    Task<ICollection<TimeEntryEntity>> GetActiveEntriesAsync(WorkspaceEntity workspace);
 
     Task<ListDto<TimeEntryEntity>> GetListAsync(WorkspaceEntity workspace, int page, FilterDataDto? filter = null);
     

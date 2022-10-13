@@ -46,8 +46,11 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new HasNoAccessException();
             }
 
-            var listDto = await _timeEntryDao.GetListAsync(workspace, request.Page);
-            var activeTimeEntry = await _timeEntryDao.GetActiveEntryAsync(workspace);
+            var listDto = await _timeEntryDao.GetListAsync(workspace, request.Page, new FilterDataDto()
+            {
+                UserId = user.Id
+            });
+            var activeTimeEntry = await _timeEntryDao.GetActiveEntryAsync(workspace, user);
             return new GetListResponse
             {
                 List = new PaginatedListDto<TimeEntryDto>(
