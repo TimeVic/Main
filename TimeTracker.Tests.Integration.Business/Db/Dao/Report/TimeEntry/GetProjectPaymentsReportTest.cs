@@ -73,7 +73,7 @@ public class GetProjectPaymentsReportTest: BaseTest
             });
         }
         
-        var result = await _reportsDao.GetProjectPaymentsReport(_workspace.Id);
+        var result = await _reportsDao.GetProjectPaymentsReport(_workspace.Id, _user.Id);
 
         var actualForProject1 = result.FirstOrDefault(item => item.ProjectId == project1.Id);
         Assert.NotNull(actualForProject1);
@@ -153,7 +153,7 @@ public class GetProjectPaymentsReportTest: BaseTest
             DateTime.UtcNow
         );
         
-        var result = await _reportsDao.GetProjectPaymentsReport(_workspace.Id);
+        var result = await _reportsDao.GetProjectPaymentsReport(_workspace.Id, _user.Id);
 
         var actualForProject1 = result.FirstOrDefault(item => item.ProjectId == project1.Id);
         Assert.NotNull(actualForProject1);

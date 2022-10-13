@@ -39,14 +39,17 @@ public class TimeEntryReportsDao: ITimeEntryReportsDao
         from time_entries te
         left join projects p on p.id = te.project_id 
         left join clients c on c.id = p.client_id
-        where te.workspace_id = :workspaceId and te.is_billable = true
+        where te.workspace_id = :workspaceId 
+          and te.user_id = :userId 
+          and te.is_billable = true
         group by p.id, c.id
     ";
 
-    public async Task<ICollection<ProjectPaymentsReportItemDto>> GetProjectPaymentsReport(long workspaceId)
+    public async Task<ICollection<ProjectPaymentsReportItemDto>> GetProjectPaymentsReport(long workspaceId, long userId)
     {
         return await _sessionProvider.CurrentSession.CreateSQLQuery(_sqlQueryProjectPayments)
             .SetParameter("workspaceId", workspaceId)
+            .SetParameter("userId", userId)
             .SetResultTransformer(Transformers.AliasToBean<ProjectPaymentsReportItemDto>())
             .ListAsync<ProjectPaymentsReportItemDto>();
     }
