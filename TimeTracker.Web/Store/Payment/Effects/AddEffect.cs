@@ -34,7 +34,6 @@ public class AddEffect: Effect<SaveEmptyPaymentListItemAction>
     {
         try
         {
-            Debug.Log(_state.Value.ItemToAdd);
             if (_state.Value.ItemToAdd == null)
             {
                 return;
@@ -42,6 +41,7 @@ public class AddEffect: Effect<SaveEmptyPaymentListItemAction>
 
             await _apiService.PaymentAddAsync(new AddRequest()
             {
+                WorkspaceId = _authState.Value.Workspace.Id,
                 ClientId = _state.Value.ItemToAdd.Client.Id,
                 ProjectId = _state.Value.ItemToAdd.Project?.Id,
                 Amount = _state.Value.ItemToAdd.Amount,
