@@ -47,7 +47,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
                 throw new HasNoAccessException();
             }
 
-            var listDto = await _paymentDao.GetListAsync(workspace, request.Page);
+            var listDto = await _paymentDao.GetListAsync(workspace, user, request.Page);
             return new GetListResponse(
                 _mapper.Map<ICollection<PaymentDto>>(listDto.Items),
                 listDto.TotalCount
