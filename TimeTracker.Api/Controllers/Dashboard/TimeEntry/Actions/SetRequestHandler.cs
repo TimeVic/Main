@@ -22,6 +22,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         private readonly ITimeEntryDao _timeEntryDao;
         private readonly ITimeEntryService _timeEntryService;
         private readonly ISecurityManager _securityManager;
+        private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public SetRequestHandler(
             IMapper mapper,
@@ -30,7 +31,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             IProjectDao projectDao,
             ITimeEntryDao timeEntryDao,
             ITimeEntryService timeEntryService,
-            ISecurityManager securityManager
+            ISecurityManager securityManager,
+            IWorkspaceAccessService workspaceAccessService
         )
         {
             _mapper = mapper;
@@ -40,6 +42,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _timeEntryDao = timeEntryDao;
             _timeEntryService = timeEntryService;
             _securityManager = securityManager;
+            _workspaceAccessService = workspaceAccessService;
         }
     
         public async Task<TimeEntryDto> ExecuteAsync(SetRequest request)
@@ -58,14 +61,15 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new HasNoAccessException();
             }
 
-            var userProjects = await _projectDao.GetByUser(user);
+            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+            var userProjects = await _projectDao.GetListAsync(workspace, user, userAccess);
             timeEntry = await _timeEntryService.SetAsync(
                 user,
                 workspace,
                 new TimeEntryCreationDto()
                 {
                     Id = timeEntry?.Id,
-                    Description = request.Description,
+                    Description = request.Description, 
                     TaskId = request.TaskId,
                     StartTime = request.StartTime,
                     EndTime = request.EndTime,
@@ -73,7 +77,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                     IsBillable = request.IsBillable,
                     Date = request.Date
                 },
-                userProjects.FirstOrDefault(item => item.Id == request.ProjectId)
+                userProjects.Items.FirstOrDefault(item => item.Id == request.ProjectId)
             );
             return _mapper.Map<TimeEntryDto>(timeEntry);
         }

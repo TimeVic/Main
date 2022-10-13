@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
@@ -11,7 +12,9 @@ using TimeTracker.Business.Orm.Dao.Integrations;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Testing.Factories;
+using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Public.Dashboard.TimeEntry;
@@ -29,15 +32,19 @@ public class SetTest: BaseTest
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IQueueDao _queueDao;
     private readonly IQueueService _queueService;
-    
+    private readonly IWorkspaceAccessService _workspaceAccessService;
+    private readonly IUserSeeder _userSeeder;
+
     public SetTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
+        _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _timeEntryFactory = ServiceProvider.GetRequiredService<IDataFactory<TimeEntryEntity>>();
         _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
+        _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
         _defaultWorkspace = _user.Workspaces.First();
@@ -128,5 +135,43 @@ public class SetTest: BaseTest
         
         var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
         Assert.True(processedCounter > 0);
+    }
+    
+    [Fact]
+    public async Task ShouldUpdateWithSharedProject()
+    {
+        var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
+        var (jwtToken, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _defaultWorkspace,
+            MembershipAccessType.User,
+            new List<ProjectEntity>()
+            {
+                expectedProject
+            }
+        );
+        
+        var fakeEntry = _timeEntryFactory.Generate();
+        await CommitDbChanges();
+        var expectedEntry = await _timeEntryDao.StartNewAsync(otherUser, _defaultWorkspace);
+        
+        var response = await PostRequestAsync(Url, jwtToken, new SetRequest()
+        {
+            Id = expectedEntry.Id,
+            WorkspaceId = _defaultWorkspace.Id,
+            Description = fakeEntry.Description,
+            EndTime = null,
+            StartTime = fakeEntry.StartTime,
+            HourlyRate = fakeEntry.HourlyRate,
+            IsBillable = fakeEntry.IsBillable,
+            ProjectId = expectedProject.Id,
+            Date = fakeEntry.Date,
+            TaskId = fakeEntry.TaskId,
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        Assert.True(actualDto.Id > 0);
+        Assert.Null(actualDto.EndTime);
+        Assert.Equal(expectedProject.Id, actualDto.Project.Id);
     }
 }

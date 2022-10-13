@@ -64,15 +64,29 @@ public class UserSeeder: IUserSeeder
         );
     }
     
+    public async Task<(string token, UserEntity user)> CreateAuthorizedAndShareAsync(
+        WorkspaceEntity workspace,
+        MembershipAccessType access = MembershipAccessType.User,
+        ICollection<ProjectEntity>? projects = null
+    )
+    {
+        var user = await CreateActivatedAndShareAsync(workspace, access, projects);
+        return (
+            _jwtAuthService.BuildJwt(user.Id),
+            user
+        );
+    }
+    
     public async Task<UserEntity> CreateActivatedAndShareAsync(
         WorkspaceEntity workspace,
-        MembershipAccessType access = MembershipAccessType.User
+        MembershipAccessType access = MembershipAccessType.User,
+        ICollection<ProjectEntity>? projects = null
     )
     {
         var user = await CreatePendingAsync();
         user = await _registrationService.ActivateUser(user.VerificationToken, "Test password");
         await _dbSessionProvider.PerformCommitAsync();
-        await _workspaceAccessService.ShareAccessAsync(workspace, user, access);
+        await _workspaceAccessService.ShareAccessAsync(workspace, user, access, projects);
         return user;
     }
 }
