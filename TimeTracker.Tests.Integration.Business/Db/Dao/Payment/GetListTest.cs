@@ -43,7 +43,7 @@ public class GetListTest: BaseTest
         var expectedTotal = 30;
         await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
 
-        var listModel = await _paymentDao.GetListAsync(_user.DefaultWorkspace, 1);
+        var listModel = await _paymentDao.GetListAsync(_user.DefaultWorkspace, _user, 1);
         Assert.Equal(PaginationUtils.DefaultPageSize, listModel.Items.Count);
         Assert.Equal(expectedTotal, listModel.TotalCount);
         
@@ -71,7 +71,21 @@ public class GetListTest: BaseTest
         var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
         await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherClient, null, 15);
         
-        var listModel = await _paymentDao.GetListAsync(_user.DefaultWorkspace, 1);
+        var listModel = await _paymentDao.GetListAsync(_user.DefaultWorkspace, _user, 1);
+        Assert.Equal(expectedTotal, listModel.Items.Count);
+        Assert.Equal(expectedTotal, listModel.TotalCount);
+    }
+    
+    [Fact]
+    public async Task ShouldReceiveOnlyForCurrentUser()
+    {
+        var expectedTotal = 7;
+        await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
+        var otherWorkspace = await _workspaceDao.CreateWorkspaceAsync(_user, "Test 2");
+        var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
+        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherClient, null, 15);
+        
+        var listModel = await _paymentDao.GetListAsync(_user.DefaultWorkspace, _user, 1);
         Assert.Equal(expectedTotal, listModel.Items.Count);
         Assert.Equal(expectedTotal, listModel.TotalCount);
     }

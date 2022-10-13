@@ -119,7 +119,7 @@ public class PaymentDao: IPaymentDao
         return payment;
     }
     
-    public async Task<ListDto<PaymentEntity>> GetListAsync(WorkspaceEntity workspace, int page)
+    public async Task<ListDto<PaymentEntity>> GetListAsync(WorkspaceEntity workspace, UserEntity user, int page)
     {
         var offset = PaginationUtils.CalculateOffset(page);
         
@@ -129,7 +129,7 @@ public class PaymentDao: IPaymentDao
         var query = _sessionProvider.CurrentSession.QueryOver<PaymentEntity>()
             .Inner.JoinAlias(item => item.Client, () => clientAlias)
             .Inner.JoinAlias(item => clientAlias.Workspace, () => workspaceAlias)
-            .Where(item => workspaceAlias.Id == workspace.Id);
+            .Where(item => workspaceAlias.Id == workspace.Id && workspaceAlias.User.Id == user.Id);
         
         var items = await query
             .OrderBy(item => item.PaymentTime).Desc

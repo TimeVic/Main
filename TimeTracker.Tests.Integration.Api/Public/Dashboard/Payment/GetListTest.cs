@@ -27,6 +27,7 @@ public class GetListTest: BaseTest
     private readonly IProjectDao _projectDao;
     private readonly ProjectEntity _project;
     private readonly IPaymentSeeder _paymentSeeder;
+    private readonly IUserSeeder _userSeeder;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -34,6 +35,7 @@ public class GetListTest: BaseTest
         _clientDao = ServiceProvider.GetRequiredService<IClientDao>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _paymentSeeder = ServiceProvider.GetRequiredService<IPaymentSeeder>();
+        _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _workspace = _user.DefaultWorkspace;
@@ -79,7 +81,6 @@ public class GetListTest: BaseTest
             Assert.NotEmpty(item.Description);
             Assert.True(item.PaymentTime > DateTime.MinValue);
         });
-        
     }
     
     [Fact]
@@ -94,5 +95,28 @@ public class GetListTest: BaseTest
         });
         var errorResponse = await response.GetJsonErrorAsync();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), errorResponse.Type);
+    }
+    
+    [Fact]
+    public async Task ShouldReceiveOnlyForCurrentUser()
+    {
+        var otherUser = await _userSeeder.CreateActivatedAsync();
+        var otherClient = _clientDao.CreateAsync(otherUser.DefaultWorkspace, "Test new client").Result;
+        var otherProject = _projectDao.CreateAsync(otherUser.DefaultWorkspace, "Test new project").Result;
+        otherProject.SetClient(otherClient);
+        await _paymentSeeder.CreateSeveralAsync(otherUser.DefaultWorkspace, otherUser, otherClient, otherProject, 5);
+        
+        var expectedTotal = 21;
+        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _client, _project, expectedTotal);
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            WorkspaceId = _workspace.Id,
+            Page = 1
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedTotal, actualResponse.TotalCount);
     }
 }
