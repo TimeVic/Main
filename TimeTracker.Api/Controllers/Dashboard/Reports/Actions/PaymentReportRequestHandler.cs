@@ -47,7 +47,10 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
                 throw new HasNoAccessException();
             }
 
-            var reportItems = await _entryReportsDao.GetProjectPaymentsReport(workspace.Id);
+            var reportItems = await _entryReportsDao.GetProjectPaymentsReport(
+                workspace.Id,
+                user.Id
+            );
             return new PaymentReportResponse()
             {
                 Items = _mapper.Map<ICollection<PaymentsReportItemDto>>(reportItems)
