@@ -49,6 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
             {
                 throw new HasNoAccessException();
             }
+            
             var client = await _clientDao.GetById(request.ClientId);
             if (
                 client == null
