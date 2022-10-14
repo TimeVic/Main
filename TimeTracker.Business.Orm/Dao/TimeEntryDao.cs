@@ -16,11 +16,17 @@ public class TimeEntryDao: ITimeEntryDao
 {
     private readonly IDbSessionProvider _sessionProvider;
     private readonly ILogger<TimeEntryDao> _logger;
+    private readonly IProjectDao _projectDao;
 
-    public TimeEntryDao(IDbSessionProvider sessionProvider, ILogger<TimeEntryDao> logger)
+    public TimeEntryDao(
+        IDbSessionProvider sessionProvider,
+        ILogger<TimeEntryDao> logger,
+        IProjectDao projectDao
+    )
     {
         _sessionProvider = sessionProvider;
         _logger = logger;
+        _projectDao = projectDao;
     }
 
     public async Task<TimeEntryEntity?> GetByIdAsync(long? id)
@@ -38,7 +44,9 @@ public class TimeEntryDao: ITimeEntryDao
     public async Task<ListDto<TimeEntryEntity>> GetListAsync(
         WorkspaceEntity workspace,
         int page,
-        FilterDataDto? filter = null
+        FilterDataDto? filter = null,
+        UserEntity? user = null,
+        MembershipAccessType accessType = MembershipAccessType.Owner
     )
     {
         var query = _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
@@ -58,9 +66,9 @@ public class TimeEntryDao: ITimeEntryDao
             {
                 query = query.Where(item => item.IsBillable == filter.IsBillable);
             }
-            if (filter.UserId.HasValue)
+            if (filter.MemberId.HasValue)
             {
-                query = query.Where(item => item.User.Id == filter.UserId);
+                query = query.Where(item => item.User.Id == filter.MemberId);
             }
             if (!string.IsNullOrEmpty(filter.Search))
             {
@@ -71,6 +79,19 @@ public class TimeEntryDao: ITimeEntryDao
                     )
                 );
             }
+        }
+
+        if (user != null && accessType == MembershipAccessType.User)
+        {
+            var availableProjectsList = await _projectDao.GetListAsync(
+                workspace,
+                user,
+                accessType
+            );
+            var availableProjectIds = availableProjectsList.Items.Select(item => item.Id).ToList();
+            query = query.Where(
+                item => availableProjectIds.Contains(item.Project.Id) || item.User.Id == user.Id
+            );
         }
 
         var offset = PaginationUtils.CalculateOffset(page);

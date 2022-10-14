@@ -28,7 +28,7 @@ public class ProjectDao: IProjectDao
             UpdateTime = DateTime.UtcNow
         };
         workspace.Projects.Add(project);
-        await _sessionProvider.CurrentSession.SaveAsync(workspace);
+        await _sessionProvider.CurrentSession.SaveAsync(project);
         return project;
     }
     
@@ -71,12 +71,12 @@ public class ProjectDao: IProjectDao
         {
             // Is not owner
             WorkspaceMembershipProjectAccessEntity projectAccessAlias = null;
-            WorkspaceMembershipEntity WorkspaceMembershipAlias = null;
-            WorkspaceEntity workspaceAlias = null;
+            WorkspaceMembershipEntity workspaceMembershipAlias = null;
+            UserEntity userAlias = null;
             query = query.Inner.JoinAlias(item => item.MembershipProjectAccess, () => projectAccessAlias)
-                .Inner.JoinAlias(() => projectAccessAlias.WorkspaceMembership, () => WorkspaceMembershipAlias)
-                .Inner.JoinAlias(() => WorkspaceMembershipAlias.Workspace, () => workspaceAlias)
-                .And(item => workspaceAlias.Id == workspace.Id);
+                .Inner.JoinAlias(() => projectAccessAlias.WorkspaceMembership, () => workspaceMembershipAlias)
+                .Inner.JoinAlias(() => workspaceMembershipAlias.User, () => userAlias)
+                .And(item => userAlias.Id == user.Id);
         }
 
         var projectIds = await query.ListAsync<long>();

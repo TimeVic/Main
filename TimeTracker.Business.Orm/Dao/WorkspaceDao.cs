@@ -28,7 +28,7 @@ public class WorkspaceDao: IWorkspaceDao
             UpdateTime = DateTime.UtcNow
         };
         user.Workspaces.Add(workspace);
-        await _sessionProvider.CurrentSession.SaveAsync(user);
+        await _sessionProvider.CurrentSession.SaveAsync(workspace);
         return workspace;
     }
     

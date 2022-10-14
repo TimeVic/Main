@@ -48,7 +48,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 
             var listDto = await _timeEntryDao.GetListAsync(workspace, request.Page, new FilterDataDto()
             {
-                UserId = user.Id
+                MemberId = user.Id
             });
             var activeTimeEntry = await _timeEntryDao.GetActiveEntryAsync(workspace, user);
             return new GetListResponse
