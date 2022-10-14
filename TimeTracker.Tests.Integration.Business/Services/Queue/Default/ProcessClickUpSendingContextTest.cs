@@ -53,7 +53,6 @@ public class ProcessClickUpSendingContextTest: BaseTest
         
         _queueDao.CompleteAllPending().Wait();
         _clickUpClient.Reset();
-        CommitDbChanges().Wait();
     }
 
     [Fact]
@@ -66,7 +65,8 @@ public class ProcessClickUpSendingContextTest: BaseTest
         Assert.Null(_timeEntry.ClickUpId);
 
         await _queueService.PushDefaultAsync(testContext);
-
+        CommitDbChanges().Wait();
+        
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(1, _clickUpClient.SentTimeEntries.Count);
