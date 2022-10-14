@@ -10,5 +10,5 @@ public class FilterDataDto
     
     public bool? IsBillable { get; set; }
     
-    public long? UserId { get; set; }
+    public long? MemberId { get; set; }
 }

@@ -45,7 +45,7 @@ namespace TimeTracker.Business.Orm.Entities.WorkspaceAccess
         [Bag(
             Inverse = true,
             Lazy = CollectionLazy.Extra,
-            Cascade = "all-delete-orphan"
+            Cascade = "save-update"
         )]
         [Key(Column = "workspace_membership_id")]
         [OneToMany(ClassType = typeof(WorkspaceMembershipProjectAccessEntity))]

@@ -37,7 +37,7 @@ public class HasAccessToTimeEntryTest: BaseTest
     public async Task ShouldHasAccessIfWorkspaceOwner(AccessLevel accessLevel)
     {
         Assert.True(_ownWorkspace.IsOwner(_owner));
-        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_owner)).First();
+        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
         var hasAccess = await _securityManager.HasAccess(accessLevel, _owner, timeEntry);
         Assert.True(hasAccess);
     }
@@ -48,7 +48,7 @@ public class HasAccessToTimeEntryTest: BaseTest
     public async Task ShouldNoAccessIfWorkspaceIfNotMember(AccessLevel accessLevel)
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_owner)).First();
+        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
         var hasAccess = await _securityManager.HasAccess(accessLevel, otherUser, timeEntry);
         Assert.False(hasAccess);
     }
@@ -57,7 +57,7 @@ public class HasAccessToTimeEntryTest: BaseTest
     public async Task ShouldHasOnlyReadAccessIfUsersRoleIsUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_owner)).First();
+        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
 
         await _workspaceAccessService.ShareAccessAsync(_ownWorkspace, otherUser, MembershipAccessType.User);
         
@@ -72,7 +72,7 @@ public class HasAccessToTimeEntryTest: BaseTest
     public async Task ShouldHasReadAndWriteAccessIfUsersRoleIsManager()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_owner)).First();
+        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
 
         await _workspaceAccessService.ShareAccessAsync(_ownWorkspace, otherUser, MembershipAccessType.Manager);
         
@@ -87,7 +87,7 @@ public class HasAccessToTimeEntryTest: BaseTest
     public async Task ShouldHasReadAndWriteAccessIfUsersIsTimeEntryOwner()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(otherUser)).First();
+        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_ownWorkspace, otherUser)).First();
 
         await _workspaceAccessService.ShareAccessAsync(_ownWorkspace, otherUser, MembershipAccessType.User);
         

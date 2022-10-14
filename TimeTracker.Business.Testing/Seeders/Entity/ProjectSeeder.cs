@@ -23,19 +23,7 @@ public class ProjectSeeder: IProjectSeeder
         _projectDao = projectDao;
         _clientSeeder = clientSeeder;
     }
-    
-    public async Task<ICollection<ProjectEntity>> CreateSeveralAsync(UserEntity user, int count = 1)
-    {
-        var workspace = user.Workspaces.First();
-        return await CreateSeveralAsync(workspace, user, count);
-    }
 
-    public async Task<ICollection<ProjectEntity>> CreateSeveralAsync(int count = 1)
-    {
-        var user = await _userSeeder.CreateActivatedAsync();
-        return await CreateSeveralAsync(user);
-    }
-    
     public async Task<ICollection<ProjectEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1)
     {
         var result = new List<ProjectEntity>();

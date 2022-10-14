@@ -14,6 +14,8 @@ public class GetListTest: BaseTest
     private readonly IProjectDao _projectDao;
     private readonly IProjectSeeder _projectSeeder;
     private readonly IWorkspaceAccessService _workspaceAccessService;
+    private readonly UserEntity _user;
+    private readonly WorkspaceEntity _workspace;
 
     public GetListTest(): base()
     {
@@ -21,17 +23,18 @@ public class GetListTest: BaseTest
         _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _projectDao = Scope.Resolve<IProjectDao>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
+        
+        _user = _userSeeder.CreateActivatedAsync().Result;
+        _workspace = _user.DefaultWorkspace;
     }
 
     [Fact]
     public async Task ShouldReceiveList()
     {
         var expectedCounter = 7;
-        var user = await _userSeeder.CreateActivatedAsync();
-        var workspace = user.Workspaces.First();
-        await _projectSeeder.CreateSeveralAsync(user, expectedCounter);
+        await _projectSeeder.CreateSeveralAsync(_workspace, _user, expectedCounter);
 
-        var actualList = await _projectDao.GetListAsync(workspace);
+        var actualList = await _projectDao.GetListAsync(_workspace);
         Assert.Equal(expectedCounter, actualList.TotalCount);
         
         Assert.All(actualList.Items, item =>
@@ -45,14 +48,12 @@ public class GetListTest: BaseTest
     public async Task ShouldNotReceiveForOtherNamespaces()
     {
         var expectedCounter = 7;
-        var user = await _userSeeder.CreateActivatedAsync();
-        var workspace = user.Workspaces.First();
-        await _projectSeeder.CreateSeveralAsync(user, expectedCounter);
+        await _projectSeeder.CreateSeveralAsync(_workspace, _user, expectedCounter);
 
         var user2 = await _userSeeder.CreateActivatedAsync();
-        await _projectSeeder.CreateSeveralAsync(user2, 15);
+        await _projectSeeder.CreateSeveralAsync(user2.DefaultWorkspace, user2, 15);
         
-        var actualList = await _projectDao.GetListAsync(workspace);
+        var actualList = await _projectDao.GetListAsync(_workspace);
         Assert.Equal(expectedCounter, actualList.TotalCount);
     }
     
@@ -60,13 +61,11 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveOnlySharedProjectsIfUserHasUserRole()
     {
         var expectedCounter = 7;
-        var user = await _userSeeder.CreateActivatedAsync();
-        var workspace = user.Workspaces.First();
-        var projects = await _projectSeeder.CreateSeveralAsync(user, expectedCounter);
+        var projects = await _projectSeeder.CreateSeveralAsync(_workspace, _user, expectedCounter);
 
         var otherUser = await  _userSeeder.CreateActivatedAsync();
         await _workspaceAccessService.ShareAccessAsync(
-            workspace,
+            _workspace,
             otherUser,
             MembershipAccessType.User,
             new List<ProjectEntity>()
@@ -76,12 +75,12 @@ public class GetListTest: BaseTest
             }
         );
         
-        var actualList = await _projectDao.GetListAsync(workspace, otherUser);
+        var actualList = await _projectDao.GetListAsync(_workspace, otherUser);
         Assert.Equal(2, actualList.TotalCount);
         
         var otherUser2 = await  _userSeeder.CreateActivatedAsync();
         await _workspaceAccessService.ShareAccessAsync(
-            workspace,
+            _workspace,
             otherUser2,
             MembershipAccessType.User,
             new List<ProjectEntity>()
@@ -91,7 +90,7 @@ public class GetListTest: BaseTest
             }
         );
         
-        actualList = await _projectDao.GetListAsync(workspace, otherUser2);
+        actualList = await _projectDao.GetListAsync(_workspace, otherUser2);
         Assert.Equal(2, actualList.TotalCount);
     }
 }

@@ -48,7 +48,7 @@ public class PaymentReportTest: BaseTest
     [Fact]
     public async Task ShouldReceivePaymentReport()
     {
-        var projects = await _projectDao.CreateSeveralAsync(_user, 2);
+        var projects = await _projectDao.CreateSeveralAsync(_defaultWorkspace, _user, 2);
         await DbSessionProvider.PerformCommitAsync();
         var project1 = projects.First();
         await _timeEntryDao.SetAsync(_user, _defaultWorkspace, new TimeEntryCreationDto()

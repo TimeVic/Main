@@ -26,7 +26,7 @@ public class ClientDao: IClientDao
             UpdateTime = DateTime.UtcNow
         };
         workspace.Clients.Add(entity);
-        await _sessionProvider.CurrentSession.SaveAsync(workspace);
+        await _sessionProvider.CurrentSession.SaveAsync(entity);
         return entity;
     }
     

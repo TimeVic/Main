@@ -39,7 +39,7 @@ namespace TimeTracker.Business.Orm.Entities
         [Bag(
             Inverse = true,
             Lazy = CollectionLazy.Extra,
-            Cascade = "all-delete-orphan"
+            Cascade = "none"
         )]
         [Key(Column = "workspace_id")]
         [OneToMany(ClassType = typeof(ClientEntity))]
@@ -48,7 +48,7 @@ namespace TimeTracker.Business.Orm.Entities
         [Bag(
             Inverse = true,
             Lazy = CollectionLazy.True,
-            Cascade = "all-delete-orphan"
+            Cascade = "none"
         )]
         [Key(Column = "workspace_id")]
         [OneToMany(ClassType = typeof(ProjectEntity))]

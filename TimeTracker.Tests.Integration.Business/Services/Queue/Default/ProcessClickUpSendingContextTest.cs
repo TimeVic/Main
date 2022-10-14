@@ -40,9 +40,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
         
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _user.Workspaces.First();
-        _timeEntry = _timeEntrySeeder.CreateSeveralAsync(_user).Result.First();
-        _queueDao.CompleteAllPending().Wait();
-        _clickUpClient.Reset();
+        _timeEntry = _timeEntrySeeder.CreateSeveralAsync(_workspace, _user).Result.First();
         _timeEntry.TaskId = _taskId;
         
         _workspaceSettingsDao.SetClickUpAsync(
@@ -52,7 +50,9 @@ public class ProcessClickUpSendingContextTest: BaseTest
             _teamId,
             true
         ).Wait();
-        CommitDbChanges().Wait();
+        
+        _queueDao.CompleteAllPending().Wait();
+        _clickUpClient.Reset();
     }
 
     [Fact]
@@ -65,7 +65,8 @@ public class ProcessClickUpSendingContextTest: BaseTest
         Assert.Null(_timeEntry.ClickUpId);
 
         await _queueService.PushDefaultAsync(testContext);
-
+        CommitDbChanges().Wait();
+        
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(1, _clickUpClient.SentTimeEntries.Count);
@@ -77,7 +78,15 @@ public class ProcessClickUpSendingContextTest: BaseTest
     [Fact]
     public async Task ShouldDoNothingIfUserDoesNotHaveClickUpConfiguration()
     {
-        var timeEntryWithAnotherUser = (await _timeEntrySeeder.CreateSeveralAsync()).First();
+        await _workspaceSettingsDao.SetClickUpAsync(
+            _user,
+            _workspace,
+            "",
+            "",
+            true
+        );
+        
+        var timeEntryWithAnotherUser = (await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user)).First();
         timeEntryWithAnotherUser.TaskId = _taskId;
         await CommitDbChanges();
         
