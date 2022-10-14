@@ -39,7 +39,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveList()
     {
         var expectedCounter = 7;
-        await _timeEntrySeeder.CreateSeveralAsync(_user, expectedCounter);
+        await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter);
 
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
         Assert.Equal(expectedCounter, actualList.TotalCount);
@@ -57,10 +57,10 @@ public class GetListTest: BaseTest
     public async Task ShouldNotReceiveForOtherNamespaces()
     {
         var expectedCounter = 7;
-        await _timeEntrySeeder.CreateSeveralAsync(_user, expectedCounter);
+        await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter);
 
         var user2 = await _userSeeder.CreateActivatedAsync();
-        await _timeEntrySeeder.CreateSeveralAsync(user2, 15);
+        await _timeEntrySeeder.CreateSeveralAsync(user2.DefaultWorkspace, user2, 15);
         
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
         Assert.Equal(expectedCounter, actualList.TotalCount);
@@ -69,7 +69,7 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task ShouldSortList()
     {
-        await _timeEntrySeeder.CreateSeveralAsync(_user, 3);
+        await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
 
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
 
@@ -82,10 +82,10 @@ public class GetListTest: BaseTest
     public async Task ShouldFilterByClient()
     {
         var expectedCounter = 7;
-        await _timeEntrySeeder.CreateSeveralAsync(_user, 9);
+        await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 9);
 
-        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_user)).First();
-        await _timeEntrySeeder.CreateSeveralAsync(_user, expectedCounter, expectedProject);
+        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_workspace, _user)).First();
+        await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter, expectedProject);
 
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1, new FilterDataDto()
         {
@@ -98,10 +98,10 @@ public class GetListTest: BaseTest
     public async Task ShouldFilterByProject()
     {
         var expectedCounter = 7;
-        await _timeEntrySeeder.CreateSeveralAsync(_user, 9);
+        await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 9);
 
-        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_user)).First();
-        await _timeEntrySeeder.CreateSeveralAsync(_user, expectedCounter, expectedProject);
+        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_workspace, _user)).First();
+        await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter, expectedProject);
 
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1, new FilterDataDto()
         {
@@ -114,12 +114,12 @@ public class GetListTest: BaseTest
     public async Task ShouldFilterBillable()
     {
         var expectedCounter = 7;
-        foreach (var timeEntryEntity in await _timeEntrySeeder.CreateSeveralAsync(_user, 9))
+        foreach (var timeEntryEntity in await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 9))
         {
             timeEntryEntity.IsBillable = false;
         }
         
-        foreach (var timeEntryEntity in await _timeEntrySeeder.CreateSeveralAsync(_user, expectedCounter))
+        foreach (var timeEntryEntity in await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter))
         {
             timeEntryEntity.IsBillable = true;
         }
@@ -137,12 +137,11 @@ public class GetListTest: BaseTest
     {
         var expectedDescription = "Some fake desc";
         var user = await _userSeeder.CreateActivatedAsync();
-        var workspace = user.Workspaces.First();
-        var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(user, 9)).First();
+        var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_workspace, user, 9)).First();
         expectedEntry.Description = expectedDescription;
         await CommitDbChanges();
 
-        var actualList = await _timeEntryDao.GetListAsync(workspace, 1, new FilterDataDto()
+        var actualList = await _timeEntryDao.GetListAsync(_workspace, 1, new FilterDataDto()
         {
             Search = "FAKE"
         });

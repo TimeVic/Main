@@ -25,6 +25,7 @@ public class UpdateTest: BaseTest
     private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
     private readonly IClientSeeder _clientSeeder;
+    private readonly WorkspaceEntity _workspace;
 
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -32,7 +33,9 @@ public class UpdateTest: BaseTest
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _clientSeeder = ServiceProvider.GetRequiredService<IClientSeeder>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _project = _projectSeeder.CreateSeveralAsync(_user).Result.First();
+
+        _workspace = _user.DefaultWorkspace;
+        _project = _projectSeeder.CreateSeveralAsync(_workspace, _user).Result.First();
     }
 
     [Fact]

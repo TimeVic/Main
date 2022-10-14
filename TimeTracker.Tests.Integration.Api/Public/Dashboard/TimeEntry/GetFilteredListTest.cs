@@ -43,8 +43,8 @@ public class GetFilteredListTest: BaseTest
     [Fact]
     public async Task ShouldReceiveList()
     {
-        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_user)).First();
-        var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_user, 6, expectedProject)).First();
+        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_defaultWorkspace, _user)).First();
+        var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, 6, expectedProject)).First();
         expectedEntry.Description = "Fake desCript223ion 123";
         expectedEntry.IsBillable = true;
         

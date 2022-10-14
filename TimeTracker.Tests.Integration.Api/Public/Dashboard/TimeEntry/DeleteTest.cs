@@ -65,7 +65,7 @@ public class DeleteTest: BaseTest
     [Fact]
     public async Task ShouldDeleteOldEntry()
     {
-        var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_user)).First();
+        var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user)).First();
         await CommitDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new DeleteRequest()
         {
