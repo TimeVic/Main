@@ -52,7 +52,6 @@ public class ProcessClickUpSendingContextTest: BaseTest
             _teamId,
             true
         ).Wait();
-        CommitDbChanges().Wait();
     }
 
     [Fact]
@@ -77,6 +76,14 @@ public class ProcessClickUpSendingContextTest: BaseTest
     [Fact]
     public async Task ShouldDoNothingIfUserDoesNotHaveClickUpConfiguration()
     {
+        await _workspaceSettingsDao.SetClickUpAsync(
+            _user,
+            _workspace,
+            "",
+            "",
+            true
+        );
+        
         var timeEntryWithAnotherUser = (await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user)).First();
         timeEntryWithAnotherUser.TaskId = _taskId;
         await CommitDbChanges();

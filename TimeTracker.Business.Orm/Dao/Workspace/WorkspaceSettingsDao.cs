@@ -36,6 +36,6 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
         clickUpSettings.IsCustomTaskIds = isCustomTaskIds;
         await _sessionProvider.CurrentSession.SaveAsync(clickUpSettings);
         
-            return clickUpSettings;
+        return clickUpSettings;
     }
 }
