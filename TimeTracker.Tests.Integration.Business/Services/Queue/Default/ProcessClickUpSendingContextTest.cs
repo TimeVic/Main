@@ -41,8 +41,6 @@ public class ProcessClickUpSendingContextTest: BaseTest
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _user.Workspaces.First();
         _timeEntry = _timeEntrySeeder.CreateSeveralAsync(_workspace, _user).Result.First();
-        _queueDao.CompleteAllPending().Wait();
-        _clickUpClient.Reset();
         _timeEntry.TaskId = _taskId;
         
         _workspaceSettingsDao.SetClickUpAsync(
@@ -52,6 +50,10 @@ public class ProcessClickUpSendingContextTest: BaseTest
             _teamId,
             true
         ).Wait();
+        
+        _queueDao.CompleteAllPending().Wait();
+        _clickUpClient.Reset();
+        CommitDbChanges().Wait();
     }
 
     [Fact]
