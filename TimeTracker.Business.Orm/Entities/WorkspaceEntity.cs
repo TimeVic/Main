@@ -39,7 +39,7 @@ namespace TimeTracker.Business.Orm.Entities
         [Bag(
             Inverse = true,
             Lazy = CollectionLazy.Extra,
-            Cascade = "save-update"
+            Cascade = "none"
         )]
         [Key(Column = "workspace_id")]
         [OneToMany(ClassType = typeof(ClientEntity))]

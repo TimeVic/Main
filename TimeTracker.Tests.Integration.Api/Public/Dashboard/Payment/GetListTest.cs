@@ -1,12 +1,10 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
