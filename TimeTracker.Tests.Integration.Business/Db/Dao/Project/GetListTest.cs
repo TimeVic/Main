@@ -51,7 +51,7 @@ public class GetListTest: BaseTest
         await _projectSeeder.CreateSeveralAsync(_workspace, _user, expectedCounter);
 
         var user2 = await _userSeeder.CreateActivatedAsync();
-        await _projectSeeder.CreateSeveralAsync(_workspace, user2, 15);
+        await _projectSeeder.CreateSeveralAsync(user2.DefaultWorkspace, user2, 15);
         
         var actualList = await _projectDao.GetListAsync(_workspace);
         Assert.Equal(expectedCounter, actualList.TotalCount);
