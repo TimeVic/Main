@@ -10,7 +10,7 @@
         class="mb-3"
         Text="Add client"
         Click="@InsertRow"
-        Disabled="@_state.Value.HasItemToAdd"/>
+        Disabled="@(_state.Value.HasItemToAdd || !AuthState.Value.IsRoleAdmin)"/>
 
     <RadzenDataGrid
         @ref="@_grid"
@@ -49,6 +49,7 @@
                         Icon="edit"
                         ButtonStyle="ButtonStyle.Light"
                         Click="@(args => EditRow(item))"
+                        Disabled="@(!AuthState.Value.IsRoleAdmin)"
                         @onclick:stopPropagation="true">
                     </RadzenButton>
                 </Template>
