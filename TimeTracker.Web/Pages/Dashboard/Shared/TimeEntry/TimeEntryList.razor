@@ -172,27 +172,31 @@
                         ButtonStyle="ButtonStyle.Light"
                         Size="ButtonSize.Small"
                         Click="@(args => EditRow(entry))"
+                        Disabled="@(!CanEditTimeEntry(entry))"
                         @onclick:stopPropagation="true">
                     </RadzenButton>
                     <RadzenButton
                         Size="ButtonSize.Small"
                         ButtonStyle="ButtonStyle.Danger"
+                        Disabled="@(!CanEditTimeEntry(entry))"
                         Icon="delete"
                         Click="async () => await OnDeleteItemAsync(entry)"/>
                 </Template>
-                <EditTemplate Context="item">
+                <EditTemplate Context="entry">
 
                     <RadzenButton
                         Icon="check"
                         Size="ButtonSize.Small"
                         ButtonStyle="ButtonStyle.Primary"
-                        Click="@(() => OnClickSaveRow(item))"/>
+                        Disabled="@(!CanEditTimeEntry(entry))"
+                        Click="@(() => OnClickSaveRow(entry))"/>
 
                     <RadzenButton
                         Icon="close"
                         Size="ButtonSize.Small"
                         ButtonStyle="ButtonStyle.Light"
-                        Click="@(() => OnClickCancelEditMode(item))">
+                        Disabled="@(!CanEditTimeEntry(entry))"
+                        Click="@(() => OnClickCancelEditMode(entry))">
                     </RadzenButton>
                 </EditTemplate>
             </RadzenDataGridColumn>

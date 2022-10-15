@@ -21,6 +21,8 @@ public class TimeEntryDto : IResponse
     public TimeSpan? EndTime { get; set; }
 
     public ProjectDto? Project { get; set; }
+    
+    public UserDto User { get; set; }
 
     public bool IsActive => EndTime == null;
     

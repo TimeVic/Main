@@ -42,6 +42,8 @@ public partial class TimeEntryList
         return Task.CompletedTask;
     }
 
+    #region Grid editing
+    
     private void OnChangeStartTime(TimeEntryDto item, TimeSpan startTime)
     {
         item.StartTime = startTime > item.EndTime ? item.EndTime.Value : startTime;
@@ -105,6 +107,8 @@ public partial class TimeEntryList
     {
         await UpdateTimeEntry(item);
     }
+    
+    #endregion
 
     private void ShowBillableRateTooltip(ElementReference elementReference, TimeEntryDto entry)
     {
@@ -116,5 +120,11 @@ public partial class TimeEntryList
         {
             Position = TooltipPosition.Left
         });
+    }
+    
+    private bool CanEditTimeEntry(TimeEntryDto entry)
+    {
+        return entry.User.Id == AuthState.Value.User.Id
+            || AuthState.Value.IsRoleAdmin;
     }
 }
