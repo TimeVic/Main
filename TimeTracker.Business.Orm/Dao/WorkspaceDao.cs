@@ -17,6 +17,12 @@ public class WorkspaceDao: IWorkspaceDao
         _sessionProvider = sessionProvider;
     }
 
+    public async Task<WorkspaceEntity?> GetByIdAsync(long id)
+    {
+        return await _sessionProvider.CurrentSession.Query<WorkspaceEntity>()
+            .FirstOrDefaultAsync(item => item.Id == id);
+    }
+    
     public async Task<WorkspaceEntity> CreateWorkspaceAsync(UserEntity user, string name, bool isDefault = false)
     {
         var workspace = new WorkspaceEntity()
@@ -28,6 +34,14 @@ public class WorkspaceDao: IWorkspaceDao
             UpdateTime = DateTime.UtcNow
         };
         user.Workspaces.Add(workspace);
+        await _sessionProvider.CurrentSession.SaveAsync(workspace);
+        return workspace;
+    }
+    
+    public async Task<WorkspaceEntity> UpdateWorkspaceAsync(WorkspaceEntity workspace, string name)
+    {
+        workspace.Name = name;
+        workspace.UpdateTime = DateTime.UtcNow;
         await _sessionProvider.CurrentSession.SaveAsync(workspace);
         return workspace;
     }

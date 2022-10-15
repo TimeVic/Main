@@ -29,4 +29,20 @@ public class WorkspaceController : MainApiControllerBase
         => this.RequestAsync()
             .For<PaginatedListDto<WorkspaceDto>>()
             .With(request);
+    
+    [HttpPost("add")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Add([FromBody] AddRequest request)
+        => this.RequestAsync()
+            .For<WorkspaceDto>()
+            .With(request);
+    
+    [HttpPost("update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Add([FromBody] UpdateRequest request)
+        => this.RequestAsync()
+            .For<WorkspaceDto>()
+            .With(request);
 }
