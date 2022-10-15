@@ -1,6 +1,7 @@
 using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
@@ -57,6 +58,7 @@ namespace TimeTracker.Web.Services
         {
             if (!string.IsNullOrEmpty(jwtToken))
             {
+                user.DefaultWorkspace.CurrentUserAccess = MembershipAccessType.Owner;
                 _dispatcher.Dispatch(new LoginAction(jwtToken, user, user.DefaultWorkspace));
                 _dispatcher.Dispatch(new PersistDataAction());
             }

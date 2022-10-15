@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Radzen;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Core.Components;
 
@@ -23,6 +24,9 @@ public class BaseComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     [Inject]
     protected NavigationManager NavigationManager { get; set; }
 
+    [Inject]
+    protected IState<AuthState> AuthState { get; set; }
+    
     #region Radzen
     
     [Inject] 

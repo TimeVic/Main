@@ -23,10 +23,6 @@
             Icon="euro_symbol"
             Text="Payments"
             Path="@SiteUrl.Dashboard_Payments"/>
-        <RadzenPanelMenuItem
-            Icon="face"
-            Text="Members"
-            Path="@SiteUrl.Dashboard_Members"/>
         <RadzenPanelMenuItem Text="Reports" Icon="assessment">
             <RadzenPanelMenuItem
                 Icon="euro_symbol"
@@ -36,6 +32,12 @@
                 Icon="line_weight"
                 Text="Detailed"
                 Path="@SiteUrl.Dashboard_Reports_TimeEntries"/>
+        </RadzenPanelMenuItem>
+        <RadzenPanelMenuItem Text="Workspace" Icon="dashboard">
+            <RadzenPanelMenuItem
+                Icon="face"
+                Text="Members"
+                Path="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)"/>
         </RadzenPanelMenuItem>
     </RadzenPanelMenu>
 </RadzenSidebar>
