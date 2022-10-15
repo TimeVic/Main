@@ -7,6 +7,8 @@ namespace TimeTracker.Business.Orm.Dao;
 
 public interface IWorkspaceDao: IDomainService
 {
+    Task<WorkspaceEntity?> GetByIdAsync(long id);
+    
     Task<WorkspaceEntity> CreateWorkspaceAsync(UserEntity user, string name, bool isDefault = false);
 
     Task<bool> HasActiveTimeEntriesAsync(WorkspaceEntity workspace);
@@ -14,4 +16,6 @@ public interface IWorkspaceDao: IDomainService
     Task<ListDto<WorkspaceMembershipEntity>> GetMembershipsAsync(WorkspaceEntity workspace, int page);
 
     Task<WorkspaceMembershipEntity> GetMembershipAsync(long id);
+
+    Task<WorkspaceEntity> UpdateWorkspaceAsync(WorkspaceEntity workspace, string name);
 }
