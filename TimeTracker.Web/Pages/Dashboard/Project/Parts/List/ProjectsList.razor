@@ -10,7 +10,7 @@
         class="mb-3"
         Text="Add project"
         Click="@InsertRow"
-        Disabled="@_state.Value.HasItemToAdd"/>
+        Disabled="@(_state.Value.HasItemToAdd || !AuthState.Value.IsRoleAdmin)"/>
 
     <RadzenDataGrid
         @ref="@_grid"
@@ -41,7 +41,7 @@
                     @item.Client?.Name
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="ProjectDto" Title="Hourly Rate">
+            <RadzenDataGridColumn TItem="ProjectDto" Title="Default Hourly Rate">
                 <Template Context="item">
                     @item.DefaultHourlyRate?.ToString("0.00")
                 </Template>
@@ -61,6 +61,7 @@
                             Icon="edit"
                             ButtonStyle="ButtonStyle.Light"
                             Click="@(args => EditNewRow(item))"
+                            Disabled="@(!AuthState.Value.IsRoleAdmin)"
                             @onclick:stopPropagation="true">
                         </RadzenButton>
                     }
@@ -70,6 +71,7 @@
                             Icon="edit"
                             ButtonStyle="ButtonStyle.Light"
                             Click="@(args => NavigateToProduct(item))"
+                            Disabled="@(!AuthState.Value.IsRoleAdmin)"
                             @onclick:stopPropagation="true">
                         </RadzenButton>
                     }
