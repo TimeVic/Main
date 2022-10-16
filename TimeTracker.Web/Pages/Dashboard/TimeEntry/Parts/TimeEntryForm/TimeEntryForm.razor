@@ -35,12 +35,14 @@
             
             <RadzenTextBox
                 Class="mr-1 col-1"
+                Placeholder="Task ID"
                 Disabled="!_state.Value.HasActiveEntry"
                 Value="@_state.Value.ActiveEntry?.TaskId"
                 ValueChanged="OnChangeTaskId"/>
             
             <RadzenTextBox
                 Class="mr-1 col"
+                Placeholder="Description"
                 Disabled="!_state.Value.HasActiveEntry"
                 Value="@_state.Value.ActiveEntry?.Description"
                 ValueChanged="OnChangeDescription"/>
