@@ -81,7 +81,8 @@ public class ActivateUserTest: BaseTest
         Assert.Equal(1, activatedUser.Workspaces.Count);
         Assert.Contains(activatedUser.Workspaces, item =>
         {
-            return item.Name.ToLower().Contains("my workspace");
+            var userName = StringUtils.GetUserNameFromEmail(user.Email);
+            return item.Name.ToLower().Contains(userName);
         });
         Assert.All(activatedUser.Workspaces, item =>
         {

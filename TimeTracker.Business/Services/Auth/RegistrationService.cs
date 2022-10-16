@@ -2,6 +2,7 @@
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -64,7 +65,16 @@ public class RegistrationService: IRegistrationService
         user.PasswordSalt = SecurityUtil.GenerateSalt(32);
         user.PasswordHash = SecurityUtil.GeneratePasswordHash(password, user.PasswordSalt);
 
-        await _workspaceDao.CreateWorkspaceAsync(user, UserResources.DefaultWorkspaceName, true);
+        var userName = StringUtils.GetUserNameFromEmail(user.Email);
+        var workspaceName = string.Format(
+            UserResources.DefaultWorkspaceName,
+            userName?.FirstCharToUpper()
+        );
+        await _workspaceDao.CreateWorkspaceAsync(
+            user,
+            workspaceName,
+            true
+        );
         
         await _queueService.PushNotificationAsync(new EmailVerifiedNotificationItemContext()
         {

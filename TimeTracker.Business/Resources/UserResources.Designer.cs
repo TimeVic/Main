@@ -60,7 +60,7 @@ namespace TimeTracker.Business.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My workspace.
+        ///   Looks up a localized string similar to {0}&apos;s workspace.
         /// </summary>
         internal static string DefaultWorkspaceName {
             get {
