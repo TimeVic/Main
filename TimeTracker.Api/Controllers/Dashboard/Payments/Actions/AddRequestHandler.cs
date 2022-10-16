@@ -49,7 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
             if (
                 workspace == null 
                 || client == null 
-                || !await _securityManager.HasAccess(AccessLevel.Write, user, workspace)
+                || !await _securityManager.HasAccess(AccessLevel.Read, user, workspace)
             )
             {
                 throw new HasNoAccessException();
