@@ -71,7 +71,7 @@ public partial class ProjectPage
             NotificationService.Notify(new NotificationMessage()
             {
                 Severity = NotificationSeverity.Error,
-                Summary = "Registration error"
+                Summary = "Project saving error"
             });
         }
         finally
