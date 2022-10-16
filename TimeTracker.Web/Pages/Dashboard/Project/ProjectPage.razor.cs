@@ -48,7 +48,7 @@ public partial class ProjectPage
     
     private void OnChangeClient(long clientId)
     {
-        model.ClientId = clientId;
+        model.ClientId = clientId == 0 ? null : clientId;
     }
     
     private async Task HandleSubmit()
