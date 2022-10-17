@@ -86,7 +86,9 @@ namespace TimeTracker.Web.Services.Http
         #region Workspace
         
         Task<PaginatedListDto<WorkspaceDto>> WorkspaceGetListAsync();
-        
+        Task<WorkspaceDto> WorkspaceAddAsync(string name);
+        Task<WorkspaceDto> WorkspaceUpdateAsync(long id, string name);
+
         #endregion
     }
 }
