@@ -29,5 +29,6 @@ public partial class WorkspaceMenu
 
         Dispatcher.Dispatch(new SetWorkspaceAction(workspace));
         Dispatcher.Dispatch(new PersistDataAction());
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }
