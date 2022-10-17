@@ -129,7 +129,7 @@ public class PaymentDao: IPaymentDao
         var query = _sessionProvider.CurrentSession.QueryOver<PaymentEntity>()
             .Inner.JoinAlias(item => item.Client, () => clientAlias)
             .Inner.JoinAlias(item => clientAlias.Workspace, () => workspaceAlias)
-            .Where(item => workspaceAlias.Id == workspace.Id && workspaceAlias.User.Id == user.Id);
+            .Where(item => workspaceAlias.Id == workspace.Id && item.User.Id == user.Id);
         
         var items = await query
             .OrderBy(item => item.PaymentTime).Desc

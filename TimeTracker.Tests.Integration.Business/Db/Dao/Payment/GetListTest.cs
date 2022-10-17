@@ -89,4 +89,18 @@ public class GetListTest: BaseTest
         Assert.Equal(expectedTotal, listModel.Items.Count);
         Assert.Equal(expectedTotal, listModel.TotalCount);
     }
+    
+    [Fact]
+    public async Task ShouldReceiveOnlyForCurrentUserWithoutPaymentsForOtherUsers()
+    {
+        var expectedTotal = 7;
+        await _paymentSeeder.CreateSeveralAsync(_user, 12);
+        
+        var otherUser = await _userSeeder.CreateActivatedAndShareAsync(_workspace);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, otherUser, expectedTotal);
+
+        var listModel = await _paymentDao.GetListAsync(_workspace, otherUser, 1);
+        Assert.Equal(expectedTotal, listModel.Items.Count);
+        Assert.Equal(expectedTotal, listModel.TotalCount);
+    }
 }
