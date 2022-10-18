@@ -17,11 +17,13 @@ public class ActivateUserTest: BaseTest
     private readonly IDataFactory<UserEntity> _userFactory;
     private readonly IQueueService _queueService;
     private readonly IQueueDao _queueDao;
+    private readonly IUserDao _userDao;
 
     public ActivateUserTest(): base()
     {
         _registrationService = Scope.Resolve<IRegistrationService>();
         _userFactory = Scope.Resolve<IDataFactory<UserEntity>>();
+        _userDao = Scope.Resolve<IUserDao>();
         _queueService = Scope.Resolve<IQueueService>();
         _queueDao = Scope.Resolve<IQueueDao>();
 
@@ -47,8 +49,10 @@ public class ActivateUserTest: BaseTest
             activatedUser.PasswordHash
         );
         Assert.True(activatedUser.IsActivated);
-        Assert.NotNull(activatedUser.DefaultWorkspace);
-        Assert.True(activatedUser.DefaultWorkspace.IsDefault);
+
+        var actualDefaultWorkspace = await _userDao.GetDefaultWorkspace(activatedUser);
+        Assert.NotNull(actualDefaultWorkspace);
+        Assert.True(actualDefaultWorkspace.IsDefault);
         
         
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);

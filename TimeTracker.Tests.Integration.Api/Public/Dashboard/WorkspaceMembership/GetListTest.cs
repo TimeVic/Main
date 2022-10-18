@@ -30,7 +30,7 @@ public class GetListTest: BaseTest
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _workspaceSeeder = ServiceProvider.GetRequiredService<IWorkspaceSeeder>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _workspace = _user.DefaultWorkspace;
+        _workspace = _user.Workspaces.First();
     }
 
     [Fact]

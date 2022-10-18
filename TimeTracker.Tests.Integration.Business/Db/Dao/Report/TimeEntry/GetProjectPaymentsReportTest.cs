@@ -27,7 +27,7 @@ public class GetProjectPaymentsReportTest: BaseTest
         _reportsDao = Scope.Resolve<ITimeEntryReportsDao>();
 
         _user = _userSeeder.CreateActivatedAsync().Result;
-        _workspace = _user.DefaultWorkspace;
+        _workspace = _user.Workspaces.First();
     }
 
     [Fact]

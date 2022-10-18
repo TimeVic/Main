@@ -77,7 +77,7 @@ public class TimeEntryService : ITimeEntryService
                 if (activeEntity.Duration >= _notificationSendingDuration)
                 {
                     await _queueService.PushNotificationAsync(
-                        new TimeEntryAutoStoppedNotificationItemContext(activeEntity.Workspace.User.Email)
+                        new TimeEntryAutoStoppedNotificationItemContext(activeEntity.Workspace.Owner.Email)
                     );    
                 }
                 await _sessionProvider.PerformCommitAsync(cancellationToken);

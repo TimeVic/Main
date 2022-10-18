@@ -35,7 +35,7 @@ public class ClientDao: IClientDao
         WorkspaceEntity workspaceAlias = null;
         var query = _sessionProvider.CurrentSession.QueryOver<ClientEntity>()
             .Inner.JoinAlias(item => item.Workspace, () => workspaceAlias)
-            .And(() => workspaceAlias.User.Id == user.Id);
+            .And(() => workspaceAlias.Owner.Id == user.Id);
         return await query.ListAsync();
     }
     
@@ -79,7 +79,7 @@ public class ClientDao: IClientDao
         ClientEntity clientEntity = null;
         var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<WorkspaceEntity>()
             .Inner.JoinAlias(item => item.Clients, () => clientEntity)
-            .Where(item => item.User.Id == user.Id)
+            .Where(item => item.Owner.Id == user.Id)
             .And(() => clientEntity.Id == entity.Id)
             .RowCountAsync();
         return itemsWithAccessCount > 0;

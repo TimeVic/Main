@@ -36,7 +36,7 @@ public class GetListTest: BaseTest
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _workspace = _user.DefaultWorkspace;
+        _workspace = _user.Workspaces.First();
         _client = _clientDao.CreateAsync(_workspace, "Test new client").Result;
         _project = _projectDao.CreateAsync(_workspace, "Test new project").Result;
         _project.SetClient(_client);
@@ -99,10 +99,11 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveOnlyForCurrentUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var otherClient = _clientDao.CreateAsync(otherUser.DefaultWorkspace, "Test new client").Result;
-        var otherProject = _projectDao.CreateAsync(otherUser.DefaultWorkspace, "Test new project").Result;
+        var workspace = otherUser.Workspaces.First();
+        var otherClient = _clientDao.CreateAsync(workspace, "Test new client").Result;
+        var otherProject = _projectDao.CreateAsync(workspace, "Test new project").Result;
         otherProject.SetClient(otherClient);
-        await _paymentSeeder.CreateSeveralAsync(otherUser.DefaultWorkspace, otherUser, otherClient, otherProject, 5);
+        await _paymentSeeder.CreateSeveralAsync(workspace, otherUser, otherClient, otherProject, 5);
         
         var expectedTotal = 21;
         await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _client, _project, expectedTotal);

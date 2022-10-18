@@ -45,7 +45,7 @@ public class UpdateTest: BaseTest
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _newUser = _userFactory.Generate();
-        _workspace = _user.DefaultWorkspace;
+        _workspace = _user.Workspaces.First();
 
         (_jwtTokenOtherUser, _otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
         _membership = _workspaceAccessService.ShareAccessAsync(
@@ -138,7 +138,7 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldNotAddProjectsFromAnotherWorkspace()
     {
-        var anotherWorkspace = _otherUser.DefaultWorkspace;
+        var anotherWorkspace = _otherUser.Workspaces.First();
         var anotherProject = await _projectDao.CreateAsync(anotherWorkspace, "other 1");
         var anotherProject2 = await _projectDao.CreateAsync(anotherWorkspace, "other 1");
         await CommitDbChanges();

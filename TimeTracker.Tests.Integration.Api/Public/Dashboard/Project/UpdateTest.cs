@@ -34,7 +34,7 @@ public class UpdateTest: BaseTest
         _clientSeeder = ServiceProvider.GetRequiredService<IClientSeeder>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _workspace = _user.DefaultWorkspace;
+        _workspace = _user.Workspaces.First();
         _project = _projectSeeder.CreateSeveralAsync(_workspace, _user).Result.First();
     }
 
@@ -53,7 +53,7 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldUpdate()
     {
-        var expectedWorkspace = _user.DefaultWorkspace;
+        var expectedWorkspace = _user.Workspaces.First();
         var expectedClient = _clientSeeder.CreateSeveralAsync(expectedWorkspace).Result.First();
         var expectedProject = _projectFactory.Generate();
         await DbSessionProvider.PerformCommitAsync();
@@ -78,7 +78,7 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldSetClientToNull()
     {
-        var expectedWorkspace = _user.DefaultWorkspace;
+        var expectedWorkspace = _user.Workspaces.First();
         var expectedClient = _clientSeeder.CreateSeveralAsync(expectedWorkspace).Result.First();
         _project.SetClient(expectedClient);
         await DbSessionProvider.PerformCommitAsync();

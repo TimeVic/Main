@@ -13,5 +13,5 @@ public class WorkspaceDto : IResponse
     
     public MembershipAccessType? CurrentUserAccess { get; set; }
     
-    public UserDto? Owner { get; set; }
+    public UserDto Owner { get; set; }
 }

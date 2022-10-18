@@ -37,7 +37,7 @@ public class UpdateTest: BaseTest
         _paymentSeeder = ServiceProvider.GetRequiredService<IPaymentSeeder>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _workspace = _user.DefaultWorkspace;
+        _workspace = _user.Workspaces.First();
         _payment = _paymentSeeder.CreateSeveralAsync(_user, 1).Result.First();
         DbSessionProvider.PerformCommitAsync().Wait();
     }

@@ -54,6 +54,9 @@ public class GetListTest: BaseTest
         {
             Assert.True(item.Id > 0);
             Assert.NotNull(item.Name);
+            Assert.NotNull(item.Owner);
+            Assert.True(item.Owner.Id > 0);
+            Assert.NotEmpty(item.Owner.UserName);
         });
     }
     
@@ -61,7 +64,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveListWithAccessToWorkspace()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var defaultWorkspace = _user.DefaultWorkspace;
+        var defaultWorkspace = _user.Workspaces.First();
         
         var expectWorkspaces = await _workspaceSeeder.CreateSeveralAsync(otherUser, 2);
         await CommitDbChanges();

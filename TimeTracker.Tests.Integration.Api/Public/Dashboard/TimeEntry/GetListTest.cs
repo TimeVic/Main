@@ -71,7 +71,7 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task ShouldReceiveOnlyForCurrentUserList()
     {
-        var workspace = _user.DefaultWorkspace;
+        var workspace = _user.Workspaces.First();
         var expectedCounter = 15;
         await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, expectedCounter);
         await _timeEntryDao.StartNewAsync(_user, workspace);
