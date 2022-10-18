@@ -73,9 +73,5 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual ICollection<WorkspaceMembershipEntity> WorkspaceMemberships { get; set; } = new List<WorkspaceMembershipEntity>();
         
         public virtual bool IsActivated => VerificationTime.HasValue;
-        
-        public virtual WorkspaceEntity? DefaultWorkspace => Workspaces
-            .AsQueryable()
-            .FirstOrDefault(item => item.IsDefault);
     }
 }

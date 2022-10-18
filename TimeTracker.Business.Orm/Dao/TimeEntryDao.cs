@@ -222,7 +222,7 @@ public class TimeEntryDao: ITimeEntryDao
         TimeEntryEntity timeEntryAlias = null;
         var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<WorkspaceEntity>()
             .Inner.JoinAlias(item => item.TimeEntries, () => timeEntryAlias)
-                .Where(item => item.User.Id == user.Id)
+                .Where(item => item.Owner.Id == user.Id)
                 .And(() => timeEntryAlias.Id == entity.Id)
             .RowCountAsync();
         return itemsWithAccessCount > 0;

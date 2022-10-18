@@ -65,6 +65,12 @@ public class UserDao: IUserDao
         return allWorkspaces.FirstOrDefault(item => item.Id == workspaceId);
     }
     
+    public async Task<WorkspaceEntity> GetDefaultWorkspace(UserEntity user)
+    {
+        var allWorkspaces = await GetUsersWorkspaces(user);
+        return allWorkspaces.First(item => item.IsDefault);
+    }
+    
     public async Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user)
     {
         var ownedWorkspaces = user.Workspaces;

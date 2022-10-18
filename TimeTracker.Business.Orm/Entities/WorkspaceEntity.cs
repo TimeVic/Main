@@ -34,7 +34,7 @@ namespace TimeTracker.Business.Orm.Entities
             Lazy = Laziness.False,
             Cascade = "none"
         )]
-        public virtual UserEntity User { get; set; }
+        public virtual UserEntity Owner { get; set; }
         
         [Bag(
             Inverse = true,
@@ -118,7 +118,7 @@ namespace TimeTracker.Business.Orm.Entities
         
         public virtual bool IsOwner(UserEntity user)
         {
-            return User.Id == user.Id;
+            return Owner.Id == user.Id;
         }
         
         #endregion

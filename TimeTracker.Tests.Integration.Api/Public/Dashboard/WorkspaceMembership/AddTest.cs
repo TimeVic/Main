@@ -37,7 +37,7 @@ public class AddTest: BaseTest
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _newUser = _userFactory.Generate();
-        _workspace = _user.DefaultWorkspace;
+        _workspace = _user.Workspaces.First();
         
         (_otherJwtToken, _otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
     }
@@ -76,7 +76,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Email = _newUser.Email,
-            WorkspaceId = _otherUser.DefaultWorkspace.Id
+            WorkspaceId = _otherUser.Workspaces.First().Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();

@@ -37,7 +37,7 @@ public class ProjectDao: IProjectDao
         WorkspaceEntity workspaceAlias = null;
         var query = _sessionProvider.CurrentSession.QueryOver<ProjectEntity>()
             .Inner.JoinAlias(item => item.Workspace, () => workspaceAlias)
-            .And(() => workspaceAlias.User.Id == user.Id);
+            .And(() => workspaceAlias.Owner.Id == user.Id);
         return await query.ListAsync();
     }
     
@@ -98,7 +98,7 @@ public class ProjectDao: IProjectDao
         ProjectEntity projectAlias = null;
         var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<WorkspaceEntity>()
             .Inner.JoinAlias(item => item.Projects, () => projectAlias)
-            .Where(item => item.User.Id == user.Id)
+            .Where(item => item.Owner.Id == user.Id)
             .And(() => projectAlias.Id == entity.Id)
             .RowCountAsync();
         return itemsWithAccessCount > 0;

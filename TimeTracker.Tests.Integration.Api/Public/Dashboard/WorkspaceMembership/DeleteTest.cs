@@ -45,7 +45,7 @@ public class DeleteTest: BaseTest
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _newUser = _userFactory.Generate();
-        _workspace = _user.DefaultWorkspace;
+        _workspace = _user.Workspaces.First();
 
         (_jwtTokenOtherUser, _otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
         

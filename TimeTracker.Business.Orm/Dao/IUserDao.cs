@@ -18,4 +18,6 @@ public interface IUserDao: IDomainService
     Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, long workspaceId);
 
     Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user);
+
+    Task<WorkspaceEntity> GetDefaultWorkspace(UserEntity user);
 }

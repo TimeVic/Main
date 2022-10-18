@@ -28,7 +28,7 @@ public class WorkspaceDao: IWorkspaceDao
         var workspace = new WorkspaceEntity()
         {
             Name = name,
-            User = user,
+            Owner = user,
             IsDefault = isDefault,
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow

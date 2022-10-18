@@ -37,7 +37,7 @@ public class AddTest: BaseTest
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _workspace = _user.DefaultWorkspace;
+        _workspace = _user.Workspaces.First();
         _client = _clientDao.CreateAsync(_workspace, "Test adding").Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
         _project.SetClient(_client);

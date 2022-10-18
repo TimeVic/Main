@@ -29,7 +29,7 @@ public class PaymentDao: IPaymentDao
         var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<PaymentEntity>()
             .Inner.JoinAlias(item => item.Client, () => clientAlias)
             .Inner.JoinAlias(() => clientAlias.Workspace, () => workspaceAlias)
-            .Inner.JoinAlias(item => workspaceAlias.User, () => userAlias)
+            .Inner.JoinAlias(item => workspaceAlias.Owner, () => userAlias)
             .And(() => userAlias.Id == user.Id)
             .And(item => item.Id == entity.Id)
             .RowCountAsync();
