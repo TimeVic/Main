@@ -21,6 +21,9 @@ public class GetFilteredListRequest: IRequest<GetFilteredListResponse>
     [IsPositive]
     public long? ProjectId { get; set; }
 
+    [IsPositive]
+    public long? MemberId { get; set; }
+    
     [StringLength(255)]
     public string? Search { get; set; }
     
