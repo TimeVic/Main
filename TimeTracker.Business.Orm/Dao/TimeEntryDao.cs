@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using NHibernate;
+using NHibernate.Criterion;
 using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
@@ -8,6 +9,7 @@ using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 using TimeTracker.Business.Orm.Exceptions;
 
 namespace TimeTracker.Business.Orm.Dao;
@@ -49,30 +51,32 @@ public class TimeEntryDao: ITimeEntryDao
         MembershipAccessType accessType = MembershipAccessType.Owner
     )
     {
-        var query = _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
-            .OrderByDescending(item => item.Date).ThenByDescending(item => item.StartTime)
+        var query = _sessionProvider.CurrentSession.QueryOver<TimeEntryEntity>()
+            .OrderBy(item => item.Date).Desc
+            .OrderBy(item => item.StartTime).Desc
             .Where(item => item.Workspace.Id == workspace.Id);
+        
         if (filter != null)
         {
             if (filter.ClientId.HasValue)
             {
-                query = query.Where(item => item.Project.Client.Id == filter.ClientId);
+                query = query.And(item => item.Project.Client.Id == filter.ClientId);
             }
             if (filter.ProjectId.HasValue)
             {
-                query = query.Where(item => item.Project.Id == filter.ProjectId);
+                query = query.And(item => item.Project.Id == filter.ProjectId);
             }
             if (filter.IsBillable.HasValue)
             {
-                query = query.Where(item => item.IsBillable == filter.IsBillable);
+                query = query.And(item => item.IsBillable == filter.IsBillable);
             }
             if (filter.MemberId.HasValue)
             {
-                query = query.Where(item => item.User.Id == filter.MemberId);
+                query = query.And(item => item.User.Id == filter.MemberId);
             }
             if (!string.IsNullOrEmpty(filter.Search))
             {
-                query = query.Where(
+                query = query.And(
                     item => (
                         item.Description.ToLower().Contains(filter.Search.ToLower())
                         || item.TaskId.ToLower().Contains(filter.Search.ToLower())
@@ -81,27 +85,43 @@ public class TimeEntryDao: ITimeEntryDao
             }
         }
 
-        if (user != null && accessType == MembershipAccessType.User)
+        if (
+            user != null 
+            && accessType != MembershipAccessType.Manager 
+            && accessType != MembershipAccessType.Owner
+        )
         {
-            var availableProjectsList = await _projectDao.GetListAsync(
-                workspace,
-                user,
-                accessType
-            );
-            var availableProjectIds = availableProjectsList.Items.Select(item => item.Id).ToList();
-            query = query.Where(
-                item => availableProjectIds.Contains(item.Project.Id) || item.User.Id == user.Id
-            );
+            // Is not owner
+            ProjectEntity projectAlias = null;
+            WorkspaceMembershipProjectAccessEntity projectAccessAlias = null;
+            WorkspaceMembershipEntity workspaceMembershipAlias = null;
+            UserEntity userAlias = null;
+            var allowedIdsSubQuery = QueryOver.Of<TimeEntryEntity>()
+                .Inner.JoinAlias(item => item.Project, () => projectAlias)
+                .Inner.JoinAlias(item => projectAlias.MembershipProjectAccess, () => projectAccessAlias)
+                .Inner.JoinAlias(() => projectAccessAlias.WorkspaceMembership, () => workspaceMembershipAlias)
+                .And(
+                    item => workspaceMembershipAlias.User.Id == user.Id 
+                        && workspaceMembershipAlias.Workspace.Id == workspace.Id
+                )
+                .Select(
+                    Projections.Distinct(
+                        Projections.Property<TimeEntryEntity>(s => s.Id)
+                    )
+                );
+            query.WithSubquery
+                .WhereProperty(item => item.Id)
+                .In(allowedIdsSubQuery);
         }
 
         var offset = PaginationUtils.CalculateOffset(page);
         var items = await query
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
-            .ToListAsync();
+            .ListAsync();
         return new ListDto<TimeEntryEntity>(
             items,
-            await query.CountAsync()
+            await query.RowCountAsync()
         );
     }
     

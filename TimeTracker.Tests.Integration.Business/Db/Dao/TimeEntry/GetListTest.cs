@@ -178,8 +178,9 @@ public class GetListTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldReturnTimeEntriesOnlyForSharedProjects()
+    public async Task ShouldReturnTimeEntriesOnlyForSharedProjectsForUserWithRoleUser()
     {
+        var accessType = MembershipAccessType.User;
         var projects = await _projectSeeder.CreateSeveralAsync(_workspace, _user, 4);
         foreach (var project in projects)
         {
@@ -189,7 +190,7 @@ public class GetListTest: BaseTest
         var expectedProject2 = projects.Last();
         var expectedUser = await _userSeeder.CreateActivatedAndShareAsync(
             _workspace,
-            access: MembershipAccessType.User,
+            access: accessType,
             projects: new List<ProjectEntity>()
             {
                 expectedProject1,
@@ -203,10 +204,10 @@ public class GetListTest: BaseTest
             _workspace, 
             1,
             user: expectedUser,
-            accessType: MembershipAccessType.User
+            accessType: accessType
         );
         
-        Assert.Equal(9, actualList.TotalCount);
+        Assert.Equal(6, actualList.TotalCount);
         Assert.All(actualList.Items, item =>
         {
             Assert.True(
@@ -214,6 +215,36 @@ public class GetListTest: BaseTest
                 || item.Project.Id == expectedProject2.Id
                 || item.User.Id == expectedUser.Id
             );
+        });
+    }
+    
+    [Fact]
+    public async Task ShouldReturnAllTimeEntriesIfUserWithRoleManager()
+    {
+        var accessType = MembershipAccessType.Manager;
+        var projects = await _projectSeeder.CreateSeveralAsync(_workspace, _user, 4);
+        foreach (var project in projects)
+        {
+            await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3, project);
+        }
+        var expectedUser = await _userSeeder.CreateActivatedAndShareAsync(
+            _workspace,
+            access: accessType
+        );
+        await _timeEntrySeeder.CreateSeveralAsync(_workspace, expectedUser, 3);
+        await CommitDbChanges();
+
+        var actualList = await _timeEntryDao.GetListAsync(
+            _workspace, 
+            1,
+            user: expectedUser,
+            accessType: accessType
+        );
+        
+        Assert.Equal(4 * 3 + 3, actualList.TotalCount);
+        Assert.All(actualList.Items, item =>
+        {
+            Assert.True(item.User.Id == expectedUser.Id || item.User.Id == _user.Id);
         });
     }
 }
