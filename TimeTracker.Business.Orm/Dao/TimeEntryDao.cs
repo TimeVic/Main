@@ -51,7 +51,13 @@ public class TimeEntryDao: ITimeEntryDao
         MembershipAccessType accessType = MembershipAccessType.Owner
     )
     {
+        ProjectEntity rootProjectAlias = null;
+        ClientEntity rootClientAlias = null;
+        UserEntity rootUserAlias = null;
         var query = _sessionProvider.CurrentSession.QueryOver<TimeEntryEntity>()
+            .Inner.JoinAlias(item => item.User, () => rootUserAlias)
+            .Left.JoinAlias(item => item.Project, () => rootProjectAlias)
+            .Left.JoinAlias(() => rootProjectAlias.Client, () => rootClientAlias)
             .OrderBy(item => item.Date).Desc
             .OrderBy(item => item.StartTime).Desc
             .Where(item => item.Workspace.Id == workspace.Id);
@@ -60,11 +66,11 @@ public class TimeEntryDao: ITimeEntryDao
         {
             if (filter.ClientId.HasValue)
             {
-                query = query.And(item => item.Project.Client.Id == filter.ClientId);
+                query = query.And(() => rootClientAlias.Id == filter.ClientId);
             }
             if (filter.ProjectId.HasValue)
             {
-                query = query.And(item => item.Project.Id == filter.ProjectId);
+                query = query.And(() => rootProjectAlias.Id == filter.ProjectId);
             }
             if (filter.IsBillable.HasValue)
             {
@@ -72,14 +78,14 @@ public class TimeEntryDao: ITimeEntryDao
             }
             if (filter.MemberId.HasValue)
             {
-                query = query.And(item => item.User.Id == filter.MemberId);
+                query = query.And(() => rootUserAlias.Id == filter.MemberId);
             }
             if (!string.IsNullOrEmpty(filter.Search))
             {
                 query = query.And(
-                    item => (
-                        item.Description.ToLower().Contains(filter.Search.ToLower())
-                        || item.TaskId.ToLower().Contains(filter.Search.ToLower())
+                    Restrictions.Or(
+                        Restrictions.InsensitiveLike("Description", filter.Search, MatchMode.Anywhere),
+                        Restrictions.InsensitiveLike("TaskId", filter.Search, MatchMode.Anywhere)
                     )
                 );
             }

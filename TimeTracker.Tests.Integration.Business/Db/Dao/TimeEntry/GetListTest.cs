@@ -17,7 +17,6 @@ public class GetListTest: BaseTest
     private readonly IWorkspaceDao _workspaceDao;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly IProjectSeeder _projectSeeder;
-    private readonly IWorkspaceAccessService _workspaceAccessService;
     
     private readonly WorkspaceEntity _workspace;
     private readonly UserEntity _user;
@@ -29,7 +28,6 @@ public class GetListTest: BaseTest
         _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
-        _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _workspaceDao.CreateWorkspaceAsync(_user, "Test").Result;
