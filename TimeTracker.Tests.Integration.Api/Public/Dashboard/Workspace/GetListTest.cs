@@ -56,7 +56,7 @@ public class GetListTest: BaseTest
             Assert.NotNull(item.Name);
             Assert.NotNull(item.Owner);
             Assert.True(item.Owner.Id > 0);
-            Assert.NotEmpty(item.Owner.UserName);
+            Assert.NotEmpty(item.Owner.Email);
         });
     }
     
