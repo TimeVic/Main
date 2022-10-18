@@ -20,13 +20,15 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         private readonly IUserDao _userDao;
         private readonly ITimeEntryDao _timeEntryDao;
         private readonly ISecurityManager _securityManager;
+        private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public GetFilteredListRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
             ITimeEntryDao timeEntryDao,
-            ISecurityManager securityManager
+            ISecurityManager securityManager,
+            IWorkspaceAccessService workspaceAccessService
         )
         {
             _mapper = mapper;
@@ -34,6 +36,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _userDao = userDao;
             _timeEntryDao = timeEntryDao;
             _securityManager = securityManager;
+            _workspaceAccessService = workspaceAccessService;
         }
     
         public async Task<GetFilteredListResponse> ExecuteAsync(GetFilteredListRequest request)
@@ -46,13 +49,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new HasNoAccessException();
             }
 
-            var listDto = await _timeEntryDao.GetListAsync(workspace, request.Page, new FilterDataDto()
-            {
-                Search = request.Search,
-                ClientId = request.ClientId,
-                IsBillable = request.IsBillable,
-                ProjectId = request.ProjectId
-            });
+            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+            var listDto = await _timeEntryDao.GetListAsync(
+                workspace, 
+                request.Page, 
+                filter: new FilterDataDto
+                {
+                    Search = request.Search,
+                    ClientId = request.ClientId,
+                    IsBillable = request.IsBillable,
+                    ProjectId = request.ProjectId,
+                    MemberId = request.MemberId
+                },
+                user: user,
+                accessType: userAccess.Value
+            );
             return new GetFilteredListResponse(
                 _mapper.Map<ICollection<TimeEntryDto>>(listDto.Items),
                 listDto.TotalCount

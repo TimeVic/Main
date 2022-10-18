@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -19,9 +20,11 @@ public class GetFilteredListTest: BaseTest
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IProjectSeeder _projectSeeder;
+    private readonly IUserSeeder _userSeeder;
 
     public GetFilteredListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
+        _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
@@ -61,5 +64,40 @@ public class GetFilteredListTest: BaseTest
 
         var actualDto = await response.GetJsonDataAsync<GetFilteredListResponse>();
         Assert.Equal(1, actualDto.TotalCount);
+    }
+    
+    [Fact]
+    public async Task ShouldReceiveListWithSharedAccess()
+    {
+        var projects = await _projectSeeder.CreateSeveralAsync(_defaultWorkspace, _user, 2);
+        var expectedProject = projects.First();
+        var expectedProject2 = projects.Last();
+
+        var (otherJwt, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _defaultWorkspace,
+            MembershipAccessType.User,
+            projects: new List<ProjectEntity>()
+            {
+                expectedProject
+            }
+        );
+        await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, otherUser, 3, expectedProject);
+        
+        await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, 3, expectedProject);
+        await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, 3, expectedProject2);
+
+        var response = await PostRequestAsync(Url, otherJwt, new GetFilteredListRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id,
+            Page = 1
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetFilteredListResponse>();
+        Assert.Equal(3 + 3, actualDto.TotalCount);
+        Assert.All(actualDto.Items, item =>
+        {
+            Assert.True(item.User.Id == _user.Id || item.User.Id == otherUser.Id);
+        });
     }
 }
