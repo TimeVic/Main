@@ -166,4 +166,62 @@ public class GetProjectPaymentsReportTest: BaseTest
         Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
         Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
     }
+    
+    [Fact]
+    public async Task ShouldReceiveOnlyForCurrentUser()
+    {
+        var otherUser = await _userSeeder.CreateActivatedAndShareAsync(_workspace);
+        
+        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, _user, 2);
+        var project1 = projects.First();
+       
+        await _paymentDao.CreateAsync(
+            _workspace,
+            otherUser,
+            project1.Client,
+            15,
+            DateTime.UtcNow,
+            project1.Id,
+            ""
+        );
+        await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
+        {
+            Date = DateTime.UtcNow,
+            StartTime = TimeSpan.FromHours(10),
+            EndTime = TimeSpan.FromHours(15),
+            IsBillable = true,
+            HourlyRate = 2
+        }, project1);
+        
+        await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+        {
+            Date = DateTime.UtcNow,
+            StartTime = TimeSpan.FromHours(10),
+            EndTime = TimeSpan.FromHours(15),
+            IsBillable = true,
+            HourlyRate = 1
+        }, project1);
+        await _paymentDao.CreateAsync(
+            _workspace,
+            _user,
+            project1.Client,
+            10,
+            DateTime.UtcNow,
+            project1.Id,
+            ""
+        );
+
+        var result = await _reportsDao.GetProjectPaymentsReport(_workspace.Id, _user.Id);
+
+        var actualForProject1 = result.FirstOrDefault(item => item.ProjectId == project1.Id);
+        Assert.NotNull(actualForProject1);
+        Assert.Equal(project1.Id, actualForProject1.ProjectId);
+        Assert.Equal(project1.Name, actualForProject1.ProjectName);
+        Assert.Equal(5, Math.Round(actualForProject1.Amount));
+        Assert.Equal(10, actualForProject1.PaidAmountByClient);
+        Assert.Equal(10, actualForProject1.PaidAmountByProject);
+        Assert.Equal(TimeSpan.FromHours(5), actualForProject1.TotalDuration);
+        Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
+        Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
+    }
 }

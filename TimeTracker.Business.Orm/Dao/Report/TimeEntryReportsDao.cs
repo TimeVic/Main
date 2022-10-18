@@ -13,7 +13,7 @@ public class TimeEntryReportsDao: ITimeEntryReportsDao
         this._sessionProvider = _sessionProvider;
     }
     
-    private const string _sqlQueryProjectPayments = @"
+    private const string SqlQueryProjectPayments = @"
         select  
             p.id as ProjectId,
             p.name as ProjectName,
@@ -29,11 +29,15 @@ public class TimeEntryReportsDao: ITimeEntryReportsDao
             (
 	            select sum(pm.amount) from payments pm
 	            where pm.client_id = c.id
+	                and pm.user_id = :userId
+	                and pm.workspace_id = :workspaceId 
 	            group by pm.client_id
             ) as PaidAmountByClientOriginal,
             (
 	            select sum(pm.amount) from payments pm
 	            where pm.project_id = p.id
+	                and pm.user_id = :userId
+	                and pm.workspace_id = :workspaceId 
 	            group by pm.client_id
             ) as PaidAmountByProjectOriginal
         from time_entries te
@@ -47,7 +51,7 @@ public class TimeEntryReportsDao: ITimeEntryReportsDao
 
     public async Task<ICollection<ProjectPaymentsReportItemDto>> GetProjectPaymentsReport(long workspaceId, long userId)
     {
-        return await _sessionProvider.CurrentSession.CreateSQLQuery(_sqlQueryProjectPayments)
+        return await _sessionProvider.CurrentSession.CreateSQLQuery(SqlQueryProjectPayments)
             .SetParameter("workspaceId", workspaceId)
             .SetParameter("userId", userId)
             .SetResultTransformer(Transformers.AliasToBean<ProjectPaymentsReportItemDto>())
