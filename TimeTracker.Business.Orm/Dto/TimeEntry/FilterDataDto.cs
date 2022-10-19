@@ -11,4 +11,8 @@ public class FilterDataDto
     public bool? IsBillable { get; set; }
     
     public long? MemberId { get; set; }
+    
+    public DateTime? DateFrom { get; set; }
+    
+    public DateTime? DateTo { get; set; }
 }

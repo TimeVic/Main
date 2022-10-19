@@ -89,6 +89,16 @@ public class TimeEntryDao: ITimeEntryDao
                     )
                 );
             }
+            if (filter.DateFrom.HasValue)
+            {
+                var startOfDay = filter.DateFrom.Value.StartOfDay();
+                query = query.And(item => item.Date >= startOfDay);
+            }
+            if (filter.DateTo.HasValue)
+            {
+                var endOfDay = filter.DateTo.Value.EndOfDay();
+                query = query.And(item => item.Date <= endOfDay);
+            }
         }
 
         if (

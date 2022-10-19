@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Autofac;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
@@ -172,6 +173,77 @@ public class GetListTest: BaseTest
         Assert.All(actualList.Items, item =>
         {
             Assert.True(item.User.Id == expectedUser.Id);
+        });
+    }
+    
+    [Fact]
+    public async Task ShouldFilterByDateFrom()
+    {
+        var dateFrom = DateTime.UtcNow.StartOfDay().AddDays(-5);
+        
+        var expectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
+        foreach (var entry in expectedEntries)
+        {
+            entry.Date = DateTime.UtcNow.StartOfDay().AddDays(-5);
+        }
+        var notExpectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 2);
+        foreach (var entry in notExpectedEntries)
+        {
+            entry.Date = DateTime.UtcNow.StartOfDay().AddDays(-6);
+        }
+        await CommitDbChanges();
+
+        var actualList = await _timeEntryDao.GetListAsync(
+            _workspace, 
+            1,
+            filter: new FilterDataDto()
+            {
+                DateFrom = dateFrom
+            }
+        );
+        
+        Assert.Equal(3, actualList.TotalCount);
+        Assert.All(actualList.Items, item =>
+        {
+            Assert.True(item.Date >= dateFrom);
+        });
+    }
+    
+    [Fact]
+    public async Task ShouldFilterByDateTo()
+    {
+        var dateTo = DateTime.UtcNow.EndOfDay();
+        
+        var expectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
+        foreach (var entry in expectedEntries)
+        {
+            entry.Date = DateTime.UtcNow.EndOfDay().AddDays(-1);
+        }
+        expectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
+        foreach (var entry in expectedEntries)
+        {
+            entry.Date = DateTime.UtcNow.EndOfDay();
+        }
+        var notExpectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 2);
+        foreach (var entry in notExpectedEntries)
+        {
+            entry.Date = DateTime.UtcNow.StartOfDay().AddDays(1);
+        }
+        await CommitDbChanges();
+
+        var actualList = await _timeEntryDao.GetListAsync(
+            _workspace, 
+            1,
+            filter: new FilterDataDto()
+            {
+                DateTo = dateTo
+            }
+        );
+        
+        Assert.Equal(6, actualList.TotalCount);
+        Assert.All(actualList.Items, item =>
+        {
+            Assert.True(item.Date <= dateTo);
         });
     }
     
