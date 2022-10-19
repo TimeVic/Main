@@ -1,0 +1,7 @@
+.w-filter ::deep .w-select {
+  width: 200px;
+}
+.w-filter ::deep .w-date {
+  width: 130px;
+}
+/*# sourceMappingURL=FilterForm.razor.css.map */

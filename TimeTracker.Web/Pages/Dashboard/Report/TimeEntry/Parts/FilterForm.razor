@@ -1,21 +1,39 @@
 ﻿@inherits BaseComponent
 
-<div class="row d-flex px-3 justify-content-center">
+<div class="row d-flex px-3 justify-content-center w-filter">
     <RadzenCard Class="w-100 d-flex">
         <div class="w-100 d-flex justify-content-start">
-            <ClientsDropDown 
-                Value="@(_state.Value.Filter.ClientId ?? 0)" 
-                Class="mr-1 col"
+            <ClientsDropDown
+                Value="@(_state.Value.Filter.ClientId ?? 0)"
+                Class="mr-1 w-select"
                 ValueChanged="OnChangeClient"/>
 
             <ProjectsDropDown
                 Value="@(_state.Value.Filter.ProjectId ?? 0)"
                 ClientId="@(_state.Value.Filter.ClientId ?? 0)"
                 ValueChanged="OnChangeProject"
-                Class="mr-1 col"/>
+                Class="mr-1 w-select"/>
 
+            <RadzenDatePicker
+                TValue="DateTime?"
+                AllowClear="true"
+                DateFormat="d"
+                Placeholder="Date from"
+                Value="@_state.Value.Filter.DateFrom"
+                Change="OnChangeDateFrom"
+                Class="mr-1 w-date"/>
+            
+            <RadzenDatePicker
+                TValue="DateTime?"
+                AllowClear="true"
+                DateFormat="d"
+                Placeholder="Date to"
+                Value="@_state.Value.Filter.DateTo"
+                Change="OnChangeDateTo"
+                Class="mr-1 w-date"/>
+            
             <RadzenTextBox
-                Class="mr-1 col"
+                Class="col"
                 Placeholder="Search"
                 Value="@_state.Value.Filter.Search"
                 ValueChanged="OnChangeSearch"/>

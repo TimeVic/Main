@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Pages.Dashboard.Report.TimeEntry.Parts;
@@ -29,6 +30,18 @@ public partial class FilterForm
     private void OnChangeSearch(string search)
     {
         _state.Value.Filter.Search = search ?? "";
+        UpdateFilterState();
+    }
+    
+    private void OnChangeDateFrom(DateTime? from)
+    {
+        _state.Value.Filter.DateFrom = from?.StartOfDay();
+        UpdateFilterState();
+    }
+    
+    private void OnChangeDateTo(DateTime? to)
+    {
+        _state.Value.Filter.DateTo = to?.EndOfDay();
         UpdateFilterState();
     }
 
