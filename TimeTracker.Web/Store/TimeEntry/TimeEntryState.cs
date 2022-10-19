@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Extensions;
 
 namespace TimeTracker.Web.Store.TimeEntry;
 
@@ -47,6 +48,10 @@ public record TimeEntryFilterState
     public long? ProjectId { get; set; }
 
     public string? Search { get; set; } = "";
+    
+    public DateTime? DateFrom { get; set; }
+    
+    public DateTime? DateTo { get; set; } = DateTime.UtcNow.EndOfDay();
     
     public bool? IsBillable { get; set; }
 }

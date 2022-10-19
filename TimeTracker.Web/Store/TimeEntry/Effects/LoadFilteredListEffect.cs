@@ -41,6 +41,8 @@ public class LoadFilteredListEffect: Effect<LoadTimeEntryFilteredListAction>
                 ClientId = _state.Value.Filter.ClientId,
                 ProjectId = _state.Value.Filter.ProjectId,
                 IsBillable = _state.Value.Filter.IsBillable,
+                DateFrom = _state.Value.Filter.DateFrom,
+                DateTo = _state.Value.Filter.DateTo,
             });
             dispatcher.Dispatch(new SetTimeEntryFilteredListItemsAction(response));
         }
