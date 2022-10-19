@@ -59,7 +59,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                     ClientId = request.ClientId,
                     IsBillable = request.IsBillable,
                     ProjectId = request.ProjectId,
-                    MemberId = request.MemberId
+                    MemberId = request.MemberId,
+                    DateFrom = request.DateFrom,
+                    DateTo = request.DateTo
                 },
                 user: user,
                 accessType: userAccess.Value

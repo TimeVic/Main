@@ -28,4 +28,8 @@ public class GetFilteredListRequest: IRequest<GetFilteredListResponse>
     public string? Search { get; set; }
     
     public bool? IsBillable { get; set; }
+    
+    public DateTime? DateFrom { get; set; }
+    
+    public DateTime? DateTo { get; set; }
 }

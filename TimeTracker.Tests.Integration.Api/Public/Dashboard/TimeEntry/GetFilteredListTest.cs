@@ -50,6 +50,7 @@ public class GetFilteredListTest: BaseTest
         var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, 6, expectedProject)).First();
         expectedEntry.Description = "Fake desCript223ion 123";
         expectedEntry.IsBillable = true;
+        expectedEntry.Date = DateTime.UtcNow.AddDays(-5);
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetFilteredListRequest()
         {
@@ -58,14 +59,16 @@ public class GetFilteredListTest: BaseTest
             Search = "cript223",
             ClientId = expectedProject.Client.Id,
             ProjectId = expectedProject.Id,
-            IsBillable = true
+            IsBillable = true,
+            DateFrom = DateTime.UtcNow.AddDays(-6),
+            DateTo = DateTime.UtcNow,
         });
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetFilteredListResponse>();
         Assert.Equal(1, actualDto.TotalCount);
     }
-    
+
     [Fact]
     public async Task ShouldReceiveListWithSharedAccess()
     {
