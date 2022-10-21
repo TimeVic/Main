@@ -33,7 +33,7 @@ RUN apt-get install -y net-tools sudo netcat \
     postgresql postgresql-client redis
 
 # Configure Postgres
-ENV PGTZ=UTC
+ENV PGTZ=Etc/UTC
 
 # Create dirs
 RUN mkdir /tmp/test
