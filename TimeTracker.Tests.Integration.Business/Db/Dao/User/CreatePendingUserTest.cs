@@ -26,6 +26,7 @@ public class CreatePendingUserTest: BaseTest
         Assert.True(user.Id > 0);
         Assert.NotEmpty(user.VerificationToken);
         Assert.NotEmpty(user.Email);
+        Assert.Equal(TimeZoneInfo.Utc.Id, user.Timezone);
         Assert.Null(user.VerificationTime);
     }
 }
