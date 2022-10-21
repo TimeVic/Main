@@ -8,7 +8,7 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
     {
         public bool AllowZero = false;
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value == null)
             {

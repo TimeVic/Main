@@ -123,6 +123,15 @@ namespace TimeTracker.Business.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field &quot;{0}&quot; may contain only time zone ID!.
+        /// </summary>
+        public static string Error_FieldMayContainOnlyTimeZoneId {
+            get {
+                return ResourceManager.GetString("Error_FieldMayContainOnlyTimeZoneId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field &quot;{0}&quot; contains incorrect Base64 value!.
         /// </summary>
         public static string Error_IncorrectBase64 {

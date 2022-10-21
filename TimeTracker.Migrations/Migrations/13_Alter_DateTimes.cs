@@ -4,7 +4,7 @@ using TimeTracker.Migrations.Code;
 namespace TimeTracker.Migrations.Migrations
 {
     [Migration(13)]
-    public class _13_Alter_Users : MyMigration
+    public class _13_Alter_DateTimes : MyMigration
     {
         public override void Up()
         {
@@ -46,6 +46,10 @@ namespace TimeTracker.Migrations.Migrations
                 .AlterColumn("update_time").AsDateTime2().NotNullable();
             
             Alter.Table("workspace_memberships")
+                .AlterColumn("create_time").AsDateTime2().NotNullable()
+                .AlterColumn("update_time").AsDateTime2().NotNullable();
+            
+            Alter.Table("workspace_membership_project_accesses")
                 .AlterColumn("create_time").AsDateTime2().NotNullable()
                 .AlterColumn("update_time").AsDateTime2().NotNullable();
 

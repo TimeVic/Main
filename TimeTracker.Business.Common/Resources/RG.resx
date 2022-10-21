@@ -27,6 +27,9 @@
     <data name="Error_FieldMayContainOnlyPositiveDigits" xml:space="preserve">
         <value>Field "{0}" may contain only positive digits!</value>
     </data>
+    <data name="Error_FieldMayContainOnlyTimeZoneId" xml:space="preserve">
+        <value>Field "{0}" may contain only time zone ID!</value>
+    </data>
     <data name="Error_ArrayStringIsTooLong" xml:space="preserve">
      <value>Field "{0}" should contain maximum {1} characters</value>
     </data>
