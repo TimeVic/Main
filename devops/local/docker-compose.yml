@@ -10,9 +10,11 @@ volumes:
 services:
   postgres:
     container_name: timevic-local-postgres
-    image: postgres:13.3
+    image: postgres:15
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+      TZ: Etc/UTC
+      PGTZ: Etc/Universal
     ports:
       - "5433:5432"
     volumes:
