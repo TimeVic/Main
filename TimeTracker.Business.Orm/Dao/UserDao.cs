@@ -53,7 +53,8 @@ public class UserDao: IUserDao
             PasswordHash = new byte[] {},
             PasswordSalt = new byte[] {},
             CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
+            UpdateTime = DateTime.UtcNow,
+            Timezone = TimeZoneInfo.Utc.Id
         };
         await _sessionProvider.CurrentSession.SaveAsync(user);
         return user;

@@ -15,6 +15,7 @@ public class ProjectPaymentsReportItemDto
     public string? ClientName { get; set; }
     
     public object AmountOriginal { get; set; }
+    
     public decimal Amount
     {
         get => Convert.ToDecimal(AmountOriginal);
@@ -34,10 +35,12 @@ public class ProjectPaymentsReportItemDto
         get => Convert.ToDecimal(PaidAmountByProjectOriginal);
     }
     
-    public double TotalDurationAsEpoch { get; set; }
+    public object TotalDurationAsEpoch { get; set; }
     
     public TimeSpan TotalDuration
     {
-        get => TimeSpan.FromSeconds((double)TotalDurationAsEpoch);
+        get => TimeSpan.FromSeconds(
+            Convert.ToDouble(TotalDurationAsEpoch)    
+        );
     }
 }

@@ -22,6 +22,10 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual string Email { get; set; }
 
         [Property(NotNull = false)]
+        [Column(Name = "timezone", Length = 100, NotNull = true)]
+        public virtual string Timezone { get; set; }
+        
+        [Property(NotNull = false)]
         [Column(Name = "verification_token", Length = 512, NotNull = false)]
         public virtual string? VerificationToken { get; set; }
 
