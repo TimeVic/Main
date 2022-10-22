@@ -5,11 +5,11 @@ namespace TimeTracker.Business.Common.Helpers;
 
 public static class JsonHelper
 {
-    public static string SerializeToString(object data)
+    public static string SerializeToString(object data, DateTimeZoneHandling? dateTimeZoneHandling = null)
     {
         return JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings()
         {
-            DateTimeZoneHandling = DateTimeZoneHandling.Utc
+            DateTimeZoneHandling = dateTimeZoneHandling ?? DateTimeZoneHandling.Utc
         });
     }
     
@@ -24,11 +24,11 @@ public static class JsonHelper
         return null;
     }
     
-    public static T? DeserializeObject<T>(string value)
+    public static T? DeserializeObject<T>(string value, DateTimeZoneHandling? dateTimeZoneHandling = null)
     {
         return JsonConvert.DeserializeObject<T>(value, new JsonSerializerSettings()
         {
-            DateTimeZoneHandling = DateTimeZoneHandling.Utc
+            DateTimeZoneHandling = dateTimeZoneHandling ?? DateTimeZoneHandling.Utc
         });
     }
 }

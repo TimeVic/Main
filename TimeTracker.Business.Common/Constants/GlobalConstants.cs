@@ -23,5 +23,10 @@ namespace TimeTracker.Business.Common.Constants
         /// The maximum number of users who will be given access
         /// </summary>
         public const int ApplicationMaxShares = 20;
+        
+        public static readonly TimeSpan EndOfDay = TimeSpan.FromHours(23)
+            .Add(TimeSpan.FromMinutes(59))
+            .Add(TimeSpan.FromSeconds(59))
+            .Add(TimeSpan.FromMilliseconds(999));
     }
 }
