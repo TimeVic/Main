@@ -54,4 +54,10 @@
     <data name="Error_UserHasNotPermissions" xml:space="preserve">
         <value>The user does not have access to do this.</value>
     </data>
+    <data name="Error_IncorrectDate" xml:space="preserve">
+        <value>Field "{0}" contains incorrect date!</value>
+    </data>
+    <data name="Error_IncorrectTimeEntryTime" xml:space="preserve">
+        <value>Field "{0}" contains incorrect time entry's time!</value>
+    </data>
 </root>

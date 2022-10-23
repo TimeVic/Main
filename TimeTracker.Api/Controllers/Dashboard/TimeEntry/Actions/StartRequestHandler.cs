@@ -53,9 +53,11 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             var timeEntry = await _timeEntryDao.StartNewAsync(
                 user,
                 workspace,
-                request.IsBillable,
-                request.Description,
-                request.ProjectId
+                request.Date,
+                request.StartTime,
+                isBillable: request.IsBillable,
+                description: request.Description,
+                projectId: request.ProjectId
             );
             await _sessionProvider.PerformCommitAsync();
             

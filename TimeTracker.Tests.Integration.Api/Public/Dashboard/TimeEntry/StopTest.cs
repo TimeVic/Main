@@ -18,10 +18,8 @@ public class StopTest: BaseTest
     private readonly string Url = "/dashboard/time-entry/stop";
     
     private readonly UserEntity _user;
-    private readonly IDataFactory<TimeEntryEntity> _timeEntryFactory;
     private readonly string _jwtToken;
     private readonly WorkspaceEntity _defaultWorkspace;
-    private readonly IProjectDao _projectDao;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IQueueDao _queueDao;
@@ -29,10 +27,8 @@ public class StopTest: BaseTest
 
     public StopTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
-        _timeEntryFactory = ServiceProvider.GetRequiredService<IDataFactory<TimeEntryEntity>>();
         _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         
@@ -47,7 +43,8 @@ public class StopTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new StopRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
+            WorkspaceId = _defaultWorkspace.Id,
+            EndTime = TimeSpan.FromHours(1)
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -55,11 +52,17 @@ public class StopTest: BaseTest
     [Fact]
     public async Task ShouldStopActive()
     {
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
+        var expectedEntry = await _timeEntryDao.StartNewAsync(
+            _user,
+            _defaultWorkspace,
+            DateTime.Now,
+            TimeSpan.FromSeconds(1)
+        );
         
         var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
+            WorkspaceId = _defaultWorkspace.Id,
+            EndTime = TimeSpan.FromHours(1)
         });
         response.EnsureSuccessStatusCode();
 
@@ -75,7 +78,8 @@ public class StopTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
+            WorkspaceId = _defaultWorkspace.Id,
+            EndTime = TimeSpan.FromHours(1)
         });
         response.EnsureSuccessStatusCode();
 

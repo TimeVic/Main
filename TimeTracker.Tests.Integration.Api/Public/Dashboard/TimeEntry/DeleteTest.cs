@@ -23,6 +23,7 @@ public class DeleteTest: BaseTest
     private readonly WorkspaceEntity _defaultWorkspace;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
+    private readonly TimeEntryEntity _timeEntry;
 
     public DeleteTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -30,16 +31,16 @@ public class DeleteTest: BaseTest
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
         _defaultWorkspace = _user.Workspaces.First();
+
+        _timeEntry = _timeEntryDao.StartNewAsync(_user, _defaultWorkspace, DateTime.Now, TimeSpan.Zero).Result;
     }
 
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
-        
         var response = await PostRequestAsAnonymousAsync(Url, new DeleteRequest()
         {
-            TimeEntryId = expectedEntry.Id
+            TimeEntryId = _timeEntry.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -47,18 +48,15 @@ public class DeleteTest: BaseTest
     [Fact]
     public async Task ShouldDeleteActiveEntry()
     {
-        await CommitDbChanges();
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
-        
         var response = await PostRequestAsync(Url, _jwtToken, new DeleteRequest()
         {
-            TimeEntryId = expectedEntry.Id
+            TimeEntryId = _timeEntry.Id
         });
         response.EnsureSuccessStatusCode();
         
         Assert.False(
             await DbSessionProvider.CurrentSession.Query<TimeEntryEntity>()
-                .AnyAsync(item => item.Id == expectedEntry.Id)
+                .AnyAsync(item => item.Id == _timeEntry.Id)
         );
     }
     

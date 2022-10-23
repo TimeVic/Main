@@ -16,13 +16,19 @@ public interface ITimeEntryDao: IDomainService
     Task<TimeEntryEntity> StartNewAsync(
         UserEntity user,
         WorkspaceEntity workspace,
+        DateTime date,
+        TimeSpan startTime,
         bool isBillable = false,
         string? description = null,
         long? projectId = null,
         decimal? hourlyRate = null
     );
     
-    Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace, UserEntity user);
+    Task<ICollection<TimeEntryEntity>> StopActiveAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        TimeSpan endTime
+    );
 
     Task<TimeEntryEntity> SetAsync(
         UserEntity user,

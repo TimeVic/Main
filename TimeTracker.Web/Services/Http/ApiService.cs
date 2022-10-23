@@ -3,6 +3,8 @@ using System.Net.Http.Json;
 using Fluxor;
 using Newtonsoft.Json;
 using TimeTracker.Business.Common.Exceptions.Common;
+using TimeTracker.Business.Common.Helpers;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http.Dto;
 using TimeTracker.Web.Store.Auth;
 
@@ -34,7 +36,7 @@ namespace TimeTracker.Web.Services.Http
         }
         
         private async Task<string> RequestAsync(string requestUri, string jwtToken, object data, HttpMethod httpMethod)
-        {
+        {   
             // create request object
             var request = new HttpRequestMessage(httpMethod, $"{_apiUrl}/{requestUri}");
             if (
@@ -62,7 +64,10 @@ namespace TimeTracker.Web.Services.Http
             BadResponseDto? badResponse = null;
             try
             {
-                badResponse = JsonConvert.DeserializeObject<BadResponseDto>(responseString);
+                badResponse = JsonHelper.DeserializeObject<BadResponseDto>(
+                    responseString,
+                    DateTimeZoneHandling.Local
+                );
             }
             finally
             {
@@ -74,18 +79,21 @@ namespace TimeTracker.Web.Services.Http
             }
         }
         
-        private async Task<TResponse> RequestAsync<TResponse>(string requestUri, string jwtToken, object data, HttpMethod httpMethod)
+        private async Task<TResponse?> RequestAsync<TResponse>(string requestUri, string jwtToken, object data, HttpMethod httpMethod)
         {
             var responseString = await RequestAsync(requestUri, jwtToken, data, httpMethod);
-            return JsonConvert.DeserializeObject<TResponse>(responseString);
+            return JsonHelper.DeserializeObject<TResponse>(
+                responseString,
+                DateTimeZoneHandling.Local
+            );
         }
 
-        private async Task<TResponse> PostAsync<TResponse>(string requestUri, object data, string jwtToken = null)
+        private async Task<TResponse?> PostAsync<TResponse>(string requestUri, object data, string jwtToken = null)
         {
             return await RequestAsync<TResponse>(requestUri, jwtToken, data, HttpMethod.Post);
         }
         
-        private async Task<TResponse> PostAuthorizedAsync<TResponse>(string requestUri, object data = null)
+        private async Task<TResponse?> PostAuthorizedAsync<TResponse>(string requestUri, object data = null)
         {
             return await RequestAsync<TResponse>(
                 requestUri, 

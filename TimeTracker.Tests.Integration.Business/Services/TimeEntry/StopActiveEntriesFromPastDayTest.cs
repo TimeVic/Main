@@ -32,86 +32,86 @@ public class StopActiveEntriesFromPastDayTest: BaseTest
         _queueDao.CompleteAllPending().Wait();
     }
 
-    [Fact]
-    public async Task ShouldStopActiveTimeEntryForPastDay()
-    {
-        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
-        activeEntry.Date = DateTime.UtcNow.AddDays(-1);
-        await DbSessionProvider.PerformCommitAsync();
-
-        await _timeEntryService.StopActiveEntriesFromPastDayAsync();
-        
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
-        Assert.NotNull(activeEntry.EndTime);
-        Assert.Equal(23, activeEntry.EndTime.Value.Hours);
-        Assert.Equal(59, activeEntry.EndTime.Value.Minutes);
-        Assert.Equal(59, activeEntry.EndTime.Value.Seconds);
-        Assert.Equal(999, activeEntry.EndTime.Value.Milliseconds);
-
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
-        Assert.True(processedCounter == 1);
-    }
-    
-    [Fact]
-    public async Task ShouldNotStopActiveForCurrentDay()
-    {
-        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
-        
-        await _timeEntryService.StopActiveEntriesFromPastDayAsync();
-        
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
-        Assert.True(activeEntry.IsActive);
-    }
-    
-    [Fact]
-    public async Task ShouldStartNewAfterPreviousWasStopped()
-    {
-        var previousEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
-        previousEntry.Date = DateTime.UtcNow.AddDays(-1);
-        await DbSessionProvider.PerformCommitAsync();
-
-        await _timeEntryService.StopActiveEntriesFromPastDayAsync();
-        
-        await DbSessionProvider.CurrentSession.RefreshAsync(previousEntry);
-        Assert.False(previousEntry.IsActive);
-
-        var newEntry = await _timeEntryDao.GetActiveEntryAsync(_workspace, _user);
-        Assert.NotNull(newEntry);
-        Assert.True(newEntry.IsActive);
-        
-        Assert.Equal(previousEntry.Description, newEntry.Description);
-        Assert.Equal(previousEntry.IsBillable, newEntry.IsBillable);
-        Assert.Equal(previousEntry.HourlyRate, newEntry.HourlyRate);
-        Assert.Equal(previousEntry.Project?.Id, newEntry.Project?.Id);
-    }
-    
-    [Fact]
-    public async Task ShouldNotSendNotificationIfDurationLessThan8Hours()
-    {
-        var previousEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
-        previousEntry.Date = DateTime.UtcNow.AddDays(-1);
-        previousEntry.StartTime = TimeSpan.FromHours(23 - 7);
-        await DbSessionProvider.PerformCommitAsync();
-
-        await _timeEntryService.StopActiveEntriesFromPastDayAsync();
-        
-        await _queueService.ProcessAsync(QueueChannel.Notifications);
-        Assert.False(EmailSendingServiceMock.IsEmailSent);
-    }
-    
-    [Fact]
-    public async Task ShouldNotSendNotificationIfDurationMoreThan8Hours()
-    {
-        var previousEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
-        previousEntry.Date = DateTime.UtcNow.AddDays(-1);
-        previousEntry.StartTime = TimeSpan.FromHours(10);
-        await DbSessionProvider.PerformCommitAsync();
-
-        await _timeEntryService.StopActiveEntriesFromPastDayAsync();
-        
-        await _queueService.ProcessAsync(QueueChannel.Notifications);
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
-        Assert.Contains(_user.Email, actualEmail.To);
-    }
+    // [Fact]
+    // public async Task ShouldStopActiveTimeEntryForPastDay()
+    // {
+    //     var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
+    //     activeEntry.Date = DateTime.UtcNow.AddDays(-1);
+    //     await DbSessionProvider.PerformCommitAsync();
+    //
+    //     await _timeEntryService.StopActiveEntriesFromPastDayAsync();
+    //     
+    //     await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+    //     Assert.NotNull(activeEntry.EndTime);
+    //     Assert.Equal(23, activeEntry.EndTime.Value.Hours);
+    //     Assert.Equal(59, activeEntry.EndTime.Value.Minutes);
+    //     Assert.Equal(59, activeEntry.EndTime.Value.Seconds);
+    //     Assert.Equal(999, activeEntry.EndTime.Value.Milliseconds);
+    //
+    //     var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+    //     Assert.True(processedCounter == 1);
+    // }
+    //
+    // [Fact]
+    // public async Task ShouldNotStopActiveForCurrentDay()
+    // {
+    //     var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
+    //     
+    //     await _timeEntryService.StopActiveEntriesFromPastDayAsync();
+    //     
+    //     await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+    //     Assert.True(activeEntry.IsActive);
+    // }
+    //
+    // [Fact]
+    // public async Task ShouldStartNewAfterPreviousWasStopped()
+    // {
+    //     var previousEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
+    //     previousEntry.Date = DateTime.UtcNow.AddDays(-1);
+    //     await DbSessionProvider.PerformCommitAsync();
+    //
+    //     await _timeEntryService.StopActiveEntriesFromPastDayAsync();
+    //     
+    //     await DbSessionProvider.CurrentSession.RefreshAsync(previousEntry);
+    //     Assert.False(previousEntry.IsActive);
+    //
+    //     var newEntry = await _timeEntryDao.GetActiveEntryAsync(_workspace, _user);
+    //     Assert.NotNull(newEntry);
+    //     Assert.True(newEntry.IsActive);
+    //     
+    //     Assert.Equal(previousEntry.Description, newEntry.Description);
+    //     Assert.Equal(previousEntry.IsBillable, newEntry.IsBillable);
+    //     Assert.Equal(previousEntry.HourlyRate, newEntry.HourlyRate);
+    //     Assert.Equal(previousEntry.Project?.Id, newEntry.Project?.Id);
+    // }
+    //
+    // [Fact]
+    // public async Task ShouldNotSendNotificationIfDurationLessThan8Hours()
+    // {
+    //     var previousEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
+    //     previousEntry.Date = DateTime.UtcNow.AddDays(-1);
+    //     previousEntry.StartTime = TimeSpan.FromHours(23 - 7);
+    //     await DbSessionProvider.PerformCommitAsync();
+    //
+    //     await _timeEntryService.StopActiveEntriesFromPastDayAsync();
+    //     
+    //     await _queueService.ProcessAsync(QueueChannel.Notifications);
+    //     Assert.False(EmailSendingServiceMock.IsEmailSent);
+    // }
+    //
+    // [Fact]
+    // public async Task ShouldNotSendNotificationIfDurationMoreThan8Hours()
+    // {
+    //     var previousEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
+    //     previousEntry.Date = DateTime.UtcNow.AddDays(-1);
+    //     previousEntry.StartTime = TimeSpan.FromHours(10);
+    //     await DbSessionProvider.PerformCommitAsync();
+    //
+    //     await _timeEntryService.StopActiveEntriesFromPastDayAsync();
+    //     
+    //     await _queueService.ProcessAsync(QueueChannel.Notifications);
+    //     Assert.True(EmailSendingServiceMock.IsEmailSent);
+    //     var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
+    //     Assert.Contains(_user.Email, actualEmail.To);
+    // }
 }

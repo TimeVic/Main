@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using NHibernate;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Notifications.Senders.TimeEntry;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
@@ -19,11 +20,6 @@ public class TimeEntryService : ITimeEntryService
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IQueueService _queueService;
 
-    private static readonly TimeSpan EndOfDay = TimeSpan.FromHours(23)
-        .Add(TimeSpan.FromMinutes(59))
-        .Add(TimeSpan.FromSeconds(59))
-        .Add(TimeSpan.FromMilliseconds(999));
-
     public TimeEntryService(
         IDbSessionProvider sessionProvider,
         ILogger<TimeEntryService> logger,
@@ -37,9 +33,17 @@ public class TimeEntryService : ITimeEntryService
         _queueService = queueService;
     }
 
-    public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(WorkspaceEntity workspace, UserEntity user)
+    public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        TimeSpan endTime
+    )
     {
-        var timeEntries = await _timeEntryDao.StopActiveAsync(workspace, user);
+        var timeEntries = await _timeEntryDao.StopActiveAsync(
+            workspace,
+            user,
+            endTime
+        );
         foreach (var timeEntry in timeEntries)
         {
             await _queueService.PushDefaultAsync(new IntegrationAppQueueItemContext(timeEntry.Id));
@@ -59,39 +63,40 @@ public class TimeEntryService : ITimeEntryService
     {
         try
         {
-            TimeEntryEntity? activeEntity = null;
-            while (true)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    break;
-                }
-
-                activeEntity = await _timeEntryDao.GetActiveEntryForPastDay(null, cancellationToken);
-                if (activeEntity == null)
-                {
-                    break;
-                }
-
-                activeEntity.EndTime = EndOfDay;
-                if (activeEntity.Duration >= _notificationSendingDuration)
-                {
-                    await _queueService.PushNotificationAsync(
-                        new TimeEntryAutoStoppedNotificationItemContext(activeEntity.Workspace.Owner.Email)
-                    );    
-                }
-                await _sessionProvider.PerformCommitAsync(cancellationToken);
-                await _queueService.PushDefaultAsync(new IntegrationAppQueueItemContext(activeEntity.Id));
-
-                await _timeEntryDao.StartNewAsync(
-                    activeEntity.User,
-                    activeEntity.Workspace,
-                    activeEntity.IsBillable,
-                    activeEntity.Description,
-                    activeEntity.Project?.Id
-                );
-                await _sessionProvider.PerformCommitAsync(cancellationToken);
-            }
+            await Task.CompletedTask;
+            // TimeEntryEntity? activeEntity = null;
+            // while (true)
+            // {
+            //     if (cancellationToken.IsCancellationRequested)
+            //     {
+            //         break;
+            //     }
+            //
+            //     activeEntity = await _timeEntryDao.GetActiveEntryForPastDay(null, cancellationToken);
+            //     if (activeEntity == null)
+            //     {
+            //         break;
+            //     }
+            //
+            //     activeEntity.EndTime = GlobalConstants.EndOfDayTime;
+            //     if (activeEntity.Duration >= _notificationSendingDuration)
+            //     {
+            //         await _queueService.PushNotificationAsync(
+            //             new TimeEntryAutoStoppedNotificationItemContext(activeEntity.Workspace.Owner.Email)
+            //         );    
+            //     }
+            //     await _sessionProvider.PerformCommitAsync(cancellationToken);
+            //     await _queueService.PushDefaultAsync(new IntegrationAppQueueItemContext(activeEntity.Id));
+            //
+            //     await _timeEntryDao.StartNewAsync(
+            //         activeEntity.User,
+            //         activeEntity.Workspace,
+            //         activeEntity.IsBillable,
+            //         activeEntity.Description,
+            //         activeEntity.Project?.Id
+            //     );
+            //     await _sessionProvider.PerformCommitAsync(cancellationToken);
+            // }
         }
         catch (Exception e)
         {

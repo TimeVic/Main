@@ -1,4 +1,5 @@
 using Autofac;
+using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -28,7 +29,12 @@ public class StartNewTest: BaseTest
     {
         var user = await _userSeeder.CreateActivatedAsync();
         var workspace = user.Workspaces.First();
-        var activeEntry = await _timeEntryDao.StartNewAsync(user, workspace, true);
+        var activeEntry = await _timeEntryDao.StartNewAsync(
+            user,
+            workspace,
+            DateTime.UtcNow,
+            DateTime.UtcNow.TimeOfDay
+        );
         Assert.Equal(DateTime.UtcNow.StartOfDay(), activeEntry.Date);
         Assert.Null(activeEntry.EndTime);
 
@@ -38,19 +44,27 @@ public class StartNewTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldStartNewAndStopCurrent()
+    public async Task ShouldThrowExceptionIfActiveExists()
     {
         var user = await _userSeeder.CreateActivatedAsync();
         var workspace1 = user.Workspaces.First();
-        var activeEntry = await _timeEntryDao.StartNewAsync(user, workspace1, true);
+        var activeEntry = await _timeEntryDao.StartNewAsync(
+            user,
+            workspace1,
+            DateTime.UtcNow,
+            DateTime.UtcNow.TimeOfDay
+        );
         Assert.Null(activeEntry.EndTime);
-        
-        var actualEntry = await _timeEntryDao.StartNewAsync(user, workspace1, true);
-        Assert.NotEqual(activeEntry.Id, actualEntry.Id);
-        await CommitDbChanges();
 
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
-        Assert.NotNull(activeEntry.EndTime);
+        await Assert.ThrowsAsync<DataInconsistencyException>(async () =>
+        {
+            await _timeEntryDao.StartNewAsync(
+                user,
+                workspace1,
+                DateTime.UtcNow,
+                DateTime.UtcNow.TimeOfDay
+            );
+        });
     }
     
     [Fact]
@@ -59,9 +73,20 @@ public class StartNewTest: BaseTest
         var user = await _userSeeder.CreateActivatedAsync();
         await _workspaceDao.CreateWorkspaceAsync(user, "Test");
         var workspace1 = user.Workspaces.First();
-        var activeEntryFor1 = await _timeEntryDao.StartNewAsync(user, workspace1, true);
+        var activeEntryFor1 = await _timeEntryDao.StartNewAsync(
+            user,
+            workspace1,
+            DateTime.UtcNow,
+            DateTime.UtcNow.TimeOfDay
+        );
+        
         var workspace2 = user.Workspaces.Last();
-        var activeEntryFor2 = await _timeEntryDao.StartNewAsync(user, workspace2, true);
+        var activeEntryFor2 = await _timeEntryDao.StartNewAsync(
+            user,
+            workspace2,
+            DateTime.UtcNow,
+            DateTime.UtcNow.TimeOfDay
+        );
         
         Assert.NotEqual(activeEntryFor1.Id, activeEntryFor2.Id);
         Assert.True(activeEntryFor1.IsActive);
@@ -82,10 +107,11 @@ public class StartNewTest: BaseTest
         
         var activeEntry = await _timeEntryDao.StartNewAsync(
             user,
-            workspace, 
-            true,
-            "",
-            project.Id
+            workspace,
+            DateTime.UtcNow,
+            DateTime.UtcNow.TimeOfDay,
+            isBillable: true,
+            projectId: project.Id
         );
         Assert.Equal(project.DefaultHourlyRate, activeEntry.HourlyRate);
         Assert.True(activeEntry.IsBillable);

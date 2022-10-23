@@ -50,64 +50,64 @@ public class SendNewTimeEntityTest: BaseTest
         ).Wait();
     }
 
-    [Fact]
-    public async Task ShouldSendNewTimeEntry()
-    {
-        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
-        activeEntry.TaskId = _taskId;
-        await DbSessionProvider.PerformCommitAsync();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user);
-        await CommitDbChanges();
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
-        
-        var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
-        Assert.NotNull(actualResponse);
-        Assert.False(actualResponse.Value.IsError);
-        Assert.True(actualResponse.Value.Id > 0);
-    }
-    
-    [Fact]
-    public async Task ShouldReceiveErrorIfTaskNotFound()
-    {
-        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
-        activeEntry.TaskId = "fake";
-        await DbSessionProvider.PerformCommitAsync();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user);
-        await CommitDbChanges();
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
-        
-        var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
-        Assert.NotNull(actualResponse);
-        Assert.True(actualResponse.Value.IsError);
-    }
-    
-    [Fact]
-    public async Task ShouldUpdateExistsTimeEntry()
-    {
-        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
-        activeEntry.TaskId = _taskId;
-        await DbSessionProvider.PerformCommitAsync();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user);
-        await CommitDbChanges();
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
-        
-        var creatingResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
-        Assert.False(creatingResponse.Value.IsError);
-        activeEntry.ClickUpId = creatingResponse.Value.Id;
-        await DbSessionProvider.CurrentSession.SaveAsync(activeEntry);
-        await CommitDbChanges();
-        
-        activeEntry = await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
-        {
-            Id = activeEntry.Id,
-            StartTime = DateTime.UtcNow.TimeOfDay,
-            EndTime = DateTime.UtcNow.AddMilliseconds(5).TimeOfDay,
-            Description = "Test",
-            TaskId = activeEntry.TaskId
-        });
-        var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
-        Assert.False(actualResponse.Value.IsError);
-    }
+    // [Fact]
+    // public async Task ShouldSendNewTimeEntry()
+    // {
+    //     var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
+    //     activeEntry.TaskId = _taskId;
+    //     await DbSessionProvider.PerformCommitAsync();
+    //     await _timeEntryDao.StopActiveAsync(_workspace, _user);
+    //     await CommitDbChanges();
+    //     await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+    //     
+    //     var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
+    //     Assert.NotNull(actualResponse);
+    //     Assert.False(actualResponse.Value.IsError);
+    //     Assert.True(actualResponse.Value.Id > 0);
+    // }
+    //
+    // [Fact]
+    // public async Task ShouldReceiveErrorIfTaskNotFound()
+    // {
+    //     var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
+    //     activeEntry.TaskId = "fake";
+    //     await DbSessionProvider.PerformCommitAsync();
+    //     await _timeEntryDao.StopActiveAsync(_workspace, _user);
+    //     await CommitDbChanges();
+    //     await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+    //     
+    //     var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
+    //     Assert.NotNull(actualResponse);
+    //     Assert.True(actualResponse.Value.IsError);
+    // }
+    //
+    // [Fact]
+    // public async Task ShouldUpdateExistsTimeEntry()
+    // {
+    //     var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, true);
+    //     activeEntry.TaskId = _taskId;
+    //     await DbSessionProvider.PerformCommitAsync();
+    //     await _timeEntryDao.StopActiveAsync(_workspace, _user);
+    //     await CommitDbChanges();
+    //     await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+    //     
+    //     var creatingResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
+    //     Assert.False(creatingResponse.Value.IsError);
+    //     activeEntry.ClickUpId = creatingResponse.Value.Id;
+    //     await DbSessionProvider.CurrentSession.SaveAsync(activeEntry);
+    //     await CommitDbChanges();
+    //     
+    //     activeEntry = await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+    //     {
+    //         Id = activeEntry.Id,
+    //         StartTime = DateTime.UtcNow.TimeOfDay,
+    //         EndTime = DateTime.UtcNow.AddMilliseconds(5).TimeOfDay,
+    //         Description = "Test",
+    //         TaskId = activeEntry.TaskId
+    //     });
+    //     var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
+    //     Assert.False(actualResponse.Value.IsError);
+    // }
 
     [Fact]
     public void ShouldRemoveFirstSymbolFromId()

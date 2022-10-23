@@ -51,7 +51,7 @@ public record TimeEntryFilterState
     
     public DateTime? DateFrom { get; set; }
     
-    public DateTime? DateTo { get; set; } = DateTime.UtcNow.EndOfDay();
+    public DateTime? DateTo { get; set; } = DateTime.Now.EndOfDay();
     
     public bool? IsBillable { get; set; }
 }
