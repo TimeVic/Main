@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts;
 
@@ -16,7 +17,7 @@ public partial class TimeCounterField: IDisposable
         get => _startTime;
         set
         {
-            _startTime = value ?? DateTime.UtcNow.TimeOfDay;
+            _startTime = value ?? DateTime.Now.TimeOfDay;
         }
     }
 
@@ -56,7 +57,7 @@ public partial class TimeCounterField: IDisposable
     {
         if (_startTime != null)
         {
-            _currentDuration = (DateTime.UtcNow.TimeOfDay - _startTime.Value);
+            _currentDuration = (DateTime.Now.TimeOfDay - _startTime.Value);
         }
         StateHasChanged();
     }

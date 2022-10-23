@@ -116,4 +116,21 @@ public class AddTest: BaseTest
         Assert.Equal(fakeTimeEntry.IsBillable, actualDto.IsBillable);
         Assert.Null(actualDto.EndTime);
     }
+    
+    [Fact]
+    public async Task StartTimeShouldBeSameAsLocal()
+    {
+        var expectedStartTime = TimeSpan.FromMinutes(13);
+        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id,
+            Date = DateTime.UtcNow.Date,
+            StartTime = expectedStartTime
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        Assert.True(actualDto.Id > 0);
+        Assert.Equal(expectedStartTime, actualDto.StartTime);
+    }
 }

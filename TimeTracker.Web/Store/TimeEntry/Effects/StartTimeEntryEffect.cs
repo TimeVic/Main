@@ -30,7 +30,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
-                Date = DateTime.Now.Date,
+                Date = DateTime.UtcNow.Date,
                 StartTime = DateTime.Now.TimeOfDay
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(response));
