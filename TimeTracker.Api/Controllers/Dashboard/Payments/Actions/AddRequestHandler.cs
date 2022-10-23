@@ -1,4 +1,5 @@
-﻿using Api.Requests.Abstractions;
+﻿using System.Globalization;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -65,6 +66,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
                 request.Description
             );
             await _sessionProvider.PerformCommitAsync();
+            
+            var requestString = request.PaymentTime.ToString("o", CultureInfo.InvariantCulture);
+            var requestString2 = payment.PaymentTime.ToString("o", CultureInfo.InvariantCulture);
             
             return _mapper.Map<PaymentDto>(payment);
         }

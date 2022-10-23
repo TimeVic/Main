@@ -19,6 +19,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         
         public bool IsBillable { get; set; }
         
+        /**
+         * Date of time entry
+         * !Important. Should be represented in UTC timezone
+         */
         [IsFutureOrNowDate]
         public DateTime Date { get; set; }
         

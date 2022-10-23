@@ -60,8 +60,8 @@ public class GetFilteredListTest: BaseTest
             ClientId = expectedProject.Client.Id,
             ProjectId = expectedProject.Id,
             IsBillable = true,
-            DateFrom = DateTime.UtcNow.AddDays(-6),
-            DateTo = DateTime.UtcNow,
+            DateFrom = DateTime.Now.AddDays(-6),
+            DateTo = DateTime.Now,
         });
         response.EnsureSuccessStatusCode();
 

@@ -1,4 +1,5 @@
-﻿using TimeTracker.Business.Common.Helpers;
+﻿using Newtonsoft.Json;
+using TimeTracker.Business.Common.Helpers;
 
 namespace TimeTracker.Business.Extensions
 {
@@ -9,7 +10,7 @@ namespace TimeTracker.Business.Extensions
             var stringData = await response.GetDataAsStringAsync();
             try
             {
-                return JsonHelper.DeserializeObject<T>(stringData);
+                return JsonHelper.DeserializeObject<T>(stringData, DateTimeZoneHandling.Local);
             }
             catch (Exception _)
             {
