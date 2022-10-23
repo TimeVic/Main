@@ -48,7 +48,7 @@ namespace TimeTracker.Api.Extensions
                     // a bug when "authorization" header is not equals "Authorization" 
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
-                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
                 })
                 .AddJsonOptions(options => {
                     // Ignore Null values in response models

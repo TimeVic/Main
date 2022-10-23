@@ -53,7 +53,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            Date = DateTime.UtcNow.Date,
+            Date = DateTime.Now.Date,
             StartTime = TimeSpan.FromSeconds(1)
         });
         response.EnsureSuccessStatusCode();
@@ -74,14 +74,14 @@ public class AddTest: BaseTest
         await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            Date = DateTime.UtcNow.Date,
+            Date = DateTime.Now.Date,
             StartTime = TimeSpan.FromSeconds(1)
         });
         await _timeEntryDao.StopActiveAsync(_defaultWorkspace, _user, TimeSpan.FromHours(1));
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            Date = DateTime.UtcNow.Date,
+            Date = DateTime.Now.Date,
             StartTime = TimeSpan.FromSeconds(1)
         });
         response.EnsureSuccessStatusCode();
@@ -104,7 +104,7 @@ public class AddTest: BaseTest
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             IsBillable = fakeTimeEntry.IsBillable,
-            Date = DateTime.UtcNow.Date,
+            Date = DateTime.Now.Date,
             StartTime = TimeSpan.FromSeconds(1)
         });
         response.EnsureSuccessStatusCode();
