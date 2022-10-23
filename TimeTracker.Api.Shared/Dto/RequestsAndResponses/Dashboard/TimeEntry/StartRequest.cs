@@ -18,5 +18,11 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         public string? Description { get; set; } 
         
         public bool IsBillable { get; set; }
+        
+        [IsFutureOrNowDate]
+        public DateTime Date { get; set; }
+        
+        [IsCorrectTimeEntryTime]
+        public TimeSpan StartTime { get; set; }
     }
 }

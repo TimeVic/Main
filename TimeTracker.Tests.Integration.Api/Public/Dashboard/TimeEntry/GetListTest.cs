@@ -74,7 +74,12 @@ public class GetListTest: BaseTest
         var workspace = _user.Workspaces.First();
         var expectedCounter = 15;
         await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, expectedCounter);
-        await _timeEntryDao.StartNewAsync(_user, workspace);
+        await _timeEntryDao.StartNewAsync(
+            _user,
+            workspace,
+            DateTime.UtcNow, 
+            TimeSpan.FromSeconds(1)
+        );
      
         var otherUser = await _userSeeder.CreateActivatedAndShareAsync(workspace);
         await _timeEntrySeeder.CreateSeveralAsync(workspace, otherUser, expectedCounter);
@@ -98,7 +103,12 @@ public class GetListTest: BaseTest
     {
         var expectedCounter = 15;
         await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, expectedCounter);
-        await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
+        await _timeEntryDao.StartNewAsync(
+            _user,
+            _defaultWorkspace,
+            DateTime.UtcNow, 
+            TimeSpan.FromSeconds(1)
+        );
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {

@@ -150,11 +150,29 @@ namespace TimeTracker.Business.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field &quot;{0}&quot; contains incorrect date!.
+        /// </summary>
+        public static string Error_IncorrectDate {
+            get {
+                return ResourceManager.GetString("Error_IncorrectDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field &quot;{0}&quot; contains incorrect re-captcha token!.
         /// </summary>
         public static string Error_IncorrectReCaptchaToken {
             get {
                 return ResourceManager.GetString("Error_IncorrectReCaptchaToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field &quot;{0}&quot; contains incorrect time entry&apos;s time!.
+        /// </summary>
+        public static string Error_IncorrectTimeEntryTime {
+            get {
+                return ResourceManager.GetString("Error_IncorrectTimeEntryTime", resourceCulture);
             }
         }
         

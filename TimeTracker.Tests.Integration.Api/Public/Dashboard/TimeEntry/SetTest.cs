@@ -55,11 +55,15 @@ public class SetTest: BaseTest
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
-        
+        var timeEntry = await _timeEntryDao.StartNewAsync(
+            _user,
+            _defaultWorkspace,
+            DateTime.UtcNow, 
+            TimeSpan.FromSeconds(1)
+        );
         var response = await PostRequestAsAnonymousAsync(Url, new SetRequest()
         {
-            Id = expectedEntry.Id
+            Id = timeEntry.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -70,14 +74,15 @@ public class SetTest: BaseTest
         var fakeEntry = _timeEntryFactory.Generate();
         var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
         await CommitDbChanges();
-        // var expectedEntry = await _timeEntryDao.StartNewAsync(_defaultWorkspace);
-        
+
+        var startTime = TimeSpan.FromSeconds(1);
+        var endTime = TimeSpan.FromHours(1);
         var response = await PostRequestAsync(Url, _jwtToken, new SetRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
             Description = fakeEntry.Description,
-            EndTime = fakeEntry.EndTime.Value,
-            StartTime = fakeEntry.StartTime,
+            EndTime = endTime,
+            StartTime = startTime,
             HourlyRate = fakeEntry.HourlyRate,
             IsBillable = fakeEntry.IsBillable,
             ProjectId = expectedProject.Id
@@ -86,8 +91,8 @@ public class SetTest: BaseTest
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.True(actualDto.Id > 0);
-        Assert.Equal(fakeEntry.EndTime, actualDto.EndTime);
-        Assert.Equal(fakeEntry.StartTime, actualDto.StartTime);
+        Assert.Equal(endTime, actualDto.EndTime);
+        Assert.Equal(startTime, actualDto.StartTime);
         Assert.Equal(fakeEntry.Description, actualDto.Description);
         Assert.Equal(fakeEntry.IsBillable, actualDto.IsBillable);
         Assert.Equal(fakeEntry.HourlyRate, actualDto.HourlyRate);
@@ -104,12 +109,16 @@ public class SetTest: BaseTest
     {
         var fakeEntry = _timeEntryFactory.Generate();
         var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
-        await CommitDbChanges();
-        var expectedEntry = await _timeEntryDao.StartNewAsync(_user, _defaultWorkspace);
-        
+        var timeEntry = await _timeEntryDao.StartNewAsync(
+            _user,
+            _defaultWorkspace,
+            DateTime.UtcNow, 
+            TimeSpan.FromSeconds(1)
+        );
+
         var response = await PostRequestAsync(Url, _jwtToken, new SetRequest()
         {
-            Id = expectedEntry.Id,
+            Id = timeEntry.Id,
             WorkspaceId = _defaultWorkspace.Id,
             Description = fakeEntry.Description,
             EndTime = null,
@@ -149,18 +158,23 @@ public class SetTest: BaseTest
                 expectedProject
             }
         );
+        var timeEntry = await _timeEntryDao.StartNewAsync(
+            otherUser,
+            _defaultWorkspace,
+            DateTime.UtcNow, 
+            TimeSpan.FromSeconds(1)
+        );
         
         var fakeEntry = _timeEntryFactory.Generate();
-        await CommitDbChanges();
-        var expectedEntry = await _timeEntryDao.StartNewAsync(otherUser, _defaultWorkspace);
         
+        var startTime = TimeSpan.FromSeconds(1);
         var response = await PostRequestAsync(Url, jwtToken, new SetRequest()
         {
-            Id = expectedEntry.Id,
+            Id = timeEntry.Id,
             WorkspaceId = _defaultWorkspace.Id,
             Description = fakeEntry.Description,
             EndTime = null,
-            StartTime = fakeEntry.StartTime,
+            StartTime = startTime,
             HourlyRate = fakeEntry.HourlyRate,
             IsBillable = fakeEntry.IsBillable,
             ProjectId = expectedProject.Id,

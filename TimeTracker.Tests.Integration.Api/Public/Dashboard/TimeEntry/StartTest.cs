@@ -38,7 +38,9 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
+            WorkspaceId = _defaultWorkspace.Id,
+            Date = DateTime.Now.Date,
+            StartTime = TimeSpan.FromSeconds(1)
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -48,7 +50,9 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
+            WorkspaceId = _defaultWorkspace.Id,
+            Date = DateTime.Now.Date,
+            StartTime = TimeSpan.FromSeconds(1)
         });
         response.EnsureSuccessStatusCode();
 
@@ -67,11 +71,15 @@ public class AddTest: BaseTest
     {
         await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
+            WorkspaceId = _defaultWorkspace.Id,
+            Date = DateTime.Now.Date,
+            StartTime = TimeSpan.FromSeconds(1)
         });
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
+            WorkspaceId = _defaultWorkspace.Id,
+            Date = DateTime.Now.Date,
+            StartTime = TimeSpan.FromSeconds(1)
         });
         response.EnsureSuccessStatusCode();
 
@@ -92,7 +100,9 @@ public class AddTest: BaseTest
             WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
-            IsBillable = fakeTimeEntry.IsBillable
+            IsBillable = fakeTimeEntry.IsBillable,
+            Date = DateTime.Now.Date,
+            StartTime = TimeSpan.FromSeconds(1)
         });
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
