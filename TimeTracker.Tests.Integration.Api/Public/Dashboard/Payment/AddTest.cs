@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -54,7 +55,7 @@ public class AddTest: BaseTest
             ClientId = _client.Id,
             Amount = payment.Amount,
             Description = payment.Description,
-            PaymentTime = payment.PaymentTime,
+            PaymentTime = DateTime.Now,
             ProjectId = _project.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -63,6 +64,7 @@ public class AddTest: BaseTest
     [Fact]
     public async Task ShouldAdd()
     {
+        var expectedPaymentTime = DateTime.Now;
         var payment = _factory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
@@ -70,10 +72,9 @@ public class AddTest: BaseTest
             ClientId = _client.Id,
             Amount = payment.Amount,
             Description = payment.Description,
-            PaymentTime = payment.PaymentTime,
+            PaymentTime = expectedPaymentTime,
             ProjectId = _project.Id
         });
-        await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
         var actualPayment = await response.GetJsonDataAsync<PaymentDto>();
@@ -82,7 +83,7 @@ public class AddTest: BaseTest
         Assert.Equal(_project.Id, actualPayment.Project.Id);
         Assert.Equal(payment.Amount, actualPayment.Amount);
         Assert.Equal(payment.Description, actualPayment.Description);
-        Assert.Equal(payment.PaymentTime, actualPayment.PaymentTime);
+        Assert.Equal(expectedPaymentTime, actualPayment.PaymentTime);
     }
     
     [Fact]
