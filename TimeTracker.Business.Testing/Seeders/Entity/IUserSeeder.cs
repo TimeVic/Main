@@ -1,6 +1,7 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.Security.Model;
 
 namespace TimeTracker.Business.Testing.Seeders.Entity;
 
@@ -17,12 +18,12 @@ public interface IUserSeeder: IDomainService
     Task<UserEntity> CreateActivatedAndShareAsync(
         WorkspaceEntity workspace,
         MembershipAccessType access = MembershipAccessType.User,
-        ICollection<ProjectEntity>? projects = null
+        ICollection<ProjectAccessModel>? projects = null
     );
 
     Task<(string token, UserEntity user)> CreateAuthorizedAndShareAsync(
         WorkspaceEntity workspace,
         MembershipAccessType access = MembershipAccessType.User,
-        ICollection<ProjectEntity>? projects = null
+        ICollection<ProjectAccessModel>? projects = null
     );
 }

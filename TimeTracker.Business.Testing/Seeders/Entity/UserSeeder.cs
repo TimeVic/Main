@@ -3,6 +3,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Factories;
 
 namespace TimeTracker.Business.Testing.Seeders.Entity;
@@ -67,7 +68,7 @@ public class UserSeeder: IUserSeeder
     public async Task<(string token, UserEntity user)> CreateAuthorizedAndShareAsync(
         WorkspaceEntity workspace,
         MembershipAccessType access = MembershipAccessType.User,
-        ICollection<ProjectEntity>? projects = null
+        ICollection<ProjectAccessModel>? projects = null
     )
     {
         var user = await CreateActivatedAndShareAsync(workspace, access, projects);
@@ -80,7 +81,7 @@ public class UserSeeder: IUserSeeder
     public async Task<UserEntity> CreateActivatedAndShareAsync(
         WorkspaceEntity workspace,
         MembershipAccessType access = MembershipAccessType.User,
-        ICollection<ProjectEntity>? projects = null
+        ICollection<ProjectAccessModel>? projects = null
     )
     {
         var user = await CreatePendingAsync();

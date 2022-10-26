@@ -9,6 +9,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 
 namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
 {
@@ -59,7 +60,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
                 membership.Workspace,
                 membership.User,
                 request.Access,
-                projects
+                projects.Select(item => new ProjectAccessModel() { Project = item }).ToList()
             );
             return _mapper.Map<WorkspaceMembershipDto>(workspaceMembership);
         }

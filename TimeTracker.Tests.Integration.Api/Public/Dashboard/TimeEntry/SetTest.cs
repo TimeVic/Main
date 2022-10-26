@@ -13,6 +13,7 @@ using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
@@ -153,9 +154,9 @@ public class SetTest: BaseTest
         var (jwtToken, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _defaultWorkspace,
             MembershipAccessType.User,
-            new List<ProjectEntity>()
+            new List<ProjectAccessModel>()
             {
-                expectedProject
+                new () { Project = expectedProject }
             }
         );
         var timeEntry = await _timeEntryDao.StartNewAsync(

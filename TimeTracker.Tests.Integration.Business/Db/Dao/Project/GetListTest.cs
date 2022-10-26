@@ -3,6 +3,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
 
@@ -68,10 +69,10 @@ public class GetListTest: BaseTest
             _workspace,
             otherUser,
             MembershipAccessType.User,
-            new List<ProjectEntity>()
+            new List<ProjectAccessModel>()
             {
-                projects.First(),
-                projects.Last()
+                new () { Project = projects.First() },
+                new () { Project = projects.Last() }
             }
         );
         
@@ -83,10 +84,10 @@ public class GetListTest: BaseTest
             _workspace,
             otherUser2,
             MembershipAccessType.User,
-            new List<ProjectEntity>()
+            new List<ProjectAccessModel>()
             {
-                projects.First(),
-                projects.Last()
+                new () { Project = projects.First() },
+                new () { Project = projects.Last() }
             }
         );
         

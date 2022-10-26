@@ -7,9 +7,9 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
+using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
-using TimeTracker.Business.Services.TimeEntry;
 
 namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 {

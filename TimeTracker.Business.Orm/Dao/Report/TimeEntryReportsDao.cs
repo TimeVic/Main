@@ -1,5 +1,6 @@
 ﻿using NHibernate.Transform;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dto.Reports;
 
 namespace TimeTracker.Business.Orm.Dao.Report;
@@ -13,7 +14,7 @@ public class TimeEntryReportsDao: ITimeEntryReportsDao
         this._sessionProvider = _sessionProvider;
     }
     
-    private const string SqlQueryProjectPayments = @"
+    private const string SqlQuery = @"
         select  
             p.id as ProjectId,
             p.name as ProjectName,
@@ -49,9 +50,12 @@ public class TimeEntryReportsDao: ITimeEntryReportsDao
         group by p.id, c.id
     ";
 
-    public async Task<ICollection<ProjectPaymentsReportItemDto>> GetProjectPaymentsReport(long workspaceId, long userId)
+    public async Task<ICollection<ProjectPaymentsReportItemDto>> GetProjectPaymentsReport(
+        long workspaceId,
+        long userId
+    )
     {
-        return await _sessionProvider.CurrentSession.CreateSQLQuery(SqlQueryProjectPayments)
+        return await _sessionProvider.CurrentSession.CreateSQLQuery(SqlQuery)
             .SetParameter("workspaceId", workspaceId)
             .SetParameter("userId", userId)
             .SetResultTransformer(Transformers.AliasToBean<ProjectPaymentsReportItemDto>())

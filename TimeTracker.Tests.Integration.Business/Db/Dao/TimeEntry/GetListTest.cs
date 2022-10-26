@@ -6,6 +6,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
 
@@ -261,10 +262,10 @@ public class GetListTest: BaseTest
         var expectedUser = await _userSeeder.CreateActivatedAndShareAsync(
             _workspace,
             access: accessType,
-            projects: new List<ProjectEntity>()
+            projects: new List<ProjectAccessModel>()
             {
-                expectedProject1,
-                expectedProject2
+                new () { Project = expectedProject1 },
+                new ProjectAccessModel() { Project = expectedProject2 }
             }
         );
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, expectedUser, 3);
