@@ -92,7 +92,7 @@ public class UpdateTest: BaseTest
         Assert.NotNull(actualMembership.User);
         Assert.Equal(expectAccess, actualMembership.Access);
         Assert.True(actualMembership.User.Id > 0);
-        Assert.Equal(0, actualMembership.Projects.Count);
+        Assert.Equal(3, actualMembership.Projects.Count);
     }
     
     [Fact]

@@ -87,7 +87,7 @@ public class UpdateTest: BaseTest
         Assert.Equal(expectProject.Id, actualPayment.Project.Id);
         Assert.Equal(expectPayment.Amount, actualPayment.Amount);
         Assert.Equal(expectPayment.Description, actualPayment.Description);
-        Assert.Equal(expectPayment.PaymentTime, actualPayment.PaymentTime);
+        Assert.Equal(expectPayment.PaymentTime, actualPayment.PaymentTime.ToUniversalTime());
     }
     
     [Fact]

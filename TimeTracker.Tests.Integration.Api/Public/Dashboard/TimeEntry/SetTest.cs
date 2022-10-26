@@ -139,7 +139,7 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.Description, actualDto.Description);
         Assert.Equal(fakeEntry.IsBillable, actualDto.IsBillable);
         Assert.Equal(fakeEntry.HourlyRate, actualDto.HourlyRate);
-        Assert.Equal(fakeEntry.Date, actualDto.Date);
+        Assert.Equal(fakeEntry.Date, actualDto.Date.ToUniversalTime());
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
         Assert.Equal(fakeEntry.TaskId, actualDto.TaskId);
         
