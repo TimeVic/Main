@@ -6,6 +6,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 using TimeTracker.Business.Services.Auth;
+using TimeTracker.Business.Services.Security.Model;
 
 namespace TimeTracker.Business.Services.Security;
 
@@ -30,7 +31,7 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         WorkspaceEntity workspace,
         string email,
         MembershipAccessType access,
-        ICollection<ProjectEntity>? projects = null
+        ICollection<ProjectAccessModel>? projectsAccess = null
     )
     {
         var user = await _userDao.GetByEmail(email);
@@ -39,14 +40,14 @@ public class WorkspaceAccessService: IWorkspaceAccessService
             user = await _registrationService.CreatePendingUser(email);
         }
 
-        return await ShareAccessAsync(workspace, user, access, projects);
+        return await ShareAccessAsync(workspace, user, access, projectsAccess);
     }
 
     public async Task<WorkspaceMembershipEntity> ShareAccessAsync(
         WorkspaceEntity workspace,
         UserEntity user,
         MembershipAccessType access,
-        ICollection<ProjectEntity>? projects = null
+        ICollection<ProjectAccessModel>? projectsAccess = null
     )
     {
         var membership = workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id);
@@ -63,20 +64,21 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         membership.UpdateTime = DateTime.UtcNow;
         membership.Access = access;
 
-        projects ??= new List<ProjectEntity>();
+        projectsAccess ??= new List<ProjectAccessModel>();
         membership.ProjectAccesses.Clear();
-        if (projects.Any() && membership.Access != MembershipAccessType.Manager)
+        if (projectsAccess.Any())
         {
-            foreach (var project in projects)
+            foreach (var projectAccess in projectsAccess)
             {
-                var projectAccess = new WorkspaceMembershipProjectAccessEntity()
+                var accessEntity = new WorkspaceMembershipProjectAccessEntity()
                 {
-                    Project = project,
+                    Project = projectAccess.Project,
+                    HourlyRate = projectAccess.HourlyRate,
                     CreateTime = DateTime.UtcNow,
                     UpdateTime = DateTime.UtcNow,
                     WorkspaceMembership = membership
                 };
-                membership.ProjectAccesses.Add(projectAccess);
+                membership.ProjectAccesses.Add(accessEntity);
             }
         }
         await _sessionProvider.CurrentSession.SaveAsync(membership);
@@ -136,13 +138,13 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         return null;
     }
     
-    private Task<WorkspaceMembershipEntity?> GetMembershipAsync(
+    public Task<WorkspaceMembershipEntity?> GetMembershipAsync(
         UserEntity user, 
         WorkspaceEntity workspace
     )
     {
         return Task.FromResult(
-            workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id)    
+            workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id)   
         );
     }
 }

@@ -13,6 +13,7 @@ using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
@@ -138,7 +139,7 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.Description, actualDto.Description);
         Assert.Equal(fakeEntry.IsBillable, actualDto.IsBillable);
         Assert.Equal(fakeEntry.HourlyRate, actualDto.HourlyRate);
-        Assert.Equal(fakeEntry.Date, actualDto.Date);
+        Assert.Equal(fakeEntry.Date, actualDto.Date.ToUniversalTime());
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
         Assert.Equal(fakeEntry.TaskId, actualDto.TaskId);
         
@@ -153,9 +154,9 @@ public class SetTest: BaseTest
         var (jwtToken, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _defaultWorkspace,
             MembershipAccessType.User,
-            new List<ProjectEntity>()
+            new List<ProjectAccessModel>()
             {
-                expectedProject
+                new () { Project = expectedProject }
             }
         );
         var timeEntry = await _timeEntryDao.StartNewAsync(
@@ -187,5 +188,31 @@ public class SetTest: BaseTest
         Assert.True(actualDto.Id > 0);
         Assert.Null(actualDto.EndTime);
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
+    }
+    
+    [Fact]
+    public async Task ShouldSetDefaultHourlyRateIfNull()
+    {
+        var expectedHourlyRate = 14.3m;
+        
+        var fakeTimeEntry = _timeEntryFactory.Generate();
+        var project = await _projectDao.CreateAsync(_defaultWorkspace, "Test project");
+        project.DefaultHourlyRate = expectedHourlyRate;
+
+        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id,
+            ProjectId = project.Id,
+            Description = fakeTimeEntry.Description,
+            Date = DateTime.UtcNow.Date,
+            StartTime = TimeSpan.FromSeconds(1),
+            
+            IsBillable = true,
+            HourlyRate = null
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        Assert.Equal(expectedHourlyRate, actualDto.HourlyRate);
     }
 }

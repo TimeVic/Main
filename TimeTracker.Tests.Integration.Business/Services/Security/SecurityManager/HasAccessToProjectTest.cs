@@ -4,6 +4,7 @@ using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
 
@@ -85,7 +86,10 @@ public class HasAccessToProjectTest: BaseTest
             _ownWorkspace,
             otherUser,
             MembershipAccessType.User,
-            new List<ProjectEntity> { project }
+            new List<ProjectAccessModel>
+            {
+                new () { Project = project }
+            }
         );
         
         var hasAccess = await _securityManager.HasAccess(AccessLevel.Read, otherUser, project);

@@ -5,6 +5,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
 
@@ -79,9 +80,9 @@ public class GetFilteredListTest: BaseTest
         var (otherJwt, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _defaultWorkspace,
             MembershipAccessType.User,
-            projects: new List<ProjectEntity>()
+            projects: new List<ProjectAccessModel>()
             {
-                expectedProject
+                new () { Project = expectedProject }
             }
         );
         await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, otherUser, 3, expectedProject);

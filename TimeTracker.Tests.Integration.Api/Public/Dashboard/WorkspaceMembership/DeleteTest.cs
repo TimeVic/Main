@@ -11,6 +11,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
@@ -49,18 +50,18 @@ public class DeleteTest: BaseTest
 
         (_jwtTokenOtherUser, _otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
         
-        var projects = new List<ProjectEntity>()
+        var projectsAccess = new List<ProjectAccessModel>()
         {
-            _projectDao.CreateAsync(_workspace, "test 1").Result,
-            _projectDao.CreateAsync(_workspace, "test 2").Result,
-            _projectDao.CreateAsync(_workspace, "test 3").Result
+            new () { Project = _projectDao.CreateAsync(_workspace, "test 1").Result },
+            new () { Project = _projectDao.CreateAsync(_workspace, "test 2").Result },
+            new () { Project = _projectDao.CreateAsync(_workspace, "test 3").Result },
         };
         CommitDbChanges().Wait();
         _membership = _workspaceAccessService.ShareAccessAsync(
             _workspace,
             _otherUser,
             MembershipAccessType.User,
-            projects
+            projectsAccess
         ).Result;
     }
 

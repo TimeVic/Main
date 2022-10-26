@@ -2,7 +2,7 @@
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 
-namespace TimeTracker.Business.Services.TimeEntry;
+namespace TimeTracker.Business.Services.Entity;
 
 public interface ITimeEntryService: IDomainService
 {
@@ -18,6 +18,4 @@ public interface ITimeEntryService: IDomainService
         TimeEntryCreationDto timeEntryDto,
         ProjectEntity? project = null
     );
-    
-    Task StopActiveEntriesFromPastDayAsync(CancellationToken cancellationToken = default);
 }

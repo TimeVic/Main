@@ -5,7 +5,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Security;
-using TimeTracker.Business.Services.TimeEntry;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
 
@@ -40,9 +40,9 @@ public class RemoveAccessTest: BaseTest
         await DbSessionProvider.PerformCommitAsync();
 
         var actualMembership = await _workspaceAccessService.ShareAccessAsync(_workspace, expectedUser, expectedAccess,
-            new List<ProjectEntity>()
+            new List<ProjectAccessModel>()
             {
-                expectedProject1
+                new () { Project = expectedProject1 }
             });
         await DbSessionProvider.PerformCommitAsync();
         Assert.Equal(_workspace.Id, actualMembership.Workspace.Id);

@@ -3,6 +3,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
+using TimeTracker.Business.Services.Security.Model;
 
 namespace TimeTracker.Business.Services.Security;
 
@@ -12,14 +13,14 @@ public interface IWorkspaceAccessService: IDomainService
         WorkspaceEntity workspace,
         UserEntity user,
         MembershipAccessType access,
-        ICollection<ProjectEntity>? projects = null
+        ICollection<ProjectAccessModel>? projectsAccess = null
     );
 
     Task<WorkspaceMembershipEntity> ShareAccessAsync(
         WorkspaceEntity workspace,
         string email,
         MembershipAccessType access,
-        ICollection<ProjectEntity>? projects = null
+        ICollection<ProjectAccessModel>? projectsAccess = null
     );
 
     Task<bool> RemoveAccessAsync(long membershipId);
@@ -33,5 +34,10 @@ public interface IWorkspaceAccessService: IDomainService
     Task<MembershipAccessType?> GetAccessTypeAsync(
         UserEntity user,
         ProjectEntity project
+    );
+
+    Task<WorkspaceMembershipEntity?> GetMembershipAsync(
+        UserEntity user,
+        WorkspaceEntity workspace
     );
 }

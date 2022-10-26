@@ -5,7 +5,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Security;
-using TimeTracker.Business.Services.TimeEntry;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
 
@@ -41,9 +41,9 @@ public class ShareAccessTest: BaseTest
         await DbSessionProvider.PerformCommitAsync();
 
         var actualMembership = await _workspaceAccessService.ShareAccessAsync(_workspace, expectedUser, expectedAccess,
-            new List<ProjectEntity>()
+            new List<ProjectAccessModel>()
             {
-                expectedProject1
+                new () { Project = expectedProject1 }
             });
         await DbSessionProvider.PerformCommitAsync();
         
@@ -58,6 +58,8 @@ public class ShareAccessTest: BaseTest
     [Fact]
     public async Task ShouldUpdateAccess_User()
     {
+        var expectedHourlyRate1 = 12;
+        var expectedHourlyRate2 = 13;
         var expectedAccess = MembershipAccessType.User;
         var expectedUser = await _userSeeder.CreateActivatedAsync();
         var expectedProject1 = await _projectDao.CreateAsync(_workspace, "Test 1");
@@ -65,16 +67,24 @@ public class ShareAccessTest: BaseTest
         await DbSessionProvider.PerformCommitAsync();
 
         await _workspaceAccessService.ShareAccessAsync(_workspace, expectedUser, expectedAccess,
-            new List<ProjectEntity>()
+            new List<ProjectAccessModel>()
             {
-                project2
+                new ()
+                {
+                    Project = project2,
+                    HourlyRate = expectedHourlyRate2
+                }
             });
         await DbSessionProvider.PerformCommitAsync();
         
         var actualMembership = await _workspaceAccessService.ShareAccessAsync(_workspace, expectedUser, expectedAccess,
-            new List<ProjectEntity>()
+            new List<ProjectAccessModel>()
             {
-                expectedProject1
+                new ()
+                {
+                    Project = expectedProject1,
+                    HourlyRate = expectedHourlyRate1
+                }
             });
         await DbSessionProvider.PerformCommitAsync();
         
@@ -84,12 +94,15 @@ public class ShareAccessTest: BaseTest
         Assert.Equal(expectedUser.Id, actualMembership.User.Id);
         Assert.Equal(1, actualMembership.ProjectAccesses.Count);
         Assert.Contains(actualMembership.ProjectAccesses, access => access.Project.Id == expectedProject1.Id);
+        Assert.Contains(actualMembership.ProjectAccesses, access => access.HourlyRate == expectedHourlyRate1);
         Assert.DoesNotContain(actualMembership.ProjectAccesses, access => access.Project.Id == project2.Id);
+        Assert.DoesNotContain(actualMembership.ProjectAccesses, access => access.HourlyRate == expectedHourlyRate2);
     }
     
     [Fact]
     public async Task ShouldProvideNewBaseAccess_Manager()
     {
+        var expectedHourlyRate = 13;
         var expectedAccess = MembershipAccessType.Manager;
         var expectedUser = await _userSeeder.CreateActivatedAsync();
         var expectedProject1 = await _projectDao.CreateAsync(_workspace, "Test 1");
@@ -97,16 +110,21 @@ public class ShareAccessTest: BaseTest
         await DbSessionProvider.PerformCommitAsync();
 
         var actualMembership = await _workspaceAccessService.ShareAccessAsync(_workspace, expectedUser, expectedAccess,
-            new List<ProjectEntity>()
+            new List<ProjectAccessModel>()
             {
-                expectedProject1
+                new ()
+                {
+                    Project = expectedProject1,
+                    HourlyRate = expectedHourlyRate
+                }
             });
         await DbSessionProvider.PerformCommitAsync();
         
         Assert.Equal(expectedAccess, actualMembership.Access);
         Assert.Equal(_workspace.Id, actualMembership.Workspace.Id);
         Assert.Equal(expectedUser.Id, actualMembership.User.Id);
-        Assert.Equal(0, actualMembership.ProjectAccesses.Count);
+        Assert.Equal(1, actualMembership.ProjectAccesses.Count);
+        Assert.Contains(actualMembership.ProjectAccesses, access => access.HourlyRate == expectedHourlyRate);
     }
     
     [Fact]

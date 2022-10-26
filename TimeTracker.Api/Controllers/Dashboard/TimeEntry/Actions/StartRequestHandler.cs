@@ -6,6 +6,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -20,6 +21,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         private readonly IDbSessionProvider _sessionProvider;
         private readonly ITimeEntryDao _timeEntryDao;
         private readonly ISecurityManager _securityManager;
+        private readonly IProjectService _projectService;
+        private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public StartRequestHandler(
             IMapper mapper,
@@ -28,7 +31,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
             ITimeEntryDao timeEntryDao,
-            ISecurityManager securityManager
+            ISecurityManager securityManager,
+            IProjectService projectService,
+            IWorkspaceAccessService workspaceAccessService
         )
         {
             _mapper = mapper;
@@ -38,6 +43,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _sessionProvider = sessionProvider;
             _timeEntryDao = timeEntryDao;
             _securityManager = securityManager;
+            _projectService = projectService;
+            _workspaceAccessService = workspaceAccessService;
         }
     
         public async Task<TimeEntryDto> ExecuteAsync(StartRequest request)
@@ -50,6 +57,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new HasNoAccessException();
             }
 
+            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+            var userProjects = await _projectDao.GetListAsync(workspace, user, userAccess);
+            var project = userProjects.Items.FirstOrDefault(item => item.Id == request.ProjectId);
+            if (request.IsBillable && !request.HourlyRate.HasValue)
+            {
+                request.HourlyRate = await _projectService.GetUsersHourlyRateForProject(user, project);
+            }
+
             var timeEntry = await _timeEntryDao.StartNewAsync(
                 user,
                 workspace,
@@ -57,7 +72,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 request.StartTime,
                 isBillable: request.IsBillable,
                 description: request.Description,
-                projectId: request.ProjectId
+                projectId: request.ProjectId,
+                hourlyRate: request.HourlyRate
             );
             await _sessionProvider.PerformCommitAsync();
             
