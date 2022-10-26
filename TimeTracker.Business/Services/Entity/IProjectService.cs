@@ -5,5 +5,5 @@ namespace TimeTracker.Business.Services.Entity;
 
 public interface IProjectService: IDomainService
 {
-    Task<decimal?> GetUsersHourlyRateForProject(ProjectEntity project, UserEntity user);
+    Task<decimal?> GetUsersHourlyRateForProject(UserEntity user, ProjectEntity? project);
 }

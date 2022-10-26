@@ -48,9 +48,7 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
                 EndTime = action.TimeEntry.EndTime,
                 StartTime = action.TimeEntry.StartTime,
                 TaskId = action.TimeEntry.TaskId,
-                HourlyRate = action.IsSetProjectDefaults && project != null 
-                    ? project.DefaultHourlyRate 
-                    : action.TimeEntry.HourlyRate,
+                HourlyRate = action.TimeEntry.HourlyRate,
                 IsBillable = action.IsSetProjectDefaults && project != null 
                     ? project.IsBillableByDefault 
                     : action.TimeEntry.IsBillable

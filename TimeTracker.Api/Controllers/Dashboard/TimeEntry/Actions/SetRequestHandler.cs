@@ -23,6 +23,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         private readonly ITimeEntryService _timeEntryService;
         private readonly ISecurityManager _securityManager;
         private readonly IWorkspaceAccessService _workspaceAccessService;
+        private readonly IProjectService _projectService;
 
         public SetRequestHandler(
             IMapper mapper,
@@ -32,7 +33,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             ITimeEntryDao timeEntryDao,
             ITimeEntryService timeEntryService,
             ISecurityManager securityManager,
-            IWorkspaceAccessService workspaceAccessService
+            IWorkspaceAccessService workspaceAccessService,
+            IProjectService projectService
         )
         {
             _mapper = mapper;
@@ -43,6 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _timeEntryService = timeEntryService;
             _securityManager = securityManager;
             _workspaceAccessService = workspaceAccessService;
+            _projectService = projectService;
         }
     
         public async Task<TimeEntryDto> ExecuteAsync(SetRequest request)
@@ -63,6 +66,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 
             var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
             var userProjects = await _projectDao.GetListAsync(workspace, user, userAccess);
+            var project = userProjects.Items.FirstOrDefault(item => item.Id == request.ProjectId);
+            if (request.IsBillable && !request.HourlyRate.HasValue)
+            {
+                request.HourlyRate = await _projectService.GetUsersHourlyRateForProject(user, project);
+            }
+            
             timeEntry = await _timeEntryService.SetAsync(
                 user,
                 workspace,

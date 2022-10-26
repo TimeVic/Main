@@ -12,8 +12,13 @@ public class ProjectService: IProjectService
         _workspaceAccessService = workspaceAccessService;
     }
 
-    public async Task<decimal?> GetUsersHourlyRateForProject(ProjectEntity project, UserEntity user)
+    public async Task<decimal?> GetUsersHourlyRateForProject(UserEntity user, ProjectEntity? project)
     {
+        if (project == null)
+        {
+            return null;
+        }
+
         if (project.Workspace.IsOwner(user))
         {
             return project.DefaultHourlyRate;

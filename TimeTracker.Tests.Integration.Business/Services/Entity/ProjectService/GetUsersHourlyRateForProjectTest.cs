@@ -56,7 +56,7 @@ public class GetUsersHourlyRateForProjectTest: BaseTest
     [Fact]
     public async Task ShouldReturnHourlyRateForOwner()
     {
-        var actualRate = await _projectService.GetUsersHourlyRateForProject(_project, _user);
+        var actualRate = await _projectService.GetUsersHourlyRateForProject(_user, _project);
         Assert.Equal(_project.DefaultHourlyRate, actualRate);
     }
     
@@ -80,7 +80,7 @@ public class GetUsersHourlyRateForProjectTest: BaseTest
             }
         );
         
-        var actualRate = await _projectService.GetUsersHourlyRateForProject(_project, userWithUserRole);
+        var actualRate = await _projectService.GetUsersHourlyRateForProject(userWithUserRole, _project);
         Assert.Equal(expectedRate, actualRate);
     }
     
@@ -102,7 +102,7 @@ public class GetUsersHourlyRateForProjectTest: BaseTest
             }
         );
         
-        var actualRate = await _projectService.GetUsersHourlyRateForProject(_project, userWithUserRole);
+        var actualRate = await _projectService.GetUsersHourlyRateForProject(userWithUserRole, _project);
         Assert.Equal(_project.DefaultHourlyRate, actualRate);
     }
     
@@ -126,7 +126,7 @@ public class GetUsersHourlyRateForProjectTest: BaseTest
             }
         );
         
-        var actualRate = await _projectService.GetUsersHourlyRateForProject(_project, userWithUserRole);
+        var actualRate = await _projectService.GetUsersHourlyRateForProject(userWithUserRole, _project);
         Assert.Equal(expectedRate, actualRate);
     }
     
@@ -148,7 +148,7 @@ public class GetUsersHourlyRateForProjectTest: BaseTest
             }
         );
         
-        var actualRate = await _projectService.GetUsersHourlyRateForProject(_project, userWithUserRole);
+        var actualRate = await _projectService.GetUsersHourlyRateForProject(userWithUserRole, _project);
         Assert.Equal(_project.DefaultHourlyRate, actualRate);
     }
 }

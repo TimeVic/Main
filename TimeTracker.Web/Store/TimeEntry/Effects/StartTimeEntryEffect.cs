@@ -31,7 +31,10 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
                 Date = DateTime.UtcNow.Date,
-                StartTime = DateTime.Now.TimeOfDay
+                StartTime = DateTime.Now.TimeOfDay,
+                
+                // TODO: Fill from the project's settings
+                IsBillable = true
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(response));
         }
