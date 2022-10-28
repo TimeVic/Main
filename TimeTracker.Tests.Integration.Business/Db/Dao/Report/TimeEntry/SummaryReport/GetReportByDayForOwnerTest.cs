@@ -13,7 +13,7 @@ using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Db.Dao.Report.TimeEntry.SummaryReport;
 
-public class GetReportByDayTest: BaseTest
+public class GetReportByDayForOwnerTest: BaseTest
 {
     private readonly IUserSeeder _userSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
@@ -24,7 +24,7 @@ public class GetReportByDayTest: BaseTest
     private readonly IPaymentDao _paymentDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
 
-    public GetReportByDayTest(): base()
+    public GetReportByDayForOwnerTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _projectSeederSeeder = Scope.Resolve<IProjectSeeder>();
@@ -80,98 +80,36 @@ public class GetReportByDayTest: BaseTest
             });
         }
         
-        var result = await _reportsDao.GetSummaryReport(
-            MembershipAccessType.Owner,
+        var result = await _reportsDao.GetReportByDayForOwnerOrManagerAsync(
             _workspace.Id,
-            SummaryReportType.GroupByWeek,
             DateTime.UtcNow.AddDays(-1),
             DateTime.UtcNow.AddDays(1)
         );
-        Assert.Equal(3, result.ByDays.Count);
+        Assert.Equal(3, result.Count);
         
-        var firstReportItem = result.ByDays.First();
-        var secondReportItem = result.ByDays.Skip(1).First();
-        var thirdReportItem = result.ByDays.Last();
+        var firstReportItem = result.First();
+        var secondReportItem = result.Skip(1).First();
+        var thirdReportItem = result.Last();
         Assert.True(firstReportItem.Date > secondReportItem.Date);
         
         Assert.Equal(TimeSpan.FromHours(24), firstReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(15), thirdReportItem.Duration);
         
-        result = await _reportsDao.GetSummaryReport(
-            MembershipAccessType.Manager,
+        result = await _reportsDao.GetReportByDayForOwnerOrManagerAsync(
             _workspace.Id,
-            SummaryReportType.GroupByWeek,
             DateTime.UtcNow.AddDays(-1),
             DateTime.UtcNow.AddDays(1)
         );
-        Assert.Equal(3, result.ByDays.Count);
+        Assert.Equal(3, result.Count);
         
-        firstReportItem = result.ByDays.First();
-        secondReportItem = result.ByDays.Skip(1).First();
-        thirdReportItem = result.ByDays.Last();
+        firstReportItem = result.First();
+        secondReportItem = result.Skip(1).First();
+        thirdReportItem = result.Last();
         Assert.True(firstReportItem.Date > secondReportItem.Date);
         
         Assert.Equal(TimeSpan.FromHours(24), firstReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(15), thirdReportItem.Duration);
-    }
-    
-    [Fact]
-    public async Task ShouldReceiveReportForManager()
-    {
-        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, _user, 2);
-        await DbSessionProvider.PerformCommitAsync();
-        var project1 = projects.First();
-        for (int i = 0; i < 3; i++)
-        {
-            await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
-            {
-                Date = DateTime.UtcNow.AddDays(-1),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
-                IsBillable = true,
-                HourlyRate = 12
-            }, project1);
-        }
-        
-        var project2 = projects.Last();
-        for (int i = 0; i < 3; i++)
-        {
-            await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
-            {
-                Date = DateTime.UtcNow,
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
-                IsBillable = true,
-                HourlyRate = 10
-            }, project2);
-        }
-
-        for (int i = 0; i < 4; i++)
-        {
-            await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
-            {
-                Date = DateTime.UtcNow.AddDays(1),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
-                IsBillable = true,
-                HourlyRate = 15
-            });
-        }
-
-        var result = await _reportsDao.GetSummaryReport(
-            MembershipAccessType.User,
-            _workspace.Id,
-            SummaryReportType.GroupByWeek,
-            DateTime.UtcNow.AddDays(-1),
-            DateTime.UtcNow.AddDays(1),
-            new List<ProjectEntity> { project1 }
-        );
-        Assert.Equal(1, result.ByDays.Count);
-        
-        var firstReportItem = result.ByDays.First();
-
-        Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
     }
 }

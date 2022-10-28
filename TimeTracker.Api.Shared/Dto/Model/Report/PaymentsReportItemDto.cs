@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Api.Shared.Dto.Model;
+﻿namespace TimeTracker.Api.Shared.Dto.Model.Report;
 
 public class PaymentsReportItemDto
 {

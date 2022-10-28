@@ -1,6 +1,7 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Model;
+using TimeTracker.Api.Shared.Dto.Model.Report;
 
 namespace TimeTracker.Web.Store.Report;
 

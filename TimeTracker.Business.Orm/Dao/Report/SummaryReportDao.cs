@@ -62,37 +62,6 @@ public class SummaryReportDao: ISummaryReportDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<SummaryReportDto> GetSummaryReport(
-        MembershipAccessType accessType,
-        long workspaceId,
-        SummaryReportType type,
-        DateTime startDate,
-        DateTime endDate,
-        IEnumerable<ProjectEntity>? availableProjectsForUser = null
-    )
-    {
-        if (
-            accessType != MembershipAccessType.Manager 
-            && accessType != MembershipAccessType.Owner
-            && availableProjectsForUser == null
-        )
-        {
-            throw new ArgumentNullException(nameof(availableProjectsForUser));
-        }
-        var report = new SummaryReportDto
-        {
-            ByDays = await GetReportByDayAsync(
-                accessType,
-                workspaceId,
-                startDate,
-                endDate,
-                availableProjectsForUser
-            )
-        };
-
-        return report;
-    }
-
     #region By Date
     private const string SqlQuerySummaryByDayForOwner = @"
         select
@@ -104,6 +73,20 @@ public class SummaryReportDao: ISummaryReportDao
         order by te.date desc
         limit 60
     ";
+
+    public async Task<ICollection<ByDaysReportItemDto>> GetReportByDayForOwnerOrManagerAsync(
+        long workspaceId,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        return await _sessionProvider.CurrentSession.CreateSQLQuery(SqlQuerySummaryByDayForOwner)
+            .SetParameter("workspaceId", workspaceId)
+            .SetParameter("startDate", startDate.StartOfDay())
+            .SetParameter("endDate", endDate.EndOfDay())
+            .SetResultTransformer(Transformers.AliasToBean<ByDaysReportItemDto>())
+            .ListAsync<ByDaysReportItemDto>();
+    }
     
     private const string SqlQuerySummaryByDayForOthers = @"
         select
@@ -116,33 +99,21 @@ public class SummaryReportDao: ISummaryReportDao
         limit 60
     ";
     
-    private async Task<ICollection<ByDaysReportItemDto>> GetReportByDayAsync(
-        MembershipAccessType accessType,
-        long workspaceId,
+    public async Task<ICollection<ByDaysReportItemDto>> GetReportByDayForOtherAsync(
         DateTime startDate,
         DateTime endDate,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     )
     {
-        IQuery query;
-        if (accessType is MembershipAccessType.Manager or MembershipAccessType.Owner)
+        if (availableProjectsForUser == null)
         {
-            query = _sessionProvider.CurrentSession.CreateSQLQuery(SqlQuerySummaryByDayForOwner)
-                .SetParameter("workspaceId", workspaceId);
+            throw new ArgumentNullException(nameof(availableProjectsForUser));
         }
-        else
-        {
-            if (availableProjectsForUser == null)
-            {
-                throw new ArgumentNullException(nameof(availableProjectsForUser));
-            }
-            query = _sessionProvider.CurrentSession.CreateSQLQuery(SqlQuerySummaryByDayForOthers)
-                .SetParameterList(
-                    "projectIds",
-                    availableProjectsForUser.Select(item => item.Id).ToArray()
-                );
-        }
-        return await query
+        return await _sessionProvider.CurrentSession.CreateSQLQuery(SqlQuerySummaryByDayForOthers)
+            .SetParameterList(
+                "projectIds",
+                availableProjectsForUser.Select(item => item.Id).ToArray()
+            )
             .SetParameter("startDate", startDate.StartOfDay())
             .SetParameter("endDate", endDate.EndOfDay())
             .SetResultTransformer(Transformers.AliasToBean<ByDaysReportItemDto>())

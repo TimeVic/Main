@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.Model;
+using TimeTracker.Api.Shared.Dto.Model.Report;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Report;
 
