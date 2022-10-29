@@ -13,15 +13,6 @@ public partial class SummaryReportDao: ISummaryReportDao
 {
     private readonly IDbSessionProvider _sessionProvider;
     
-    private const string SqlQuerySummaryByMonth = @"
-        select
-            extract(month from te.date) as month,
-            sum(extract(epoch from te.end_time - te.start_time)) as duration
-        from time_entries te 
-        group by month
-        order by month
-    ";
-    
     private const string SqlQuerySummaryByWeek = @"
         select
             extract(week from te.date) as week,
