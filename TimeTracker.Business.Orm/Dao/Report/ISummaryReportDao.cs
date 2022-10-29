@@ -17,4 +17,40 @@ public interface ISummaryReportDao: IDomainService
         DateTime endDate,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
+
+    Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectForOwnerOrManagerAsync(
+        long workspaceId,
+        DateTime startDate,
+        DateTime endDate
+    );
+
+    Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectForOtherAsync(
+        DateTime startDate,
+        DateTime endDate,
+        IEnumerable<ProjectEntity>? availableProjectsForUser = null
+    );
+
+    Task<ICollection<ByClientsReportItemDto>> GetReportByClientForOwnerOrManagerAsync(
+        long workspaceId,
+        DateTime startDate,
+        DateTime endDate
+    );
+
+    Task<ICollection<ByClientsReportItemDto>> GetReportByClientForOtherAsync(
+        DateTime startDate,
+        DateTime endDate,
+        IEnumerable<ProjectEntity>? availableProjectsForUser = null
+    );
+
+    Task<ICollection<ByUsersReportItemDto>> GetReportByUserForOwnerOrManagerAsync(
+        long workspaceId,
+        DateTime startDate,
+        DateTime endDate
+    );
+
+    Task<ICollection<ByUsersReportItemDto>> GetReportByUserForOtherAsync(
+        DateTime startDate,
+        DateTime endDate,
+        IEnumerable<ProjectEntity>? availableProjectsForUser = null
+    );
 }

@@ -34,14 +34,14 @@ public class PaymentSeeder: IPaymentSeeder
     public async Task<ICollection<PaymentEntity>> CreateSeveralAsync(UserEntity user, int count = 1)
     {
         var workspace = user.Workspaces.First();
-        var project = (await _projectSeeder.CreateSeveralAsync(workspace, user)).First();
+        var project = (await _projectSeeder.CreateSeveralAsync(workspace)).First();
         await _sessionProvider.PerformCommitAsync();
         return await CreateSeveralAsync(workspace, user, project.Client, project, count);
     }
     
     public async Task<ICollection<PaymentEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1)
     {
-        var project = (await _projectSeeder.CreateSeveralAsync(workspace, user)).First();
+        var project = (await _projectSeeder.CreateSeveralAsync(workspace)).First();
         await _sessionProvider.PerformCommitAsync();
         return await CreateSeveralAsync(workspace, user, project.Client, project, count);
     }

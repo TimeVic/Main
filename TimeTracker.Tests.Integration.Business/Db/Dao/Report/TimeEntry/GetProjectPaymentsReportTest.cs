@@ -33,7 +33,7 @@ public class GetProjectPaymentsReportTest: BaseTest
     [Fact]
     public async Task ShouldReceiveSimpleReport()
     {
-        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, _user, 2);
+        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
         await DbSessionProvider.PerformCommitAsync();
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
@@ -112,7 +112,7 @@ public class GetProjectPaymentsReportTest: BaseTest
     [Fact]
     public async Task ShouldReceiveSimpleReportWithCalculatedPayments()
     {
-        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, _user, 2);
+        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
         await DbSessionProvider.PerformCommitAsync();
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
@@ -172,7 +172,7 @@ public class GetProjectPaymentsReportTest: BaseTest
     {
         var otherUser = await _userSeeder.CreateActivatedAndShareAsync(_workspace);
         
-        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, _user, 2);
+        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
         var project1 = projects.First();
        
         await _paymentDao.CreateAsync(

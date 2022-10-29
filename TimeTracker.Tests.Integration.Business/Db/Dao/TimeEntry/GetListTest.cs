@@ -84,7 +84,7 @@ public class GetListTest: BaseTest
         var expectedCounter = 7;
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 9);
 
-        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_workspace, _user)).First();
+        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_workspace)).First();
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter, expectedProject);
 
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1, new FilterDataDto()
@@ -100,7 +100,7 @@ public class GetListTest: BaseTest
         var expectedCounter = 7;
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 9);
 
-        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_workspace, _user)).First();
+        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_workspace)).First();
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter, expectedProject);
 
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1, new FilterDataDto()
@@ -252,7 +252,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReturnTimeEntriesOnlyForSharedProjectsForUserWithRoleUser()
     {
         var accessType = MembershipAccessType.User;
-        var projects = await _projectSeeder.CreateSeveralAsync(_workspace, _user, 4);
+        var projects = await _projectSeeder.CreateSeveralAsync(_workspace, 4);
         foreach (var project in projects)
         {
             await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3, project);
@@ -293,7 +293,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReturnAllTimeEntriesIfUserWithRoleManager()
     {
         var accessType = MembershipAccessType.Manager;
-        var projects = await _projectSeeder.CreateSeveralAsync(_workspace, _user, 4);
+        var projects = await _projectSeeder.CreateSeveralAsync(_workspace, 4);
         foreach (var project in projects)
         {
             await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3, project);

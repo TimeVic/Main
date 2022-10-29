@@ -41,7 +41,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveList()
     {
         var expectedCounter = 15;
-        await _projectSeeder.CreateSeveralAsync(_defaultWorkspace, _user, expectedCounter);
+        await _projectSeeder.CreateSeveralAsync(_defaultWorkspace, expectedCounter);
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
