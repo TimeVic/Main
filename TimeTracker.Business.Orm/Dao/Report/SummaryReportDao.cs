@@ -12,15 +12,6 @@ namespace TimeTracker.Business.Orm.Dao.Report;
 public partial class SummaryReportDao: ISummaryReportDao
 {
     private readonly IDbSessionProvider _sessionProvider;
-    
-    private const string SqlQuerySummaryByWeek = @"
-        select
-            extract(week from te.date) as week,
-            sum(extract(epoch from te.end_time - te.start_time)) as duration
-        from time_entries te 
-        group by week
-        order by week
-    ";
 
     public SummaryReportDao(IDbSessionProvider sessionProvider)
     {

@@ -65,4 +65,16 @@ public interface ISummaryReportDao: IDomainService
         DateTime endDate,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
+
+    Task<ICollection<ByWeeksReportItemDto>> GetReportByWeekForOwnerOrManagerAsync(
+        long workspaceId,
+        DateTime startDate,
+        DateTime endDate
+    );
+
+    Task<ICollection<ByWeeksReportItemDto>> GetReportByWeekForOtherAsync(
+        DateTime startDate,
+        DateTime endDate,
+        IEnumerable<ProjectEntity>? availableProjectsForUser = null
+    );
 }
