@@ -216,15 +216,15 @@ public class GetReportByWeeksTest: BaseTest
         var firstReportItem = result.First();
         var secondReportItem = result.Skip(1).First();
         var thirdReportItem = result.Last();
-        Assert.Equal(DateTime.Parse("2021-12-20T00:00:00Z").ToUniversalTime(), firstReportItem.WeekStartDate);
-        Assert.Equal(DateTime.Parse("2021-12-26T00:00:00Z").ToUniversalTime(), firstReportItem.WeekEndDate);
+        Assert.Equal(DateTime.Parse("2021-12-20T00:00:00Z").ToUniversalTime(), thirdReportItem.WeekStartDate);
+        Assert.Equal(DateTime.Parse("2021-12-26T00:00:00Z").ToUniversalTime(), thirdReportItem.WeekEndDate);
         Assert.Equal(DateTime.Parse("2021-12-27T00:00:00Z").ToUniversalTime(), secondReportItem.WeekStartDate);
         Assert.Equal(DateTime.Parse("2022-01-02T00:00:00Z").ToUniversalTime(), secondReportItem.WeekEndDate);
-        Assert.Equal(DateTime.Parse("2022-01-03T00:00:00Z").ToUniversalTime(), thirdReportItem.WeekStartDate);
-        Assert.Equal(DateTime.Parse("2022-01-09T00:00:00Z").ToUniversalTime(), thirdReportItem.WeekEndDate);
+        Assert.Equal(DateTime.Parse("2022-01-03T00:00:00Z").ToUniversalTime(), firstReportItem.WeekStartDate);
+        Assert.Equal(DateTime.Parse("2022-01-09T00:00:00Z").ToUniversalTime(), firstReportItem.WeekEndDate);
 
-        Assert.Equal(TimeSpan.FromHours(1), firstReportItem.Duration);
+        Assert.Equal(TimeSpan.FromHours(3), firstReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(4), secondReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(3), thirdReportItem.Duration);
+        Assert.Equal(TimeSpan.FromHours(1), thirdReportItem.Duration);
     }
 }
