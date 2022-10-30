@@ -1,18 +1,30 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
-@using Fluxor
-@using TimeTracker.Web.Store.Client
+@using System.Globalization
 
 @code {
 
     [Parameter]
-    public ICollection<SummaryByClientsReportItemDto> Items { get; set; } = new List<SummaryByClientsReportItemDto>();
+    public ICollection<SummaryByMonthsReportItemDto> Items { get; set; } = new List<SummaryByMonthsReportItemDto>();
+    
+    private RadzenDataGrid<SummaryByMonthsReportItemDto> _grid { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private string GetProjectName(int month, int year)
+    {
+        return new DateTime(year, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
+    }
 }
 
-<h3>Grouped by client:</h3>
+<h3>Grouped by project:</h3>
 
 <RadzenDataGrid
-    TItem="SummaryByClientsReportItemDto"
+    @ref="_grid"
+    TItem="SummaryByMonthsReportItemDto"
     AllowSorting="false"
     EditMode="DataGridEditMode.Single"
     Data="@Items"
@@ -20,18 +32,18 @@
 
     <Columns>
         <RadzenDataGridColumn 
-            TItem="SummaryByClientsReportItemDto"
+            TItem="SummaryByMonthsReportItemDto"
             Title="Client"
             Width="250px"
             TextAlign="TextAlign.Left"
         >
             <Template Context="item">
-                @item.ClientName
+                @GetProjectName(item.Month, item.Year)
             </Template>
         </RadzenDataGridColumn>
         
         <RadzenDataGridColumn 
-            TItem="SummaryByClientsReportItemDto" 
+            TItem="SummaryByMonthsReportItemDto" 
             Title="Duration"
             TextAlign="TextAlign.Left"
         >

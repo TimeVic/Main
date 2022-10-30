@@ -39,4 +39,8 @@
     {
         <ByProjectTable Items="@_state.Value.SummaryReportData.GroupedByProject"></ByProjectTable>
     }
+    @if (_state.Value.SummaryReportData?.GroupedByMonth != null)
+    {
+        <ByMonthTable Items="@_state.Value.SummaryReportData.GroupedByMonth"></ByMonthTable>
+    }
 </RadzenCard>

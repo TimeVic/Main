@@ -4,6 +4,8 @@ public class ByUsersReportItemDto
 {
     public long? UserId { get; set; }
     
+    public string? UserName { get; set; }
+    
     public object DurationAsEpoch { get; set; }
 
     public TimeSpan Duration

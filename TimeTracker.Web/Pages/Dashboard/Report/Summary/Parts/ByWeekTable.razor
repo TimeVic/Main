@@ -1,19 +1,30 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
-@using Fluxor
-@using TimeTracker.Web.Store.Client
-@using TimeTracker.Web.Store.Project
+@using System.Globalization
 
 @code {
 
     [Parameter]
-    public ICollection<SummaryByUsersReportItemDto> Items { get; set; } = new List<SummaryByUsersReportItemDto>();
+    public ICollection<SummaryByWeeksReportItemDto> Items { get; set; } = new List<SummaryByWeeksReportItemDto>();
+    
+    private RadzenDataGrid<SummaryByWeeksReportItemDto> _grid { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private string GetProjectName(int month, int year)
+    {
+        return new DateTime(year, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
+    }
 }
 
 <h3>Grouped by project:</h3>
 
 <RadzenDataGrid
-    TItem="SummaryByUsersReportItemDto"
+    @ref="_grid"
+    TItem="SummaryByWeeksReportItemDto"
     AllowSorting="false"
     EditMode="DataGridEditMode.Single"
     Data="@Items"
@@ -21,18 +32,20 @@
 
     <Columns>
         <RadzenDataGridColumn 
-            TItem="SummaryByUsersReportItemDto"
+            TItem="SummaryByWeeksReportItemDto"
             Title="Client"
             Width="250px"
             TextAlign="TextAlign.Left"
         >
             <Template Context="item">
-                @item.UserName
+                @item.WeekStartDate.ToShortDateString()
+                -
+                @item.WeekEndDate.ToShortDateString()
             </Template>
         </RadzenDataGridColumn>
         
         <RadzenDataGridColumn 
-            TItem="SummaryByUsersReportItemDto" 
+            TItem="SummaryByWeeksReportItemDto" 
             Title="Duration"
             TextAlign="TextAlign.Left"
         >

@@ -13,12 +13,13 @@ public partial class SummaryReportDao: ISummaryReportDao
 {
     private const string SqlQuerySummaryByWeekForOwner = @"
         select
-            cast(extract(week from te.date) AS int) as Week,
+            cast(date_trunc('week', te.date) as date) as WeekStartDate,
+            cast(date_trunc('week', te.date) + '6 days' as date) as WeekEndDate,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
         from time_entries te 
         where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
-        group by Week
-        order by Week desc
+        group by WeekStartDate, WeekEndDate
+        order by WeekStartDate desc
     ";
     
     public async Task<ICollection<ByWeeksReportItemDto>> GetReportByWeekForOwnerOrManagerAsync(
@@ -37,12 +38,13 @@ public partial class SummaryReportDao: ISummaryReportDao
     
     private const string SqlQuerySummaryByWeekForOther = @"
         select
-            cast(extract(week from te.date) AS int) as Week,
+            cast(date_trunc('week', te.date) as date) as WeekStartDate,
+            cast(date_trunc('week', te.date) + '6 days' as date) as WeekEndDate,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
         from time_entries te 
         where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
-        group by Week
-        order by Week
+        group by WeekStartDate, WeekEndDate
+        order by WeekStartDate desc
     ";
 
     public async Task<ICollection<ByWeeksReportItemDto>> GetReportByWeekForOtherAsync(

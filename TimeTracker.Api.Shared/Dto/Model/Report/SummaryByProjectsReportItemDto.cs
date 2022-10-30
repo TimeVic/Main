@@ -3,6 +3,8 @@
 public class SummaryByProjectsReportItemDto
 {
     public long? ProjectId { get; set; }
+    
+    public string? ProjectName { get; set; }
 
     public TimeSpan Duration { get; set; }
 }

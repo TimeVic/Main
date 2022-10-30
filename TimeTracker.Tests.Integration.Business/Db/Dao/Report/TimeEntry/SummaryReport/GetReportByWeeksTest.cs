@@ -89,10 +89,7 @@ public class GetReportByWeeksTest: BaseTest
         var firstReportItem = result.First();
         var secondReportItem = result.Skip(1).First();
         var thirdReportItem = result.Last();
-        Assert.Equal(DateTime.UtcNow.AddDays(-7).GetIso8601WeekOfYear(), firstReportItem.Week);
-        Assert.Equal(DateTime.UtcNow.AddDays(-14).GetIso8601WeekOfYear(), secondReportItem.Week);
-        Assert.Equal(DateTime.UtcNow.AddDays(-21).GetIso8601WeekOfYear(), thirdReportItem.Week);
-        
+
         Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(24), thirdReportItem.Duration);
@@ -107,10 +104,7 @@ public class GetReportByWeeksTest: BaseTest
         firstReportItem = result.First();
         secondReportItem = result.Skip(1).First();
         thirdReportItem = result.Last();
-        Assert.Equal(DateTime.UtcNow.AddDays(-7).GetIso8601WeekOfYear(), firstReportItem.Week);
-        Assert.Equal(DateTime.UtcNow.AddDays(-14).GetIso8601WeekOfYear(), secondReportItem.Week);
-        Assert.Equal(DateTime.UtcNow.AddDays(-21).GetIso8601WeekOfYear(), thirdReportItem.Week);
-        
+
         Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(24), thirdReportItem.Duration);
@@ -169,7 +163,68 @@ public class GetReportByWeeksTest: BaseTest
         
         var firstReportItem = result.First();
 
-        Assert.Equal(DateTime.UtcNow.AddDays(-14).GetIso8601WeekOfYear(), firstReportItem.Week);
         Assert.Equal(TimeSpan.FromHours(12), firstReportItem.Duration);
+    }
+    
+    [Fact]
+    public async Task ShouldReceiveCorrectWeekNumber()
+    {
+        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
+        await DbSessionProvider.PerformCommitAsync();
+        var project1 = projects.First();
+        await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+        {
+            Date = DateTime.Parse("2021-12-26T01:00:00Z"),
+            StartTime = TimeSpan.FromHours(1),
+            EndTime = TimeSpan.FromHours(2),
+            IsBillable = true,
+            HourlyRate = 12
+        }, project1);
+        await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+        {
+            Date = DateTime.Parse("2021-12-31T01:00:00Z"),
+            StartTime = TimeSpan.FromHours(2),
+            EndTime = TimeSpan.FromHours(4),
+            IsBillable = true,
+            HourlyRate = 12
+        }, project1);
+        await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+        {
+            Date = DateTime.Parse("2022-01-01T01:00:00Z"),
+            StartTime = TimeSpan.FromHours(2),
+            EndTime = TimeSpan.FromHours(4),
+            IsBillable = true,
+            HourlyRate = 12
+        }, project1);
+        await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+        {
+            Date = DateTime.Parse("2022-01-03T01:00:00Z"),
+            StartTime = TimeSpan.FromHours(5),
+            EndTime = TimeSpan.FromHours(8),
+            IsBillable = true,
+            HourlyRate = 12
+        }, project1);
+        await CommitDbChanges();
+        
+        var result = await _reportsDao.GetReportByWeekForOwnerOrManagerAsync(
+            _workspace.Id,
+            DateTime.Parse("2021-12-15T01:00:00Z"),
+            DateTime.Parse("2022-01-15T01:00:00Z")
+        );
+        Assert.Equal(3, result.Count);
+        
+        var firstReportItem = result.First();
+        var secondReportItem = result.Skip(1).First();
+        var thirdReportItem = result.Last();
+        Assert.Equal(DateTime.Parse("2021-12-20T00:00:00Z").ToUniversalTime(), firstReportItem.WeekStartDate);
+        Assert.Equal(DateTime.Parse("2021-12-26T00:00:00Z").ToUniversalTime(), firstReportItem.WeekEndDate);
+        Assert.Equal(DateTime.Parse("2021-12-27T00:00:00Z").ToUniversalTime(), secondReportItem.WeekStartDate);
+        Assert.Equal(DateTime.Parse("2022-01-02T00:00:00Z").ToUniversalTime(), secondReportItem.WeekEndDate);
+        Assert.Equal(DateTime.Parse("2022-01-03T00:00:00Z").ToUniversalTime(), thirdReportItem.WeekStartDate);
+        Assert.Equal(DateTime.Parse("2022-01-09T00:00:00Z").ToUniversalTime(), thirdReportItem.WeekEndDate);
+
+        Assert.Equal(TimeSpan.FromHours(1), firstReportItem.Duration);
+        Assert.Equal(TimeSpan.FromHours(4), secondReportItem.Duration);
+        Assert.Equal(TimeSpan.FromHours(3), thirdReportItem.Duration);
     }
 }

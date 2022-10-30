@@ -9,20 +9,11 @@
     [Parameter]
     public ICollection<SummaryByProjectsReportItemDto> Items { get; set; } = new List<SummaryByProjectsReportItemDto>();
 
-    [Inject]
-    public IState<ProjectState> ProjectsState { get; set; }
-
     private RadzenDataGrid<SummaryByProjectsReportItemDto> _grid { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        ProjectsState.StateChanged += (sender, args) => StateHasChanged();
-    }
-
-    private string GetProjectName(long? clientId)
-    {
-        return ProjectsState.Value.List.FirstOrDefault(item => item.Id == clientId)?.Name ?? "-Without project-";
     }
 }
 
@@ -44,7 +35,7 @@
             TextAlign="TextAlign.Left"
         >
             <Template Context="item">
-                @GetProjectName(item.ProjectId)
+                @item.ProjectName
             </Template>
         </RadzenDataGridColumn>
         

@@ -2,7 +2,9 @@
 
 public class SummaryByWeeksReportItemDto
 {
-    public int Week { get; set; }
+    public DateTime WeekStartDate { get; set; }
+    
+    public DateTime WeekEndDate { get; set; }
 
     public TimeSpan Duration { get; set; }
 }
