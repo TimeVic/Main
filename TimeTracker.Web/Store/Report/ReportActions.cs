@@ -6,15 +6,15 @@ using TimeTracker.Business.Common.Constants.Reports;
 
 namespace TimeTracker.Web.Store.Report;
 
-public record struct ReportFetchPaymentsReportAction(
-    DateTime StartTime,
-    DateTime EndTime,
-    SummaryReportType ReportType
-);
+public record struct ReportFetchPaymentsReportAction();
 
 public record struct ReportSetPaymentReportItemsAction(ICollection<PaymentsReportItemDto> Items);
 
-public record struct ReportFetchSummaryReportAction();
+public record struct ReportFetchSummaryReportAction(
+    DateTime StartTime,
+    DateTime EndTime,
+    SummaryReportType ReportType    
+);
 
 public record struct ReportSetSummaryReportItemsAction(SummaryReportResponse ReportData);
 

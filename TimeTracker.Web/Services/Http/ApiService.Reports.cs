@@ -28,7 +28,7 @@ namespace TimeTracker.Web.Services.Http
             SummaryReportType reportType
         )
         {
-            var response = await PostAuthorizedAsync<SummaryReportResponse>(ApiUrl.ReportPayments, new SummaryReportRequest()
+            var response = await PostAuthorizedAsync<SummaryReportResponse>(ApiUrl.ReportSummary, new SummaryReportRequest()
             {
                 WorkspaceId = workspaceId,
                 StartTime = startDate,

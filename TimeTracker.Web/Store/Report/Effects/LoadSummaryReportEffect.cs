@@ -7,7 +7,7 @@ using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Store.Report.Effects;
 
-public class LoadSummaryReportEffect: Effect<ReportFetchPaymentsReportAction>
+public class LoadSummaryReportEffect: Effect<ReportFetchSummaryReportAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IApiService _apiService;
@@ -24,7 +24,7 @@ public class LoadSummaryReportEffect: Effect<ReportFetchPaymentsReportAction>
         _logger = logger;
     }
 
-    public override async Task HandleAsync(ReportFetchPaymentsReportAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(ReportFetchSummaryReportAction action, IDispatcher dispatcher)
     {
         try
         {

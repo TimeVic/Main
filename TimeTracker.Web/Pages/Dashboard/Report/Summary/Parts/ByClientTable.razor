@@ -1,0 +1,60 @@
+﻿@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Business.Extensions
+@using Fluxor
+@using TimeTracker.Web.Store.Client
+
+@code {
+
+    [Parameter]
+    public ICollection<SummaryByClientsReportItemDto> Items { get; set; } = new List<SummaryByClientsReportItemDto>();
+
+    [Inject]
+    public IState<ClientState> ClientsState { get; set; }
+
+    private RadzenDataGrid<SummaryByClientsReportItemDto> _grid { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        ClientsState.StateChanged += (sender, args) => StateHasChanged();
+    }
+
+    private string GetClientName(long? clientId)
+    {
+        return ClientsState.Value.List.FirstOrDefault(item => item.Id == clientId)?.Name ?? "-Without client-";
+    }
+}
+
+<h3>Grouped by client:</h3>
+
+<RadzenDataGrid
+    @ref="_grid"
+    TItem="SummaryByClientsReportItemDto"
+    AllowSorting="false"
+    EditMode="DataGridEditMode.Single"
+    Data="@Items"
+    AllowPaging="false">
+
+    <Columns>
+        <RadzenDataGridColumn 
+            TItem="SummaryByClientsReportItemDto"
+            Title="Client"
+            Width="250px"
+            TextAlign="TextAlign.Left"
+        >
+            <Template Context="item">
+                @GetClientName(item.ClientId)
+            </Template>
+        </RadzenDataGridColumn>
+        
+        <RadzenDataGridColumn 
+            TItem="SummaryByClientsReportItemDto" 
+            Title="Duration"
+            TextAlign="TextAlign.Left"
+        >
+            <Template Context="item">
+                @item.Duration.ToReadableString()
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
