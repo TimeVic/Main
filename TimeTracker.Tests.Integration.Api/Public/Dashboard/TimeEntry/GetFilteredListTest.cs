@@ -47,7 +47,7 @@ public class GetFilteredListTest: BaseTest
     [Fact]
     public async Task ShouldReceiveList()
     {
-        var expectedProject = (await _projectSeeder.CreateSeveralAsync(_defaultWorkspace, _user)).First();
+        var expectedProject = await _projectSeeder.CreateAsync(_defaultWorkspace);
         var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, 6, expectedProject)).First();
         expectedEntry.Description = "Fake desCript223ion 123";
         expectedEntry.IsBillable = true;
@@ -73,7 +73,7 @@ public class GetFilteredListTest: BaseTest
     [Fact]
     public async Task ShouldReceiveListWithSharedAccess()
     {
-        var projects = await _projectSeeder.CreateSeveralAsync(_defaultWorkspace, _user, 2);
+        var projects = await _projectSeeder.CreateSeveralAsync(_defaultWorkspace, 2);
         var expectedProject = projects.First();
         var expectedProject2 = projects.Last();
 

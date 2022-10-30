@@ -51,7 +51,7 @@ public class ProjectDao: IProjectDao
             .FirstOrDefaultAsync();
     }
     
-    public async Task<ListDto<ProjectEntity>> GetListAsync(
+    public async Task<ListDto<ProjectEntity>> GetAvailableForUserListAsync(
         WorkspaceEntity workspace,
         UserEntity? user = null,
         MembershipAccessType? accessType = null

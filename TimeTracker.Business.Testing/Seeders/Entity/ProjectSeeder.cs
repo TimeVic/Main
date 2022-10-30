@@ -24,18 +24,27 @@ public class ProjectSeeder: IProjectSeeder
         _clientSeeder = clientSeeder;
     }
 
-    public async Task<ICollection<ProjectEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1)
+    public async Task<ICollection<ProjectEntity>> CreateSeveralAsync(WorkspaceEntity workspace, int count = 1)
     {
         var result = new List<ProjectEntity>();
         var client = (await _clientSeeder.CreateSeveralAsync(workspace)).First();
         for (int i = 0; i < count; i++)
         {
-            var fakeEntry = _projectFactory.Generate();
-            var entry = await _projectDao.CreateAsync(workspace, fakeEntry.Name);
-            entry.SetClient(client);
-            result.Add(entry);
+            result.Add(
+                await CreateAsync(workspace, client)
+            );
         }
 
         return result;
+    }
+    
+    public async Task<ProjectEntity> CreateAsync(WorkspaceEntity workspace, ClientEntity? client = null)
+    {
+        client ??= (await _clientSeeder.CreateSeveralAsync(workspace)).First();
+        var fakeEntry = _projectFactory.Generate();
+        var entry = await _projectDao.CreateAsync(workspace, fakeEntry.Name);
+        entry.SetClient(client);
+
+        return entry;
     }
 }

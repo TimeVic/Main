@@ -1,4 +1,5 @@
-﻿using TimeTracker.Business.Extensions.Resources;
+﻿using System.Globalization;
+using TimeTracker.Business.Extensions.Resources;
 
 namespace TimeTracker.Business.Extensions
 {
@@ -118,11 +119,6 @@ namespace TimeTracker.Business.Extensions
             return dt.ToString("hh:mm dd-MM-yyyy");
         }
 
-        public static string ToContentTimeString(this DateTime dt)
-        {
-            return dt.ToString("MMM dd\\'yy \\a\\t HH:mm");
-        }
-
         public static DateTime Round(this DateTime date, RoundTo roundTo)
         {
             DateTime dtRounded = new DateTime();
@@ -158,6 +154,27 @@ namespace TimeTracker.Business.Extensions
         public static DateTime EndOfDay(this DateTime theDate)
         {
             return theDate.Date.AddDays(1).AddTicks(-1);
+        }
+        
+        /// <summary>
+        /// This presumes that weeks start with Monday.
+        /// Week 1 is the 1st week of the year with a Thursday in it.
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public static int GetIso8601WeekOfYear(this DateTime time)
+        {
+            // Seriously cheat.  If its Monday, Tuesday or Wednesday, then it'll 
+            // be the same week# as whatever Thursday, Friday or Saturday are,
+            // and we always get those right
+            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(time);
+            if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
+            {
+                time = time.AddDays(3);
+            }
+
+            // Return the week of our adjusted day
+            return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
     }
 }

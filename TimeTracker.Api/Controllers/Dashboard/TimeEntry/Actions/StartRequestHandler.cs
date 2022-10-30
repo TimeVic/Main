@@ -58,7 +58,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             }
 
             var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
-            var userProjects = await _projectDao.GetListAsync(workspace, user, userAccess);
+            var userProjects = await _projectDao.GetAvailableForUserListAsync(workspace, user, userAccess);
             var project = userProjects.Items.FirstOrDefault(item => item.Id == request.ProjectId);
             if (request.IsBillable && !request.HourlyRate.HasValue)
             {

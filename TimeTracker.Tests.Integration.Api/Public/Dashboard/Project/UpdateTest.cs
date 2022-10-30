@@ -35,7 +35,7 @@ public class UpdateTest: BaseTest
         (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _workspace = _user.Workspaces.First();
-        _project = _projectSeeder.CreateSeveralAsync(_workspace, _user).Result.First();
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
     }
 
     [Fact]

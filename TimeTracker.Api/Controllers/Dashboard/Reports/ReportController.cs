@@ -25,8 +25,16 @@ public class ReportController : MainApiControllerBase
     [HttpPost("payments")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> List([FromBody] PaymentReportRequest request)
+    public Task<IActionResult> PaymentsReport([FromBody] PaymentReportRequest request)
         => this.RequestAsync()
             .For<PaymentReportResponse>()
+            .With(request);
+    
+    [HttpPost("summary")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> SummaryReport([FromBody] SummaryReportRequest request)
+        => this.RequestAsync()
+            .For<SummaryReportResponse>()
             .With(request);
 }

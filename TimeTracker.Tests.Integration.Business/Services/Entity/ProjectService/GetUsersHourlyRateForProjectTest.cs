@@ -48,7 +48,7 @@ public class GetUsersHourlyRateForProjectTest: BaseTest
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _workspaceSeeder.CreateSeveralAsync(_user).Result.First();
-        _project = _projectSeeder.CreateSeveralAsync(_workspace, _user).Result.First();
+        _project = _projectSeeder.CreateSeveralAsync(_workspace).Result.First();
         
         _queueDao.CompleteAllPending();
     }
