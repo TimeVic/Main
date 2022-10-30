@@ -3,6 +3,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Reports;
 
 namespace TimeTracker.Web.Services.Http
 {
@@ -62,6 +63,13 @@ namespace TimeTracker.Web.Services.Http
 
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report.PaymentReportResponse> ReportsGetPaymentsReportAsync(long workspaceId);
 
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report.SummaryReportResponse> ReportsGetSummaryReportAsync(
+            long workspaceId,
+            DateTime startDate,
+            DateTime endTime,
+            SummaryReportType reportType
+        );
+        
         #endregion
         
         #region WorkspaceMembership

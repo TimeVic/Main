@@ -47,9 +47,11 @@ public class ApiUrl
     #region Report
     
     public const string ReportPayments = "dashboard/report/payments";
-    
+
+    public const string ReportSummary = "dashboard/report/summary";
+
     #endregion
-    
+
     #region Workspace Membership
     
     public const string WorkspaceMembershipAdd = "dashboard/workspace/membership/add";
