@@ -41,7 +41,6 @@ public class GetReportByDayForOwnerTest: BaseTest
     public async Task ShouldReceiveReportForOwnerOrManager()
     {
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
         {

@@ -48,7 +48,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
 
             var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
 
-            var listDto = await _projectDao.GetListAsync(workspace, user, userAccess);
+            var listDto = await _projectDao.GetAvailableForUserListAsync(workspace, user, userAccess);
             return new GetListResponse(
                 _mapper.Map<ICollection<ProjectDto>>(listDto.Items),
                 listDto.TotalCount

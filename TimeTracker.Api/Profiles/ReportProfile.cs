@@ -14,5 +14,10 @@ public class ReportProfile : Profile
     {
         CreateMap<ProjectPaymentsReportItemDto, PaymentsReportItemDto>();
         CreateMap<ByDaysReportItemDto, SummaryByDaysReportItemDto>();
+        CreateMap<ByMonthsReportItemDto, SummaryByMonthsReportItemDto>();
+        CreateMap<ByWeeksReportItemDto, SummaryByWeeksReportItemDto>();
+        CreateMap<ByClientsReportItemDto, SummaryByClientsReportItemDto>();
+        CreateMap<ByProjectsReportItemDto, SummaryByProjectsReportItemDto>();
+        CreateMap<ByUsersReportItemDto, SummaryByUsersReportItemDto>();
     }
 }

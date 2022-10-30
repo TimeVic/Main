@@ -13,7 +13,7 @@ public interface IProjectDao: IDomainService
 
     Task<ProjectEntity?> GetById(long? projectId);
 
-    Task<ListDto<ProjectEntity>> GetListAsync(
+    Task<ListDto<ProjectEntity>> GetAvailableForUserListAsync(
         WorkspaceEntity workspace,
         UserEntity? user = null,
         MembershipAccessType? accessType = null
