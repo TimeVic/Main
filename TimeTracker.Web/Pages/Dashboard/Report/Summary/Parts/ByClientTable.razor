@@ -1,0 +1,43 @@
+﻿@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Business.Extensions
+@using Fluxor
+@using TimeTracker.Web.Store.Client
+
+@code {
+
+    [Parameter]
+    public ICollection<SummaryByClientsReportItemDto> Items { get; set; } = new List<SummaryByClientsReportItemDto>();
+}
+
+<h3>Grouped by client:</h3>
+
+<RadzenDataGrid
+    TItem="SummaryByClientsReportItemDto"
+    AllowSorting="false"
+    EditMode="DataGridEditMode.Single"
+    Data="@Items"
+    AllowPaging="false">
+
+    <Columns>
+        <RadzenDataGridColumn 
+            TItem="SummaryByClientsReportItemDto"
+            Title="Client"
+            Width="250px"
+            TextAlign="TextAlign.Left"
+        >
+            <Template Context="item">
+                @item.ClientName
+            </Template>
+        </RadzenDataGridColumn>
+        
+        <RadzenDataGridColumn 
+            TItem="SummaryByClientsReportItemDto" 
+            Title="Duration"
+            TextAlign="TextAlign.Left"
+        >
+            <Template Context="item">
+                @item.Duration.ToReadableString()
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>

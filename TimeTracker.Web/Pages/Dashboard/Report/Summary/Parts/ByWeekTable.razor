@@ -1,0 +1,57 @@
+﻿@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Business.Extensions
+@using System.Globalization
+
+@code {
+
+    [Parameter]
+    public ICollection<SummaryByWeeksReportItemDto> Items { get; set; } = new List<SummaryByWeeksReportItemDto>();
+    
+    private RadzenDataGrid<SummaryByWeeksReportItemDto> _grid { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private string GetProjectName(int month, int year)
+    {
+        return new DateTime(year, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
+    }
+}
+
+<h3>Grouped by project:</h3>
+
+<RadzenDataGrid
+    @ref="_grid"
+    TItem="SummaryByWeeksReportItemDto"
+    AllowSorting="false"
+    EditMode="DataGridEditMode.Single"
+    Data="@Items"
+    AllowPaging="false">
+
+    <Columns>
+        <RadzenDataGridColumn 
+            TItem="SummaryByWeeksReportItemDto"
+            Title="Client"
+            Width="250px"
+            TextAlign="TextAlign.Left"
+        >
+            <Template Context="item">
+                @item.WeekStartDate.ToShortDateString()
+                -
+                @item.WeekEndDate.ToShortDateString()
+            </Template>
+        </RadzenDataGridColumn>
+        
+        <RadzenDataGridColumn 
+            TItem="SummaryByWeeksReportItemDto" 
+            Title="Duration"
+            TextAlign="TextAlign.Left"
+        >
+            <Template Context="item">
+                @item.Duration.ToReadableString()
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>

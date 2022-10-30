@@ -170,7 +170,8 @@ public class ForUserTest: BaseTest
         Assert.Equal(1, actualDto.GroupedByWeek.Count);
         Assert.All(actualDto.GroupedByWeek, item =>
         {
-            Assert.Equal(DateTime.UtcNow.AddDays(-32).GetIso8601WeekOfYear(), item.Week);
+            Assert.NotNull(item.WeekStartDate);
+            Assert.NotNull(item.WeekEndDate);
             Assert.Equal(TimeSpan.FromHours(15), item.Duration);
         });
     }
@@ -195,6 +196,7 @@ public class ForUserTest: BaseTest
         Assert.All(actualDto.GroupedByClient, item =>
         {
             Assert.Equal(_client.Id, item.ClientId);
+            Assert.Equal(_client.Name, item.ClientName);
             Assert.Equal(TimeSpan.FromHours(15), item.Duration);
         });
     }
@@ -219,6 +221,7 @@ public class ForUserTest: BaseTest
         Assert.All(actualDto.GroupedByProject, item =>
         {
             Assert.Equal(_project.Id, item.ProjectId);
+            Assert.Equal(_project.Name, item.ProjectName);
             Assert.Equal(TimeSpan.FromHours(15), item.Duration);
         });
     }
@@ -243,6 +246,7 @@ public class ForUserTest: BaseTest
         Assert.All(actualDto.GroupedByUser, item =>
         {
             Assert.Equal(_user.Id, item.UserId);
+            Assert.Equal(_user.UserName, item.UserName);
             Assert.Equal(TimeSpan.FromHours(15), item.Duration);
         });
     }

@@ -3,6 +3,8 @@
 public class SummaryByMonthsReportItemDto
 {
     public int Month { get; set; }
+    
+    public int Year { get; set; }
 
     public TimeSpan Duration { get; set; }
 }

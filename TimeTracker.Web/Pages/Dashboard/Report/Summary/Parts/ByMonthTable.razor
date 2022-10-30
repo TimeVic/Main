@@ -1,0 +1,55 @@
+﻿@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Business.Extensions
+@using System.Globalization
+
+@code {
+
+    [Parameter]
+    public ICollection<SummaryByMonthsReportItemDto> Items { get; set; } = new List<SummaryByMonthsReportItemDto>();
+    
+    private RadzenDataGrid<SummaryByMonthsReportItemDto> _grid { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private string GetProjectName(int month, int year)
+    {
+        return new DateTime(year, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
+    }
+}
+
+<h3>Grouped by project:</h3>
+
+<RadzenDataGrid
+    @ref="_grid"
+    TItem="SummaryByMonthsReportItemDto"
+    AllowSorting="false"
+    EditMode="DataGridEditMode.Single"
+    Data="@Items"
+    AllowPaging="false">
+
+    <Columns>
+        <RadzenDataGridColumn 
+            TItem="SummaryByMonthsReportItemDto"
+            Title="Client"
+            Width="250px"
+            TextAlign="TextAlign.Left"
+        >
+            <Template Context="item">
+                @GetProjectName(item.Month, item.Year)
+            </Template>
+        </RadzenDataGridColumn>
+        
+        <RadzenDataGridColumn 
+            TItem="SummaryByMonthsReportItemDto" 
+            Title="Duration"
+            TextAlign="TextAlign.Left"
+        >
+            <Template Context="item">
+                @item.Duration.ToReadableString()
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>

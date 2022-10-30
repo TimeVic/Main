@@ -22,4 +22,17 @@ public class ReportReducers
             IsLoading = action.IsLoading
         };
     }
+    
+    #region Summary
+    
+    [ReducerMethod]
+    public static ReportsState ReportSetSummaryReportItemsActionReducer(ReportsState state, ReportSetSummaryReportItemsAction action)
+    {
+        return state with
+        {
+            SummaryReportData = action.ReportData
+        };
+    }
+    
+    #endregion
 }

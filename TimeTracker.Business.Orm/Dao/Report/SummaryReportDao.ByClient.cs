@@ -14,12 +14,13 @@ public partial class SummaryReportDao: ISummaryReportDao
     private const string SqlQuerySummaryByClientForOwner = @"
         select
             c.id as ClientId,
+            c.name as ClientName,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
         from time_entries te 
         left join projects p on p.id = te.project_id
         left join clients c on c.id = p.client_id 
         where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
-        group by c.id
+        group by c.id, c.name
     ";
     
     public async Task<ICollection<ByClientsReportItemDto>> GetReportByClientForOwnerOrManagerAsync(
@@ -39,12 +40,13 @@ public partial class SummaryReportDao: ISummaryReportDao
     private const string SqlQuerySummaryByClientForOther = @"
         select
             c.id as ClientId,
+            c.name as ClientName,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
         from time_entries te 
         inner join projects p on p.id = te.project_id
         inner join clients c on c.id = p.client_id 
         where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
-        group by c.id
+        group by c.id, c.name
     ";
     
     public async Task<ICollection<ByClientsReportItemDto>> GetReportByClientForOtherAsync(

@@ -1,0 +1,41 @@
+﻿@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Business.Extensions
+
+@code {
+
+    [Parameter]
+    public ICollection<SummaryByDaysReportItemDto> Items { get; set; } = new List<SummaryByDaysReportItemDto>();
+}
+
+<h3>Grouped by date:</h3>
+
+<RadzenDataGrid
+    TItem="SummaryByDaysReportItemDto"
+    AllowSorting="false"
+    EditMode="DataGridEditMode.Single"
+    Data="@Items"
+    AllowPaging="false">
+
+    <Columns>
+        <RadzenDataGridColumn 
+            TItem="SummaryByDaysReportItemDto"
+            Title="Date"
+            Width="120px"
+            TextAlign="TextAlign.Center"
+        >
+            <Template Context="item">
+                @item.Date.ToShortDateString()
+            </Template>
+        </RadzenDataGridColumn>
+        
+        <RadzenDataGridColumn 
+            TItem="SummaryByDaysReportItemDto" 
+            Title="Duration"
+            TextAlign="TextAlign.Left"
+        >
+            <Template Context="item">
+                @item.Duration.ToReadableString()
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>

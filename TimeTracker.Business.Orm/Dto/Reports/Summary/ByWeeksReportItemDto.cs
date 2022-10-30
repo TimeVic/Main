@@ -2,7 +2,9 @@
 
 public class ByWeeksReportItemDto
 {
-    public int Week { get; set; }
+    public DateTime WeekStartDate { get; set; }
+    
+    public DateTime WeekEndDate { get; set; }
     
     public object DurationAsEpoch { get; set; }
 
