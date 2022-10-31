@@ -71,13 +71,14 @@ public class AddTest: BaseTest
     [Fact]
     public async Task ShouldNotStart2ItemsIfRequestIsAsync()
     {
+        var date = DateTime.UtcNow.Date;
         await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            Date = DateTime.UtcNow.Date,
+            Date = date,
             StartTime = TimeSpan.FromSeconds(1)
         });
-        await _timeEntryDao.StopActiveAsync(_defaultWorkspace, _user, TimeSpan.FromHours(1));
+        await _timeEntryDao.StopActiveAsync(_defaultWorkspace, _user, TimeSpan.FromHours(1), date);
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,

@@ -190,9 +190,16 @@ public class TimeEntryDao: ITimeEntryDao
     public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(
         WorkspaceEntity workspace,
         UserEntity user,
-        TimeSpan endTime
+        TimeSpan endTime,
+        DateTime endDate
     )
     {
+        if (endTime > GlobalConstants.EndOfDay)
+        {
+            throw new DataInconsistencyException("End time can not be more than 24 hours");
+        }
+        endDate = endDate.Date;
+        
         var activeTimeEntries = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
             .Where(
                 item => item.Workspace.Id == workspace.Id 
@@ -207,15 +214,26 @@ public class TimeEntryDao: ITimeEntryDao
                 workspace.Id
             );
         }
-
+        
         foreach (var activeTimeEntry in activeTimeEntries)
         {
-            if (activeTimeEntry.StartTime > endTime)
+            if (activeTimeEntry.StartTime > endTime && activeTimeEntry.Date == endDate)
             {
                 throw new DataInconsistencyException("End time can not be less than Start time");
             }
-
+            if (activeTimeEntry.Date > endDate )
+            {
+                throw new DataInconsistencyException("End time can not be less than Start time");
+            }
+            
             var endTimeForCurrent = endTime;
+            if (endDate > activeTimeEntry.Date)
+            {
+                // Time Entry was not stopped on the day it was started
+                // This difference should be added to endTime
+                endTimeForCurrent = endTime + (endDate - activeTimeEntry.Date);
+            }
+            
             var dateOfEntry = activeTimeEntry.Date;
             if (endTimeForCurrent > GlobalConstants.EndOfDay)
             {

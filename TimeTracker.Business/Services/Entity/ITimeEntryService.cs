@@ -9,7 +9,8 @@ public interface ITimeEntryService: IDomainService
     Task<ICollection<TimeEntryEntity>> StopActiveAsync(
         WorkspaceEntity workspace,
         UserEntity user,
-        TimeSpan endTime
+        TimeSpan endTime,
+        DateTime stopDate
     );
 
     Task<TimeEntryEntity> SetAsync(

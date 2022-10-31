@@ -11,6 +11,9 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         [IsPositive]
         public long WorkspaceId { get; set; }
         
+        [IsCorrectTimeEntryTime]
         public TimeSpan EndTime { get; set; }
+        
+        public DateTime EndDate { get; set; }
     }
 }

@@ -52,17 +52,19 @@ public class StopTest: BaseTest
     [Fact]
     public async Task ShouldStopActive()
     {
+        var date = DateTime.Now;
         var expectedEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,
-            DateTime.Now,
+            date,
             TimeSpan.FromSeconds(1)
         );
         
         var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            EndTime = TimeSpan.FromHours(1)
+            EndTime = TimeSpan.FromHours(1),
+            EndDate = date
         });
         response.EnsureSuccessStatusCode();
 
@@ -79,7 +81,8 @@ public class StopTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            EndTime = TimeSpan.FromHours(1)
+            EndTime = TimeSpan.FromHours(1),
+            EndDate = DateTime.Now
         });
         response.EnsureSuccessStatusCode();
 

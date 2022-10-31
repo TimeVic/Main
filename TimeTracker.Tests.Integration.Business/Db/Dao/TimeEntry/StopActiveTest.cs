@@ -43,7 +43,8 @@ public class StopActiveTest: BaseTest
         await _timeEntryDao.StopActiveAsync(
             workspace,
             user,
-            startTime + TimeSpan.FromMinutes(1)
+            startTime + TimeSpan.FromMinutes(1),
+            DateTimeOffset.UtcNow.Date
         );
         await CommitDbChanges();
     
@@ -52,7 +53,7 @@ public class StopActiveTest: BaseTest
     }
 
     [Fact]
-    public async Task ShouldThrowExceptionIfEndTimeLessThanStartTime()
+    public async Task ShouldThrowExceptionIfEndTimeLessThanStartTimeForOneDay()
     {
         var startTime = DateTimeOffset.UtcNow.TimeOfDay;
         var user = await _userSeeder.CreateActivatedAsync();
@@ -70,7 +71,58 @@ public class StopActiveTest: BaseTest
             await _timeEntryDao.StopActiveAsync(
                 workspace,
                 user,
-                startTime + TimeSpan.FromSeconds(-1)
+                startTime + TimeSpan.FromSeconds(-1),
+                DateTimeOffset.UtcNow.Date
+            );
+        });
+    }
+    
+    [Fact]
+    public async Task ShouldThrowExceptionIfEndDateLessThanStartDate()
+    {
+        var startTime = DateTimeOffset.UtcNow.TimeOfDay;
+        var user = await _userSeeder.CreateActivatedAsync();
+        var workspace = user.Workspaces.First();
+        var activeEntry = await _timeEntryDao.StartNewAsync(
+            user,
+            workspace,
+            DateTime.UtcNow, 
+            DateTimeOffset.UtcNow.TimeOfDay
+        );
+        Assert.Null(activeEntry.EndTime);
+
+        await Assert.ThrowsAsync<DataInconsistencyException>(async () =>
+        {
+            await _timeEntryDao.StopActiveAsync(
+                workspace,
+                user,
+                startTime + TimeSpan.FromSeconds(5),
+                DateTimeOffset.UtcNow.Date.AddDays(-1)
+            );
+        });
+    }
+    
+    [Fact]
+    public async Task ShouldThrowExceptionIfEndTimeMoreThanOneDay()
+    {
+        var startTime = DateTimeOffset.UtcNow.TimeOfDay;
+        var user = await _userSeeder.CreateActivatedAsync();
+        var workspace = user.Workspaces.First();
+        var activeEntry = await _timeEntryDao.StartNewAsync(
+            user,
+            workspace,
+            DateTime.UtcNow, 
+            DateTimeOffset.UtcNow.TimeOfDay
+        );
+        Assert.Null(activeEntry.EndTime);
+
+        await Assert.ThrowsAsync<DataInconsistencyException>(async () =>
+        {
+            await _timeEntryDao.StopActiveAsync(
+                workspace,
+                user,
+                TimeSpan.FromHours(24),
+                DateTimeOffset.UtcNow.Date
             );
         });
     }
@@ -92,7 +144,12 @@ public class StopActiveTest: BaseTest
         var activeEntries = await _timeEntryDao.GetActiveEntriesAsync(workspace);
         Assert.Equal(2, activeEntries.Count);
         
-        await _timeEntryDao.StopActiveAsync(workspace, user, startTime + TimeSpan.FromSeconds(1));
+        await _timeEntryDao.StopActiveAsync(
+            workspace, 
+            user,
+            startTime + TimeSpan.FromSeconds(1),
+            date
+        );
         await CommitDbChanges();
     
         activeEntries = await _timeEntryDao.GetActiveEntriesAsync(workspace);
@@ -117,7 +174,12 @@ public class StopActiveTest: BaseTest
         Assert.Null(activeEntry.EndTime);
         
         var workspace2 = user.Workspaces.Last();
-        await _timeEntryDao.StopActiveAsync(workspace2, user, startTime + TimeSpan.FromSeconds(1));
+        await _timeEntryDao.StopActiveAsync(
+            workspace2,
+            user,
+            startTime + TimeSpan.FromSeconds(1),
+            date
+        );
         var stoppedEntry = await _timeEntryDao.GetActiveEntryAsync(workspace2, user);
         Assert.Null(stoppedEntry);
     }
@@ -131,7 +193,12 @@ public class StopActiveTest: BaseTest
         var user = await _userSeeder.CreateActivatedAsync();
         var workspace1 = user.Workspaces.First();
         var startedEntry = await _timeEntryDao.StartNewAsync(user, workspace1, date, startTime);
-        await _timeEntryDao.StopActiveAsync(workspace1, user, startTime + TimeSpan.FromSeconds(1));
+        await _timeEntryDao.StopActiveAsync(
+            workspace1,
+            user,
+            startTime + TimeSpan.FromSeconds(1),
+            date
+        );
         await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(startedEntry);
         Assert.True(startedEntry.EndTime >= startedEntry.StartTime);
@@ -142,12 +209,17 @@ public class StopActiveTest: BaseTest
     {
         var date = DateTime.UtcNow.StartOfDay();
         var startTime = DateTime.UtcNow.TimeOfDay;
-        var endTime = startTime + TimeSpan.FromDays(3);
+        var endTime = startTime;
         
         var user = await _userSeeder.CreateActivatedAsync();
         var workspace1 = user.Workspaces.First();
         var startedEntry = await _timeEntryDao.StartNewAsync(user, workspace1, date, startTime);
-        await _timeEntryDao.StopActiveAsync(workspace1, user, endTime);
+        await _timeEntryDao.StopActiveAsync(
+            workspace1,
+            user,
+            endTime,
+            date.AddDays(3)
+        );
         await CommitDbChanges();
         
         await DbSessionProvider.CurrentSession.RefreshAsync(startedEntry);
@@ -157,7 +229,7 @@ public class StopActiveTest: BaseTest
 
         var lastItem = actualList.Items.First();
         Assert.Equal(date.AddDays(3), lastItem.Date);
-        var endTimeOfFirstItem = endTime - TimeSpan.FromDays(3);
+        var endTimeOfFirstItem = endTime;
         Assert.Equal(endTimeOfFirstItem.Days, lastItem.EndTime.Value.Days);
         Assert.Equal(endTimeOfFirstItem.Minutes, lastItem.EndTime.Value.Minutes);
         Assert.Equal(endTimeOfFirstItem.Seconds, lastItem.EndTime.Value.Seconds);
@@ -174,12 +246,17 @@ public class StopActiveTest: BaseTest
     {
         var date = DateTime.UtcNow.StartOfDay();
         var startTime = DateTime.UtcNow.TimeOfDay;
-        var endTime = startTime + TimeSpan.FromDays(100);
+        var endTime = startTime;
         
         var user = await _userSeeder.CreateActivatedAsync();
         var workspace1 = user.Workspaces.First();
         var startedEntry = await _timeEntryDao.StartNewAsync(user, workspace1, date, startTime);
-        await _timeEntryDao.StopActiveAsync(workspace1, user, endTime);
+        await _timeEntryDao.StopActiveAsync(
+            workspace1,
+            user,
+            endTime,
+            date.AddDays(100)
+        );
         await CommitDbChanges();
         
         await DbSessionProvider.CurrentSession.RefreshAsync(startedEntry);
