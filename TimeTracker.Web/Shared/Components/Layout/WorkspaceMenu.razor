@@ -2,17 +2,27 @@
 
 @if (_workpsaceState.Value.IsLoaded)
 {
-    <RadzenMenu class="ml-3 mr-3">
-        <RadzenMenuItem Text="@_authState.Value.Workspace.Name" Icon="event_seat">
+    <RadzenSplitButton 
+        Text="@_authState.Value.Workspace.Name"
+        Variant="Variant.Outlined" 
+        ButtonStyle="ButtonStyle.Secondary"
+        Click=@(args => OnClickToMenuItem(args.Value))
+        class="ml-2 mr-2"
+    >
+        <ChildContent>
             @foreach (var workspace in _workpsaceState.Value.List)
             {
-                <RadzenMenuItem Text="@workspace.Name" Click="() => OnClickToMenuItem(workspace)"/>    
+                if (_authState.Value.Workspace.Id != @workspace.Id)
+                {
+                    <RadzenSplitButtonItem Text="@workspace.Name" Value="@workspace.Id.ToString()"/>     
+                }  
             }
-            <RadzenMenuItem 
-                Text="Manage"
-                Icon="build"
-                Path="@SiteUrl.Workspace_List"
-            />
-        </RadzenMenuItem>
-    </RadzenMenu>    
+        </ChildContent>
+    </RadzenSplitButton>
+    <RadzenButton
+        ButtonStyle="ButtonStyle.Secondary"
+        Icon="build"
+        Click="NavigateToEditPage"
+        class="mr-2"
+    />
 }
