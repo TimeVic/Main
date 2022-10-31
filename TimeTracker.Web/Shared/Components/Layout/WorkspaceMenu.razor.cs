@@ -1,6 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Web.Constants;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common.Actions;
 using TimeTracker.Web.Store.Workspace;
@@ -20,8 +21,9 @@ public partial class WorkspaceMenu
         await base.OnInitializedAsync();
     }
 
-    private void OnClickToMenuItem(WorkspaceDto workspace)
+    private void OnClickToMenuItem(string idString)
     {
+        var workspace = _workpsaceState.Value.List.First(item => item.Id.ToString() == idString);
         if (workspace.Id == _authState.Value.Workspace.Id)
         {
             return;
@@ -30,5 +32,10 @@ public partial class WorkspaceMenu
         Dispatcher.Dispatch(new SetWorkspaceAction(workspace));
         Dispatcher.Dispatch(new PersistDataAction());
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+    
+    private void NavigateToEditPage()
+    {
+        NavigationManager.NavigateTo(SiteUrl.Workspace_List);
     }
 }
