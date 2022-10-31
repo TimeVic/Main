@@ -26,7 +26,7 @@
             TextAlign="TextAlign.Left"
         >
             <Template Context="item">
-                @item.ClientName
+                @(item.ClientName ?? "- No client -")
             </Template>
         </RadzenDataGridColumn>
         

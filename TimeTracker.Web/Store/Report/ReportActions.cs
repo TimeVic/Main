@@ -10,12 +10,10 @@ public record struct ReportFetchPaymentsReportAction();
 
 public record struct ReportSetPaymentReportItemsAction(ICollection<PaymentsReportItemDto> Items);
 
-public record struct ReportFetchSummaryReportAction(
-    DateTime StartTime,
-    DateTime EndTime,
-    SummaryReportType ReportType    
-);
+public record struct ReportFetchSummaryReportAction();
 
 public record struct ReportSetSummaryReportItemsAction(SummaryReportResponse ReportData);
+
+public record struct ReportSetSummaryReportFilterAction(SummaryReportFilterState FilterState);
 
 public record struct ReportSetIsLoadingAction(bool IsLoading);

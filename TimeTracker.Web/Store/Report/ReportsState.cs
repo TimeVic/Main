@@ -3,6 +3,8 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Model;
 using TimeTracker.Api.Shared.Dto.Model.Report;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
+using TimeTracker.Business.Common.Constants.Reports;
+using TimeTracker.Web.Constants;
 
 namespace TimeTracker.Web.Store.Report;
 
@@ -14,4 +16,18 @@ public record ReportsState
     public SummaryReportResponse? SummaryReportData { get; set; }
 
     public bool IsLoading { get; set; }
+
+    public SummaryReportFilterState SummaryReportFilter { get; set; } = new SummaryReportFilterState(
+        SummaryReportType.GroupByProject,
+        SummaryReportPeriodType.ThisWeek,
+        DateTime.Now.AddDays(-7),
+        DateTime.Now
+    );
 }
+
+public record SummaryReportFilterState(
+    SummaryReportType ReportType,
+    SummaryReportPeriodType PeriodType,
+    DateTime StartDate,
+    DateTime EndDate
+);

@@ -22,12 +22,7 @@ public partial class SummaryReportPage
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Dispatcher.Dispatch(new ReportFetchSummaryReportAction()
-        {
-            EndTime = DateTime.Now,
-            StartTime = DateTime.Now.AddDays(-30),
-            ReportType = SummaryReportType.GroupByProject
-        });
+        Dispatcher.Dispatch(new ReportFetchSummaryReportAction());
     }
     
     private string FormatterDuration(object durationObject)
