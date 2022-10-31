@@ -1,0 +1,64 @@
+﻿@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Business.Common.Constants.Reports
+
+@inherits BaseComponent
+@layout Layout
+
+<div class="row">
+    <div class="col">
+        <RadzenText
+            TextStyle="TextStyle.Subtitle2"
+            TagName="TagName.H3">
+            Group by:
+        </RadzenText>
+        <EnumDropDown
+            TItem="SummaryReportType"
+            Value="@_filterState.ReportType"
+            Class="w-100"
+            ValueChanged="OnChangeReportType"/>
+    </div>
+    <div class="col">
+        <RadzenText
+            TextStyle="TextStyle.Subtitle2"
+            TagName="TagName.H3">
+            Period:
+        </RadzenText>
+        <EnumDropDown
+            TItem="SummaryReportPeriodType"
+            Value="@_filterState.PeriodType"
+            ValueChanged="OnChangePeriodType"
+            Class="w-100"/>
+    </div>
+    <div class="col">
+        <RadzenText
+            TextStyle="TextStyle.Subtitle2"
+            TagName="TagName.H3">
+            Date start:
+        </RadzenText>
+        <RadzenDatePicker
+            TValue="DateTime?"
+            Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+            AllowClear="false"
+            DateFormat="d"
+            Class="w-100"
+            Placeholder="Date start"
+            Value="@_filterState.StartDate"
+            Change="OnChangeDateStart"/>
+    </div>
+    <div class="col">
+        <RadzenText
+            TextStyle="TextStyle.Subtitle2"
+            TagName="TagName.H3">
+            Date end:
+        </RadzenText>
+        <RadzenDatePicker
+            TValue="DateTime?"
+            Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+            AllowClear="false"
+            DateFormat="d"
+            Class="w-100"
+            Placeholder="Date start"
+            Value="@_filterState.EndDate"
+            Change="OnChangeDateEnd"/>
+    </div>
+</div>

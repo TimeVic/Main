@@ -156,6 +156,36 @@ namespace TimeTracker.Business.Extensions
             return theDate.Date.AddDays(1).AddTicks(-1);
         }
         
+        public static DateTime StartOfWeek(this DateTime now)
+        {
+            var startOfWeek = now.Date;
+            while(startOfWeek.DayOfWeek != DayOfWeek.Monday)
+            {
+                startOfWeek = startOfWeek.AddDays(-1);
+            }
+            return startOfWeek;
+        }
+        
+        public static DateTime StartOfMonth(this DateTime now)
+        {
+            return new DateTime(now.Year, now.Month, 1);
+        }
+        
+        public static DateTime EndOfMonth(this DateTime now)
+        {
+            return now.StartOfMonth().AddMonths(1).AddDays(-1);
+        }
+        
+        public static DateTime StartOfYear(this DateTime now)
+        {
+            return new DateTime(now.Year, 1, 1);
+        }
+        
+        public static DateTime EndOfYear(this DateTime now)
+        {
+            return now.StartOfYear().AddYears(1).AddDays(-1);
+        }
+        
         /// <summary>
         /// This presumes that weeks start with Monday.
         /// Week 1 is the 1st week of the year with a Thursday in it.
