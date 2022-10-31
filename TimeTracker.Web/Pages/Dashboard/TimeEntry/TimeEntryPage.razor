@@ -7,9 +7,10 @@
 @inherits BaseComponent
 @layout Layout
 
-<RadzenPanel Style="margin: 10px auto;">
-    <ChildContent>
-        <TimeEntryForm/>
-        <TimeEntryList/>
-    </ChildContent>
-</RadzenPanel>
+<RadzenCard>
+    <TimeEntryForm/>
+</RadzenCard>
+
+<RadzenCard class="mt-2">
+    <TimeEntryList/>
+</RadzenCard>

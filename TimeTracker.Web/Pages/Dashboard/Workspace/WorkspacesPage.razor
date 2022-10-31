@@ -7,15 +7,17 @@
 @inherits BaseComponent
 @layout Layout
 
-<RadzenPanel Style="margin: 10px auto;">
-    <div class="row d-flex px-3 justify-content-center w-time-form mt-3">
+<div class="row d-flex px-3 justify-content-center w-time-form">
+
+    <RadzenCard class="w-100">
         <RadzenButton
             Icon="add_circle_outline"
-            class="mb-3"
             Text="Add workspace"
             Click="@InsertRow"
             Disabled="@(_state.Value.HasItemToAdd)"/>
-    
+    </RadzenCard>
+
+    <RadzenCard class="w-100 mt-2">
         <RadzenDataGrid
             @ref="@_grid"
             TItem="WorkspaceDto"
@@ -28,7 +30,7 @@
             IsLoading="@_state.Value.IsListLoading"
             Count="@_state.Value.TotalCount"
             ColumnWidth="200px">
-    
+
             <Columns>
                 <RadzenDataGridColumn TItem="WorkspaceDto" Property="Name" Title="Name">
                     <EditTemplate Context="app">
@@ -51,9 +53,9 @@
                     Sortable="false"
                     TextAlign="TextAlign.Center"
                     Width="120px">
-    
+
                     <Template Context="item">
-    
+
                         <RadzenButton
                             Icon="edit"
                             ButtonStyle="ButtonStyle.Light"
@@ -62,12 +64,12 @@
                         </RadzenButton>
                     </Template>
                     <EditTemplate Context="item">
-    
+
                         <RadzenButton
                             Icon="check"
                             ButtonStyle="ButtonStyle.Primary"
                             Click="@(() => OnClickSaveRow(item))"/>
-    
+
                         <RadzenButton
                             Icon="close"
                             ButtonStyle="ButtonStyle.Light"
@@ -77,5 +79,5 @@
                 </RadzenDataGridColumn>
             </Columns>
         </RadzenDataGrid>
-    </div>
-</RadzenPanel>
+    </RadzenCard>
+</div>
