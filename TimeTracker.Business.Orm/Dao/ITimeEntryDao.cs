@@ -27,7 +27,8 @@ public interface ITimeEntryDao: IDomainService
     Task<ICollection<TimeEntryEntity>> StopActiveAsync(
         WorkspaceEntity workspace,
         UserEntity user,
-        TimeSpan endTime
+        TimeSpan endTime,
+        DateTime endDate
     );
 
     Task<TimeEntryEntity> SetAsync(
