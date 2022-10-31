@@ -14,7 +14,15 @@
     }
     else
     {
-        
+        if (!_grouppedItems.Any())
+        {
+            <RadzenText
+                TextStyle="TextStyle.Subtitle1"
+                TagName="TagName.H5"
+                class="mt-3">
+                The report is empty
+            </RadzenText>
+        }
         foreach (var groupItem in _grouppedItems)
         {
             var clientId = groupItem.Key ?? 0;
