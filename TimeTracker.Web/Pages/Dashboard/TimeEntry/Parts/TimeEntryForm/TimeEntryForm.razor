@@ -4,7 +4,7 @@
 @using TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts
 
 <div class="row d-flex px-3 justify-content-center w-time-form">
-    <RadzenCard Class="w-100 d-flex">
+    <div Class="w-100 d-flex">
         <div class="w-100 d-flex justify-content-start">
             @if (_state.Value.HasActiveEntry)
             {
@@ -47,5 +47,5 @@
                 Value="@_state.Value.ActiveEntry?.Description"
                 ValueChanged="OnChangeDescription"/>
         </div>
-    </RadzenCard>
+    </div>
 </div>

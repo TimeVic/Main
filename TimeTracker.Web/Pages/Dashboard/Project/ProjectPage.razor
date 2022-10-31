@@ -4,10 +4,9 @@
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
 
 @inherits BaseComponent
-
 @layout Layout
 
-<RadzenPanel Style="margin: 10px auto;">
+<RadzenCard Style="margin: 10px auto;">
     <div class="px-3">
         <RadzenBreadCrumb class="mb-3">
             <RadzenBreadCrumbItem Path="@SiteUrl.Dashboard_Projects" Text="Projects"/>
@@ -56,5 +55,4 @@
             </RadzenTemplateForm>
         </RadzenCard>
     </div>
-
-</RadzenPanel>
+</RadzenCard>

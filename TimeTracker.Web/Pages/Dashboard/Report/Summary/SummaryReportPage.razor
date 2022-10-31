@@ -6,11 +6,11 @@
 @inherits BaseComponent
 @layout Layout
 
-<RadzenCard Style="margin: 10px auto;">
+<RadzenCard>
     <FilterForm/>
 </RadzenCard>
 
-<RadzenCard Style="margin: 10px auto;">
+<RadzenCard class="mt-2">
 
     @if (_state.Value.IsLoading)
     {
@@ -41,7 +41,7 @@
     }
 </RadzenCard>
 
-<RadzenCard Style="margin: 10px auto;">
+<RadzenCard class="mt-2">
     @if (_state.Value.IsLoading)
     {
         <RadzenProgressBar 

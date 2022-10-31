@@ -4,108 +4,111 @@
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Business.Extensions
 
-<div class="row d-flex px-3 justify-content-center w-time-form mt-3">
+<div class="row d-flex px-3 justify-content-center w-time-form">
 
-    <RadzenButton
-        Icon="add_circle_outline"
-        class="mb-3"
-        Text="Add member"
-        Click="ShowAddModal"/>
+    <RadzenCard class="w-100">
+        <RadzenButton
+            Icon="add_circle_outline"
+            Text="Add member"
+            Click="ShowAddModal"/>
+    </RadzenCard>
 
-    <RadzenDataGrid
-        @ref="@_grid"
-        TItem="WorkspaceMembershipDto"
-        AllowSorting="false"
-        EditMode="DataGridEditMode.Single"
-        PageSize="@GlobalConstants.ListPageSize"
-        RowUpdate="@OnUpdateRow"
-        Data="@_state.Value.List"
-        AllowPaging="false"
-        IsLoading="@_state.Value.IsListLoading"
-        Count="@_state.Value.TotalCount"
-        ColumnWidth="200px">
+    <RadzenCard class="w-100 mt-2">
+        <RadzenDataGrid
+            @ref="@_grid"
+            TItem="WorkspaceMembershipDto"
+            AllowSorting="false"
+            EditMode="DataGridEditMode.Single"
+            PageSize="@GlobalConstants.ListPageSize"
+            RowUpdate="@OnUpdateRow"
+            Data="@_state.Value.List"
+            AllowPaging="false"
+            IsLoading="@_state.Value.IsListLoading"
+            Count="@_state.Value.TotalCount"
+            ColumnWidth="200px">
 
-        <Columns>
-            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="User">
-                <Template Context="item">
-                    @item.User.Email
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Access Level">
-                <Template Context="item">
-                    @item.Access.GetDisplayName()
-                </Template>
-                <EditTemplate Context="item">
-                    <EnumDropDown
-                        TItem="MembershipAccessType"
-                        AllowClear="false"
-                        AllowedValues="_allowedAccessLevels"
-                        @bind-Value="item.Access"
-                        Name="Access level"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Projects">
-                <Template Context="item">
-                    @if (item.Access is MembershipAccessType.Manager or MembershipAccessType.Owner)
-                    {
-                        <text>All</text>
-                    }
-                    else
-                    {
-                        if (item.Projects?.Count == 0)
+            <Columns>
+                <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="User">
+                    <Template Context="item">
+                        @item.User.Email
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Access Level">
+                    <Template Context="item">
+                        @item.Access.GetDisplayName()
+                    </Template>
+                    <EditTemplate Context="item">
+                        <EnumDropDown
+                            TItem="MembershipAccessType"
+                            AllowClear="false"
+                            AllowedValues="_allowedAccessLevels"
+                            @bind-Value="item.Access"
+                            Name="Access level"/>
+                    </EditTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Projects">
+                    <Template Context="item">
+                        @if (item.Access is MembershipAccessType.Manager or MembershipAccessType.Owner)
                         {
-                            <text>Project not selected</text>
+                            <text>All</text>
                         }
                         else
                         {
-                            <ProjectsMultipleDropDown
-                                Disabled="true"
-                                Value="@(item.Projects?.Select(item => item.Id) ?? new List<long>())"/>    
+                            if (item.Projects?.Count == 0)
+                            {
+                                <text>Project not selected</text>
+                            }
+                            else
+                            {
+                                <ProjectsMultipleDropDown
+                                    Disabled="true"
+                                    Value="@(item.Projects?.Select(item => item.Id) ?? new List<long>())"/>
+                            }
                         }
-                    }
-                </Template>
-                <EditTemplate Context="item">
-                    <ProjectsMultipleDropDown
-                        Value="@(item.Projects?.Select(item => item.Id) ?? new List<long>())"
-                        SelectedItemsChanged="OnProjectsChanged"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn
-                TItem="WorkspaceMembershipDto"
-                Context="app" Filterable="false"
-                Sortable="false"
-                TextAlign="TextAlign.Center"
-                Width="120px">
+                    </Template>
+                    <EditTemplate Context="item">
+                        <ProjectsMultipleDropDown
+                            Value="@(item.Projects?.Select(item => item.Id) ?? new List<long>())"
+                            SelectedItemsChanged="OnProjectsChanged"/>
+                    </EditTemplate>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn
+                    TItem="WorkspaceMembershipDto"
+                    Context="app" Filterable="false"
+                    Sortable="false"
+                    TextAlign="TextAlign.Center"
+                    Width="120px">
 
-                <Template Context="item">
+                    <Template Context="item">
 
-                    <RadzenButton
-                        Size="ButtonSize.Small"
-                        Icon="edit"
-                        ButtonStyle="ButtonStyle.Light"
-                        Click="@(args => EditRow(item))"
-                        @onclick:stopPropagation="true">
-                    </RadzenButton>
-                    <RadzenButton
-                        Size="ButtonSize.Small"
-                        ButtonStyle="ButtonStyle.Danger"
-                        Icon="delete"
-                        Click="async () => await OnDeleteItemAsync(item)"/>
-                </Template>
-                <EditTemplate Context="item">
+                        <RadzenButton
+                            Size="ButtonSize.Small"
+                            Icon="edit"
+                            ButtonStyle="ButtonStyle.Light"
+                            Click="@(args => EditRow(item))"
+                            @onclick:stopPropagation="true">
+                        </RadzenButton>
+                        <RadzenButton
+                            Size="ButtonSize.Small"
+                            ButtonStyle="ButtonStyle.Danger"
+                            Icon="delete"
+                            Click="async () => await OnDeleteItemAsync(item)"/>
+                    </Template>
+                    <EditTemplate Context="item">
 
-                    <RadzenButton
-                        Icon="check"
-                        ButtonStyle="ButtonStyle.Primary"
-                        Click="@(() => OnClickSaveRow(item))"/>
+                        <RadzenButton
+                            Icon="check"
+                            ButtonStyle="ButtonStyle.Primary"
+                            Click="@(() => OnClickSaveRow(item))"/>
 
-                    <RadzenButton
-                        Icon="close"
-                        ButtonStyle="ButtonStyle.Light"
-                        Click="@(() => OnClickCancelEditMode(item))">
-                    </RadzenButton>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-        </Columns>
-    </RadzenDataGrid>
+                        <RadzenButton
+                            Icon="close"
+                            ButtonStyle="ButtonStyle.Light"
+                            Click="@(() => OnClickCancelEditMode(item))">
+                        </RadzenButton>
+                    </EditTemplate>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </RadzenCard>
 </div>
