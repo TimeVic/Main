@@ -1,6 +1,7 @@
 ﻿using NHibernate.Transform;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dto.Reports;
 
 namespace TimeTracker.Business.Orm.Dao.Report;
@@ -62,7 +63,7 @@ public class TimeEntryReportsDao: ITimeEntryReportsDao
         return await _sessionProvider.CurrentSession.CreateSQLQuery(SqlQuery)
             .SetParameter("workspaceId", workspaceId)
             .SetParameter("userId", userId)
-            .SetParameter("endDate", endDate.Date)
+            .SetParameter("endDate", endDate.EndOfDay())
             .SetResultTransformer(Transformers.AliasToBean<ProjectPaymentsReportItemDto>())
             .ListAsync<ProjectPaymentsReportItemDto>();
     }
