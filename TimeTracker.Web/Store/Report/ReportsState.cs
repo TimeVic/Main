@@ -17,10 +17,14 @@ public record ReportsState
 
     public bool IsLoading { get; set; }
 
-    public SummaryReportFilterState SummaryReportFilter { get; set; } = new SummaryReportFilterState(
+    public SummaryReportFilterState SummaryReportFilter { get; set; } = new(
         SummaryReportType.GroupByProject,
         SummaryReportPeriodType.ThisWeek,
         DateTime.Now.AddDays(-7),
+        DateTime.Now
+    );
+    
+    public PaymentReportFilterState PaymentReportFilter { get; set; } = new(
         DateTime.Now
     );
 }
@@ -29,5 +33,9 @@ public record SummaryReportFilterState(
     SummaryReportType ReportType,
     SummaryReportPeriodType PeriodType,
     DateTime StartDate,
+    DateTime EndDate
+);
+
+public record PaymentReportFilterState(
     DateTime EndDate
 );

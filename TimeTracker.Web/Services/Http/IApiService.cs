@@ -61,7 +61,10 @@ namespace TimeTracker.Web.Services.Http
         
         #region Report
 
-        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report.PaymentReportResponse> ReportsGetPaymentsReportAsync(long workspaceId);
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report.PaymentReportResponse> ReportsGetPaymentsReportAsync(
+            long workspaceId,
+            DateTime endDate
+        );
 
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report.SummaryReportResponse> ReportsGetSummaryReportAsync(
             long workspaceId,

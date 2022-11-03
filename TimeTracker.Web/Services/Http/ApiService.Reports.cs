@@ -7,11 +7,12 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<PaymentReportResponse> ReportsGetPaymentsReportAsync(long workspaceId)
+        public async Task<PaymentReportResponse> ReportsGetPaymentsReportAsync(long workspaceId, DateTime endDate)
         {
             var response = await PostAuthorizedAsync<PaymentReportResponse>(ApiUrl.ReportPayments, new PaymentReportRequest()
             {
-                WorkspaceId = workspaceId
+                WorkspaceId = workspaceId,
+                EndDate = endDate
             });
             if (response == null)
             {

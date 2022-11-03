@@ -72,7 +72,8 @@ public class PaymentReportTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new PaymentReportRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
+            WorkspaceId = _defaultWorkspace.Id,
+            EndDate = DateTime.UtcNow
         });
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
