@@ -5,5 +5,9 @@ namespace TimeTracker.Business.Orm.Dao.Report;
 
 public interface ITimeEntryReportsDao: IDomainService
 {
-    Task<ICollection<ProjectPaymentsReportItemDto>> GetProjectPaymentsReport(long workspaceId, long userId);
+    Task<ICollection<ProjectPaymentsReportItemDto>> GetProjectPaymentsReport(
+        long workspaceId,
+        long userId,
+        DateTime endDate
+    );
 }

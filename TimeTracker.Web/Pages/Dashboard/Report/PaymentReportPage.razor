@@ -1,13 +1,32 @@
 ﻿@page "/dashboard/report/payments"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
-@using TimeTracker.Api.Shared.Dto.Model
 @using TimeTracker.Api.Shared.Dto.Model.Report
 
 @inherits BaseComponent
 @layout Layout
 
 <RadzenCard>
+    <div class="row">
+        <div class="col">
+            <RadzenText
+                TextStyle="TextStyle.Subtitle2"
+                TagName="TagName.H3">
+                Report Date:
+            </RadzenText>
+            <RadzenDatePicker
+                TValue="DateTime?"
+                AllowClear="false"
+                DateFormat="d"
+                Class="w-100"
+                Placeholder="Report date"
+                Value="@_filterState.EndDate"
+                Change="OnChangeDateEnd"/>
+        </div>
+    </div>
+</RadzenCard>
+
+<RadzenCard class="mt-3">
     @if (_state.Value.IsLoading)
     {
         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>

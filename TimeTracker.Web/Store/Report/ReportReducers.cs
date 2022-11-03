@@ -7,6 +7,17 @@ namespace TimeTracker.Web.Store.Report;
 
 public class ReportReducers
 {
+    #region Payment
+    
+    [ReducerMethod]
+    public static ReportsState ReportSetPaymentReportFilterActionReducer(ReportsState state, ReportSetPaymentReportFilterAction action)
+    {
+        return state with
+        {
+            PaymentReportFilter = action.FilterState
+        };
+    }
+    
     [ReducerMethod]
     public static ReportsState ReportSetPaymentReportItemsActionReducer(ReportsState state, ReportSetPaymentReportItemsAction action)
     {
@@ -24,6 +35,8 @@ public class ReportReducers
             IsLoading = action.IsLoading
         };
     }
+    
+    #endregion
     
     #region Summary
     

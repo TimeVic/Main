@@ -8,7 +8,7 @@ using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Db.Dao.Report.TimeEntry;
 
-public class GetProjectPaymentsReportTest: BaseTest
+public class GetPaymentsReportTest: BaseTest
 {
     private readonly IUserSeeder _userSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
@@ -18,7 +18,7 @@ public class GetProjectPaymentsReportTest: BaseTest
     private readonly IProjectSeeder _projectSeederSeeder;
     private readonly IPaymentDao _paymentDao;
 
-    public GetProjectPaymentsReportTest(): base()
+    public GetPaymentsReportTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _projectSeederSeeder = Scope.Resolve<IProjectSeeder>();
@@ -73,7 +73,11 @@ public class GetProjectPaymentsReportTest: BaseTest
             });
         }
         
-        var result = await _reportsDao.GetProjectPaymentsReport(_workspace.Id, _user.Id);
+        var result = await _reportsDao.GetProjectPaymentsReport(
+            _workspace.Id,
+            _user.Id,
+            DateTime.UtcNow
+        );
 
         var actualForProject1 = result.FirstOrDefault(item => item.ProjectId == project1.Id);
         Assert.NotNull(actualForProject1);
@@ -153,7 +157,11 @@ public class GetProjectPaymentsReportTest: BaseTest
             DateTime.UtcNow
         );
         
-        var result = await _reportsDao.GetProjectPaymentsReport(_workspace.Id, _user.Id);
+        var result = await _reportsDao.GetProjectPaymentsReport(
+            _workspace.Id,
+            _user.Id,
+            DateTime.UtcNow
+        );
 
         var actualForProject1 = result.FirstOrDefault(item => item.ProjectId == project1.Id);
         Assert.NotNull(actualForProject1);
@@ -211,7 +219,11 @@ public class GetProjectPaymentsReportTest: BaseTest
             ""
         );
 
-        var result = await _reportsDao.GetProjectPaymentsReport(_workspace.Id, _user.Id);
+        var result = await _reportsDao.GetProjectPaymentsReport(
+            _workspace.Id,
+            _user.Id,
+            DateTime.UtcNow
+        );
 
         var actualForProject1 = result.FirstOrDefault(item => item.ProjectId == project1.Id);
         Assert.NotNull(actualForProject1);
@@ -223,5 +235,72 @@ public class GetProjectPaymentsReportTest: BaseTest
         Assert.Equal(TimeSpan.FromHours(5), actualForProject1.TotalDuration);
         Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
         Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
+    }
+    
+    [Fact]
+    public async Task ShouldReceiveForProvidedDate()
+    {
+        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
+        var project1 = projects.First();
+       
+        await _paymentDao.CreateAsync(
+            _workspace,
+            _user,
+            project1.Client,
+            15,
+            DateTime.UtcNow.AddDays(-4),
+            project1.Id,
+            ""
+        );
+        await _paymentDao.CreateAsync(
+            _workspace,
+            _user,
+            project1.Client,
+            15,
+            DateTime.UtcNow.AddDays(-10),
+            project1.Id,
+            ""
+        );
+        await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+        {
+            Date = DateTime.UtcNow,
+            StartTime = TimeSpan.FromHours(10),
+            EndTime = TimeSpan.FromHours(15),
+            IsBillable = true,
+            HourlyRate = 2
+        }, project1);
+        
+        await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+        {
+            Date = DateTime.UtcNow.AddDays(-10),
+            StartTime = TimeSpan.FromHours(10),
+            EndTime = TimeSpan.FromHours(15),
+            IsBillable = true,
+            HourlyRate = 1
+        }, project1);
+        await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+        {
+            Date = DateTime.UtcNow.AddDays(-4),
+            StartTime = TimeSpan.FromHours(10),
+            EndTime = TimeSpan.FromHours(15),
+            IsBillable = true,
+            HourlyRate = 1
+        }, project1);
+        await CommitDbChanges();
+
+        var result = await _reportsDao.GetProjectPaymentsReport(
+            _workspace.Id,
+            _user.Id,
+            DateTime.UtcNow.AddDays(-5)
+        );
+
+        var actualForProject1 = result.FirstOrDefault(item => item.ProjectId == project1.Id);
+        Assert.NotNull(actualForProject1);
+        Assert.Equal(project1.Id, actualForProject1.ProjectId);
+        Assert.Equal(project1.Name, actualForProject1.ProjectName);
+        Assert.Equal(5, Math.Round(actualForProject1.Amount));
+        Assert.Equal(15, actualForProject1.PaidAmountByClient);
+        Assert.Equal(15, actualForProject1.PaidAmountByProject);
+        Assert.Equal(TimeSpan.FromHours(5), actualForProject1.TotalDuration);
     }
 }

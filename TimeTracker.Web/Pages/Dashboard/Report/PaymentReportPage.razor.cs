@@ -13,6 +13,11 @@ public partial class PaymentReportPage
     [Inject] 
     private IState<ReportsState> _state { get; set; }
 
+    public PaymentReportFilterState _filterState
+    {
+        get => _state.Value.PaymentReportFilter;
+    }
+
     private IEnumerable<IGrouping<long?, PaymentsReportItemDto>> _grouppedItems
     {
         get => _state.Value.PaymentReportItems.GroupBy(item => item.ClientId);
@@ -26,7 +31,6 @@ public partial class PaymentReportPage
 
     private void OnFooterCellRender(DataGridCellRenderEventArgs<PaymentsReportItemDto> args, PaymentsReportItemDto data)
     {
-        Debug.Log(args.Column.Property);
         if (args.Column.Property == "ProjectName")
         {
             var unpaidAmount = GetClientUnpaidAmount(data.ClientId ?? 0);
@@ -44,5 +48,13 @@ public partial class PaymentReportPage
     {
         var paidAmount = _state.Value.PaymentReportItems.FirstOrDefault(item => item.ClientId == clientId)?.PaidAmountByClient ?? 0;
         return paidAmount - GetClientTotalAmount(clientId);
+    }
+
+    private void OnChangeDateEnd(DateTime? endDate)
+    {
+        Dispatcher.Dispatch(_filterState with {
+            EndDate = endDate.Value
+        });
+        Dispatcher.Dispatch(new ReportFetchPaymentsReportAction());
     }
 }

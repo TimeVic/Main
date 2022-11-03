@@ -50,7 +50,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
 
             var reportItems = await _entryReportsDao.GetProjectPaymentsReport(
                 workspace.Id,
-                user.Id
+                user.Id,
+                request.EndDate
             );
             return new PaymentReportResponse()
             {
