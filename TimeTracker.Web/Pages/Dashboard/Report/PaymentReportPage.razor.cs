@@ -52,9 +52,7 @@ public partial class PaymentReportPage
 
     private void OnChangeDateEnd(DateTime? endDate)
     {
-        Dispatcher.Dispatch(_filterState with {
-            EndDate = endDate.Value
-        });
+        Dispatcher.Dispatch(new ReportSetPaymentReportFilterAction(new PaymentReportFilterState(EndDate: endDate.Value)));
         Dispatcher.Dispatch(new ReportFetchPaymentsReportAction());
     }
 }
