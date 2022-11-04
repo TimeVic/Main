@@ -37,7 +37,8 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                     WorkspaceId = _authState.Value.Workspace.Id,
                     EndTime = DateTime.Now.TimeOfDay,
                     EndDate = DateTime.Now
-                });    
+                });
+                dispatcher.Dispatch(new LoadTimeEntryListAction(1));
             }
             
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
