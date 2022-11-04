@@ -68,7 +68,7 @@ public class ActivateUserTest: BaseTest
         var user = _userFactory.Generate();
         await Assert.ThrowsAsync<RecordNotFoundException>(async () =>
         {
-            await _registrationService.ActivateUser(user.VerificationToken, "fake password");
+            await _registrationService.ActivateUser(SecurityUtil.GetRandomString(100), "fake password");
         });
     }
     
