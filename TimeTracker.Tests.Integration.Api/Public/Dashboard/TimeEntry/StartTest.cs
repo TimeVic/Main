@@ -85,6 +85,7 @@ public class AddTest: BaseTest
             Date = DateTime.UtcNow.Date,
             StartTime = TimeSpan.FromSeconds(1)
         });
+        await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
         var activeRecordsCount = await DbSessionProvider.CurrentSession.Query<TimeEntryEntity>()
