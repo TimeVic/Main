@@ -33,8 +33,10 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 Date = DateTime.UtcNow.Date,
                 StartTime = DateTime.Now.TimeOfDay,
                 
-                // TODO: Fill from the project's settings
-                IsBillable = true
+                IsBillable = action.IsBillable,
+                ProjectId = action.Project?.Id,
+                Description = action.Description,
+                HourlyRate = action.HourlyRate
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(response));
         }

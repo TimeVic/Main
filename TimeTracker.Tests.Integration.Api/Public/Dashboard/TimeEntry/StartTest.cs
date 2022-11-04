@@ -85,6 +85,7 @@ public class AddTest: BaseTest
             Date = DateTime.UtcNow.Date,
             StartTime = TimeSpan.FromSeconds(1)
         });
+        await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
         var activeRecordsCount = await DbSessionProvider.CurrentSession.Query<TimeEntryEntity>()
@@ -133,6 +134,34 @@ public class AddTest: BaseTest
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.True(actualDto.Id > 0);
         Assert.Equal(expectedStartTime, actualDto.StartTime);
+    }
+    
+    [Fact]
+    public async Task ShouldSetIsBillableIfNull()
+    {
+        var expectedHourlyRate = 14.3m;
+        
+        var fakeTimeEntry = _timeEntryFactory.Generate();
+        var project = await _projectDao.CreateAsync(_defaultWorkspace, "Test project");
+        project.IsBillableByDefault = true;
+        project.DefaultHourlyRate = expectedHourlyRate;
+
+        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id,
+            ProjectId = project.Id,
+            Description = fakeTimeEntry.Description,
+            Date = DateTime.UtcNow.Date,
+            StartTime = TimeSpan.FromSeconds(1),
+            
+            IsBillable = null,
+            HourlyRate = null
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        Assert.Equal(true, actualDto.IsBillable);
+        Assert.Equal(expectedHourlyRate, actualDto.HourlyRate);
     }
     
     [Fact]

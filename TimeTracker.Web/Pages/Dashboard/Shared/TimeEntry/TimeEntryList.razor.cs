@@ -4,6 +4,7 @@ using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
@@ -126,5 +127,18 @@ public partial class TimeEntryList
     {
         return entry.User.Id == AuthState.Value.User.Id
             || AuthState.Value.IsRoleAdmin;
+    }
+
+    private void CopyTimeEntry(TimeEntryDto timeEntry)
+    {
+        Dispatcher.Dispatch(new StopActiveTimeEntryAction());
+        Dispatcher.Dispatch(new StartTimeEntryAction()
+        {
+            Description = timeEntry.Description,
+            Project = timeEntry.Project,
+            HourlyRate = timeEntry.HourlyRate,
+            IsBillable = timeEntry.IsBillable,
+            TaskId = timeEntry.TaskId
+        });
     }
 }

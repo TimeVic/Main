@@ -57,7 +57,6 @@ public class ActivateUserTest: BaseTest
         
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
-        
         Assert.True(EmailSendingServiceMock.IsEmailSent);
         var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(user.Email, actualEmail.To);
@@ -68,7 +67,7 @@ public class ActivateUserTest: BaseTest
     {
         await Assert.ThrowsAsync<RecordNotFoundException>(async () =>
         {
-            await _registrationService.ActivateUser("fake token", "fake password");
+            await _registrationService.ActivateUser(SecurityUtil.GetRandomString(100), "fake password");
         });
     }
     

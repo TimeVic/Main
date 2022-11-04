@@ -17,7 +17,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         [StringLength(1000)]
         public string? Description { get; set; } 
         
-        public bool IsBillable { get; set; }
+        public bool? IsBillable { get; set; }
         
         [IsPositive]
         public decimal? HourlyRate { get; set; } 

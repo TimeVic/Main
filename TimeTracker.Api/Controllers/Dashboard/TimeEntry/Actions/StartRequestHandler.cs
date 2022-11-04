@@ -60,7 +60,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
             var userProjects = await _projectDao.GetAvailableForUserListAsync(workspace, user, userAccess);
             var project = userProjects.Items.FirstOrDefault(item => item.Id == request.ProjectId);
-            if (request.IsBillable && !request.HourlyRate.HasValue)
+
+            var isBillable = request.IsBillable ?? project?.IsBillableByDefault ?? false;
+            if (isBillable && !request.HourlyRate.HasValue)
             {
                 request.HourlyRate = await _projectService.GetUsersHourlyRateForProject(user, project);
             }
@@ -70,7 +72,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 workspace,
                 request.Date,
                 request.StartTime,
-                isBillable: request.IsBillable,
+                isBillable: isBillable,
                 description: request.Description,
                 projectId: request.ProjectId,
                 hourlyRate: request.HourlyRate
