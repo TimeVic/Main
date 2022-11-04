@@ -6,44 +6,59 @@
 @inherits BaseComponent
 @layout Layout
 
-<RadzenCard Style="margin: 10px auto;">
-    <div class="px-3">
-        <RadzenBreadCrumb class="mb-3">
-            <RadzenBreadCrumbItem Path="@SiteUrl.Dashboard_Projects" Text="Projects"/>
-            <RadzenBreadCrumbItem Text="Edit project"/>
-        </RadzenBreadCrumb>
+<RadzenBreadCrumb class="mb-3">
+    <RadzenBreadCrumbItem Path="@SiteUrl.Dashboard_Projects" Text="Projects"/>
+    <RadzenBreadCrumbItem Text="Edit project"/>
+</RadzenBreadCrumb>
 
-        <RadzenCard>
-            <h2 class="mb-4">@(model.Name)</h2>
-            <RadzenTemplateForm TItem="UpdateRequest" Data="@model" Submit="HandleSubmit">
-                <DataAnnotationsValidator/>
-                <ValidationSummary/>
+<RadzenCard>
+    <h2 class="mb-4">@(model.Name)</h2>
+    <RadzenTemplateForm TItem="UpdateRequest" Data="@model" Submit="HandleSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
 
-                <div class="mb-2 row">
-                    <RadzenLabel
-                        Text="Project name"
-                        class="col-sm-3 fw-bold"/>
-                    <RadzenTextBox @bind-Value="@model.Name" Class="col"/>
-                </div>
-                <div class="mb-2 row">
-                    <RadzenLabel
-                        Text="Client"
-                        class="col-sm-3 fw-bold"/>
-                    <div class="col">
-                        <ClientsDropDown Value="@(model.ClientId ?? 0)" ValueChanged="OnChangeClient"/>
-                    </div>
-                </div>
-                <div class="mb-2">
-                    <RadzenCheckBox @bind-Value="@model.IsBillableByDefault"/>
-                    <RadzenLabel
-                        Text="Billable by default"/>
-                </div>
-                <div class="mb-2 row">
-                    <RadzenLabel
-                        Text="Default hourly rate"
-                        class="col-sm-3 fw-bold"/>
-                    <RadzenNumeric @bind-Value="@model.DefaultHourlyRate" Class="col"/>
-                </div>
+        <div class="row">
+            <div class="col-md-6">
+                <RadzenLabel
+                    Text="Project name"
+                    TextStyle="@TextStyle.Subtitle2"/>
+                <RadzenTextBox
+                    @bind-Value="@model.Name"
+                    Class="w-100"/>
+            </div>
+            <div class="col-md-6">
+                <RadzenLabel
+                    Text="Client"
+                    TextStyle="@TextStyle.Subtitle2"/>
+                <ClientsDropDown
+                    Value="@(model.ClientId ?? 0)"
+                    ValueChanged="OnChangeClient"
+                    Class="w-100"/>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-6 pt-4">
+                <RadzenCheckBox
+                    TValue="bool"
+                    Name="IsBillableCheckBox"
+                    @bind-Value="@model.IsBillableByDefault"/>
+                <RadzenLabel
+                    Component="IsBillableCheckBox"
+                    Style="margin-left: 8px; vertical-align: middle;"
+                    Text="Billable by default"/>
+            </div>
+            <div class="col-md-6">
+                <RadzenLabel
+                    Text="Default hourly rate"
+                    TextStyle="@TextStyle.Subtitle2"/>
+                <RadzenNumeric
+                    @bind-Value="@model.DefaultHourlyRate"
+                    Class="w-100"/>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-12 d-flex align-items-end justify-content-center mt-4">
                 <RadzenButton
                     Click="OnClickBackButton"
                     ButtonStyle="ButtonStyle.Light"
@@ -51,8 +66,9 @@
                 <RadzenButton
                     ButtonType="ButtonType.Submit"
                     Disabled="@_isLoading"
+                    class="ml-3"
                     Text="Save"/>
-            </RadzenTemplateForm>
-        </RadzenCard>
-    </div>
+            </div>
+        </div>
+    </RadzenTemplateForm>
 </RadzenCard>
