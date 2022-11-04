@@ -43,6 +43,7 @@ public class LoadFilteredListEffect: Effect<LoadTimeEntryFilteredListAction>
                 IsBillable = _state.Value.Filter.IsBillable,
                 DateFrom = _state.Value.Filter.DateFrom,
                 DateTo = _state.Value.Filter.DateTo,
+                MemberId = _state.Value.Filter.UserId
             });
             dispatcher.Dispatch(new SetTimeEntryFilteredListItemsAction(response));
         }

@@ -1,38 +1,51 @@
 ﻿@inherits BaseComponent
 
-<div class="row d-flex px-3 w-filter d-flex justify-content-start">
-    <ClientsDropDown
-        Value="@(_state.Value.Filter.ClientId ?? 0)"
-        Class="mr-1 w-select"
-        ValueChanged="OnChangeClient"/>
-
-    <ProjectsDropDown
-        Value="@(_state.Value.Filter.ProjectId ?? 0)"
-        ClientId="@(_state.Value.Filter.ClientId ?? 0)"
-        ValueChanged="OnChangeProject"
-        Class="mr-1 w-select"/>
-
-    <RadzenDatePicker
-        TValue="DateTime?"
-        AllowClear="true"
-        DateFormat="d"
-        Placeholder="Date from"
-        Value="@_state.Value.Filter.DateFrom"
-        Change="OnChangeDateFrom"
-        Class="mr-1 w-date"/>
-
-    <RadzenDatePicker
-        TValue="DateTime?"
-        AllowClear="true"
-        DateFormat="d"
-        Placeholder="Date to"
-        Value="@_state.Value.Filter.DateTo"
-        Change="OnChangeDateTo"
-        Class="mr-1 w-date"/>
-
-    <RadzenTextBox
-        Class="col"
-        Placeholder="Search"
-        Value="@_state.Value.Filter.Search"
-        ValueChanged="OnChangeSearch"/>
+<div class="row w-filter">
+    <div class="col-md-3">
+        <ClientsDropDown
+            Value="@(_state.Value.Filter.ClientId ?? 0)"
+            Class="w-100"
+            ValueChanged="OnChangeClient"/>
+    </div>
+    <div class="col-md-3">
+        <ProjectsDropDown
+            Value="@(_state.Value.Filter.ProjectId ?? 0)"
+            ClientId="@(_state.Value.Filter.ClientId ?? 0)"
+            ValueChanged="OnChangeProject"
+            Class="w-100"/>
+    </div>
+    <div class="col-md-3">
+        <RadzenDatePicker
+            TValue="DateTime?"
+            AllowClear="true"
+            DateFormat="d"
+            Placeholder="Date from"
+            Value="@_state.Value.Filter.DateFrom"
+            Change="OnChangeDateFrom"
+            Class="w-100"/>
+    </div>
+    <div class="col-md-3">
+        <RadzenDatePicker
+            TValue="DateTime?"
+            AllowClear="true"
+            DateFormat="d"
+            Placeholder="Date to"
+            Value="@_state.Value.Filter.DateTo"
+            Change="OnChangeDateTo"
+            Class="w-100"/>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <MembersDropDown
+            Class="w-100"
+            SelectedItemChanged="OnChangeMember"/>
+    </div>
+    <div class="col-md-6">
+        <RadzenTextBox
+            Class="w-100"
+            Placeholder="Search"
+            Value="@_state.Value.Filter.Search"
+            ValueChanged="OnChangeSearch"/>
+    </div>
 </div>
