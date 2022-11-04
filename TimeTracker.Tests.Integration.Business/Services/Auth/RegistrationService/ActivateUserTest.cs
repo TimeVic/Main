@@ -65,7 +65,6 @@ public class ActivateUserTest: BaseTest
     [Fact]
     public async Task ShouldThrowExceptionIfNotFound()
     {
-        var user = _userFactory.Generate();
         await Assert.ThrowsAsync<RecordNotFoundException>(async () =>
         {
             await _registrationService.ActivateUser(SecurityUtil.GetRandomString(100), "fake password");
