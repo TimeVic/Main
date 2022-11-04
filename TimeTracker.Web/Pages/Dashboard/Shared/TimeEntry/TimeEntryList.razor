@@ -183,6 +183,17 @@
                 Width="60px">
 
                 <Template Context="entry">
+                    @if (!IsFilteredList)
+                    {
+                        <RadzenButton
+                            Icon="done_all"
+                            ButtonStyle="ButtonStyle.Light"
+                            Size="ButtonSize.Small"
+                            Click="@(args => CopyTimeEntry(entry))"
+                            Disabled="@(!CanEditTimeEntry(entry))"
+                            @onclick:stopPropagation="true">
+                        </RadzenButton>
+                    }
                     <RadzenButton
                         Icon="edit"
                         ButtonStyle="ButtonStyle.Light"
