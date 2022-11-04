@@ -9,17 +9,20 @@ namespace TimeTracker.Web.Store.TimeEntry.Effects;
 public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
 {
     private readonly IState<AuthState> _authState;
+    private readonly IState<TimeEntryState> _timeEntryState;
     private readonly IApiService _apiService;
     private readonly ILogger<StartTimeEntryEffect> _logger;
 
     public StartTimeEntryEffect(
         IApiService apiService,
         IState<AuthState> authState,
+        IState<TimeEntryState> timeEntryState,
         ILogger<StartTimeEntryEffect> logger
     )
     {
         _apiService = apiService;
         _authState = authState;
+        _timeEntryState = timeEntryState;
         _logger = logger;
     }
 
@@ -27,6 +30,16 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
     {
         try
         {
+            if (_timeEntryState.Value.HasActiveEntry)
+            {
+                await _apiService.TimeEntryStopAsync(new StopRequest()
+                {
+                    WorkspaceId = _authState.Value.Workspace.Id,
+                    EndTime = DateTime.Now.TimeOfDay,
+                    EndDate = DateTime.Now
+                });    
+            }
+            
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,

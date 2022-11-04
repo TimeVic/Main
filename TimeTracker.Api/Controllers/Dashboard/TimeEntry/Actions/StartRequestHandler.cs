@@ -75,7 +75,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 isBillable: isBillable,
                 description: request.Description,
                 projectId: request.ProjectId,
-                hourlyRate: request.HourlyRate
+                hourlyRate: request.HourlyRate,
+                taskId: request.TaskId
             );
             await _sessionProvider.PerformCommitAsync();
             

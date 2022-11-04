@@ -131,7 +131,6 @@ public partial class TimeEntryList
 
     private void CopyTimeEntry(TimeEntryDto timeEntry)
     {
-        Dispatcher.Dispatch(new StopActiveTimeEntryAction());
         Dispatcher.Dispatch(new StartTimeEntryAction()
         {
             Description = timeEntry.Description,
