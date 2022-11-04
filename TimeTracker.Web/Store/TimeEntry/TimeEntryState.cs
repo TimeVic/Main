@@ -46,6 +46,8 @@ public record TimeEntryFilterState
     public long? ClientId { get; set; }
     
     public long? ProjectId { get; set; }
+    
+    public long? UserId { get; set; }
 
     public string? Search { get; set; } = "";
     

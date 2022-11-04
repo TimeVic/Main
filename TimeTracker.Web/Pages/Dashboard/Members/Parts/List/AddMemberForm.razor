@@ -6,11 +6,11 @@
     <DataAnnotationsValidator/>
     <ValidationSummary/>
 
-    <div class="mb-2">
+    <div class="mb-3">
         <RadzenLabel
             Text="Enter email"
-            class="col-lg-12 col-sm-3 mb-3"/>
-        <RadzenTextBox @bind-Value="model.Email" Class="w-100 mb-3 col"/>
+            TextStyle="@TextStyle.Subtitle2"/>
+        <RadzenTextBox @bind-Value="model.Email" Class="w-100"/>
     </div>
     <RadzenButton
         ButtonType="ButtonType.Submit"

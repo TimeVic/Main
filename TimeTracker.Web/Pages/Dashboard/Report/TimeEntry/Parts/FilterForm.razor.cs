@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Store.TimeEntry;
 
@@ -45,6 +46,12 @@ public partial class FilterForm
         UpdateFilterState();
     }
 
+    private void OnChangeMember(WorkspaceMembershipDto? member)
+    {
+        _state.Value.Filter.UserId = member?.User.Id;
+        UpdateFilterState();
+    }
+    
     private void UpdateFilterState()
     {
         Dispatcher.Dispatch(new SetTimeEntryFilterAction(_state.Value.Filter));
