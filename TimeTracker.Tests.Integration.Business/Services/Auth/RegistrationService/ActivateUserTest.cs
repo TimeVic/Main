@@ -57,7 +57,6 @@ public class ActivateUserTest: BaseTest
         
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
-        
         Assert.True(EmailSendingServiceMock.IsEmailSent);
         var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(user.Email, actualEmail.To);
