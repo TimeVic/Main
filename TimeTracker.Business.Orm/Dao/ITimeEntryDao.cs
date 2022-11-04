@@ -21,7 +21,8 @@ public interface ITimeEntryDao: IDomainService
         bool isBillable = false,
         string? description = null,
         long? projectId = null,
-        decimal? hourlyRate = null
+        decimal? hourlyRate = null,
+        string? taskId = null
     );
     
     Task<ICollection<TimeEntryEntity>> StopActiveAsync(

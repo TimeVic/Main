@@ -153,7 +153,8 @@ public class TimeEntryDao: ITimeEntryDao
         bool isBillable = false,
         string? description = "",
         long? projectId = null,
-        decimal? hourlyRate = null
+        decimal? hourlyRate = null,
+        string? taskId = null
     )
     {
         if (startTime >= GlobalConstants.EndOfDay)
@@ -174,6 +175,7 @@ public class TimeEntryDao: ITimeEntryDao
             EndTime = null,
             Workspace = workspace,
             User = user,
+            TaskId = taskId,
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow
         };
