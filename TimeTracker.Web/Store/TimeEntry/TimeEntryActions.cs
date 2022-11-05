@@ -30,6 +30,8 @@ public record struct DeleteTimeEntryAction(long EntryId);
 
 public record struct DeleteTimeEntryFromListAction(long EntryId);
 
+public record struct SetIsTimeEntryProcessing(bool IsProcessing);
+
 #region Filtered
 
 public record struct LoadTimeEntryFilteredListAction(int Skip = 1);

@@ -25,6 +25,8 @@ public record TimeEntryState
     public bool HasMoreItems { get; set; }
     
     public bool IsListLoading { get; set; }
+    
+    public bool IsTimeEntryProcessing { get; set; }
 
     #region Filtered
     
