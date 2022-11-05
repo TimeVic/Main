@@ -190,7 +190,7 @@
                             ButtonStyle="ButtonStyle.Light"
                             Size="ButtonSize.Small"
                             Click="@(args => CopyTimeEntry(entry))"
-                            Disabled="@(!CanEditTimeEntry(entry))"
+                            Disabled="@(!CanEditTimeEntry(entry) || _state.Value.IsTimeEntryProcessing)"
                             @onclick:stopPropagation="true">
                         </RadzenButton>
                     }
@@ -199,13 +199,13 @@
                         ButtonStyle="ButtonStyle.Light"
                         Size="ButtonSize.Small"
                         Click="@(args => EditRow(entry))"
-                        Disabled="@(!CanEditTimeEntry(entry))"
+                        Disabled="@(!CanEditTimeEntry(entry) || _state.Value.IsTimeEntryProcessing)"
                         @onclick:stopPropagation="true">
                     </RadzenButton>
                     <RadzenButton
                         Size="ButtonSize.Small"
                         ButtonStyle="ButtonStyle.Danger"
-                        Disabled="@(!CanEditTimeEntry(entry))"
+                        Disabled="@(!CanEditTimeEntry(entry) || _state.Value.IsTimeEntryProcessing)"
                         Icon="delete"
                         Click="async () => await OnDeleteItemAsync(entry)"/>
                 </Template>

@@ -30,6 +30,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
     {
         try
         {
+            dispatcher.Dispatch(new SetIsTimeEntryProcessing(true));
             if (_timeEntryState.Value.HasActiveEntry)
             {
                 await _apiService.TimeEntryStopAsync(new StopRequest()
@@ -40,13 +41,13 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 });
                 dispatcher.Dispatch(new LoadTimeEntryListAction(1));
             }
-            
+
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
                 Date = DateTime.UtcNow.Date,
                 StartTime = DateTime.Now.TimeOfDay,
-                
+
                 TaskId = action.TaskId,
                 IsBillable = action.IsBillable,
                 ProjectId = action.Project?.Id,
@@ -58,6 +59,10 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
         catch (Exception e)
         {
             _logger.LogError(e.Message, e);
+        }
+        finally
+        {
+            dispatcher.Dispatch(new SetIsTimeEntryProcessing(false));
         }
     }
 }

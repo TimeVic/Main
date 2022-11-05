@@ -12,6 +12,7 @@
                     ButtonStyle="ButtonStyle.Secondary"
                     Class="mr-1"
                     Click="@(StopTimeEntry)"
+                    Disabled="_state.Value.IsTimeEntryProcessing"
                     Text="Stop"/>
             }
             else
@@ -20,6 +21,7 @@
                     ButtonStyle="ButtonStyle.Success"
                     Click="@(StartTimeEntry)"
                     Class="mr-1"
+                    Disabled="_state.Value.IsTimeEntryProcessing"
                     Text="Start"/>
             }
             <TimeCounterField

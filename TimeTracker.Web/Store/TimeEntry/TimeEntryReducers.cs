@@ -7,6 +7,15 @@ namespace TimeTracker.Web.Store.TimeEntry;
 public class TimeEntryReducers
 {
     [ReducerMethod]
+    public static TimeEntryState SetIsTimeEntryProcessingReducer(TimeEntryState state, SetIsTimeEntryProcessing action)
+    {
+        return state with
+        {
+            IsTimeEntryProcessing = action.IsProcessing
+        };
+    }
+    
+    [ReducerMethod]
     public static TimeEntryState SetActiveTimeEntryActionReducer(TimeEntryState state, SetActiveTimeEntryAction action)
     {
         return state with
