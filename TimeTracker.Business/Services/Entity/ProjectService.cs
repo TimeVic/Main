@@ -18,11 +18,6 @@ public class ProjectService: IProjectService
         {
             return null;
         }
-
-        if (project.Workspace.IsOwner(user))
-        {
-            return project.DefaultHourlyRate;
-        }
         var membership = await _workspaceAccessService.GetMembershipAsync(
             user, 
             project.Workspace

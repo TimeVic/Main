@@ -29,8 +29,7 @@ public class GetFilteredListTest: BaseTest
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _defaultWorkspace = _user.Workspaces.First();
+        (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]
@@ -77,7 +76,7 @@ public class GetFilteredListTest: BaseTest
         var expectedProject = projects.First();
         var expectedProject2 = projects.Last();
 
-        var (otherJwt, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
+        var (otherJwt, otherUser, otherWorkspace) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _defaultWorkspace,
             MembershipAccessType.User,
             projects: new List<ProjectAccessModel>()

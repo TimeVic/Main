@@ -19,6 +19,7 @@ public class HasAccessToClientTest: BaseTest
     private readonly ISecurityManager _securityManager;
     private readonly IProjectDao _projectDao;
     private readonly IClientDao _clientDao;
+    private readonly IUserDao _userDao;
 
     public HasAccessToClientTest(): base()
     {
@@ -28,9 +29,10 @@ public class HasAccessToClientTest: BaseTest
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         _securityManager = Scope.Resolve<ISecurityManager>();
+        _userDao = Scope.Resolve<IUserDao>();
 
         _owner = _userSeeder.CreateActivatedAsync().Result;
-        _ownWorkspace = _owner.Workspaces.First();
+        _ownWorkspace = _userDao.GetUsersWorkspaces(_owner, MembershipAccessType.Owner).Result.First();
         // Clear queue
         _queueDao.CompleteAllPending().Wait();
     }
@@ -40,7 +42,8 @@ public class HasAccessToClientTest: BaseTest
     [InlineData(AccessLevel.Write)]
     public async Task ShouldHasAccessIfWorkspaceOwner(AccessLevel accessLevel)
     {
-        Assert.True(_ownWorkspace.IsOwner(_owner));
+        var accessType = await _workspaceAccessService.GetAccessTypeAsync(_owner, _ownWorkspace);
+        Assert.Equal(MembershipAccessType.Owner, accessType);
         var client = await _clientDao.CreateAsync(_ownWorkspace, "Test 1");
         var hasAccess = await _securityManager.HasAccess(accessLevel, _owner, client);
         Assert.True(hasAccess);

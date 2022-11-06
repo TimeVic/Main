@@ -35,9 +35,8 @@ public class UpdateTest: BaseTest
         _clientDao = ServiceProvider.GetRequiredService<IClientDao>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _paymentSeeder = ServiceProvider.GetRequiredService<IPaymentSeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _workspace = _user.Workspaces.First();
         _payment = _paymentSeeder.CreateSeveralAsync(_user, 1).Result.First();
         DbSessionProvider.PerformCommitAsync().Wait();
     }
@@ -94,7 +93,7 @@ public class UpdateTest: BaseTest
     public async Task ShouldNotUpdateIfHasNoAccess()
     {
         var expectPayment = _factory.Generate();
-        var (otherJwtToken, otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
+        var (otherJwtToken, otherUser, otherWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
         
         var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()
         {

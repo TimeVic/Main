@@ -335,22 +335,6 @@ public class TimeEntryDao: ITimeEntryDao
         return timeEntry;
     }
 
-    public async Task<bool> HasAccessAsync(UserEntity user, TimeEntryEntity? entity)
-    {
-        if (entity == null)
-        {
-            return false;
-        }
-
-        TimeEntryEntity timeEntryAlias = null;
-        var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<WorkspaceEntity>()
-            .Inner.JoinAlias(item => item.TimeEntries, () => timeEntryAlias)
-                .Where(item => item.Owner.Id == user.Id)
-                .And(() => timeEntryAlias.Id == entity.Id)
-            .RowCountAsync();
-        return itemsWithAccessCount > 0;
-    }
-    
     public async Task<TimeEntryEntity?> GetActiveEntryAsync(WorkspaceEntity workspace, UserEntity user)
     {
         return await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()

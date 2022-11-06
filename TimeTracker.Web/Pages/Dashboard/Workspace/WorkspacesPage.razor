@@ -42,11 +42,6 @@
                             Style="position: absolute"/>
                     </EditTemplate>
                 </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="WorkspaceDto" Title="Owner">
-                    <Template Context="item">
-                        @item.Owner?.UserName
-                    </Template>
-                </RadzenDataGridColumn>
                 <RadzenDataGridColumn
                     TItem="WorkspaceDto"
                     Context="app" Filterable="false"

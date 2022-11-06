@@ -13,34 +13,12 @@ namespace TimeTracker.Business.Services.Security;
 public class WorkspaceAccessService: IWorkspaceAccessService
 {
     private readonly IDbSessionProvider _sessionProvider;
-    private readonly IRegistrationService _registrationService;
-    private readonly IUserDao _userDao;
 
     public WorkspaceAccessService(
-        IDbSessionProvider sessionProvider,
-        IRegistrationService registrationService,
-        IUserDao userDao
+        IDbSessionProvider sessionProvider
     )
     {
         _sessionProvider = sessionProvider;
-        _registrationService = registrationService;
-        _userDao = userDao;
-    }
-
-    public async Task<WorkspaceMembershipEntity> ShareAccessAsync(
-        WorkspaceEntity workspace,
-        string email,
-        MembershipAccessType access,
-        ICollection<ProjectAccessModel>? projectsAccess = null
-    )
-    {
-        var user = await _userDao.GetByEmail(email);
-        if (user is not { IsActivated: true })
-        {
-            user = await _registrationService.CreatePendingUser(email);
-        }
-
-        return await ShareAccessAsync(workspace, user, access, projectsAccess);
     }
 
     public async Task<WorkspaceMembershipEntity> ShareAccessAsync(
@@ -102,28 +80,18 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         ProjectEntity? project = null
     )
     {
-        if (workspace.IsOwner(user))
-        {
-            return MembershipAccessType.Owner;
-        }
-
         var member = await GetMembershipAsync(user, workspace);
         return member?.Access;
     }
     
     public async Task<MembershipAccessType?> GetAccessTypeAsync(UserEntity user, ProjectEntity project)
     {
-        if (project.Workspace.IsOwner(user))
-        {
-            return MembershipAccessType.Owner;
-        }
-
         var member = await GetMembershipAsync(user, project.Workspace);
         if (member == null)
         {
             return null;
         }
-        if (member.Access == MembershipAccessType.Manager)
+        if (member.Access == MembershipAccessType.Manager || member.Access == MembershipAccessType.Owner)
         {
             return member.Access;
         }

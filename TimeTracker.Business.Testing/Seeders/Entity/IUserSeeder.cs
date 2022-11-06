@@ -13,7 +13,7 @@ public interface IUserSeeder: IDomainService
 
     Task<ICollection<UserEntity>> CreateActivatedAsync(int counter, string password = "test password");
     
-    Task<(string token, UserEntity user)> CreateAuthorizedAsync(string password = "test password");
+    Task<(string token, UserEntity user, WorkspaceEntity defaultWorkspace)> CreateAuthorizedAsync(string password = "test password");
 
     Task<UserEntity> CreateActivatedAndShareAsync(
         WorkspaceEntity workspace,
@@ -21,7 +21,7 @@ public interface IUserSeeder: IDomainService
         ICollection<ProjectAccessModel>? projects = null
     );
 
-    Task<(string token, UserEntity user)> CreateAuthorizedAndShareAsync(
+    Task<(string token, UserEntity user, WorkspaceEntity defaultWorkspace)> CreateAuthorizedAndShareAsync(
         WorkspaceEntity workspace,
         MembershipAccessType access = MembershipAccessType.User,
         ICollection<ProjectAccessModel>? projects = null

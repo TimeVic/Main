@@ -30,11 +30,11 @@ namespace TimeTracker.Business.Orm.Entities
         
         [ManyToOne(
             ClassType = typeof(UserEntity), 
-            Column = "user_id", 
+            Column = "created_user_id", 
             Lazy = Laziness.False,
             Cascade = "none"
         )]
-        public virtual UserEntity Owner { get; set; }
+        public virtual UserEntity CreatedUser { get; set; }
         
         [Bag(
             Inverse = true,
@@ -114,11 +114,6 @@ namespace TimeTracker.Business.Orm.Entities
                 return false;
             }
             return Projects.Any(item => item.Id == project.Id);
-        }
-        
-        public virtual bool IsOwner(UserEntity user)
-        {
-            return Owner.Id == user.Id;
         }
         
         #endregion

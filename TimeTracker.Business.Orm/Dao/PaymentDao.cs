@@ -16,26 +16,6 @@ public class PaymentDao: IPaymentDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<bool> HasAccessAsync(UserEntity user, PaymentEntity? entity)
-    {
-        if (entity == null)
-        {
-            return false;
-        }
-
-        UserEntity userAlias = null;
-        WorkspaceEntity workspaceAlias = null;
-        ClientEntity clientAlias = null;
-        var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<PaymentEntity>()
-            .Inner.JoinAlias(item => item.Client, () => clientAlias)
-            .Inner.JoinAlias(() => clientAlias.Workspace, () => workspaceAlias)
-            .Inner.JoinAlias(item => workspaceAlias.Owner, () => userAlias)
-            .And(() => userAlias.Id == user.Id)
-            .And(item => item.Id == entity.Id)
-            .RowCountAsync();
-        return itemsWithAccessCount > 0;
-    }
-    
     public async Task<PaymentEntity?> GetById(long? id)
     {
         if (id == null)

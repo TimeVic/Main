@@ -32,9 +32,8 @@ public class UpdateTest: BaseTest
         _projectFactory = ServiceProvider.GetRequiredService<IDataFactory<ProjectEntity>>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _clientSeeder = ServiceProvider.GetRequiredService<IClientSeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _workspace = _user.Workspaces.First();
         _project = _projectSeeder.CreateAsync(_workspace).Result;
     }
 
@@ -53,8 +52,7 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldUpdate()
     {
-        var expectedWorkspace = _user.Workspaces.First();
-        var expectedClient = _clientSeeder.CreateSeveralAsync(expectedWorkspace).Result.First();
+        var expectedClient = _clientSeeder.CreateSeveralAsync(_workspace).Result.First();
         var expectedProject = _projectFactory.Generate();
         await DbSessionProvider.PerformCommitAsync();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
@@ -78,8 +76,7 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldSetClientToNull()
     {
-        var expectedWorkspace = _user.Workspaces.First();
-        var expectedClient = _clientSeeder.CreateSeveralAsync(expectedWorkspace).Result.First();
+        var expectedClient = _clientSeeder.CreateSeveralAsync(_workspace).Result.First();
         _project.SetClient(expectedClient);
         await DbSessionProvider.PerformCommitAsync();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
@@ -117,7 +114,7 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldNotUpdateIfHasNoAccess()
     {
-        var (otherJwtToken, _) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAsync();
         await DbSessionProvider.PerformCommitAsync();
         
         var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()

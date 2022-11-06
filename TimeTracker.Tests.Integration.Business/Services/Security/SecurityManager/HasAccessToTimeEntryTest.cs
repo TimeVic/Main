@@ -17,6 +17,7 @@ public class HasAccessToTimeEntryTest: BaseTest
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly ISecurityManager _securityManager;
+    private IUserDao _userDao;
 
     public HasAccessToTimeEntryTest(): base()
     {
@@ -24,9 +25,10 @@ public class HasAccessToTimeEntryTest: BaseTest
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         _securityManager = Scope.Resolve<ISecurityManager>();
+        _userDao = Scope.Resolve<IUserDao>();
 
         _owner = _userSeeder.CreateActivatedAsync().Result;
-        _ownWorkspace = _owner.Workspaces.First();
+        _ownWorkspace = _userDao.GetUsersWorkspaces(_owner, MembershipAccessType.Owner).Result.First();
         // Clear queue
         _queueDao.CompleteAllPending().Wait();
     }
@@ -36,7 +38,8 @@ public class HasAccessToTimeEntryTest: BaseTest
     [InlineData(AccessLevel.Write)]
     public async Task ShouldHasAccessIfWorkspaceOwner(AccessLevel accessLevel)
     {
-        Assert.True(_ownWorkspace.IsOwner(_owner));
+        var accessType = await _workspaceAccessService.GetAccessTypeAsync(_owner, _ownWorkspace);
+        Assert.Equal(MembershipAccessType.Owner, accessType);
         var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
         var hasAccess = await _securityManager.HasAccess(accessLevel, _owner, timeEntry);
         Assert.True(hasAccess);

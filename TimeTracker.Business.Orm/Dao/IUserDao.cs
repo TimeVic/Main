@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Orm.Dao;
@@ -17,7 +18,7 @@ public interface IUserDao: IDomainService
 
     Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, long workspaceId);
 
-    Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user);
+    Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user, MembershipAccessType? accessType = null);
 
     Task<WorkspaceEntity> GetDefaultWorkspace(UserEntity user);
 }

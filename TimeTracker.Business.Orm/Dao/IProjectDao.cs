@@ -8,9 +8,7 @@ namespace TimeTracker.Business.Orm.Dao;
 public interface IProjectDao: IDomainService
 {
     Task<ProjectEntity> CreateAsync(WorkspaceEntity workspace, string name);
-
-    Task<ICollection<ProjectEntity>> GetByUser(UserEntity user);
-
+    
     Task<ProjectEntity?> GetById(long? projectId);
 
     Task<ListDto<ProjectEntity>> GetAvailableForUserListAsync(
@@ -18,6 +16,4 @@ public interface IProjectDao: IDomainService
         UserEntity? user = null,
         MembershipAccessType? accessType = null
     );
-
-    Task<bool> HasAccessAsync(UserEntity user, ProjectEntity? entity);
 }

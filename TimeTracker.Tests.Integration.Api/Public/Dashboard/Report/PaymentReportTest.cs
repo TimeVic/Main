@@ -31,8 +31,7 @@ public class PaymentReportTest: BaseTest
         _paymentDao = ServiceProvider.GetRequiredService<IPaymentDao>();
         _timeEntryReportDao = ServiceProvider.GetRequiredService<ITimeEntryReportsDao>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectSeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _defaultWorkspace = _user.Workspaces.First();
+        (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]

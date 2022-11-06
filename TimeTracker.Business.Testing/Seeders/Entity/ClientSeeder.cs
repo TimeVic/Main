@@ -1,4 +1,5 @@
-﻿using TimeTracker.Business.Orm.Dao;
+﻿using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Testing.Factories;
 
@@ -9,21 +10,24 @@ public class ClientSeeder: IClientSeeder
     private readonly IDataFactory<ProjectEntity> _projectFactory;
     private readonly IUserSeeder _userSeeder;
     private readonly IClientDao _clientDao;
+    private readonly IUserDao _userDao;
 
     public ClientSeeder(
         IDataFactory<ProjectEntity> projectFactory,
         IUserSeeder userSeeder,
-        IClientDao clientDao
+        IClientDao clientDao,
+        IUserDao userDao
     )
     {
         _projectFactory = projectFactory;
         _userSeeder = userSeeder;
         _clientDao = clientDao;
+        _userDao = userDao;
     }
     
     public async Task<ICollection<ClientEntity>> CreateSeveralAsync(UserEntity user, int count = 1)
     {
-        var workspace = user.Workspaces.First();
+        var workspace = (await _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner)).First();
         return await CreateSeveralAsync(workspace, count);
     }
 

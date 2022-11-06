@@ -29,9 +29,8 @@ public class DeleteTest: BaseTest
     {
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _defaultWorkspace = _user.Workspaces.First();
-
+        (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        
         _timeEntry = _timeEntryDao.StartNewAsync(_user, _defaultWorkspace, DateTime.Now, TimeSpan.Zero).Result;
     }
 

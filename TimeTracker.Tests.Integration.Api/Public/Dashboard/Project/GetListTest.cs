@@ -23,8 +23,7 @@ public class GetListTest: BaseTest
     {
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _defaultWorkspace = _user.Workspaces.First();
+        (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]

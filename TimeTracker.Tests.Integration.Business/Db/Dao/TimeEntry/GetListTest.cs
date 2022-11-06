@@ -22,6 +22,7 @@ public class GetListTest: BaseTest
     
     private readonly WorkspaceEntity _workspace;
     private readonly UserEntity _user;
+    private readonly IUserDao _userDao;
 
     public GetListTest(): base()
     {
@@ -30,6 +31,7 @@ public class GetListTest: BaseTest
         _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
+        _userDao = Scope.Resolve<IUserDao>();
         
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _workspaceDao.CreateWorkspaceAsync(_user, "Test").Result;
@@ -60,7 +62,8 @@ public class GetListTest: BaseTest
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter);
 
         var user2 = await _userSeeder.CreateActivatedAsync();
-        await _timeEntrySeeder.CreateSeveralAsync(user2.Workspaces.First(), user2, 15);
+        var user2Workspace = _userDao.GetUsersWorkspaces(user2, MembershipAccessType.Owner).Result.First();
+        await _timeEntrySeeder.CreateSeveralAsync(user2Workspace, user2, 15);
         
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
         Assert.Equal(expectedCounter, actualList.TotalCount);

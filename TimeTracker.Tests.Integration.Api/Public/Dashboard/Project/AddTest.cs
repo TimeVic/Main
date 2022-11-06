@@ -22,12 +22,13 @@ public class AddTest: BaseTest
     private readonly UserEntity _user;
     private readonly IDataFactory<ProjectEntity> _projectFactory;
     private readonly string _jwtToken;
+    private WorkspaceEntity _workspace;
 
     public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _projectFactory = ServiceProvider.GetRequiredService<IDataFactory<ProjectEntity>>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]
@@ -37,7 +38,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
             Name = project.Name,
-            WorkspaceId = _user.Workspaces.First().Id
+            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -49,7 +50,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Name = project.Name,
-            WorkspaceId = _user.Workspaces.First().Id
+            WorkspaceId = _workspace.Id
         });
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
@@ -62,12 +63,12 @@ public class AddTest: BaseTest
     [Fact]
     public async Task ShouldNotAddIfIncorrectWorkspaceId()
     {
-        var user2 = await UserSeeder.CreateActivatedAsync();
+        var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
         var project = _projectFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Name = project.Name,
-            WorkspaceId = user2.Workspaces.First().Id
+            WorkspaceId = otherWorkspace.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();

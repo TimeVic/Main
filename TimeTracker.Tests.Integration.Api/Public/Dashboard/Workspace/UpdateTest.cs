@@ -32,7 +32,7 @@ public class UpdateTest: BaseTest
         _workspaceSeeder = ServiceProvider.GetRequiredService<IWorkspaceSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _workspace = _workspaceSeeder.CreateSeveralAsync(_user, 1).Result.First();
     }
 
@@ -67,7 +67,7 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldUpdateUserWithRoleManager()
     {
-        var (otherJwt, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
+        var (otherJwt, otherUser, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
             MembershipAccessType.Manager
         );
@@ -89,7 +89,7 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldNotUpdateUserWithRoleUser()
     {
-        var (otherJwt, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
+        var (otherJwt, otherUser, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
             MembershipAccessType.User
         );

@@ -1,5 +1,6 @@
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Security;
@@ -13,6 +14,7 @@ public class UserSeeder: IUserSeeder
     private readonly IDataFactory<UserEntity> _userFactory;
     private readonly IJwtAuthService _jwtAuthService;
     private readonly IWorkspaceAccessService _workspaceAccessService;
+    private readonly IUserDao _userDao;
     private readonly IDbSessionProvider _dbSessionProvider;
     private readonly IRegistrationService _registrationService;
 
@@ -21,7 +23,8 @@ public class UserSeeder: IUserSeeder
         IRegistrationService registrationService,
         IDataFactory<UserEntity> userFactory,
         IJwtAuthService jwtAuthService,
-        IWorkspaceAccessService workspaceAccessService
+        IWorkspaceAccessService workspaceAccessService,
+        IUserDao userDao
     )
     {
         _dbSessionProvider = dbSessionProvider;
@@ -29,6 +32,7 @@ public class UserSeeder: IUserSeeder
         _userFactory = userFactory;
         _jwtAuthService = jwtAuthService;
         _workspaceAccessService = workspaceAccessService;
+        _userDao = userDao;
     }
 
     public async Task<UserEntity> CreatePendingAsync()
@@ -56,16 +60,17 @@ public class UserSeeder: IUserSeeder
         return user;
     }
     
-    public async Task<(string token, UserEntity user)> CreateAuthorizedAsync(string password = "test password")
+    public async Task<(string token, UserEntity user, WorkspaceEntity defaultWorkspace)> CreateAuthorizedAsync(string password = "test password")
     {
         var user = await CreateActivatedAsync(password);
         return (
             _jwtAuthService.BuildJwt(user.Id),
-            user
+            user,
+            (await _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner)).First()
         );
     }
     
-    public async Task<(string token, UserEntity user)> CreateAuthorizedAndShareAsync(
+    public async Task<(string token, UserEntity user, WorkspaceEntity defaultWorkspace)> CreateAuthorizedAndShareAsync(
         WorkspaceEntity workspace,
         MembershipAccessType access = MembershipAccessType.User,
         ICollection<ProjectAccessModel>? projects = null
@@ -74,7 +79,8 @@ public class UserSeeder: IUserSeeder
         var user = await CreateActivatedAndShareAsync(workspace, access, projects);
         return (
             _jwtAuthService.BuildJwt(user.Id),
-            user
+            user,
+            (await _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner)).First()
         );
     }
     

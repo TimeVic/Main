@@ -23,6 +23,7 @@ public class GetReportByDayForOwnerTest: BaseTest
     private readonly IProjectSeeder _projectSeederSeeder;
     private readonly IPaymentDao _paymentDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
+    private readonly IUserDao _userDao;
 
     public GetReportByDayForOwnerTest(): base()
     {
@@ -32,9 +33,10 @@ public class GetReportByDayForOwnerTest: BaseTest
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
         _paymentDao = Scope.Resolve<IPaymentDao>();
         _reportsDao = Scope.Resolve<ISummaryReportDao>();
+        _userDao = Scope.Resolve<IUserDao>();
 
         _user = _userSeeder.CreateActivatedAsync().Result;
-        _workspace = _user.Workspaces.First();
+        _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
     }
 
     [Fact]

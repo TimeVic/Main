@@ -54,9 +54,9 @@ namespace TimeTracker.Business.Orm.Entities
             Lazy = CollectionLazy.True,
             Cascade = "none"
         )]
-        [Key(Column = "user_id")]
+        [Key(Column = "created_user_id")]
         [OneToMany(ClassType = typeof(WorkspaceEntity))]
-        public virtual ICollection<WorkspaceEntity> Workspaces { get; set; } = new List<WorkspaceEntity>();
+        public virtual ICollection<WorkspaceEntity> CreatedWorkspaces { get; set; } = new List<WorkspaceEntity>();
         
         [Bag(
             Inverse = true,

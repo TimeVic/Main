@@ -19,7 +19,6 @@ public class GetListTest: BaseTest
     
     private readonly UserEntity _user;
     private readonly string _jwtToken;
-    private readonly IWorkspaceSeeder _workspaceSeeder;
     private readonly IUserSeeder _userSeeder;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly WorkspaceEntity _workspace;
@@ -28,9 +27,7 @@ public class GetListTest: BaseTest
     {
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
-        _workspaceSeeder = ServiceProvider.GetRequiredService<IWorkspaceSeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _workspace = _user.Workspaces.First();
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]
@@ -58,12 +55,12 @@ public class GetListTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.Equal(expectedCounter, actualDto.TotalCount);
+        Assert.Equal(expectedCounter + 1, actualDto.TotalCount);
         
         Assert.All(actualDto.Items, item =>
         {
             Assert.True(item.Id > 0);
-            Assert.Equal(MembershipAccessType.User, item.Access);
+            Assert.True(item.Access == MembershipAccessType.User || item.Access == MembershipAccessType.Owner);
             Assert.True(item.User.Id > 0);
         });
     }
@@ -71,7 +68,7 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task UserWithRoleManagerShouldReceiveList()
     {
-        var (otherJwtToken, otherUser) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherJwtToken, otherUser, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
         var expectedMembership = await _workspaceAccessService.ShareAccessAsync(
             _workspace,
             otherUser,
@@ -89,14 +86,14 @@ public class GetListTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.Equal(expectedCounter + 1, actualDto.TotalCount);
+        Assert.Equal(expectedCounter + 2, actualDto.TotalCount);
         Assert.Contains(actualDto.Items, item => item.Id == expectedMembership.Id);
     }
     
     [Fact]
     public async Task UserWithRoleUserShouldNotReceiveList()
     {
-        var (otherJwtToken, otherUser) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherJwtToken, otherUser, workspace) = await UserSeeder.CreateAuthorizedAsync();
         var expectedMembership = await _workspaceAccessService.ShareAccessAsync(
             _workspace,
             otherUser,

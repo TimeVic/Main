@@ -29,16 +29,7 @@ public class ClientDao: IClientDao
         await _sessionProvider.CurrentSession.SaveAsync(entity);
         return entity;
     }
-    
-    public async Task<ICollection<ClientEntity>> GetByUser(UserEntity user)
-    {
-        WorkspaceEntity workspaceAlias = null;
-        var query = _sessionProvider.CurrentSession.QueryOver<ClientEntity>()
-            .Inner.JoinAlias(item => item.Workspace, () => workspaceAlias)
-            .And(() => workspaceAlias.Owner.Id == user.Id);
-        return await query.ListAsync();
-    }
-    
+
     public async Task<ClientEntity?> GetById(long? clientId, WorkspaceEntity? workspace = null)
     {
         if (clientId == null)
@@ -67,21 +58,5 @@ public class ClientDao: IClientDao
             items,
             await query.CountAsync()
         );
-    }
-    
-    public async Task<bool> HasAccessAsync(UserEntity user, ClientEntity? entity)
-    {
-        if (entity == null)
-        {
-            return false;
-        }
-
-        ClientEntity clientEntity = null;
-        var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<WorkspaceEntity>()
-            .Inner.JoinAlias(item => item.Clients, () => clientEntity)
-            .Where(item => item.Owner.Id == user.Id)
-            .And(() => clientEntity.Id == entity.Id)
-            .RowCountAsync();
-        return itemsWithAccessCount > 0;
     }
 }
