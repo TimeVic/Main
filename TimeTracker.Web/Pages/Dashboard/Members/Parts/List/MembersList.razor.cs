@@ -7,6 +7,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembers
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Shared.Components.Form;
+using TimeTracker.Web.Store.Project;
 using TimeTracker.Web.Store.WorkspaceMemberships;
 
 namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
@@ -16,7 +17,9 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
         [Inject] 
         private IState<WorkspaceMembershipsState> _state { get; set; }
     
-        private RadzenDataGrid<WorkspaceMembershipDto> _grid;
+        [Inject]
+        public IState<ProjectState> _projectState { get; set; }
+        
         private IEnumerable<ProjectDto> _selectedProjects = new List<ProjectDto>();
         private ICollection<MembershipAccessType> _allowedAccessLevels = new List<MembershipAccessType>()
         {
@@ -30,6 +33,19 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
             Dispatcher.Dispatch(new LoadListAction(true));
         }
 
+        private string GetProjectNames(WorkspaceMembershipDto membershipDto)
+        {
+            return string.Join(
+                ", ",
+                membershipDto.ProjectAccesses.Select(
+                    item => _projectState.Value.List.FirstOrDefault(project => project.Id == item.Project.Id)
+                )
+                    .Where(item => item != null)
+                    .Select(item => item.Name)
+                    .ToList()
+            );
+        }
+        
         private async Task OnDeleteItemAsync(WorkspaceMembershipDto item)
         {
             var isOk = await DialogService.Confirm(
@@ -48,31 +64,24 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
             await Task.CompletedTask;
         }
         
-        private async Task EditRow(WorkspaceMembershipDto item)
+        private async Task ShowEditModal(WorkspaceMembershipDto item)
         {
-            await _grid.EditRow(item);
+            await DialogService.OpenAsync<MemberAccessForm>(
+                "Change access",
+                parameters: new Dictionary<string, object>()
+                {
+                    { "WorkspaceMembership", item }
+                },
+                options: new DialogOptions
+                {
+                    Width = "600px",
+                    Height = "400px",
+                    Resizable = true, 
+                    Draggable = false
+                }
+            );
         }
 
-        private async Task OnClickSaveRow(WorkspaceMembershipDto item)
-        {
-            await _grid.UpdateRow(item);
-        }
-
-        private void OnClickCancelEditMode(WorkspaceMembershipDto item)
-        {
-            _grid.CancelEditRow(item);
-        }
-    
-        private async Task OnUpdateRow(WorkspaceMembershipDto item)
-        {
-            Dispatcher.Dispatch(new UpdateMemberAction()
-            {
-                MembershipId = item.Id,
-                Access = item.Access,
-                Projects = _selectedProjects.ToList()
-            });
-        }
-        
         private async Task ShowAddModal()
         {
             await DialogService.OpenAsync<AddMemberForm>(

@@ -245,4 +245,29 @@ public class UpdateTest: BaseTest
         Assert.True(actualMembership.Id > 0);
         Assert.Equal(_otherUser.Id, actualMembership.User.Id);
     }
+    
+    [Fact]
+    public async Task ShouldNotDuplicateAccessItems()
+    {
+        var expectAccess = MembershipAccessType.Manager;
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            MembershipId = _membership.Id,
+            Access = expectAccess,
+            ProjectsAccess = _projects
+                .Concat(_projects)
+                .Select(item =>
+                {
+                    return new MembershipProjectAccessRequest()
+                    {
+                        ProjectId = item.Id,
+                        HasAccess = true
+                    };
+                }).ToArray()
+        });
+        response.EnsureSuccessStatusCode();
+    
+        var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
+        Assert.Equal(3, actualMembership.ProjectAccesses.Count);
+    }
 }

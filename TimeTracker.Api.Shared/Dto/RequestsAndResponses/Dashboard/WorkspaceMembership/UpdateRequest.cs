@@ -2,7 +2,6 @@
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants;
-using TimeTracker.Business.Common.Mvc.Attribute.Constant;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership
@@ -18,6 +17,24 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMem
 
         [Required]
         [ValidateListModels]
-        public MembershipProjectAccessRequest[] ProjectsAccess { get; set; } = { };
+        public ICollection<MembershipProjectAccessRequest> ProjectsAccess { get; set; } = new List<MembershipProjectAccessRequest>();
+
+        public void Fill(WorkspaceMembershipDto membershipDto, ICollection<ProjectDto> projects)
+        {
+            MembershipId = membershipDto.Id;
+            Access = membershipDto.Access;
+            ProjectsAccess = projects.Select(item =>
+            {
+                var accessItem = membershipDto.ProjectAccesses.FirstOrDefault(
+                    item2 => item2.Project.Id == item.Id
+                );
+                return new MembershipProjectAccessRequest()
+                {
+                    HourlyRate = accessItem?.HourlyRate,
+                    ProjectId = item.Id,
+                    HasAccess = accessItem != null
+                };
+            }).ToList();
+        }
     }
 }

@@ -33,12 +33,12 @@ public class UpdateEffect: Effect<UpdateMemberAction>
     {
         try
         {
-            await _apiService.WorkspaceMembershipUpdateAsync(
-                action.MembershipId,
-                action.Access,
-                new List<MembershipProjectAccessRequest>()
-                // action.Projects?.Select(item => item.Id).ToArray()
-            );
+            // await _apiService.WorkspaceMembershipUpdateAsync(
+            //     action.MembershipId,
+            //     action.Access,
+            //     new List<MembershipProjectAccessRequest>()
+            //     // action.Projects?.Select(item => item.Id).ToArray()
+            // );
             dispatcher.Dispatch(new LoadListAction(true));
             
             _notificationService.Notify(new NotificationMessage()

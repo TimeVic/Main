@@ -46,7 +46,7 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         membership.ProjectAccesses.Clear();
         if (projectsAccess.Any())
         {
-            foreach (var projectAccess in projectsAccess)
+            foreach (var projectAccess in projectsAccess.DistinctBy(item => item.Project.Id))
             {
                 var accessEntity = new WorkspaceMembershipProjectAccessEntity()
                 {

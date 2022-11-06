@@ -80,9 +80,7 @@ namespace TimeTracker.Web.Services.Http
         Task<WorkspaceMembershipDto> WorkspaceMembershipAddAsync(long workspaceId, string email);
 
         Task<WorkspaceMembershipDto> WorkspaceMembershipUpdateAsync(
-            long membershipId,
-            MembershipAccessType access,
-            ICollection<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.MembershipProjectAccessRequest> projectAccesses
+            TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.UpdateRequest request
         );
 
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.GetListResponse>

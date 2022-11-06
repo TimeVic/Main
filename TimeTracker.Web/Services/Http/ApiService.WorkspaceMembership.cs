@@ -26,20 +26,11 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
-        public async Task<WorkspaceMembershipDto> WorkspaceMembershipUpdateAsync(
-            long membershipId,
-            MembershipAccessType access,
-            ICollection<MembershipProjectAccessRequest> projectAccesses
-        )
+        public async Task<WorkspaceMembershipDto> WorkspaceMembershipUpdateAsync(UpdateRequest request)
         {
             var response = await PostAuthorizedAsync<WorkspaceMembershipDto>(
                 ApiUrl.WorkspaceMembershipUpdate,
-                new UpdateRequest()
-                {
-                    MembershipId = membershipId,
-                    Access = access,
-                    ProjectsAccess = projectAccesses.ToArray()
-                }
+                request
             );
             if (response == null)
             {
