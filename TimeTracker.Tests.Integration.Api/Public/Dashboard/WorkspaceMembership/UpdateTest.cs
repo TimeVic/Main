@@ -69,7 +69,7 @@ public class UpdateTest: BaseTest
         {
             MembershipId = _membership.Id,
             Access = MembershipAccessType.Manager,
-            ProjectIds = null
+            ProjectsAccess = {}
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -83,7 +83,14 @@ public class UpdateTest: BaseTest
         {
             MembershipId = _membership.Id,
             Access = expectAccess,
-            ProjectIds = _projects.Select(item => item.Id).ToArray()
+            ProjectsAccess = _projects.Select(item =>
+            {
+                return new MembershipProjectAccessRequest()
+                {
+                    ProjectId = item.Id,
+                    HasAccess = true
+                };
+            }).ToArray()
         });
         response.EnsureSuccessStatusCode();
 
@@ -92,33 +99,82 @@ public class UpdateTest: BaseTest
         Assert.NotNull(actualMembership.User);
         Assert.Equal(expectAccess, actualMembership.Access);
         Assert.True(actualMembership.User.Id > 0);
-        Assert.Equal(3, actualMembership.Projects.Count);
+        Assert.Equal(3, actualMembership.ProjectAccesses.Count);
+        
+        Assert.All(actualMembership.ProjectAccesses, item =>
+        {
+            Assert.Null(item.HourlyRate);
+            Assert.NotNull(item.Project);
+            Assert.True(item.Project.Id > 0);
+        });
+    }
+    
+    [Fact]
+    public async Task ShouldUpdateSetProjectHourlyRatesForRoleRoleManager()
+    {
+        var expectAccess = MembershipAccessType.Manager;
+        var expectHourlyRate = 99.9m;
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            MembershipId = _membership.Id,
+            Access = expectAccess,
+            ProjectsAccess = _projects.Select(item =>
+            {
+                return new MembershipProjectAccessRequest()
+                {
+                    ProjectId = item.Id,
+                    HasAccess = true,
+                    HourlyRate = expectHourlyRate
+                };
+            }).ToArray()
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
+        Assert.True(actualMembership.Id > 0);
+        Assert.NotNull(actualMembership.User);
+        Assert.Equal(expectAccess, actualMembership.Access);
+        Assert.True(actualMembership.User.Id > 0);
+        Assert.Equal(3, actualMembership.ProjectAccesses.Count);
+        Assert.All(actualMembership.ProjectAccesses, item =>
+        {
+            Assert.NotNull(item.HourlyRate);
+            Assert.Equal(expectHourlyRate, item.HourlyRate);
+        });
     }
     
     [Fact]
     public async Task ShouldUpdateToUserRole()
     {
         var expectAccess = MembershipAccessType.User;
-
+    
         await CommitDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             MembershipId = _membership.Id,
             Access = expectAccess,
-            ProjectIds = _projects.Select(item => item.Id).ToArray()
+            ProjectsAccess = _projects.Select(item =>
+            {
+                return new MembershipProjectAccessRequest()
+                {
+                    ProjectId = item.Id,
+                    HasAccess = true
+                };
+            }).ToArray()
         });
         response.EnsureSuccessStatusCode();
-
+    
         var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
         Assert.True(actualMembership.Id > 0);
         Assert.NotNull(actualMembership.User);
         Assert.Equal(expectAccess, actualMembership.Access);
         Assert.True(actualMembership.User.Id > 0);
-        Assert.Equal(3, actualMembership.Projects.Count);
-        Assert.All(actualMembership.Projects, item =>
+        Assert.Equal(3, actualMembership.ProjectAccesses.Count);
+        Assert.All(actualMembership.ProjectAccesses, item =>
         {
-            Assert.NotEmpty(item.Name);
-            Assert.True(item.Id > 0);
+            Assert.NotEmpty(item.Project.Name);
+            Assert.True(item.Project.Id > 0);
         });
     }
     
@@ -148,18 +204,22 @@ public class UpdateTest: BaseTest
         {
             MembershipId = _membership.Id,
             Access = expectAccess,
-            ProjectIds = _projects.Select(item => item.Id)
-                .Concat(new List<long>()
+            ProjectsAccess = _projects
+                .Concat(new List<ProjectEntity>()
                 {
-                    anotherProject.Id,
-                    anotherProject2.Id
+                    anotherProject,
+                    anotherProject2
                 })
-                .ToArray()
+                .Select(item => new MembershipProjectAccessRequest()
+                {
+                    ProjectId = item.Id,
+                    HasAccess = true
+                }).ToArray()
         });
         response.EnsureSuccessStatusCode();
-
+    
         var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
-        Assert.Equal(3, actualMembership.Projects.Count);
+        Assert.Equal(3, actualMembership.ProjectAccesses.Count);
     }
     
     [Fact]
@@ -170,10 +230,17 @@ public class UpdateTest: BaseTest
         {
             MembershipId = _membership.Id,
             Access = expectAccess,
-            ProjectIds = _projects.Select(item => item.Id).ToArray()
+            ProjectsAccess = _projects.Select(item =>
+            {
+                return new MembershipProjectAccessRequest()
+                {
+                    ProjectId = item.Id,
+                    HasAccess = true
+                };
+            }).ToArray()
         });
         response.EnsureSuccessStatusCode();
-
+    
         var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
         Assert.True(actualMembership.Id > 0);
         Assert.Equal(_otherUser.Id, actualMembership.User.Id);

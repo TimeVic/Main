@@ -50,17 +50,29 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
             }
 
             var projects = new List<ProjectEntity>();
-            if (request.ProjectIds != null)
+            if (request.ProjectsAccess.Any())
             {
                 projects = membership.Workspace.Projects.Where(
-                    item => request.ProjectIds.Contains(item.Id)
+                    item => request.ProjectsAccess.Any(
+                        projectAccessDto => projectAccessDto.ProjectId == item.Id && projectAccessDto.HasAccess
+                    )
                 ).ToList();    
             }
             var workspaceMembership = await _workspaceAccessService.ShareAccessAsync(
                 membership.Workspace,
                 membership.User,
                 request.Access,
-                projects.Select(item => new ProjectAccessModel() { Project = item }).ToList()
+                projects.Select(item =>
+                {
+                    var providedAccess = request.ProjectsAccess.FirstOrDefault(
+                        projectAccess => projectAccess.ProjectId == item.Id && projectAccess.HasAccess
+                    );
+                    return new ProjectAccessModel()
+                    {
+                        Project = providedAccess != null ? item : null,
+                        HourlyRate = providedAccess?.HourlyRate
+                    };
+                }).ToList()
             );
             return _mapper.Map<WorkspaceMembershipDto>(workspaceMembership);
         }

@@ -1,4 +1,5 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Model.WorkspaceMembership;
 using TimeTracker.Business.Common.Constants;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
@@ -11,5 +12,5 @@ public class WorkspaceMembershipDto : IResponse
     
     public UserDto User { get; set; }
 
-    public ICollection<ProjectDto> Projects { get; set; } = new List<ProjectDto>();
+    public ICollection<WorkspaceMembershipProjectAccessDto> ProjectAccesses { get; set; } = new List<WorkspaceMembershipProjectAccessDto>();
 }

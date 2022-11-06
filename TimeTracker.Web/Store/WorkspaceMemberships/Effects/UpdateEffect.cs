@@ -36,7 +36,8 @@ public class UpdateEffect: Effect<UpdateMemberAction>
             await _apiService.WorkspaceMembershipUpdateAsync(
                 action.MembershipId,
                 action.Access,
-                action.Projects?.Select(item => item.Id).ToArray()
+                new List<MembershipProjectAccessRequest>()
+                // action.Projects?.Select(item => item.Id).ToArray()
             );
             dispatcher.Dispatch(new LoadListAction(true));
             

@@ -5,10 +5,10 @@ using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 
 namespace TimeTracker.Api.Profiles;
 
-public class WorkspaceMemberProfile : Profile
+public class WorkspaceMembershipProjectAccessProfile : Profile
 {
-    public WorkspaceMemberProfile()
+    public WorkspaceMembershipProjectAccessProfile()
     {
-        CreateMap<WorkspaceMembershipEntity, WorkspaceMembershipDto>();
+        CreateMap<WorkspaceMembershipProjectAccessEntity, WorkspaceMembershipProjectAccessDto>();
     }
 }
