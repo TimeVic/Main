@@ -266,6 +266,22 @@ public class UpdateTest: BaseTest
                 }).ToArray()
         });
         response.EnsureSuccessStatusCode();
+        response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            MembershipId = _membership.Id,
+            Access = expectAccess,
+            ProjectsAccess = _projects
+                .Concat(_projects)
+                .Select(item =>
+                {
+                    return new MembershipProjectAccessRequest()
+                    {
+                        ProjectId = item.Id,
+                        HasAccess = true
+                    };
+                }).ToArray()
+        });
+        response.EnsureSuccessStatusCode();
     
         var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
         Assert.Equal(3, actualMembership.ProjectAccesses.Count);
