@@ -11,6 +11,6 @@ public class MembershipProjectAccessRequest
 
     [IsPositive]
     public decimal? HourlyRate { get; set; }
-
+    
     public bool HasAccess { get; set; }
 }

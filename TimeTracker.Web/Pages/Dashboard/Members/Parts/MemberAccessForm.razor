@@ -1,0 +1,74 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership
+@using TimeTracker.Business.Common.Constants
+@using Microsoft.AspNetCore.Components
+@inherits BaseComponent
+
+<RadzenTemplateForm TItem="UpdateRequest" Data="@model" Submit="HandleSubmit">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="row">
+        <div class="col-md-4">
+            <RadzenLabel
+                Text="Workspace access:"
+                TextStyle="@TextStyle.Subtitle2"/>
+        </div>
+        <div class="col-md-8">
+            <EnumDropDown
+                TItem="MembershipAccessType"
+                AllowClear="false"
+                AllowedValues="_allowedAccessLevels"
+                @bind-Value="model.Access"
+                class="w-100"
+                Name="Access level"/>
+        </div>
+    </div>
+    <h3 class="mt-3">Access to projects</h3>
+    @foreach (var accessItem in model.ProjectsAccess)
+    {
+        <RadzenCard class="pb-4 mt-2">
+            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">
+                @GetProjectName(accessItem.ProjectId)
+            </RadzenText>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenLabel
+                        Text="Default hourly rate"
+                        TextStyle="@TextStyle.Subtitle2"/>
+                </div>
+                <div class="col-md-4">
+                    <RadzenNumeric
+                        @bind-Value="@accessItem.HourlyRate"
+                        Class="w-100"/>
+                </div>
+                <div class="col-md-4">
+                    <RadzenCheckBox
+                        TValue="bool"
+                        Name="HasAccessCheckBox"
+                        @bind-Value="@accessItem.HasAccess"/>
+                    <RadzenLabel
+                        Component="HasAccessCheckBox"
+                        Style="margin-left: 8px; vertical-align: middle;"
+                        Text="Has access"/>
+                </div>
+            </div>
+        </RadzenCard>
+    }
+
+    <div class="row justify-content-center">
+        <div class="col-md-12 d-flex align-items-end justify-content-center mt-4">
+            <RadzenButton
+                ButtonType="ButtonType.Button"
+                Disabled="@_isLoading"
+                ButtonStyle="ButtonStyle.Secondary"
+                Click="CloseModal"
+                Text="Cancel"/>
+            <RadzenButton
+                ButtonType="ButtonType.Submit"
+                Disabled="@_isLoading"
+                class="ml-3"
+                Text="Save"/>
+        </div>
+    </div>
+</RadzenTemplateForm>
