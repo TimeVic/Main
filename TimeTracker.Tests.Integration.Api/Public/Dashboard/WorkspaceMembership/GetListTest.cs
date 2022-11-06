@@ -55,12 +55,12 @@ public class GetListTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.Equal(expectedCounter, actualDto.TotalCount);
+        Assert.Equal(expectedCounter + 1, actualDto.TotalCount);
         
         Assert.All(actualDto.Items, item =>
         {
             Assert.True(item.Id > 0);
-            Assert.Equal(MembershipAccessType.User, item.Access);
+            Assert.True(item.Access == MembershipAccessType.User || item.Access == MembershipAccessType.Owner);
             Assert.True(item.User.Id > 0);
         });
     }
@@ -86,7 +86,7 @@ public class GetListTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.Equal(expectedCounter + 1, actualDto.TotalCount);
+        Assert.Equal(expectedCounter + 2, actualDto.TotalCount);
         Assert.Contains(actualDto.Items, item => item.Id == expectedMembership.Id);
     }
     
