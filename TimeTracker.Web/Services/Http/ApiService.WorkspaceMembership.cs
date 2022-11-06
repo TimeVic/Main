@@ -29,7 +29,7 @@ namespace TimeTracker.Web.Services.Http
         public async Task<WorkspaceMembershipDto> WorkspaceMembershipUpdateAsync(
             long membershipId,
             MembershipAccessType access,
-            ICollection<long>? projectIds
+            ICollection<MembershipProjectAccessRequest> projectAccesses
         )
         {
             var response = await PostAuthorizedAsync<WorkspaceMembershipDto>(
@@ -38,7 +38,7 @@ namespace TimeTracker.Web.Services.Http
                 {
                     MembershipId = membershipId,
                     Access = access,
-                    ProjectIds = projectIds?.ToArray()
+                    ProjectsAccess = projectAccesses.ToArray()
                 }
             );
             if (response == null)

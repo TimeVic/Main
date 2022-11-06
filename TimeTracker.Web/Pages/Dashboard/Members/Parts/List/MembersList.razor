@@ -54,22 +54,22 @@
                         }
                         else
                         {
-                            if (item.Projects?.Count == 0)
-                            {
-                                <text>Project not selected</text>
-                            }
-                            else
-                            {
-                                <ProjectsMultipleDropDown
-                                    Disabled="true"
-                                    Value="@(item.Projects?.Select(item => item.Id) ?? new List<long>())"/>
-                            }
+                            @* if (item.Projects?.Count == 0) *@
+                            @* { *@
+                            @*     <text>Project not selected</text> *@
+                            @* } *@
+                            @* else *@
+                            @* { *@
+                            @*     <ProjectsMultipleDropDown *@
+                            @*         Disabled="true" *@
+                            @*         Value="@(item.Projects?.Select(item => item.Id) ?? new List<long>())"/> *@
+                            @* } *@
                         }
                     </Template>
                     <EditTemplate Context="item">
-                        <ProjectsMultipleDropDown
-                            Value="@(item.Projects?.Select(item => item.Id) ?? new List<long>())"
-                            SelectedItemsChanged="OnProjectsChanged"/>
+                        @* <ProjectsMultipleDropDown *@
+                        @*     Value="@(item.Projects?.Select(item => item.Id) ?? new List<long>())" *@
+                        @*     SelectedItemsChanged="OnProjectsChanged"/> *@
                     </EditTemplate>
                 </RadzenDataGridColumn>
                 <RadzenDataGridColumn
