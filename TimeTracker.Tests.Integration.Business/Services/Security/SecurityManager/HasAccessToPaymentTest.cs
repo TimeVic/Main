@@ -20,6 +20,7 @@ public class HasAccessToPaymentTest: BaseTest
     private readonly IProjectDao _projectDao;
     private readonly IClientDao _clientDao;
     private readonly IPaymentSeeder _paymentSeeder;
+    private readonly IUserDao _userDao;
 
     public HasAccessToPaymentTest(): base()
     {
@@ -30,9 +31,10 @@ public class HasAccessToPaymentTest: BaseTest
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         _securityManager = Scope.Resolve<ISecurityManager>();
+        _userDao = Scope.Resolve<IUserDao>();
 
         _owner = _userSeeder.CreateActivatedAsync().Result;
-        _ownWorkspace = _owner.Workspaces.First();
+        _ownWorkspace = _userDao.GetUsersWorkspaces(_owner, MembershipAccessType.Owner).Result.First();
         // Clear queue
         _queueDao.CompleteAllPending().Wait();
     }
@@ -42,7 +44,8 @@ public class HasAccessToPaymentTest: BaseTest
     [InlineData(AccessLevel.Write)]
     public async Task OnlyPaymentOwnerHasAccess(AccessLevel accessLevel)
     {
-        Assert.True(_ownWorkspace.IsOwner(_owner));
+        var accessType = await _workspaceAccessService.GetAccessTypeAsync(_owner, _ownWorkspace);
+        Assert.Equal(MembershipAccessType.Owner, accessType);
         var payment = (await _paymentSeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
         var hasAccess = await _securityManager.HasAccess(accessLevel, _owner, payment);
         Assert.True(hasAccess);

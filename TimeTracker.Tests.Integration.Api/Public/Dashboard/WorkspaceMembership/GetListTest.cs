@@ -19,7 +19,6 @@ public class GetListTest: BaseTest
     
     private readonly UserEntity _user;
     private readonly string _jwtToken;
-    private readonly IWorkspaceSeeder _workspaceSeeder;
     private readonly IUserSeeder _userSeeder;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly WorkspaceEntity _workspace;
@@ -28,9 +27,7 @@ public class GetListTest: BaseTest
     {
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
-        _workspaceSeeder = ServiceProvider.GetRequiredService<IWorkspaceSeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _workspace = _user.Workspaces.First();
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]
@@ -71,7 +68,7 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task UserWithRoleManagerShouldReceiveList()
     {
-        var (otherJwtToken, otherUser) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherJwtToken, otherUser, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
         var expectedMembership = await _workspaceAccessService.ShareAccessAsync(
             _workspace,
             otherUser,
@@ -96,7 +93,7 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task UserWithRoleUserShouldNotReceiveList()
     {
-        var (otherJwtToken, otherUser) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherJwtToken, otherUser, workspace) = await UserSeeder.CreateAuthorizedAsync();
         var expectedMembership = await _workspaceAccessService.ShareAccessAsync(
             _workspace,
             otherUser,

@@ -34,8 +34,7 @@ public class ForOwnerTest: BaseTest
         _paymentDao = ServiceProvider.GetRequiredService<IPaymentDao>();
         _timeEntryReportDao = ServiceProvider.GetRequiredService<ITimeEntryReportsDao>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _workspace = _user.Workspaces.First();
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         
         _project = _projectSeeder.CreateAsync(_workspace).Result;
         _client = _project.Client;

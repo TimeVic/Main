@@ -52,7 +52,13 @@ namespace TimeTracker.Migrations.Code
                                     .OrderBy(f => f.Name);
                 foreach (FileInfo file in files)
                 {
-                    Execute.Script(Path + file.Name);
+                    var filePath = Path + file.Name;
+                    if (!File.Exists(filePath))
+                    {
+                        throw new Exception($"File not found: {filePath}");
+                    }
+
+                    Execute.Script(filePath);
                 }
             }
             catch (Exception e)

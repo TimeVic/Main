@@ -1,6 +1,8 @@
 using Autofac;
 using Microsoft.Extensions.Configuration;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Integrations;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
@@ -24,6 +26,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
     private readonly IWorkspaceSettingsDao _workspaceSettingsDao;
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
+    private readonly IUserDao _userDao;
 
     public ProcessClickUpSendingContextTest(): base()
     {
@@ -32,6 +35,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _clickUpClient = Scope.Resolve<IClickUpClient>() as ClickUpClientMock;
         _workspaceSettingsDao = Scope.Resolve<IWorkspaceSettingsDao>();
+        _userDao = Scope.Resolve<IUserDao>();
         
         var configuration = Scope.Resolve<IConfiguration>();
         _securityKey = configuration.GetValue<string>("Integration:ClickUp:SecurityKey");
@@ -39,7 +43,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
         _taskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
         
         _user = _userSeeder.CreateActivatedAsync().Result;
-        _workspace = _user.Workspaces.First();
+        _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
         _timeEntry = _timeEntrySeeder.CreateSeveralAsync(_workspace, _user).Result.First();
         _timeEntry.TaskId = _taskId;
         

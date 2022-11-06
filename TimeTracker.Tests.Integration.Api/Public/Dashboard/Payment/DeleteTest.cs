@@ -25,12 +25,13 @@ public class DeleteTest: BaseTest
     private readonly IPaymentSeeder _paymentSeeder;
     private readonly PaymentEntity _payment;
     private readonly IPaymentDao _paymentDao;
+    private WorkspaceEntity _workspace;
 
     public DeleteTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _paymentDao = ServiceProvider.GetRequiredService<IPaymentDao>();
         _paymentSeeder = ServiceProvider.GetRequiredService<IPaymentSeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _payment = _paymentSeeder.CreateSeveralAsync(_user, 1).Result.First();
     }
@@ -61,7 +62,7 @@ public class DeleteTest: BaseTest
     [Fact]
     public async Task ShouldNotUpdateIfHasNoAccess()
     {
-        var (otherJwtToken, otherUser) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherJwtToken, otherUser, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
         var response = await PostRequestAsync(Url, otherJwtToken, new DeleteRequest()
         {
             PaymentId = _payment.Id

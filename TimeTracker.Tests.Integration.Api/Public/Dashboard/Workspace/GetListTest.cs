@@ -22,13 +22,14 @@ public class GetListTest: BaseTest
     private readonly IWorkspaceSeeder _workspaceSeeder;
     private readonly IUserSeeder _userSeeder;
     private readonly IWorkspaceAccessService _workspaceAccessService;
+    private WorkspaceEntity _workspace;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _workspaceSeeder = ServiceProvider.GetRequiredService<IWorkspaceSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]
@@ -54,9 +55,6 @@ public class GetListTest: BaseTest
         {
             Assert.True(item.Id > 0);
             Assert.NotNull(item.Name);
-            Assert.NotNull(item.Owner);
-            Assert.True(item.Owner.Id > 0);
-            Assert.NotEmpty(item.Owner.Email);
         });
     }
     
@@ -64,8 +62,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveListWithAccessToWorkspace()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var defaultWorkspace = _user.Workspaces.First();
-        
+
         var expectWorkspaces = await _workspaceSeeder.CreateSeveralAsync(otherUser, 2);
         await CommitDbChanges();
         
@@ -91,7 +88,7 @@ public class GetListTest: BaseTest
 
         Assert.Contains(actualDto.Items, item =>
         {
-            return item.Id == defaultWorkspace.Id && item.CurrentUserAccess == MembershipAccessType.Owner;
+            return item.Id == _workspace.Id && item.CurrentUserAccess == MembershipAccessType.Owner;
         });
         Assert.Contains(actualDto.Items, item =>
         {

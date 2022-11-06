@@ -1,5 +1,6 @@
 using Autofac;
 using NHibernate.Linq;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Integrations;
 using TimeTracker.Business.Orm.Entities;
@@ -16,15 +17,17 @@ public class SetTest: BaseTest
     private readonly WorkspaceEntity _workspace;
     private readonly IWorkspaceSettingsDao _workspaceSettingsDao;
     private readonly IDataFactory<WorkspaceSettingsClickUpEntity> _factory;
+    private readonly IUserDao _userDao;
 
     public SetTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _factory = Scope.Resolve<IDataFactory<WorkspaceSettingsClickUpEntity>>();
         _workspaceSettingsDao = Scope.Resolve<IWorkspaceSettingsDao>();
+        _userDao = Scope.Resolve<IUserDao>();
 
         _user = _userSeeder.CreateActivatedAsync().Result;
-        _workspace = _user.Workspaces.First();
+        _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
     }
 
     [Fact]

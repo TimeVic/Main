@@ -26,8 +26,7 @@ public class GetListTest: BaseTest
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _defaultWorkspace = _user.Workspaces.First();
+        (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]
@@ -71,18 +70,17 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task ShouldReceiveOnlyForCurrentUserList()
     {
-        var workspace = _user.Workspaces.First();
         var expectedCounter = 15;
         await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, expectedCounter);
         await _timeEntryDao.StartNewAsync(
             _user,
-            workspace,
+            _defaultWorkspace,
             DateTime.UtcNow, 
             TimeSpan.FromSeconds(1)
         );
      
-        var otherUser = await _userSeeder.CreateActivatedAndShareAsync(workspace);
-        await _timeEntrySeeder.CreateSeveralAsync(workspace, otherUser, expectedCounter);
+        var otherUser = await _userSeeder.CreateActivatedAndShareAsync(_defaultWorkspace);
+        await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, otherUser, expectedCounter);
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
@@ -94,7 +92,7 @@ public class GetListTest: BaseTest
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(expectedCounter + 1, actualDto.List.TotalCount);
 
-        var activeEntry = await _timeEntryDao.GetActiveEntryAsync(workspace, _user);
+        var activeEntry = await _timeEntryDao.GetActiveEntryAsync(_defaultWorkspace, _user);
         Assert.Equal(activeEntry.Id, actualDto.ActiveTimeEntry.Id);
     }
     

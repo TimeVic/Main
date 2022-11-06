@@ -31,16 +31,7 @@ public class ProjectDao: IProjectDao
         await _sessionProvider.CurrentSession.SaveAsync(project);
         return project;
     }
-    
-    public async Task<ICollection<ProjectEntity>> GetByUser(UserEntity user)
-    {
-        WorkspaceEntity workspaceAlias = null;
-        var query = _sessionProvider.CurrentSession.QueryOver<ProjectEntity>()
-            .Inner.JoinAlias(item => item.Workspace, () => workspaceAlias)
-            .And(() => workspaceAlias.Owner.Id == user.Id);
-        return await query.ListAsync();
-    }
-    
+
     public async Task<ProjectEntity?> GetById(long? projectId)
     {
         if (projectId == null)
@@ -86,21 +77,5 @@ public class ProjectDao: IProjectDao
             .ToListAsync();
         
         return new ListDto<ProjectEntity>(projects, projects.Count);
-    }
-    
-    public async Task<bool> HasAccessAsync(UserEntity user, ProjectEntity? entity)
-    {
-        if (entity == null)
-        {
-            return false;
-        }
-
-        ProjectEntity projectAlias = null;
-        var itemsWithAccessCount = await _sessionProvider.CurrentSession.QueryOver<WorkspaceEntity>()
-            .Inner.JoinAlias(item => item.Projects, () => projectAlias)
-            .Where(item => item.Owner.Id == user.Id)
-            .And(() => projectAlias.Id == entity.Id)
-            .RowCountAsync();
-        return itemsWithAccessCount > 0;
     }
 }

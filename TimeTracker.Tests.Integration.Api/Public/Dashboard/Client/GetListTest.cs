@@ -21,8 +21,7 @@ public class GetListTest: BaseTest
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _clientSeeder = ServiceProvider.GetRequiredService<IClientSeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _defaultWorkspace = _user.Workspaces.First();
+        (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]

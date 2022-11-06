@@ -18,15 +18,17 @@ public class RemoveAccessTest: BaseTest
     private readonly WorkspaceEntity _workspace;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IProjectDao _projectDao;
+    private readonly IUserDao _userDao;
 
     public RemoveAccessTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _projectDao = Scope.Resolve<IProjectDao>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
+        _userDao = Scope.Resolve<IUserDao>();
 
         _user = _userSeeder.CreateActivatedAsync().Result;
-        _workspace = _user.Workspaces.First();
+        _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
         // Clear queue
         _queueDao.CompleteAllPending().Wait();
     }

@@ -21,6 +21,7 @@ public class HasAccessToWorkspaceTest: BaseTest
     private readonly IProjectDao _projectDao;
     private readonly IClientDao _clientDao;
     private readonly IWorkspaceDao _workspaceDao;
+    private IUserDao _userDao;
 
     public HasAccessToWorkspaceTest(): base()
     {
@@ -31,9 +32,10 @@ public class HasAccessToWorkspaceTest: BaseTest
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         _securityManager = Scope.Resolve<ISecurityManager>();
+        _userDao = Scope.Resolve<IUserDao>();
 
         _owner = _userSeeder.CreateActivatedAsync().Result;
-        _ownWorkspace = _owner.Workspaces.First();
+        _ownWorkspace = _userDao.GetUsersWorkspaces(_owner, MembershipAccessType.Owner).Result.First();
         // Clear queue
         _queueDao.CompleteAllPending().Wait();
     }
@@ -43,7 +45,8 @@ public class HasAccessToWorkspaceTest: BaseTest
     [InlineData(AccessLevel.Write)]
     public async Task ShouldHasAccessIfWorkspaceOwner(AccessLevel accessLevel)
     {
-        Assert.True(_ownWorkspace.IsOwner(_owner));
+        var accessType = await _workspaceAccessService.GetAccessTypeAsync(_owner, _ownWorkspace);
+        Assert.Equal(MembershipAccessType.Owner, accessType);
         var hasAccess = await _securityManager.HasAccess(accessLevel, _owner, _ownWorkspace);
         Assert.True(hasAccess);
     }

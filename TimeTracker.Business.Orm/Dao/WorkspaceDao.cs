@@ -28,12 +28,12 @@ public class WorkspaceDao: IWorkspaceDao
         var workspace = new WorkspaceEntity()
         {
             Name = name,
-            Owner = user,
+            CreatedUser = user,
             IsDefault = isDefault,
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow
         };
-        user.Workspaces.Add(workspace);
+        user.CreatedWorkspaces.Add(workspace);
         await _sessionProvider.CurrentSession.SaveAsync(workspace);
         return workspace;
     }

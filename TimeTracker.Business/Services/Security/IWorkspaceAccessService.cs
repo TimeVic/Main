@@ -16,13 +16,6 @@ public interface IWorkspaceAccessService: IDomainService
         ICollection<ProjectAccessModel>? projectsAccess = null
     );
 
-    Task<WorkspaceMembershipEntity> ShareAccessAsync(
-        WorkspaceEntity workspace,
-        string email,
-        MembershipAccessType access,
-        ICollection<ProjectAccessModel>? projectsAccess = null
-    );
-
     Task<bool> RemoveAccessAsync(long membershipId);
     
     Task<MembershipAccessType?> GetAccessTypeAsync(

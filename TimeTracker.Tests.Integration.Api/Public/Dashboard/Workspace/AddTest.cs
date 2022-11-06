@@ -22,7 +22,7 @@ public class AddTest: BaseTest
     public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _workspaceFactory = ServiceProvider.GetRequiredService<IDataFactory<WorkspaceEntity>>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
     [Fact]

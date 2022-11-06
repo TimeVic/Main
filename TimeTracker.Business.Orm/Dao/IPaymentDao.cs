@@ -26,8 +26,6 @@ public interface IPaymentDao: IDomainService
         long? projectId,
         string? description
     );
-
-    Task<bool> HasAccessAsync(UserEntity user, PaymentEntity? entity);
-
+    
     Task<ListDto<PaymentEntity>> GetListAsync(WorkspaceEntity workspace,  UserEntity user, int page);
 }

@@ -12,6 +12,4 @@ public class WorkspaceDto : IResponse
     public bool IsDefault { get; set; }
     
     public MembershipAccessType? CurrentUserAccess { get; set; }
-    
-    public UserDto Owner { get; set; }
 }

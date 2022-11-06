@@ -47,9 +47,8 @@ public class SetTest: BaseTest
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _defaultWorkspace = _user.Workspaces.First();
-        
+        (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
+
         _queueDao.CompleteAllPending().Wait();
     }
 
@@ -151,7 +150,7 @@ public class SetTest: BaseTest
     public async Task ShouldUpdateWithSharedProject()
     {
         var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
-        var (jwtToken, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
+        var (jwtToken, otherUser, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _defaultWorkspace,
             MembershipAccessType.User,
             new List<ProjectAccessModel>()

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Extensions;
@@ -8,6 +9,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Resources;
 using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Business.Services.Auth;
 
@@ -16,18 +18,21 @@ public class RegistrationService: IRegistrationService
     private readonly IUserDao _userDao;
     private readonly IQueueService _queueService;
     private readonly IWorkspaceDao _workspaceDao;
+    private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly string _frontendUrl;
 
     public RegistrationService(
         IUserDao userDao,
         IQueueService queueService,
         IConfiguration configuration,
-        IWorkspaceDao workspaceDao
+        IWorkspaceDao workspaceDao,
+        IWorkspaceAccessService workspaceAccessService
     )
     {
         _userDao = userDao;
         _queueService = queueService;
         _workspaceDao = workspaceDao;
+        _workspaceAccessService = workspaceAccessService;
         _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
     }
 
@@ -70,11 +75,12 @@ public class RegistrationService: IRegistrationService
             UserResources.DefaultWorkspaceName,
             userName?.FirstCharToUpper()
         );
-        await _workspaceDao.CreateWorkspaceAsync(
+        var workspace = await _workspaceDao.CreateWorkspaceAsync(
             user,
             workspaceName,
             true
         );
+        await _workspaceAccessService.ShareAccessAsync(workspace, user, MembershipAccessType.Owner);
         
         await _queueService.PushNotificationAsync(new EmailVerifiedNotificationItemContext()
         {

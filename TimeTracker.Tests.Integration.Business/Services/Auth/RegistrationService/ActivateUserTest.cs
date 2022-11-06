@@ -81,13 +81,14 @@ public class ActivateUserTest: BaseTest
         var activatedUser = await _registrationService.ActivateUser(user.VerificationToken, expectedPassword);
         await CommitDbChanges();
         
-        Assert.Equal(1, activatedUser.Workspaces.Count);
-        Assert.Contains(activatedUser.Workspaces, item =>
+        Assert.Equal(1, activatedUser.CreatedWorkspaces.Count);
+        var workspaces = await _userDao.GetUsersWorkspaces(user);
+        Assert.Contains(workspaces, item =>
         {
             var userName = StringUtils.GetUserNameFromEmail(user.Email);
             return item.Name.ToLower().Contains(userName);
         });
-        Assert.All(activatedUser.Workspaces, item =>
+        Assert.All(workspaces, item =>
         {
             Assert.True(item.Id > 0);
         });

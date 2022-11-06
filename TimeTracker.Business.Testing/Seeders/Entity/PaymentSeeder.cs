@@ -1,4 +1,5 @@
 ﻿using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Testing.Factories;
@@ -13,6 +14,7 @@ public class PaymentSeeder: IPaymentSeeder
     private readonly IClientSeeder _clientSeeder;
     private readonly IUserSeeder _userSeeder;
     private readonly IDataFactory<PaymentEntity> _dataFactory;
+    private readonly IUserDao _userDao;
 
     public PaymentSeeder(
         IDbSessionProvider sessionProvider,
@@ -20,7 +22,8 @@ public class PaymentSeeder: IPaymentSeeder
         IProjectSeeder projectSeeder,
         IClientSeeder clientSeeder,
         IUserSeeder userSeeder,
-        IDataFactory<PaymentEntity> dataFactory
+        IDataFactory<PaymentEntity> dataFactory,
+        IUserDao userDao
     )
     {
         _sessionProvider = sessionProvider;
@@ -29,11 +32,12 @@ public class PaymentSeeder: IPaymentSeeder
         _clientSeeder = clientSeeder;
         _userSeeder = userSeeder;
         _dataFactory = dataFactory;
+        _userDao = userDao;
     }
     
     public async Task<ICollection<PaymentEntity>> CreateSeveralAsync(UserEntity user, int count = 1)
     {
-        var workspace = user.Workspaces.First();
+        var workspace = (await _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner)).First();
         var project = (await _projectSeeder.CreateSeveralAsync(workspace)).First();
         await _sessionProvider.PerformCommitAsync();
         return await CreateSeveralAsync(workspace, user, project.Client, project, count);

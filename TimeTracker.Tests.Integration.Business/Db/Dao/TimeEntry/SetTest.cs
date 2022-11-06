@@ -1,4 +1,5 @@
 using Autofac;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
@@ -16,6 +17,7 @@ public class SetTest: BaseTest
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IDataFactory<TimeEntryEntity> _timeEntryFactory;
     private readonly IProjectDao _projectDao;
+    private readonly IUserDao _userDao;
 
     public SetTest(): base()
     {
@@ -24,6 +26,7 @@ public class SetTest: BaseTest
         _projectDao = Scope.Resolve<IProjectDao>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
         _timeEntryFactory = Scope.Resolve<IDataFactory<TimeEntryEntity>>();
+        _userDao = Scope.Resolve<IUserDao>();
     }
 
     [Fact]
@@ -40,7 +43,7 @@ public class SetTest: BaseTest
         };
         
         var user = await _userSeeder.CreateActivatedAsync();
-        var expectWorkspace = user.Workspaces.First();
+        var expectWorkspace = _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner).Result.First();;
         var expectProject = await _projectDao.CreateAsync(expectWorkspace, "Test project");
         
         var newEntry = await _timeEntryDao.SetAsync(user, expectWorkspace, expectedDto, expectProject);
@@ -68,7 +71,7 @@ public class SetTest: BaseTest
         };
         
         var user = await _userSeeder.CreateActivatedAsync();
-        var initialWorkspace = user.Workspaces.First();
+        var initialWorkspace = _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner).Result.First();;
         var initialProject = await _projectDao.CreateAsync(initialWorkspace, "Test project1");
         
         var initialEntry = await _timeEntryDao.SetAsync(user, initialWorkspace, initialDto, initialProject);
@@ -110,7 +113,7 @@ public class SetTest: BaseTest
         };
         
         var user = await _userSeeder.CreateActivatedAsync();
-        var initialWorkspace = user.Workspaces.First();
+        var initialWorkspace = _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner).Result.First();;
         var initialProject = await _projectDao.CreateAsync(initialWorkspace, "Test project1");
         
         var initialEntry = await _timeEntryDao.StartNewAsync(
@@ -154,7 +157,7 @@ public class SetTest: BaseTest
         };
         
         var user = await _userSeeder.CreateActivatedAsync();
-        var expectWorkspace = user.Workspaces.First();
+        var expectWorkspace = _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner).Result.First();;
 
         await Assert.ThrowsAsync<DataInconsistentException>(async () =>
         {

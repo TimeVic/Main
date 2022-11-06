@@ -32,9 +32,8 @@ public class StopTest: BaseTest
         _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        _defaultWorkspace = _user.Workspaces.First();
-        
+        (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
+
         _queueDao.CompleteAllPending().Wait();
     }
 

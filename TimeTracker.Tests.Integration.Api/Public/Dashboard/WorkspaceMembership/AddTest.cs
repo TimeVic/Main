@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembers
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Testing.Extensions;
@@ -24,22 +25,27 @@ public class AddTest: BaseTest
     private readonly IUserSeeder _userSeeder;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     
-    private readonly UserEntity _newUser;
+    private readonly UserEntity _newUserFake;
     private readonly WorkspaceEntity _workspace;
     private string _otherJwtToken;
     private UserEntity _otherUser;
+    private WorkspaceEntity _otherWorkspace;
+    private readonly IQueueDao _queueDao;
 
     public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _userFactory = ServiceProvider.GetRequiredService<IDataFactory<UserEntity>>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
+        _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _newUser = _userFactory.Generate();
-        _workspace = _user.Workspaces.First();
+        _newUserFake = _userFactory.Generate();
         
-        (_otherJwtToken, _otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_otherJwtToken, _otherUser, _otherWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        
+        // Clear queue
+        _queueDao.CompleteAllPending().Wait();
     }
 
     [Fact]
@@ -47,7 +53,7 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
-            Email = _newUser.Email,
+            Email = _newUserFake.Email,
             WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -58,7 +64,7 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            Email = _newUser.Email,
+            Email = _newUserFake.Email,
             WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
@@ -75,8 +81,8 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            Email = _newUser.Email,
-            WorkspaceId = _otherUser.Workspaces.First().Id
+            Email = _newUserFake.Email,
+            WorkspaceId = _otherWorkspace.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
@@ -86,7 +92,7 @@ public class AddTest: BaseTest
     [Fact]
     public async Task UserWithManagerRoleShouldAdd()
     {
-        var (otherJwtToken, otherUser) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherJwtToken, otherUser, _) = await UserSeeder.CreateAuthorizedAsync();
         await _workspaceAccessService.ShareAccessAsync(
             _workspace,
             otherUser,
@@ -95,7 +101,7 @@ public class AddTest: BaseTest
         
         var response = await PostRequestAsync(Url, otherJwtToken, new AddRequest()
         {
-            Email = _newUser.Email,
+            Email = _newUserFake.Email,
             WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
@@ -104,7 +110,7 @@ public class AddTest: BaseTest
     [Fact]
     public async Task UserWithUserRoleShouldNotAdd()
     {
-        var (otherJwtToken, otherUser) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherJwtToken, otherUser, _) = await UserSeeder.CreateAuthorizedAsync();
         await _workspaceAccessService.ShareAccessAsync(
             _workspace,
             otherUser,
@@ -113,11 +119,38 @@ public class AddTest: BaseTest
         
         var response = await PostRequestAsync(Url, otherJwtToken, new AddRequest()
         {
-            Email = _newUser.Email,
+            Email = _newUserFake.Email,
             WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+    }
+    
+    [Fact]
+    public async Task ShouldNotShareIfAlreadySharedAndNotPending()
+    {
+        var activeUser = await _userSeeder.CreateActivatedAsync();
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            activeUser,
+            MembershipAccessType.User
+        );
+        
+        var (otherJwtToken, otherUser, _) = await UserSeeder.CreateAuthorizedAsync();
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            otherUser,
+            MembershipAccessType.Manager
+        );
+        
+        var response = await PostRequestAsync(Url, otherJwtToken, new AddRequest()
+        {
+            Email = activeUser.Email,
+            WorkspaceId = _workspace.Id
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonErrorAsync();
+        Assert.Equal(new RecordIsExistsException().GetTypeName(), error.Type);
     }
 }

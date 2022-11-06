@@ -38,9 +38,7 @@ public interface ITimeEntryDao: IDomainService
         TimeEntryCreationDto timeEntryDto,
         ProjectEntity? project = null
     );
-
-    Task<bool> HasAccessAsync(UserEntity user, TimeEntryEntity? entity);
-
+    
     Task<TimeEntryEntity?> GetActiveEntryAsync(WorkspaceEntity workspace, UserEntity user);
 
     Task<ICollection<TimeEntryEntity>> GetActiveEntriesAsync(WorkspaceEntity workspace);

@@ -1,4 +1,5 @@
 using Autofac;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -21,6 +22,7 @@ public class GetListTest: BaseTest
     private readonly WorkspaceEntity _workspace;
     private readonly IProjectDao _projectDao;
     private readonly IPaymentSeeder _paymentSeeder;
+    private readonly IUserDao _userDao;
 
     public GetListTest(): base()
     {
@@ -32,9 +34,10 @@ public class GetListTest: BaseTest
         _paymentSeeder = Scope.Resolve<IPaymentSeeder>();
         _clientFactory = Scope.Resolve<IDataFactory<ClientEntity>>();
         _paymentFactory = Scope.Resolve<IDataFactory<PaymentEntity>>();
+        _userDao = Scope.Resolve<IUserDao>();
         
         _user = _userSeeder.CreateActivatedAsync().Result;
-        _workspace = _user.Workspaces.First();
+        _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
     }
 
     [Fact]
@@ -43,7 +46,7 @@ public class GetListTest: BaseTest
         var expectedTotal = 30;
         await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
 
-        var listModel = await _paymentDao.GetListAsync(_user.Workspaces.First(), _user, 1);
+        var listModel = await _paymentDao.GetListAsync(_workspace, _user, 1);
         Assert.Equal(PaginationUtils.DefaultPageSize, listModel.Items.Count);
         Assert.Equal(expectedTotal, listModel.TotalCount);
         
@@ -71,7 +74,7 @@ public class GetListTest: BaseTest
         var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
         await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherClient, null, 15);
         
-        var listModel = await _paymentDao.GetListAsync(_user.Workspaces.First(), _user, 1);
+        var listModel = await _paymentDao.GetListAsync(_workspace, _user, 1);
         Assert.Equal(expectedTotal, listModel.Items.Count);
         Assert.Equal(expectedTotal, listModel.TotalCount);
     }
@@ -85,7 +88,7 @@ public class GetListTest: BaseTest
         var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
         await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherClient, null, 15);
         
-        var listModel = await _paymentDao.GetListAsync(_user.Workspaces.First(), _user, 1);
+        var listModel = await _paymentDao.GetListAsync(_workspace, _user, 1);
         Assert.Equal(expectedTotal, listModel.Items.Count);
         Assert.Equal(expectedTotal, listModel.TotalCount);
     }

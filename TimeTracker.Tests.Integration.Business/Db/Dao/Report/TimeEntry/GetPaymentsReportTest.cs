@@ -1,4 +1,5 @@
 using Autofac;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Report;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
@@ -17,6 +18,7 @@ public class GetPaymentsReportTest: BaseTest
     private readonly WorkspaceEntity _workspace;
     private readonly IProjectSeeder _projectSeederSeeder;
     private readonly IPaymentDao _paymentDao;
+    private readonly IUserDao _userDao;
 
     public GetPaymentsReportTest(): base()
     {
@@ -25,9 +27,10 @@ public class GetPaymentsReportTest: BaseTest
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
         _paymentDao = Scope.Resolve<IPaymentDao>();
         _reportsDao = Scope.Resolve<ITimeEntryReportsDao>();
+        _userDao = Scope.Resolve<IUserDao>();
 
         _user = _userSeeder.CreateActivatedAsync().Result;
-        _workspace = _user.Workspaces.First();
+        _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
     }
 
     [Fact]

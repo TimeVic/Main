@@ -27,6 +27,9 @@
       <None Update="SQLFiles\Procedures\pr_log_add.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="SQLFiles\Scripts\16_CreateWorkspaceMemberships.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -8,11 +8,7 @@ public interface IClientDao: IDomainService
 {
     Task<ClientEntity> CreateAsync(WorkspaceEntity workspace, string name);
 
-    Task<ICollection<ClientEntity>> GetByUser(UserEntity user);
-
     Task<ListDto<ClientEntity>> GetListAsync(WorkspaceEntity workspace, int page);
 
     Task<ClientEntity?> GetById(long? clientId, WorkspaceEntity? workspace = null);
-
-    Task<bool> HasAccessAsync(UserEntity user, ClientEntity? entity);
 }

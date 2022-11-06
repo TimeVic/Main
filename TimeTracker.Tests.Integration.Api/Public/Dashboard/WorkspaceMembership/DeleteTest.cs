@@ -43,12 +43,10 @@ public class DeleteTest: BaseTest
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _newUser = _userFactory.Generate();
-        _workspace = _user.Workspaces.First();
-
-        (_jwtTokenOtherUser, _otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtTokenOtherUser, _otherUser, _) = UserSeeder.CreateAuthorizedAsync().Result;
         
         var projectsAccess = new List<ProjectAccessModel>()
         {

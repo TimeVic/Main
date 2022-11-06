@@ -1,5 +1,7 @@
 ﻿using NHibernate.Linq;
+using NHibernate.MultiTenancy;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
@@ -72,13 +74,16 @@ public class UserDao: IUserDao
         return allWorkspaces.First(item => item.IsDefault);
     }
     
-    public async Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user)
+    public async Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user, MembershipAccessType? accessType = null)
     {
-        var ownedWorkspaces = user.Workspaces;
-        var otherWorkspaces = await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
-            .Where(item => item.User.Id == user.Id)
-            .Select(item => item.Workspace)
-            .ToListAsync();
-        return ownedWorkspaces.Concat(otherWorkspaces).ToList();
+        var query = _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Where(item => item.User.Id == user.Id);
+        if (accessType != null)
+        {
+            query = query.Where(item => item.Access == accessType);
+        }
+
+        return await query.Select(item => item.Workspace)
+            .ToListAsync();;
     }
 }

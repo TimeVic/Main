@@ -36,9 +36,8 @@ public class AddTest: BaseTest
         _clientDao = ServiceProvider.GetRequiredService<IClientDao>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _workspace = _user.Workspaces.First();
         _client = _clientDao.CreateAsync(_workspace, "Test adding").Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
         _project.SetClient(_client);
@@ -89,7 +88,7 @@ public class AddTest: BaseTest
     [Fact]
     public async Task UserWithRoleUserCanAddOwnPayment()
     {
-        var (otherToken, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
+        var (otherToken, otherUser, otherWorkspace) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
             MembershipAccessType.User
         );
@@ -113,7 +112,7 @@ public class AddTest: BaseTest
     [Fact]
     public async Task UserWithRoleManagerCanAddOwnPayment()
     {
-        var (otherToken, otherUser) = await _userSeeder.CreateAuthorizedAndShareAsync(
+        var (otherToken, otherUser, otherWorkspace) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
             MembershipAccessType.Manager
         );
@@ -137,7 +136,7 @@ public class AddTest: BaseTest
     [Fact]
     public async Task NonMemberCantAddOwnPayment()
     {
-        var (otherToken, otherUser) = await _userSeeder.CreateAuthorizedAsync();
+        var (otherToken, otherUser, otherWorkspace) = await _userSeeder.CreateAuthorizedAsync();
         
         var payment = _factory.Generate();
         var response = await PostRequestAsync(Url, otherToken, new AddRequest()

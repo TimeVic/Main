@@ -33,6 +33,7 @@ public class ForUserTest: BaseTest
     private string _otherJwtToken;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly ProjectEntity _project2;
+    private WorkspaceEntity _otherWorkspace;
 
     public ForUserTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -42,9 +43,9 @@ public class ForUserTest: BaseTest
         _timeEntryReportDao = ServiceProvider.GetRequiredService<ITimeEntryReportsDao>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
-        (_otherJwtToken, _otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
-        _workspace = _user.Workspaces.First();
+        
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_otherJwtToken, _otherUser, _otherWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectSeeder.CreateAsync(_workspace).Result;
         _project2 = _projectSeeder.CreateAsync(_workspace).Result;
         _client = _project.Client;

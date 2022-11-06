@@ -35,6 +35,7 @@ public class UpdateTest: BaseTest
     private readonly WorkspaceMembershipEntity _membership;
     private readonly IProjectDao _projectDao;
     private readonly List<ProjectEntity> _projects;
+    private WorkspaceEntity _otherWorkspace;
 
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -42,12 +43,11 @@ public class UpdateTest: BaseTest
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
-        (_jwtToken, _user) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _newUser = _userFactory.Generate();
-        _workspace = _user.Workspaces.First();
 
-        (_jwtTokenOtherUser, _otherUser) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtTokenOtherUser, _otherUser, _otherWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _membership = _workspaceAccessService.ShareAccessAsync(
             _workspace,
             _otherUser,
@@ -138,9 +138,8 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldNotAddProjectsFromAnotherWorkspace()
     {
-        var anotherWorkspace = _otherUser.Workspaces.First();
-        var anotherProject = await _projectDao.CreateAsync(anotherWorkspace, "other 1");
-        var anotherProject2 = await _projectDao.CreateAsync(anotherWorkspace, "other 1");
+        var anotherProject = await _projectDao.CreateAsync(_otherWorkspace, "other 1");
+        var anotherProject2 = await _projectDao.CreateAsync(_otherWorkspace, "other 1");
         await CommitDbChanges();
         
         var expectAccess = MembershipAccessType.User;
