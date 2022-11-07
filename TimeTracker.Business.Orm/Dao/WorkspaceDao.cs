@@ -63,6 +63,7 @@ public class WorkspaceDao: IWorkspaceDao
         var items = await query
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
+            .OrderByDescending(item => item.Id)
             .ToListAsync();
         return new ListDto<WorkspaceMembershipEntity>(
             items,
