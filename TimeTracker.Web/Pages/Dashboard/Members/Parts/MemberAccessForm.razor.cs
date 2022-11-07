@@ -5,7 +5,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Store.Project;
-using TimeTracker.Web.Store.Workspace;
+using TimeTracker.Web.Store.WorkspaceMemberships;
 
 namespace TimeTracker.Web.Pages.Dashboard.Members.Parts;
 
