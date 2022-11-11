@@ -4,7 +4,7 @@
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Business.Extensions
 
-<div class="row d-flex px-3 justify-content-center w-time-form">
+<div class="row d-flex justify-content-center w-time-form no-gutters mx-n2">
 
     <RadzenCard class="w-100">
         <RadzenButton
@@ -13,70 +13,69 @@
             Click="ShowAddModal"/>
     </RadzenCard>
 
-    <RadzenCard class="w-100 mt-2">
-        <RadzenDataGrid
-            TItem="WorkspaceMembershipDto"
-            AllowSorting="false"
-            PageSize="@GlobalConstants.ListPageSize"
-            Density="Density.Compact"
-            Data="@_state.Value.List"
-            AllowPaging="false"
-            IsLoading="@_state.Value.IsListLoading"
-            Count="@_state.Value.TotalCount"
-            ColumnWidth="200px">
+    <RadzenDataGrid
+        class="mt-2"
+        TItem="WorkspaceMembershipDto"
+        AllowSorting="false"
+        PageSize="@GlobalConstants.ListPageSize"
+        Density="Density.Compact"
+        Data="@_state.Value.List"
+        AllowPaging="false"
+        IsLoading="@_state.Value.IsListLoading"
+        Count="@_state.Value.TotalCount"
+        ColumnWidth="200px">
 
-            <Columns>
-                <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="User" MinWidth="200px">
-                    <Template Context="item">
-                        @item.User.Email
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Access Level" Width="100px">
-                    <Template Context="item">
-                        @item.Access.GetDisplayName()
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Projects">
-                    <Template Context="item">
-                        @if (item.Access is MembershipAccessType.Manager or MembershipAccessType.Owner)
+        <Columns>
+            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="User" MinWidth="200px">
+                <Template Context="item">
+                    @item.User.Email
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Access Level" Width="100px">
+                <Template Context="item">
+                    @item.Access.GetDisplayName()
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Projects">
+                <Template Context="item">
+                    @if (item.Access is MembershipAccessType.Manager or MembershipAccessType.Owner)
+                    {
+                        <text>All</text>
+                    }
+                    else
+                    {
+                        var projectNames = GetProjectNames(item);
+                        if (string.IsNullOrEmpty(projectNames))
                         {
-                            <text>All</text>
+                            projectNames = "No access";
                         }
-                        else
-                        {
-                            var projectNames = GetProjectNames(item);
-                            if (string.IsNullOrEmpty(projectNames))
-                            {
-                                projectNames = "No access";
-                            }
-                            <text>@projectNames</text>
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn
-                    TItem="WorkspaceMembershipDto"
-                    Context="app" Filterable="false"
-                    Sortable="false"
-                    TextAlign="TextAlign.Center"
-                    Width="120px">
+                        <text>@projectNames</text>
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn
+                TItem="WorkspaceMembershipDto"
+                Context="app" Filterable="false"
+                Sortable="false"
+                TextAlign="TextAlign.Center"
+                Width="120px">
 
-                    <Template Context="item">
+                <Template Context="item">
 
-                        <RadzenButton
-                            Size="ButtonSize.Small"
-                            Icon="edit"
-                            ButtonStyle="ButtonStyle.Light"
-                            Click="@(args => ShowEditModal(item))"
-                            @onclick:stopPropagation="true">
-                        </RadzenButton>
-                        <RadzenButton
-                            Size="ButtonSize.Small"
-                            ButtonStyle="ButtonStyle.Danger"
-                            Icon="delete"
-                            Click="async () => await OnDeleteItemAsync(item)"/>
-                    </Template>
-                </RadzenDataGridColumn>
-            </Columns>
-        </RadzenDataGrid>
-    </RadzenCard>
+                    <RadzenButton
+                        Size="ButtonSize.Small"
+                        Icon="edit"
+                        ButtonStyle="ButtonStyle.Light"
+                        Click="@(args => ShowEditModal(item))"
+                        @onclick:stopPropagation="true">
+                    </RadzenButton>
+                    <RadzenButton
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Danger"
+                        Icon="delete"
+                        Click="async () => await OnDeleteItemAsync(item)"/>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
 </div>

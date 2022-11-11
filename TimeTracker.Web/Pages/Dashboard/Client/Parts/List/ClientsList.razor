@@ -3,7 +3,7 @@
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
 
-<div class="row d-flex px-3 justify-content-center w-time-form">
+<div class="row d-flex justify-content-center w-time-form no-gutters mx-n2">
 
     <RadzenCard class="w-100">
         <RadzenButton
@@ -13,63 +13,64 @@
             Disabled="@(_state.Value.HasItemToAdd || !AuthState.Value.IsRoleAdmin)"/>
     </RadzenCard>
 
-    <RadzenCard class="mt-2 w-100">
-        <RadzenDataGrid
-            @ref="@_grid"
-            TItem="ClientDto"
-            AllowSorting="false"
-            EditMode="DataGridEditMode.Single"
-            PageSize="@GlobalConstants.ListPageSize"
-            RowUpdate="@OnUpdateRow"
-            Data="@_state.Value.SortedList"
-            AllowPaging="false"
-            IsLoading="@_state.Value.IsListLoading"
-            Count="@_state.Value.TotalCount"
-            ColumnWidth="200px">
+    <RadzenDataGrid
+        class="mt-2"
+        @ref="@_grid"
+        TItem="ClientDto"
+        AllowSorting="false"
+        EditMode="DataGridEditMode.Single"
+        PageSize="@GlobalConstants.ListPageSize"
+        RowUpdate="@OnUpdateRow"
+        Data="@_state.Value.SortedList"
+        AllowPaging="false"
+        IsLoading="@_state.Value.IsListLoading"
+        Count="@_state.Value.TotalCount"
+        ColumnWidth="200px">
 
-            <Columns>
-                <RadzenDataGridColumn TItem="ClientDto" Property="Name" Title="Name">
-                    <EditTemplate Context="app">
-                        <RadzenTextBox @bind-Value="@app.Name" Style="width:100%; display: block" Name="Name"/>
-                        <RadzenLengthValidator
-                            Component="Name"
-                            Min="3"
-                            Max="255"
-                            Style="position: absolute"/>
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn
-                    TItem="ClientDto"
-                    Context="app" Filterable="false"
-                    Sortable="false"
-                    TextAlign="TextAlign.Center"
-                    Width="120px">
+        <Columns>
+            <RadzenDataGridColumn TItem="ClientDto" Property="Name" Title="Name">
+                <EditTemplate Context="app">
+                    <RadzenTextBox @bind-Value="@app.Name" Style="width:100%; display: block" Name="Name"/>
+                    <RadzenLengthValidator
+                        Component="Name"
+                        Min="3"
+                        Max="255"
+                        Style="position: absolute"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn
+                TItem="ClientDto"
+                Context="app" Filterable="false"
+                Sortable="false"
+                TextAlign="TextAlign.Center"
+                Width="120px">
 
-                    <Template Context="item">
+                <Template Context="item">
 
-                        <RadzenButton
-                            Icon="edit"
-                            ButtonStyle="ButtonStyle.Light"
-                            Click="@(args => EditRow(item))"
-                            Disabled="@(!AuthState.Value.IsRoleAdmin)"
-                            @onclick:stopPropagation="true">
-                        </RadzenButton>
-                    </Template>
-                    <EditTemplate Context="item">
+                    <RadzenButton
+                        Icon="edit"
+                        ButtonStyle="ButtonStyle.Light"
+                        Click="@(args => EditRow(item))"
+                        Disabled="@(!AuthState.Value.IsRoleAdmin)"
+                        @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="item">
 
-                        <RadzenButton
-                            Icon="check"
-                            ButtonStyle="ButtonStyle.Primary"
-                            Click="@(() => OnClickSaveRow(item))"/>
+                    <RadzenButton
+                        Icon="check"
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Primary"
+                        Click="@(() => OnClickSaveRow(item))"/>
 
-                        <RadzenButton
-                            Icon="close"
-                            ButtonStyle="ButtonStyle.Light"
-                            Click="@(() => OnClickCancelEditMode(item))">
-                        </RadzenButton>
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-            </Columns>
-        </RadzenDataGrid>
-    </RadzenCard>
+                    <RadzenButton
+                        Icon="close"
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Light"
+                        Click="@(() => OnClickCancelEditMode(item))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
 </div>

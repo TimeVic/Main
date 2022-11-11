@@ -11,7 +11,7 @@
     <RadzenBreadCrumbItem Text="Edit project"/>
 </RadzenBreadCrumb>
 
-<RadzenCard>
+<RadzenCard class="no-gutters mx-n2">
     <h2 class="mb-4">@(model.Name)</h2>
     <RadzenTemplateForm TItem="UpdateRequest" Data="@model" Submit="HandleSubmit">
         <DataAnnotationsValidator/>
