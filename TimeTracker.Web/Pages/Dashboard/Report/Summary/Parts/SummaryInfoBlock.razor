@@ -1,0 +1,17 @@
+﻿@using TimeTracker.Business.Extensions
+@inherits BaseComponent
+
+<div class="row no-gutters mx-n2">
+    <div class="col-12">
+        <RadzenCard class="pb-3q d-flex justify-content-start">
+            <RadzenText TextStyle="TextStyle.H6">
+                Duration:
+            </RadzenText>
+            <RadzenText
+                TextStyle="TextStyle.H6"
+                class="rz-color-info ml-1">
+                @_totalDuration.ToReadableString()
+            </RadzenText>
+        </RadzenCard>    
+    </div>
+</div>

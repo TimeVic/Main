@@ -3,7 +3,7 @@
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
 
-<div class="row d-flex px-3 justify-content-center w-time-form">
+<div class="row w-time-form no-gutters mx-n2">
 
     <RadzenCard class="w-100">
         <RadzenButton
@@ -13,107 +13,106 @@
             Disabled="@_state.Value.HasItemToAdd"/>
     </RadzenCard>
 
-    <RadzenCard class="mt-2">
-        <RadzenDataGrid
-            @ref="@_grid"
-            TItem="PaymentDto"
-            AllowSorting="false"
-            EditMode="DataGridEditMode.Single"
-            PageSize="@GlobalConstants.ListPageSize"
-            RowUpdate="@OnUpdateRow"
-            Data="@_state.Value.SortedList"
-            AllowPaging="false"
-            IsLoading="@_state.Value.IsListLoading"
-            Count="@_state.Value.TotalCount"
-            ColumnWidth="100px">
+    <RadzenDataGrid
+        class="mt-2"
+        @ref="@_grid"
+        TItem="PaymentDto"
+        AllowSorting="false"
+        EditMode="DataGridEditMode.Single"
+        PageSize="@GlobalConstants.ListPageSize"
+        RowUpdate="@OnUpdateRow"
+        Data="@_state.Value.SortedList"
+        AllowPaging="false"
+        IsLoading="@_state.Value.IsListLoading"
+        Count="@_state.Value.TotalCount"
+        ColumnWidth="100px">
 
-            <Columns>
-                <RadzenDataGridColumn TItem="PaymentDto" Title="Client">
-                    <Template Context="item">
-                        @item.Client.Name
-                    </Template>
-                    <EditTemplate Context="item">
-                        <ClientsDropDown
-                            Value="@(item.Client.Id)"
-                            SelectedItemChanged="OnClientSelected"/>
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="PaymentDto" Title="Project">
-                    <Template Context="item">
-                        @item.Project?.Name
-                    </Template>
-                    <EditTemplate Context="item">
-                        <ProjectsDropDown
-                            Disabled="@(item.Client.Id == 0)"
-                            ClientId="@item.Client.Id"
-                            Value="@(item.Project?.Id ?? 0)"
-                            SelectedItemChanged="OnProjectSelected"/>
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="PaymentDto" Title="Amount">
-                    <Template Context="item">
-                        <RadzenNumeric @bind-Value="@item.Amount" Format="0.##" Disabled="true" Name="Amount"/>
-                    </Template>
-                    <EditTemplate Context="item">
-                        <RadzenNumeric @bind-Value="@item.Amount" Format="0.##" Style="width:100%; display: block" Name="Amount"/>
-                        <RadzenNumericRangeValidator Component="Amount" Min="1" Popup="true" Style="position: absolute"/>
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="PaymentDto" Title="Payment Date">
-                    <Template Context="item">
-                        @item.PaymentTime.ToString("d")
-                    </Template>
-                    <EditTemplate Context="item">
-                        <RadzenDatePicker
-                            DateFormat="d"
-                            @bind-Value="@item.PaymentTime"
-                            Name="PaymentTime"/>
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="PaymentDto" Property="Description" Title="Description">
-                    <EditTemplate Context="item">
-                        <RadzenTextBox @bind-Value="@item.Description" Style="width:100%; display: block" Name="Description"/>
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn
-                    TItem="PaymentDto"
-                    Context="app" Filterable="false"
-                    Sortable="false"
-                    TextAlign="TextAlign.Center"
-                    Width="120px">
+        <Columns>
+            <RadzenDataGridColumn TItem="PaymentDto" Title="Client">
+                <Template Context="item">
+                    @item.Client.Name
+                </Template>
+                <EditTemplate Context="item">
+                    <ClientsDropDown
+                        Value="@(item.Client.Id)"
+                        SelectedItemChanged="OnClientSelected"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="PaymentDto" Title="Project">
+                <Template Context="item">
+                    @item.Project?.Name
+                </Template>
+                <EditTemplate Context="item">
+                    <ProjectsDropDown
+                        Disabled="@(item.Client.Id == 0)"
+                        ClientId="@item.Client.Id"
+                        Value="@(item.Project?.Id ?? 0)"
+                        SelectedItemChanged="OnProjectSelected"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="PaymentDto" Title="Amount">
+                <Template Context="item">
+                    <RadzenNumeric @bind-Value="@item.Amount" Format="0.##" Disabled="true" Name="Amount"/>
+                </Template>
+                <EditTemplate Context="item">
+                    <RadzenNumeric @bind-Value="@item.Amount" Format="0.##" Style="width:100%; display: block" Name="Amount"/>
+                    <RadzenNumericRangeValidator Component="Amount" Min="1" Popup="true" Style="position: absolute"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="PaymentDto" Title="Payment Date">
+                <Template Context="item">
+                    @item.PaymentTime.ToString("d")
+                </Template>
+                <EditTemplate Context="item">
+                    <RadzenDatePicker
+                        DateFormat="d"
+                        @bind-Value="@item.PaymentTime"
+                        Name="PaymentTime"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="PaymentDto" Property="Description" Title="Description">
+                <EditTemplate Context="item">
+                    <RadzenTextBox @bind-Value="@item.Description" Style="width:100%; display: block" Name="Description"/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn
+                TItem="PaymentDto"
+                Context="app" Filterable="false"
+                Sortable="false"
+                TextAlign="TextAlign.Center"
+                Width="120px">
 
-                    <Template Context="item">
+                <Template Context="item">
 
-                        <RadzenButton
-                            Size="ButtonSize.Small"
-                            Icon="edit"
-                            ButtonStyle="ButtonStyle.Light"
-                            Click="@(args => EditRow(item))"
-                            @onclick:stopPropagation="true">
-                        </RadzenButton>
-                        <RadzenButton
-                            Size="ButtonSize.Small"
-                            ButtonStyle="ButtonStyle.Danger"
-                            Icon="delete"
-                            Click="async () => await OnDeleteItemAsync(item)"/>
-                    </Template>
-                    <EditTemplate Context="item">
+                    <RadzenButton
+                        Size="ButtonSize.Small"
+                        Icon="edit"
+                        ButtonStyle="ButtonStyle.Light"
+                        Click="@(args => EditRow(item))"
+                        @onclick:stopPropagation="true">
+                    </RadzenButton>
+                    <RadzenButton
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Danger"
+                        Icon="delete"
+                        Click="async () => await OnDeleteItemAsync(item)"/>
+                </Template>
+                <EditTemplate Context="item">
 
-                        <RadzenButton
-                            Size="ButtonSize.Small"
-                            Icon="check"
-                            ButtonStyle="ButtonStyle.Primary"
-                            Click="@(() => OnClickSaveRow(item))"/>
+                    <RadzenButton
+                        Size="ButtonSize.Small"
+                        Icon="check"
+                        ButtonStyle="ButtonStyle.Primary"
+                        Click="@(() => OnClickSaveRow(item))"/>
 
-                        <RadzenButton
-                            Size="ButtonSize.Small"
-                            Icon="close"
-                            ButtonStyle="ButtonStyle.Light"
-                            Click="@(() => OnClickCancelEditMode(item))">
-                        </RadzenButton>
-                    </EditTemplate>
-                </RadzenDataGridColumn>
-            </Columns>
-        </RadzenDataGrid>
-    </RadzenCard>
+                    <RadzenButton
+                        Size="ButtonSize.Small"
+                        Icon="close"
+                        ButtonStyle="ButtonStyle.Light"
+                        Click="@(() => OnClickCancelEditMode(item))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
 </div>
