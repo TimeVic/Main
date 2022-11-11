@@ -1,6 +1,6 @@
 FROM nginx:latest as base
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 as dot_net
+FROM mcr.microsoft.com/dotnet/sdk:7.0 as dot_net
 
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV DOTNET_USE_POLLING_FILE_WATCHER=true  
