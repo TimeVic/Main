@@ -16,7 +16,7 @@ WORKDIR /app/TimeTracker.Web
 RUN apt update
 RUN apt install -y apt-transport-https wget ca-certificates
 RUN echo "{}" > appsettings.Local.json
-RUN dotnet publish --configuration=Production -o "/var/www" -f net6.0 -r linux-x64 --self-contained true
+RUN dotnet publish --configuration=Production -o "/var/www" -f net7.0 -r linux-x64 --self-contained true
 
 FROM base
 WORKDIR /usr/share/nginx/html
