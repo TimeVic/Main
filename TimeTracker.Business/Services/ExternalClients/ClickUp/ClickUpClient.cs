@@ -22,16 +22,42 @@ public class ClickUpClient: IClickUpClient
         _logger = logger;
     }
 
-    public async Task<SetTimeEntryResponseDto?> SendTimeEntryAsync(TimeEntryEntity timeEntry)
+    public async Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry)
     {
-        if (timeEntry.IsActive)
+        if (!IsValidTimeEntry(timeEntry))
         {
-            _logger.LogError("TimeEntry is active");
             return null;
         }
-        if (string.IsNullOrEmpty(timeEntry.TaskId))
+
+        var httpClient = _newHttpClient;
+        var settings = timeEntry.Workspace.GetClickUpSettings(timeEntry.User.Id);
+        if (settings == null)
         {
-            _logger.LogError("TimeEntry does not contain TaskId: {TimeEntryId}", timeEntry.Id);
+            throw new Exception($"ClickUp settings not found EntryId: {timeEntry.Id}");
+        }
+        if (!settings.IsFillTimeEntryWithTaskDetails || !string.IsNullOrEmpty(timeEntry.Description))
+        {
+            return null;
+        }
+
+        httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
+        
+        var uri = BuildGetTaskUri(
+            settings.TeamId,
+            timeEntry.TaskId,
+            settings.IsCustomTaskIds,
+            timeEntry.ClickUpId
+        );
+        _logger.LogDebug("ClickUp. Send request to: {Uri}", uri);
+        HttpResponseMessage response;
+        response = await httpClient.GetAsync(uri);
+        return await HandleResponse<GetTaskResponseDto>(uri, response);
+    }
+    
+    public async Task<SetTimeEntryResponseDto?> SendTimeEntryAsync(TimeEntryEntity timeEntry)
+    {
+        if (!IsValidTimeEntry(timeEntry))
+        {
             return null;
         }
         
@@ -51,7 +77,7 @@ public class ClickUpClient: IClickUpClient
         });
         httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
         
-        var uri = BuildTimeEntryUri(
+        var uri = BuildSetTimeEntryUri(
             settings.TeamId,
             timeEntry.TaskId,
             settings.IsCustomTaskIds,
@@ -67,13 +93,22 @@ public class ClickUpClient: IClickUpClient
         {
             response = await httpClient.PostAsync(uri, requestData);
         }
-        return await HandleResponse(response, requestData, uri);
+        var responseData = await HandleResponse<SetTimeEntryResponseDto?>(uri, response, requestData);
+        if (responseData == null || responseData.Value.IsError)
+        {
+            _logger.LogDebug(
+                "ClickUp returned error: {error}",
+                responseData.Value.Error
+            );
+        }
+
+        return responseData;
     }
 
-    private async Task<SetTimeEntryResponseDto?> HandleResponse(
+    private async Task<T?> HandleResponse<T>(
+        string uri,
         HttpResponseMessage httpResponse,
-        JsonContent request,
-        string uri
+        JsonContent? request = null
     )
     {
         if (httpResponse.StatusCode != HttpStatusCode.OK)
@@ -81,28 +116,20 @@ public class ClickUpClient: IClickUpClient
             _logger.LogDebug("Returned status code: {code}", httpResponse.StatusCode);
         }
 
-        var responseData = await httpResponse.GetJsonDataAsync<SetTimeEntryResponseDto?>();
+        var responseData = await httpResponse.GetJsonDataAsync<T?>();
         if (responseData == null)
         {
             _logger.LogDebug(
                 "Returned empty response for url: {S} and data: {ReadAsStringAsync}",
                 uri,
-                await request.ReadAsStringAsync()
+                request != null ? await request.ReadAsStringAsync() : ""
             );
-            return null;
-        }
-
-        if (responseData.Value.IsError)
-        {
-            _logger.LogDebug(
-                "ClickUp returned error: {error}",
-                responseData.Value.Error
-            );
+            return default;
         }
         return responseData;
     }
 
-    private string BuildTimeEntryUri(string teamId, string taskId, bool isCustomTaskIds, long? timeEntryId = null)
+    private string BuildSetTimeEntryUri(string teamId, string taskId, bool isCustomTaskIds, long? timeEntryId = null)
     {
         teamId = HttpUtility.UrlEncode(teamId);
         taskId = HttpUtility.UrlEncode(
@@ -119,6 +146,25 @@ public class ClickUpClient: IClickUpClient
         url.Query = queryParams.ToString();
         return url.ToString();
     }
+    
+    private string BuildGetTaskUri(string teamId, string taskId, bool isCustomTaskIds, long? timeEntryId = null)
+    {
+        teamId = HttpUtility.UrlEncode(teamId);
+        taskId = HttpUtility.UrlEncode(
+            CleanUpTaskId(taskId, isCustomTaskIds)
+        );
+        
+        var queryParams = HttpUtility.ParseQueryString(string.Empty);
+        queryParams.Add("custom_task_ids", isCustomTaskIds.ToString().ToLower());
+        queryParams.Add("team_id", teamId);
+        queryParams.Add("include_subtasks", "false");
+        var url = new UriBuilder(
+            $"{BaseUrl}/task/{taskId}"
+            + (timeEntryId.HasValue ? $"/{timeEntryId}" : "")
+        );
+        url.Query = queryParams.ToString();
+        return url.ToString();
+    }
 
     public static string CleanUpTaskId(string taskId, bool isCustomTaskId)
     {
@@ -128,5 +174,21 @@ public class ClickUpClient: IClickUpClient
             return taskId.TrimStart('#');
         }
         return taskId;
+    }
+    
+    private bool IsValidTimeEntry(TimeEntryEntity timeEntry)
+    {
+        if (timeEntry.IsActive)
+        {
+            _logger.LogError("TimeEntry is active");
+            return false;
+        }
+        if (string.IsNullOrEmpty(timeEntry.TaskId))
+        {
+            _logger.LogError("TimeEntry does not contain TaskId: {TimeEntryId}", timeEntry.Id);
+            return false;
+        }
+
+        return true;
     }
 }

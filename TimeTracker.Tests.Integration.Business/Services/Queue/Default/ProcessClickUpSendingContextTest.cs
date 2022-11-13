@@ -52,6 +52,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
             _workspace,
             _securityKey,
             _teamId,
+            true,
             true
         ).Wait();
         
@@ -108,5 +109,28 @@ public class ProcessClickUpSendingContextTest: BaseTest
 
         await DbSessionProvider.CurrentSession.RefreshAsync(timeEntryWithAnotherUser);
         Assert.Null(timeEntryWithAnotherUser.ClickUpId);
+    }
+    
+    [Fact]
+    public async Task ShouldFillTimeEntryFromTaskDetails()
+    {
+        _timeEntry.Description = "";
+        await CommitDbChanges();
+        
+        var testContext = new IntegrationAppQueueItemContext()
+        {
+            TimeEntryId = _timeEntry.Id
+        };
+        Assert.Null(_timeEntry.ClickUpId);
+
+        await _queueService.PushDefaultAsync(testContext);
+
+        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        Assert.True(actualProcessedCounter == 1);
+        Assert.Equal(1, _clickUpClient.SentTimeEntries.Count);
+
+        await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
+        Assert.NotNull(_timeEntry.ClickUpId);
+        Assert.NotEmpty(_timeEntry.Description);
     }
 }

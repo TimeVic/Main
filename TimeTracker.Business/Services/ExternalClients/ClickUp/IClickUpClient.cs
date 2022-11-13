@@ -6,5 +6,7 @@ namespace TimeTracker.Business.Services.ExternalClients.ClickUp;
 
 public interface IClickUpClient
 {
+    Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry);
+    
     Task<SetTimeEntryResponseDto?> SendTimeEntryAsync(TimeEntryEntity timeEntry);
 }
