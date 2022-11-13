@@ -53,6 +53,7 @@ public class SendNewTimeEntityTest : BaseTest
             _workspace,
             _securityKey,
             _teamId,
+            true,
             true
         ).Wait();
     }
@@ -137,6 +138,30 @@ public class SendNewTimeEntityTest : BaseTest
     //     Assert.False(actualResponse.Value.IsError);
     // }
 
+    [Fact]
+    public async Task ShouldGetTaskDetails()
+    {
+        var date = DateTime.UtcNow.Date;
+        var activeEntry = await _timeEntryDao.StartNewAsync(
+            _user,
+            _workspace,
+            date,
+            TimeSpan.FromMinutes(1),
+            true
+        );
+        activeEntry.TaskId = _taskId;
+        
+        // Description should be empty
+        activeEntry.Description = "";
+        await CommitDbChanges();
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
+        await CommitDbChanges();
+        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+    
+        var getTaskResponse = await _сlickUpClient.GetTaskAsync(activeEntry);
+        Assert.NotEmpty(getTaskResponse.Value.Name);
+    }
+    
     [Fact]
     public void ShouldRemoveFirstSymbolFromId()
     {

@@ -18,7 +18,8 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
         WorkspaceEntity workspace,
         string? securityKey,
         string? teamId,
-        bool isCustomTaskIds
+        bool isCustomTaskIds,
+        bool isFillTimeEntryWithTaskDetails = true
     )
     {
         var clickUpSettings = workspace.GetClickUpSettings(user);

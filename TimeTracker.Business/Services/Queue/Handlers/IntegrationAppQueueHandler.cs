@@ -4,6 +4,7 @@ using NHibernate;
 using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Exceptions.Common;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 
@@ -49,10 +50,16 @@ public class IntegrationAppQueueHandler: IAsyncQueueHandler<IntegrationAppQueueI
 
             if (timeEntry.Workspace.IsIntegrationClickUpActive(timeEntry.User.Id))
             {
-                var response = await _clickUpClient.SendTimeEntryAsync(timeEntry);
-                if (response is {IsError: false})
+                var setResponse = await _clickUpClient.SendTimeEntryAsync(timeEntry);
+                if (setResponse is {IsError: false})
                 {
-                    timeEntry.ClickUpId = response.Value.Id;
+                    timeEntry.ClickUpId = setResponse.Value.Id;
+                    await _session.SaveAsync(timeEntry, cancellationToken);
+                }
+                var getTaskResponse = await _clickUpClient.GetTaskAsync(timeEntry);
+                if (getTaskResponse != null)
+                {
+                    timeEntry.Description = getTaskResponse.Value.Name;
                     await _session.SaveAsync(timeEntry, cancellationToken);
                 }
             }

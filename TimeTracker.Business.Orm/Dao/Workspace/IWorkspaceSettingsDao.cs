@@ -10,6 +10,7 @@ public interface IWorkspaceSettingsDao: IDomainService
         WorkspaceEntity workspace,
         string? securityKey,
         string? teamId,
-        bool isCustomTaskIds
+        bool isCustomTaskIds,
+        bool isFillTimeEntryWithTaskDetails = true
     );
 }
