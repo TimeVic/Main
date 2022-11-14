@@ -4,6 +4,8 @@ public class ByMonthsReportItemDto
 {
     public int Month { get; set; }
     
+    public int Year { get; set; }
+    
     public object DurationAsEpoch { get; set; }
 
     public TimeSpan Duration
