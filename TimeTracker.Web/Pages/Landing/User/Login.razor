@@ -15,15 +15,15 @@
                 <ValidationSummary/>
 
                 <div class="mb-2">
-                    <RadzenLabel
-                        Text="Enter your email"
-                        class="col-lg-12 col-sm-3 mb-3"/>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">
+                        Enter your email
+                    </RadzenText>
                     <RadzenTextBox @bind-Value="model.Email" Class="w-100 mb-3 col"/>
                 </div>
                 <div class="mb-2">
-                    <RadzenLabel
-                        Text="Your password"
-                        class="col-lg-12 col-sm-3 mb-3"/>
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">
+                        Your password
+                    </RadzenText>
                     <RadzenPassword @bind-Value="model.Password" Class="w-100 mb-3 col"/>
                 </div>
                 @if (_isLoading)
