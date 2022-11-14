@@ -5,228 +5,24 @@
 @using TimeTracker.Business.Common.Constants
 
 <div class="w-time-entry-list">
-    <RadzenDataGrid
-        @ref="@_grid"
-        TItem="TimeEntryDto"
-        AllowSorting="false"
-        EditMode="DataGridEditMode.Single"
-        PageSize="@GlobalConstants.ListPageSize"
-        Data="@_list"
-        AllowPaging="true"
-        RowUpdate="@OnUpdateRow"
-        IsLoading="@_state.Value.IsListLoading"
+    @foreach (var groupedItem in _groupedList)
+    {
+        <RadzenCard class="mb-3">
+            <RadzenText 
+                class="mb-3"
+                TextStyle="TextStyle.H5">
+                @groupedItem.Key.ToShortDateString()
+            </RadzenText>
+
+            <TimeEntryTable
+                Items="@groupedItem"
+                IsFilteredList="IsFilteredList"/>
+        </RadzenCard>
+    }
+    <RadzenPager
         Count="@_totalCounter"
-        LoadData="@OnLoadList"
+        AlwaysVisible="true"
         ShowPagingSummary="true"
-        Density="Density.Compact"
-        ColumnWidth="200px">
-
-        <Columns>
-        
-            @if (IsFilteredList)
-            {
-                <RadzenDataGridColumn
-                    TItem="TimeEntryDto"
-                    Title="User"
-                    Width="100px"
-                    TextAlign="TextAlign.Center">
-
-                    <Template Context="entry">
-                        @entry.User.Name
-                    </Template>
-                </RadzenDataGridColumn>
-            }
-            
-            <RadzenDataGridColumn
-                TItem="TimeEntryDto"
-                Title="Duration"
-                Width="60px"
-                TextAlign="TextAlign.Center">
-
-                <Template Context="entry">
-                    @_timeParsingService.TimeSpanToTimeString(entry.Duration, true)
-                </Template>
-                <EditTemplate Context="entry">
-                    <DurationField
-                        Value="@entry.Duration"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-
-            <RadzenDataGridColumn
-                TItem="TimeEntryDto"
-                Title="Date"
-                Width="100px"
-                TextAlign="TextAlign.Center">
-
-                <Template Context="entry">
-                    @entry.Date.ToString("d")
-                </Template>
-                <EditTemplate Context="entry">
-                    <RadzenDatePicker
-                        @bind-Value="@entry.Date"
-                        DateFormat="d"
-                        Class="w-100"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-
-            <RadzenDataGridColumn
-                TItem="TimeEntryDto"
-                Title="Period"
-                Width="100px"
-                TextAlign="TextAlign.Center">
-
-                <Template Context="entry">
-                    <div class="d-flex justify-content-center">
-                        @_timeParsingService.TimeSpanToTimeString(entry.StartTime)
-                        <div class="fw-bold pr-2 pl-2 text-center">
-                            -
-                        </div>
-                        @_timeParsingService.TimeSpanToTimeString(entry.EndTime.Value)
-                    </div>
-                </Template>
-                <EditTemplate Context="entry">
-                    <div class="d-flex justify-content-start">
-                        <TimeInput
-                            Class="mr-1"
-                            Value="@entry.StartTime"
-                            ValueChanged="@(time => OnChangeStartTime(entry, time))"/>
-                        <div class="fw-bold pt-2 text-center">
-                            <RadzenIcon Icon="code"/>
-                        </div>
-                        <TimeInput
-                            Class="ml-1"
-                            Value="@entry.EndTime.Value"
-                            ValueChanged="@(async time => await OnChangeEndTime(entry, time))"/>
-                    </div>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-
-            <RadzenDataGridColumn
-                TItem="TimeEntryDto"
-                Title="Project"
-                Width="120px">
-
-                <Template Context="entry">
-                    @entry.Project?.Name
-                    @if (entry.Project?.Client != null)
-                    {
-                        <RadzenText
-                            class="d-block"
-                            TextStyle="TextStyle.Caption">
-                            <b>@entry.Project?.Client?.Name</b>
-                        </RadzenText>
-                    }
-                </Template>
-                <EditTemplate Context="entry">
-                    <ProjectsDropDown
-                        Value="@(entry.Project?.Id ?? 0)"
-                        SelectedItemChanged="project => entry.Project = project"
-                        Class="ml-1"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-
-            <RadzenDataGridColumn
-                TItem="TimeEntryDto"
-                Title="Task ID"
-                Width="100px">
-
-                <Template Context="entry">
-                    @entry.TaskId
-                </Template>
-                <EditTemplate Context="entry">
-                    <RadzenTextBox
-                        Class="ml-1"
-                        MaxLength="500"
-                        @bind-Value="@entry.TaskId"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-
-            <RadzenDataGridColumn
-                TItem="TimeEntryDto"
-                Title="Description"
-                Width="200px">
-
-                <Template Context="entry">
-                    @entry.Description
-                </Template>
-                <EditTemplate Context="entry">
-                    <RadzenTextBox
-                        Class="ml-1"
-                        @bind-Value="@entry.Description"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-
-            <RadzenDataGridColumn
-                TItem="TimeEntryDto"
-                Title="Billable"
-                Width="60px">
-
-                <Template Context="entry">
-                    <RadzenText class="d-block" TextStyle="TextStyle.Caption">
-                        <RadzenCheckBox
-                            Disabled="true"
-                            Class="ml-1"
-                            @bind-Value="@entry.IsBillable"
-                            MouseEnter="(args) => ShowBillableRateTooltip(args, entry)"/>
-                    </RadzenText>
-                </Template>
-                <EditTemplate Context="entry">
-                    <RadzenCheckBox
-                        Class="ml-1"
-                        @bind-Value="@entry.IsBillable"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-
-            <RadzenDataGridColumn
-                TItem="TimeEntryDto"
-                Title=""
-                Width="60px">
-
-                <Template Context="entry">
-                    @if (!IsFilteredList)
-                    {
-                        <RadzenButton
-                            Icon="done_all"
-                            ButtonStyle="ButtonStyle.Light"
-                            Size="ButtonSize.Small"
-                            Click="@(args => CopyTimeEntry(entry))"
-                            Disabled="@(!CanEditTimeEntry(entry) || _state.Value.IsTimeEntryProcessing)"
-                            @onclick:stopPropagation="true">
-                        </RadzenButton>
-                    }
-                    <RadzenButton
-                        Icon="edit"
-                        ButtonStyle="ButtonStyle.Light"
-                        Size="ButtonSize.Small"
-                        Click="@(args => EditRow(entry))"
-                        Disabled="@(!CanEditTimeEntry(entry) || _state.Value.IsTimeEntryProcessing)"
-                        @onclick:stopPropagation="true">
-                    </RadzenButton>
-                    <RadzenButton
-                        Size="ButtonSize.Small"
-                        ButtonStyle="ButtonStyle.Danger"
-                        Disabled="@(!CanEditTimeEntry(entry) || _state.Value.IsTimeEntryProcessing)"
-                        Icon="delete"
-                        Click="async () => await OnDeleteItemAsync(entry)"/>
-                </Template>
-                <EditTemplate Context="entry">
-
-                    <RadzenButton
-                        Icon="check"
-                        Size="ButtonSize.Small"
-                        ButtonStyle="ButtonStyle.Primary"
-                        Disabled="@(!CanEditTimeEntry(entry))"
-                        Click="@(() => OnClickSaveRow(entry))"/>
-
-                    <RadzenButton
-                        Icon="close"
-                        Size="ButtonSize.Small"
-                        ButtonStyle="ButtonStyle.Light"
-                        Disabled="@(!CanEditTimeEntry(entry))"
-                        Click="@(() => OnClickCancelEditMode(entry))">
-                    </RadzenButton>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-        </Columns>
-    </RadzenDataGrid>
+        PageSize="@GlobalConstants.ListPageSize" PageChanged="OnPageChanged">
+    </RadzenPager>
 </div>
