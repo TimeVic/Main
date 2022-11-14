@@ -14,10 +14,11 @@ public partial class SummaryReportDao: ISummaryReportDao
     private const string SqlQuerySummaryByMonthForOwner = @"
         select
             cast(extract(month from te.date) AS int) as Month,
+            cast(extract(year from te.date) AS int) as Year,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
         from time_entries te 
         where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
-        group by month
+        group by month, year
         order by month desc
     ";
     
@@ -38,10 +39,11 @@ public partial class SummaryReportDao: ISummaryReportDao
     private const string SqlQuerySummaryByMonthForOther = @"
         select
             cast(extract(month from te.date) AS int) as Month,
+            cast(extract(year from te.date) AS int) as Year,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
         from time_entries te 
         where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
-        group by month
+        group by month, year
         order by month
     ";
 

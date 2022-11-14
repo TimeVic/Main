@@ -14,7 +14,7 @@
         await base.OnInitializedAsync();
     }
 
-    private string GetProjectName(int month, int year)
+    private string GetName(int month, int year)
     {
         return new DateTime(year, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
     }
@@ -33,12 +33,12 @@
     <Columns>
         <RadzenDataGridColumn 
             TItem="SummaryByMonthsReportItemDto"
-            Title="Client"
+            Title="Month"
             Width="250px"
             TextAlign="TextAlign.Left"
         >
             <Template Context="item">
-                @GetProjectName(item.Month, item.Year)
+                @GetName(item.Month, item.Year)
             </Template>
         </RadzenDataGridColumn>
         

@@ -94,6 +94,9 @@ public class GetReportByMothsTest: BaseTest
         Assert.Equal(DateTime.UtcNow.AddMonths(-1).Month, firstReportItem.Month);
         Assert.Equal(DateTime.UtcNow.AddMonths(-2).Month, secondReportItem.Month);
         Assert.Equal(DateTime.UtcNow.AddMonths(-3).Month, thirdReportItem.Month);
+        Assert.Equal(DateTime.UtcNow.AddMonths(-1).Year, firstReportItem.Year);
+        Assert.Equal(DateTime.UtcNow.AddMonths(-2).Year, secondReportItem.Year);
+        Assert.Equal(DateTime.UtcNow.AddMonths(-3).Year, thirdReportItem.Year);
         
         Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
@@ -171,6 +174,7 @@ public class GetReportByMothsTest: BaseTest
         var firstReportItem = result.First();
 
         Assert.Equal(DateTime.UtcNow.AddMonths(-2).Month, firstReportItem.Month);
+        Assert.Equal(DateTime.UtcNow.AddMonths(-2).Year, firstReportItem.Year);
         Assert.Equal(TimeSpan.FromHours(12), firstReportItem.Duration);
     }
 }
