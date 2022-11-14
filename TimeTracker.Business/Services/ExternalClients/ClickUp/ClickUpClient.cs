@@ -158,10 +158,7 @@ public class ClickUpClient: IClickUpClient
         queryParams.Add("custom_task_ids", isCustomTaskIds.ToString().ToLower());
         queryParams.Add("team_id", teamId);
         queryParams.Add("include_subtasks", "false");
-        var url = new UriBuilder(
-            $"{BaseUrl}/task/{taskId}"
-            + (timeEntryId.HasValue ? $"/{timeEntryId}" : "")
-        );
+        var url = new UriBuilder($"{BaseUrl}/task/{taskId}");
         url.Query = queryParams.ToString();
         return url.ToString();
     }
