@@ -24,8 +24,7 @@ window.getReCaptchaToken = function (siteKey) {
     });
 };
 
-window.setFavicon = function (isColor) {
+window.setFavicon = function (fileName) {
     const element = document.querySelectorAll('[rel=icon]')[0];
-    const dir = isColor ? 'color' : 'black';
-    element.setAttribute('href', `/img/logo/${dir}/clock-256.png`)
+    element.setAttribute('href', `/img/logo/${fileName}`)
 };
