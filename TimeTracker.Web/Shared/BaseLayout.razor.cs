@@ -73,7 +73,13 @@ public partial class BaseLayout
         };
         TimeEntryState.StateChanged += async (sender, args) =>
         {
-            await Js.InvokeAsync<object>("window.setFavicon", TimeEntryState.Value.HasActiveEntry);
+            var faviconName = "black/clock-64.png";
+            if (TimeEntryState.Value.HasActiveEntry)
+            {
+                faviconName = "play_1/play-64.png";
+            }
+
+            await Js.InvokeAsync<object>("window.setFavicon", faviconName);
         };
         Dispatcher.Dispatch(new LoadPersistedDataAction());
     }
