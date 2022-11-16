@@ -55,8 +55,14 @@
                     <RadzenNumeric @bind-Value="@item.Amount" Format="0.##" Disabled="true" Name="Amount"/>
                 </Template>
                 <EditTemplate Context="item">
-                    <RadzenNumeric @bind-Value="@item.Amount" Format="0.##" Style="width:100%; display: block" Name="Amount"/>
-                    <RadzenNumericRangeValidator Component="Amount" Min="1" Popup="true" Style="position: absolute"/>
+                    <RadzenNumeric 
+                        TValue="decimal"
+                        @bind-Value="@item.Amount"
+                        Step="0.01"
+                        Format="0.00"
+                        Style="width:100%; display: block"
+                        Name="Amount"/>
+                    <RadzenRequiredValidator Component="Amount"Popup="true" Style="position: absolute"/>
                 </EditTemplate>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="PaymentDto" Title="Payment Date">
