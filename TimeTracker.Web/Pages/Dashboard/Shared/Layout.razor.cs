@@ -9,10 +9,18 @@ public partial class Layout
     {
         IsRedirectIfNotLoggedIn = true;
         await base.OnInitializedAsync();
-        
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadProjectListAction(false));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Client.LoadClientListAction(false));
+        if (AuthState.Value.IsLoggedIn)
+        {
+            await OnLoggedInAsync();
+        }
+    }
+    
+    protected override async Task OnLoggedInAsync()
+    {
         Dispatcher.Dispatch(new TimeTracker.Web.Store.Workspace.LoadListAction(false));
         Dispatcher.Dispatch(new TimeTracker.Web.Store.WorkspaceMemberships.LoadListAction(false));
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadProjectListAction(false));
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Client.LoadClientListAction(false));
+        await Task.CompletedTask;
     }
 }

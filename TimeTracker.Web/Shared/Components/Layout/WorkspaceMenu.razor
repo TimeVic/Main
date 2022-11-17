@@ -7,7 +7,7 @@
         Variant="Variant.Outlined" 
         ButtonStyle="ButtonStyle.Secondary"
         Click=@(args => OnClickToMenuItem(args.Value))
-        class="ml-2 mr-2"
+        class="mr-2"
     >
         <ChildContent>
             @foreach (var workspace in _workpsaceState.Value.List)
