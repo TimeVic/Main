@@ -62,8 +62,9 @@ public partial class ProjectPage
                 NotificationService.Notify(new NotificationMessage()
                 {
                     Severity = NotificationSeverity.Info,
-                    Summary = "Project is sent"
+                    Summary = "Project has been updated"
                 });
+                _navigationManager.NavigateTo(SiteUrl.Dashboard_Projects);
             }
         }
         catch (Exception)
