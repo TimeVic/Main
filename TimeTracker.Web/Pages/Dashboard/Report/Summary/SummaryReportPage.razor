@@ -30,15 +30,15 @@
     else
     {
         <RadzenChart>
-            <RadzenColumnSeries 
+            <RadzenLineSeries 
                 Data="@_byDateItems" 
                 CategoryProperty="Date"
-                LineType="LineType.Dashed"
+                LineType="LineType.Solid"
                 ValueProperty="DurationAsMillis"
                 Title="By Date"
             >
                 <RadzenSeriesDataLabels Visible="false" />
-            </RadzenColumnSeries>
+            </RadzenLineSeries>
             <RadzenColumnOptions Radius="5" Width="30"/>
             <RadzenValueAxis Min="0" Step="86400000" Formatter="FormatterDuration">
                 <RadzenGridLines Visible="true" />
