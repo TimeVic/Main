@@ -2,6 +2,8 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Radzen.Blazor;
+using TimeTracker.Web.Constants;
+using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Shared;
@@ -13,6 +15,11 @@ public partial class MainHeader
     
     [Inject]
     private IState<AuthState> AuthState { get; set; }
+
+    private bool _isShowDashboardLink
+    {
+        get => !NavigationManager.GetPath().StartsWith(SiteUrl.DashboardBase);
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,6 +41,9 @@ public partial class MainHeader
     {
         switch (menuEvent.Value)
         {
+            case "user_profile":
+                // TODO: Add user's profile page
+                break;
             case "logout":
                 Dispatcher.Dispatch(new LogoutAction());
                 NavigationManager.NavigateTo("/", true);

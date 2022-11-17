@@ -1,14 +1,15 @@
 ﻿@inherits BaseComponent
 
 @using TimeTracker.Web.Shared.Components.Layout
+@using TimeTracker.Web.Core.Helpers
 
 <RadzenHeader>
-    <div class="row justify-content-start align-items-center p-1">
+    <div class="row p-2">
         <div class="col-5 d-flex align-items-center">
             <a class="navbar-brand" href="#">
-                <img 
-                    style="width: 48px;"
-                    src="/img/logo/black/clock-256.png" 
+                <img
+                    style="width: 28px;"
+                    src="/img/logo/black/clock-256.png"
                     class="d-inline-block">
                 <b>TimeVic</b>
             </a>
@@ -17,10 +18,17 @@
             <div class="d-md-inline-flex align-items-center">
                 @if (AuthState.Value.IsLoggedIn)
                 {
-                    <RadzenLink
-                        Path="@SiteUrl.DashboardBase"
-                        Text="Dashboard"/>
-                    <WorkspaceMenu/>
+                    if (_isShowDashboardLink)
+                    {
+                        <RadzenLink
+                            class="mr-2"
+                            Path="@SiteUrl.DashboardBase"
+                            Text="Dashboard"/>
+                    }
+                    else
+                    {
+                        <WorkspaceMenu/>
+                    }
                 }
                 else
                 {
@@ -30,20 +38,41 @@
                     <RadzenLink
                         Path="@SiteUrl.Registration_Step1"
                         Text="Sign Up"
-                        class="ml-3"/>
+                        class="ml-3 mr-3"/>
                 }
             </div>
             @if (AuthState.Value.IsLoggedIn)
             {
-                <RadzenProfileMenu Click="OnClickUserMenu">
+                <RadzenProfileMenu
+                    class="p-0 pl-3"
+                    Click="OnClickUserMenu">
                     <Template>
                         <RadzenGravatar Email="user@example.com">
                         </RadzenGravatar>
                     </Template>
                     <ChildContent>
-                        <RadzenProfileMenuItem Text="Logout" Value="logout" Icon="logout"></RadzenProfileMenuItem>
+                        <div class="pt-3 pl-3 pr-3 pb-1">
+                            <RadzenText TextStyle="TextStyle.DisplayH6">
+                                @AuthState.Value.User.Name
+                            </RadzenText>
+                            @if (AuthState.Value.User.Name != AuthState.Value.User.Email)
+                            {
+                                <RadzenText TextStyle="TextStyle.Subtitle2">
+                                    @AuthState.Value.User.Name
+                                </RadzenText>
+                            }
+                        </div>
+                        <hr/>
+                        <RadzenProfileMenuItem
+                            Text="My profile"
+                            Value="user_profile"
+                            Icon="account_circle"/>
+                        <RadzenProfileMenuItem
+                            Text="Logout"
+                            Value="logout"
+                            Icon="logout"/>
                     </ChildContent>
-                </RadzenProfileMenu>    
+                </RadzenProfileMenu>
             }
         </div>
     </div>

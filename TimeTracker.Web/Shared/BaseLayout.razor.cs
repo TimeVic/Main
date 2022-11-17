@@ -95,7 +95,7 @@ public partial class BaseLayout
             CheckIsLoggedInAndRedirect();
             if (AuthState.Value.IsLoggedIn)
             {
-                await OnAppInitializedAsync();
+                await OnLoggedInAsync();
             }
         };
         ReCaptchaService.IsShowChanged += OnReCaptchaShowChanged;
@@ -105,7 +105,7 @@ public partial class BaseLayout
         CheckIsLoggedInAndRedirect();
         if (AuthState.Value.IsLoggedIn)
         {
-            await OnAppInitializedAsync();
+            await OnLoggedInAsync();
         }
     }
 
@@ -133,7 +133,7 @@ public partial class BaseLayout
         StateHasChanged();
     }
 
-    protected virtual Task OnAppInitializedAsync()
+    protected virtual Task OnLoggedInAsync()
     {
         return Task.CompletedTask;
     }
