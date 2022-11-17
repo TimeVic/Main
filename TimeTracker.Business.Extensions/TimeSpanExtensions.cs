@@ -46,7 +46,7 @@ public static class TimeSpanExtensions
             span.Duration().Days > 0 
                 ? string.Format(R.TimeSpan_Pattern_Days_Short, span.Days) 
                 : string.Empty,
-            $"{span.Duration().Hours:0}:{span.Duration().Minutes:0}:{span.Duration().Seconds:0}"
+            $"{span.Duration().Hours:00}:{span.Duration().Minutes:00}:{span.Duration().Seconds:00}"
         );
 
         if (formatted.EndsWith(", ")) formatted = formatted.Substring(0, formatted.Length - 2);
