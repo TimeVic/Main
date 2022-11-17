@@ -23,9 +23,9 @@
                 Name="Access level"/>
         </div>
     </div>
-    <h3 class="mt-3">Access to projects</h3>
     @foreach (var accessItem in model.ProjectsAccess)
     {
+        <h3 class="mt-3">Access to projects</h3>
         <RadzenCard class="pb-4 mt-2">
             <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">
                 @GetProjectName(accessItem.ProjectId)
