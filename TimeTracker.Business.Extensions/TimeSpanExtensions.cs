@@ -39,4 +39,20 @@ public static class TimeSpanExtensions
 
         return formatted;
     }
+    
+    public static string ToReadableShortString(this TimeSpan span)
+    {
+        string formatted = string.Format("{0}{1}",
+            span.Duration().Days > 0 
+                ? string.Format(R.TimeSpan_Pattern_Days_Short, span.Days) 
+                : string.Empty,
+            $"{span.Duration().Hours:0}:{span.Duration().Minutes:0}:{span.Duration().Seconds:0}"
+        );
+
+        if (formatted.EndsWith(", ")) formatted = formatted.Substring(0, formatted.Length - 2);
+
+        if (string.IsNullOrEmpty(formatted)) formatted = R.TimeSpan_ZeroSeconds;
+
+        return formatted;
+    }
 }

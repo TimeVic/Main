@@ -28,6 +28,6 @@ public partial class SummaryReportPage
     private string FormatterDuration(object durationObject)
     {
         var duration = TimeSpan.FromMilliseconds((double)durationObject);
-        return duration.ToReadableString();
+        return duration.ToReadableShortString();
     }
 }
