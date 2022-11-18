@@ -71,6 +71,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
                 accessType
             );
             return await GetReportForOtherAsync(
+                user,
                 availableProjects.Items,
                 request.StartTime,
                 request.EndTime,
@@ -153,6 +154,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
         }
         
         private async Task<SummaryReportResponse> GetReportForOtherAsync(
+            UserEntity currentUser,
             ICollection<ProjectEntity> availableProjectsForUser,
             DateTime startTime,
             DateTime endTime,
@@ -162,6 +164,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
             var byDaysReportItems = await _summaryReportDao.GetReportByDayForOtherAsync(
                 startTime,
                 endTime,
+                currentUser.Id,
                 availableProjectsForUser
             );
             var response = new SummaryReportResponse()
@@ -173,6 +176,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
                 var groupedItems = await _summaryReportDao.GetReportByDayForOtherAsync(
                     startTime,
                     endTime,
+                    currentUser.Id,
                     availableProjectsForUser
                 );
                 response.GroupedByDay = _mapper.Map<ICollection<SummaryByDaysReportItemDto>>(groupedItems);
@@ -182,6 +186,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
                 var groupedItems = await _summaryReportDao.GetReportByClientForOtherAsync(
                     startTime,
                     endTime,
+                    currentUser.Id,
                     availableProjectsForUser
                 );
                 response.GroupedByClient = _mapper.Map<ICollection<SummaryByClientsReportItemDto>>(groupedItems);
@@ -191,6 +196,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
                 var groupedItems = await _summaryReportDao.GetReportByProjectForOtherAsync(
                     startTime,
                     endTime,
+                    currentUser.Id,
                     availableProjectsForUser
                 );
                 response.GroupedByProject = _mapper.Map<ICollection<SummaryByProjectsReportItemDto>>(groupedItems);
@@ -200,6 +206,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
                 var groupedItems = await _summaryReportDao.GetReportByMonthForOtherAsync(
                     startTime,
                     endTime,
+                    currentUser.Id,
                     availableProjectsForUser
                 );
                 response.GroupedByMonth = _mapper.Map<ICollection<SummaryByMonthsReportItemDto>>(groupedItems);
@@ -209,6 +216,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
                 var groupedItems = await _summaryReportDao.GetReportByWeekForOtherAsync(
                     startTime,
                     endTime,
+                    currentUser.Id,
                     availableProjectsForUser
                 );
                 response.GroupedByWeek = _mapper.Map<ICollection<SummaryByWeeksReportItemDto>>(groupedItems);
@@ -218,6 +226,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
                 var groupedItems = await _summaryReportDao.GetReportByUserForOtherAsync(
                     startTime,
                     endTime,
+                    currentUser.Id,
                     availableProjectsForUser
                 );
                 response.GroupedByUser = _mapper.Map<ICollection<SummaryByUsersReportItemDto>>(groupedItems);
