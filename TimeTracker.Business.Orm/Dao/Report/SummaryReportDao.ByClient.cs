@@ -15,7 +15,15 @@ public partial class SummaryReportDao: ISummaryReportDao
         select
             c.id as ClientId,
             c.name as ClientName,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
+            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
+            sum(
+	            round(
+	                te.hourly_rate / 60 / 60 -- Price per second 
+	                *
+	                extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                2
+	            )
+            ) as AmountOriginal
         from time_entries te 
         left join projects p on p.id = te.project_id
         left join clients c on c.id = p.client_id 
@@ -41,7 +49,18 @@ public partial class SummaryReportDao: ISummaryReportDao
         select
             c.id as ClientId,
             c.name as ClientName,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
+            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
+            sum(
+                case when te.user_id = :userId
+                    then round(
+	                    te.hourly_rate / 60 / 60 -- Price per second 
+	                    *
+	                    extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                    2
+	                )
+                    else 0
+                end
+            ) as AmountOriginal
         from time_entries te 
         inner join projects p on p.id = te.project_id
         inner join clients c on c.id = p.client_id 
@@ -52,6 +71,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     public async Task<ICollection<ByClientsReportItemDto>> GetReportByClientForOtherAsync(
         DateTime startDate,
         DateTime endDate,
+        long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     )
     {
@@ -59,6 +79,7 @@ public partial class SummaryReportDao: ISummaryReportDao
             SqlQuerySummaryByClientForOther,
             startDate,
             endDate,
+            userId,
             availableProjectsForUser
         );
     }

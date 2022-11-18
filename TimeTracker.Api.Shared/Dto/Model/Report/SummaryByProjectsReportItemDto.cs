@@ -6,5 +6,7 @@ public class SummaryByProjectsReportItemDto
     
     public string? ProjectName { get; set; }
 
+    public decimal Amount { get; set; }
+    
     public TimeSpan Duration { get; set; }
 }

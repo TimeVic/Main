@@ -15,7 +15,15 @@ public partial class SummaryReportDao: ISummaryReportDao
         select
             te.user_id as UserId,
             u.user_name as UserName,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
+            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
+            sum(
+	            round(
+	                te.hourly_rate / 60 / 60 -- Price per second 
+	                *
+	                extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                2
+	            )
+            ) as AmountOriginal
         from time_entries te 
         inner join users u on u.id = te.user_id
         where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
@@ -40,7 +48,18 @@ public partial class SummaryReportDao: ISummaryReportDao
         select
             te.user_id as UserId,
             u.user_name as UserName,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
+            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
+            sum(
+                case when te.user_id = :userId
+                    then round(
+	                    te.hourly_rate / 60 / 60 -- Price per second 
+	                    *
+	                    extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                    2
+	                )
+                    else 0
+                end
+            ) as AmountOriginal
         from time_entries te 
         inner join users u on u.id = te.user_id
         where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
@@ -50,6 +69,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     public async Task<ICollection<ByUsersReportItemDto>> GetReportByUserForOtherAsync(
         DateTime startDate,
         DateTime endDate,
+        long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     )
     {
@@ -57,6 +77,7 @@ public partial class SummaryReportDao: ISummaryReportDao
             SqlQuerySummaryByUserForOther,
             startDate,
             endDate,
+            userId,
             availableProjectsForUser
         );
     }

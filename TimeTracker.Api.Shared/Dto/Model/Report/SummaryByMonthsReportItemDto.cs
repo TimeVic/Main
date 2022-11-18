@@ -6,5 +6,7 @@ public class SummaryByMonthsReportItemDto
     
     public int Year { get; set; }
 
+    public decimal Amount { get; set; }
+    
     public TimeSpan Duration { get; set; }
 }

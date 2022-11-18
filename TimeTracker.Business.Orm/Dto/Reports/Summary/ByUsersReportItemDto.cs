@@ -8,10 +8,17 @@ public class ByUsersReportItemDto
     
     public object DurationAsEpoch { get; set; }
 
+    public object AmountOriginal { get; set; }
+    
     public TimeSpan Duration
     {
         get => TimeSpan.FromSeconds(
             Convert.ToDouble(DurationAsEpoch)
         );
+    }
+    
+    public decimal Amount
+    {
+        get => Convert.ToDecimal(AmountOriginal);
     }
 }

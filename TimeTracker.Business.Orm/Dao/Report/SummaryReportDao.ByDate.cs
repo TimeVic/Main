@@ -11,10 +11,10 @@ namespace TimeTracker.Business.Orm.Dao.Report;
 
 public partial class SummaryReportDao: ISummaryReportDao
 {
-    private const string SqlQuerySummaryByMonthForOwner = @"
+    #region By Date
+    private const string SqlQuerySummaryByDayForOwner = @"
         select
-            cast(extract(month from te.date) AS int) as Month,
-            cast(extract(year from te.date) AS int) as Year,
+            te.date as Date,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
             sum(
 	            round(
@@ -24,30 +24,30 @@ public partial class SummaryReportDao: ISummaryReportDao
 	                2
 	            )
             ) as AmountOriginal
-        from time_entries te 
+        from time_entries te
         where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
-        group by month, year
-        order by month desc
+        group by te.date
+        order by te.date desc
+        limit 60
     ";
-    
-    public async Task<ICollection<ByMonthsReportItemDto>> GetReportByMonthForOwnerOrManagerAsync(
+
+    public async Task<ICollection<ByDaysReportItemDto>> GetReportByDayForOwnerOrManagerAsync(
         long workspaceId,
         DateTime startDate,
         DateTime endDate
     )
     {
-        return await GetReportForOwnerOrManagerAsync<ByMonthsReportItemDto>(
-            SqlQuerySummaryByMonthForOwner,
+        return await GetReportForOwnerOrManagerAsync<ByDaysReportItemDto>(
+            SqlQuerySummaryByDayForOwner,
             workspaceId,
             startDate,
             endDate
         );
     }
     
-    private const string SqlQuerySummaryByMonthForOther = @"
+    private const string SqlQuerySummaryByDayForOthers = @"
         select
-            cast(extract(month from te.date) AS int) as Month,
-            cast(extract(year from te.date) AS int) as Year,
+            te.date as Date,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
             sum(
                 case when te.user_id = :userId
@@ -60,25 +60,27 @@ public partial class SummaryReportDao: ISummaryReportDao
                     else 0
                 end
             ) as AmountOriginal
-        from time_entries te 
+        from time_entries te
         where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
-        group by month, year
-        order by month
+        group by te.date
+        order by te.date desc
+        limit 60
     ";
-
-    public async Task<ICollection<ByMonthsReportItemDto>> GetReportByMonthForOtherAsync(
+    
+    public async Task<ICollection<ByDaysReportItemDto>> GetReportByDayForOtherAsync(
         DateTime startDate,
         DateTime endDate,
         long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     )
     {
-        return await GetReportForOtherAsync<ByMonthsReportItemDto>(
-            SqlQuerySummaryByMonthForOther,
+        return await GetReportForOtherAsync<ByDaysReportItemDto>(
+            SqlQuerySummaryByDayForOthers,
             startDate,
             endDate,
             userId,
             availableProjectsForUser
         );
     }
+    #endregion
 }

@@ -23,9 +23,12 @@ public class TimeEntryReportsDao: ITimeEntryReportsDao
             c.name as ClientName,
             extract(epoch from sum(te.end_time - te.start_time)) as TotalDurationAsEpoch,
             sum(
-	            (te.hourly_rate / 60 / 60) -- Price per second 
-	            *
-	            extract(epoch from te.end_time - te.start_time) -- Total seconds
+	            round(
+	                (te.hourly_rate / 60 / 60) -- Price per second 
+	                *
+	                extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                2
+	            )
             ) as AmountOriginal,
 
             (
