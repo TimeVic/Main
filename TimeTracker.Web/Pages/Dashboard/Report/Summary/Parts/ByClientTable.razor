@@ -7,6 +7,7 @@
 
     [Parameter]
     public ICollection<SummaryByClientsReportItemDto> Items { get; set; } = new List<SummaryByClientsReportItemDto>();
+
 }
 
 <h3>Grouped by client:</h3>
@@ -19,24 +20,31 @@
     AllowPaging="false">
 
     <Columns>
-        <RadzenDataGridColumn 
+        <RadzenDataGridColumn
             TItem="SummaryByClientsReportItemDto"
             Title="Client"
             Width="250px"
-            TextAlign="TextAlign.Left"
-        >
+            TextAlign="TextAlign.Left">
             <Template Context="item">
                 @(item.ClientName ?? "- No client -")
             </Template>
         </RadzenDataGridColumn>
-        
-        <RadzenDataGridColumn 
-            TItem="SummaryByClientsReportItemDto" 
+
+        <RadzenDataGridColumn
+            TItem="SummaryByClientsReportItemDto"
             Title="Duration"
-            TextAlign="TextAlign.Left"
-        >
+            TextAlign="TextAlign.Left">
             <Template Context="item">
                 @item.Duration.ToReadableShortString()
+            </Template>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn
+            TItem="SummaryByClientsReportItemDto"
+            Title="Amount"
+            TextAlign="TextAlign.Left">
+            <Template Context="item">
+                @item.Amount.ToMoneyFormat()
             </Template>
         </RadzenDataGridColumn>
     </Columns>

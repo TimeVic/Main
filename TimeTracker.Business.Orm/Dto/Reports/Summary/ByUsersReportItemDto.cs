@@ -6,6 +6,8 @@ public class ByUsersReportItemDto
     
     public string? UserName { get; set; }
     
+    public string Email { get; set; }
+    
     public object DurationAsEpoch { get; set; }
 
     public object AmountOriginal { get; set; }

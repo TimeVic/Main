@@ -15,6 +15,7 @@ public partial class SummaryReportDao: ISummaryReportDao
         select
             te.user_id as UserId,
             u.user_name as UserName,
+            u.email as Email,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
             sum(
 	            round(
@@ -27,7 +28,7 @@ public partial class SummaryReportDao: ISummaryReportDao
         from time_entries te 
         inner join users u on u.id = te.user_id
         where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
-        group by te.user_id, u.user_name
+        group by te.user_id, u.user_name, u.email
     ";
     
     public async Task<ICollection<ByUsersReportItemDto>> GetReportByUserForOwnerOrManagerAsync(
@@ -48,6 +49,7 @@ public partial class SummaryReportDao: ISummaryReportDao
         select
             te.user_id as UserId,
             u.user_name as UserName,
+            u.email as Email,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
             sum(
                 case when te.user_id = :userId
@@ -63,7 +65,7 @@ public partial class SummaryReportDao: ISummaryReportDao
         from time_entries te 
         inner join users u on u.id = te.user_id
         where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
-        group by te.user_id, u.user_name
+        group by te.user_id, u.user_name, u.email
     ";
     
     public async Task<ICollection<ByUsersReportItemDto>> GetReportByUserForOtherAsync(

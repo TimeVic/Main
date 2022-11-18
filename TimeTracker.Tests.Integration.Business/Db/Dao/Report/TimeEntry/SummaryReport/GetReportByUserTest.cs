@@ -122,6 +122,8 @@ public class GetReportByUserTest: BaseTest
         Assert.Equal(TimeSpan.FromHours(24), firstReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(15), secondReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(12), thirdReportItem.Duration);
+        
+        Assert.NotEmpty(firstReportItem.Email);
     }
     
     [Fact]

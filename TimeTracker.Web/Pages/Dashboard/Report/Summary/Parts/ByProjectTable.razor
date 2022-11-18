@@ -15,6 +15,7 @@
     {
         await base.OnInitializedAsync();
     }
+
 }
 
 <h3>Grouped by project:</h3>
@@ -28,24 +29,31 @@
     AllowPaging="false">
 
     <Columns>
-        <RadzenDataGridColumn 
+        <RadzenDataGridColumn
             TItem="SummaryByProjectsReportItemDto"
             Title="Project"
             Width="250px"
-            TextAlign="TextAlign.Left"
-        >
+            TextAlign="TextAlign.Left">
             <Template Context="item">
                 @(item.ProjectName ?? "- No project -")
             </Template>
         </RadzenDataGridColumn>
-        
-        <RadzenDataGridColumn 
-            TItem="SummaryByProjectsReportItemDto" 
+
+        <RadzenDataGridColumn
+            TItem="SummaryByProjectsReportItemDto"
             Title="Duration"
-            TextAlign="TextAlign.Left"
-        >
+            TextAlign="TextAlign.Left">
             <Template Context="item">
                 @item.Duration.ToReadableShortString()
+            </Template>
+        </RadzenDataGridColumn>
+        
+        <RadzenDataGridColumn
+            TItem="SummaryByProjectsReportItemDto"
+            Title="Amount"
+            TextAlign="TextAlign.Left">
+            <Template Context="item">
+                @item.Amount.ToMoneyFormat()
             </Template>
         </RadzenDataGridColumn>
     </Columns>
