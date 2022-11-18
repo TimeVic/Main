@@ -5,6 +5,7 @@
 
     [Parameter]
     public ICollection<SummaryByDaysReportItemDto> Items { get; set; } = new List<SummaryByDaysReportItemDto>();
+
 }
 
 <h3>Grouped by date:</h3>
@@ -17,24 +18,31 @@
     AllowPaging="false">
 
     <Columns>
-        <RadzenDataGridColumn 
+        <RadzenDataGridColumn
             TItem="SummaryByDaysReportItemDto"
             Title="Date"
             Width="120px"
-            TextAlign="TextAlign.Center"
-        >
+            TextAlign="TextAlign.Center">
             <Template Context="item">
                 @item.Date.ToShortDateString()
             </Template>
         </RadzenDataGridColumn>
-        
-        <RadzenDataGridColumn 
-            TItem="SummaryByDaysReportItemDto" 
+
+        <RadzenDataGridColumn
+            TItem="SummaryByDaysReportItemDto"
             Title="Duration"
-            TextAlign="TextAlign.Left"
-        >
+            TextAlign="TextAlign.Left">
             <Template Context="item">
                 @item.Duration.ToReadableShortString()
+            </Template>
+        </RadzenDataGridColumn>
+        
+        <RadzenDataGridColumn
+            TItem="SummaryByDaysReportItemDto"
+            Title="Amount"
+            TextAlign="TextAlign.Left">
+            <Template Context="item">
+                @item.Amount.ToMoneyFormat()
             </Template>
         </RadzenDataGridColumn>
     </Columns>

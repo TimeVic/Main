@@ -6,17 +6,12 @@
 
     [Parameter]
     public ICollection<SummaryByWeeksReportItemDto> Items { get; set; } = new List<SummaryByWeeksReportItemDto>();
-    
+
     private RadzenDataGrid<SummaryByWeeksReportItemDto> _grid { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-    }
-
-    private string GetProjectName(int month, int year)
-    {
-        return new DateTime(year, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
     }
 }
 
@@ -31,26 +26,33 @@
     AllowPaging="false">
 
     <Columns>
-        <RadzenDataGridColumn 
+        <RadzenDataGridColumn
             TItem="SummaryByWeeksReportItemDto"
             Title="Week"
             Width="250px"
-            TextAlign="TextAlign.Left"
-        >
+            TextAlign="TextAlign.Left">
             <Template Context="item">
                 @item.WeekStartDate.ToShortDateString()
                 -
                 @item.WeekEndDate.ToShortDateString()
             </Template>
         </RadzenDataGridColumn>
-        
-        <RadzenDataGridColumn 
-            TItem="SummaryByWeeksReportItemDto" 
+
+        <RadzenDataGridColumn
+            TItem="SummaryByWeeksReportItemDto"
             Title="Duration"
-            TextAlign="TextAlign.Left"
-        >
+            TextAlign="TextAlign.Left">
             <Template Context="item">
                 @item.Duration.ToReadableShortString()
+            </Template>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn
+            TItem="SummaryByDaysReportItemDto"
+            Title="Amount"
+            TextAlign="TextAlign.Left">
+            <Template Context="item">
+                @item.Amount.ToMoneyFormat()
             </Template>
         </RadzenDataGridColumn>
     </Columns>
