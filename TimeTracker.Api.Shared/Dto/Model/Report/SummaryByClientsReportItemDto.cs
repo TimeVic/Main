@@ -7,4 +7,6 @@ public class SummaryByClientsReportItemDto
     public string? ClientName { get; set; }
     
     public TimeSpan Duration { get; set; }
+    
+    public decimal Amount { get; set; }
 }

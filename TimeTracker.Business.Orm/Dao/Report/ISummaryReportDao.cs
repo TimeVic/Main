@@ -15,6 +15,7 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByDaysReportItemDto>> GetReportByDayForOtherAsync(
         DateTime startDate,
         DateTime endDate,
+        long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 
@@ -27,6 +28,7 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectForOtherAsync(
         DateTime startDate,
         DateTime endDate,
+        long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 
@@ -39,6 +41,7 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByClientsReportItemDto>> GetReportByClientForOtherAsync(
         DateTime startDate,
         DateTime endDate,
+        long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 
@@ -51,6 +54,7 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByUsersReportItemDto>> GetReportByUserForOtherAsync(
         DateTime startDate,
         DateTime endDate,
+        long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 
@@ -63,6 +67,7 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByMonthsReportItemDto>> GetReportByMonthForOtherAsync(
         DateTime startDate,
         DateTime endDate,
+        long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 
@@ -75,6 +80,7 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByWeeksReportItemDto>> GetReportByWeekForOtherAsync(
         DateTime startDate,
         DateTime endDate,
+        long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 }

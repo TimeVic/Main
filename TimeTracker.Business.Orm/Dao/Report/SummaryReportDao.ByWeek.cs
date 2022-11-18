@@ -15,7 +15,15 @@ public partial class SummaryReportDao: ISummaryReportDao
         select
             cast(date_trunc('week', te.date) as date) as WeekStartDate,
             cast(date_trunc('week', te.date) + '6 days' as date) as WeekEndDate,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
+            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
+            sum(
+	            round(
+	                te.hourly_rate / 60 / 60 -- Price per second 
+	                *
+	                extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                2
+	            )
+            ) as AmountOriginal
         from time_entries te 
         where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
         group by WeekStartDate, WeekEndDate
@@ -40,7 +48,18 @@ public partial class SummaryReportDao: ISummaryReportDao
         select
             cast(date_trunc('week', te.date) as date) as WeekStartDate,
             cast(date_trunc('week', te.date) + '6 days' as date) as WeekEndDate,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
+            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
+            sum(
+                case when te.user_id = :userId
+                    then round(
+	                    te.hourly_rate / 60 / 60 -- Price per second 
+	                    *
+	                    extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                    2
+	                )
+                    else 0
+                end
+            ) as AmountOriginal
         from time_entries te 
         where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
         group by WeekStartDate, WeekEndDate
@@ -50,6 +69,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     public async Task<ICollection<ByWeeksReportItemDto>> GetReportByWeekForOtherAsync(
         DateTime startDate,
         DateTime endDate,
+        long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     )
     {
@@ -57,6 +77,7 @@ public partial class SummaryReportDao: ISummaryReportDao
             SqlQuerySummaryByWeekForOther,
             startDate,
             endDate,
+            userId,
             availableProjectsForUser
         );
     }

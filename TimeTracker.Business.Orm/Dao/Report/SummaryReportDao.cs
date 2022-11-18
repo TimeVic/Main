@@ -37,6 +37,7 @@ public partial class SummaryReportDao: ISummaryReportDao
         string query,
         DateTime startDate,
         DateTime endDate,
+        long userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     )
     {
@@ -56,59 +57,8 @@ public partial class SummaryReportDao: ISummaryReportDao
             )
             .SetParameter("startDate", startDate.StartOfDay())
             .SetParameter("endDate", endDate.EndOfDay())
+            .SetParameter("userId", userId)
             .SetResultTransformer(Transformers.AliasToBean<T>())
             .ListAsync<T>();
     }
-    
-    #region By Date
-    private const string SqlQuerySummaryByDayForOwner = @"
-        select
-            te.date as Date,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
-        from time_entries te
-        where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
-        group by te.date
-        order by te.date desc
-        limit 60
-    ";
-
-    public async Task<ICollection<ByDaysReportItemDto>> GetReportByDayForOwnerOrManagerAsync(
-        long workspaceId,
-        DateTime startDate,
-        DateTime endDate
-    )
-    {
-        return await GetReportForOwnerOrManagerAsync<ByDaysReportItemDto>(
-            SqlQuerySummaryByDayForOwner,
-            workspaceId,
-            startDate,
-            endDate
-        );
-    }
-    
-    private const string SqlQuerySummaryByDayForOthers = @"
-        select
-            te.date as Date,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch
-        from time_entries te
-        where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
-        group by te.date
-        order by te.date desc
-        limit 60
-    ";
-    
-    public async Task<ICollection<ByDaysReportItemDto>> GetReportByDayForOtherAsync(
-        DateTime startDate,
-        DateTime endDate,
-        IEnumerable<ProjectEntity>? availableProjectsForUser = null
-    )
-    {
-        return await GetReportForOtherAsync<ByDaysReportItemDto>(
-            SqlQuerySummaryByDayForOthers,
-            startDate,
-            endDate,
-            availableProjectsForUser
-        );
-    }
-    #endregion
 }

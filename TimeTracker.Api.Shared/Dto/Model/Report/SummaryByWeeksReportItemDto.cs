@@ -7,4 +7,6 @@ public class SummaryByWeeksReportItemDto
     public DateTime WeekEndDate { get; set; }
 
     public TimeSpan Duration { get; set; }
+    
+    public decimal Amount { get; set; }
 }

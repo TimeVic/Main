@@ -6,5 +6,7 @@ public class SummaryByDaysReportItemDto
 
     public TimeSpan Duration { get; set; }
 
+    public decimal Amount { get; set; }
+    
     public double DurationAsMillis => Duration.TotalMilliseconds;
 }

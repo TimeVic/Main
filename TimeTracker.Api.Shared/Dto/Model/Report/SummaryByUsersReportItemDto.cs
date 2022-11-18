@@ -6,5 +6,7 @@ public class SummaryByUsersReportItemDto
     
     public string UserName { get; set; }
 
+    public decimal Amount { get; set; }
+    
     public TimeSpan Duration { get; set; }
 }

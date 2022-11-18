@@ -5,6 +5,7 @@ using TimeTracker.Business.Orm.Dao.Report;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
 
@@ -79,7 +80,6 @@ public class GetReportByClientTest: BaseTest
                 HourlyRate = 15
             });
         }
-
         await CommitDbChanges();
         
         var result = await _reportsDao.GetReportByClientForOwnerOrManagerAsync(
@@ -99,6 +99,10 @@ public class GetReportByClientTest: BaseTest
         Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(24), thirdReportItem.Duration);
+        
+        Assert.Equal(180m, firstReportItem.Amount);
+        Assert.Equal(120m, secondReportItem.Amount);
+        Assert.Equal(360m, thirdReportItem.Amount);
         
         result = await _reportsDao.GetReportByClientForOwnerOrManagerAsync(
             _workspace.Id,
@@ -124,10 +128,23 @@ public class GetReportByClientTest: BaseTest
     {
         await DbSessionProvider.PerformCommitAsync();
         var project1 = await _projectSeederSeeder.CreateAsync(_workspace);
+        var project2 = await _projectSeederSeeder.CreateAsync(_workspace);
+        var otherUser = await _userSeeder.CreateActivatedAsync();
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            otherUser,
+            MembershipAccessType.User,
+            new List<ProjectAccessModel>()
+            {
+                new() { Project = project1 },
+                new() { Project = project2 }
+            }
+        );
+
         var client1 = project1.Client;
         for (int i = 0; i < 3; i++)
         {
-            await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+            await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
             {
                 Date = DateTime.UtcNow.AddDays(-1),
                 StartTime = TimeSpan.FromHours(10),
@@ -137,7 +154,6 @@ public class GetReportByClientTest: BaseTest
             }, project1);
         }
         
-        var project2 = await _projectSeederSeeder.CreateAsync(_workspace);
         var client2 = project2.Client;
         for (int i = 0; i < 3; i++)
         {
@@ -168,13 +184,21 @@ public class GetReportByClientTest: BaseTest
         var result = await _reportsDao.GetReportByClientForOtherAsync(
             DateTime.UtcNow.AddDays(-1),
             DateTime.UtcNow.AddDays(1),
-            new List<ProjectEntity> { project1 }
+            otherUser.Id,
+            new List<ProjectEntity> { project1, project2 }
         );
-        Assert.Equal(1, result.Count);
+        Assert.Equal(2, result.Count);
         
         var firstReportItem = result.First();
+        var secondReportItem = result.Last();
 
+        Assert.Equal(180, firstReportItem.Amount);
+        Assert.Equal(0, secondReportItem.Amount);
+        
+        Assert.Equal(client2.Id, secondReportItem.ClientId);
         Assert.Equal(client1.Id, firstReportItem.ClientId);
+        
         Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
+        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
     }
 }

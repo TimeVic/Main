@@ -47,7 +47,7 @@ node('testing-node') {
             }
         }
 
-        def testImage = docker.build('timevic-test-image', '--file=./devops/test/Dockerfile .')
+        def testImage = docker.build('timevic-test-image', '--file=./devops/test-github/Dockerfile .')
         String containerEnvVarString = mapToEnvVars(containerEnvVars)
         testImage.inside(containerEnvVarString.concat(" --network=$networkId")) {
 
@@ -60,7 +60,8 @@ node('testing-node') {
             }
 
             runStage(Stage.INIT_DB) {
-                sh 'pg_ctlcluster 12 main start'
+                sh 'psql --version'
+                sh 'pg_ctlcluster 15 main start'
                 sh 'pg_isready'
                 sh "sudo -u postgres psql -c \"ALTER USER postgres PASSWORD '$postresUserPassword';\""
                 sh "PGPASSWORD=postgres psql -h localhost --username=$postresUserPassword --dbname=$postresUserPassword -c \"select 1\""
