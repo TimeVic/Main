@@ -27,7 +27,7 @@
             Width="250px"
             TextAlign="TextAlign.Left">
             <Template Context="item">
-                @item.UserName
+                @item.Name
             </Template>
         </RadzenDataGridColumn>
 
@@ -39,8 +39,9 @@
                 @item.Duration.ToReadableShortString()
             </Template>
         </RadzenDataGridColumn>
+        
         <RadzenDataGridColumn
-            TItem="SummaryByDaysReportItemDto"
+            TItem="SummaryByUsersReportItemDto"
             Title="Amount"
             TextAlign="TextAlign.Left">
             <Template Context="item">
