@@ -9,7 +9,7 @@ RUN apt install -y apt-transport-https wget ca-certificates iputils-ping telnet 
 
 # Configure time
 ARG DEBIAN_FRONTEND=noninteractive
-ENV TZ=UTC
+ENV TZ=Etc/UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get install -y tzdata lsb-release
 
