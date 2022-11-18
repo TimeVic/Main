@@ -17,20 +17,26 @@ RUN apt-get install -y tzdata lsb-release
 #RUN echo "fs.inotify.max_user_instances=524288" >> /etc/sysctl.conf
 #RUN sysctl -p
 
-# Install .Net Core 7.0
+# Install .Net Core 8.0
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 RUN curl https://packages.microsoft.com/config/ubuntu/20.10/prod.list | tee /etc/apt/sources.list.d/msprod.list
-RUN apt update
-RUN apt install -y dotnet-sdk-7.0
 
 # Install Redis repositories
 RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
 RUN echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list
 
-# Update
+# Install Postgres repositories
+# Create the file repository configuration:
+RUN sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+# Import the repository signing key:
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+# Install packages
+RUN apt update
 RUN apt-get install -y net-tools sudo netcat \
     default-jre \
-    postgresql postgresql-client redis
+    postgresql postgresql-client redis \
+    dotnet-sdk-8.0
 
 # Configure Postgres
 ENV PGTZ=Etc/UTC
