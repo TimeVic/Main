@@ -51,3 +51,4 @@ ENV HOME=/tmp
 COPY . /app
 
 ENTRYPOINT ["tail", "-f", "/dev/null"]
+
