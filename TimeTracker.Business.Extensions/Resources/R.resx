@@ -104,6 +104,6 @@
     <value>0 seconds</value>
   </data>
     <data name="TimeSpan_Pattern_Days_Short" xml:space="preserve">
-    <value>{0:0}d. </value>
+    <value>{0:0}d </value>
   </data>
 </root>

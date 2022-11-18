@@ -42,7 +42,7 @@ public static class TimeSpanExtensions
     
     public static string ToReadableShortString(this TimeSpan span)
     {
-        string formatted = string.Format("{0}{1}",
+        var formatted = string.Format("{0}{1}",
             span.Duration().Days > 0 
                 ? string.Format(R.TimeSpan_Pattern_Days_Short, span.Days) 
                 : string.Empty,

@@ -35,10 +35,17 @@ public partial class PaymentReportPage
         {
             var unpaidAmount = GetClientUnpaidAmount(data.ClientId ?? 0);
             args.Attributes.Add("style", $"background-color: {(unpaidAmount < 0 ? "var(--rz-danger)" : "var(--rz-success)")};");
-            args.Attributes.Add("colspan", 2);
+            args.Attributes.Add("colspan", 1);
         }
     }
 
+    private TimeSpan GetTotalDuration(long clientId)
+    {
+        var totalTicks = _state.Value.PaymentReportItems.Where(item => item.ClientId == clientId)
+            .Sum(item => item.TotalDuration.Ticks);
+        return new TimeSpan(totalTicks);
+    }
+    
     private decimal GetClientTotalAmount(long clientId)
     {
         return _state.Value.PaymentReportItems.Where(item => item.ClientId == clientId).Sum(item => item.Amount);

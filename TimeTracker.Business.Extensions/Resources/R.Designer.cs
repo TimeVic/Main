@@ -204,7 +204,7 @@ namespace TimeTracker.Business.Extensions.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0:0}d. .
+        ///   Looks up a localized string similar to {0:0}d .
         /// </summary>
         internal static string TimeSpan_Pattern_Days_Short {
             get {
