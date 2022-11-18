@@ -65,7 +65,7 @@ node('lm-web-1') {
         ]) {
             envVariables.put(
                 'ConnectionStrings__DefaultConnection',
-                "User ID=${USER_NAME};Password=${PASSWORD};Host=10.10.0.2;Port=5432;Database=timevic;Pooling=true;"
+                "User ID=${USER_NAME};Password=${PASSWORD};Host=10.10.0.2;Port=5433;Database=timevic;Pooling=true;"
             )
         }
         withCredentials([
