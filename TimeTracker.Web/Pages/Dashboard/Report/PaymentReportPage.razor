@@ -2,6 +2,7 @@
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Business.Extensions
 
 @inherits BaseComponent
 @layout Layout
@@ -50,6 +51,7 @@
             var clientAmount = clientDataItem.PaidAmountByClient;
             var unpaidAmount = GetClientUnpaidAmount(clientId);
             var totalAmount = GetClientTotalAmount(clientId);
+            var totalDuration = GetTotalDuration(clientId);
 
             <RadzenText
                 TextStyle="TextStyle.H5"
@@ -101,6 +103,9 @@
                         <Template Context="item">
                             @item.TotalDuration.ToString("dd\\.hh\\:mm\\:ss")
                         </Template>
+                        <FooterTemplate>
+                            Total: <b>@totalDuration.ToReadableShortString()</b>
+                        </FooterTemplate>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn
                         TItem="PaymentsReportItemDto"
