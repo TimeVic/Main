@@ -47,7 +47,7 @@ node('testing-node') {
             }
         }
 
-        def testImage = docker.build('timevic-test-image', '--file=./devops/test/Dockerfile .')
+        def testImage = docker.build('timevic-test-image', '--file=./devops/test-github/Dockerfile .')
         String containerEnvVarString = mapToEnvVars(containerEnvVars)
         testImage.inside(containerEnvVarString.concat(" --network=$networkId")) {
 
