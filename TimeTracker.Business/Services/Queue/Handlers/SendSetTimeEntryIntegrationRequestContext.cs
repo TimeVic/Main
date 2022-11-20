@@ -3,15 +3,15 @@ using Notification.Abstractions;
 
 namespace TimeTracker.Business.Services.Queue.Handlers;
 
-public class IntegrationAppQueueItemContext: IExternalServiceItemContext
+public class SendSetTimeEntryIntegrationRequestContext: IExternalServiceItemContext
 {
     public long TimeEntryId { get; set; }
 
-    public IntegrationAppQueueItemContext()
+    public SendSetTimeEntryIntegrationRequestContext()
     {
     }
 
-    public IntegrationAppQueueItemContext(long timeEntryId)
+    public SendSetTimeEntryIntegrationRequestContext(long timeEntryId)
     {
         TimeEntryId = timeEntryId;
     }

@@ -12,4 +12,6 @@ public interface IRedmineClient: IDomainService
     Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry);
     
     Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry);
+
+    bool IsCorrectTaskId(TimeEntryEntity timeEntry);
 }

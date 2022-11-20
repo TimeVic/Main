@@ -8,6 +8,7 @@ using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Notifications.Services;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
+using TimeTracker.Business.Services.ExternalClients.Redmine;
 using TimeTracker.Business.Testing;
 
 namespace TimeTracker.Tests.Integration.Business.Core;
@@ -52,6 +53,9 @@ public abstract class BaseTest: IDisposable
         {
             builder.RegisterType<ClickUpClientMock>()
                 .As<IClickUpClient>()
+                .SingleInstance();
+            builder.RegisterType<RedmineClientMock>()
+                .As<IRedmineClient>()
                 .SingleInstance();
         }
 

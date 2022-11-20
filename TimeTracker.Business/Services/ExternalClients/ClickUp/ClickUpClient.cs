@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 using System.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
@@ -12,6 +13,9 @@ namespace TimeTracker.Business.Services.ExternalClients.ClickUp;
 
 public class ClickUpClient: AExternalClientService, IClickUpClient
 {
+    private static readonly Regex DefaultTaskIdRegex = new(@"^\#{0,1}[a-zA-Z0-9]{1,10}$");
+    private static readonly Regex CustomTaskIdRegex = new(@"^[a-zA-Z0-9\-]{1,12}$");
+    
     private const string BaseUrl = "https://api.clickup.com/api/v2";
     
     private static HttpClient _newHttpClient => new();
@@ -28,9 +32,10 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         );
     }
 
-    public override Task<bool> IsCorrectTaskId(TimeEntryEntity timeEntry)
+    public override bool IsCorrectTaskId(TimeEntryEntity timeEntry)
     {
-        throw new NotImplementedException();
+        return DefaultTaskIdRegex.IsMatch(timeEntry.TaskId ?? "")
+            || CustomTaskIdRegex.IsMatch(timeEntry.TaskId ?? "");
     }
     
     public async Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry)
@@ -46,8 +51,7 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
             timeEntry.ClickUpId
         );
         _logger.LogDebug("ClickUp. Send request to: {Uri}", uri);
-        HttpResponseMessage response;
-        response = await httpClient.GetAsync(uri);
+        var response = await httpClient.GetAsync(uri);
         return await HandleResponse<GetTaskResponseDto>(uri, response);
     }
 
@@ -95,13 +99,28 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         return new SynchronizedTimeEntryDto()
         {
             Id = responseData.Value.Id?.ToString() ?? "",
-            Description = clickUpTask?.Description
+            Description = clickUpTask?.Name
         };
     }
 
-    protected override Task<bool> SendDeleteTimeEntryRequestAsync(TimeEntryEntity timeEntry)
+    protected override async Task<bool> SendDeleteTimeEntryRequestAsync(TimeEntryEntity timeEntry)
     {
-        throw new NotImplementedException();
+        var httpClient = _newHttpClient;
+        var settings = GetSettings(timeEntry);
+        httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
+        
+        var uri = BaseUrl 
+            + $"/team/{settings.TeamId}/time_entries/{timeEntry.ClickUpId}";
+        _logger.LogDebug("ClickUp. Send request to: {Uri}", uri);
+        var response = await httpClient.DeleteAsync(uri);
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            _logger.LogDebug(
+                "ClickUp returned status code: {response.StatusCode}"
+            );
+            return false;
+        }
+        return true;
     }
     
     private string BuildSetTimeEntryUri(string teamId, string taskId, bool isCustomTaskIds, string? timeEntryId = null)

@@ -139,8 +139,8 @@ namespace TimeTracker.Business.Orm.Entities
             {
                 return !string.IsNullOrEmpty(foundIntegration.Url)
                     && !string.IsNullOrEmpty(foundIntegration.ApiKey)
-                    && foundIntegration.RedmineUserId == 0
-                    && foundIntegration.ActivityId == 0;
+                    && foundIntegration.RedmineUserId != 0
+                    && foundIntegration.ActivityId != 0;
             }
 
             return false;

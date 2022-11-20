@@ -11,19 +11,19 @@ using TimeTracker.Business.Services.ExternalClients.Redmine;
 
 namespace TimeTracker.Business.Services.Queue.Handlers;
 
-public class IntegrationAppQueueHandler: IAsyncQueueHandler<IntegrationAppQueueItemContext>, IDisposable
+public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendSetTimeEntryIntegrationRequestContext>, IDisposable
 {
     private readonly IClickUpClient _clickUpClient;
     private readonly IRedmineClient _redmineClient;
     private readonly IDbSessionProvider _sessionProvider;
-    private readonly ILogger<IntegrationAppQueueHandler> _logger;
+    private readonly ILogger<SendSetTimeEntryIntegrationRequestHandler> _logger;
     private readonly ISession _session;
 
-    public IntegrationAppQueueHandler(
+    public SendSetTimeEntryIntegrationRequestHandler(
         IClickUpClient clickUpClient,
         IRedmineClient redmineClient,
         IDbSessionProvider sessionProvider,
-        ILogger<IntegrationAppQueueHandler> logger
+        ILogger<SendSetTimeEntryIntegrationRequestHandler> logger
     )
     {
         _clickUpClient = clickUpClient;
@@ -33,7 +33,7 @@ public class IntegrationAppQueueHandler: IAsyncQueueHandler<IntegrationAppQueueI
         _session = _sessionProvider.CreateSession();
     }
     
-    public async Task HandleAsync(IntegrationAppQueueItemContext commandContext, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(SendSetTimeEntryIntegrationRequestContext commandContext, CancellationToken cancellationToken = default)
     {
         var transaction = _session.BeginTransaction();
         try
@@ -70,7 +70,7 @@ public class IntegrationAppQueueHandler: IAsyncQueueHandler<IntegrationAppQueueI
                 var setResponse = await _redmineClient.SetTimeEntryAsync(timeEntry);
                 if (setResponse != null)
                 {
-                    timeEntry.ClickUpId = setResponse.Id;
+                    timeEntry.RedmineId = setResponse.Id;
                     if (await _redmineClient.IsFillTimeEntryDescription(timeEntry))
                     {
                         timeEntry.Description = setResponse.Description;

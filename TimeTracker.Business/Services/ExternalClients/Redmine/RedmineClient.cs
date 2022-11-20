@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TimeTracker.Business.Extensions;
@@ -16,6 +17,8 @@ public class RedmineClient: AExternalClientService, IRedmineClient
      * Redmine integration documentation: https://www.redmine.org/projects/redmine/wiki/Rest_TimeEntries
      */
 
+    private static readonly Regex TaskRegex = new(@"^[0-9]+$");
+    
     private const string CreateUrl = "{0}/time_entries.json";
     private const string UpdateUrl = "{0}/time_entries/{1}.json";
     private const string DeleteUrl = "{0}/time_entries/{1}.json";
@@ -29,9 +32,9 @@ public class RedmineClient: AExternalClientService, IRedmineClient
         return Task.FromResult(false);
     }
 
-    public override Task<bool> IsCorrectTaskId(TimeEntryEntity timeEntry)
+    public override bool IsCorrectTaskId(TimeEntryEntity timeEntry)
     {
-        throw new NotImplementedException();
+        return TaskRegex.IsMatch(timeEntry.TaskId);
     }
 
     protected override async Task<SynchronizedTimeEntryDto?> SendTimeEntryAsync(TimeEntryEntity timeEntry)

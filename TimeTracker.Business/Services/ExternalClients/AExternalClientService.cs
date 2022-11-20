@@ -79,7 +79,7 @@ public abstract class AExternalClientService
 
     public abstract Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry);
     
-    public abstract Task<bool> IsCorrectTaskId(TimeEntryEntity timeEntry);
+    public abstract bool IsCorrectTaskId(TimeEntryEntity timeEntry);
     
     protected abstract Task<SynchronizedTimeEntryDto?> SendTimeEntryAsync(TimeEntryEntity timeEntry);
     

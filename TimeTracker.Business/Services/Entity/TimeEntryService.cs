@@ -45,7 +45,7 @@ public class TimeEntryService : ITimeEntryService
         );
         foreach (var timeEntry in timeEntries)
         {
-            await _queueService.PushDefaultAsync(new IntegrationAppQueueItemContext(timeEntry.Id));
+            await _queueService.PushExternalClientAsync(new SendSetTimeEntryIntegrationRequestContext(timeEntry.Id));
         }
 
         return timeEntries;
@@ -54,7 +54,7 @@ public class TimeEntryService : ITimeEntryService
     public async Task<TimeEntryEntity> SetAsync(UserEntity user, WorkspaceEntity workspace, TimeEntryCreationDto timeEntryDto, ProjectEntity? project = null)
     {
         var timeEntry = await _timeEntryDao.SetAsync(user, workspace, timeEntryDto, project);
-        await _queueService.PushDefaultAsync(new IntegrationAppQueueItemContext(timeEntry.Id));
+        await _queueService.PushExternalClientAsync(new SendSetTimeEntryIntegrationRequestContext(timeEntry.Id));
         return timeEntry;
     }
 }

@@ -12,4 +12,8 @@ public interface IClickUpClient
     Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry);
 
     Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry);
+
+    bool IsCorrectTaskId(TimeEntryEntity timeEntry);
+
+    Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry);
 }
