@@ -4,11 +4,11 @@ using TimeTracker.WorkerServices.Core;
 
 namespace TimeTracker.WorkerServices.Services
 {
-    internal class NotificationProcessingHostedService : ABackgroundService
+    internal class QueueProcessingHostedService : ABackgroundService
     {
         private readonly IQueueService _queueService;
 
-        public NotificationProcessingHostedService(
+        public QueueProcessingHostedService(
             ILogger<ABackgroundService> logger,
             IQueueService queueService
         ) : base(logger)
@@ -24,6 +24,7 @@ namespace TimeTracker.WorkerServices.Services
             {
                 await _queueService.ProcessAsync(QueueChannel.Default, cancellationToken);
                 await _queueService.ProcessAsync(QueueChannel.Notifications, cancellationToken);
+                await _queueService.ProcessAsync(QueueChannel.ExternalClient, cancellationToken);
                 await Task.Delay(1000, cancellationToken);
             }
         }

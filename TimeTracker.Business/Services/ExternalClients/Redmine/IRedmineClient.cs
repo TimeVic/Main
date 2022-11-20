@@ -1,15 +1,15 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Services.ExternalClients.ClickUp.Model;
 using TimeTracker.Business.Services.ExternalClients.Dto;
+using TimeTracker.Business.Services.ExternalClients.Redmine.Dto;
 
-namespace TimeTracker.Business.Services.ExternalClients.ClickUp;
+namespace TimeTracker.Business.Services.ExternalClients.Redmine;
 
-public interface IClickUpClient
+public interface IRedmineClient: IDomainService
 {
     Task<SynchronizedTimeEntryDto?> SetTimeEntryAsync(TimeEntryEntity timeEntry);
 
     Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry);
-
-    Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry);
+    
+    Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry);
 }

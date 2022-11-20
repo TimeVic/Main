@@ -2,7 +2,7 @@ using Autofac;
 using Microsoft.Extensions.Configuration;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Integrations;
+using TimeTracker.Business.Orm.Dao.Workspace;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
@@ -98,9 +98,9 @@ public class SendNewTimeEntityTest : BaseTest
         await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
 
-        var actualResponse = await _сlickUpClient.SendTimeEntryAsync(activeEntry);
+        var actualResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
         Assert.NotNull(actualResponse);
-        Assert.True(actualResponse.Value.IsError);
+        Assert.True(actualResponse.IsError);
     }
 
     // [Fact]

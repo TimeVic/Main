@@ -1,8 +1,9 @@
 ﻿using Domain.Abstractions;
+using Notification.Abstractions;
 
 namespace TimeTracker.Business.Services.Queue.Handlers;
 
-public class IntegrationAppQueueItemContext: IQueueItemContext
+public class IntegrationAppQueueItemContext: IExternalServiceItemContext
 {
     public long TimeEntryId { get; set; }
 

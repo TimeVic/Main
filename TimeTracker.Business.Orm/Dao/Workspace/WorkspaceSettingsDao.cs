@@ -1,5 +1,4 @@
 ﻿using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Orm.Dao.Integrations;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Orm.Dao.Workspace;
@@ -38,5 +37,33 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
         await _sessionProvider.CurrentSession.SaveAsync(clickUpSettings);
         
         return clickUpSettings;
+    }
+    
+    public async Task<WorkspaceSettingsRedmineEntity> SetRedmineAsync(
+        UserEntity user,
+        WorkspaceEntity workspace,
+        string? redmineUrl,
+        string? apiKey,
+        long? redmineUserId,
+        long? redmineActivityId
+    )
+    {
+        var settings = workspace.GetRedmineSettings(user);
+        if (settings == null)
+        {
+            settings = new WorkspaceSettingsRedmineEntity();
+            settings.User = user;
+            settings.Workspace = workspace;
+            workspace.SettingsRedmine.Add(settings);
+            settings.CreateTime = DateTime.UtcNow;
+        }
+        settings.UpdateTime = DateTime.UtcNow;
+        settings.ApiKey = apiKey ?? "";
+        settings.RedmineUserId = redmineUserId ?? 0;
+        settings.Url = redmineUrl ?? "";
+        settings.ActivityId = redmineActivityId ?? 0;
+        await _sessionProvider.CurrentSession.SaveAsync(settings);
+        
+        return settings;
     }
 }

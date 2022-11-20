@@ -10,5 +10,7 @@ public interface IQueueService: IDomainService
 
     Task PushDefaultAsync(IQueueItemContext itemContext);
 
+    Task PushExternalClientAsync(IExternalServiceItemContext itemContext);
+
     Task<int> ProcessAsync(QueueChannel channel, CancellationToken cancellationToken = default);
 }

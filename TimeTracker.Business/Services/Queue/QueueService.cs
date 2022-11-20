@@ -44,6 +44,11 @@ public class QueueService: IQueueService
         await _queueDao.Push(itemContext, QueueChannel.Notifications);
     }
     
+    public async Task PushExternalClientAsync(IExternalServiceItemContext itemContext)
+    {
+        await _queueDao.Push(itemContext, QueueChannel.ExternalClient);
+    }
+    
     public async Task<int> ProcessAsync(QueueChannel channel, CancellationToken cancellationToken = default)
     {
         var processedCounter = 0;

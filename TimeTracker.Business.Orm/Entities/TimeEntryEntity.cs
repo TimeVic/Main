@@ -41,7 +41,11 @@ namespace TimeTracker.Business.Orm.Entities
         
         [Property(NotNull = false)]
         [Column(Name = "clickup_id", NotNull = false)]
-        public virtual long? ClickUpId { get; set; }
+        public virtual string? ClickUpId { get; set; }
+        
+        [Property(NotNull = false)]
+        [Column(Name = "redmine_id", NotNull = false)]
+        public virtual string? RedmineId { get; set; }
         
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
