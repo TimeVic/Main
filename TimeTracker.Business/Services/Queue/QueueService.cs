@@ -91,7 +91,7 @@ public class QueueService: IQueueService
         {
             await HandleQueueItem<SendSetTimeEntryIntegrationRequestContext>(queueItem, cancellationToken);
         }
-        if (IsContext<SendDeleteTimeEntryIntegrationRequestContext>(contextType))
+        else if (IsContext<SendDeleteTimeEntryIntegrationRequestContext>(contextType))
         {
             await HandleQueueItem<SendDeleteTimeEntryIntegrationRequestContext>(queueItem, cancellationToken);
         }
