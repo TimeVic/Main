@@ -45,6 +45,14 @@ node('testing-node') {
             withCredentials([string(credentialsId: "timevic_testing_clickup_secret_key", variable: 'AUTH_SECRET')]) {
                 containerEnvVars.put('Integration__ClickUp__SecurityKey', AUTH_SECRET)
             }
+
+            withCredentials([string(credentialsId: "timevic_testing_redmine_api_key", variable: 'AUTH_SECRET')]) {
+                containerEnvVars.put('Integration__Redmine__ApiKey', AUTH_SECRET)
+            }
+
+            withCredentials([string(credentialsId: "timevic_testing_redmine_url", variable: 'AUTH_SECRET')]) {
+                containerEnvVars.put('Integration__Redmine__Url', AUTH_SECRET)
+            }
         }
 
         def testImage = docker.build('timevic-test-image', '--file=./devops/test-github/Dockerfile .')
@@ -81,15 +89,15 @@ node('testing-node') {
             }
 
             runStage(Stage.RUN_UNIT_TESTS) {
-                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Unit.Business'
+                sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Unit.Business'
             }
             
             runStage(Stage.RUN_INTEGRATION_TESTS_1) {
-                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Business'
+                sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Integration.Business'
             }
 
             runStage(Stage.RUN_INTEGRATION_TESTS_2) {
-                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api'
+                sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api'
             }
         }
 

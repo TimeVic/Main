@@ -6,31 +6,32 @@ using TimeTracker.Business.Orm.Dao.Workspace;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
-using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.ExternalClients.Redmine;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
 
-namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.ClickUp;
+namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.Redmine;
 
-public class SendNewTimeEntityTest : BaseTest
+public class RedmineClientTest : BaseTest
 {
     private readonly IUserSeeder _userSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
-    private readonly IClickUpClient _сlickUpClient;
     private readonly IWorkspaceSettingsDao _workspaceSettingsDao;
-    private readonly string _securityKey;
-
-    private readonly string _teamId;
-    private readonly string _taskId;
+    private readonly IRedmineClient _redmineClient;
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IUserDao _userDao;
+    
+    private readonly string _apiKey;
+    private readonly long _userId;
+    private readonly string _taskId;
+    private readonly string? _redmineUrl;
+    private readonly long _activityId;
 
-    // TODO: Revert test
-    public SendNewTimeEntityTest() : base(false)
+    public RedmineClientTest() : base(false)
     {
-        _сlickUpClient = Scope.Resolve<IClickUpClient>();
+        _redmineClient = Scope.Resolve<IRedmineClient>();
         _workspaceSettingsDao = Scope.Resolve<IWorkspaceSettingsDao>();
 
         _userSeeder = Scope.Resolve<IUserSeeder>();
@@ -39,49 +40,52 @@ public class SendNewTimeEntityTest : BaseTest
         _userDao = Scope.Resolve<IUserDao>();
 
         var configuration = Scope.Resolve<IConfiguration>();
-        _securityKey = configuration.GetValue<string>("Integration:ClickUp:SecurityKey");
-        _teamId = configuration.GetValue<string>("Integration:ClickUp:TeamId");
-        _taskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
+        _apiKey = configuration.GetValue<string>("Integration:Redmine:ApiKey");
+        _userId = configuration.GetValue<long>("Integration:Redmine:UserId");
+        _taskId = configuration.GetValue<string>("Integration:Redmine:TaskId");
+        _activityId = configuration.GetValue<long>("Integration:Redmine:ActivityId");
+        _redmineUrl = configuration.GetValue<string>("Integration:Redmine:Url");
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
         // Clear queue
         _queueDao.CompleteAllPending().Wait();
 
-        _workspaceSettingsDao.SetClickUpAsync(
+        _workspaceSettingsDao.SetRedmineAsync(
             _user,
             _workspace,
-            _securityKey,
-            _teamId,
-            true,
-            true
+            _redmineUrl,
+            _apiKey,
+            _userId,
+            _activityId
         ).Wait();
     }
 
     [Fact]
     public async Task ShouldSendNewTimeEntry()
     {
+        var expectedDescription = "Test description";
         var date = DateTime.UtcNow.Date;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
             DateTime.UtcNow.Date,
-            DateTime.UtcNow.TimeOfDay,
-            true
+            TimeSpan.FromMinutes(1),
+            true,
+            description: expectedDescription
         );
-        activeEntry.TaskId = _taskId;
+        activeEntry.TaskId = _taskId.ToString();
         await DbSessionProvider.PerformCommitAsync();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
         await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
-        var actualResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
-        Assert.NotNull(actualResponse);
-        Assert.False(actualResponse.IsError);
+        var actualResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
         Assert.NotEmpty(actualResponse.Id);
+        Assert.Equal(expectedDescription, actualResponse.Comment);
 
-        activeEntry.ClickUpId = actualResponse.Id;
-        var isDeleted = await _сlickUpClient.DeleteTimeEntryAsync(activeEntry);
+        activeEntry.RedmineId = actualResponse.Id;
+        var isDeleted = await _redmineClient.DeleteTimeEntryAsync(activeEntry);
         Assert.True(isDeleted);
     }
 
@@ -101,8 +105,8 @@ public class SendNewTimeEntityTest : BaseTest
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
         await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
-
-        var actualResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
+    
+        var actualResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
         Assert.NotNull(actualResponse);
         Assert.True(actualResponse.IsError);
     }
@@ -115,18 +119,18 @@ public class SendNewTimeEntityTest : BaseTest
             _user,
             _workspace,
             date,
-            DateTime.UtcNow.TimeOfDay,
+            TimeSpan.FromMinutes(1),
             true
         );
         activeEntry.TaskId = _taskId;
         await DbSessionProvider.PerformCommitAsync();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
         await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
-        var creatingResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
+        var creatingResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
         Assert.False(creatingResponse.IsError);
-        activeEntry.ClickUpId = creatingResponse.Id;
+        activeEntry.RedmineId = creatingResponse.Id;
         await DbSessionProvider.CurrentSession.SaveAsync(activeEntry);
         await CommitDbChanges();
     
@@ -138,50 +142,10 @@ public class SendNewTimeEntityTest : BaseTest
             Description = "Test",
             TaskId = activeEntry.TaskId
         });
-        var actualResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
+        var actualResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
         Assert.False(actualResponse.IsError);
         
-        var isDeleted = await _сlickUpClient.DeleteTimeEntryAsync(activeEntry);
+        var isDeleted = await _redmineClient.DeleteTimeEntryAsync(activeEntry);
         Assert.True(isDeleted);
-    }
-
-    [Fact]
-    public async Task ShouldGetTaskDetails()
-    {
-        var date = DateTime.UtcNow.Date;
-        var activeEntry = await _timeEntryDao.StartNewAsync(
-            _user,
-            _workspace,
-            date,
-            TimeSpan.FromMinutes(1),
-            true
-        );
-        activeEntry.TaskId = _taskId;
-        
-        // Description should be empty
-        activeEntry.Description = "";
-        await CommitDbChanges();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
-        await CommitDbChanges();
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
-    
-        var getTaskResponse = await _сlickUpClient.GetTaskAsync(activeEntry);
-        Assert.NotEmpty(getTaskResponse.Value.Name);
-    }
-    
-    [Fact]
-    public void ShouldRemoveFirstSymbolFromId()
-    {
-        var taskId = " #abd123 ";
-        var actualTaskId = ClickUpClient.CleanUpTaskId(taskId, false);
-        Assert.Equal("abd123", actualTaskId);
-    }
-
-    [Fact]
-    public void ShouldNotRemoveFirstSymbolFromId()
-    {
-        var expectedTaskId = " #abd123 ";
-        var actualTaskId = ClickUpClient.CleanUpTaskId(expectedTaskId, true);
-        Assert.Equal(expectedTaskId.Trim(), actualTaskId);
     }
 }

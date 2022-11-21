@@ -18,7 +18,7 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public virtual void ConfigureServices(IServiceCollection services)
     {
-        services.AddHostedService<Services.NotificationProcessingHostedService>();
+        services.AddHostedService<Services.QueueProcessingHostedService>();
     }
 
     public void ConfigureContainer(ContainerBuilder containerBuilder)

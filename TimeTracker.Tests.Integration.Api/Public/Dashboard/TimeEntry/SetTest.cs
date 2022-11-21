@@ -8,7 +8,6 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Integrations;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.Queue;
@@ -100,7 +99,7 @@ public class SetTest: BaseTest
         
         Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
 
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
     
@@ -142,7 +141,7 @@ public class SetTest: BaseTest
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
         Assert.Equal(fakeEntry.TaskId, actualDto.TaskId);
         
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
     

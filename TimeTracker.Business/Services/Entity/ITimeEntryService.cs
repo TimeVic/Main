@@ -19,4 +19,6 @@ public interface ITimeEntryService: IDomainService
         TimeEntryCreationDto timeEntryDto,
         ProjectEntity? project = null
     );
+
+    Task DeleteAsync(TimeEntryEntity timeEntry);
 }

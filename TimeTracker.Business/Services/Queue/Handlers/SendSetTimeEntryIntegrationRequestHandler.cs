@@ -7,29 +7,33 @@ using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
+using TimeTracker.Business.Services.ExternalClients.Redmine;
 
 namespace TimeTracker.Business.Services.Queue.Handlers;
 
-public class IntegrationAppQueueHandler: IAsyncQueueHandler<IntegrationAppQueueItemContext>, IDisposable
+public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendSetTimeEntryIntegrationRequestContext>, IDisposable
 {
     private readonly IClickUpClient _clickUpClient;
+    private readonly IRedmineClient _redmineClient;
     private readonly IDbSessionProvider _sessionProvider;
-    private readonly ILogger<IntegrationAppQueueHandler> _logger;
+    private readonly ILogger<SendSetTimeEntryIntegrationRequestHandler> _logger;
     private readonly ISession _session;
 
-    public IntegrationAppQueueHandler(
+    public SendSetTimeEntryIntegrationRequestHandler(
         IClickUpClient clickUpClient,
+        IRedmineClient redmineClient,
         IDbSessionProvider sessionProvider,
-        ILogger<IntegrationAppQueueHandler> logger
+        ILogger<SendSetTimeEntryIntegrationRequestHandler> logger
     )
     {
         _clickUpClient = clickUpClient;
+        _redmineClient = redmineClient;
         _sessionProvider = sessionProvider;
         _logger = logger;
         _session = _sessionProvider.CreateSession();
     }
     
-    public async Task HandleAsync(IntegrationAppQueueItemContext commandContext, CancellationToken cancellationToken = default)
+    public async Task HandleAsync(SendSetTimeEntryIntegrationRequestContext commandContext, CancellationToken cancellationToken = default)
     {
         var transaction = _session.BeginTransaction();
         try
@@ -50,16 +54,27 @@ public class IntegrationAppQueueHandler: IAsyncQueueHandler<IntegrationAppQueueI
 
             if (timeEntry.Workspace.IsIntegrationClickUpActive(timeEntry.User.Id))
             {
-                var setResponse = await _clickUpClient.SendTimeEntryAsync(timeEntry);
-                if (setResponse is {IsError: false})
+                var setResponse = await _clickUpClient.SetTimeEntryAsync(timeEntry);
+                if (setResponse != null)
                 {
-                    timeEntry.ClickUpId = setResponse.Value.Id;
+                    timeEntry.ClickUpId = setResponse.Id;
+                    if (await _clickUpClient.IsFillTimeEntryDescription(timeEntry))
+                    {
+                        timeEntry.Description = setResponse.Description;
+                    }
                     await _session.SaveAsync(timeEntry, cancellationToken);
                 }
-                var getTaskResponse = await _clickUpClient.GetTaskAsync(timeEntry);
-                if (getTaskResponse != null)
+            }
+            if (timeEntry.Workspace.IsIntegrationRedmineActive(timeEntry.User.Id))
+            {
+                var setResponse = await _redmineClient.SetTimeEntryAsync(timeEntry);
+                if (setResponse != null)
                 {
-                    timeEntry.Description = getTaskResponse.Value.Name;
+                    timeEntry.RedmineId = setResponse.Id;
+                    if (await _redmineClient.IsFillTimeEntryDescription(timeEntry))
+                    {
+                        timeEntry.Description = setResponse.Description;
+                    }
                     await _session.SaveAsync(timeEntry, cancellationToken);
                 }
             }

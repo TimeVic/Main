@@ -75,14 +75,23 @@ namespace TimeTracker.Business.Orm.Entities
         [Bag(
             Inverse = true,
             Lazy = CollectionLazy.True,
+            Cascade = "none"
+        )]
+        [Key(Column = "workspace_id")]
+        [OneToMany(ClassType = typeof(WorkspaceSettingsRedmineEntity))]
+        public virtual ICollection<WorkspaceSettingsRedmineEntity> SettingsRedmine { get; set; } = new List<WorkspaceSettingsRedmineEntity>();
+        
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.True,
             Cascade = "save-update"
         )]
         [Key(Column = "workspace_id")]
         [OneToMany(ClassType = typeof(WorkspaceMembershipEntity))]
         public virtual ICollection<WorkspaceMembershipEntity> Memberships { get; set; } = new List<WorkspaceMembershipEntity>();
         
-        #region Other
-
+        #region Integration - ClickUp
+        
         public virtual WorkspaceSettingsClickUpEntity? GetClickUpSettings(long userId)
         {
             return SettingsClickUp.FirstOrDefault(
@@ -107,6 +116,40 @@ namespace TimeTracker.Business.Orm.Entities
             return false;
         }
         
+        #endregion
+        
+        #region Integration - Redmine
+        
+        public virtual WorkspaceSettingsRedmineEntity? GetRedmineSettings(long userId)
+        {
+            return SettingsRedmine.FirstOrDefault(
+                item => item.User.Id == userId
+            );
+        }
+
+        public virtual WorkspaceSettingsRedmineEntity? GetRedmineSettings(UserEntity user)
+        {
+            return GetRedmineSettings(user.Id);
+        }
+        
+        public virtual bool IsIntegrationRedmineActive(long userId)
+        {
+            var foundIntegration = GetRedmineSettings(userId);
+            if (foundIntegration != null)
+            {
+                return !string.IsNullOrEmpty(foundIntegration.Url)
+                    && !string.IsNullOrEmpty(foundIntegration.ApiKey)
+                    && foundIntegration.RedmineUserId != 0
+                    && foundIntegration.ActivityId != 0;
+            }
+
+            return false;
+        }
+        
+        #endregion
+        
+        #region Other
+
         public virtual bool ContainsProject(ProjectEntity? project)
         {
             if (project == null)

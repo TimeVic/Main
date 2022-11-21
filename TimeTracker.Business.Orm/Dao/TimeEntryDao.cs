@@ -40,12 +40,7 @@ public class TimeEntryDao: ITimeEntryDao
         if (id == null)
             return null;
         return await _sessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(id);
-    }
-    
-    public async Task DeleteAsync(TimeEntryEntity timeEntry)
-    {
-        await _sessionProvider.CurrentSession.DeleteAsync(timeEntry);
-    }    
+    }  
     
     public async Task<ListDto<TimeEntryEntity>> GetListAsync(
         WorkspaceEntity workspace,
@@ -64,7 +59,7 @@ public class TimeEntryDao: ITimeEntryDao
             .Left.JoinAlias(() => rootProjectAlias.Client, () => rootClientAlias)
             .OrderBy(item => item.Date).Desc
             .OrderBy(item => item.StartTime).Desc
-            .Where(item => item.Workspace.Id == workspace.Id);
+            .Where(item => item.Workspace.Id == workspace.Id && item.IsMarkedToDelete == false);
         
         if (filter != null)
         {

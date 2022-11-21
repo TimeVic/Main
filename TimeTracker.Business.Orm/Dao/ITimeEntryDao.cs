@@ -10,8 +10,6 @@ namespace TimeTracker.Business.Orm.Dao;
 public interface ITimeEntryDao: IDomainService
 {
     Task<TimeEntryEntity?> GetByIdAsync(long? id);
-
-    Task DeleteAsync(TimeEntryEntity timeEntry);
     
     Task<TimeEntryEntity> StartNewAsync(
         UserEntity user,

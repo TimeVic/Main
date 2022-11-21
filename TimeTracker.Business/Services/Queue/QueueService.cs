@@ -44,6 +44,11 @@ public class QueueService: IQueueService
         await _queueDao.Push(itemContext, QueueChannel.Notifications);
     }
     
+    public async Task PushExternalClientAsync(IExternalServiceItemContext itemContext)
+    {
+        await _queueDao.Push(itemContext, QueueChannel.ExternalClient);
+    }
+    
     public async Task<int> ProcessAsync(QueueChannel channel, CancellationToken cancellationToken = default)
     {
         var processedCounter = 0;
@@ -60,9 +65,9 @@ public class QueueService: IQueueService
                 await ProcessNotificationItem(queueItem, cancellationToken);
                 processedCounter++;
             }
-            if (channel == QueueChannel.Default)
+            if (channel == QueueChannel.ExternalClient)
             {
-                await ProcessDefaultItem(queueItem, cancellationToken);
+                await ProcessExternalClientItem(queueItem, cancellationToken);
                 processedCounter++;
             }
             else
@@ -74,7 +79,7 @@ public class QueueService: IQueueService
         return processedCounter;
     }
 
-    private async Task ProcessDefaultItem(QueueEntity queueItem, CancellationToken cancellationToken = default)
+    private async Task ProcessExternalClientItem(QueueEntity queueItem, CancellationToken cancellationToken = default)
     {
         var contextType = GetContextType(queueItem, typeof(BusinessAssemblyMarker));
         if (contextType == null)
@@ -82,9 +87,13 @@ public class QueueService: IQueueService
             _logger.LogError($"Queue context was not found in assembly: {queueItem.ContextType}");
             return;
         }
-        if (IsContext<IntegrationAppQueueItemContext>(contextType))
+        if (IsContext<SendSetTimeEntryIntegrationRequestContext>(contextType))
         {
-            await HandleQueueItem<IntegrationAppQueueItemContext>(queueItem, cancellationToken);
+            await HandleQueueItem<SendSetTimeEntryIntegrationRequestContext>(queueItem, cancellationToken);
+        }
+        else if (IsContext<SendDeleteTimeEntryIntegrationRequestContext>(contextType))
+        {
+            await HandleQueueItem<SendDeleteTimeEntryIntegrationRequestContext>(queueItem, cancellationToken);
         }
         else
         {

@@ -1,11 +1,9 @@
-﻿using System.Globalization;
-using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Services.ExternalClients.ClickUp.Model;
+﻿using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.Dto;
 
-namespace TimeTracker.Business.Services.ExternalClients.ClickUp;
+namespace TimeTracker.Business.Services.ExternalClients.Redmine;
 
-public class ClickUpClientMock: IClickUpClient
+public class RedmineClientMock: IRedmineClient
 {
     public ICollection<TimeEntryEntity> SentTimeEntries = new List<TimeEntryEntity>();
     
@@ -15,7 +13,7 @@ public class ClickUpClientMock: IClickUpClient
     {
         SentTimeEntries.Clear();
     }
-
+    
     public async Task<SynchronizedTimeEntryDto?> SetTimeEntryAsync(TimeEntryEntity timeEntry)
     {
         SentTimeEntries.Add(timeEntry);
@@ -31,19 +29,14 @@ public class ClickUpClientMock: IClickUpClient
         return Task.FromResult(true);
     }
 
-    public async Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry)
+    public Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry)
     {
-        return null;
+        SentTimeEntries.Add(timeEntry);
+        return Task.FromResult(true);
     }
 
     public bool IsCorrectTaskId(TimeEntryEntity timeEntry)
     {
         return true;
-    }
-
-    public Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry)
-    {
-        SentTimeEntries.Add(timeEntry);
-        return Task.FromResult(true);
     }
 }
