@@ -91,6 +91,10 @@ public class QueueService: IQueueService
         {
             await HandleQueueItem<SendSetTimeEntryIntegrationRequestContext>(queueItem, cancellationToken);
         }
+        if (IsContext<SendDeleteTimeEntryIntegrationRequestContext>(contextType))
+        {
+            await HandleQueueItem<SendDeleteTimeEntryIntegrationRequestContext>(queueItem, cancellationToken);
+        }
         else
         {
             _logger.LogError($"Incorrect queue context: {queueItem.ContextType}");

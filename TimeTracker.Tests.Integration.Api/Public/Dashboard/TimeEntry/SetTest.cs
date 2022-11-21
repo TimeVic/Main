@@ -99,7 +99,7 @@ public class SetTest: BaseTest
         
         Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
 
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
     
@@ -141,7 +141,7 @@ public class SetTest: BaseTest
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
         Assert.Equal(fakeEntry.TaskId, actualDto.TaskId);
         
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
     

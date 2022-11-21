@@ -47,6 +47,10 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "redmine_id", NotNull = false)]
         public virtual string? RedmineId { get; set; }
         
+        [Property(NotNull = true)]
+        [Column(Name = "is_marked_to_delete", NotNull = true)]
+        public virtual bool IsMarkedToDelete { get; set; }
+        
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }

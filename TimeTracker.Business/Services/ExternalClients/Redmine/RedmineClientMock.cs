@@ -11,7 +11,7 @@ public class RedmineClientMock: IRedmineClient
 
     public void Reset()
     {
-        
+        SentTimeEntries.Clear();
     }
     
     public async Task<SynchronizedTimeEntryDto?> SetTimeEntryAsync(TimeEntryEntity timeEntry)
@@ -31,7 +31,8 @@ public class RedmineClientMock: IRedmineClient
 
     public Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry)
     {
-        throw new NotImplementedException();
+        SentTimeEntries.Add(timeEntry);
+        return Task.FromResult(true);
     }
 
     public bool IsCorrectTaskId(TimeEntryEntity timeEntry)

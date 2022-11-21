@@ -321,4 +321,17 @@ public class GetListTest: BaseTest
             Assert.True(item.User.Id == expectedUser.Id || item.User.Id == _user.Id);
         });
     }
+    
+    [Fact]
+    public async Task ShouldNotReceiveMarkedToDeleteTimeEntries()
+    {
+        var expectedCounter = 7;
+        var entries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter);
+        var markedToDelete = entries.First();
+        markedToDelete.IsMarkedToDelete = true;
+        await CommitDbChanges();
+        
+        var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
+        Assert.Equal(expectedCounter - 1, actualList.TotalCount);
+    }
 }

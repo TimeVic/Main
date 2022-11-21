@@ -5,6 +5,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -16,18 +17,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         private readonly IUserDao _userDao;
         private readonly ITimeEntryDao _timeEntryDao;
         private readonly ISecurityManager _securityManager;
+        private readonly ITimeEntryService _timeEntryService;
 
         public DeleteRequestHandler(
             IRequestService requestService,
             IUserDao userDao,
             ITimeEntryDao timeEntryDao,
-            ISecurityManager securityManager
+            ISecurityManager securityManager,
+            ITimeEntryService timeEntryService
         )
         {
             _requestService = requestService;
             _userDao = userDao;
             _timeEntryDao = timeEntryDao;
             _securityManager = securityManager;
+            _timeEntryService = timeEntryService;
         }
     
         public async Task ExecuteAsync(DeleteRequest request)
@@ -44,7 +48,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new PermissionException();
             }
 
-            await _timeEntryDao.DeleteAsync(timeEntry);
+            await _timeEntryService.DeleteAsync(timeEntry);
         }
     }
 }

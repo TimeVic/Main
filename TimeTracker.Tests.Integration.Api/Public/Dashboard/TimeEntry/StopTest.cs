@@ -70,7 +70,7 @@ public class StopTest: BaseTest
         await DbSessionProvider.CurrentSession.RefreshAsync(_defaultWorkspace);
         Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
         
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
     
@@ -88,7 +88,7 @@ public class StopTest: BaseTest
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.Null(actualDto);
         
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.Default);
+        var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
         Assert.True(processedCounter == 0);
     }
 }

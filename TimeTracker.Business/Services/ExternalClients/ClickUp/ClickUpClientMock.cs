@@ -13,7 +13,7 @@ public class ClickUpClientMock: IClickUpClient
 
     public void Reset()
     {
-        
+        SentTimeEntries.Clear();
     }
 
     public async Task<SynchronizedTimeEntryDto?> SetTimeEntryAsync(TimeEntryEntity timeEntry)
@@ -43,6 +43,7 @@ public class ClickUpClientMock: IClickUpClient
 
     public Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry)
     {
+        SentTimeEntries.Add(timeEntry);
         return Task.FromResult(true);
     }
 }

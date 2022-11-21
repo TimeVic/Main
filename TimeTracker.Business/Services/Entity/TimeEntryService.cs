@@ -10,24 +10,22 @@ namespace TimeTracker.Business.Services.Entity;
 
 public class TimeEntryService : ITimeEntryService
 {
-    private readonly TimeSpan _notificationSendingDuration = TimeSpan.FromHours(8);
-    
-    private readonly IDbSessionProvider _sessionProvider;
     private readonly ILogger<TimeEntryService> _logger;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IQueueService _queueService;
+    private readonly IDbSessionProvider _dbSessionProvider;
 
     public TimeEntryService(
-        IDbSessionProvider sessionProvider,
         ILogger<TimeEntryService> logger,
         ITimeEntryDao timeEntryDao,
-        IQueueService queueService
+        IQueueService queueService,
+        IDbSessionProvider dbSessionProvider
     )
     {
-        _sessionProvider = sessionProvider;
         _logger = logger;
         _timeEntryDao = timeEntryDao;
         _queueService = queueService;
+        _dbSessionProvider = dbSessionProvider;
     }
 
     public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(
@@ -51,10 +49,22 @@ public class TimeEntryService : ITimeEntryService
         return timeEntries;
     }
 
-    public async Task<TimeEntryEntity> SetAsync(UserEntity user, WorkspaceEntity workspace, TimeEntryCreationDto timeEntryDto, ProjectEntity? project = null)
+    public async Task<TimeEntryEntity> SetAsync(
+        UserEntity user,
+        WorkspaceEntity workspace,
+        TimeEntryCreationDto timeEntryDto,
+        ProjectEntity? project = null
+    )
     {
         var timeEntry = await _timeEntryDao.SetAsync(user, workspace, timeEntryDto, project);
         await _queueService.PushExternalClientAsync(new SendSetTimeEntryIntegrationRequestContext(timeEntry.Id));
         return timeEntry;
+    }
+
+    public async Task DeleteAsync(TimeEntryEntity timeEntry)
+    {
+        timeEntry.IsMarkedToDelete = true;
+        await _dbSessionProvider.CurrentSession.SaveAsync(timeEntry);
+        await _queueService.PushExternalClientAsync(new SendDeleteTimeEntryIntegrationRequestContext());
     }
 }
