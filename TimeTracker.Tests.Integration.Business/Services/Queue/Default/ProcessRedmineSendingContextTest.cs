@@ -89,12 +89,13 @@ public class ProcessRedmineSendingContextTest: BaseTest
     [Fact]
     public async Task ShouldDoNothingIfUserDoesNotHaveConfiguration()
     {
-        await _workspaceSettingsDao.SetClickUpAsync(
+        await _workspaceSettingsDao.SetRedmineAsync(
             _user,
             _workspace,
             "",
             "",
-            true
+            0,
+            0
         );
         
         var timeEntryWithAnotherUser = (await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user)).First();
