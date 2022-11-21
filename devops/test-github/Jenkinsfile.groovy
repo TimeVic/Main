@@ -89,15 +89,15 @@ node('testing-node') {
             }
 
             runStage(Stage.RUN_UNIT_TESTS) {
-                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Unit.Business'
+                sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Unit.Business'
             }
             
             runStage(Stage.RUN_INTEGRATION_TESTS_1) {
-                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Business'
+                sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Integration.Business'
             }
 
             runStage(Stage.RUN_INTEGRATION_TESTS_2) {
-                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api'
+                sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api'
             }
         }
 
