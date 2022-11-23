@@ -45,4 +45,12 @@ public class WorkspaceController : MainApiControllerBase
         => this.RequestAsync()
             .For<WorkspaceDto>()
             .With(request);
+    
+    [HttpPost("settings/set-redmine")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> SetRedmineSettings([FromBody] SetRedmineSettingsRequest request)
+        => this.RequestAsync()
+            .For<WorkspaceSettingsRedmineDto>()
+            .With(request);
 }
