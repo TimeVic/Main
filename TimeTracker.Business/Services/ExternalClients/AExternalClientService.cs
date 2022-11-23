@@ -36,6 +36,11 @@ public abstract class AExternalClientService
 
         return await SendDeleteTimeEntryRequestAsync(timeEntry);
     }
+    
+    public async Task<bool> IsValidClientSettings(WorkspaceEntity workspace, UserEntity user)
+    {
+        return await SendSettingsValidationRequest(workspace, user);
+    }
 
     protected async Task<T?> HandleResponse<T>(
         string uri,
@@ -84,4 +89,6 @@ public abstract class AExternalClientService
     protected abstract Task<SynchronizedTimeEntryDto?> SendTimeEntryAsync(TimeEntryEntity timeEntry);
     
     protected abstract Task<bool> SendDeleteTimeEntryRequestAsync(TimeEntryEntity timeEntry);
+    
+    protected abstract Task<bool> SendSettingsValidationRequest(WorkspaceEntity workspace, UserEntity user);
 }

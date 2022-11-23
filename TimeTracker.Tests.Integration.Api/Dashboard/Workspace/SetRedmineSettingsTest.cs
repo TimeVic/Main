@@ -70,4 +70,25 @@ public class SetRedmineSettingsTest: BaseTest
         Assert.Equal(expectApiKey, actual.ApiKey);
         Assert.Equal(expectUrl, actual.Url);
     }
+    
+    [Fact]
+    public async Task ShouldActivateSettings()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new SetRedmineSettingsRequest()
+        {
+            WorkspaceId = _workspace.Id,
+            Url = "http://some.url/",
+            ActivityId = 9,
+            ApiKey = "someasdasdAPIKey",
+            RedmineUserId = 8
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actual = await response.GetJsonDataAsync<WorkspaceSettingsRedmineDto>();
+        Assert.True(actual.IsActive);
+
+        await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
+        var actualSettings = _workspace.GetRedmineSettings(_user.Id);
+        Assert.True(actualSettings.IsActive);
+    }
 }

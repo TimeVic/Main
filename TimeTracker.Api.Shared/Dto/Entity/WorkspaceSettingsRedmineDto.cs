@@ -11,4 +11,6 @@ public class WorkspaceSettingsRedmineDto : IResponse
     public virtual long RedmineUserId { get; set; }
     
     public virtual long ActivityId { get; set; }
+    
+    public virtual bool IsActive { get; set; }
 }

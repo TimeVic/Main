@@ -46,4 +46,9 @@ public class ClickUpClientMock: IClickUpClient
         SentTimeEntries.Add(timeEntry);
         return Task.FromResult(true);
     }
+
+    public Task<bool> IsValidClientSettings(WorkspaceEntity workspace, UserEntity user)
+    {
+        return Task.FromResult<bool>(true);
+    }
 }

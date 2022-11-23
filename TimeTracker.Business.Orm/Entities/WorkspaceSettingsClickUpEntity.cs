@@ -27,6 +27,10 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "is_fill_time_entry_with_task_details", NotNull = true)]
         public virtual bool IsFillTimeEntryWithTaskDetails { get; set; } = true;
 
+        [Property(NotNull = true)]
+        [Column(Name = "is_active", NotNull = true)]
+        public virtual bool IsActive { get; set; }
+        
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }

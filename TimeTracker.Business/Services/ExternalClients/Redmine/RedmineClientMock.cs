@@ -39,4 +39,9 @@ public class RedmineClientMock: IRedmineClient
     {
         return true;
     }
+
+    public Task<bool> IsValidClientSettings(WorkspaceEntity workspace, UserEntity user)
+    {
+        return Task.FromResult<bool>(true);
+    }
 }
