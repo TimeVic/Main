@@ -16,9 +16,9 @@ using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Workspace;
 
-public class GetSettingsTest: BaseTest
+public class GetIntegrationSettingsTest: BaseTest
 {
-    private readonly string Url = "/dashboard/workspace/settings/get";
+    private readonly string Url = "/dashboard/workspace/settings/integrations/get";
     
     private readonly UserEntity _user;
     private readonly string _jwtToken;
@@ -36,7 +36,7 @@ public class GetSettingsTest: BaseTest
     private readonly string? _clickUpteamId;
     private readonly string? _clickUptaskId;
 
-    public GetSettingsTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    public GetIntegrationSettingsTest(ApiCustomWebApplicationFactory factory) : base(factory)
     { 
         _workspaceSeeder = ServiceProvider.GetRequiredService<IWorkspaceSeeder>();
         _workspaceSettingsDao = ServiceProvider.GetRequiredService<IWorkspaceSettingsDao>();
@@ -75,7 +75,7 @@ public class GetSettingsTest: BaseTest
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var response = await PostRequestAsAnonymousAsync(Url, new GetSettingsRequest()
+        var response = await PostRequestAsAnonymousAsync(Url, new GetIntegrationSettingsRequest()
         {
             WorkspaceId = _workspace.Id
         });
@@ -85,13 +85,13 @@ public class GetSettingsTest: BaseTest
     [Fact]
     public async Task ShouldReceive()
     {
-        var response = await PostRequestAsync(Url, _jwtToken, new GetSettingsRequest()
+        var response = await PostRequestAsync(Url, _jwtToken, new GetIntegrationSettingsRequest()
         {
             WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
-        var actualResponse = await response.GetJsonDataAsync<GetSettingsResponse>();
+        var actualResponse = await response.GetJsonDataAsync<GetIntegrationSettingsResponse>();
         Assert.NotNull(actualResponse.IntegrationRedmine);
         Assert.Equal(_redmineUrl, actualResponse.IntegrationRedmine.Url);
         Assert.Equal(_redmineApiKey, actualResponse.IntegrationRedmine.ApiKey);
@@ -108,13 +108,13 @@ public class GetSettingsTest: BaseTest
     {
         var (otherJwt, otherUser, workspace) = await _userSeeder.CreateAuthorizedAndShareAsync(_workspace);
         await CommitDbChanges();
-        var response = await PostRequestAsync(Url, otherJwt, new GetSettingsRequest()
+        var response = await PostRequestAsync(Url, otherJwt, new GetIntegrationSettingsRequest()
         {
             WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
-        var actualResponse = await response.GetJsonDataAsync<GetSettingsResponse>();
+        var actualResponse = await response.GetJsonDataAsync<GetIntegrationSettingsResponse>();
         Assert.Null(actualResponse.IntegrationRedmine);
         Assert.Null(actualResponse.IntegrationClickUp);
     }

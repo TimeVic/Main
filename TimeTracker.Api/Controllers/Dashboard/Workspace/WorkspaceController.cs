@@ -46,12 +46,12 @@ public class WorkspaceController : MainApiControllerBase
             .For<WorkspaceDto>()
             .With(request);
     
-    [HttpPost("settings/get")]
+    [HttpPost("settings/integrations/get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> SetSettings([FromBody] GetSettingsRequest request)
+    public Task<IActionResult> SetSettings([FromBody] GetIntegrationSettingsRequest request)
         => this.RequestAsync()
-            .For<GetSettingsResponse>()
+            .For<GetIntegrationSettingsResponse>()
             .With(request);
     
     [HttpPost("settings/set-redmine")]

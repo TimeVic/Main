@@ -5,10 +5,10 @@ using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
 {
-    public class GetSettingsRequest : IRequest<GetSettingsResponse>
+    public class GetIntegrationSettingsResponse : IResponse
     {
-        [Required]
-        [IsPositive]
-        public virtual long WorkspaceId { get; set; }
+        public virtual WorkspaceSettingsClickUpDto? IntegrationClickUp { get; set; }
+        
+        public virtual WorkspaceSettingsRedmineDto? IntegrationRedmine { get; set; }
     }
 }

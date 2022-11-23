@@ -12,7 +12,7 @@ using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
 {
-    public class GetSettingsRequestHandler : IAsyncRequestHandler<GetSettingsRequest, GetSettingsResponse>
+    public class GetSettingsRequestHandler : IAsyncRequestHandler<GetIntegrationSettingsRequest, GetIntegrationSettingsResponse>
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
@@ -41,7 +41,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             _redmineClient = redmineClient;
         }
     
-        public async Task<GetSettingsResponse> ExecuteAsync(GetSettingsRequest request)
+        public async Task<GetIntegrationSettingsResponse> ExecuteAsync(GetIntegrationSettingsRequest request)
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
@@ -53,7 +53,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
 
             var redmineSettings = workspace.GetRedmineSettings(user.Id);
             var clickUpSettings = workspace.GetClickUpSettings(user.Id);
-            return new GetSettingsResponse()
+            return new GetIntegrationSettingsResponse()
             {
                 IntegrationRedmine = _mapper.Map<WorkspaceSettingsRedmineDto>(redmineSettings),
                 IntegrationClickUp = _mapper.Map<WorkspaceSettingsClickUpDto>(clickUpSettings),
