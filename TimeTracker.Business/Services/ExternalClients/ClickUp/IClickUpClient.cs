@@ -16,4 +16,6 @@ public interface IClickUpClient
     bool IsCorrectTaskId(TimeEntryEntity timeEntry);
 
     Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry);
+
+    Task<bool> IsValidClientSettings(WorkspaceEntity workspace, UserEntity user);
 }

@@ -71,4 +71,25 @@ public class SetClickUpSettingsTest: BaseTest
         Assert.Equal(true, actual.IsCustomTaskIds);
         Assert.Equal(false, actual.IsFillTimeEntryWithTaskDetails);
     }
+    
+    [Fact]
+    public async Task ShouldActivateSettings()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new SetClickUpSettingsRequest()
+        {
+            WorkspaceId = _workspace.Id,
+            SecurityKey = "someasdasdAPIKey",
+            TeamId = "someTeamId",
+            IsCustomTaskIds = true,
+            IsFillTimeEntryWithTaskDetails = false
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actual = await response.GetJsonDataAsync<WorkspaceSettingsClickUpDto>();
+        Assert.True(actual.IsActive);
+
+        await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
+        var actualSettings = _workspace.GetClickUpSettings(_user.Id);
+        Assert.True(actualSettings.IsActive);
+    }
 }

@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using System.Web;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using TimeTracker.Business.Extensions;
@@ -122,7 +123,31 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         }
         return true;
     }
-    
+
+    protected override async Task<bool> SendSettingsValidationRequest(WorkspaceEntity workspace, UserEntity user)
+    {
+        var httpClient = _newHttpClient;
+        var settings = workspace.GetClickUpSettings(user.Id);
+        httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
+        
+        var queryParams = new Dictionary<string, string>();
+        queryParams.Add("custom_task_ids", settings.IsCustomTaskIds.ToString().ToLower());
+        queryParams.Add("team_id", settings.TeamId);
+
+        var url = BaseUrl + $"/team/{settings.TeamId}/time_entries";
+        var uri = new Uri(QueryHelpers.AddQueryString(url, queryParams), UriKind.Absolute);
+        _logger.LogDebug("ClickUp. Send checking request to: {Uri}", uri);
+        var response = await httpClient.GetAsync(uri);
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            _logger.LogDebug(
+                "ClickUp returned status code: {response.StatusCode}"
+            );
+            return false;
+        }
+        return true;
+    }
+
     private string BuildSetTimeEntryUri(string teamId, string taskId, bool isCustomTaskIds, string? timeEntryId = null)
     {
         teamId = HttpUtility.UrlEncode(teamId);

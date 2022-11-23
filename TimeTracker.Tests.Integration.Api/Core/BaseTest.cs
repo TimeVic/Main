@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using Persistence.Transactions.Behaviors;
@@ -63,11 +64,16 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         return await HttpClient.PostAsync(url, requestData);
     }
         
-    public async Task<HttpResponseMessage> GetRequestAsAnonymousAsync(string url)
+    public async Task<HttpResponseMessage> GetRequestAsAnonymousAsync(
+        string url,
+        Dictionary<string, string>? urlParams = null
+    )
     {
+        urlParams ??= new Dictionary<string, string>();
+        var uri = new Uri(QueryHelpers.AddQueryString(url, urlParams), UriKind.Relative);
         await CommitDbChanges();
 
-        return await HttpClient.GetAsync(url);
+        return await HttpClient.GetAsync(uri);
     }
         
     public async Task<HttpResponseMessage> GetRequestAsync(string url, string jwtToken,  object data = null)

@@ -14,4 +14,6 @@ public interface IRedmineClient: IDomainService
     Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry);
 
     bool IsCorrectTaskId(TimeEntryEntity timeEntry);
+
+    Task<bool> IsValidClientSettings(WorkspaceEntity workspace, UserEntity user);
 }

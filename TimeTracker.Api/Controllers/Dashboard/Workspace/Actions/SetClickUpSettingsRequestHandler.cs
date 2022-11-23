@@ -6,6 +6,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Workspace;
+using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -18,8 +19,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
         private readonly IUserDao _userDao;
         private readonly IWorkspaceDao _workspaceDao;
         private readonly ISecurityManager _securityManager;
-        private readonly IWorkspaceAccessService _workspaceAccessService;
         private readonly IWorkspaceSettingsDao _workspaceSettingsDao;
+        private readonly IClickUpClient _clickUpClient;
 
         public SetClickUpSettingsRequestHandler(
             IMapper mapper,
@@ -27,8 +28,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             IUserDao userDao,
             IWorkspaceDao workspaceDao,
             ISecurityManager securityManager,
-            IWorkspaceAccessService workspaceAccessService,
-            IWorkspaceSettingsDao workspaceSettingsDao
+            IWorkspaceSettingsDao workspaceSettingsDao,
+            IClickUpClient clickUpClient
         )
         {
             _mapper = mapper;
@@ -36,8 +37,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             _userDao = userDao;
             _workspaceDao = workspaceDao;
             _securityManager = securityManager;
-            _workspaceAccessService = workspaceAccessService;
             _workspaceSettingsDao = workspaceSettingsDao;
+            _clickUpClient = clickUpClient;
         }
     
         public async Task<WorkspaceSettingsClickUpDto> ExecuteAsync(SetClickUpSettingsRequest request)
@@ -57,6 +58,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
                 request.IsCustomTaskIds,
                 request.IsFillTimeEntryWithTaskDetails
             );
+            settings.IsActive = await _clickUpClient.IsValidClientSettings(workspace, user);
             return _mapper.Map<WorkspaceSettingsClickUpDto>(settings);
         }
     }
