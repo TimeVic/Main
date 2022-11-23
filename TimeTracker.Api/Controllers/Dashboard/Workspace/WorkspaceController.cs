@@ -53,4 +53,12 @@ public class WorkspaceController : MainApiControllerBase
         => this.RequestAsync()
             .For<WorkspaceSettingsRedmineDto>()
             .With(request);
+    
+    [HttpPost("settings/set-clickup")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> SetRedmineSettings([FromBody] SetClickUpSettingsRequest request)
+        => this.RequestAsync()
+            .For<WorkspaceSettingsClickUpDto>()
+            .With(request);
 }
