@@ -34,6 +34,7 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
         clickUpSettings.SecurityKey = securityKey;
         clickUpSettings.TeamId = teamId;
         clickUpSettings.IsCustomTaskIds = isCustomTaskIds;
+        clickUpSettings.IsFillTimeEntryWithTaskDetails = isFillTimeEntryWithTaskDetails;
         await _sessionProvider.CurrentSession.SaveAsync(clickUpSettings);
         
         return clickUpSettings;

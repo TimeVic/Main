@@ -8,6 +8,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
     public class SetClickUpSettingsRequest : IRequest<WorkspaceSettingsClickUpDto>
     {
         [Required]
+        [IsPositive]
+        public virtual long WorkspaceId { get; set; }
+        
+        [Required]
         [StringLength(255)]
         public virtual string SecurityKey { get; set; } = "";
     
