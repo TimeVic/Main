@@ -58,26 +58,29 @@ public class DeleteTest: BaseTest
         _redmineTaskId = configuration.GetValue<string>("Integration:Redmine:TaskId");
         _redmineActivityId = configuration.GetValue<long>("Integration:Redmine:ActivityId");
         _redmineUrl = configuration.GetValue<string>("Integration:Redmine:Url");
-        _workspaceSettingsDao.SetRedmineAsync(
+        var redmineSettings = _workspaceSettingsDao.SetRedmineAsync(
             _user,
             _defaultWorkspace,
             _redmineUrl,
             _redmineApiKey,
             _redmineUserId,
             _redmineActivityId
-        ).Wait();
+        ).Result;
+        redmineSettings.IsActive = true;
         
         _clickUpsecurityKey = configuration.GetValue<string>("Integration:ClickUp:SecurityKey");
         _clickUpteamId = configuration.GetValue<string>("Integration:ClickUp:TeamId");
         _clickUptaskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
-        _workspaceSettingsDao.SetClickUpAsync(
+        var clickUpSettings = _workspaceSettingsDao.SetClickUpAsync(
             _user,
             _defaultWorkspace,
             _clickUpsecurityKey,
             _clickUpteamId,
             true,
             true
-        ).Wait();
+        ).Result;
+        clickUpSettings.IsActive = true;
+        CommitDbChanges().Wait();
         
         _queueDao.CompleteAllPending().Wait();
         _clickUpClient.Reset();
