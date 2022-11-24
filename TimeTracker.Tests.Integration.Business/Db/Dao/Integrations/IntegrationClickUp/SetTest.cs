@@ -48,6 +48,8 @@ public class SetTest: BaseTest
             expectIntegration.TeamId,
             expectIntegration.IsCustomTaskIds
         );
+        actualIntegration.IsActive = true;
+        await CommitDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(actualIntegration);
         await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
