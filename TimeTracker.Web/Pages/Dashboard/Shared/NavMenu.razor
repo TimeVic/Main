@@ -38,6 +38,10 @@
                 Icon="face"
                 Text="Members"
                 Path="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)"/>
+            <RadzenPanelMenuItem
+                Icon="compare_arrows"
+                Text="Integrations"
+                Path="@SiteUrl.Dashboard_Integrations"/>
         </RadzenPanelMenuItem>
     </RadzenPanelMenu>
 </RadzenSidebar>

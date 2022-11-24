@@ -68,4 +68,12 @@ public class ApiUrl
     public const string WorkspaceUpdate = "dashboard/workspace/update";
     
     #endregion
+    
+    #region Workspace Integrations
+    
+    public const string WorkspaceIntegrationSettingsGet = "dashboard/workspace/settings/integrations/get";
+    public const string WorkspaceIntegrationSettingsRedmineSet = "dashboard/workspace/settings/set-redmine";
+    public const string WorkspaceIntegrationSettingsClickUpSet = "dashboard/workspace/settings/set-clickup";
+    
+    #endregion
 }
