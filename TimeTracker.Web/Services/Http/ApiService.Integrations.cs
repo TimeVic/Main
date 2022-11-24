@@ -7,9 +7,14 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<GetIntegrationSettingsResponse> WorkspaceIntegrationSettingsGetAsync()
+        public async Task<GetIntegrationSettingsResponse> WorkspaceIntegrationSettingsGetAsync(long workspaceId)
         {
-            var response = await PostAuthorizedAsync<GetIntegrationSettingsResponse>(ApiUrl.WorkspaceIntegrationSettingsGet);
+            var response = await PostAuthorizedAsync<GetIntegrationSettingsResponse>(
+                ApiUrl.WorkspaceIntegrationSettingsGet,
+                new GetIntegrationSettingsRequest() {
+                    WorkspaceId = workspaceId
+                }
+            );
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -17,9 +22,12 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
 
-        public async Task<WorkspaceSettingsRedmineDto> WorkspaceSetRedmineIntegrationSettingsAsync(WorkspaceSettingsRedmineDto settings)
+        public async Task<WorkspaceSettingsRedmineDto> WorkspaceSetRedmineIntegrationSettingsAsync(SetRedmineSettingsRequest settings)
         {
-            var response = await PostAuthorizedAsync<WorkspaceSettingsRedmineDto>(ApiUrl.WorkspaceIntegrationSettingsRedmineSet);
+            var response = await PostAuthorizedAsync<WorkspaceSettingsRedmineDto>(
+                ApiUrl.WorkspaceIntegrationSettingsRedmineSet,
+                settings
+            );
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -27,9 +35,12 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
 
-        public async Task<WorkspaceSettingsClickUpDto> WorkspaceSetClickUpIntegrationSettingsAsync(WorkspaceSettingsClickUpDto settings)
+        public async Task<WorkspaceSettingsClickUpDto> WorkspaceSetClickUpIntegrationSettingsAsync(SetClickUpSettingsRequest settings)
         {
-            var response = await PostAuthorizedAsync<WorkspaceSettingsClickUpDto>(ApiUrl.WorkspaceIntegrationSettingsClickUpSet);
+            var response = await PostAuthorizedAsync<WorkspaceSettingsClickUpDto>(
+                ApiUrl.WorkspaceIntegrationSettingsClickUpSet,
+                settings
+            );
             if (response == null)
             {
                 throw new ServerErrorException();
