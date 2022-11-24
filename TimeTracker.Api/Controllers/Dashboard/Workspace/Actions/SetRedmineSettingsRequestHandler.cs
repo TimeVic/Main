@@ -46,7 +46,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _workspaceDao.GetByIdAsync(request.WorkspaceId);
-            if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
+            if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();
             }

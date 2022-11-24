@@ -46,6 +46,14 @@ public class WorkspaceController : MainApiControllerBase
             .For<WorkspaceDto>()
             .With(request);
     
+    [HttpPost("settings/integrations/get")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> SetSettings([FromBody] GetIntegrationSettingsRequest request)
+        => this.RequestAsync()
+            .For<GetIntegrationSettingsResponse>()
+            .With(request);
+    
     [HttpPost("settings/set-redmine")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
