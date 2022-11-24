@@ -1,15 +1,25 @@
 ﻿@page "/dashboard/integrations"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Web.Pages.Dashboard.Integrations.Parts
 
 @inherits BaseComponent
 @layout Layout
 
-<RadzenTabs TabPosition="@TabPosition.Top" RenderMode="TabRenderMode.Client" >
-    <Tabs>
-        <RadzenTabsItem Text="ClickUp">
-        </RadzenTabsItem>
-        <RadzenTabsItem Text="Redmine">
-        </RadzenTabsItem>
-    </Tabs>
-</RadzenTabs>
+@if (_isLoading)
+{
+    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+}
+else
+{
+    <RadzenTabs TabPosition="@TabPosition.Top" RenderMode="TabRenderMode.Client" >
+        <Tabs>
+            <RadzenTabsItem Text="ClickUp">
+                <ClickUpSettingsForm @bind-Value="_settings.IntegrationClickUp"/>
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Redmine">
+                <RedmineSettingsForm @bind-Value="_settings.IntegrationRedmine"/>
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>    
+}

@@ -1,0 +1,66 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
+@using Microsoft.AspNetCore.Components
+
+@inherits BaseComponent
+
+<RadzenTemplateForm TItem="SetClickUpSettingsRequest" Data="@_model" Submit="HandleSubmit">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="row">
+        <div class="col">
+            <RadzenLabel
+                Text="Security Key"
+                TextStyle="@TextStyle.Subtitle2"/>
+            <RadzenPassword
+                disabled="@_isLoading"
+                @bind-Value="@_model.SecurityKey"
+                Class="w-100"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <RadzenLabel
+                Text="Team Id"
+                TextStyle="@TextStyle.Subtitle2"/>
+            <RadzenTextBox
+                @bind-Value="@_model.TeamId"
+                disabled="@_isLoading"
+                Class="w-100"/>
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+            <RadzenCheckBox
+                TValue="bool"
+                Name="IsCustomTaskIds"
+                disabled="@_isLoading"
+                @bind-Value="@_model.IsCustomTaskIds"/>
+            <RadzenLabel
+                Component="IsCustomTaskIds"
+                Style="margin-left: 8px; vertical-align: middle;"
+                Text="Is custom Task IDs"/>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col">
+            <RadzenCheckBox
+                TValue="bool"
+                Name="IsFillTimeEntryWithTaskDetails"
+                disabled="@_isLoading"
+                @bind-Value="@_model.IsFillTimeEntryWithTaskDetails"/>
+            <RadzenLabel
+                Component="IsFillTimeEntryWithTaskDetails"
+                Style="margin-left: 8px; vertical-align: middle;"
+                Text="Update description of the Time Entry if empty"/>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-12 d-flex align-items-end justify-content-center mt-4">
+            <RadzenButton
+                ButtonType="ButtonType.Submit"
+                Disabled="@_isLoading"
+                class="ml-3"
+                Text="Save"/>
+        </div>
+    </div>
+</RadzenTemplateForm>

@@ -103,11 +103,11 @@ namespace TimeTracker.Web.Services.Http
         
         #region Integrations
         
-        Task<GetIntegrationSettingsResponse> WorkspaceIntegrationSettingsGetAsync();
+        Task<GetIntegrationSettingsResponse> WorkspaceIntegrationSettingsGetAsync(long workspaceId);
         
-        Task<WorkspaceSettingsRedmineDto> WorkspaceSetRedmineIntegrationSettingsAsync(WorkspaceSettingsRedmineDto settings);
+        Task<WorkspaceSettingsRedmineDto> WorkspaceSetRedmineIntegrationSettingsAsync(SetRedmineSettingsRequest settings);
         
-        Task<WorkspaceSettingsClickUpDto> WorkspaceSetClickUpIntegrationSettingsAsync(WorkspaceSettingsClickUpDto settings);
+        Task<WorkspaceSettingsClickUpDto> WorkspaceSetClickUpIntegrationSettingsAsync(SetClickUpSettingsRequest settings);
 
         #endregion
     }

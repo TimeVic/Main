@@ -1,0 +1,63 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
+@using Microsoft.AspNetCore.Components
+
+@inherits BaseComponent
+
+<RadzenTemplateForm TItem="SetRedmineSettingsRequest" Data="@_model" Submit="HandleSubmit">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div class="row">
+        <div class="col">
+            <RadzenLabel
+                Text="Redmine Url"
+                TextStyle="@TextStyle.Subtitle2"/>
+            <RadzenTextBox
+                disabled="@_isLoading"
+                @bind-Value="@_model.Url"
+                Class="w-100"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <RadzenLabel
+                Text="Api Key"
+                TextStyle="@TextStyle.Subtitle2"/>
+            <RadzenPassword
+                disabled="@_isLoading"
+                @bind-Value="@_model.ApiKey"
+                Class="w-100"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <RadzenLabel
+                Text="Redmine Activity Id"
+                TextStyle="@TextStyle.Subtitle2"/>
+            <RadzenNumeric
+                TValue="long"
+                disabled="@_isLoading"
+                @bind-Value="@_model.ActivityId"
+                Class="w-100"/>
+        </div>
+        <div class="col-md-6">
+            <RadzenLabel
+                Text="Redmine Activity Id"
+                TextStyle="@TextStyle.Subtitle2"/>
+            <RadzenNumeric
+                TValue="long"
+                disabled="@_isLoading"
+                @bind-Value="@_model.RedmineUserId"
+                Class="w-100"/>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-12 d-flex align-items-end justify-content-center mt-4">
+            <RadzenButton
+                ButtonType="ButtonType.Submit"
+                Disabled="@_isLoading"
+                class="ml-3"
+                Text="Save"/>
+        </div>
+    </div>
+</RadzenTemplateForm>
