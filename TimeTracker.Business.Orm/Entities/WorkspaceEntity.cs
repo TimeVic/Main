@@ -106,14 +106,7 @@ namespace TimeTracker.Business.Orm.Entities
         
         public virtual bool IsIntegrationClickUpActive(long userId)
         {
-            var foundIntegration = GetClickUpSettings(userId);
-            if (foundIntegration != null)
-            {
-                return !string.IsNullOrEmpty(foundIntegration.SecurityKey)
-                    && !string.IsNullOrEmpty(foundIntegration.TeamId);
-            }
-
-            return false;
+            return GetClickUpSettings(userId)?.IsActive ?? false;
         }
         
         #endregion
@@ -134,16 +127,7 @@ namespace TimeTracker.Business.Orm.Entities
         
         public virtual bool IsIntegrationRedmineActive(long userId)
         {
-            var foundIntegration = GetRedmineSettings(userId);
-            if (foundIntegration != null)
-            {
-                return !string.IsNullOrEmpty(foundIntegration.Url)
-                    && !string.IsNullOrEmpty(foundIntegration.ApiKey)
-                    && foundIntegration.RedmineUserId != 0
-                    && foundIntegration.ActivityId != 0;
-            }
-
-            return false;
+            return GetRedmineSettings(userId)?.IsActive ?? false;
         }
         
         #endregion

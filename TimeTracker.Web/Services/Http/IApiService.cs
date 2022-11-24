@@ -2,6 +2,7 @@ using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Reports;
 
@@ -97,6 +98,16 @@ namespace TimeTracker.Web.Services.Http
         Task<PaginatedListDto<WorkspaceDto>> WorkspaceGetListAsync();
         Task<WorkspaceDto> WorkspaceAddAsync(string name);
         Task<WorkspaceDto> WorkspaceUpdateAsync(long id, string name);
+
+        #endregion
+        
+        #region Integrations
+        
+        Task<GetIntegrationSettingsResponse> WorkspaceIntegrationSettingsGetAsync();
+        
+        Task<WorkspaceSettingsRedmineDto> WorkspaceSetRedmineIntegrationSettingsAsync(WorkspaceSettingsRedmineDto settings);
+        
+        Task<WorkspaceSettingsClickUpDto> WorkspaceSetClickUpIntegrationSettingsAsync(WorkspaceSettingsClickUpDto settings);
 
         #endregion
     }

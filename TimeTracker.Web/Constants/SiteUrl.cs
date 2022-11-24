@@ -21,6 +21,7 @@ public static class SiteUrl
     public static readonly string Dashboard_Clients = "/dashboard/client";
     public static readonly string Dashboard_Payments = "/dashboard/payment";
     public static readonly string Dashboard_Members = "/dashboard/members";
+    public static readonly string Dashboard_Integrations = "/dashboard/integrations";
     
     public static readonly string Dashboard_Reports_Summary = "/dashboard/report/summary";
     public static readonly string Dashboard_Reports_Payments = "/dashboard/report/payments";
