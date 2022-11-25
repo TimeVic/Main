@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common.Actions;
 using TimeTracker.Web.Store.Workspace;
@@ -21,8 +22,14 @@ public partial class WorkspaceMenu
         await base.OnInitializedAsync();
     }
 
-    private void OnClickToMenuItem(string idString)
+    private void OnClickToMenuItem(string? idString)
     {
+        if (string.IsNullOrEmpty(idString))
+        {
+            // Clicked on selected item
+            return;
+        }
+
         var workspace = _workpsaceState.Value.List.First(item => item.Id.ToString() == idString);
         if (workspace.Id == _authState.Value.Workspace.Id)
         {

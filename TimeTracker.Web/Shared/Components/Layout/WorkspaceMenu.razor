@@ -6,7 +6,7 @@
         Text="@_authState.Value.Workspace.Name"
         Variant="Variant.Outlined" 
         ButtonStyle="ButtonStyle.Secondary"
-        Click=@(args => OnClickToMenuItem(args.Value))
+        Click=@(args => OnClickToMenuItem(args?.Value))
         class="mr-2"
     >
         <ChildContent>
