@@ -19,6 +19,26 @@ public partial class SummaryReportPage
         get => _state.Value.SummaryReportData?.ByDays ?? new List<SummaryByDaysReportItemDto>();
     }
 
+    public bool _isShowChartWithLineSeries
+    {
+        get
+        {
+            var firstItem = _byDateItems.FirstOrDefault();
+            var lastItem = _byDateItems.LastOrDefault();
+            if (firstItem == null || lastItem == null)
+            {
+                return true;
+            }
+
+            if (firstItem.Date - lastItem.Date > TimeSpan.FromDays(4))
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
+    
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();

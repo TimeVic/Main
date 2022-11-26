@@ -19,4 +19,8 @@ public partial class SummaryInfoBlock
     {
         get => new(_byDateItems.Sum(item => item.Duration.Ticks));
     }
+    public decimal _totalAmount
+    {
+        get => _byDateItems.Sum(item => item.Amount);
+    }
 }

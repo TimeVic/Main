@@ -1,17 +1,25 @@
 ﻿@using TimeTracker.Business.Extensions
 @inherits BaseComponent
 
-<div class="row no-gutters mx-n2">
-    <div class="col-12">
-        <RadzenCard class="pb-3q d-flex justify-content-start">
-            <RadzenText TextStyle="TextStyle.H6">
-                Duration:
-            </RadzenText>
-            <RadzenText
-                TextStyle="TextStyle.H6"
-                class="rz-color-info ml-1">
-                @_totalDuration.ToReadableShortString()
-            </RadzenText>
-        </RadzenCard>    
+<RadzenCard class=" no-gutters mx-n2 mt-2 row">
+    <div class="col-6 d-flex justify-content-center">
+        <RadzenText TextStyle="TextStyle.H6">
+            Duration:
+        </RadzenText>
+        <RadzenText
+            TextStyle="TextStyle.H6"
+            class="rz-color-info ml-1">
+            @_totalDuration.ToReadableShortString()
+        </RadzenText>
     </div>
-</div>
+    <div class="col-6 d-flex justify-content-center">
+        <RadzenText TextStyle="TextStyle.H6">
+            Amount:
+        </RadzenText>
+        <RadzenText
+            TextStyle="TextStyle.H6"
+            class="rz-color-info ml-1">
+            @_totalAmount.ToMoneyFormat()
+        </RadzenText>
+    </div>
+</RadzenCard>
