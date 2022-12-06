@@ -4,6 +4,7 @@ using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Web.Constants;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Pages.Dashboard.Integrations.Parts;
@@ -30,6 +31,7 @@ public partial class ClickUpSettingsForm
             _model.Fill(Value);    
         }
 
+        Debug.Log(_model);
         _model.WorkspaceId = _authState.Value.Workspace.Id;
     }
     

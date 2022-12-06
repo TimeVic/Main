@@ -15,6 +15,8 @@
             <RadzenPassword
                 disabled="@_isLoading"
                 @bind-Value="@_model.SecurityKey"
+                AutoComplete="false"
+                Name="SecurityKey"
                 Class="w-100"/>
         </div>
     </div>
@@ -26,12 +28,15 @@
             <RadzenTextBox
                 @bind-Value="@_model.TeamId"
                 disabled="@_isLoading"
+                Name="TeamId"
+                AutoComplete="false"
                 Class="w-100"/>
         </div>
         <div class="col-md-6 d-flex align-items-center">
             <RadzenCheckBox
                 TValue="bool"
                 Name="IsCustomTaskIds"
+                AutoComplete="false"
                 disabled="@_isLoading"
                 @bind-Value="@_model.IsCustomTaskIds"/>
             <RadzenLabel
