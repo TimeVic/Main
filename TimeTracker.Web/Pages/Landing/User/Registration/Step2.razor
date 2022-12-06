@@ -8,17 +8,17 @@
 <div class="row d-flex justify-content-center">
     <div class="col-xl-4 p-3">
         <RadzenCard>
-            <h2 class="mb-4">Registration. Step 2</h2>
+            <h2 class="mb-4">Registration - Step 2</h2>
             
             <RadzenTemplateForm TItem="RegistrationStep2Request" Data="@model" Submit="HandleSubmit">
                 <DataAnnotationsValidator/>
                 <ValidationSummary/>
-
-                <div class="row">
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enter your password</RadzenText>
+                
+                <div class="mb-2">
+                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enter your password to finish registration</RadzenText>
                     <RadzenPassword
                         @bind-Value="model.Password"
-                        Class="w-100 mb-3 col"/>
+                        Class="w-100 mb-3"/>
                 </div>
                 @if (!_isLoading)
                 {
