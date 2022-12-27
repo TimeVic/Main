@@ -65,7 +65,7 @@ node('abedor-mainframe-web-2') {
         ]) {
             envVariables.put(
                 'ConnectionStrings__DefaultConnection',
-                "User ID=${USER_NAME};Password=${PASSWORD};Host=10.10.0.2;Port=5433;Database=timevic;Pooling=true;"
+                "User ID=${USER_NAME};Password=${PASSWORD};Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
             )
         }
         withCredentials([
