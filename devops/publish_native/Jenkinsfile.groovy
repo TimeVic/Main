@@ -25,7 +25,7 @@ properties([
     disableConcurrentBuilds()
 ])
 
-node('lm-web-1') {
+node('abedor-mainframe-web-2') {
     env.ENVIRONMENT = "Development"
 
     stage('CleanUp Docker') {
