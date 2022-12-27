@@ -13,7 +13,7 @@ public abstract class ABackgroundService: BackgroundService
     private DateTime _nextTickTime;
     private bool _isShouldRunWork
     {
-        get => DateTime.Now > _nextTickTime;
+        get => DateTime.UtcNow > _nextTickTime;
     }
 
     public ABackgroundService(ILogger<ABackgroundService> logger)
@@ -66,7 +66,7 @@ public abstract class ABackgroundService: BackgroundService
 
     private void UpdateNextTickTime()
     {
-        _nextTickTime = _crontabScheduler.GetNextOccurrence(DateTime.Now, DateTime.MaxValue);
+        _nextTickTime = _crontabScheduler.GetNextOccurrence(DateTime.UtcNow, DateTime.MaxValue);
         LogDebug($"Next work scheduled at: {_nextTickTime}");
     }
 
