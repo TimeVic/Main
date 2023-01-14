@@ -53,6 +53,14 @@ node('testing-node') {
             withCredentials([string(credentialsId: "timevic_testing_redmine_url", variable: 'AUTH_SECRET')]) {
                 containerEnvVars.put('Integration__Redmine__Url', AUTH_SECRET)
             }
+
+            withCredentials([string(credentialsId: "timevic_testing_google__storage_project_id", variable: 'AUTH_SECRET')]) {
+                containerEnvVars.put('Google__Storage__ProjectId', AUTH_SECRET)
+            }
+
+            withCredentials([string(credentialsId: "timevic_testing_google__storage_bucket_name", variable: 'AUTH_SECRET')]) {
+                containerEnvVars.put('Google__Storage__BucketName', AUTH_SECRET)
+            }
         }
 
         def testImage = docker.build('timevic-test-image', '--file=./devops/test-github/Dockerfile .')
@@ -63,7 +71,6 @@ node('testing-node') {
                 withCredentials([file(credentialsId: 'timevic_testing_gcloud_credentials', variable: 'FILE')]) {
                     sh 'cp $FILE .credentials/google.json'
                 }
-                sh "cat .credentials/google.json"
             }
 
             runStage(Stage.BUILD) {
