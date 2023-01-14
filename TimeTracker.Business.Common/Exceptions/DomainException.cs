@@ -25,4 +25,6 @@ public static class DomainException
     public static TooManyRecordsException TooManyRecordsException { get; } = new();
     
     public static UserNotAuthorizedException UserNotAuthorizedException { get; } = new();
+    
+    public static IncorrectFileException IncorrectFileException { get; } = new();
 }
