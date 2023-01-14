@@ -60,6 +60,12 @@ node('testing-node') {
         String containerEnvVarString = mapToEnvVars(containerEnvVars)
         testImage.inside(containerEnvVarString.concat(" --network=$networkId")) {
 
+            runStage(Stage.ADD_GCLOUD_CREDENTIALS) {
+                withCredentials([string(credentialsId: "timevic_testing_gcloud_credentials", variable: 'AUTH_SECRET')]) {
+                    sh "echo \"${AUTH_SECRET}\" > .credentials/google.json"
+                }
+            }
+
             runStage(Stage.BUILD) {
                 sh 'echo "{}" > appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
@@ -69,23 +75,23 @@ node('testing-node') {
                 sh 'dotnet build --'
             }
 
-            runStage(Stage.ASSIGN_PERMISSIONS) {
-                sh 'chmod -R 700 $KAFKA_HOME'
-                sh 'chmod -R 700 ./devops/common/kafka/boot.sh'
-                sh 'chmod -R 770 ./devops/common/zookeeper/boot.sh'
-            }
+            // runStage(Stage.ASSIGN_PERMISSIONS) {
+            //     sh 'chmod -R 700 $KAFKA_HOME'
+            //     sh 'chmod -R 700 ./devops/common/kafka/boot.sh'
+            //     sh 'chmod -R 770 ./devops/common/zookeeper/boot.sh'
+            // }
 
-            runStage(Stage.INIT_ZOOKEEPER) {
-                sh './devops/common/zookeeper/boot.sh &'
-                sh 'until nc -z localhost 2181; do sleep 1; done'
-                echo "Zookeeper is started"
-            }
+            // runStage(Stage.INIT_ZOOKEEPER) {
+            //     sh './devops/common/zookeeper/boot.sh &'
+            //     sh 'until nc -z localhost 2181; do sleep 1; done'
+            //     echo "Zookeeper is started"
+            // }
 
-            runStage(Stage.INIT_KAFKA) {
-                sh './devops/common/kafka/boot.sh &'
-                sh 'until nc -z localhost 9094; do sleep 1; done'
-                echo "Kafka is started"
-            }
+            // runStage(Stage.INIT_KAFKA) {
+            //     sh './devops/common/kafka/boot.sh &'
+            //     sh 'until nc -z localhost 9094; do sleep 1; done'
+            //     echo "Kafka is started"
+            // }
 
             runStage(Stage.INIT_DB) {
                 sh 'pg_ctlcluster 12 main start'
@@ -117,6 +123,7 @@ node('testing-node') {
 enum Stage {
     CLEAN('Clean'),
     CHECKOUT('Checkout'),
+    ADD_GCLOUD_CREDENTIALS('Add GCloud credentials'),
     BUILD('Build projects'),
     SET_VARS('Set environment vars'),
     ASSIGN_PERMISSIONS('Assign Permissions'),

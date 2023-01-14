@@ -14,7 +14,7 @@ using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Services.Storage;
 
-public class FileStorage: IFileStorage
+public partial class FileStorage: IFileStorage
 {
     private readonly IDbSessionProvider _dbSessionProvider;
     private const string CredentialsFilepath = "../../../../.credentials/google.json";
