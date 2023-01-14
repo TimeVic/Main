@@ -59,6 +59,12 @@ node('testing-node') {
         String containerEnvVarString = mapToEnvVars(containerEnvVars)
         testImage.inside(containerEnvVarString.concat(" --network=$networkId")) {
 
+            runStage(Stage.ADD_GCLOUD_CREDENTIALS) {
+                withCredentials([string(credentialsId: "timevic_testing_gcloud_credentials", variable: 'AUTH_SECRET')]) {
+                    sh "echo \"${AUTH_SECRET}\" > .credentials/google.json"
+                }
+            }
+
             runStage(Stage.BUILD) {
                 sh 'echo "{}" > appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
@@ -112,6 +118,7 @@ enum Stage {
     CLEAN('Clean'),
     CHECKOUT('Checkout'),
     SET_VARS('Set environment vars'),
+    ADD_GCLOUD_CREDENTIALS('Add GCloud credentials'),
     BUILD('Build projects'),
     INIT_DB('Init DB'),
     INIT_REDIS('Init Redis'),
