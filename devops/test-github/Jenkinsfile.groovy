@@ -3,6 +3,11 @@ node('testing-node') {
         disableConcurrentBuilds(),
     ])
 
+    runStage(Stage.CLEAN) {
+        // Clean before build
+        cleanWs()
+    }
+
     stage("Test test") {
         checkout scm
     }
@@ -21,11 +26,6 @@ node('testing-node') {
         'ConnectionStrings__DefaultConnection': "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres;Pooling=true;Include Error Detail=true;Log Parameters=true;",
         'Hibernate__IsShowSql': "false"
     ]
-
-    runStage(Stage.CLEAN) {
-        // Clean before build
-        cleanWs()
-    }
 
     runStage(Stage.UPDATE_GIT_STATUS) {
         updateGithubCommitStatus('Set PENDING status', 'PENDING')

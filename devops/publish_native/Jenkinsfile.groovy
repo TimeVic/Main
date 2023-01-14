@@ -35,7 +35,7 @@ node('abedor-mainframe-web-2') {
     }
 
     stage('Checkout') {
-        // cleanWs()
+        cleanWs()
         sh """
             git config --global http.postBuffer 2048M
             git config --global http.maxRequestBuffer 1024M
