@@ -60,7 +60,7 @@ node('testing-node') {
         testImage.inside(containerEnvVarString.concat(" --network=$networkId")) {
 
             runStage(Stage.ADD_GCLOUD_CREDENTIALS) {
-                withCredentials([file(credentialsId: 'secret', variable: 'FILE')]) {
+                withCredentials([file(credentialsId: 'timevic_testing_gcloud_credentials', variable: 'FILE')]) {
                     sh 'use $FILE'
                     sh 'ls -a'
                 }
