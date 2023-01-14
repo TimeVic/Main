@@ -3,6 +3,11 @@ node('testing-node') {
         disableConcurrentBuilds(),
     ])
 
+    runStage(Stage.CLEAN) {
+        // Clean before build
+        cleanWs()
+    }
+
     stage("Test test") {
         checkout scm
     }
@@ -27,11 +32,7 @@ node('testing-node') {
     }
 
     preconfigureAndStart(({ networkId ->
-        runStage(Stage.CLEAN) {
-            // Clean before build
-            cleanWs()
-        }
-    
+        
         runStage(Stage.CHECKOUT) {
             sh """
                 git config --global http.postBuffer 2048M
@@ -53,11 +54,25 @@ node('testing-node') {
             withCredentials([string(credentialsId: "timevic_testing_redmine_url", variable: 'AUTH_SECRET')]) {
                 containerEnvVars.put('Integration__Redmine__Url', AUTH_SECRET)
             }
+
+            withCredentials([string(credentialsId: "timevic_testing_google__storage_project_id", variable: 'AUTH_SECRET')]) {
+                containerEnvVars.put('Google__Storage__ProjectId', AUTH_SECRET)
+            }
+
+            withCredentials([string(credentialsId: "timevic_testing_google__storage_bucket_name", variable: 'AUTH_SECRET')]) {
+                containerEnvVars.put('Google__Storage__BucketName', AUTH_SECRET)
+            }
         }
 
         def testImage = docker.build('timevic-test-image', '--file=./devops/test-github/Dockerfile .')
         String containerEnvVarString = mapToEnvVars(containerEnvVars)
         testImage.inside(containerEnvVarString.concat(" --network=$networkId")) {
+
+            runStage(Stage.ADD_GCLOUD_CREDENTIALS) {
+                withCredentials([file(credentialsId: 'timevic_testing_gcloud_credentials', variable: 'FILE')]) {
+                    sh 'cp $FILE .credentials/google.json'
+                }
+            }
 
             runStage(Stage.BUILD) {
                 sh 'echo "{}" > appsettings.Local.json'
@@ -105,6 +120,10 @@ node('testing-node') {
             updateGithubCommitStatus('Set SUCCESS status', 'SUCCESS')
         }
     } as Closure<String>))
+
+    runStage(Stage.CLEAN) {
+        cleanWs()
+    }
 }
 
 enum Stage {
@@ -112,6 +131,7 @@ enum Stage {
     CLEAN('Clean'),
     CHECKOUT('Checkout'),
     SET_VARS('Set environment vars'),
+    ADD_GCLOUD_CREDENTIALS('Add GCloud credentials'),
     BUILD('Build projects'),
     INIT_DB('Init DB'),
     INIT_REDIS('Init Redis'),

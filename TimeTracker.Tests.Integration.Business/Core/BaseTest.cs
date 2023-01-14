@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Persistence.Transactions.Behaviors;
 using Serilog;
@@ -69,6 +70,38 @@ public abstract class BaseTest: IDisposable
         EmailSendingServiceMock.Reset();
     }
 
+    #region Uploading
+
+    protected IFormFile CreateFormFile(string fileName = "test.pdf")
+    {
+        var fileExtension = Path.GetExtension(fileName).Replace(".", "");
+        var stream = new MemoryStream();
+        var writer = new StreamWriter(stream);
+            
+        var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        stubsPath = Path.GetDirectoryName(stubsPath);
+        stubsPath = Path.Combine(stubsPath, "Stubs", "Image");
+            
+        fileExtension = fileExtension.Trim().ToLower();
+        if (fileExtension == "jpg" || fileExtension == "jpeg")
+        {
+            var stubFileBytes = File.ReadAllBytes(
+                Path.Combine(stubsPath, "ByExtensions", "image.jpg")
+            );
+            writer.Write(stubFileBytes);
+        }
+        else
+        {
+            var content = "Hello World from a Fake File";
+            writer.Write(content);
+        }
+        writer.Flush();
+        stream.Position = 0;
+        return new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
+    }
+
+    #endregion
+    
     protected async Task CommitDbChanges()
     { 
         await DbSessionProvider.PerformCommitAsync();
