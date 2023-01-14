@@ -61,7 +61,11 @@ node('testing-node') {
 
             runStage(Stage.ADD_GCLOUD_CREDENTIALS) {
                 withCredentials([string(credentialsId: "timevic_testing_gcloud_credentials", variable: 'AUTH_SECRET')]) {
-                    sh "echo \"${AUTH_SECRET}\" > .credentials/google.json"
+                    sh '''
+                        set +x
+                        sh "echo \"${AUTH_SECRET}\" > .credentials/google.json"
+                        set -x 
+                    '''
                 }
             }
 
