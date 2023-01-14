@@ -45,6 +45,9 @@ node('abedor-mainframe-web-2') {
     }
 
     stage('Build main image') {
+        withCredentials([file(credentialsId: 'timevic_production_gcloud_credentials', variable: 'FILE')]) {
+            sh 'cp $FILE .credentials/google.json'
+        }
         dockerHelper.buildContainer(mainContainer)
     }
 
@@ -79,6 +82,13 @@ node('abedor-mainframe-web-2') {
         }
         withCredentials([string(credentialsId: "timevic_production_recaptcha_secret", variable: 'AUTH_SECRET')]) {
             envVariables.put('ReCaptcha__Secret', AUTH_SECRET)
+        }
+        withCredentials([string(credentialsId: "timevic_production_google__storage_project_id", variable: 'AUTH_SECRET')]) {
+            containerEnvVars.put('Google__Storage__ProjectId', AUTH_SECRET)
+        }
+
+        withCredentials([string(credentialsId: "timevic_production_google__storage_bucket_name", variable: 'AUTH_SECRET')]) {
+            containerEnvVars.put('Google__Storage__BucketName', AUTH_SECRET)
         }
     }
 
@@ -121,5 +131,9 @@ node('abedor-mainframe-web-2') {
     stage('Run web app') {
         webAppContainer.port = '6201:80';
         dockerHelper.runContainer(webAppContainer)
-    } 
+    }
+
+    runStage("Clean workspace") {
+        cleanWs()
+    }
 }

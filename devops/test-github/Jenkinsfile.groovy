@@ -22,16 +22,17 @@ node('testing-node') {
         'Hibernate__IsShowSql': "false"
     ]
 
+    runStage(Stage.CLEAN) {
+        // Clean before build
+        cleanWs()
+    }
+
     runStage(Stage.UPDATE_GIT_STATUS) {
         updateGithubCommitStatus('Set PENDING status', 'PENDING')
     }
 
     preconfigureAndStart(({ networkId ->
-        runStage(Stage.CLEAN) {
-            // Clean before build
-            cleanWs()
-        }
-    
+        
         runStage(Stage.CHECKOUT) {
             sh """
                 git config --global http.postBuffer 2048M
@@ -119,6 +120,10 @@ node('testing-node') {
             updateGithubCommitStatus('Set SUCCESS status', 'SUCCESS')
         }
     } as Closure<String>))
+
+    runStage(Stage.CLEAN) {
+        cleanWs()
+    }
 }
 
 enum Stage {
