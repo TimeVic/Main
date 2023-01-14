@@ -64,7 +64,7 @@ node('testing-node') {
                 withCredentials([string(credentialsId: "timevic_testing_gcloud_credentials", variable: 'AUTH_SECRET')]) {
                     sh '''
                         set +x
-                        sh "echo \"${AUTH_SECRET}\" > .credentials/google.json"
+                        echo \"${AUTH_SECRET}\" > .credentials/google.json
                         set -x 
                     '''
                 }
