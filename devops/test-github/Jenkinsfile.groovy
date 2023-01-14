@@ -61,9 +61,7 @@ node('testing-node') {
 
             runStage(Stage.ADD_GCLOUD_CREDENTIALS) {
                 withCredentials([file(credentialsId: 'timevic_testing_gcloud_credentials', variable: 'FILE')]) {
-                    sh 'cat $FILE'
-                    sh 'whereis $FILE'
-                    sh 'ls -a'
+                    sh 'cp $FILE .credentials/google.json'
                 }
                 sh "cat .credentials/google.json"
             }
