@@ -4,7 +4,9 @@ using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Persistence.Transactions.Behaviors;
+using SixLabors.ImageSharp;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Utils;
@@ -17,23 +19,26 @@ namespace TimeTracker.Business.Services.Storage;
 public partial class FileStorage: IFileStorage
 {
     private const int MaxFileSize = 1024 * 1024 * 15; // 15Mb
+    private const int Thumb_MaxWidth = 256;
+    private const int Thumb_MaxHeight = 256;
     
     private readonly IDbSessionProvider _dbSessionProvider;
+    private readonly ILogger<IFileStorage> _logger;
     private const string CredentialsFilepath = "../../../../.credentials/google.json";
     
     private readonly StorageClient _googleClient;
     private readonly Bucket _bucket;
     private readonly string? _bucketName;
     private readonly string? _projectId;
-
-    // https://storage.cloud.google.com/timevic-development/attachment/2023/1/917b6a7a-157a-4b47-a3ec-29363e9503cc.pdf
     
     public FileStorage(
         IConfiguration configuration,
-        IDbSessionProvider dbSessionProvider
+        IDbSessionProvider dbSessionProvider,
+        ILogger<IFileStorage> logger
     )
     {
         _dbSessionProvider = dbSessionProvider;
+        _logger = logger;
         var filePath = Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath);
         if (!File.Exists(filePath))
         {
@@ -84,7 +89,39 @@ public partial class FileStorage: IFileStorage
             Size = Convert.ToInt64(cloudFile.Size),
             CreateTime = DateTime.UtcNow
         };
+
+        if (IsImageMimeType(mimeType))
+        {
+            try
+            {
+                fileStream.Position = 0;
+                var thumbImage = await ImageHelper.ResizeImageFromStreamAsync(
+                    fileStream,
+                    Thumb_MaxWidth,
+                    Thumb_MaxHeight
+                );
+                using var thumbStream = new MemoryStream();
+                await thumbImage.SaveAsPngAsync(thumbStream);
+                var cloudThumbFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath("png")}";
+                var cloudThumbFile = await _googleClient.UploadObjectAsync(
+                    _bucketName,
+                    cloudThumbFileName,
+                    "image/png",
+                    thumbStream
+                );
+                if (cloudFile != null)
+                {
+                    storedFile.ThumbCloudFilePath = cloudThumbFile.Name;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+            }
+        }
+
         await _dbSessionProvider.CurrentSession.SaveAsync(storedFile);
+        await fileStream.DisposeAsync();
         return storedFile;
     }
 
@@ -126,5 +163,20 @@ public partial class FileStorage: IFileStorage
             return "user";
         }
         return "common";
+    }
+
+    private bool IsImageMimeType(string mimeType)
+    {
+        switch (mimeType)
+        {
+            case "image/png":
+            case "image/jpeg":
+            case "image/gif":
+            case "image/bmp":
+            case "image/webp":
+                return true;
+        }
+
+        return false;
     }
 }

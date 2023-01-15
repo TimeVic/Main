@@ -33,6 +33,15 @@ public class PutFileTest: BaseTest
     }
     
     [Fact]
+    public async Task ShouldCreateThumbIfImage()
+    {
+        var formFile = CreateFormFile("test.jpg");
+        var actualFile = await _fileStorage.PutFileAsync(new UserEntity(), formFile, StoredFileType.Attachment);
+        Assert.NotNull(actualFile.ThumbCloudFilePath);
+        Assert.NotEmpty(actualFile.ThumbCloudFilePath);
+    }
+    
+    [Fact]
     public async Task ShouldPutImage()
     {
         var formFile = CreateFormFile("image.jpg");
