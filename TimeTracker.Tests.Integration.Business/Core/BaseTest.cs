@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Text;
+using Autofac;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Persistence.Transactions.Behaviors;
@@ -72,30 +73,35 @@ public abstract class BaseTest: IDisposable
 
     #region Uploading
 
-    protected IFormFile CreateFormFile(string fileName = "test.pdf")
+    protected IFormFile CreateFormFile(string fileName = "test.pdf", byte[]? fileBytes = null)
     {
         var fileExtension = Path.GetExtension(fileName).Replace(".", "");
         var stream = new MemoryStream();
-        var writer = new StreamWriter(stream);
             
         var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
         stubsPath = Path.GetDirectoryName(stubsPath);
-        stubsPath = Path.Combine(stubsPath, "Stubs", "Image");
+        stubsPath = Path.Combine(stubsPath, "stubs", "images");
             
         fileExtension = fileExtension.Trim().ToLower();
-        if (fileExtension == "jpg" || fileExtension == "jpeg")
+        if (fileBytes != null)
         {
-            var stubFileBytes = File.ReadAllBytes(
-                Path.Combine(stubsPath, "ByExtensions", "image.jpg")
-            );
-            writer.Write(stubFileBytes);
+            stream.Write(fileBytes);
         }
         else
         {
-            var content = "Hello World from a Fake File";
-            writer.Write(content);
+            if (fileExtension == "jpg" || fileExtension == "jpeg")
+            {
+                var stubFileBytes = File.ReadAllBytes(
+                    Path.Combine(stubsPath, "image.jpg")
+                );
+                stream.Write(stubFileBytes);
+            }
+            else
+            {
+                var content = "Hello World from a Fake File";
+                stream.Write(Encoding.UTF8.GetBytes(content));
+            }
         }
-        writer.Flush();
         stream.Position = 0;
         return new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
     }

@@ -50,7 +50,7 @@
       <None Update="xunit.runner.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="stubs\images\smiling.jpg">
+      <None Update="stubs\images\image.jpg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

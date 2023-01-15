@@ -33,9 +33,32 @@ public class PutFileTest: BaseTest
     }
     
     [Fact]
+    public async Task ShouldPutImage()
+    {
+        var formFile = CreateFormFile("image.jpg");
+        var actualFile = await _fileStorage.PutFileAsync(new UserEntity(), formFile, StoredFileType.Attachment);
+        Assert.True(actualFile.Id > 0);
+    }
+    
+    [Fact]
     public async Task ShouldThrowExceptionIfNoExtension()
     {
         var fileWithoutExtension = CreateFormFile("test");
+        await Assert.ThrowsAsync<IncorrectFileException>(async () =>
+        {
+            await _fileStorage.PutFileAsync(new UserEntity(), fileWithoutExtension, StoredFileType.Attachment);
+        });
+    }
+    
+    [Fact]
+    public async Task ShouldThrowExceptionIfTooLarge()
+    {
+        var randomizer = new Random();
+        var fileBytes = Enumerable
+            .Repeat(0, 1024 * 1024 * 15 + 1)
+            .Select(x => Convert.ToByte(randomizer.Next(0, 254)))
+            .ToArray();
+        var fileWithoutExtension = CreateFormFile("test.pdf", fileBytes);
         await Assert.ThrowsAsync<IncorrectFileException>(async () =>
         {
             await _fileStorage.PutFileAsync(new UserEntity(), fileWithoutExtension, StoredFileType.Attachment);
