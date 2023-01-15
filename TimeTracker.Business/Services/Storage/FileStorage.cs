@@ -16,6 +16,8 @@ namespace TimeTracker.Business.Services.Storage;
 
 public partial class FileStorage: IFileStorage
 {
+    private const int MaxFileSize = 1024 * 1024 * 15; // 15Mb
+    
     private readonly IDbSessionProvider _dbSessionProvider;
     private const string CredentialsFilepath = "../../../../.credentials/google.json";
     
@@ -53,7 +55,6 @@ public partial class FileStorage: IFileStorage
         if (_projectId == null)
             throw new ArgumentNullException(nameof(_projectId));
 
-        credentials.CreateScoped();
         _googleClient = StorageClient.Create(credentials);
     }
 
@@ -101,6 +102,11 @@ public partial class FileStorage: IFileStorage
     
     private void ValidateFileType(IFormFile file, StoredFileType fileType)
     {
+        if (file.Length > MaxFileSize)
+        {
+            throw new IncorrectFileException($"File can not be large than {(MaxFileSize / 1024 / 1024)}Mb");
+        }
+
         var mimeType = MimeTypeHelper.GetMimeType(file.GetExtension());
         if (string.IsNullOrEmpty(mimeType))
         {
@@ -119,7 +125,6 @@ public partial class FileStorage: IFileStorage
         {
             return "user";
         }
-
         return "common";
     }
 }

@@ -17,7 +17,7 @@ public class CropImageTest: BaseTest
             Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
             "stubs",
             "images",
-            "smiling.jpg"
+            "image.jpg"
         );
         var actualImage = await ImageHelper.CropImageFromStreamAsync(imagePath, 100, 128);
         Assert.Equal(100, actualImage.Width);
