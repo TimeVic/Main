@@ -19,8 +19,8 @@ namespace TimeTracker.Business.Services.Storage;
 public partial class FileStorage: IFileStorage
 {
     private const int MaxFileSize = 1024 * 1024 * 15; // 15Mb
-    private const int Thumb_MaxWidth = 128;
-    private const int Thumb_MaxHeight = 128;
+    private const int Thumb_MaxWidth = 256;
+    private const int Thumb_MaxHeight = 256;
     
     private readonly IDbSessionProvider _dbSessionProvider;
     private readonly ILogger<IFileStorage> _logger;
