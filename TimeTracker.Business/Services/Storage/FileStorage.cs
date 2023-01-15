@@ -30,8 +30,6 @@ public partial class FileStorage: IFileStorage
     private readonly Bucket _bucket;
     private readonly string? _bucketName;
     private readonly string? _projectId;
-
-    // https://storage.cloud.google.com/timevic-development/attachment/2023/1/917b6a7a-157a-4b47-a3ec-29363e9503cc.pdf
     
     public FileStorage(
         IConfiguration configuration,
