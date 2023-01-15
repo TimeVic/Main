@@ -19,11 +19,11 @@ public class CropImageTest: BaseTest
             "images",
             "image.jpg"
         );
-        var actualImage = await ImageHelper.CropImageFromStreamAsync(imagePath, 100, 128);
+        var actualImage = await ImageHelper.ResizeImageFromStreamAsync(imagePath, 100, 128);
         Assert.Equal(100, actualImage.Width);
         Assert.Equal(62, actualImage.Height);
         
-        actualImage = await ImageHelper.CropImageFromStreamAsync(imagePath, 250, 100);
+        actualImage = await ImageHelper.ResizeImageFromStreamAsync(imagePath, 250, 100);
         Assert.Equal(162, actualImage.Width);
         Assert.Equal(100, actualImage.Height);
     }

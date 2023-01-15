@@ -21,6 +21,10 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual string CloudFilePath { get; set; }
         
         [Property(NotNull = false)]
+        [Column(Name = "thumb_cloud_file_path", Length = 512, NotNull = false)]
+        public virtual string? ThumbCloudFilePath { get; set; }
+        
+        [Property(NotNull = false)]
         [Column(Name = "extension", Length = 20, NotNull = false)]
         public virtual string? Extension { get; set; }
         

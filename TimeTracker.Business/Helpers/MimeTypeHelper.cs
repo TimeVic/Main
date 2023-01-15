@@ -570,6 +570,7 @@ public static class MimeTypeHelper
             {".xwd", "image/x-xwindowdump"},
             {".z", "application/x-compress"},
             {".zip", "application/x-zip-compressed"},
+            {".webp", "image/webp"},
 
             #endregion
         };

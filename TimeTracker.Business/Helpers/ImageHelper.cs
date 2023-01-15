@@ -5,13 +5,13 @@ namespace TimeTracker.Business.Helpers;
 
 public static class ImageHelper
 {
-    public static async Task<Image> CropImageFromStreamAsync(string path, int width, int height)
+    public static async Task<Image> ResizeImageFromStreamAsync(string path, int width, int height)
     {
         using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-        return await CropImageFromStreamAsync(fileStream, width, height);
+        return await ResizeImageFromStreamAsync(fileStream, width, height);
     }
     
-    public static async Task<Image> CropImageFromStreamAsync(Stream imageStream, int width, int height)
+    public static async Task<Image> ResizeImageFromStreamAsync(Stream imageStream, int width, int height)
     {
         var image = await Image.LoadAsync(imageStream);
         image.Mutate(
