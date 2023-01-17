@@ -84,11 +84,11 @@ node('abedor-mainframe-web-2') {
             envVariables.put('ReCaptcha__Secret', AUTH_SECRET)
         }
         withCredentials([string(credentialsId: "timevic_production_google__storage_project_id", variable: 'AUTH_SECRET')]) {
-            containerEnvVars.put('Google__Storage__ProjectId', AUTH_SECRET)
+            envVariables.put('Google__Storage__ProjectId', AUTH_SECRET)
         }
 
         withCredentials([string(credentialsId: "timevic_production_google__storage_bucket_name", variable: 'AUTH_SECRET')]) {
-            containerEnvVars.put('Google__Storage__BucketName', AUTH_SECRET)
+            envVariables.put('Google__Storage__BucketName', AUTH_SECRET)
         }
     }
 
