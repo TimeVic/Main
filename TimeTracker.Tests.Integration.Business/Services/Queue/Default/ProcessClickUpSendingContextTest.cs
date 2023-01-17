@@ -78,6 +78,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(1, _clickUpClient.SentTimeEntries.Count);
 
+        await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.NotNull(_timeEntry.ClickUpId);
     }
@@ -105,6 +106,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(0, _clickUpClient.SentTimeEntries.Count);
 
+        await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(timeEntryWithAnotherUser);
         Assert.Null(timeEntryWithAnotherUser.ClickUpId);
     }
@@ -127,6 +129,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(1, _clickUpClient.SentTimeEntries.Count);
 
+        await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.NotNull(_timeEntry.ClickUpId);
         Assert.NotEmpty(_timeEntry.Description);
