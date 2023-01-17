@@ -1,3 +1,4 @@
+using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.WorkerServices.Core;
@@ -7,13 +8,16 @@ namespace TimeTracker.WorkerServices.Services
     internal class QueueProcessingHostedService : ABackgroundService
     {
         private readonly IQueueService _queueService;
+        private readonly IDbSessionProvider _dbSessionProvider;
 
         public QueueProcessingHostedService(
             ILogger<ABackgroundService> logger,
-            IQueueService queueService
+            IQueueService queueService,
+            IDbSessionProvider dbSessionProvider
         ) : base(logger)
         {
             _queueService = queueService;
+            _dbSessionProvider = dbSessionProvider;
             ServiceName = "NotificationProcessingHostedService";
         }
 
@@ -25,6 +29,7 @@ namespace TimeTracker.WorkerServices.Services
                 await _queueService.ProcessAsync(QueueChannel.Default, cancellationToken);
                 await _queueService.ProcessAsync(QueueChannel.Notifications, cancellationToken);
                 await _queueService.ProcessAsync(QueueChannel.ExternalClient, cancellationToken);
+                await _dbSessionProvider.PerformCommitAsync(cancellationToken);
                 await Task.Delay(1000, cancellationToken);
             }
         }

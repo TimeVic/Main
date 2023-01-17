@@ -10,14 +10,12 @@ using TimeTracker.Business.Services.ExternalClients.Redmine;
 
 namespace TimeTracker.Business.Services.Queue.Handlers;
 
-public class SendDeleteTimeEntryIntegrationRequestHandler 
-    : IAsyncQueueHandler<SendDeleteTimeEntryIntegrationRequestContext>, IDisposable
+public class SendDeleteTimeEntryIntegrationRequestHandler : IAsyncQueueHandler<SendDeleteTimeEntryIntegrationRequestContext>
 {
     private readonly IClickUpClient _clickUpClient;
     private readonly IRedmineClient _redmineClient;
     private readonly IDbSessionProvider _sessionProvider;
     private readonly ILogger<SendDeleteTimeEntryIntegrationRequestHandler> _logger;
-    private readonly ISession _session;
 
     public SendDeleteTimeEntryIntegrationRequestHandler(
         IClickUpClient clickUpClient,
@@ -30,13 +28,12 @@ public class SendDeleteTimeEntryIntegrationRequestHandler
         _redmineClient = redmineClient;
         _sessionProvider = sessionProvider;
         _logger = logger;
-        _session = _sessionProvider.CreateSession();
     }
 
     public async Task HandleAsync(SendDeleteTimeEntryIntegrationRequestContext commandContext,
         CancellationToken cancellationToken = default)
     {
-        var timeEntriesToDelete = await _session.Query<TimeEntryEntity>()
+        var timeEntriesToDelete = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
             .Where(item => item.IsMarkedToDelete == true)
             .ToListAsync(
                 cancellationToken: cancellationToken
@@ -44,7 +41,7 @@ public class SendDeleteTimeEntryIntegrationRequestHandler
 
         foreach (var timeEntry in timeEntriesToDelete)
         {
-            var transaction = _session.BeginTransaction();
+            var transaction = _sessionProvider.CurrentSession.BeginTransaction();
             try
             {
                 try
@@ -73,7 +70,7 @@ public class SendDeleteTimeEntryIntegrationRequestHandler
                     _logger.LogTrace(e, e.Message);
                 }
 
-                await _session.DeleteAsync(timeEntry, cancellationToken);
+                await _sessionProvider.CurrentSession.DeleteAsync(timeEntry, cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
             }
             catch (MinorException e)
@@ -86,10 +83,5 @@ public class SendDeleteTimeEntryIntegrationRequestHandler
                 await transaction.RollbackAsync(cancellationToken);
             }
         }
-    }
-
-    public void Dispose()
-    {
-        _session.Dispose();
     }
 }

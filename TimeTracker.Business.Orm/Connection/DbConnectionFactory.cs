@@ -42,7 +42,7 @@ namespace TimeTracker.Business.Orm.Connection
 
         public void Dispose()
         {
-            _sessionFactory?.Close();
+            _sessionFactory?.Dispose();
         }
 
         private ISessionFactory BuildFactory(IDictionary<string, string> properties)
