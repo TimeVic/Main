@@ -13,7 +13,7 @@ namespace TimeTracker.Business.Orm.Connection
         private readonly ILogger<IDbConnectionFactory> _logger;
         private readonly IConfiguration _configuration;
 
-        private ISession _session { get; set; }
+        private ISession? _session { get; set; }
         
         private ISessionFactory _sessionFactory { get; set; }
 
@@ -21,14 +21,14 @@ namespace TimeTracker.Business.Orm.Connection
         
         public ISession CurrentSession {
             get {
-                if (_session == null || !_session.IsOpen)
+                if (_session is not {IsOpen: true})
                 {
                     _session = CreateSession();
                 }
 
                 lock (_session)
                 {
-                    if (_transaction == null || !_transaction.IsActive)
+                    if (_transaction is not {IsActive: true})
                     {
                         _transaction = _session.BeginTransaction(
                             IsolationLevel.ReadCommitted    
@@ -39,7 +39,7 @@ namespace TimeTracker.Business.Orm.Connection
             }
         }
 
-        private ITransaction _transaction;
+        private ITransaction? _transaction;
 
         public DbSessionProvider(
             IDbConnectionFactory dbConnectionFactory, 
@@ -73,6 +73,7 @@ namespace TimeTracker.Business.Orm.Connection
                     await _transaction.RollbackAsync(cancellationToken);
                     throw e;
                 }
+                await _session.FlushAsync(cancellationToken);
             }
             _transaction?.Dispose();
             _transaction = null;
@@ -89,15 +90,25 @@ namespace TimeTracker.Business.Orm.Connection
             return _sessionFactory.OpenSession();
         }
         
-        #region IDisposable implementation
-        public void Dispose()
+        public void CloseCurrentSession()
         {
             if (_session != null)
             {
-                _session.Close();
+                if (_session.IsOpen)
+                {
+                    _session.Flush();
+                    _session.Close();    
+                }
                 _session.Dispose();
                 _session = null;
             }
+        }
+        
+        #region IDisposable implementation
+        public void Dispose()
+        {
+            CloseCurrentSession();
+            _sessionFactory.Dispose();
             GC.SuppressFinalize(this);
         }
         #endregion

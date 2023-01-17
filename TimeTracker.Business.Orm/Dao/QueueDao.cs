@@ -134,9 +134,6 @@ public class QueueDao: IQueueDao
     public void Dispose()
     {
         _session.Flush();
-        if (_session.IsOpen)
-        {
-            _session.Close();    
-        }
+        _session.Dispose();
     }
 }

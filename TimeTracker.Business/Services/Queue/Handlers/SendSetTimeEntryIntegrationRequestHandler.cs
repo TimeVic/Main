@@ -11,13 +11,12 @@ using TimeTracker.Business.Services.ExternalClients.Redmine;
 
 namespace TimeTracker.Business.Services.Queue.Handlers;
 
-public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendSetTimeEntryIntegrationRequestContext>, IDisposable
+public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendSetTimeEntryIntegrationRequestContext>
 {
     private readonly IClickUpClient _clickUpClient;
     private readonly IRedmineClient _redmineClient;
     private readonly IDbSessionProvider _sessionProvider;
     private readonly ILogger<SendSetTimeEntryIntegrationRequestHandler> _logger;
-    private readonly ISession _session;
 
     public SendSetTimeEntryIntegrationRequestHandler(
         IClickUpClient clickUpClient,
@@ -30,15 +29,14 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
         _redmineClient = redmineClient;
         _sessionProvider = sessionProvider;
         _logger = logger;
-        _session = _sessionProvider.CreateSession();
     }
     
     public async Task HandleAsync(SendSetTimeEntryIntegrationRequestContext commandContext, CancellationToken cancellationToken = default)
     {
-        var transaction = _session.BeginTransaction();
+        var transaction = _sessionProvider.CurrentSession.BeginTransaction();
         try
         {
-            var timeEntry = await _session.Query<TimeEntryEntity>().FirstOrDefaultAsync(
+            var timeEntry = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>().FirstOrDefaultAsync(
                 item => item.Id == commandContext.TimeEntryId,
                 cancellationToken: cancellationToken
             );
@@ -62,7 +60,7 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
                     {
                         timeEntry.Description = setResponse.Description;
                     }
-                    await _session.SaveAsync(timeEntry, cancellationToken);
+                    await _sessionProvider.CurrentSession.SaveAsync(timeEntry, cancellationToken);
                 }
             }
             if (timeEntry.Workspace.IsIntegrationRedmineActive(timeEntry.User.Id))
@@ -75,7 +73,7 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
                     {
                         timeEntry.Description = setResponse.Description;
                     }
-                    await _session.SaveAsync(timeEntry, cancellationToken);
+                    await _sessionProvider.CurrentSession.SaveAsync(timeEntry, cancellationToken);
                 }
             }
 
@@ -90,10 +88,5 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
             _logger.LogError(e, e.Message);
             await transaction.RollbackAsync(cancellationToken);
         }
-    }
-
-    public void Dispose()
-    {
-        _session.Dispose();
     }
 }

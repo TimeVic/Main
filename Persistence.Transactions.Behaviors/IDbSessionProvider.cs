@@ -10,5 +10,7 @@ namespace Persistence.Transactions.Behaviors
         ISession CurrentSession { get; }
 
         ISession CreateSession();
+
+        void CloseCurrentSession();
     }
 }
