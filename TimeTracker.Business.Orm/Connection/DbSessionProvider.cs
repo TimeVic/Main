@@ -108,7 +108,6 @@ namespace TimeTracker.Business.Orm.Connection
         public void Dispose()
         {
             CloseCurrentSession();
-            _sessionFactory.Dispose();
             GC.SuppressFinalize(this);
         }
         #endregion
