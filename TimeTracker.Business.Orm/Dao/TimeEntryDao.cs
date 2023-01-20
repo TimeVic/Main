@@ -191,10 +191,6 @@ public class TimeEntryDao: ITimeEntryDao
         DateTime endDate
     )
     {
-        if (endTime > GlobalConstants.EndOfDay)
-        {
-            throw new DataInconsistencyException("End time can not be more than 24 hours");
-        }
         endDate = endDate.Date;
         
         var activeTimeEntries = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
