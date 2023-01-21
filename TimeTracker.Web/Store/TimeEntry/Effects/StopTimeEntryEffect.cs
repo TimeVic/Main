@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 
@@ -31,7 +32,7 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
                 EndTime = DateTime.Now.TimeOfDay,
-                EndDate = DateTime.Now
+                EndDate = DateTime.Now.ToDateAndRemoveTimeZone()
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(null));
             dispatcher.Dispatch(new LoadTimeEntryListAction(1));

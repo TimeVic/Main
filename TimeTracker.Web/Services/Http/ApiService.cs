@@ -82,10 +82,11 @@ namespace TimeTracker.Web.Services.Http
         private async Task<TResponse?> RequestAsync<TResponse>(string requestUri, string jwtToken, object data, HttpMethod httpMethod)
         {
             var responseString = await RequestAsync(requestUri, jwtToken, data, httpMethod);
-            return JsonHelper.DeserializeObject<TResponse>(
+            var response = JsonHelper.DeserializeObject<TResponse>(
                 responseString,
                 DateTimeZoneHandling.Local
             );
+            return response;
         }
 
         private async Task<TResponse?> PostAsync<TResponse>(string requestUri, object data, string jwtToken = null)
