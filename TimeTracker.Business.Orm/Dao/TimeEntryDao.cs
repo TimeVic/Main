@@ -216,12 +216,10 @@ public class TimeEntryDao: ITimeEntryDao
         {
             if (activeTimeEntry.StartTime > endTime && activeTimeEntry.Date == endDate)
             {
-                _logger.LogError($"Start time: {activeTimeEntry.StartTime:yyyy-MM-ddTHH:mm:ssK} EndTime: {endTime:yyyy-MM-ddTHH:mm:ssK} EntryDate: {activeTimeEntry.Date:yyyy-MM-ddTHH:mm:ssK} endDate: {endDate:yyyy-MM-ddTHH:mm:ssK}");
                 throw new DataInconsistencyException("End time can not be less than Start time");
             }
             if (activeTimeEntry.Date > endDate)
             {
-                _logger.LogError($"Start time: {activeTimeEntry.StartTime:yyyy-MM-ddTHH:mm:ssK} EndTime: {endTime:yyyy-MM-ddTHH:mm:ssK} EntryDate: {activeTimeEntry.Date:yyyy-MM-ddTHH:mm:ssK} endDate: {endDate:yyyy-MM-ddTHH:mm:ssK}");
                 throw new DataInconsistencyException("End time can not be less than Start time");
             }
             
