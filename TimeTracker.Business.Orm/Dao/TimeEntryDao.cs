@@ -191,6 +191,10 @@ public class TimeEntryDao: ITimeEntryDao
         DateTime endDate
     )
     {
+        if (endTime > GlobalConstants.EndOfDay)
+        {
+            throw new DataInconsistencyException("End time can not be more than 24 hours");
+        }
         endDate = endDate.Date;
         
         var activeTimeEntries = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
@@ -212,10 +216,12 @@ public class TimeEntryDao: ITimeEntryDao
         {
             if (activeTimeEntry.StartTime > endTime && activeTimeEntry.Date == endDate)
             {
+                _logger.LogError($"Start time: {activeTimeEntry.StartTime:o} EndTime: {endTime:o} EntryDate: {activeTimeEntry.Date:0} endDate: {endDate:o}");
                 throw new DataInconsistencyException("End time can not be less than Start time");
             }
-            if (activeTimeEntry.Date > endDate )
+            if (activeTimeEntry.Date > endDate)
             {
+                _logger.LogError($"Start time: {activeTimeEntry.StartTime:o} EndTime: {endTime:o} EntryDate: {activeTimeEntry.Date:0} endDate: {endDate:o}");
                 throw new DataInconsistencyException("End time can not be less than Start time");
             }
             
