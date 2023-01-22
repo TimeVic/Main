@@ -104,7 +104,7 @@
                         Property="TotalDuration"
                         Title="Total Duration">
                         <Template Context="item">
-                            @item.TotalDuration.ToString("dd\\.hh\\:mm\\:ss")
+                            @item.TotalDuration.ToReadableShortString()
                         </Template>
                         <FooterTemplate>
                             Total: <b>@totalDuration.ToReadableShortString()</b>

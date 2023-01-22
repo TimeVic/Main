@@ -42,17 +42,6 @@ public static class TimeSpanExtensions
     
     public static string ToReadableShortString(this TimeSpan span)
     {
-        var formatted = string.Format("{0}{1}",
-            span.Duration().Days > 0 
-                ? string.Format(R.TimeSpan_Pattern_Days_Short, span.Days) 
-                : string.Empty,
-            $"{span.Duration().Hours:00}:{span.Duration().Minutes:00}:{span.Duration().Seconds:00}"
-        );
-
-        if (formatted.EndsWith(", ")) formatted = formatted.Substring(0, formatted.Length - 2);
-
-        if (string.IsNullOrEmpty(formatted)) formatted = R.TimeSpan_ZeroSeconds;
-
-        return formatted;
+        return $"{span.Duration().TotalHours:00}:{span.Duration().Minutes:00}:{span.Duration().Seconds:00}";
     }
 }
