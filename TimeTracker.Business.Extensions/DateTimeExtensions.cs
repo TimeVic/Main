@@ -206,5 +206,14 @@ namespace TimeTracker.Business.Extensions
             // Return the week of our adjusted day
             return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
+        
+        /**
+         * This method is used to get the date in the current time zone. It is necessary to
+         * transfer to the server the local date of the client without the time zone
+         */
+        public static DateTime ToDateAndRemoveTimeZone(this DateTime now)
+        {
+            return new DateTime(now.Year, now.Month, now.Day);
+        }
     }
 }

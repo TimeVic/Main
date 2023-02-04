@@ -218,7 +218,7 @@ public class TimeEntryDao: ITimeEntryDao
             {
                 throw new DataInconsistencyException("End time can not be less than Start time");
             }
-            if (activeTimeEntry.Date > endDate )
+            if (activeTimeEntry.Date > endDate)
             {
                 throw new DataInconsistencyException("End time can not be less than Start time");
             }

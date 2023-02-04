@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Project;
@@ -45,7 +46,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
-                Date = DateTime.UtcNow.Date,
+                Date = DateTime.Now.ToDateAndRemoveTimeZone(),
                 StartTime = DateTime.Now.TimeOfDay,
 
                 TaskId = action.TaskId,

@@ -30,6 +30,7 @@ namespace TimeTracker.WorkerServices.Services
                 await _queueService.ProcessAsync(QueueChannel.Notifications, cancellationToken);
                 await _queueService.ProcessAsync(QueueChannel.ExternalClient, cancellationToken);
                 await _dbSessionProvider.PerformCommitAsync(cancellationToken);
+                _dbSessionProvider.CurrentSession.Clear();
                 await Task.Delay(1000, cancellationToken);
             }
         }
