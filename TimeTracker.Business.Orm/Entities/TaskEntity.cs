@@ -16,13 +16,13 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "title", Length = 1024, NotNull = true)]
         public virtual string Title { get; set; }
         
-        [Property(NotNull = true)]
-        [Column(Name = "description", Length = 10000, NotNull = true)]
+        [Property(NotNull = false)]
+        [Column(Name = "description", Length = 10000, NotNull = false)]
         public virtual string Description { get; set; }
         
         [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "notification_time", SqlType = "datetime", NotNull = false)]
-        public virtual DateTime NotificationTime { get; set; }
+        public virtual DateTime? NotificationTime { get; set; }
         
         [Property(NotNull = true)]
         [Column(Name = "is_done", NotNull = true)]
@@ -41,21 +41,37 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual DateTime CreateTime { get; set; }
         
         [ManyToOne(
-            ClassType = typeof(WorkspaceEntity), 
-            Column = "workspace_id", 
-            Lazy = Laziness.False,
-            Fetch = FetchMode.Join,
-            Cascade = "none"
-        )]
-        public virtual WorkspaceEntity Workspace { get; set; }
-        
-        [ManyToOne(
             ClassType = typeof(UserEntity), 
             Column = "user_id", 
             Lazy = Laziness.Proxy,
             Fetch = FetchMode.Join,
             Cascade = "none"
         )]
-        public virtual UserEntity? User { get; set; }
+        public virtual UserEntity User { get; set; }
+        
+        [ManyToOne(
+            ClassType = typeof(TaskListEntity), 
+            Column = "task_list_id", 
+            Lazy = Laziness.Proxy,
+            Fetch = FetchMode.Join,
+            Cascade = "none"
+        )]
+        public virtual TaskListEntity TaskList { get; set; }
+        
+        [Set(
+            Table = "task_stored_files",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "task_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            ClassType = typeof(StoredFileEntity),
+            Column = "stored_file_id"
+        )]
+        public virtual ICollection<StoredFileEntity> Attachments { get; set; } = new List<StoredFileEntity>();
     }
 }

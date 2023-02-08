@@ -1,7 +1,6 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
-using TimeTracker.Business.Common.Constants;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -13,7 +12,7 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual long Id { get; set; }
         
         [Property(NotNull = true)]
-        [Column(Name = "title", Length = 1024, NotNull = true)]
+        [Column(Name = "name", Length = 1024, NotNull = true)]
         public virtual string Name { get; set; }
         
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
@@ -25,12 +24,11 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual DateTime CreateTime { get; set; }
         
         [ManyToOne(
-            ClassType = typeof(WorkspaceEntity), 
-            Column = "workspace_id", 
+            ClassType = typeof(ProjectEntity), 
+            Column = "project_id", 
             Lazy = Laziness.False,
-            Fetch = FetchMode.Join,
             Cascade = "none"
         )]
-        public virtual WorkspaceEntity Workspace { get; set; }
+        public virtual ProjectEntity Project { get; set; }
     }
 }
