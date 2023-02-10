@@ -11,7 +11,7 @@ public interface IQueueDao: IScopedDomainService, IDisposable
         CancellationToken cancellationToken = default
     );
 
-    Task Push(
+    System.Threading.Tasks.Task Push(
         object context,
         QueueChannel channel = QueueChannel.Default,
         CancellationToken cancellationToken = default
@@ -19,7 +19,7 @@ public interface IQueueDao: IScopedDomainService, IDisposable
 
     Task<QueueEntity?> GetTop(QueueChannel? channel = null, CancellationToken cancellationToken = default);
 
-    Task MarkAsProcessed(
+    System.Threading.Tasks.Task MarkAsProcessed(
         QueueEntity item,
         string? error = null,
         CancellationToken cancellationToken = default
