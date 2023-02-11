@@ -1,0 +1,35 @@
+﻿@page "/dashboard/tasks"
+@page "/dashboard/tasks/{ClientId:long}"
+
+@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Api.Shared.Dto.Entity
+
+@inherits BaseComponent
+@layout Layout
+
+<RadzenRow class="no-gutters mx-n4">
+    <RadzenColumn Size="3">
+        <RadzenCard class="mx-auto">
+            <RadzenTree Style="width: 100%;">
+                @foreach(var project in Projects)
+                {
+                    <RadzenTreeItem Text="@project.Name">
+                        <ChildContent>
+                            <RadzenTreeItem Text="M3"/>
+                            <RadzenTreeItem Text="M5"/>
+                        </ChildContent>
+                        <Template>
+                            <b>@context.Text</b>
+                        </Template>
+                    </RadzenTreeItem>    
+                }
+            </RadzenTree>
+        </RadzenCard>
+    </RadzenColumn>
+    <RadzenColumn>
+        Auto
+    </RadzenColumn>
+    <RadzenColumn>
+        Auto
+    </RadzenColumn>
+</RadzenRow>
