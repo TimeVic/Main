@@ -5,13 +5,10 @@ using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 {
-    public class AddTaskListRequest : IRequest<TaskListDto>
+    public class UpdateTaskListRequest : AddTaskListRequest
     {
         [Required]
         [IsPositive]
-        public long ProjectId { get; set; }
-        
-        [StringLength(1024, MinimumLength = 1)]
-        public string Name { get; set; }
+        public long TaskListId { get; set; }
     }
 }

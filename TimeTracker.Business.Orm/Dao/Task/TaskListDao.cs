@@ -12,7 +12,7 @@ public class TaskListDao: ITaskListDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<TaskListEntity> CreateList(ProjectEntity project, string name)
+    public async Task<TaskListEntity> CreateTaskList(ProjectEntity project, string name)
     {
         var taskList = new TaskListEntity()
         {
@@ -23,5 +23,10 @@ public class TaskListDao: ITaskListDao
         };
         await _sessionProvider.CurrentSession.SaveAsync(taskList);
         return taskList;
+    }
+    
+    public async Task<TaskListEntity?> GetById(long taskListId)
+    {
+        return await _sessionProvider.CurrentSession.GetAsync<TaskListEntity>(taskListId);
     }
 }

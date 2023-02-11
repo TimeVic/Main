@@ -29,4 +29,12 @@ public class TasksController : MainApiControllerBase
         => this.RequestAsync()
             .For<TaskListDto>()
             .With(request);
+    
+    [HttpPost("list/update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Start([FromBody] UpdateTaskListRequest request)
+        => this.RequestAsync()
+            .For<TaskListDto>()
+            .With(request);
 }

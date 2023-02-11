@@ -14,7 +14,7 @@ using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 {
-    public class AddTaskListRequestHandler : IAsyncRequestHandler<AddTaskListRequest, TaskListDto>
+    public class UpdateTaskListRequestHandler : IAsyncRequestHandler<UpdateTaskListRequest, TaskListDto>
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
@@ -25,7 +25,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         private readonly IWorkspaceAccessService _workspaceAccessService;
         private readonly ITaskListDao _taskListDao;
 
-        public AddTaskListRequestHandler(
+        public UpdateTaskListRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
@@ -46,18 +46,23 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _taskListDao = taskListDao;
         }
     
-        public async Task<TaskListDto> ExecuteAsync(AddTaskListRequest request)
+        public async Task<TaskListDto> ExecuteAsync(UpdateTaskListRequest request)
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var project = await _projectDao.GetById(request.ProjectId);
+            var taskList = await _taskListDao.GetById(request.TaskListId);
+            if (taskList == null || project == null)
+            {
+                throw new RecordNotFoundException();
+            }
+            
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, project.Workspace))
             {
                 throw new HasNoAccessException();
             }
-            var taskList = await _taskListDao.CreateTaskList(project, request.Name);
-            await _sessionProvider.PerformCommitAsync();
-            
+
+            taskList.Name = request.Name;
             return _mapper.Map<TaskListDto>(taskList);
         }
     }
