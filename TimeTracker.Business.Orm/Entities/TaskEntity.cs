@@ -73,5 +73,11 @@ namespace TimeTracker.Business.Orm.Entities
             Column = "stored_file_id"
         )]
         public virtual ICollection<StoredFileEntity> Attachments { get; set; } = new List<StoredFileEntity>();
+
+        #region Calculated
+
+        public virtual WorkspaceEntity Workspace => TaskList.Project.Workspace;
+
+        #endregion
     }
 }

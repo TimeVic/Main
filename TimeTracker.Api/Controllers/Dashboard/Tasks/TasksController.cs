@@ -60,5 +60,13 @@ public class TasksController : MainApiControllerBase
             .For<TaskDto>()
             .With(request);
     
+    [HttpPost("update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> UpdateTask([FromBody] UpdateTaskRequest request)
+        => this.RequestAsync()
+            .For<TaskDto>()
+            .With(request);
+    
     #endregion
 }

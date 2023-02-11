@@ -14,9 +14,9 @@ using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
 
-public class AddTaskTest: BaseTest
+public class UpdateTaskTest: BaseTest
 {
-    private readonly string Url = "/dashboard/tasks/add";
+    private readonly string Url = "/dashboard/tasks/update";
     
     private readonly IQueueService _queueService;
     private readonly UserEntity _user;
@@ -29,8 +29,10 @@ public class AddTaskTest: BaseTest
     private readonly ITaskListSeeder _taskListSeeder;
     
     private readonly TaskListEntity _taskList;
+    private readonly TaskEntity _task;
+    private readonly TaskListEntity _otherTaskList;
 
-    public AddTaskTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    public UpdateTaskTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
@@ -41,15 +43,17 @@ public class AddTaskTest: BaseTest
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
         _taskList = _taskListSeeder.CreateAsync(_project).Result;
+        _otherTaskList = _taskListSeeder.CreateAsync(_project).Result;
+        _task = _taskSeeder.CreateAsync(_taskList).Result;
     }
 
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
         var task = _taskFactory.Generate();
-        var response = await PostRequestAsAnonymousAsync(Url, new AddTaskRequest()
+        var response = await PostRequestAsAnonymousAsync(Url, new UpdateTaskRequest()
         {
-            TaskListId = _taskList.Id,
+            TaskId = task.Id,
             Title = task.Title,
             Description = task.Description,
             NotificationTime = task.NotificationTime
@@ -58,46 +62,50 @@ public class AddTaskTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldAdd()
+    public async Task ShouldUpdate()
     {
-        var task = _taskFactory.Generate();
-        var response = await PostRequestAsync(Url, _jwtToken, new AddTaskRequest()
+        var expectedTask = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateTaskRequest()
         {
-            TaskListId = _taskList.Id,
-            Title = task.Title,
-            Description = task.Description,
-            NotificationTime = task.NotificationTime,
-            IsDone = task.IsDone,
-            IsArchived = task.IsArchived,
+            TaskId = _task.Id,
+            TaskListId = _otherTaskList.Id,
+            Title = expectedTask.Title,
+            Description = expectedTask.Description,
+            NotificationTime = expectedTask.NotificationTime,
+            IsDone = expectedTask.IsDone,
+            IsArchived = expectedTask.IsArchived,
         });
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualData.Id > 0);
-        Assert.Equal(_taskList.Id, actualData.TaskList.Id);
-        Assert.Equal(task.Title, actualData.Title);
-        Assert.Equal(task.Description, actualData.Description);
-        Assert.Equal(task.IsDone, actualData.IsDone);
-        Assert.Equal(task.IsArchived, actualData.IsArchived);
+        Assert.Equal(_task.Id, actualData.Id);
+        Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
+        Assert.Equal(expectedTask.Title, actualData.Title);
+        Assert.Equal(expectedTask.Description, actualData.Description);
+        Assert.Equal(expectedTask.IsDone, actualData.IsDone);
+        Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
     }
     
     [Fact]
-    public async Task ShouldNotAddIfIncorrectWorkspaceId()
+    public async Task ShouldNotSetTaskIdFromOtherWorkspace()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
         var otherProject = _projectDao.CreateAsync(otherWorkspace, "Test adding").Result;
         var otherTaskList = _taskListSeeder.CreateAsync(otherProject).Result;
         
-        var task = _taskFactory.Generate();
-        var response = await PostRequestAsync(Url, _jwtToken, new AddTaskRequest()
+        var newTask = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateTaskRequest()
         {
+            TaskId = _task.Id,
             TaskListId = otherTaskList.Id,
-            Title = task.Title,
-            Description = task.Description,
-            NotificationTime = task.NotificationTime
+            Title = newTask.Title,
+            Description = newTask.Description,
+            NotificationTime = newTask.NotificationTime,
+            IsDone = newTask.IsDone,
+            IsArchived = newTask.IsArchived
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        Assert.Equal(new ValidationException().GetTypeName(), error.Type);
     }
 }

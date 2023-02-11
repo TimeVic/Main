@@ -10,6 +10,10 @@ public interface ITaskDao: IDomainService
         UserEntity user,
         string title,
         string? description = null,
-        DateTime? notificationTime = null
+        DateTime? notificationTime = null,
+        bool isDone = false,
+        bool isArchived = false
     );
+
+    Task<TaskEntity?> GetById(long taskListId);
 }

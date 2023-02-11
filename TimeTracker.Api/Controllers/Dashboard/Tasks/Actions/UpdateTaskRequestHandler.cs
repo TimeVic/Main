@@ -8,13 +8,14 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Task;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 {
-    public class AddTaskRequestHandler : IAsyncRequestHandler<AddTaskRequest, TaskDto>
+    public class UpdateTaskRequestHandler : IAsyncRequestHandler<UpdateTaskRequest, TaskDto>
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
@@ -26,7 +27,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         private readonly ITaskListDao _taskListDao;
         private readonly ITaskDao _taskDao;
 
-        public AddTaskRequestHandler(
+        public UpdateTaskRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
@@ -49,25 +50,23 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _taskDao = taskDao;
         }
     
-        public async Task<TaskDto> ExecuteAsync(AddTaskRequest request)
+        public async Task<TaskDto> ExecuteAsync(UpdateTaskRequest request)
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var taskList = await _taskListDao.GetById(request.TaskListId);
-            if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList.Project.Workspace))
+            var task = await _taskDao.GetById(request.TaskId);
+            if (!await _securityManager.HasAccess(AccessLevel.Read, user, task.Workspace))
             {
                 throw new HasNoAccessException();
             }
+            var taskList = await _taskListDao.GetById(request.TaskListId);
+            if (taskList == null || taskList.Project.Workspace != task.Workspace)
+            {
+                throw new ValidationException("Incorrect TaskListId");
+            }
 
-            var task = await _taskDao.AddTaskAsync(
-                taskList,
-                user,
-                request.Title,
-                request.Description,
-                request.NotificationTime
-            );
-            await _sessionProvider.PerformCommitAsync();
-            
+            task = _mapper.Map(request, task);
+            task.TaskList = taskList;
             return _mapper.Map<TaskDto>(task);
         }
     }

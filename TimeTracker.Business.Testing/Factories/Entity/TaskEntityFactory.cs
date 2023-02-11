@@ -13,9 +13,9 @@ namespace TimeTracker.Business.Testing.Factories.Entity
                 .RuleFor(fake => fake.Title, fake => fake.Random.String2(100))
                 .RuleFor(fake => fake.Description, fake => fake.Lorem.Sentence())
                 .RuleFor(fake => fake.IsArchived, fake => false)
-                .RuleFor(fake => fake.NotificationTime, fake => fake.Date.Future())
-                .RuleFor(fake => fake.CreateTime, fake => fake.Date.Past())
-                .RuleFor(fake => fake.UpdateTime, fake => fake.Date.Past());
+                .RuleFor(fake => fake.NotificationTime, fake => fake.Date.Future().ToUniversalTime())
+                .RuleFor(fake => fake.CreateTime, fake => fake.Date.Past().ToUniversalTime())
+                .RuleFor(fake => fake.UpdateTime, fake => fake.Date.Past().ToUniversalTime());
         }
 
         public TaskEntity Generate()
