@@ -192,11 +192,11 @@ public class GetReportByMothsTest: BaseTest
         var firstReportItem = result.First();
         var secondReportItem = result.Last();
 
-        Assert.Equal(DateTime.UtcNow.AddMonths(-2).Month, secondReportItem.Month);
-        Assert.Equal(DateTime.UtcNow.AddMonths(-2).Year, secondReportItem.Year);
-        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
+        Assert.Equal(DateTime.UtcNow.AddMonths(-2).Month, firstReportItem.Month);
+        Assert.Equal(DateTime.UtcNow.AddMonths(-2).Year, firstReportItem.Year);
+        Assert.Equal(TimeSpan.FromHours(12), firstReportItem.Duration);
         
-        Assert.Equal(0, secondReportItem.Amount);
-        Assert.Equal(180, firstReportItem.Amount);
+        Assert.Equal(0, firstReportItem.Amount);
+        Assert.Equal(180, secondReportItem.Amount);
     }
 }
