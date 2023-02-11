@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Orm.Dao.Task;
@@ -16,4 +17,6 @@ public interface ITaskDao: IDomainService
     );
 
     Task<TaskEntity?> GetById(long taskListId);
+
+    Task<ListDto<TaskEntity>> GetList(TaskListEntity taskList);
 }

@@ -36,4 +36,12 @@ public class TasksController : MainApiControllerBase
         => this.RequestAsync()
             .For<TaskDto>()
             .With(request);
+    
+    [HttpPost("get-list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> UpdateTask([FromBody] GetListRequest request)
+        => this.RequestAsync()
+            .For<GetListResponse>()
+            .With(request);
 }
