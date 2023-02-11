@@ -3,6 +3,7 @@ using AspNetCore.ApiControllers.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
@@ -25,7 +26,7 @@ public class TasksController : MainApiControllerBase
     [HttpPost("list/add")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Start([FromBody] AddTaskListRequest request)
+    public Task<IActionResult> AddTaskList([FromBody] AddTaskListRequest request)
         => this.RequestAsync()
             .For<TaskListDto>()
             .With(request);
@@ -33,8 +34,16 @@ public class TasksController : MainApiControllerBase
     [HttpPost("list/update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Start([FromBody] UpdateTaskListRequest request)
+    public Task<IActionResult> UpdateTaskList([FromBody] UpdateTaskListRequest request)
         => this.RequestAsync()
             .For<TaskListDto>()
+            .With(request);
+    
+    [HttpPost("list/get-list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> UpdateTaskList([FromBody] GetTaskListRequest request)
+        => this.RequestAsync()
+            .For<GetTaskListResponse>()
             .With(request);
 }

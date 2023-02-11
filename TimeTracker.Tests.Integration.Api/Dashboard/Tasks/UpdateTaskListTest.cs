@@ -42,7 +42,7 @@ public class UpdateTaskListTest: BaseTest
     public async Task NonAuthorizedCanNotDoIt()
     {
         var taskList = _taskListFactory.Generate();
-        taskList = await _taskListDao.CreateTaskList(_project, taskList.Name);
+        taskList = await _taskListDao.CreateTaskListAsync(_project, taskList.Name);
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateTaskListRequest()
         {
             Name = taskList.Name,
@@ -55,7 +55,7 @@ public class UpdateTaskListTest: BaseTest
     public async Task ShouldUpdate()
     {
         var expectedName = _taskListFactory.Generate().Name;
-        var taskList = await _taskListDao.CreateTaskList(_project, expectedName);
+        var taskList = await _taskListDao.CreateTaskListAsync(_project, expectedName);
         
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateTaskListRequest()
         {
@@ -77,7 +77,7 @@ public class UpdateTaskListTest: BaseTest
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
         var otherProject = _projectDao.CreateAsync(otherWorkspace, "Test adding").Result;
-        var taskList = await _taskListDao.CreateTaskList(_project, "Some name");
+        var taskList = await _taskListDao.CreateTaskListAsync(_project, "Some name");
         var project = _taskListFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateTaskListRequest()
         {

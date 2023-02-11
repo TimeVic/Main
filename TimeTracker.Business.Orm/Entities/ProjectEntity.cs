@@ -70,6 +70,15 @@ namespace TimeTracker.Business.Orm.Entities
         [OneToMany(ClassType = typeof(WorkspaceMembershipProjectAccessEntity))]
         public virtual ICollection<WorkspaceMembershipProjectAccessEntity> MembershipProjectAccess { get; set; } = new List<WorkspaceMembershipProjectAccessEntity>();
 
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.Extra,
+            Cascade = "none"
+        )]
+        [Key(Column = "project_id")]
+        [OneToMany(ClassType = typeof(TaskListEntity))]
+        public virtual ICollection<TaskListEntity> TaskLists { get; set; } = new List<TaskListEntity>();
+        
         public virtual void SetClient(ClientEntity? client)
         {
             if (Client?.Id == client?.Id)

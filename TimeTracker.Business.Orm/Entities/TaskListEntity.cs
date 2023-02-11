@@ -30,5 +30,16 @@ namespace TimeTracker.Business.Orm.Entities
             Cascade = "none"
         )]
         public virtual ProjectEntity Project { get; set; }
+        
+        public virtual void SetProject(ProjectEntity project)
+        {
+            if (Project?.Id == project?.Id)
+            {
+                return;
+            }
+
+            Project = project;
+            Project.TaskLists.Add(this);
+        }
     }
 }
