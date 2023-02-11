@@ -89,7 +89,7 @@ namespace TimeTracker.Business.Orm.Entities
         [Key(Column = "workspace_id")]
         [OneToMany(ClassType = typeof(WorkspaceMembershipEntity))]
         public virtual ICollection<WorkspaceMembershipEntity> Memberships { get; set; } = new List<WorkspaceMembershipEntity>();
-        
+
         #region Integration - ClickUp
         
         public virtual WorkspaceSettingsClickUpEntity? GetClickUpSettings(long userId)

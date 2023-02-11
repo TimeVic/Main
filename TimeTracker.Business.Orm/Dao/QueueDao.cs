@@ -19,7 +19,7 @@ public class QueueDao: IQueueDao
         _session = sessionProvider.CreateSession();
     }
 
-    public async Task Push(
+    public async System.Threading.Tasks.Task Push(
         object context,
         QueueChannel channel = QueueChannel.Default,
         CancellationToken cancellationToken = default
@@ -100,7 +100,7 @@ public class QueueDao: IQueueDao
         return null;
     }
 
-    public async Task MarkAsProcessed(
+    public async System.Threading.Tasks.Task MarkAsProcessed(
         QueueEntity item,
         string? error = null,
         CancellationToken cancellationToken = default

@@ -26,8 +26,8 @@ public partial class SummaryReportDao: ISummaryReportDao
             ) as AmountOriginal
         from time_entries te 
         where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
-        group by month, year
-        order by month desc
+        group by year, month
+        order by year desc, month desc
     ";
     
     public async Task<ICollection<ByMonthsReportItemDto>> GetReportByMonthForOwnerOrManagerAsync(
@@ -62,8 +62,8 @@ public partial class SummaryReportDao: ISummaryReportDao
             ) as AmountOriginal
         from time_entries te 
         where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
-        group by month, year
-        order by month
+        group by year, month
+        order by year, month
     ";
 
     public async Task<ICollection<ByMonthsReportItemDto>> GetReportByMonthForOtherAsync(
