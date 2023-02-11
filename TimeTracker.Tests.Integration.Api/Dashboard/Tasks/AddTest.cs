@@ -14,7 +14,7 @@ using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
 
-public class AddTaskTest: BaseTest
+public class AddTest: BaseTest
 {
     private readonly string Url = "/dashboard/tasks/add";
     
@@ -30,7 +30,7 @@ public class AddTaskTest: BaseTest
     
     private readonly TaskListEntity _taskList;
 
-    public AddTaskTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
@@ -47,7 +47,7 @@ public class AddTaskTest: BaseTest
     public async Task NonAuthorizedCanNotDoIt()
     {
         var task = _taskFactory.Generate();
-        var response = await PostRequestAsAnonymousAsync(Url, new AddTaskRequest()
+        var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
             TaskListId = _taskList.Id,
             Title = task.Title,
@@ -61,7 +61,7 @@ public class AddTaskTest: BaseTest
     public async Task ShouldAdd()
     {
         var task = _taskFactory.Generate();
-        var response = await PostRequestAsync(Url, _jwtToken, new AddTaskRequest()
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             TaskListId = _taskList.Id,
             Title = task.Title,
@@ -89,7 +89,7 @@ public class AddTaskTest: BaseTest
         var otherTaskList = _taskListSeeder.CreateAsync(otherProject).Result;
         
         var task = _taskFactory.Generate();
-        var response = await PostRequestAsync(Url, _jwtToken, new AddTaskRequest()
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             TaskListId = otherTaskList.Id,
             Title = task.Title,

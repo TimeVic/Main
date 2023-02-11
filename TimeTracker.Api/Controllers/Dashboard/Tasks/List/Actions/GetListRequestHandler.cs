@@ -1,7 +1,7 @@
 ﻿using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
@@ -9,9 +9,9 @@ using TimeTracker.Business.Orm.Dao.Task;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
-namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
+namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
 {
-    public class GetTaskListRequestHandler : IAsyncRequestHandler<GetTaskListRequest, GetTaskListResponse>
+    public class GetListRequestHandler : IAsyncRequestHandler<GetListRequest, GetListResponse>
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
@@ -19,7 +19,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         private readonly ISecurityManager _securityManager;
         private readonly ITaskListDao _taskListDao;
 
-        public GetTaskListRequestHandler(
+        public GetListRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
@@ -34,18 +34,18 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _taskListDao = taskListDao;
         }
     
-        public async Task<GetTaskListResponse> ExecuteAsync(GetTaskListRequest request)
+        public async Task<GetListResponse> ExecuteAsync(GetListRequest listRequest)
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user, listRequest.WorkspaceId);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();
             }
 
             var taskLists = await _taskListDao.GetList(workspace);
-            return new GetTaskListResponse(
+            return new GetListResponse(
                 _mapper.Map<ICollection<TaskListDto>>(taskLists.Items),
                 taskLists.TotalCount
             );

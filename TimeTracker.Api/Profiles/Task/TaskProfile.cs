@@ -10,6 +10,6 @@ public class TaskProfile : Profile
     public TaskProfile()
     {
         CreateMap<TaskEntity, TaskDto>();
-        CreateMap<UpdateTaskRequest, TaskEntity>();
+        CreateMap<UpdateRequest, TaskEntity>();
     }
 }

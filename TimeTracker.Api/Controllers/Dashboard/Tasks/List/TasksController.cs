@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 
-namespace TimeTracker.Api.Controllers.Dashboard.Tasks;
+namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List;
 
 [ApiController]
 [Authorize]
-[Route("/dashboard/tasks")]
+[Route("/dashboard/tasks/list")]
 public class TasksController : MainApiControllerBase
 {
     public TasksController(
@@ -24,16 +24,24 @@ public class TasksController : MainApiControllerBase
     [HttpPost("add")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> AddTask([FromBody] AddRequest request)
+    public Task<IActionResult> AddTaskList([FromBody] AddRequest request)
         => this.RequestAsync()
-            .For<TaskDto>()
+            .For<TaskListDto>()
             .With(request);
     
     [HttpPost("update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> UpdateTask([FromBody] UpdateRequest request)
+    public Task<IActionResult> UpdateTaskList([FromBody] UpdateRequest request)
         => this.RequestAsync()
-            .For<TaskDto>()
+            .For<TaskListDto>()
             .With(request);
+    
+    [HttpPost("get-list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> UpdateTaskList([FromBody] GetListRequest listRequest)
+        => this.RequestAsync()
+            .For<GetListResponse>()
+            .With(listRequest);
 }

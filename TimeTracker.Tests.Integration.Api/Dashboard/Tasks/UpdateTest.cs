@@ -14,7 +14,7 @@ using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
 
-public class UpdateTaskTest: BaseTest
+public class UpdateTest: BaseTest
 {
     private readonly string Url = "/dashboard/tasks/update";
     
@@ -32,7 +32,7 @@ public class UpdateTaskTest: BaseTest
     private readonly TaskEntity _task;
     private readonly TaskListEntity _otherTaskList;
 
-    public UpdateTaskTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
@@ -51,7 +51,7 @@ public class UpdateTaskTest: BaseTest
     public async Task NonAuthorizedCanNotDoIt()
     {
         var task = _taskFactory.Generate();
-        var response = await PostRequestAsAnonymousAsync(Url, new UpdateTaskRequest()
+        var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
             TaskId = task.Id,
             Title = task.Title,
@@ -65,7 +65,7 @@ public class UpdateTaskTest: BaseTest
     public async Task ShouldUpdate()
     {
         var expectedTask = _taskFactory.Generate();
-        var response = await PostRequestAsync(Url, _jwtToken, new UpdateTaskRequest()
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
@@ -94,7 +94,7 @@ public class UpdateTaskTest: BaseTest
         var otherTaskList = _taskListSeeder.CreateAsync(otherProject).Result;
         
         var newTask = _taskFactory.Generate();
-        var response = await PostRequestAsync(Url, _jwtToken, new UpdateTaskRequest()
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             TaskId = _task.Id,
             TaskListId = otherTaskList.Id,

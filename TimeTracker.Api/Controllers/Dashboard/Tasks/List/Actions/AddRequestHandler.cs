@@ -2,19 +2,17 @@
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Task;
-using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
-namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
+namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
 {
-    public class AddTaskRequestHandler : IAsyncRequestHandler<AddTaskRequest, TaskDto>
+    public class AddRequestHandler : IAsyncRequestHandler<AddRequest, TaskListDto>
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
@@ -24,9 +22,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         private readonly ISecurityManager _securityManager;
         private readonly IWorkspaceAccessService _workspaceAccessService;
         private readonly ITaskListDao _taskListDao;
-        private readonly ITaskDao _taskDao;
 
-        public AddTaskRequestHandler(
+        public AddRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
@@ -34,8 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             IDbSessionProvider sessionProvider,
             ISecurityManager securityManager,
             IWorkspaceAccessService workspaceAccessService,
-            ITaskListDao taskListDao,
-            ITaskDao taskDao
+            ITaskListDao taskListDao
         )
         {
             _mapper = mapper;
@@ -46,29 +42,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _securityManager = securityManager;
             _workspaceAccessService = workspaceAccessService;
             _taskListDao = taskListDao;
-            _taskDao = taskDao;
         }
     
-        public async Task<TaskDto> ExecuteAsync(AddTaskRequest request)
+        public async Task<TaskListDto> ExecuteAsync(AddRequest request)
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var taskList = await _taskListDao.GetById(request.TaskListId);
-            if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList.Project.Workspace))
+            var project = await _projectDao.GetById(request.ProjectId);
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, project.Workspace))
             {
                 throw new HasNoAccessException();
             }
-
-            var task = await _taskDao.AddTaskAsync(
-                taskList,
-                user,
-                request.Title,
-                request.Description,
-                request.NotificationTime
-            );
+            var taskList = await _taskListDao.CreateTaskListAsync(project, request.Name);
             await _sessionProvider.PerformCommitAsync();
             
-            return _mapper.Map<TaskDto>(task);
+            return _mapper.Map<TaskListDto>(taskList);
         }
     }
 }

@@ -3,9 +3,9 @@ using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
-namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
+namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
 {
-    public class AddTaskListRequest : IRequest<TaskListDto>
+    public class AddRequest : IRequest<TaskListDto>
     {
         [Required]
         [IsPositive]

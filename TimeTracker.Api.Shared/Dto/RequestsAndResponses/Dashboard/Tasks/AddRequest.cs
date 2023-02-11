@@ -5,7 +5,7 @@ using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 {
-    public class AddTaskRequest : IRequest<TaskDto>
+    public class AddRequest : IRequest<TaskDto>
     {
         [Required]
         [IsPositive]

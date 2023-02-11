@@ -1,10 +1,10 @@
 ﻿using TimeTracker.Api.Shared.Dto.Entity;
 
-namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 
-public class GetTaskListResponse: PaginatedListDto<TaskListDto>
+public class GetListResponse: PaginatedListDto<TaskListDto>
 {
-    public GetTaskListResponse(
+    public GetListResponse(
         ICollection<TaskListDto> responseList,
         int totalItems
     ) : base(responseList, totalItems)

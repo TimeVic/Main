@@ -1,22 +1,21 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Task;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Api.Core;
+using AddRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.AddRequest;
 
-namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
+namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks.List;
 
-public class UpdateTaskListTest: BaseTest
+public class AddTest: BaseTest
 {
-    private readonly string Url = "/dashboard/tasks/list/update";
+    private readonly string Url = "/dashboard/tasks/list/add";
     
     private readonly IQueueService _queueService;
     private readonly UserEntity _user;
@@ -25,14 +24,12 @@ public class UpdateTaskListTest: BaseTest
     private WorkspaceEntity _workspace;
     private readonly IProjectDao _projectDao;
     private readonly ProjectEntity _project;
-    private readonly ITaskListDao _taskListDao;
 
-    public UpdateTaskListTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
-        _taskListDao = ServiceProvider.GetRequiredService<ITaskListDao>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
@@ -41,67 +38,45 @@ public class UpdateTaskListTest: BaseTest
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var taskList = _taskListFactory.Generate();
-        taskList = await _taskListDao.CreateTaskListAsync(_project, taskList.Name);
-        var response = await PostRequestAsAnonymousAsync(Url, new UpdateTaskListRequest()
+        var project = _taskListFactory.Generate();
+        var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
-            Name = taskList.Name,
+            Name = project.Name,
             ProjectId = _project.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
     
     [Fact]
-    public async Task ShouldUpdate()
+    public async Task ShouldAdd()
     {
-        var expectedName = _taskListFactory.Generate().Name;
-        var taskList = await _taskListDao.CreateTaskListAsync(_project, expectedName);
-        
-        var response = await PostRequestAsync(Url, _jwtToken, new UpdateTaskListRequest()
+        var taskList = _taskListFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            Name = expectedName,
-            ProjectId = _project.Id,
-            TaskListId = taskList.Id
+            Name = taskList.Name,
+            ProjectId = _project.Id
         });
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<TaskListDto>();
         Assert.True(actualProject.Id > 0);
-        Assert.Equal(expectedName, actualProject.Name);
-        Assert.Equal(taskList.Id, actualProject.Id);
+        Assert.Equal(taskList.Name, actualProject.Name);
     }
     
     [Fact]
-    public async Task ShouldNotUpdateIfIncorrectWorkspaceId()
+    public async System.Threading.Tasks.Task ShouldNotAddIfIncorrectWorkspaceId()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
         var otherProject = _projectDao.CreateAsync(otherWorkspace, "Test adding").Result;
-        var taskList = await _taskListDao.CreateTaskListAsync(_project, "Some name");
         var project = _taskListFactory.Generate();
-        var response = await PostRequestAsync(Url, _jwtToken, new UpdateTaskListRequest()
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Name = project.Name,
-            ProjectId = otherProject.Id,
-            TaskListId = taskList.Id
+            ProjectId = otherProject.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
-    }
-    
-    [Fact]
-    public async Task ShouldNotUpdateIfTaskListNotFound()
-    {
-        var project = _taskListFactory.Generate();
-        var response = await PostRequestAsync(Url, _jwtToken, new UpdateTaskListRequest()
-        {
-            Name = project.Name,
-            ProjectId = _project.Id,
-            TaskListId = 9999999
-        });
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
     }
 }

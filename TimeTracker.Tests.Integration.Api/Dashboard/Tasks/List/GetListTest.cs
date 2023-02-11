@@ -1,17 +1,17 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
+using GetListRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.GetListRequest;
+using GetListResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.GetListResponse;
 
-namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
+namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks.List;
 
-public class GetTasksListTest: BaseTest
+public class GetListTest: BaseTest
 {
     private readonly string Url = "/dashboard/tasks/list/get-list";
     
@@ -24,7 +24,7 @@ public class GetTasksListTest: BaseTest
     private readonly ITaskListSeeder _taskListSeeder;
     private readonly ProjectEntity _project;
 
-    public GetTasksListTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
@@ -38,7 +38,7 @@ public class GetTasksListTest: BaseTest
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var response = await PostRequestAsAnonymousAsync(Url, new GetTaskListRequest()
+        var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
         {
             WorkspaceId = _defaultWorkspace.Id
         });
@@ -51,13 +51,13 @@ public class GetTasksListTest: BaseTest
         var expectedCounter = 15;
         await _taskListSeeder.CreateSeveralAsync(_project, expectedCounter);
         
-        var response = await PostRequestAsync(Url, _jwtToken, new GetTaskListRequest()
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
             WorkspaceId = _defaultWorkspace.Id
         });
         response.EnsureSuccessStatusCode();
 
-        var actualDto = await response.GetJsonDataAsync<GetTaskListResponse>();
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(expectedCounter, actualDto.TotalCount);
         
         Assert.All(actualDto.Items, item =>
