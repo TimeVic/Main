@@ -20,6 +20,8 @@ public class TaskDto : IResponse
     
     public DateTime CreateTime { get; set; }
     
+    public TaskListDto TaskList { get; set; }
+    
     public UserDto User { get; set; }
 
     public ICollection<StoredFileDto> Attachments { get; set; } = new List<StoredFileDto>();

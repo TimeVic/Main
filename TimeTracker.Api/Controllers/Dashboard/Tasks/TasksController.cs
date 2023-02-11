@@ -23,6 +23,7 @@ public class TasksController : MainApiControllerBase
     {
     }
 
+    #region Task List
     [HttpPost("list/add")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -46,4 +47,18 @@ public class TasksController : MainApiControllerBase
         => this.RequestAsync()
             .For<GetTaskListResponse>()
             .With(request);
+    
+    #endregion
+    
+    #region Task
+    
+    [HttpPost("add")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> AddTask([FromBody] AddTaskRequest request)
+        => this.RequestAsync()
+            .For<TaskDto>()
+            .With(request);
+    
+    #endregion
 }

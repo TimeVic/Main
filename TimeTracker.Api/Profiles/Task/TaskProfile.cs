@@ -8,6 +8,6 @@ public class TaskProfile : Profile
 {
     public TaskProfile()
     {
-        CreateMap<TaskProfile, TaskDto>();
+        CreateMap<TaskEntity, TaskDto>();
     }
 }

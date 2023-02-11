@@ -18,7 +18,7 @@ namespace TimeTracker.Business.Orm.Entities
         
         [Property(NotNull = false)]
         [Column(Name = "description", Length = 10000, NotNull = false)]
-        public virtual string Description { get; set; }
+        public virtual string? Description { get; set; }
         
         [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "notification_time", SqlType = "datetime", NotNull = false)]
