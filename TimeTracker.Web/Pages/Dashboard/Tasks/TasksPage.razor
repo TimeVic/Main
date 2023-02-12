@@ -2,36 +2,14 @@
 @page "/dashboard/tasks/{ClientId:long}"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Web.Pages.Dashboard.Tasks.Parts
 
 @inherits BaseComponent
 @layout Layout
 
 <RadzenRow class="no-gutters mx-n4">
     <RadzenColumn Size="3">
-        <RadzenCard class="mx-auto">
-            <RadzenTree Style="width: 100%;">
-                @foreach(var project in Projects)
-                {
-                    <RadzenTreeItem Text="@project.Name">
-                        <ChildContent>
-                            <RadzenTreeItem Text="M3"/>
-                            <RadzenTreeItem Text="M5"/>
-                        </ChildContent>
-                        <Template>
-                            <b>@context.Text</b>
-                        </Template>
-                    </RadzenTreeItem>    
-                }
-            </RadzenTree>
-            <hr/>
-            <RadzenButton
-                Variant="Variant.Text"
-                ButtonStyle="ButtonStyle.Primary"
-                Class="w-100"
-                Icon="add">
-                Add list
-            </RadzenButton>
-        </RadzenCard>
+        <TasksListTree ClientId="ClientId"></TasksListTree>
     </RadzenColumn>
     <RadzenColumn>
         Auto

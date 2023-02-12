@@ -1,0 +1,39 @@
+﻿@using TimeTracker.Web.Pages.Dashboard.Shared
+
+@inherits BaseComponent
+
+<RadzenCard class="mx-auto">
+    <RadzenTree Style="width: 100%;">
+        @if (TasksListState.Value.TotalCount == 0)
+        {
+            <RadzenText TextStyle="TextStyle.Caption">Task lists not found</RadzenText>
+        }
+        @foreach (var project in Projects)
+        {
+            var tasksList = GetTasksList(project);
+            if (tasksList.Any())
+            {
+                <RadzenTreeItem Text="@project.Name">
+                    <ChildContent>
+                        @foreach (var list in tasksList)
+                        {
+                            <RadzenTreeItem Text="@list.Name" Value="@list.Id"/>
+                        }
+                    </ChildContent>
+                    <Template>
+                        <b>@context.Text</b>
+                    </Template>
+                </RadzenTreeItem>
+            }
+        }
+    </RadzenTree>
+    <hr/>
+    <RadzenButton
+        Variant="Variant.Text"
+        ButtonStyle="ButtonStyle.Primary"
+        Class="w-100"
+        Click="ShowAddTaskListModal"
+        Icon="add">
+        Add list
+    </RadzenButton>
+</RadzenCard>

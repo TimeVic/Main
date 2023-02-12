@@ -1,0 +1,25 @@
+﻿@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
+
+@inherits BaseComponent
+
+<RadzenTemplateForm TItem="UpdateRequest" Data="@model" Submit="HandleSubmit">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    
+    <div class="row justify-content-center">
+            <div class="col-md-12 d-flex align-items-end justify-content-center mt-4">
+                <RadzenButton
+                    ButtonType="ButtonType.Button"
+                    Disabled="@_isLoading"
+                    ButtonStyle="ButtonStyle.Secondary"
+                    Click="CloseModal"
+                    Text="Cancel"/>
+                <RadzenButton
+                    ButtonType="ButtonType.Submit"
+                    Disabled="@_isLoading"
+                    class="ml-3"
+                    Text="Save"/>
+            </div>
+        </div>
+</RadzenTemplateForm>

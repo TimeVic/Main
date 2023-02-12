@@ -9,16 +9,4 @@ public partial class TasksPage
 {
     [Parameter]
     public long? ClientId { get; set; }
-
-    [Inject]
-    public IState<ProjectState> ProjectState { get; set; }
-
-    public ICollection<ProjectDto> Projects
-    {
-        get
-        {
-            var projects = ProjectState.Value.SortedList;
-            return projects.Where(item => item.Client?.Id == ClientId).ToList();
-        }
-    }
 }
