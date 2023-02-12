@@ -20,7 +20,7 @@ public partial class ProjectsList
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Dispatcher.Dispatch(new LoadProjectListAction(true));
+        Dispatcher.Dispatch(new LoadListAction(true));
     }
 
     private async Task OnDeleteItemAsync(ProjectDto value)

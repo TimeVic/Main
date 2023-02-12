@@ -4,6 +4,7 @@ using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Store.Client;
 using TimeTracker.Web.Store.Project;
+using LoadListAction = TimeTracker.Web.Store.Client.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Client.Parts.List;
 
@@ -17,7 +18,7 @@ public partial class ClientsList
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Dispatcher.Dispatch(new LoadClientListAction(true));
+        Dispatcher.Dispatch(new LoadListAction(true));
     }
 
     private async Task OnDeleteItemAsync(ClientDto value)

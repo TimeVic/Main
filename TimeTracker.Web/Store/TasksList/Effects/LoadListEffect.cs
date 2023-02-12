@@ -1,21 +1,21 @@
 ﻿using Fluxor;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 
-namespace TimeTracker.Web.Store.Client.Effects;
+namespace TimeTracker.Web.Store.TasksList.Effects;
 
 public class LoadListEffect: Effect<LoadListAction>
 {
     private readonly IState<AuthState> _authState;
-    private readonly IState<ClientState> _state;
+    private readonly IState<TasksListState> _state;
     private readonly IApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
 
     public LoadListEffect(
         IApiService apiService,
         IState<AuthState> authState,
-        IState<ClientState> state,
+        IState<TasksListState> state,
         ILogger<LoadListEffect> logger
     )
     {
@@ -35,13 +35,12 @@ public class LoadListEffect: Effect<LoadListAction>
                 return;
             }
 
-            dispatcher.Dispatch(new SetClientIsListLoading(true));
-            var response = await _apiService.ClientGetListAsync(new GetListRequest()
+            dispatcher.Dispatch(new SetIsListLoading(true));
+            var response = await _apiService.TaskListGetListAsync(new GetListRequest()
             {
-                WorkspaceId = _authState.Value.Workspace.Id,
-                Page = 1
+                WorkspaceId = _authState.Value.Workspace.Id
             });
-            dispatcher.Dispatch(new SetClientListItemsAction(response));
+            dispatcher.Dispatch(new SetListItemsAction(response));
         }
         catch (Exception e)
         {
@@ -49,7 +48,7 @@ public class LoadListEffect: Effect<LoadListAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetClientIsListLoading(false));
+            dispatcher.Dispatch(new SetIsListLoading(false));
         }
     }
 }

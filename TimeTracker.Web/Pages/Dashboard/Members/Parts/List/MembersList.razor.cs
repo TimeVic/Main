@@ -9,6 +9,7 @@ using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Shared.Components.Form;
 using TimeTracker.Web.Store.Project;
 using TimeTracker.Web.Store.WorkspaceMemberships;
+using LoadListAction = TimeTracker.Web.Store.WorkspaceMemberships.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
 {

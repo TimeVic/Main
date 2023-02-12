@@ -2,7 +2,6 @@
 @page "/dashboard/tasks/{ClientId:long}"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
-@using TimeTracker.Api.Shared.Dto.Entity
 
 @inherits BaseComponent
 @layout Layout
@@ -24,10 +23,15 @@
                     </RadzenTreeItem>    
                 }
             </RadzenTree>
+            <hr/>
+            <RadzenButton
+                Variant="Variant.Text"
+                ButtonStyle="ButtonStyle.Primary"
+                Class="w-100"
+                Icon="add">
+                Add list
+            </RadzenButton>
         </RadzenCard>
-    </RadzenColumn>
-    <RadzenColumn>
-        Auto
     </RadzenColumn>
     <RadzenColumn>
         Auto

@@ -110,5 +110,15 @@ namespace TimeTracker.Web.Services.Http
         Task<WorkspaceSettingsClickUpDto> WorkspaceSetClickUpIntegrationSettingsAsync(SetClickUpSettingsRequest settings);
 
         #endregion
+
+        #region Tasks list
+
+        Task<ProjectDto> TaskListAddAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.AddRequest model);
+        Task<ProjectDto> TaskListUpdateAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.UpdateRequest model);
+
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.GetListResponse> TaskListGetListAsync(
+            TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.GetListRequest model);
+
+        #endregion
     }
 }

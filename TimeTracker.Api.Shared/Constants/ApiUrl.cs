@@ -76,4 +76,20 @@ public class ApiUrl
     public const string WorkspaceIntegrationSettingsClickUpSet = "dashboard/workspace/settings/set-clickup";
     
     #endregion
+    
+    #region Tasks list
+    
+    public const string TaskListAdd = "dashboard/tasks/list/add";
+    public const string TaskListUpdate = "dashboard/tasks/list/update";
+    public const string TaskListList = "dashboard/tasks/list/get-list";
+    
+    #endregion
+    
+    #region Tasks
+    
+    public const string TasksAdd = "dashboard/tasks/add";
+    public const string TasksUpdate = "dashboard/tasks/update";
+    public const string TasksList = "dashboard/tasks/get-list";
+    
+    #endregion
 }

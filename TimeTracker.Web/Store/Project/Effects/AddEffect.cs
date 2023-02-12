@@ -45,7 +45,7 @@ public class AddEffect: Effect<SaveEmptyProjectListItemAction>
                 Name = _state.Value.ItemToAdd.Name
             });
             dispatcher.Dispatch(new RemoveEmptyProjectListItemAction());
-            dispatcher.Dispatch(new LoadProjectListAction(true));
+            dispatcher.Dispatch(new LoadListAction(true));
             
             _notificationService.Notify(new NotificationMessage()
             {

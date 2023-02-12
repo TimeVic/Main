@@ -19,8 +19,9 @@ public partial class Layout
     {
         Dispatcher.Dispatch(new TimeTracker.Web.Store.Workspace.LoadListAction(false));
         Dispatcher.Dispatch(new TimeTracker.Web.Store.WorkspaceMemberships.LoadListAction(false));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadProjectListAction(false));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Client.LoadClientListAction(false));
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadListAction(false));
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Client.LoadListAction(false));
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.LoadListAction(false));
         await Task.CompletedTask;
     }
 }

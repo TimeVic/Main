@@ -7,7 +7,7 @@ using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.Project.Effects;
 
-public class LoadListEffect: Effect<LoadProjectListAction>
+public class LoadListEffect: Effect<LoadListAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<ProjectState> _state;
@@ -27,7 +27,7 @@ public class LoadListEffect: Effect<LoadProjectListAction>
         _logger = logger;
     }
 
-    public override async Task HandleAsync(LoadProjectListAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(LoadListAction action, IDispatcher dispatcher)
     {
         try
         {
