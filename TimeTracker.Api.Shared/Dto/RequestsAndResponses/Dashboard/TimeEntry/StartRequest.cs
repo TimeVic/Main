@@ -29,6 +29,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
          * Date of time entry
          * !Important. Should be represented in UTC timezone
          */
+        [Required]
         [IsFutureOrNowDate]
         public DateTime Date { get; set; }
         
