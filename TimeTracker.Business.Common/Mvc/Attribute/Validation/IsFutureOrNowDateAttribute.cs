@@ -10,7 +10,7 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
         {
             if (value == null)
             {
-                return GetError(validationContext);
+                return ValidationResult.Success;
             }
 
             if (value is DateTime dateValue)
