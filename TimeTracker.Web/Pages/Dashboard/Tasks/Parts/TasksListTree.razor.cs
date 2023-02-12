@@ -34,9 +34,9 @@ public partial class TasksListTree
 
     private async Task ShowAddTaskListModal()
     {
-        await DialogService.OpenAsync<UpdateTasksListForm>(
-            "Task list",
-            options: new DialogOptions { Width = "400px", Height = "300px", Resizable = true, Draggable = false }
+        await DialogService.OpenSideAsync<AddTasksListForm>(
+            "Add task list",
+            options: new SideDialogOptions { CloseDialogOnOverlayClick = true }
         );
     }
 }

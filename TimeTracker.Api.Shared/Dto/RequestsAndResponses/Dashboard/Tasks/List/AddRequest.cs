@@ -11,6 +11,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
         [IsPositive]
         public long ProjectId { get; set; }
         
+        [Required]
         [StringLength(1024, MinimumLength = 1)]
         public string Name { get; set; }
     }

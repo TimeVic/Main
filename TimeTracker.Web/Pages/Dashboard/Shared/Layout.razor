@@ -1,5 +1,10 @@
 ﻿@inherits BaseLayout
 
+<RadzenContextMenu/>
+<RadzenDialog />
+<RadzenTooltip />
+<RadzenNotification/>
+
 @if (CommonState.Value.IsInitialized)
 {
     <RadzenLayout>
@@ -23,8 +28,3 @@
         </RadzenBody>
     </RadzenLayout>    
 }
-
-<RadzenContextMenu/>
-<RadzenDialog />
-<RadzenTooltip />
-<RadzenNotification/>
