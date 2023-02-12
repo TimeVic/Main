@@ -133,7 +133,7 @@ node('abedor-mainframe-web-2') {
         dockerHelper.runContainer(webAppContainer)
     }
 
-    runStage("Clean workspace") {
+    stage("Clean workspace") {
         cleanWs()
     }
 }
