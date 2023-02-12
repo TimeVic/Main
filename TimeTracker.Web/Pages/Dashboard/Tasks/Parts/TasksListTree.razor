@@ -3,8 +3,8 @@
 @inherits BaseComponent
 
 <RadzenCard class="mx-auto">
-    <RadzenTree Style="width: 100%;">
-        @if (TasksListState.Value.TotalCount == 0)
+    <RadzenTree Style="width: 100%;" ValueChanged="OnSelectedTestsList">
+        @if (!TasksList.Any())
         {
             <RadzenText TextStyle="TextStyle.Caption">Task lists not found</RadzenText>
         }
@@ -17,11 +17,21 @@
                     <ChildContent>
                         @foreach (var list in tasksList)
                         {
-                            <RadzenTreeItem Text="@list.Name" Value="@list.Id"/>
+                            <RadzenTreeItem Text="@list.Name" Value="@list.Id">
+                                <Template>
+                                    <RadzenText
+                                        TextStyle="TextStyle.Subtitle2"
+                                        class="w-100">
+                                        @context.Text
+                                    </RadzenText>
+                                </Template>
+                            </RadzenTreeItem>
                         }
                     </ChildContent>
                     <Template>
-                        <b>@context.Text</b>
+                        <b>
+                            @context.Text
+                        </b>
                     </Template>
                 </RadzenTreeItem>
             }

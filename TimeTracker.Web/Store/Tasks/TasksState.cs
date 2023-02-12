@@ -1,14 +1,12 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
 
-namespace TimeTracker.Web.Store.TasksList;
+namespace TimeTracker.Web.Store.Tasks;
 
 [FeatureState]
-public record TasksListState
+public record TasksState
 {
-    public long? SelectedTaskListId { get; set; }
-    
-    public ICollection<TaskListDto> List { get; set; } = new List<TaskListDto>();
+    public ICollection<TaskDto> List { get; set; } = new List<TaskDto>();
     
     public int TotalCount { get; set; }
     

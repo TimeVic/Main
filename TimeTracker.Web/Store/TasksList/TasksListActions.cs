@@ -10,3 +10,5 @@ public record struct SetListItemsAction(GetListResponse Response);
 public record struct SetListItemAction(ProjectDto Project);
 
 public record struct SetIsListLoading(bool IsLoading);
+
+public record struct SetSelected(long? TaskListId);

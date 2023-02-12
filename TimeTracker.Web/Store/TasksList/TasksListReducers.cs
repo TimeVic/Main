@@ -27,4 +27,13 @@ public class TasksListReducers
             IsListLoading = action.IsLoading
         };
     }
+    
+    [ReducerMethod]
+    public static TasksListState SetSelectedReducer(TasksListState state, SetSelected action)
+    {
+        return state with
+        {
+            SelectedTaskListId = action.TaskListId
+        };
+    }
 }

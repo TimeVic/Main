@@ -120,5 +120,16 @@ namespace TimeTracker.Web.Services.Http
             TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.GetListRequest model);
 
         #endregion
+        
+        #region Task
+
+        Task<TaskDto> TasksAddAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.AddRequest model);
+
+        Task<TaskDto> TasksUpdateAsync(
+            TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.UpdateRequest model);
+
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.GetListResponse> TasksGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.GetListRequest model);
+
+        #endregion
     }
 }

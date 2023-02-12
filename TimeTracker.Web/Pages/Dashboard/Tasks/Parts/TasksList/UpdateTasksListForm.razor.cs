@@ -1,7 +1,7 @@
 ﻿using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 
-namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
+namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 
 public partial class UpdateTasksListForm
 {

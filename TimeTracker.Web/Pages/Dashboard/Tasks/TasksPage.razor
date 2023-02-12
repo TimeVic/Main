@@ -9,9 +9,12 @@
 
 <RadzenRow class="no-gutters mx-n4">
     <RadzenColumn Size="3">
-        <TasksListTree ClientId="ClientId"></TasksListTree>
+        <TasksListTree 
+            ClientId="ClientId"
+            TestsListSelected="value => OnTestsListSelected(value)"/>
     </RadzenColumn>
     <RadzenColumn>
-        Auto
+        <AddTaskForm/>
+        <TasksTable/>
     </RadzenColumn>
 </RadzenRow>

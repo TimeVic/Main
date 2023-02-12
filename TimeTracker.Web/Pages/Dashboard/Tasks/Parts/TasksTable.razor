@@ -1,0 +1,18 @@
+﻿@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
+
+@inherits BaseComponent
+
+<RadzenDataList
+    PageSize="@GlobalConstants.ListPageSize"
+    Count="TasksState.Value.TotalCount"
+    IsLoading="@TasksState.Value.IsListLoading"
+    ShowPagingSummary="true"
+    WrapItems="true"
+    AllowPaging="true"
+    LoadData="OnLoadData"
+    Data="@TasksState.Value.List" 
+    TItem="TaskDto">
+
+</RadzenDataList>

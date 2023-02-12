@@ -1,0 +1,29 @@
+﻿@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
+
+@inherits BaseComponent
+
+<RadzenCard>
+    <RadzenTemplateForm TItem="AddRequest" Data="@model" Submit="HandleSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+    
+        <RadzenRow>
+            <RadzenColumn>
+                <RadzenTextBox 
+                    Name="Title"
+                    @bind-Value="model.Title"
+                    Placeholder="Enter a title for the task"
+                    Class="w-100"/>
+            </RadzenColumn>
+            <RadzenColumn Style="max-width: 70px">
+                <RadzenButton
+                    ButtonType="ButtonType.Submit"
+                    IsBusy="_isLoading"
+                    Disabled="_isDisabled"
+                    class="ml-3"
+                    Text="Add"/>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenTemplateForm>
+</RadzenCard>
