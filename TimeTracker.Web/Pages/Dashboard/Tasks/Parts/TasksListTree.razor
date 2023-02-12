@@ -13,7 +13,7 @@
             var tasksList = GetTasksList(project);
             if (tasksList.Any())
             {
-                <RadzenTreeItem Text="@project.Name">
+                <RadzenTreeItem Text="@project.Name" Expanded="true">
                     <ChildContent>
                         @foreach (var list in tasksList)
                         {

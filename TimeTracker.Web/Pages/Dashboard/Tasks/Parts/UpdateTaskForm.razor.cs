@@ -1,38 +1,35 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
-using TimeTracker.Web.Constants;
 using TimeTracker.Web.Store.TasksList;
-using LoadListAction = TimeTracker.Web.Store.Tasks.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 
-public partial class AddTaskForm
+public partial class UpdateTaskForm
 {
+    [Parameter]
+    public TaskDto Task { get; set; }
+    
     [Inject]
     public IState<TasksListState> TasksListState { get; set; }
     
-    private AddRequest model = new();
+    private UpdateRequest model = new();
     private bool _isLoading = false;
-
-    private bool _isDisabled => TasksListState.Value.SelectedTaskListId == null;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        TasksListState.StateChanged += (data, stateEvent) =>
-        {
-            model.TaskListId = TasksListState.Value.SelectedTaskListId ?? 0;
-        };
+        model.Fill(Task);
     }
 
-    private async Task HandleSubmit(AddRequest request)
+    private async Task HandleSubmit(UpdateRequest request)
     {
         _isLoading = true;
         try
         {
-            var responseDto = await ApiService.TasksAddAsync(request);
+            var responseDto = await ApiService.TasksUpdateAsync(request);
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new LoadListAction());

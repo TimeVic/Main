@@ -4,15 +4,37 @@
 
 @inherits BaseComponent
 
-<RadzenDataList
-    PageSize="@GlobalConstants.ListPageSize"
-    Count="TasksState.Value.TotalCount"
-    IsLoading="@TasksState.Value.IsListLoading"
-    ShowPagingSummary="true"
-    WrapItems="true"
-    AllowPaging="true"
-    LoadData="OnLoadData"
-    Data="@TasksState.Value.List" 
-    TItem="TaskDto">
-
-</RadzenDataList>
+<div class="w-task-table">
+    @if (!TasksState.Value.List.Any())
+    {
+        <RadzenCard
+            class="m-0 mt-1 w-100">
+            <RadzenText TextStyle="TextStyle.Subtitle1">No records to display.</RadzenText>
+        </RadzenCard>
+    }
+    <RadzenDataList
+        PageSize="@GlobalConstants.ListPageSize"
+        Count="TasksState.Value.TotalCount"
+        IsLoading="@TasksState.Value.IsListLoading"
+        ShowPagingSummary="true"
+        WrapItems="true"
+        AllowPaging="true"
+        LoadData="OnLoadData"
+        Data="@TasksState.Value.List"
+        TItem="TaskDto">
+        <Template Context="item">
+            <RadzenCard
+                @onclick="() => OnClickTask(item)"
+                class="m-0 mt-1 w-100 w-task-item rz-ripple">
+                <RadzenRow>
+                    <RadzenColumn Style="max-width: 30px;">
+                        <RadzenBadge Shade="Shade.Lighter" BadgeStyle="BadgeStyle.Primary" Text="@item.Id.ToString()"/>
+                    </RadzenColumn>
+                    <RadzenColumn class="text-truncate">
+                        <RadzenText TextStyle="TextStyle.Subtitle1">@item.Title</RadzenText>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenCard>
+        </Template>
+    </RadzenDataList>
+</div>

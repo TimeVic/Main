@@ -1,0 +1,4 @@
+.w-task-table ::deep .w-task-item:hover {
+  cursor: pointer;
+}
+/*# sourceMappingURL=TasksTable.razor.css.map */
