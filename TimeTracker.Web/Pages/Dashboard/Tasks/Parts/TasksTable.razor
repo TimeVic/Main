@@ -28,10 +28,16 @@
                 class="m-0 mt-1 w-100 w-task-item rz-ripple">
                 <RadzenRow>
                     <RadzenColumn Style="max-width: 30px;">
-                        <RadzenBadge Shade="Shade.Lighter" BadgeStyle="BadgeStyle.Primary" Text="@("#" + item.Id)"/>
+                        <RadzenBadge 
+                            Shade="Shade.Lighter" 
+                            BadgeStyle="BadgeStyle.Primary" 
+                            Text="@("#" + item.Id)"
+                        />
                     </RadzenColumn>
                     <RadzenColumn class="text-truncate">
-                        <RadzenText TextStyle="TextStyle.Subtitle1">@item.Title</RadzenText>
+                        <RadzenText 
+                            class="@(item.IsDone ? "w-done" : "")"
+                            TextStyle="TextStyle.Subtitle1">@item.Title</RadzenText>
                     </RadzenColumn>
                 </RadzenRow>
             </RadzenCard>

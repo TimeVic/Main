@@ -4,7 +4,7 @@
 
 @inherits BaseComponent
 
-<RadzenTemplateForm 
+<RadzenTemplateForm
     @ref="@_form"
     TItem="UpdateRequest"
     Data="@model"
@@ -16,25 +16,47 @@
         AlignItems="AlignItems.Start"
         Wrap="FlexWrap.Wrap">
 
-        <RadzenTextBox
-            Name="Title"
-            @bind-Value="model.Title"
-            Placeholder="Enter a title for the task"
-            Change="SubmitForm"
-            Class="w-100"/>
+        <RadzenRow class="w-100">
+            <RadzenColumn>
+                <RadzenTextBox
+                    Name="Title"
+                    @bind-Value="model.Title"
+                    Placeholder="Enter a title for the task"
+                    Change="SubmitForm"
+                    Class="w-100"/>
+            </RadzenColumn>
+            <RadzenColumn Style="max-width: 65px;">
+                <RadzenCheckBox
+                    @bind-Value=@model.IsDone
+                    Name="IsArchived"
+                    Change="SubmitForm"
+                    TValue="bool"/>
+                <RadzenLabel Text="Done" Component="IsDone" class="ml-1"/>
+            </RadzenColumn>
+            <RadzenColumn Style="max-width: 85px;">
+                <RadzenCheckBox
+                    @bind-Value=@model.IsArchived
+                    Name="IsArchived"
+                    Change="SubmitForm"
+                    TValue="bool"/>
+                <RadzenLabel Text="Archived" Component="IsArchived" class="ml-1"/>
+            </RadzenColumn>
+        </RadzenRow>
 
         <RadzenRow>
             <RadzenColumn>
-                <RadzenText 
-                    TextStyle="TextStyle.Subtitle2" 
-                    TagName="TagName.H3">Notify me at</RadzenText>
-                <RadzenDatePicker 
+                <RadzenText
+                    TextStyle="TextStyle.Subtitle2"
+                    TagName="TagName.H3">
+                    Notify me at
+                </RadzenText>
+                <RadzenDatePicker
                     TValue="DateTime?"
                     ShowTime="true"
                     ShowSeconds="true"
                     HoursStep="1"
-                    MinutesStep="30" 
-                    @bind-Value="model.NotificationTime" 
+                    MinutesStep="30"
+                    @bind-Value="model.NotificationTime"
                     DateFormat="MM/dd/yyyy HH:mm"
                     Change="SubmitForm"
                     class="w-100"/>
