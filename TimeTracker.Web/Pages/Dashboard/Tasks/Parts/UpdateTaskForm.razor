@@ -1,9 +1,14 @@
 ﻿@using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
+@using TimeTracker.Web.Core.Helpers
 
 @inherits BaseComponent
 
-<RadzenTemplateForm TItem="UpdateRequest" Data="@model" Submit="HandleSubmit">
+<RadzenTemplateForm 
+    @ref="@_form"
+    TItem="UpdateRequest"
+    Data="@model"
+    Submit="HandleSubmit">
     <DataAnnotationsValidator/>
 
     <RadzenStack
@@ -15,6 +20,7 @@
             Name="Title"
             @bind-Value="model.Title"
             Placeholder="Enter a title for the task"
+            Change="SubmitForm"
             Class="w-100"/>
 
         <RadzenRow>
@@ -29,7 +35,8 @@
                     HoursStep="1"
                     MinutesStep="30" 
                     @bind-Value="model.NotificationTime" 
-                    DateFormat="MM/dd/yyyy HH:mm" 
+                    DateFormat="MM/dd/yyyy HH:mm"
+                    Change="SubmitForm"
                     class="w-100"/>
             </RadzenColumn>
             <RadzenColumn Style="max-width: 70px">
@@ -40,14 +47,11 @@
             Name="Description"
             @bind-Value="model.Description"
             Placeholder="Insert your task details here"
-            Cols="12"
+            Rows="_descriptionTextAreaRows"
+            @oninput="ResizeDescriptionTextArea"
             MaxLength="10000"
+            Change="SubmitForm"
             Class="w-100"/>
-
-        <RadzenButton
-            ButtonType="ButtonType.Submit"
-            IsBusy="_isLoading"
-            Text="Save"/>
 
     </RadzenStack>
 </RadzenTemplateForm>

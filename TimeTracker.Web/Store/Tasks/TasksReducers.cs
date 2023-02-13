@@ -19,6 +19,24 @@ public class TasksReducers
     }
 
     [ReducerMethod]
+    public static TasksState SetListItemActionReducer(TasksState state, SetListItemAction action)
+    {
+        var list = state.List.Select(item =>
+        {
+            if (item.Id == action.Task.Id)
+            {
+                return action.Task;
+            }
+
+            return item;
+        }).ToList();
+        return state with
+        {
+            List = list
+        };
+    }
+    
+    [ReducerMethod]
     public static TasksState SetProjectIsListLoadingReducer(TasksState state, SetIsListLoading action)
     {
         return state with

@@ -29,11 +29,12 @@ public partial class TasksTable
             options: new DialogOptions()
             {
                 Width = " ",
-                Style = "left: 6em; right: 6em; top: 6em;",
+                Style = "left: 6em; right: 6em; top: 6em; bottom: 6em;",
                 ShowClose = true,
                 CloseDialogOnEsc = true,
                 AutoFocusFirstElement = true,
-                Resizable = true
+                Resizable = true,
+                CloseDialogOnOverlayClick = true
             }
         );
     }
