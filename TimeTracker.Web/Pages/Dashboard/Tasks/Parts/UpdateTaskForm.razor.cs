@@ -22,8 +22,8 @@ public partial class UpdateTaskForm
     private bool _isLoading = false;
     
     private readonly int _descriptionTextAreaRowsMin = 10;
-    private readonly int _descriptionTextAreaRowsMax = 100;
-    private int _descriptionTextAreaRows = 10;
+    private readonly int _descriptionTextAreaRowsMax = 20;
+    private int _descriptionTextAreaRows = 6;
 
     protected override async Task OnInitializedAsync()
     {

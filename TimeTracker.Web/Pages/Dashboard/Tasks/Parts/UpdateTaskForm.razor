@@ -16,7 +16,16 @@
         AlignItems="AlignItems.Start"
         Wrap="FlexWrap.Wrap">
 
-        <RadzenRow class="w-100">
+        <RadzenRow Class="w-100">
+            <RadzenColumn 
+                class="d-flex align-items-center"
+                Style="max-width: 30px;">
+                <RadzenBadge 
+                    Shade="Shade.Lighter" 
+                    BadgeStyle="BadgeStyle.Primary" 
+                    Text="@("#" + model.TaskId)"
+                />
+            </RadzenColumn>
             <RadzenColumn>
                 <RadzenTextBox
                     Name="Title"
@@ -25,25 +34,12 @@
                     Change="SubmitForm"
                     Class="w-100"/>
             </RadzenColumn>
-            <RadzenColumn Style="max-width: 65px;">
-                <RadzenCheckBox
-                    @bind-Value=@model.IsDone
-                    Name="IsArchived"
-                    Change="SubmitForm"
-                    TValue="bool"/>
-                <RadzenLabel Text="Done" Component="IsDone" class="ml-1"/>
-            </RadzenColumn>
-            <RadzenColumn Style="max-width: 85px;">
-                <RadzenCheckBox
-                    @bind-Value=@model.IsArchived
-                    Name="IsArchived"
-                    Change="SubmitForm"
-                    TValue="bool"/>
-                <RadzenLabel Text="Archived" Component="IsArchived" class="ml-1"/>
-            </RadzenColumn>
         </RadzenRow>
+        
+        
+        
 
-        <RadzenRow>
+        <RadzenRow Class="w-100">
             <RadzenColumn>
                 <RadzenText
                     TextStyle="TextStyle.Subtitle2"
@@ -57,11 +53,31 @@
                     HoursStep="1"
                     MinutesStep="30"
                     @bind-Value="model.NotificationTime"
-                    DateFormat="MM/dd/yyyy HH:mm"
-                    Change="SubmitForm"
-                    class="w-100"/>
+                    DateFormat="MM/dd/yyyy HH:mm"/>
             </RadzenColumn>
-            <RadzenColumn Style="max-width: 70px">
+            <RadzenColumn Style="max-width: 190px">
+                <RadzenStack 
+                    Orientation="Orientation.Horizontal" 
+                    AlignItems="AlignItems.End"
+                    JustifyContent="JustifyContent.End"
+                    Style="height: 100%;">
+                    <div>
+                        <RadzenCheckBox
+                            @bind-Value=@model.IsDone
+                            Name="IsArchived"
+                            Change="SubmitForm"
+                            TValue="bool"/>
+                        <RadzenLabel Text="Done" Component="IsDone" class="ml-1"/>
+                    </div>
+                    <div>
+                        <RadzenCheckBox
+                            @bind-Value=@model.IsArchived
+                            Name="IsArchived"
+                            Change="SubmitForm"
+                            TValue="bool"/>
+                        <RadzenLabel Text="Archived" Component="IsArchived" class="ml-1"/>
+                    </div>
+                </RadzenStack>
             </RadzenColumn>
         </RadzenRow>
 

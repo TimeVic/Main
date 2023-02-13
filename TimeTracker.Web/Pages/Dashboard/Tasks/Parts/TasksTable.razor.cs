@@ -21,7 +21,7 @@ public partial class TasksTable
     private async Task OnClickTask(TaskDto task)
     {
         await DialogService.OpenAsync<UpdateTaskForm>(
-            $"Update task #{task.Id}",
+            $"Task {task.Id}",
             parameters: new Dictionary<string, object>()
             {
                 { "Task", task }
