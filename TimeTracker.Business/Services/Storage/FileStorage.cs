@@ -14,6 +14,7 @@ using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Business.Services.Storage;
 
@@ -26,6 +27,7 @@ public partial class FileStorage: IFileStorage
     private readonly IDbSessionProvider _dbSessionProvider;
     private readonly ILogger<IFileStorage> _logger;
     private readonly IFileStorageRelationshipService _relationshipService;
+    private readonly ISecurityManager _securityManager;
     private const string CredentialsFilepath = "../../../../.credentials/google.json";
     
     private readonly StorageClient _googleClient;
@@ -37,12 +39,14 @@ public partial class FileStorage: IFileStorage
         IConfiguration configuration,
         IDbSessionProvider dbSessionProvider,
         ILogger<IFileStorage> logger,
-        IFileStorageRelationshipService relationshipService
+        IFileStorageRelationshipService relationshipService,
+        ISecurityManager securityManager
     )
     {
         _dbSessionProvider = dbSessionProvider;
         _logger = logger;
         _relationshipService = relationshipService;
+        _securityManager = securityManager;
         var filePath = Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath);
         if (!File.Exists(filePath))
         {

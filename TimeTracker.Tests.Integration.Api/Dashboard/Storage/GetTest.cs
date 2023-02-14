@@ -9,6 +9,7 @@ using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
@@ -16,9 +17,9 @@ using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Storage;
 
-public class UploadTest: BaseTest
+public class GetTest: BaseTest
 {
-    private readonly string Url = "/dashboard/storage/upload";
+    private readonly string Url = "/dashboard/storage/file/{0}";
     
     private readonly UserEntity _user;
     private readonly IDataFactory<TaskEntity> _taskFactory;
@@ -28,80 +29,54 @@ public class UploadTest: BaseTest
     private readonly ITaskListSeeder _taskListSeeder;
     
     private readonly TaskEntity _task;
+    private readonly IFileStorage _fileStorage;
+    private readonly StoredFileEntity _uploadedFile;
 
-    public UploadTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    public GetTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
+        _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
         
         (_jwtToken, _user, var workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _task = _taskSeeder.CreateAsync(user: _user).Result;
+        
+        _uploadedFile = _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Result;
     }
 
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var response = await PostMultipartFormDataRequestAsync(
-            Url,
-            _jwtToken,
-            new Dictionary<string, object>()
-            {
-                { "EntityId", _task.Id },
-                { "EntityType", StorageEntityType.Task },
-                { "FileType", StoredFileType.Attachment },
-            },
-            CreateFormFile()
+        var response = await GetRequestAsAnonymousAsync(
+            string.Format(Url, _uploadedFile.Id)
         );
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
     
     [Fact]
-    public async Task ShouldUpload()
+    public async Task ShouldDownloadFile()
     {
-        Assert.Equal(0, _task.Attachments.Count);
-
-        var fileToUpload = CreateFormFile("test.jpg");
-        var response = await PostMultipartFormDataRequestAsync(
-            Url,
-            _jwtToken,
-            new Dictionary<string, object>()
-            {
-                { "EntityId", _task.Id },
-                { "EntityType", StorageEntityType.Task },
-                { "FileType", StoredFileType.Attachment },
-            },
-            fileToUpload
+        var response = await GetRequestAsync(
+            string.Format(Url, _uploadedFile.Id),
+            _jwtToken
         );
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<StoredFileDto>();
-        Assert.True(actualData.Id > 0);
-        Assert.NotEmpty(actualData.Url);
-        Assert.NotEmpty(actualData.ThumbUrl);
-
-        await CommitDbChanges();
-        var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
-        Assert.Equal(1, actualTask.Attachments.Count);
+        var fileContent = await response.Content.ReadAsStringAsync();
+        Assert.NotEmpty(fileContent);
     }
     
     [Fact]
-    public async Task ShouldUploadIfHasNotAccessToEntity()
+    public async Task ShouldDownloadIfHasNotAccessToEntity()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
         var task = _taskSeeder.CreateAsync(user: user2).Result;
         
-        var response = await PostMultipartFormDataRequestAsync(
-            Url,
-            _jwtToken,
-            new Dictionary<string, object>()
-            {
-                { "EntityId", task.Id },
-                { "EntityType", StorageEntityType.Task },
-                { "FileType", StoredFileType.Attachment },
-            },
-            CreateFormFile("test.jpg")
+        var response = await GetRequestAsync(
+            string.Format(Url, _uploadedFile.Id),
+            otherToken
         );
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();

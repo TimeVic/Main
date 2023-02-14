@@ -20,4 +20,6 @@ public interface IFileStorage: IDomainService
         IFormFile formFile,
         StoredFileType fileType
     ) where TEntity : IEntity;
+
+    Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, long fileId);
 }
