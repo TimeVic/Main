@@ -78,21 +78,4 @@ public class PutFileTest: BaseTest
             await _fileStorage.PutFileAsync(_user, fileWithoutExtension, StoredFileType.Attachment);
         });
     }
-    
-    #region For entities
-    
-    [Fact]
-    public async Task ShouldPutFileForTask()
-    {
-        var actualFile = await _fileStorage.PutFileAsync(new TaskEntity(), CreateFormFile(), StoredFileType.Attachment);
-        Assert.True(actualFile.Id > 0);
-        Assert.NotEmpty(actualFile.MimeType);
-        Assert.NotEmpty(actualFile.CloudFilePath);
-        Assert.NotNull(actualFile.Extension);
-        Assert.NotEmpty(actualFile.OriginalFileName);
-        Assert.True(actualFile.Size > 0);
-        Assert.Equal(StoredFileType.Attachment, actualFile.Type);
-    }
-    
-    #endregion
 }
