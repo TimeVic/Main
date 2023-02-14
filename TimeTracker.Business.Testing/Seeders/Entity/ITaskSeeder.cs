@@ -11,5 +11,5 @@ public interface ITaskSeeder: IDomainService
         UserEntity? user = null
     );
 
-    Task<TaskEntity> CreateAsync(TaskListEntity taskList, UserEntity? user = null);
+    Task<TaskEntity> CreateAsync(TaskListEntity? taskList = null, UserEntity? user = null);
 }

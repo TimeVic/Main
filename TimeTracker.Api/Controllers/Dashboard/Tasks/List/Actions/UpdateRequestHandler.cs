@@ -55,7 +55,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
                 throw new RecordNotFoundException();
             }
             
-            if (!await _securityManager.HasAccess(AccessLevel.Write, user, project.Workspace))
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
             {
                 throw new HasNoAccessException();
             }
