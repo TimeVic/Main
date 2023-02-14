@@ -150,6 +150,11 @@ namespace AspNetCore.ApiControllers.Extensions
                     await apiController.CommitPerformer.PerformCommitAsync();
                 }
 
+                if (response is FileResponse)
+                {
+                    return response as IActionResult;
+                }
+
                 return success(response);
             }
             catch (Exception exception)

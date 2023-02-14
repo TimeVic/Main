@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Business.Common.Constants;
+﻿namespace TimeTracker.Business.Common.Constants.Storage;
 
 public enum StoredFileType
 {

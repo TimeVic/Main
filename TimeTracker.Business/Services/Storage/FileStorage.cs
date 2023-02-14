@@ -8,11 +8,13 @@ using Microsoft.Extensions.Logging;
 using Persistence.Transactions.Behaviors;
 using SixLabors.ImageSharp;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Business.Services.Storage;
 
@@ -24,6 +26,8 @@ public partial class FileStorage: IFileStorage
     
     private readonly IDbSessionProvider _dbSessionProvider;
     private readonly ILogger<IFileStorage> _logger;
+    private readonly IFileStorageRelationshipService _relationshipService;
+    private readonly ISecurityManager _securityManager;
     private const string CredentialsFilepath = "../../../../.credentials/google.json";
     
     private readonly StorageClient _googleClient;
@@ -34,11 +38,15 @@ public partial class FileStorage: IFileStorage
     public FileStorage(
         IConfiguration configuration,
         IDbSessionProvider dbSessionProvider,
-        ILogger<IFileStorage> logger
+        ILogger<IFileStorage> logger,
+        IFileStorageRelationshipService relationshipService,
+        ISecurityManager securityManager
     )
     {
         _dbSessionProvider = dbSessionProvider;
         _logger = logger;
+        _relationshipService = relationshipService;
+        _securityManager = securityManager;
         var filePath = Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath);
         if (!File.Exists(filePath))
         {
@@ -121,6 +129,7 @@ public partial class FileStorage: IFileStorage
         }
 
         await _dbSessionProvider.CurrentSession.SaveAsync(storedFile);
+        await _relationshipService.AddFileRelationship(entity, storedFile);
         await fileStream.DisposeAsync();
         return storedFile;
     }
@@ -161,6 +170,10 @@ public partial class FileStorage: IFileStorage
         if (entity is UserEntity)
         {
             return "user";
+        }
+        if (entity is TaskEntity)
+        {
+            return "task";
         }
         return "common";
     }
