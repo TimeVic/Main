@@ -90,14 +90,17 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     
     public async Task<HttpResponseMessage> PostMultipartFormDataRequestAsync(
         string url,
-        string token,
+        string? token = null,
         Dictionary<string, object> data = null,
         IFormFile file = null
     )
     {
         await CommitDbChanges();
-        
-        HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        if (!string.IsNullOrEmpty(token))
+        {
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);    
+        }
         using var multipartFormContent = new MultipartFormDataContent();
         if (data != null)
         {

@@ -45,14 +45,13 @@ public class UploadTest: BaseTest
     {
         var response = await PostMultipartFormDataRequestAsync(
             Url,
-            _jwtToken,
-            new Dictionary<string, object>()
+            data: new Dictionary<string, object>()
             {
                 { "EntityId", _task.Id },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
-            CreateFormFile()
+            file: CreateFormFile()
         );
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
