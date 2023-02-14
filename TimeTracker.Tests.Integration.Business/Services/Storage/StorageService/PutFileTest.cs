@@ -14,16 +14,20 @@ namespace TimeTracker.Tests.Integration.Business.Services.Storage.StorageService
 public class PutFileTest: BaseTest
 {
     private readonly IFileStorage _fileStorage;
+    private readonly IUserSeeder _userSeeder;
+    private readonly UserEntity _user;
 
     public PutFileTest(): base()
     {
         _fileStorage = Scope.Resolve<IFileStorage>();
+        _userSeeder = Scope.Resolve<IUserSeeder>();
+        _user = _userSeeder.CreateActivatedAsync().Result;
     }
 
     [Fact]
     public async Task ShouldPutFile()
     {
-        var actualFile = await _fileStorage.PutFileAsync(new UserEntity(), CreateFormFile(), StoredFileType.Attachment);
+        var actualFile = await _fileStorage.PutFileAsync(_user, CreateFormFile(), StoredFileType.Attachment);
         Assert.True(actualFile.Id > 0);
         Assert.NotEmpty(actualFile.MimeType);
         Assert.NotEmpty(actualFile.CloudFilePath);
@@ -37,7 +41,7 @@ public class PutFileTest: BaseTest
     public async Task ShouldCreateThumbIfImage()
     {
         var formFile = CreateFormFile("test.jpg");
-        var actualFile = await _fileStorage.PutFileAsync(new UserEntity(), formFile, StoredFileType.Attachment);
+        var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
         Assert.NotNull(actualFile.ThumbCloudFilePath);
         Assert.NotEmpty(actualFile.ThumbCloudFilePath);
     }
@@ -46,7 +50,7 @@ public class PutFileTest: BaseTest
     public async Task ShouldPutImage()
     {
         var formFile = CreateFormFile("image.jpg");
-        var actualFile = await _fileStorage.PutFileAsync(new UserEntity(), formFile, StoredFileType.Attachment);
+        var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
         Assert.True(actualFile.Id > 0);
     }
     
@@ -56,7 +60,7 @@ public class PutFileTest: BaseTest
         var fileWithoutExtension = CreateFormFile("test");
         await Assert.ThrowsAsync<IncorrectFileException>(async () =>
         {
-            await _fileStorage.PutFileAsync(new UserEntity(), fileWithoutExtension, StoredFileType.Attachment);
+            await _fileStorage.PutFileAsync(_user, fileWithoutExtension, StoredFileType.Attachment);
         });
     }
     
@@ -71,7 +75,7 @@ public class PutFileTest: BaseTest
         var fileWithoutExtension = CreateFormFile("test.pdf", fileBytes);
         await Assert.ThrowsAsync<IncorrectFileException>(async () =>
         {
-            await _fileStorage.PutFileAsync(new UserEntity(), fileWithoutExtension, StoredFileType.Attachment);
+            await _fileStorage.PutFileAsync(_user, fileWithoutExtension, StoredFileType.Attachment);
         });
     }
     
