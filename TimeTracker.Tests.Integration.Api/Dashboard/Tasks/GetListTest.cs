@@ -1,9 +1,11 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
@@ -25,6 +27,7 @@ public class GetListTest: BaseTest
     private readonly ITaskListSeeder _taskListSeeder;
     private readonly ProjectEntity _project;
     private readonly ITaskSeeder _taskSeeder;
+    private readonly IFileStorage _fileStorage;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -33,6 +36,7 @@ public class GetListTest: BaseTest
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
+        _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
         
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectSeeder.CreateAsync(_defaultWorkspace).Result;
@@ -53,7 +57,8 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveList()
     {
         var expectedCounter = 15;
-        await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        await _fileStorage.PutFileAsync(tasks.First(), CreateFormFile(), StoredFileType.Attachment);
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
@@ -72,6 +77,10 @@ public class GetListTest: BaseTest
             Assert.NotNull(item.TaskList);
             Assert.NotEmpty(item.Description);
             Assert.Equal(_taskList.Id, item.TaskList.Id);
+        });
+        Assert.Contains(actualDto.Items, item =>
+        {
+            return item.Attachments.Any() && !string.IsNullOrEmpty(item.Attachments.First().Url);
         });
     }
 }
