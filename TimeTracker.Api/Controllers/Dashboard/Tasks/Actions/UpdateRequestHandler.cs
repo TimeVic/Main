@@ -52,21 +52,27 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     
         public async Task<TaskDto> ExecuteAsync(UpdateRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
-            var task = await _taskDao.GetById(request.TaskId);
-            if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
+            var user = await _userDao.GetById(request.UserId);
+            if (user == null)
             {
-                throw new HasNoAccessException();
+                throw new RecordNotFoundException("User not found");
             }
-            var taskList = await _taskListDao.GetById(request.TaskListId);
-            if (taskList == null || taskList.Project.Workspace != task.Workspace)
+
+            var task = await _taskDao.GetById(request.TaskId);
+            var newTaskList = await _taskListDao.GetById(request.TaskListId);
+            if (newTaskList == null || newTaskList.Project.Workspace != task.Workspace)
             {
                 throw new ValidationException("Incorrect TaskListId");
             }
-
             task = _mapper.Map(request, task);
-            task.TaskList = taskList;
+            if (!await _securityManager.HasAccess(AccessLevel.Read, user, newTaskList))
+                throw new HasNoAccessException("This user has no permissions for provided task list");
+            
+            if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
+                throw new HasNoAccessException("This user has no permissions for task");
+            
+            task.TaskList = newTaskList;
+            task.User = user;
             return _mapper.Map<TaskDto>(task);
         }
     }
