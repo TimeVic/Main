@@ -10,6 +10,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         [Required]
         [IsPositive]
         public long TaskId { get; set; }
+        
+        [Required]
+        [IsPositive]
+        public long UserId { get; set; }
 
         public void Fill(TaskDto dto)
         {
@@ -20,6 +24,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
             NotificationTime = dto.NotificationTime;
             IsDone = dto.IsDone;
             IsArchived = dto.IsArchived;
+            UserId = dto.User.Id;
         }
     }
 }
