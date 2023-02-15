@@ -49,7 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var project = await _projectDao.GetById(request.ProjectId);
-            if (!await _securityManager.HasAccess(AccessLevel.Write, user, project.Workspace))
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
             {
                 throw new HasNoAccessException();
             }

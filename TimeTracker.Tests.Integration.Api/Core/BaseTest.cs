@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
@@ -85,5 +87,71 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         HttpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "text/json");
         return await HttpClient.GetAsync(url);
     }
+    
+    public async Task<HttpResponseMessage> PostMultipartFormDataRequestAsync(
+        string url,
+        string? token = null,
+        Dictionary<string, object> data = null,
+        IFormFile file = null
+    )
+    {
+        await CommitDbChanges();
+
+        if (!string.IsNullOrEmpty(token))
+        {
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);    
+        }
+        using var multipartFormContent = new MultipartFormDataContent();
+        if (data != null)
+        {
+            foreach (var dataKeyPair in data)
+            {
+                multipartFormContent.Add(new StringContent($"{dataKeyPair.Value}"), name: dataKeyPair.Key);       
+            }
+        }
+        if (file != null)
+        {
+            var fileStreamContent = new StreamContent(file.OpenReadStream());
+            multipartFormContent.Add(fileStreamContent, name: "File", fileName: file.FileName);
+        }
+        return await HttpClient.PostAsync(url, multipartFormContent);
+    }
+    #endregion
+    
+    #region Uploading
+
+    protected IFormFile CreateFormFile(string fileName = "test.pdf", byte[]? fileBytes = null)
+    {
+        var fileExtension = Path.GetExtension(fileName).Replace(".", "");
+        var stream = new MemoryStream();
+            
+        var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        stubsPath = Path.GetDirectoryName(stubsPath);
+        stubsPath = Path.Combine(stubsPath, "stubs", "images");
+            
+        fileExtension = fileExtension.Trim().ToLower();
+        if (fileBytes != null)
+        {
+            stream.Write(fileBytes);
+        }
+        else
+        {
+            if (fileExtension == "jpg" || fileExtension == "jpeg")
+            {
+                var stubFileBytes = File.ReadAllBytes(
+                    Path.Combine(stubsPath, "image.jpg")
+                );
+                stream.Write(stubFileBytes);
+            }
+            else
+            {
+                var content = "Hello World from a Fake File";
+                stream.Write(Encoding.UTF8.GetBytes(content));
+            }
+        }
+        stream.Position = 0;
+        return new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
+    }
+
     #endregion
 }

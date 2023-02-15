@@ -1,7 +1,9 @@
 using Domain.Abstractions;
+using NHibernate.Mapping;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Storage;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -51,5 +53,40 @@ namespace TimeTracker.Business.Orm.Entities
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }
+        
+        
+        [Set(
+            Table = "task_stored_files",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "stored_file_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            Fetch = FetchMode.Join,
+            ClassType = typeof(TaskEntity),
+            Column = "task_id"
+        )]
+        public virtual ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
+        
+        #region Calculated
+
+        public virtual IEntity? Relationship
+        {
+            get
+            {
+                if (Tasks.Any())
+                {
+                    return Tasks.First();
+                }
+
+                return null;
+            }
+        }
+        
+        #endregion
     }
 }

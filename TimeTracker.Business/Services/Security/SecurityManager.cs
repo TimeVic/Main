@@ -47,6 +47,14 @@ public class SecurityManager: ISecurityManager
         {
             return await HasAccessToPayment(accessLevel, user, paymentEntity);
         }
+        if (entity is TaskEntity taskEntity)
+        {
+            return await HasAccessToTask(user, taskEntity);
+        }
+        if (entity is TaskListEntity taskList)
+        {
+            return await HasAccessToTaskList(user, taskList);
+        }
 
         throw new NotImplementedException($"Security checking not implemented for {entity?.GetTypeName()}");
     }
@@ -118,5 +126,15 @@ public class SecurityManager: ISecurityManager
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, payment.Workspace);
         return accessType != null
             && payment.User.Id == user.Id;
+    }
+    
+    private async Task<bool> HasAccessToTask(UserEntity user, TaskEntity task)
+    {
+        return await HasAccessToProject(AccessLevel.Read, user, task.TaskList.Project);
+    }
+    
+    private async Task<bool> HasAccessToTaskList(UserEntity user, TaskListEntity taskList)
+    {
+        return await HasAccessToProject(AccessLevel.Read, user, taskList.Project);
     }
 }

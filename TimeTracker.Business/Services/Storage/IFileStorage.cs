@@ -1,6 +1,7 @@
 ﻿using Domain.Abstractions;
 using Microsoft.AspNetCore.Http;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Services.Storage;
@@ -19,4 +20,6 @@ public interface IFileStorage: IDomainService
         IFormFile formFile,
         StoredFileType fileType
     ) where TEntity : IEntity;
+
+    Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, long fileId);
 }

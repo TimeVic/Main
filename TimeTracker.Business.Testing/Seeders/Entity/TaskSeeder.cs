@@ -1,4 +1,6 @@
-﻿using TimeTracker.Business.Orm.Dao.Task;
+﻿using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Task;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Testing.Factories;
 
@@ -9,16 +11,28 @@ public class TaskSeeder: ITaskSeeder
     private readonly IDataFactory<TaskEntity> _factory;
     private readonly ITaskDao _taskDao;
     private readonly IUserSeeder _userSeeder;
+    private readonly ITaskListSeeder _taskListSeeder;
+    private readonly IProjectSeeder _projectSeeder;
+    private readonly IWorkspaceSeeder _workspaceSeeder;
+    private readonly IUserDao _userDao;
 
     public TaskSeeder(
         IDataFactory<TaskEntity> factory,
         ITaskDao taskDao,
-        IUserSeeder userSeeder
+        IUserSeeder userSeeder,
+        ITaskListSeeder taskListSeeder,
+        IProjectSeeder projectSeeder,
+        IWorkspaceSeeder workspaceSeeder,
+        IUserDao userDao
     )
     {
         _factory = factory;
         _taskDao = taskDao;
         _userSeeder = userSeeder;
+        _taskListSeeder = taskListSeeder;
+        _projectSeeder = projectSeeder;
+        _workspaceSeeder = workspaceSeeder;
+        _userDao = userDao;
     }
     
     public async Task<ICollection<TaskEntity>> CreateSeveralAsync(
@@ -38,9 +52,15 @@ public class TaskSeeder: ITaskSeeder
         return result;
     }
     
-    public async Task<TaskEntity> CreateAsync(TaskListEntity taskList, UserEntity? user = null)
+    public async Task<TaskEntity> CreateAsync(TaskListEntity? taskList = null, UserEntity? user = null)
     {
         user ??= await _userSeeder.CreateActivatedAsync();
+        if (taskList == null)
+        {
+            var workspace = (await _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner)).First();
+            var project = await _projectSeeder.CreateAsync(workspace);
+            taskList ??= await _taskListSeeder.CreateAsync(project);    
+        }
         
         var fakeEntry = _factory.Generate();
         var entry = await _taskDao.AddTaskAsync(
