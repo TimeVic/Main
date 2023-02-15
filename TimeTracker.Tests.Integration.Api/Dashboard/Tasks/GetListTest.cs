@@ -74,4 +74,148 @@ public class GetListTest: BaseTest
             Assert.Equal(_taskList.Id, item.TaskList.Id);
         });
     }
+    
+    [Fact]
+    public async Task ShouldFilterByAssignee()
+    {
+        var user2 = await UserSeeder.CreateActivatedAndShareAsync(_defaultWorkspace);
+        var expectedCounter = 7;
+        await _taskSeeder.CreateSeveralAsync(_taskList, 4);
+        await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter, user2);
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id,
+            Page = 1,
+            Filter = new GetListFilterRequest()
+            {
+                AssignedUserId = user2.Id
+            }
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter, actualDto.TotalCount);
+    }
+    
+    [Fact]
+    public async Task ShouldFilterByIsDone()
+    {
+        var expectedCounter = 7;
+        var otherTasks = await _taskSeeder.CreateSeveralAsync(_taskList, 4);
+        foreach (var task in otherTasks)
+        {
+            task.IsDone = false;
+            await DbSessionProvider.CurrentSession.SaveAsync(task);
+        }
+        var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        foreach (var task in tasks)
+        {
+            task.IsDone = true;
+            await DbSessionProvider.CurrentSession.SaveAsync(task);
+        }
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id,
+            Page = 1,
+            Filter = new GetListFilterRequest()
+            {
+                IsDone = true
+            }
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter, actualDto.TotalCount);
+    }
+    
+    [Fact]
+    public async Task ShouldFilterByIsArchived()
+    {
+        var expectedCounter = 7;
+        var otherTasks = await _taskSeeder.CreateSeveralAsync(_taskList, 4);
+        foreach (var task in otherTasks)
+        {
+            task.IsArchived = false;
+            await DbSessionProvider.CurrentSession.SaveAsync(task);
+        }
+        var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        foreach (var task in tasks)
+        {
+            task.IsArchived = true;
+            await DbSessionProvider.CurrentSession.SaveAsync(task);
+        }
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id,
+            Page = 1,
+            Filter = new GetListFilterRequest()
+            {
+                IsArchived = true
+            }
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter, actualDto.TotalCount);
+    }
+    
+    [Fact]
+    public async Task ShouldFilterBySearchStringInTitle()
+    {
+        var expectedCounter = 7;
+        var expectedSearchString = "Some 123 string";
+        await _taskSeeder.CreateSeveralAsync(_taskList, 4);
+        var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        foreach (var task in tasks)
+        {
+            task.Title = $"{task.Title} {expectedSearchString.ToLower()} ";
+            await DbSessionProvider.CurrentSession.SaveAsync(task);
+        }
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id,
+            Page = 1,
+            Filter = new GetListFilterRequest()
+            {
+                SearchString = expectedSearchString
+            }
+        });
+        await response.GetJsonDataAsync();
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter, actualDto.TotalCount);
+    }
+    
+    [Fact]
+    public async Task ShouldFilterBySearchStringInDescription()
+    {
+        var expectedCounter = 7;
+        var expectedSearchString = "Some 123 string";
+        await _taskSeeder.CreateSeveralAsync(_taskList, 4);
+        var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        foreach (var task in tasks)
+        {
+            task.Description = $"{task.Description} {expectedSearchString.ToLower()} ";
+            await DbSessionProvider.CurrentSession.SaveAsync(task);
+        }
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id,
+            Page = 1,
+            Filter = new GetListFilterRequest()
+            {
+                SearchString = expectedSearchString
+            }
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter, actualDto.TotalCount);
+    }
 }

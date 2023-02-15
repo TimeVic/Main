@@ -6,6 +6,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Task;
+using TimeTracker.Business.Orm.Dto.Task;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -47,7 +48,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                 throw new HasNoAccessException();
             }
 
-            var taskLists = await _taskDao.GetList(taskList);
+            var filter = _mapper.Map<GetTasksFilterDto>(request.Filter);
+            var taskLists = await _taskDao.GetList(taskList, filter);
             return new GetListResponse(
                 _mapper.Map<ICollection<TaskDto>>(taskLists.Items),
                 taskLists.TotalCount
