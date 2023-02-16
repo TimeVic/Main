@@ -4,7 +4,10 @@ using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
-using TimeTracker.Web.Store.Tasks;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Web.Services.Security;
+using TimeTracker.Web.Store.WorkspaceMemberships;
+using SetListItemAction = TimeTracker.Web.Store.Tasks.SetListItemAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 
@@ -14,7 +17,13 @@ public partial class UpdateTaskForm
     public TaskDto Task { get; set; }
     
     [Inject]
-    public IState<TimeTracker.Web.Store.TasksList.TasksListState> TasksListState { get; set; }
+    public IState<TimeTracker.Web.Store.TasksList.TasksListState> _tasksListState { get; set; }
+
+    [Inject] 
+    private ISecurityManager _securityManager { get; set; }
+
+    [Inject]
+    private IState<WorkspaceMembershipsState> _workspaceMembershipsState { get; set; }
 
     private RadzenTemplateForm<UpdateRequest> _form;
 
@@ -24,6 +33,16 @@ public partial class UpdateTaskForm
     private readonly int _descriptionTextAreaRowsMin = 10;
     private readonly int _descriptionTextAreaRowsMax = 20;
     private int _descriptionTextAreaRows = 6;
+
+    private ICollection<long> _allowedUserIds
+    {
+        get
+        {
+            return _securityManager.GetMembersWhichHaveAccessToProject(Task.TaskList.Project)
+                .Select(item => item.Id)
+                .ToList();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,5 +97,22 @@ public partial class UpdateTaskForm
         _descriptionTextAreaRows = Math.Max(description.Split('\n').Length, description.Split('\r').Length);
         _descriptionTextAreaRows = Math.Max(_descriptionTextAreaRows, _descriptionTextAreaRowsMin);
         _descriptionTextAreaRows = Math.Min(_descriptionTextAreaRows, _descriptionTextAreaRowsMax);
+    }
+
+    private async Task OnChangedAssigned(WorkspaceMembershipDto membership)
+    {
+        model.UserId = membership.User.Id;
+        await SubmitForm();
+    }
+
+    private async Task OnChangeNotificationTime(DateTime? notificationTime)
+    {
+        model.NotificationTime = notificationTime;
+        await SubmitForm();
+    }
+
+    private void OnRenderNotificationTime(DateRenderEventArgs renderEvent)
+    {
+        renderEvent.Disabled = renderEvent.Disabled || renderEvent.Date < DateTime.Now;
     }
 }

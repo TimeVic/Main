@@ -4,6 +4,7 @@ using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Project;
@@ -37,16 +38,21 @@ public partial class MembersDropDown
     public string Class { get; set; }
 
     [Parameter]
-    public long UserId { get; set; }
+    public bool Clearable { get; set; } = true;
 
-    [Inject]
-    public ILogger<MembersDropDown> _logger { get; set; }
-    
-    [Inject]
-    public IApiService _apiService { get; set; }
-    
-    [Inject]
-    public IState<AuthState> _authState { get; set; }
+    [Parameter]
+    public ICollection<long> AllowedIds { get; set; } = new List<long>();
+
+    [Parameter]
+    public long? UserId
+    {
+        get => _selectedItem?.User.Id;
+        set
+        {
+            _selectedItem = _state.Value.List.FirstOrDefault(item => item.User.Id == value);
+            _selectedId = _selectedItem?.Id ?? 0;
+        }
+    }
     
     [Inject]
     public IState<WorkspaceMembershipsState> _state { get; set; }
@@ -61,13 +67,16 @@ public partial class MembersDropDown
     {
         get
         {
-            var list = _state.Value.List;
-            if (UserId == 0)
+            if (AllowedIds.Any())
             {
-                return list;
+                return _state.Value.List
+                    .Where(
+                        item => AllowedIds.Any(allowedId => allowedId == item.Id)
+                    ) 
+                    .ToList();
             }
 
-            return list.Where(item => item.User.Id == UserId).ToList();
+            return _state.Value.List;
         }
     }
 

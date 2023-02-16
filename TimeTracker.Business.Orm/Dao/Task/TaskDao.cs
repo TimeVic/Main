@@ -80,7 +80,8 @@ public class TaskDao: ITaskDao
         }
 
         var items = await query
-            .OrderBy(item => item.IsDone).Desc
+            .OrderBy(item => item.IsDone).Asc
+            .OrderBy(item => item.IsArchived).Asc
             .ThenBy(item => item.UpdateTime).Desc
             .ListAsync<TaskEntity>();
         return new ListDto<TaskEntity>(
