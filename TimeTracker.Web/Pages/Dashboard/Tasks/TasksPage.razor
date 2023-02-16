@@ -1,0 +1,20 @@
+﻿@page "/dashboard/tasks"
+@page "/dashboard/tasks/{ClientId:long}"
+
+@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Web.Pages.Dashboard.Tasks.Parts
+
+@inherits BaseComponent
+@layout Layout
+
+<RadzenRow class="no-gutters mx-n4">
+    <RadzenColumn Size="3">
+        <TasksListTree 
+            ClientId="ClientId"
+            TestsListSelected="value => OnTestsListSelected(value)"/>
+    </RadzenColumn>
+    <RadzenColumn>
+        <AddTaskForm/>
+        <TasksTable/>
+    </RadzenColumn>
+</RadzenRow>

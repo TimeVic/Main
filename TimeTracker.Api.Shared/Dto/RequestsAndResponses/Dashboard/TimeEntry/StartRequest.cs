@@ -33,6 +33,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         [IsFutureOrNowDate]
         public DateTime Date { get; set; }
         
+        [Required]
         [IsCorrectTimeEntryTime]
         public TimeSpan StartTime { get; set; }
     }

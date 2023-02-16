@@ -16,6 +16,9 @@ public partial class ProjectsDropDown
     public bool Disabled { get; set; }
 
     [Parameter]
+    public bool AllowClear { get; set; } = true;
+    
+    [Parameter]
     public long Value
     {
         get => _selectedId;

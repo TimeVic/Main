@@ -27,5 +27,7 @@ public static class SiteUrl
     public static readonly string Dashboard_Reports_Payments = "/dashboard/report/payments";
     public static readonly string Dashboard_Reports_TimeEntries = "/dashboard/report/time-entries";
     
+    public static readonly string Dashboard_Tasks = "/dashboard/tasks/{0}";
+    
     public static readonly string Workspace_List = "/dashboard/workspaces";
 }

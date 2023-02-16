@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 using TimeTracker.Business.Common.Resources;
 
 namespace TimeTracker.Business.Common.Mvc.Attribute.Validation

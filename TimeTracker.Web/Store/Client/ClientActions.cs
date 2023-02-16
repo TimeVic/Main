@@ -3,7 +3,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client;
 
 namespace TimeTracker.Web.Store.Client;
 
-public record struct LoadClientListAction(bool IsReload = false);
+public record struct LoadListAction(bool IsReload = false);
 
 public record struct SetClientListItemsAction(GetListResponse Response);
 

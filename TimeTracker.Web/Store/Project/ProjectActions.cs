@@ -3,7 +3,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 
 namespace TimeTracker.Web.Store.Project;
 
-public record struct LoadProjectListAction(bool IsReload = false);
+public record struct LoadListAction(bool IsReload = false);
 
 public record struct SetProjectListItemsAction(GetListResponse Response);
 

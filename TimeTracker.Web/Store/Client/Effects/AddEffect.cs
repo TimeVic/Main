@@ -44,7 +44,7 @@ public class AddEffect: Effect<SaveEmptyClientListItemAction>
                 Name = _state.Value.ItemToAdd.Name
             });
             dispatcher.Dispatch(new RemoveEmptyClientListItemAction());
-            dispatcher.Dispatch(new LoadClientListAction(true));
+            dispatcher.Dispatch(new LoadListAction(true));
             
             _notificationService.Notify(new NotificationMessage()
             {

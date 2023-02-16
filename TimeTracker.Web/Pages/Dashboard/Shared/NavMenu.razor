@@ -11,14 +11,19 @@
             Icon="assessment"
             Text="Summary"
             Path="@SiteUrl.Dashboard_Reports_Summary"/>
-        <RadzenPanelMenuItem
-            Icon="chrome_reader_mode"
-            Text="Projects"
-            Path="@SiteUrl.Dashboard_Projects"/>
-        <RadzenPanelMenuItem
-            Icon="assignment_ind"
-            Text="Clients"
-            Path="@SiteUrl.Dashboard_Clients"/>
+        <RadzenPanelMenuItem Text="Tasks" Icon="task">
+            <RadzenPanelMenuItem
+                Icon="scatter_plot"
+                Text="Without client"
+                Path="@GetTasksListUrl()"/>
+            @foreach (var client in Clients)
+            {
+                <RadzenPanelMenuItem
+                    Icon="scatter_plot"
+                    Text="@client.Name"
+                    Path="@GetTasksListUrl(client.Id)"/>
+            }
+        </RadzenPanelMenuItem>
         <RadzenPanelMenuItem
             Icon="euro_symbol"
             Text="Payments"
@@ -34,6 +39,14 @@
                 Path="@SiteUrl.Dashboard_Reports_TimeEntries"/>
         </RadzenPanelMenuItem>
         <RadzenPanelMenuItem Text="Workspace" Icon="dashboard">
+            <RadzenPanelMenuItem
+                Icon="chrome_reader_mode"
+                Text="Projects"
+                Path="@SiteUrl.Dashboard_Projects"/>
+            <RadzenPanelMenuItem
+                Icon="assignment_ind"
+                Text="Clients"
+                Path="@SiteUrl.Dashboard_Clients"/>
             <RadzenPanelMenuItem
                 Icon="face"
                 Text="Members"
