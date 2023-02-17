@@ -12,7 +12,7 @@ using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.Redmine;
 
-public class RedmineClientTest : BaseTest
+public partial class RedmineClientTest : BaseTest
 {
     private readonly IUserSeeder _userSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
@@ -28,12 +28,14 @@ public class RedmineClientTest : BaseTest
     private readonly string _taskId;
     private readonly string? _redmineUrl;
     private readonly long _activityId;
+    private readonly ITaskSeeder _taskSeeder;
 
     public RedmineClientTest() : base(false)
     {
         _redmineClient = Scope.Resolve<IRedmineClient>();
         _workspaceSettingsDao = Scope.Resolve<IWorkspaceSettingsDao>();
 
+        _taskSeeder = Scope.Resolve<ITaskSeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();

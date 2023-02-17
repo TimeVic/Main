@@ -32,6 +32,10 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "is_archived", NotNull = true)]
         public virtual bool IsArchived { get; set; }
         
+        [Property(NotNull = false)]
+        [Column(Name = "external_task_id", Length = 512, NotNull = false)]
+        public virtual string? ExternalTaskId { get; set; }
+        
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "update_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime UpdateTime { get; set; }

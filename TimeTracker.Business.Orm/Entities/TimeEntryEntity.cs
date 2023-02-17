@@ -86,10 +86,21 @@ namespace TimeTracker.Business.Orm.Entities
         )]
         public virtual UserEntity User { get; set; }
         
+        [ManyToOne(
+            ClassType = typeof(TaskEntity), 
+            Column = "internal_task_id", 
+            Lazy = Laziness.Proxy,
+            Fetch = FetchMode.Join,
+            Cascade = "none"
+        )]
+        public virtual TaskEntity? Task { get; set; }
+        
         public virtual bool IsActive => EndTime == null;
         
         public virtual bool IsNew => Id == 0;
         
         public virtual TimeSpan Duration => EndTime != null ? EndTime.Value - StartTime : TimeSpan.Zero;
+        
+        public virtual string? ExternalTaskId => Task?.ExternalTaskId ?? TaskId;
     }
 }

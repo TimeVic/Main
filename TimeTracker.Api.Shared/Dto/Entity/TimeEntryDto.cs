@@ -23,6 +23,8 @@ public class TimeEntryDto : IResponse
     public ProjectDto? Project { get; set; }
     
     public UserDto User { get; set; }
+    
+    public TaskDto Task { get; set; }
 
     public bool IsActive => EndTime == null;
     
@@ -39,5 +41,6 @@ public class TimeEntryDto : IResponse
         Date = fromEntry.Date;
         IsBillable = fromEntry.IsBillable;
         TaskId = fromEntry.TaskId;
+        Task = fromEntry.Task;
     }
 }

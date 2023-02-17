@@ -10,6 +10,8 @@ public class TaskDto : IResponse
     
     public string? Description { get; set; }
     
+    public string? ExternalTaskId { get; set; }
+    
     public DateTime? NotificationTime { get; set; }
     
     public bool IsDone { get; set; }

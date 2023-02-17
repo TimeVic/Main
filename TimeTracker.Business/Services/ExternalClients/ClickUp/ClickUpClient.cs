@@ -47,7 +47,7 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         
         var uri = BuildGetTaskUri(
             settings.TeamId,
-            timeEntry.TaskId,
+            timeEntry.ExternalTaskId,
             settings.IsCustomTaskIds,
             timeEntry.ClickUpId
         );
@@ -72,7 +72,7 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         
         var uri = BuildSetTimeEntryUri(
             settings.TeamId,
-            timeEntry.TaskId,
+            timeEntry.ExternalTaskId,
             settings.IsCustomTaskIds,
             timeEntry.ClickUpId
         );

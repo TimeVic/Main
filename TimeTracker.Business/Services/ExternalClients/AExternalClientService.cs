@@ -73,7 +73,7 @@ public abstract class AExternalClientService
             _logger.LogError("TimeEntry is active");
             return false;
         }
-        if (string.IsNullOrEmpty(timeEntry.TaskId))
+        if (string.IsNullOrEmpty(timeEntry.ExternalTaskId))
         {
             _logger.LogError("TimeEntry does not contain TaskId: {TimeEntryId}", timeEntry.Id);
             return false;

@@ -20,6 +20,9 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         [StringLength(100)]
         public string? TaskId { get; set; }
         
+        [IsPositive]
+        public long? InternalTaskId { get; set; }
+        
         public bool? IsBillable { get; set; }
         
         [IsPositive]

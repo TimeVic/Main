@@ -6,10 +6,9 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Task;
-using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
