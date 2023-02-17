@@ -49,7 +49,7 @@ public class RedmineClient: AExternalClientService, IRedmineClient
             TimeEntryRequest = new TimeEntryRequestDto()
             {
                 Duration = timeEntry.Duration,
-                TaskId = timeEntry.TaskId,
+                TaskId = timeEntry.ExternalTaskId,
                 UserId = settings.RedmineUserId,
                 Comments = timeEntry.Description ?? "",
                 SpentOnDate = timeEntry.Date,

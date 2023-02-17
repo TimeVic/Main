@@ -1,4 +1,5 @@
-﻿using Api.Requests.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;

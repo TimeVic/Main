@@ -12,7 +12,7 @@ using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.ClickUp;
 
-public class SendNewTimeEntityTest : BaseTest
+public partial class SendNewTimeEntityTest : BaseTest
 {
     private readonly IUserSeeder _userSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
@@ -26,6 +26,7 @@ public class SendNewTimeEntityTest : BaseTest
     private readonly string _taskId;
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IUserDao _userDao;
+    private readonly ITaskSeeder _taskSeeder;
 
     // TODO: Revert test
     public SendNewTimeEntityTest() : base(false)
@@ -33,6 +34,7 @@ public class SendNewTimeEntityTest : BaseTest
         _сlickUpClient = Scope.Resolve<IClickUpClient>();
         _workspaceSettingsDao = Scope.Resolve<IWorkspaceSettingsDao>();
 
+        _taskSeeder = Scope.Resolve<ITaskSeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();

@@ -149,7 +149,8 @@ public class TimeEntryDao: ITimeEntryDao
         string? description = "",
         long? projectId = null,
         decimal? hourlyRate = null,
-        string? taskId = null
+        string? taskId = null,
+        TaskEntity? internalTask = null
     )
     {
         if (startTime >= GlobalConstants.EndOfDay)
@@ -159,6 +160,14 @@ public class TimeEntryDao: ITimeEntryDao
         if (await GetActiveEntryAsync(workspace, user) != null)
         {
             throw new DataInconsistencyException("New time entry can not be created before active exists");
+        }
+        if (internalTask != null)
+        {
+            if (taskId != null && string.IsNullOrEmpty(internalTask.ExternalTaskId))
+            {
+                internalTask.ExternalTaskId = taskId;
+            }
+            taskId = null;
         }
 
         var entry = new TimeEntryEntity
@@ -171,6 +180,7 @@ public class TimeEntryDao: ITimeEntryDao
             Workspace = workspace,
             User = user,
             TaskId = taskId,
+            Task = internalTask,
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow
         };
@@ -312,7 +322,15 @@ public class TimeEntryDao: ITimeEntryDao
             };
         }
         timeEntry.Project = project;
-        timeEntry.TaskId = timeEntryDto.TaskId;
+        if (timeEntry.Task == null)
+        {
+            timeEntry.TaskId = timeEntryDto.TaskId;    
+        }
+        else if (!string.IsNullOrEmpty(timeEntryDto.TaskId) && string.IsNullOrEmpty(timeEntry.Task.ExternalTaskId))
+        {
+            timeEntry.Task.ExternalTaskId = timeEntryDto.TaskId;
+            await _sessionProvider.CurrentSession.SaveAsync(timeEntry.Task);
+        }
         timeEntry.Description = timeEntryDto.Description;
         timeEntry.HourlyRate = timeEntryDto.HourlyRate;
         timeEntry.IsBillable = timeEntryDto.IsBillable;

@@ -5,14 +5,16 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Task;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
+using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.TimeEntry;
 
-public class AddTest: BaseTest
+public partial class StartTest: BaseTest
 {
     private readonly string Url = "/dashboard/time-entry/start";
     
@@ -23,12 +25,14 @@ public class AddTest: BaseTest
     private readonly WorkspaceEntity _defaultWorkspace;
     private readonly IProjectDao _projectDao;
     private readonly ITimeEntryDao _timeEntryDao;
+    private readonly ITaskSeeder _taskSeeder;
 
-    public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    public StartTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _timeEntryFactory = ServiceProvider.GetRequiredService<IDataFactory<TimeEntryEntity>>();
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }

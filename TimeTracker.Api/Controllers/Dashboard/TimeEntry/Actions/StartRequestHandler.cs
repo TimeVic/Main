@@ -5,7 +5,10 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Task;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
@@ -23,6 +26,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         private readonly ISecurityManager _securityManager;
         private readonly IProjectService _projectService;
         private readonly IWorkspaceAccessService _workspaceAccessService;
+        private readonly ITaskDao _taskDao;
 
         public StartRequestHandler(
             IMapper mapper,
@@ -33,7 +37,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             ITimeEntryDao timeEntryDao,
             ISecurityManager securityManager,
             IProjectService projectService,
-            IWorkspaceAccessService workspaceAccessService
+            IWorkspaceAccessService workspaceAccessService,
+            ITaskDao taskDao
         )
         {
             _mapper = mapper;
@@ -45,6 +50,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _securityManager = securityManager;
             _projectService = projectService;
             _workspaceAccessService = workspaceAccessService;
+            _taskDao = taskDao;
         }
     
         public async Task<TimeEntryDto> ExecuteAsync(StartRequest request)
@@ -52,6 +58,20 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var task = await _taskDao.GetById(request.InternalTaskId ?? 0);
+            if (task != null)
+            {
+                if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
+                {
+                    throw new HasNoAccessException();
+                }
+
+                if (task.Workspace.Id != workspace?.Id)
+                {
+                    throw new ValidationException("Provided TaskId from other workspace");
+                }
+            }
+
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();
@@ -76,7 +96,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 description: request.Description,
                 projectId: request.ProjectId,
                 hourlyRate: request.HourlyRate,
-                taskId: request.TaskId
+                taskId: request.TaskId,
+                internalTask: task
             );
             await _sessionProvider.PerformCommitAsync();
             
