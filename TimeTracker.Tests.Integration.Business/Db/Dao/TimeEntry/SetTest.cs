@@ -168,4 +168,43 @@ public partial class SetTest: BaseTest
         });
     }
     
+    [Fact]
+    public async Task ShouldNotUpdateTaskIdIfSynced()
+    {
+        var fakeTimeEntry = _timeEntryFactory.Generate();
+        var initialDto = new TimeEntryCreationDto()
+        {
+            Description = fakeTimeEntry.Description,
+            EndTime = fakeTimeEntry.EndTime.Value,
+            StartTime = fakeTimeEntry.StartTime,
+            HourlyRate = fakeTimeEntry.HourlyRate,
+            IsBillable = fakeTimeEntry.IsBillable,
+            TaskId = fakeTimeEntry.TaskId
+        };
+        
+        var initialWorkspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();;
+        var initialProject = await _projectDao.CreateAsync(initialWorkspace, "Test project1");
+        
+        var initialEntry = await _timeEntryDao.SetAsync(_user, initialWorkspace, initialDto, initialProject);
+
+        // Was synced
+        initialEntry.RedmineId = "asdasdasd";
+        await CommitDbChanges();
+        
+        var fakeTimeEntry2 = _timeEntryFactory.Generate();
+        var expectedDto = new TimeEntryCreationDto()
+        {
+            Id = initialEntry.Id,
+            Description = fakeTimeEntry2.Description,
+            EndTime = fakeTimeEntry2.EndTime.Value,
+            StartTime = fakeTimeEntry2.StartTime,
+            HourlyRate = fakeTimeEntry2.HourlyRate,
+            IsBillable = fakeTimeEntry2.IsBillable,
+            TaskId = fakeTimeEntry2.TaskId
+        };
+        var expectedProject = await _projectDao.CreateAsync(initialWorkspace, "Test project2");
+        var actualEntry = await _timeEntryDao.SetAsync(_user, initialWorkspace, expectedDto, expectedProject);
+        
+        Assert.Equal(fakeTimeEntry.TaskId, actualEntry.TaskId);
+    }
 }

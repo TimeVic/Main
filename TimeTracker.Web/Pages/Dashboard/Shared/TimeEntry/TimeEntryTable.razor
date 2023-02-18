@@ -136,10 +136,17 @@
             }
             else
             {
-                <RadzenTextBox
-                    Class="ml-1"
-                    MaxLength="500"
-                    @bind-Value="@entry.TaskId"/>    
+                if (!entry?.IsSynced ?? false)
+                {
+                    <RadzenTextBox
+                        Class="ml-1"
+                        MaxLength="500"
+                        @bind-Value="@entry.TaskId"/>    
+                }
+                else
+                {
+                    @entry?.TaskId
+                }    
             }
         </EditTemplate>
     </RadzenDataGridColumn>
