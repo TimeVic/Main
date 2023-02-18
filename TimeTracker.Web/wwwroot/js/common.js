@@ -1,5 +1,4 @@
-window.clickOnElement = function (elementId) {
-    const element = document.getElementById(elementId);
+window.clickOnElement = function (element) {
     if (element) {
         element.click()
     }
@@ -28,3 +27,13 @@ window.setFavicon = function (fileName) {
     const element = document.querySelectorAll('[rel=icon]')[0];
     element.setAttribute('href', `/img/logo/${fileName}`)
 };
+
+window.openFile = function(data) {
+    var link = this.document.createElement('a');
+    link.download = data.fileName;
+    link.href = data.url;
+    link.target ="_blank";
+    this.document.body.appendChild(link);
+    link.click();
+    this.document.body.removeChild(link);
+}

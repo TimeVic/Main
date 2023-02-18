@@ -78,14 +78,17 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         return await HttpClient.GetAsync(uri);
     }
         
-    public async Task<HttpResponseMessage> GetRequestAsync(string url, string jwtToken,  object data = null)
+    public async Task<HttpResponseMessage> GetRequestAsync(string url, string jwtToken, Dictionary<string, string>? urlParams = null)
     {
         await CommitDbChanges();
 
+        urlParams ??= new Dictionary<string, string>();
         HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
         HttpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
         HttpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "text/json");
-        return await HttpClient.GetAsync(url);
+        
+        var uri = new Uri(QueryHelpers.AddQueryString(url, urlParams), UriKind.Relative);
+        return await HttpClient.GetAsync(uri);
     }
     
     public async Task<HttpResponseMessage> PostMultipartFormDataRequestAsync(

@@ -69,6 +69,23 @@ public class GetTest: BaseTest
     }
     
     [Fact]
+    public async Task ShouldDownloadFileWithQueryToken()
+    {
+        var response = await GetRequestAsync(
+            string.Format(Url, _uploadedFile.Id),
+            null,
+            new Dictionary<string, string>()
+            {
+                { "api_token", _jwtToken }
+            }
+        );
+        response.EnsureSuccessStatusCode();
+
+        var fileContent = await response.Content.ReadAsStringAsync();
+        Assert.NotEmpty(fileContent);
+    }
+    
+    [Fact]
     public async Task ShouldDownloadIfHasNotAccessToEntity()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();

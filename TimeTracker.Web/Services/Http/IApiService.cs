@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
@@ -5,6 +6,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Reports;
+using TimeTracker.Business.Common.Constants.Storage;
 
 namespace TimeTracker.Web.Services.Http
 {
@@ -129,6 +131,17 @@ namespace TimeTracker.Web.Services.Http
             TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.UpdateRequest model);
 
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.GetListResponse> TasksGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.GetListRequest model);
+
+        #endregion
+        
+        #region Storage
+
+        Task<TimeTracker.Api.Shared.Dto.Entity.StoredFileDto> StorageUploadFileAsync(
+            long entityId,
+            StorageEntityType entityType,
+            StoredFileType fileType,
+            IBrowserFile file
+        );
 
         #endregion
     }

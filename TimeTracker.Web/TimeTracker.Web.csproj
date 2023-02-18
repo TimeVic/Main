@@ -29,6 +29,9 @@
       <Content Include="Pages\Dashboard\Report\TimeEntry\Parts\FilterForm.razor.less">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </Content>
+      <Content Update="Shared\Components\Storage\FileUploader.razor.less">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

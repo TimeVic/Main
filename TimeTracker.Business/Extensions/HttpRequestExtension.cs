@@ -5,7 +5,7 @@ namespace TimeTracker.Business.Extensions
 {
     public static class HttpRequestExtension
     {
-        private const string ApiTokenKey = "api_token";
+        public const string ApiTokenKey = "api_token";
         
         public static string GetApiToken(this HttpRequest request)
         {

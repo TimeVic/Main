@@ -40,6 +40,7 @@ builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<ITimeParsingService, TimeParsingService>();
 builder.Services.AddScoped<ISecurityManager, SecurityManager>();
 builder.Services.AddScoped<ModalDialogProviderService>();
+builder.Services.AddScoped<UiHelperService>();
 
 // Store
 builder.Services.AddFluxor(

@@ -1,0 +1,46 @@
+﻿@using TimeTracker.Api.Shared.Dto.Entity
+@if (!Files.Any())
+{
+    <RadzenCard
+        class="m-0 mt-1 w-100">
+        <RadzenText TextStyle="TextStyle.Subtitle1">No records to display.</RadzenText>
+    </RadzenCard>
+}
+
+<RadzenDataList
+    Count="Files.Count"
+    ShowPagingSummary="false"
+    WrapItems="true"
+    AllowPaging="true"
+    Data="@Files"
+    TItem="StoredFileDto">
+    <Template Context="item">
+        <RadzenCard
+            @onclick="() => OpenFile(item)"
+            Style="cursor: pointer;"
+            class="m-0 mt-1 w-100 rz-ripple">
+            <RadzenRow>
+                <RadzenColumn Style="max-width: 80px;">
+                    <img src="@item.ThumbUrl"/>
+                </RadzenColumn>
+                <RadzenColumn>
+                    @if (!string.IsNullOrEmpty(item.Title))
+                    {
+                        @item.Title
+                    }
+                    else
+                    {
+                        @item.OriginalFileName
+                    }
+                </RadzenColumn>
+                <RadzenColumn Style="max-width: 80px;">
+                    <RadzenButton
+                        @onclick="OnCLickDelete"
+                        Icon="delete_outline"
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Secondary"/>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenCard>
+    </Template>
+</RadzenDataList>
