@@ -82,7 +82,8 @@ public class UpdateTest: BaseTest
             NotificationTime = expectedTask.NotificationTime,
             IsDone = expectedTask.IsDone,
             IsArchived = expectedTask.IsArchived,
-            UserId = _user.Id
+            UserId = _user.Id,
+            ExternalTaskId = expectedTask.ExternalTaskId
         });
         response.EnsureSuccessStatusCode();
 
@@ -93,6 +94,7 @@ public class UpdateTest: BaseTest
         Assert.Equal(expectedTask.Description, actualData.Description);
         Assert.Equal(expectedTask.IsDone, actualData.IsDone);
         Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
+        Assert.Equal(expectedTask.ExternalTaskId, actualData.ExternalTaskId);
     }
     
     [Fact]
