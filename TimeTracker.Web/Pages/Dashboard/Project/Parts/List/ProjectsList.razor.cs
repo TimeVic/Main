@@ -7,6 +7,7 @@ using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Project;
 using TimeTracker.Web.Store.TimeEntry;
+using LoadListAction = TimeTracker.Web.Store.Project.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Project.Parts.List;
 

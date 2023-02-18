@@ -22,6 +22,7 @@ public partial class Layout
         Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadListAction(false));
         Dispatcher.Dispatch(new TimeTracker.Web.Store.Client.LoadListAction(false));
         Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.LoadListAction(false));
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction(0));
         await Task.CompletedTask;
     }
 }

@@ -24,7 +24,7 @@ public class TimeEntryDto : IResponse
     
     public UserDto User { get; set; }
     
-    public TaskDto Task { get; set; }
+    public TaskDto? Task { get; set; }
 
     public bool IsActive => EndTime == null;
     

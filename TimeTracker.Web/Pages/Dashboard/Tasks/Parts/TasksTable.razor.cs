@@ -20,22 +20,6 @@ public partial class TasksTable
 
     private async Task OnClickTask(TaskDto task)
     {
-        await DialogService.OpenAsync<UpdateTaskForm>(
-            $"Task {task.Id}",
-            parameters: new Dictionary<string, object>()
-            {
-                { "Task", task }
-            },
-            options: new DialogOptions()
-            {
-                Width = " ",
-                Style = "left: 6em; right: 6em; top: 6em; bottom: 6em;",
-                ShowClose = true,
-                CloseDialogOnEsc = true,
-                AutoFocusFirstElement = true,
-                Resizable = true,
-                CloseDialogOnOverlayClick = true
-            }
-        );
+        await ModalDialogProviderService.ShowEditTaskModal(task);
     }
 }

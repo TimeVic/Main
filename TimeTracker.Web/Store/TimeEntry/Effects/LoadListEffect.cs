@@ -8,7 +8,7 @@ using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.TimeEntry.Effects;
 
-public class LoadListEffect: Effect<LoadTimeEntryListAction>
+public class LoadListEffect: Effect<LoadListAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<TimeEntryState> _state;
@@ -28,7 +28,7 @@ public class LoadListEffect: Effect<LoadTimeEntryListAction>
         _logger = logger;
     }
 
-    public override async Task HandleAsync(LoadTimeEntryListAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(LoadListAction action, IDispatcher dispatcher)
     {
         try
         {

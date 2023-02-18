@@ -9,6 +9,7 @@ using TimeTracker.Web;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.Security;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
 
 var currentAssembly = typeof(Program).Assembly;    
@@ -38,6 +39,7 @@ builder.Services.AddScoped<IReCaptchaService, ReCaptchaService>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<ITimeParsingService, TimeParsingService>();
 builder.Services.AddScoped<ISecurityManager, SecurityManager>();
+builder.Services.AddScoped<ModalDialogProviderService>();
 
 // Store
 builder.Services.AddFluxor(

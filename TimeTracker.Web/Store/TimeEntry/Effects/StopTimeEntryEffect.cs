@@ -35,7 +35,7 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
                 EndDate = DateTime.Now.ToDateAndRemoveTimeZone()
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(null));
-            dispatcher.Dispatch(new LoadTimeEntryListAction(1));
+            dispatcher.Dispatch(new LoadListAction(1));
         }
         catch (Exception e)
         {

@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
-@using TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 
 @inherits BaseComponent
 
@@ -116,13 +116,31 @@
         Width="100px">
 
         <Template Context="entry">
-            @entry.TaskId
+            @if (entry.Task != null)
+            {
+                <TaskIdBadge 
+                    IsClickable="true"
+                    InternalTask="@entry.Task"/>
+            }
+            else
+            {
+                @entry.TaskId    
+            }
         </Template>
         <EditTemplate Context="entry">
-            <RadzenTextBox
-                Class="ml-1"
-                MaxLength="500"
-                @bind-Value="@entry.TaskId"/>
+            @if (entry.Task != null)
+            {
+                <TaskIdBadge 
+                    IsClickable="false"
+                    InternalTask="@entry.Task"/>
+            }
+            else
+            {
+                <RadzenTextBox
+                    Class="ml-1"
+                    MaxLength="500"
+                    @bind-Value="@entry.TaskId"/>    
+            }
         </EditTemplate>
     </RadzenDataGridColumn>
 
