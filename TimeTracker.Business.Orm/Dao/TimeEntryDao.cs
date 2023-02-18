@@ -184,6 +184,10 @@ public class TimeEntryDao: ITimeEntryDao
             entry.TaskId = null;
             projectId = internalTask?.TaskList.Project.Id;
         }
+        else
+        {
+            entry.TaskId = taskId;
+        }
         if (projectId != null)
         {
             entry.Project = workspace.Projects.FirstOrDefault(item => item.Id == projectId);
