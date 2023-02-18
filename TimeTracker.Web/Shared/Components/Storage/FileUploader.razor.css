@@ -1,0 +1,6 @@
+.w-file-upload ::deep .w-upload-input {
+  overflow: hidden;
+  width: 0;
+  height: 0;
+}
+/*# sourceMappingURL=FileUploader.razor.css.map */

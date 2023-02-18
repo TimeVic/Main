@@ -1,4 +1,5 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
+@using TimeTracker.Business.Common.Constants.Storage
 @using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 
@@ -105,15 +106,29 @@
             </RadzenColumn>
         </RadzenRow>
 
-        <RadzenTextArea
-            Name="Description"
-            @bind-Value="model.Description"
-            Placeholder="Insert your task details here"
-            Rows="_descriptionTextAreaRows"
-            @oninput="ResizeDescriptionTextArea"
-            MaxLength="10000"
-            Change="SubmitForm"
-            Class="w-100"/>
+        <RadzenTabs RenderMode="@TabRenderMode.Client" class="w-100">
+            <Tabs>
+                <RadzenTabsItem Text="Description">
+                    <RadzenTextArea
+                        Name="Description"
+                        @bind-Value="model.Description"
+                        Placeholder="Insert your task details here"
+                        Rows="_descriptionTextAreaRows"
+                        @oninput="ResizeDescriptionTextArea"
+                        MaxLength="10000"
+                        Change="SubmitForm"
+                        Class="w-100"/>
+                </RadzenTabsItem>
+                <RadzenTabsItem Text="Attachments">
+                    <FileUploader
+                        Class="w-100"
+                        EntityId="@Task.Id"
+                        EntityType="StorageEntityType.Task"
+                        FileType="StoredFileType.Attachment"/>
+                    <FilesList Files="@Task.Attachments"/>
+                </RadzenTabsItem>
+            </Tabs>
+        </RadzenTabs>
 
     </RadzenStack>
 </RadzenTemplateForm>

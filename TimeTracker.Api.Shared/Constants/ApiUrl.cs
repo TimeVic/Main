@@ -92,4 +92,10 @@ public class ApiUrl
     public const string TasksList = "dashboard/tasks/get-list";
     
     #endregion
+
+    #region Storage
+
+    public const string StorageUpload = "dashboard/storage/upload";
+
+    #endregion
 }

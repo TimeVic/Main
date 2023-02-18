@@ -1,6 +1,8 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -83,6 +85,41 @@ namespace TimeTracker.Api.Extensions
                         IssuerSigningKey = jwtSecurityKey,
                         ValidateLifetime = true,
                         ClockSkew = System.TimeSpan.FromMinutes(30000)
+                    };
+                    options.Events = new JwtBearerEvents {
+                        OnMessageReceived = (context) => {
+                            StringValues values;
+
+                            if (!context.Request.Query.TryGetValue(HttpRequestExtension.ApiTokenKey, out values)) {
+                                return Task.CompletedTask;
+                            }
+
+                            if (values.Count > 1) {
+                                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                                context.Fail(
+                                    $"Only one '{HttpRequestExtension.ApiTokenKey}' query string parameter can be defined. " +
+                                    $"However, {values.Count:N0} were included in the request."
+                                );
+
+                                return Task.CompletedTask;
+                            }
+
+                            var token = values.Single();
+
+                            if (string.IsNullOrWhiteSpace(token)) {
+                                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                                context.Fail(
+                                    "The 'access_token' query string parameter was defined, " +
+                                    "but a value to represent the token was not included."
+                                );
+
+                                return Task.CompletedTask;
+                            }
+
+                            context.Token = token;
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
         }

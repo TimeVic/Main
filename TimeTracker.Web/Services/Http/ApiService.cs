@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Fluxor;
+using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Helpers;
@@ -55,6 +56,43 @@ namespace TimeTracker.Web.Services.Http
 
             // send request
             var response = await _httpClient.SendAsync(request);
+            return await HandleHttpResponse(response);
+        }
+        
+        private async Task<TResponse?> MultipartFormDataRequestAsync<TResponse>(
+            string requestUri,
+            Dictionary<string, object> data = null,
+            IBrowserFile file = null
+        )
+        {   
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{_apiUrl}/{requestUri}");
+            using var multipartFormContent = new MultipartFormDataContent();
+            if (data != null)
+            {
+                foreach (var dataKeyPair in data)
+                {
+                    multipartFormContent.Add(new StringContent($"{dataKeyPair.Value}"), name: dataKeyPair.Key);       
+                }
+            }
+            if (file != null)
+            {
+                var fileStreamContent = new StreamContent(file.OpenReadStream());
+                multipartFormContent.Add(fileStreamContent, name: "File", fileName: file.Name);
+            }
+            request.Content = multipartFormContent;
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", GetJwt());
+
+            // send request
+            var response = await _httpClient.SendAsync(request);
+            var responseString = await HandleHttpResponse(response);
+            return JsonHelper.DeserializeObject<TResponse>(
+                responseString,
+                DateTimeZoneHandling.Local
+            );
+        }
+
+        private async Task<string> HandleHttpResponse(HttpResponseMessage response)
+        {
             var responseString = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
@@ -78,7 +116,7 @@ namespace TimeTracker.Web.Services.Http
                 );
             }
         }
-        
+
         private async Task<TResponse?> RequestAsync<TResponse>(string requestUri, string jwtToken, object data, HttpMethod httpMethod)
         {
             var responseString = await RequestAsync(requestUri, jwtToken, data, httpMethod);
