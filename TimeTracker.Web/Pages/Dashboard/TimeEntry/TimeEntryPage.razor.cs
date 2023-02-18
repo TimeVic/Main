@@ -9,6 +9,5 @@ public partial class TimeEntryPage: BaseComponent
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Dispatcher.Dispatch(new LoadTimeEntryListAction(1));
     }
 }

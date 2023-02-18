@@ -4,12 +4,11 @@ using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
-using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Store.WorkspaceMemberships;
 using SetListItemAction = TimeTracker.Web.Store.Tasks.SetListItemAction;
 
-namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
+namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 
 public partial class UpdateTaskForm
 {

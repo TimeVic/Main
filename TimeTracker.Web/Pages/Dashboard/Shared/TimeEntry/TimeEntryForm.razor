@@ -1,0 +1,65 @@
+﻿@inherits BaseComponent
+
+@using TimeTracker.Web.Shared.Components.Form
+@using TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+
+<div Class="w-100 w-time-form">
+    <div class="w-100 d-flex justify-content-start">
+        @if (_hasActiveEntry)
+        {
+            <RadzenButton
+                ButtonStyle="ButtonStyle.Secondary"
+                Class="mr-1"
+                Click="@(StopTimeEntry)"
+                Disabled="@_state.Value.IsTimeEntryProcessing"
+                Text="Stop"/>
+        }
+        else
+        {
+            <RadzenButton
+                ButtonStyle="ButtonStyle.Success"
+                Click="@(StartTimeEntry)"
+                Class="mr-1"
+                Disabled="@_state.Value.IsTimeEntryProcessing"
+                Text="Start"/>
+        }
+        <TimeCounterField
+            Class="mr-1"
+            Value="@_activeEntry?.StartTime"
+            IsActive="@_hasActiveEntry"/>
+
+        @if (!IsShort)
+        {
+            <ProjectsDropDown
+                Disabled="!_state.Value.HasActiveEntry"
+                Value="@(_activeEntry?.Project?.Id ?? 0)"
+                SelectedItemChanged="OnChangeProject"
+                Class="mr-1"/>
+
+            @if (_activeEntry?.Task != null)
+            {
+                <TaskIdBadge 
+                    Class="mr-1"
+                    InternalTask="@_activeEntry?.Task"
+                    IsClickable="true"/>
+            }
+            else
+            {
+                <RadzenTextBox
+                    Class="mr-1 col-1"
+                    Placeholder="Task ID"
+                    Disabled="!_state.Value.HasActiveEntry"
+                    Value="@_activeEntry?.TaskId"
+                    ValueChanged="OnChangeTaskId"/>    
+            }
+
+            <RadzenTextBox
+                Class="mr-1 col"
+                Placeholder="Description"
+                Disabled="!_state.Value.HasActiveEntry"
+                Value="@_activeEntry?.Description"
+                ValueChanged="OnChangeDescription"/>    
+        }
+    </div>
+</div>

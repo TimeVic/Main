@@ -40,7 +40,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                     EndTime = DateTime.Now.TimeOfDay,
                     EndDate = DateTime.Now
                 });
-                dispatcher.Dispatch(new LoadTimeEntryListAction(1));
+                dispatcher.Dispatch(new LoadListAction(1));
             }
 
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
@@ -53,7 +53,8 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 IsBillable = action.IsBillable,
                 ProjectId = action.Project?.Id,
                 Description = action.Description,
-                HourlyRate = action.HourlyRate
+                HourlyRate = action.HourlyRate,
+                InternalTaskId = action.InternalTask?.Id
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(response));
         }

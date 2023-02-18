@@ -161,15 +161,7 @@ public class TimeEntryDao: ITimeEntryDao
         {
             throw new DataInconsistencyException("New time entry can not be created before active exists");
         }
-        if (internalTask != null)
-        {
-            if (taskId != null && string.IsNullOrEmpty(internalTask.ExternalTaskId))
-            {
-                internalTask.ExternalTaskId = taskId;
-            }
-            taskId = null;
-        }
-
+        
         var entry = new TimeEntryEntity
         {
             IsBillable = isBillable,
@@ -179,11 +171,19 @@ public class TimeEntryDao: ITimeEntryDao
             EndTime = null,
             Workspace = workspace,
             User = user,
-            TaskId = taskId,
             Task = internalTask,
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow
         };
+        if (internalTask != null)
+        {
+            if (taskId != null && string.IsNullOrEmpty(internalTask.ExternalTaskId))
+            {
+                internalTask.ExternalTaskId = taskId;
+            }
+            entry.TaskId = null;
+            projectId = internalTask?.TaskList.Project.Id;
+        }
         if (projectId != null)
         {
             entry.Project = workspace.Projects.FirstOrDefault(item => item.Id == projectId);
@@ -321,7 +321,15 @@ public class TimeEntryDao: ITimeEntryDao
                 UpdateTime = DateTime.UtcNow
             };
         }
-        timeEntry.Project = project;
+        if (timeEntry.Task != null)
+        {
+            timeEntry.Project = timeEntry.Task.TaskList.Project;
+        }
+        else
+        {
+            timeEntry.Project = project;
+        }
+        
         if (timeEntry.Task == null)
         {
             timeEntry.TaskId = timeEntryDto.TaskId;    

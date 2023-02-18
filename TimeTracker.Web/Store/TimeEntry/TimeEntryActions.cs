@@ -9,14 +9,15 @@ public record struct StartTimeEntryAction(
     ProjectDto? Project = null,
     string? TaskId = null,
     string? Description = null,
-    decimal? HourlyRate = null
+    decimal? HourlyRate = null,
+    TaskDto? InternalTask = null
 );
 
 public record struct StopActiveTimeEntryAction();
 
 public record struct SetActiveTimeEntryAction(TimeEntryDto TimeEntry);
 
-public record struct LoadTimeEntryListAction(int Skip = 1);
+public record struct LoadListAction(int Skip = 1);
 
 public record struct SetTimeEntryListItemsAction(GetListResponse Response);
 

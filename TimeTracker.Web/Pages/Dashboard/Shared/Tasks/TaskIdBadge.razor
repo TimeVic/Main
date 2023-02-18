@@ -1,0 +1,9 @@
+﻿@inherits BaseComponent
+
+<RadzenBadge
+    Shade="Shade.Lighter"
+    BadgeStyle="BadgeStyle.Primary"
+    Style="@(IsClickable ? "cursor: pointer" : "")"
+    @onclick="OnClick"
+    class="@($"{Class} d-flex align-items-center")"
+    Text="@InternalTask.FormattedId"/>

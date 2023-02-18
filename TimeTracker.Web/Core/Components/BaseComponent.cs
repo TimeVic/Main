@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Radzen;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Core.Components;
@@ -34,6 +35,9 @@ public class BaseComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     
     [Inject]
     protected DialogService DialogService { get; set; }
+    
+    [Inject]
+    protected ModalDialogProviderService ModalDialogProviderService { get; set; }
     
     #endregion
 }

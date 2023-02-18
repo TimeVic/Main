@@ -31,7 +31,7 @@ public partial class TimeEntryList
         }
         else
         {
-            Dispatcher.Dispatch(new LoadTimeEntryListAction(pagingEvent.Skip));
+            Dispatcher.Dispatch(new LoadListAction(pagingEvent.Skip));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 
 @inherits BaseComponent
 
@@ -27,17 +28,18 @@
                 @onclick="() => OnClickTask(item)"
                 class="m-0 mt-1 w-100 w-task-item rz-ripple">
                 <RadzenRow>
-                    <RadzenColumn Style="max-width: 30px;">
-                        <RadzenBadge 
-                            Shade="Shade.Lighter" 
-                            BadgeStyle="BadgeStyle.Primary" 
-                            Text="@("#" + item.Id)"
-                        />
+                    <RadzenColumn Style="max-width: 80px;">
+                        <TaskIdBadge InternalTask="item"/>
+                    </RadzenColumn>
+                    <RadzenColumn Style="max-width: 60px;">
+                        
                     </RadzenColumn>
                     <RadzenColumn class="text-truncate">
-                        <RadzenText 
+                        <RadzenText
                             class="@(item.IsDone ? "w-done" : "")"
-                            TextStyle="TextStyle.Subtitle1">@item.Title</RadzenText>
+                            TextStyle="TextStyle.Subtitle1">
+                            @item.Title
+                        </RadzenText>
                     </RadzenColumn>
                 </RadzenRow>
             </RadzenCard>

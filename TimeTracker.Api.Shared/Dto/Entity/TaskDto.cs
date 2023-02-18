@@ -27,4 +27,13 @@ public class TaskDto : IResponse
     public UserDto User { get; set; }
 
     public ICollection<StoredFileDto> Attachments { get; set; } = new List<StoredFileDto>();
+
+    #region Calculated
+
+    public string FormattedId
+    {
+        get => $"TMV#{Id}";
+    }
+    
+    #endregion
 }
