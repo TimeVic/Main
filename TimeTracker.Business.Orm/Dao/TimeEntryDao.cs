@@ -181,12 +181,12 @@ public class TimeEntryDao: ITimeEntryDao
             {
                 internalTask.ExternalTaskId = taskId;
             }
-            entry.TaskId = null;
+            entry.SetTaskId(null);
             projectId = internalTask?.TaskList.Project.Id;
         }
         else
         {
-            entry.TaskId = taskId;
+            entry.SetTaskId(taskId);
         }
         if (projectId != null)
         {
@@ -336,7 +336,7 @@ public class TimeEntryDao: ITimeEntryDao
         
         if (timeEntry.Task == null)
         {
-            timeEntry.TaskId = timeEntryDto.TaskId;    
+            timeEntry.SetTaskId(timeEntryDto.TaskId);  
         }
         else if (!string.IsNullOrEmpty(timeEntryDto.TaskId) && string.IsNullOrEmpty(timeEntry.Task.ExternalTaskId))
         {

@@ -20,16 +20,18 @@ public class TimeEntryDto : IResponse
     
     public TimeSpan? EndTime { get; set; }
 
+    public bool IsSynced { get; set; }
+    
     public ProjectDto? Project { get; set; }
     
     public UserDto User { get; set; }
     
     public TaskDto? Task { get; set; }
-
+    
     public bool IsActive => EndTime == null;
     
     public TimeSpan Duration => EndTime == null ? TimeSpan.Zero : EndTime.Value - StartTime;
-
+    
     public void UpdateFrom(TimeEntryDto fromEntry)
     {
         Id = fromEntry.Id;
@@ -42,5 +44,6 @@ public class TimeEntryDto : IResponse
         IsBillable = fromEntry.IsBillable;
         TaskId = fromEntry.TaskId;
         Task = fromEntry.Task;
+        IsSynced = fromEntry.IsSynced;
     }
 }

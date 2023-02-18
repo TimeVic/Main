@@ -5,102 +5,118 @@ using NHibernate.Type;
 namespace TimeTracker.Business.Orm.Entities
 {
     [Class(Table = "time_entries")]
-    public class TimeEntryEntity: IEntity
+    public class TimeEntryEntity : IEntity
     {
         [Id(Name = "Id", Generator = "native")]
         [Column(Name = "id", SqlType = "bigint", NotNull = true)]
         public virtual long Id { get; set; }
-        
+
         [Property(NotNull = false)]
         [Column(Name = "description", Length = 1000, NotNull = false)]
         public virtual string? Description { get; set; }
-        
+
         [Property(NotNull = false)]
         [Column(Name = "hourly_rate", NotNull = false)]
         public virtual decimal? HourlyRate { get; set; }
-        
+
         [Property(NotNull = false)]
         [Column(Name = "is_billable", NotNull = false)]
         public virtual bool IsBillable { get; set; }
-        
+
         [Property(NotNull = true, TypeType = typeof(DateType))]
         [Column(Name = "date", SqlType = "date", NotNull = true)]
         public virtual DateTime Date { get; set; }
-        
+
         [Property(NotNull = true, TypeType = typeof(TimeAsTimeSpanType))]
         [Column(Name = "start_time", SqlType = "time", NotNull = true)]
         public virtual TimeSpan StartTime { get; set; }
-        
+
         [Property(NotNull = false, TypeType = typeof(TimeAsTimeSpanType))]
         [Column(Name = "end_time", SqlType = "time", NotNull = false)]
         public virtual TimeSpan? EndTime { get; set; }
-        
+
         [Property(NotNull = false)]
         [Column(Name = "task_id", Length = 512, NotNull = false)]
         public virtual string? TaskId { get; set; }
-        
+
         [Property(NotNull = false)]
         [Column(Name = "clickup_id", NotNull = false)]
         public virtual string? ClickUpId { get; set; }
-        
+
         [Property(NotNull = false)]
         [Column(Name = "redmine_id", NotNull = false)]
         public virtual string? RedmineId { get; set; }
-        
+
         [Property(NotNull = true)]
         [Column(Name = "is_marked_to_delete", NotNull = true)]
         public virtual bool IsMarkedToDelete { get; set; }
-        
+
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }
-        
+
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "update_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime UpdateTime { get; set; }
-        
+
         [ManyToOne(
-            ClassType = typeof(WorkspaceEntity), 
-            Column = "workspace_id", 
+            ClassType = typeof(WorkspaceEntity),
+            Column = "workspace_id",
             Lazy = Laziness.False,
             Fetch = FetchMode.Join,
             Cascade = "none"
         )]
         public virtual WorkspaceEntity Workspace { get; set; }
-        
+
         [ManyToOne(
-            ClassType = typeof(ProjectEntity), 
-            Column = "project_id", 
+            ClassType = typeof(ProjectEntity),
+            Column = "project_id",
             Lazy = Laziness.Proxy,
             Fetch = FetchMode.Join,
             Cascade = "none"
         )]
         public virtual ProjectEntity? Project { get; set; }
-        
+
         [ManyToOne(
-            ClassType = typeof(UserEntity), 
-            Column = "user_id", 
+            ClassType = typeof(UserEntity),
+            Column = "user_id",
             Lazy = Laziness.Proxy,
             Fetch = FetchMode.Join,
             Cascade = "none"
         )]
         public virtual UserEntity User { get; set; }
-        
+
         [ManyToOne(
-            ClassType = typeof(TaskEntity), 
-            Column = "internal_task_id", 
+            ClassType = typeof(TaskEntity),
+            Column = "internal_task_id",
             Lazy = Laziness.Proxy,
             Fetch = FetchMode.Join,
             Cascade = "none"
         )]
         public virtual TaskEntity? Task { get; set; }
-        
+
+        #region Calculated
+
+        public virtual bool IsSynced => !string.IsNullOrEmpty(RedmineId) || !string.IsNullOrEmpty(ClickUpId);
+
         public virtual bool IsActive => EndTime == null;
-        
+
         public virtual bool IsNew => Id == 0;
-        
+
         public virtual TimeSpan Duration => EndTime != null ? EndTime.Value - StartTime : TimeSpan.Zero;
-        
+
         public virtual string? ExternalTaskId => Task?.ExternalTaskId ?? TaskId;
+
+        public virtual void SetTaskId(string? taskId)
+        {
+            if (IsSynced)
+            {
+                return;
+            }
+
+            TaskId = taskId;
+        }
+
+        #endregion
     }
 }
