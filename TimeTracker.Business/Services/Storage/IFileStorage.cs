@@ -22,4 +22,6 @@ public interface IFileStorage: IDomainService
     ) where TEntity : IEntity;
 
     Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, long fileId);
+
+    Task DeleteFile(UserEntity user, long fileId);
 }

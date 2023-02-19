@@ -38,4 +38,10 @@ public class StorageController : MainApiControllerBase
         => this.RequestAsync()
             .For<FileResponse>()
             .With(request);
+    
+    [HttpPost("delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task Upload([FromBody] DeleteRequest request)
+        => this.RequestAsync(request);
 }
