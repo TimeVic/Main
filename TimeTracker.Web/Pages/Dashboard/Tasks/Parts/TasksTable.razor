@@ -31,8 +31,24 @@
                     <RadzenColumn Style="max-width: 80px;">
                         <TaskIdBadge InternalTask="item"/>
                     </RadzenColumn>
-                    <RadzenColumn Style="max-width: 60px;">
-                        
+                    <RadzenColumn Style="max-width: 80px;">
+                        @if (item.Attachments.Any())
+                        {
+                            <RadzenIcon
+                                IconStyle="IconStyle.Info"
+                                Icon="attachment"/>
+                        }
+                        @if (item.IsDone)
+                        {
+                            <RadzenIcon
+                                IconStyle="IconStyle.Success"
+                                Icon="check_circle_outline"/>
+                        }
+                        @if (item.IsArchived)
+                        {
+                            <RadzenIcon
+                                Icon="inventory"/>
+                        }
                     </RadzenColumn>
                     <RadzenColumn class="text-truncate">
                         <RadzenText
