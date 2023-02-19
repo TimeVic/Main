@@ -120,4 +120,10 @@ public partial class UpdateTaskForm
         Task.Attachments = Task.Attachments.Concat(uploadedFiles).ToList();
         Dispatcher.Dispatch(new SetListItemAction(Task));
     }
+    
+    private void OnFileDeleted(long fileId)
+    {
+        Task.Attachments = Task.Attachments.Where(item => item.Id != fileId).ToList();
+        Dispatcher.Dispatch(new SetListItemAction(Task));
+    }
 }

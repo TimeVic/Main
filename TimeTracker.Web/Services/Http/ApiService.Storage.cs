@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Web.Core.Exceptions;
 
@@ -31,6 +32,17 @@ namespace TimeTracker.Web.Services.Http
             }
 
             return response;
+        }
+        
+        public async Task StorageDeleteFileAsync(long fileId)
+        {
+            await PostAuthorizedAsync<object>(
+                ApiUrl.StorageDelete,
+                new DeleteRequest()
+                {
+                    Id = fileId
+                }
+            );
         }
     }
 }

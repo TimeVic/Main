@@ -143,6 +143,8 @@ namespace TimeTracker.Web.Services.Http
             IBrowserFile file
         );
 
+        Task StorageDeleteFileAsync(long fileId);
+
         #endregion
     }
 }
