@@ -37,7 +37,7 @@
       <None Update="appsettings.Local.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="stubs\images\image.jpg">
+      <None Update="stubs\image.jpg">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
