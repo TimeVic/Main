@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
@@ -43,13 +44,18 @@ public partial class FileUploader
     public InputFile _fileInput { get; set; }
     public bool _isLoading = false;
 
+    public string _acceptTypes
+    {
+        get => string.Join(",", FileType.GetAllowedMimeTypes());
+    }
+
     public string _buttonLabel
     {
         get
         {
             if (_isLoading)
             {
-                return "Loading...";
+                return "Uploading...";
             }
 
             return "Select files";
@@ -79,7 +85,7 @@ public partial class FileUploader
                     _logger.LogError(e, e.Message);
                     _toastService.Notify(new NotificationMessage()
                     {
-                        Summary = "File uploading error",
+                        Summary = e.Message,
                         Severity = NotificationSeverity.Error,
                 
                     });
