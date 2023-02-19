@@ -114,4 +114,10 @@ public partial class UpdateTaskForm
     {
         renderEvent.Disabled = renderEvent.Disabled || renderEvent.Date < DateTime.Now;
     }
+
+    private void OnFilesUploaded(ICollection<StoredFileDto> uploadedFiles)
+    {
+        Task.Attachments = Task.Attachments.Concat(uploadedFiles).ToList();
+        Dispatcher.Dispatch(new SetListItemAction(Task));
+    }
 }

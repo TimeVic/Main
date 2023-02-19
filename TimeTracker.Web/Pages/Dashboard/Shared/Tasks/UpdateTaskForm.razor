@@ -123,9 +123,12 @@
                     <FileUploader
                         Class="w-100"
                         EntityId="@Task.Id"
+                        FilesUploaded="OnFilesUploaded"
                         EntityType="StorageEntityType.Task"
                         FileType="StoredFileType.Attachment"/>
-                    <FilesList Files="@Task.Attachments"/>
+                    <FilesList 
+                        Class="mt-1"
+                        Files="@Task.Attachments"/>
                 </RadzenTabsItem>
             </Tabs>
         </RadzenTabs>

@@ -16,7 +16,9 @@ namespace TimeTracker.Web.Services.Http
         private readonly HttpClient _httpClient;
         private readonly IServiceProvider _serviceProvider;
         private readonly IConfiguration _configuration;
+        
         private readonly string _apiUrl;
+        private readonly int _maxFileSize;
 
         public ApiService(
             HttpClient httpClient,
@@ -28,6 +30,7 @@ namespace TimeTracker.Web.Services.Http
             _serviceProvider = serviceProvider;
             _configuration = configuration;
             _apiUrl = _configuration.GetValue<string>("ApiUrl");
+            _maxFileSize = _configuration.GetValue<int>("MaxFileSize");
         }
 
         public string? GetJwt()
@@ -76,7 +79,7 @@ namespace TimeTracker.Web.Services.Http
             }
             if (file != null)
             {
-                var fileStreamContent = new StreamContent(file.OpenReadStream());
+                var fileStreamContent = new StreamContent(file.OpenReadStream(_maxFileSize));
                 multipartFormContent.Add(fileStreamContent, name: "File", fileName: file.Name);
             }
             request.Content = multipartFormContent;

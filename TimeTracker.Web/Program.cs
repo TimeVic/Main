@@ -41,6 +41,7 @@ builder.Services.AddScoped<ITimeParsingService, TimeParsingService>();
 builder.Services.AddScoped<ISecurityManager, SecurityManager>();
 builder.Services.AddScoped<ModalDialogProviderService>();
 builder.Services.AddScoped<UiHelperService>();
+builder.Services.AddScoped<UrlService>();
 
 // Store
 builder.Services.AddFluxor(
