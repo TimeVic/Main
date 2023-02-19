@@ -106,4 +106,33 @@ public class UploadTest: BaseTest
         var error = await response.GetJsonErrorAsync();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
     }
+    
+    [Fact]
+    public async Task ShouldUploadBigZipFile()
+    {
+        Assert.Equal(0, _task.Attachments.Count);
+
+        var fileToUpload = CreateFormFile("big.jpg");
+        var response = await PostMultipartFormDataRequestAsync(
+            Url,
+            _jwtToken,
+            new Dictionary<string, object>()
+            {
+                { "EntityId", _task.Id },
+                { "EntityType", StorageEntityType.Task },
+                { "FileType", StoredFileType.Attachment },
+            },
+            fileToUpload
+        );
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<StoredFileDto>();
+        Assert.True(actualData.Id > 0);
+        Assert.NotEmpty(actualData.Url);
+        Assert.NotEmpty(actualData.ThumbUrl);
+
+        await CommitDbChanges();
+        var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
+        Assert.Equal(1, actualTask.Attachments.Count);
+    }
 }

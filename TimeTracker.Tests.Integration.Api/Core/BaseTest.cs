@@ -130,7 +130,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
             
         var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
         stubsPath = Path.GetDirectoryName(stubsPath);
-        stubsPath = Path.Combine(stubsPath, "stubs", "images");
+        stubsPath = Path.Combine(stubsPath, "stubs");
             
         fileExtension = fileExtension.Trim().ToLower();
         if (fileBytes != null)
@@ -139,11 +139,10 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         }
         else
         {
-            if (fileExtension == "jpg" || fileExtension == "jpeg")
+            var filePath = Path.Combine(stubsPath, fileName);
+            if (File.Exists(filePath))
             {
-                var stubFileBytes = File.ReadAllBytes(
-                    Path.Combine(stubsPath, "image.jpg")
-                );
+                var stubFileBytes = File.ReadAllBytes(filePath);
                 stream.Write(stubFileBytes);
             }
             else

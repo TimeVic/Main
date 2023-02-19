@@ -1,6 +1,7 @@
 ﻿using Domain.Abstractions;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Storage.v1.Data;
+using Google.Apis.Upload;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -83,7 +84,12 @@ public partial class FileStorage: IFileStorage
         var cloudFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath(fileExtension)}";
         var mimeType = MimeTypeHelper.GetMimeType(fileExtension);
         
-        var cloudFile = await _googleClient.UploadObjectAsync(_bucketName, cloudFileName, mimeType, fileStream);
+        var cloudFile = await _googleClient.UploadObjectAsync(
+            _bucketName,
+            cloudFileName,
+            mimeType,
+            fileStream
+        );
         if (cloudFile == null)
         {
             throw new Exception($"File was not uploaded to cloud: {cloudFileName}");
