@@ -54,7 +54,6 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }
         
-        
         [Set(
             Table = "task_stored_files",
             Lazy = CollectionLazy.True,
