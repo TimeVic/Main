@@ -21,7 +21,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         [StringLength(512)]
         public string? ExternalTaskId { get; set; }
         
-        [IsFutureOrNowDate]
         public DateTime? NotificationTime { get; set; }
     
         public bool IsDone { get; set; }
