@@ -49,6 +49,15 @@ public partial class MemberAccessForm
         _isLoading = true;
         try
         {
+            if (model.Access == MembershipAccessType.Manager)
+            {
+                model.ProjectsAccess = model.ProjectsAccess.Select(item =>
+                {
+                    item.HasAccess = true;
+                    return item;
+                }).ToList();
+            }
+
             var membershipDto = await ApiService.WorkspaceMembershipUpdateAsync(model);
             if (membershipDto != null)
             {

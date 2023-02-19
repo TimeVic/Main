@@ -58,6 +58,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
                     )
                 ).ToList();    
             }
+            // TODO: Should be refactored to Manager role. In this case HourlyRate will not be saved if HasAccess = false
             var workspaceMembership = await _workspaceAccessService.ShareAccessAsync(
                 membership.Workspace,
                 membership.User,
