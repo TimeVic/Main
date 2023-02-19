@@ -24,12 +24,11 @@ public class ModalDialogProviderService
             },
             options: new DialogOptions()
             {
-                Width = " ",
-                Style = "left: 6em; right: 6em; top: 6em; bottom: 6em;",
+                Style = "top: 6em; bottom: 6em;",
                 ShowClose = true,
                 CloseDialogOnEsc = true,
                 AutoFocusFirstElement = true,
-                Resizable = true,
+                Resizable = false,
                 CloseDialogOnOverlayClick = true
             }
         );

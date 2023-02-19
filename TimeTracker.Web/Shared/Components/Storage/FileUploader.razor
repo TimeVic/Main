@@ -1,6 +1,11 @@
 ﻿@inherits BaseComponent
 
 <div class="w-file-upload @Class">
-    <InputFile @ref="@_fileInput" class="w-upload-input" OnChange="@OnInputFileChange" multiple />
+    <InputFile 
+        @ref="@_fileInput" 
+        class="w-upload-input"
+        OnChange="@OnInputFileChange" 
+        multiple 
+        accept="@_acceptTypes" />
     <RadzenButton Click="OnClickSelectFile" IsBusy="_isLoading">@_buttonLabel</RadzenButton>
 </div>

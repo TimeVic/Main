@@ -68,6 +68,9 @@
                     Value="model.NotificationTime"
                     DateFormat="MM/dd/yyyy HH:mm"/>
             </RadzenColumn>
+        </RadzenRow>
+
+        <RadzenRow Class="w-100">
             <RadzenColumn Style="max-width: 200px">
                 <RadzenText
                     TextStyle="TextStyle.Subtitle2"
@@ -80,7 +83,7 @@
                     @bind-Value="@model.ExternalTaskId"
                     Change="SubmitForm"/>
             </RadzenColumn>
-            <RadzenColumn Style="max-width: 190px">
+            <RadzenColumn>
                 <RadzenStack
                     Orientation="Orientation.Horizontal"
                     AlignItems="AlignItems.End"
@@ -126,7 +129,7 @@
                         FilesUploaded="OnFilesUploaded"
                         EntityType="StorageEntityType.Task"
                         FileType="StoredFileType.Attachment"/>
-                    <FilesList 
+                    <FilesList
                         Class="mt-1"
                         Files="@Task.Attachments"/>
                 </RadzenTabsItem>
