@@ -19,6 +19,7 @@ public static class SiteUrl
     public static readonly string Dashboard_Projects = "/dashboard/project";
     public static readonly string Dashboard_Project = "/dashboard/project/{0}";
     public static readonly string Dashboard_Clients = "/dashboard/client";
+    public static readonly string Dashboard_Tags = "/dashboard/tag";
     public static readonly string Dashboard_Payments = "/dashboard/payment";
     public static readonly string Dashboard_Members = "/dashboard/members";
     public static readonly string Dashboard_Integrations = "/dashboard/integrations";

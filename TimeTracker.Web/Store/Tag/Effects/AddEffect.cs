@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 using Radzen;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 
@@ -38,10 +38,11 @@ public class AddEffect: Effect<SaveEmptyListItemAction>
                 return;
             }
 
-            await _apiService.ProjectAddAsync(new AddRequest()
+            await _apiService.TagAddAsync(new AddRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
-                Name = _state.Value.ItemToAdd.Name
+                Name = _state.Value.ItemToAdd.Name,
+                Color = _state.Value.ItemToAdd.Color,
             });
             dispatcher.Dispatch(new RemoveEmptyListItemAction());
             dispatcher.Dispatch(new LoadListAction(true));
@@ -49,7 +50,7 @@ public class AddEffect: Effect<SaveEmptyListItemAction>
             _notificationService.Notify(new NotificationMessage()
             {
                 Severity = NotificationSeverity.Info,
-                Summary = "New project was added"
+                Summary = "New tag was added"
             });
         }
         catch (Exception e)
