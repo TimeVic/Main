@@ -27,6 +27,8 @@ public class TaskDto : IResponse
     public UserDto User { get; set; }
 
     public ICollection<StoredFileDto> Attachments { get; set; } = new List<StoredFileDto>();
+    
+    public ICollection<TagDto> Tags { get; set; } = new List<TagDto>();
 
     #region Calculated
 
