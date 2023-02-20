@@ -146,5 +146,13 @@ namespace TimeTracker.Web.Services.Http
         Task StorageDeleteFileAsync(long fileId);
 
         #endregion
+        
+        #region Tag
+
+        Task<TagDto> TagAddAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag.AddRequest model);
+        Task<TagDto> TagUpdateAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag.UpdateRequest model);
+        Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag.GetListResponse> TagGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag.GetListRequest model);
+
+        #endregion
     }
 }
