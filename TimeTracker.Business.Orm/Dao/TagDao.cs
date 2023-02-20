@@ -1,0 +1,34 @@
+﻿using System.Drawing;
+using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Orm.Entities;
+
+namespace TimeTracker.Business.Orm.Dao;
+
+public class TagDao: ITagDao
+{
+    private readonly IDbSessionProvider _sessionProvider;
+
+    public TagDao(IDbSessionProvider sessionProvider)
+    {
+        _sessionProvider = sessionProvider;
+    }
+    
+    public async Task<TagEntity> CreateAsync(
+        WorkspaceEntity workspace,
+        string name,
+        Color? color = null
+    )
+    {
+        var tag = new TagEntity()
+        {
+            Name = name,
+            Color = color,
+            Workspace = workspace,
+            CreateTime = DateTime.UtcNow,
+            UpdateTime = DateTime.UtcNow
+        };
+        workspace.Tags.Add(tag);
+        await _sessionProvider.CurrentSession.SaveAsync(tag);
+        return tag;
+    }
+}

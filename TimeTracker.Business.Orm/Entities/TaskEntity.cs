@@ -78,6 +78,22 @@ namespace TimeTracker.Business.Orm.Entities
         )]
         public virtual ICollection<StoredFileEntity> Attachments { get; set; } = new List<StoredFileEntity>();
 
+        [Set(
+            Table = "task_tags",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "task_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            ClassType = typeof(TagEntity),
+            Column = "tag_id"
+        )]
+        public virtual ICollection<TagEntity> Tags { get; set; } = new List<TagEntity>();
+        
         #region Calculated
 
         public virtual WorkspaceEntity Workspace => TaskList.Project.Workspace;
