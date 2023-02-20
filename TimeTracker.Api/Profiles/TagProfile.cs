@@ -17,6 +17,12 @@ public class TagProfile : Profile
                 builder => builder.MapFrom(
                     entity => entity.Color.ToHexString()
                 )
+            )
+            .ForMember(
+                dto => dto.TextColor,
+                builder => builder.MapFrom(
+                    entity => entity.Color.GetTextColorBasedOn().ToHexString()
+                )
             );
         CreateMap<UpdateRequest, TagEntity>()
             .ForMember(

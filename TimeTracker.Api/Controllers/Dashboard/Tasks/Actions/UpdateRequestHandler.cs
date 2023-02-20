@@ -72,6 +72,16 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             
             task.TaskList = newTaskList;
             task.User = user;
+            
+            var tags = task.Workspace.Tags.Where(
+                item => request.TagIds.Any(tagId => item.Id == tagId)
+            );
+            task.Tags.Clear();
+            foreach (var tag in tags)
+            {
+                task.Tags.Add(tag);
+            }
+            
             return _mapper.Map<TaskDto>(task);
         }
     }

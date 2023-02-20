@@ -15,6 +15,8 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         [IsPositive]
         public long UserId { get; set; }
 
+        public ICollection<long> TagIds { get; set; } = new List<long>();
+        
         public void Fill(TaskDto dto)
         {
             TaskId = dto.Id;

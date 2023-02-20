@@ -22,7 +22,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         public string? ExternalTaskId { get; set; }
         
         public DateTime? NotificationTime { get; set; }
-    
+        
         public bool IsDone { get; set; }
     
         public bool IsArchived { get; set; }

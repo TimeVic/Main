@@ -42,6 +42,7 @@ public class TaskDao: ITaskDao
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow,
         };
+
         await _sessionProvider.CurrentSession.SaveAsync(task);
         return task;
     }

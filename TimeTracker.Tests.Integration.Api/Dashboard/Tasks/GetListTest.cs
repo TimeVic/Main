@@ -28,12 +28,14 @@ public class GetListTest: BaseTest
     private readonly ProjectEntity _project;
     private readonly ITaskSeeder _taskSeeder;
     private readonly IFileStorage _fileStorage;
+    private readonly ITagSeeder _tagSeeder;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
+        _tagSeeder = ServiceProvider.GetRequiredService<ITagSeeder>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
@@ -226,5 +228,29 @@ public class GetListTest: BaseTest
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(expectedCounter, actualDto.TotalCount);
+    }
+    
+    [Fact]
+    public async Task ShouldReceiveListWithTags()
+    {
+        var tags = await _tagSeeder.CreateSeveralAsync(_defaultWorkspace, 2);
+        
+        var expectedCounter = 15;
+        var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        var task = tasks.First();
+        foreach (var tag in tags)
+        {
+            task.Tags.Add(tag);
+        }
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id,
+            Page = 1
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Contains(actualDto.Items, item => item.Tags.Any());
     }
 }

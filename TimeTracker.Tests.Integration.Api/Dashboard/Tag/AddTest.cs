@@ -61,6 +61,7 @@ public class AddTest: BaseTest
         Assert.True(actualProject.Id > 0);
         Assert.Equal(project.Name, actualProject.Name);
         Assert.Equal(_expectedColor.ToHexString(), actualProject.Color);
+        Assert.Equal(Color.Black.ToHexString(), actualProject.TextColor);
     }
     
     [Fact]

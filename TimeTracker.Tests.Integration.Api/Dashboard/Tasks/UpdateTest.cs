@@ -18,7 +18,7 @@ using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
 
-public class UpdateTest: BaseTest
+public partial class UpdateTest: BaseTest
 {
     private readonly string Url = "/dashboard/tasks/update";
     
@@ -37,6 +37,7 @@ public class UpdateTest: BaseTest
     private readonly TaskListEntity _otherTaskList;
     private readonly IUserSeeder _userSeeder;
     private readonly IWorkspaceAccessService _workspaceAccessService;
+    private readonly ITagSeeder _tagSeeder;
 
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -45,6 +46,7 @@ public class UpdateTest: BaseTest
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
+        _tagSeeder = ServiceProvider.GetRequiredService<ITagSeeder>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         
