@@ -13,4 +13,6 @@ public interface ITagDao: IDomainService
     );
 
     Task<TagEntity?> GetById(long? id);
+
+    Task<ICollection<TagEntity>> GetList(WorkspaceEntity workspace);
 }

@@ -42,4 +42,11 @@ public class TagDao: ITagDao
             .Where(item => item.Id == id)
             .FirstOrDefaultAsync();
     }
+    
+    public async Task<ICollection<TagEntity>> GetList(WorkspaceEntity workspace)
+    {
+        return await _sessionProvider.CurrentSession.Query<TagEntity>()
+            .Where(item => item.Workspace.Id == workspace.Id)
+            .ToListAsync();
+    }
 }
