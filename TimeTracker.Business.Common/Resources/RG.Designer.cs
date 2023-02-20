@@ -105,6 +105,15 @@ namespace TimeTracker.Business.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field &quot;{0}&quot; may contain only color HEX.
+        /// </summary>
+        public static string Error_FieldMayContainOnlyColor {
+            get {
+                return ResourceManager.GetString("Error_FieldMayContainOnlyColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field &quot;{0}&quot; may contain only currency code!.
         /// </summary>
         public static string Error_FieldMayContainOnlyCurrencyCode {

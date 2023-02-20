@@ -5,6 +5,7 @@ using NHibernate;
 using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Extensions;
 
 namespace TimeTracker.Business.Orm.Hibernate.DataTypes;

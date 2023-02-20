@@ -11,4 +11,6 @@ public interface ITagDao: IDomainService
         string name,
         Color? color = null
     );
+
+    Task<TagEntity?> GetById(long? id);
 }

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Entities;
 
@@ -30,5 +31,15 @@ public class TagDao: ITagDao
         workspace.Tags.Add(tag);
         await _sessionProvider.CurrentSession.SaveAsync(tag);
         return tag;
+    }
+    
+    public async Task<TagEntity?> GetById(long? id)
+    {
+        if (id == null)
+            return null;
+
+        return await _sessionProvider.CurrentSession.Query<TagEntity>()
+            .Where(item => item.Id == id)
+            .FirstOrDefaultAsync();
     }
 }
