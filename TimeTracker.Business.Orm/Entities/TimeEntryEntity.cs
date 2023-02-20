@@ -95,6 +95,22 @@ namespace TimeTracker.Business.Orm.Entities
         )]
         public virtual TaskEntity? Task { get; set; }
 
+        [Set(
+            Table = "time_entry_tags",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "time_entry_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            ClassType = typeof(TagEntity),
+            Column = "tag_id"
+        )]
+        public virtual ICollection<TagEntity> Tags { get; set; } = new List<TagEntity>();
+        
         #region Calculated
 
         public virtual bool IsSynced => !string.IsNullOrEmpty(RedmineId) || !string.IsNullOrEmpty(ClickUpId);
