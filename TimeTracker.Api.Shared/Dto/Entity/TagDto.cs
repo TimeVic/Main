@@ -9,4 +9,6 @@ public class TagDto : IResponse
     public string Name { get; set; }
     
     public string? Color { get; set; }
+    
+    public string TextColor { get; set; }
 }
