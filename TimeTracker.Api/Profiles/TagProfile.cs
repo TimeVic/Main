@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Drawing;
+using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Business.Extensions;
@@ -21,7 +22,7 @@ public class TagProfile : Profile
             .ForMember(
                 dto => dto.Color,
                 builder => builder.MapFrom(
-                    entity => entity.Color
+                    entity => ColorTranslator.FromHtml(entity.Color)
                 )
             );
     }

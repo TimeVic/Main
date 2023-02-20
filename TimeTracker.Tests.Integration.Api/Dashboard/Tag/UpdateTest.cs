@@ -1,7 +1,8 @@
+using System.Drawing;
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
@@ -14,34 +15,37 @@ namespace TimeTracker.Tests.Integration.Api.Dashboard.Tag;
 
 public class UpdateTest: BaseTest
 {
-    private readonly string Url = "/dashboard/project/update";
+    private readonly string Url = "/dashboard/tag/update";
     
     private readonly UserEntity _user;
-    private readonly IDataFactory<ProjectEntity> _projectFactory;
+    private readonly IDataFactory<TagEntity> _tagFactory;
     private readonly string _jwtToken;
-    private readonly IProjectSeeder _projectSeeder;
-    private readonly ProjectEntity _project;
+    private readonly ITagSeeder _tagSeeder;
+    private readonly TagEntity _tag;
     private readonly IClientSeeder _clientSeeder;
     private readonly WorkspaceEntity _workspace;
+    private readonly Color _expectedColor = Color.Blue;
 
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
-        _projectFactory = ServiceProvider.GetRequiredService<IDataFactory<ProjectEntity>>();
-        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
+        _tagFactory = ServiceProvider.GetRequiredService<IDataFactory<TagEntity>>();
+        _tagSeeder = ServiceProvider.GetRequiredService<ITagSeeder>();
         _clientSeeder = ServiceProvider.GetRequiredService<IClientSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _project = _projectSeeder.CreateAsync(_workspace).Result;
+        _tag = _tagSeeder.CreateAsync(_workspace).Result;
+
     }
 
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var expectedProject = _projectFactory.Generate();
+        var expectedProject = _tagFactory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
-            ProjectId = _project.Id,
-            Name = expectedProject.Name
+            TagId = _tag.Id,
+            Name = expectedProject.Name,
+            Color = _expectedColor.ToHexString()
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -49,63 +53,20 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldUpdate()
     {
-        var expectedClient = _clientSeeder.CreateSeveralAsync(_workspace).Result.First();
-        var expectedProject = _projectFactory.Generate();
+        var expectedTag = _tagFactory.Generate();
         await DbSessionProvider.PerformCommitAsync();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            ProjectId = _project.Id,
-            Name = expectedProject.Name,
-            DefaultHourlyRate = expectedProject.DefaultHourlyRate,
-            IsBillableByDefault = expectedProject.IsBillableByDefault,
-            ClientId = expectedClient.Id
+            TagId = _tag.Id,
+            Name = expectedTag.Name,
+            Color = _expectedColor.ToHexString()
         });
         response.EnsureSuccessStatusCode();
 
-        var actualProject = await response.GetJsonDataAsync<ProjectDto>();
+        var actualProject = await response.GetJsonDataAsync<TagDto>();
         Assert.True(actualProject.Id > 0);
-        Assert.Equal(expectedProject.Name, actualProject.Name);
-        Assert.Equal(expectedProject.DefaultHourlyRate, actualProject.DefaultHourlyRate);
-        Assert.Equal(expectedProject.IsBillableByDefault, actualProject.IsBillableByDefault);
-        Assert.Equal(expectedClient.Id, actualProject.Client.Id);
-    }
-    
-    [Fact]
-    public async Task ShouldSetClientToNull()
-    {
-        var expectedClient = _clientSeeder.CreateSeveralAsync(_workspace).Result.First();
-        _project.SetClient(expectedClient);
-        await DbSessionProvider.PerformCommitAsync();
-        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
-        {
-            ProjectId = _project.Id,
-            Name = _project.Name,
-            ClientId = null
-        });
-        response.EnsureSuccessStatusCode();
-
-        var actualProject = await response.GetJsonDataAsync<ProjectDto>();
-        Assert.True(actualProject.Id > 0);
-        Assert.Null(actualProject.Client);
-    }
-    
-    [Fact]
-    public async Task ShouldNotSetClientFromOtherUser()
-    {
-        var otherClient = _clientSeeder.CreateSeveralAsync().Result.First();
-        await DbSessionProvider.PerformCommitAsync();
-        
-        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
-        {
-            ProjectId = _project.Id,
-            Name = _project.Name,
-            ClientId = otherClient.Id
-        });
-        response.EnsureSuccessStatusCode();
-
-        var actualProject = await response.GetJsonDataAsync<ProjectDto>();
-        Assert.True(actualProject.Id > 0);
-        Assert.Null(actualProject.Client);
+        Assert.Equal(expectedTag.Name, actualProject.Name);
+        Assert.Equal(_expectedColor.ToHexString(), actualProject.Color);
     }
     
     [Fact]
@@ -116,8 +77,8 @@ public class UpdateTest: BaseTest
         
         var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()
         {
-            ProjectId = _project.Id,
-            Name = _project.Name
+            TagId = _tag.Id,
+            Name = _tag.Name,
         });
         
         var errorResponse = await response.GetJsonErrorAsync();
