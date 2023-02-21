@@ -1,18 +1,21 @@
-﻿<div>
+﻿<div class="w-tags-badges">
     @foreach (var tag in Tags)
     {
         if (tag.Color != null)
         {
             <RadzenBadge 
-                BadgeStyle="BadgeStyle.Secondary"
+                IsPill="true"
                 Text="@tag.Name"
+                class="w-badge"
                 Style="@($"background-color: {tag.Color}; color: {tag.TextColor};")"
             />
         }
         else
         {
             <RadzenBadge 
+                IsPill="true"
                 BadgeStyle="BadgeStyle.Secondary"
+                class="w-badge"
                 Text="@tag.Name"
             />
         }
