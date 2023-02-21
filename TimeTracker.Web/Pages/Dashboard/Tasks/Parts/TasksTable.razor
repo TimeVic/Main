@@ -18,15 +18,15 @@
         Count="TasksState.Value.TotalCount"
         IsLoading="@TasksState.Value.IsListLoading"
         ShowPagingSummary="true"
-        WrapItems="true"
+        WrapItems="false"
         AllowPaging="true"
         LoadData="OnLoadData"
         Data="@TasksState.Value.List"
         TItem="TaskDto">
         <Template Context="item">
-            <RadzenCard
+            <div
                 @onclick="() => OnClickTask(item)"
-                class="m-0 mt-1 w-100 w-task-item rz-ripple">
+                class="m-0 w-100 w-task-item">
                 <RadzenRow>
                     <RadzenColumn Style="max-width: 80px;">
                         <TaskIdBadge InternalTask="item"/>
@@ -61,7 +61,7 @@
                         <TagsBadgesList Tags="@item.Tags"/>
                     </RadzenColumn>
                 </RadzenRow>
-            </RadzenCard>
+            </div>
         </Template>
     </RadzenDataList>
 </div>

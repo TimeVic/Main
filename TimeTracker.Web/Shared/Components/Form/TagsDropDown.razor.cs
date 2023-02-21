@@ -42,13 +42,16 @@ public partial class TagsDropDown
     
     private RadzenDropDown<IEnumerable<long>> _listReference;
 
-    private Task OnValueChanged(IEnumerable<long> selectedIds)
+    private void OnValueChanged(IEnumerable<long>? selectedIds)
     {
+        selectedIds ??= new List<long>();
         _selectedItems = _state.Value.List.Where(
             item => selectedIds.Any(selectedId => selectedId == item.Id)
         ).ToList();
-        SelectedItemChanged.InvokeAsync(_selectedItems);
-        ValueChanged.InvokeAsync(selectedIds.ToList());
-        return Task.CompletedTask;
+        InvokeAsync(async () =>
+        {
+            await SelectedItemChanged.InvokeAsync(_selectedItems);
+            await ValueChanged.InvokeAsync(selectedIds.ToList());
+        });
     }
 }

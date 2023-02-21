@@ -50,38 +50,42 @@ public partial class UpdateTaskForm
         ResizeDescriptionField(model.Description);
     }
 
-    private async Task HandleSubmit(UpdateRequest request)
+    private void HandleSubmit(UpdateRequest request)
     {
-        _isLoading = true;
-        try
+        InvokeAsync(async () =>
         {
-            var responseDto = await ApiService.TasksUpdateAsync(model);
-            if (responseDto != null)
+            _isLoading = true;
+            try
             {
-                Dispatcher.Dispatch(new SetListItemAction(responseDto));
+                var responseDto = await ApiService.TasksUpdateAsync(model);
+                if (responseDto != null)
+                {
+                    Dispatcher.Dispatch(new SetListItemAction(responseDto));
+                }
             }
-        }
-        catch (Exception)
-        {
-            NotificationService.Notify(new NotificationMessage()
+            catch (Exception)
             {
-                Severity = NotificationSeverity.Error,
-                Summary = "Task adding error"
-            });
-        }
-        finally
-        {
-            _isLoading = false;
-        }
-        StateHasChanged();
+                NotificationService.Notify(new NotificationMessage()
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Task adding error"
+                });
+            }
+            finally
+            {
+                _isLoading = false;
+            }
+            StateHasChanged();    
+        });
     }
 
-    private async Task SubmitForm()
+    private Task SubmitForm()
     {
         if (_form.IsValid)
         {
-            await _form.Submit.InvokeAsync();
+            InvokeAsync(async () => await _form.Submit.InvokeAsync());
         }
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
     private void ResizeDescriptionTextArea(ChangeEventArgs elementEvent)

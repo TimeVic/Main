@@ -18,8 +18,8 @@ public partial class TasksTable
         Dispatcher.Dispatch(new LoadListAction(arg.Skip ?? 0));
     }
 
-    private async Task OnClickTask(TaskDto task)
+    private void OnClickTask(TaskDto task)
     {
-        await ModalDialogProviderService.ShowEditTaskModal(task);
+        InvokeAsync(async () => await ModalDialogProviderService.ShowEditTaskModal(task));
     }
 }
