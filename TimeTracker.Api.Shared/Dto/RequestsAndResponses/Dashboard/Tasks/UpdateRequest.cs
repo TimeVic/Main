@@ -27,6 +27,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
             IsDone = dto.IsDone;
             IsArchived = dto.IsArchived;
             UserId = dto.User.Id;
+            TagIds = dto.Tags.Select(item => item.Id).ToList();
         }
     }
 }

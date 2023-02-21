@@ -109,6 +109,20 @@
             </RadzenColumn>
         </RadzenRow>
 
+        <RadzenRow Class="w-100">
+            <RadzenColumn>
+                <RadzenText
+                    TextStyle="TextStyle.Subtitle2"
+                    TagName="TagName.H3">
+                    Tags
+                </RadzenText>
+                <TagsDropDown
+                    Value="@model.TagIds"
+                    ValueChanged="OnTagsChanged"
+                    Class="w-100"/>
+            </RadzenColumn>
+        </RadzenRow>
+
         <RadzenTabs RenderMode="@TabRenderMode.Client" class="w-100">
             <Tabs>
                 <RadzenTabsItem Text="Description">
