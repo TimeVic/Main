@@ -48,6 +48,10 @@
                 Text="Clients"
                 Path="@SiteUrl.Dashboard_Clients"/>
             <RadzenPanelMenuItem
+                Icon="local_offer"
+                Text="Tags"
+                Path="@SiteUrl.Dashboard_Tags"/>
+            <RadzenPanelMenuItem
                 Icon="face"
                 Text="Members"
                 Path="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)"/>
