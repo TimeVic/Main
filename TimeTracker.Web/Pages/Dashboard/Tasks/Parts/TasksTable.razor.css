@@ -4,4 +4,12 @@
 .w-task-table ::deep .w-task-item .w-done {
   text-decoration: line-through;
 }
+.w-task-table ::deep .rz-datalist-data {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+.w-task-table ::deep .rz-datalist-data li {
+  margin: 0;
+}
 /*# sourceMappingURL=TasksTable.razor.css.map */
