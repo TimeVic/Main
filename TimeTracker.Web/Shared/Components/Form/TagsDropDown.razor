@@ -1,0 +1,26 @@
+﻿@inherits BaseComponent
+
+@using TimeTracker.Business.Common.Constants
+
+<RadzenDropDown
+    @ref="_listReference"
+    Disabled="Disabled"
+    TValue="IEnumerable<long>"
+    Class="@(Class)"
+    AllowFiltering="true"
+    FilterOperator="StringFilterOperator.Contains"
+    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+    AllowSorting="false"
+    Multiple="true"
+    AllowClear="true"
+    AllowVirtualization="true"
+    Count="@_state.Value.TotalCount"
+    Data="@_state.Value.List"
+    TextProperty="Name"
+    ValueProperty="Id"
+    Chips="true"
+    Placeholder="@Placeholder"
+    Value="@_selectedIds"
+    MaxSelectedLabels="10"
+    ValueChanged="async (value) => await OnValueChanged(value)">
+</RadzenDropDown>

@@ -1,0 +1,20 @@
+﻿<div>
+    @foreach (var tag in Tags)
+    {
+        if (tag.Color != null)
+        {
+            <RadzenBadge 
+                BadgeStyle="BadgeStyle.Secondary"
+                Text="@tag.Name"
+                Style="@($"background-color: {tag.Color}; color: {tag.TextColor};")"
+            />
+        }
+        else
+        {
+            <RadzenBadge 
+                BadgeStyle="BadgeStyle.Secondary"
+                Text="@tag.Name"
+            />
+        }
+    }
+</div>

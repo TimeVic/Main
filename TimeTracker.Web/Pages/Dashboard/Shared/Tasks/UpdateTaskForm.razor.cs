@@ -126,4 +126,10 @@ public partial class UpdateTaskForm
         Task.Attachments = Task.Attachments.Where(item => item.Id != fileId).ToList();
         Dispatcher.Dispatch(new SetListItemAction(Task));
     }
+
+    private async Task OnTagsChanged(ICollection<long> selectedTagIds)
+    {
+        model.TagIds = selectedTagIds;
+        await SubmitForm();
+    }
 }
