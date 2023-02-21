@@ -53,7 +53,7 @@ public partial class TagsList
     {
         if (item.Id > 0)
         {
-            // await UpdateApplication(item);
+            Dispatcher.Dispatch(new UpdateItemAction(item));
             return;
         }
 

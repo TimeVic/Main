@@ -7,7 +7,7 @@ public class ProjectReducers
 {
 
     [ReducerMethod]
-    public static TagState SetProjectListItemsActionReducer(TagState state, SetListItemsAction action)
+    public static TagState SetListItemsActionReducer(TagState state, SetListItemsAction action)
     {
         return state with
         {
@@ -18,9 +18,27 @@ public class ProjectReducers
             IsLoaded = true
         };
     }
+    
+    [ReducerMethod]
+    public static TagState SetListItemActionReducer(TagState state, SetListItemAction action)
+    {
+        var listItems = state.List.Select(item =>
+        {
+            if (item.Id == action.Tag.Id)
+            {
+                return action.Tag;
+            }
+
+            return item;
+        }).ToList();
+        return state with
+        {
+            List = listItems
+        };
+    }
 
     [ReducerMethod]
-    public static TagState SetProjectIsListLoadingReducer(TagState state, SetIsListLoading action)
+    public static TagState SetIsListLoadingReducer(TagState state, SetIsListLoading action)
     {
         return state with
         {
@@ -31,7 +49,7 @@ public class ProjectReducers
     #region Add new item
     
     [ReducerMethod(typeof(AddEmptyListItemAction))]
-    public static TagState AddEmptyProjectListItemActionAction(TagState state)
+    public static TagState AddEmptyListItemActionAction(TagState state)
     {
         var newList = state.SortedList.ToList();
         newList.Add(new TagDto()
@@ -47,7 +65,7 @@ public class ProjectReducers
     }
     
     [ReducerMethod(typeof(RemoveEmptyListItemAction))]
-    public static TagState RemoveEmptyProjectListItemActionAction(TagState state)
+    public static TagState RemoveEmptyListItemActionAction(TagState state)
     {
         return state with
         {
