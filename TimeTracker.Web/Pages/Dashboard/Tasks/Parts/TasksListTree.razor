@@ -13,14 +13,14 @@
             var tasksList = GetTasksList(project);
             if (tasksList.Any())
             {
-                <RadzenTreeItem 
+                <RadzenTreeItem
                     Text="@project.Name"
                     Expanded="true"
                     Selected="false">
                     <ChildContent>
                         @foreach (var list in tasksList)
                         {
-                            <RadzenTreeItem 
+                            <RadzenTreeItem
                                 Selected="@(list.Id == _selectedTaskListId)"
                                 Text="@list.Name"
                                 Value="@list.Id">
@@ -44,12 +44,27 @@
         }
     </RadzenTree>
     <hr/>
-    <RadzenButton
-        Variant="Variant.Text"
-        ButtonStyle="ButtonStyle.Primary"
-        Class="w-100"
-        Click="ShowAddTaskListModal"
-        Icon="add">
-        Add list
-    </RadzenButton>
+    <RadzenRow>
+        <RadzenColumn>
+            <RadzenButton
+                Variant="Variant.Text"
+                ButtonStyle="ButtonStyle.Primary"
+                Class="w-100"
+                Click="ShowAddTaskListModal"
+                Icon="add">
+                Add list
+            </RadzenButton>
+        </RadzenColumn>
+        <RadzenColumn Style="max-width: 36px;">
+            <RadzenButton
+                Variant="Variant.Text"
+                ButtonStyle="ButtonStyle.Secondary"
+                Class="w-100"
+                Disabled="@(_selectedTaskListId == null)"
+                Click="ShowUpdateTaskListModal"
+                Icon="edit"/>
+        </RadzenColumn>
+    </RadzenRow>
+
+
 </RadzenCard>

@@ -73,6 +73,26 @@ public class UpdateTest: BaseTest
     }
     
     [Fact]
+    public async Task ShouldUpdateProject()
+    {
+        var project2 = _projectDao.CreateAsync(_workspace, "Test adding").Result;
+        var expectedName = _taskListFactory.Generate().Name;
+        var taskList = await _taskListDao.CreateTaskListAsync(_project, expectedName);
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            Name = expectedName,
+            ProjectId = project2.Id,
+            TaskListId = taskList.Id
+        });
+        await response.GetJsonDataAsync();
+        response.EnsureSuccessStatusCode();
+
+        var actualList = await response.GetJsonDataAsync<TaskListDto>();
+        Assert.Equal(project2.Id, actualList.Project.Id);
+    }
+    
+    [Fact]
     public async Task ShouldNotUpdateIfIncorrectWorkspaceId()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();

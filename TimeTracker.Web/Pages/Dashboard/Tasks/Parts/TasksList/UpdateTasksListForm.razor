@@ -1,25 +1,41 @@
-﻿@using TimeTracker.Web.Pages.Dashboard.Shared
-@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
 
 @inherits BaseComponent
 
-<RadzenTemplateForm TItem="UpdateRequest" Data="@model" Submit="HandleSubmit">
+<RadzenTemplateForm TItem="AddRequest" Data="@model" Submit="HandleSubmit">
     <DataAnnotationsValidator/>
     <ValidationSummary/>
-    
-    <div class="row justify-content-center">
-            <div class="col-md-12 d-flex align-items-end justify-content-center mt-4">
-                <RadzenButton
-                    ButtonType="ButtonType.Button"
-                    Disabled="@_isLoading"
-                    ButtonStyle="ButtonStyle.Secondary"
-                    Click="CloseModal"
-                    Text="Cancel"/>
-                <RadzenButton
-                    ButtonType="ButtonType.Submit"
-                    Disabled="@_isLoading"
-                    class="ml-3"
-                    Text="Save"/>
-            </div>
+
+    <RadzenStack
+        Orientation="Orientation.Vertical"
+        JustifyContent="JustifyContent.Start">
+
+        <div>
+            @model.ProjectId
+            <RadzenLabel
+                Text="Select project"
+                TextStyle="@TextStyle.Subtitle2"/>
+            <ProjectsDropDown
+                Class="w-100"
+                Value="@model.ProjectId"
+                ValueChanged="@(value => model.ProjectId = value)"/>
         </div>
+
+        <div>
+            <RadzenLabel
+                Text="Enter list name"
+                TextStyle="@TextStyle.Subtitle2"/>
+            <RadzenTextBox Name="Name" @bind-Value="model.Name" Class="w-100"/>
+        </div>
+    </RadzenStack>
+
+    <div class="row justify-content-center">
+        <div class="col-md-12 d-flex align-items-end justify-content-center mt-4">
+            <RadzenButton
+                ButtonType="ButtonType.Submit"
+                IsBusy="@_isLoading"
+                class="ml-3"
+                Text="Update"/>
+        </div>
+    </div>
 </RadzenTemplateForm>
