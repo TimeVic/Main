@@ -115,8 +115,8 @@ namespace TimeTracker.Web.Services.Http
 
         #region Tasks list
 
-        Task<ProjectDto> TaskListAddAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.AddRequest model);
-        Task<ProjectDto> TaskListUpdateAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.UpdateRequest model);
+        Task<TaskListDto> TaskListAddAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.AddRequest model);
+        Task<TaskListDto> TaskListUpdateAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.UpdateRequest model);
 
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.GetListResponse> TaskListGetListAsync(
             TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.GetListRequest model);

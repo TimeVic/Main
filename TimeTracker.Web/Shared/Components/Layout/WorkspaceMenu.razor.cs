@@ -38,7 +38,7 @@ public partial class WorkspaceMenu
 
         Dispatcher.Dispatch(new SetWorkspaceAction(workspace));
         Dispatcher.Dispatch(new PersistDataAction());
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        NavigationManager.NavigateTo(SiteUrl.Dashboard_TimeEntry, forceLoad: true);
     }
     
     private void NavigateToEditPage()

@@ -7,9 +7,9 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<ProjectDto> TaskListAddAsync(AddRequest model)
+        public async Task<TaskListDto> TaskListAddAsync(AddRequest model)
         {
-            var response = await PostAuthorizedAsync<ProjectDto>(ApiUrl.TaskListAdd, model);
+            var response = await PostAuthorizedAsync<TaskListDto>(ApiUrl.TaskListAdd, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -18,9 +18,9 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
 
-        public async Task<ProjectDto> TaskListUpdateAsync(UpdateRequest model)
+        public async Task<TaskListDto> TaskListUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAuthorizedAsync<ProjectDto>(ApiUrl.TaskListUpdate, model);
+            var response = await PostAuthorizedAsync<TaskListDto>(ApiUrl.TaskListUpdate, model);
             if (response == null)
             {
                 throw new ServerErrorException();

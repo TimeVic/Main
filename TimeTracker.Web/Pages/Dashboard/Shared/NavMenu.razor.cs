@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants;
+using TimeTracker.Web.Core.Extensions;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Client;
 
@@ -11,6 +13,9 @@ public partial class NavMenu
 {
     [Inject]
     protected IState<ClientState> ClientState { get; set; }
+    
+    [Inject]
+    protected NavigationManager _navigationManager { get; set; }
 
     public ICollection<ClientDto> Clients => ClientState.Value.SortedList;
 
@@ -22,8 +27,8 @@ public partial class NavMenu
         }
     }
 
-    public string GetTasksListUrl(long? clientId = null)
+    private string GetTasksListUrl(long? clientId = null)
     {
-        return string.Format(SiteUrl.Dashboard_Tasks, clientId.ToString() ?? "");
+        return string.Format(SiteUrl.Dashboard_Tasks, clientId?.ToString() ?? "0", "");
     }
 }

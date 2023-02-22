@@ -11,6 +11,9 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 public partial class AddTasksListForm
 {
     [Inject]
+    public ILogger<AddTasksListForm> _logger { get; set; }
+    
+    [Inject]
     public IState<ProjectState> ProjectState { get; set; }
     
     private AddRequest model = new();
@@ -26,8 +29,8 @@ public partial class AddTasksListForm
         _isLoading = true;
         try
         {
-            var membershipDto = await ApiService.TaskListAddAsync(model);
-            if (membershipDto != null)
+            var taskList = await ApiService.TaskListAddAsync(model);
+            if (taskList != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
                 NotificationService.Notify(new NotificationMessage()
@@ -36,17 +39,22 @@ public partial class AddTasksListForm
                     Summary = "Task list has been added"
                 });
                 DialogService.CloseSide();
-
+                
                 var navigateToProjectsClient = ProjectState.Value.List.FirstOrDefault(
                     item => item.Id == model.ProjectId
                 );
                 NavigationManager.NavigateTo(
-                    string.Format(SiteUrl.Dashboard_Tasks, navigateToProjectsClient?.Client?.Id.ToString() ?? "")    
+                    string.Format(
+                        SiteUrl.Dashboard_Tasks,
+                        navigateToProjectsClient?.Client?.Id.ToString() ?? "0",
+                        taskList.Id
+                    )    
                 );
             }
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError(e, e.Message);
             NotificationService.Notify(new NotificationMessage()
             {
                 Severity = NotificationSeverity.Error,
