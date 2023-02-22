@@ -104,6 +104,7 @@ public class ApiUrl
     
     public const string TagAdd = "dashboard/tag/add";
     public const string TagUpdate = "dashboard/tag/update";
+    public const string TagDelete = "dashboard/tag/delete";
     public const string TagList = "dashboard/tag/list";
     
     #endregion

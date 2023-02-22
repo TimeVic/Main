@@ -152,6 +152,7 @@ namespace TimeTracker.Web.Services.Http
         Task<TagDto> TagAddAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag.AddRequest model);
         Task<TagDto> TagUpdateAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag.UpdateRequest model);
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag.GetListResponse> TagGetListAsync(TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag.GetListRequest model);
+        Task TagDeleteAsync(long tagId);
 
         #endregion
     }

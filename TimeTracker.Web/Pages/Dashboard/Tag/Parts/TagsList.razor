@@ -78,8 +78,17 @@
 
                     <RadzenButton
                         Icon="edit"
+                        Size="ButtonSize.Small"
                         ButtonStyle="ButtonStyle.Light"
                         Click="@(args => EditRow(item))"
+                        Disabled="@(!AuthState.Value.IsRoleAdmin)"
+                        @onclick:stopPropagation="true">
+                    </RadzenButton>
+                    <RadzenButton
+                        Icon="delete"
+                        Size="ButtonSize.Small"
+                        ButtonStyle="ButtonStyle.Danger"
+                        Click="@(args => OnDelete(item))"
                         Disabled="@(!AuthState.Value.IsRoleAdmin)"
                         @onclick:stopPropagation="true">
                     </RadzenButton>
