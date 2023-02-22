@@ -28,6 +28,14 @@ namespace TimeTracker.Web.Services.Http
 
             return response;
         }
+        
+        public async Task TagDeleteAsync(long tagId)
+        {
+            await PostAuthorizedAsync<object>(ApiUrl.TagDelete, new DeleteRequest()
+            {
+                TagId = tagId
+            });
+        }
 
         public async Task<GetListResponse> TagGetListAsync(GetListRequest model)
         {

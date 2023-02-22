@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Radzen;
 using Radzen.Blazor;
 using Radzen.Blazor.Rendering;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -58,6 +59,23 @@ public partial class TagsList
         }
 
         Dispatcher.Dispatch(new SaveEmptyListItemAction());
+    }
+    
+    private async Task OnDelete(TagDto item)
+    {
+        var isOk = await DialogService.Confirm(
+            "Are you sure you want to remove this tag?",
+            "Delete confirmation",
+            new ConfirmOptions()
+            {
+                OkButtonText = "Delete",
+                CancelButtonText = "Cancel"
+            }
+        );
+        if (isOk.HasValue && isOk.Value)
+        {
+            Dispatcher.Dispatch(new DeleteItemAction(item));
+        }
     }
     
     #region ColorPicker helpers

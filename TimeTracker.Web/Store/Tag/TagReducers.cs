@@ -36,6 +36,16 @@ public class ProjectReducers
             List = listItems
         };
     }
+    
+    [ReducerMethod]
+    public static TagState SetListItemActionReducer(TagState state, DeleteListItemAction action)
+    {
+        var listItems = state.List.Where(item => item.Id != action.TagId).ToList();
+        return state with
+        {
+            List = listItems
+        };
+    }
 
     [ReducerMethod]
     public static TagState SetIsListLoadingReducer(TagState state, SetIsListLoading action)
