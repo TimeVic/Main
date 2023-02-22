@@ -3,7 +3,7 @@ using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
 
-namespace TimeTracker.Business.Orm.Dao.Task;
+namespace TimeTracker.Business.Orm.Dao.Tasks;
 
 public class TaskListDao: ITaskListDao
 {

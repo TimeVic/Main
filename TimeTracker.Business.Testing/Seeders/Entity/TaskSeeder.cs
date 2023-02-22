@@ -1,6 +1,6 @@
 ﻿using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Task;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Testing.Factories;
 

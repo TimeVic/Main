@@ -44,4 +44,10 @@ public class TagController : MainApiControllerBase
         => this.RequestAsync()
             .For<GetListResponse>()
             .With(request);
+    
+    [HttpPost("delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Add([FromBody] DeleteRequest request)
+        => this.RequestAsync(request);
 }

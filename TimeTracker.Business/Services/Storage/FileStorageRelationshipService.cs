@@ -3,7 +3,7 @@ using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Task;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Services.Storage;

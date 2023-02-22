@@ -49,4 +49,11 @@ public class TagDao: ITagDao
             .Where(item => item.Workspace.Id == workspace.Id)
             .ToListAsync();
     }
+    
+    public async Task DeleteTag(TagEntity tag)
+    {
+        tag.Tasks.Clear();
+        tag.TimeEntries.Clear();
+        await _sessionProvider.CurrentSession.DeleteAsync(tag);
+    }
 }
