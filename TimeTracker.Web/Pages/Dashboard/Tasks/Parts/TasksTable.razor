@@ -6,13 +6,23 @@
 @inherits BaseComponent
 
 <div class="w-task-table">
-    @if (!TasksState.Value.List.Any())
+    @if (TasksState.Value.IsListLoading)
     {
-        <RadzenCard
-            class="m-0 mt-1 w-100">
+        <RadzenCard class="m-0 mt-1 w-100">
+            <RadzenProgressBar
+                Value="100"
+                ProgressBarStyle="ProgressBarStyle.Info"
+                ShowValue="false"
+                Mode="ProgressBarMode.Indeterminate"/>
+        </RadzenCard>
+    }
+    else if (!TasksState.Value.List.Any())
+    {
+        <RadzenCard class="m-0 mt-1 w-100">
             <RadzenText TextStyle="TextStyle.Subtitle1">No records to display.</RadzenText>
         </RadzenCard>
     }
+
     <RadzenDataList
         PageSize="@GlobalConstants.ListPageSize"
         Count="TasksState.Value.TotalCount"
