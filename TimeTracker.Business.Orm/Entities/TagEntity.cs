@@ -37,5 +37,37 @@ namespace TimeTracker.Business.Orm.Entities
             Cascade = "none"
         )]
         public virtual WorkspaceEntity Workspace { get; set; }
+        
+        [Set(
+            Table = "task_tags",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "tag_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            ClassType = typeof(TaskEntity),
+            Column = "task_id"
+        )]
+        public virtual ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
+        
+        [Set(
+            Table = "time_entry_tags",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "tag_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            ClassType = typeof(TimeEntryEntity),
+            Column = "time_entry_id"
+        )]
+        public virtual ICollection<TimeEntryEntity> TimeEntries { get; set; } = new List<TimeEntryEntity>();
     }
 }

@@ -4,7 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Task;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Extensions;

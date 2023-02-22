@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Business.Orm.Dto.Task;
+﻿namespace TimeTracker.Business.Orm.Dto.Tasks;
 
 public class GetTasksFilterDto
 {

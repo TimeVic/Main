@@ -2,17 +2,16 @@
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
-namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
+namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
 {
-    public class AddRequestHandler : IAsyncRequestHandler<AddRequest, TaskListDto>
+    public class DeleteRequestHandler : IAsyncRequestHandler<DeleteRequest>
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
@@ -20,18 +19,16 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
         private readonly ISecurityManager _securityManager;
-        private readonly IWorkspaceAccessService _workspaceAccessService;
-        private readonly ITaskListDao _taskListDao;
+        private readonly ITagDao _tagDao;
 
-        public AddRequestHandler(
+        public DeleteRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
             ISecurityManager securityManager,
-            IWorkspaceAccessService workspaceAccessService,
-            ITaskListDao taskListDao
+            ITagDao tagDao
         )
         {
             _mapper = mapper;
@@ -40,23 +37,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
             _securityManager = securityManager;
-            _workspaceAccessService = workspaceAccessService;
-            _taskListDao = taskListDao;
+            _tagDao = tagDao;
         }
     
-        public async Task<TaskListDto> ExecuteAsync(AddRequest request)
+        public async Task ExecuteAsync(DeleteRequest request)
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var project = await _projectDao.GetById(request.ProjectId);
-            if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
+
+            var tag = await _tagDao.GetById(request.TagId);
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, tag.Workspace))
             {
                 throw new HasNoAccessException();
             }
-            var taskList = await _taskListDao.CreateTaskListAsync(project, request.Name);
-            await _sessionProvider.PerformCommitAsync();
-            
-            return _mapper.Map<TaskListDto>(taskList);
+
+            await _tagDao.DeleteTag(tag);
         }
     }
 }
