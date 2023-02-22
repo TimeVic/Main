@@ -13,11 +13,17 @@
             var tasksList = GetTasksList(project);
             if (tasksList.Any())
             {
-                <RadzenTreeItem Text="@project.Name" Expanded="true">
+                <RadzenTreeItem 
+                    Text="@project.Name"
+                    Expanded="true"
+                    Selected="false">
                     <ChildContent>
                         @foreach (var list in tasksList)
                         {
-                            <RadzenTreeItem Text="@list.Name" Value="@list.Id">
+                            <RadzenTreeItem 
+                                Selected="@(list.Id == _selectedTaskListId)"
+                                Text="@list.Name"
+                                Value="@list.Id">
                                 <Template>
                                     <RadzenText
                                         TextStyle="TextStyle.Subtitle2"

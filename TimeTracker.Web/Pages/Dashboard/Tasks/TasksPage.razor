@@ -1,18 +1,15 @@
-﻿@page "/dashboard/tasks"
+﻿@page "/dashboard/tasks/{ClientId:long}/{TaskListId:long}"
 @page "/dashboard/tasks/{ClientId:long}"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Tasks.Parts
-@using TimeTracker.Business.Common.Constants.Storage
 
 @inherits BaseComponent
 @layout Layout
 
 <RadzenRow class="no-gutters mx-n4">
     <RadzenColumn Size="3">
-        <TasksListTree 
-            ClientId="ClientId"
-            TestsListSelected="value => OnTestsListSelected(value)"/>
+        <TasksListTree ClientId="ClientId"/>
     </RadzenColumn>
     <RadzenColumn>
         <AddTaskForm/>
