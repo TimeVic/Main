@@ -1,6 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Store.Project;
@@ -10,6 +11,9 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 
 public partial class AddTasksListForm
 {
+    [Inject]
+    public TaskListDto? _taskList { get; set; }
+    
     [Inject]
     public ILogger<AddTasksListForm> _logger { get; set; }
     

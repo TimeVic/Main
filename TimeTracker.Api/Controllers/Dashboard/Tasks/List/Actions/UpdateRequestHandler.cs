@@ -60,6 +60,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
                 throw new HasNoAccessException();
             }
 
+            taskList.Project = project;
             taskList.Name = request.Name;
             return _mapper.Map<TaskListDto>(taskList);
         }

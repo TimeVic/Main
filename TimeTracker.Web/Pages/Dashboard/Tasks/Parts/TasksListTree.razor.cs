@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Project;
 using TimeTracker.Web.Store.TasksList;
 
@@ -23,6 +24,9 @@ public partial class TasksListTree
 
     [Inject]
     public NavigationManager NavigationManager { get; set; }
+    
+    [Inject]
+    public ModalDialogProviderService _modalDialogProviderService { get; set; }
 
     private long? _nullableClientId => ClientId > 0 ? ClientId : null;
     
@@ -59,12 +63,15 @@ public partial class TasksListTree
         return TasksListState.Value.List.Where(item => item.Project.Id == project.Id).ToList();
     }
 
-    private async Task ShowAddTaskListModal()
+    private void ShowAddTaskListModal()
     {
-        await DialogService.OpenSideAsync<AddTasksListForm>(
-            "Add task list",
-            options: new SideDialogOptions { CloseDialogOnOverlayClick = true }
-        );
+        InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal());
+    }
+    
+    private void ShowUpdateTaskListModal()
+    {
+        var taskList = TasksListState.Value.List.First(item => item.Id == _selectedTaskListId);
+        InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal(taskList));
     }
 
     private void OnSelectedTestsList(object tasksListIdObject)

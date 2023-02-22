@@ -7,7 +7,7 @@ public record struct LoadListAction(bool IsReload = false);
 
 public record struct SetListItemsAction(GetListResponse Response);
 
-public record struct SetListItemAction(ProjectDto Project);
+public record struct SetListItemAction(TaskListDto TaskList);
 
 public record struct SetIsListLoading(bool IsLoading);
 
