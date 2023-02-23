@@ -12,7 +12,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 
         [Required]
         [IsPositive]
-        public long Page { get; set; } = 1;
+        public int Page { get; set; } = 1;
         
         public GetListFilterRequest? Filter { get; set; }
     }
