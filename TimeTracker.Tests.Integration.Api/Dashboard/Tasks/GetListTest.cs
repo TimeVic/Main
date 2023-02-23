@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
@@ -84,6 +85,28 @@ public class GetListTest: BaseTest
         {
             return item.Attachments.Any() && !string.IsNullOrEmpty(item.Attachments.First().Url);
         });
+    }
+    
+    [Fact]
+    public async Task ShouldReceiveSecondList()
+    {
+        var expectedCounter = 3;
+        var tasks = await _taskSeeder.CreateSeveralAsync(
+            _taskList,
+            expectedCounter + GlobalConstants.ListPageSize
+        );
+        await _fileStorage.PutFileAsync(tasks.First(), CreateFormFile(), StoredFileType.Attachment);
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id,
+            Page = 2
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter + GlobalConstants.ListPageSize, actualDto.TotalCount);
+        Assert.Equal(expectedCounter, actualDto.Items.Count);
     }
     
     [Fact]

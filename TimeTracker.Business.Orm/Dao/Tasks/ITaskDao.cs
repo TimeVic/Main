@@ -19,5 +19,9 @@ public interface ITaskDao: IDomainService
 
     Task<TaskEntity?> GetById(long taskListId);
 
-    Task<ListDto<TaskEntity>> GetList(TaskListEntity taskList, GetTasksFilterDto? filter = null);
+    Task<ListDto<TaskEntity>> GetList(
+        TaskListEntity taskList,
+        int page,
+        GetTasksFilterDto? filter = null
+    );
 }
