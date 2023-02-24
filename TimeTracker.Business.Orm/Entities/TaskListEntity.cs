@@ -15,6 +15,10 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "name", Length = 1024, NotNull = true)]
         public virtual string Name { get; set; }
         
+        [Property(NotNull = true)]
+        [Column(Name = "is_archived", NotNull = true)]
+        public virtual bool IsArchived { get; set; }
+        
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "update_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime UpdateTime { get; set; }

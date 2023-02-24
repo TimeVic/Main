@@ -38,7 +38,8 @@ public class TaskListDao: ITaskListDao
         ProjectEntity projectAlias = null;
         var query = _sessionProvider.CurrentSession.QueryOver<TaskListEntity>()
             .Inner.JoinAlias(item => item.Project, () => projectAlias)
-            .Where(() => projectAlias.Workspace.Id == workspace.Id);
+            .Where(() => projectAlias.Workspace.Id == workspace.Id)
+            .Where(taskList => taskList.IsArchived == false);
         
         var items = await query
             .OrderBy(item => item.Name).Desc
@@ -47,5 +48,11 @@ public class TaskListDao: ITaskListDao
             items,
             await query.RowCountAsync()
         );
+    }
+    
+    public async Task ArchiveTaskListAsync(TaskListEntity taskList)
+    {
+        taskList.IsArchived = true;
+        await _sessionProvider.CurrentSession.SaveAsync(taskList);
     }
 }

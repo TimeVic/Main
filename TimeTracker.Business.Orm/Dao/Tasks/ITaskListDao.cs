@@ -9,5 +9,8 @@ public interface ITaskListDao: IDomainService
     Task<TaskListEntity> CreateTaskListAsync(ProjectEntity project, string name);
 
     Task<TaskListEntity?> GetById(long taskListId);
+    
     Task<ListDto<TaskListEntity>> GetList(WorkspaceEntity workspace);
+
+    Task ArchiveTaskListAsync(TaskListEntity taskList);
 }
