@@ -12,9 +12,6 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 public partial class AddTasksListForm
 {
     [Inject]
-    public TaskListDto? _taskList { get; set; }
-    
-    [Inject]
     public ILogger<AddTasksListForm> _logger { get; set; }
     
     [Inject]
@@ -22,12 +19,7 @@ public partial class AddTasksListForm
     
     private AddRequest model = new();
     private bool _isLoading = false;
-    
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-    }
-    
+
     private async Task HandleSubmit()
     {
         _isLoading = true;
