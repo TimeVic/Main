@@ -39,7 +39,8 @@ public class LoadListEffect: Effect<LoadListAction>
                 var response = await _apiService.TasksGetListAsync(new GetListRequest()
                 {
                     TaskListId = tasksListId.Value,
-                    Page = PaginationUtils.CalculatePage(action.Skip)
+                    Page = PaginationUtils.CalculatePage(action.Skip),
+                    Filter = _state.Value.Filter
                 });
                 dispatcher.Dispatch(new SetListItemsAction(response));
             }

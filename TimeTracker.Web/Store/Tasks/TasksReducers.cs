@@ -44,4 +44,13 @@ public class TasksReducers
             IsListLoading = action.IsLoading
         };
     }
+    
+    [ReducerMethod]
+    public static TasksState SetListFilterActionReducer(TasksState state, SetListFilterAction action)
+    {
+        return state with
+        {
+            Filter = action.Filter
+        };
+    }
 }

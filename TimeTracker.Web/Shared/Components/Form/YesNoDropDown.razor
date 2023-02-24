@@ -1,0 +1,20 @@
+﻿<RadzenDropDown
+    @ref="_listReference"
+    Disabled="Disabled"
+    TValue="bool?"
+    Class="@(Class)"
+    AllowFiltering="false"
+    FilterOperator="StringFilterOperator.Contains"
+    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+    AllowSorting="false"
+    Multiple="false"
+    AllowClear="true"
+    AllowVirtualization="true"
+    Data="@_listItems"
+    TextProperty="Name"
+    ValueProperty="Value"
+    Placeholder="@Placeholder"
+    Value="@Value"
+    MaxSelectedLabels="10"
+    ValueChanged="OnValueChanged">
+</RadzenDropDown>
