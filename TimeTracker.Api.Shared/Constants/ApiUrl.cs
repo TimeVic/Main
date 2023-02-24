@@ -81,6 +81,7 @@ public class ApiUrl
     
     public const string TaskListAdd = "dashboard/tasks/list/add";
     public const string TaskListUpdate = "dashboard/tasks/list/update";
+    public const string TaskListArchive = "dashboard/tasks/list/archive";
     public const string TaskListList = "dashboard/tasks/list/get-list";
     
     #endregion

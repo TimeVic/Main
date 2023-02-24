@@ -121,6 +121,8 @@ namespace TimeTracker.Web.Services.Http
         Task<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.GetListResponse> TaskListGetListAsync(
             TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.GetListRequest model);
 
+        Task TaskListArchiveAsync(long taskListId);
+        
         #endregion
         
         #region Task

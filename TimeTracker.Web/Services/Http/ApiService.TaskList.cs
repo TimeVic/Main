@@ -39,5 +39,13 @@ namespace TimeTracker.Web.Services.Http
 
             return response;
         }
+        
+        public async Task TaskListArchiveAsync(long taskListId)
+        {
+            await PostAuthorizedAsync<TaskListDto>(ApiUrl.TaskListArchive, new ArchiveTaskListRequest()
+            {
+                TaskListId = taskListId
+            });
+        }
     }
 }

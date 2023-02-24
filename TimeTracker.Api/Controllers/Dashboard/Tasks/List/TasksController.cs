@@ -44,4 +44,10 @@ public class TasksController : MainApiControllerBase
         => this.RequestAsync()
             .For<GetListResponse>()
             .With(listRequest);
+    
+    [HttpPost("archive")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> ArchiveTaskList([FromBody] ArchiveTaskListRequest request)
+        => this.RequestAsync(request);
 }

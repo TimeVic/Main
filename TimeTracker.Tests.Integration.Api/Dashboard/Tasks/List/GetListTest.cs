@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
@@ -23,6 +24,7 @@ public class GetListTest: BaseTest
     private readonly IDataFactory<TaskListEntity> _taskListFactory;
     private readonly ITaskListSeeder _taskListSeeder;
     private readonly ProjectEntity _project;
+    private readonly ITaskListDao _taskListDao;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -30,6 +32,7 @@ public class GetListTest: BaseTest
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
+        _taskListDao = ServiceProvider.GetRequiredService<ITaskListDao>();
         
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectSeeder.CreateAsync(_defaultWorkspace).Result;
@@ -67,5 +70,25 @@ public class GetListTest: BaseTest
             Assert.NotNull(item.Project);
             Assert.Equal(_project.Id, item.Project.Id);
         });
+    }
+    
+    [Fact]
+    public async Task ShouldNotArchivedTasksLists()
+    {
+        var expectedCounter = 7;
+        var taskLists = await _taskListSeeder.CreateSeveralAsync(_project, expectedCounter + 3);
+        foreach (var taskList in taskLists.Skip(expectedCounter))
+        {
+            await _taskListDao.ArchiveTaskListAsync(taskList);
+        }
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter, actualDto.TotalCount);
     }
 }
