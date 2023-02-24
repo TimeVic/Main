@@ -24,7 +24,7 @@ public partial class FileUploader
     public StoredFileType FileType { get; set; }
 
     [Parameter]
-    public EventCallback<ICollection<StoredFileDto>> FilesUploaded { get; set; }
+    public EventCallback<StoredFileDto> FileUploaded { get; set; }
     
     [Parameter]
     public string Class { get; set; }
@@ -64,7 +64,6 @@ public partial class FileUploader
 
     private async Task OnInputFileChange(InputFileChangeEventArgs eventArguments)
     {
-        var uploadedFiles = new List<StoredFileDto>();
         if (eventArguments.FileCount > 0)
         {
             _isLoading = true;
@@ -78,7 +77,7 @@ public partial class FileUploader
                         FileType,
                         file
                     );
-                    uploadedFiles.Add(uploadedFileDto);
+                    await InvokeAsync(() => FileUploaded.InvokeAsync(uploadedFileDto));
                 }
                 catch (Exception e)
                 {
@@ -92,11 +91,6 @@ public partial class FileUploader
                 }
             }    
             _isLoading = false;
-        }
-
-        if (uploadedFiles.Any())
-        {
-            await InvokeAsync(() => FilesUploaded.InvokeAsync(uploadedFiles));
         }
     }
 
