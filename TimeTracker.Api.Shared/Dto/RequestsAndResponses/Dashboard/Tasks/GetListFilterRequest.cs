@@ -15,5 +15,13 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         public bool? IsArchived { get; set; }
         
         public bool? IsDone { get; set; }
+
+        public void Fill(GetListFilterRequest request)
+        {
+            AssignedUserId = request.AssignedUserId;
+            SearchString = request.SearchString;
+            IsArchived = request.IsArchived;
+            IsDone = request.IsDone;
+        }
     }
 }

@@ -1,0 +1,51 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
+@using Microsoft.AspNetCore.Components
+
+@inherits BaseComponent
+
+<RadzenTemplateForm TItem="GetListFilterRequest" Data="@model" Submit="HandleSubmit">
+    <RadzenCard class="mt-3">
+        <RadzenRow class="mb-1">
+            <RadzenColumn>
+                <MembersDropDown
+                    Class="w-100"
+                    Value="@(model.AssignedUserId ?? 0)"
+                    ValueChanged="OnChangeAssignedUserId"/>
+            </RadzenColumn>
+            <RadzenColumn Style="max-width: 170px;">
+                <YesNoDropDown
+                    Class="w-100"
+                    Placeholder="Only completed"
+                    @bind-Value="@model.IsDone"/>
+            </RadzenColumn>
+            <RadzenColumn Style="max-width: 150px;">
+                <YesNoDropDown
+                    Class="w-100"
+                    Placeholder="Only archived"
+                    @bind-Value="@model.IsArchived"/>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenColumn>
+                <RadzenTextBox
+                    Name="Title"
+                    @bind-Value="@model.SearchString"
+                    Placeholder="Write anything"
+                    Class="w-100"/>
+            </RadzenColumn>
+            <RadzenColumn Style="max-width: 150px">
+                <RadzenButton
+                    ButtonStyle="ButtonStyle.Primary"
+                    ButtonType="ButtonType.Submit"
+                    Icon="search"
+                    Text="Search"/>
+                <RadzenButton
+                    ButtonType="ButtonType.Button"
+                    ButtonStyle="ButtonStyle.Secondary"
+                    Click="ResetForm"
+                    class="ml-1"
+                    Icon="replay"/>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenCard>
+</RadzenTemplateForm>

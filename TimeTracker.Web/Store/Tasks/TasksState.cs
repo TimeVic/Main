@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 
 namespace TimeTracker.Web.Store.Tasks;
 
@@ -17,4 +18,6 @@ public record TasksState
     public bool IsListLoading { get; set; }
 
     public bool IsLoaded { get; set; } = false;
+
+    public GetListFilterRequest Filter { get; set; } = new();
 }
