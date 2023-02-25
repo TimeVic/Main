@@ -17,10 +17,10 @@ public partial class TasksListTree
     public long ClientId { get; set; }
 
     [Inject]
-    public IState<ProjectState> ProjectState { get; set; }
+    public IState<ProjectState> _projectState { get; set; }
     
     [Inject]
-    public IState<TasksListState> TasksListState { get; set; }
+    public IState<TasksListState> _tasksListState { get; set; }
 
     [Inject]
     public NavigationManager NavigationManager { get; set; }
@@ -34,7 +34,7 @@ public partial class TasksListTree
     {
         get
         {
-            var projects = ProjectState.Value.List;
+            var projects = _projectState.Value.List;
             return projects.Where(item => item.Client?.Id == _nullableClientId).ToList();
         }
     }
@@ -43,8 +43,8 @@ public partial class TasksListTree
     {
         get
         {
-            var taskLists = TasksListState.Value.List;
-            var projects = ProjectState.Value.List;
+            var taskLists = _tasksListState.Value.List;
+            var projects = _projectState.Value.List;
             return taskLists.Where(item =>
             {
                 var projectWithClient = projects.FirstOrDefault(item2 => item2.Id == item.Project.Id);
@@ -55,12 +55,12 @@ public partial class TasksListTree
 
     public long? _selectedTaskListId
     {
-        get => TasksListState.Value.SelectedTaskListId;
+        get => _tasksListState.Value.SelectedTaskListId;
     }
     
     public ICollection<TaskListDto> GetTasksList(ProjectDto project)
     {
-        return TasksListState.Value.List.Where(item => item.Project.Id == project.Id).ToList();
+        return _tasksListState.Value.List.Where(item => item.Project.Id == project.Id).ToList();
     }
 
     private void ShowAddTaskListModal()
@@ -70,10 +70,28 @@ public partial class TasksListTree
     
     private void ShowUpdateTaskListModal()
     {
-        var taskList = TasksListState.Value.List.First(item => item.Id == _selectedTaskListId);
+        var taskList = _tasksListState.Value.List.First(item => item.Id == _selectedTaskListId);
         InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal(taskList));
     }
 
+    private async Task OnDeleteTaskList()
+    {
+        var taskList = _tasksListState.Value.List.First(item => item.Id == _selectedTaskListId);
+        var isOk = await DialogService.Confirm(
+            "Are you sure you want to remove this task list?",
+            "Delete confirmation",
+            new ConfirmOptions()
+            {
+                OkButtonText = "Delete",
+                CancelButtonText = "Cancel"
+            }
+        );
+        if (isOk.HasValue && isOk.Value)
+        {
+            Dispatcher.Dispatch(new ArchiveTaskListAction(taskList));
+        }
+    }
+    
     private void OnSelectedTestsList(object tasksListIdObject)
     {
         var tasksListId = (long) tasksListIdObject;

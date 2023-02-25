@@ -36,9 +36,19 @@ public class TasksListReducers
             List = list
         };
     }
+    
+    [ReducerMethod]
+    public static TasksListState RemoveListItemsActionReducer(TasksListState state, RemoveListItemsAction action)
+    {
+        var list = state.List.Where(item => item.Id != action.TaskListId).ToList();
+        return state with
+        {
+            List = list
+        };
+    }
 
     [ReducerMethod]
-    public static TasksListState SetProjectIsListLoadingReducer(TasksListState state, SetIsListLoading action)
+    public static TasksListState SetProjectIsListLoadingReducer(TasksListState state, SetIsListLoadingAction action)
     {
         return state with
         {
@@ -47,7 +57,7 @@ public class TasksListReducers
     }
     
     [ReducerMethod]
-    public static TasksListState SetSelectedReducer(TasksListState state, SetSelected action)
+    public static TasksListState SetSelectedReducer(TasksListState state, SetSelectedAction action)
     {
         return state with
         {
