@@ -34,7 +34,7 @@ builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<ContextMenuService>();
 
 // Custom services
-builder.Services.AddScoped<IApiService, ApiService>();
+builder.Services.AddScoped<ApiService>();
 builder.Services.AddScoped<IReCaptchaService, ReCaptchaService>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<ITimeParsingService, TimeParsingService>();

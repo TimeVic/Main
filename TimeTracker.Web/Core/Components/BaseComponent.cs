@@ -20,7 +20,7 @@ public class BaseComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     protected IJSRuntime Js { get; set; }
     
     [Inject]
-    protected IApiService ApiService { get; set; }
+    protected ApiService ApiService { get; set; }
     
     [Inject]
     protected NavigationManager NavigationManager { get; set; }

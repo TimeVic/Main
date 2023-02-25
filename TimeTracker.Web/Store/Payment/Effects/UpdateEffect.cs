@@ -8,12 +8,12 @@ namespace TimeTracker.Web.Store.Payment.Effects;
 
 public class UpdateEffect: Effect<SavePaymentListItemAction>
 {
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
     private readonly NotificationService _notificationService;
 
     public UpdateEffect(
-        IApiService apiService,
+        ApiService apiService,
         ILogger<LoadListEffect> logger,
         NotificationService notificationService
     )

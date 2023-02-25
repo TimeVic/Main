@@ -12,11 +12,11 @@ public class LoadListEffect: Effect<LoadListAction>
 {
     private readonly IState<TasksState> _state;
     private readonly IState<TasksListState> _tasksListState;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
 
     public LoadListEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<TasksState> state,
         IState<TasksListState> tasksListState,
         ILogger<LoadListEffect> logger

@@ -13,11 +13,11 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
     private readonly IState<AuthState> _authState;
     private readonly IState<TimeEntryState> _timeEntryState;
     private readonly IState<ProjectState> _projectState;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<StartTimeEntryEffect> _logger;
 
     public StartTimeEntryEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         IState<TimeEntryState> timeEntryState,
         IState<ProjectState> projectState,

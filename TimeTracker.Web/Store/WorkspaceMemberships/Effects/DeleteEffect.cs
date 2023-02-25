@@ -7,12 +7,12 @@ namespace TimeTracker.Web.Store.WorkspaceMemberships.Effects;
 
 public class DeleteEffect: Effect<DeleteMemberAction>
 {
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
     private readonly NotificationService _notificationService;
 
     public DeleteEffect(
-        IApiService apiService,
+        ApiService apiService,
         ILogger<LoadListEffect> logger,
         NotificationService notificationService
     )

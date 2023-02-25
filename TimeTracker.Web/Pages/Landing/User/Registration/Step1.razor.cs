@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Pages.Landing.User.Registration;
 public partial class Step1
 {
     [Inject] 
-    private IApiService _apiService { get; set; }
+    private ApiService _apiService { get; set; }
     
     [Inject] 
     private NavigationManager _navigationManager { get; set; }

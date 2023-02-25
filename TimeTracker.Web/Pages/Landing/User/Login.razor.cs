@@ -12,7 +12,7 @@ namespace TimeTracker.Web.Pages.Landing.User;
 public partial class Login
 {
     [Inject] 
-    private IApiService _apiService { get; set; }
+    private ApiService _apiService { get; set; }
     
     [Inject] 
     private NavigationManager _navigationManager { get; set; }

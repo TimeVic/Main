@@ -20,7 +20,7 @@ public partial class Step2
     }
     
     [Inject] 
-    private IApiService _apiService { get; set; }
+    private ApiService _apiService { get; set; }
     
     [Inject] 
     private NavigationManager _navigationManager { get; set; }

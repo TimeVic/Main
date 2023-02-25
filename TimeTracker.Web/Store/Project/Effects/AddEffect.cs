@@ -11,12 +11,12 @@ public class AddEffect: Effect<SaveEmptyProjectListItemAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<ProjectState> _state;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
     private readonly NotificationService _notificationService;
 
     public AddEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         IState<ProjectState> state,
         ILogger<LoadListEffect> logger,

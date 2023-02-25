@@ -44,4 +44,12 @@ public class TasksController : MainApiControllerBase
         => this.RequestAsync()
             .For<GetListResponse>()
             .With(request);
+    
+    [HttpPost("get-one")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> GetOneTask([FromBody] GetOneRequest request)
+        => this.RequestAsync()
+            .For<TaskDto>()
+            .With(request);
 }

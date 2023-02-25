@@ -9,12 +9,12 @@ namespace TimeTracker.Web.Store.TimeEntry.Effects;
 public class DeleteTimeEntryEffect: Effect<DeleteTimeEntryAction>
 {
     private readonly IState<AuthState> _authState;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<DeleteTimeEntryEffect> _logger;
     private readonly NotificationService _toastService;
 
     public DeleteTimeEntryEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         ILogger<DeleteTimeEntryEffect> logger,
         NotificationService toastService

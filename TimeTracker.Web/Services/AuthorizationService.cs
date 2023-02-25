@@ -11,13 +11,13 @@ namespace TimeTracker.Web.Services
 {
     public class AuthorizationService: IAuthorizationService
     {   
-        private readonly IApiService _apiService;
+        private readonly ApiService _apiService;
         private readonly IDispatcher _dispatcher;
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<AuthorizationService> _logger;
 
         public AuthorizationService(
-            IApiService apiService, 
+            ApiService apiService, 
             IDispatcher dispatcher,
             IServiceProvider serviceProvider,
             ILogger<AuthorizationService> logger

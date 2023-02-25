@@ -11,7 +11,7 @@ using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Services.Http
 {
-    public partial class ApiService: IApiService
+    public partial class ApiService
     {
         private readonly HttpClient _httpClient;
         private readonly IServiceProvider _serviceProvider;

@@ -39,5 +39,19 @@ namespace TimeTracker.Web.Services.Http
 
             return response;
         }
+        
+        public async Task<TaskDto?> TasksGetAsync(long taskId)
+        {
+            var response = await PostAuthorizedAsync<TaskDto?>(ApiUrl.TasksGetOne, new GetOneRequest()
+            {
+                TaskId = taskId
+            });
+            if (response == null)
+            {
+                throw new ServerErrorException();
+            }
+
+            return response;
+        }
     }
 }

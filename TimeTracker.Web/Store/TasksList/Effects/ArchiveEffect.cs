@@ -10,14 +10,14 @@ namespace TimeTracker.Web.Store.TasksList.Effects;
 
 public class ArchiveEffect: Effect<ArchiveTaskListAction>
 {
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly IState<TasksListState> _taskListState;
     private readonly IState<ProjectState> _projectState;
     private readonly ILogger<ArchiveEffect> _logger;
     private readonly NavigationManager _navigationManager;
 
     public ArchiveEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<TasksListState> taskListState,
         IState<ProjectState> projectState,
         ILogger<ArchiveEffect> logger,

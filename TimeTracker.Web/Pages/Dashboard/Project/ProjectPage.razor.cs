@@ -21,7 +21,7 @@ public partial class ProjectPage
     private NavigationManager _navigationManager { get; set; }
     
     [Inject]
-    private IApiService _apiService { get; set; }
+    private ApiService _apiService { get; set; }
     
     private ProjectDto? _project;
     private UpdateRequest model = new();

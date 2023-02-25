@@ -9,11 +9,11 @@ namespace TimeTracker.Web.Store.TimeEntry.Effects;
 public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
 {
     private readonly IState<AuthState> _authState;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<StopTimeEntryEffect> _logger;
 
     public StopTimeEntryEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         ILogger<StopTimeEntryEffect> logger
     )

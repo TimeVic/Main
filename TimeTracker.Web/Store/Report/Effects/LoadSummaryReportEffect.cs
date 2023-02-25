@@ -15,11 +15,11 @@ public class LoadSummaryReportEffect: Effect<ReportFetchSummaryReportAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<ReportsState> _reportsState;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<LoadPaymentReportEffect> _logger;
 
     public LoadSummaryReportEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         IState<ReportsState> reportsState,
         ILogger<LoadPaymentReportEffect> logger

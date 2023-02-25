@@ -11,12 +11,12 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<ProjectState> _projectState;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<SetTimeEntryEffect> _logger;
     private readonly NotificationService _toastService;
 
     public SetTimeEntryEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         IState<ProjectState> projectState,
         ILogger<SetTimeEntryEffect> logger,
