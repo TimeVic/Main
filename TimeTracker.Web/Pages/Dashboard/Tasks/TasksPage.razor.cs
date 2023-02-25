@@ -32,7 +32,7 @@ public partial class TasksPage
 
     private void OnTasksListSelected(long? testsListId)
     {
-        Dispatcher.Dispatch(new Store.TasksList.SetSelected(testsListId));
+        Dispatcher.Dispatch(new Store.TasksList.SetSelectedAction(testsListId));
         Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction(0));
     }
 }

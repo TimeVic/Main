@@ -35,7 +35,7 @@ public class LoadListEffect: Effect<LoadListAction>
                 return;
             }
 
-            dispatcher.Dispatch(new SetIsListLoading(true));
+            dispatcher.Dispatch(new SetIsListLoadingAction(true));
             var response = await _apiService.TaskListGetListAsync(new GetListRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id
@@ -48,7 +48,7 @@ public class LoadListEffect: Effect<LoadListAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetIsListLoading(false));
+            dispatcher.Dispatch(new SetIsListLoadingAction(false));
         }
     }
 }

@@ -64,6 +64,15 @@
                 Click="ShowUpdateTaskListModal"
                 Icon="edit"/>
         </RadzenColumn>
+        <RadzenColumn Style="max-width: 36px;">
+            <RadzenButton
+                Variant="Variant.Text"
+                ButtonStyle="ButtonStyle.Danger"
+                Class="w-100"
+                Disabled="@(_selectedTaskListId == null)"
+                Click="OnDeleteTaskList"
+                Icon="delete"/>
+        </RadzenColumn>
     </RadzenRow>
 
 
