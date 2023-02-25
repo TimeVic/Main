@@ -9,11 +9,11 @@ public class LoadListEffect: Effect<LoadListAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<ClientState> _state;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
 
     public LoadListEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         IState<ClientState> state,
         ILogger<LoadListEffect> logger

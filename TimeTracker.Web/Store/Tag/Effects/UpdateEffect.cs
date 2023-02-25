@@ -10,12 +10,12 @@ public class UpdateEffect: Effect<UpdateItemAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<TagState> _state;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
     private readonly NotificationService _notificationService;
 
     public UpdateEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         IState<TagState> state,
         ILogger<LoadListEffect> logger,

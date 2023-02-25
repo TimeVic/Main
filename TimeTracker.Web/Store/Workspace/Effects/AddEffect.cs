@@ -8,12 +8,12 @@ namespace TimeTracker.Web.Store.Workspace.Effects;
 public class AddEffect: Effect<SaveEmptyListItemAction>
 {
     private readonly IState<WorkspaceState> _state;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<AddEffect> _logger;
     private readonly NotificationService _notificationService;
 
     public AddEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<WorkspaceState> state,
         ILogger<AddEffect> logger,
         NotificationService notificationService

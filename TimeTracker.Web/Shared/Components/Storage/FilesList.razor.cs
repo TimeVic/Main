@@ -24,7 +24,7 @@ public partial class FilesList
     public UrlService _urlService { get; set; }
     
     [Inject]
-    public IApiService _apiService { get; set; }
+    public ApiService _apiService { get; set; }
     
     [Inject]
     public ILogger<FilesList> _logger { get; set; }

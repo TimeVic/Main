@@ -30,7 +30,7 @@ public partial class FileUploader
     public string Class { get; set; }
     
     [Inject]
-    public IApiService _apiService { get; set; }
+    public ApiService _apiService { get; set; }
     
     [Inject]
     public NotificationService _toastService { get; set; }

@@ -10,12 +10,12 @@ public class AddEffect: Effect<AddNewMemberAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<WorkspaceMembershipsState> _state;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
     private readonly NotificationService _notificationService;
 
     public AddEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         IState<WorkspaceMembershipsState> state,
         ILogger<LoadListEffect> logger,

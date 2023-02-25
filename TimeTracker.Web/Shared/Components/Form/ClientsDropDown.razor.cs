@@ -39,7 +39,7 @@ public partial class ClientsDropDown
     public ILogger<ClientsDropDown> _logger { get; set; }
     
     [Inject]
-    public IApiService _apiService { get; set; }
+    public ApiService _apiService { get; set; }
     
     [Inject]
     public IState<AuthState> _authState { get; set; }

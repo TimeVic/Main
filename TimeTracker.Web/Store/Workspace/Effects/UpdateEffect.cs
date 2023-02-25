@@ -8,12 +8,12 @@ namespace TimeTracker.Web.Store.Workspace.Effects;
 public class UpdateEffect: Effect<UpdateWorkspaceAction>
 {
     private readonly IState<WorkspaceState> _state;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<UpdateEffect> _logger;
     private readonly NotificationService _notificationService;
 
     public UpdateEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<WorkspaceState> state,
         ILogger<UpdateEffect> logger,
         NotificationService notificationService

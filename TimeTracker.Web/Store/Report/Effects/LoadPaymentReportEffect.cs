@@ -11,11 +11,11 @@ public class LoadPaymentReportEffect: Effect<ReportFetchPaymentsReportAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<ReportsState> _reportState;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<LoadPaymentReportEffect> _logger;
 
     public LoadPaymentReportEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         IState<ReportsState> reportState,
         ILogger<LoadPaymentReportEffect> logger

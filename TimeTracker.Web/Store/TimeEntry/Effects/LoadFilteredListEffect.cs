@@ -12,11 +12,11 @@ public class LoadFilteredListEffect: Effect<LoadTimeEntryFilteredListAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<TimeEntryState> _state;
-    private readonly IApiService _apiService;
+    private readonly ApiService _apiService;
     private readonly ILogger<LoadFilteredListEffect> _logger;
 
     public LoadFilteredListEffect(
-        IApiService apiService,
+        ApiService apiService,
         IState<AuthState> authState,
         IState<TimeEntryState> state,
         ILogger<LoadFilteredListEffect> logger
