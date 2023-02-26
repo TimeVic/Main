@@ -65,8 +65,7 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            TaskListId = _taskList.Id,
-            Page = 1
+            TaskListId = _taskList.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -86,29 +85,7 @@ public class GetListTest: BaseTest
             return item.Attachments.Any() && !string.IsNullOrEmpty(item.Attachments.First().Url);
         });
     }
-    
-    [Fact]
-    public async Task ShouldReceiveSecondList()
-    {
-        var expectedCounter = 3;
-        var tasks = await _taskSeeder.CreateSeveralAsync(
-            _taskList,
-            expectedCounter + GlobalConstants.ListPageSize
-        );
-        await _fileStorage.PutFileAsync(tasks.First(), CreateFormFile(), StoredFileType.Attachment);
-        
-        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
-        {
-            TaskListId = _taskList.Id,
-            Page = 2
-        });
-        response.EnsureSuccessStatusCode();
 
-        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.Equal(expectedCounter + GlobalConstants.ListPageSize, actualDto.TotalCount);
-        Assert.Equal(expectedCounter, actualDto.Items.Count);
-    }
-    
     [Fact]
     public async Task ShouldFilterByAssignee()
     {
@@ -120,7 +97,6 @@ public class GetListTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
             TaskListId = _taskList.Id,
-            Page = 1,
             Filter = new GetListFilterRequest()
             {
                 AssignedUserId = user2.Id
@@ -152,7 +128,6 @@ public class GetListTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
             TaskListId = _taskList.Id,
-            Page = 1,
             Filter = new GetListFilterRequest()
             {
                 IsDone = true
@@ -184,7 +159,6 @@ public class GetListTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
             TaskListId = _taskList.Id,
-            Page = 1,
             Filter = new GetListFilterRequest()
             {
                 IsArchived = true
@@ -212,7 +186,6 @@ public class GetListTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
             TaskListId = _taskList.Id,
-            Page = 1,
             Filter = new GetListFilterRequest()
             {
                 SearchString = expectedSearchString
@@ -241,7 +214,6 @@ public class GetListTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
             TaskListId = _taskList.Id,
-            Page = 1,
             Filter = new GetListFilterRequest()
             {
                 SearchString = expectedSearchString
@@ -268,8 +240,7 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            TaskListId = _taskList.Id,
-            Page = 1
+            TaskListId = _taskList.Id
         });
         response.EnsureSuccessStatusCode();
 
