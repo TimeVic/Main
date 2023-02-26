@@ -3,15 +3,14 @@ using Microsoft.AspNetCore.Components;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Constants;
-using TimeTracker.Web.Store.TasksList;
-using LoadListAction = TimeTracker.Web.Store.Tasks.LoadListAction;
+using TimeTracker.Web.Store.Tasks;
 
 namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 
 public partial class AddTaskForm
 {
     [Inject]
-    public IState<TasksListState> TasksListState { get; set; }
+    public IState<TimeTracker.Web.Store.TasksList.TasksListState> TasksListState { get; set; }
     
     private AddRequest model = new();
     private bool _isLoading = false;
@@ -35,7 +34,7 @@ public partial class AddTaskForm
             var responseDto = await ApiService.TasksAddAsync(request);
             if (responseDto != null)
             {
-                Dispatcher.Dispatch(new LoadListAction());
+                Dispatcher.Dispatch(new SetListItemAction(responseDto));
                 model.Title = "";
                 NotificationService.Notify(new NotificationMessage()
                 {
