@@ -14,21 +14,22 @@ public static class SiteUrl
     public static readonly string Error404 = "/error/404";
     #endregion
     
-    public static readonly string DashboardBase = "/dashboard";
-    public static readonly string Dashboard_TimeEntry = "/dashboard";
-    public static readonly string Dashboard_Projects = "/dashboard/project";
-    public static readonly string Dashboard_Project = "/dashboard/project/{0}";
-    public static readonly string Dashboard_Clients = "/dashboard/client";
-    public static readonly string Dashboard_Tags = "/dashboard/tag";
-    public static readonly string Dashboard_Payments = "/dashboard/payment";
-    public static readonly string Dashboard_Members = "/dashboard/members";
-    public static readonly string Dashboard_Integrations = "/dashboard/integrations";
+    public static readonly string DashboardBase = "/board";
+    public static readonly string Dashboard_TimeEntry = "/board";
+    public static readonly string Dashboard_Projects = "/board/project";
+    public static readonly string Dashboard_Project = "/board/project/{0}";
+    public static readonly string Dashboard_Clients = "/board/client";
+    public static readonly string Dashboard_Tags = "/board/tag";
+    public static readonly string Dashboard_Payments = "/board/payment";
+    public static readonly string Dashboard_Members = "/board/members";
+    public static readonly string Dashboard_Integrations = "/board/integrations";
     
-    public static readonly string Dashboard_Reports_Summary = "/dashboard/report/summary";
-    public static readonly string Dashboard_Reports_Payments = "/dashboard/report/payments";
-    public static readonly string Dashboard_Reports_TimeEntries = "/dashboard/report/time-entries";
+    public static readonly string Dashboard_Reports_Summary = "/board/report/summary";
+    public static readonly string Dashboard_Reports_Payments = "/board/report/payments";
+    public static readonly string Dashboard_Reports_TimeEntries = "/board/report/time-entries";
     
-    public static readonly string Dashboard_Tasks = "/dashboard/tasks/{0}/{1}";
+    public static readonly string Dashboard_Tasks_Default = "/board/tasks/0";
+    public static readonly string Dashboard_Tasks = "/board/tasks/{0}/{1}";
     
-    public static readonly string Workspace_List = "/dashboard/workspaces";
+    public static readonly string Workspace_List = "/board/workspaces";
 }

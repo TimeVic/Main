@@ -1,0 +1,27 @@
+﻿@page "/board/task/{TaskId:long}"
+
+@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+
+@inherits BaseComponent
+@layout Layout
+
+<RadzenCard class="no-gutters mx-n4">
+    <RadzenButton
+        Click="NavigateToTasksPage"
+        Icon="arrow_back_ios"
+        ButtonStyle="ButtonStyle.Light"
+        Text="To list"
+    />
+</RadzenCard>
+
+<RadzenCard class="no-gutters mx-n4 mt-1">
+    @if (_isLoading)
+    {
+        <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+    }
+    else
+    {
+        <UpdateTaskForm Task="_task"/>
+    }
+</RadzenCard>
