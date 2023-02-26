@@ -21,7 +21,6 @@ public interface ITaskDao: IDomainService
 
     Task<ListDto<TaskEntity>> GetList(
         TaskListEntity taskList,
-        int page,
         GetTasksFilterDto? filter = null
     );
 }

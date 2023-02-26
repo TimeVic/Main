@@ -49,7 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             }
 
             var filter = _mapper.Map<GetTasksFilterDto>(request.Filter);
-            var taskLists = await _taskDao.GetList(taskList, request.Page, filter);
+            var taskLists = await _taskDao.GetList(taskList, filter);
             return new GetListResponse(
                 _mapper.Map<ICollection<TaskDto>>(taskLists.Items),
                 taskLists.TotalCount

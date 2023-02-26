@@ -10,10 +10,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         [IsPositive]
         public long TaskListId { get; set; }
 
-        [Required]
-        [IsPositive]
-        public int Page { get; set; } = 1;
-        
         public GetListFilterRequest? Filter { get; set; }
     }
 }

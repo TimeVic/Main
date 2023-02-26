@@ -28,7 +28,7 @@ public partial class TasksFilterForm
 
     private void LoadList()
     {
-        Dispatcher.Dispatch(new LoadListAction(0));
+        Dispatcher.Dispatch(new LoadListAction());
     }
 
     private void OnChangeAssignedUserId(long userId)

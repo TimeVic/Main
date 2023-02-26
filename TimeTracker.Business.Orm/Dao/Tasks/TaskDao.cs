@@ -51,12 +51,10 @@ public class TaskDao: ITaskDao
     
     public async Task<ListDto<TaskEntity>> GetList(
         TaskListEntity taskList,
-        int page,
         GetTasksFilterDto? filter = null
     )
     {
         var isArchived = filter?.IsArchived ?? false;
-        var offset = PaginationUtils.CalculateOffset(page);
         
         TaskListEntity taskListAlias = null;
         ProjectEntity projectAlias = null;
@@ -91,8 +89,6 @@ public class TaskDao: ITaskDao
             .OrderBy(item => item.IsDone).Asc
             .OrderBy(item => item.IsArchived).Asc
             .ThenBy(item => item.UpdateTime).Desc
-            .Skip(offset)
-            .Take(GlobalConstants.ListPageSize)
             .ListAsync<TaskEntity>();
         return new ListDto<TaskEntity>(
             items,
