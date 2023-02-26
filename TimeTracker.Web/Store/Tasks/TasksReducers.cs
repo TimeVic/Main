@@ -27,9 +27,13 @@ public class TasksReducers
             {
                 return action.Task;
             }
-
             return item;
         }).ToList();
+        if (list.All(item => item.Id != action.Task.Id))
+        {
+            list.Insert(0, action.Task);
+        }
+
         return state with
         {
             List = list

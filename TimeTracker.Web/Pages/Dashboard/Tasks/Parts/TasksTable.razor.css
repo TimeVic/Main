@@ -1,3 +1,7 @@
+.w-task-table ::deep {
+  height: calc(100vh - 295px);
+  overflow-y: scroll;
+}
 .w-task-table ::deep .w-task-item:hover {
   cursor: pointer;
 }
