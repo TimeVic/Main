@@ -31,7 +31,7 @@ public class ModalDialogProviderService
                 CloseDialogOnEsc = true,
                 AutoFocusFirstElement = true,
                 Resizable = false,
-                CloseDialogOnOverlayClick = true
+                CloseDialogOnOverlayClick = true,
             }
         );
     }
