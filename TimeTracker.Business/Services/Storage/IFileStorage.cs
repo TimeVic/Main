@@ -12,13 +12,15 @@ public interface IFileStorage: IDomainService
         TEntity entity,
         Stream fileStream,
         string fileName,
-        StoredFileType fileType
+        StoredFileType fileType,
+        CancellationToken cancellationToken = default
     ) where TEntity : IEntity;
 
     Task<StoredFileEntity> PutFileAsync<TEntity>(
         TEntity entity,
         IFormFile formFile,
-        StoredFileType fileType
+        StoredFileType fileType,
+        CancellationToken cancellationToken = default
     ) where TEntity : IEntity;
 
     Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, long fileId);

@@ -108,7 +108,7 @@ public class UploadTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldUploadBigZipFile()
+    public async Task ShouldUploadBigJpgFile()
     {
         Assert.Equal(0, _task.Attachments.Count);
 
