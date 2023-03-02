@@ -133,7 +133,8 @@ public partial class FileStorage: IFileStorage
                     _bucketName,
                     cloudThumbFileName,
                     "image/png",
-                    thumbStream
+                    thumbStream, 
+                    cancellationToken: cancellationToken
                 );
                 if (cloudFile != null)
                 {
@@ -162,7 +163,7 @@ public partial class FileStorage: IFileStorage
         ValidateFileType(formFile, fileType);
         using var fileStream = new MemoryStream();
         await formFile.CopyToAsync(fileStream);
-        return await PutFileAsync(entity, fileStream, formFile.FileName, fileType);
+        return await PutFileAsync(entity, fileStream, formFile.FileName, fileType, cancellationToken);
     }
     
     private void ValidateFileType(IFormFile file, StoredFileType fileType)
