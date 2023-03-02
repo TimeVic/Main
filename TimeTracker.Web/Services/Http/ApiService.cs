@@ -18,7 +18,7 @@ namespace TimeTracker.Web.Services.Http
         private readonly IConfiguration _configuration;
         
         private readonly string _apiUrl;
-        private readonly int _maxFileSize;
+        private readonly int _maxFileSizeInMb;
 
         public ApiService(
             HttpClient httpClient,
@@ -30,7 +30,7 @@ namespace TimeTracker.Web.Services.Http
             _serviceProvider = serviceProvider;
             _configuration = configuration;
             _apiUrl = _configuration.GetValue<string>("ApiUrl");
-            _maxFileSize = _configuration.GetValue<int>("MaxFileSize");
+            _maxFileSizeInMb = _configuration.GetValue<int>("MaxFileSize");
         }
 
         public string? GetJwt()
@@ -79,11 +79,10 @@ namespace TimeTracker.Web.Services.Http
             }
             if (file != null)
             {
-                var maxSize = _maxFileSize * 1024 * 1024;
+                var maxSize = _maxFileSizeInMb * 1024 * 1024;
                 if (file.Size > maxSize)
                 {
-                    var fileSizeMb = maxSize / 1024 / 1024;
-                    throw new Exception($"The file size cannot be larger than {fileSizeMb} Mb");
+                    throw new Exception($"The file size cannot be larger than {_maxFileSizeInMb} Mb");
                 }
 
                 var fileStreamContent = new StreamContent(file.OpenReadStream(maxSize));
