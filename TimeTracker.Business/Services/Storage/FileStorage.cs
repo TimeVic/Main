@@ -96,7 +96,7 @@ public partial class FileStorage: IFileStorage
             progress: new Progress<IUploadProgress>(handler =>
             {
                 var bytesString = StringUtils.BytesToString(handler.BytesSent);
-                _logger.LogTrace($"GCloud file uploading. Status: {handler.Status} Uploaded: {bytesString}");
+                _logger.LogDebug($"GCloud file uploading. Status: {handler.Status} Uploaded: {bytesString}");
             })
         );
         if (cloudFile == null)
