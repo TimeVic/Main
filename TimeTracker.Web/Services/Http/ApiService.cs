@@ -79,13 +79,14 @@ namespace TimeTracker.Web.Services.Http
             }
             if (file != null)
             {
-                if (file.Size > _maxFileSize)
+                var maxSize = _maxFileSize * 1024 * 1024;
+                if (file.Size > maxSize)
                 {
-                    var fileSizeMb = _maxFileSize / 1024 / 1024;
+                    var fileSizeMb = maxSize / 1024 / 1024;
                     throw new Exception($"The file size cannot be larger than {fileSizeMb} Mb");
                 }
 
-                var fileStreamContent = new StreamContent(file.OpenReadStream(_maxFileSize));
+                var fileStreamContent = new StreamContent(file.OpenReadStream(maxSize));
                 multipartFormContent.Add(fileStreamContent, name: "File", fileName: file.Name);
             }
             request.Content = multipartFormContent;
