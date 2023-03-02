@@ -88,7 +88,16 @@ public partial class FileStorage: IFileStorage
             _bucketName,
             cloudFileName,
             mimeType,
-            fileStream
+            fileStream,
+            options: new UploadObjectOptions()
+            {
+                ChunkSize = 1 * 1024 * 1024
+            },
+            progress: new Progress<IUploadProgress>(handler =>
+            {
+                var bytesString = StringUtils.BytesToString(handler.BytesSent);
+                _logger.LogTrace($"GCloud file uploading. Status: {handler.Status} Uploaded: {bytesString}");
+            })
         );
         if (cloudFile == null)
         {
