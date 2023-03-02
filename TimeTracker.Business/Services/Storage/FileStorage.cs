@@ -32,10 +32,12 @@ public partial class FileStorage: IFileStorage
     private readonly ISecurityManager _securityManager;
     private const string CredentialsFilepath = "../../../../.credentials/google.json";
     
-    private readonly StorageClient _googleClient;
     private readonly Bucket _bucket;
     private readonly string? _bucketName;
     private readonly string? _projectId;
+    private readonly GoogleCredential _credentials;
+
+    private StorageClient _googleClient => StorageClient.Create(_credentials);
     
     public FileStorage(
         IConfiguration configuration,
@@ -60,24 +62,23 @@ public partial class FileStorage: IFileStorage
             FileMode.Open,
             FileAccess.Read
         );
-        var credentials = GoogleCredential.FromStream(credentialsStream);
-        if (credentials == null)
-            throw new ArgumentNullException(nameof(credentials));
+        _credentials = GoogleCredential.FromStream(credentialsStream);
+        if (_credentials == null)
+            throw new ArgumentNullException(nameof(_credentials));
         _bucketName = configuration.GetValue<string>("Google:Storage:BucketName");
         if (_bucketName == null)
             throw new ArgumentNullException(nameof(_bucketName));
         _projectId = configuration.GetValue<string>("Google:Storage:ProjectId");
         if (_projectId == null)
             throw new ArgumentNullException(nameof(_projectId));
-
-        _googleClient = StorageClient.Create(credentials);
     }
 
     public async Task<StoredFileEntity> PutFileAsync<TEntity>(
         TEntity entity,
         Stream fileStream,
         string fileName,
-        StoredFileType fileType
+        StoredFileType fileType,
+        CancellationToken cancellationToken = default
     ) where TEntity : IEntity
     {
         var fileExtension = Path.GetExtension(fileName).Replace(".", "");
@@ -89,6 +90,7 @@ public partial class FileStorage: IFileStorage
             cloudFileName,
             mimeType,
             fileStream,
+            cancellationToken: cancellationToken,
             options: new UploadObjectOptions()
             {
                 ChunkSize = 1 * 1024 * 1024
@@ -153,7 +155,8 @@ public partial class FileStorage: IFileStorage
     public async Task<StoredFileEntity> PutFileAsync<TEntity>(
         TEntity entity,
         IFormFile formFile,
-        StoredFileType fileType
+        StoredFileType fileType,
+        CancellationToken cancellationToken = default
     ) where TEntity: IEntity
     {
         ValidateFileType(formFile, fileType);

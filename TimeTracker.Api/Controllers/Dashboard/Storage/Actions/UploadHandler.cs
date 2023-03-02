@@ -55,7 +55,11 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
             {
                 throw new HasNoAccessException();
             }
-            var file = await _fileStorage.PutFileAsync(entity, request.File, request.FileType);
+            var file = await _fileStorage.PutFileAsync(
+                entity,
+                request.File,
+                request.FileType
+            );
             return _mapper.Map<StoredFileDto>(file);
         }
     }
