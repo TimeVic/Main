@@ -69,7 +69,7 @@ public class PutFileTest: BaseTest
     {
         var randomizer = new Random();
         var fileBytes = Enumerable
-            .Repeat(0, 1024 * 1024 * 15 + 1)
+            .Repeat(0, 1024 * 1024 * 50 + 1)
             .Select(x => Convert.ToByte(randomizer.Next(0, 254)))
             .ToArray();
         var fileWithoutExtension = CreateFormFile("test.pdf", fileBytes);
