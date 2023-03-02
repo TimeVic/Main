@@ -37,7 +37,7 @@
     <RadzenDataGridColumn
         TItem="TimeEntryDto"
         Title="Duration"
-        Width="60px"
+        Width="40px"
         TextAlign="TextAlign.Center">
 
         <Template Context="entry">
@@ -48,7 +48,7 @@
     <RadzenDataGridColumn
         TItem="TimeEntryDto"
         Title="Time"
-        Width="120px"
+        Width="100px"
         TextAlign="TextAlign.Center">
 
         <Template Context="entry">
@@ -58,9 +58,6 @@
                     -
                 </div>
                 @_timeParsingService.TimeSpanToTimeString(entry.EndTime.Value)
-            </div>
-            <div>
-                @entry.Date.ToString("d")
             </div>
         </Template>
         <EditTemplate Context="entry">
@@ -106,14 +103,14 @@
             <ProjectsDropDown
                 Value="@(entry.Project?.Id ?? 0)"
                 SelectedItemChanged="project => entry.Project = project"
-                Class="ml-1"/>
+                Class="w-100"/>
         </EditTemplate>
     </RadzenDataGridColumn>
 
     <RadzenDataGridColumn
         TItem="TimeEntryDto"
         Title="Task ID"
-        Width="100px">
+        Width="50px">
 
         <Template Context="entry">
             @if (entry.Task != null)
@@ -139,7 +136,7 @@
                 if (!entry?.IsSynced ?? false)
                 {
                     <RadzenTextBox
-                        Class="ml-1"
+                        Class="w-100"
                         MaxLength="500"
                         @bind-Value="@entry.TaskId"/>    
                 }
@@ -161,7 +158,7 @@
         </Template>
         <EditTemplate Context="entry">
             <RadzenTextBox
-                Class="ml-1"
+                Class="w-100"
                 @bind-Value="@entry.Description"/>
         </EditTemplate>
     </RadzenDataGridColumn>
@@ -175,14 +172,12 @@
             <RadzenText class="d-block" TextStyle="TextStyle.Caption">
                 <RadzenCheckBox
                     Disabled="true"
-                    Class="ml-1"
                     @bind-Value="@entry.IsBillable"
                     MouseEnter="(args) => ShowBillableRateTooltip(args, entry)"/>
             </RadzenText>
         </Template>
         <EditTemplate Context="entry">
             <RadzenCheckBox
-                Class="ml-1"
                 @bind-Value="@entry.IsBillable"/>
         </EditTemplate>
     </RadzenDataGridColumn>
