@@ -36,11 +36,11 @@ public class PutFileTest: BaseTest
         Assert.True(actualFile.Size > 0);
         Assert.Equal(StoredFileType.Attachment, actualFile.Type);
     }
-    
+
     [Fact]
     public async Task ShouldCreateThumbIfImage()
     {
-        var formFile = CreateFormFile("test.jpg");
+        var formFile = CreateFormFile("images/image.jpg");
         var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
         Assert.NotNull(actualFile.ThumbCloudFilePath);
         Assert.NotEmpty(actualFile.ThumbCloudFilePath);
@@ -49,7 +49,7 @@ public class PutFileTest: BaseTest
     [Fact]
     public async Task ShouldPutImage()
     {
-        var formFile = CreateFormFile("image.jpg");
+        var formFile = CreateFormFile("images/image.jpg");
         var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
         Assert.True(actualFile.Id > 0);
     }

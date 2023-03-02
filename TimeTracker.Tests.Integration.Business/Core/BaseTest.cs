@@ -80,7 +80,7 @@ public abstract class BaseTest: IDisposable
             
         var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
         stubsPath = Path.GetDirectoryName(stubsPath);
-        stubsPath = Path.Combine(stubsPath, "stubs", "images");
+        stubsPath = Path.Combine(stubsPath, "stubs");
             
         fileExtension = fileExtension.Trim().ToLower();
         if (fileBytes != null)
@@ -89,11 +89,10 @@ public abstract class BaseTest: IDisposable
         }
         else
         {
-            if (fileExtension == "jpg" || fileExtension == "jpeg")
+            var file = Path.Combine(stubsPath, fileName);
+            if (File.Exists(file))
             {
-                var stubFileBytes = File.ReadAllBytes(
-                    Path.Combine(stubsPath, "image.jpg")
-                );
+                var stubFileBytes = File.ReadAllBytes(file);
                 stream.Write(stubFileBytes);
             }
             else
