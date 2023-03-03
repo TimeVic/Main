@@ -62,6 +62,17 @@ node('testing-node') {
             withCredentials([string(credentialsId: "timevic_testing_google__storage_bucket_name", variable: 'AUTH_SECRET')]) {
                 containerEnvVars.put('Google__Storage__BucketName', AUTH_SECRET)
             }
+            
+            withCredentials([
+                usernamePassword(credentialsId: "timevic_testing_aws_s3_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
+            ]) {
+                containerEnvVars.put('AWS__S3__AccessKey', USER_NAME)
+                containerEnvVars.put('AWS__S3__SecretKey', PASSWORD)
+            }
+            
+            withCredentials([string(credentialsId: "timevic_testing_aws_s3_bucket_name", variable: 'AUTH_SECRET')]) {
+                containerEnvVars.put('AWS__S3__BucketName', AUTH_SECRET)
+            }
         }
 
         def testImage = docker.build('timevic-test-image', '--file=./devops/test-github/Dockerfile .')

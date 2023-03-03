@@ -90,6 +90,18 @@ node('abedor-mainframe-web-2') {
         withCredentials([string(credentialsId: "timevic_production_google__storage_bucket_name", variable: 'AUTH_SECRET')]) {
             envVariables.put('Google__Storage__BucketName', AUTH_SECRET)
         }
+        
+        withCredentials([
+            usernamePassword(credentialsId: "timevic_production_aws_s3_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
+        ]) {
+            envVariables.put('AWS__S3__AccessKey', USER_NAME)
+            envVariables.put('AWS__S3__SecretKey', PASSWORD)
+        }
+        
+        withCredentials([string(credentialsId: "timevic_production_aws_s3_bucket_name", variable: 'AUTH_SECRET')]) {
+            envVariables.put('AWS__S3__BucketName', AUTH_SECRET)
+        }
+        
     }
 
     stage('Stop containers') {

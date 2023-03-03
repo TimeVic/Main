@@ -1,18 +1,15 @@
-﻿using Domain.Abstractions;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Storage.v1.Data;
-using Google.Apis.Upload;
-using Google.Cloud.Storage.V1;
+﻿using Amazon.Runtime;
+using Amazon.S3;
+using Amazon.S3.Model;
+using Domain.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Persistence.Transactions.Behaviors;
 using SixLabors.ImageSharp;
-using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
-using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Orm.Entities;
@@ -30,14 +27,9 @@ public partial class FileStorage: IFileStorage
     private readonly ILogger<IFileStorage> _logger;
     private readonly IFileStorageRelationshipService _relationshipService;
     private readonly ISecurityManager _securityManager;
-    private const string CredentialsFilepath = "../../../../.credentials/google.json";
     
-    private readonly Bucket _bucket;
     private readonly string? _bucketName;
-    private readonly string? _projectId;
-    private readonly GoogleCredential _credentials;
-
-    private StorageClient _googleClient => StorageClient.Create(_credentials);
+    private readonly AmazonS3Client _s3Client;
     
     public FileStorage(
         IConfiguration configuration,
@@ -51,26 +43,19 @@ public partial class FileStorage: IFileStorage
         _logger = logger;
         _relationshipService = relationshipService;
         _securityManager = securityManager;
-        var filePath = Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath);
-        if (!File.Exists(filePath))
-        {
-            throw new FileNotFoundException($"Google Cloud credentials file not found: {filePath}");
-        }
-
-        using var credentialsStream = new FileStream(
-            Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath),
-            FileMode.Open,
-            FileAccess.Read
-        );
-        _credentials = GoogleCredential.FromStream(credentialsStream);
-        if (_credentials == null)
-            throw new ArgumentNullException(nameof(_credentials));
-        _bucketName = configuration.GetValue<string>("Google:Storage:BucketName");
+        
+        var accessKey = configuration.GetValue<string>("AWS:S3:AccessKey");
+        if (accessKey == null)
+            throw new ArgumentNullException(nameof(accessKey));
+        var secretKey = configuration.GetValue<string>("AWS:S3:SecretKey");
+        if (secretKey == null)
+            throw new ArgumentNullException(nameof(secretKey));
+        _bucketName = configuration.GetValue<string>("AWS:S3:BucketName");
         if (_bucketName == null)
             throw new ArgumentNullException(nameof(_bucketName));
-        _projectId = configuration.GetValue<string>("Google:Storage:ProjectId");
-        if (_projectId == null)
-            throw new ArgumentNullException(nameof(_projectId));
+
+        var options = new BasicAWSCredentials(accessKey, secretKey);
+        _s3Client = new AmazonS3Client(options, Amazon.RegionEndpoint.EUCentral1);
     }
 
     public async Task<StoredFileEntity> PutFileAsync<TEntity>(
@@ -81,25 +66,26 @@ public partial class FileStorage: IFileStorage
         CancellationToken cancellationToken = default
     ) where TEntity : IEntity
     {
+        
+
+        using var cloudFileStream = new MemoryStream();
+        fileStream.PrepareToCopy();
+        await fileStream.CopyToAsync(cloudFileStream, cancellationToken);
+        cloudFileStream.PrepareToCopy();
+        
         var fileExtension = Path.GetExtension(fileName).Replace(".", "");
         var cloudFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath(fileExtension)}";
         var mimeType = MimeTypeHelper.GetMimeType(fileExtension);
-        
-        var cloudFile = await _googleClient.UploadObjectAsync(
-            _bucketName,
-            cloudFileName,
-            mimeType,
-            fileStream,
-            cancellationToken: cancellationToken,
-            options: new UploadObjectOptions()
+
+        var fileSize = fileStream.Length;
+        var cloudFile = await _s3Client.PutObjectAsync(
+            new PutObjectRequest()
             {
-                ChunkSize = 1 * 1024 * 1024
+                BucketName = _bucketName,
+                Key = cloudFileName,
+                InputStream = cloudFileStream
             },
-            progress: new Progress<IUploadProgress>(handler =>
-            {
-                var bytesString = StringUtils.BytesToString(handler.BytesSent);
-                _logger.LogDebug($"GCloud file uploading. Status: {handler.Status} Uploaded: {bytesString}");
-            })
+            cancellationToken: cancellationToken
         );
         if (cloudFile == null)
         {
@@ -109,36 +95,42 @@ public partial class FileStorage: IFileStorage
         {
             Extension = fileExtension,
             MimeType = mimeType,
-            CloudFilePath = cloudFile.Name,
+            CloudFilePath = cloudFileName,
             OriginalFileName = fileName,
             Type = fileType,
-            Size = Convert.ToInt64(cloudFile.Size),
+            Size = fileSize,
             CreateTime = DateTime.UtcNow
         };
 
         if (IsImageMimeType(mimeType))
         {
+            using var cloudThumbFileStream = new MemoryStream();
+            fileStream.PrepareToCopy();
+            await fileStream.CopyToAsync(cloudThumbFileStream, cancellationToken);
+            cloudThumbFileStream.PrepareToCopy();
+            
             try
             {
-                fileStream.Position = 0;
                 var thumbImage = await ImageHelper.ResizeImageFromStreamAsync(
-                    fileStream,
+                    cloudThumbFileStream,
                     Thumb_MaxWidth,
                     Thumb_MaxHeight
                 );
                 using var thumbStream = new MemoryStream();
-                await thumbImage.SaveAsPngAsync(thumbStream);
+                await thumbImage.SaveAsPngAsync(thumbStream, cancellationToken: cancellationToken);
                 var cloudThumbFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath("png")}";
-                var cloudThumbFile = await _googleClient.UploadObjectAsync(
-                    _bucketName,
-                    cloudThumbFileName,
-                    "image/png",
-                    thumbStream, 
+                await _s3Client.PutObjectAsync(
+                    new PutObjectRequest()
+                    {
+                        BucketName = _bucketName,
+                        Key = cloudThumbFileName,
+                        InputStream = thumbStream
+                    },
                     cancellationToken: cancellationToken
                 );
                 if (cloudFile != null)
                 {
-                    storedFile.ThumbCloudFilePath = cloudThumbFile.Name;
+                    storedFile.ThumbCloudFilePath = cloudThumbFileName;
                 }
             }
             catch (Exception e)
@@ -147,7 +139,7 @@ public partial class FileStorage: IFileStorage
             }
         }
 
-        await _dbSessionProvider.CurrentSession.SaveAsync(storedFile);
+        await _dbSessionProvider.CurrentSession.SaveAsync(storedFile, cancellationToken);
         await _relationshipService.AddFileRelationship(entity, storedFile);
         await fileStream.DisposeAsync();
         return storedFile;
@@ -162,7 +154,7 @@ public partial class FileStorage: IFileStorage
     {
         ValidateFileType(formFile, fileType);
         using var fileStream = new MemoryStream();
-        await formFile.CopyToAsync(fileStream);
+        await formFile.CopyToAsync(fileStream, cancellationToken);
         return await PutFileAsync(entity, fileStream, formFile.FileName, fileType, cancellationToken);
     }
     
