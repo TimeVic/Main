@@ -54,8 +54,13 @@ public partial class FileStorage: IFileStorage
         if (_bucketName == null)
             throw new ArgumentNullException(nameof(_bucketName));
 
+        var config = new AmazonS3Config()
+        {
+            RegionEndpoint = Amazon.RegionEndpoint.EUCentral1,
+            DisableLogging = false
+        };
         var options = new BasicAWSCredentials(accessKey, secretKey);
-        _s3Client = new AmazonS3Client(options, Amazon.RegionEndpoint.EUCentral1);
+        _s3Client = new AmazonS3Client(options, config);
     }
 
     public async Task<StoredFileEntity> PutFileAsync<TEntity>(
@@ -77,13 +82,21 @@ public partial class FileStorage: IFileStorage
         var cloudFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath(fileExtension)}";
         var mimeType = MimeTypeHelper.GetMimeType(fileExtension);
 
+        var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        stubsPath = Path.GetDirectoryName(stubsPath);
+        stubsPath = Path.Combine(stubsPath, "stubs", "video.mp4");
+        
         var fileSize = fileStream.Length;
         var cloudFile = await _s3Client.PutObjectAsync(
             new PutObjectRequest()
             {
                 BucketName = _bucketName,
                 Key = cloudFileName,
-                InputStream = cloudFileStream
+                FilePath = stubsPath, 
+                StreamTransferProgress = (sender, args) =>
+                {
+                    _logger.LogDebug($"S3 file uploading progress: {args.PercentDone}%");
+                }
             },
             cancellationToken: cancellationToken
         );
