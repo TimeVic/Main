@@ -6,6 +6,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
@@ -45,7 +46,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
             var user = await _userDao.GetById(userId);
 
             var (file, fileStream) = await _fileStorage.GetFileStream(user, request.FileId);
-            fileStream.Position = 0;
+            fileStream.PrepareToCopy();
             return new FileResponse(fileStream, file.MimeType);
         }
     }

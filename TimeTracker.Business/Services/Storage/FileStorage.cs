@@ -66,6 +66,13 @@ public partial class FileStorage: IFileStorage
         CancellationToken cancellationToken = default
     ) where TEntity : IEntity
     {
+        
+
+        using var cloudFileStream = new MemoryStream();
+        fileStream.PrepareToCopy();
+        await fileStream.CopyToAsync(cloudFileStream, cancellationToken);
+        cloudFileStream.PrepareToCopy();
+        
         var fileExtension = Path.GetExtension(fileName).Replace(".", "");
         var cloudFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath(fileExtension)}";
         var mimeType = MimeTypeHelper.GetMimeType(fileExtension);
@@ -76,7 +83,7 @@ public partial class FileStorage: IFileStorage
             {
                 BucketName = _bucketName,
                 Key = cloudFileName,
-                InputStream = fileStream
+                InputStream = cloudFileStream
             },
             cancellationToken: cancellationToken
         );
@@ -97,11 +104,15 @@ public partial class FileStorage: IFileStorage
 
         if (IsImageMimeType(mimeType))
         {
+            using var cloudThumbFileStream = new MemoryStream();
+            fileStream.PrepareToCopy();
+            await fileStream.CopyToAsync(cloudThumbFileStream, cancellationToken);
+            cloudThumbFileStream.PrepareToCopy();
+            
             try
             {
-                fileStream.Position = 0;
                 var thumbImage = await ImageHelper.ResizeImageFromStreamAsync(
-                    fileStream,
+                    cloudThumbFileStream,
                     Thumb_MaxWidth,
                     Thumb_MaxHeight
                 );
@@ -130,6 +141,7 @@ public partial class FileStorage: IFileStorage
 
         await _dbSessionProvider.CurrentSession.SaveAsync(storedFile, cancellationToken);
         await _relationshipService.AddFileRelationship(entity, storedFile);
+        await fileStream.DisposeAsync();
         return storedFile;
     }
 

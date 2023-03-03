@@ -24,6 +24,8 @@ public partial class FileStorage: IFileStorage
             throw new RecordNotFoundException($"S3 File not found: {file.CloudFilePath}");
         }
 
-        return (file, fileResponse.ResponseStream);
+        var fileStream = new MemoryStream();
+        await fileResponse.ResponseStream.CopyToAsync(fileStream);
+        return (file, fileStream);
     }
 }
