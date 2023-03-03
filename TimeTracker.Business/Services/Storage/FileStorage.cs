@@ -81,10 +81,6 @@ public partial class FileStorage: IFileStorage
         var fileExtension = Path.GetExtension(fileName).Replace(".", "");
         var cloudFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath(fileExtension)}";
         var mimeType = MimeTypeHelper.GetMimeType(fileExtension);
-
-        var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-        stubsPath = Path.GetDirectoryName(stubsPath);
-        stubsPath = Path.Combine(stubsPath, "stubs", "video.mp4");
         
         var fileSize = fileStream.Length;
         var cloudFile = await _s3Client.PutObjectAsync(
@@ -92,7 +88,7 @@ public partial class FileStorage: IFileStorage
             {
                 BucketName = _bucketName,
                 Key = cloudFileName,
-                FilePath = stubsPath, 
+                InputStream = cloudFileStream, 
                 StreamTransferProgress = (sender, args) =>
                 {
                     _logger.LogDebug($"S3 file uploading progress: {args.PercentDone}%");
