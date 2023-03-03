@@ -7,6 +7,7 @@ using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Dto.RequestsAndResponses.Storage;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
+using TimeTracker.Business.Services.Storage;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Storage;
 
@@ -24,6 +25,7 @@ public class StorageController : MainApiControllerBase
     }
 
     [HttpPost("upload")]
+    [RequestSizeLimit(FileStorage.MaxFileSize)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Upload([FromForm] UploadRequest request)
