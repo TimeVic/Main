@@ -1,4 +1,5 @@
-﻿using Amazon.Runtime;
+﻿using System.Net;
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Domain.Abstractions;
@@ -57,7 +58,10 @@ public partial class FileStorage: IFileStorage
         var config = new AmazonS3Config()
         {
             RegionEndpoint = Amazon.RegionEndpoint.EUCentral1,
-            DisableLogging = false
+            DisableLogging = true,
+            BufferSize = 65536, // 64KB Use a larger buffer size, normally 8K default.
+            DefaultConfigurationMode = DefaultConfigurationMode.InRegion,
+            UseFIPSEndpoint = false,
         };
         var options = new BasicAWSCredentials(accessKey, secretKey);
         _s3Client = new AmazonS3Client(options, config);
@@ -71,31 +75,25 @@ public partial class FileStorage: IFileStorage
         CancellationToken cancellationToken = default
     ) where TEntity : IEntity
     {
-        
-
-        using var cloudFileStream = new MemoryStream();
         fileStream.PrepareToCopy();
-        await fileStream.CopyToAsync(cloudFileStream, cancellationToken);
-        cloudFileStream.PrepareToCopy();
         
         var fileExtension = Path.GetExtension(fileName).Replace(".", "");
         var cloudFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath(fileExtension)}";
         var mimeType = MimeTypeHelper.GetMimeType(fileExtension);
         
         var fileSize = fileStream.Length;
-        var cloudFile = await _s3Client.PutObjectAsync(
-            new PutObjectRequest()
+        var s3Request = new PutObjectRequest()
+        {
+            BucketName = _bucketName,
+            Key = cloudFileName,
+            InputStream = fileStream,
+            AutoCloseStream = false,
+            StreamTransferProgress = (sender, args) =>
             {
-                BucketName = _bucketName,
-                Key = cloudFileName,
-                InputStream = cloudFileStream, 
-                StreamTransferProgress = (sender, args) =>
-                {
-                    _logger.LogDebug($"S3 file uploading progress: {args.PercentDone}%");
-                }
-            },
-            cancellationToken: cancellationToken
-        );
+                _logger.LogDebug($"S3 file uploading progress: {args.PercentDone}%");
+            }
+        };
+        var cloudFile = await _s3Client.PutObjectAsync(s3Request);
         if (cloudFile == null)
         {
             throw new Exception($"File was not uploaded to cloud: {cloudFileName}");
@@ -113,15 +111,11 @@ public partial class FileStorage: IFileStorage
 
         if (IsImageMimeType(mimeType))
         {
-            using var cloudThumbFileStream = new MemoryStream();
             fileStream.PrepareToCopy();
-            await fileStream.CopyToAsync(cloudThumbFileStream, cancellationToken);
-            cloudThumbFileStream.PrepareToCopy();
-            
             try
             {
                 var thumbImage = await ImageHelper.ResizeImageFromStreamAsync(
-                    cloudThumbFileStream,
+                    fileStream,
                     Thumb_MaxWidth,
                     Thumb_MaxHeight
                 );

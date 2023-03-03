@@ -55,6 +55,14 @@ public class PutFileTest: BaseTest
     }
     
     [Fact]
+    public async Task ShouldPutPdf()
+    {
+        var formFile = CreateFormFile("sample-30mb.pdf");
+        var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
+        Assert.True(actualFile.Id > 0);
+    }
+    
+    [Fact]
     public async Task ShouldThrowExceptionIfNoExtension()
     {
         var fileWithoutExtension = CreateFormFile("test");
