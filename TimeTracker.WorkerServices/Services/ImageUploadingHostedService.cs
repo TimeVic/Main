@@ -1,6 +1,4 @@
 using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Orm.Constants;
-using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.WorkerServices.Core;
 
@@ -10,15 +8,16 @@ namespace TimeTracker.WorkerServices.Services
     {
         private readonly IFileStorage _fileStorage;
         private readonly IDbSessionProvider _dbSessionProvider;
+        private readonly IServiceScope _scope;
 
         public ImageUploadingHostedService(
             ILogger<ABackgroundService> logger,
-            IFileStorage fileStorage,
-            IDbSessionProvider dbSessionProvider
+            IServiceScopeFactory serviceScopeFactory
         ) : base(logger)
         {
-            _fileStorage = fileStorage;
-            _dbSessionProvider = dbSessionProvider;
+            _scope = serviceScopeFactory.CreateScope();
+            _fileStorage = _scope.ServiceProvider.GetService<IFileStorage>();
+            _dbSessionProvider = _scope.ServiceProvider.GetService<IDbSessionProvider>();
             ServiceName = "ImageUploadingHostedService";
         }
 
@@ -31,6 +30,12 @@ namespace TimeTracker.WorkerServices.Services
                 await _dbSessionProvider.PerformCommitAsync(cancellationToken);
                 await Task.Delay(500, cancellationToken);
             }
+        }
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+            _scope.Dispose();
         }
     }
 }

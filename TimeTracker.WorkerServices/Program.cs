@@ -17,26 +17,9 @@ public class Program
         Log.Logger = log;
 
         Serilog.Debugging.SelfLog.Enable(Console.WriteLine);
-
-        var containerBuilder = new ContainerBuilder();
-        var container = containerBuilder.Build();
-
-        var host1 = CreateHostBuilder<Services.QueueProcessingHostedService>(
-            args,
-            container,
-            "queue_processing_scope"
-        );
-        var host2 = CreateHostBuilder<Services.ImageUploadingHostedService>(
-            args,
-            container,
-            "storage_processing_scope"
-        );
         try
         {
-            await Task.WhenAll(
-                host2.RunAsync(),
-                host1.RunAsync()
-            );
+            await CreateHostBuilder(args).RunAsync();
         }
         catch (Exception e)
         {
@@ -48,18 +31,14 @@ public class Program
         }
     }
 
-    private static IHost CreateHostBuilder<THostedService>(
-        string[] args,
-        ILifetimeScope container,
-        string scopeName
-    ) where THostedService : class, IHostedService
+    private static IHost CreateHostBuilder(string[] args)
     {
         return Host.CreateDefaultBuilder(args)
             .UseSerilog(Log.Logger)
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<Startup<THostedService>>();
+                webBuilder.UseStartup<Startup>();
             })
             .Build();
     }

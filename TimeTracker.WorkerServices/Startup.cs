@@ -7,7 +7,7 @@ using TimeTracker.Business.Notifications;
 
 namespace TimeTracker.WorkerServices;
 
-public class Startup<THostedService> where THostedService : class, IHostedService
+public class Startup
 {
     public Startup(IConfiguration configuration)
     {
@@ -19,13 +19,14 @@ public class Startup<THostedService> where THostedService : class, IHostedServic
     // This method gets called by the runtime. Use this method to add services to the container.
     public virtual void ConfigureServices(IServiceCollection services)
     {
-        services.AddHostedService<THostedService>();
+        services.AddHostedService<Services.QueueProcessingHostedService>();
+        services.AddHostedService<Services.ImageUploadingHostedService>();
     }
 
-    public void ConfigureContainer(ContainerBuilder builder)
+    public void ConfigureContainer(ContainerBuilder containerBuilder)
     {
-        builder.RegisterAssemblyModules(typeof(BusinessAssemblyMarker).Assembly);
-        builder.RegisterAssemblyModules(typeof(BusinessNotificationsAssemblyMarker).Assembly);
+        containerBuilder.RegisterAssemblyModules(typeof(BusinessAssemblyMarker).Assembly);
+        containerBuilder.RegisterAssemblyModules(typeof(BusinessNotificationsAssemblyMarker).Assembly);
     }
     
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
