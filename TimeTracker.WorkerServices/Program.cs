@@ -17,38 +17,9 @@ public class Program
         Log.Logger = log;
 
         Serilog.Debugging.SelfLog.Enable(Console.WriteLine);
-
-        var configuration = ApplicationHelper.BuildConfiguration();
-        var containerBuilder = new ContainerBuilder();
-        containerBuilder.RegisterAssemblyModules(typeof(BusinessAssemblyMarker).Assembly);
-        containerBuilder.RegisterAssemblyModules(typeof(BusinessNotificationsAssemblyMarker).Assembly);
-        containerBuilder
-            .RegisterInstance(ApplicationHelper.BuildConfiguration())
-            .As<IConfiguration>()
-            .SingleInstance();
-        // Serilog
-        var serilogConfiguration = new LoggerConfiguration()
-            .ReadFrom.Configuration(configuration);
-        containerBuilder.RegisterSerilog(serilogConfiguration);
-
-        var container = containerBuilder.Build();
-
-        var host1 = CreateHostBuilder<Services.QueueProcessingHostedService>(
-            args,
-            container,
-            "queue_processing_scope"
-        );
-        var host2 = CreateHostBuilder<Services.ImageUploadingHostedService>(
-            args,
-            container,
-            "storage_processing_scope"
-        );
         try
         {
-            await Task.WhenAll(
-                host1.RunAsync(),
-                host2.RunAsync()
-            );
+            await CreateHostBuilder(args).RunAsync();
         }
         catch (Exception e)
         {
@@ -60,21 +31,14 @@ public class Program
         }
     }
 
-    private static IHost CreateHostBuilder<THostedService>(
-        string[] args,
-        ILifetimeScope container,
-        string scopeName
-    ) where THostedService : class, IHostedService
+    private static IHost CreateHostBuilder(string[] args)
     {
         return Host.CreateDefaultBuilder(args)
             .UseSerilog(Log.Logger)
-            .UseServiceProviderFactory(
-                new AutofacChildLifetimeScopeServiceProviderFactory(container.BeginLifetimeScope(scopeName))
-            )
+            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.ConfigureServices(services => { services.AddHostedService<THostedService>(); });
-                webBuilder.Configure(appBuilder => { });
+                webBuilder.UseStartup<Startup>();
             })
             .Build();
     }

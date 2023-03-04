@@ -5,7 +5,6 @@ namespace TimeTracker.WorkerServices.Core;
 public abstract class ABackgroundService: BackgroundService
 {
     protected readonly ILogger<ABackgroundService> _logger;
-    private CancellationToken _cancelationToken;
     private readonly CrontabSchedule _crontabScheduler;
 
     protected string ServiceName = "BackgroundService";
@@ -25,23 +24,25 @@ public abstract class ABackgroundService: BackgroundService
         UpdateNextTickTime();
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        _cancelationToken = stoppingToken;
         LogDebug("Processing Hosted Service is starting.");
 
-        stoppingToken.Register(() => LogDebug($"Processing Hosted Service is stopping because cancelled."));
+        cancellationToken.Register(() =>
+        {
+            LogDebug($"Processing Hosted Service is stopping because cancelled.");
+        });
 
         Task.Run(async () =>
         {
-            while (!_cancelationToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 if (_isShouldRunWork)
                 {
                     var startTime = DateTime.UtcNow;
                     try
                     {
-                        await DoWorkAsync(_cancelationToken);
+                        await DoWorkAsync(cancellationToken);
                     }
                     catch (Exception e)
                     {
@@ -55,7 +56,7 @@ public abstract class ABackgroundService: BackgroundService
 
                 Thread.Sleep(1000);
             }
-        }, _cancelationToken);
+        }, cancellationToken);
     }
 
     public override async Task StopAsync(CancellationToken stoppingToken)
