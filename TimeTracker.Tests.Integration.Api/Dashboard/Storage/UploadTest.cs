@@ -9,6 +9,7 @@ using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
@@ -28,14 +29,19 @@ public class UploadTest: BaseTest
     private readonly ITaskListSeeder _taskListSeeder;
     
     private readonly TaskEntity _task;
+    private readonly IStoredFilesDao _storedFilesDao;
+    private readonly IFileStorage _fileStorage;
 
     public UploadTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
+        _storedFilesDao = ServiceProvider.GetRequiredService<IStoredFilesDao>();
+        _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
-        
+
+        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         (_jwtToken, _user, var workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _task = _taskSeeder.CreateAsync(user: _user).Result;
     }
@@ -61,7 +67,7 @@ public class UploadTest: BaseTest
     {
         Assert.Equal(0, _task.Attachments.Count);
 
-        var fileToUpload = CreateFormFile("test.jpg");
+        var fileToUpload = CreateFormFile("image.jpg");
         var response = await PostMultipartFormDataRequestAsync(
             Url,
             _jwtToken,
@@ -83,6 +89,10 @@ public class UploadTest: BaseTest
         await CommitDbChanges();
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
+
+        var actualUploadedFile = await _fileStorage.UploadFirstPendingToCloud();
+        Assert.Equal(actualData.Id, actualUploadedFile.Id);
+        Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath);
     }
     
     [Fact]
@@ -100,7 +110,7 @@ public class UploadTest: BaseTest
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
-            CreateFormFile("test.jpg")
+            CreateFormFile("image.jpg")
         );
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
@@ -134,5 +144,9 @@ public class UploadTest: BaseTest
         await CommitDbChanges();
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
+        
+        var actualUploadedFile = await _fileStorage.UploadFirstPendingToCloud();
+        Assert.Equal(actualData.Id, actualUploadedFile.Id);
+        Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath);
     }
 }

@@ -18,6 +18,10 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "type", NotNull = true)]
         public virtual StoredFileType Type { get; set; }
         
+        [Property(NotNull = true, TypeType = typeof(StoredFileStatus))]
+        [Column(Name = "status", NotNull = true)]
+        public virtual StoredFileStatus Status { get; set; }
+        
         [Property(NotNull = true)]
         [Column(Name = "cloud_file_path", Length = 512, NotNull = true)]
         public virtual string CloudFilePath { get; set; }
@@ -53,6 +57,14 @@ namespace TimeTracker.Business.Orm.Entities
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }
+        
+        [Property(NotNull = false)]
+        [Column(Name = "data_to_upload", NotNull = false)]
+        public virtual byte[]? DataToUpload { get; set; }
+        
+        [Property(NotNull = false)]
+        [Column(Name = "uploading_error", NotNull = false)]
+        public virtual string? UploadingError { get; set; }
         
         [Set(
             Table = "task_stored_files",

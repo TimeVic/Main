@@ -33,17 +33,10 @@ public class PutFileTest: BaseTest
         Assert.NotEmpty(actualFile.CloudFilePath);
         Assert.NotNull(actualFile.Extension);
         Assert.NotEmpty(actualFile.OriginalFileName);
+        Assert.NotNull(actualFile.DataToUpload);
         Assert.True(actualFile.Size > 0);
         Assert.Equal(StoredFileType.Attachment, actualFile.Type);
-    }
-
-    [Fact]
-    public async Task ShouldCreateThumbIfImage()
-    {
-        var formFile = CreateFormFile("images/image.jpg");
-        var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
-        Assert.NotNull(actualFile.ThumbCloudFilePath);
-        Assert.NotEmpty(actualFile.ThumbCloudFilePath);
+        Assert.Equal(StoredFileStatus.Pending, actualFile.Status);
     }
     
     [Fact]
@@ -66,6 +59,16 @@ public class PutFileTest: BaseTest
     public async Task ShouldThrowExceptionIfNoExtension()
     {
         var fileWithoutExtension = CreateFormFile("test");
+        await Assert.ThrowsAsync<IncorrectFileException>(async () =>
+        {
+            await _fileStorage.PutFileAsync(_user, fileWithoutExtension, StoredFileType.Attachment);
+        });
+    }
+    
+    [Fact]
+    public async Task ShouldThrowExceptionIfFileDataIsNotImage()
+    {
+        var fileWithoutExtension = CreateFormFile("test.jpg", new byte[] { 1, 2 });
         await Assert.ThrowsAsync<IncorrectFileException>(async () =>
         {
             await _fileStorage.PutFileAsync(_user, fileWithoutExtension, StoredFileType.Attachment);

@@ -131,8 +131,6 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
         stubsPath = Path.GetDirectoryName(stubsPath);
         stubsPath = Path.Combine(stubsPath, "stubs");
-            
-        fileExtension = fileExtension.Trim().ToLower();
         if (fileBytes != null)
         {
             stream.Write(fileBytes);

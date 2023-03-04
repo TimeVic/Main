@@ -19,6 +19,7 @@ public class Startup
     public virtual void ConfigureServices(IServiceCollection services)
     {
         services.AddHostedService<Services.QueueProcessingHostedService>();
+        services.AddHostedService<Services.ImageUploadingHostedService>();
     }
 
     public void ConfigureContainer(ContainerBuilder containerBuilder)

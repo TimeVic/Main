@@ -22,28 +22,26 @@ public class GetTest: BaseTest
     private readonly string Url = "/dashboard/storage/file/{0}";
     
     private readonly UserEntity _user;
-    private readonly IDataFactory<TaskEntity> _taskFactory;
     private readonly string _jwtToken;
-    private readonly IProjectDao _projectDao;
     private readonly ITaskSeeder _taskSeeder;
-    private readonly ITaskListSeeder _taskListSeeder;
     
     private readonly TaskEntity _task;
     private readonly IFileStorage _fileStorage;
     private readonly StoredFileEntity _uploadedFile;
+    private readonly IStoredFilesDao _storedFilesDao;
 
     public GetTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
-        _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
-        _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
+        _storedFilesDao = ServiceProvider.GetRequiredService<IStoredFilesDao>();
         _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
-        
+
+        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         (_jwtToken, _user, var workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
-        _uploadedFile = _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Result;
+        _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Wait();
+        _uploadedFile = _fileStorage.UploadFirstPendingToCloud().Result;
     }
 
     [Fact]

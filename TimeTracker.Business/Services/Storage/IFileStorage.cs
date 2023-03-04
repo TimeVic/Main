@@ -1,6 +1,5 @@
 ﻿using Domain.Abstractions;
 using Microsoft.AspNetCore.Http;
-using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Orm.Entities;
 
@@ -8,9 +7,9 @@ namespace TimeTracker.Business.Services.Storage;
 
 public interface IFileStorage: IDomainService
 {
-    Task<StoredFileEntity> PutFileAsync<TEntity>(
+    public Task<StoredFileEntity> PutFileAsync<TEntity>(
         TEntity entity,
-        Stream fileStream,
+        byte[] fileData,
         string fileName,
         StoredFileType fileType,
         CancellationToken cancellationToken = default
@@ -26,4 +25,6 @@ public interface IFileStorage: IDomainService
     Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, long fileId);
 
     Task DeleteFile(UserEntity user, long fileId);
+
+    Task<StoredFileEntity?> UploadFirstPendingToCloud(CancellationToken cancellationToken = default);
 }

@@ -19,14 +19,17 @@ public class DeleteTest: BaseTest
     
     private readonly TaskEntity _task;
     private readonly UserEntity _user;
+    private readonly IStoredFilesDao _storedFilesDao;
 
     public DeleteTest(): base()
     {
         _fileStorage = Scope.Resolve<IFileStorage>();
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
+        _storedFilesDao = Scope.Resolve<IStoredFilesDao>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _user = _userSeeder.CreateActivatedAsync().Result;
-        
+
+        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         _task = _taskSeeder.CreateAsync(user: _user).Result;
     }
 
@@ -34,6 +37,7 @@ public class DeleteTest: BaseTest
     public async Task ShouldDeleteForTask()
     {
         var file = await _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment);
+        await _fileStorage.UploadFirstPendingToCloud();
 
         await CommitDbChanges();
         await _fileStorage.DeleteFile(_user, file.Id);
@@ -50,6 +54,18 @@ public class DeleteTest: BaseTest
         var file = await _fileStorage.PutFileAsync(task2, CreateFormFile(), StoredFileType.Attachment);
 
         await Assert.ThrowsAsync<HasNoAccessException>(async () =>
+        {
+            await _fileStorage.DeleteFile(_user, file.Id);
+        });
+    }
+    
+    [Fact]
+    public async Task ShouldNotDeleteIfPendingStatus()
+    {
+        var file = await _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment);
+        await CommitDbChanges();
+
+        await Assert.ThrowsAsync<RecordCanNotBeModifiedException>(async () =>
         {
             await _fileStorage.DeleteFile(_user, file.Id);
         });

@@ -1,4 +1,5 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants.Storage
 
 <div class="@Class">
     @if (!Files.Any())
@@ -37,10 +38,13 @@
                         <RadzenButton
                             Click="() => OnClickDownload(item)"
                             Icon="file_download"
+                            IsBusy="item.Status == StoredFileStatus.Pending"
+                            Disabled="item.Status != StoredFileStatus.Uploaded"
                             Size="ButtonSize.Small"
                             ButtonStyle="ButtonStyle.Light"/>
                         <RadzenButton
                             Click="() => OnCLickDelete(item)"
+                            Disabled="item.Status != StoredFileStatus.Uploaded"
                             Icon="delete_outline"
                             Size="ButtonSize.Small"
                             ButtonStyle="ButtonStyle.Danger"/>
