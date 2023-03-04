@@ -19,7 +19,7 @@ namespace TimeTracker.WorkerServices.Services
         {
             _fileStorage = fileStorage;
             _dbSessionProvider = dbSessionProvider;
-            ServiceName = "NotificationProcessingHostedService";
+            ServiceName = "ImageUploadingHostedService";
         }
 
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
@@ -29,7 +29,6 @@ namespace TimeTracker.WorkerServices.Services
             {
                 await _fileStorage.UploadFirstPendingToCloud(cancellationToken);
                 await _dbSessionProvider.PerformCommitAsync(cancellationToken);
-                _dbSessionProvider.CurrentSession.Clear();
                 await Task.Delay(500, cancellationToken);
             }
         }
