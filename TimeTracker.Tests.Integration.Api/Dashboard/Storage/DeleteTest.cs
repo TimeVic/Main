@@ -31,6 +31,7 @@ public class DeleteTest: BaseTest
     private readonly TaskEntity _task;
     private readonly IFileStorage _fileStorage;
     private readonly StoredFileEntity _uploadedFile;
+    private readonly IStoredFilesDao _storedFilesDao;
 
     public DeleteTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -39,11 +40,14 @@ public class DeleteTest: BaseTest
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
+        _storedFilesDao = ServiceProvider.GetRequiredService<IStoredFilesDao>();
         
+        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         (_jwtToken, _user, var workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
-        _uploadedFile = _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Result;
+        _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Wait();
+        _uploadedFile = _fileStorage.UploadFirstPendingToCloud().Result;
     }
 
     [Fact]
