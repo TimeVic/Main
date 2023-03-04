@@ -10,6 +10,8 @@ public class StoredFileDto : IResponse
     
     public StoredFileType Type { get; set; }
     
+    public StoredFileStatus Status { get; set; }
+    
     public string? Extension { get; set; }
     
     public string? MimeType { get; set; }

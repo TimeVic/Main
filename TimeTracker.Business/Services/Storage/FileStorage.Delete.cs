@@ -1,4 +1,5 @@
 ﻿using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Entities;
 
@@ -16,6 +17,10 @@ public partial class FileStorage: IFileStorage
         if (!await _securityManager.HasAccess(AccessLevel.Read, user, file.Relationship))
         {
             throw new HasNoAccessException();
+        }
+        if (file.Status == StoredFileStatus.Pending)
+        {
+            throw new RecordCanNotBeModifiedException();
         }
 
         await _s3Client.DeleteObjectAsync(_bucketName, file.CloudFilePath);

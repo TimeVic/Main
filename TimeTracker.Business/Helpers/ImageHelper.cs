@@ -27,4 +27,18 @@ public static class ImageHelper
         );
         return image;
     }
+    
+    public static async Task<bool> IsImage(byte[] imageBytes)
+    {
+        try
+        {
+            using var stream = new MemoryStream(imageBytes);
+            await Image.LoadAsync(stream);
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+        return true;
+    }
 }
