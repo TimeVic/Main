@@ -17,6 +17,7 @@ RUN echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json
 RUN echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json
 RUN echo "{}" > TimeTracker.Api/appsettings.Local.json
 RUN echo "{}" > TimeTracker.Migrations/appsettings.Local.json
+RUN echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json
 
 RUN ["dotnet", "restore", "--verbosity=q"]
 RUN ["dotnet", "build", "--verbosity=q"]
