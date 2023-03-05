@@ -1,4 +1,5 @@
-﻿using NHibernate.Linq;
+﻿using NHibernate.Criterion;
+using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Orm.Entities;
@@ -27,6 +28,20 @@ public class StoredFilesDao: IStoredFilesDao
         storedFile.Status = StoredFileStatus.Uploading;
         await _sessionProvider.CurrentSession.SaveAsync(storedFile);
         return storedFile;
+    }
+    
+    public async Task<ICollection<StoredFileEntity>> GetListByEntity(long entityId, StorageEntityType entityType)
+    {
+        TaskEntity taskAlias = null;
+        UserEntity userAlias = null;
+        var query = _sessionProvider.CurrentSession.QueryOver<StoredFileEntity>()
+            .Left.JoinAlias(item => item.Tasks, () => taskAlias);
+        if (entityType == StorageEntityType.Task)
+        {
+            query = query.Where(() => taskAlias.Id == entityId);
+        }
+        query = query.OrderBy(item => item.CreateTime).Desc;
+        return await query.ListAsync();
     }
     
     /*

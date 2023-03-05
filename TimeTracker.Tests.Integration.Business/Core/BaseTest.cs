@@ -82,7 +82,6 @@ public abstract class BaseTest: IDisposable
         stubsPath = Path.GetDirectoryName(stubsPath);
         stubsPath = Path.Combine(stubsPath, "stubs");
             
-        fileExtension = fileExtension.Trim().ToLower();
         if (fileBytes != null)
         {
             stream.Write(fileBytes);

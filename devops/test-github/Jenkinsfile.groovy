@@ -90,6 +90,7 @@ node('testing-node') {
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json'
                 sh 'dotnet build --'
             }
 

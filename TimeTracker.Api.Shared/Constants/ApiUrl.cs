@@ -99,6 +99,7 @@ public class ApiUrl
 
     public const string StorageUpload = "dashboard/storage/upload";
     public const string StorageDelete = "dashboard/storage/delete";
+    public const string StorageList = "dashboard/storage/list";
 
     #endregion
     
