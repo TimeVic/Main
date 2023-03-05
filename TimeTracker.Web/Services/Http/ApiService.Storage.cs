@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<TimeTracker.Api.Shared.Dto.Entity.StoredFileDto> StorageUploadFileAsync(
+        public async Task<StoredFileDto> StorageUploadFileAsync(
             long entityId,
             StorageEntityType entityType,
             StoredFileType fileType,
@@ -43,6 +43,27 @@ namespace TimeTracker.Web.Services.Http
                     Id = fileId
                 }
             );
+        }
+        
+        public async Task<GetListResponse> StorageGetListAsync(
+            long entityId,
+            StorageEntityType entityType
+        )
+        {
+            var response = await PostAuthorizedAsync<GetListResponse>(
+                ApiUrl.StorageList,
+                new GetListRequest()
+                {
+                    EntityId = entityId,
+                    EntityType = entityType
+                }
+            );
+            if (response == null)
+            {
+                throw new ServerErrorException();
+            }
+
+            return response;
         }
     }
 }

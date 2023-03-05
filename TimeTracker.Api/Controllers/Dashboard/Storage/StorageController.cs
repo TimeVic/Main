@@ -33,6 +33,15 @@ public class StorageController : MainApiControllerBase
             .For<StoredFileDto>()
             .With(request);
     
+    [HttpPost("list")]
+    [RequestSizeLimit(FileStorage.MaxFileSize)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> GetList([FromBody] GetListRequest request)
+        => this.RequestAsync()
+            .For<GetListResponse>()
+            .With(request);
+    
     [HttpGet("file/{FileId:long}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
