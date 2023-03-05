@@ -124,12 +124,6 @@ public partial class UpdateTaskForm
         Task.Attachments.Add(uploadedFile);
         Dispatcher.Dispatch(new SetListItemAction(Task));
     }
-    
-    private void OnFileDeleted(long fileId)
-    {
-        Task.Attachments = Task.Attachments.Where(item => item.Id != fileId).ToList();
-        Dispatcher.Dispatch(new SetListItemAction(Task));
-    }
 
     private async Task OnTagsChanged(ICollection<long> selectedTagIds)
     {
