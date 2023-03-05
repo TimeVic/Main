@@ -23,9 +23,6 @@ public partial class FilesList: IDisposable
     public string Class { get; set; }
     
     [Parameter]
-    public EventCallback<long> FileDeleted { get; set; }
-    
-    [Parameter]
     public EventCallback<ICollection<StoredFileDto>> ListUpdated { get; set; }
     
     [Inject]
@@ -95,7 +92,8 @@ public partial class FilesList: IDisposable
         try
         {
             await _apiService.StorageDeleteFileAsync(file.Id);
-            await InvokeAsync(() => FileDeleted.InvokeAsync(file.Id));
+            var newList = Files.Where(item => item.Id != file.Id).ToList();
+            await InvokeAsync(() => ListUpdated.InvokeAsync(newList));
         }
         catch (Exception e)
         {
