@@ -31,14 +31,17 @@ public partial class FileStorage: IFileStorage
                 AutoCloseStream = false,
                 StreamTransferProgress = (sender, args) =>
                 {
-                    _logger.LogDebug($"S3 file uploading progress: {args.PercentDone}%");
+                    _logger.LogTrace($"S3 file uploading progress: {args.PercentDone}%");
                 }
             };
+            
+            _logger.LogDebug($"S3 file uploading started: {fileToUpload.CloudFilePath}");
             var cloudFile = await _s3Client.PutObjectAsync(s3Request, cancellationToken);
             if (cloudFile == null)
             {
                 throw new Exception($"File was not uploaded to cloud: {fileToUpload.CloudFilePath}");
             }
+            _logger.LogDebug($"S3 file uploading finished: {fileToUpload.CloudFilePath}");
 
             if (IsImageMimeType(fileToUpload.MimeType))
             {
@@ -53,7 +56,9 @@ public partial class FileStorage: IFileStorage
                     using var thumbStream = new MemoryStream();
                     await thumbImage.SaveAsPngAsync(thumbStream, cancellationToken: cancellationToken);
                     var cloudThumbFileName = $"{GetParentDir(fileToUpload)}/{fileToUpload.Type.GetFilePath("png")}";
-                    await _s3Client.PutObjectAsync(
+                    
+                    _logger.LogDebug($"S3 file thumb uploading started: {cloudThumbFileName}");
+                    var cloudThumbResponse = await _s3Client.PutObjectAsync(
                         new PutObjectRequest()
                         {
                             BucketName = _bucketName,
@@ -62,8 +67,9 @@ public partial class FileStorage: IFileStorage
                         },
                         cancellationToken: cancellationToken
                     );
-                    if (cloudFile != null)
+                    if (cloudThumbResponse != null)
                     {
+                        _logger.LogDebug($"S3 file thumb uploading finished: {cloudThumbFileName}");
                         fileToUpload.ThumbCloudFilePath = cloudThumbFileName;
                     }
                 }

@@ -67,6 +67,7 @@ public partial class FileStorage: IFileStorage
             BufferSize = 65536, // 64KB Use a larger buffer size, normally 8K default.
             DefaultConfigurationMode = DefaultConfigurationMode.InRegion,
             UseFIPSEndpoint = false,
+            ProgressUpdateInterval = 1 * 1024 * 1024
         };
         var options = new BasicAWSCredentials(accessKey, secretKey);
         _s3Client = new AmazonS3Client(options, config);
