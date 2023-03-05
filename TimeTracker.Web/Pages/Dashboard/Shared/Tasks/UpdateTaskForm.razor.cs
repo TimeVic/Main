@@ -136,4 +136,10 @@ public partial class UpdateTaskForm
         model.TagIds = selectedTagIds;
         await SubmitForm();
     }
+
+    private void AttachmentsListUpdated(ICollection<StoredFileDto> attachments)
+    {
+        Task.Attachments = attachments;
+        Dispatcher.Dispatch(new SetListItemAction(Task));
+    }
 }

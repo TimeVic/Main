@@ -67,9 +67,9 @@ public partial class FileUploader
         if (eventArguments.FileCount > 0)
         {
             _isLoading = true;
-            foreach (var file in eventArguments.GetMultipleFiles(MaxFiles))
+            try
             {
-                try
+                foreach (var file in eventArguments.GetMultipleFiles(MaxFiles))
                 {
                     var uploadedFileDto = await ApiService.StorageUploadFileAsync(
                         EntityId,
@@ -79,17 +79,17 @@ public partial class FileUploader
                     );
                     await InvokeAsync(() => FileUploaded.InvokeAsync(uploadedFileDto));
                 }
-                catch (Exception e)
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                _toastService.Notify(new NotificationMessage()
                 {
-                    _logger.LogError(e, e.Message);
-                    _toastService.Notify(new NotificationMessage()
-                    {
-                        Summary = e.Message,
-                        Severity = NotificationSeverity.Error,
+                    Summary = e.Message,
+                    Severity = NotificationSeverity.Error,
                 
-                    });
-                }
-            }    
+                });
+            }  
             _isLoading = false;
         }
     }
