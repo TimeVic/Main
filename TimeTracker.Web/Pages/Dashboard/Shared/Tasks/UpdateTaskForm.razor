@@ -146,6 +146,9 @@
                     <FilesList
                         Class="mt-1"
                         FileDeleted="OnFileDeleted"
+                        EntityId="@Task.Id"
+                        EntityType="StorageEntityType.Task"
+                        ListUpdated="AttachmentsListUpdated"
                         Files="@Task.Attachments"/>
                 </RadzenTabsItem>
             </Tabs>
