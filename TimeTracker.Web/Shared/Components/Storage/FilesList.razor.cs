@@ -124,7 +124,7 @@ public partial class FilesList: IDisposable
         try
         {
             var files = await _apiService.StorageGetListAsync(EntityId.Value, EntityType.Value);
-            await ListUpdated.InvokeAsync(files.Items);
+            await InvokeAsync(() => ListUpdated.InvokeAsync(files.Items));
         }
         catch (Exception e)
         {
