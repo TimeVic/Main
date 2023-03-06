@@ -28,9 +28,9 @@ namespace TimeTracker.WorkerServices.Services
             LogDebug($"Notifications processing worker started at: {DateTime.Now}");
             while (!cancellationToken.IsCancellationRequested)
             {
-                // await _queueService.ProcessAsync(QueueChannel.Default, cancellationToken);
-                // await _queueService.ProcessAsync(QueueChannel.Notifications, cancellationToken);
-                // await _queueService.ProcessAsync(QueueChannel.ExternalClient, cancellationToken);
+                await _queueService.ProcessAsync(QueueChannel.Default, cancellationToken);
+                await _queueService.ProcessAsync(QueueChannel.Notifications, cancellationToken);
+                await _queueService.ProcessAsync(QueueChannel.ExternalClient, cancellationToken);
                 await _dbSessionProvider.PerformCommitAsync(cancellationToken);
                 await Task.Delay(1000, cancellationToken);
             }
