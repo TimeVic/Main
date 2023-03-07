@@ -60,21 +60,30 @@ public class QueueService: IQueueService
                 break;
             }
 
-            if (channel == QueueChannel.Notifications)
+            string error = null;
+            try
             {
-                await ProcessNotificationItem(queueItem, cancellationToken);
-                processedCounter++;
+                if (channel == QueueChannel.Notifications)
+                {
+                    await ProcessNotificationItem(queueItem, cancellationToken);
+                    processedCounter++;
+                }
+                if (channel == QueueChannel.ExternalClient)
+                {
+                    await ProcessExternalClientItem(queueItem, cancellationToken);
+                    processedCounter++;
+                }
+                else
+                {
+                    throw new Exception($"Channel handler is not exists: {channel}");
+                }
             }
-            if (channel == QueueChannel.ExternalClient)
+            catch (Exception e)
             {
-                await ProcessExternalClientItem(queueItem, cancellationToken);
-                processedCounter++;
+                error = e.Message;
+                _logger.LogError(e, e.Message);
             }
-            else
-            {
-                _logger.LogError("Channel handler is not exists: {Channel}", channel);
-            }
-            await _queueDao.MarkAsProcessed(queueItem, cancellationToken: cancellationToken);
+            await _queueDao.MarkAsProcessed(queueItem, error: error, cancellationToken: cancellationToken);
         }
 
         return processedCounter;
@@ -98,7 +107,7 @@ public class QueueService: IQueueService
         }
         else
         {
-            _logger.LogError($"Incorrect queue context: {queueItem.ContextType}");
+            throw new Exception($"Incorrect queue context: {queueItem.ContextType}");
         }
     }
     
@@ -107,8 +116,7 @@ public class QueueService: IQueueService
         var contextType = GetContextType(queueItem, typeof(BusinessNotificationsAssemblyMarker));
         if (contextType == null)
         {
-            _logger.LogError($"Notification context was not found in assembly: {queueItem.ContextType}");
-            return;
+            throw new Exception($"Notification context was not found in assembly: {queueItem.ContextType}");
         }
         if (IsContext<TestNotificationItemContext>(contextType))
         {
@@ -128,7 +136,7 @@ public class QueueService: IQueueService
         }
         else
         {
-            _logger.LogError($"Incorrect notification context: {queueItem.ContextType}");
+            throw new Exception($"Incorrect notification context: {queueItem.ContextType}");
         }
     }
 
