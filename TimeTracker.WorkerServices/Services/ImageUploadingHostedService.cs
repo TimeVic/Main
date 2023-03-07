@@ -28,6 +28,7 @@ namespace TimeTracker.WorkerServices.Services
             {
                 await _fileStorage.UploadFirstPendingToCloud(cancellationToken);
                 await _dbSessionProvider.PerformCommitAsync(cancellationToken);
+                _dbSessionProvider.CurrentSession.Clear();
                 await Task.Delay(500, cancellationToken);
             }
         }
