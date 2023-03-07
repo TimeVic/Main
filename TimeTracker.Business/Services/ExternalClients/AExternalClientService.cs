@@ -70,7 +70,7 @@ public abstract class AExternalClientService
     {
         if (timeEntry.IsActive)
         {
-            _logger.LogError("TimeEntry is active");
+            _logger.LogError($"TimeEntry is active: {timeEntry.Id}");
             return false;
         }
         if (string.IsNullOrEmpty(timeEntry.ExternalTaskId))
