@@ -48,7 +48,7 @@ public class SendDeleteTimeEntryIntegrationRequestHandler : IAsyncQueueHandler<S
                 {
                     if (string.IsNullOrEmpty(timeEntry.TaskId))
                     {
-                        _logger.LogTrace($"TimeEntry does not have TaskId: {timeEntry.TaskId}");
+                        _logger.LogDebug($"TimeEntry does not have TaskId: {timeEntry.TaskId}");
                     }
                     if (
                         timeEntry.Workspace.IsIntegrationClickUpActive(timeEntry.User.Id)
@@ -67,7 +67,7 @@ public class SendDeleteTimeEntryIntegrationRequestHandler : IAsyncQueueHandler<S
                 }
                 catch (Exception e)
                 {
-                    _logger.LogTrace(e, e.Message);
+                    _logger.LogDebug(e, e.Message);
                 }
 
                 await _sessionProvider.CurrentSession.DeleteAsync(timeEntry, cancellationToken);
@@ -75,7 +75,7 @@ public class SendDeleteTimeEntryIntegrationRequestHandler : IAsyncQueueHandler<S
             }
             catch (MinorException e)
             {
-                _logger.LogTrace(e, e.Message);
+                _logger.LogDebug(e, e.Message);
             }
             catch (Exception e)
             {

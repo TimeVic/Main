@@ -81,7 +81,7 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
         }
         catch (MinorException e)
         {
-            _logger.LogTrace(e, e.Message);
+            _logger.LogDebug(e, e.Message);
         }
         catch (Exception e)
         {
