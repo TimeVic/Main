@@ -1,18 +1,17 @@
-using Autofac;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.WorkerServices.Core;
 
-namespace TimeTracker.WorkerServices.Services
+namespace TimeTracker.WorkerServices.Services.Queue
 {
-    internal class QueueProcessingHostedService : ABackgroundService
+    internal class ExternalClientProcessingHostedService : ABackgroundService
     {
         private readonly IQueueService _queueService;
         private readonly IDbSessionProvider _dbSessionProvider;
         private readonly IServiceScope _scope;
 
-        public QueueProcessingHostedService(
+        public ExternalClientProcessingHostedService(
             ILogger<ABackgroundService> logger,
             IServiceScopeFactory serviceScopeFactory
         ) : base(logger)
@@ -20,16 +19,14 @@ namespace TimeTracker.WorkerServices.Services
             _scope = serviceScopeFactory.CreateScope();
             _queueService = _scope.ServiceProvider.GetService<IQueueService>();
             _dbSessionProvider = _scope.ServiceProvider.GetService<IDbSessionProvider>();
-            ServiceName = "NotificationProcessingHostedService";
+            ServiceName = "ExternalClientProcessingHostedService";
         }
 
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
         {
-            LogDebug($"Notifications processing worker started at: {DateTime.Now}");
+            LogDebug($"Worker started at: {DateTime.Now}");
             while (!cancellationToken.IsCancellationRequested)
             {
-                await _queueService.ProcessAsync(QueueChannel.Default, cancellationToken);
-                await _queueService.ProcessAsync(QueueChannel.Notifications, cancellationToken);
                 await _queueService.ProcessAsync(QueueChannel.ExternalClient, cancellationToken);
                 await _dbSessionProvider.PerformCommitAsync(cancellationToken);
                 await Task.Delay(1000, cancellationToken);
