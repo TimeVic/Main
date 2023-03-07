@@ -48,7 +48,7 @@ public class SendDeleteTimeEntryIntegrationRequestHandler : IAsyncQueueHandler<S
                 {
                     if (string.IsNullOrEmpty(timeEntry.TaskId))
                     {
-                        _logger.LogDebug($"TimeEntry does not have TaskId: {timeEntry.TaskId}");
+                        _logger.LogDebug($"TimeEntry does not have TaskId: {timeEntry.Id}");
                     }
                     if (
                         timeEntry.Workspace.IsIntegrationClickUpActive(timeEntry.User.Id)

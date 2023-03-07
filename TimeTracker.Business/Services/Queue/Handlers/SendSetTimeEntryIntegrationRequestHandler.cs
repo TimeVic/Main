@@ -47,7 +47,7 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
 
             if (string.IsNullOrEmpty(timeEntry.TaskId))
             {
-                throw new MinorException($"TimeEntry does not have TaskId: {timeEntry.TaskId}");
+                throw new MinorException($"TimeEntry does not have TaskId: {commandContext.TimeEntryId}");
             }
 
             if (timeEntry.Workspace.IsIntegrationClickUpActive(timeEntry.User.Id))
@@ -81,7 +81,7 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
         }
         catch (MinorException e)
         {
-            _logger.LogDebug(e, e.Message);
+            _logger.LogDebug(e.Message);
         }
         catch (Exception e)
         {
