@@ -74,6 +74,7 @@ public class QueueService: IQueueService
             {
                 _logger.LogError("Channel handler is not exists: {Channel}", channel);
             }
+            await _queueDao.MarkAsProcessed(queueItem, cancellationToken: cancellationToken);
         }
 
         return processedCounter;

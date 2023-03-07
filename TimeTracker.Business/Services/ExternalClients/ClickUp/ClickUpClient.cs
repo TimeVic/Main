@@ -117,7 +117,7 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         if (response.StatusCode != HttpStatusCode.OK)
         {
             _logger.LogDebug(
-                "ClickUp returned status code: {response.StatusCode}"
+                $"ClickUp returned status code: {response.StatusCode}"
             );
             return false;
         }
@@ -141,7 +141,7 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         if (response.StatusCode != HttpStatusCode.OK)
         {
             _logger.LogDebug(
-                "ClickUp returned status code: {response.StatusCode}"
+                $"ClickUp returned status code: {response.StatusCode}"
             );
             return false;
         }
