@@ -94,8 +94,7 @@ public class QueueService: IQueueService
         var contextType = GetContextType(queueItem, typeof(BusinessAssemblyMarker));
         if (contextType == null)
         {
-            _logger.LogError($"Queue context was not found in assembly: {queueItem.ContextType}");
-            return;
+            throw new Exception($"Queue context was not found in assembly: {queueItem.ContextType}");
         }
         if (IsContext<SendSetTimeEntryIntegrationRequestContext>(contextType))
         {
