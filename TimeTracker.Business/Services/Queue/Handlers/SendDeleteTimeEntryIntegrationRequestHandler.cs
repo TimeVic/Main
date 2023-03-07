@@ -79,8 +79,8 @@ public class SendDeleteTimeEntryIntegrationRequestHandler : IAsyncQueueHandler<S
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
                 await transaction.RollbackAsync(cancellationToken);
+                throw e;
             }
         }
     }
