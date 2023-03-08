@@ -1,4 +1,5 @@
 ﻿using NCrontab;
+using Persistence.Transactions.Behaviors;
 
 namespace TimeTracker.WorkerServices.Core;
 
@@ -10,20 +11,30 @@ public abstract class ABackgroundService: BackgroundService
     protected string ServiceName = "BackgroundService";
     
     private DateTime _nextTickTime;
+    protected readonly IServiceScope JobScope;
+    protected IServiceProvider ServiceProvider { get; set; }
+    protected readonly IDbSessionProvider DbSessionProvider;
+    
     private bool _isShouldRunWork
     {
         get => DateTime.UtcNow > _nextTickTime;
     }
 
-    public ABackgroundService(ILogger<ABackgroundService> logger)
+    public ABackgroundService(
+        ILogger<ABackgroundService> logger,
+        IServiceScopeFactory serviceScopeFactory
+    )
     {
         _logger = logger;
+        JobScope = serviceScopeFactory.CreateScope();
+        ServiceProvider = JobScope.ServiceProvider;
+        DbSessionProvider = ServiceProvider.GetService<IDbSessionProvider>();
         _crontabScheduler = CrontabSchedule.Parse(
             GetCrontabExpression()
         );
         UpdateNextTickTime();
     }
-
+    
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         LogDebug("Processing Hosted Service is starting.");
@@ -76,6 +87,12 @@ public abstract class ABackgroundService: BackgroundService
         _logger.LogDebug($"{ServiceName}: {message}");
     }
 
+    public override void Dispose()
+    {
+        base.Dispose();
+        JobScope.Dispose();
+    }
+    
     protected virtual string GetCrontabExpression() => "* * * * *";
 
     protected abstract Task DoWorkAsync(CancellationToken cancellationToken);

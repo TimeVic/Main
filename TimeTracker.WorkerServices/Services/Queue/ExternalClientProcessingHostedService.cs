@@ -8,17 +8,13 @@ namespace TimeTracker.WorkerServices.Services.Queue
     internal class ExternalClientProcessingHostedService : ABackgroundService
     {
         private readonly IQueueService _queueService;
-        private readonly IDbSessionProvider _dbSessionProvider;
-        private readonly IServiceScope _scope;
 
         public ExternalClientProcessingHostedService(
-            ILogger<ABackgroundService> logger,
+            ILogger<ExternalClientProcessingHostedService> logger,
             IServiceScopeFactory serviceScopeFactory
-        ) : base(logger)
+        ) : base(logger, serviceScopeFactory)
         {
-            _scope = serviceScopeFactory.CreateScope();
-            _queueService = _scope.ServiceProvider.GetService<IQueueService>();
-            _dbSessionProvider = _scope.ServiceProvider.GetService<IDbSessionProvider>();
+            _queueService = ServiceProvider.GetService<IQueueService>();
             ServiceName = "ExternalClientProcessingHostedService";
         }
 
@@ -28,16 +24,10 @@ namespace TimeTracker.WorkerServices.Services.Queue
             while (!cancellationToken.IsCancellationRequested)
             {
                 await _queueService.ProcessAsync(QueueChannel.ExternalClient, cancellationToken);
-                await _dbSessionProvider.PerformCommitAsync(cancellationToken);
-                _dbSessionProvider.CurrentSession.Clear();
+                await DbSessionProvider.PerformCommitAsync(cancellationToken);
+                DbSessionProvider.CurrentSession.Clear();
                 await Task.Delay(1000, cancellationToken);
             }
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _scope.Dispose();
         }
     }
 }

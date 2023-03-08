@@ -7,17 +7,13 @@ namespace TimeTracker.WorkerServices.Services
     internal class ImageUploadingHostedService : ABackgroundService
     {
         private readonly IFileStorage _fileStorage;
-        private readonly IDbSessionProvider _dbSessionProvider;
-        private readonly IServiceScope _scope;
 
         public ImageUploadingHostedService(
-            ILogger<ABackgroundService> logger,
+            ILogger<ImageUploadingHostedService> logger,
             IServiceScopeFactory serviceScopeFactory
-        ) : base(logger)
+        ) : base(logger, serviceScopeFactory)
         {
-            _scope = serviceScopeFactory.CreateScope();
-            _fileStorage = _scope.ServiceProvider.GetService<IFileStorage>();
-            _dbSessionProvider = _scope.ServiceProvider.GetService<IDbSessionProvider>();
+            _fileStorage = ServiceProvider.GetService<IFileStorage>();
             ServiceName = "ImageUploadingHostedService";
         }
 
@@ -27,16 +23,10 @@ namespace TimeTracker.WorkerServices.Services
             while (!cancellationToken.IsCancellationRequested)
             {
                 await _fileStorage.UploadFirstPendingToCloud(cancellationToken);
-                await _dbSessionProvider.PerformCommitAsync(cancellationToken);
-                _dbSessionProvider.CurrentSession.Clear();
+                await DbSessionProvider.PerformCommitAsync(cancellationToken);
+                DbSessionProvider.CurrentSession.Clear();
                 await Task.Delay(500, cancellationToken);
             }
-        }
-        
-        public override void Dispose()
-        {
-            base.Dispose();
-            _scope.Dispose();
         }
     }
 }
