@@ -15,6 +15,9 @@ public partial class TaskIdBadge
 
     [Parameter]
     public string Class { get; set; }
+
+    [Parameter]
+    public bool IsLink { get; set; } = false;
     
     [Inject]
     public IState<TasksState> TaskState { get; set; }
