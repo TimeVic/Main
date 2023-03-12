@@ -43,6 +43,9 @@ public partial class FilesList: IDisposable
     [Inject]
     protected DialogService _dialogService { get; set; }
     
+    [Inject]
+    protected ModalDialogProviderService _dialogProvider { get; set; }
+    
     private System.Timers.Timer _timer;
 
     private bool _isReloadFiles
@@ -117,6 +120,11 @@ public partial class FilesList: IDisposable
             storedFile.OriginalFileName,
             GetFullUrl(storedFile.Url)
         );
+    }
+    
+    private async Task OnClickView(StoredFileDto storedFile)
+    {
+        await _dialogProvider.ShowFileView(storedFile);
     }
     
     private async Task ReloadList()

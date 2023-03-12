@@ -4,6 +4,7 @@ using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
+using TimeTracker.Web.Shared.Components.Storage;
 
 namespace TimeTracker.Web.Services.UI;
 
@@ -56,5 +57,26 @@ public class ModalDialogProviderService
                 options: new SideDialogOptions { CloseDialogOnOverlayClick = true }
             );
         }
+    }
+    
+    public async Task ShowFileView(StoredFileDto file)
+    {
+        await _dialogService.OpenAsync<FileView>(
+            file.OriginalFileName,
+            parameters: new Dictionary<string, object>()
+            {
+                { "File", file }
+            },
+            options: new DialogOptions()
+            {
+                Style = "top: 1em; bottom: 1em; right: 1em; left: 1em",
+                Width = "auto",
+                ShowClose = true,
+                CloseDialogOnEsc = true,
+                AutoFocusFirstElement = true,
+                Resizable = true,
+                CloseDialogOnOverlayClick = true,
+            }
+        );
     }
 }
