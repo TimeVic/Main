@@ -1,11 +1,26 @@
 ﻿@inherits BaseComponent
 
 <div class="d-flex align-items-center">
-    <RadzenBadge
-        Shade="Shade.Lighter"
-        BadgeStyle="BadgeStyle.Primary"
-        Style="@(IsClickable ? "cursor: pointer" : "")"
-        @onclick="OnClick"
-        class="@($"{Class} d-flex align-items-center")"
-        Text="@InternalTask.FormattedId"/>
+    @if (IsLink)
+    {
+        <NavLink href="@("/board/task/" + InternalTask.Id)" target="_blank">
+            <RadzenBadge
+                Shade="Shade.Lighter"
+                BadgeStyle="BadgeStyle.Primary"
+                Style="@(IsClickable ? "cursor: pointer" : "")"
+                @onclick="OnClick"
+                class="@($"{Class} d-flex align-items-center")"
+                Text="@InternalTask.FormattedId"/>
+        </NavLink>
+    }
+    else
+    {
+        <RadzenBadge
+            Shade="Shade.Lighter"
+            BadgeStyle="BadgeStyle.Primary"
+            Style="@(IsClickable ? "cursor: pointer" : "")"
+            @onclick="OnClick"
+            class="@($"{Class} d-flex align-items-center")"
+            Text="@InternalTask.FormattedId"/>
+    }
 </div>
