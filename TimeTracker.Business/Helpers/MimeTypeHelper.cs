@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using TimeTracker.Business.Extensions;
-
-namespace TimeTracker.Business.Helpers;
+﻿namespace TimeTracker.Business.Helpers;
 
 public static class MimeTypeHelper
 {
@@ -574,11 +571,6 @@ public static class MimeTypeHelper
 
             #endregion
         };
-
-    public static string GetMimeType(IFormFile file)
-    {
-        return GetMimeType(file.GetExtension());
-    }
 
     public static string GetMimeType(string extension)
     {

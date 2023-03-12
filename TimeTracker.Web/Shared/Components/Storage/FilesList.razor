@@ -34,7 +34,14 @@
                             @item.OriginalFileName
                         }
                     </RadzenColumn>
-                    <RadzenColumn Style="max-width: 80px;">
+                    <RadzenColumn Style="max-width: 100px;">
+                        <RadzenButton
+                            Click="() => OnClickView(item)"
+                            Icon="visibility"
+                            IsBusy="item.Status == StoredFileStatus.Pending"
+                            Disabled="item.Status != StoredFileStatus.Uploaded"
+                            Size="ButtonSize.Small"
+                            ButtonStyle="ButtonStyle.Info"/>
                         <RadzenButton
                             Click="() => OnClickDownload(item)"
                             Icon="file_download"
