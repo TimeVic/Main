@@ -33,6 +33,20 @@ public partial class UpdateTaskForm
     private readonly int _descriptionTextAreaRowsMax = 20;
     private int _descriptionTextAreaRows = 6;
 
+    private string _tabLabelAttachments
+    {
+        get
+        {
+            var label = "Attachments";
+            if (Task.Attachments.Any())
+            {
+                label += $"({Task.Attachments.Count})";
+            }
+
+            return label;
+        }
+    }
+
     private ICollection<long> _allowedUserIds
     {
         get
