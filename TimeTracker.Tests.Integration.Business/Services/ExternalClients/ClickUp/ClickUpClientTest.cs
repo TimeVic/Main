@@ -7,6 +7,7 @@ using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
 
@@ -27,8 +28,8 @@ public partial class SendNewTimeEntityTest : BaseTest
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IUserDao _userDao;
     private readonly ITaskSeeder _taskSeeder;
+    private readonly IDataFactory<TimeEntryEntity> _timeEntryFactory;
 
-    // TODO: Revert test
     public SendNewTimeEntityTest() : base(false)
     {
         _сlickUpClient = Scope.Resolve<IClickUpClient>();
@@ -38,6 +39,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
+        _timeEntryFactory = Scope.Resolve<IDataFactory<TimeEntryEntity>>();
         _userDao = Scope.Resolve<IUserDao>();
 
         var configuration = Scope.Resolve<IConfiguration>();
@@ -63,13 +65,16 @@ public partial class SendNewTimeEntityTest : BaseTest
     [Fact]
     public async Task ShouldSendNewTimeEntry()
     {
+        var fakeTimeEntry = _timeEntryFactory.Generate();
+        
         var date = DateTime.UtcNow.Date;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
             DateTime.UtcNow.Date,
             DateTime.UtcNow.TimeOfDay,
-            true
+            true,
+            description: fakeTimeEntry.Description
         );
         activeEntry.TaskId = _taskId;
         await DbSessionProvider.PerformCommitAsync();

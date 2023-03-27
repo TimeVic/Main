@@ -9,4 +9,7 @@ public struct SetTimeEntryDto
     
     [JsonPropertyName("end")]
     public long End { get; set; }
+    
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
 }

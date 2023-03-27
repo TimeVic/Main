@@ -82,7 +82,7 @@ public abstract class AExternalClientService
         return true;
     }
 
-    public abstract Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry);
+    public abstract Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry);
     
     public abstract bool IsCorrectTaskId(TimeEntryEntity timeEntry);
     
