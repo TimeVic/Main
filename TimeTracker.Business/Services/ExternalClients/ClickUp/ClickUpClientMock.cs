@@ -26,7 +26,7 @@ public class ClickUpClientMock: IClickUpClient
         };
     }
 
-    public Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry)
+    public Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry)
     {
         return Task.FromResult(true);
     }

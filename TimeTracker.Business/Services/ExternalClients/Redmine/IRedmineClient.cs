@@ -9,7 +9,7 @@ public interface IRedmineClient: IDomainService
 {
     Task<SynchronizedTimeEntryDto?> SetTimeEntryAsync(TimeEntryEntity timeEntry);
 
-    Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry);
+    Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry);
     
     Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry);
 

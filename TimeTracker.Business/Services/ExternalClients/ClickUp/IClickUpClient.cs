@@ -9,7 +9,7 @@ public interface IClickUpClient
 {
     Task<SynchronizedTimeEntryDto?> SetTimeEntryAsync(TimeEntryEntity timeEntry);
 
-    Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry);
+    Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry);
 
     Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry);
 

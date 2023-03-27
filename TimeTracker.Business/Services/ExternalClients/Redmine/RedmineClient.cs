@@ -29,7 +29,7 @@ public class RedmineClient: AExternalClientService, IRedmineClient
     {
     }
 
-    public override Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry)
+    public override Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry)
     {
         return Task.FromResult(false);
     }

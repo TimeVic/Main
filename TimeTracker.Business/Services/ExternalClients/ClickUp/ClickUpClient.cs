@@ -25,7 +25,7 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
     {
     }
 
-    public override Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry)
+    public override Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry)
     {
         var settings = GetSettings(timeEntry);
         return Task.FromResult(
@@ -67,6 +67,7 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         {
             Start = startTime.ToUnixTime(),
             End = endTime.ToUnixTime(),
+            Description = timeEntry.Description
         });
         httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
         

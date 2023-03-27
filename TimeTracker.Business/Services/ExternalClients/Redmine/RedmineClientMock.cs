@@ -24,7 +24,7 @@ public class RedmineClientMock: IRedmineClient
         };
     }
 
-    public Task<bool> IsFillTimeEntryDescription(TimeEntryEntity timeEntry)
+    public Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry)
     {
         return Task.FromResult(true);
     }
