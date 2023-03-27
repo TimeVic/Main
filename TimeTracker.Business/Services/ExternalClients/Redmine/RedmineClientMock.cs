@@ -20,7 +20,7 @@ public class RedmineClientMock: IRedmineClient
         return new SynchronizedTimeEntryDto()
         {
             Id = "123",
-            Description = "Test description"
+            AdditionalDescription = "Test description"
         };
     }
 

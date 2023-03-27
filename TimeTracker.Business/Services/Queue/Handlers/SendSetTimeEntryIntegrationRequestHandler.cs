@@ -58,7 +58,7 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
                     timeEntry.ClickUpId = setResponse.Id;
                     if (await _clickUpClient.IsFillTimeEntryDescriptionFromTaskTitle(timeEntry))
                     {
-                        timeEntry.Description = setResponse.Description;
+                        timeEntry.Description = setResponse.AdditionalDescription;
                     }
                     await _sessionProvider.CurrentSession.SaveAsync(timeEntry, cancellationToken);
                 }
@@ -71,7 +71,7 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
                     timeEntry.RedmineId = setResponse.Id;
                     if (await _redmineClient.IsFillTimeEntryDescriptionFromTaskTitle(timeEntry))
                     {
-                        timeEntry.Description = setResponse.Description;
+                        timeEntry.Description = setResponse.AdditionalDescription;
                     }
                     await _sessionProvider.CurrentSession.SaveAsync(timeEntry, cancellationToken);
                 }

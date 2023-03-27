@@ -112,7 +112,7 @@ public class RedmineClient: AExternalClientService, IRedmineClient
         return new SynchronizedTimeEntryDto()
         {
             Id = responseData.TimeEntryRequest.Id.ToString(),
-            Description = responseData.TimeEntryRequest.Issue.Name,
+            AdditionalDescription = responseData.TimeEntryRequest.Issue.Name,
             Comment = responseData.TimeEntryRequest.Comments,
             IsError = false
         };
