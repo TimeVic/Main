@@ -77,7 +77,11 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
             settings.IsCustomTaskIds,
             timeEntry.ClickUpId
         );
-        _logger.LogDebug("ClickUp. Send request to: {Uri}", uri);
+        _logger.LogDebug(
+            "ClickUp. Send request to: {Uri}. Body: {Body}",
+            uri,
+            await requestData.ReadAsStringAsync()
+        );
         HttpResponseMessage response;
         if (string.IsNullOrEmpty(timeEntry.ClickUpId))
         {
