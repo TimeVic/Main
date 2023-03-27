@@ -86,6 +86,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         Assert.NotNull(actualResponse);
         Assert.False(actualResponse.IsError);
         Assert.NotEmpty(actualResponse.Id);
+        Assert.Equal(fakeTimeEntry.Description, actualResponse.Comment);
 
         activeEntry.ClickUpId = actualResponse.Id;
         var isDeleted = await _сlickUpClient.DeleteTimeEntryAsync(activeEntry);
@@ -117,6 +118,8 @@ public partial class SendNewTimeEntityTest : BaseTest
     [Fact]
     public async Task ShouldUpdateExistsTimeEntry()
     {
+        var fakeTimeEntry = _timeEntryFactory.Generate();
+        
         var date = DateTime.UtcNow.Date;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
@@ -142,11 +145,12 @@ public partial class SendNewTimeEntityTest : BaseTest
             Id = activeEntry.Id,
             StartTime = DateTime.UtcNow.TimeOfDay,
             EndTime = DateTime.UtcNow.AddMilliseconds(5).TimeOfDay,
-            Description = "Test",
+            Description = fakeTimeEntry.Description,
             TaskId = activeEntry.TaskId
         });
         var actualResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
         Assert.False(actualResponse.IsError);
+        Assert.Equal(fakeTimeEntry.Description, actualResponse.Comment);
         
         var isDeleted = await _сlickUpClient.DeleteTimeEntryAsync(activeEntry);
         Assert.True(isDeleted);

@@ -3,10 +3,10 @@ using Newtonsoft.Json;
 
 namespace TimeTracker.Business.Services.ExternalClients.ClickUp.Model;
 
-public struct SetTimeEntryResponseDto
+public class UpdateTimeEntryResponseDto
 {
-    [JsonProperty(PropertyName = "id")]
-    public long? Id { get; set; }
+    [JsonProperty(PropertyName = "data")]
+    public ICollection<TimeEntryDto> Data { get; set; }
     
     [JsonProperty(PropertyName = "err")]
     public string? Error { get; set; }

@@ -6,7 +6,7 @@ public class SynchronizedTimeEntryDto
     
     public string? Comment { get; set; }
     
-    public string? Description { get; set; }
+    public string? AdditionalDescription { get; set; }
 
     public bool IsError { get; set; } = false;
 }

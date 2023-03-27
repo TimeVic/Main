@@ -67,13 +67,13 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         {
             Start = startTime.ToUnixTime(),
             End = endTime.ToUnixTime(),
-            Description = timeEntry.Description
+            Description = timeEntry.Description,
+            TaskId = CleanUpTaskId(timeEntry.ExternalTaskId, settings.IsCustomTaskIds)
         });
         httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
         
         var uri = BuildSetTimeEntryUri(
             settings.TeamId,
-            timeEntry.ExternalTaskId,
             settings.IsCustomTaskIds,
             timeEntry.ClickUpId
         );
@@ -86,27 +86,46 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         if (string.IsNullOrEmpty(timeEntry.ClickUpId))
         {
             response = await httpClient.PostAsync(uri, requestData);
+            var responseData = await HandleResponse<CreateTimeEntryResponseDto?>(uri, response, requestData);
+            if (responseData == null || responseData.IsError)
+            {
+                _logger.LogDebug(
+                    "ClickUp returned error: {error}",
+                    responseData.Error
+                );
+                return new SynchronizedTimeEntryDto { IsError = true };
+            }
+
+            var clickUpTask = await GetTaskAsync(timeEntry);
+            return new SynchronizedTimeEntryDto()
+            {
+                Id = responseData.Data?.Id ?? "",
+                Comment = responseData.Data?.Description,
+                AdditionalDescription = clickUpTask?.Name
+            };
         }
         else
         {
             response = await httpClient.PutAsync(uri, requestData);
-        }
-        var responseData = await HandleResponse<SetTimeEntryResponseDto?>(uri, response, requestData);
-        if (responseData == null || responseData.Value.IsError)
-        {
-            _logger.LogDebug(
-                "ClickUp returned error: {error}",
-                responseData.Value.Error
-            );
-            return new SynchronizedTimeEntryDto { IsError = true };
-        }
+            var responseData = await HandleResponse<UpdateTimeEntryResponseDto?>(uri, response, requestData);
+            if (responseData == null || responseData.IsError)
+            {
+                _logger.LogDebug(
+                    "ClickUp returned error: {error}",
+                    responseData.Error
+                );
+                return new SynchronizedTimeEntryDto { IsError = true };
+            }
 
-        var clickUpTask = await GetTaskAsync(timeEntry);
-        return new SynchronizedTimeEntryDto()
-        {
-            Id = responseData.Value.Id?.ToString() ?? "",
-            Description = clickUpTask?.Name
-        };
+            var clickUpTask = await GetTaskAsync(timeEntry);
+            var responseEntry = responseData.Data.FirstOrDefault();
+            return new SynchronizedTimeEntryDto()
+            {
+                Id = responseEntry.Id ?? "",
+                Comment = responseEntry.Description,
+                AdditionalDescription = clickUpTask?.Name
+            };
+        }
     }
 
     protected override async Task<bool> SendDeleteTimeEntryRequestAsync(TimeEntryEntity timeEntry)
@@ -153,18 +172,15 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         return true;
     }
 
-    private string BuildSetTimeEntryUri(string teamId, string taskId, bool isCustomTaskIds, string? timeEntryId = null)
+    private string BuildSetTimeEntryUri(string teamId, bool isCustomTaskIds, string? timeEntryId = null)
     {
         teamId = HttpUtility.UrlEncode(teamId);
-        taskId = HttpUtility.UrlEncode(
-            CleanUpTaskId(taskId, isCustomTaskIds)
-        );
         
         var queryParams = HttpUtility.ParseQueryString(string.Empty);
         queryParams.Add("custom_task_ids", isCustomTaskIds.ToString().ToLower());
         queryParams.Add("team_id", teamId);
         var url = new UriBuilder(
-            $"{BaseUrl}/task/{taskId}/time"
+            $"{BaseUrl}/team/{teamId}/time_entries"
             + (!string.IsNullOrEmpty(timeEntryId) ? $"/{timeEntryId}" : "")
         );
         url.Query = queryParams.ToString();

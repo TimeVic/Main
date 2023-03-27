@@ -22,7 +22,7 @@ public class ClickUpClientMock: IClickUpClient
         return new SynchronizedTimeEntryDto()
         {
             Id = "123",
-            Description = "Test description"
+            AdditionalDescription = "Test description"
         };
     }
 
