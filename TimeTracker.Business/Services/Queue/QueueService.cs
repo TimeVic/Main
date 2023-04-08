@@ -133,6 +133,10 @@ public class QueueService: IQueueService
         {
             await SendNotification<TimeEntryAutoStoppedNotificationItemContext>(queueItem, cancellationToken);
         }
+        else if (IsContext<EmailVerificationNotificationItemContext>(contextType))
+        {
+            await SendNotification<EmailVerificationNotificationItemContext>(queueItem, cancellationToken);
+        }
         else
         {
             throw new Exception($"Incorrect notification context: {queueItem.ContextType}");
