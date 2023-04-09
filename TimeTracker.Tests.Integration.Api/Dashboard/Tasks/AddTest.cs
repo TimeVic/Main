@@ -100,4 +100,30 @@ public class AddTest: BaseTest
         var error = await response.GetJsonErrorAsync();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
     }
+    
+    [Fact]
+    public async Task ShouldCreateHistoryItem()
+    {
+        var task = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            TaskListId = _taskList.Id,
+            Title = task.Title,
+            Description = task.Description,
+            NotificationTime = task.NotificationTime,
+            IsDone = task.IsDone,
+            IsArchived = task.IsArchived,
+        });
+        response.EnsureSuccessStatusCode();
+        
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(actualData.Id);
+        Assert.Single(actualTask.HistoryItems);
+        var historyItem = actualTask.HistoryItems.First();
+        Assert.Equal(task.Title, historyItem.Title);
+        Assert.Equal(task.Description, historyItem.Description);
+        Assert.Equal(task.NotificationTime.ToString(), historyItem.NotificationTime.ToString());
+        Assert.Equal(task.IsDone, historyItem.IsDone);
+        Assert.Equal(task.IsArchived, historyItem.IsArchived);
+    }
 }

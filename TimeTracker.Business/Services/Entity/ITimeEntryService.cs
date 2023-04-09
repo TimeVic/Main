@@ -20,5 +20,5 @@ public interface ITimeEntryService: IDomainService
         ProjectEntity? project = null
     );
 
-    Task DeleteAsync(TimeEntryEntity timeEntry);
+    System.Threading.Tasks.Task DeleteAsync(TimeEntryEntity timeEntry);
 }

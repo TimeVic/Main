@@ -216,4 +216,36 @@ public partial class UpdateTest: BaseTest
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
         Assert.Contains("for provided task list", error.Message);
     }
+    
+    [Fact]
+    public async Task ShouldCreateHistoryItemUpdate()
+    {
+        var newTags = await _tagSeeder.CreateSeveralAsync(_workspace, 2);
+        
+        var expectedTask = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.Id,
+            TaskListId = _otherTaskList.Id,
+            Title = expectedTask.Title,
+            Description = expectedTask.Description,
+            NotificationTime = expectedTask.NotificationTime,
+            IsDone = expectedTask.IsDone,
+            IsArchived = expectedTask.IsArchived,
+            UserId = _user.Id,
+            ExternalTaskId = expectedTask.ExternalTaskId,
+            TagIds = newTags.Select(item => item.Id).ToList()
+        });
+        response.EnsureSuccessStatusCode();
+
+        await DbSessionProvider.CurrentSession.RefreshAsync(_task);
+        Assert.Equal(2, _task.HistoryItems.Count);
+        var historyItem = _task.HistoryItems.Last();
+        Assert.Equal(expectedTask.Title, historyItem.Title);
+        Assert.Equal(expectedTask.Description, historyItem.Description);
+        Assert.Equal(expectedTask.NotificationTime.ToString(), historyItem.NotificationTime.ToString());
+        Assert.Equal(expectedTask.IsDone, historyItem.IsDone);
+        Assert.Equal(expectedTask.IsArchived, historyItem.IsArchived);
+        Assert.NotEmpty(historyItem.Tags ?? "");
+    }
 }

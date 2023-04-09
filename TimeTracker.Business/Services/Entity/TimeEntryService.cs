@@ -63,7 +63,7 @@ public class TimeEntryService : ITimeEntryService
         return timeEntry;
     }
 
-    public async Task DeleteAsync(TimeEntryEntity timeEntry)
+    public async System.Threading.Tasks.Task DeleteAsync(TimeEntryEntity timeEntry)
     {
         timeEntry.IsMarkedToDelete = true;
         await _dbSessionProvider.CurrentSession.SaveAsync(timeEntry);

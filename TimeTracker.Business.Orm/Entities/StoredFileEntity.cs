@@ -98,6 +98,10 @@ namespace TimeTracker.Business.Orm.Entities
             }
         }
         
+        public virtual string Url => $"/dashboard/storage/file/{Id}";
+        
+        public virtual string ThumbUrl => $"/dashboard/storage/file/thumbnail/{Id}";
+
         #endregion
     }
 }
