@@ -1,4 +1,5 @@
 using System.Collections;
+using NHibernate;
 using NHibernate.Collection;
 
 namespace TimeTracker.Business.Orm.Extensions
@@ -21,6 +22,15 @@ namespace TimeTracker.Business.Orm.Extensions
                 return true;
             }
             return false;
+        }
+        
+        public static T? GetInstanceFromCache<T>(this ISession session, object key) where T : class
+        {
+            var entity = session.GetSessionImplementation()
+                .PersistenceContext
+                .EntitiesByKey
+                .SingleOrDefault(x => x.Value is T && x.Key.Identifier == key);
+            return entity as T;
         }
     }
 }
