@@ -67,8 +67,8 @@ public class QueueService: IQueueService
                 {
                     await ProcessNotificationItem(queueItem, cancellationToken);
                     processedCounter++;
-                }
-                if (channel == QueueChannel.ExternalClient)
+                } 
+                else if (channel == QueueChannel.ExternalClient)
                 {
                     await ProcessExternalClientItem(queueItem, cancellationToken);
                     processedCounter++;

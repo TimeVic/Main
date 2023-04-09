@@ -1,6 +1,3 @@
 ﻿namespace TimeTracker.Web.Store.Common.Actions;
 
-public class SetIsAppInitializedAction
-{
-    
-}
+public record struct SetIsAppInitializedAction(bool IsInitialized);

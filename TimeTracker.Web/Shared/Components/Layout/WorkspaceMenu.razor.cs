@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common.Actions;
 using TimeTracker.Web.Store.Workspace;
@@ -16,6 +17,9 @@ public partial class WorkspaceMenu
     
     [Inject]
     public IState<AuthState> _authState { get; set; }
+    
+    [Inject]
+    public UrlService _urlService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -36,9 +40,7 @@ public partial class WorkspaceMenu
             return;
         }
 
-        Dispatcher.Dispatch(new SetWorkspaceAction(workspace));
-        Dispatcher.Dispatch(new PersistDataAction());
-        NavigationManager.NavigateTo(SiteUrl.Dashboard_TimeEntry, forceLoad: true);
+        _urlService.NavigateToChangeWorkspace(workspace.Id, SiteUrl.Dashboard_TimeEntry);
     }
     
     private void NavigateToEditPage()

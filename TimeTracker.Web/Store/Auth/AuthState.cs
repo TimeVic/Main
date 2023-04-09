@@ -13,7 +13,7 @@ public record AuthState
     
     public UserDto User { get; set; }
     
-    public WorkspaceDto Workspace { get; set; }
+    public WorkspaceDto? Workspace { get; set; }
 
     public MembershipAccessType AccessLevel
     {
