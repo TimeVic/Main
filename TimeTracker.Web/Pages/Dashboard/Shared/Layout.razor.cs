@@ -1,10 +1,19 @@
 ﻿
+using Microsoft.AspNetCore.Components;
+using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Services.Workspace;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared;
 
 public partial class Layout
 {
+    [Inject]
+    private WorkspaceInitializationService _workspaceInitializationService { get; set; }
+    
+    [Inject]
+    private NavigationManager _navigationManager { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         IsRedirectIfNotLoggedIn = true;
@@ -17,13 +26,11 @@ public partial class Layout
     
     protected override async Task OnLoggedInAsync()
     {
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Workspace.LoadListAction(false));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.WorkspaceMemberships.LoadListAction(false));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadListAction(false));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Client.LoadListAction(false));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.LoadListAction(false));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction(0));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Tag.LoadListAction());
+        if (!_navigationManager.GetPath().StartsWith("/board-change/"))
+        {
+            await _workspaceInitializationService.Init();
+            await _workspaceInitializationService.AfterInit();
+        }
         await Task.CompletedTask;
     }
 }

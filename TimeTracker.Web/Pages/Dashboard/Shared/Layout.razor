@@ -5,26 +5,33 @@
 <RadzenTooltip />
 <RadzenNotification/>
 
-@if (CommonState.Value.IsInitialized)
-{
-    <RadzenLayout>
+<RadzenLayout>
+    @if (CommonState.Value.IsInitialized)
+    {
         <MainHeader/>
         @if (IsShowMainMenu)
         {
             <NavMenu/>
-        }
-        <RadzenBody>
-            <div class="w-container container-fluid">
-                @Body
-            </div>
-            @if (!IsShowReCaptcha)
+        }    
+    }
+    <RadzenBody>
+        <div class="w-container container-fluid">
+            @if (CommonState.Value.IsInitialized)
             {
-                <style>
+                @Body
+            }
+            else
+            {
+                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
+            }
+        </div>
+        @if (!IsShowReCaptcha)
+        {
+            <style>
                     .grecaptcha-badge {
                         visibility: hidden;
                     }
                 </style>
-            }
-        </RadzenBody>
-    </RadzenLayout>    
-}
+        }
+    </RadzenBody>
+</RadzenLayout> 

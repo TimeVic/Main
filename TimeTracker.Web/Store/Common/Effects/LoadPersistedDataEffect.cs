@@ -36,7 +36,7 @@ public class LoadPersistedDataAEffect: AEffectPersistData<LoadPersistedDataActio
         {
             dispatcher.Dispatch(new LoginAction(authData));
         }
-        dispatcher.Dispatch(new SetIsAppInitializedAction());
+        dispatcher.Dispatch(new SetIsAppInitializedAction(IsInitialized: true));
     }
 
     private async Task<TState?> GetData<TState>(string key)

@@ -11,6 +11,7 @@ using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
+using TimeTracker.Web.Services.Workspace;
 
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -42,6 +43,7 @@ builder.Services.AddScoped<ISecurityManager, SecurityManager>();
 builder.Services.AddScoped<ModalDialogProviderService>();
 builder.Services.AddScoped<UiHelperService>();
 builder.Services.AddScoped<UrlService>();
+builder.Services.AddScoped<WorkspaceInitializationService>();
 
 // Store
 builder.Services.AddFluxor(
