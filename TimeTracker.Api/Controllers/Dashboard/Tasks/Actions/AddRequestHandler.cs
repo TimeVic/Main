@@ -19,10 +19,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
         private readonly IUserDao _userDao;
-        private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
         private readonly ISecurityManager _securityManager;
-        private readonly IWorkspaceAccessService _workspaceAccessService;
         private readonly ITaskListDao _taskListDao;
         private readonly ITaskDao _taskDao;
 
@@ -30,10 +28,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
-            IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
             ISecurityManager securityManager,
-            IWorkspaceAccessService workspaceAccessService,
             ITaskListDao taskListDao,
             ITaskDao taskDao
         )
@@ -41,10 +37,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _mapper = mapper;
             _requestService = requestService;
             _userDao = userDao;
-            _projectDao = projectDao;
             _sessionProvider = sessionProvider;
             _securityManager = securityManager;
-            _workspaceAccessService = workspaceAccessService;
             _taskListDao = taskListDao;
             _taskDao = taskDao;
         }

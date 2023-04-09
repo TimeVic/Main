@@ -24,6 +24,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         private readonly IWorkspaceAccessService _workspaceAccessService;
         private readonly ITaskListDao _taskListDao;
         private readonly ITaskDao _taskDao;
+        private readonly ITaskHistoryItemDao _taskHistoryItemDao;
 
         public UpdateRequestHandler(
             IMapper mapper,
@@ -34,7 +35,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             ISecurityManager securityManager,
             IWorkspaceAccessService workspaceAccessService,
             ITaskListDao taskListDao,
-            ITaskDao taskDao
+            ITaskDao taskDao,
+            ITaskHistoryItemDao taskHistoryItemDao
         )
         {
             _mapper = mapper;
@@ -46,6 +48,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _workspaceAccessService = workspaceAccessService;
             _taskListDao = taskListDao;
             _taskDao = taskDao;
+            _taskHistoryItemDao = taskHistoryItemDao;
         }
     
         public async Task<TaskDto> ExecuteAsync(UpdateRequest request)
@@ -80,7 +83,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             {
                 task.Tags.Add(tag);
             }
-            
+
+            await _taskHistoryItemDao.Create(task, user);
             return _mapper.Map<TaskDto>(task);
         }
     }

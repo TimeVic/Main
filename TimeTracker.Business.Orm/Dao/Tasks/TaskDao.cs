@@ -11,10 +11,15 @@ namespace TimeTracker.Business.Orm.Dao.Tasks;
 public class TaskDao: ITaskDao
 {
     private readonly IDbSessionProvider _sessionProvider;
+    private readonly ITaskHistoryItemDao _taskHistoryItemDao;
 
-    public TaskDao(IDbSessionProvider sessionProvider)
+    public TaskDao(
+        IDbSessionProvider sessionProvider,
+        ITaskHistoryItemDao taskHistoryItemDao
+    )
     {
         _sessionProvider = sessionProvider;
+        _taskHistoryItemDao = taskHistoryItemDao;
     }
 
     public async Task<TaskEntity?> GetById(long taskListId)
@@ -46,6 +51,7 @@ public class TaskDao: ITaskDao
         };
 
         await _sessionProvider.CurrentSession.SaveAsync(task);
+        await _taskHistoryItemDao.Create(task, user);
         return task;
     }
     
