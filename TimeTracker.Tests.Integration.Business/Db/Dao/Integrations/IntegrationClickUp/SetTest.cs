@@ -1,5 +1,4 @@
 using Autofac;
-using NHibernate.Linq;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Workspace;
@@ -7,6 +6,7 @@ using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
+using System.Threading.Tasks;
 
 namespace TimeTracker.Tests.Integration.Business.Db.Dao.Integrations.IntegrationClickUp;
 

@@ -44,6 +44,14 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "external_task_id", Length = 512, NotNull = false)]
         public virtual string? ExternalTaskId { get; set; }
 
+        [Property(NotNull = true)]
+        [Column(Name = "is_notified", NotNull = true)]
+        public virtual bool IsNotified { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "is_new_task", NotNull = true)]
+        public virtual bool IsNewTask { get; set; }
+        
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }
