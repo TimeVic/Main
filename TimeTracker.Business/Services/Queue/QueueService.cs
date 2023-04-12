@@ -5,6 +5,7 @@ using Notification.Abstractions;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Notifications;
 using TimeTracker.Business.Notifications.Senders;
+using TimeTracker.Business.Notifications.Senders.Tasks;
 using TimeTracker.Business.Notifications.Senders.TimeEntry;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Constants;
@@ -136,6 +137,10 @@ public class QueueService: IQueueService
         else if (IsContext<EmailVerificationNotificationItemContext>(contextType))
         {
             await SendNotification<EmailVerificationNotificationItemContext>(queueItem, cancellationToken);
+        }
+        else if (IsContext<TaskChangedNotificationContext>(contextType))
+        {
+            await SendNotification<TaskChangedNotificationContext>(queueItem, cancellationToken);
         }
         else
         {
