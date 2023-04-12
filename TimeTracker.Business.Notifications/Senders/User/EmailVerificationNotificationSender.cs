@@ -16,13 +16,13 @@ namespace TimeTracker.Business.Notifications.Senders.User
         }
 
         public Task SendAsync(
-            EmailVerificationNotificationItemContext commandItemContext, 
+            EmailVerificationNotificationItemContext context, 
             CancellationToken cancellationToken = default
         )
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("EmailVerificationNotification.htm");
-            emailBuilder.AddPlaceholder("verificationUrl", commandItemContext.VerificationUrl);
-            _emailSendingService.SendEmail(commandItemContext.ToAddress, emailBuilder, null);
+            emailBuilder.AddPlaceholder("verificationUrl", context.VerificationUrl);
+            _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
     }

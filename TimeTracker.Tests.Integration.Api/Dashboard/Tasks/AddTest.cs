@@ -125,5 +125,6 @@ public class AddTest: BaseTest
         Assert.Equal(task.NotificationTime.ToString(), historyItem.NotificationTime.ToString());
         Assert.Equal(task.IsDone, historyItem.IsDone);
         Assert.Equal(task.IsArchived, historyItem.IsArchived);
+        Assert.True(historyItem.IsNewTask);
     }
 }

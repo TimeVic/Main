@@ -51,7 +51,7 @@ public class TaskDao: ITaskDao
         };
 
         await _sessionProvider.CurrentSession.SaveAsync(task);
-        await _taskHistoryItemDao.Create(task, user);
+        await _taskHistoryItemDao.Create(task, user, true);
         return task;
     }
     

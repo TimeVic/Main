@@ -107,6 +107,10 @@ namespace TimeTracker.Business.Orm.Entities
 
         public virtual WorkspaceEntity Workspace => TaskList.Project.Workspace;
 
+        public virtual string TagsString => string.Join(";", Tags.Select(item => item.Name));
+        
+        public virtual string AttachmentsString => string.Join(";", Tags.Select(item => item.Name));
+        
         #endregion
     }
 }

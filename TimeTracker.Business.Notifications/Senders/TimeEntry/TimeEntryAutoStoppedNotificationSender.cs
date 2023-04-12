@@ -16,12 +16,12 @@ namespace TimeTracker.Business.Notifications.Senders.TimeEntry
         }
 
         public Task SendAsync(
-            TimeEntryAutoStoppedNotificationItemContext commandItemContext, 
+            TimeEntryAutoStoppedNotificationItemContext context, 
             CancellationToken cancellationToken = default
         )
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("TimeEntryAutoStoppedNotification.htm");
-            _emailSendingService.SendEmail(commandItemContext.ToAddress, emailBuilder, null);
+            _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
     }

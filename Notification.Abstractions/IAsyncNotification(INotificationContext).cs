@@ -5,6 +5,6 @@ namespace Notification.Abstractions
 {
     public interface IAsyncNotification<in TCommandcNotification> where TCommandcNotification : INotificationItemContext
     {
-        Task SendAsync(TCommandcNotification commandContext, CancellationToken cancellationToken = default);
+        Task SendAsync(TCommandcNotification context, CancellationToken cancellationToken = default);
     }
 }

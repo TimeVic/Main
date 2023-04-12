@@ -247,5 +247,6 @@ public partial class UpdateTest: BaseTest
         Assert.Equal(expectedTask.IsDone, historyItem.IsDone);
         Assert.Equal(expectedTask.IsArchived, historyItem.IsArchived);
         Assert.NotEmpty(historyItem.Tags ?? "");
+        Assert.False(historyItem.IsNewTask);
     }
 }

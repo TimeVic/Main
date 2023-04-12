@@ -76,6 +76,13 @@ namespace TimeTracker.Business.Orm.Entities
         [OneToMany(ClassType = typeof(WorkspaceMembershipEntity))]
         public virtual ICollection<WorkspaceMembershipEntity> WorkspaceMemberships { get; set; } = new List<WorkspaceMembershipEntity>();
         
+        #region Calculated
+
         public virtual bool IsActivated => VerificationTime.HasValue;
+
+        public virtual string Name => string.IsNullOrEmpty(UserName) ? Email : UserName;
+        
+        #endregion
+        
     }
 }
