@@ -15,7 +15,7 @@ namespace TimeTracker.WorkerServices.Services.Tasks
         ) : base(logger, serviceScopeFactory)
         {
             _taskNotificationService = ServiceProvider.GetService<ITaskNotificationService>();
-            ServiceName = "DefaultProcessingHostedService";
+            ServiceName = "TaskNotificationHostedService";
         }
 
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
