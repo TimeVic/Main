@@ -72,7 +72,7 @@ public class TaskNotificationService: ITaskNotificationService
             historyItem.AssigneeUser.Email,
             historyItem.Task.Workspace.CreatedUser.Email
         };
-        foreach (var receiverEmail in receivers)
+        foreach (var receiverEmail in receivers.Distinct())
         {
             await _queueService.PushNotificationAsync(new TaskChangedNotificationContext()
             {
