@@ -76,7 +76,10 @@ public class TaskNotificationService: ITaskNotificationService
         {
             await _queueService.PushNotificationAsync(new TaskChangedNotificationContext()
             {
+                UserName = historyItem.User.Name,
                 ToAddress = receiverEmail,
+                TaskId = historyItem.Task.Id,
+                TaskTitle = historyItem.Task.Title,
                 ChangeSet = changeSet
             });    
         }

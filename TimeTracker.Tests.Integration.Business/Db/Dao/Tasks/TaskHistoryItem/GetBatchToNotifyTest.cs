@@ -28,9 +28,10 @@ public class GetBatchToNotifyTest: BaseTest
     }
 
     [Fact]
-    public async Task ShouldGetToNotify()
+    public async Task ShouldGetToNotifyAndScipFirst()
     {
         var task = await _taskSeeder.CreateAsync();
+        await _taskHistoryItemDao.Create(task, _user);
         var actualHistoryItems = await _taskHistoryItemDao.GetBatchToNotify(0);
         Assert.Single(actualHistoryItems);
         

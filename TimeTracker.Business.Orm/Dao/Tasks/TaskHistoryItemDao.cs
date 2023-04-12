@@ -12,6 +12,7 @@ public class TaskHistoryItemDao: ITaskHistoryItemDao
         	id
         from task_history_items
         where is_notified is false 
+            and is_new_task is false
             and create_time >= :startTime
             and create_time <= :endTime
         order by task_id, create_time desc

@@ -18,12 +18,12 @@ namespace TimeTracker.Business.Notifications.Senders
         }
 
         public Task SendAsync(
-            TestNotificationItemContext commandItemContext, 
+            TestNotificationItemContext context, 
             CancellationToken cancellationToken = default
         )
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("TestNotification.htm");
-            _emailSendingService.SendEmail(commandItemContext.ToAddress, emailBuilder, null);
+            _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
     }
