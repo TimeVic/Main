@@ -30,7 +30,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
             var emailBuilder = _emailFactory.GetEmailBuilder("TaskChangedNotification.htm");
             emailBuilder.AddPlaceholder("userName", context.UserName);
             emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl}/board/task/" + context.TaskId);
-            emailBuilder.AddPlaceholder("taskTitle", context.UserName);
+            emailBuilder.AddPlaceholder("taskTitle", context.TaskTitle);
             emailBuilder.AddPlaceholder("changesBlock", BuildChangeSetBlock(context.ChangeSet));
             _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
