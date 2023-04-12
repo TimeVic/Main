@@ -39,23 +39,23 @@ public class TaskNotificationService: ITaskNotificationService
         var result = new Dictionary<string, string?>();
         var task = historyItem.Task;
         if (historyItem.Title != task.Title)
-            result.Add("New title:", task.Title);
+            result.Add("New title", task.Title);
         if (historyItem.Description != task.Description)
-            result.Add("New description:", task.Description);
+            result.Add("New description", task.Description);
         if (historyItem.Tags != task.TagsString)
-            result.Add("New tags:", task.TagsString);
+            result.Add("New tags", task.TagsString);
         if (historyItem.Attachments != task.AttachmentsString)
             result.Add("Added new attachments", "");
         if (historyItem.NotificationTime != task.NotificationTime)
-            result.Add("New notification time:", "");
+            result.Add("New notification time", "");
         if (historyItem.IsDone != task.IsDone)
-            result.Add("Marked task as:", task.IsDone ? "Done" : "Active");
+            result.Add("Marked task as", task.IsDone ? "Done" : "Active");
         if (historyItem.IsArchived != task.IsArchived && historyItem.IsArchived)
             result.Add("Archived the task", "");
         if (historyItem.AssigneeUser.Id != task.User.Id)
-            result.Add("Assigned to:", task.User.Name);
+            result.Add("Assigned to", task.User.Name);
         if (historyItem.TaskList.Id != task.TaskList.Id)
-            result.Add("New task list:", task.TaskList.Name);
+            result.Add("New task list", task.TaskList.Name);
 
         return result;
     }
@@ -72,7 +72,7 @@ public class TaskNotificationService: ITaskNotificationService
             historyItem.AssigneeUser.Email,
             historyItem.Task.Workspace.CreatedUser.Email
         };
-        foreach (var receiverEmail in receivers.Distinct())
+        foreach (var receiverEmail in receivers.DistinctBy(item => item))
         {
             await _queueService.PushNotificationAsync(new TaskChangedNotificationContext()
             {
