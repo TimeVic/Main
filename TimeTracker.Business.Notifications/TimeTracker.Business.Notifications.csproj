@@ -39,6 +39,8 @@
       <EmbeddedResource Include="Templates\Emails\en\RegistrationNotification.htm" />
       <None Remove="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
+      <None Remove="Templates\Emails\en\TaskChangedNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\TaskChangedNotification.htm" />
     </ItemGroup>
 
 </Project>
