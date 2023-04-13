@@ -41,8 +41,8 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
             var result = "<div>";
             foreach (var changeKeyPair in changeSet)
             {
-                var changeString = string.IsNullOrEmpty(changeKeyPair.Value)
-                    ? changeKeyPair.Key
+                var changeString = string.IsNullOrEmpty(changeKeyPair.Key)
+                    ? changeKeyPair.Value
                     : $"{changeKeyPair.Key}: <b>{changeKeyPair.Value}</b>";
                 result += $"<p>{changeString}</p>";
             }
