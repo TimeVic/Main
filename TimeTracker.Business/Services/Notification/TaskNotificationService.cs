@@ -44,14 +44,18 @@ public class TaskNotificationService: ITaskNotificationService
             result.Add("New description", task.Description);
         if (historyItem.Tags != task.TagsString)
             result.Add("New tags", task.TagsString);
-        if (historyItem.Attachments != task.AttachmentsString)
-            result.Add("Added new attachments", "");
+        if (
+            historyItem.Attachments != task.AttachmentsString
+            && !string.IsNullOrEmpty(historyItem.Attachments)
+            && !string.IsNullOrEmpty(task.AttachmentsString)
+        )
+            result.Add("", "Added new attachments");
         if (historyItem.NotificationTime != task.NotificationTime)
-            result.Add("New notification time", "");
+            result.Add("New notification time", historyItem.NotificationTime.ToString());
         if (historyItem.IsDone != task.IsDone)
             result.Add("Marked task as", task.IsDone ? "Done" : "Active");
         if (historyItem.IsArchived != task.IsArchived && historyItem.IsArchived)
-            result.Add("Archived the task", "");
+            result.Add("", "Archived the task");
         if (historyItem.AssigneeUser.Id != task.User.Id)
             result.Add("Assigned to", task.User.Name);
         if (historyItem.TaskList.Id != task.TaskList.Id)
