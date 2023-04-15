@@ -31,3 +31,43 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: Test 2
+  steps:
+  - !CommandStep
+    name: Test 2 Job
+    runInContainer: true
+    image: ubuntu
+    interpreter: !DefaultInterpreter
+      commands:
+      - echo "@param:db@"
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  paramSpecs:
+  - !TextParam
+    name: db
+    allowEmpty: false
+    multiline: false
+  triggers:
+  - !PullRequestUpdateTrigger
+    branches: '**'
+    projects: TimeVic/Main
+    params:
+    - name: db
+      valuesProvider: !SpecifiedValues
+        values:
+        - - Test 2
+      secret: false
+  jobDependencies:
+  - jobName: Test
+    requireSuccessful: true
+    jobParams:
+    - name: db
+      valuesProvider: !SpecifiedValues
+        values:
+        - - Some value 2
+      secret: false
+    artifacts: '**'
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
