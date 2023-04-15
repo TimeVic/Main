@@ -5,7 +5,7 @@ jobs:
   - !CommandStep
     name: Show DB param
     runInContainer: true
-    image: hello-world
+    image: ubuntu
     interpreter: !DefaultInterpreter
       commands:
       - echo "@param:db@"
