@@ -1,0 +1,31 @@
+version: 20
+jobs:
+- name: Test
+  steps:
+  - !CommandStep
+    name: Show DB param
+    runInContainer: false
+    interpreter: !ShellInterpreter
+      shell: bash
+      commands:
+      - echo "@param:db@"
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  paramSpecs:
+  - !TextParam
+    name: db
+    allowEmpty: false
+    multiline: false
+  triggers:
+  - !PullRequestUpdateTrigger
+    projects: timevic
+    params:
+    - name: db
+      valuesProvider: !SpecifiedValues
+        values:
+        - - Postre
+      secret: false
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
