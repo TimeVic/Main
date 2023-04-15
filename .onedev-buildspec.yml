@@ -4,7 +4,8 @@ jobs:
   steps:
   - !CommandStep
     name: Show DB param
-    runInContainer: false
+    runInContainer: true
+    image: hello-world
     interpreter: !DefaultInterpreter
       commands:
       - echo "@param:db@"
