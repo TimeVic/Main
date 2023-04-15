@@ -5,8 +5,7 @@ jobs:
   - !CommandStep
     name: Show DB param
     runInContainer: false
-    interpreter: !ShellInterpreter
-      shell: bash
+    interpreter: !DefaultInterpreter
       commands:
       - echo "@param:db@"
     useTTY: false
