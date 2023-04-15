@@ -18,7 +18,7 @@ jobs:
     multiline: false
   triggers:
   - !PullRequestUpdateTrigger
-    projects: timevic
+    projects: TimeVic/Main
     params:
     - name: db
       valuesProvider: !SpecifiedValues
