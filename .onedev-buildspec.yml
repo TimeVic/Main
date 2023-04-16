@@ -73,6 +73,7 @@ jobs:
   retryDelay: 30
   timeout: 3600
 - name: Run Integration Tests
+  jobExecutor: onedev-executor-1
   steps:
   - !CommandStep
     name: Run migrations
