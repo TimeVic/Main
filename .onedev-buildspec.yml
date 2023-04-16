@@ -88,6 +88,8 @@ jobs:
     name: db
     allowEmpty: false
     multiline: false
+    defaultValueProvider: !SpecifiedDefaultValue
+      value: Some value
   triggers:
   - !PullRequestUpdateTrigger
     projects: TimeVic/Main
