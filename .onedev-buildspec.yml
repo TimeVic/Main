@@ -1,6 +1,7 @@
 version: 20
 jobs:
 - name: Build
+  jobExecutor: onedev-executor-1
   steps:
   - !CommandStep
     name: Build solution
@@ -106,7 +107,7 @@ jobs:
         values:
         - - Some value 2
       secret: false
-    artifacts: '**'
+    artifacts: ./**
   requiredServices:
   - Postgres
   retryCondition: never
