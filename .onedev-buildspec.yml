@@ -38,6 +38,9 @@ jobs:
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
+  caches:
+  - key: nuget-cache
+    path: /root/.nuget/packages/
   timeout: 3600
 - name: Run Integration Tests
   jobExecutor: onedev-executor-1
@@ -82,6 +85,9 @@ jobs:
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
+  caches:
+  - key: nuget-cache
+    path: /root/.nuget/packages/
   timeout: 3600
 services:
 - name: postgres
