@@ -77,7 +77,7 @@ jobs:
         values:
         - - Some value 2
       secret: false
-    artifacts: ./**
+    artifacts: '*/**'
   requiredServices:
   - Postgres
   retryCondition: never
