@@ -1,15 +1,58 @@
 version: 20
 jobs:
-- name: Test
+- name: Build
   steps:
   - !CommandStep
-    name: Show DB param
+    name: Build solution
     runInContainer: true
     image: ubuntu
     interpreter: !DefaultInterpreter
       commands:
-      - echo "@param:db@"
+      - cat /etc/os-release
+      - ''
+      - apt update --fix-missing
+      - apt install -y apt-transport-https wget ca-certificates iputils-ping telnet
+        curl gnupg2
+      - ''
+      - '# Configure time'
+      - DEBIAN_FRONTEND=noninteractive
+      - TZ=Etc/UTC
+      - ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+      - apt-get install -y tzdata lsb-release
+      - ''
+      - '# Install .Net Core 7.0'
+      - curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+      - curl https://packages.microsoft.com/config/ubuntu/20.10/prod.list | tee /etc/apt/sources.list.d/msprod.list
+      - ''
+      - '# Install Redis repositories'
+      - curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+      - echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb
+        $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list
+      - ''
+      - '# Install Postgres repositories'
+      - '# Create the file repository configuration:'
+      - sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg
+        main" > /etc/apt/sources.list.d/pgdg.list'
+      - wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key
+        add -
+      - ''
+      - '# Install packages'
+      - apt update
+      - apt-get install -y net-tools sudo netcat \
+      - '    default-jre \'
+      - '    postgresql postgresql-client redis \'
+      - '    dotnet-sdk-7.0'
+      - "\t"
+      - 'ASPNETCORE_URLS = "http://+:80" '
+      - ASPNETCORE_ENVIRONMENT=Development
+      - 'DOTNET_USE_POLLING_FILE_WATCHER=true  '
+      - DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
+      - HOME=/tmp
     useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PublishArtifactStep
+    name: Publish artifacts
+    artifacts: '**'
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   paramSpecs:
   - !TextParam
@@ -31,12 +74,12 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
-- name: Test 2
+- name: Run Integration Tests
   steps:
   - !CommandStep
-    name: Test 2 Job
+    name: Run migrations
     runInContainer: true
-    image: ubuntu
+    image: mcr.microsoft.com/dotnet/sdk
     interpreter: !DefaultInterpreter
       commands:
       - echo "@param:db@"
@@ -58,7 +101,7 @@ jobs:
         - - Test 2
       secret: false
   jobDependencies:
-  - jobName: Test
+  - jobName: Build
     requireSuccessful: true
     jobParams:
     - name: db
@@ -67,7 +110,13 @@ jobs:
         - - Some value 2
       secret: false
     artifacts: '**'
+  requiredServices:
+  - Postgres
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+services:
+- name: Postgres
+  image: postgres:15
+  readinessCheckCommand: POSTGRES_PASSWORD=StronG67Pass
