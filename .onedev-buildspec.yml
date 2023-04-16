@@ -90,16 +90,6 @@ jobs:
     name: db
     allowEmpty: false
     multiline: false
-  triggers:
-  - !PullRequestUpdateTrigger
-    branches: '**'
-    projects: TimeVic/Main
-    params:
-    - name: db
-      valuesProvider: !SpecifiedValues
-        values:
-        - - Test 2
-      secret: false
   jobDependencies:
   - jobName: Build
     requireSuccessful: true
