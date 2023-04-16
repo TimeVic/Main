@@ -15,6 +15,7 @@ jobs:
     image: mcr.microsoft.com/dotnet/sdk:latest
     interpreter: !DefaultInterpreter
       commands:
+      - nuget locals all -list
       - echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json
       - echo "{}" > TimeTracker.Migrations/appsettings.Local.json
       - echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json
@@ -47,7 +48,7 @@ jobs:
     image: mcr.microsoft.com/dotnet/sdk
     interpreter: !DefaultInterpreter
       commands:
-      - export ConnectionStrings__DefaultConnection="User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres;Pooling=true;Include
+      - export ConnectionStrings__DefaultConnection="User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;Include
         Error Detail=true;Log Parameters=true;"
       - export Hibernate__IsShowSql="false"
       - ''
@@ -78,14 +79,12 @@ jobs:
         - - Some value 2
       secret: false
     artifacts: '*/**'
-  requiredServices:
-  - Postgres
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
 services:
-- name: Postgres
+- name: postgres
   image: postgres:15
   envVars:
   - name: POSTGRES_PASSWORD
