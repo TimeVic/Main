@@ -117,4 +117,7 @@ jobs:
 services:
 - name: Postgres
   image: postgres:15
-  readinessCheckCommand: POSTGRES_PASSWORD=StronG67Pass
+  envVars:
+  - name: POSTGRES_PASSWORD
+    value: StronG67Pass
+  readinessCheckCommand: exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
