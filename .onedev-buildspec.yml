@@ -82,6 +82,8 @@ jobs:
         - - Some value 2
       secret: false
     artifacts: '*/**'
+  requiredServices:
+  - postgres
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
