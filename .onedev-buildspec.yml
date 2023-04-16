@@ -90,6 +90,13 @@ jobs:
     name: db
     allowEmpty: false
     multiline: false
+  triggers:
+  - !DependencyFinishedTrigger
+    projects: TimeVic/Main
+    params:
+    - name: db
+      valuesProvider: !Ignore {}
+      secret: false
   jobDependencies:
   - jobName: Build
     requireSuccessful: true
