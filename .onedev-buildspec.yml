@@ -90,4 +90,5 @@ services:
   envVars:
   - name: POSTGRES_PASSWORD
     value: postgres
-  readinessCheckCommand: exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+  readinessCheckCommand: exec pg_isready -U "postgres" -P "postgres" -h 127.0.0.1
+    -p 5432
