@@ -15,7 +15,7 @@ jobs:
     image: mcr.microsoft.com/dotnet/sdk:latest
     interpreter: !DefaultInterpreter
       commands:
-      - nuget locals all -list
+      - dotnet nuget locals all -l
       - echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json
       - echo "{}" > TimeTracker.Migrations/appsettings.Local.json
       - echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json
