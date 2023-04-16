@@ -3,6 +3,12 @@ jobs:
 - name: Build
   jobExecutor: onedev-executor-1
   steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
     name: Build solution
     runInContainer: true
@@ -53,7 +59,7 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
     name: Publish artifacts
-    artifacts: '**'
+    artifacts: ./**
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   paramSpecs:
   - !TextParam
@@ -62,15 +68,6 @@ jobs:
     multiline: false
     defaultValueProvider: !SpecifiedDefaultValue
       value: Some value
-  triggers:
-  - !PullRequestUpdateTrigger
-    projects: TimeVic/Main
-    params:
-    - name: db
-      valuesProvider: !SpecifiedValues
-        values:
-        - - Postre
-      secret: false
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
@@ -92,7 +89,7 @@ jobs:
     allowEmpty: false
     multiline: false
   triggers:
-  - !DependencyFinishedTrigger
+  - !PullRequestUpdateTrigger
     projects: TimeVic/Main
     params:
     - name: db
