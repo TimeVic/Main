@@ -58,6 +58,45 @@ jobs:
       - dotnet run --no-restore --no-build --project ./TimeTracker.Migrations
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run Unit Tests
+    runInContainer: true
+    image: mcr.microsoft.com/dotnet/sdk
+    interpreter: !DefaultInterpreter
+      commands:
+      - export ConnectionStrings__DefaultConnection="User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;Include
+        Error Detail=true;Log Parameters=true;"
+      - export Hibernate__IsShowSql="false"
+      - ''
+      - dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Unit.Business
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run Integration Tests for Bussiness logic
+    runInContainer: true
+    image: mcr.microsoft.com/dotnet/sdk
+    interpreter: !DefaultInterpreter
+      commands:
+      - export ConnectionStrings__DefaultConnection="User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;Include
+        Error Detail=true;Log Parameters=true;"
+      - export Hibernate__IsShowSql="false"
+      - ''
+      - dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Integration.Business
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run Integration tests for API
+    runInContainer: true
+    image: mcr.microsoft.com/dotnet/sdk
+    interpreter: !DefaultInterpreter
+      commands:
+      - export ConnectionStrings__DefaultConnection="User ID=postgres;Password=postgres;Host=postgres;Port=5432;Database=postgres;Pooling=true;Include
+        Error Detail=true;Log Parameters=true;"
+      - export Hibernate__IsShowSql="false"
+      - ''
+      - dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   paramSpecs:
   - !TextParam
     name: db
@@ -87,9 +126,6 @@ jobs:
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
-  caches:
-  - key: nuget-cache
-    path: /root/.nuget/packages/
   timeout: 3600
 services:
 - name: postgres
