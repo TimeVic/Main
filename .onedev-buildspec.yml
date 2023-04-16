@@ -10,56 +10,17 @@ jobs:
     withSubmodules: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
-    name: Build solution
+    name: Build
     runInContainer: true
-    image: ubuntu
+    image: mcr.microsoft.com/dotnet/sdk:latest
     interpreter: !DefaultInterpreter
       commands:
-      - cat /etc/os-release
-      - ''
-      - apt update --fix-missing
-      - apt install -y apt-transport-https wget ca-certificates iputils-ping telnet
-        curl gnupg2
-      - ''
-      - '# Configure time'
-      - DEBIAN_FRONTEND=noninteractive
-      - TZ=Etc/UTC
-      - ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-      - apt-get install -y tzdata lsb-release
-      - ''
-      - '# Install .Net Core 7.0'
-      - curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-      - curl https://packages.microsoft.com/config/ubuntu/20.10/prod.list | tee /etc/apt/sources.list.d/msprod.list
-      - ''
-      - '# Install Redis repositories'
-      - curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
-      - echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb
-        $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/redis.list
-      - ''
-      - '# Install Postgres repositories'
-      - '# Create the file repository configuration:'
-      - sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg
-        main" > /etc/apt/sources.list.d/pgdg.list'
-      - wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key
-        add -
-      - ''
-      - '# Install packages'
-      - apt update
-      - apt-get install -y net-tools sudo netcat \
-      - '    default-jre \'
-      - '    postgresql postgresql-client redis \'
-      - '    dotnet-sdk-7.0'
-      - "\t"
-      - 'ASPNETCORE_URLS = "http://+:80" '
-      - ASPNETCORE_ENVIRONMENT=Development
-      - 'DOTNET_USE_POLLING_FILE_WATCHER=true  '
-      - DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
-      - HOME=/tmp
+      - dotnet build --
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
     name: Publish artifacts
-    artifacts: ./**
+    artifacts: '@project_path@/**'
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   paramSpecs:
   - !TextParam
