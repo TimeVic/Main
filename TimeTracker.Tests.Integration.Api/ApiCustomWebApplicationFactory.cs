@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using TimeTracker.Api;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Notifications.Services;
@@ -23,11 +24,15 @@ public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
     {
         var builder = Host.CreateDefaultBuilder()
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureWebHost(builder =>
+            {
+                builder.UseStartup<TestStartup>();
+            })
             .ConfigureWebHostDefaults(builder =>
             {
                 builder.UseStartup<TestStartup>()
                     .UseSerilog()
-                    .UseContentRoot(AssemblyUtils.GetAssemblyPath())
+                    .UseContentRoot(AssemblyUtils.GetAssemblyPath(typeof(ApiAssemblyMarker).Assembly))
                     .ConfigureTestServices(services => 
                     {
                         services.AddHttpContextAccessor();

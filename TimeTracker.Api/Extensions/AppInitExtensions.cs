@@ -17,7 +17,7 @@ namespace TimeTracker.Api.Extensions
         {
             services.AddControllers()
                 // We should provide correct assembly for the tests
-                .AddApplicationPart(typeof(ApiAssemblyMarker).Assembly)
+                .AddApplicationPart(typeof(TimeTracker.Api.Startup).Assembly)
                 .ConfigureApiBehaviorOptions(options =>
                 {
                     // Disable pre-model validation of the models
