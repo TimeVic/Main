@@ -305,6 +305,9 @@ jobs:
       - docker pull lampego/timevic-web:latest
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  jobDependencies:
+  - jobName: Publish
+    requireSuccessful: true
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
