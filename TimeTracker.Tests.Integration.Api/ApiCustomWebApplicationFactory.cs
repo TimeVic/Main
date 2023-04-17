@@ -15,12 +15,6 @@ namespace TimeTracker.Tests.Integration.Api;
 
 public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
 {
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        builder.UseContentRoot(".");
-        base.ConfigureWebHost(builder);
-    }
-    
     public void ConfigureServices(IServiceCollection services)
     {
         // This method should be here to run the tests
@@ -34,7 +28,7 @@ public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
             {
                 builder.UseStartup<TestStartup>()
                     .UseSerilog()
-                    // .UseContentRoot(AssemblyUtils.GetAssemblyPath(typeof(ApiAssemblyMarker).Assembly))
+                    .UseContentRoot(AssemblyUtils.GetAssemblyPath(typeof(ApiAssemblyMarker).Assembly))
                     .ConfigureTestServices(services => 
                     {
                         services.AddHttpContextAccessor();

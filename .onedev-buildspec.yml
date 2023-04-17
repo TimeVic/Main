@@ -23,12 +23,9 @@ jobs:
       - echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json
       - ''
       - '# Tests'
-      - dotnet build --configuration=Debug --output="./build/TimeTracker.Tests.Unit.Business"
-        ./TimeTracker.Tests.Unit.Business
-      - dotnet build --configuration=Debug --output="./build/TimeTracker.Tests.Integration.Business"
-        ./TimeTracker.Tests.Integration.Business
-      - dotnet build --configuration=Debug --output="./build/TimeTracker.Tests.Integration.Api"
-        ./TimeTracker.Tests.Integration.Api
+      - dotnet build --configuration=Debug ./TimeTracker.Tests.Unit.Business/TimeTracker.Tests.Unit.Business
+      - dotnet build --configuration=Debug ./TimeTracker.Tests.Integration.Business/TimeTracker.Tests.Integration.Business
+      - dotnet build --configuration=Debug ./TimeTracker.Tests.Integration.Api/TimeTracker.Tests.Integration.Api
       - ''
       - '# Main projects '
       - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
@@ -43,7 +40,7 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
     name: Publish artifacts
-    artifacts: build/**
+    artifacts: "*/**"
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   paramSpecs:
   - !TextParam
@@ -131,7 +128,7 @@ jobs:
         values:
         - - Some value 2
       secret: false
-    artifacts: build/**
+    artifacts: "*/**"
   requiredServices:
   - postgres
   retryCondition: never
