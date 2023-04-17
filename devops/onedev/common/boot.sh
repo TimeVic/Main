@@ -1,6 +1,6 @@
 #!/bin/bash
 
 echo "Start application.."
-echo "Project dir is: $PROJECT_DIR"
-cd "./$PROJECT_DIR"
-dotnet run --no-launch-profile
+scriptPath="./$PROJECT_DIR/$PROJECT_DIR"
+echo "Script path: $scriptPath"
+eval $scriptPath
