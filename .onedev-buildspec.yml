@@ -104,15 +104,15 @@ jobs:
       - ''
       - cd ./build/TimeTracker.Tests.Unit.Business/
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
-        TimeTracker.Tests.Unit.Business.dll
+        ./TimeTracker.Tests.Unit.Business
       - ''
       - cd ./../TimeTracker.Tests.Integration.Business/
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
-        TimeTracker.Tests.Integration.Business.dll
+        ./TimeTracker.Tests.Integration.Business
       - ''
       - cd ./../TimeTracker.Tests.Integration.Api/
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
-        TimeTracker.Tests.Integration.Api.dll
+        ./TimeTracker.Tests.Integration.Api
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   paramSpecs:
