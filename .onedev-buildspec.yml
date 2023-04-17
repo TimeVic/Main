@@ -202,7 +202,7 @@ jobs:
   - !RunContainerStep
     name: Run Main API container
     image: lampego/timevic-main:latest
-    args: -p 6201:80 --restart=always -d
+    args: -p 6210:80 --restart=always -d
     envVars:
     - name: PROJECT_DIR
       value: TimeTracker.Api
@@ -263,6 +263,12 @@ jobs:
       value: '@secret:prod-s3-secret-key@'
     - name: AWS__S3__BucketName
       value: '@secret:prod-s3-bucket-name@'
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !RunContainerStep
+    name: Run Web container
+    image: lampego/timevic-web:latest
+    args: -d --restart=always -p 6211:80
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   jobDependencies:
