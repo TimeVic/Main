@@ -15,7 +15,7 @@ public class TestStartup: Startup
     public TestStartup(IConfiguration configuration) : base(configuration)
     {
     }
-    
+
     public override void ConfigureContainer(ContainerBuilder builder)
     {
         base.ConfigureContainer(builder);
