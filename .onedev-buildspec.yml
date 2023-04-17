@@ -192,7 +192,7 @@ jobs:
   retryDelay: 30
   timeout: 3600
 - name: Deploy
-  jobExecutor: abedor-web-1
+  jobExecutor: abedor-web-1-docker-executor
   steps:
   - !RunContainerStep
     name: Run migrations
