@@ -196,7 +196,7 @@ jobs:
   steps:
   - !RunContainerStep
     name: Run migrations
-    image: lampego/timevic-main
+    image: --restart=no lampego/timevic-main
     envVars:
     - name: PROJECT_DIR
       value: TimeTracker.Migrations
