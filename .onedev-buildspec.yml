@@ -71,7 +71,7 @@ jobs:
         Error Detail=true;Log Parameters=true;"
       - export Hibernate__IsShowSql="false"
       - ''
-      - dotnet run --no-restore --no-build --project ./TimeTracker.Migrations
+      - dotnet run --no-restore --no-build ./build/TimeTracker.Migrations
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
