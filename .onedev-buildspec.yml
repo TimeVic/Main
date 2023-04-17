@@ -196,7 +196,7 @@ jobs:
   steps:
   - !CommandStep
     name: Pull latest
-    runInContainer: true
+    runInContainer: false
     image: ubuntu
     interpreter: !DefaultInterpreter
       commands:
