@@ -194,6 +194,15 @@ jobs:
 - name: Deploy
   jobExecutor: abedor-web-1
   steps:
+  - !CommandStep
+    name: Pull latest
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker pull lampego/timevic-main:latest
+      - docker pull lampego/timevic-web:latest
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !RunContainerStep
     name: Run migrations
     image: lampego/timevic-main
