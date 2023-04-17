@@ -26,7 +26,9 @@ public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureWebHost(builder =>
             {
-                builder.UseStartup<TestStartup>();
+                builder
+                    .UseContentRoot(AssemblyUtils.GetAssemblyPath(typeof(ApiAssemblyMarker).Assembly))
+                    .UseStartup<TestStartup>();
             })
             .ConfigureWebHostDefaults(builder =>
             {
