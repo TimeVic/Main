@@ -329,10 +329,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker run \
-      - '--restart=always \ '
-      - '-d \ '
-      - --label=timevic-main-worker \
+      - docker run -d --restart=always --label=timevic-main-worker \
       - -e "PROJECT_DIR=TimeTracker.WorkerServices" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
       - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
