@@ -192,7 +192,7 @@ jobs:
   retryDelay: 30
   timeout: 3600
 - name: Deploy
-  jobExecutor: abedor-web-1
+  jobExecutor: abedor-web-1-docker-executor
   steps:
   - !RunContainerStep
     name: Run migrations
@@ -209,7 +209,7 @@ jobs:
   - !RunContainerStep
     name: Run Main API container
     image: lampego/timevic-main
-    args: -p 6210:80 --restart=always -d
+    args: -p 6210:80 --restart=always -d --name=timevic-main-api
     envVars:
     - name: PROJECT_DIR
       value: TimeTracker.Api
@@ -242,7 +242,7 @@ jobs:
   - !RunContainerStep
     name: Run Worker Services container
     image: lampego/timevic-main
-    args: --restart=always -d
+    args: --restart=always -d --name=timevic-main-worker
     envVars:
     - name: PROJECT_DIR
       value: TimeTracker.WorkerServices
@@ -276,6 +276,38 @@ jobs:
     name: Run Web container
     image: lampego/timevic-web
     args: -d --restart=always -p 6211:80
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  jobDependencies:
+  - jobName: Stop and pull images
+    requireSuccessful: true
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+- name: Stop and pull images
+  jobExecutor: abedor-web-1
+  steps:
+  - !CommandStep
+    name: Stop and remove images
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker rm -f timevic-main-api || true
+      - docker rm -f timevic-main-worker || true
+      - docker rm -f timevic-web || true
+      - ''
+      - docker image rm -f lampego/timevic-main || true
+      - docker image rm -f lampego/timevic-web || true
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Pull images
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker pull lampego/timevic-main:latest
+      - docker pull lampego/timevic-web:latest
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
