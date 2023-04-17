@@ -147,11 +147,11 @@ jobs:
     image: docker
     interpreter: !DefaultInterpreter
       commands:
-      - docker build --file="devops/onedev/common/Dockerfile" -t lampego/timevic-main:@build_number@
-        .
+      - imageName="lampego/timevic-main:@build_number@"
       - ''
+      - docker build --file="devops/onedev/common/Dockerfile" -t $imageName .
       - docker login -u @secret:dockerhub-login@ -p @secret:dockerhub-password@
-      - docker push lampego/timevic-main:@build_number@
+      - docker push $imageName
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   jobDependencies:
