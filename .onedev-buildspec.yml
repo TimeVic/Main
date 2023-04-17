@@ -203,7 +203,7 @@ jobs:
     - name: Serilog__MinimumLevel__Default
       value: Debug
     - name: ConnectionStrings__DefaultConnection
-      value: User ID=@secret:dockerhub-login@;Password=@secret:dockerhub-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
+      value: User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !RunContainerStep
@@ -222,7 +222,7 @@ jobs:
     - name: Redis__Server
       value: 10.10.0.2:6379
     - name: ConnectionStrings__DefaultConnection
-      value: User ID=@secret:dockerhub-login@;Password=@secret:dockerhub-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
+      value: User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
     - name: Smtp__UserName
       value: '@secret:prod-smtp-login@'
     - name: Smtp__Password
@@ -255,7 +255,7 @@ jobs:
     - name: Redis__Server
       value: 10.10.0.2:6379
     - name: ConnectionStrings__DefaultConnection
-      value: User ID=@secret:dockerhub-login@;Password=@secret:dockerhub-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
+      value: User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
     - name: Smtp__UserName
       value: '@secret:prod-smtp-login@'
     - name: Smtp__Password
@@ -310,9 +310,6 @@ jobs:
       - '#docker pull lampego/timevic-web:latest'
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  jobDependencies:
-  - jobName: Publish
-    requireSuccessful: true
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
