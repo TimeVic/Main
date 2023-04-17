@@ -145,3 +145,26 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: Publish
+  jobExecutor: onedev-executor-1
+  steps:
+  - !BuildImageStep
+    name: Build main docker image
+    dockerfile: devops/onedev/common/Dockerfile
+    tags: lampego/timevic-main:@build_number@
+    publish: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  jobDependencies:
+  - jobName: Build
+    requireSuccessful: true
+    jobParams:
+    - name: db
+      valuesProvider: !SpecifiedValues
+        values:
+        - - Some value
+      secret: false
+    artifacts: '*/**'
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
