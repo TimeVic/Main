@@ -311,6 +311,19 @@ jobs:
       - '#docker pull lampego/timevic-web:latest'
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run migrations
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker run \
+      - -e "PROJECT_DIR=TimeTracker.Migrations" \
+      - -e "Serilog__MinimumLevel__Default=Debug" \
+      - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
+        \
+      - lampego/timevic-main
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
