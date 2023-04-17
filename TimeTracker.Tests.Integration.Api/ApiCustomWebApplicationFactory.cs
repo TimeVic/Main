@@ -17,7 +17,7 @@ public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseContentRoot(AssemblyUtils.GetAssemblyPath(typeof(ApiAssemblyMarker).Assembly));
+        builder.UseContentRoot(".");
         base.ConfigureWebHost(builder);
     }
     
@@ -34,7 +34,7 @@ public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
             {
                 builder.UseStartup<TestStartup>()
                     .UseSerilog()
-                    .UseContentRoot(AssemblyUtils.GetAssemblyPath(typeof(ApiAssemblyMarker).Assembly))
+                    // .UseContentRoot(AssemblyUtils.GetAssemblyPath(typeof(ApiAssemblyMarker).Assembly))
                     .ConfigureTestServices(services => 
                     {
                         services.AddHttpContextAccessor();
