@@ -332,7 +332,7 @@ jobs:
       - docker run \
       - '--restart=always \ '
       - '-d \ '
-      - --name=timevic-main-worker \
+      - --label=timevic-main-worker \
       - -e "PROJECT_DIR=TimeTracker.WorkerServices" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
       - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
@@ -357,7 +357,7 @@ jobs:
     interpreter: !DefaultInterpreter
       commands:
       - docker run \
-      - '--port=6210:80 --restart=always -d --name=timevic-main-api \ '
+      - '--port=6210:80 --restart=always -d --label=timevic-main-api \ '
       - -e "PROJECT_DIR=TimeTracker.Api" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
       - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
