@@ -297,8 +297,8 @@ jobs:
       - docker rm -f timevic-main-worker || true
       - docker rm -f timevic-web || true
       - ''
-      - docker image rm lampego/timevic-main:latest
-      - docker image rm lampego/timevic-web:latest
+      - docker image rm -f lampego/timevic-main || true
+      - docker image rm -f lampego/timevic-web || true
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
