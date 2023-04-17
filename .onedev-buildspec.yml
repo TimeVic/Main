@@ -196,7 +196,8 @@ jobs:
   steps:
   - !CommandStep
     name: Pull latest
-    runInContainer: false
+    runInContainer: true
+    image: ubuntu
     interpreter: !DefaultInterpreter
       commands:
       - docker pull lampego/timevic-main:latest
