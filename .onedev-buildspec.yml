@@ -138,7 +138,7 @@ jobs:
         values:
         - - Some value 2
       secret: false
-    artifacts: build/**
+    artifacts: '*/**'
   requiredServices:
   - postgres
   retryCondition: never
