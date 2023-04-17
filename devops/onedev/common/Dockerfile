@@ -18,3 +18,5 @@ RUN ["dotnet", "build", "--verbosity=q"]
 COPY ./devops/publish_native/common/boot.sh /usr/local/bin/php_boot
 
 CMD ["sh", "/usr/local/bin/php_boot"]
+
+
