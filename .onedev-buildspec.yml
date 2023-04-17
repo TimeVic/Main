@@ -188,8 +188,8 @@ jobs:
   steps:
   - !RunContainerStep
     name: Run migrations
-    image: lampego/timevic-main:latest
-    args: -t
+    image: lampego/timevic-main
+    args: --restart=no
     envVars:
     - name: PROJECT_DIR
       value: TimeTracker.Migrations
@@ -201,7 +201,7 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !RunContainerStep
     name: Run Main API container
-    image: lampego/timevic-main:latest
+    image: lampego/timevic-main
     args: -p 6210:80 --restart=always -d
     envVars:
     - name: PROJECT_DIR
@@ -234,7 +234,7 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !RunContainerStep
     name: Run Worker Services container
-    image: lampego/timevic-main:latest
+    image: lampego/timevic-main
     args: --restart=always -d
     envVars:
     - name: PROJECT_DIR
@@ -267,7 +267,7 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !RunContainerStep
     name: Run Web container
-    image: lampego/timevic-web:latest
+    image: lampego/timevic-web
     args: -d --restart=always -p 6211:80
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
