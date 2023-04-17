@@ -353,7 +353,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - 'docker run -d -p 6210:80 --restart=always --label=timevic-main-api \ '
+      - docker run -d -p 6210:80 --restart=always --label=timevic-main-api \
       - -e "PROJECT_DIR=TimeTracker.Api" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
       - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
@@ -369,7 +369,8 @@ jobs:
       - -e "AWS__S3__AccessKey=@secret:prod-s3-access-key@" \
       - -e "AWS__S3__SecretKey=@secret:prod-s3-secret-key@" \
       - -e "AWS__S3__BucketName=@secret:prod-s3-bucket-name@" \
-      - lampego/timevic-main
+      - lampego/timevic-main \
+      - \
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
