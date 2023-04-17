@@ -149,13 +149,15 @@ jobs:
     image: docker
     interpreter: !DefaultInterpreter
       commands:
+      - image="lampego/timevic-main"
       - imageVersion="@build_number@"
-      - imageName="lampego/timevic-main:$imageVersion"
+      - imageName="$image:$imageVersion"
       - ''
       - docker build --file="devops/onedev/common/Dockerfile" -t $imageName .
       - docker login -u "@secret:dockerhub-login@" -p "@secret:dockerhub-password@"
       - docker push $imageName
       - docker tag $imageName lampego/timevic-main:latest
+      - docker push lampego/timevic-main:latest
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
@@ -172,6 +174,7 @@ jobs:
       - docker login -u "@secret:dockerhub-login@" -p "@secret:dockerhub-password@"
       - docker push $imageName
       - docker tag $imageName lampego/timevic-web:latest
+      - docker push lampego/timevic-web:latest
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   jobDependencies:
