@@ -289,6 +289,14 @@ jobs:
   jobExecutor: abedor-web-1
   steps:
   - !CommandStep
+    name: Prune images
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker images prune -f
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
     name: Pull images
     runInContainer: false
     interpreter: !DefaultInterpreter
