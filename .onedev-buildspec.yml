@@ -21,7 +21,19 @@ jobs:
       - echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json
       - echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json
       - echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json
-      - dotnet build --
+      - ''
+      - '# Tests'
+      - dotnet build --configuration=Release --output="./build/TimeTracker.Tests.Unit.Business"
+        ./TimeTracker.Tests.Unit.Business
+      - ''
+      - dotnet build --configuration=Release --output="./build/TimeTracker.Tests.Integration.Business"
+        ./TimeTracker.Tests.Integration.Business
+      - ''
+      - dotnet build --configuration=Release --output="./build/TimeTracker.Tests.Integration.Api"
+        ./TimeTracker.Tests.Integration.Api
+      - ''
+      - ls -a
+      - ls -a ./build
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
