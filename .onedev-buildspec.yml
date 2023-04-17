@@ -95,11 +95,11 @@ jobs:
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
         TimeTracker.Tests.Unit.Business.dll
       - ''
-      - cd ./../build/TimeTracker.Tests.Integration.Business/
+      - cd ./../TimeTracker.Tests.Integration.Business/
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
         TimeTracker.Tests.Integration.Business.dll
       - ''
-      - cd ./../build/TimeTracker.Tests.Integration.Api/
+      - cd ./../TimeTracker.Tests.Integration.Api/
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
         TimeTracker.Tests.Integration.Api.dll
     useTTY: false
