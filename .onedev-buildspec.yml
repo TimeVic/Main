@@ -150,9 +150,7 @@ jobs:
       - docker build --file="devops/onedev/common/Dockerfile" -t lampego/timevic-main:@build_number@
         .
       - ''
-      - '# dockerhub-password is a job secret defined in "Settings / Build / Job Secrets" '
-      - '# of the project'
-      - '#docker login -u @secret:dockerhub-login@ -p @secret:dockerhub-password@'
+      - docker login -u @secret:dockerhub-login@ -p @secret:dockerhub-password@
       - docker push lampego/timevic-main:@build_number@
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
