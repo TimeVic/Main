@@ -187,10 +187,58 @@ jobs:
   jobExecutor: abedor-web-1
   steps:
   - !RunContainerStep
+    name: Run migrations
+    image: lampego/timevic-main:latest
+    args: -t
+    envVars:
+    - name: PROJECT_DIR
+      value: TimeTracker.Migrations
+    - name: Serilog__MinimumLevel__Default
+      value: Debug
+    - name: ConnectionStrings__DefaultConnection
+      value: User ID=@secret:dockerhub-login@;Password=@secret:dockerhub-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !RunContainerStep
     name: Run Main API container
     image: lampego/timevic-main:latest
-    args: -p 6201:80
+    args: -p 6201:80 --restart=always -d
     envVars:
+    - name: PROJECT_DIR
+      value: TimeTracker.Api
+    - name: App__FrontendUrl
+      value: https://timevic.com
+    - name: Serilog__IsSendEmailIfError
+      value: 'false'
+    - name: Serilog__MinimumLevel__Default
+      value: Debug
+    - name: Redis__Server
+      value: 10.10.0.2:6379
+    - name: ConnectionStrings__DefaultConnection
+      value: User ID=@secret:dockerhub-login@;Password=@secret:dockerhub-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
+    - name: Smtp__UserName
+      value: '@secret:prod-smtp-login@'
+    - name: Smtp__Password
+      value: '@secret:prod-smtp-password@'
+    - name: App__Auth__SymmetricSecurityKey
+      value: '@secret:prod-auth-symmetric-security-key@'
+    - name: ReCaptcha__Secret
+      value: '@secret:prod-recaptcha-secret@'
+    - name: AWS__S3__AccessKey
+      value: '@secret:prod-s3-access-key@'
+    - name: AWS__S3__SecretKey
+      value: '@secret:prod-s3-secret-key@'
+    - name: AWS__S3__BucketName
+      value: '@secret:prod-s3-bucket-name@'
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !RunContainerStep
+    name: Run Worker Services container
+    image: lampego/timevic-main:latest
+    args: --restart=always -d
+    envVars:
+    - name: PROJECT_DIR
+      value: TimeTracker.WorkerServices
     - name: App__FrontendUrl
       value: https://timevic.com
     - name: Serilog__IsSendEmailIfError
