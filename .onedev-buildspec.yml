@@ -209,7 +209,7 @@ jobs:
   - !RunContainerStep
     name: Run Main API container
     image: lampego/timevic-main
-    args: -p 6210:80 --restart=always -d --name=timevic-main-api
+    args: --port=6210:80 --restart=always -d --name=timevic-main-api
     envVars:
     - name: PROJECT_DIR
       value: TimeTracker.Api
