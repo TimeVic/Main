@@ -378,9 +378,9 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker run \
-      - '-d --restart=always -p 6211:80 \ '
-      - lampego/timevic-web
+      - docker run -d --restart=always -p 6211:80 \
+      - lampego/timevic-web \
+      - \
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
