@@ -4,20 +4,13 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY . /app
+COPY ./build /app
 WORKDIR /app/
 
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV DOTNET_USE_POLLING_FILE_WATCHER=true  
 ENV ASPNETCORE_URLS=http://+:80  
 EXPOSE 80
-
-RUN echo "{}" > appsettings.Local.json
-RUN echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json
-RUN echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json
-RUN echo "{}" > TimeTracker.Api/appsettings.Local.json
-RUN echo "{}" > TimeTracker.Migrations/appsettings.Local.json
-RUN echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json
 
 RUN ["dotnet", "restore", "--verbosity=q"]
 RUN ["dotnet", "build", "--verbosity=q"]
