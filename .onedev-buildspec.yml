@@ -43,9 +43,11 @@ jobs:
       - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
         --output="./build/TimeTracker.Migrations" ./TimeTracker.Migrations
       - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
-        --output="./build/TimeTracker.Web" ./TimeTracker.Web
-      - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
         --output="./build/TimeTracker.WorkerServices" ./TimeTracker.WorkerServices
+      - ''
+      - '# Web project'
+      - dotnet build --configuration=Release --configuration=Production -f net7.0
+        -r linux-x64 --self-contained true --output="./build/TimeTracker.Web" ./TimeTracker.Web
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
@@ -150,6 +152,19 @@ jobs:
       - imageName="lampego/timevic-main:@build_number@"
       - ''
       - docker build --file="devops/onedev/common/Dockerfile" -t $imageName .
+      - docker login -u "@secret:dockerhub-login@" -p "@secret:dockerhub-password@"
+      - docker push $imageName
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Build and push web docker image
+    runInContainer: true
+    image: docker
+    interpreter: !DefaultInterpreter
+      commands:
+      - imageName="lampego/timevic-web:@build_number@"
+      - ''
+      - docker build --file="devops/onedev/web/Dockerfile" -t $imageName .
       - docker login -u "@secret:dockerhub-login@" -p "@secret:dockerhub-password@"
       - docker push $imageName
     useTTY: false
