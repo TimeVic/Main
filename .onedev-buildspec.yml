@@ -278,6 +278,9 @@ jobs:
     args: -d --restart=always -p 6211:80
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  jobDependencies:
+  - jobName: Publish
+    requireSuccessful: true
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
