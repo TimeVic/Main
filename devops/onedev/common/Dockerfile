@@ -12,7 +12,7 @@ ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 ENV ASPNETCORE_URLS=http://+:80  
 EXPOSE 80
 
-COPY ./devops/publish_native/common/boot.sh /usr/local/bin/php_boot
+COPY ./devops/onedev/common/boot.sh /usr/local/bin/php_boot
 
 CMD ["sh", "/usr/local/bin/php_boot"]
 
