@@ -147,12 +147,12 @@ jobs:
     image: docker
     interpreter: !DefaultInterpreter
       commands:
-      - docker build -t lampego/timevic-main::@build_number@ . < devops/onedev/common/Dockerfile
+      - docker build -t lampego/timevic-main:@build_number@ . < devops/onedev/common/Dockerfile
       - ''
       - '# dockerhub-password is a job secret defined in "Settings / Build / Job Secrets" '
       - '# of the project'
       - '#docker login -u @secret:dockerhub-login@ -p @secret:dockerhub-password@'
-      - docker push lampego/timevic-main::version1.@build_number@
+      - docker push lampego/timevic-main:@build_number@
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   jobDependencies:
