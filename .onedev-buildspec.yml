@@ -23,12 +23,12 @@ jobs:
       - echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json
       - ''
       - '# Tests'
-      - dotnet build --configuration=Debug --self-contained=false --runtime=linux-x64
-        --output="./build/TimeTracker.Tests.Unit.Business" ./TimeTracker.Tests.Unit.Business
-      - dotnet build --configuration=Debug --self-contained=false --runtime=linux-x64
-        --output="./build/TimeTracker.Tests.Integration.Business" ./TimeTracker.Tests.Integration.Business
-      - dotnet build --configuration=Debug --self-contained=false --runtime=linux-x64
-        --output="./build/TimeTracker.Tests.Integration.Api" ./TimeTracker.Tests.Integration.Api
+      - dotnet build --configuration=Debug --output="./build/TimeTracker.Tests.Unit.Business"
+        ./TimeTracker.Tests.Unit.Business
+      - dotnet build --configuration=Debug --output="./build/TimeTracker.Tests.Integration.Business"
+        ./TimeTracker.Tests.Integration.Business
+      - dotnet build --configuration=Debug --output="./build/TimeTracker.Tests.Integration.Api"
+        ./TimeTracker.Tests.Integration.Api
       - ''
       - '# Main projects '
       - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
