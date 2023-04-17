@@ -286,7 +286,7 @@ jobs:
   retryDelay: 30
   timeout: 3600
 - name: Pull latest images
-  jobExecutor: onedev-executor-1
+  jobExecutor: abedor-web-1
   steps:
   - !CommandStep
     name: Pull images
