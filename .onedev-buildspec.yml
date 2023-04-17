@@ -1,4 +1,11 @@
 version: 20
+services:
+- name: postgres
+  image: postgres:15
+  envVars:
+  - name: POSTGRES_PASSWORD
+    value: postgres
+  readinessCheckCommand: exec pg_isready -h 127.0.0.1 -p 5432
 jobs:
 - name: Build
   jobExecutor: onedev-executor-1
@@ -92,8 +99,8 @@ jobs:
       - export AWS__S3__BucketName="@secret:dev-aws-s3-bucket-name@"
       - ''
       - 'ls -a '
-      - ls -a onedev-build/workspace/build/
-      - ls -a onedev-build/workspace/build/TimeTracker.Tests.Integration.Api/
+      - ls -a build/
+      - ls -a build/TimeTracker.Tests.Integration.Api/
       - ''
       - cd ./build/TimeTracker.Tests.Unit.Business/
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
@@ -138,10 +145,3 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
-services:
-- name: postgres
-  image: postgres:15
-  envVars:
-  - name: POSTGRES_PASSWORD
-    value: postgres
-  readinessCheckCommand: exec pg_isready -h 127.0.0.1 -p 5432
