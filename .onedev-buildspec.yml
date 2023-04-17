@@ -50,7 +50,7 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
     name: Publish artifacts
-    artifacts: build/**
+    artifacts: '*/**'
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   paramSpecs:
   - !TextParam
@@ -154,8 +154,6 @@ jobs:
     image: docker
     interpreter: !DefaultInterpreter
       commands:
-      - '# read version from file created in previous step'
-      - version=`cat version.txt`
       - docker build -t lampego/timevic-main::@build_number@ . < devops/onedev/common/Dockerfile
       - ''
       - '# dockerhub-password is a job secret defined in "Settings / Build / Job Secrets" '
