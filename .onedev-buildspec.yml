@@ -140,6 +140,10 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+  postBuildActions:
+  - !SendNotificationAction
+    condition: always
+    receivers: authors
 - name: Publish
   jobExecutor: onedev-executor-1
   steps:
@@ -192,100 +196,6 @@ jobs:
   retryDelay: 30
   timeout: 3600
 - name: Deploy
-  jobExecutor: abedor-web-1-docker-executor
-  steps:
-  - !RunContainerStep
-    name: Run migrations
-    image: lampego/timevic-main
-    envVars:
-    - name: PROJECT_DIR
-      value: TimeTracker.Migrations
-    - name: Serilog__MinimumLevel__Default
-      value: Debug
-    - name: ConnectionStrings__DefaultConnection
-      value: User ID=@secret:dockerhub-login@;Password=@secret:dockerhub-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
-    useTTY: false
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !RunContainerStep
-    name: Run Main API container
-    image: lampego/timevic-main
-    args: -p 6210:80 --restart=always -d --name=timevic-main-api
-    envVars:
-    - name: PROJECT_DIR
-      value: TimeTracker.Api
-    - name: App__FrontendUrl
-      value: https://timevic.com
-    - name: Serilog__IsSendEmailIfError
-      value: 'false'
-    - name: Serilog__MinimumLevel__Default
-      value: Debug
-    - name: Redis__Server
-      value: 10.10.0.2:6379
-    - name: ConnectionStrings__DefaultConnection
-      value: User ID=@secret:dockerhub-login@;Password=@secret:dockerhub-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
-    - name: Smtp__UserName
-      value: '@secret:prod-smtp-login@'
-    - name: Smtp__Password
-      value: '@secret:prod-smtp-password@'
-    - name: App__Auth__SymmetricSecurityKey
-      value: '@secret:prod-auth-symmetric-security-key@'
-    - name: ReCaptcha__Secret
-      value: '@secret:prod-recaptcha-secret@'
-    - name: AWS__S3__AccessKey
-      value: '@secret:prod-s3-access-key@'
-    - name: AWS__S3__SecretKey
-      value: '@secret:prod-s3-secret-key@'
-    - name: AWS__S3__BucketName
-      value: '@secret:prod-s3-bucket-name@'
-    useTTY: false
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !RunContainerStep
-    name: Run Worker Services container
-    image: lampego/timevic-main
-    args: --restart=always -d --name=timevic-main-worker
-    envVars:
-    - name: PROJECT_DIR
-      value: TimeTracker.WorkerServices
-    - name: App__FrontendUrl
-      value: https://timevic.com
-    - name: Serilog__IsSendEmailIfError
-      value: 'false'
-    - name: Serilog__MinimumLevel__Default
-      value: Debug
-    - name: Redis__Server
-      value: 10.10.0.2:6379
-    - name: ConnectionStrings__DefaultConnection
-      value: User ID=@secret:dockerhub-login@;Password=@secret:dockerhub-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;
-    - name: Smtp__UserName
-      value: '@secret:prod-smtp-login@'
-    - name: Smtp__Password
-      value: '@secret:prod-smtp-password@'
-    - name: App__Auth__SymmetricSecurityKey
-      value: '@secret:prod-auth-symmetric-security-key@'
-    - name: ReCaptcha__Secret
-      value: '@secret:prod-recaptcha-secret@'
-    - name: AWS__S3__AccessKey
-      value: '@secret:prod-s3-access-key@'
-    - name: AWS__S3__SecretKey
-      value: '@secret:prod-s3-secret-key@'
-    - name: AWS__S3__BucketName
-      value: '@secret:prod-s3-bucket-name@'
-    useTTY: false
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !RunContainerStep
-    name: Run Web container
-    image: lampego/timevic-web
-    args: -d --restart=always -p 6211:80
-    useTTY: false
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  jobDependencies:
-  - jobName: Stop and pull images
-    requireSuccessful: true
-  retryCondition: never
-  maxRetries: 3
-  retryDelay: 30
-  timeout: 3600
-- name: Stop and pull images
   jobExecutor: abedor-web-1
   steps:
   - !CommandStep
@@ -306,11 +216,93 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker pull lampego/timevic-main:latest
-      - docker pull lampego/timevic-web:latest
+      - '#docker pull lampego/timevic-main:latest'
+      - '#docker pull lampego/timevic-web:latest'
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run migrations
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker run \
+      - -e "PROJECT_DIR=TimeTracker.Migrations" \
+      - -e "Serilog__MinimumLevel__Default=Debug" \
+      - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
+        \
+      - lampego/timevic-main
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run Worker Services container
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker run -d --restart=always --name=timevic-main-worker \
+      - -e "PROJECT_DIR=TimeTracker.WorkerServices" \
+      - -e "Serilog__MinimumLevel__Default=Debug" \
+      - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
+        \
+      - -e "App__FrontendUrl=https://timevic.com" \
+      - -e "Serilog__IsSendEmailIfError=false" \
+      - -e "Redis__Server=10.10.0.2:6379" \
+      - -e "Smtp__UserName=@secret:prod-smtp-login@" \
+      - -e "Smtp__Password=@secret:prod-smtp-password@" \
+      - -e "App__Auth__SymmetricSecurityKey=@secret:prod-auth-symmetric-security-key@"
+        \
+      - -e "ReCaptcha__Secret=@secret:prod-recaptcha-secret@" \
+      - -e "AWS__S3__AccessKey=@secret:prod-s3-access-key@" \
+      - -e "AWS__S3__SecretKey=@secret:prod-s3-secret-key@" \
+      - -e "AWS__S3__BucketName=@secret:prod-s3-bucket-name@" \
+      - lampego/timevic-main
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run Main API container
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker run -d -p 6210:80 --restart=always --name=timevic-main-api \
+      - -e "PROJECT_DIR=TimeTracker.Api" \
+      - -e "Serilog__MinimumLevel__Default=Debug" \
+      - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
+        \
+      - -e "App__FrontendUrl=https://timevic.com" \
+      - -e "Serilog__IsSendEmailIfError=false" \
+      - -e "Redis__Server=10.10.0.2:6379" \
+      - -e "Smtp__UserName=@secret:prod-smtp-login@" \
+      - -e "Smtp__Password=@secret:prod-smtp-password@" \
+      - -e "App__Auth__SymmetricSecurityKey=@secret:prod-auth-symmetric-security-key@"
+        \
+      - -e "ReCaptcha__Secret=@secret:prod-recaptcha-secret@" \
+      - -e "AWS__S3__AccessKey=@secret:prod-s3-access-key@" \
+      - -e "AWS__S3__SecretKey=@secret:prod-s3-secret-key@" \
+      - -e "AWS__S3__BucketName=@secret:prod-s3-bucket-name@" \
+      - lampego/timevic-main \
+      - \
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run Web container
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker run -d --restart=always -p 6211:80 --name=timevic-web \
+      - lampego/timevic-web \
+      - \
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  jobDependencies:
+  - jobName: Publish
+    requireSuccessful: true
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+  postBuildActions:
+  - !SendNotificationAction
+    condition: successful
+    receivers: authors
+  - !SendNotificationAction
+    condition: failed
+    receivers: authors
