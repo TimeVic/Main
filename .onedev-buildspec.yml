@@ -283,7 +283,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker run -d --restart=always -p 6211:80 -name timevic-web \
+      - docker run -d --restart=always -p 6211:80 --name=timevic-web \
       - lampego/timevic-web \
       - \
     useTTY: false
