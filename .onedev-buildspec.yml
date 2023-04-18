@@ -234,7 +234,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker run -d --restart=always --label=timevic-main-worker \
+      - docker run -d --restart=always --name=timevic-main-worker \
       - -e "PROJECT_DIR=TimeTracker.WorkerServices" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
       - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
@@ -258,7 +258,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker run -d -p 6210:80 --restart=always --label=timevic-main-api \
+      - docker run -d -p 6210:80 --restart=always --name=timevic-main-api \
       - -e "PROJECT_DIR=TimeTracker.Api" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
       - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
@@ -283,8 +283,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker run -d --restart=always -p 6211:80 \
-      - -l timevic-web \
+      - docker run -d --restart=always -p 6211:80 -name timevic-web \
       - lampego/timevic-web \
       - \
     useTTY: false
