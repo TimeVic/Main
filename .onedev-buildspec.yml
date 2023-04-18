@@ -140,6 +140,10 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+  postBuildActions:
+  - !SendNotificationAction
+    condition: always
+    receivers: authors
 - name: Publish
   jobExecutor: onedev-executor-1
   steps:
@@ -295,3 +299,10 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+  postBuildActions:
+  - !SendNotificationAction
+    condition: successful
+    receivers: authors
+  - !SendNotificationAction
+    condition: failed
+    receivers: authors
