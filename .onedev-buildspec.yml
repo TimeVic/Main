@@ -36,14 +36,16 @@ jobs:
       - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
         --output="./build/TimeTracker.Migrations" ./TimeTracker.Migrations
       - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
-        --output="./build/TimeTracker.Web" ./TimeTracker.Web
-      - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
         --output="./build/TimeTracker.WorkerServices" ./TimeTracker.WorkerServices
+      - ''
+      - '# Web project'
+      - dotnet build --configuration=Production -f net7.0 -r linux-x64 --self-contained
+        true --output="./build/TimeTracker.Web" ./TimeTracker.Web
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
     name: Publish artifacts
-    artifacts: build/**
+    artifacts: '*/**'
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   paramSpecs:
   - !TextParam
@@ -91,17 +93,14 @@ jobs:
       - export AWS__S3__SecretKey="@secret:dev-aws-s3-secret-key@"
       - export AWS__S3__BucketName="@secret:dev-aws-s3-bucket-name@"
       - ''
-      - cd ./build/TimeTracker.Tests.Unit.Business/
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
-        TimeTracker.Tests.Unit.Business.dll
+        ./TimeTracker.Tests.Unit.Business
       - ''
-      - cd ./../TimeTracker.Tests.Integration.Business/
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
-        TimeTracker.Tests.Integration.Business.dll
+        ./TimeTracker.Tests.Integration.Business
       - ''
-      - cd ./../TimeTracker.Tests.Integration.Api/
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
-        TimeTracker.Tests.Integration.Api.dll
+        ./TimeTracker.Tests.Integration.Api
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   paramSpecs:
@@ -127,13 +126,183 @@ jobs:
         values:
         - - Some value 2
       secret: false
-    artifacts: build/**
+    artifacts: '*/**'
   requiredServices:
   - postgres
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+  postBuildActions:
+  - !SendNotificationAction
+    condition: always
+    receivers: authors
+- name: Publish
+  jobExecutor: onedev-executor-1
+  steps:
+  - !CommandStep
+    name: Build and push main docker image
+    runInContainer: true
+    image: docker
+    interpreter: !DefaultInterpreter
+      commands:
+      - image="lampego/timevic-main"
+      - imageVersion="@build_number@"
+      - imageName="$image:$imageVersion"
+      - ''
+      - docker build --file="devops/onedev/common/Dockerfile" -t $imageName .
+      - docker login -u "@secret:dockerhub-login@" -p "@secret:dockerhub-password@"
+      - docker push $imageName
+      - docker tag $imageName lampego/timevic-main:latest
+      - docker push lampego/timevic-main:latest
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Build and push web docker image
+    runInContainer: true
+    image: docker
+    interpreter: !DefaultInterpreter
+      commands:
+      - image="lampego/timevic-web"
+      - imageVersion="@build_number@"
+      - imageName="$image:$imageVersion"
+      - ''
+      - docker build --file="devops/onedev/web/Dockerfile" -t $imageName .
+      - docker login -u "@secret:dockerhub-login@" -p "@secret:dockerhub-password@"
+      - docker push $imageName
+      - docker tag $imageName lampego/timevic-web:latest
+      - docker push lampego/timevic-web:latest
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  jobDependencies:
+  - jobName: Build
+    requireSuccessful: true
+    jobParams:
+    - name: db
+      valuesProvider: !SpecifiedValues
+        values:
+        - - Some value
+      secret: false
+    artifacts: '*/**'
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+- name: Deploy
+  jobExecutor: abedor-web-1
+  steps:
+  - !CommandStep
+    name: Stop and remove images
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker rm -f timevic-main-api || true
+      - docker rm -f timevic-main-worker || true
+      - docker rm -f timevic-web || true
+      - ''
+      - docker image rm -f lampego/timevic-main || true
+      - docker image rm -f lampego/timevic-web || true
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Pull images
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - '#docker pull lampego/timevic-main:latest'
+      - '#docker pull lampego/timevic-web:latest'
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run migrations
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker run \
+      - -e "PROJECT_DIR=TimeTracker.Migrations" \
+      - -e "Serilog__MinimumLevel__Default=Debug" \
+      - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
+        \
+      - lampego/timevic-main
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run Worker Services container
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker run -d --restart=always --name=timevic-main-worker \
+      - -e "PROJECT_DIR=TimeTracker.WorkerServices" \
+      - -e "Serilog__MinimumLevel__Default=Debug" \
+      - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
+        \
+      - -e "App__FrontendUrl=https://timevic.com" \
+      - -e "Serilog__IsSendEmailIfError=false" \
+      - -e "Redis__Server=10.10.0.2:6379" \
+      - -e "Smtp__UserName=@secret:prod-smtp-login@" \
+      - -e "Smtp__Password=@secret:prod-smtp-password@" \
+      - -e "App__Auth__SymmetricSecurityKey=@secret:prod-auth-symmetric-security-key@"
+        \
+      - -e "ReCaptcha__Secret=@secret:prod-recaptcha-secret@" \
+      - -e "AWS__S3__AccessKey=@secret:prod-s3-access-key@" \
+      - -e "AWS__S3__SecretKey=@secret:prod-s3-secret-key@" \
+      - -e "AWS__S3__BucketName=@secret:prod-s3-bucket-name@" \
+      - lampego/timevic-main
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run Main API container
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker run -d -p 6200:80 --restart=always --name=timevic-main-api \
+      - -e "PROJECT_DIR=TimeTracker.Api" \
+      - -e "Serilog__MinimumLevel__Default=Debug" \
+      - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
+        \
+      - -e "App__FrontendUrl=https://timevic.com" \
+      - -e "Serilog__IsSendEmailIfError=false" \
+      - -e "Redis__Server=10.10.0.2:6379" \
+      - -e "Smtp__UserName=@secret:prod-smtp-login@" \
+      - -e "Smtp__Password=@secret:prod-smtp-password@" \
+      - -e "App__Auth__SymmetricSecurityKey=@secret:prod-auth-symmetric-security-key@"
+        \
+      - -e "ReCaptcha__Secret=@secret:prod-recaptcha-secret@" \
+      - -e "AWS__S3__AccessKey=@secret:prod-s3-access-key@" \
+      - -e "AWS__S3__SecretKey=@secret:prod-s3-secret-key@" \
+      - -e "AWS__S3__BucketName=@secret:prod-s3-bucket-name@" \
+      - lampego/timevic-main \
+      - \
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: Run Web container
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - docker run -d --restart=always -p 6201:80 --name=timevic-web \
+      - lampego/timevic-web \
+      - \
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !PullRequestMergeTrigger
+    branches: main
+    projects: TimeVic/Main
+  jobDependencies:
+  - jobName: Publish
+    requireSuccessful: true
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+  postBuildActions:
+  - !SendNotificationAction
+    condition: successful
+    receivers: authors
+  - !SendNotificationAction
+    condition: failed
+    receivers: authors
 services:
 - name: postgres
   image: postgres:15

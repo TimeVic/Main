@@ -24,10 +24,6 @@ public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
     {
         var builder = Host.CreateDefaultBuilder()
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-            .ConfigureWebHost(builder =>
-            {
-                builder.UseStartup<TestStartup>();
-            })
             .ConfigureWebHostDefaults(builder =>
             {
                 builder.UseStartup<TestStartup>()
