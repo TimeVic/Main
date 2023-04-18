@@ -1,11 +1,4 @@
 version: 20
-services:
-- name: postgres
-  image: postgres:15
-  envVars:
-  - name: POSTGRES_PASSWORD
-    value: postgres
-  readinessCheckCommand: exec pg_isready -h 127.0.0.1 -p 5432
 jobs:
 - name: Build
   jobExecutor: onedev-executor-1
@@ -262,7 +255,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker run -d -p 6210:80 --restart=always --name=timevic-main-api \
+      - docker run -d -p 6200:80 --restart=always --name=timevic-main-api \
       - -e "PROJECT_DIR=TimeTracker.Api" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
       - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
@@ -287,11 +280,15 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker run -d --restart=always -p 6211:80 --name=timevic-web \
+      - docker run -d --restart=always -p 6201:80 --name=timevic-web \
       - lampego/timevic-web \
       - \
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !PullRequestMergeTrigger
+    branches: main
+    projects: TimeVic/Main
   jobDependencies:
   - jobName: Publish
     requireSuccessful: true
@@ -306,3 +303,10 @@ jobs:
   - !SendNotificationAction
     condition: failed
     receivers: authors
+services:
+- name: postgres
+  image: postgres:15
+  envVars:
+  - name: POSTGRES_PASSWORD
+    value: postgres
+  readinessCheckCommand: exec pg_isready -h 127.0.0.1 -p 5432
