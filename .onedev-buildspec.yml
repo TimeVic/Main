@@ -31,16 +31,17 @@ jobs:
         ./TimeTracker.Tests.Integration.Api
       - ''
       - '# Main projects '
-      - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
+      - dotnet build --configuration=Release --self-contained=true --runtime=linux-x64
         --output="./build/TimeTracker.Api" ./TimeTracker.Api
-      - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
+      - dotnet build --configuration=Release --self-contained=true --runtime=linux-x64
         --output="./build/TimeTracker.Migrations" ./TimeTracker.Migrations
-      - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
+      - dotnet build --configuration=Release --self-contained=true --runtime=linux-x64
         --output="./build/TimeTracker.WorkerServices" ./TimeTracker.WorkerServices
       - ''
       - '# Web project'
-      - dotnet build --configuration=Production -f net7.0 -r linux-x64 --self-contained
-        true --output="./build/TimeTracker.Web" ./TimeTracker.Web
+      - '# -f net7.0'
+      - dotnet publish --configuration=Production -r linux-x64 --self-contained=true
+        --output="./build/TimeTracker.Web" ./TimeTracker.Web
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
