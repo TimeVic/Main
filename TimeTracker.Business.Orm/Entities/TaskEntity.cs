@@ -61,7 +61,7 @@ namespace TimeTracker.Business.Orm.Entities
             Cascade = "none"
         )]
         public virtual TaskListEntity TaskList { get; set; }
-        
+
         [Set(
             Table = "task_stored_files",
             Lazy = CollectionLazy.True,

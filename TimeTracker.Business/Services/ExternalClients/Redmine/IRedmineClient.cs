@@ -16,4 +16,10 @@ public interface IRedmineClient: IDomainService
     bool IsCorrectTaskId(TimeEntryEntity timeEntry);
 
     Task<bool> IsValidClientSettings(WorkspaceEntity workspace, UserEntity user);
+    
+    Task<TaskEntity> SetTimeEntryTaskAsync(
+        TimeEntryEntity timeEntry,
+        TaskListEntity taskListEntity,
+        string externalTaskId
+    );
 }

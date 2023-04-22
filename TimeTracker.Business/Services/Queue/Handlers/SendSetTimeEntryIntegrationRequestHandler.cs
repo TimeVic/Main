@@ -50,6 +50,7 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
                 throw new MinorException($"TimeEntry does not have TaskId: {commandContext.TimeEntryId}");
             }
 
+            bool isSynchronized = false;
             if (timeEntry.Workspace.IsIntegrationClickUpActive(timeEntry.User.Id))
             {
                 var setResponse = await _clickUpClient.SetTimeEntryAsync(timeEntry);
@@ -61,9 +62,13 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
                         timeEntry.Description = setResponse.AdditionalDescription;
                     }
                     await _sessionProvider.CurrentSession.SaveAsync(timeEntry, cancellationToken);
+                    isSynchronized = true;
                 }
             }
-            if (timeEntry.Workspace.IsIntegrationRedmineActive(timeEntry.User.Id))
+            if (
+                timeEntry.Workspace.IsIntegrationRedmineActive(timeEntry.User.Id)
+                && !isSynchronized
+            )
             {
                 var setResponse = await _redmineClient.SetTimeEntryAsync(timeEntry);
                 if (setResponse != null)

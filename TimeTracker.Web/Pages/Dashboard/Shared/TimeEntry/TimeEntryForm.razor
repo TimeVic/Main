@@ -44,15 +44,6 @@
                     InternalTask="@_activeEntry?.Task"
                     IsClickable="true"/>
             }
-            else
-            {
-                <RadzenTextBox
-                    Class="mr-1 col-1"
-                    Placeholder="Task ID"
-                    Disabled="!_state.Value.HasActiveEntry"
-                    Value="@_activeEntry?.TaskId"
-                    ValueChanged="OnChangeTaskId"/>
-            }
 
             <RadzenTextBox
                 Class="mr-1 col"

@@ -25,27 +25,33 @@ public class TimeEntrySeeder: ITimeEntrySeeder
         _projectDao = projectDao;
     }
 
+    public async Task<TimeEntryEntity> CreateAsync(WorkspaceEntity workspace, UserEntity user, ProjectEntity? project = null)
+    {
+        var fakeEntry = _timeEntryFactory.Generate();
+        var entry = await _timeEntryDao.SetAsync(
+            user,
+            workspace,
+            new TimeEntryCreationDto()
+            {
+                Description = fakeEntry.Description,
+                EndTime = fakeEntry.EndTime.Value,
+                StartTime = fakeEntry.StartTime,
+                Date = fakeEntry.Date,
+                HourlyRate = fakeEntry.HourlyRate,
+                IsBillable = fakeEntry.IsBillable
+            },
+            project
+        );
+        return entry;
+    }
+    
     public async Task<ICollection<TimeEntryEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1, ProjectEntity? project = null)
     {
         project ??= await _projectDao.CreateAsync(workspace, "Test project name");
         var result = new List<TimeEntryEntity>();
         for (int i = 0; i < count; i++)
         {
-            var fakeEntry = _timeEntryFactory.Generate();
-            var entry = await _timeEntryDao.SetAsync(
-                user,
-                workspace,
-                new TimeEntryCreationDto()
-                {
-                    Description = fakeEntry.Description,
-                    EndTime = fakeEntry.EndTime.Value,
-                    StartTime = fakeEntry.StartTime,
-                    Date = fakeEntry.Date,
-                    HourlyRate = fakeEntry.HourlyRate,
-                    IsBillable = fakeEntry.IsBillable
-                },
-                project
-            );
+            var entry = await CreateAsync(workspace, user, project);
             result.Add(entry);
         }
 

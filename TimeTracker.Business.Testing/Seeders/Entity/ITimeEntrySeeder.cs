@@ -11,4 +11,6 @@ public interface ITimeEntrySeeder: IDomainService
         int count = 1,
         ProjectEntity? project = null
     );
+
+    Task<TimeEntryEntity> CreateAsync(WorkspaceEntity workspace, UserEntity user, ProjectEntity? project = null);
 }

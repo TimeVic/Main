@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
@@ -14,21 +15,23 @@ using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
 
-public class AddTest: BaseTest
+public partial class AddTest: BaseTest
 {
     private readonly string Url = "/dashboard/tasks/add";
+    
+    private readonly string? _clickUpTaskId;
+    private readonly string _jwtToken;
+    private WorkspaceEntity _workspace;
+    private readonly TaskListEntity _taskList;
+    private readonly ProjectEntity _project;
     
     private readonly IQueueService _queueService;
     private readonly UserEntity _user;
     private readonly IDataFactory<TaskEntity> _taskFactory;
-    private readonly string _jwtToken;
-    private WorkspaceEntity _workspace;
     private readonly IProjectDao _projectDao;
-    private readonly ProjectEntity _project;
     private readonly ITaskSeeder _taskSeeder;
     private readonly ITaskListSeeder _taskListSeeder;
-    
-    private readonly TaskListEntity _taskList;
+    private readonly ITimeEntrySeeder _timeEntrySeeder;
 
     public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -37,10 +40,14 @@ public class AddTest: BaseTest
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
+        _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
         _taskList = _taskListSeeder.CreateAsync(_project).Result;
+        
+        var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
+        _clickUpTaskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
     }
 
     [Fact]

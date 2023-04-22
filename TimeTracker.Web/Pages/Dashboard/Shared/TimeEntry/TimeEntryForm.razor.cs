@@ -59,13 +59,6 @@ public partial class TimeEntryForm
     {
         Dispatcher.Dispatch(new StopActiveTimeEntryAction());
     }
-
-    private async Task OnChangeTaskId(string value)
-    {
-        _activeEntry.TaskId = value;
-        await UpdateTimeEntry(_activeEntry);
-        await Task.CompletedTask;
-    }
     
     private async Task OnChangeDescription(string value)
     {

@@ -109,8 +109,7 @@ public partial class StartTest: BaseTest
             Description = fakeTimeEntry.Description,
             IsBillable = fakeTimeEntry.IsBillable,
             Date = DateTime.UtcNow.Date,
-            StartTime = TimeSpan.FromSeconds(1),
-            TaskId = fakeTimeEntry.TaskId
+            StartTime = TimeSpan.FromSeconds(1)
         });
         response.EnsureSuccessStatusCode();
 
@@ -120,7 +119,6 @@ public partial class StartTest: BaseTest
         Assert.Equal(project.Id, actualDto.Project.Id);
         Assert.Equal(fakeTimeEntry.IsBillable, actualDto.IsBillable);
         Assert.Null(actualDto.EndTime);
-        Assert.Equal(fakeTimeEntry.TaskId, actualDto.TaskId);
     }
     
     [Fact]

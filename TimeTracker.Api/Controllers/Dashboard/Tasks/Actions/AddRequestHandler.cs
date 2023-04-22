@@ -6,9 +6,13 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Entity;
+using TimeTracker.Business.Services.ExternalClients;
+using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -23,6 +27,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         private readonly ISecurityManager _securityManager;
         private readonly ITaskListDao _taskListDao;
         private readonly ITaskDao _taskDao;
+        private readonly IClickUpClient _clickUpClient;
+        private readonly ITimeEntryDao _timeEntryDao;
 
         public AddRequestHandler(
             IMapper mapper,
@@ -31,7 +37,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             IDbSessionProvider sessionProvider,
             ISecurityManager securityManager,
             ITaskListDao taskListDao,
-            ITaskDao taskDao
+            ITaskDao taskDao,
+            IClickUpClient clickUpClient,
+            ITimeEntryDao timeEntryDao
         )
         {
             _mapper = mapper;
@@ -41,6 +49,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _securityManager = securityManager;
             _taskListDao = taskListDao;
             _taskDao = taskDao;
+            _clickUpClient = clickUpClient;
+            _timeEntryDao = timeEntryDao;
         }
     
         public async Task<TaskDto> ExecuteAsync(AddRequest request)
@@ -52,17 +62,62 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             {
                 throw new HasNoAccessException();
             }
-            
-            var task = await _taskDao.AddTaskAsync(
-                taskList,
-                user,
-                request.Title,
-                request.Description,
-                request.NotificationTime
-            );
+
+            TaskEntity task = null;
+            if (!string.IsNullOrEmpty(request.ExternalTaskId))
+            {
+                task = await CreateFromExternalId(request, taskList, user);
+            }
+            if (task == null)
+            {
+                if (string.IsNullOrEmpty(request.Title))
+                {
+                    throw new ValidationException("Title is required");
+                }
+
+                task = await _taskDao.AddTaskAsync(
+                    taskList,
+                    user,
+                    request.Title,
+                    request.Description,
+                    request.NotificationTime
+                );    
+            }
             await _sessionProvider.PerformCommitAsync();
             
             return _mapper.Map<TaskDto>(task);
+        }
+
+        private async Task<TaskEntity> CreateFromExternalId(
+            AddRequest request,
+            TaskListEntity taskList,
+            UserEntity user
+        )
+        {
+            if (_clickUpClient.IsCorrectTaskId(request.ExternalTaskId))
+            {
+                if (request.TimeEntryId != null)
+                {
+                    var timeEntry = await _sessionProvider.CurrentSession
+                        .GetAsync<TimeEntryEntity>(request.TimeEntryId);
+                    if (!await _securityManager.HasAccess(AccessLevel.Write, user, timeEntry))
+                    {
+                        throw new HasNoAccessException("Has no access to TimeEntry");
+                    }
+                    return await _clickUpClient.SetTimeEntryTaskAsync(
+                        timeEntry,
+                        taskList,
+                        request.ExternalTaskId
+                    );
+                }
+                return await _clickUpClient.SetTimeEntryTaskAsync(
+                    taskList,
+                    user,
+                    request.ExternalTaskId
+                );
+            }
+
+            return null;
         }
     }
 }

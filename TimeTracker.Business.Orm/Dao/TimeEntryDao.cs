@@ -149,7 +149,6 @@ public class TimeEntryDao: ITimeEntryDao
         string? description = "",
         long? projectId = null,
         decimal? hourlyRate = null,
-        string? taskId = null,
         TaskEntity? internalTask = null
     )
     {
@@ -177,16 +176,7 @@ public class TimeEntryDao: ITimeEntryDao
         };
         if (internalTask != null)
         {
-            if (taskId != null && string.IsNullOrEmpty(internalTask.ExternalTaskId))
-            {
-                internalTask.ExternalTaskId = taskId;
-            }
-            entry.SetTaskId(null);
             projectId = internalTask?.TaskList.Project.Id;
-        }
-        else
-        {
-            entry.SetTaskId(taskId);
         }
         if (projectId != null)
         {
@@ -194,7 +184,6 @@ public class TimeEntryDao: ITimeEntryDao
         }
         entry.HourlyRate = hourlyRate ?? entry.Project?.DefaultHourlyRate;
         await _sessionProvider.CurrentSession.SaveAsync(entry);
-
         return entry;
     }
 
@@ -334,15 +323,6 @@ public class TimeEntryDao: ITimeEntryDao
             timeEntry.Project = project;
         }
         
-        if (timeEntry.Task == null)
-        {
-            timeEntry.SetTaskId(timeEntryDto.TaskId);  
-        }
-        else if (!string.IsNullOrEmpty(timeEntryDto.TaskId) && string.IsNullOrEmpty(timeEntry.Task.ExternalTaskId))
-        {
-            timeEntry.Task.ExternalTaskId = timeEntryDto.TaskId;
-            await _sessionProvider.CurrentSession.SaveAsync(timeEntry.Task);
-        }
         timeEntry.Description = timeEntryDto.Description;
         timeEntry.HourlyRate = timeEntryDto.HourlyRate;
         timeEntry.IsBillable = timeEntryDto.IsBillable;

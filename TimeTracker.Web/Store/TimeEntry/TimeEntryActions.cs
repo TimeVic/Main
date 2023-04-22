@@ -7,7 +7,6 @@ namespace TimeTracker.Web.Store.TimeEntry;
 public record struct StartTimeEntryAction(
     bool? IsBillable = null,
     ProjectDto? Project = null,
-    string? TaskId = null,
     string? Description = null,
     decimal? HourlyRate = null,
     TaskDto? InternalTask = null
