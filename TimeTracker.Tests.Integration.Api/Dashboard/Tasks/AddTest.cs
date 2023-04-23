@@ -89,6 +89,29 @@ public partial class AddTest: BaseTest
     }
     
     [Fact]
+    public async Task ShouldAddWithAttachedTimeEntry()
+    {
+        var timeEntry = await _timeEntrySeeder.CreateAsync(_workspace, _user);
+        
+        var task = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            TaskListId = _taskList.Id,
+            Title = task.Title,
+            TimeEntryId = timeEntry.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.True(actualData.Id > 0);
+        Assert.Equal(_taskList.Id, actualData.TaskList.Id);
+        Assert.Equal(task.Title, actualData.Title);
+        
+        var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.Equal(actualData.Id, actualTimeEntry.Task.Id);
+    }
+    
+    [Fact]
     public async Task ShouldNotAddIfIncorrectWorkspaceId()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();

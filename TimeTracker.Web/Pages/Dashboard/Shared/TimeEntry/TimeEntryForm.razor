@@ -44,6 +44,15 @@
                     InternalTask="@_activeEntry?.Task"
                     IsClickable="true"/>
             }
+            else if (_activeEntry != null)
+            {
+                <RadzenButton
+                    ButtonStyle="ButtonStyle.Info"
+                    Click="@(() => ShowAddTaskModal(_activeEntry.Id))"
+                    MouseEnter="ShowTooltip"
+                    Class="mr-1"
+                    Icon="add"/>
+            }
 
             <RadzenTextBox
                 Class="mr-1 col"

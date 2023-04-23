@@ -81,7 +81,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                     request.Title,
                     request.Description,
                     request.NotificationTime
-                );    
+                );
+                if (request.TimeEntryId != null)
+                {
+                    var timeEntry = await GetTimeEntry(request.TimeEntryId.Value, user);
+                    timeEntry.Task = task;
+                }
             }
             await _sessionProvider.PerformCommitAsync();
             
@@ -98,8 +103,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             {
                 if (request.TimeEntryId != null)
                 {
-                    var timeEntry = await _sessionProvider.CurrentSession
-                        .GetAsync<TimeEntryEntity>(request.TimeEntryId);
+                    var timeEntry = await GetTimeEntry(request.TimeEntryId.Value, user);
                     if (!await _securityManager.HasAccess(AccessLevel.Write, user, timeEntry))
                     {
                         throw new HasNoAccessException("Has no access to TimeEntry");
@@ -118,6 +122,18 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             }
 
             return null;
+        }
+
+        private async Task<TimeEntryEntity> GetTimeEntry(long timeEntryId, UserEntity user)
+        {
+            var timeEntry = await _sessionProvider.CurrentSession
+                .GetAsync<TimeEntryEntity>(timeEntryId);
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, timeEntry))
+            {
+                throw new HasNoAccessException("Has no access to TimeEntry");
+            }
+
+            return timeEntry;
         }
     }
 }

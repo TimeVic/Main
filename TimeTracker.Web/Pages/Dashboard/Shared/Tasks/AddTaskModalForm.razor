@@ -1,0 +1,58 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
+@inherits BaseComponent
+
+<RadzenTemplateForm
+    @ref="@_form"
+    TItem="AddRequest"
+    Data="@model"
+    Submit="HandleSubmit">
+    <DataAnnotationsValidator/>
+
+    <RadzenStack
+        Orientation="Orientation.Vertical"
+        AlignItems="AlignItems.Start"
+        Wrap="FlexWrap.Wrap">
+
+        <RadzenRow Class="w-100">
+            <RadzenColumn>
+                <TaskListsDropDown
+                    Class="w-100"
+                    Value="@model.TaskListId"
+                    ValueChanged="@(value => model.TaskListId = value)"/>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow Class="w-100">
+            <RadzenColumn>
+                <RadzenTextBox
+                    Name="Title"
+                    @bind-Value="model.Title"
+                    Placeholder="Task title"
+                    Class="w-100"/>
+            </RadzenColumn>
+            <RadzenColumn class="col-1 d-flex justify-content-center align-items-center">
+                OR
+            </RadzenColumn>
+            <RadzenColumn>
+                <RadzenTextBox
+                    Name="Title"
+                    @bind-Value="model.ExternalTaskId"
+                    Placeholder="External task ID"
+                    Class="w-100"/>
+            </RadzenColumn>
+        </RadzenRow>
+        <div class="w-100 d-flex align-items-center justify-content-between">
+            <RadzenButton
+                IsBusy="@_isLoading"
+                Click="OnCloseModal"
+                ButtonStyle="ButtonStyle.Secondary"
+                class="ml-1"
+                Text="Cancel"/>
+            <RadzenButton
+                ButtonStyle="ButtonStyle.Success"
+                ButtonType="ButtonType.Submit"
+                IsBusy="@_isLoading"
+                class="mr-1"
+                Text="Add"/>
+        </div>
+    </RadzenStack>
+</RadzenTemplateForm>
