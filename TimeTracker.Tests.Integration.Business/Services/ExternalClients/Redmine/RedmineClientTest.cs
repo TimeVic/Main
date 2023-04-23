@@ -29,6 +29,10 @@ public partial class RedmineClientTest : BaseTest
     private readonly string? _redmineUrl;
     private readonly long _activityId;
     private readonly ITaskSeeder _taskSeeder;
+    private readonly IProjectSeeder _projectSeeder;
+    private readonly ITaskListSeeder _taskListSeeder;
+    private readonly ProjectEntity _project;
+    private readonly TaskListEntity _taskList;
 
     public RedmineClientTest() : base(false)
     {
@@ -40,6 +44,8 @@ public partial class RedmineClientTest : BaseTest
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
         _userDao = Scope.Resolve<IUserDao>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
+        _taskListSeeder = Scope.Resolve<ITaskListSeeder>();
 
         var configuration = Scope.Resolve<IConfiguration>();
         _apiKey = configuration.GetValue<string>("Integration:Redmine:ApiKey");
@@ -61,6 +67,9 @@ public partial class RedmineClientTest : BaseTest
             _userId,
             _activityId
         ).Wait();
+        
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
+        _taskList = _taskListSeeder.CreateAsync(_project).Result;
     }
 
     [Fact]
@@ -76,7 +85,8 @@ public partial class RedmineClientTest : BaseTest
             true,
             description: expectedDescription
         );
-        activeEntry.TaskId = _taskId.ToString();
+        activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
+        activeEntry.Task.ExternalTaskId = _taskId;
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
         await CommitDbChanges();
@@ -102,7 +112,8 @@ public partial class RedmineClientTest : BaseTest
             TimeSpan.FromMinutes(1),
             true
         );
-        activeEntry.TaskId = "fake";
+        activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
+        activeEntry.Task.ExternalTaskId = "fake";
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
         await CommitDbChanges();
@@ -124,7 +135,8 @@ public partial class RedmineClientTest : BaseTest
             TimeSpan.FromMinutes(1),
             true
         );
-        activeEntry.TaskId = _taskId;
+        activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
+        activeEntry.Task.ExternalTaskId = _taskId;
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
         await CommitDbChanges();
@@ -141,8 +153,7 @@ public partial class RedmineClientTest : BaseTest
             Id = activeEntry.Id,
             StartTime = DateTime.UtcNow.TimeOfDay,
             EndTime = DateTime.UtcNow.AddMilliseconds(5).TimeOfDay,
-            Description = "Test",
-            TaskId = activeEntry.TaskId
+            Description = "Test"
         });
         var actualResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
         Assert.False(actualResponse.IsError);

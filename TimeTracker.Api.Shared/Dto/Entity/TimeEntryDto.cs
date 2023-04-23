@@ -6,8 +6,6 @@ public class TimeEntryDto : IResponse
 {
     public long Id { get; set; }
     
-    public string? TaskId { get; set; }
-    
     public string? Description { get; set; }
     
     public decimal? HourlyRate { get; set; }
@@ -42,7 +40,6 @@ public class TimeEntryDto : IResponse
         HourlyRate = fromEntry.HourlyRate;
         Date = fromEntry.Date;
         IsBillable = fromEntry.IsBillable;
-        TaskId = fromEntry.TaskId;
         Task = fromEntry.Task;
         IsSynced = fromEntry.IsSynced;
     }

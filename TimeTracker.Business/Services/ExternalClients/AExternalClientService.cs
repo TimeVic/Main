@@ -37,6 +37,24 @@ public abstract class AExternalClientService
         return await SendDeleteTimeEntryRequestAsync(timeEntry);
     }
     
+    public async Task<TaskEntity> SetTimeEntryTaskAsync(
+        TimeEntryEntity timeEntry,
+        TaskListEntity taskListEntity,
+        string externalTaskId
+    )
+    {
+        return await CreateOrUpdateTimeEntryTaskAsync(timeEntry, taskListEntity, externalTaskId);
+    }
+    
+    public async Task<TaskEntity> SetTimeEntryTaskAsync(
+        TaskListEntity taskListEntity,
+        UserEntity user,
+        string externalTaskId
+    )
+    {
+        return await CreateOrUpdateTimeEntryTaskAsync(taskListEntity, user, externalTaskId);
+    }
+    
     public async Task<bool> IsValidClientSettings(WorkspaceEntity workspace, UserEntity user)
     {
         return await SendSettingsValidationRequest(workspace, user);
@@ -91,4 +109,16 @@ public abstract class AExternalClientService
     protected abstract Task<bool> SendDeleteTimeEntryRequestAsync(TimeEntryEntity timeEntry);
     
     protected abstract Task<bool> SendSettingsValidationRequest(WorkspaceEntity workspace, UserEntity user);
+    
+    protected abstract Task<TaskEntity> CreateOrUpdateTimeEntryTaskAsync(
+        TimeEntryEntity timeEntry,
+        TaskListEntity taskList,
+        string externalTaskId
+    );
+
+    protected abstract Task<TaskEntity> CreateOrUpdateTimeEntryTaskAsync(
+        TaskListEntity taskList,
+        UserEntity user,
+        string externalTaskId
+    );
 }

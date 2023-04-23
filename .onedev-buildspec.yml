@@ -15,6 +15,15 @@ jobs:
     image: mcr.microsoft.com/dotnet/sdk:latest
     interpreter: !DefaultInterpreter
       commands:
+      - if [ "@branch@" = "main" ]; then
+      - "\tconfiguration=\"Release\""
+      - "\tenableWebAssemblyCompression=true"
+      - else
+      - "\tconfiguration=\"Development\""
+      - "\tenableWebAssemblyCompression=false"
+      - fi
+      - ''
+      - ''
       - dotnet nuget locals all -l
       - echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json
       - echo "{}" > TimeTracker.Migrations/appsettings.Local.json
@@ -31,16 +40,17 @@ jobs:
         ./TimeTracker.Tests.Integration.Api
       - ''
       - '# Main projects '
-      - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
+      - dotnet build --configuration="$configuration" --self-contained=true --runtime=linux-x64
         --output="./build/TimeTracker.Api" ./TimeTracker.Api
-      - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
+      - dotnet build --configuration="$configuration" --self-contained=true --runtime=linux-x64
         --output="./build/TimeTracker.Migrations" ./TimeTracker.Migrations
-      - dotnet build --configuration=Release --self-contained=false --runtime=linux-x64
+      - dotnet build --configuration="$configuration" --self-contained=true --runtime=linux-x64
         --output="./build/TimeTracker.WorkerServices" ./TimeTracker.WorkerServices
       - ''
       - '# Web project'
-      - dotnet build --configuration=Production -f net7.0 -r linux-x64 --self-contained
-        true --output="./build/TimeTracker.Web" ./TimeTracker.Web
+      - '# -f net7.0'
+      - dotnet publish -c "$configuration" -p:BlazorEnableCompression=$enableWebAssemblyCompression
+        -r linux-x64 --self-contained=true --output="./build/TimeTracker.Web" ./TimeTracker.Web
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
@@ -50,10 +60,8 @@ jobs:
   paramSpecs:
   - !TextParam
     name: db
-    allowEmpty: false
+    allowEmpty: true
     multiline: false
-    defaultValueProvider: !SpecifiedDefaultValue
-      value: Some value
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
@@ -89,9 +97,9 @@ jobs:
       - export Integration__ClickUp__SecurityKey="@secret:dev-integration-clickup-security-key@"
       - export Integration__Redmine__ApiKey="@secret:dev-integration-redmine-api-key@"
       - export Integration__Redmine__Url="@secret:dev-integration-redmine-url@"
-      - export AWS__S3__AccessKey="@secret:dev-aws-s3-access-key@"
-      - export AWS__S3__SecretKey="@secret:dev-aws-s3-secret-key@"
-      - export AWS__S3__BucketName="@secret:dev-aws-s3-bucket-name@"
+      - export AWS__S3__AccessKey="@secret:dev-s3-access-key@"
+      - export AWS__S3__SecretKey="@secret:dev-s3-secret-key@"
+      - export AWS__S3__BucketName="@secret:dev-s3-bucket-name@"
       - ''
       - dotnet test --logger trx --verbosity=minimal --results-directory /tmp/test
         ./TimeTracker.Tests.Unit.Business
@@ -106,10 +114,8 @@ jobs:
   paramSpecs:
   - !TextParam
     name: db
-    allowEmpty: false
+    allowEmpty: true
     multiline: false
-    defaultValueProvider: !SpecifiedDefaultValue
-      value: Some value
   triggers:
   - !PullRequestUpdateTrigger
     projects: TimeVic/Main
@@ -146,15 +152,21 @@ jobs:
     image: docker
     interpreter: !DefaultInterpreter
       commands:
-      - image="lampego/timevic-main"
+      - if [ "@branch@" = "main" ]; then
+      - "\timage=\"lampego/timevic-main\""
+      - else
+      - "\timage=\"lampego/timevic-main-dev\""
+      - fi
+      - ''
       - imageVersion="@build_number@"
       - imageName="$image:$imageVersion"
+      - latestImageName="$image:latest"
       - ''
       - docker build --file="devops/onedev/common/Dockerfile" -t $imageName .
       - docker login -u "@secret:dockerhub-login@" -p "@secret:dockerhub-password@"
       - docker push $imageName
-      - docker tag $imageName lampego/timevic-main:latest
-      - docker push lampego/timevic-main:latest
+      - docker tag $imageName $latestImageName
+      - docker push $latestImageName
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
@@ -163,17 +175,28 @@ jobs:
     image: docker
     interpreter: !DefaultInterpreter
       commands:
-      - image="lampego/timevic-web"
+      - if [ "@branch@" = "main" ]; then
+      - "\timage=\"lampego/timevic-web\""
+      - else
+      - "\timage=\"lampego/timevic-web-dev\""
+      - fi
+      - ''
       - imageVersion="@build_number@"
       - imageName="$image:$imageVersion"
+      - latestImageName="$image:latest"
       - ''
       - docker build --file="devops/onedev/web/Dockerfile" -t $imageName .
       - docker login -u "@secret:dockerhub-login@" -p "@secret:dockerhub-password@"
       - docker push $imageName
-      - docker tag $imageName lampego/timevic-web:latest
-      - docker push lampego/timevic-web:latest
+      - docker tag $imageName $latestImageName
+      - docker push $latestImageName
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  paramSpecs:
+  - !TextParam
+    name: db
+    allowEmpty: false
+    multiline: false
   jobDependencies:
   - jobName: Build
     requireSuccessful: true
@@ -196,12 +219,21 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker rm -f timevic-main-api || true
-      - docker rm -f timevic-main-worker || true
-      - docker rm -f timevic-web || true
+      - 'if [ "@branch@" = "main" ]; then '
+      - "\tdocker rm -f timevic-main-api || true"
+      - "\tdocker rm -f timevic-main-worker || true"
+      - "\tdocker rm -f timevic-web || true"
       - ''
-      - docker image rm -f lampego/timevic-main || true
-      - docker image rm -f lampego/timevic-web || true
+      - "\tdocker image rm -f lampego/timevic-main || true"
+      - "\tdocker image rm -f lampego/timevic-web || true"
+      - else
+      - "\tdocker rm -f timevic-main-api-dev || true"
+      - "\tdocker rm -f timevic-main-worker-dev || true"
+      - "\tdocker rm -f timevic-web-dev || true"
+      - ''
+      - "\tdocker image rm -f lampego/timevic-main-dev || true"
+      - "\tdocker image rm -f lampego/timevic-web-dev || true"
+      - fi
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
@@ -218,61 +250,82 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
+      - if [ "@branch@" = "main" ]; then
+      - "\timageName=\"lampego/timevic-main\""
+      - "\tconnectionString=\"ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;\""
+      - else
+      - "\timageName=\"lampego/timevic-main-dev\""
+      - "\tconnectionString=\"ConnectionStrings__DefaultConnection=User ID=@secret:dev-db-login@;Password=@secret:dev-db-password@;Host=192.168.99.8;Port=5433;Database=timevic_dev;Pooling=true;\""
+      - fi
+      - ''
       - docker run \
       - -e "PROJECT_DIR=TimeTracker.Migrations" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
-      - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
-        \
-      - lampego/timevic-main
+      - -e "$connectionString" \
+      - '"$imageName" \'
+      - \
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
-    name: Run Worker Services container
+    name: Run backend containers
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker run -d --restart=always --name=timevic-main-worker \
+      - if [ "@branch@" = "main" ]; then
+      - "\timageName=\"lampego/timevic-main\""
+      - "\tportApi=\"6200:80\""
+      - "\tcontainerNameBgJob=\"timevic-main-worker\""
+      - "\tcontainerNameApi=\"timevic-main-api\""
+      - "\tconnectionString=\"ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;\""
+      - "\tfrontendUrl=\"https://timevic.com\""
+      - "\tauthSymmetricKey=\"@secret:prod-auth-symmetric-security-key@\""
+      - "\ts3SecretKey=\"@secret:prod-s3-secret-key@\""
+      - "\ts3AccessKey=\"@secret:prod-s3-access-key@\""
+      - "\ts3BucketName=\"@secret:prod-s3-bucket-name@\""
+      - else
+      - "\timageName=\"lampego/timevic-main-dev\""
+      - "\tportApi=\"8215:80\""
+      - "\tcontainerNameBgJob=\"timevic-main-worker-dev\""
+      - "\tcontainerNameApi=\"timevic-main-api-dev\""
+      - "\tconnectionString=\"ConnectionStrings__DefaultConnection=User ID=@secret:dev-db-login@;Password=@secret:dev-db-password@;Host=192.168.99.8;Port=5433;Database=timevic_dev;Pooling=true;\""
+      - "\tfrontendUrl=\"https://dev.timevic.com\""
+      - "\tauthSymmetricKey=\"@secret:dev-auth-symmetric-security-key@\""
+      - "\ts3SecretKey=\"@secret:dev-s3-secret-key@\""
+      - "\ts3AccessKey=\"@secret:dev-s3-access-key@\""
+      - "\ts3BucketName=\"@secret:dev-s3-bucket-name@\""
+      - fi
+      - ''
+      - docker run -d --restart=always --name=$containerNameBgJob \
       - -e "PROJECT_DIR=TimeTracker.WorkerServices" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
-      - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
-        \
-      - -e "App__FrontendUrl=https://timevic.com" \
+      - -e "$connectionString" \
+      - -e "App__FrontendUrl=$frontendUrl" \
       - -e "Serilog__IsSendEmailIfError=false" \
       - -e "Redis__Server=10.10.0.2:6379" \
       - -e "Smtp__UserName=@secret:prod-smtp-login@" \
       - -e "Smtp__Password=@secret:prod-smtp-password@" \
-      - -e "App__Auth__SymmetricSecurityKey=@secret:prod-auth-symmetric-security-key@"
-        \
+      - -e "App__Auth__SymmetricSecurityKey=$authSymmetricKey" \
       - -e "ReCaptcha__Secret=@secret:prod-recaptcha-secret@" \
-      - -e "AWS__S3__AccessKey=@secret:prod-s3-access-key@" \
-      - -e "AWS__S3__SecretKey=@secret:prod-s3-secret-key@" \
-      - -e "AWS__S3__BucketName=@secret:prod-s3-bucket-name@" \
-      - lampego/timevic-main
-    useTTY: false
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !CommandStep
-    name: Run Main API container
-    runInContainer: false
-    interpreter: !DefaultInterpreter
-      commands:
-      - docker run -d -p 6200:80 --restart=always --name=timevic-main-api \
+      - -e "AWS__S3__AccessKey=$s3AccessKey" \
+      - -e "AWS__S3__SecretKey=$s3SecretKey" \
+      - -e "AWS__S3__BucketName=$s3BucketName" \
+      - '"$imageName"'
+      - ''
+      - docker run -d -p "$portApi" --restart=always --name=$containerNameApi \
       - -e "PROJECT_DIR=TimeTracker.Api" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
-      - -e "ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;"
-        \
-      - -e "App__FrontendUrl=https://timevic.com" \
+      - -e "$connectionString" \
+      - -e "App__FrontendUrl=$frontendUrl" \
       - -e "Serilog__IsSendEmailIfError=false" \
       - -e "Redis__Server=10.10.0.2:6379" \
       - -e "Smtp__UserName=@secret:prod-smtp-login@" \
       - -e "Smtp__Password=@secret:prod-smtp-password@" \
-      - -e "App__Auth__SymmetricSecurityKey=@secret:prod-auth-symmetric-security-key@"
-        \
+      - -e "App__Auth__SymmetricSecurityKey=$authSymmetricKey" \
       - -e "ReCaptcha__Secret=@secret:prod-recaptcha-secret@" \
-      - -e "AWS__S3__AccessKey=@secret:prod-s3-access-key@" \
-      - -e "AWS__S3__SecretKey=@secret:prod-s3-secret-key@" \
-      - -e "AWS__S3__BucketName=@secret:prod-s3-bucket-name@" \
-      - lampego/timevic-main \
-      - \
+      - -e "AWS__S3__AccessKey=$s3AccessKey" \
+      - -e "AWS__S3__SecretKey=$s3SecretKey" \
+      - -e "AWS__S3__BucketName=$s3BucketName" \
+      - '"$imageName"'
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
@@ -280,18 +333,43 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - docker run -d --restart=always -p 6201:80 --name=timevic-web \
-      - lampego/timevic-web \
+      - if [ "@branch@" = "main" ]; then
+      - "\timageName=\"lampego/timevic-web\""
+      - "\tcontainerName=\"timevic-web\""
+      - "\tport=\"6201:80\""
+      - else
+      - "\timageName=\"lampego/timevic-web-dev\""
+      - "\tcontainerName=\"timevic-web-dev\""
+      - "\tport=\"8216:80\""
+      - fi
+      - ''
+      - docker run -d --restart=always -p $port --name=$containerName \
+      - $imageName \
       - \
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  paramSpecs:
+  - !TextParam
+    name: db
+    allowEmpty: false
+    multiline: false
+    defaultValueProvider: !SpecifiedDefaultValue
+      value: Test
   triggers:
   - !PullRequestMergeTrigger
-    branches: main
+    branches: main dev
     projects: TimeVic/Main
+    params:
+    - name: db
+      valuesProvider: !Ignore {}
+      secret: false
   jobDependencies:
   - jobName: Publish
     requireSuccessful: true
+    jobParams:
+    - name: db
+      valuesProvider: !Ignore {}
+      secret: false
   retryCondition: never
   maxRetries: 3
   retryDelay: 30

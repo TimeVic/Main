@@ -15,17 +15,18 @@ using TimeTracker.Web.Services.Workspace;
 
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+// System services
+Console.WriteLine($"Application loaded in {builder.HostEnvironment.Environment} mode!");
+
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 var apiUrl = builder.Configuration.GetValue<string>("ApiUrl");
-// System services
-builder.Services.AddScoped(
-    sp => new HttpClient
-    {
-        BaseAddress = new Uri(apiUrl)
-    }
-);
+builder.Services.AddScoped(sp => new HttpClient
+{
+    BaseAddress = new Uri(apiUrl)
+});
 builder.Services.AddBlazoredLocalStorage();
 
 // Radzen services

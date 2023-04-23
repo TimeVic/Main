@@ -96,7 +96,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 description: request.Description,
                 projectId: request.ProjectId,
                 hourlyRate: request.HourlyRate,
-                taskId: request.TaskId,
                 internalTask: task
             );
             await _sessionProvider.PerformCommitAsync();

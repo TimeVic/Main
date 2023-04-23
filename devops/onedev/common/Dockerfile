@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime:7.0
+FROM mcr.microsoft.com/dotnet/runtime:latest
 
 # Change timezone to local time
 ENV TZ=UTC

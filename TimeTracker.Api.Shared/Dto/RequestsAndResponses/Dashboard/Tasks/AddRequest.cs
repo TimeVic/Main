@@ -7,19 +7,21 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 {
     public class AddRequest : IRequest<TaskDto>
     {
+        [IsPositive]
+        public long? TimeEntryId { get; set; } 
+        
         [Required]
         [IsPositive]
         public long TaskListId { get; set; }
         
-        [Required]
         [StringLength(1024, MinimumLength = 1)]
-        public string Title { get; set; }
-        
-        [StringLength(10000)]
-        public string? Description { get; set; }
+        public string? Title { get; set; }
         
         [StringLength(512)]
         public string? ExternalTaskId { get; set; }
+        
+        [StringLength(10000)]
+        public string? Description { get; set; }
         
         public DateTime? NotificationTime { get; set; }
         

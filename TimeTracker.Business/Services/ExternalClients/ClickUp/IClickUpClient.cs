@@ -11,11 +11,25 @@ public interface IClickUpClient
 
     Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry);
 
-    Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry);
+    Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry, string externalTaskId);
 
     bool IsCorrectTaskId(TimeEntryEntity timeEntry);
+    
+    bool IsCorrectTaskId(string externalTaskId);
 
     Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry);
 
     Task<bool> IsValidClientSettings(WorkspaceEntity workspace, UserEntity user);
+
+    Task<TaskEntity> SetTimeEntryTaskAsync(
+        TimeEntryEntity timeEntry,
+        TaskListEntity taskListEntity,
+        string externalTaskId
+    );
+
+    Task<TaskEntity> SetTimeEntryTaskAsync(
+        TaskListEntity taskListEntity,
+        UserEntity user,
+        string externalTaskId
+    );
 }

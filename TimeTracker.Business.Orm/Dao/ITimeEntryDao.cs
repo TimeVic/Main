@@ -20,7 +20,6 @@ public interface ITimeEntryDao: IDomainService
         string? description = null,
         long? projectId = null,
         decimal? hourlyRate = null,
-        string? taskId = null,
         TaskEntity? internalTask = null
     );
     

@@ -1,6 +1,9 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
@@ -15,6 +18,12 @@ public partial class TimeEntryForm
 
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
+    
+    [Inject] 
+    private TooltipService _tooltipService { get; set; }
+    
+    [Inject] 
+    private ModalDialogProviderService _modalDialogProviderService { get; set; }
 
     public TaskDto? _internalTask;
     
@@ -59,13 +68,6 @@ public partial class TimeEntryForm
     {
         Dispatcher.Dispatch(new StopActiveTimeEntryAction());
     }
-
-    private async Task OnChangeTaskId(string value)
-    {
-        _activeEntry.TaskId = value;
-        await UpdateTimeEntry(_activeEntry);
-        await Task.CompletedTask;
-    }
     
     private async Task OnChangeDescription(string value)
     {
@@ -86,5 +88,18 @@ public partial class TimeEntryForm
         Dispatcher.Dispatch(new UpdateTimeEntryAction(entry));
         Dispatcher.Dispatch(new SaveTimeEntryAction(entry, true));
         await Task.CompletedTask;
+    }
+    
+    private async Task ShowAddTaskModal(long timEntryId)
+    {
+        await _modalDialogProviderService.ShowAddTaskModal(timEntryId);
+    }
+
+    private void ShowTooltip(ElementReference elementReference)
+    {
+        _tooltipService.Open(elementReference, "Add task", new TooltipOptions()
+        {
+            Position = TooltipPosition.Top
+        });
     }
 }

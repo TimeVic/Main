@@ -123,7 +123,6 @@ public class SetTest: BaseTest
             IsBillable = fakeEntry.IsBillable,
             ProjectId = expectedProject.Id,
             Date = fakeEntry.Date,
-            TaskId = fakeEntry.TaskId,
         });
         response.EnsureSuccessStatusCode();
 
@@ -136,8 +135,7 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.HourlyRate, actualDto.HourlyRate);
         Assert.Equal(fakeEntry.Date, actualDto.Date.ToUniversalTime());
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
-        Assert.Equal(fakeEntry.TaskId, actualDto.TaskId);
-        
+
         var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
@@ -175,7 +173,6 @@ public class SetTest: BaseTest
             IsBillable = fakeEntry.IsBillable,
             ProjectId = expectedProject.Id,
             Date = fakeEntry.Date,
-            TaskId = fakeEntry.TaskId,
         });
         response.EnsureSuccessStatusCode();
 

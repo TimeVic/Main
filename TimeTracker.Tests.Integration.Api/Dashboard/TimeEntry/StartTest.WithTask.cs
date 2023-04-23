@@ -32,15 +32,14 @@ public partial class StartTest
             IsBillable = fakeTimeEntry.IsBillable,
             Date = DateTime.UtcNow.Date,
             StartTime = TimeSpan.FromSeconds(1),
-            TaskId = fakeTimeEntry.TaskId,
             InternalTaskId = task.Id
         });
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.True(actualDto.Id > 0);
-        Assert.Null(actualDto.TaskId);
         Assert.NotNull(actualDto.Task);
         Assert.True(actualDto.Task.Id > 0);
     }
+    
 }

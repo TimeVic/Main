@@ -44,4 +44,13 @@ public class RedmineClientMock: IRedmineClient
     {
         return Task.FromResult<bool>(true);
     }
+
+    public Task<TaskEntity> SetTimeEntryTaskAsync(
+        TimeEntryEntity timeEntry,
+        TaskListEntity taskListEntity,
+        string externalTaskId
+    )
+    {
+        throw new NotImplementedException();
+    }
 }

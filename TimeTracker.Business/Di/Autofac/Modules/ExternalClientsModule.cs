@@ -13,11 +13,11 @@ namespace TimeTracker.Business.Di.Autofac.Modules
             builder
                 .RegisterType<ClickUpClient>()
                 .As<IClickUpClient>()
-                .SingleInstance();
+                .InstancePerDependency();
             builder
                 .RegisterType<RedmineClient>()
                 .As<IRedmineClient>()
-                .SingleInstance();
+                .InstancePerDependency();
         }
     }
 }

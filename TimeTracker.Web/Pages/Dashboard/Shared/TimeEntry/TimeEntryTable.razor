@@ -119,10 +119,6 @@
                     IsClickable="true"
                     InternalTask="@entry.Task"/>
             }
-            else
-            {
-                @entry.TaskId    
-            }
         </Template>
         <EditTemplate Context="entry">
             @if (entry.Task != null)
@@ -133,17 +129,10 @@
             }
             else
             {
-                if (!entry?.IsSynced ?? false)
-                {
-                    <RadzenTextBox
-                        Class="w-100"
-                        MaxLength="500"
-                        @bind-Value="@entry.TaskId"/>    
-                }
-                else
-                {
-                    @entry?.TaskId
-                }    
+                <RadzenButton
+                    ButtonStyle="ButtonStyle.Info"
+                    Class="mr-1"
+                    Icon="add"/>  
             }
         </EditTemplate>
     </RadzenDataGridColumn>

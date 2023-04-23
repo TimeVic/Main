@@ -21,14 +21,18 @@ public partial class SendNewTimeEntityTest : BaseTest
     private readonly WorkspaceEntity _workspace;
     private readonly IClickUpClient _сlickUpClient;
     private readonly IWorkspaceSettingsDao _workspaceSettingsDao;
+    
     private readonly string _securityKey;
-
     private readonly string _teamId;
-    private readonly string _taskId;
+    private readonly string _externalTaskId;
+    private readonly string _externalTaskIdForCreation;
+    
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IUserDao _userDao;
     private readonly ITaskSeeder _taskSeeder;
     private readonly IDataFactory<TimeEntryEntity> _timeEntryFactory;
+    private readonly ITaskListSeeder _taskListSeeder;
+    private readonly IProjectSeeder _projectSeeder;
 
     public SendNewTimeEntityTest() : base(false)
     {
@@ -38,14 +42,17 @@ public partial class SendNewTimeEntityTest : BaseTest
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
+        _taskListSeeder = Scope.Resolve<ITaskListSeeder>();
         _timeEntryFactory = Scope.Resolve<IDataFactory<TimeEntryEntity>>();
         _userDao = Scope.Resolve<IUserDao>();
 
         var configuration = Scope.Resolve<IConfiguration>();
         _securityKey = configuration.GetValue<string>("Integration:ClickUp:SecurityKey");
         _teamId = configuration.GetValue<string>("Integration:ClickUp:TeamId");
-        _taskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
+        _externalTaskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
+        _externalTaskIdForCreation = configuration.GetValue<string>("Integration:ClickUp:TaskIdForCreation");
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
@@ -65,6 +72,9 @@ public partial class SendNewTimeEntityTest : BaseTest
     [Fact]
     public async Task ShouldSendNewTimeEntry()
     {
+        var project = await _projectSeeder.CreateAsync(_workspace);
+        var taskList = await _taskListSeeder.CreateAsync(project);
+        
         var fakeTimeEntry = _timeEntryFactory.Generate();
         
         var date = DateTime.UtcNow.Date;
@@ -76,7 +86,8 @@ public partial class SendNewTimeEntityTest : BaseTest
             true,
             description: fakeTimeEntry.Description
         );
-        activeEntry.TaskId = _taskId;
+        activeEntry.Task = await _taskSeeder.CreateAsync(taskList: taskList);
+        activeEntry.Task.ExternalTaskId = _externalTaskId;
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
         await CommitDbChanges();
@@ -96,6 +107,8 @@ public partial class SendNewTimeEntityTest : BaseTest
     [Fact]
     public async Task ShouldReceiveErrorIfTaskNotFound()
     {
+        var project = await _projectSeeder.CreateAsync(_workspace);
+        var taskList = await _taskListSeeder.CreateAsync(project);
         var date = DateTime.UtcNow.Date;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
@@ -104,7 +117,8 @@ public partial class SendNewTimeEntityTest : BaseTest
             TimeSpan.FromMinutes(1),
             true
         );
-        activeEntry.TaskId = "fake";
+        activeEntry.Task = await _taskSeeder.CreateAsync(taskList: taskList);
+        activeEntry.Task.ExternalTaskId = "fake";
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
         await CommitDbChanges();
@@ -118,6 +132,8 @@ public partial class SendNewTimeEntityTest : BaseTest
     [Fact]
     public async Task ShouldUpdateExistsTimeEntry()
     {
+        var project = await _projectSeeder.CreateAsync(_workspace);
+        var taskList = await _taskListSeeder.CreateAsync(project);
         var fakeTimeEntry = _timeEntryFactory.Generate();
         
         var date = DateTime.UtcNow.Date;
@@ -128,7 +144,8 @@ public partial class SendNewTimeEntityTest : BaseTest
             DateTime.UtcNow.TimeOfDay,
             true
         );
-        activeEntry.TaskId = _taskId;
+        activeEntry.Task = await _taskSeeder.CreateAsync(taskList: taskList);
+        activeEntry.Task.ExternalTaskId = _externalTaskId;
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
         await CommitDbChanges();
@@ -146,7 +163,6 @@ public partial class SendNewTimeEntityTest : BaseTest
             StartTime = DateTime.UtcNow.TimeOfDay,
             EndTime = DateTime.UtcNow.AddMilliseconds(5).TimeOfDay,
             Description = fakeTimeEntry.Description,
-            TaskId = activeEntry.TaskId
         });
         var actualResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
         Assert.False(actualResponse.IsError);
@@ -167,7 +183,7 @@ public partial class SendNewTimeEntityTest : BaseTest
             TimeSpan.FromMinutes(1),
             true
         );
-        activeEntry.TaskId = _taskId;
+        activeEntry.TaskId = _externalTaskId;
         
         // Description should be empty
         activeEntry.Description = "";
@@ -176,7 +192,10 @@ public partial class SendNewTimeEntityTest : BaseTest
         await CommitDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
-        var getTaskResponse = await _сlickUpClient.GetTaskAsync(activeEntry);
+        var getTaskResponse = await _сlickUpClient.GetTaskAsync(
+            activeEntry,
+            _externalTaskId
+        );
         Assert.NotEmpty(getTaskResponse.Value.Name);
     }
     

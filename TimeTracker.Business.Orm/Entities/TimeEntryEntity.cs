@@ -35,6 +35,7 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "end_time", SqlType = "time", NotNull = false)]
         public virtual TimeSpan? EndTime { get; set; }
 
+        [Obsolete("This property moved to TaskEntity")]
         [Property(NotNull = false)]
         [Column(Name = "task_id", Length = 512, NotNull = false)]
         public virtual string? TaskId { get; set; }
@@ -121,17 +122,7 @@ namespace TimeTracker.Business.Orm.Entities
 
         public virtual TimeSpan Duration => EndTime != null ? EndTime.Value - StartTime : TimeSpan.Zero;
 
-        public virtual string? ExternalTaskId => Task?.ExternalTaskId ?? TaskId;
-
-        public virtual void SetTaskId(string? taskId)
-        {
-            if (IsSynced)
-            {
-                return;
-            }
-
-            TaskId = taskId;
-        }
+        public virtual string? ExternalTaskId => Task?.ExternalTaskId;
 
         #endregion
     }

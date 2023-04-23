@@ -59,8 +59,6 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 WorkspaceId = _authState.Value.Workspace.Id,
                 Date = DateTime.Now.ToDateAndRemoveTimeZone(),
                 StartTime = DateTime.Now.TimeOfDay,
-
-                TaskId = action.TaskId,
                 IsBillable = project != null ? project.IsBillableByDefault : action.IsBillable,
                 ProjectId = action.Project?.Id,
                 Description = action.Description,
