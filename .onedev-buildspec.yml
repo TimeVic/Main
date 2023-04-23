@@ -152,7 +152,9 @@ jobs:
     image: docker
     interpreter: !DefaultInterpreter
       commands:
-      - if [ "@branch@" = "main" ]; then
+      - 'echo "Current branch: @branch@"'
+      - ''
+      - if [[ "@branch@" == "main" ]]; then
       - "\timage=\"lampego/timevic-main\""
       - else
       - "\timage=\"lampego/timevic-main-dev\""
@@ -175,7 +177,7 @@ jobs:
     image: docker
     interpreter: !DefaultInterpreter
       commands:
-      - if [ "@branch@" = "main" ]; then
+      - if [[ "@branch@" == "main" ]]; then
       - "\timage=\"lampego/timevic-web\""
       - else
       - "\timage=\"lampego/timevic-web-dev\""
@@ -202,9 +204,7 @@ jobs:
     requireSuccessful: true
     jobParams:
     - name: db
-      valuesProvider: !SpecifiedValues
-        values:
-        - - Some value
+      valuesProvider: !Ignore {}
       secret: false
     artifacts: '*/**'
   retryCondition: never
@@ -219,7 +219,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - 'if [ "@branch@" = "main" ]; then '
+      - if [[ "@branch@" == "main" ]]; then
       - "\tdocker rm -f timevic-main-api || true"
       - "\tdocker rm -f timevic-main-worker || true"
       - "\tdocker rm -f timevic-web || true"
@@ -250,7 +250,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - if [ "@branch@" = "main" ]; then
+      - if [[ "@branch@" == "main" ]]; then
       - "\timageName=\"lampego/timevic-main\""
       - "\tconnectionString=\"ConnectionStrings__DefaultConnection=User ID=@secret:prod-db-login@;Password=@secret:prod-db-password@;Host=192.168.99.8;Port=5433;Database=timevic;Pooling=true;\""
       - else
@@ -271,7 +271,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - if [ "@branch@" = "main" ]; then
+      - if [[ "@branch@" == "main" ]]; then
       - "\timageName=\"lampego/timevic-main\""
       - "\tportApi=\"6200:80\""
       - "\tcontainerNameBgJob=\"timevic-main-worker\""
@@ -333,7 +333,7 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
-      - if [ "@branch@" = "main" ]; then
+      - if [[ "@branch@" == "main" ]]; then
       - "\timageName=\"lampego/timevic-web\""
       - "\tcontainerName=\"timevic-web\""
       - "\tport=\"6201:80\""
