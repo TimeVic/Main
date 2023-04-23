@@ -110,14 +110,25 @@
     <RadzenDataGridColumn
         TItem="TimeEntryDto"
         Title="Task ID"
+        TextAlign="TextAlign.Center"
         Width="50px">
 
         <Template Context="entry">
             @if (entry.Task != null)
             {
-                <TaskIdBadge 
+                <TaskIdBadge
                     IsClickable="true"
                     InternalTask="@entry.Task"/>
+            }
+            else
+            {
+                <RadzenButton
+                    ButtonStyle="ButtonStyle.Info"
+                    Size="ButtonSize.Small"
+                    Click="@(() => ShowAddTaskModal(entry.Id))"
+                    MouseEnter="ShowTooltip"
+                    Class="mr-1"
+                    Icon="add"/>
             }
         </Template>
         <EditTemplate Context="entry">
@@ -126,13 +137,6 @@
                 <TaskIdBadge 
                     IsClickable="false"
                     InternalTask="@entry.Task"/>
-            }
-            else
-            {
-                <RadzenButton
-                    ButtonStyle="ButtonStyle.Info"
-                    Class="mr-1"
-                    Icon="add"/>  
             }
         </EditTemplate>
     </RadzenDataGridColumn>

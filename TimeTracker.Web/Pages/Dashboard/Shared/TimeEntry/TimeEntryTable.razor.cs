@@ -4,6 +4,7 @@ using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
@@ -24,6 +25,9 @@ public partial class TimeEntryTable
     
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
+    
+    [Inject] 
+    private ModalDialogProviderService _modalDialogProviderService { get; set; }
     
     private RadzenDataGrid<TimeEntryDto> _grid;
     private TimeEntryDto _modelToEdit = new();
@@ -122,6 +126,19 @@ public partial class TimeEntryTable
             Project = timeEntry.Project,
             HourlyRate = timeEntry.HourlyRate,
             IsBillable = timeEntry.IsBillable,
+        });
+    }
+    
+    private async Task ShowAddTaskModal(long timEntryId)
+    {
+        await _modalDialogProviderService.ShowAddTaskModal(timEntryId);
+    }
+    
+    private void ShowTooltip(ElementReference elementReference)
+    {
+        _tooltipService.Open(elementReference, "Add task", new TooltipOptions()
+        {
+            Position = TooltipPosition.Top
         });
     }
 }

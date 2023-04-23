@@ -1,6 +1,6 @@
 ﻿@inherits BaseComponent
 
-<div class="d-flex align-items-center">
+<div class="d-flex align-items-center justify-content-center">
     @if (IsLink)
     {
         <NavLink href="@("/board/task/" + InternalTask.Id)" target="_blank">
@@ -16,6 +16,7 @@
     else
     {
         <RadzenBadge
+            
             Shade="Shade.Lighter"
             BadgeStyle="BadgeStyle.Primary"
             Style="@(IsClickable ? "cursor: pointer" : "")"
