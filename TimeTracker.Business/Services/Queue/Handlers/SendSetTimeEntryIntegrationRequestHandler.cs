@@ -45,7 +45,7 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
                 throw new MinorException($"TimeEntry not found: {commandContext.TimeEntryId}");
             }
 
-            if (string.IsNullOrEmpty(timeEntry.TaskId))
+            if (string.IsNullOrEmpty(timeEntry.ExternalTaskId))
             {
                 throw new MinorException($"TimeEntry does not have TaskId: {commandContext.TimeEntryId}");
             }
