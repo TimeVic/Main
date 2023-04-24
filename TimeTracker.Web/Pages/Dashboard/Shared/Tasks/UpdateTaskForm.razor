@@ -39,7 +39,7 @@
         </RadzenRow>
 
         <RadzenRow Class="w-100">
-            <RadzenColumn Style="max-width: 200px">
+            <RadzenColumn>
                 <RadzenText
                     TextStyle="TextStyle.Subtitle2"
                     TagName="TagName.H3">
@@ -49,9 +49,10 @@
                     Clearable="false"
                     AllowedIds="_allowedUserIds"
                     UserId="@model.UserId"
+                    Class="w-100"
                     SelectedItemChanged="OnChangedAssigned"/>
             </RadzenColumn>
-            <RadzenColumn Style="max-width: 200px">
+            <RadzenColumn>
                 <RadzenText
                     TextStyle="TextStyle.Subtitle2"
                     TagName="TagName.H3">
@@ -63,6 +64,7 @@
                     ShowSeconds="true"
                     HoursStep="1"
                     MinutesStep="30"
+                    class="w-100"
                     Change="OnChangeNotificationTime"
                     DateRender="OnRenderNotificationTime"
                     Value="model.NotificationTime"
@@ -71,23 +73,41 @@
         </RadzenRow>
 
         <RadzenRow Class="w-100">
-            <RadzenColumn Style="max-width: 200px">
+            <RadzenColumn>
                 <RadzenText
                     TextStyle="TextStyle.Subtitle2"
                     TagName="TagName.H3">
-                    External Task Id
+                    Tags
                 </RadzenText>
-                <RadzenTextBox
-                    Class="w-100"
-                    Placeholder="Task ID"
-                    @bind-Value="@model.ExternalTaskId"
-                    Change="SubmitForm"/>
+                <TagsDropDown
+                    Value="@model.TagIds"
+                    ValueChanged="OnTagsChanged"
+                    Class="w-100"/>
             </RadzenColumn>
-            <RadzenColumn>
+        </RadzenRow>
+
+        <RadzenRow Class="w-100">
+            @if (!string.IsNullOrEmpty(model.ExternalTaskId))
+            {
+                <RadzenColumn>
+                    <RadzenStack
+                        Orientation="Orientation.Horizontal"
+                        AlignItems="AlignItems.Center"
+                        JustifyContent="JustifyContent.Start"
+                        Style="height: 100%;">
+
+                        <RadzenText
+                            TextStyle="TextStyle.Subtitle1">
+                            External Task Id: @model.ExternalTaskId
+                        </RadzenText>
+                    </RadzenStack>
+                </RadzenColumn>
+            }
+            <RadzenColumn Style="max-width: 200px">
                 <RadzenStack
                     Orientation="Orientation.Horizontal"
-                    AlignItems="AlignItems.End"
-                    JustifyContent="JustifyContent.End"
+                    AlignItems="AlignItems.Center"
+                    JustifyContent="JustifyContent.Start"
                     Style="height: 100%;">
                     <div>
                         <RadzenCheckBox
@@ -106,20 +126,6 @@
                         <RadzenLabel Text="Archived" Component="IsArchived" class="ml-1"/>
                     </div>
                 </RadzenStack>
-            </RadzenColumn>
-        </RadzenRow>
-
-        <RadzenRow Class="w-100">
-            <RadzenColumn>
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    Tags
-                </RadzenText>
-                <TagsDropDown
-                    Value="@model.TagIds"
-                    ValueChanged="OnTagsChanged"
-                    Class="w-100"/>
             </RadzenColumn>
         </RadzenRow>
 

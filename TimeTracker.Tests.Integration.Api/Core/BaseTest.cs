@@ -38,7 +38,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     
     public void Dispose()
     {
-        DbSessionProvider.PerformCommitAsync().Wait();
+        CommitDbChanges().Wait();
         GC.SuppressFinalize(this);
     }
 

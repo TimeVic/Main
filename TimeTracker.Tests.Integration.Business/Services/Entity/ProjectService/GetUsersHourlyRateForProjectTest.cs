@@ -64,7 +64,7 @@ public class GetUsersHourlyRateForProjectTest: BaseTest
     public async Task ShouldReturnHourlyRateForUser()
     {
         var expectedRate = 15.78m;
-        
+
         var userWithUserRole = await _userSeeder.CreateActivatedAsync();
         await _workspaceAccessService.ShareAccessAsync(
             _workspace,

@@ -114,6 +114,7 @@ public abstract class BaseTest: IDisposable
     
     public void Dispose()
     {
+        CommitDbChanges().Wait();
         Scope.Dispose();
         _serviceProvider.Dispose();
     }
