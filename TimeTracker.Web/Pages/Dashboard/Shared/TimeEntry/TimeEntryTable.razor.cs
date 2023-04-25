@@ -126,6 +126,7 @@ public partial class TimeEntryTable
             Project = timeEntry.Project,
             HourlyRate = timeEntry.HourlyRate,
             IsBillable = timeEntry.IsBillable,
+            InternalTask = timeEntry.Task
         });
     }
     
