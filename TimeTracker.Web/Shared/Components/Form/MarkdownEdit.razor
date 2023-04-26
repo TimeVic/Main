@@ -1,0 +1,102 @@
+﻿@using TimeTracker.Web.Services.UI
+
+<div class="@($"{Class} w-markdown-editor")">
+    <RadzenTextArea
+        hidden="@(!_isShowEditBox)"
+        @ref="_markdownTextArea"
+        Name="@TextAreaName"
+        Value="@_value"
+        ValueChanged="OnChangeValue"
+        Placeholder="@Placeholder"
+        Rows="_textAreaRows"
+        @oninput="ResizeEditBox"
+        MaxLength="MaxLength"
+        @onfocusout="@(() => _isShowEditBox = false)"
+        Class="w-100"/>
+    
+    <div class="w-view"
+         hidden="@(_isShowEditBox)"
+         @onclick="@OnClickView">
+        @MarkdownHtml
+    </div>
+    <hr/>
+    Supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a>
+</div>
+
+@code
+{
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Placeholder { get; set; }
+
+    [Parameter]
+    public string TextAreaName { get; set; }
+
+    [Parameter]
+    public int MaxLength { get; set; } = 10000;
+
+    [Parameter]
+    public string Value
+    {
+        set => _value = value;
+    }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> Changed { get; set; }
+
+    [Inject]
+    public MarkdownService MarkdownService { get; set; }
+
+    public MarkupString MarkdownHtml => (MarkupString) MarkdownService.ToHtml(_value);
+
+    private RadzenTextArea _markdownTextArea;
+    private bool _isShowEditBox;
+    private readonly int _textAreaRowsMin = 10;
+    private readonly int _textAreaRowsMax = 20;
+    private int _textAreaRows = 6;
+    private string _value = "";
+
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrEmpty(_value))
+        {
+            _isShowEditBox = true;
+        }
+        else
+        {
+            ResizeEditBox(_value);
+        }
+    }
+
+    private void ResizeEditBox(ChangeEventArgs elementEvent)
+    {
+        var description = (string) (elementEvent.Value ?? "");
+        ResizeEditBox(description);
+    }
+
+    private void ResizeEditBox(string? description)
+    {
+        description ??= "";
+        _textAreaRows = Math.Max(description.Split('\n').Length, description.Split('\r').Length);
+        _textAreaRows = Math.Max(_textAreaRows, _textAreaRowsMin);
+        _textAreaRows = Math.Min(_textAreaRows, _textAreaRowsMax);
+    }
+
+    private void OnChangeValue(string value)
+    {
+        _value = value;
+        ValueChanged.InvokeAsync(_value);
+        Changed.InvokeAsync(_value);
+    }
+
+    private void OnClickView()
+    {
+        _isShowEditBox = true;
+        _markdownTextArea.Element.FocusAsync();
+    }
+}

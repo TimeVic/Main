@@ -12,10 +12,12 @@
         <PackageReference Include="Fluxor.Blazor.Web" Version="5.7.0" />
         <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.7.0" />
         <PackageReference Include="Majorsoft.Blazor.WebAssembly.Logging.Console" Version="1.5.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.4" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.4" PrivateAssets="all" />
+        <PackageReference Include="Markdig" Version="0.31.0" />
+        <PackageReference Include="Markdown.ColorCode" Version="1.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.5" PrivateAssets="all" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
-        <PackageReference Include="Radzen.Blazor" Version="4.8.4" />
+        <PackageReference Include="Radzen.Blazor" Version="4.10.0" />
         <PackageReference Include="System.Net.Http.Json" Version="7.0.1" />
     </ItemGroup>
 
@@ -37,6 +39,9 @@
       </Content>
       <Content Update="wwwroot\appsettings.Debug.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Shared\Components\Form\MarkdownEdit.razor.less">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </Content>
     </ItemGroup>
 

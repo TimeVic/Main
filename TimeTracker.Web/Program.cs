@@ -44,6 +44,7 @@ builder.Services.AddScoped<ISecurityManager, SecurityManager>();
 builder.Services.AddScoped<ModalDialogProviderService>();
 builder.Services.AddScoped<UiHelperService>();
 builder.Services.AddScoped<UrlService>();
+builder.Services.AddScoped<MarkdownService>();
 builder.Services.AddScoped<WorkspaceInitializationService>();
 
 // Store

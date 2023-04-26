@@ -28,10 +28,6 @@ public partial class UpdateTaskForm
 
     private UpdateRequest model = new();
     private bool _isLoading = false;
-    
-    private readonly int _descriptionTextAreaRowsMin = 10;
-    private readonly int _descriptionTextAreaRowsMax = 20;
-    private int _descriptionTextAreaRows = 6;
 
     private string _tabLabelAttachments
     {
@@ -61,7 +57,6 @@ public partial class UpdateTaskForm
     {
         await base.OnInitializedAsync();
         model.Fill(Task);
-        ResizeDescriptionField(model.Description);
     }
 
     private void HandleSubmit(UpdateRequest request)
@@ -100,20 +95,6 @@ public partial class UpdateTaskForm
             InvokeAsync(async () => await _form.Submit.InvokeAsync());
         }
         return System.Threading.Tasks.Task.CompletedTask;
-    }
-
-    private void ResizeDescriptionTextArea(ChangeEventArgs elementEvent)
-    {
-        var description = (string)(elementEvent.Value ?? "");
-        ResizeDescriptionField(description);
-    }
-
-    private void ResizeDescriptionField(string? description)
-    {
-        description ??= "";
-        _descriptionTextAreaRows = Math.Max(description.Split('\n').Length, description.Split('\r').Length);
-        _descriptionTextAreaRows = Math.Max(_descriptionTextAreaRows, _descriptionTextAreaRowsMin);
-        _descriptionTextAreaRows = Math.Min(_descriptionTextAreaRows, _descriptionTextAreaRowsMax);
     }
 
     private async Task OnChangedAssigned(WorkspaceMembershipDto membership)

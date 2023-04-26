@@ -132,14 +132,11 @@
         <RadzenTabs RenderMode="@TabRenderMode.Client" class="w-100">
             <Tabs>
                 <RadzenTabsItem Text="Description">
-                    <RadzenTextArea
-                        Name="Description"
+                    <MarkdownEdit
+                        TextAreaName="Description"
                         @bind-Value="model.Description"
                         Placeholder="Insert your task details here"
-                        Rows="_descriptionTextAreaRows"
-                        @oninput="ResizeDescriptionTextArea"
-                        MaxLength="10000"
-                        Change="SubmitForm"
+                        Changed="SubmitForm"
                         Class="w-100"/>
                 </RadzenTabsItem>
                 <RadzenTabsItem Text="@_tabLabelAttachments">
