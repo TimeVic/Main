@@ -142,4 +142,5 @@ public partial class TimeEntryTable
             Position = TooltipPosition.Top
         });
     }
+    
 }
