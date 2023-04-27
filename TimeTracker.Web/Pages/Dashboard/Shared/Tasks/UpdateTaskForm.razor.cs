@@ -5,6 +5,7 @@ using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Services.Security;
+using TimeTracker.Web.Store.Tasks;
 using TimeTracker.Web.Store.WorkspaceMemberships;
 using SetListItemAction = TimeTracker.Web.Store.Tasks.SetListItemAction;
 
@@ -117,7 +118,7 @@ public partial class UpdateTaskForm
     private void OnFileUploaded(StoredFileDto uploadedFile)
     {
         Task.Attachments.Add(uploadedFile);
-        Dispatcher.Dispatch(new SetListItemAction(Task));
+        Dispatcher.Dispatch(new SetAttachmentsAction(Task.Id, Task.Attachments));
     }
 
     private async Task OnTagsChanged(ICollection<long> selectedTagIds)
@@ -129,6 +130,6 @@ public partial class UpdateTaskForm
     private void AttachmentsListUpdated(ICollection<StoredFileDto> attachments)
     {
         Task.Attachments = attachments;
-        Dispatcher.Dispatch(new SetListItemAction(Task));
+        Dispatcher.Dispatch(new SetAttachmentsAction(Task.Id, Task.Attachments));
     }
 }

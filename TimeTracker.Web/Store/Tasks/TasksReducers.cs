@@ -57,4 +57,21 @@ public class TasksReducers
             Filter = action.Filter
         };
     }
+    
+    [ReducerMethod]
+    public static TasksState SetAttachmentsActionReducer(TasksState state, SetAttachmentsAction action)
+    {
+        return state with
+        {
+            List = state.List.Select(item =>
+            {
+                if (item.Id == action.TaskId)
+                {
+                    item.Attachments = action.Attachments;
+                }
+
+                return item;
+            }).ToList()
+        };
+    }
 }
