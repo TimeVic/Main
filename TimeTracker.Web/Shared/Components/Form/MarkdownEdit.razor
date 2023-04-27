@@ -96,7 +96,7 @@
 
     private void OnClickView()
     {
-        _isShowEditBox = true;
+        _isShowEditBox = string.IsNullOrWhiteSpace(_value);
         _markdownTextArea.Element.FocusAsync();
     }
 }
