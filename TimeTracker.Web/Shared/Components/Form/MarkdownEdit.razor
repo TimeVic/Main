@@ -11,7 +11,7 @@
         Rows="_textAreaRows"
         @oninput="ResizeEditBox"
         MaxLength="MaxLength"
-        @onfocusout="@(() => _isShowEditBox = false)"
+        @onfocusout="@(OnBlur)"
         Class="w-100"/>
     
     <div class="w-view"
@@ -96,8 +96,12 @@
 
     private void OnClickView()
     {
-        _isShowEditBox = string.IsNullOrWhiteSpace(_value);
+        _isShowEditBox = true;
         _markdownTextArea.Element.FocusAsync();
     }
     
+    private void OnBlur()
+    {
+        _isShowEditBox = string.IsNullOrWhiteSpace(_value);
+    }
 }
