@@ -157,4 +157,27 @@ public partial class AddTest: BaseTest
         Assert.Equal(task.IsArchived, historyItem.IsArchived);
         Assert.True(historyItem.IsNewTask);
     }
+    
+    [Fact]
+    public async Task ShouldSetTimeEntriesProjectIfWasNotProvided()
+    {
+        var timeEntry = await _timeEntrySeeder.CreateAsync(_workspace, _user, project: null);
+        
+        var task = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            TaskListId = _taskList.Id,
+            Title = task.Title,
+            TimeEntryId = timeEntry.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.True(actualData.Id > 0);
+        Assert.Equal(_taskList.Id, actualData.TaskList.Id);
+        Assert.Equal(task.Title, actualData.Title);
+        
+        var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.Equal(_taskList.Project.Id, actualTimeEntry.Project.Id);
+    }
 }
