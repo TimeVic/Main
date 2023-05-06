@@ -12,21 +12,21 @@ using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 {
-    public class GetListRequestHandler : IAsyncRequestHandler<GetListRequest, GetListResponse>
+    public class GetMyListRequestHandler : IAsyncRequestHandler<GetMyListRequest, GetListResponse>
     {
         private readonly IMapper _mapper;
         private readonly IRequestService _requestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
-        private readonly ITaskListDao _taskListDao;
+        private readonly IWorkspaceDao _workspaceDao;
         private readonly ITaskDao _taskDao;
 
-        public GetListRequestHandler(
+        public GetMyListRequestHandler(
             IMapper mapper,
             IRequestService requestService,
             IUserDao userDao,
             ISecurityManager securityManager,
-            ITaskListDao taskListDao,
+            IWorkspaceDao workspaceDao,
             ITaskDao taskDao
         )
         {
@@ -34,22 +34,26 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _requestService = requestService;
             _userDao = userDao;
             _securityManager = securityManager;
-            _taskListDao = taskListDao;
+            _workspaceDao = workspaceDao;
             _taskDao = taskDao;
         }
     
-        public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
+        public async Task<GetListResponse> ExecuteAsync(GetMyListRequest request)
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var taskList = await _taskListDao.GetById(request.TaskListId);
-            if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList.Project))
+            var workspace = await _workspaceDao.GetByIdAsync(request.WorkspaceId);
+            if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();
             }
 
-            var filter = _mapper.Map<GetTasksFilterDto>(request.Filter);
-            var taskLists = await _taskDao.GetList(taskList: taskList, filter: filter);
+            var taskLists = await _taskDao.GetList(workspace: workspace, filter: new GetTasksFilterDto
+            {
+                AssignedUserId = user.Id,
+                Status = request.Status,
+                SearchString = request.SearchString
+            });
             return new GetListResponse(
                 _mapper.Map<ICollection<TaskDto>>(taskLists.Items),
                 taskLists.TotalCount

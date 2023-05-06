@@ -40,7 +40,15 @@ public class TasksController : MainApiControllerBase
     [HttpPost("get-list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> UpdateTask([FromBody] GetListRequest request)
+    public Task<IActionResult> GetList([FromBody] GetListRequest request)
+        => this.RequestAsync()
+            .For<GetListResponse>()
+            .With(request);
+    
+    [HttpPost("get-my-list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> GetMyList([FromBody] GetMyListRequest request)
         => this.RequestAsync()
             .For<GetListResponse>()
             .With(request);

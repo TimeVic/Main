@@ -57,21 +57,37 @@ public class TaskDao: ITaskDao
     }
     
     public async Task<ListDto<TaskEntity>> GetList(
-        TaskListEntity taskList,
+        WorkspaceEntity? workspace = null,
+        TaskListEntity? taskList = null,
         GetTasksFilterDto? filter = null
     )
     {
+        if (workspace == null && taskList == null)
+        {
+            throw new ArgumentNullException($"{nameof(workspace)}, {nameof(taskList)}");
+        }
+
         var isArchived = filter?.IsArchived ?? false;
         
         TaskListEntity taskListAlias = null;
         ProjectEntity projectAlias = null;
+        WorkspaceEntity workspaceAlias = null;
         UserEntity userAlias = null;
         var query = _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
             .Inner.JoinAlias(item => taskListAlias.Project, () => projectAlias)
+            .Inner.JoinAlias(item => projectAlias.Workspace, () => workspaceAlias)
             .Inner.JoinAlias(item => item.User, () => userAlias)
-            .Where(() => taskListAlias.Id == taskList.Id)
             .Where(item => item.IsArchived == isArchived);
+
+        if (taskList != null)
+        {
+            query = query.Where(() => taskListAlias.Id == taskList.Id);
+        }
+        else
+        {
+            query = query.Where(() => workspaceAlias.Id == workspace.Id);
+        }
 
         if (filter != null)
         {

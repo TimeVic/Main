@@ -2,6 +2,7 @@
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Core.Exceptions;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Services.Http
 {
@@ -32,6 +33,26 @@ namespace TimeTracker.Web.Services.Http
         public async Task<GetListResponse> TasksGetListAsync(GetListRequest model)
         {
             var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TasksList, model);
+            if (response == null)
+            {
+                throw new ServerErrorException();
+            }
+
+            return response;
+        }
+        
+        public async Task<GetListResponse> TasksGetMyListAsync(
+            long workspaceId,
+            TaskStatus? taskStatus = null,
+            string? searchString = null
+        )
+        {
+            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TasksMyList, new GetMyListRequest
+            {
+                WorkspaceId = workspaceId,
+                Status = taskStatus,
+                SearchString = searchString
+            });
             if (response == null)
             {
                 throw new ServerErrorException();
