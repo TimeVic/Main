@@ -2,6 +2,7 @@
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 {
@@ -25,7 +26,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         
         public DateTime? NotificationTime { get; set; }
         
-        public bool IsDone { get; set; }
+        public TaskStatus Status { get; set; }
     
         public bool IsArchived { get; set; }
     }

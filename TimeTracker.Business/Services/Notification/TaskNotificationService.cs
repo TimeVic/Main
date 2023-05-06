@@ -1,4 +1,5 @@
-﻿using TimeTracker.Business.Notifications.Senders.Tasks;
+﻿using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Notifications.Senders.Tasks;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
@@ -52,8 +53,8 @@ public class TaskNotificationService: ITaskNotificationService
             result.Add("", "Added new attachments");
         if (historyItem.NotificationTime != task.NotificationTime)
             result.Add("New notification time", historyItem.NotificationTime.ToString());
-        if (historyItem.IsDone != task.IsDone)
-            result.Add("Marked task as", task.IsDone ? "Done" : "Active");
+        if (historyItem.Status != task.Status)
+            result.Add("Status changed", $"{historyItem.Status.GetDisplayName()} -> {task.Status.GetDisplayName()}");
         if (historyItem.IsArchived != task.IsArchived && historyItem.IsArchived)
             result.Add("", "Archived the task");
         if (historyItem.AssigneeUser.Id != task.User.Id)

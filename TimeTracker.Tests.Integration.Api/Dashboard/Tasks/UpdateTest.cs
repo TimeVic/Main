@@ -82,7 +82,7 @@ public partial class UpdateTest: BaseTest
             Title = expectedTask.Title,
             Description = expectedTask.Description,
             NotificationTime = expectedTask.NotificationTime,
-            IsDone = expectedTask.IsDone,
+            Status = expectedTask.Status,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
             ExternalTaskId = expectedTask.ExternalTaskId
@@ -94,7 +94,7 @@ public partial class UpdateTest: BaseTest
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Equal(expectedTask.Title, actualData.Title);
         Assert.Equal(expectedTask.Description, actualData.Description);
-        Assert.Equal(expectedTask.IsDone, actualData.IsDone);
+        Assert.Equal(expectedTask.Status, actualData.Status);
         Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
         Assert.Equal(expectedTask.ExternalTaskId, actualData.ExternalTaskId);
     }
@@ -114,7 +114,7 @@ public partial class UpdateTest: BaseTest
             Title = newTask.Title,
             Description = newTask.Description,
             NotificationTime = newTask.NotificationTime,
-            IsDone = newTask.IsDone,
+            Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = _user.Id
         });
@@ -136,7 +136,7 @@ public partial class UpdateTest: BaseTest
             Title = newTask.Title,
             Description = newTask.Description,
             NotificationTime = newTask.NotificationTime,
-            IsDone = newTask.IsDone,
+            Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = user2.Id
         });
@@ -171,7 +171,7 @@ public partial class UpdateTest: BaseTest
             Title = newTask.Title,
             Description = newTask.Description,
             NotificationTime = newTask.NotificationTime,
-            IsDone = newTask.IsDone,
+            Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = user2.Id
         });
@@ -207,7 +207,7 @@ public partial class UpdateTest: BaseTest
             Title = newTask.Title,
             Description = newTask.Description,
             NotificationTime = newTask.NotificationTime,
-            IsDone = newTask.IsDone,
+            Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = user2.Id
         });
@@ -230,7 +230,7 @@ public partial class UpdateTest: BaseTest
             Title = expectedTask.Title,
             Description = expectedTask.Description,
             NotificationTime = expectedTask.NotificationTime,
-            IsDone = expectedTask.IsDone,
+            Status = expectedTask.Status,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
             ExternalTaskId = expectedTask.ExternalTaskId,
@@ -244,7 +244,7 @@ public partial class UpdateTest: BaseTest
         Assert.Equal(expectedTask.Title, historyItem.Title);
         Assert.Equal(expectedTask.Description, historyItem.Description);
         Assert.Equal(expectedTask.NotificationTime.ToString(), historyItem.NotificationTime.ToString());
-        Assert.Equal(expectedTask.IsDone, historyItem.IsDone);
+        Assert.Equal(expectedTask.Status, historyItem.Status);
         Assert.Equal(expectedTask.IsArchived, historyItem.IsArchived);
         Assert.NotEmpty(historyItem.Tags ?? "");
         Assert.False(historyItem.IsNewTask);

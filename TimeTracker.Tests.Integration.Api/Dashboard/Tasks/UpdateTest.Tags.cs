@@ -34,7 +34,7 @@ public partial class UpdateTest
             Title = expectedTask.Title,
             Description = expectedTask.Description,
             NotificationTime = expectedTask.NotificationTime,
-            IsDone = expectedTask.IsDone,
+            Status = expectedTask.Status,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
             ExternalTaskId = expectedTask.ExternalTaskId,
@@ -47,7 +47,7 @@ public partial class UpdateTest
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Equal(expectedTask.Title, actualData.Title);
         Assert.Equal(expectedTask.Description, actualData.Description);
-        Assert.Equal(expectedTask.IsDone, actualData.IsDone);
+        Assert.Equal(expectedTask.Status, actualData.Status);
         Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
         Assert.Equal(expectedTask.ExternalTaskId, actualData.ExternalTaskId);
         Assert.Equal(expectedTags, actualData.Tags.Count);
@@ -73,7 +73,7 @@ public partial class UpdateTest
             Title = expectedTask.Title,
             Description = expectedTask.Description,
             NotificationTime = expectedTask.NotificationTime,
-            IsDone = expectedTask.IsDone,
+            Status = expectedTask.Status,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
             ExternalTaskId = expectedTask.ExternalTaskId,
@@ -86,7 +86,7 @@ public partial class UpdateTest
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Equal(expectedTask.Title, actualData.Title);
         Assert.Equal(expectedTask.Description, actualData.Description);
-        Assert.Equal(expectedTask.IsDone, actualData.IsDone);
+        Assert.Equal(expectedTask.Status, actualData.Status);
         Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
         Assert.Equal(expectedTask.ExternalTaskId, actualData.ExternalTaskId);
         Assert.Equal(expectedTags, actualData.Tags.Count);

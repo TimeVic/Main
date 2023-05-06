@@ -74,7 +74,7 @@ public partial class AddTest: BaseTest
             Title = task.Title,
             Description = task.Description,
             NotificationTime = task.NotificationTime,
-            IsDone = task.IsDone,
+            Status = task.Status,
             IsArchived = task.IsArchived,
         });
         response.EnsureSuccessStatusCode();
@@ -84,7 +84,7 @@ public partial class AddTest: BaseTest
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
         Assert.Equal(task.Description, actualData.Description);
-        Assert.Equal(task.IsDone, actualData.IsDone);
+        Assert.Equal(task.Status, actualData.Status);
         Assert.Equal(task.IsArchived, actualData.IsArchived);
     }
     
@@ -141,7 +141,7 @@ public partial class AddTest: BaseTest
             Title = task.Title,
             Description = task.Description,
             NotificationTime = task.NotificationTime,
-            IsDone = task.IsDone,
+            Status = task.Status,
             IsArchived = task.IsArchived,
         });
         response.EnsureSuccessStatusCode();
@@ -153,7 +153,7 @@ public partial class AddTest: BaseTest
         Assert.Equal(task.Title, historyItem.Title);
         Assert.Equal(task.Description, historyItem.Description);
         Assert.Equal(task.NotificationTime.ToString(), historyItem.NotificationTime.ToString());
-        Assert.Equal(task.IsDone, historyItem.IsDone);
+        Assert.Equal(task.Status, historyItem.Status);
         Assert.Equal(task.IsArchived, historyItem.IsArchived);
         Assert.True(historyItem.IsNewTask);
     }

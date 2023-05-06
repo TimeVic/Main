@@ -111,14 +111,6 @@
                     Style="height: 100%;">
                     <div>
                         <RadzenCheckBox
-                            @bind-Value=@model.IsDone
-                            Name="IsArchived"
-                            Change="SubmitForm"
-                            TValue="bool"/>
-                        <RadzenLabel Text="Done" Component="IsDone" class="ml-1"/>
-                    </div>
-                    <div>
-                        <RadzenCheckBox
                             @bind-Value=@model.IsArchived
                             Name="IsArchived"
                             Change="SubmitForm"

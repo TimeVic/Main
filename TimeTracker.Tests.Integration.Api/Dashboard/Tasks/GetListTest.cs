@@ -10,6 +10,7 @@ using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
 
@@ -109,19 +110,19 @@ public class GetListTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldFilterByIsDone()
+    public async Task ShouldFilterByStatus()
     {
         var expectedCounter = 7;
         var otherTasks = await _taskSeeder.CreateSeveralAsync(_taskList, 4);
         foreach (var task in otherTasks)
         {
-            task.IsDone = false;
+            task.Status = TaskStatus.Done;
             await DbSessionProvider.CurrentSession.SaveAsync(task);
         }
         var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
         foreach (var task in tasks)
         {
-            task.IsDone = true;
+            task.Status = TaskStatus.InProgress;;
             await DbSessionProvider.CurrentSession.SaveAsync(task);
         }
         
@@ -130,7 +131,7 @@ public class GetListTest: BaseTest
             TaskListId = _taskList.Id,
             Filter = new GetListFilterRequest()
             {
-                IsDone = true
+                Status = TaskStatus.InProgress
             }
         });
         response.EnsureSuccessStatusCode();

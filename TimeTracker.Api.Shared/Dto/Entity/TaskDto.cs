@@ -1,10 +1,13 @@
 ﻿using Api.Requests.Abstractions;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 
 public class TaskDto : IResponse
 {
     public long Id { get; set; }
+    
+    public TaskStatus Status { get; set; }
     
     public string Title { get; set; }
     
@@ -13,8 +16,6 @@ public class TaskDto : IResponse
     public string? ExternalTaskId { get; set; }
     
     public DateTime? NotificationTime { get; set; }
-    
-    public bool IsDone { get; set; }
     
     public bool IsArchived { get; set; }
     

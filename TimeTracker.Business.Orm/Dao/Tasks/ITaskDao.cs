@@ -2,6 +2,7 @@
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.Tasks;
 using TimeTracker.Business.Orm.Entities;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Business.Orm.Dao.Tasks;
 
@@ -13,7 +14,7 @@ public interface ITaskDao: IDomainService
         string title,
         string? description = null,
         DateTime? notificationTime = null,
-        bool isDone = false,
+        TaskStatus status = TaskStatus.Backlog,
         bool isArchived = false
     );
 

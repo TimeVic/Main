@@ -5,6 +5,7 @@ using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.Tasks;
 using TimeTracker.Business.Orm.Entities;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Business.Orm.Dao.Tasks;
 
@@ -33,7 +34,7 @@ public class TaskDao: ITaskDao
         string title,
         string? description = null,
         DateTime? notificationTime = null,
-        bool isDone = false,
+        TaskStatus status = TaskStatus.Backlog,
         bool isArchived = false
     )
     {
@@ -44,7 +45,7 @@ public class TaskDao: ITaskDao
             Title = title,
             Description = description,
             NotificationTime = notificationTime,
-            IsDone = isDone,
+            Status = status,
             IsArchived = isArchived,
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow,
@@ -78,9 +79,9 @@ public class TaskDao: ITaskDao
             {
                 query = query.Where(() => userAlias.Id == filter.AssignedUserId);
             }
-            if (filter.IsDone.HasValue)
+            if (filter.Status.HasValue)
             {
-                query = query.Where(item => item.IsDone == filter.IsDone);
+                query = query.Where(item => item.Status == filter.Status);
             }
             if (!string.IsNullOrWhiteSpace(filter.SearchString))
             {
@@ -92,7 +93,7 @@ public class TaskDao: ITaskDao
         }
 
         var items = await query
-            .OrderBy(item => item.IsDone).Asc
+            .OrderBy(item => item.Status).Asc
             .OrderBy(item => item.IsArchived).Asc
             .ThenBy(item => item.UpdateTime).Desc
             .ListAsync<TaskEntity>();

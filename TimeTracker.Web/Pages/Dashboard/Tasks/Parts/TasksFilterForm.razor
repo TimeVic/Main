@@ -12,12 +12,6 @@
                     Value="@(model.AssignedUserId ?? 0)"
                     ValueChanged="OnChangeAssignedUserId"/>
             </RadzenColumn>
-            <RadzenColumn Style="max-width: 170px;">
-                <YesNoDropDown
-                    Class="w-100"
-                    Placeholder="Only completed"
-                    @bind-Value="@model.IsDone"/>
-            </RadzenColumn>
             <RadzenColumn Style="max-width: 150px;">
                 <YesNoDropDown
                     Class="w-100"

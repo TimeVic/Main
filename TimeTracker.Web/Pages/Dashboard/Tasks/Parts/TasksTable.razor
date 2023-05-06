@@ -1,7 +1,9 @@
 ﻿@using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
+@using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 @inherits BaseComponent
 
@@ -38,12 +40,6 @@
                             IconStyle="IconStyle.Info"
                             Icon="attachment"/>
                     }
-                    @if (item.IsDone)
-                    {
-                        <RadzenIcon
-                            IconStyle="IconStyle.Success"
-                            Icon="check_circle_outline"/>
-                    }
                     @if (item.IsArchived)
                     {
                         <RadzenIcon
@@ -52,9 +48,15 @@
                 </RadzenColumn>
                 <RadzenColumn class="text-truncate">
                     <RadzenText
-                        class="@(item.IsDone ? "w-done" : "")"
+                        class="@(item.Status == TaskStatus.Done ? "w-done" : "")"
                         TextStyle="TextStyle.Subtitle1">
                         @item.Title
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Style="max-width: 80px;">
+                    <RadzenText
+                        TextStyle="TextStyle.Subtitle1">
+                        @item.Status.GetDisplayName()
                     </RadzenText>
                 </RadzenColumn>
                 <RadzenColumn Style="max-width: 150px;">

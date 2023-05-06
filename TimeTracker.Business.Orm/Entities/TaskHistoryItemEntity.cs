@@ -1,7 +1,7 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
-using TimeTracker.Business.Common.Constants;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -11,6 +11,10 @@ namespace TimeTracker.Business.Orm.Entities
         [Id(Name = "Id", Generator = "native")]
         [Column(Name = "id", SqlType = "bigint", NotNull = true)]
         public virtual long Id { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "status", SqlType = "int", NotNull = true)]
+        public virtual TaskStatus Status { get; set; }
         
         [Property(NotNull = true)]
         [Column(Name = "title", Length = 1024, NotNull = true)]
@@ -31,11 +35,7 @@ namespace TimeTracker.Business.Orm.Entities
         [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "notification_time", SqlType = "datetime", NotNull = false)]
         public virtual DateTime? NotificationTime { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "is_done", NotNull = true)]
-        public virtual bool IsDone { get; set; }
-        
+
         [Property(NotNull = true)]
         [Column(Name = "is_archived", NotNull = true)]
         public virtual bool IsArchived { get; set; }
