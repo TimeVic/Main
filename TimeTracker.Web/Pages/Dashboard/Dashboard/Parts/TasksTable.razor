@@ -1,0 +1,64 @@
+﻿@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+
+@inherits BaseComponent
+
+<div class="w-task-table">
+    @if (MyTasksState.IsLoading)
+    {
+        <RadzenProgressBar
+            Value="100"
+            ProgressBarStyle="ProgressBarStyle.Info"
+            ShowValue="false"
+            Mode="ProgressBarMode.Indeterminate"/>
+    }
+    else if (!MyTasksState.List.Any())
+    {
+        <RadzenText TextStyle="TextStyle.Subtitle1">No records to display.</RadzenText>
+    }
+
+    <Virtualize Items="@MyTasksState.List" Context="item">
+        <RadzenCard
+            @onclick="() => OnClickTask(item)"
+            class="m-0 mt-1 w-100 w-task-item">
+            <RadzenRow>
+                <RadzenColumn Style="max-width: 80px;">
+                    <TaskIdBadge InternalTask="item"/>
+                </RadzenColumn>
+                <RadzenColumn Style="max-width: 80px;">
+                    @if (item.Attachments.Any())
+                    {
+                        <RadzenIcon
+                            IconStyle="IconStyle.Info"
+                            Icon="attachment"/>
+                    }
+                    @if (item.IsArchived)
+                    {
+                        <RadzenIcon
+                            Icon="inventory"/>
+                    }
+                </RadzenColumn>
+                <RadzenColumn class="text-truncate">
+                    <RadzenText
+                        class="@(item.Status == TaskStatus.Done ? "w-done" : "")"
+                        TextStyle="TextStyle.Subtitle1">
+                        @item.Title
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Style="max-width: 80px;">
+                    <RadzenText
+                        TextStyle="TextStyle.Subtitle1">
+                        @item.Status.GetDisplayName()
+                    </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Style="max-width: 150px;">
+                    <TagsBadgesList Tags="@item.Tags"/>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenCard>
+    </Virtualize>
+</div>

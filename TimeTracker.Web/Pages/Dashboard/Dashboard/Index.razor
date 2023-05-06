@@ -1,0 +1,14 @@
+﻿@page "/board/dashboard"
+
+@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Web.Pages.Dashboard.Dashboard.Parts
+
+@inherits BaseComponent
+@layout Layout
+
+<RadzenText TextStyle="TextStyle.H5">
+    My Tasks
+</RadzenText>
+<RadzenCard class="no-gutters mx-n2">
+    <TasksTable></TasksTable>
+</RadzenCard>
