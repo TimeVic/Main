@@ -10,15 +10,19 @@
 <div class="w-task-table">
     @if (MyTasksState.IsLoading)
     {
-        <RadzenProgressBar
-            Value="100"
-            ProgressBarStyle="ProgressBarStyle.Info"
-            ShowValue="false"
-            Mode="ProgressBarMode.Indeterminate"/>
+        <RadzenCard class="m-0 mt-1 w-100">
+            <RadzenProgressBar
+                Value="100"
+                ProgressBarStyle="ProgressBarStyle.Info"
+                ShowValue="false"
+                Mode="ProgressBarMode.Indeterminate"/>
+        </RadzenCard>
     }
     else if (!MyTasksState.List.Any())
     {
-        <RadzenText TextStyle="TextStyle.Subtitle1">No records to display.</RadzenText>
+        <RadzenCard class="m-0 mt-1 w-100">
+            <RadzenText TextStyle="TextStyle.Subtitle1">No records to display.</RadzenText>
+        </RadzenCard>
     }
 
     <Virtualize Items="@MyTasksState.List" Context="item">
@@ -47,12 +51,6 @@
                         class="@(item.Status == TaskStatus.Done ? "w-done" : "")"
                         TextStyle="TextStyle.Subtitle1">
                         @item.Title
-                    </RadzenText>
-                </RadzenColumn>
-                <RadzenColumn Style="max-width: 80px;">
-                    <RadzenText
-                        TextStyle="TextStyle.Subtitle1">
-                        @item.Status.GetDisplayName()
                     </RadzenText>
                 </RadzenColumn>
                 <RadzenColumn Style="max-width: 150px;">

@@ -2,6 +2,7 @@
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Store.Dashboard.Effects;
 
@@ -30,13 +31,10 @@ public class LoadMyTasksEffect: Effect<LoadTasksListAction>
         try
         {
             dispatcher.Dispatch(new SetIsTasksListLoadingAction(true));
-            var response = await _apiService.TasksGetListAsync(new GetListRequest()
-            {
-                Filter = new GetListFilterRequest()
-                {
-                    AssignedUserId = _authState.Value.User.Id
-                }
-            });
+            var response = await _apiService.TasksGetMyListAsync(
+                _authState.Value.Workspace.Id,
+                TaskStatus.ToDo
+            );
             dispatcher.Dispatch(new SetTasksListItemsAction(response));
         }
         catch (Exception e)
