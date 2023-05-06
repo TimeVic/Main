@@ -72,7 +72,6 @@ public class GetMyListTest: BaseTest
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(expectedCounter, actualDto.TotalCount);
-        
         Assert.All(actualDto.Items, item =>
         {
             Assert.True(item.Id > 0);
