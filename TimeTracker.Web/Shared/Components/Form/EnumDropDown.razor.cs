@@ -15,6 +15,9 @@ public partial class EnumDropDown<TItem>
     public EventCallback<TItem> ValueChanged { get; set; }
 
     [Parameter]
+    public EventCallback<TItem> Changed { get; set; }
+    
+    [Parameter]
     public string Placeholder { get; set; } = "Select item";
     
     [Parameter]
@@ -48,5 +51,6 @@ public partial class EnumDropDown<TItem>
     {
         _value = level;
         ValueChanged.InvokeAsync(_value);
+        Changed.InvokeAsync(_value);
     }
 }

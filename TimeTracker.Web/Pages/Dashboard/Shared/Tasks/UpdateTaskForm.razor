@@ -2,6 +2,7 @@
 @using TimeTracker.Business.Common.Constants.Storage
 @using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 @inherits BaseComponent
 
@@ -19,32 +20,11 @@
 
         <RadzenRow Class="w-100">
             <RadzenColumn
-                class="d-flex align-items-center"
-                Style="max-width: 60px;">
+                Style="max-width: 60px;"
+                class="w-100 d-flex align-items-center">
                 <TaskIdBadge IsLink="true" InternalTask="@Task"/>
             </RadzenColumn>
             <RadzenColumn>
-                <RadzenTextBox
-                    Name="Title"
-                    @bind-Value="model.Title"
-                    Placeholder="Enter a title for new task"
-                    Change="SubmitForm"
-                    Class="w-100"/>
-            </RadzenColumn>
-            <RadzenColumn Style="max-width: 150px;">
-                <TimeEntryForm
-                    InternalTask="@Task"
-                    IsShort="true"/>
-            </RadzenColumn>
-        </RadzenRow>
-
-        <RadzenRow Class="w-100">
-            <RadzenColumn>
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    Assigned
-                </RadzenText>
                 <MembersDropDown
                     Clearable="false"
                     AllowedIds="_allowedUserIds"
@@ -52,6 +32,38 @@
                     Class="w-100"
                     SelectedItemChanged="OnChangedAssigned"/>
             </RadzenColumn>
+            <RadzenColumn>
+                <EnumDropDown
+                    TItem="TaskStatus"
+                    AllowClear="false"
+                    @bind-Value="model.Status"
+                    Changed="SubmitForm"
+                    class="w-100"
+                    Name="Status"/>
+            </RadzenColumn>
+            <RadzenColumn Style="max-width: 150px">
+                <TimeEntryForm
+                    InternalTask="@Task"
+                    IsShort="true"/>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow Class="w-100">
+            <RadzenColumn>
+                <RadzenText
+                    TextStyle="TextStyle.Subtitle2"
+                    TagName="TagName.H3">
+                    Title
+                </RadzenText>
+                <RadzenTextBox
+                    Name="Title"
+                    @bind-Value="model.Title"
+                    Placeholder="Enter a title for new task"
+                    Change="SubmitForm"
+                    Class="w-100"/>
+            </RadzenColumn>
+        </RadzenRow>
+
+        <RadzenRow Class="w-100">
             <RadzenColumn>
                 <RadzenText
                     TextStyle="TextStyle.Subtitle2"
@@ -69,6 +81,22 @@
                     DateRender="OnRenderNotificationTime"
                     Value="model.NotificationTime"
                     DateFormat="MM/dd/yyyy HH:mm"/>
+            </RadzenColumn>
+            <RadzenColumn Style="max-width: 200px">
+                <RadzenStack
+                    Orientation="Orientation.Horizontal"
+                    AlignItems="AlignItems.End"
+                    JustifyContent="JustifyContent.Start"
+                    Style="height: 100%;">
+                    <div>
+                        <RadzenCheckBox
+                            @bind-Value=@model.IsArchived
+                            Name="IsArchived"
+                            Change="SubmitForm"
+                            TValue="bool"/>
+                        <RadzenLabel Text="Archived" Component="IsArchived" class="ml-1"/>
+                    </div>
+                </RadzenStack>
             </RadzenColumn>
         </RadzenRow>
 
@@ -103,22 +131,6 @@
                     </RadzenStack>
                 </RadzenColumn>
             }
-            <RadzenColumn Style="max-width: 200px">
-                <RadzenStack
-                    Orientation="Orientation.Horizontal"
-                    AlignItems="AlignItems.Center"
-                    JustifyContent="JustifyContent.Start"
-                    Style="height: 100%;">
-                    <div>
-                        <RadzenCheckBox
-                            @bind-Value=@model.IsArchived
-                            Name="IsArchived"
-                            Change="SubmitForm"
-                            TValue="bool"/>
-                        <RadzenLabel Text="Archived" Component="IsArchived" class="ml-1"/>
-                    </div>
-                </RadzenStack>
-            </RadzenColumn>
         </RadzenRow>
 
         <RadzenTabs RenderMode="@TabRenderMode.Client" class="w-100">

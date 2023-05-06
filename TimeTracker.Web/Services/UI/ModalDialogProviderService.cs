@@ -27,7 +27,7 @@ public class ModalDialogProviderService
             },
             options: new DialogOptions()
             {
-                Style = "top: 6em; bottom: 6em;",
+                Style = "top: 6em; bottom: 6em; min-width: 900px;",
                 ShowClose = true,
                 CloseDialogOnEsc = true,
                 AutoFocusFirstElement = true,
