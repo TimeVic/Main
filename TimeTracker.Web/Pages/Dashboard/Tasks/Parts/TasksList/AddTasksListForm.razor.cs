@@ -29,11 +29,7 @@ public partial class AddTasksListForm
             if (taskList != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Info,
-                    Summary = "Task list has been added"
-                });
+                await ToastService.ShowInfo("Task list has been added");
                 DialogService.CloseSide();
                 
                 var navigateToProjectsClient = ProjectState.Value.List.FirstOrDefault(
@@ -51,11 +47,7 @@ public partial class AddTasksListForm
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Task list adding error"
-            });
+            await ToastService.ShowError("Task list adding error");
         }
         finally
         {

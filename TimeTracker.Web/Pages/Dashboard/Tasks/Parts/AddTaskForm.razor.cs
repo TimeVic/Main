@@ -36,20 +36,12 @@ public partial class AddTaskForm
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
                 model.Title = "";
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Info,
-                    Summary = "Task has been added"
-                });
+                await ToastService.ShowInfo("Task has been added");
             }
         }
         catch (Exception)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Task adding error"
-            });
+            await ToastService.ShowError("Task adding error");
         }
         finally
         {

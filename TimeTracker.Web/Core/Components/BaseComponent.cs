@@ -31,7 +31,7 @@ public class BaseComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     #region Radzen
     
     [Inject] 
-    protected NotificationService NotificationService { get; set; }
+    protected ToastService ToastService { get; set; }
     
     [Inject]
     protected DialogService DialogService { get; set; }

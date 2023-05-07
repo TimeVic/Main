@@ -2,6 +2,7 @@
 using Radzen;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.WorkspaceMemberships.Effects;
@@ -12,14 +13,14 @@ public class AddEffect: Effect<AddNewMemberAction>
     private readonly IState<WorkspaceMembershipsState> _state;
     private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
-    private readonly NotificationService _notificationService;
+    private readonly ToastService _notificationService;
 
     public AddEffect(
         ApiService apiService,
         IState<AuthState> authState,
         IState<WorkspaceMembershipsState> state,
         ILogger<LoadListEffect> logger,
-        NotificationService notificationService
+        ToastService notificationService
     )
     {
         _apiService = apiService;
@@ -36,11 +37,7 @@ public class AddEffect: Effect<AddNewMemberAction>
             await _apiService.WorkspaceMembershipAddAsync(_authState.Value.Workspace.Id, action.Email);
             dispatcher.Dispatch(new LoadListAction(true));
             
-            _notificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Info,
-                Summary = "New member was added"
-            });
+            await _notificationService.ShowInfo("New member was added");
         }
         catch (Exception e)
         {

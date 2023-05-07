@@ -40,11 +40,7 @@ public partial class UpdateTasksListForm
             if (taskList != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Info,
-                    Summary = "Task list has been updated"
-                });
+                await ToastService.ShowInfo("Task list has been updated");
                 DialogService.CloseSide();
                 Dispatcher.Dispatch(new SetListItemAction(taskList));
             }
@@ -52,11 +48,7 @@ public partial class UpdateTasksListForm
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Task list adding error"
-            });
+            await ToastService.ShowError("Task list adding error");
         }
         finally
         {

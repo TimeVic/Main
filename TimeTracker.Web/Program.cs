@@ -46,6 +46,7 @@ builder.Services.AddScoped<UiHelperService>();
 builder.Services.AddScoped<UrlService>();
 builder.Services.AddScoped<MarkdownService>();
 builder.Services.AddScoped<WorkspaceInitializationService>();
+builder.Services.AddScoped<ToastService>();
 
 // Store
 builder.Services.AddFluxor(

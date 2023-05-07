@@ -3,6 +3,7 @@ using Radzen;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.Project.Effects;
@@ -13,14 +14,14 @@ public class AddEffect: Effect<SaveEmptyProjectListItemAction>
     private readonly IState<ProjectState> _state;
     private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
-    private readonly NotificationService _notificationService;
+    private readonly ToastService _notificationService;
 
     public AddEffect(
         ApiService apiService,
         IState<AuthState> authState,
         IState<ProjectState> state,
         ILogger<LoadListEffect> logger,
-        NotificationService notificationService
+        ToastService notificationService
     )
     {
         _apiService = apiService;
@@ -47,11 +48,7 @@ public class AddEffect: Effect<SaveEmptyProjectListItemAction>
             dispatcher.Dispatch(new RemoveEmptyProjectListItemAction());
             dispatcher.Dispatch(new LoadListAction(true));
             
-            _notificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Info,
-                Summary = "New project was added"
-            });
+            await _notificationService.ShowInfo("New project was added");
         }
         catch (Exception e)
         {

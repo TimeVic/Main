@@ -51,11 +51,7 @@ public partial class Login
         }
         catch (Exception)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Incorrect email or password"
-            });
+            await ToastService.ShowError("Incorrect email or password");
         }
         finally
         {

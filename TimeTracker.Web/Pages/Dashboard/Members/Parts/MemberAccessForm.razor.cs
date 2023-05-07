@@ -62,21 +62,13 @@ public partial class MemberAccessForm
             if (membershipDto != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Info,
-                    Summary = "Member access has been changed"
-                });
+                await ToastService.ShowInfo("Member access has been changed");
                 DialogService.Close();
             }
         }
         catch (Exception)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Member access saving error"
-            });
+            await ToastService.ShowError("Member access saving error");
         }
         finally
         {

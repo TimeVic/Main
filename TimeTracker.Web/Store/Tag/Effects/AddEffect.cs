@@ -2,6 +2,7 @@
 using Radzen;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.Tag.Effects;
@@ -12,14 +13,14 @@ public class AddEffect: Effect<SaveEmptyListItemAction>
     private readonly IState<TagState> _state;
     private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
-    private readonly NotificationService _notificationService;
+    private readonly ToastService _notificationService;
 
     public AddEffect(
         ApiService apiService,
         IState<AuthState> authState,
         IState<TagState> state,
         ILogger<LoadListEffect> logger,
-        NotificationService notificationService
+        ToastService notificationService
     )
     {
         _apiService = apiService;
@@ -47,11 +48,7 @@ public class AddEffect: Effect<SaveEmptyListItemAction>
             dispatcher.Dispatch(new RemoveEmptyListItemAction());
             dispatcher.Dispatch(new LoadListAction(true));
             
-            _notificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Info,
-                Summary = "New tag was added"
-            });
+            await _notificationService.ShowInfo("New tag was added");
         }
         catch (Exception e)
         {

@@ -43,36 +43,20 @@ public partial class ClickUpSettingsForm
             var responseDto = await ApiService.WorkspaceSetClickUpIntegrationSettingsAsync(_model);
             if (responseDto != null)
             {
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Info,
-                    Summary = "The settings was saved"
-                });
+                await ToastService.ShowInfo("The settings was saved");
                 if (!responseDto.IsActive)
                 {
-                    NotificationService.Notify(new NotificationMessage()
-                    {
-                        Severity = NotificationSeverity.Warning,
-                        Summary = "Integration to ClickUp was not activated. Please check the settings"
-                    });
+                    await ToastService.ShowWarning("Integration to ClickUp was not activated. Please check the settings");
                 }
                 else
                 {
-                    NotificationService.Notify(new NotificationMessage()
-                    {
-                        Severity = NotificationSeverity.Info,
-                        Summary = "Integration to ClickUp is activated"
-                    });
+                    await ToastService.ShowInfo("Integration to ClickUp is activated");
                 }
             }
         }
         catch (Exception)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Settings saving error"
-            });
+            await ToastService.ShowError("Settings saving error");
         }
         finally
         {

@@ -2,6 +2,7 @@
 using Radzen;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.Payment.Effects;
@@ -10,12 +11,12 @@ public class UpdateEffect: Effect<SavePaymentListItemAction>
 {
     private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
-    private readonly NotificationService _notificationService;
+    private readonly ToastService _notificationService;
 
     public UpdateEffect(
         ApiService apiService,
         ILogger<LoadListEffect> logger,
-        NotificationService notificationService
+        ToastService notificationService
     )
     {
         _apiService = apiService;
@@ -37,12 +38,7 @@ public class UpdateEffect: Effect<SavePaymentListItemAction>
                 PaymentTime = action.Payment.PaymentTime
             });
             dispatcher.Dispatch(new LoadPaymentListAction(true));
-            
-            _notificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Info,
-                Summary = "Payment was updated"
-            });
+            await _notificationService.ShowInfo("Payment was updated");
         }
         catch (Exception e)
         {

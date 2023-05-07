@@ -57,11 +57,7 @@ public partial class Step2
         }
         catch (Exception)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Registration error"
-            });
+            await ToastService.ShowError("Registration error");
         }
         finally
         {

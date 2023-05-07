@@ -2,6 +2,7 @@
 using Radzen;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.Tag.Effects;
@@ -12,14 +13,14 @@ public class DeleteEffect: Effect<DeleteItemAction>
     private readonly IState<TagState> _state;
     private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
-    private readonly NotificationService _notificationService;
+    private readonly ToastService _notificationService;
 
     public DeleteEffect(
         ApiService apiService,
         IState<AuthState> authState,
         IState<TagState> state,
         ILogger<LoadListEffect> logger,
-        NotificationService notificationService
+        ToastService notificationService
     )
     {
         _apiService = apiService;
@@ -36,11 +37,7 @@ public class DeleteEffect: Effect<DeleteItemAction>
             await _apiService.TagDeleteAsync(action.Tag.Id);
             dispatcher.Dispatch(new DeleteListItemAction(action.Tag.Id));
             
-            _notificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Info,
-                Summary = "Tag was updated"
-            });
+            await _notificationService.ShowInfo("Tag was updated");
         }
         catch (Exception e)
         {

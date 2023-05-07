@@ -2,6 +2,7 @@
 using Radzen;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Project;
 
@@ -13,14 +14,14 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
     private readonly IState<ProjectState> _projectState;
     private readonly ApiService _apiService;
     private readonly ILogger<SetTimeEntryEffect> _logger;
-    private readonly NotificationService _toastService;
+    private readonly ToastService _toastService;
 
     public SetTimeEntryEffect(
         ApiService apiService,
         IState<AuthState> authState,
         IState<ProjectState> projectState,
         ILogger<SetTimeEntryEffect> logger,
-        NotificationService toastService
+        ToastService toastService
     )
     {
         _apiService = apiService;
@@ -53,12 +54,7 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
                     : action.TimeEntry.IsBillable
             });
             dispatcher.Dispatch(new UpdateTimeEntryAction(response));
-            _toastService.Notify(new NotificationMessage()
-            {
-                Summary = "Time entry updated!",
-                Severity = NotificationSeverity.Info,
-                
-            });
+            await _toastService.ShowInfo("Time entry updated!");
         }
         catch (Exception e)
         {

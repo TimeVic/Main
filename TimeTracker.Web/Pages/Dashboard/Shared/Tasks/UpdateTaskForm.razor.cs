@@ -75,11 +75,7 @@ public partial class UpdateTaskForm
             }
             catch (Exception)
             {
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Error,
-                    Summary = "Task adding error"
-                });
+                await ToastService.ShowError("Task adding error");
             }
             finally
             {

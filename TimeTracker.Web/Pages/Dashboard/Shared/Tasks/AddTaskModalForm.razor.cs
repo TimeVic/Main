@@ -39,11 +39,7 @@ public partial class AddTaskModalForm
             }
             catch (Exception e)
             {
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Error,
-                    Summary = e.Message
-                });
+                await ToastService.ShowError(e.Message);
             }
             finally
             {

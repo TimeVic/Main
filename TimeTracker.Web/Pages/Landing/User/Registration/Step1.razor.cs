@@ -39,21 +39,13 @@ public partial class Step1
             var isOk = await _apiService.RegistrationStep1Async(model);
             if (isOk)
             {
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Info,
-                    Summary = "Registration email is sent"
-                });
+                await ToastService.ShowInfo("Registration email is sent");
                 model.Email = "";
             }
         }
         catch (Exception)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Registration error"
-            });
+            await ToastService.ShowError("Registration error");
         }
         finally
         {

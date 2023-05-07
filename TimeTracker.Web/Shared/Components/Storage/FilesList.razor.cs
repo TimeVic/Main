@@ -38,7 +38,7 @@ public partial class FilesList: IDisposable
     public ILogger<FilesList> _logger { get; set; }
     
     [Inject]
-    public NotificationService _toastService { get; set; }
+    public ToastService _toastService { get; set; }
     
     [Inject]
     protected DialogService _dialogService { get; set; }
@@ -101,11 +101,7 @@ public partial class FilesList: IDisposable
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            _toastService.Notify(new NotificationMessage()
-            {
-                Summary = e.Message,
-                Severity = NotificationSeverity.Error,
-            });
+            await _toastService.ShowError(e.Message);
         }
     }
 

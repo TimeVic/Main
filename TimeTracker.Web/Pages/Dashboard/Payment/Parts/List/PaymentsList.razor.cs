@@ -55,11 +55,7 @@ public partial class PaymentsList
     {
         if (item.Client.Id == 0)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Summary = "Client is required",
-                Severity = NotificationSeverity.Error
-            });
+            await ToastService.ShowError("Client is required");
             return;
         }
 

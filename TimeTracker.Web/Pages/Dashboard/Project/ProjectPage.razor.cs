@@ -59,21 +59,13 @@ public partial class ProjectPage
             var project = await _apiService.ProjectUpdateAsync(model);
             if (project != null)
             {
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Info,
-                    Summary = "Project has been updated"
-                });
+                await ToastService.ShowInfo("Project has been updated");
                 _navigationManager.NavigateTo(SiteUrl.Dashboard_Projects);
             }
         }
         catch (Exception)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Project saving error"
-            });
+            await ToastService.ShowError("Project saving error");
         }
         finally
         {

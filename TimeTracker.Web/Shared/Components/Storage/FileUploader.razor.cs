@@ -33,7 +33,7 @@ public partial class FileUploader
     public ApiService _apiService { get; set; }
     
     [Inject]
-    public NotificationService _toastService { get; set; }
+    public ToastService _toastService { get; set; }
     
     [Inject]
     public ILogger<FileUploader> _logger { get; set; }
@@ -83,12 +83,7 @@ public partial class FileUploader
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                _toastService.Notify(new NotificationMessage()
-                {
-                    Summary = e.Message,
-                    Severity = NotificationSeverity.Error,
-                
-                });
+                await _toastService.ShowError(e.Message);
             }  
             _isLoading = false;
         }

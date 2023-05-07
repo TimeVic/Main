@@ -67,3 +67,7 @@ a, .btn-link {
     display: flex !important;
     justify-content: flex-start !important;
 }
+
+:root {
+    --rz-card-padding: 0.5rem;
+}

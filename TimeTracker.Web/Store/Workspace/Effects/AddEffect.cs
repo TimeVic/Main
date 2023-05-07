@@ -2,6 +2,7 @@
 using Radzen;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 
 namespace TimeTracker.Web.Store.Workspace.Effects;
 
@@ -10,13 +11,13 @@ public class AddEffect: Effect<SaveEmptyListItemAction>
     private readonly IState<WorkspaceState> _state;
     private readonly ApiService _apiService;
     private readonly ILogger<AddEffect> _logger;
-    private readonly NotificationService _notificationService;
+    private readonly ToastService _notificationService;
 
     public AddEffect(
         ApiService apiService,
         IState<WorkspaceState> state,
         ILogger<AddEffect> logger,
-        NotificationService notificationService
+        ToastService notificationService
     )
     {
         _apiService = apiService;
@@ -37,12 +38,7 @@ public class AddEffect: Effect<SaveEmptyListItemAction>
             await _apiService.WorkspaceAddAsync(_state.Value.ItemToAdd.Name);
             dispatcher.Dispatch(new RemoveEmptyListItemAction());
             dispatcher.Dispatch(new LoadListAction(true));
-            
-            _notificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Info,
-                Summary = "New Workspace was added"
-            });
+            await _notificationService.ShowInfo("New Workspace was added");
         }
         catch (Exception e)
         {
