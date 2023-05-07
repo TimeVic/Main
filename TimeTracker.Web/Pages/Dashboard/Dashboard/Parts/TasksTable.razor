@@ -33,13 +33,12 @@
                 <RadzenColumn>
                     <RadzenText
                         TextStyle="TextStyle.Caption">
-                        @item.TaskList.Name
-                         / @item.TaskList.Name
-                         / @item.TaskList.Project.Name
                         @if (item.TaskList.Project.Client != null)
                         {
-                            <text> / @item.TaskList.Project.Client.Name</text>
+                            <text>@item.TaskList.Project.Client.Name / </text>
                         }
+                        @item.TaskList.Project.Name
+                        / @item.TaskList.Name
                     </RadzenText>
                 </RadzenColumn>
             </RadzenRow>

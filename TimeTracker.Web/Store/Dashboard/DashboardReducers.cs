@@ -4,7 +4,6 @@ namespace TimeTracker.Web.Store.Dashboard;
 
 public class DashboardReducers
 {
-
     [ReducerMethod]
     public static DashboardState SetProjectListItemsActionReducer(DashboardState state, SetTasksListItemsAction action)
     {
@@ -19,9 +18,29 @@ public class DashboardReducers
             }
         };
     }
-    
+
     [ReducerMethod]
-    public static DashboardState SetIsTasksListLoadingActionReducer(DashboardState state, SetIsTasksListLoadingAction action)
+    public static DashboardState SetProjectListItemActionReducer(DashboardState state, SetTasksListItemAction action)
+    {
+        return state with
+        {
+            MyTasks = state.MyTasks with
+            {
+                List = state.MyTasks.List.Select(item =>
+                {
+                    if (item.Id == action.Task.Id)
+                    {
+                        return action.Task;
+                    }
+                    return item;
+                }).ToList()
+            }
+        };
+    }
+
+    [ReducerMethod]
+    public static DashboardState SetIsTasksListLoadingActionReducer(DashboardState state,
+        SetIsTasksListLoadingAction action)
     {
         return state with
         {

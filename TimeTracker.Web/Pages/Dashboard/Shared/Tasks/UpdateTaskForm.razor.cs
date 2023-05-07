@@ -5,6 +5,7 @@ using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Services.Security;
+using TimeTracker.Web.Store.Dashboard;
 using TimeTracker.Web.Store.Tasks;
 using TimeTracker.Web.Store.WorkspaceMemberships;
 using SetListItemAction = TimeTracker.Web.Store.Tasks.SetListItemAction;
@@ -71,6 +72,7 @@ public partial class UpdateTaskForm
                 if (responseDto != null)
                 {
                     Dispatcher.Dispatch(new SetListItemAction(responseDto));
+                    Dispatcher.Dispatch(new SetTasksListItemAction(responseDto));
                 }
             }
             catch (Exception)
