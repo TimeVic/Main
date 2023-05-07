@@ -99,9 +99,10 @@ public class TaskDao: ITaskDao
             {
                 query = query.Where(item => item.Status == filter.Status);
             }
-            else if (filter.Statuses != null)
+            else if (filter.Statuses != null && filter.Statuses.Any())
             {
-                query = query.Where(item => filter.Statuses.Contains(item.Status));
+                query = query.WhereRestrictionOn(item => item.Status)
+                    .IsIn(filter.Statuses.ToList());
             }
             if (!string.IsNullOrWhiteSpace(filter.SearchString))
             {
