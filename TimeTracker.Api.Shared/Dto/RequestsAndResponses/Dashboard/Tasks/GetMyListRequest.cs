@@ -12,7 +12,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         
         [StringLength(100)]
         public string? SearchString { get; set; }
-        
-        public TaskStatus? Status { get; set; }
+
+        public ICollection<TaskStatus> Statuses { get; set; } = new List<TaskStatus>();
     }
 }

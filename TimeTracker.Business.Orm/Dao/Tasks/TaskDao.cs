@@ -99,6 +99,10 @@ public class TaskDao: ITaskDao
             {
                 query = query.Where(item => item.Status == filter.Status);
             }
+            else if (filter.Statuses != null)
+            {
+                query = query.Where(item => filter.Statuses.Contains(item.Status));
+            }
             if (!string.IsNullOrWhiteSpace(filter.SearchString))
             {
                 query = query.Where(
@@ -109,7 +113,7 @@ public class TaskDao: ITaskDao
         }
 
         var items = await query
-            .OrderBy(item => item.Status).Asc
+            .OrderBy(item => item.Status).Desc
             .OrderBy(item => item.IsArchived).Asc
             .ThenBy(item => item.UpdateTime).Desc
             .ListAsync<TaskEntity>();

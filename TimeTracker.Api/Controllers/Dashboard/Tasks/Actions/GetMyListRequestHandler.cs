@@ -51,7 +51,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             var taskLists = await _taskDao.GetList(workspace: workspace, filter: new GetTasksFilterDto
             {
                 AssignedUserId = user.Id,
-                Status = request.Status,
+                Statuses = request.Statuses,
                 SearchString = request.SearchString
             });
             return new GetListResponse(

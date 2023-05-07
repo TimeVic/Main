@@ -9,5 +9,7 @@ public class GetTasksFilterDto
     
     public TaskStatus? Status { get; set; }
     
+    public ICollection<TaskStatus>? Statuses { get; set; }
+    
     public bool? IsArchived { get; set; }
 }

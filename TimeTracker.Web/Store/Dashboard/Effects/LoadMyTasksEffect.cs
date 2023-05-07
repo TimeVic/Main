@@ -33,7 +33,11 @@ public class LoadMyTasksEffect: Effect<LoadTasksListAction>
             dispatcher.Dispatch(new SetIsTasksListLoadingAction(true));
             var response = await _apiService.TasksGetMyListAsync(
                 _authState.Value.Workspace.Id,
-                TaskStatus.ToDo
+                new List<TaskStatus>()
+                {
+                    TaskStatus.ToDo,
+                    TaskStatus.InProgress
+                }
             );
             dispatcher.Dispatch(new SetTasksListItemsAction(response));
         }

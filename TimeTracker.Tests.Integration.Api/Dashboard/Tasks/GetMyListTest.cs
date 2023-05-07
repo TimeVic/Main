@@ -99,14 +99,17 @@ public class GetMyListTest: BaseTest
         var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter, user: _user);
         foreach (var task in tasks)
         {
-            task.Status = TaskStatus.InProgress;;
+            task.Status = TaskStatus.InProgress;
             await DbSessionProvider.CurrentSession.SaveAsync(task);
         }
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetMyListRequest()
         {
             WorkspaceId = _workspace.Id,
-            Status = TaskStatus.InProgress
+            Statuses = new List<TaskStatus>()
+            {
+                TaskStatus.InProgress
+            }
         });
         response.EnsureSuccessStatusCode();
 

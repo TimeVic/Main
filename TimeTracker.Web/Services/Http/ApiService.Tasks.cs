@@ -43,14 +43,14 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<GetListResponse> TasksGetMyListAsync(
             long workspaceId,
-            TaskStatus? taskStatus = null,
+            ICollection<TaskStatus> taskStatuses = null,
             string? searchString = null
         )
         {
             var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TasksMyList, new GetMyListRequest
             {
                 WorkspaceId = workspaceId,
-                Status = taskStatus,
+                Statuses = taskStatuses,
                 SearchString = searchString
             });
             if (response == null)
