@@ -2,6 +2,7 @@
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Core.Extensions.Enums
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
@@ -25,44 +26,51 @@
         </RadzenCard>
     }
 
-    <Virtualize Items="@TasksState.Value.List" Context="item">
-        <RadzenCard
-            @onclick="() => OnClickTask(item)"
-            class="m-0 mt-1 w-100 w-task-item">
-            <RadzenRow>
-                <RadzenColumn Style="max-width: 80px;">
-                    <TaskIdBadge InternalTask="item"/>
-                </RadzenColumn>
-                <RadzenColumn Style="max-width: 80px;">
-                    @if (item.Attachments.Any())
-                    {
-                        <RadzenIcon
-                            IconStyle="IconStyle.Info"
-                            Icon="attachment"/>
-                    }
-                    @if (item.IsArchived)
-                    {
-                        <RadzenIcon
-                            Icon="inventory"/>
-                    }
-                </RadzenColumn>
-                <RadzenColumn class="text-truncate">
-                    <RadzenText
-                        class="@(item.Status == TaskStatus.Done ? "w-done" : "")"
-                        TextStyle="TextStyle.Subtitle1">
-                        @item.Title
-                    </RadzenText>
-                </RadzenColumn>
-                <RadzenColumn Style="max-width: 80px;">
-                    <RadzenText
-                        TextStyle="TextStyle.Subtitle1">
-                        @item.Status.GetDisplayName()
-                    </RadzenText>
-                </RadzenColumn>
-                <RadzenColumn Style="max-width: 150px;">
-                    <TagsBadgesList Tags="@item.Tags"/>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenCard>
-    </Virtualize>
+    @foreach (var taskGroupKeyValue in _taskGroups)
+    {
+        var status = taskGroupKeyValue.Key;
+        var tasks = taskGroupKeyValue.Value;
+        if (!tasks.Any())
+        {
+            continue;
+        }
+        <RadzenText
+            class="@("mt-3 " + status.GetColor())"
+            TextStyle="TextStyle.H5">
+            @status.GetDisplayName()
+        </RadzenText>
+        <Virtualize Items="@tasks" Context="item">
+            <RadzenCard
+                @onclick="() => OnClickTask(item)"
+                class="m-0 mt-1 w-100 w-task-item">
+                <RadzenRow>
+                    <RadzenColumn Style="max-width: 80px;">
+                        <TaskIdBadge InternalTask="item"/>
+                    </RadzenColumn>
+                    <RadzenColumn Style="max-width: 80px;">
+                        @if (item.Attachments.Any())
+                        {
+                            <RadzenIcon
+                                IconStyle="IconStyle.Info"
+                                Icon="attachment"/>
+                        }
+                        @if (item.IsArchived)
+                        {
+                            <RadzenIcon
+                                Icon="inventory"/>
+                        }
+                    </RadzenColumn>
+                    <RadzenColumn class="text-truncate">
+                        <RadzenText
+                            TextStyle="TextStyle.Subtitle1">
+                            @item.Title
+                        </RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Style="max-width: 150px;">
+                        <TagsBadgesList Tags="@item.Tags"/>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenCard>
+        </Virtualize>
+    }
 </div>
