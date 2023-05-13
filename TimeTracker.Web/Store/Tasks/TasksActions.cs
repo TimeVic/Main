@@ -14,3 +14,5 @@ public record struct SetAttachmentsAction(long TaskId, ICollection<StoredFileDto
 public record struct SetListFilterAction(GetListFilterRequest Filter);
 
 public record struct SetIsListLoading(bool IsLoading);
+
+public record struct UpdateListItemAction(UpdateRequest UpdateRequest);

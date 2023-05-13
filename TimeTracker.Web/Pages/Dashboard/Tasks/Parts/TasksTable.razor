@@ -34,43 +34,52 @@
         {
             continue;
         }
-        <RadzenText
-            class="@("mt-3 " + status.GetColor())"
-            TextStyle="TextStyle.H5">
-            @status.GetDisplayName()
-        </RadzenText>
-        <Virtualize Items="@tasks" Context="item">
-            <RadzenCard
-                @onclick="() => OnClickTask(item)"
-                class="m-0 mt-1 w-100 w-task-item">
-                <RadzenRow>
-                    <RadzenColumn Style="max-width: 80px;">
-                        <TaskIdBadge InternalTask="item"/>
-                    </RadzenColumn>
-                    <RadzenColumn Style="max-width: 80px;">
-                        @if (item.Attachments.Any())
-                        {
-                            <RadzenIcon
-                                IconStyle="IconStyle.Info"
-                                Icon="attachment"/>
-                        }
-                        @if (item.IsArchived)
-                        {
-                            <RadzenIcon
-                                Icon="inventory"/>
-                        }
-                    </RadzenColumn>
-                    <RadzenColumn class="text-truncate">
-                        <RadzenText
-                            TextStyle="TextStyle.Subtitle1">
-                            @item.Title
-                        </RadzenText>
-                    </RadzenColumn>
-                    <RadzenColumn Style="max-width: 150px;">
-                        <TagsBadgesList Tags="@item.Tags"/>
-                    </RadzenColumn>
-                </RadzenRow>
-            </RadzenCard>
-        </Virtualize>
+        <div
+            @ondrop="@(() => HandleDrop(status))"
+            ondragover="event.preventDefault();"
+            ondragstart="event.dataTransfer.setData('', event.target.id);">
+
+            <RadzenText
+
+                class="@("mt-3 " + status.GetColor())"
+                TextStyle="TextStyle.H5">
+                @status.GetDisplayName()
+            </RadzenText>
+            <Virtualize Items="@tasks" Context="item">
+                <RadzenCard
+                    draggable="true"
+                    @ondragstart="@(() => OnDragStart(item))"
+                    @onclick="@(() => OnClickTask(item))"
+                    class="m-0 mt-1 w-100 w-task-item">
+                    <RadzenRow>
+                        <RadzenColumn Style="max-width: 80px;">
+                            <TaskIdBadge InternalTask="item"/>
+                        </RadzenColumn>
+                        <RadzenColumn Style="max-width: 80px;">
+                            @if (item.Attachments.Any())
+                            {
+                                <RadzenIcon
+                                    IconStyle="IconStyle.Info"
+                                    Icon="attachment"/>
+                            }
+                            @if (item.IsArchived)
+                            {
+                                <RadzenIcon
+                                    Icon="inventory"/>
+                            }
+                        </RadzenColumn>
+                        <RadzenColumn class="text-truncate">
+                            <RadzenText
+                                TextStyle="TextStyle.Subtitle1">
+                                @item.Title
+                            </RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Style="max-width: 150px;">
+                            <TagsBadgesList Tags="@item.Tags"/>
+                        </RadzenColumn>
+                    </RadzenRow>
+                </RadzenCard>
+            </Virtualize>
+        </div>
     }
 </div>

@@ -18,7 +18,7 @@ public partial class UpdateTaskForm
     public TaskDto Task { get; set; }
     
     [Inject]
-    public IState<TimeTracker.Web.Store.TasksList.TasksListState> _tasksListState { get; set; }
+    public IState<Store.TasksList.TasksListState> _tasksListState { get; set; }
 
     [Inject] 
     private ISecurityManager _securityManager { get; set; }
@@ -68,12 +68,7 @@ public partial class UpdateTaskForm
             _isLoading = true;
             try
             {
-                var responseDto = await ApiService.TasksUpdateAsync(model);
-                if (responseDto != null)
-                {
-                    Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                    Dispatcher.Dispatch(new SetTasksListItemAction(responseDto));
-                }
+                Dispatcher.Dispatch(new UpdateListItemAction(model));
             }
             catch (Exception)
             {
