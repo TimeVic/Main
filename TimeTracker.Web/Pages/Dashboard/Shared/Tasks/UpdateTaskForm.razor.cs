@@ -78,7 +78,7 @@ public partial class UpdateTaskForm
             {
                 _isLoading = false;
             }
-            StateHasChanged();    
+            StateHasChanged();
         });
     }
 
