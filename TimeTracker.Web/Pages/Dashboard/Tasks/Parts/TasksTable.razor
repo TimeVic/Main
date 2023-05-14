@@ -19,13 +19,7 @@
                 Mode="ProgressBarMode.Indeterminate"/>
         </RadzenCard>
     }
-    else if (!TasksState.Value.List.Any())
-    {
-        <RadzenCard class="m-0 mt-1 w-100">
-            <RadzenText TextStyle="TextStyle.Subtitle1">No records to display.</RadzenText>
-        </RadzenCard>
-    }
-
+    
     @foreach (var taskGroupKeyValue in _taskGroups)
     {
         var status = taskGroupKeyValue.Key;
@@ -43,7 +37,9 @@
 
             @if (!tasks.Any())
             {
-                <RadzenCard class="m-0 mt-1 w-100 p-4 rz-background-color-info-lighter"></RadzenCard>
+                <RadzenCard class="m-0 mt-1 w-100 p-4 rz-background-color-info-lighter">
+                    Empty task list
+                </RadzenCard>
             }
             
             <Virtualize Items="@tasks" Context="item">
