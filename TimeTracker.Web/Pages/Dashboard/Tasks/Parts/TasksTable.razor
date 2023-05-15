@@ -72,6 +72,12 @@
                                 @item.Title
                             </RadzenText>
                         </RadzenColumn>
+                        <RadzenColumn Style="max-width: 65px;">
+                            <RadzenBadge 
+                                Shade="Shade.Lighter"
+                                BadgeStyle="@item.Priority.GetBadgeStyle()" 
+                                Text="@item.Priority.GetDisplayName()" />
+                        </RadzenColumn>
                         <RadzenColumn Style="max-width: 150px;">
                             <TagsBadgesList Tags="@item.Tags"/>
                         </RadzenColumn>

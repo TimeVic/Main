@@ -55,6 +55,8 @@ public class TaskNotificationService: ITaskNotificationService
             result.Add("New notification time", historyItem.NotificationTime.ToString());
         if (historyItem.Status != task.Status)
             result.Add("Status changed", $"{historyItem.Status.GetDisplayName()} -> {task.Status.GetDisplayName()}");
+        if (historyItem.Priority != task.Priority)
+            result.Add("Priority changed", $"{historyItem.Priority.GetDisplayName()} -> {task.Priority.GetDisplayName()}");
         if (historyItem.IsArchived != task.IsArchived && historyItem.IsArchived)
             result.Add("", "Archived the task");
         if (historyItem.AssigneeUser.Id != task.User.Id)

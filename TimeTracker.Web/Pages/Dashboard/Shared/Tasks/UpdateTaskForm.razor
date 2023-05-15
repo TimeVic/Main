@@ -1,5 +1,6 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 @using TimeTracker.Business.Common.Constants.Storage
+@using TimeTracker.Business.Common.Constants.Task
 @using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
@@ -128,6 +129,22 @@
                         Changed="SubmitForm"
                         class="w-100"
                         Name="Status"/>
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow Class="w-100 mt-2">
+                <RadzenColumn>
+                    <RadzenText
+                        TextStyle="TextStyle.Subtitle2"
+                        TagName="TagName.H3">
+                        Priority
+                    </RadzenText>
+                    <EnumDropDown
+                        TItem="TaskPriority"
+                        AllowClear="false"
+                        @bind-Value="model.Priority"
+                        Changed="SubmitForm"
+                        class="w-100"
+                        Name="Priority"/>
                 </RadzenColumn>
             </RadzenRow>
             <RadzenRow Class="w-100 mt-2">

@@ -2,6 +2,7 @@
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Core.Extensions.Enums
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
@@ -71,6 +72,12 @@
                         TextStyle="TextStyle.Subtitle1">
                         @item.Title
                     </RadzenText>
+                </RadzenColumn>
+                <RadzenColumn Style="max-width: 65px;">
+                    <RadzenBadge
+                        Shade="Shade.Lighter"
+                        BadgeStyle="@item.Priority.GetBadgeStyle()"
+                        Text="@item.Priority.GetDisplayName()"/>
                 </RadzenColumn>
                 <RadzenColumn Style="max-width: 150px;">
                     <TagsBadgesList Tags="@item.Tags"/>

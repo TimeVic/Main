@@ -46,6 +46,7 @@ public class TaskHistoryItemDao: ITaskHistoryItemDao
             Attachments = task.AttachmentsString,
             NotificationTime = task.NotificationTime,
             Status = task.Status,
+            Priority = task.Priority,
             IsArchived = task.IsArchived,
             ExternalTaskId = task.ExternalTaskId,
             AssigneeUser = task.User,
