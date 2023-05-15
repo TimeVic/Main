@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.Tasks;
 using TimeTracker.Business.Orm.Entities;
@@ -15,6 +16,7 @@ public interface ITaskDao: IDomainService
         string? description = null,
         DateTime? notificationTime = null,
         TaskStatus status = TaskStatus.Backlog,
+        TaskPriority priority = TaskPriority.Low,
         bool isArchived = false
     );
 

@@ -68,7 +68,9 @@ public class TaskSeeder: ITaskSeeder
             user,
             fakeEntry.Title,
             fakeEntry.Description,
-            fakeEntry.NotificationTime
+            fakeEntry.NotificationTime,
+            priority: fakeEntry.Priority,
+            status: fakeEntry.Status
         );
         return entry;
     }

@@ -83,6 +83,7 @@ public partial class UpdateTest: BaseTest
             Description = expectedTask.Description,
             NotificationTime = expectedTask.NotificationTime,
             Status = expectedTask.Status,
+            Priority = expectedTask.Priority,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
             ExternalTaskId = expectedTask.ExternalTaskId
@@ -95,6 +96,7 @@ public partial class UpdateTest: BaseTest
         Assert.Equal(expectedTask.Title, actualData.Title);
         Assert.Equal(expectedTask.Description, actualData.Description);
         Assert.Equal(expectedTask.Status, actualData.Status);
+        Assert.Equal(expectedTask.Priority, actualData.Priority);
         Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
         Assert.Equal(expectedTask.ExternalTaskId, actualData.ExternalTaskId);
     }
@@ -240,7 +242,7 @@ public partial class UpdateTest: BaseTest
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_task);
         Assert.Equal(2, _task.HistoryItems.Count);
-        var historyItem = _task.HistoryItems.Last();
+        var historyItem = _task.HistoryItems.OrderBy(item => item.CreateTime).Last();
         Assert.Equal(expectedTask.Title, historyItem.Title);
         Assert.Equal(expectedTask.Description, historyItem.Description);
         Assert.Equal(expectedTask.NotificationTime.ToString(), historyItem.NotificationTime.ToString());

@@ -1,4 +1,5 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Business.Common.Constants.Task;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
@@ -8,6 +9,8 @@ public class TaskDto : IResponse
     public long Id { get; set; }
     
     public TaskStatus Status { get; set; }
+    
+    public TaskPriority Priority { get; set; }
     
     public string Title { get; set; }
     

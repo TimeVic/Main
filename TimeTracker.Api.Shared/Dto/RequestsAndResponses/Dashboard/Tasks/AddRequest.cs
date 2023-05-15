@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
@@ -25,8 +26,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         public string? Description { get; set; }
         
         public DateTime? NotificationTime { get; set; }
-        
-        public TaskStatus Status { get; set; }
+
+        public TaskStatus Status { get; set; } = TaskStatus.Backlog;
+
+        public TaskPriority Priority { get; set; } = TaskPriority.Medium;
     
         public bool IsArchived { get; set; }
     }

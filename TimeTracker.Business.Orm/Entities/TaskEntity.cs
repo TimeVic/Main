@@ -1,6 +1,7 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
+using TimeTracker.Business.Common.Constants.Task;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Business.Orm.Entities
@@ -15,6 +16,10 @@ namespace TimeTracker.Business.Orm.Entities
         [Property(NotNull = true)]
         [Column(Name = "status", SqlType = "int", NotNull = true)]
         public virtual TaskStatus Status { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "priority", SqlType = "int", NotNull = true)]
+        public virtual TaskPriority Priority { get; set; }
         
         [Property(NotNull = true)]
         [Column(Name = "title", Length = 1024, NotNull = true)]

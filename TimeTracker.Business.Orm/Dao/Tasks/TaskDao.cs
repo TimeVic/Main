@@ -1,6 +1,7 @@
 ﻿using NHibernate.Criterion;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.Tasks;
@@ -35,6 +36,7 @@ public class TaskDao: ITaskDao
         string? description = null,
         DateTime? notificationTime = null,
         TaskStatus status = TaskStatus.Backlog,
+        TaskPriority priority = TaskPriority.Low,
         bool isArchived = false
     )
     {
@@ -46,6 +48,7 @@ public class TaskDao: ITaskDao
             Description = description,
             NotificationTime = notificationTime,
             Status = status,
+            Priority = priority,
             IsArchived = isArchived,
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow,
@@ -114,7 +117,7 @@ public class TaskDao: ITaskDao
         }
 
         var items = await query
-            .OrderBy(item => item.Status).Desc
+            .OrderBy(item => item.Priority).Asc
             .OrderBy(item => item.IsArchived).Asc
             .ThenBy(item => item.UpdateTime).Desc
             .ListAsync<TaskEntity>();

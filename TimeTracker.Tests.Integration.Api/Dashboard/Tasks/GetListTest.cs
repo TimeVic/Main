@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -79,6 +80,7 @@ public class GetListTest: BaseTest
             Assert.NotEmpty(item.Title);
             Assert.NotNull(item.TaskList);
             Assert.NotEmpty(item.Description);
+            Assert.Equal(TaskPriority.Medium, item.Priority);
             Assert.Equal(_taskList.Id, item.TaskList.Id);
         });
         Assert.Contains(actualDto.Items, item =>
@@ -87,6 +89,40 @@ public class GetListTest: BaseTest
         });
     }
 
+    [Fact]
+    public async Task ShouldSortByPriority()
+    {
+        var expectedCounter = 6;
+        var urgentTasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        foreach (var task in urgentTasks)
+        {
+            task.Priority = TaskPriority.Urgent;
+        }
+        var mediumTasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        foreach (var task in mediumTasks)
+        {
+            task.Priority = TaskPriority.Medium;
+        }
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(12, actualDto.TotalCount);
+        
+        Assert.All(actualDto.Items.Take(6).ToList(), item =>
+        {
+            Assert.Equal(TaskPriority.Urgent, item.Priority);
+        });
+        Assert.All(actualDto.Items.Skip(6).Take(6).ToList(), item =>
+        {
+            Assert.Equal(TaskPriority.Medium, item.Priority);
+        });
+    }
+    
     [Fact]
     public async Task ShouldFilterByAssignee()
     {

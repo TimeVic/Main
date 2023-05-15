@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
@@ -76,6 +77,7 @@ public partial class AddTest: BaseTest
             NotificationTime = task.NotificationTime,
             Status = task.Status,
             IsArchived = task.IsArchived,
+            Priority = task.Priority
         });
         response.EnsureSuccessStatusCode();
 
@@ -85,6 +87,7 @@ public partial class AddTest: BaseTest
         Assert.Equal(task.Title, actualData.Title);
         Assert.Equal(task.Description, actualData.Description);
         Assert.Equal(task.Status, actualData.Status);
+        Assert.Equal(task.Priority, actualData.Priority);
         Assert.Equal(task.IsArchived, actualData.IsArchived);
     }
     
