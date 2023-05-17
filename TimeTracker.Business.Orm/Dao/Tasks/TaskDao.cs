@@ -2,6 +2,7 @@
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Task;
+using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.Tasks;
@@ -34,19 +35,26 @@ public class TaskDao: ITaskDao
         UserEntity user,
         string title,
         string? description = null,
-        DateTime? notificationTime = null,
+        DateTime? startTime = null,
+        DateTime? endTime = null,
         TaskStatus status = TaskStatus.Backlog,
         TaskPriority priority = TaskPriority.Low,
         bool isArchived = false
     )
     {
+        if (endTime < startTime)
+        {
+            throw new ValidationException("End Time can not be less than Start Time");
+        }
+
         var task = new TaskEntity()
         {
             TaskList = taskList,
             User = user,
             Title = title,
             Description = description,
-            NotificationTime = notificationTime,
+            StartTime = startTime,
+            EndTime = endTime,
             Status = status,
             Priority = priority,
             IsArchived = isArchived,

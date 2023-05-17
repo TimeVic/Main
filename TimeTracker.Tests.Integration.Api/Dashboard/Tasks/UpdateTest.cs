@@ -66,7 +66,8 @@ public partial class UpdateTest: BaseTest
             TaskId = task.Id,
             Title = task.Title,
             Description = task.Description,
-            NotificationTime = task.NotificationTime
+            StartTime = task.StartTime,
+            EndTime = task.EndTime,
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -81,7 +82,8 @@ public partial class UpdateTest: BaseTest
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
-            NotificationTime = expectedTask.NotificationTime,
+            StartTime = expectedTask.StartTime,
+            EndTime = expectedTask.EndTime,
             Status = expectedTask.Status,
             Priority = expectedTask.Priority,
             IsArchived = expectedTask.IsArchived,
@@ -115,7 +117,8 @@ public partial class UpdateTest: BaseTest
             TaskListId = otherTaskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
-            NotificationTime = newTask.NotificationTime,
+            StartTime = newTask.StartTime,
+            EndTime = newTask.EndTime,
             Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = _user.Id
@@ -137,7 +140,8 @@ public partial class UpdateTest: BaseTest
             TaskListId = _taskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
-            NotificationTime = newTask.NotificationTime,
+            StartTime = newTask.StartTime,
+            EndTime = newTask.EndTime,
             Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = user2.Id
@@ -172,7 +176,8 @@ public partial class UpdateTest: BaseTest
             TaskListId = _taskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
-            NotificationTime = newTask.NotificationTime,
+            StartTime = newTask.StartTime,
+            EndTime = newTask.EndTime,
             Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = user2.Id
@@ -208,7 +213,8 @@ public partial class UpdateTest: BaseTest
             TaskListId = taskList2.Id,
             Title = newTask.Title,
             Description = newTask.Description,
-            NotificationTime = newTask.NotificationTime,
+            StartTime = newTask.StartTime,
+            EndTime = newTask.EndTime,
             Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = user2.Id
@@ -231,7 +237,8 @@ public partial class UpdateTest: BaseTest
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
-            NotificationTime = expectedTask.NotificationTime,
+            StartTime = expectedTask.StartTime,
+            EndTime = expectedTask.EndTime,
             Status = expectedTask.Status,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
@@ -245,7 +252,8 @@ public partial class UpdateTest: BaseTest
         var historyItem = _task.HistoryItems.OrderBy(item => item.CreateTime).Last();
         Assert.Equal(expectedTask.Title, historyItem.Title);
         Assert.Equal(expectedTask.Description, historyItem.Description);
-        Assert.Equal(expectedTask.NotificationTime.ToString(), historyItem.NotificationTime.ToString());
+        Assert.Equal(expectedTask.StartTime.ToString(), historyItem.StartTime.ToString());
+        Assert.Equal(expectedTask.EndTime.ToString(), historyItem.EndTime.ToString());
         Assert.Equal(expectedTask.Status, historyItem.Status);
         Assert.Equal(expectedTask.IsArchived, historyItem.IsArchived);
         Assert.NotEmpty(historyItem.Tags ?? "");

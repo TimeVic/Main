@@ -38,8 +38,12 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual string? Attachments { get; set; }
         
         [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "notification_time", SqlType = "datetime", NotNull = false)]
-        public virtual DateTime? NotificationTime { get; set; }
+        [Column(Name = "start_time", SqlType = "datetime", NotNull = false)]
+        public virtual DateTime? StartTime { get; set; }
+        
+        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "end_time", SqlType = "datetime", NotNull = false)]
+        public virtual DateTime? EndTime { get; set; }
 
         [Property(NotNull = true)]
         [Column(Name = "is_archived", NotNull = true)]

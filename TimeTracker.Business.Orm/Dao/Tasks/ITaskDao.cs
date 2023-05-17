@@ -14,7 +14,8 @@ public interface ITaskDao: IDomainService
         UserEntity user,
         string title,
         string? description = null,
-        DateTime? notificationTime = null,
+        DateTime? startTime = null,
+        DateTime? endTime = null,
         TaskStatus status = TaskStatus.Backlog,
         TaskPriority priority = TaskPriority.Low,
         bool isArchived = false

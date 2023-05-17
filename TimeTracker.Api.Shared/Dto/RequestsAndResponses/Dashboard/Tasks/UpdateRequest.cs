@@ -23,7 +23,8 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
             TaskListId = dto.TaskList.Id;
             Title = dto.Title;
             Description = dto.Description;
-            NotificationTime = dto.NotificationTime;
+            StartTime = dto.StartTime;
+            EndTime = dto.EndTime;
             Status = dto.Status;
             Priority = dto.Priority;
             IsArchived = dto.IsArchived;

@@ -18,7 +18,9 @@ public class TaskDto : IResponse
     
     public string? ExternalTaskId { get; set; }
     
-    public DateTime? NotificationTime { get; set; }
+    public DateTime? StartTime { get; set; }
+    
+    public DateTime? EndTime { get; set; }
     
     public bool IsArchived { get; set; }
     

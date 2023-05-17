@@ -68,7 +68,8 @@ public class TaskSeeder: ITaskSeeder
             user,
             fakeEntry.Title,
             fakeEntry.Description,
-            fakeEntry.NotificationTime,
+            startTime: fakeEntry.StartTime,
+            endTime: fakeEntry.EndTime,
             priority: fakeEntry.Priority,
             status: fakeEntry.Status
         );

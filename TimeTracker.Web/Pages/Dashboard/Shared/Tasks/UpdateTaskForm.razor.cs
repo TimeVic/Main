@@ -97,17 +97,18 @@ public partial class UpdateTaskForm
         await SubmitForm();
     }
 
-    private async Task OnChangeNotificationTime(DateTime? notificationTime)
+    private async Task OnChangeStartTime(DateTime? time)
     {
-        model.NotificationTime = notificationTime;
+        model.StartTime = time;
         await SubmitForm();
     }
 
-    private void OnRenderNotificationTime(DateRenderEventArgs renderEvent)
+    private async Task OnChangeEndTime(DateTime? time)
     {
-        renderEvent.Disabled = renderEvent.Disabled || renderEvent.Date < DateTime.Now;
+        model.EndTime = time;
+        await SubmitForm();
     }
-
+    
     private void OnFileUploaded(StoredFileDto uploadedFile)
     {
         Task.Attachments.Add(uploadedFile);

@@ -25,7 +25,9 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         [StringLength(10000)]
         public string? Description { get; set; }
         
-        public DateTime? NotificationTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        
+        public DateTime? EndTime { get; set; }
 
         public TaskStatus Status { get; set; } = TaskStatus.Backlog;
 

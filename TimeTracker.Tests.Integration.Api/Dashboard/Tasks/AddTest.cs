@@ -60,7 +60,8 @@ public partial class AddTest: BaseTest
             TaskListId = _taskList.Id,
             Title = task.Title,
             Description = task.Description,
-            NotificationTime = task.NotificationTime
+            StartTime = task.StartTime,
+            EndTime = task.EndTime,
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -74,7 +75,8 @@ public partial class AddTest: BaseTest
             TaskListId = _taskList.Id,
             Title = task.Title,
             Description = task.Description,
-            NotificationTime = task.NotificationTime,
+            StartTime = task.StartTime,
+            EndTime = task.EndTime,
             Status = task.Status,
             IsArchived = task.IsArchived,
             Priority = task.Priority
@@ -89,6 +91,9 @@ public partial class AddTest: BaseTest
         Assert.Equal(task.Status, actualData.Status);
         Assert.Equal(task.Priority, actualData.Priority);
         Assert.Equal(task.IsArchived, actualData.IsArchived);
+        Assert.Equal(task.StartTime, actualData.StartTime);
+        Assert.Equal(task.EndTime.Value.ToLongTimeString(), actualData.EndTime.Value.ToLongTimeString());
+        Assert.Equal(task.StartTime.Value.ToLongTimeString(), actualData.StartTime.Value.ToLongTimeString());
     }
     
     [Fact]
@@ -127,7 +132,8 @@ public partial class AddTest: BaseTest
             TaskListId = otherTaskList.Id,
             Title = task.Title,
             Description = task.Description,
-            NotificationTime = task.NotificationTime
+            StartTime = task.StartTime,
+            EndTime = task.EndTime,
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
@@ -143,7 +149,8 @@ public partial class AddTest: BaseTest
             TaskListId = _taskList.Id,
             Title = task.Title,
             Description = task.Description,
-            NotificationTime = task.NotificationTime,
+            StartTime = task.StartTime,
+            EndTime = task.EndTime,
             Status = task.Status,
             IsArchived = task.IsArchived,
         });
@@ -155,7 +162,8 @@ public partial class AddTest: BaseTest
         var historyItem = actualTask.HistoryItems.First();
         Assert.Equal(task.Title, historyItem.Title);
         Assert.Equal(task.Description, historyItem.Description);
-        Assert.Equal(task.NotificationTime.ToString(), historyItem.NotificationTime.ToString());
+        Assert.Equal(task.StartTime.ToString(), historyItem.StartTime.ToString());
+        Assert.Equal(task.EndTime.ToString(), historyItem.EndTime.ToString());
         Assert.Equal(task.Status, historyItem.Status);
         Assert.Equal(task.IsArchived, historyItem.IsArchived);
         Assert.True(historyItem.IsNewTask);

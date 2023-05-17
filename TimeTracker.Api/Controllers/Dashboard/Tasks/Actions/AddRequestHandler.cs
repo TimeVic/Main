@@ -80,7 +80,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                     user,
                     request.Title,
                     request.Description,
-                    request.NotificationTime,
+                    startTime: request.StartTime,
+                    endTime: request.EndTime,
                     status: request.Status,
                     priority: request.Priority
                 );

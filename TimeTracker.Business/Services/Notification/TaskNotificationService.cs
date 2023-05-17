@@ -51,8 +51,10 @@ public class TaskNotificationService: ITaskNotificationService
             && !string.IsNullOrEmpty(task.AttachmentsString)
         )
             result.Add("", "Added new attachments");
-        if (historyItem.NotificationTime != task.NotificationTime)
-            result.Add("New notification time", historyItem.NotificationTime.ToString());
+        if (historyItem.StartTime != task.StartTime)
+            result.Add("New start time", historyItem.StartTime?.ToString() ?? "Not set");
+        if (historyItem.EndTime != task.EndTime)
+            result.Add("New end time", historyItem.EndTime?.ToString() ?? "Not set");
         if (historyItem.Status != task.Status)
             result.Add("Status changed", $"{historyItem.Status.GetDisplayName()} -> {task.Status.GetDisplayName()}");
         if (historyItem.Priority != task.Priority)
