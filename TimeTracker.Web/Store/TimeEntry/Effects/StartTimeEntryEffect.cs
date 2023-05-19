@@ -42,7 +42,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 {
                     WorkspaceId = _authState.Value.Workspace.Id,
                     EndTime = DateTime.Now.TimeOfDay,
-                    EndDate = DateTime.Now
+                    EndDate = DateTime.Now.ToDateAndRemoveTimeZone()
                 });
                 dispatcher.Dispatch(new LoadListAction(1));
             }

@@ -49,7 +49,11 @@ namespace TimeTracker.Web.Services.Http
             )
             {
                 data ??= new { };
-                request.Content = JsonContent.Create(data);    
+                request.Content = new StringContent(
+                    JsonHelper.SerializeToString(data, DateTimeZoneHandling.RoundtripKind), 
+                    System.Text.Encoding.UTF8, 
+                    "application/json"
+                );
             }
             // add authorization header
             if (!string.IsNullOrEmpty(jwtToken))

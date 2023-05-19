@@ -126,4 +126,9 @@ public partial class UpdateTaskForm
         Task.Attachments = attachments;
         Dispatcher.Dispatch(new SetAttachmentsAction(Task.Id, Task.Attachments));
     }
+
+    private bool ValidateStartTime(DateTime? startTime)
+    {
+        return false;
+    }
 }
