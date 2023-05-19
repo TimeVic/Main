@@ -13,7 +13,7 @@
         MaxLength="MaxLength"
         @onfocusout="@(OnBlur)"
         Class="w-100"/>
-    
+
     <div class="w-view"
          hidden="@(_isShowEditBox)"
          @onclick="@OnClickView">
@@ -99,7 +99,7 @@
         _isShowEditBox = true;
         _markdownTextArea.Element.FocusAsync();
     }
-    
+
     private void OnBlur()
     {
         _isShowEditBox = string.IsNullOrWhiteSpace(_value);

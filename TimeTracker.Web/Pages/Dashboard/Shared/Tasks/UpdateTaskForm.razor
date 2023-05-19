@@ -19,208 +19,210 @@
     AlignItems="AlignItems.Stretch"
     Wrap="FlexWrap.Wrap">
 
-    <div class="flex-grow-1">
-        <RadzenStack
-            class="w-100"
-            Orientation="Orientation.Horizontal"
-            JustifyContent="JustifyContent.SpaceBetween"
-            Wrap="FlexWrap.Wrap">
-            <RadzenColumn
-                Style="max-width: 60px;"
-                class="d-flex align-items-center">
-                <TaskIdBadge IsLink="true" InternalTask="@Task"/>
-            </RadzenColumn>
-            @if (!string.IsNullOrEmpty(model.ExternalTaskId))
-            {
-                <RadzenColumn>
-                    <RadzenStack
-                        Orientation="Orientation.Horizontal"
-                        AlignItems="AlignItems.Center"
-                        JustifyContent="JustifyContent.Start"
-                        Style="height: 100%;">
+<div
+    class="flex-grow-1"
+    Style="max-width: 60%;">
+    <RadzenStack
+        class="w-100"
+        Orientation="Orientation.Horizontal"
+        JustifyContent="JustifyContent.SpaceBetween"
+        Wrap="FlexWrap.Wrap">
+        <RadzenColumn
+            Style="max-width: 60px;"
+            class="d-flex align-items-center">
+            <TaskIdBadge IsLink="true" InternalTask="@Task"/>
+        </RadzenColumn>
+        @if (!string.IsNullOrEmpty(model.ExternalTaskId))
+        {
+            <RadzenColumn>
+                <RadzenStack
+                    Orientation="Orientation.Horizontal"
+                    AlignItems="AlignItems.Center"
+                    JustifyContent="JustifyContent.Start"
+                    Style="height: 100%;">
 
-                        <RadzenText
-                            TextStyle="TextStyle.Subtitle1">
-                            External Task Id: @model.ExternalTaskId
-                        </RadzenText>
-                    </RadzenStack>
-                </RadzenColumn>
-            }
-            <RadzenColumn Style="max-width: 200px">
-                <TimeEntryForm
-                    InternalTask="@Task"
-                    IsShort="true"/>
+                    <RadzenText
+                        TextStyle="TextStyle.Subtitle1">
+                        External Task Id: @model.ExternalTaskId
+                    </RadzenText>
+                </RadzenStack>
             </RadzenColumn>
-        </RadzenStack>
-        <RadzenRow Class="w-100">
+        }
+        <RadzenColumn Style="max-width: 200px">
+            <TimeEntryForm
+                InternalTask="@Task"
+                IsShort="true"/>
+        </RadzenColumn>
+    </RadzenStack>
+    <RadzenRow Class="w-100">
+        <RadzenColumn>
+            <RadzenText
+                TextStyle="TextStyle.Subtitle2"
+                TagName="TagName.H3">
+                Title
+            </RadzenText>
+            <RadzenTextBox
+                Name="Title"
+                @bind-Value="model.Title"
+                Placeholder="Enter a title for new task"
+                Change="SubmitForm"
+                Class="w-100"/>
+        </RadzenColumn>
+    </RadzenRow>
+
+    <RadzenTabs RenderMode="@TabRenderMode.Client" class="w-100 mt-2">
+        <Tabs>
+            <RadzenTabsItem Text="Description">
+                <MarkdownEdit
+                    TextAreaName="Description"
+                    @bind-Value="model.Description"
+                    Placeholder="Insert your task details here"
+                    Changed="SubmitForm"
+                    Class="w-100"/>
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="@_tabLabelAttachments">
+                <FileUploader
+                    Class="w-100"
+                    EntityId="@Task.Id"
+                    FileUploaded="OnFileUploaded"
+                    EntityType="StorageEntityType.Task"
+                    FileType="StoredFileType.Attachment"/>
+                <FilesList
+                    Class=" mt-2"
+                    EntityId="@Task.Id"
+                    EntityType="StorageEntityType.Task"
+                    ListUpdated="AttachmentsListUpdated"
+                    Files="@Task.Attachments"/>
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
+</div>
+
+<RadzenFieldset
+    Text="Details"
+    class="flex-grow-1"
+    Style="max-width: 400px;">
+    <RadzenRow Class="w-100">
+        <RadzenColumn>
+            <RadzenText
+                TextStyle="TextStyle.Subtitle2"
+                TagName="TagName.H3">
+                Assigned
+            </RadzenText>
+            <MembersDropDown
+                Clearable="false"
+                AllowedIds="_allowedUserIds"
+                UserId="@model.UserId"
+                Class="w-100"
+                SelectedItemChanged="OnChangedAssigned"/>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow Class="w-100 mt-2">
+        <RadzenColumn>
+            <RadzenText
+                TextStyle="TextStyle.Subtitle2"
+                TagName="TagName.H3">
+                Status
+            </RadzenText>
+            <EnumDropDown
+                TItem="TaskStatus"
+                AllowClear="false"
+                @bind-Value="model.Status"
+                Changed="SubmitForm"
+                class="w-100"
+                Name="Status"/>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow Class="w-100 mt-2">
+        <RadzenColumn>
+            <RadzenText
+                TextStyle="TextStyle.Subtitle2"
+                TagName="TagName.H3">
+                Priority
+            </RadzenText>
+            <EnumDropDown
+                TItem="TaskPriority"
+                AllowClear="false"
+                @bind-Value="model.Priority"
+                Changed="SubmitForm"
+                class="w-100"
+                Name="Priority"/>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow Class="w-100 mt-2">
+        <RadzenColumn>
+            <RadzenText
+                TextStyle="TextStyle.Subtitle2"
+                TagName="TagName.H3">
+                Start
+            </RadzenText>
+            <RadzenDatePicker
+                TValue="DateTime?"
+                ShowTime="true"
+                ShowSeconds="true"
+                HoursStep="1"
+                MinutesStep="30"
+                Kind="DateTimeKind.Local"
+                Name="StartTime"
+                Max="model.EndTime"
+                class="w-100"
+                Change="OnChangeStartTime"
+                Value="model.StartTime"
+                DateFormat="MM/dd/yyyy HH:mm"/>
+            <RadzenCustomValidator
+                Component="StartTime" Validator="@(() => ValidateStartTime(model.StartTime))" Text="Email already exists"/>
+        </RadzenColumn>
+        <RadzenColumn>
+            <RadzenText
+                TextStyle="TextStyle.Subtitle2"
+                TagName="TagName.H3">
+                End
+            </RadzenText>
+            <RadzenDatePicker
+                TValue="DateTime?"
+                ShowTime="true"
+                ShowSeconds="true"
+                HoursStep="1"
+                Min="model.StartTime"
+                Kind="DateTimeKind.Local"
+                MinutesStep="30"
+                class="w-100"
+                Change="OnChangeEndTime"
+                Value="model.EndTime"
+                DateFormat="MM/dd/yyyy HH:mm"/>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenRow Class="w-100 mt-2">
+        <RadzenColumn Style="max-width: 200px">
+            <RadzenStack
+                Orientation="Orientation.Horizontal"
+                AlignItems="AlignItems.End"
+                JustifyContent="JustifyContent.Start"
+                Style="height: 100%;">
+                <div>
+                    <RadzenCheckBox
+                        @bind-Value=@model.IsArchived
+                        Name="IsArchived"
+                        Change="SubmitForm"
+                        TValue="bool"/>
+                    <RadzenLabel Text="Archived" Component="IsArchived" class="ml-1"/>
+                </div>
+            </RadzenStack>
+        </RadzenColumn>
+        <RadzenRow Class="w-100 mt-2">
             <RadzenColumn>
                 <RadzenText
                     TextStyle="TextStyle.Subtitle2"
                     TagName="TagName.H3">
-                    Title
+                    Tags
                 </RadzenText>
-                <RadzenTextBox
-                    Name="Title"
-                    @bind-Value="model.Title"
-                    Placeholder="Enter a title for new task"
-                    Change="SubmitForm"
+                <TagsDropDown
+                    Value="@model.TagIds"
+                    ValueChanged="OnTagsChanged"
                     Class="w-100"/>
             </RadzenColumn>
         </RadzenRow>
-
-        <RadzenTabs RenderMode="@TabRenderMode.Client" class="w-100 mt-2">
-            <Tabs>
-                <RadzenTabsItem Text="Description">
-                    <MarkdownEdit
-                        TextAreaName="Description"
-                        @bind-Value="model.Description"
-                        Placeholder="Insert your task details here"
-                        Changed="SubmitForm"
-                        Class="w-100"/>
-                </RadzenTabsItem>
-                <RadzenTabsItem Text="@_tabLabelAttachments">
-                    <FileUploader
-                        Class="w-100"
-                        EntityId="@Task.Id"
-                        FileUploaded="OnFileUploaded"
-                        EntityType="StorageEntityType.Task"
-                        FileType="StoredFileType.Attachment"/>
-                    <FilesList
-                        Class=" mt-2"
-                        EntityId="@Task.Id"
-                        EntityType="StorageEntityType.Task"
-                        ListUpdated="AttachmentsListUpdated"
-                        Files="@Task.Attachments"/>
-                </RadzenTabsItem>
-            </Tabs>
-        </RadzenTabs>
-    </div>
-
-    <RadzenFieldset
-        Text="Details"
-        class="flex-grow-1"
-        Style="max-width: 400px;">
-        <RadzenRow Class="w-100">
-            <RadzenColumn>
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    Assigned
-                </RadzenText>
-                <MembersDropDown
-                    Clearable="false"
-                    AllowedIds="_allowedUserIds"
-                    UserId="@model.UserId"
-                    Class="w-100"
-                    SelectedItemChanged="OnChangedAssigned"/>
-            </RadzenColumn>
-        </RadzenRow>
-        <RadzenRow Class="w-100 mt-2">
-            <RadzenColumn>
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    Status
-                </RadzenText>
-                <EnumDropDown
-                    TItem="TaskStatus"
-                    AllowClear="false"
-                    @bind-Value="model.Status"
-                    Changed="SubmitForm"
-                    class="w-100"
-                    Name="Status"/>
-            </RadzenColumn>
-        </RadzenRow>
-        <RadzenRow Class="w-100 mt-2">
-            <RadzenColumn>
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    Priority
-                </RadzenText>
-                <EnumDropDown
-                    TItem="TaskPriority"
-                    AllowClear="false"
-                    @bind-Value="model.Priority"
-                    Changed="SubmitForm"
-                    class="w-100"
-                    Name="Priority"/>
-            </RadzenColumn>
-        </RadzenRow>
-        <RadzenRow Class="w-100 mt-2">
-            <RadzenColumn>
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    Start
-                </RadzenText>
-                <RadzenDatePicker
-                    TValue="DateTime?"
-                    ShowTime="true"
-                    ShowSeconds="true"
-                    HoursStep="1"
-                    MinutesStep="30"
-                    Kind="DateTimeKind.Local"
-                    Name="StartTime"
-                    Max="model.EndTime"
-                    class="w-100"
-                    Change="OnChangeStartTime"
-                    Value="model.StartTime"
-                    DateFormat="MM/dd/yyyy HH:mm"/>
-                <RadzenCustomValidator
-                    Component="StartTime" Validator="@(() => ValidateStartTime(model.StartTime))" Text="Email already exists"/>
-            </RadzenColumn>
-            <RadzenColumn>
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    End
-                </RadzenText>
-                <RadzenDatePicker
-                    TValue="DateTime?"
-                    ShowTime="true"
-                    ShowSeconds="true"
-                    HoursStep="1"
-                    Min="model.StartTime"
-                    Kind="DateTimeKind.Local"
-                    MinutesStep="30"
-                    class="w-100"
-                    Change="OnChangeEndTime"
-                    Value="model.EndTime"
-                    DateFormat="MM/dd/yyyy HH:mm"/>
-            </RadzenColumn>
-        </RadzenRow>
-        <RadzenRow Class="w-100 mt-2">
-            <RadzenColumn Style="max-width: 200px">
-                <RadzenStack
-                    Orientation="Orientation.Horizontal"
-                    AlignItems="AlignItems.End"
-                    JustifyContent="JustifyContent.Start"
-                    Style="height: 100%;">
-                    <div>
-                        <RadzenCheckBox
-                            @bind-Value=@model.IsArchived
-                            Name="IsArchived"
-                            Change="SubmitForm"
-                            TValue="bool"/>
-                        <RadzenLabel Text="Archived" Component="IsArchived" class="ml-1"/>
-                    </div>
-                </RadzenStack>
-            </RadzenColumn>
-            <RadzenRow Class="w-100 mt-2">
-                <RadzenColumn>
-                    <RadzenText
-                        TextStyle="TextStyle.Subtitle2"
-                        TagName="TagName.H3">
-                        Tags
-                    </RadzenText>
-                    <TagsDropDown
-                        Value="@model.TagIds"
-                        ValueChanged="OnTagsChanged"
-                        Class="w-100"/>
-                </RadzenColumn>
-            </RadzenRow>
-        </RadzenRow>
-    </RadzenFieldset>
-    </RadzenStack>
+    </RadzenRow>
+</RadzenFieldset>
+</RadzenStack>
 </RadzenTemplateForm>
