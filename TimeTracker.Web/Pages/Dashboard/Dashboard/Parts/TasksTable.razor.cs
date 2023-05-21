@@ -1,6 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Web.Store.Dashboard;
 using TimeTracker.Web.Store.Dashboard.Effects;
 using TimeTracker.Web.Store.Tasks;

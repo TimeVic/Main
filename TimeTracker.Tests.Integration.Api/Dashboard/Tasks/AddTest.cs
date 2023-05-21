@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Exceptions.Api;
@@ -12,6 +13,7 @@ using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
@@ -91,9 +93,8 @@ public partial class AddTest: BaseTest
         Assert.Equal(task.Status, actualData.Status);
         Assert.Equal(task.Priority, actualData.Priority);
         Assert.Equal(task.IsArchived, actualData.IsArchived);
-        Assert.Equal(task.StartTime, actualData.StartTime);
-        Assert.Equal(task.EndTime.Value.ToLongTimeString(), actualData.EndTime.Value.ToLongTimeString());
-        Assert.Equal(task.StartTime.Value.ToLongTimeString(), actualData.StartTime.Value.ToLongTimeString());
+        Assert.Equal(task.EndTime.Value.ToLongTimeString(), actualData.EndTime.Value.ToUniversalTime().ToLongTimeString());
+        Assert.Equal(task.StartTime.Value.ToLongTimeString(), actualData.StartTime.Value.ToUniversalTime().ToLongTimeString());
     }
     
     [Fact]

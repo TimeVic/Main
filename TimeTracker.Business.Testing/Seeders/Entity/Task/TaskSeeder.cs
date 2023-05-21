@@ -4,7 +4,7 @@ using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Testing.Factories;
 
-namespace TimeTracker.Business.Testing.Seeders.Entity;
+namespace TimeTracker.Business.Testing.Seeders.Entity.Task;
 
 public class TaskSeeder: ITaskSeeder
 {

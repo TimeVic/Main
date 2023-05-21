@@ -1,5 +1,6 @@
 ﻿using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts;

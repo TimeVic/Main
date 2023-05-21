@@ -1,0 +1,210 @@
+using System.Net;
+using Microsoft.Extensions.DependencyInjection;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
+using TimeTracker.Business.Testing.Extensions;
+using TimeTracker.Business.Testing.Factories;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
+using TimeTracker.Tests.Integration.Api.Core;
+
+namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks.Comments;
+
+public class AddTest: BaseTest
+{
+    private readonly string Url = "/dashboard/tasks/comment/add";
+    
+    private readonly IQueueService _queueService;
+    private readonly UserEntity _user;
+    private readonly IDataFactory<TaskListEntity> _taskListFactory;
+    private readonly string _jwtToken;
+    private WorkspaceEntity _workspace;
+    private readonly IProjectDao _projectDao;
+    private readonly ProjectEntity _project;
+    private readonly IDataFactory<TaskCommentEntity> _taskCommentFactory;
+    private readonly TaskCommentEntity _fakeComment;
+    private readonly ITaskSeeder _taskSeeder;
+    private readonly TaskEntity _task;
+    private readonly IWorkspaceAccessService _workspaceAccessService;
+
+    public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    {
+        _queueService = ServiceProvider.GetRequiredService<IQueueService>();
+        _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
+        _taskCommentFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskCommentEntity>>();
+        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
+        _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
+        
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
+        _task = _taskSeeder.CreateAsync(user: _user).Result;
+        
+        _fakeComment = _taskCommentFactory.Generate();
+    }
+
+    [Fact]
+    public async Task NonAuthorizedCanNotDoIt()
+    {
+        var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
+        {
+            TaskId = _task.Id,
+            Comment = _fakeComment.Comment
+        });
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task ShouldAdd()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            TaskId = _task.Id,
+            Comment = _fakeComment.Comment
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualEntity = await response.GetJsonDataAsync<TaskCommentDto>();
+        Assert.True(actualEntity.Id > 0);
+        Assert.Equal(_fakeComment.Comment, actualEntity.Comment);
+        Assert.Equal(_user.Id, actualEntity.User.Id);
+    }
+    
+    [Fact]
+    public async Task ShouldAddWithWatchers()
+    {
+        var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherToken3, user3, otherWorkspace3) = await UserSeeder.CreateAuthorizedAsync();
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            user2,
+            MembershipAccessType.User, 
+            new List<ProjectAccessModel>()
+            {
+                new()
+                {
+                    Project = _task.TaskList.Project
+                }
+            }
+        );
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            user3,
+            MembershipAccessType.User, 
+            new List<ProjectAccessModel>()
+            {
+                new()
+                {
+                    Project = _task.TaskList.Project
+                }
+            }
+        );
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            TaskId = _task.Id,
+            Comment = _fakeComment.Comment,
+            WatcherIds = new List<long>() { user2.Id, user3.Id }
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualEntity = await response.GetJsonDataAsync<TaskCommentDto>();
+        Assert.True(actualEntity.Id > 0);
+        Assert.Equal(2, actualEntity.Watchers.Count);
+        Assert.Contains(actualEntity.Watchers, item => item.Id == user2.Id);
+        Assert.Contains(actualEntity.Watchers, item => item.Id == user3.Id);
+    }
+    
+    [Fact]
+    public async Task ShouldAddWithUnsharedWatcher()
+    {
+        var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherToken3, user3, otherWorkspace3) = await UserSeeder.CreateAuthorizedAsync();
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            user2,
+            MembershipAccessType.User, 
+            new List<ProjectAccessModel>()
+            {
+                new()
+                {
+                    Project = _task.TaskList.Project
+                }
+            }
+        );
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            TaskId = _task.Id,
+            Comment = _fakeComment.Comment,
+            WatcherIds = new List<long>() { user2.Id, user3.Id }
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonErrorAsync();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+    }
+    
+    [Fact]
+    public async Task ShouldAddForSharedUser()
+    {
+        var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            user2,
+            MembershipAccessType.User, 
+            new List<ProjectAccessModel>()
+            {
+                new()
+                {
+                    Project = _task.TaskList.Project
+                }
+            }
+        );
+        var response = await PostRequestAsync(Url, otherToken, new AddRequest()
+        {
+            TaskId = _task.Id,
+            Comment = _fakeComment.Comment
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualEntity = await response.GetJsonDataAsync<TaskCommentDto>();
+        Assert.True(actualEntity.Id > 0);
+        Assert.Equal(_fakeComment.Comment, actualEntity.Comment);
+        Assert.Equal(user2.Id, actualEntity.User.Id);
+    }
+    
+    [Fact]
+    public async Task ShouldNotAddIfIncorrectTaskId()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            TaskId = 9999,
+            Comment = _fakeComment.Comment
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonErrorAsync();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+    }
+    
+    [Fact]
+    public async Task ShouldNotAddIfHasNotAccessToTask()
+    {
+        var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
+        var otherTask = await _taskSeeder.CreateAsync(user: user2);
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            TaskId = otherTask.Id,
+            Comment = _fakeComment.Comment
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonErrorAsync();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+    }
+}

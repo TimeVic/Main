@@ -3,5 +3,6 @@
 public enum StorageEntityType
 {
     User = 1,
-    Task
+    Task,
+    TaskComment
 }

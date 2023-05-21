@@ -10,6 +10,7 @@ using TimeTracker.Business.Services.ExternalClients.Redmine;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Queue.Handlers;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Services.Queue.Default;

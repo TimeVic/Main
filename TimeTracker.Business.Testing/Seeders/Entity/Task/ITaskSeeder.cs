@@ -1,7 +1,7 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Orm.Entities;
 
-namespace TimeTracker.Business.Testing.Seeders.Entity;
+namespace TimeTracker.Business.Testing.Seeders.Entity.Task;
 
 public interface ITaskSeeder: IDomainService
 {

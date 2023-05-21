@@ -55,6 +55,10 @@ public class SecurityManager: ISecurityManager
         {
             return await HasAccessToTaskList(user, taskList);
         }
+        if (entity is TaskCommentEntity taskCommentEntity)
+        {
+            return await HasAccessToTaskComment(accessLevel, user, taskCommentEntity);
+        }
 
         throw new NotImplementedException($"Security checking not implemented for {entity?.GetTypeName()}");
     }
@@ -131,6 +135,30 @@ public class SecurityManager: ISecurityManager
     private async Task<bool> HasAccessToTask(UserEntity user, TaskEntity task)
     {
         return await HasAccessToProject(AccessLevel.Read, user, task.TaskList.Project);
+    }
+    
+    private async Task<bool> HasAccessToTaskComment(AccessLevel accessLevel, UserEntity user, TaskCommentEntity taskComment)
+    {
+        var hasAccessToTask = await HasAccessToProject(
+            AccessLevel.Read,
+            user,
+            taskComment.Task.TaskList.Project
+        );
+        if (!hasAccessToTask)
+        {
+            return false;
+        }
+        if (
+            accessLevel == AccessLevel.Read
+            || (
+                accessLevel == AccessLevel.Write
+                && taskComment.User.Id == user.Id
+            )
+        )
+        {
+            return true;
+        }
+        return false;
     }
     
     private async Task<bool> HasAccessToTaskList(UserEntity user, TaskListEntity taskList)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Api.Profiles.Task;

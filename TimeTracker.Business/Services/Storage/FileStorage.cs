@@ -154,6 +154,10 @@ public partial class FileStorage: IFileStorage
         {
             return "task";
         }
+        if (entity is TaskCommentEntity)
+        {
+            return "task_comment";
+        }
         return "common";
     }
 

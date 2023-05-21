@@ -10,6 +10,7 @@ using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 

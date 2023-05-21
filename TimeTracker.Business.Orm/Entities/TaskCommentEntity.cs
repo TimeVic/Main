@@ -36,16 +36,7 @@ namespace TimeTracker.Business.Orm.Entities
             Cascade = "none"
         )]
         public virtual UserEntity? User { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(UserEntity), 
-            Column = "updated_user_id", 
-            Lazy = Laziness.Proxy,
-            Fetch = FetchMode.Join,
-            Cascade = "none"
-        )]
-        public virtual UserEntity? UpdatedUser { get; set; }
-        
+
         [ManyToOne(
             ClassType = typeof(TaskEntity), 
             Column = "task_id", 
@@ -54,5 +45,37 @@ namespace TimeTracker.Business.Orm.Entities
             Cascade = "none"
         )]
         public virtual TaskEntity Task { get; set; }
+        
+        [Set(
+            Table = "task_comment_watchers",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "comment_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            ClassType = typeof(UserEntity),
+            Column = "user_id"
+        )]
+        public virtual ICollection<UserEntity> Watchers { get; set; } = new List<UserEntity>();
+        
+        [Set(
+            Table = "task_comment_stored_files",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "comment_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            ClassType = typeof(StoredFileEntity),
+            Column = "stored_file_id"
+        )]
+        public virtual ICollection<StoredFileEntity> Attachments { get; set; } = new List<StoredFileEntity>();
     }
 }

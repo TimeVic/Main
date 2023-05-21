@@ -1,6 +1,6 @@
 ﻿using Api.Requests.Abstractions;
 
-namespace TimeTracker.Api.Shared.Dto.Entity;
+namespace TimeTracker.Api.Shared.Dto.Entity.Task;
 
 public class TaskListDto : IResponse
 {

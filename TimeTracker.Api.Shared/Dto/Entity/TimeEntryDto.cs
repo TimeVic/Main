@@ -1,4 +1,5 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;

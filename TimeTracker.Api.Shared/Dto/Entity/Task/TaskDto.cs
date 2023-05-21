@@ -2,7 +2,7 @@
 using TimeTracker.Business.Common.Constants.Task;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
-namespace TimeTracker.Api.Shared.Dto.Entity;
+namespace TimeTracker.Api.Shared.Dto.Entity.Task;
 
 public class TaskDto : IResponse
 {

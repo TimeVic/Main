@@ -12,16 +12,19 @@ public class FileStorageRelationshipService: IFileStorageRelationshipService
 {
     private readonly IUserDao _userDao;
     private readonly ITaskDao _taskDao;
+    private readonly ITaskCommentDao _taskCommentDao;
     private readonly IDbSessionProvider _sessionProvider;
 
     public FileStorageRelationshipService(
         IUserDao userDao,
         ITaskDao taskDao,
+        ITaskCommentDao taskCommentDao,
         IDbSessionProvider sessionProvider
     )
     {
         _userDao = userDao;
         _taskDao = taskDao;
+        _taskCommentDao = taskCommentDao;
         _sessionProvider = sessionProvider;
     }
     
@@ -38,6 +41,10 @@ public class FileStorageRelationshipService: IFileStorageRelationshipService
         if (entityType == StorageEntityType.Task)
         {
             entity = await _taskDao.GetById(entityId);
+        }
+        if (entityType == StorageEntityType.TaskComment)
+        {
+            entity = await _taskCommentDao.GetById(entityId);
         }
         if (entity == null)
         {
@@ -59,6 +66,10 @@ public class FileStorageRelationshipService: IFileStorageRelationshipService
         if (entity is TaskEntity taskEntity)
         {
             taskEntity.Attachments.Add(file);
+        }
+        if (entity is TaskCommentEntity taskCommentEntity)
+        {
+            taskCommentEntity.Attachments.Add(file);
         }
         await _sessionProvider.CurrentSession.SaveAsync(entity);
     }
