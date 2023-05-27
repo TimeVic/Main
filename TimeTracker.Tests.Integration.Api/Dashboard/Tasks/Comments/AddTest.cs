@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Queue;
@@ -48,6 +49,8 @@ public class AddTest: BaseTest
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
         _fakeComment = _taskCommentFactory.Generate();
+
+        _queueService.ProcessAsync(QueueChannel.Notifications).Wait();
     }
 
     [Fact]
@@ -75,6 +78,17 @@ public class AddTest: BaseTest
         Assert.True(actualEntity.Id > 0);
         Assert.Equal(_fakeComment.Comment, actualEntity.Comment);
         Assert.Equal(_user.Id, actualEntity.User.Id);
+        
+        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        Assert.True(actualProcessedCounter > 0);
+        
+        Assert.True(EmailSendingServiceMock.IsEmailSent);
+        Assert.Contains(
+            EmailSendingServiceMock.SentMessages, 
+            item => item.To == _user.Email
+            && item.Body.Contains("added")
+            && item.Body.Contains(_task.Id.ToString())
+        );
     }
     
     [Fact]
@@ -120,6 +134,15 @@ public class AddTest: BaseTest
         Assert.Equal(2, actualEntity.Watchers.Count);
         Assert.Contains(actualEntity.Watchers, item => item.Id == user2.Id);
         Assert.Contains(actualEntity.Watchers, item => item.Id == user3.Id);
+        
+        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        Assert.True(actualProcessedCounter > 0);
+        
+        Assert.True(EmailSendingServiceMock.IsEmailSent);
+        Assert.Contains(
+            EmailSendingServiceMock.SentMessages, 
+            item => item.To == user2.Email || item.To == user3.Email
+        );
     }
     
     [Fact]
