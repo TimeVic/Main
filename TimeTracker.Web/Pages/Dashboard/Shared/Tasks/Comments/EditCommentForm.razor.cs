@@ -1,11 +1,13 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Tag;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks.Comments;
 
@@ -16,6 +18,9 @@ public partial class EditCommentForm
     
     [Parameter]
     public EventCallback<TaskCommentDto> OnSaved { get; set; }
+    
+    [Parameter]
+    public EventCallback<TaskCommentDto> OnDeleted { get; set; }
     
     [Inject]
     public IState<AuthState> AuthState { get; set; }
@@ -35,6 +40,11 @@ public partial class EditCommentForm
     private string _userName
     {
         get => _isNewComment ? AuthState.Value.User.Name : Comment.User.Name;
+    }
+    
+    private bool _canEdit
+    {
+        get => Comment.User?.Id == AuthState.Value.User.Id;
     }
     
     public MarkupString CommentHtml => (MarkupString) _markdownService.ToHtml(model.Comment);
@@ -97,5 +107,41 @@ public partial class EditCommentForm
     private void OnFocusOnEditField()
     {
         _isEditMode = true;
+    }
+
+    private async Task OnClickDelete()
+    {
+        var isOk = await DialogService.Confirm(
+            "Are you sure you want to remove this comment?",
+            "Delete confirmation",
+            new ConfirmOptions()
+            {
+                OkButtonText = "Delete",
+                CancelButtonText = "Cancel"
+            }
+        );
+        if (!isOk.HasValue || !isOk.Value)
+        {
+            return;
+        }
+        await InvokeAsync(async () =>
+        {
+            _isLoading = true;
+            try
+            {
+                await ApiService.TaskCommentDeleteAsync(Comment.Id);
+                await OnDeleted.InvokeAsync(Comment);
+                ResetForm();
+            }
+            catch (Exception e)
+            {
+                await ToastService.ShowError(e.Message);
+            }
+            finally
+            {
+                _isLoading = false;
+            }
+            StateHasChanged();    
+        });
     }
 }

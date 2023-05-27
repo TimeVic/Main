@@ -95,6 +95,7 @@ public class ApiUrl
     public const string TasksGetOne = "dashboard/tasks/get-one";
     public const string TaskCommentAdd = "dashboard/tasks/comment/add";
     public const string TaskCommentUpdate = "dashboard/tasks/comment/update";
+    public const string TaskCommentDelete = "dashboard/tasks/comment/delete";
     public const string TaskCommentsList = "dashboard/tasks/comment/get-list";
     
     #endregion

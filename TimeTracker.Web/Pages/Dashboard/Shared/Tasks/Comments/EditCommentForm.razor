@@ -2,7 +2,7 @@
 @using TimeTracker.Business.Extensions
 @inherits BaseComponent
 
-<div>
+<div class="w-comment-edit-form">
     <RadzenTemplateForm
         @ref="@_form"
         TItem="AddRequest"
@@ -63,13 +63,20 @@
                                     Size="ButtonSize.Small"
                                     Text="Cancel"/>
                             }
-                            else if (!_isNewComment)
+                            else if (!_isNewComment && _canEdit)
                             {
                                 <a 
                                     href="#" 
                                     @onclick:preventDefault="true"
                                     @onclick="OnClickEdit">
                                     <b>Edit</b>
+                                </a>
+                                <RadzenIcon Icon="circle" class="w-circle"></RadzenIcon>
+                                <a 
+                                    href="#" 
+                                    @onclick:preventDefault="true"
+                                    @onclick="OnClickDelete">
+                                    <b>Delete</b>
                                 </a>
                             }
                         </RadzenColumn>

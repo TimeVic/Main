@@ -28,27 +28,41 @@ public partial class TaskCommentsBlock
     private async Task LoadItems(int page)
     {
         _isLoading = true;
+        if (page == 1)
+        {
+            _comments = new List<TaskCommentDto>();
+        }
         var response = await ApiService.TaskCommentsGetListAsync(Task.Id, page);
-        _comments = response.Items;
+        _comments = _comments.Concat(response.Items);
         _isLoading = false;
     }
 
     private void OnCommentSaved(TaskCommentDto comment)
     {
-        var isExists = false;
-        _comments = _comments.Select(item =>
+        InvokeAsync(() =>
         {
-            if (item.Id == comment.Id)
+            var isExists = false;
+            _comments = _comments.Select(item =>
             {
-                isExists = true;
-                return comment;
-            }
+                if (item.Id == comment.Id)
+                {
+                    isExists = true;
+                    return comment;
+                }
 
-            return item;
+                return item;
+            });
+            if (!isExists)
+            {
+                _comments = _comments.Prepend(comment);
+            }
+            StateHasChanged();
         });
-        if (!isExists)
-        {
-            _comments = _comments.Prepend(comment);
-        }
+    }
+
+    private void OnCommentDeleted(TaskCommentDto comment)
+    {
+        _comments = _comments.Where(item => item.Id != comment.Id);
+        StateHasChanged();
     }
 }

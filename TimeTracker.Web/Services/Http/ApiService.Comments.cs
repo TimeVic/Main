@@ -28,6 +28,13 @@ namespace TimeTracker.Web.Services.Http
 
             return response;
         }
+        
+        public async Task TaskCommentDeleteAsync(long commentId)
+        {
+            await PostAuthorizedAsync<TaskCommentDto>(ApiUrl.TaskCommentDelete, new DeleteRequest() {
+                CommentId = commentId
+            });
+        }
 
         public async Task<GetListResponse> TaskCommentsGetListAsync(long taskId, int page)
         {
