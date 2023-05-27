@@ -1,0 +1,33 @@
+﻿@inherits BaseComponent
+
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
+
+<RadzenDropDown
+    @ref="_listReference"
+    Disabled="Disabled"
+    PageSize="GlobalConstants.ListPageSize"
+    AllowClear="Clearable"
+    TValue="ICollection<long>"
+    Class="@(Class)"
+    AllowFiltering="true"
+    FilterOperator="StringFilterOperator.Contains"
+    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+    AllowSorting="false"
+    AllowVirtualization="true"
+    Multiple="true"
+    Chips=true
+    AllowSelectAll="true"
+    Data="@_list"
+    TextProperty="Name"
+    ValueProperty="Id"
+    Placeholder="@Placeholder"
+    Value="@Value"
+    ValueChanged="OnValueChanged">
+    <Template>
+        @{
+            var user = context as UserDto;
+        }
+        <div>@user.Name</div>
+    </Template>
+</RadzenDropDown>

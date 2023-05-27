@@ -41,18 +41,19 @@ public partial class TaskCommentsBlock
     {
         InvokeAsync(() =>
         {
-            var isExists = false;
-            _comments = _comments.Select(item =>
+            if (_comments.Any(item => item.Id == comment.Id))
             {
-                if (item.Id == comment.Id)
+                _comments = _comments.Select(item =>
                 {
-                    isExists = true;
-                    return comment;
-                }
+                    if (item.Id == comment.Id)
+                    {
+                        return comment;
+                    }
 
-                return item;
-            });
-            if (!isExists)
+                    return item;
+                });
+            }
+            else
             {
                 _comments = _comments.Prepend(comment);
             }

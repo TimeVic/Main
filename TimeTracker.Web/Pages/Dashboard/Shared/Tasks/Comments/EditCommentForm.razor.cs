@@ -5,6 +5,7 @@ using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
+using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Tag;
@@ -28,27 +29,20 @@ public partial class EditCommentForm
     [Inject]
     public MarkdownService _markdownService { get; set; }
     
+    public IEnumerable<long> WatcherIds { get; set; } = new List<long>();
+    
     private RadzenTemplateForm<AddRequest> _form;
     private AddRequest model = new();
     private bool _isLoading = false;
     private bool _isEditMode = false;
-    private bool _isNewComment
-    {
-        get => Comment.Id == 0;
-    }
-    
-    private string _userName
-    {
-        get => _isNewComment ? AuthState.Value.User.Name : Comment.User.Name;
-    }
-    
-    private bool _canEdit
-    {
-        get => Comment.User?.Id == AuthState.Value.User.Id;
-    }
-    
+    private bool _isNewComment => Comment.Id == 0;
+
+    private string _userName => _isNewComment ? AuthState.Value.User.Name : Comment.User.Name;
+
+    private bool _canEdit => Comment.User?.Id == AuthState.Value.User.Id;
+
     public MarkupString CommentHtml => (MarkupString) _markdownService.ToHtml(model.Comment);
-    
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();

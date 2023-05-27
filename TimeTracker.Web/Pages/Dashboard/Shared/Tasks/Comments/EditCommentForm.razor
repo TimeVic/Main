@@ -1,5 +1,6 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Core.Helpers
 @inherits BaseComponent
 
 <div class="w-comment-edit-form">
@@ -39,6 +40,12 @@
                             Placeholder="Add a comment..."
                             @onfocus="OnFocusOnEditField"
                             Class="w-100"/>
+                        
+                        <MultipleUsersDropDown 
+                            Class="w-100 mt-1"
+                            Project="@Comment.Task.TaskList.Project"
+                            Placeholder="Select watchers"
+                            @bind-Value="@model.WatcherIds"/>
                     }
                     else
                     {
