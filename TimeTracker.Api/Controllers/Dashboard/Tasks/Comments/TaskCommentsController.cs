@@ -44,4 +44,10 @@ public class TaskCommentsController : MainApiControllerBase
         => this.RequestAsync()
             .For<GetListResponse>()
             .With(listRequest);
+    
+    [HttpPost("delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Add([FromBody] DeleteRequest request)
+        => this.RequestAsync(request);
 }

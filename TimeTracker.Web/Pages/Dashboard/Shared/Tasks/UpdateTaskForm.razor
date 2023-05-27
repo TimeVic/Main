@@ -3,7 +3,9 @@
 @using TimeTracker.Business.Common.Constants.Task
 @using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks.Comments
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+@using TimeTracker.Api.Shared.Dto.Entity.Task
 
 @inherits BaseComponent
 
@@ -96,6 +98,12 @@
             </RadzenTabsItem>
         </Tabs>
     </RadzenTabs>
+    
+    <RadzenRow Class="w-100">
+        <RadzenColumn>
+            <TaskCommentsBlock Task="Task"/>
+        </RadzenColumn>
+    </RadzenRow>
 </div>
 
 <RadzenFieldset

@@ -16,5 +16,12 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Commen
         public string Comment { get; set; }
         
         public ICollection<long>? WatcherIds { get; set; }
+
+        public void Fill(TaskCommentDto comment)
+        {
+            TaskId = comment.Task.Id;
+            Comment = comment.Comment;
+            WatcherIds = comment.Watchers?.Select(item => item.Id).ToList();
+        }
     }
 }

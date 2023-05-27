@@ -1,0 +1,13 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
+@using TimeTracker.Api.Shared.Dto.Entity.Task
+@inherits BaseComponent
+
+<EditCommentForm 
+    OnSaved="OnCommentSaved"
+    Comment="@(new TaskCommentDto { Task = Task })"></EditCommentForm>
+@foreach (var comment in _comments)
+{
+    <EditCommentForm 
+        OnSaved="OnCommentSaved"
+        Comment="comment"></EditCommentForm>
+}

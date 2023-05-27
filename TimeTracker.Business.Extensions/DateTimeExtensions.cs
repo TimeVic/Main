@@ -20,10 +20,11 @@ namespace TimeTracker.Business.Extensions
             ).TotalMilliseconds;
         }
 
-        public static string TimeAgo(this DateTime dt)
+        public static string TimeAgo(this DateTime dt, DateTimeKind dateTimeKind = DateTimeKind.Utc)
         {
             string resultTemplate;
-            TimeSpan span = DateTime.UtcNow - dt;
+            var timeNow = dateTimeKind == DateTimeKind.Utc ? DateTime.UtcNow : DateTime.Now;
+            TimeSpan span = timeNow - dt;
             if (span.Days > 365)
             {
                 int years = (span.Days / 365);

@@ -70,6 +70,12 @@ public class TaskCommentDao: ITaskCommentDao
         return taskComment;
     }
     
+    public async Task DeleteAsync(TaskCommentEntity taskComment)
+    {
+        taskComment.IsArchived = true;
+        await _sessionProvider.CurrentSession.SaveAsync(taskComment);
+    }
+    
     public async Task<ListDto<TaskCommentEntity>> GetList(
         TaskEntity task,
         int page

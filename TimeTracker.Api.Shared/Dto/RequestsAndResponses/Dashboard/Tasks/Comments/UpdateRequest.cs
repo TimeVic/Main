@@ -16,5 +16,16 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Commen
         public string Comment { get; set; }
         
         public ICollection<long>? WatcherIds { get; set; }
+
+        public UpdateRequest()
+        {
+        }
+        
+        public UpdateRequest(long commentId, AddRequest addRequest)
+        {
+            CommentId = commentId;
+            Comment = addRequest.Comment;
+            WatcherIds = addRequest.WatcherIds;
+        }
     }
 }

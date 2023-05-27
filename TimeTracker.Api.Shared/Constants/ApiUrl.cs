@@ -93,6 +93,9 @@ public class ApiUrl
     public const string TasksList = "dashboard/tasks/get-list";
     public const string TasksMyList = "dashboard/tasks/get-my-list";
     public const string TasksGetOne = "dashboard/tasks/get-one";
+    public const string TaskCommentAdd = "dashboard/tasks/comment/add";
+    public const string TaskCommentUpdate = "dashboard/tasks/comment/update";
+    public const string TaskCommentsList = "dashboard/tasks/comment/get-list";
     
     #endregion
 

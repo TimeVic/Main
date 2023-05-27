@@ -25,4 +25,6 @@ public interface ITaskCommentDao: IDomainService
         TaskEntity task,
         int page
     );
+
+    Task DeleteAsync(TaskCommentEntity taskComment);
 }

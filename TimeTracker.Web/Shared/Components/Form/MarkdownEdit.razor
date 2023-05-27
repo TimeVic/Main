@@ -1,4 +1,5 @@
 ﻿@using TimeTracker.Web.Services.UI
+@using TimeTracker.Web.Core.Helpers
 
 <div class="@($"{Class} w-markdown-editor")">
     <RadzenTextArea
@@ -10,6 +11,7 @@
         Placeholder="@Placeholder"
         Rows="_textAreaRows"
         @oninput="ResizeEditBox"
+        @onfocus="OnFocus"
         MaxLength="MaxLength"
         @onfocusout="@(OnBlur)"
         Class="w-100"/>
@@ -19,8 +21,13 @@
          @onclick="@OnClickView">
         @MarkdownHtml
     </div>
-    <hr/>
-    Supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a>
+    @if (_isShowEditBox)
+    {
+        <hr/>
+        <p class="w-support">
+            Supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a>
+        </p>
+    }
 </div>
 
 @code
@@ -40,14 +47,28 @@
     [Parameter]
     public string Value
     {
-        set => _value = value;
+        set
+        {
+            _value = value;
+            if (string.IsNullOrEmpty(_value))
+            {
+                _isShowEditBox = true;
+                ResizeEditBox(_value);
+            }
+        }
     }
 
+    [Parameter]
+    public int RowsMin { get; set; } = 6;
+    
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }
 
     [Parameter]
     public EventCallback<string> Changed { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickedToView { get; set; }
 
     [Inject]
     public MarkdownService MarkdownService { get; set; }
@@ -56,9 +77,8 @@
 
     private RadzenTextArea _markdownTextArea;
     private bool _isShowEditBox;
-    private readonly int _textAreaRowsMin = 10;
     private readonly int _textAreaRowsMax = 20;
-    private int _textAreaRows = 6;
+    private int _textAreaRows = 3;
     private string _value = "";
 
     protected override void OnInitialized()
@@ -83,7 +103,7 @@
     {
         description ??= "";
         _textAreaRows = Math.Max(description.Split('\n').Length, description.Split('\r').Length);
-        _textAreaRows = Math.Max(_textAreaRows, _textAreaRowsMin);
+        _textAreaRows = Math.Max(_textAreaRows, RowsMin);
         _textAreaRows = Math.Min(_textAreaRows, _textAreaRowsMax);
     }
 
@@ -97,11 +117,25 @@
     private void OnClickView()
     {
         _isShowEditBox = true;
-        _markdownTextArea.Element.FocusAsync();
+        StateHasChanged();
+        Task.Run(async () =>
+        {
+            await Task.Delay(10);
+            await _markdownTextArea.Element.FocusAsync();
+        });
     }
 
     private void OnBlur()
     {
         _isShowEditBox = string.IsNullOrWhiteSpace(_value);
+        if (_isShowEditBox)
+        {
+            ResizeEditBox(_value);
+        }
+    }
+
+    private void OnFocus()
+    {
+        OnClickedToView.InvokeAsync();
     }
 }

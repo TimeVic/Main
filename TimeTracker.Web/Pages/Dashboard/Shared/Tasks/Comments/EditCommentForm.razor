@@ -1,0 +1,81 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
+@using TimeTracker.Business.Extensions
+@inherits BaseComponent
+
+<div>
+    <RadzenTemplateForm
+        @ref="@_form"
+        TItem="AddRequest"
+        Data="@model"
+        Submit="HandleSubmit">
+        <DataAnnotationsValidator/>
+
+        <RadzenStack
+            class="mt-3"
+            Orientation="Orientation.Horizontal"
+            AlignItems="AlignItems.Start">
+
+            <RadzenRow Style="width: 36px;" class="d-flex justify-content-center">
+                <RadzenColumn>
+                    <RadzenIcon
+                        Style="font-size: 36px"
+                        Icon="account_circle"/>
+                </RadzenColumn>
+            </RadzenRow>
+            <RadzenRow Class="w-100">
+                <RadzenColumn>
+                    @if (!_isNewComment)
+                    {
+                        <div class="w-100 mb-1">
+                            <b>@_userName</b>
+                            @Comment.UpdateTime.TimeAgo(DateTimeKind.Local)
+                        </div>
+                    }
+
+                    @if (_isEditMode || _isNewComment)
+                    {
+                        <RadzenTextArea
+                            @bind-Value="model.Comment"
+                            Placeholder="Add a comment..."
+                            @onfocus="OnFocusOnEditField"
+                            Class="w-100"/>
+                    }
+                    else
+                    {
+                        <div class="w-view">
+                            @CommentHtml
+                        </div>
+                    }
+
+                    <RadzenRow Class="w-100 mt-2">
+
+                        <RadzenColumn>
+                            @if (_isEditMode)
+                            {
+                                <RadzenButton
+                                    ButtonStyle="ButtonStyle.Primary"
+                                    ButtonType="ButtonType.Submit"
+                                    Size="ButtonSize.Small"
+                                    Text="Save"/>
+                                <RadzenButton
+                                    ButtonStyle="ButtonStyle.Light"
+                                    Click="ResetForm"
+                                    Size="ButtonSize.Small"
+                                    Text="Cancel"/>
+                            }
+                            else if (!_isNewComment)
+                            {
+                                <a 
+                                    href="#" 
+                                    @onclick:preventDefault="true"
+                                    @onclick="OnClickEdit">
+                                    <b>Edit</b>
+                                </a>
+                            }
+                        </RadzenColumn>
+                    </RadzenRow>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenStack>
+    </RadzenTemplateForm>
+</div>
