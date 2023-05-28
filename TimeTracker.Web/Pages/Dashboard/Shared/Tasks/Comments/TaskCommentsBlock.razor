@@ -13,3 +13,14 @@
         OnDeleted="OnCommentDeleted"
         Comment="@comment"></EditCommentForm>
 }
+@if (_isHasMore)
+{
+    <div class="d-flex justify-content-center">
+        <RadzenButton
+            Icon="expand_more"
+            ButtonStyle="ButtonStyle.Light"
+            IsBusy="_isLoading"
+            Click="LoadMore"
+        />
+    </div>    
+}

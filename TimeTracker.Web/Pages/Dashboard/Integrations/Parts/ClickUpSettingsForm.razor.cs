@@ -31,7 +31,6 @@ public partial class ClickUpSettingsForm
             _model.Fill(Value);    
         }
 
-        Debug.Log(_model);
         _model.WorkspaceId = _authState.Value.Workspace.Id;
     }
     

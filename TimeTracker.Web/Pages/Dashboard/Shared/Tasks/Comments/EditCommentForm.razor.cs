@@ -48,7 +48,6 @@ public partial class EditCommentForm
     {
         await base.OnInitializedAsync();
         model.Fill(Comment);
-        Debug.Log(Comment.Comment);
     }
     
     private void HandleSubmit(AddRequest request)

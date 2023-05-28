@@ -15,25 +15,32 @@ public partial class TaskCommentsBlock
     [Inject]
     public IState<AuthState> AuthState { get; set; }
     
-
-    private ICollection<TaskCommentDto> _comments { get; set; } = new List<TaskCommentDto>();
+    private IEnumerable<TaskCommentDto> _comments { get; set; } = new List<TaskCommentDto>();
     private bool _isLoading { get; set; } = false;
+    private int _page { get; set; } = 1;
+    private bool _isHasMore { get; set; } = false;
     
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        await LoadItems(1);
+        await LoadItems(true);
     }
 
-    private async Task LoadItems(int page)
+    private async Task LoadItems(bool isReset = false)
     {
         _isLoading = true;
-        if (page == 1)
+        if (isReset)
         {
             _comments = new List<TaskCommentDto>();
+            _page = 1;
         }
-        var response = await ApiService.TaskCommentsGetListAsync(Task.Id, page);
-        _comments = _comments.Concat(response.Items).ToList();
+        else
+        {
+            _page++;
+        }
+        var response = await ApiService.TaskCommentsGetListAsync(Task.Id, _page);
+        _comments = _comments.Concat(response.Items);
+        _isHasMore = response.IsHasMore;
         _isLoading = false;
     }
 
@@ -47,16 +54,15 @@ public partial class TaskCommentsBlock
                 {
                     if (item.Id == comment.Id)
                     {
-                        Debug.Log(comment);
                         return comment;
                     }
 
                     return item;
-                }).ToList();
+                });
             }
             else
             {
-                _comments = _comments.Prepend(comment).ToList();
+                _comments = _comments.Prepend(comment);
             }
             StateHasChanged();
         });
@@ -66,5 +72,10 @@ public partial class TaskCommentsBlock
     {
         _comments = _comments.Where(item => item.Id != comment.Id).ToList();
         StateHasChanged();
+    }
+
+    private async Task LoadMore()
+    {
+        await LoadItems();
     }
 }
