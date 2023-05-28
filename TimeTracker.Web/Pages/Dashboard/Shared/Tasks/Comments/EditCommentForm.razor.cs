@@ -5,6 +5,7 @@ using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
@@ -47,6 +48,7 @@ public partial class EditCommentForm
     {
         await base.OnInitializedAsync();
         model.Fill(Comment);
+        Debug.Log(Comment.Comment);
     }
     
     private void HandleSubmit(AddRequest request)

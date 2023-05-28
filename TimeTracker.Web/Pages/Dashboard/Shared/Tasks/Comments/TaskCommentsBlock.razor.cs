@@ -16,7 +16,7 @@ public partial class TaskCommentsBlock
     public IState<AuthState> AuthState { get; set; }
     
 
-    private IEnumerable<TaskCommentDto> _comments { get; set; } = new List<TaskCommentDto>();
+    private ICollection<TaskCommentDto> _comments { get; set; } = new List<TaskCommentDto>();
     private bool _isLoading { get; set; } = false;
     
     protected override async Task OnInitializedAsync()
@@ -33,7 +33,7 @@ public partial class TaskCommentsBlock
             _comments = new List<TaskCommentDto>();
         }
         var response = await ApiService.TaskCommentsGetListAsync(Task.Id, page);
-        _comments = _comments.Concat(response.Items);
+        _comments = _comments.Concat(response.Items).ToList();
         _isLoading = false;
     }
 
@@ -47,15 +47,16 @@ public partial class TaskCommentsBlock
                 {
                     if (item.Id == comment.Id)
                     {
+                        Debug.Log(comment);
                         return comment;
                     }
 
                     return item;
-                });
+                }).ToList();
             }
             else
             {
-                _comments = _comments.Prepend(comment);
+                _comments = _comments.Prepend(comment).ToList();
             }
             StateHasChanged();
         });
@@ -63,7 +64,7 @@ public partial class TaskCommentsBlock
 
     private void OnCommentDeleted(TaskCommentDto comment)
     {
-        _comments = _comments.Where(item => item.Id != comment.Id);
+        _comments = _comments.Where(item => item.Id != comment.Id).ToList();
         StateHasChanged();
     }
 }

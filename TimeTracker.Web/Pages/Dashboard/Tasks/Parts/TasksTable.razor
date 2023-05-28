@@ -26,6 +26,7 @@
         var status = taskGroupKeyValue.Key;
         var tasks = taskGroupKeyValue.Value;
         <div
+            @key="taskGroupKeyValue.Value"
             @ondrop="@(() => HandleDrop(status))"
             ondragover="event.preventDefault();"
             ondragstart="event.dataTransfer.setData('', event.target.id);">
