@@ -7,9 +7,6 @@
     Comment="@(new TaskCommentDto { Task = Task })"></EditCommentForm>
 @foreach (var comment in _comments)
 {
-    <p>
-        @comment.Comment
-    </p>
     <EditCommentForm
         @key="comment"
         OnSaved="OnCommentSaved"
