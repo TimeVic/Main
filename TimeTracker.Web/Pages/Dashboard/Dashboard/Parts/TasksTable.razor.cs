@@ -14,6 +14,10 @@ public partial class TasksTable
     public IState<DashboardState> DashboardState { get; set; }
 
     public MyTasksState MyTasksState => DashboardState.Value.MyTasks;
+    
+    public IEnumerable<IGrouping<long?, TaskDto>> GroupedMyTasks => MyTasksState.List.GroupBy(
+        item => item.TaskList.Project.Client?.Id
+    );
 
     protected override async Task OnInitializedAsync()
     {
