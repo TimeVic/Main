@@ -82,7 +82,7 @@ public class GetListTest: BaseTest
         {
             Assert.True(currentItem.Id > 0);
             Assert.NotEmpty(currentItem.Comment);
-            Assert.True(currentItem.CreateTime <= DateTime.UtcNow);
+            Assert.True(currentItem.CreateTime.ToUniversalTime() <= DateTime.UtcNow);
             Assert.Equal(_task.Id, currentItem.Task.Id);
         }
     }

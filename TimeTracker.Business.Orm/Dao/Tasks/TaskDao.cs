@@ -42,31 +42,63 @@ public class TaskDao: ITaskDao
         bool isArchived = false
     )
     {
-        if (endTime < startTime)
-        {
-            throw new ValidationException("End Time can not be less than Start Time");
-        }
-
         var task = new TaskEntity()
         {
             TaskList = taskList,
             User = user,
             Title = title,
             Description = description,
-            StartTime = startTime,
-            EndTime = endTime,
             Status = status,
             Priority = priority,
             IsArchived = isArchived,
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow,
         };
+        SetStartEndTime(task, startTime, endTime);
 
         await _sessionProvider.CurrentSession.SaveAsync(task);
         await _taskHistoryItemDao.Create(task, user, true);
         return task;
     }
     
+    public async Task<TaskEntity> UpdateTaskAsync(
+        TaskEntity task,
+        TaskListEntity taskList,
+        UserEntity user,
+        string title,
+        string? description = null,
+        DateTime? startTime = null,
+        DateTime? endTime = null,
+        TaskStatus status = TaskStatus.Backlog,
+        TaskPriority priority = TaskPriority.Low,
+        bool isArchived = false,
+        IEnumerable<TagEntity>? tags = null
+    )
+    {
+        task.TaskList = taskList;
+        task.User = user;
+        task.Title = title;
+        task.Description = description;
+        task.Status = status;
+        task.Priority = priority;
+        task.IsArchived = isArchived;
+        task.UpdateTime = DateTime.UtcNow;
+        SetStartEndTime(task, startTime, endTime);
+        
+        task.Tags.Clear();
+        if (tags != null)
+        {
+            foreach (var tag in tags)
+            {
+                task.Tags.Add(tag);
+            }
+        }
+
+        await _sessionProvider.CurrentSession.SaveAsync(task);
+        await _taskHistoryItemDao.Create(task, user, false);
+        return task;
+    }
+
     public async Task<ListDto<TaskEntity>> GetList(
         WorkspaceEntity? workspace = null,
         TaskListEntity? taskList = null,
@@ -122,16 +154,47 @@ public class TaskDao: ITaskDao
                     || item.Description.IsLike(filter.SearchString.ToLower(), MatchMode.Anywhere)
                 );
             }
+            if (filter is {StartTime: not null, EndTime: not null})
+            {
+                query = query.Where(
+                    item => item.StartTime >= filter.StartTime && item.StartTime <= filter.EndTime
+                        || item.EndTime >= filter.StartTime && item.EndTime <= filter.EndTime
+                );
+            }
         }
 
         var items = await query
             .OrderBy(item => item.Priority).Asc
             .OrderBy(item => item.IsArchived).Asc
             .ThenBy(item => item.UpdateTime).Desc
+            .Take(1000)
             .ListAsync<TaskEntity>();
         return new ListDto<TaskEntity>(
             items,
             await query.RowCountAsync()
         );
+    }
+    
+    private void SetStartEndTime(TaskEntity task, DateTime? startTime, DateTime? endTime)
+    {
+        if (endTime < startTime)
+        {
+            throw new ValidationException("End Time can not be less than Start Time");
+        }
+        task.StartTime = startTime;
+        task.EndTime = endTime;
+        if (!task.StartTime.HasValue && !task.EndTime.HasValue)
+        {
+            return;
+        }
+
+        if (task is {StartTime: not null, EndTime: null})
+        {
+            task.EndTime = task.StartTime.Value.AddHours(1);
+        }
+        else if (task is {StartTime: null, EndTime: not null})
+        {
+            task.StartTime = task.EndTime.Value.AddHours(-1);
+        }
     }
 }

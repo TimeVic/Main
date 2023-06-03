@@ -21,6 +21,20 @@ public interface ITaskDao: IDomainService
         bool isArchived = false
     );
 
+    Task<TaskEntity> UpdateTaskAsync(
+        TaskEntity task,
+        TaskListEntity taskList,
+        UserEntity user,
+        string title,
+        string? description = null,
+        DateTime? startTime = null,
+        DateTime? endTime = null,
+        TaskStatus status = TaskStatus.Backlog,
+        TaskPriority priority = TaskPriority.Low,
+        bool isArchived = false,
+        IEnumerable<TagEntity>? tags = null
+    );
+    
     Task<TaskEntity?> GetById(long taskListId);
 
     Task<ListDto<TaskEntity>> GetList(

@@ -72,20 +72,23 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
                 throw new HasNoAccessException("This user has no permissions for task");
-            
-            task.TaskList = newTaskList;
-            task.User = user;
-            
+
             var tags = task.Workspace.Tags.Where(
                 item => request.TagIds.Any(tagId => item.Id == tagId)
             );
-            task.Tags.Clear();
-            foreach (var tag in tags)
-            {
-                task.Tags.Add(tag);
-            }
-
-            await _taskHistoryItemDao.Create(task, user);
+            await _taskDao.UpdateTaskAsync(
+                task,
+                taskList: newTaskList,
+                user: user,
+                title: request.Title,
+                description: request.Description,
+                startTime: request.StartTime,
+                endTime: request.EndTime,
+                status: request.Status,
+                priority: request.Priority,
+                isArchived: request.IsArchived,
+                tags: tags
+            );
             return _mapper.Map<TaskDto>(task);
         }
     }

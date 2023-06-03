@@ -16,6 +16,7 @@ public static class SiteUrl
     
     public static readonly string DashboardBase = "/board";
     public static readonly string Dashboard_Dashboard = "/board/dashboard";
+    public static readonly string Dashboard_Calendar = "/board/calendar";
     public static readonly string Dashboard_TimeEntry = "/board";
     public static readonly string Dashboard_Projects = "/board/project";
     public static readonly string Dashboard_Project = "/board/project/{0}";

@@ -1,0 +1,28 @@
+﻿@page "/board/calendar"
+
+@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Web.Pages.Dashboard.Client.Parts.List
+
+@inherits BaseComponent
+@layout Layout
+
+<RadzenScheduler
+    @ref=@scheduler
+    SlotRender=@OnSlotRender
+    style="height: 768px;"
+    TItem="Appointment"
+    Data=@appointments
+    StartProperty="Start"
+    EndProperty="End"
+    TextProperty="Text"
+    SelectedIndex="1"
+    SlotSelect=@OnSlotSelect
+    LoadData="OnLoadData"
+    AppointmentSelect=@OnAppointmentSelect
+    AppointmentRender=@OnAppointmentRender>
+    <RadzenDayView/>
+    <RadzenWeekView/>
+    <RadzenMonthView/>
+    <RadzenYearPlannerView/>
+    <RadzenYearTimelineView/>
+</RadzenScheduler>

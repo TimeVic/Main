@@ -54,6 +54,14 @@ public class TasksController : MainApiControllerBase
             .For<GetListResponse>()
             .With(request);
     
+    [HttpPost("get-for-calendar")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> GetForCalendar([FromBody] GetForCalendarRequest request)
+        => this.RequestAsync()
+            .For<GetListResponse>()
+            .With(request);
+    
     [HttpPost("get-one")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -261,4 +261,99 @@ public partial class UpdateTest: BaseTest
         Assert.NotEmpty(historyItem.Tags ?? "");
         Assert.False(historyItem.IsNewTask);
     }
+    
+    [Fact]
+    public async Task ShouldUpdateWithoutEndAndStartTime()
+    {
+        var expectedTask = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.Id,
+            TaskListId = _otherTaskList.Id,
+            Title = expectedTask.Title,
+            Description = expectedTask.Description,
+            StartTime = null,
+            EndTime = null,
+            Status = expectedTask.Status,
+            Priority = expectedTask.Priority,
+            IsArchived = expectedTask.IsArchived,
+            UserId = _user.Id,
+            ExternalTaskId = expectedTask.ExternalTaskId
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.Equal(_task.Id, actualData.Id);
+        Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
+        Assert.Null(actualData.StartTime);
+        Assert.Null(actualData.EndTime);
+    }
+    
+    [Fact]
+    public async Task ShouldSetEndTimeIfWasNotProvided()
+    {
+        var expectedTime = DateTime.UtcNow;
+        var expectedTask = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.Id,
+            TaskListId = _otherTaskList.Id,
+            Title = expectedTask.Title,
+            Description = expectedTask.Description,
+            StartTime = expectedTime,
+            EndTime = null,
+            Status = expectedTask.Status,
+            Priority = expectedTask.Priority,
+            IsArchived = expectedTask.IsArchived,
+            UserId = _user.Id,
+            ExternalTaskId = expectedTask.ExternalTaskId
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.Equal(_task.Id, actualData.Id);
+        Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
+        Assert.Equal(
+            expectedTime.ToLongTimeString(),
+            actualData.StartTime.Value.ToUniversalTime().ToLongTimeString()
+        );
+        Assert.Equal(
+            expectedTime.AddHours(1).ToLongTimeString(),
+            actualData.EndTime.Value.ToUniversalTime().ToLongTimeString()
+        );
+    }
+    
+    [Fact]
+    public async Task ShouldSetStartTimeIfWasNotProvided()
+    {
+        var expectedTime = DateTime.UtcNow;
+        var expectedTask = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.Id,
+            TaskListId = _otherTaskList.Id,
+            Title = expectedTask.Title,
+            Description = expectedTask.Description,
+            StartTime = null,
+            EndTime = expectedTime,
+            Status = expectedTask.Status,
+            Priority = expectedTask.Priority,
+            IsArchived = expectedTask.IsArchived,
+            UserId = _user.Id,
+            ExternalTaskId = expectedTask.ExternalTaskId
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.Equal(_task.Id, actualData.Id);
+        Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
+        Assert.Equal(
+            expectedTime.ToLongTimeString(),
+            actualData.EndTime.Value.ToUniversalTime().ToLongTimeString()
+        );
+        Assert.Equal(
+            expectedTime.AddHours(-1).ToLongTimeString(),
+            actualData.StartTime.Value.ToUniversalTime().ToLongTimeString()
+        );
+    }
 }
