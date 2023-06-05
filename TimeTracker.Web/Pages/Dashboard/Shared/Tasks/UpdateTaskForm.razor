@@ -98,7 +98,7 @@
             </RadzenTabsItem>
         </Tabs>
     </RadzenTabs>
-    
+
     <RadzenRow Class="w-100">
         <RadzenColumn>
             <TaskCommentsBlock Task="Task"/>
@@ -167,18 +167,21 @@
             <RadzenDatePicker
                 TValue="DateTime?"
                 ShowTime="true"
-                ShowSeconds="true"
+                ShowSeconds="false"
                 HoursStep="1"
-                MinutesStep="30"
+                MinutesStep="15"
                 Kind="DateTimeKind.Local"
                 Name="StartTime"
                 Max="model.EndTime"
                 class="w-100"
                 Change="OnChangeStartTime"
-                Value="model.StartTime"
+                @bind-Value="model.StartTime"
                 DateFormat="MM/dd/yyyy HH:mm"/>
             <RadzenCustomValidator
-                Component="StartTime" Validator="@(() => ValidateStartTime(model.StartTime))" Text="Email already exists"/>
+                Component="StartTime" 
+                Popup="false"
+                Validator="@(() => ValidateStartTime(model.StartTime))" 
+                Text="Start Time can not be more than End Time"/>
         </RadzenColumn>
         <RadzenColumn>
             <RadzenText
@@ -187,17 +190,23 @@
                 End
             </RadzenText>
             <RadzenDatePicker
+                Name="EndTime"
                 TValue="DateTime?"
                 ShowTime="true"
-                ShowSeconds="true"
+                ShowSeconds="false"
                 HoursStep="1"
                 Min="model.StartTime"
                 Kind="DateTimeKind.Local"
-                MinutesStep="30"
+                MinutesStep="15"
                 class="w-100"
                 Change="OnChangeEndTime"
-                Value="model.EndTime"
+                @bind-Value="model.EndTime"
                 DateFormat="MM/dd/yyyy HH:mm"/>
+            <RadzenCustomValidator
+                Component="EndTime" 
+                Popup="false"
+                Validator="@(() => ValidateEndTime(model.EndTime))" 
+                Text="End Time can not be less than Start Time"/>
         </RadzenColumn>
     </RadzenRow>
     <RadzenRow Class="w-100 mt-2">

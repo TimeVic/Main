@@ -42,6 +42,6 @@ public static class TimeSpanExtensions
     
     public static string ToReadableShortString(this TimeSpan span)
     {
-        return $"{span.Duration().TotalHours:00}:{span.Duration().Minutes:00}:{span.Duration().Seconds:00}";
+        return $"{span.Duration().Hours:00}:{span.Duration().Minutes:00}:{span.Duration().Seconds:00}";
     }
 }

@@ -1,50 +1,45 @@
-﻿using Radzen;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Radzen;
 using Radzen.Blazor;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Services.UI;
 
 namespace TimeTracker.Web.Pages.Dashboard.Calendar;
 
-public class Appointment
-{
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
-    public string Text { get; set; }
-}
-
 public partial class CalendarPage
 {
-    RadzenScheduler<Appointment> scheduler;
-    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
-
-    IList<Appointment> appointments = new List<Appointment>
-    {
-        new() { Start = DateTime.Today.AddDays(-2), End = DateTime.Today.AddDays(-2), Text = "Birthday" },
-        new() { Start = DateTime.Today.AddDays(-11), End = DateTime.Today.AddDays(-10), Text = "Day off" },
-        new() { Start = DateTime.Today.AddDays(-10), End = DateTime.Today.AddDays(-8), Text = "Work from home" },
-        new() { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(12), Text = "Online meeting" },
-        new() { Start = DateTime.Today.AddHours(10), End = DateTime.Today.AddHours(13), Text = "Skype call" },
-        new() { Start = DateTime.Today.AddHours(14), End = DateTime.Today.AddHours(14).AddMinutes(30), Text = "Dentist appointment" },
-        new() { Start = DateTime.Today.AddDays(1), End = DateTime.Today.AddDays(12), Text = "Vacation" },
-    };
+    [Inject]
+    public ILogger<CalendarPage> _logger { get; set; }
+    
+    [Inject]
+    public TooltipService _tooltipService { get; set; }
+    
+    [Inject] 
+    private ModalDialogProviderService _modalDialogProviderService { get; set; }
+    
+    RadzenScheduler<TaskDto> scheduler;
+    private ICollection<TaskDto> _list = new List<TaskDto>();
 
     void OnSlotRender(SchedulerSlotRenderEventArgs args)
     {
         // Highlight today in month view
-        if (args.View.Text == "Month" && args.Start.Date == DateTime.Today)
-        {
-            args.Attributes["style"] = "background: rgba(255,220,40,.2);";
-        }
-
-        // Highlight working hours (9-18)
-        if ((args.View.Text == "Week" || args.View.Text == "Day") && args.Start.Hour > 8 && args.Start.Hour < 19)
-        {
-            args.Attributes["style"] = "background: rgba(255,220,40,.2);";
-        }
+        // if (args.View.Text == "Month" && args.Start.Date == DateTime.Today)
+        // {
+        //     args.Attributes["style"] = "background: rgba(255,220,40,.2);";
+        // }
+        //
+        // // Highlight working hours (9-18)
+        // if ((args.View.Text == "Week" || args.View.Text == "Day") && args.Start.Hour > 8 && args.Start.Hour < 19)
+        // {
+        //     args.Attributes["style"] = "background: rgba(255,220,40,.2);";
+        // }
     }
 
     async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
     {
-        Debug.Log("OnSlotSelect");
         // if (data != null)
         // {
         //     // Either call the Reload method or reassign the Data property of the Scheduler
@@ -52,25 +47,50 @@ public partial class CalendarPage
         // }
     }
 
-    async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
+    private async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<TaskDto> args)
     {
-        Debug.Log("OnAppointmentSelect");
+        await _modalDialogProviderService.ShowEditTaskModal(args.Data);
         // await scheduler.Reload();
     }
 
-    void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
+    void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<TaskDto> args)
     {
         // Never call StateHasChanged in AppointmentRender - would lead to infinite loop
 
-        if (args.Data.Text == "Birthday")
+        // if (args.Data.Text == "Birthday")
+        // {
+        //     args.Attributes["style"] = "background: red";
+        // }
+    }
+
+    private async Task OnLoadData(SchedulerLoadDataEventArgs arg)
+    {
+        try
         {
-            args.Attributes["style"] = "background: red";
+            var result = await ApiService.TasksGetForCalendarAsync(new GetForCalendarRequest()
+            {
+                StartTime = arg.Start,
+                EndTime = arg.End,
+                WorkspaceId = AuthState.Value.Workspace.Id
+            });
+            _list = result.Items;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            await ToastService.ShowError("Tasks receiving error");
         }
     }
 
-    private Task OnLoadData(SchedulerLoadDataEventArgs arg)
+    private void ShowTooltip(ElementReference elementReference, TaskDto task)
     {
-        Debug.Log("OnLoadData", arg.Start, arg.End);
-        return Task.CompletedTask;
+        var toShow = "";
+        if (task.TaskList.Project.Client != null)
+        {
+            toShow = "task.TaskList.Project.Client.Name / ";
+        }
+
+        toShow += $"{task.TaskList.Project.Name} / {task.TaskList.Name}";
+        _tooltipService.Open(elementReference, toShow, new TooltipOptions() {});
     }
 }

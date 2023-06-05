@@ -2,6 +2,7 @@
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Client.Parts.List
+@using TimeTracker.Api.Shared.Dto.Entity.Task
 
 @inherits BaseComponent
 @layout Layout
@@ -10,19 +11,29 @@
     @ref=@scheduler
     SlotRender=@OnSlotRender
     style="height: 768px;"
-    TItem="Appointment"
-    Data=@appointments
-    StartProperty="Start"
-    EndProperty="End"
-    TextProperty="Text"
-    SelectedIndex="1"
+    TItem="TaskDto"
+    Data="@_list"
+    StartProperty="StartTime"
+    EndProperty="EndTime"
+    TextProperty="Title"
+    SelectedIndex="0"
     SlotSelect=@OnSlotSelect
     LoadData="OnLoadData"
     AppointmentSelect=@OnAppointmentSelect
     AppointmentRender=@OnAppointmentRender>
-    <RadzenDayView/>
-    <RadzenWeekView/>
-    <RadzenMonthView/>
-    <RadzenYearPlannerView/>
-    <RadzenYearTimelineView/>
+
+    <Template 
+        Context="task">
+        <RadzenText
+            TextStyle="TextStyle.Body1">
+            @task.Title
+        </RadzenText>
+    </Template>
+    <ChildContent>
+        <RadzenDayView MinutesPerSlot="15"/>
+        <RadzenWeekView MinutesPerSlot="15"/>
+        <RadzenMonthView/>
+        <RadzenYearPlannerView/>
+        <RadzenYearTimelineView/>
+    </ChildContent>
 </RadzenScheduler>

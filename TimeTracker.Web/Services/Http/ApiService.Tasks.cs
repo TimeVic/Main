@@ -42,6 +42,17 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
+        public async Task<GetListResponse> TasksGetForCalendarAsync(GetForCalendarRequest model)
+        {
+            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TasksListForCalendar, model);
+            if (response == null)
+            {
+                throw new ServerErrorException();
+            }
+
+            return response;
+        }
+        
         public async Task<GetListResponse> TasksGetMyListAsync(
             long workspaceId,
             ICollection<TaskStatus> taskStatuses = null,

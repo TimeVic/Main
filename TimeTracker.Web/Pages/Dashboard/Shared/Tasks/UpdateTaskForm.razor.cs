@@ -5,6 +5,7 @@ using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Store.Dashboard;
 using TimeTracker.Web.Store.Tasks;
@@ -73,7 +74,7 @@ public partial class UpdateTaskForm
             }
             catch (Exception)
             {
-                await ToastService.ShowError("Task adding error");
+                await ToastService.ShowError("Task updating error");
             }
             finally
             {
@@ -100,13 +101,19 @@ public partial class UpdateTaskForm
 
     private async Task OnChangeStartTime(DateTime? time)
     {
-        model.StartTime = time;
+        if (!model.EndTime.HasValue && time.HasValue)
+        {
+            model.EndTime = model.StartTime.Value.AddHours(1);
+        }
         await SubmitForm();
     }
 
     private async Task OnChangeEndTime(DateTime? time)
     {
-        model.EndTime = time;
+        if (!model.StartTime.HasValue && time.HasValue)
+        {
+            model.StartTime = model.EndTime.Value.AddHours(-1);
+        }
         await SubmitForm();
     }
     
@@ -128,8 +135,25 @@ public partial class UpdateTaskForm
         Dispatcher.Dispatch(new SetAttachmentsAction(Task.Id, Task.Attachments));
     }
 
-    private bool ValidateStartTime(DateTime? startTime)
+    private bool ValidateStartTime(DateTime? modelStartTime)
     {
-        return false;
+        if (!modelStartTime.HasValue || !model.EndTime.HasValue)
+        {
+            return true;
+        }
+
+        return modelStartTime < model.EndTime;
+    }
+
+    private bool ValidateEndTime(DateTime? modelEndTime)
+    {
+        if (!modelEndTime.HasValue || !model.StartTime.HasValue)
+        {
+            return true;
+        }
+
+        Debug.Log("modelEndTime", modelEndTime);
+        Debug.Log("model.StartTime", model.StartTime);
+        return modelEndTime > model.StartTime;
     }
 }
