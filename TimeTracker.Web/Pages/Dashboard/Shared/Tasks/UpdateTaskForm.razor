@@ -174,7 +174,7 @@
                 Name="StartTime"
                 Max="model.EndTime"
                 class="w-100"
-                Change="OnChangeStartTime"
+                Change="OnChangeTime"
                 @bind-Value="model.StartTime"
                 DateFormat="MM/dd/yyyy HH:mm"/>
             <RadzenCustomValidator
@@ -199,7 +199,7 @@
                 Kind="DateTimeKind.Local"
                 MinutesStep="15"
                 class="w-100"
-                Change="OnChangeEndTime"
+                Change="OnChangeTime"
                 @bind-Value="model.EndTime"
                 DateFormat="MM/dd/yyyy HH:mm"/>
             <RadzenCustomValidator

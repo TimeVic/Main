@@ -73,7 +73,19 @@ public partial class CalendarPage
                 EndTime = arg.End,
                 WorkspaceId = AuthState.Value.Workspace.Id
             });
-            _list = result.Items;
+            _list = result.Items.Select(item =>
+            {
+                if (item.StartTime == null && item.EndTime.HasValue)
+                {
+                    item.StartTime = item.EndTime.Value.AddHours(-1);
+                }
+                else if (item.StartTime.HasValue && item.EndTime == null)
+                {
+                    item.EndTime = item.StartTime.Value.AddHours(1);
+                }
+                
+                return item;
+            }).ToList();
         }
         catch (Exception e)
         {

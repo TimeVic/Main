@@ -183,18 +183,5 @@ public class TaskDao: ITaskDao
         }
         task.StartTime = startTime;
         task.EndTime = endTime;
-        if (!task.StartTime.HasValue && !task.EndTime.HasValue)
-        {
-            return;
-        }
-
-        if (task is {StartTime: not null, EndTime: null})
-        {
-            task.EndTime = task.StartTime.Value.AddHours(1);
-        }
-        else if (task is {StartTime: null, EndTime: not null})
-        {
-            task.StartTime = task.EndTime.Value.AddHours(-1);
-        }
     }
 }

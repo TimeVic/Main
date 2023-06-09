@@ -99,24 +99,11 @@ public partial class UpdateTaskForm
         await SubmitForm();
     }
 
-    private async Task OnChangeStartTime(DateTime? time)
+    private async Task OnChangeTime(DateTime? time)
     {
-        if (!model.EndTime.HasValue && time.HasValue)
-        {
-            model.EndTime = model.StartTime.Value.AddHours(1);
-        }
         await SubmitForm();
     }
 
-    private async Task OnChangeEndTime(DateTime? time)
-    {
-        if (!model.StartTime.HasValue && time.HasValue)
-        {
-            model.StartTime = model.EndTime.Value.AddHours(-1);
-        }
-        await SubmitForm();
-    }
-    
     private void OnFileUploaded(StoredFileDto uploadedFile)
     {
         Task.Attachments.Add(uploadedFile);
@@ -141,7 +128,6 @@ public partial class UpdateTaskForm
         {
             return true;
         }
-
         return modelStartTime < model.EndTime;
     }
 
@@ -151,9 +137,6 @@ public partial class UpdateTaskForm
         {
             return true;
         }
-
-        Debug.Log("modelEndTime", modelEndTime);
-        Debug.Log("model.StartTime", model.StartTime);
         return modelEndTime > model.StartTime;
     }
 }
