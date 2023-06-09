@@ -9,19 +9,27 @@
 
         <RadzenRow>
             <RadzenColumn>
-                <RadzenTextBox 
+                <RadzenTextBox
                     Name="Title"
                     @bind-Value="@model.Title"
                     Placeholder="Enter a title for new task"
                     Class="w-100"/>
             </RadzenColumn>
-            <RadzenColumn Style="max-width: 70px">
+            <RadzenColumn Style="max-width: 110px">
                 <RadzenButton
                     ButtonType="ButtonType.Submit"
                     IsBusy="_isLoading"
                     Disabled="_isDisabled"
-                    class="ml-3"
+                    class="ml-1"
                     Text="Add"/>
+                <RadzenButton
+                    ButtonType="ButtonType.Button"
+                    ButtonStyle="ButtonStyle.Light"
+                    Click="OnClickAdd"
+                    IsBusy="_isLoading"
+                    Disabled="_isDisabled"
+                    class="ml-1"
+                    Icon="add_circle_outline"/>
             </RadzenColumn>
         </RadzenRow>
     </RadzenTemplateForm>

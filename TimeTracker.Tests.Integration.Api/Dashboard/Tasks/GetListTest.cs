@@ -285,4 +285,5 @@ public class GetListTest: BaseTest
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Contains(actualDto.Items, item => item.Tags.Any());
     }
+    
 }

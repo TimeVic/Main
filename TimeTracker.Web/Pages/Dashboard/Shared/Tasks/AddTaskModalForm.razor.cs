@@ -9,7 +9,10 @@ namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 public partial class AddTaskModalForm
 {
     [Parameter]
-    public long TimeEntryId { get; set; }
+    public long? TimeEntryId { get; set; }
+    
+    [Parameter]
+    public long? TaskListId { get; set; }
     
     private RadzenTemplateForm<AddRequest> _form;
 
@@ -20,6 +23,10 @@ public partial class AddTaskModalForm
     {
         await base.OnInitializedAsync();
         model.TimeEntryId = TimeEntryId;
+        if (TaskListId.HasValue)
+        {
+            model.TaskListId = TaskListId.Value;
+        }
     }
 
     private void HandleSubmit(AddRequest request)

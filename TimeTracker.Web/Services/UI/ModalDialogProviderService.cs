@@ -81,14 +81,18 @@ public class ModalDialogProviderService
         );
     }
     
-    public async Task ShowAddTaskModal(long timEntryId)
+    public async Task ShowAddTaskModal(
+        long? timEntryId = null,
+        long? taskListId = null
+    )
     {
         await _dialogService.OpenAsync<AddTaskModalForm>(
             "Add new task",
             options: new DialogOptions { Width = "500px", Height = "250px", Resizable = true, Draggable = false },
-            parameters: new Dictionary<string, object>()
+            parameters: new Dictionary<string, object?>()
             {
-                { "TimeEntryId", timEntryId }
+                { "TimeEntryId", timEntryId },
+                { "TaskListId", taskListId },
             }
         );
     }

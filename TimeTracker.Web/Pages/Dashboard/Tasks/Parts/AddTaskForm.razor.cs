@@ -49,4 +49,9 @@ public partial class AddTaskForm
         }
         StateHasChanged();
     }
+
+    private async Task OnClickAdd()
+    {
+        await ModalDialogProviderService.ShowAddTaskModal(taskListId: model.TaskListId);
+    }
 }
