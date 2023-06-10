@@ -18,9 +18,11 @@ jobs:
       - if [ "@param:environment@" = "prod" ]; then
       - "\tconfiguration=\"Release\""
       - "\tenableWebAssemblyCompression=true"
+      - "\techo \"Using Release configuration...\""
       - else
       - "\tconfiguration=\"Development\""
       - "\tenableWebAssemblyCompression=false"
+      - "\techo \"Using Development configuration...\""
       - fi
       - ''
       - dotnet nuget locals all -l
