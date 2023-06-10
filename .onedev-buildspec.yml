@@ -9,6 +9,11 @@ jobs:
     withLfs: false
     withSubmodules: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CreateTagStep
+    name: Create Tag
+    tagName: '@build_number@'
+    accessTokenSecret: build-tag-creation-secret
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
     name: Build
     runInContainer: true
@@ -52,11 +57,6 @@ jobs:
       - dotnet publish -c "$configuration" -p:BlazorEnableCompression=$enableWebAssemblyCompression
         -r linux-x64 --self-contained=true --output="./build/TimeTracker.Web" ./TimeTracker.Web
     useTTY: false
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !CreateTagStep
-    name: Create Tag
-    tagName: '@script:getTagName@'
-    accessTokenSecret: dockerhub-login
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
     name: Publish artifacts
