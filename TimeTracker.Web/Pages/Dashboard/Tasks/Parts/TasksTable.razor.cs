@@ -18,9 +18,9 @@ public partial class TasksTable
     
     private ICollection<TaskStatus> _statusOrder = new List<TaskStatus>()
     {
-        TaskStatus.InProgress,
-        TaskStatus.ToDo,
         TaskStatus.Backlog,
+        TaskStatus.ToDo,
+        TaskStatus.InProgress,
         TaskStatus.Done
     };
 

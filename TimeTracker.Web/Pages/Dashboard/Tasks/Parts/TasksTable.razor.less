@@ -1,15 +1,31 @@
 ﻿.w-task-table ::deep {
-    height: calc(100vh - 295px);
-    overflow-y:scroll;
+    min-height: calc(100vh - 295px);
+    overflow-y: scroll;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 1em;
+    
+    
+    .w-task-col {
+        width: 300px;
+        margin-block-end: 1em;
+    }
     
     .w-task-item {
-        
         &:hover {
             cursor: pointer;    
         }
         
         .w-done {
             text-decoration: line-through;
+        }
+        
+        .w-task-title {
+            margin-block-start: 0.5em;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+            font-weight: var(--rz-text-h6-font-weight);
         }
     }
     

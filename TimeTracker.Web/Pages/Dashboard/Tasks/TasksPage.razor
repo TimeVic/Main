@@ -9,12 +9,13 @@
 @layout Layout
 
 <RadzenRow class="no-gutters mx-n4">
-    <RadzenColumn Size="3">
-        <TasksListTree ClientId="ClientId"/>
-    </RadzenColumn>
-    <RadzenColumn>
-        <AddTaskForm/>
-        <TasksFilterForm/>
-        <TasksTable/>
-    </RadzenColumn>
+    <CascadingValue Name="ClientId" Value="@ClientId">
+        <CascadingValue Name="TaskListId" Value="@TaskListId">
+            <RadzenColumn>
+                <AddTaskForm/>
+                <TasksFilterForm/>
+                <TasksTable/>
+            </RadzenColumn>
+        </CascadingValue>
+    </CascadingValue>
 </RadzenRow>

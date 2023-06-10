@@ -14,9 +14,28 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 
 public partial class TasksListTree
 {
-    [Parameter]
-    public long ClientId { get; set; }
-
+    [CascadingParameter(Name = "ClientId")]
+    public long ClientId
+    {
+        get => _clientId;
+        set
+        {
+            _clientId = value;
+            OnTasksListSelected(null);
+        }
+    }
+    
+    [CascadingParameter(Name = "TaskListId")]
+    public long? TaskListId
+    {
+        get => _taskListId;
+        set
+        {
+            _taskListId = value;
+            OnTasksListSelected(_taskListId);
+        }
+    }
+    
     [Inject]
     public IState<ProjectState> _projectState { get; set; }
     
@@ -30,6 +49,8 @@ public partial class TasksListTree
     public ModalDialogProviderService _modalDialogProviderService { get; set; }
 
     private long? _nullableClientId => ClientId > 0 ? ClientId : null;
+    private long _clientId = 0;
+    private long? _taskListId = null;
     
     public ICollection<ProjectDto> Projects
     {
@@ -54,9 +75,9 @@ public partial class TasksListTree
         }
     }
 
-    public long? _selectedTaskListId
+    public long _selectedTaskListId
     {
-        get => _tasksListState.Value.SelectedTaskListId;
+        get => _tasksListState.Value.SelectedTaskListId ?? 0;
     }
     
     public ICollection<TaskListDto> GetTasksList(ProjectDto project)
@@ -93,12 +114,16 @@ public partial class TasksListTree
         }
     }
     
-    private void OnSelectedTestsList(object tasksListIdObject)
+    private void OnSelectedTasksList(long tasksListId)
     {
-        var tasksListId = (long) tasksListIdObject;
-        
         NavigationManager.NavigateTo(
             string.Format(SiteUrl.Dashboard_Tasks, ClientId, tasksListId)    
         );
+    }
+    
+    private void OnTasksListSelected(long? testsListId)
+    {
+        Dispatcher.Dispatch(new SetSelectedAction(testsListId));
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
     }
 }

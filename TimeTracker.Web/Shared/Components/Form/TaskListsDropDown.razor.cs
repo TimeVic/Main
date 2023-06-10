@@ -40,7 +40,10 @@ public partial class TaskListsDropDown
     public string Class { get; set; }
 
     [Parameter]
-    public long ProjectId { get; set; }
+    public long? ProjectId { get; set; }
+    
+    [Parameter]
+    public long? ClientId { get; set; }
 
     [Inject]
     public ILogger<TaskListDto> _logger { get; set; }
@@ -65,12 +68,15 @@ public partial class TaskListsDropDown
         get
         {
             var list = _state.Value.List;
-            if (ProjectId == 0)
+            if (ProjectId.HasValue)
             {
-                return list;
+                return list.Where(item => item.Project?.Id == ProjectId).ToList();
             }
-
-            return list.Where(item => item.Project?.Id == ProjectId).ToList();
+            else if (ClientId.HasValue)
+            {
+                return list.Where(item => item.Project?.Client?.Id == ClientId).ToList();
+            }
+            return list;
         }
     }
 

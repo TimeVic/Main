@@ -8,82 +8,69 @@
 
 @inherits BaseComponent
 
-<div class="w-task-table">
-    @if (TasksState.Value.IsListLoading)
-    {
-        <RadzenCard class="m-0 mt-1 w-100">
-            <RadzenProgressBar
-                Value="100"
-                ProgressBarStyle="ProgressBarStyle.Info"
-                ShowValue="false"
-                Mode="ProgressBarMode.Indeterminate"/>
-        </RadzenCard>
-    }
-    
-    
-    @foreach (var taskGroupKeyValue in _taskGroups)
-    {
-        var status = taskGroupKeyValue.Key;
-        var tasks = taskGroupKeyValue.Value;
-        <div
-            @ondrop="@(() => HandleDrop(status))"
-            ondragover="event.preventDefault();"
-            ondragstart="event.dataTransfer.setData('', event.target.id);">
+@if (TasksState.Value.IsListLoading)
+{
+    <RadzenCard class="m-0 mt-1 w-100">
+        <RadzenProgressBar
+            Value="100"
+            ProgressBarStyle="ProgressBarStyle.Info"
+            ShowValue="false"
+            Mode="ProgressBarMode.Indeterminate"/>
+    </RadzenCard>
+}
+else
+{
+    <div class="w-task-table mt-1">
+        @foreach (var taskGroupKeyValue in _taskGroups)
+        {
+            var status = taskGroupKeyValue.Key;
+            var tasks = taskGroupKeyValue.Value;
+            <RadzenCard
+                class="w-task-col"
+                @ondrop="@(() => HandleDrop(status))"
+                ondragover="event.preventDefault();"
+                ondragstart="event.dataTransfer.setData('', event.target.id);">
 
-            <RadzenText
-                class="@("mt-3 " + status.GetColor())"
-                TextStyle="TextStyle.H5">
-                @status.GetDisplayName()
-            </RadzenText>
+                <RadzenText
+                    class="mt-1 mb-2 rz-color-base-700"
+                    TextStyle="TextStyle.H5">
+                    @status.GetDisplayName()
+                </RadzenText>
 
-            @if (!tasks.Any())
-            {
-                <RadzenCard class="m-0 mt-1 w-100 p-4 rz-background-color-info-lighter">
-                    Empty task list
-                </RadzenCard>
-            }
-            
-            <Virtualize Items="@tasks" Context="item">
-                <RadzenCard
-                    draggable="true"
-                    @ondragstart="@(() => OnDragStart(item))"
-                    @onclick="@(() => OnClickTask(item))"
-                    class="m-0 mt-1 w-100 w-task-item">
-                    <RadzenRow>
-                        <RadzenColumn Style="max-width: 80px;">
-                            <TaskIdBadge InternalTask="item"/>
-                        </RadzenColumn>
-                        <RadzenColumn Style="max-width: 80px;">
-                            @if (item.Attachments.Any())
-                            {
-                                <RadzenIcon
-                                    IconStyle="IconStyle.Info"
-                                    Icon="attachment"/>
-                            }
-                            @if (item.IsArchived)
-                            {
-                                <RadzenIcon
-                                    Icon="inventory"/>
-                            }
-                        </RadzenColumn>
-                        <RadzenColumn class="text-truncate">
-                            <RadzenText
-                                TextStyle="TextStyle.Subtitle1">
-                                @item.Title
-                            </RadzenText>
-                        </RadzenColumn>
-                        <RadzenColumn Style="max-width: 65px;">
-                            <RadzenBadge 
-                                Shade="Shade.Lighter"
-                                BadgeStyle="@item.Priority.GetBadgeStyle()" 
-                                Text="@item.Priority.GetDisplayName()" />
-                        </RadzenColumn>
-                        <RadzenColumn Style="max-width: 150px;">
-                            <TagsBadgesList Tags="@item.Tags"/>
-                        </RadzenColumn>
-                    </RadzenRow>
-                </RadzenCard>
-            </Virtualize>
-        </div>
-    }
-</div>
+                @foreach (var item in tasks)
+                {
+                    <RadzenCard
+                        draggable="true"
+                        @ondragstart="@(() => OnDragStart(item))"
+                        @onclick="@(() => OnClickTask(item))"
+                        class="m-0 mt-1 w-100 w-task-item rz-background-color-base-100 rz-shadow-0 rz-p-1">
+                        <RadzenRow JustifyContent="JustifyContent.SpaceBetween" class="flex-nowrap">
+                            <RadzenColumn>
+                                <TaskIdBadge InternalTask="item"/>
+                            </RadzenColumn>
+
+                            <RadzenColumn class="d-flex justify-content-end">
+                                <RadzenBadge
+                                    Shade="Shade.Lighter"
+                                    BadgeStyle="@item.Priority.GetBadgeStyle()"
+                                    Text="@item.Priority.GetDisplayName()"/>
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow>
+                            <RadzenColumn>
+                                <div class="w-task-title" style="">
+                                    @item.Title?.Truncate(200)
+                                </div>
+                            </RadzenColumn>
+                        </RadzenRow>
+                        <RadzenRow>
+                            <RadzenColumn Style="max-width: 150px;">
+                                <TagsBadgesList Tags="@item.Tags"/>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </RadzenCard>
+                }
+            </RadzenCard>
+        }
+    </div>
+}
