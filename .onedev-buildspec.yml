@@ -12,7 +12,7 @@ jobs:
   - !CreateTagStep
     name: Create Tag
     tagName: '@build_number@'
-    accessTokenSecret: build-tag-creation-secret
+    accessTokenSecret: build-tag-creation-token
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
     name: Build
