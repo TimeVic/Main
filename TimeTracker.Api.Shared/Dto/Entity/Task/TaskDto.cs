@@ -42,6 +42,31 @@ public class TaskDto : IResponse
     {
         get => $"TMV#{Id}";
     }
+
+    public DateTime? CalculatedStartTime
+    {
+        get
+        {
+            if (StartTime == null && EndTime.HasValue)
+            {
+                return EndTime.Value.AddHours(-1);
+            }
+
+            return StartTime;
+        }
+    }
+    
+    public DateTime? CalculatedEndTime
+    {
+        get
+        {
+            if (StartTime.HasValue && EndTime == null)
+            {
+                return StartTime.Value.AddHours(1);
+            }
+            return EndTime;
+        }
+    }
     
     #endregion
 }

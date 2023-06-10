@@ -23,6 +23,9 @@ public partial class CalendarPage
     RadzenScheduler<TaskDto> scheduler;
     private ICollection<TaskDto> _list = new List<TaskDto>();
 
+    private DateTime? calendarStartTime = null;
+    private DateTime? calendarEndTime = null;
+    
     void OnSlotRender(SchedulerSlotRenderEventArgs args)
     {
         // Highlight today in month view
@@ -50,7 +53,10 @@ public partial class CalendarPage
     private async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<TaskDto> args)
     {
         await _modalDialogProviderService.ShowEditTaskModal(args.Data);
-        // await scheduler.Reload();
+        // Modal closed
+        Debug.Log("1111111111111");
+        await LoadItems();
+        await scheduler.Reload();
     }
 
     void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<TaskDto> args)
@@ -65,27 +71,27 @@ public partial class CalendarPage
 
     private async Task OnLoadData(SchedulerLoadDataEventArgs arg)
     {
+        calendarStartTime = arg.Start;
+        calendarEndTime = arg.End;
+        await LoadItems();
+    }
+    
+    private async Task LoadItems()
+    {
+        if (!calendarStartTime.HasValue || !calendarEndTime.HasValue)
+        {
+            return;
+        }
+
         try
         {
             var result = await ApiService.TasksGetForCalendarAsync(new GetForCalendarRequest()
             {
-                StartTime = arg.Start,
-                EndTime = arg.End,
+                StartTime = calendarStartTime.Value,
+                EndTime = calendarEndTime.Value,
                 WorkspaceId = AuthState.Value.Workspace.Id
             });
-            _list = result.Items.Select(item =>
-            {
-                if (item.StartTime == null && item.EndTime.HasValue)
-                {
-                    item.StartTime = item.EndTime.Value.AddHours(-1);
-                }
-                else if (item.StartTime.HasValue && item.EndTime == null)
-                {
-                    item.EndTime = item.StartTime.Value.AddHours(1);
-                }
-                
-                return item;
-            }).ToList();
+            _list = result.Items;
         }
         catch (Exception e)
         {

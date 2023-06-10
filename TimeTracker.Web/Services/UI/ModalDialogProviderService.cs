@@ -2,6 +2,7 @@
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
@@ -33,7 +34,7 @@ public class ModalDialogProviderService
                 CloseDialogOnEsc = true,
                 AutoFocusFirstElement = true,
                 Resizable = false,
-                CloseDialogOnOverlayClick = true,
+                CloseDialogOnOverlayClick = true
             }
         );
     }

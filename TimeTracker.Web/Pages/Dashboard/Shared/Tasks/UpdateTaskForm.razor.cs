@@ -61,6 +61,7 @@ public partial class UpdateTaskForm
     {
         await base.OnInitializedAsync();
         model.Fill(Task);
+        Debug.Log(model);
     }
 
     private void HandleSubmit(UpdateRequest request)
