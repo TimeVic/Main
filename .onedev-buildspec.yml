@@ -275,6 +275,8 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
+      - 'echo "Environment: @param:environment@"'
+      - ''
       - if [ "@param:environment@" = "prod" ]; then
       - "\timageName=\"lampego/timevic-main\""
       - "\tportApi=\"6200:80\""
@@ -337,6 +339,8 @@ jobs:
     runInContainer: false
     interpreter: !DefaultInterpreter
       commands:
+      - 'echo "Environment: @param:environment@"'
+      - ''
       - if [ "@param:environment@" = "prod" ]; then
       - "\timageName=\"lampego/timevic-web\""
       - "\tcontainerName=\"timevic-web\""
