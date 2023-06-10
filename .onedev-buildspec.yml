@@ -11,7 +11,7 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CreateTagStep
     name: Create Tag
-    tagName: '@build_number@'
+    tagName: '@param:environment@-@build_number@'
     accessTokenSecret: build-tag-creation-token
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
