@@ -11,6 +11,9 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 
 public partial class AddTasksListForm
 {
+    [Parameter]
+    public long? ProjectId { get; set; }
+    
     [Inject]
     public ILogger<AddTasksListForm> _logger { get; set; }
     
@@ -19,6 +22,12 @@ public partial class AddTasksListForm
     
     private AddRequest model = new();
     private bool _isLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        model.ProjectId = ProjectId ?? 0;
+    }
 
     private async Task HandleSubmit()
     {
@@ -32,13 +41,13 @@ public partial class AddTasksListForm
                 await ToastService.ShowInfo("Task list has been added");
                 DialogService.CloseSide();
                 
-                var navigateToProjectsClient = ProjectState.Value.List.FirstOrDefault(
+                var navigateToProject = ProjectState.Value.List.First(
                     item => item.Id == model.ProjectId
                 );
                 NavigationManager.NavigateTo(
                     string.Format(
                         SiteUrl.Dashboard_Tasks,
-                        navigateToProjectsClient?.Client?.Id.ToString() ?? "0",
+                        navigateToProject?.Id.ToString(),
                         taskList.Id
                     )    
                 );

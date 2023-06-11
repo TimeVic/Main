@@ -51,11 +51,13 @@ public partial class TasksTable
 
     private void OnDragStart(TaskDto item)
     {
+        Debug.Log("OnDragStart");
         _draggableTask = item;
     }
 
     private void HandleDrop(TaskStatus newStatus)
     {
+        Debug.Log("HandleDrop");
         if (_draggableTask == null || _draggableTask?.Status == newStatus)
         {
             _draggableTask = null;

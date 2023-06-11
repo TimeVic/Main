@@ -21,16 +21,30 @@
             Path="@SiteUrl.Dashboard_Reports_Summary"/>
         <RadzenPanelMenuItem Text="Tasks" Icon="task">
             <RadzenPanelMenuItem
-                Icon="scatter_plot"
-                Text="Without client"
-                Path="@GetTasksListUrl()"/>
+                Icon="supervisor_account"
+                Text="Without client">
+                @foreach (var project in GetClientProjects(null))
+                {
+                    <RadzenPanelMenuItem
+                        Icon="list_alt"
+                        Text="@project.Name"
+                        Path="@GetTasksListUrl(project)"/>
+                }
+            </RadzenPanelMenuItem>
             @foreach (var client in Clients)
             {
                 <RadzenPanelMenuItem
                     @key="client"
-                    Icon="scatter_plot"
-                    Text="@client.Name"
-                    Path="@GetTasksListUrl(client.Id)"/>
+                    Icon="supervisor_account"
+                    Text="@client.Name">
+                    @foreach (var project in GetClientProjects(client))
+                    {
+                        <RadzenPanelMenuItem
+                            Icon="list_alt"
+                            Text="@project.Name"
+                            Path="@GetTasksListUrl(project)"/>
+                    }
+                </RadzenPanelMenuItem>
             }
         </RadzenPanelMenuItem>
         <RadzenPanelMenuItem

@@ -14,13 +14,13 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 
 public partial class TasksListTree
 {
-    [CascadingParameter(Name = "ClientId")]
-    public long ClientId
+    [CascadingParameter(Name = "ProjectId")]
+    public long ProjectId
     {
-        get => _clientId;
+        get => _projectId;
         set
         {
-            _clientId = value;
+            _projectId = value;
             OnTasksListSelected(null);
         }
     }
@@ -48,46 +48,17 @@ public partial class TasksListTree
     [Inject]
     public ModalDialogProviderService _modalDialogProviderService { get; set; }
 
-    private long? _nullableClientId => ClientId > 0 ? ClientId : null;
-    private long _clientId = 0;
+    private long _projectId = 0;
     private long? _taskListId = null;
     
-    public ICollection<ProjectDto> Projects
-    {
-        get
-        {
-            var projects = _projectState.Value.List;
-            return projects.Where(item => item.Client?.Id == _nullableClientId).ToList();
-        }
-    }
-    
-    public ICollection<TaskListDto> TasksList
-    {
-        get
-        {
-            var taskLists = _tasksListState.Value.List;
-            var projects = _projectState.Value.List;
-            return taskLists.Where(item =>
-            {
-                var projectWithClient = projects.FirstOrDefault(item2 => item2.Id == item.Project.Id);
-                return projectWithClient?.Client?.Id == _nullableClientId;
-            }).ToList();
-        }
-    }
-
     public long _selectedTaskListId
     {
         get => _tasksListState.Value.SelectedTaskListId ?? 0;
     }
-    
-    public ICollection<TaskListDto> GetTasksList(ProjectDto project)
-    {
-        return _tasksListState.Value.List.Where(item => item.Project.Id == project.Id).ToList();
-    }
 
     private void ShowAddTaskListModal()
     {
-        InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal());
+        InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal(projectId: ProjectId));
     }
     
     private void ShowUpdateTaskListModal()
@@ -117,7 +88,7 @@ public partial class TasksListTree
     private void OnSelectedTasksList(long tasksListId)
     {
         NavigationManager.NavigateTo(
-            string.Format(SiteUrl.Dashboard_Tasks, ClientId, tasksListId)    
+            string.Format(SiteUrl.Dashboard_Tasks, ProjectId, tasksListId)    
         );
     }
     

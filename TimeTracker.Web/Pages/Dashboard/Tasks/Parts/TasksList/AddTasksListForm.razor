@@ -16,6 +16,7 @@
                 TextStyle="@TextStyle.Subtitle2"/>
             <ProjectsDropDown
                 Class="w-100"
+                Value="@(ProjectId ?? 0)"
                 ValueChanged="value => model.ProjectId = value"/>
         </div>
 

@@ -29,7 +29,7 @@
             var project = context as TaskListDto;
         }
         <div>@project.Name</div>
-        @if (project.Project != null)
+        @if (project.Project != null && IsExtendedInfo)
         {
             <RadzenText class="mt-2 d-block" TextStyle="TextStyle.Caption">
                 @project.Project?.Name

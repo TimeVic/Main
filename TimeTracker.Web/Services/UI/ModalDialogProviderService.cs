@@ -39,12 +39,19 @@ public class ModalDialogProviderService
         );
     }
     
-    public async Task ShowEditTaskListModal(TaskListDto? taskList = null)
+    public async Task ShowEditTaskListModal(
+        TaskListDto? taskList = null,
+        long? projectId = null
+    )
     {
         if (taskList == null)
         {
             await _dialogService.OpenSideAsync<AddTasksListForm>(
                 "Add task list",
+                parameters: new Dictionary<string, object>()
+                {
+                    { "ProjectId", projectId }
+                },
                 options: new SideDialogOptions { CloseDialogOnOverlayClick = true }
             );
         }

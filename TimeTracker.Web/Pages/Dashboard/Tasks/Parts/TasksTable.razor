@@ -10,7 +10,7 @@
 
 @if (TasksState.Value.IsListLoading)
 {
-    <RadzenCard class="m-0 mt-1 w-100">
+    <RadzenCard class="m-0 mt-2 w-100">
         <RadzenProgressBar
             Value="100"
             ProgressBarStyle="ProgressBarStyle.Info"
@@ -20,7 +20,7 @@
 }
 else
 {
-    <div class="w-task-table mt-1">
+    <div class="w-task-table mt-2">
         @foreach (var taskGroupKeyValue in _taskGroups)
         {
             var status = taskGroupKeyValue.Key;
@@ -44,30 +44,29 @@ else
                         @ondragstart="@(() => OnDragStart(item))"
                         @onclick="@(() => OnClickTask(item))"
                         class="m-0 mt-1 w-100 w-task-item rz-background-color-base-100 rz-shadow-0 rz-p-1">
-                        <RadzenRow JustifyContent="JustifyContent.SpaceBetween" class="flex-nowrap">
-                            <RadzenColumn>
+                        <div class="row d-flex justify-content-between">
+                            <div class="col">
                                 <TaskIdBadge InternalTask="item"/>
-                            </RadzenColumn>
-
-                            <RadzenColumn class="d-flex justify-content-end">
+                            </div>
+                            <div class="col d-flex justify-content-end">
                                 <RadzenBadge
                                     Shade="Shade.Lighter"
                                     BadgeStyle="@item.Priority.GetBadgeStyle()"
                                     Text="@item.Priority.GetDisplayName()"/>
-                            </RadzenColumn>
-                        </RadzenRow>
-                        <RadzenRow>
-                            <RadzenColumn>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
                                 <div class="w-task-title" style="">
                                     @item.Title?.Truncate(200)
                                 </div>
-                            </RadzenColumn>
-                        </RadzenRow>
-                        <RadzenRow>
-                            <RadzenColumn Style="max-width: 150px;">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
                                 <TagsBadgesList Tags="@item.Tags"/>
-                            </RadzenColumn>
-                        </RadzenRow>
+                            </div>
+                        </div>
                     </RadzenCard>
                 }
             </RadzenCard>

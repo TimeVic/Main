@@ -28,6 +28,10 @@ public class SecurityManager: ISecurityManager
     public ICollection<ProjectDto> GetSharedProjects(UserDto? user = null)
     {
         user ??= _authState.Value.User;
+        if (_authState.Value.Workspace.IsFullAccess)
+        {
+            return _projectState.Value.List;
+        }
 
         var projectAccesses = _workspaceMembershipsState
             .Value

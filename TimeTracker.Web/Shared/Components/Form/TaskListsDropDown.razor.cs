@@ -45,6 +45,9 @@ public partial class TaskListsDropDown
     [Parameter]
     public long? ClientId { get; set; }
 
+    [Parameter]
+    public bool IsExtendedInfo { get; set; } = true;
+
     [Inject]
     public ILogger<TaskListDto> _logger { get; set; }
     

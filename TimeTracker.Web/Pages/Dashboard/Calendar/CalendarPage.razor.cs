@@ -54,7 +54,6 @@ public partial class CalendarPage
     {
         await _modalDialogProviderService.ShowEditTaskModal(args.Data);
         // Modal closed
-        Debug.Log("1111111111111");
         await LoadItems();
         await scheduler.Reload();
     }

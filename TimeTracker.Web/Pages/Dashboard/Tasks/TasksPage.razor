@@ -1,5 +1,5 @@
-﻿@page "/board/tasks/{ClientId:long}/{TaskListId:long}"
-@page "/board/tasks/{ClientId:long}"
+﻿@page "/board/tasks/{ProjectId:long}/{TaskListId:long}"
+@page "/board/tasks/{ProjectId:long}"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Tasks.Parts
@@ -9,8 +9,8 @@
 @layout Layout
 
 <RadzenRow class="no-gutters mx-n4">
-    <CascadingValue Name="ClientId" Value="@ClientId">
-        <CascadingValue Name="TaskListId" Value="@TaskListId">
+    <CascadingValue Name="TaskListId" Value="@TaskListId">
+        <CascadingValue Name="ProjectId" Value="@ProjectId">
             <RadzenColumn>
                 <AddTaskForm/>
                 <TasksFilterForm/>

@@ -18,7 +18,7 @@ public class ToastService
             Severity = severity,
             Summary = summary,
             CloseOnClick = true,
-            Duration = 50000
+            Duration = 3000
         });
         return Task.CompletedTask;
     }
