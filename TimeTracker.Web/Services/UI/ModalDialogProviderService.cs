@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
+using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 using TimeTracker.Web.Shared.Components.Storage;
@@ -101,6 +102,26 @@ public class ModalDialogProviderService
             {
                 { "TimeEntryId", timEntryId },
                 { "TaskListId", taskListId },
+            }
+        );
+    }
+    
+    public async Task ShowTimeEntriesModal()
+    {
+        await _dialogService.OpenAsync<TimeEntryList>(
+            "My Time Entries",
+            options: new DialogOptions
+            {
+                Style = "top: 1em; bottom: 1em; right: 1em; left: 1em",
+                Width = "auto",
+                ShowClose = true,
+                CloseDialogOnEsc = true,
+                Resizable = true,
+                Draggable = false
+            },
+            parameters: new Dictionary<string, object?>()
+            {
+                { "IsFilteredList", false },
             }
         );
     }

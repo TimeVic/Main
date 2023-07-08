@@ -2,10 +2,11 @@
 
 @using TimeTracker.Web.Shared.Components.Layout
 @using TimeTracker.Web.Core.Helpers
+@using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
 
-<RadzenHeader>
-    <div class="row p-2">
-        <div class="col-5 d-flex align-items-center">
+<RadzenHeader class="w-header">
+    <div class="p-2 d-flex justify-content-between">
+        <div class="d-flex align-items-center">
             <a class="navbar-brand" href="#">
                 <img
                     style="width: 28px;"
@@ -14,8 +15,14 @@
                 <b>TimeVic</b>
             </a>
         </div>
-        <div class="col-7 d-flex align-items-center justify-content-end">
-            <div class="d-md-inline-flex align-items-center">
+        @if (AuthState.Value.IsLoggedIn && !_isShowDashboardLink)
+        {
+            <div class="d-md-inline-flex align-items-center w-time-entry-form">
+                <TimeEntryForm IsShowTimeEntriesButton="true"/>
+            </div>
+        }
+        <div class="d-flex align-items-center justify-content-end">
+            <div class="d-md-inline-flex align-items-end">
                 @if (AuthState.Value.IsLoggedIn)
                 {
                     if (_isShowDashboardLink)

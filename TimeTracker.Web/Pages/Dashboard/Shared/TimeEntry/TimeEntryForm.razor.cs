@@ -15,6 +15,9 @@ public partial class TimeEntryForm
     public bool IsShort { get; set; }
 
     [Parameter]
+    public bool IsShowTimeEntriesButton { get; set; } = false;
+    
+    [Parameter]
     public TaskDto? InternalTask { get; set; }
 
     [Inject] 
@@ -95,12 +98,17 @@ public partial class TimeEntryForm
     {
         await _modalDialogProviderService.ShowAddTaskModal(timEntryId);
     }
+    
+    private async Task ShowTimeEntriesModal()
+    {
+        await _modalDialogProviderService.ShowTimeEntriesModal();
+    }
 
     private void ShowTooltip(ElementReference elementReference)
     {
         _tooltipService.Open(elementReference, "Add task", new TooltipOptions()
         {
-            Position = TooltipPosition.Top
+            Position = TooltipPosition.Bottom
         });
     }
 }

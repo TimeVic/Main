@@ -62,5 +62,14 @@
                 Value="@_activeEntry?.Description"
                 ValueChanged="OnChangeDescription"/>    
         }
+        @if (IsShowTimeEntriesButton)
+        {
+            <RadzenButton
+                ButtonStyle="ButtonStyle.Light"
+                Size="ButtonSize.Small"
+                Click="@(ShowTimeEntriesModal)"
+                Class="mr-1"
+                Icon="history"/>    
+        }
     </div>
 </div>
