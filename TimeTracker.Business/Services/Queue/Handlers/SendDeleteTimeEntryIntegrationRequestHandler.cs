@@ -6,6 +6,7 @@ using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
+using TimeTracker.Business.Services.ExternalClients.Jira;
 using TimeTracker.Business.Services.ExternalClients.Redmine;
 
 namespace TimeTracker.Business.Services.Queue.Handlers;
@@ -14,18 +15,21 @@ public class SendDeleteTimeEntryIntegrationRequestHandler : IAsyncQueueHandler<S
 {
     private readonly IClickUpClient _clickUpClient;
     private readonly IRedmineClient _redmineClient;
+    private readonly IJiraClient _jiraClient;
     private readonly IDbSessionProvider _sessionProvider;
     private readonly ILogger<SendDeleteTimeEntryIntegrationRequestHandler> _logger;
 
     public SendDeleteTimeEntryIntegrationRequestHandler(
         IClickUpClient clickUpClient,
         IRedmineClient redmineClient,
+        IJiraClient jiraClient,
         IDbSessionProvider sessionProvider,
         ILogger<SendDeleteTimeEntryIntegrationRequestHandler> logger
     )
     {
         _clickUpClient = clickUpClient;
         _redmineClient = redmineClient;
+        _jiraClient = jiraClient;
         _sessionProvider = sessionProvider;
         _logger = logger;
     }
@@ -63,6 +67,13 @@ public class SendDeleteTimeEntryIntegrationRequestHandler : IAsyncQueueHandler<S
                     )
                     {
                         await _redmineClient.DeleteTimeEntryAsync(timeEntry);
+                    }
+                    if (
+                        timeEntry.Workspace.IsIntegrationJiraActive(timeEntry.User.Id)
+                        && _jiraClient.IsCorrectTaskId(timeEntry)
+                    )
+                    {
+                        await _jiraClient.DeleteTimeEntryAsync(timeEntry);
                     }
                 }
                 catch (Exception e)

@@ -5,6 +5,7 @@ using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Queue;

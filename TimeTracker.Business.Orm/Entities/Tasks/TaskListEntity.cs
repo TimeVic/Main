@@ -2,7 +2,7 @@ using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
 
-namespace TimeTracker.Business.Orm.Entities
+namespace TimeTracker.Business.Orm.Entities.Tasks
 {
     [Class(Table = "task_lists")]
     public class TaskListEntity: IEntity

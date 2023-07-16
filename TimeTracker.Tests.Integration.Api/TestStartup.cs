@@ -5,6 +5,7 @@ using TimeTracker.Business;
 using TimeTracker.Business.Common.Services.Web.ReCaptcha;
 using TimeTracker.Business.Notifications.Services;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
+using TimeTracker.Business.Services.ExternalClients.Jira;
 using TimeTracker.Business.Services.ExternalClients.Redmine;
 using TimeTracker.Business.Testing;
 
@@ -27,5 +28,6 @@ public class TestStartup: Startup
         builder.RegisterType<EmailSendingServiceMock>().As<IEmailSendingService>().InstancePerLifetimeScope();
         builder.RegisterType<ClickUpClientMock>().As<IClickUpClient>().InstancePerLifetimeScope();
         builder.RegisterType<RedmineClientMock>().As<IRedmineClient>().InstancePerLifetimeScope();
+        builder.RegisterType<JiraClientMock>().As<IJiraClient>().InstancePerLifetimeScope();
     }
 }

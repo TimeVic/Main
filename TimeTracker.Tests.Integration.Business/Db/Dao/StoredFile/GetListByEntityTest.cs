@@ -5,6 +5,7 @@ using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Factories;

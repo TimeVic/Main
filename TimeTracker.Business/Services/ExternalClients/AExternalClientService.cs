@@ -1,7 +1,10 @@
 ﻿using System.Net;
 using Microsoft.Extensions.Logging;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.ExternalClients.Dto;
 
 namespace TimeTracker.Business.Services.ExternalClients;

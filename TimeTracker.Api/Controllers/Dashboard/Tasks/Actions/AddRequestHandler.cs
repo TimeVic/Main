@@ -11,9 +11,11 @@ using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.ExternalClients;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
+using TimeTracker.Business.Services.ExternalClients.Jira;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -29,6 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         private readonly ITaskListDao _taskListDao;
         private readonly ITaskDao _taskDao;
         private readonly IClickUpClient _clickUpClient;
+        private readonly IJiraClient _jiraClient;
         private readonly ITimeEntryDao _timeEntryDao;
 
         public AddRequestHandler(
@@ -40,6 +43,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             ITaskListDao taskListDao,
             ITaskDao taskDao,
             IClickUpClient clickUpClient,
+            IJiraClient jiraClient,
             ITimeEntryDao timeEntryDao
         )
         {
@@ -51,6 +55,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _taskListDao = taskListDao;
             _taskDao = taskDao;
             _clickUpClient = clickUpClient;
+            _jiraClient = jiraClient;
             _timeEntryDao = timeEntryDao;
         }
     
@@ -116,12 +121,32 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                     {
                         throw new HasNoAccessException("Has no access to TimeEntry");
                     }
+
+                    try
+                    {
+                        return await _jiraClient.SetTimeEntryTaskAsync(
+                            timeEntry,
+                            taskList,
+                            request.ExternalTaskId
+                        );
+                    }
+                    catch (Exception e) {}
                     return await _clickUpClient.SetTimeEntryTaskAsync(
                         timeEntry,
                         taskList,
                         request.ExternalTaskId
                     );
                 }
+
+                try
+                {
+                    return await _jiraClient.SetTimeEntryTaskAsync(
+                        taskList,
+                        user,
+                        request.ExternalTaskId
+                    );
+                }
+                catch (Exception e) {}
                 return await _clickUpClient.SetTimeEntryTaskAsync(
                     taskList,
                     user,

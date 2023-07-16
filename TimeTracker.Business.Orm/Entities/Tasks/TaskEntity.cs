@@ -2,9 +2,10 @@ using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
 using TimeTracker.Business.Common.Constants.Task;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
-namespace TimeTracker.Business.Orm.Entities
+namespace TimeTracker.Business.Orm.Entities.Tasks
 {
     [Class(Table = "tasks")]
     public class TaskEntity: IEntity

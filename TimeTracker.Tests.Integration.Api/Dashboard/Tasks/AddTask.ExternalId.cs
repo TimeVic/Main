@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -15,7 +16,7 @@ using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
 
-public partial class AddTest
+public partial class AddTask
 {
     [Fact]
     public async Task ShouldAddByClickUpExternalId()
@@ -53,6 +54,30 @@ public partial class AddTest
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.NotEmpty(actualData.Title);
         Assert.Equal(_clickUpTaskId, actualData.ExternalTaskId);
+
+        var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.Equal(actualData.Id, actualTimeEntry.Task.Id);
+    }
+    
+    [Fact]
+    public async Task ShouldAddByJiraExternalIdAndTimeEntry()
+    {
+        var timeEntry = await _timeEntrySeeder.CreateAsync(_workspace, _user);
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            TaskListId = _taskList.Id,
+            ExternalTaskId = _jiraTaskId,
+            TimeEntryId = timeEntry.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        await CommitDbChanges();
+        
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.True(actualData.Id > 0);
+        Assert.Equal(_taskList.Id, actualData.TaskList.Id);
+        Assert.NotEmpty(actualData.Title);
+        Assert.Equal(_jiraTaskId, actualData.ExternalTaskId);
 
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
         Assert.Equal(actualData.Id, actualTimeEntry.Task.Id);

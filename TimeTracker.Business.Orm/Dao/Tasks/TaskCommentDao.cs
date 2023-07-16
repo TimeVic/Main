@@ -5,6 +5,7 @@ using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.Tasks;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
 
 namespace TimeTracker.Business.Orm.Dao.Tasks;
 

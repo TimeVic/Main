@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using TimeTracker.Business.Common.Helpers;
 
-namespace TimeTracker.Business.Extensions
+namespace TimeTracker.Business.Common.Extensions
 {
     public static class HttpResponseExtensions
     {

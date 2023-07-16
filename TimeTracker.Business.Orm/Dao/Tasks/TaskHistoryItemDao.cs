@@ -1,6 +1,7 @@
 ﻿using NHibernate.Transform;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
 
 namespace TimeTracker.Business.Orm.Dao.Tasks;
 

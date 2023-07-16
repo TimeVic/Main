@@ -1,5 +1,7 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.ExternalClients.Dto;
 using TimeTracker.Business.Services.ExternalClients.Redmine.Dto;
 

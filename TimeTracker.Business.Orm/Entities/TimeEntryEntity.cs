@@ -1,6 +1,8 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -47,7 +49,11 @@ namespace TimeTracker.Business.Orm.Entities
         [Property(NotNull = false)]
         [Column(Name = "redmine_id", NotNull = false)]
         public virtual string? RedmineId { get; set; }
-
+        
+        [Property(NotNull = false)]
+        [Column(Name = "jira_id", NotNull = false)]
+        public virtual long? JiraId { get; set; }
+        
         [Property(NotNull = true)]
         [Column(Name = "is_marked_to_delete", NotNull = true)]
         public virtual bool IsMarkedToDelete { get; set; }
@@ -114,7 +120,8 @@ namespace TimeTracker.Business.Orm.Entities
         
         #region Calculated
 
-        public virtual bool IsSynced => !string.IsNullOrEmpty(RedmineId) || !string.IsNullOrEmpty(ClickUpId);
+        public virtual bool IsSynced => !string.IsNullOrEmpty(RedmineId) 
+            || !string.IsNullOrEmpty(ClickUpId);
 
         public virtual bool IsActive => EndTime == null;
 

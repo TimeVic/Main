@@ -1,5 +1,6 @@
 ﻿using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao.Workspace;
 
@@ -63,6 +64,32 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
         settings.RedmineUserId = redmineUserId ?? 0;
         settings.Url = redmineUrl ?? "";
         settings.ActivityId = redmineActivityId ?? 0;
+        await _sessionProvider.CurrentSession.SaveAsync(settings);
+        
+        return settings;
+    }
+    
+    public async Task<WorkspaceSettingsJiraEntity> SetJiraAsync(
+        UserEntity user,
+        WorkspaceEntity workspace,
+        string? apiKey,
+        string? userName,
+        bool isFillTimeEntryWithTaskDetails = true
+    )
+    {
+        var settings = workspace.GetJiraSettings(user);
+        if (settings == null)
+        {
+            settings = new WorkspaceSettingsJiraEntity();
+            settings.User = user;
+            settings.Workspace = workspace;
+            workspace.SettingsJira.Add(settings);
+            settings.CreateTime = DateTime.UtcNow;
+        }
+        settings.UpdateTime = DateTime.UtcNow;
+        settings.ApiKey = apiKey;
+        settings.UserName = userName;
+        settings.IsFillTimeEntryWithTaskDetails = isFillTimeEntryWithTaskDetails;
         await _sessionProvider.CurrentSession.SaveAsync(settings);
         
         return settings;

@@ -26,8 +26,4 @@
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\TimeTracker.Business.Common\TimeTracker.Business.Common.csproj" />
-    </ItemGroup>
-
 </Project>

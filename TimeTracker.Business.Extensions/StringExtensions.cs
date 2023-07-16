@@ -227,6 +227,13 @@ namespace TimeTracker.Business.Extensions
                 .Replace("\t", "");
         }
         
+        public static string RemoveNewLineSymbolsWithChars(this string str)
+        {
+            return str.RemoveNewLineSymbols()
+                .Replace("\\n", "\n")
+                .Replace("\\r", "\n");
+        }
+        
         public static string FirstCharToUpper(this string input) =>
             input switch
             {
@@ -242,13 +249,7 @@ namespace TimeTracker.Business.Extensions
             var dots = isAddDots ? "..." : "";
             return value.Length <= maxLength ? value : $"{value[..maxLength]}${dots}"; 
         }
-        
-        public static string RemoveNewLines(this string value)
-        {
-            return value.Replace("\n", "")
-                .Replace("\r", ""); 
-        }
-        
+
         public static byte[] GetUtf8Bytes(this string value)
         {
             return Encoding.UTF8.GetBytes(value);

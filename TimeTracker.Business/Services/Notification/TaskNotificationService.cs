@@ -2,6 +2,7 @@
 using TimeTracker.Business.Notifications.Senders.Tasks;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Services.Queue;
 
 namespace TimeTracker.Business.Services.Notification;

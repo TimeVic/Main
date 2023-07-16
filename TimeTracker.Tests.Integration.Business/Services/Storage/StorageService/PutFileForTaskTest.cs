@@ -4,6 +4,7 @@ using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Seeders.Entity;

@@ -6,9 +6,12 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
@@ -18,15 +21,16 @@ using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
 
-public partial class AddTest: BaseTest
+public partial class AddTask: BaseTest
 {
     private readonly string Url = "/dashboard/tasks/add";
     
-    private readonly string? _clickUpTaskId;
-    private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
     private readonly TaskListEntity _taskList;
     private readonly ProjectEntity _project;
+    private readonly string? _clickUpTaskId;
+    private readonly string? _jiraTaskId;
+    private readonly string _jwtToken;
     
     private readonly IQueueService _queueService;
     private readonly UserEntity _user;
@@ -36,7 +40,7 @@ public partial class AddTest: BaseTest
     private readonly ITaskListSeeder _taskListSeeder;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
 
-    public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    public AddTask(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
@@ -51,6 +55,7 @@ public partial class AddTest: BaseTest
         
         var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
         _clickUpTaskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
+        _jiraTaskId = configuration.GetValue<string>("Integration:Jira:TaskId");
     }
 
     [Fact]

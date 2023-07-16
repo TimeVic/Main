@@ -1,5 +1,6 @@
 using Bogus;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
 
 namespace TimeTracker.Business.Testing.Factories.Entity
 {

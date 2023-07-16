@@ -8,6 +8,7 @@ using TimeTracker.Business.Notifications.Senders.Tasks.Comments;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Security;

@@ -3,7 +3,7 @@ using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 
-namespace TimeTracker.Business.Orm.Entities
+namespace TimeTracker.Business.Orm.Entities.Workspaces
 {
     [Class(Table = "workspaces")]
     public class WorkspaceEntity: IEntity
@@ -84,6 +84,16 @@ namespace TimeTracker.Business.Orm.Entities
         [Bag(
             Inverse = true,
             Lazy = CollectionLazy.True,
+            Cascade = "none"
+        )]
+        [Key(Column = "workspace_id")]
+        [OneToMany(ClassType = typeof(WorkspaceSettingsJiraEntity))]
+        public virtual ICollection<WorkspaceSettingsJiraEntity> SettingsJira { get; set; } = new List<WorkspaceSettingsJiraEntity>();
+
+        
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.True,
             Cascade = "save-update"
         )]
         [Key(Column = "workspace_id")]
@@ -113,9 +123,26 @@ namespace TimeTracker.Business.Orm.Entities
             return GetClickUpSettings(user.Id);
         }
         
+        public virtual WorkspaceSettingsJiraEntity? GetJiraSettings(long userId)
+        {
+            return SettingsJira.FirstOrDefault(
+                item => item.User.Id == userId
+            );
+        }
+        
+        public virtual WorkspaceSettingsJiraEntity? GetJiraSettings(UserEntity user)
+        {
+            return GetJiraSettings(user.Id);
+        }
+        
         public virtual bool IsIntegrationClickUpActive(long userId)
         {
             return GetClickUpSettings(userId)?.IsActive ?? false;
+        }
+        
+        public virtual bool IsIntegrationJiraActive(long userId)
+        {
+            return GetJiraSettings(userId)?.IsActive ?? false;
         }
         
         #endregion

@@ -1,9 +1,8 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
-using TimeTracker.Business.Common.Constants;
 
-namespace TimeTracker.Business.Orm.Entities
+namespace TimeTracker.Business.Orm.Entities.Tasks
 {
     [Class(Table = "task_comments")]
     public class TaskCommentEntity: IEntity

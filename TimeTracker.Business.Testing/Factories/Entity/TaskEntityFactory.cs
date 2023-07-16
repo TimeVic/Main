@@ -1,6 +1,7 @@
 using Bogus;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Business.Testing.Factories.Entity

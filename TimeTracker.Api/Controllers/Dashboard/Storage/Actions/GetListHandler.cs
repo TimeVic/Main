@@ -12,6 +12,7 @@ using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Storage;

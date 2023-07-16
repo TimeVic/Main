@@ -34,10 +34,18 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="ReverseMarkdown" Version="3.25.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Domain.Abstractions\Domain.Abstractions.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="TimeTracker.Business.Extensions">
+        <HintPath>..\TimeTracker.Tests.Integration.Business\bin\Debug\net7.0\TimeTracker.Business.Extensions.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

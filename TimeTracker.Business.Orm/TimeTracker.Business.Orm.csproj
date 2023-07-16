@@ -24,7 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Entities\Task\" />
       <Folder Include="Hibernate\Queries" />
     </ItemGroup>
 

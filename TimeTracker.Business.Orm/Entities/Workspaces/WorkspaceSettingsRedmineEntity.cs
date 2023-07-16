@@ -2,7 +2,7 @@ using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
 
-namespace TimeTracker.Business.Orm.Entities
+namespace TimeTracker.Business.Orm.Entities.Workspaces
 {
     [Class(Table = "workspace_setting_redmines")]
     public class WorkspaceSettingsRedmineEntity: IEntity

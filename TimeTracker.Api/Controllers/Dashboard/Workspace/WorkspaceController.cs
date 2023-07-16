@@ -69,4 +69,12 @@ public class WorkspaceController : MainApiControllerBase
         => this.RequestAsync()
             .For<WorkspaceSettingsClickUpDto>()
             .With(request);
+    
+    [HttpPost("settings/set-jira")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> SetJiraSettings([FromBody] SetJiraSettingsRequest request)
+        => this.RequestAsync()
+            .For<WorkspaceSettingsJiraDto>()
+            .With(request);
 }
