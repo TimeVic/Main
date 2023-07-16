@@ -26,7 +26,7 @@ else
             </RadzenTabsItem>
             <RadzenTabsItem 
                 Text="Jira"
-                Icon="@(_settings.IntegrationJira is { IsActive: true } ? "cloud_done" : "signal_disconnected")">>
+                Icon="@(_settings.IntegrationJira is { IsActive: true } ? "cloud_done" : "signal_disconnected")">
                 <JiraSettingsForm @bind-Value="_settings.IntegrationJira"/>
             </RadzenTabsItem>
         </Tabs>
