@@ -14,13 +14,19 @@ else
 {
     <RadzenTabs TabPosition="@TabPosition.Top" RenderMode="TabRenderMode.Client" >
         <Tabs>
-            <RadzenTabsItem Text="ClickUp">
+            <RadzenTabsItem 
+                Text="ClickUp" 
+                Icon="@(_settings.IntegrationClickUp is { IsActive: true } ? "cloud_done" : "signal_disconnected")">
                 <ClickUpSettingsForm @bind-Value="_settings.IntegrationClickUp"/>
             </RadzenTabsItem>
-            <RadzenTabsItem Text="Redmine">
+            <RadzenTabsItem 
+                Text="Redmine"
+                Icon="@(_settings.IntegrationRedmine is { IsActive: true } ? "cloud_done" : "signal_disconnected")">
                 <RedmineSettingsForm @bind-Value="_settings.IntegrationRedmine"/>
             </RadzenTabsItem>
-            <RadzenTabsItem Text="Jira">
+            <RadzenTabsItem 
+                Text="Jira"
+                Icon="@(_settings.IntegrationJira is { IsActive: true } ? "cloud_done" : "signal_disconnected")">>
                 <JiraSettingsForm @bind-Value="_settings.IntegrationJira"/>
             </RadzenTabsItem>
         </Tabs>

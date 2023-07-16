@@ -39,7 +39,7 @@ namespace TimeTracker.Web.Services.Http
             return store?.Value.Jwt;
         }
         
-        private async Task<string> RequestAsync(string requestUri, string jwtToken, object data, HttpMethod httpMethod)
+        private async Task<string> RequestAsync(string requestUri, string? jwtToken, object data, HttpMethod httpMethod)
         {   
             // create request object
             var request = new HttpRequestMessage(httpMethod, $"{_apiUrl}/{requestUri}");
@@ -68,8 +68,8 @@ namespace TimeTracker.Web.Services.Http
         
         private async Task<TResponse?> MultipartFormDataRequestAsync<TResponse>(
             string requestUri,
-            Dictionary<string, object> data = null,
-            IBrowserFile file = null
+            Dictionary<string, object>? data = null,
+            IBrowserFile? file = null
         )
         {   
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_apiUrl}/{requestUri}");
@@ -130,7 +130,7 @@ namespace TimeTracker.Web.Services.Http
             }
         }
 
-        private async Task<TResponse?> RequestAsync<TResponse>(string requestUri, string jwtToken, object data, HttpMethod httpMethod)
+        private async Task<TResponse?> RequestAsync<TResponse>(string requestUri, string? jwtToken, object data, HttpMethod httpMethod)
         {
             var responseString = await RequestAsync(requestUri, jwtToken, data, httpMethod);
             var response = JsonHelper.DeserializeObject<TResponse>(
@@ -140,7 +140,7 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
 
-        private async Task<TResponse?> PostAsync<TResponse>(string requestUri, object data, string jwtToken = null)
+        private async Task<TResponse?> PostAsync<TResponse>(string requestUri, object data, string? jwtToken = null)
         {
             return await RequestAsync<TResponse>(requestUri, jwtToken, data, HttpMethod.Post);
         }

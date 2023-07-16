@@ -55,7 +55,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<GetListResponse> TasksGetMyListAsync(
             long workspaceId,
-            ICollection<TaskStatus> taskStatuses = null,
+            ICollection<TaskStatus>? taskStatuses = null,
             string? searchString = null
         )
         {

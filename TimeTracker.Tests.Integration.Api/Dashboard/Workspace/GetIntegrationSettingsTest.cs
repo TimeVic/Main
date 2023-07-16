@@ -39,6 +39,7 @@ public class GetIntegrationSettingsTest: BaseTest
     private readonly string? _clickUptaskId;
     private readonly string? _jiraApiKey;
     private readonly string? _jiraUserName;
+    private readonly string? _jiraUrl;
 
     public GetIntegrationSettingsTest(ApiCustomWebApplicationFactory factory) : base(factory)
     { 
@@ -77,9 +78,11 @@ public class GetIntegrationSettingsTest: BaseTest
         
         _jiraApiKey = configuration.GetValue<string>("Integration:Jira:ApiToken");
         _jiraUserName = configuration.GetValue<string>("Integration:Jira:UserName");
+        _jiraUrl = configuration.GetValue<string>("Integration:Jira:Url");
         _workspaceSettingsDao.SetJiraAsync(
             _user,
             _workspace,
+            _jiraUrl,
             _jiraApiKey,
             _jiraUserName,
             true

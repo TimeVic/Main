@@ -27,6 +27,7 @@ public interface IWorkspaceSettingsDao: IDomainService
     Task<WorkspaceSettingsJiraEntity> SetJiraAsync(
         UserEntity user,
         WorkspaceEntity workspace,
+        string? url,
         string? apiKey,
         string? userName,
         bool isFillTimeEntryWithTaskDetails = true

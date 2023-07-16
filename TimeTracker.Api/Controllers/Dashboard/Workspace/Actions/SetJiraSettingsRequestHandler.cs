@@ -54,6 +54,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             var settings = await _workspaceSettingsDao.SetJiraAsync(
                 user,
                 workspace,
+                request.Url,
                 request.ApiKey,
                 request.UserName,
                 false

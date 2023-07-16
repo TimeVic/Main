@@ -25,7 +25,7 @@ public partial class JiraClient
     {
         var httpClient = BuildHttpClient(workspace, user);
 
-        var uri = new UriBuilder($"{BaseUrl}/issue/{externalTaskId}");
+        var uri = BuildUrl(workspace, user, $"issue/{externalTaskId}");
         _logger.LogDebug("Jira. Send request to: {Uri}", uri);
         var response = await httpClient.GetAsync(uri.ToString());
         return await HandleResponse<GetTaskResponseDto>(uri.ToString(), response);

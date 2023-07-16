@@ -12,15 +12,21 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
         public virtual long WorkspaceId { get; set; }
         
         [Required]
+        [Url]
         [StringLength(255)]
-        public virtual string ApiKey { get; set; } = "";
+        public virtual string? Url { get; set; }
+        
+        [Required]
+        [StringLength(255)]
+        public virtual string? ApiKey { get; set; }
     
         [Required]
         [StringLength(255)]
-        public virtual string UserName { get; set; } = "";
+        public virtual string? UserName { get; set; }
     
         public void Fill(WorkspaceSettingsJiraDto dto)
         {
+            Url = dto.Url;
             ApiKey = dto.ApiKey;
             UserName = dto.UserName;
         }

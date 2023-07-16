@@ -44,6 +44,7 @@ public class SetJiraSettingsTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new SetJiraSettingsRequest()
         {
             WorkspaceId = _workspace.Id,
+            Url = "http://bla.com",
             ApiKey = "someApi",
             UserName = "someTeamId"
         });
@@ -58,6 +59,7 @@ public class SetJiraSettingsTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new SetJiraSettingsRequest()
         {
             WorkspaceId = _workspace.Id,
+            Url = "http://bla.com",
             ApiKey = expectApiKey,
             UserName = expectUserName
         });
@@ -74,6 +76,7 @@ public class SetJiraSettingsTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new SetJiraSettingsRequest()
         {
             WorkspaceId = _workspace.Id,
+            Url = "http://bla.com",
             ApiKey = "someasdasdAPIKey",
             UserName = "someTeamId"
         });

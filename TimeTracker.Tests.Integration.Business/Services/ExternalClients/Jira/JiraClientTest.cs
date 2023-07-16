@@ -33,7 +33,8 @@ public partial class SendNewTimeEntityTest : BaseTest
     private readonly string _apiToken;
     private readonly string _userName;
     private readonly string _taskId;
-    
+    private readonly string? _url;
+
     public SendNewTimeEntityTest() : base(false)
     {
         _client = Scope.Resolve<IJiraClient>();
@@ -52,6 +53,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         _apiToken = configuration.GetValue<string>("Integration:Jira:ApiToken");
         _userName = configuration.GetValue<string>("Integration:Jira:UserName");
         _taskId = configuration.GetValue<string>("Integration:Jira:TaskId");
+        _url = configuration.GetValue<string>("Integration:Jira:Url");
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
@@ -61,6 +63,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         _workspaceSettingsDao.SetJiraAsync(
             _user,
             _workspace,
+            _url,
             _apiToken,
             _userName,
             true

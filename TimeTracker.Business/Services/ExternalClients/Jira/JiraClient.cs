@@ -14,6 +14,7 @@ using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.ExternalClients.ClickUp.Model;
 using TimeTracker.Business.Services.ExternalClients.Dto;
+using TimeTracker.Business.Services.ExternalClients.Jira.Dto;
 using SetTimeEntryDto = TimeTracker.Business.Services.ExternalClients.Jira.Dto.SetTimeEntryDto;
 using TimeEntryDto = TimeTracker.Business.Services.ExternalClients.Jira.Dto.TimeEntryDto;
 
@@ -26,7 +27,7 @@ public partial class JiraClient: AExternalClientService, IJiraClient
 
     private static readonly Regex TaskIdRegex = new(@"^[a-zA-Z0-9\-]{1,12}$");
     
-    private const string BaseUrl = "https://lampego.atlassian.net/rest/api/3";
+    private const string BaseUri = "rest/api/3";
     
     public JiraClient(
         ILogger<JiraClient> logger,
@@ -67,7 +68,12 @@ public partial class JiraClient: AExternalClientService, IJiraClient
         };
         request.Comment.SetText(timeEntry.Description);
         var requestData = JsonContent.Create(request);
-        var uri = BuildChangeTimeEntryUri(timeEntry.ExternalTaskId, timeEntry.JiraId);
+        var uri = BuildChangeTimeEntryUri(
+            timeEntry.Workspace,
+            timeEntry.User,
+            timeEntry.ExternalTaskId,
+            timeEntry.JiraId
+        );;
         _logger.LogDebug(
             "Jira. Send request to: {Uri}. Body: {Body}",
             uri,
@@ -107,7 +113,12 @@ public partial class JiraClient: AExternalClientService, IJiraClient
     {
         var httpClient = BuildHttpClient(timeEntry.Workspace, timeEntry.User);
         
-        var uri = BuildChangeTimeEntryUri(timeEntry.ExternalTaskId, timeEntry.JiraId);
+        var uri = BuildChangeTimeEntryUri(
+            timeEntry.Workspace,
+            timeEntry.User,
+            timeEntry.ExternalTaskId,
+            timeEntry.JiraId
+        );
         _logger.LogDebug("Jira. Send request to: {Uri}", uri);
         var response = await httpClient.DeleteAsync(uri);
         if (response.StatusCode != HttpStatusCode.NoContent)
@@ -123,26 +134,28 @@ public partial class JiraClient: AExternalClientService, IJiraClient
     protected override async Task<bool> SendSettingsValidationRequest(WorkspaceEntity workspace, UserEntity user)
     {
         var httpClient = BuildHttpClient(workspace, user);
-        var uri = new Uri(BaseUrl + $"/events", UriKind.Absolute);
+        var uri = BuildUrl(workspace, user, "groups/picker");
         _logger.LogDebug("Jira. Send checking request to: {Uri}", uri);
         var response = await httpClient.GetAsync(uri);
-        if (response.StatusCode != HttpStatusCode.OK)
+        var responseData = await HandleResponse<CheckSettingsResponseDto?>(uri, response);
+        if (response.StatusCode == HttpStatusCode.OK && responseData is {IsCorrect: true})
         {
-            _logger.LogDebug(
-                $"Jira returned status code: {response.StatusCode}"
-            );
-            return false;
+            return true;
         }
-        return true;
+        _logger.LogDebug(
+            $"Jira returned status code: {response.StatusCode}"
+        );
+        return false;
     }
 
-    private string BuildChangeTimeEntryUri(string taskId, long? timeEntryId = null)
+    private string BuildChangeTimeEntryUri(WorkspaceEntity workspace, UserEntity user, string taskId, long? timeEntryId = null)
     {
-        var url = new UriBuilder(
-            $"{BaseUrl}/issue/{taskId}/worklog"
-            + (timeEntryId.HasValue ? $"/{timeEntryId}" : "")
+        return BuildUrl(
+            workspace,
+            user,
+            $"issue/{taskId}/worklog"
+            + (timeEntryId.HasValue ? $"/{timeEntryId}" : "")    
         );
-        return url.ToString();
     }
 
     private WorkspaceSettingsJiraEntity GetSettings(WorkspaceEntity workspace, UserEntity user)
@@ -174,5 +187,14 @@ public partial class JiraClient: AExternalClientService, IJiraClient
             totalSeconds = 60;
         }
         return totalSeconds;
+    }
+
+    private string BuildUrl(WorkspaceEntity workspace, UserEntity user, string url)
+    {
+        var settings = workspace.GetJiraSettings(user.Id);
+        if (settings == null)
+            throw new NullReferenceException("Jira settings not found");
+        var uri = new UriBuilder($"{settings.Url}/{BaseUri}/{url}");
+        return uri.ToString();
     }
 }

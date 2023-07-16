@@ -19,6 +19,10 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
         [Column(Name = "user_name", Length = 512, NotNull = false)]
         public virtual string? UserName { get; set; }
         
+        [Property(NotNull = false)]
+        [Column(Name = "url", Length = 512, NotNull = false)]
+        public virtual string? Url { get; set; }
+        
         [Property(NotNull = true)]
         [Column(Name = "is_fill_time_entry_with_task_details", NotNull = true)]
         public virtual bool IsFillTimeEntryWithTaskDetails { get; set; } = true;

@@ -1,4 +1,5 @@
 ﻿using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
@@ -72,6 +73,7 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
     public async Task<WorkspaceSettingsJiraEntity> SetJiraAsync(
         UserEntity user,
         WorkspaceEntity workspace,
+        string? url,
         string? apiKey,
         string? userName,
         bool isFillTimeEntryWithTaskDetails = true
@@ -87,6 +89,7 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
             settings.CreateTime = DateTime.UtcNow;
         }
         settings.UpdateTime = DateTime.UtcNow;
+        settings.Url = url?.ToLower().RemoveTrailingSlash();
         settings.ApiKey = apiKey;
         settings.UserName = userName;
         settings.IsFillTimeEntryWithTaskDetails = isFillTimeEntryWithTaskDetails;

@@ -10,17 +10,29 @@
     <div class="row">
         <div class="col">
             <RadzenLabel
+                Text="Url"
+                TextStyle="@TextStyle.Subtitle2"/>
+            <RadzenText
+                disabled="@_isLoading"
+                @bind-Value="@_model.Url"
+                AutoComplete="false"
+                Name="Url"
+                Class="w-100"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <RadzenLabel
                 Text="User Name"
                 TextStyle="@TextStyle.Subtitle2"/>
             <RadzenPassword
                 disabled="@_isLoading"
                 @bind-Value="@_model.UserName"
                 AutoComplete="false"
-                Name="SecurityKey"
+                Name="UserName"
                 Class="w-100"/>
         </div>
         <div class="col">
-            
             <RadzenLabel
                 Text="Api Key"
                 TextStyle="@TextStyle.Subtitle2"/>
@@ -28,7 +40,7 @@
                 disabled="@_isLoading"
                 @bind-Value="@_model.ApiKey"
                 AutoComplete="false"
-                Name="SecurityKey"
+                Name="ApiKey"
                 Class="w-100"/>
         </div>
     </div>
