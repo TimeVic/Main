@@ -53,10 +53,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
 
             var redmineSettings = workspace.GetRedmineSettings(user.Id);
             var clickUpSettings = workspace.GetClickUpSettings(user.Id);
+            var jiraSettings = workspace.GetJiraSettings(user.Id);
             return new GetIntegrationSettingsResponse()
             {
                 IntegrationRedmine = _mapper.Map<WorkspaceSettingsRedmineDto>(redmineSettings),
                 IntegrationClickUp = _mapper.Map<WorkspaceSettingsClickUpDto>(clickUpSettings),
+                IntegrationJira = _mapper.Map<WorkspaceSettingsJiraDto>(jiraSettings),
             };
         }
     }

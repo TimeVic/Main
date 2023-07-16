@@ -20,6 +20,9 @@ else
             <RadzenTabsItem Text="Redmine">
                 <RedmineSettingsForm @bind-Value="_settings.IntegrationRedmine"/>
             </RadzenTabsItem>
+            <RadzenTabsItem Text="Jira">
+                <JiraSettingsForm @bind-Value="_settings.IntegrationJira"/>
+            </RadzenTabsItem>
         </Tabs>
     </RadzenTabs>    
 }

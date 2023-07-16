@@ -13,7 +13,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
         
         [Required]
         [StringLength(255)]
-        public virtual string SecurityKey { get; set; } = "";
+        public virtual string ApiKey { get; set; } = "";
     
         [Required]
         [StringLength(255)]
@@ -21,7 +21,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
     
         public void Fill(WorkspaceSettingsJiraDto dto)
         {
-            SecurityKey = dto.ApiKey;
+            ApiKey = dto.ApiKey;
             UserName = dto.UserName;
         }
     }

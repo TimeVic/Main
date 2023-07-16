@@ -44,7 +44,7 @@ public class SetJiraSettingsTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new SetJiraSettingsRequest()
         {
             WorkspaceId = _workspace.Id,
-            SecurityKey = "someApi",
+            ApiKey = "someApi",
             UserName = "someTeamId"
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -58,7 +58,7 @@ public class SetJiraSettingsTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new SetJiraSettingsRequest()
         {
             WorkspaceId = _workspace.Id,
-            SecurityKey = expectApiKey,
+            ApiKey = expectApiKey,
             UserName = expectUserName
         });
         response.EnsureSuccessStatusCode();
@@ -74,7 +74,7 @@ public class SetJiraSettingsTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new SetJiraSettingsRequest()
         {
             WorkspaceId = _workspace.Id,
-            SecurityKey = "someasdasdAPIKey",
+            ApiKey = "someasdasdAPIKey",
             UserName = "someTeamId"
         });
         response.EnsureSuccessStatusCode();

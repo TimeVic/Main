@@ -47,5 +47,18 @@ namespace TimeTracker.Web.Services.Http
             }
             return response;
         }
+        
+        public async Task<WorkspaceSettingsJiraDto> WorkspaceSetJiraIntegrationSettingsAsync(SetJiraSettingsRequest settings)
+        {
+            var response = await PostAuthorizedAsync<WorkspaceSettingsJiraDto>(
+                ApiUrl.WorkspaceIntegrationSettingsJiraSet,
+                settings
+            );
+            if (response == null)
+            {
+                throw new ServerErrorException();
+            }
+            return response;
+        }
     }
 }

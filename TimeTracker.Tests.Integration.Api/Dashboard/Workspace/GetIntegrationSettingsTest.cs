@@ -37,6 +37,8 @@ public class GetIntegrationSettingsTest: BaseTest
     private readonly string? _clickUpsecurityKey;
     private readonly string? _clickUpteamId;
     private readonly string? _clickUptaskId;
+    private readonly string? _jiraApiKey;
+    private readonly string? _jiraUserName;
 
     public GetIntegrationSettingsTest(ApiCustomWebApplicationFactory factory) : base(factory)
     { 
@@ -72,6 +74,16 @@ public class GetIntegrationSettingsTest: BaseTest
             true,
             true
         ).Wait();
+        
+        _jiraApiKey = configuration.GetValue<string>("Integration:Jira:ApiToken");
+        _jiraUserName = configuration.GetValue<string>("Integration:Jira:UserName");
+        _workspaceSettingsDao.SetJiraAsync(
+            _user,
+            _workspace,
+            _jiraApiKey,
+            _jiraUserName,
+            true
+        ).Wait();
     }
 
     [Fact]
@@ -103,6 +115,10 @@ public class GetIntegrationSettingsTest: BaseTest
         Assert.NotNull(actualResponse.IntegrationClickUp);
         Assert.Equal(_clickUpsecurityKey, actualResponse.IntegrationClickUp.SecurityKey);
         Assert.Equal(_clickUpteamId, actualResponse.IntegrationClickUp.TeamId);
+        
+        Assert.NotNull(actualResponse.IntegrationJira);
+        Assert.Equal(_jiraApiKey, actualResponse.IntegrationJira.ApiKey);
+        Assert.Equal(_jiraUserName, actualResponse.IntegrationJira.UserName);
     }
     
     [Fact]

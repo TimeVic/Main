@@ -74,6 +74,7 @@ public class ApiUrl
     public const string WorkspaceIntegrationSettingsGet = "dashboard/workspace/settings/integrations/get";
     public const string WorkspaceIntegrationSettingsRedmineSet = "dashboard/workspace/settings/set-redmine";
     public const string WorkspaceIntegrationSettingsClickUpSet = "dashboard/workspace/settings/set-clickup";
+    public const string WorkspaceIntegrationSettingsJiraSet = "dashboard/workspace/settings/set-jira";
     
     #endregion
     
