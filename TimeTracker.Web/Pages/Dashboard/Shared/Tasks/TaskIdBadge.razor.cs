@@ -15,6 +15,9 @@ public partial class TaskIdBadge
     public bool IsClickable { get; set; } = false;
 
     [Parameter]
+    public bool IsReplaceWithExternal { get; set; } = false;
+    
+    [Parameter]
     public string Class { get; set; }
 
     [Parameter]

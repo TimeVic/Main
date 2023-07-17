@@ -1,6 +1,11 @@
 ﻿@inherits BaseComponent
 
-<div class="d-flex align-items-center justify-content-start">
+<div class="d-flex align-items-center justify-content-center">
+    @{
+        var taskId = string.IsNullOrEmpty(InternalTask.ExternalTaskId) && !IsReplaceWithExternal
+            ? InternalTask.FormattedId
+            : InternalTask.ExternalTaskId;
+    }
     @if (IsLink)
     {
         <NavLink href="@("/board/task/" + InternalTask.Id)" target="_blank">
@@ -10,7 +15,7 @@
                 Style="@(IsClickable ? "cursor: pointer" : "")"
                 @onclick="OnClick"
                 class="@($"{Class} d-flex align-items-center")"
-                Text="@InternalTask.FormattedId"/>
+                Text="@taskId"/>
         </NavLink>
     }
     else
@@ -21,6 +26,6 @@
             Style="@(IsClickable ? "cursor: pointer" : "")"
             @onclick="OnClick"
             class="@($"{Class} d-flex align-items-center")"
-            Text="@InternalTask.FormattedId"/>
+            Text="@taskId"/>
     }
 </div>

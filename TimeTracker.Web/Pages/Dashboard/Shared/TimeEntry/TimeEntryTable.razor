@@ -111,7 +111,7 @@
         TItem="TimeEntryDto"
         Title="Task ID"
         TextAlign="TextAlign.Center"
-        Width="50px">
+        Width="60px">
 
         <Template Context="entry">
             @if (entry.Task != null)
@@ -124,7 +124,7 @@
             {
                 <RadzenButton
                     ButtonStyle="ButtonStyle.Info"
-                    Size="ButtonSize.Small"
+                    Size="ButtonSize.ExtraSmall"
                     Click="@(() => ShowAddTaskModal(entry.Id))"
                     MouseEnter="ShowTooltip"
                     Class="mr-1"
@@ -134,7 +134,8 @@
         <EditTemplate Context="entry">
             @if (entry.Task != null)
             {
-                <TaskIdBadge 
+                <TaskIdBadge
+                    IsReplaceWithExternal="true"
                     IsClickable="false"
                     InternalTask="@entry.Task"/>
             }
@@ -147,7 +148,14 @@
         Width="200px">
 
         <Template Context="entry">
-            @entry.Description
+            @{
+                var description = entry.Description;
+                if (string.IsNullOrEmpty(description))
+                {
+                    description = entry.Task?.Title;
+                }
+            }
+            @description
         </Template>
         <EditTemplate Context="entry">
             <RadzenTextBox
