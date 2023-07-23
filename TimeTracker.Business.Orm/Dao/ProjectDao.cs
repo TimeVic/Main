@@ -3,6 +3,7 @@ using NHibernate.Linq;
 using NHibernate.Transform;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
@@ -33,14 +34,30 @@ public class ProjectDao: IProjectDao
         return project;
     }
 
-    public async Task<ProjectEntity?> GetById(long? projectId)
+    public async Task<ProjectEntity?> GetById(long? projectId, bool isOnlyActive = true)
     {
         if (projectId == null)
             return null;
 
         return await _sessionProvider.CurrentSession.Query<ProjectEntity>()
             .Where(item => item.Id == projectId)
+            .Where(item => !isOnlyActive || !item.IsArchived)
             .FirstOrDefaultAsync();
+    }
+    
+    public async Task ArchiveProject(ProjectEntity project)
+    {
+        if (project.IsArchived)
+        {
+            throw new DataValidationException();
+        }
+        project.IsArchived = true;
+        await _sessionProvider.CurrentSession.SaveAsync(project);
+        foreach (var taskList in project.TaskLists)
+        {
+            taskList.IsArchived = true;
+            await _sessionProvider.CurrentSession.SaveAsync(project);
+        }
     }
     
     public async Task<ListDto<ProjectEntity>> GetAvailableForUserListAsync(
@@ -53,7 +70,8 @@ public class ProjectDao: IProjectDao
             .Select(
                 Projections.Group<ProjectEntity>(x => x.Id)
             )
-            .Where(item => item.Workspace.Id == workspace.Id);
+            .Where(item => item.Workspace.Id == workspace.Id)
+            .Where(item => !item.IsArchived);
 
         if (
             user != null 

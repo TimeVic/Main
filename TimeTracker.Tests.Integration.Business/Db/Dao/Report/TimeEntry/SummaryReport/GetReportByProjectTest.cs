@@ -20,7 +20,7 @@ public class GetReportByProjectTest: BaseTest
     private readonly ISummaryReportDao _reportsDao;
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
-    private readonly IProjectSeeder _projectSeederSeeder;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly IPaymentDao _paymentDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IUserDao _userDao;
@@ -28,7 +28,7 @@ public class GetReportByProjectTest: BaseTest
     public GetReportByProjectTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
-        _projectSeederSeeder = Scope.Resolve<IProjectSeeder>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
         _paymentDao = Scope.Resolve<IPaymentDao>();
@@ -42,7 +42,7 @@ public class GetReportByProjectTest: BaseTest
     [Fact]
     public async Task ShouldReceiveReportForOwnerOrManager()
     {
-        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
+        var projects = await _projectSeeder.CreateSeveralAsync(_workspace, 2);
         await DbSessionProvider.PerformCommitAsync();
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
@@ -126,7 +126,7 @@ public class GetReportByProjectTest: BaseTest
     [Fact]
     public async Task ShouldReceiveReportForOther()
     {
-        var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
+        var projects = await _projectSeeder.CreateSeveralAsync(_workspace, 2);
         await DbSessionProvider.PerformCommitAsync();
         var project1 = projects.First();
         var project2 = projects.Last();

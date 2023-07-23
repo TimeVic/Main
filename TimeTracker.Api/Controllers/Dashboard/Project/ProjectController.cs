@@ -32,7 +32,7 @@ public class ProjectController : MainApiControllerBase
     [HttpPost("update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Add([FromBody] UpdateRequest request)
+    public Task<IActionResult> Update([FromBody] UpdateRequest request)
         => this.RequestAsync()
             .For<ProjectDto>()
             .With(request);
@@ -40,8 +40,14 @@ public class ProjectController : MainApiControllerBase
     [HttpPost("list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Add([FromBody] GetListRequest request)
+    public Task<IActionResult> List([FromBody] GetListRequest request)
         => this.RequestAsync()
             .For<GetListResponse>()
             .With(request);
+    
+    [HttpPost("delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Delete([FromBody] DeleteRequest request)
+        => this.RequestAsync(request);
 }

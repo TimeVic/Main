@@ -26,6 +26,7 @@ public class ApiUrl
     
     public const string ProjectAdd = "dashboard/project/add";
     public const string ProjectUpdate = "dashboard/project/update";
+    public const string ProjectDelete = "dashboard/project/delete";
     public const string ProjectList = "dashboard/project/list";
     
     #endregion

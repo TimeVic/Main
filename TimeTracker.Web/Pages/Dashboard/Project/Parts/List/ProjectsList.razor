@@ -78,6 +78,14 @@
                             Disabled="@(!AuthState.Value.IsRoleAdmin)"
                             @onclick:stopPropagation="true">
                         </RadzenButton>
+                        <RadzenButton
+                            Icon="trash"
+                            ButtonStyle="ButtonStyle.Danger"
+                            Size="ButtonSize.Small"
+                            Click="@(args => DeleteProject(item))"
+                            Disabled="@(!AuthState.Value.IsRoleAdmin)"
+                            @onclick:stopPropagation="true">
+                        </RadzenButton>
                     }
                 </Template>
                 <EditTemplate Context="item">

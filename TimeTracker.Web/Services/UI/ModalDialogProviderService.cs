@@ -20,6 +20,23 @@ public class ModalDialogProviderService
         _dialogService = dialogService;
     }
 
+    #region Confirmation Dialog
+    
+    public async Task<bool?> ShowDeleteConfirmationDialog(string messsage = "Are you sure you want to remove this item?")
+    {
+        return await _dialogService.Confirm(
+            messsage,
+            "Delete confirmation",
+            new ConfirmOptions()
+            {
+                OkButtonText = "Delete",
+                CancelButtonText = "Cancel"
+            }
+        );
+    }
+    
+    #endregion
+    
     public async Task ShowEditTaskModal(TaskDto task)
     {
         await _dialogService.OpenAsync<UpdateTaskForm>(

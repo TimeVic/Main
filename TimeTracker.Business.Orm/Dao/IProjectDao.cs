@@ -10,11 +10,13 @@ public interface IProjectDao: IDomainService
 {
     Task<ProjectEntity> CreateAsync(WorkspaceEntity workspace, string name);
     
-    Task<ProjectEntity?> GetById(long? projectId);
+    Task<ProjectEntity?> GetById(long? projectId, bool isOnlyActive = true);
 
     Task<ListDto<ProjectEntity>> GetAvailableForUserListAsync(
         WorkspaceEntity workspace,
         UserEntity? user = null,
         MembershipAccessType? accessType = null
     );
+
+    Task ArchiveProject(ProjectEntity project);
 }

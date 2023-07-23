@@ -50,6 +50,19 @@ public class GetListTest: BaseTest
     }
     
     [Fact]
+    public async Task ShouldReceiveOnlyActiveProjects()
+    {
+        var expectedCounter = 7;
+        var projects = await _projectSeeder.CreateSeveralAsync(_workspace, expectedCounter);
+        var firstProject = projects.First();
+        firstProject.IsArchived = true;
+        await CommitDbChanges();
+
+        var actualList = await _projectDao.GetAvailableForUserListAsync(_workspace);
+        Assert.Equal(expectedCounter - 1, actualList.TotalCount);
+    }
+    
+    [Fact]
     public async Task ShouldNotReceiveForOtherNamespaces()
     {
         var expectedCounter = 7;
