@@ -7,6 +7,8 @@ public class ApiUrl
     public const string UserCheckIsLoggedIn = "user/check-is-logged-in";
     public const string RegistrationStep1 = "user/registration/step1";
     public const string RegistrationStep2 = "user/registration/step2";
+    public const string ResetPasswordStep1 = "user/password/reset";
+    public const string ResetPasswordStep2 = "user/password/change";
     #endregion
     
     #region Time Entry

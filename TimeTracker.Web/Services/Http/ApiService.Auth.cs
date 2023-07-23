@@ -56,5 +56,35 @@ namespace TimeTracker.Web.Services.Http
 
             return response;
         }
+        
+        public async Task<bool> ResetPasswordStep1(ResetPasswordStep1Request model)
+        {
+            try
+            {
+                await PostAsync<object>(ApiUrl.ResetPasswordStep1, model);
+                return true;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return false;
+        }
+        
+        public async Task<bool> ResetPasswordStep2(ResetPasswordStep2Request model)
+        {
+            try
+            {
+                await PostAsync<object>(ApiUrl.ResetPasswordStep2, model);
+                return true;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return false;
+        }
     }
 }
