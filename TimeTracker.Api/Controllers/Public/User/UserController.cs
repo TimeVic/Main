@@ -48,4 +48,18 @@ public class UserController : MainApiControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public Task<IActionResult> CheckIsLoggedIn([FromQuery] CheckIsLoggedInRequest request)
         => this.RequestAsync(request);
+    
+    [HttpPost("password/reset")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public Task<IActionResult> PasswordResetStep1([FromBody] ResetPasswordStep1Request request)
+        => this.RequestAsync(request);
+    
+    [HttpPost("password/change")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public Task<IActionResult> PasswordResetStep1([FromBody] ResetPasswordStep2Request request)
+        => this.RequestAsync(request);
 }

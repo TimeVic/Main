@@ -96,6 +96,15 @@ namespace TimeTracker.Business.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data validation error.
+        /// </summary>
+        public static string Error_DataValidationException {
+            get {
+                return ResourceManager.GetString("Error_DataValidationException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field &quot;{0}&quot;contains incorrect IPv4 address!.
         /// </summary>
         public static string Error_FieldContainsIncorrectIPv4Address {

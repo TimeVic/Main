@@ -30,6 +30,8 @@
 
     <ItemGroup>
       <None Remove="Templates\Emails\en\_EmailLayout.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\PasswordHasBeenChangedNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\ResetPasswordNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\TaskCommentSetNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\TimeEntryAutoStoppedNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\_EmailLayout.htm" />

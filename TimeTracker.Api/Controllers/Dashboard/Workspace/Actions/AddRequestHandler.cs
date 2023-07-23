@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 

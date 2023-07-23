@@ -3,7 +3,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
-namespace TimeTracker.Business.Orm.Dao;
+namespace TimeTracker.Business.Orm.Dao.User;
 
 public interface IUserDao: IDomainService
 {

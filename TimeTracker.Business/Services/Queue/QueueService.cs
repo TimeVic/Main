@@ -147,6 +147,10 @@ public class QueueService: IQueueService
         {
             await SendNotification<SetCommentNotificationContext>(queueItem, cancellationToken);
         }
+        else if (IsContext<ResetPasswordNotificationContext>(contextType))
+        {
+            await SendNotification<ResetPasswordNotificationContext>(queueItem, cancellationToken);
+        }
         else
         {
             throw new Exception($"Incorrect notification context: {queueItem.ContextType}");

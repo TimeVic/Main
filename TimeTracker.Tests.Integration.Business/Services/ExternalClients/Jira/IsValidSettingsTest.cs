@@ -2,6 +2,7 @@ using Autofac;
 using Microsoft.Extensions.Configuration;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dao.Workspace;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Workspaces;

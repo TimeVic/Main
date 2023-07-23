@@ -1,5 +1,4 @@
 ﻿using NHibernate.Linq;
-using NHibernate.MultiTenancy;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
@@ -7,7 +6,7 @@ using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
-namespace TimeTracker.Business.Orm.Dao;
+namespace TimeTracker.Business.Orm.Dao.User;
 
 public class UserDao: IUserDao
 {
