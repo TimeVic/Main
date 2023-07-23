@@ -42,14 +42,10 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task ProjectDeleteAsync(long projectId)
         {
-            var response = await PostAuthorizedAsync<ProjectDto>(ApiUrl.ProjectDelete, new DeleteRequest()
+            await PostAuthorizedAsync<ProjectDto>(ApiUrl.ProjectDelete, new DeleteRequest()
             {
                 ProjectId = projectId
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
         }
     }
 }
