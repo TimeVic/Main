@@ -8,68 +8,59 @@
 
 @inherits BaseComponent
 
-@if (TasksState.Value.IsListLoading)
-{
-    <RadzenCard class="m-0 mt-2 w-100">
-        <RadzenProgressBar
-            Value="100"
-            ProgressBarStyle="ProgressBarStyle.Info"
-            ShowValue="false"
-            Mode="ProgressBarMode.Indeterminate"/>
-    </RadzenCard>
-}
-else
-{
-    <div class="w-task-table mt-2">
-        @foreach (var taskGroupKeyValue in _taskGroups)
-        {
-            var status = taskGroupKeyValue.Key;
-            var tasks = taskGroupKeyValue.Value;
-            <RadzenCard
-                class="w-task-col"
-                @ondrop="@(() => HandleDrop(status))"
-                ondragover="event.preventDefault();"
-                ondragstart="event.dataTransfer.setData('', event.target.id);">
+<div class="mt-2 mb-2">
+    <TasksListTree/>
+</div>
 
-                <RadzenText
-                    class="mt-1 mb-2 rz-color-base-700"
-                    TextStyle="TextStyle.H5">
-                    @status.GetDisplayName()
-                </RadzenText>
+<div class="w-task-table">
+    @foreach (var taskGroupKeyValue in _taskGroups)
+    {
+        var status = taskGroupKeyValue.Key;
+        var tasks = taskGroupKeyValue.Value;
+        <RadzenCard
+            class="w-task-col"
+            @ondrop="@(() => HandleDrop(status))"
+            ondragover="event.preventDefault();"
+            ondragstart="event.dataTransfer.setData('', event.target.id);">
 
-                @foreach (var item in tasks)
-                {
-                    <RadzenCard
-                        draggable="true"
-                        @ondragstart="@(() => OnDragStart(item))"
-                        @onclick="@(() => OnClickTask(item))"
-                        class="m-0 mt-1 w-100 w-task-item rz-background-color-base-100 rz-shadow-0 rz-p-1">
-                        <div class="row d-flex justify-content-between">
-                            <div class="col">
-                                <TaskIdBadge InternalTask="item"/>
-                            </div>
-                            <div class="col d-flex justify-content-end">
-                                <RadzenBadge
-                                    Shade="Shade.Lighter"
-                                    BadgeStyle="@item.Priority.GetBadgeStyle()"
-                                    Text="@item.Priority.GetDisplayName()"/>
+            <RadzenText
+                class="mt-1 mb-2 rz-color-base-700"
+                TextStyle="TextStyle.H5">
+                @status.GetDisplayName()
+            </RadzenText>
+
+            @foreach (var item in tasks)
+            {
+                <RadzenCard
+                    draggable="true"
+                    @ondragstart="@(() => OnDragStart(item))"
+                    @onclick="@(() => OnClickTask(item))"
+                    class="m-0 mt-1 w-100 w-task-item rz-background-color-base-100 rz-shadow-0 rz-p-1">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col">
+                            <TaskIdBadge InternalTask="item"/>
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <RadzenBadge
+                                Shade="Shade.Lighter"
+                                BadgeStyle="@item.Priority.GetBadgeStyle()"
+                                Text="@item.Priority.GetDisplayName()"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="w-task-title" style="">
+                                @item.Title?.Truncate(200)
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="w-task-title" style="">
-                                    @item.Title?.Truncate(200)
-                                </div>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <TagsBadgesList Tags="@item.Tags"/>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <TagsBadgesList Tags="@item.Tags"/>
-                            </div>
-                        </div>
-                    </RadzenCard>
-                }
-            </RadzenCard>
-        }
-    </div>
-}
+                    </div>
+                </RadzenCard>
+            }
+        </RadzenCard>
+    }
+</div>

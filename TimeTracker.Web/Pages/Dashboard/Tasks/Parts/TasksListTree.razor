@@ -3,13 +3,16 @@
 @inherits BaseComponent
 
 <RadzenRow>
-    <RadzenColumn>
-        <TaskListsDropDown
-            Class="w-100"
-            ProjectId="ProjectId"
-            IsExtendedInfo="false"
+    <RadzenColumn class="d-flex justify-content-center">
+        <RadzenSelectBar 
+            TValue="long"
             Value="@_selectedTaskListId"
-            ValueChanged="OnSelectedTasksList"/>
+            ValueChanged="OnSelectedTasksList"
+            TextProperty="Name"
+            ValueProperty="Id" 
+            Data="@_tasksListState.Value.List"
+            Size="ButtonSize.Small"
+            Class="rz-display-none rz-display-xl-flex" />
     </RadzenColumn>
     <RadzenColumn Style="max-width: 36px;">
         <RadzenButton

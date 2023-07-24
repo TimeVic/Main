@@ -6,11 +6,8 @@
 <RadzenCard>
     <RadzenTemplateForm TItem="AddRequest" Data="@model" Submit="HandleSubmit">
         <DataAnnotationsValidator/>
-
+        
         <RadzenRow>
-            <RadzenColumn>
-                <TasksListTree/>
-            </RadzenColumn>
             <RadzenColumn>
                 <RadzenTextBox
                     Name="Title"
