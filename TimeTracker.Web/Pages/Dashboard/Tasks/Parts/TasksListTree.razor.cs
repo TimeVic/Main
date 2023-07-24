@@ -56,6 +56,15 @@ public partial class TasksListTree
         get => _tasksListState.Value.SelectedTaskListId ?? 0;
     }
 
+    private ICollection<TaskListDto> _tasksList
+    {
+        get
+        {
+            var list = _tasksListState.Value.List;
+            return list.Where(item => item.Project?.Id == _projectId).ToList();
+        }
+    }
+    
     private void ShowAddTaskListModal()
     {
         InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal(projectId: ProjectId));
