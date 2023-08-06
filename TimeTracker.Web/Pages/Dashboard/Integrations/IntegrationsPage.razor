@@ -16,17 +16,17 @@ else
         <Tabs>
             <RadzenTabsItem 
                 Text="ClickUp" 
-                Icon="@(_settings.IntegrationClickUp is { IsActive: true } ? "cloud_done" : "signal_disconnected")">
+                Icon="@(_settings.IntegrationClickUp is { IsActive: true } ? "link" : "link_off")">
                 <ClickUpSettingsForm @bind-Value="_settings.IntegrationClickUp"/>
             </RadzenTabsItem>
             <RadzenTabsItem 
                 Text="Redmine"
-                Icon="@(_settings.IntegrationRedmine is { IsActive: true } ? "cloud_done" : "signal_disconnected")">
+                Icon="@(_settings.IntegrationRedmine is { IsActive: true } ? "link" : "link_off")">
                 <RedmineSettingsForm @bind-Value="_settings.IntegrationRedmine"/>
             </RadzenTabsItem>
             <RadzenTabsItem 
                 Text="Jira"
-                Icon="@(_settings.IntegrationJira is { IsActive: true } ? "cloud_done" : "signal_disconnected")">
+                Icon="@(_settings.IntegrationJira is { IsActive: true } ? "link" : "link_off")">
                 <JiraSettingsForm @bind-Value="_settings.IntegrationJira"/>
             </RadzenTabsItem>
         </Tabs>
