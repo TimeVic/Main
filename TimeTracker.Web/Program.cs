@@ -16,12 +16,6 @@ using TimeTracker.Web.Services.Workspace;
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-#if IS_RELEASE_BUILD
-    Console.WriteLine($"This is release build!");
-#else
-    Console.WriteLine($"This is other build!");
-#endif
-
 var environment = builder.HostEnvironment.Environment;
 // System services
 Console.WriteLine($"Application loaded in {environment} mode!");
@@ -41,10 +35,9 @@ var webHttp = new HttpClient()
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 };
 var configurationFileSubPath = environment;
-if (environment is "Release" or "Production")
-{
+#if IS_RELEASE_BUILD
     configurationFileSubPath = "Release";
-}
+#endif
 using var response = await webHttp.GetAsync($"appsettings.{configurationFileSubPath}.json");
 using var stream = await response.Content.ReadAsStreamAsync();
 builder.Configuration.AddJsonStream(stream);
