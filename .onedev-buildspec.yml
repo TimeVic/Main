@@ -212,8 +212,6 @@ jobs:
         color: '#0d87e9'
       - value: prod
         color: '#0d87e9'
-    defaultValueProvider: !SpecifiedDefaultValue
-      value: dev
   jobDependencies:
   - jobName: Build
     requireSuccessful: true
