@@ -217,9 +217,8 @@ jobs:
     requireSuccessful: true
     jobParams:
     - name: environment
-      valuesProvider: !SpecifiedValues
-        values:
-        - - dev
+      valuesProvider: !PassthroughValues
+        paramName: environment
       secret: false
     artifacts: '*/** -.git'
   retryCondition: never
