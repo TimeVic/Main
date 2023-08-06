@@ -1,44 +1,34 @@
 ﻿@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Business.Extensions
 
 @inherits BaseComponent
 
-<RadzenRow>
-    <RadzenColumn class="d-flex justify-content-center">
-        <RadzenSelectBar 
-            TValue="long"
-            Value="@_selectedTaskListId"
-            ValueChanged="OnSelectedTasksList"
-            TextProperty="Name"
-            ValueProperty="Id" 
-            Data="@_tasksList"
-            Size="ButtonSize.Small"
-            Class="rz-display-none rz-display-xl-flex" />
-    </RadzenColumn>
-    <RadzenColumn Style="max-width: 36px;">
-        <RadzenButton
-            Variant="Variant.Text"
-            ButtonStyle="ButtonStyle.Primary"
-            Class="w-100"
-            Click="ShowAddTaskListModal"
-            Icon="add">
-        </RadzenButton>
-    </RadzenColumn>
-    <RadzenColumn Style="max-width: 36px;">
-        <RadzenButton
-            Variant="Variant.Text"
-            ButtonStyle="ButtonStyle.Secondary"
-            Class="w-100"
-            Disabled="@(_selectedTaskListId == null)"
-            Click="ShowUpdateTaskListModal"
-            Icon="edit"/>
-    </RadzenColumn>
-    <RadzenColumn Style="max-width: 36px;">
-        <RadzenButton
-            Variant="Variant.Text"
-            ButtonStyle="ButtonStyle.Danger"
-            Class="w-100"
-            Disabled="@(_selectedTaskListId == null)"
-            Click="OnDeleteTaskList"
-            Icon="delete"/>
-    </RadzenColumn>
-</RadzenRow>
+<RadzenSplitButton
+    Click="OnClickSplitButton"
+    IsBusy="@(!_commonState.Value.IsInitialized)"
+    Text="@_selectedTaskListName.TruncateAndAddDots(16)">
+    <ChildContent>
+        @foreach (var taskList in _tasksList)
+        {
+            <RadzenSplitButtonItem
+                Text="@taskList.Name"
+                Value="@taskList.Id.ToString()"/>
+        }
+        <hr/>
+        <RadzenSplitButtonItem
+            Value="@TaskListAction.Add.ToString()"
+            Icon="add"
+            Text="Add new"/>
+        @if (_selectedTaskListId != null)
+        {
+            <RadzenSplitButtonItem
+                Value="@TaskListAction.Edit.ToString()"
+                Icon="edit"
+                Text="Edit"/>
+            <RadzenSplitButtonItem
+                Value="@TaskListAction.Delete.ToString()"
+                Icon="delete"
+                Text="Delete"/>
+        }
+    </ChildContent>
+</RadzenSplitButton>

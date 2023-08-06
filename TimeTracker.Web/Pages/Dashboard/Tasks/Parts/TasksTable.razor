@@ -8,11 +8,7 @@
 
 @inherits BaseComponent
 
-<div class="mt-2 mb-2">
-    <TasksListTree/>
-</div>
-
-<div class="w-task-table">
+<div class="w-task-table mt-2">
     @foreach (var taskGroupKeyValue in _taskGroups)
     {
         var status = taskGroupKeyValue.Key;
@@ -23,11 +19,20 @@
             ondragover="event.preventDefault();"
             ondragstart="event.dataTransfer.setData('', event.target.id);">
 
-            <RadzenText
-                class="mt-1 mb-2 rz-color-base-700"
-                TextStyle="TextStyle.H5">
-                @status.GetDisplayName()
-            </RadzenText>
+            <div class="d-flex justify-content-between">
+                <RadzenText
+                    class="mt-1 mb-2 rz-color-base-700"
+                    TextStyle="TextStyle.H6">
+                    @status.GetDisplayName()
+                </RadzenText>
+                
+                <RadzenButton
+                    ButtonStyle="ButtonStyle.Light"
+                    Size="ButtonSize.ExtraSmall"
+                    Click="() => OnAddTask(status)"
+                    class="ml-3"
+                    Icon="add"/>
+            </div>
 
             @foreach (var item in tasks)
             {

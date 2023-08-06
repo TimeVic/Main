@@ -1,16 +1,25 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 using TimeTracker.Web.Services.UI;
+using TimeTracker.Web.Store.Common;
 using TimeTracker.Web.Store.Project;
 using TimeTracker.Web.Store.TasksList;
 
 namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
+
+internal enum TaskListAction
+{
+    Add = -1,
+    Edit = -2,
+    Delete = -3,
+}
 
 public partial class TasksListTree
 {
@@ -37,6 +46,9 @@ public partial class TasksListTree
     }
     
     [Inject]
+    public IState<CommonState> _commonState { get; set; }
+    
+    [Inject]
     public IState<ProjectState> _projectState { get; set; }
     
     [Inject]
@@ -54,6 +66,21 @@ public partial class TasksListTree
     public long _selectedTaskListId
     {
         get => _tasksListState.Value.SelectedTaskListId ?? 0;
+    }
+    
+    public string _selectedTaskListName
+    {
+        get
+        {
+            var selectedTaskList = _tasksListState.Value.List.FirstOrDefault(
+                item => item.Id == _tasksListState.Value.SelectedTaskListId
+            );
+            if (selectedTaskList != null)
+            {
+                return selectedTaskList.Name;
+            }
+            return "Add new task list";
+        }
     }
 
     private ICollection<TaskListDto> _tasksList
@@ -80,7 +107,7 @@ public partial class TasksListTree
     {
         var taskList = _tasksListState.Value.List.First(item => item.Id == _selectedTaskListId);
         var isOk = await DialogService.Confirm(
-            "Are you sure you want to remove this task list?",
+            $"Are you sure you want to remove: {taskList.Name}?",
             "Delete confirmation",
             new ConfirmOptions()
             {
@@ -105,5 +132,35 @@ public partial class TasksListTree
     {
         Dispatcher.Dispatch(new SetSelectedAction(testsListId));
         Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
+    }
+
+    private async Task OnClickSplitButton(RadzenSplitButtonItem? selectedItem)
+    {
+        if (selectedItem == null)
+        {
+            return;
+        }
+
+        var isAction = Enum.TryParse(selectedItem.Value, out TaskListAction action)
+            && Enum.IsDefined(typeof(TaskListAction), action);
+        if (isAction)
+        {
+            switch (action)
+            {
+                case TaskListAction.Add:
+                    ShowAddTaskListModal();
+                    break;
+                case TaskListAction.Edit:
+                    ShowUpdateTaskListModal();
+                    break;
+                case TaskListAction.Delete:
+                    await OnDeleteTaskList();
+                    break;
+            }
+        }
+        else
+        {
+            OnSelectedTasksList(long.Parse(selectedItem.Value));
+        }
     }
 }

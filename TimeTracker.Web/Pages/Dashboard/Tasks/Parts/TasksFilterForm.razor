@@ -3,43 +3,30 @@
 
 @inherits BaseComponent
 
-<RadzenTemplateForm TItem="GetListFilterRequest" Data="@model" Submit="HandleSubmit">
-    <RadzenCard class="mt-2">
-        <RadzenRow class="mb-1">
-            <RadzenColumn>
-                <MembersDropDown
-                    Class="w-100"
-                    Value="@(model.AssignedUserId ?? 0)"
-                    ValueChanged="OnChangeAssignedUserId"/>
-            </RadzenColumn>
-            <RadzenColumn Style="max-width: 150px;">
-                <YesNoDropDown
-                    Class="w-100"
-                    Placeholder="Only archived"
-                    @bind-Value="@model.IsArchived"/>
-            </RadzenColumn>
-        </RadzenRow>
-        <RadzenRow>
-            <RadzenColumn>
-                <RadzenTextBox
-                    Name="Title"
-                    @bind-Value="@model.SearchString"
-                    Placeholder="Write anything"
-                    Class="w-100"/>
-            </RadzenColumn>
-            <RadzenColumn Style="max-width: 150px">
-                <RadzenButton
-                    ButtonStyle="ButtonStyle.Primary"
-                    ButtonType="ButtonType.Submit"
-                    Icon="search"
-                    Text="Search"/>
-                <RadzenButton
-                    ButtonType="ButtonType.Button"
-                    ButtonStyle="ButtonStyle.Secondary"
-                    Click="ResetForm"
-                    class="ml-1"
-                    Icon="replay"/>
-            </RadzenColumn>
-        </RadzenRow>
-    </RadzenCard>
-</RadzenTemplateForm>
+<RadzenRow class="mb-1">
+    <RadzenColumn style="max-width: 200px">
+        <TasksListTree/>
+    </RadzenColumn>
+    <RadzenColumn>
+        <RadzenTextBox
+            Name="Title"
+            Value="@Filter.SearchString"
+            ValueChanged="OnChangeSearchString"
+            Placeholder="Write anything"
+            Class="w-100"/>
+    </RadzenColumn>
+    <RadzenColumn style="max-width: 150px">
+        <MembersDropDown
+            Class="w-100"
+            Value="@(Filter.AssignedUserId ?? 0)"
+            ValueChanged="OnChangeAssignedUserId"/>
+    </RadzenColumn>
+    <RadzenColumn Style="max-width: 150px;">
+        <YesNoDropDown
+            Class="w-100"
+            Placeholder="Only archived"
+            ValueChanged="OnChangeIsArchived"
+            Value="@Filter.IsArchived"/>
+    </RadzenColumn>
+</RadzenRow>
+

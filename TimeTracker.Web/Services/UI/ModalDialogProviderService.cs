@@ -8,6 +8,7 @@ using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 using TimeTracker.Web.Shared.Components.Storage;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Services.UI;
 
@@ -109,7 +110,8 @@ public class ModalDialogProviderService
     
     public async Task ShowAddTaskModal(
         long? timEntryId = null,
-        long? taskListId = null
+        long? taskListId = null,
+        TaskStatus? taskStatus = null
     )
     {
         await _dialogService.OpenAsync<AddTaskModalForm>(
@@ -119,6 +121,7 @@ public class ModalDialogProviderService
             {
                 { "TimeEntryId", timEntryId },
                 { "TaskListId", taskListId },
+                { "TaskStatus", taskStatus },
             }
         );
     }

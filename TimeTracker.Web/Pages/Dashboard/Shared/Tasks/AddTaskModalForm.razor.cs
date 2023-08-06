@@ -3,6 +3,7 @@ using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Store.Tasks;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 
@@ -13,6 +14,9 @@ public partial class AddTaskModalForm
     
     [Parameter]
     public long? TaskListId { get; set; }
+    
+    [Parameter]
+    public TaskStatus? TaskStatus { get; set; }
     
     private RadzenTemplateForm<AddRequest> _form;
 
@@ -26,6 +30,10 @@ public partial class AddTaskModalForm
         if (TaskListId.HasValue)
         {
             model.TaskListId = TaskListId.Value;
+        }
+        if (TaskStatus.HasValue)
+        {
+            model.Status = TaskStatus.Value;
         }
     }
 

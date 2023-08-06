@@ -12,8 +12,9 @@
     <CascadingValue Name="TaskListId" Value="@TaskListId">
         <CascadingValue Name="ProjectId" Value="@ProjectId">
             <RadzenColumn>
-                <AddTaskForm/>
-                <TasksFilterForm/>
+                <RadzenCard>
+                    <TasksFilterForm/>
+                </RadzenCard>
                 <TasksTable/>
             </RadzenColumn>
         </CascadingValue>
