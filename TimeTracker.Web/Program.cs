@@ -16,6 +16,12 @@ using TimeTracker.Web.Services.Workspace;
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
+#if IS_RELEASE_BUILD
+    Console.WriteLine($"This is release build!");
+#else
+    Console.WriteLine($"This is other build!");
+#endif
+
 // System services
 Console.WriteLine($"Application loaded in {builder.HostEnvironment.Environment} mode!");
 

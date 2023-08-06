@@ -7,6 +7,10 @@
         <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DefineConstants>TRACE;IS_RELEASE_BUILD</DefineConstants>
+    </PropertyGroup>
+    
     <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
         <PackageReference Include="Fluxor.Blazor.Web" Version="5.9.0" />
