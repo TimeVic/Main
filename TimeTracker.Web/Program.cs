@@ -16,23 +16,35 @@ using TimeTracker.Web.Services.Workspace;
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
-#if IS_RELEASE_BUILD
+#if RE
     Console.WriteLine($"This is release build!");
 #else
     Console.WriteLine($"This is other build!");
 #endif
 
+var environment = builder.HostEnvironment.Environment;
 // System services
-Console.WriteLine($"Application loaded in {builder.HostEnvironment.Environment} mode!");
+Console.WriteLine($"Application loaded in {environment} mode!");
 
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 var apiUrl = builder.Configuration.GetValue<string>("ApiUrl");
-builder.Services.AddScoped(sp => new HttpClient
+builder.Services.AddScoped(sp => new HttpClient()
 {
     BaseAddress = new Uri(apiUrl)
 });
+
+// Init Environment config file 
+var webHttp = new HttpClient()
+{
+    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+};
+using var response = await webHttp.GetAsync($"appsettings.{environment}.json");
+using var stream = await response.Content.ReadAsStreamAsync();
+builder.Configuration.AddJsonStream(stream);
+
+// Init local storage
 builder.Services.AddBlazoredLocalStorage();
 
 // Radzen services
