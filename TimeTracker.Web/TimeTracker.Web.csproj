@@ -10,6 +10,9 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <DefineConstants>TRACE;IS_RELEASE_BUILD</DefineConstants>
     </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Development' ">
+        <DefineConstants>TRACE;IS_DEVELOPMENT_BUILD</DefineConstants>
+    </PropertyGroup>
     
     <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />

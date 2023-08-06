@@ -17,9 +17,9 @@ var currentAssembly = typeof(Program).Assembly;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 var environment = builder.HostEnvironment.Environment;
-// System services
-Console.WriteLine($"Application loaded in {environment} mode!");
+Console.WriteLine($"Environment: {environment}");
 
+// System services
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
@@ -34,11 +34,15 @@ var webHttp = new HttpClient()
 {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 };
-var configurationFileSubPath = environment;
+var configurationFile = "Debug";
 #if IS_RELEASE_BUILD
-    configurationFileSubPath = "Release";
+    configurationFile = "Release";
 #endif
-using var response = await webHttp.GetAsync($"appsettings.{configurationFileSubPath}.json");
+#if IS_DEVELOPMENT_BUILD
+    configurationFile = "Development";
+#endif
+Console.WriteLine($"Application loaded with {configurationFile} configuration");
+using var response = await webHttp.GetAsync($"appsettings.{configurationFile}.json");
 using var stream = await response.Content.ReadAsStreamAsync();
 builder.Configuration.AddJsonStream(stream);
 
