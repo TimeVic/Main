@@ -23,13 +23,13 @@ public class TasksReducers
     {
         var list = state.List.Select(item =>
         {
-            if (item.Id == action.Task.Id)
+            if (item.TaskId == action.Task.TaskId)
             {
                 return action.Task;
             }
             return item;
         }).ToList();
-        if (list.All(item => item.Id != action.Task.Id))
+        if (list.All(item => item.TaskId != action.Task.TaskId))
         {
             list.Insert(0, action.Task);
         }
@@ -65,7 +65,7 @@ public class TasksReducers
         {
             List = state.List.Select(item =>
             {
-                if (item.Id == action.TaskId)
+                if (item.TaskId == action.TaskId)
                 {
                     item.Attachments = action.Attachments;
                 }

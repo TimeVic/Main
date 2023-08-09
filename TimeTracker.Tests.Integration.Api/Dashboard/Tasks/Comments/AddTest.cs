@@ -61,7 +61,8 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
-            TaskId = _task.Id,
+            WorkspaceId = _workspace.Id,
+            TaskId = _task.TaskId,
             Comment = _fakeComment.Comment
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -72,7 +73,8 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            TaskId = _task.Id,
+            WorkspaceId = _workspace.Id,
+            TaskId = _task.TaskId,
             Comment = _fakeComment.Comment
         });
         response.EnsureSuccessStatusCode();
@@ -126,7 +128,8 @@ public class AddTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            TaskId = _task.Id,
+            WorkspaceId = _workspace.Id,
+            TaskId = _task.TaskId,
             Comment = _fakeComment.Comment,
             WatcherIds = new List<long>() { user2.Id, user3.Id }
         });
@@ -168,7 +171,8 @@ public class AddTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            TaskId = _task.Id,
+            WorkspaceId = _workspace.Id,
+            TaskId = _task.TaskId,
             Comment = _fakeComment.Comment,
             WatcherIds = new List<long>() { user2.Id, user3.Id }
         });
@@ -195,7 +199,8 @@ public class AddTest: BaseTest
         );
         var response = await PostRequestAsync(Url, otherToken, new AddRequest()
         {
-            TaskId = _task.Id,
+            WorkspaceId = _workspace.Id,
+            TaskId = _task.TaskId,
             Comment = _fakeComment.Comment
         });
         response.EnsureSuccessStatusCode();
@@ -211,7 +216,22 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
+            WorkspaceId = _workspace.Id,
             TaskId = 9999,
+            Comment = _fakeComment.Comment
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonErrorAsync();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+    }
+    
+    [Fact]
+    public async Task ShouldNotAddIfIncorrectWorkspaceId()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            WorkspaceId = 99999,
+            TaskId = _task.TaskId,
             Comment = _fakeComment.Comment
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -226,7 +246,8 @@ public class AddTest: BaseTest
         var otherTask = await _taskSeeder.CreateAsync(user: user2);
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            TaskId = otherTask.Id,
+            WorkspaceId = otherWorkspace.Id,
+            TaskId = otherTask.TaskId,
             Comment = _fakeComment.Comment
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

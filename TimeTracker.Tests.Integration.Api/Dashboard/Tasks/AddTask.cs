@@ -9,6 +9,7 @@ using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -39,6 +40,7 @@ public partial class AddTask: BaseTest
     private readonly ITaskSeeder _taskSeeder;
     private readonly ITaskListSeeder _taskListSeeder;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
+    private readonly ITaskDao _taskDao;
 
     public AddTask(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -48,6 +50,7 @@ public partial class AddTask: BaseTest
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
+        _taskDao = ServiceProvider.GetRequiredService<ITaskDao>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
@@ -91,7 +94,7 @@ public partial class AddTask: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualData.Id > 0);
+        Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
         Assert.Equal(task.Description, actualData.Description);
@@ -117,12 +120,12 @@ public partial class AddTask: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualData.Id > 0);
+        Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
         
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
-        Assert.Equal(actualData.Id, actualTimeEntry.Task.Id);
+        Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
     
     [Fact]
@@ -163,7 +166,7 @@ public partial class AddTask: BaseTest
         response.EnsureSuccessStatusCode();
         
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(actualData.Id);
+        var actualTask = await _taskDao.GetByWorkspaceTaskId(_workspace.Id, actualData.TaskId);
         Assert.Single(actualTask.HistoryItems);
         var historyItem = actualTask.HistoryItems.First();
         Assert.Equal(task.Title, historyItem.Title);
@@ -190,7 +193,7 @@ public partial class AddTask: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualData.Id > 0);
+        Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
         

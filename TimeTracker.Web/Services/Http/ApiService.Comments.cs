@@ -36,10 +36,15 @@ namespace TimeTracker.Web.Services.Http
             });
         }
 
-        public async Task<GetListResponse> TaskCommentsGetListAsync(long taskId, int page)
+        public async Task<GetListResponse> TaskCommentsGetListAsync(
+            long workspaceId,
+            long taskId,
+            int page
+        )
         {
             var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TaskCommentsList, new GetListRequest()
             {
+                WorkspaceId = workspaceId,
                 TaskId = taskId,
                 Page = page
             });

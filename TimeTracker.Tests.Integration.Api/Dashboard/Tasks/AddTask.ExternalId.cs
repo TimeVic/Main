@@ -29,7 +29,7 @@ public partial class AddTask
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualData.Id > 0);
+        Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.NotEmpty(actualData.Title);
         Assert.Equal(_clickUpTaskId, actualData.ExternalTaskId);
@@ -50,13 +50,13 @@ public partial class AddTask
         await CommitDbChanges();
         
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualData.Id > 0);
+        Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.NotEmpty(actualData.Title);
         Assert.Equal(_clickUpTaskId, actualData.ExternalTaskId);
 
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
-        Assert.Equal(actualData.Id, actualTimeEntry.Task.Id);
+        Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
     
     [Fact]
@@ -74,12 +74,12 @@ public partial class AddTask
         await CommitDbChanges();
         
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualData.Id > 0);
+        Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.NotEmpty(actualData.Title);
         Assert.Equal(_jiraTaskId, actualData.ExternalTaskId);
 
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
-        Assert.Equal(actualData.Id, actualTimeEntry.Task.Id);
+        Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
 }

@@ -49,6 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
             var user = await _userDao.GetById(userId);
 
             var entity = await _fileStorageRelationshipService.GetFileRelationship(
+                request.WorkspaceId,
                 request.EntityId,
                 request.EntityType
             );

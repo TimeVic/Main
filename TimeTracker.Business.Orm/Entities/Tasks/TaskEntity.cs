@@ -15,6 +15,10 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         public virtual long Id { get; set; }
         
         [Property(NotNull = true)]
+        [Column(Name = "task_id", SqlType = "bigint", NotNull = true)]
+        public virtual long TaskId { get; set; }
+        
+        [Property(NotNull = true)]
         [Column(Name = "status", SqlType = "int", NotNull = true)]
         public virtual TaskStatus Status { get; set; }
         

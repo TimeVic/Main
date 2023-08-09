@@ -28,7 +28,7 @@ public class DashboardReducers
             {
                 List = state.MyTasks.List.Select(item =>
                 {
-                    if (item.Id == action.Task.Id)
+                    if (item.TaskId == action.Task.TaskId)
                     {
                         return action.Task;
                     }

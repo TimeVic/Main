@@ -80,7 +80,7 @@ public class GetOneTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.True(actualDto.TaskId > 0);
         Assert.NotEmpty(actualDto.Title);
         Assert.NotEmpty(actualDto.Description);
         Assert.NotNull(actualDto.TaskList?.Project?.Client);
@@ -112,7 +112,7 @@ public class GetOneTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.True(actualDto.TaskId > 0);
     }
     
     [Fact]

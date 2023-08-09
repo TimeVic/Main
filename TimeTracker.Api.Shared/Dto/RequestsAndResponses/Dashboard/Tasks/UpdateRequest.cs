@@ -20,7 +20,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         
         public void Fill(TaskDto dto)
         {
-            TaskId = dto.Id;
+            TaskId = dto.TaskId;
             TaskListId = dto.TaskList.Id;
             Title = dto.Title;
             Description = dto.Description;

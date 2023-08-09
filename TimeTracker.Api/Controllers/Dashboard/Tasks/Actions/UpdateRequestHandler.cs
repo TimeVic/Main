@@ -60,26 +60,31 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             {
                 throw new RecordNotFoundException("User not found");
             }
-
-            var task = await _taskDao.GetById(request.TaskId);
-            var newTaskList = await _taskListDao.GetById(request.TaskListId);
-            if (newTaskList == null || newTaskList.Project.Workspace != task.Workspace)
+            var taskList = await _taskListDao.GetById(request.TaskListId);
+            if (taskList == null)
             {
                 throw new ValidationException("Incorrect TaskListId");
             }
-            task = _mapper.Map(request, task);
-            if (!await _securityManager.HasAccess(AccessLevel.Read, user, newTaskList))
+            
+            var task = await _taskDao.GetByWorkspaceTaskId(
+                taskList.Project.Workspace.Id,
+                request.TaskId
+            );
+            if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList))
                 throw new HasNoAccessException("This user has no permissions for provided task list");
             
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
                 throw new HasNoAccessException("This user has no permissions for task");
-
+            if (taskList.Project.Workspace != task.Workspace)
+                throw new ValidationException("Incorrect TaskListId");
+            
+            task = _mapper.Map(request, task);
             var tags = task.Workspace.Tags.Where(
                 item => request.TagIds.Any(tagId => item.Id == tagId)
             );
             await _taskDao.UpdateTaskAsync(
                 task,
-                taskList: newTaskList,
+                taskList: taskList,
                 user: user,
                 title: request.Title,
                 description: request.Description,

@@ -9,6 +9,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Commen
     {
         [Required]
         [IsPositive]
+        public long WorkspaceId { get; set; }
+        
+        [Required]
+        [IsPositive]
         public long TaskId { get; set; }
         
         [Required]
@@ -19,7 +23,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Commen
 
         public void Fill(TaskCommentDto comment)
         {
-            TaskId = comment.Task.Id;
+            TaskId = comment.Task.TaskId;
             Comment = comment.Comment;
             WatcherIds = comment.Watchers?.Select(item => item.Id).ToList();
         }

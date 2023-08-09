@@ -8,7 +8,7 @@
     }
     @if (IsLink)
     {
-        <NavLink href="@("/board/task/" + InternalTask.Id)" target="_blank">
+        <NavLink href="@($"/board/task/{InternalTask.TaskList.Project.Id}/{InternalTask.TaskId}")" target="_blank">
             <RadzenBadge
                 Shade="Shade.Lighter"
                 BadgeStyle="BadgeStyle.Primary"

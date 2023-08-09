@@ -107,7 +107,7 @@ public partial class UpdateTaskForm
     private void OnFileUploaded(StoredFileDto uploadedFile)
     {
         Task.Attachments.Add(uploadedFile);
-        Dispatcher.Dispatch(new SetAttachmentsAction(Task.Id, Task.Attachments));
+        Dispatcher.Dispatch(new SetAttachmentsAction(Task.TaskId, Task.Attachments));
     }
 
     private async Task OnTagsChanged(ICollection<long> selectedTagIds)
@@ -119,7 +119,7 @@ public partial class UpdateTaskForm
     private void AttachmentsListUpdated(ICollection<StoredFileDto> attachments)
     {
         Task.Attachments = attachments;
-        Dispatcher.Dispatch(new SetAttachmentsAction(Task.Id, Task.Attachments));
+        Dispatcher.Dispatch(new SetAttachmentsAction(Task.TaskId, Task.Attachments));
     }
 
     private bool ValidateStartTime(DateTime? modelStartTime)

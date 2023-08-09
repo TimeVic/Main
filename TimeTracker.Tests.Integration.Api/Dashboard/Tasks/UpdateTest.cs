@@ -83,7 +83,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -98,7 +98,7 @@ public partial class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.Equal(_task.Id, actualData.Id);
+        Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Equal(expectedTask.Title, actualData.Title);
         Assert.Equal(expectedTask.Description, actualData.Description);
@@ -118,7 +118,7 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = otherTaskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
@@ -130,7 +130,7 @@ public partial class UpdateTest: BaseTest
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new ValidationException().GetTypeName(), error.Type);
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
     }
     
     [Fact]
@@ -177,7 +177,7 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = task2.Id,
+            TaskId = task2.TaskId,
             TaskListId = _taskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
@@ -238,7 +238,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -271,7 +271,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -286,7 +286,7 @@ public partial class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.Equal(_task.Id, actualData.Id);
+        Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Null(actualData.StartTime);
         Assert.Null(actualData.EndTime);

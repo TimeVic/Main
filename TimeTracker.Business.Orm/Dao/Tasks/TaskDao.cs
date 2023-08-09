@@ -32,6 +32,25 @@ public class TaskDao: ITaskDao
         return await _sessionProvider.CurrentSession.GetAsync<TaskEntity>(taskListId);
     }
     
+    public async Task<TaskEntity?> GetByWorkspaceTaskId(
+        long workspaceId,
+        long workspaceTaskId
+    )
+    {
+        TaskListEntity taskListAlias = null;
+        ProjectEntity projectAlias = null;
+        WorkspaceEntity workspaceAlias = null;
+        return await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
+            .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
+            .Inner.JoinAlias(item => taskListAlias.Project, () => projectAlias)
+            .Inner.JoinAlias(item => projectAlias.Workspace, () => workspaceAlias)
+            .Where(
+                item => item.TaskId == workspaceTaskId
+                && workspaceAlias.Id == workspaceId
+            )
+            .SingleOrDefaultAsync();
+    }
+    
     public async Task<TaskEntity> AddTaskAsync(
         TaskListEntity taskList,
         UserEntity user,
@@ -46,6 +65,7 @@ public class TaskDao: ITaskDao
     {
         var task = new TaskEntity()
         {
+            TaskId = await GetNextTaskId(taskList.Project),
             TaskList = taskList,
             User = user,
             Title = title,
@@ -185,5 +205,27 @@ public class TaskDao: ITaskDao
         }
         task.StartTime = startTime;
         task.EndTime = endTime;
+    }
+    
+    private async Task<long> GetNextTaskId(ProjectEntity? project)
+    {
+        TaskListEntity taskListAlias = null;
+        ProjectEntity projectAlias = null;
+        WorkspaceEntity workspaceAlias = null;
+        UserEntity userAlias = null;
+        var existsTaskWithMaxId = (await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
+            .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
+            .Inner.JoinAlias(item => taskListAlias.Project, () => projectAlias)
+            .Inner.JoinAlias(item => projectAlias.Workspace, () => workspaceAlias)
+            .Inner.JoinAlias(item => item.User, () => userAlias)
+            .Where(item => workspaceAlias.Id == project.Workspace.Id)
+            .ThenBy(item => item.TaskId).Desc
+            .Take(1)
+            .ListAsync()).FirstOrDefault();
+        if (existsTaskWithMaxId == null)
+        {
+            return 1;
+        }
+        return existsTaskWithMaxId.TaskId + 1;
     }
 }

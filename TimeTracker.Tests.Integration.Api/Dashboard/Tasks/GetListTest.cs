@@ -80,7 +80,7 @@ public class GetListTest: BaseTest
         
         Assert.All(actualDto.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.True(item.TaskId > 0);
             Assert.NotEmpty(item.Title);
             Assert.NotNull(item.TaskList);
             Assert.NotEmpty(item.Description);

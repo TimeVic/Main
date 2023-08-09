@@ -63,7 +63,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 ProjectId = action.Project?.Id,
                 Description = action.Description,
                 HourlyRate = action.HourlyRate,
-                InternalTaskId = action.InternalTask?.Id
+                InternalTaskId = action.InternalTask?.TaskId
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(response));
         }

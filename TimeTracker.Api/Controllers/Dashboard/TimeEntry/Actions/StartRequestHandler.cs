@@ -59,7 +59,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
-            var task = await _taskDao.GetById(request.InternalTaskId ?? 0);
+            var task = await _taskDao.GetByWorkspaceTaskId(request.WorkspaceId, request.InternalTaskId ?? 0);
             if (task != null)
             {
                 if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))

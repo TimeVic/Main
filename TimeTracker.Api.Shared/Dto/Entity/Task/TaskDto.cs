@@ -6,7 +6,7 @@ namespace TimeTracker.Api.Shared.Dto.Entity.Task;
 
 public class TaskDto : IResponse
 {
-    public long Id { get; set; }
+    public long TaskId { get; set; }
     
     public TaskStatus Status { get; set; }
     
@@ -40,7 +40,7 @@ public class TaskDto : IResponse
 
     public string FormattedId
     {
-        get => $"TMV#{Id}";
+        get => $"TMV#{TaskId}";
     }
 
     public DateTime? CalculatedStartTime

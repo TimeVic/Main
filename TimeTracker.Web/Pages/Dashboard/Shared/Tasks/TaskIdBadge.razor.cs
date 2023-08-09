@@ -35,7 +35,7 @@ public partial class TaskIdBadge
         }
 
         // TODO: Read task data from the server?
-        var task = TaskState.Value.List.FirstOrDefault(item => item.Id == InternalTask.Id);
+        var task = TaskState.Value.List.FirstOrDefault(item => item.TaskId == InternalTask.TaskId);
         task ??= InternalTask;
         await ModalDialogProviderService.ShowEditTaskModal(task);
     }

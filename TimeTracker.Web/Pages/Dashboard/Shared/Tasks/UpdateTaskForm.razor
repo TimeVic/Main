@@ -85,13 +85,13 @@
             <RadzenTabsItem Text="@_tabLabelAttachments">
                 <FileUploader
                     Class="w-100"
-                    EntityId="@Task.Id"
+                    EntityId="@Task.TaskId"
                     FileUploaded="OnFileUploaded"
                     EntityType="StorageEntityType.Task"
                     FileType="StoredFileType.Attachment"/>
                 <FilesList
                     Class=" mt-2"
-                    EntityId="@Task.Id"
+                    EntityId="@Task.TaskId"
                     EntityType="StorageEntityType.Task"
                     ListUpdated="AttachmentsListUpdated"
                     Files="@Task.Attachments"/>

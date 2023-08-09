@@ -39,6 +39,11 @@ public interface ITaskDao: IDomainService
     
     Task<TaskEntity?> GetById(long taskListId);
 
+    Task<TaskEntity?> GetByWorkspaceTaskId(
+        long workspaceId,
+        long workspaceTaskId
+    );
+    
     Task<ListDto<TaskEntity>> GetList(
         WorkspaceEntity? workspace = null,
         TaskListEntity? taskList = null,

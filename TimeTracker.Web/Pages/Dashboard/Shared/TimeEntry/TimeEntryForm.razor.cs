@@ -37,7 +37,7 @@ public partial class TimeEntryForm
         {
             if (InternalTask == null)
                 return _state.Value.ActiveEntry;
-            if (InternalTask?.Id == _state.Value.ActiveEntry?.Task?.Id)
+            if (InternalTask?.TaskId == _state.Value.ActiveEntry?.Task?.TaskId)
             {
                 return _state.Value.ActiveEntry;
             }
@@ -52,7 +52,7 @@ public partial class TimeEntryForm
         {
             if (InternalTask == null)
                 return _state.Value.HasActiveEntry;
-            if (InternalTask?.Id == _state.Value.ActiveEntry?.Task?.Id)
+            if (InternalTask?.TaskId == _state.Value.ActiveEntry?.Task?.TaskId)
             {
                 return _state.Value.HasActiveEntry;
             }
