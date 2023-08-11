@@ -34,22 +34,6 @@
             class="d-flex align-items-center">
             <TaskIdBadge IsLink="true" InternalTask="@Task"/>
         </RadzenColumn>
-        @if (!string.IsNullOrEmpty(model.ExternalTaskId))
-        {
-            <RadzenColumn>
-                <RadzenStack
-                    Orientation="Orientation.Horizontal"
-                    AlignItems="AlignItems.Center"
-                    JustifyContent="JustifyContent.Start"
-                    Style="height: 100%;">
-
-                    <RadzenText
-                        TextStyle="TextStyle.Subtitle1">
-                        External Task Id: @model.ExternalTaskId
-                    </RadzenText>
-                </RadzenStack>
-            </RadzenColumn>
-        }
         <RadzenColumn Style="max-width: 200px">
             <TimeEntryForm
                 InternalTask="@Task"

@@ -48,6 +48,7 @@ public partial class EditCommentForm
     {
         await base.OnInitializedAsync();
         model.Fill(Comment);
+        model.WorkspaceId = AuthState.Value.Workspace.Id;
     }
     
     private void HandleSubmit(AddRequest request)

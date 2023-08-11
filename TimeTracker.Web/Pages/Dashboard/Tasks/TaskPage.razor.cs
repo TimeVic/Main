@@ -53,16 +53,17 @@ public partial class TaskPage
             NavigateToTasksPage();
             return;
         }
+        _isLoading = true;
+        
         if (WorkspaceId != _authState.Value.Workspace.Id)
         {
             _urlService.NavigateToChangeWorkspace(
                 WorkspaceId,
-                string.Format(SiteUrl.Dashboard_Tasks, WorkspaceId, TaskId)
+                string.Format(SiteUrl.Dashboard_Task, WorkspaceId, TaskId)
             );
             return;
         }
         
-        _isLoading = true;
         try
         {
             _task = await ApiService.TasksGetAsync(

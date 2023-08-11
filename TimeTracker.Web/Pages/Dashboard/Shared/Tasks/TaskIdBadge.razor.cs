@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Tasks;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
@@ -25,6 +26,9 @@ public partial class TaskIdBadge
     
     [Inject]
     public IState<TasksState> TaskState { get; set; }
+    
+    [Inject]
+    public IState<AuthState> AuthState { get; set; }
     
     private async Task OnClick()
     {

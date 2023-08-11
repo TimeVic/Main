@@ -43,6 +43,6 @@ public class UrlService
     public void NavigateToChangeWorkspace(long workspaceId, string subUrl)
     {
         subUrl = subUrl.StartsWith("/") ? subUrl : $"/{subUrl}";
-        _navigationManager.NavigateTo($"/board-change/{workspaceId}{subUrl}");
+        _navigationManager.NavigateTo($"/board-change/{workspaceId}{subUrl}", replace: true);
     }
 }

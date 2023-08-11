@@ -72,7 +72,7 @@ public partial class TasksListTree
     {
         get
         {
-            var selectedTaskList = _tasksListState.Value.List.FirstOrDefault(
+            var selectedTaskList = _tasksList.FirstOrDefault(
                 item => item.Id == _tasksListState.Value.SelectedTaskListId
             );
             if (selectedTaskList != null)

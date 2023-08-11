@@ -55,7 +55,7 @@ public partial class WorkspaceChangingPage
             _navigationManager.NavigateTo(SiteUrl.Error404);
             return;
         }
-
+        
         if (_authState.Value.Workspace == null || workspace.Id != _authState.Value.Workspace?.Id)
         {
             _workpsaceState.StateChanged -= OnWorkspaceListChanged;
@@ -70,7 +70,8 @@ public partial class WorkspaceChangingPage
     private void NavigateTo()
     {
         _navigationManager.NavigateTo(
-            string.IsNullOrEmpty(PageRoute) ? SiteUrl.DashboardBase : PageRoute  
+            string.IsNullOrEmpty(PageRoute) ? SiteUrl.DashboardBase : PageRoute,
+            replace: true
         );
     }
 }

@@ -32,6 +32,8 @@ public static class SiteUrl
     
     public static readonly string Dashboard_Tasks_Default = "/board/tasks/0";
     public static readonly string Dashboard_Tasks = "/board/tasks/{0}/{1}";
+    public static readonly string Dashboard_Task = "/board/task/{0}/{1}";
     
     public static readonly string Workspace_List = "/board/workspaces";
+    public static readonly string Workspace_Change = "/board-change/{0}";
 }
