@@ -12,8 +12,8 @@ namespace TimeTracker.Tests.Unit.Business.Utils.MarkdownHelperTests
         [InlineData(
             "<p>Testing description</p>\n\n\n\n<p>Another paragraph</p>", 
             @"Testing description
-    
-        Another paragraph"
+
+Another paragraph"
         )]
         public void ShouldConvert(string html, string expectedMarkdown)
         {

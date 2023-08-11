@@ -95,7 +95,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
                 {
                     ToAddress = receiver.Email,
                     Comment = comment.Comment,
-                    TaskId = comment.Task.Id,
+                    TaskId = comment.Task.TaskId,
+                    WorkspaceId = comment.Task.TaskList.Project.Workspace.Id,
                     IsUpdated = false,
                     OwnerName = comment.User.Name
                 });

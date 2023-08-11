@@ -12,6 +12,8 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
 
         public long TaskId { get; set; }
         
+        public long WorkspaceId { get; set; }
+        
         public string TaskTitle { get; set; }
         
         public TaskChangedNotificationContext() {}

@@ -30,7 +30,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks.Comments
             var emailBuilder = _emailFactory.GetEmailBuilder("TaskCommentSetNotification.htm");
             emailBuilder.AddPlaceholder("UserName", context.OwnerName);
             emailBuilder.AddPlaceholder("Comment", MarkdownHelper.ToHtml(context.Comment));
-            emailBuilder.AddPlaceholder("TaskLink", $"{_frontendUrl}/board/task/" + context.TaskId);
+            emailBuilder.AddPlaceholder("TaskLink", $"{_frontendUrl}/board/task/{context.WorkspaceId}/{context.TaskId}");
             emailBuilder.AddPlaceholder("ChangeMessage", context.IsUpdated ? "updated" : "added");
             _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;

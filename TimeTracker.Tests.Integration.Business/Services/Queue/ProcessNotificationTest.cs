@@ -83,6 +83,7 @@ public class ProcessNotificationTest: BaseTest
                 { "test", "test" }
             },
             TaskId = task.Id,
+            WorkspaceId = task.TaskList.Project.Workspace.Id,
             TaskTitle = "Task title",
             UserName = expectedUser.Name
         };

@@ -6,6 +6,8 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks.Comments
     {
         public string ToAddress { get; set; }
         
+        public long WorkspaceId { get; set; }
+        
         public long TaskId { get; set; }
         
         public string OwnerName { get; set; }

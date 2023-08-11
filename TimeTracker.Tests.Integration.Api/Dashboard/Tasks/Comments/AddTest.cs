@@ -92,7 +92,7 @@ public class AddTest: BaseTest
             EmailSendingServiceMock.SentMessages, 
             item => item.To == _user.Email
             && item.Body.Contains("added")
-            && item.Body.Contains(_task.Id.ToString())
+            && item.Body.Contains($"{_task.TaskList.Project.Workspace.Id}/{_task.TaskId}")
         );
     }
     

@@ -70,7 +70,7 @@ public class AddTaskAsyncTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldGenerateUniqueTaskIdWithinProject()
+    public async Task ShouldGenerateUniqueTaskIdWithinWorkspace()
     {
         var fakeTask = _taskFactory.Generate();
         
@@ -87,7 +87,7 @@ public class AddTaskAsyncTest: BaseTest
             _user,
             fakeTask.Title
         );
-        Assert.Equal(1, secondTask.TaskId);
+        Assert.Equal(2, secondTask.TaskId);
     }
 }
  

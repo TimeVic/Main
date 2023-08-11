@@ -64,6 +64,7 @@ public class TaskSeeder: ITaskSeeder
             taskList ??= await _taskListSeeder.CreateAsync(project);    
         }
         
+        
         var fakeEntry = _factory.Generate();
         var entry = await _taskDao.AddTaskAsync(
             taskList,

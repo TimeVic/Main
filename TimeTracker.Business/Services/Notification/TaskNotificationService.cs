@@ -88,7 +88,8 @@ public class TaskNotificationService: ITaskNotificationService
             {
                 UserName = historyItem.User.Name,
                 ToAddress = receiverEmail,
-                TaskId = historyItem.Task.Id,
+                TaskId = historyItem.Task.TaskId,
+                WorkspaceId = historyItem.Task.TaskList.Project.Workspace.Id,
                 TaskTitle = historyItem.Task.Title,
                 ChangeSet = changeSet
             });    

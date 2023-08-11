@@ -96,7 +96,7 @@ public class UpdateTest: BaseTest
             EmailSendingServiceMock.SentMessages, 
             item => item.To == _user.Email
                 && item.Body.Contains("updated")
-                && item.Body.Contains(_task.Id.ToString())
+                && item.Body.Contains($"{_task.TaskList.Project.Workspace.Id}/{_task.TaskId}")
         );
     }
     

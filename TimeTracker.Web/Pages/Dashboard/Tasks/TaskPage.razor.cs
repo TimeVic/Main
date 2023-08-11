@@ -24,6 +24,9 @@ public partial class TaskPage
         }
     }
 
+    [Parameter]
+    public long WorkspaceId { get; set; }
+
     [Inject]
     private ILogger<TaskPage> _logger { get; set; }
 
@@ -32,6 +35,9 @@ public partial class TaskPage
     
     [Inject]
     private ModalDialogProviderService _dialogProviderService { get; set; }
+    
+    [Inject]
+    private UrlService _urlService { get; set; }
     
     [Inject]
     private IState<AuthState> _authState { get; set; }
@@ -47,7 +53,15 @@ public partial class TaskPage
             NavigateToTasksPage();
             return;
         }
-
+        if (WorkspaceId != _authState.Value.Workspace.Id)
+        {
+            _urlService.NavigateToChangeWorkspace(
+                WorkspaceId,
+                string.Format(SiteUrl.Dashboard_Tasks, WorkspaceId, TaskId)
+            );
+            return;
+        }
+        
         _isLoading = true;
         try
         {
