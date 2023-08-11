@@ -68,7 +68,7 @@ public partial class UpdateTest: BaseTest
         var task = _taskFactory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
-            TaskId = task.Id,
+            TaskId = task.TaskId,
             Title = task.Title,
             Description = task.Description,
             StartTime = task.StartTime,
@@ -141,7 +141,7 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = _taskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,

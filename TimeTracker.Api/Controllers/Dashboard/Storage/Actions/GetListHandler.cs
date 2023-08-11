@@ -11,6 +11,7 @@ using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
@@ -29,6 +30,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
         private readonly IFileStorage _fileStorage;
         private readonly IFileStorageRelationshipService _fileStorageRelationshipService;
         private readonly IDbSessionProvider _sessionProvider;
+        private readonly ITaskDao _taskDao;
 
         public GetListHandler(
             IMapper mapper,
@@ -37,7 +39,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
             ISecurityManager securityManager,
             IFileStorage fileStorage,
             IFileStorageRelationshipService fileStorageRelationshipService,
-            IDbSessionProvider sessionProvider
+            IDbSessionProvider sessionProvider,
+            ITaskDao taskDao
         )
         {
             _mapper = mapper;
@@ -47,6 +50,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
             _fileStorage = fileStorage;
             _fileStorageRelationshipService = fileStorageRelationshipService;
             _sessionProvider = sessionProvider;
+            _taskDao = taskDao;
         }
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
@@ -56,7 +60,10 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
 
             if (request.EntityType == StorageEntityType.Task)
             {
-                var task = await _sessionProvider.CurrentSession.GetAsync<TaskEntity>(request.EntityId);
+                var task = await _taskDao.GetByWorkspaceTaskId(
+                    request.WorkspaceId,
+                    request.EntityId
+                );
                 if (task == null)
                 {
                     throw new RecordNotFoundException();

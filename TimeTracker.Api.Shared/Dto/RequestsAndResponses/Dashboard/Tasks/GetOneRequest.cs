@@ -10,6 +10,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
     {
         [Required]
         [IsPositive]
+        public long WorkspaceId { get; set; }
+        
+        [Required]
+        [IsPositive]
         public long TaskId { get; set; }
     }
 }

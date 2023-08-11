@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Fluxor;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -7,6 +8,8 @@ using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
+using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Common;
 
 namespace TimeTracker.Web.Shared.Components.Storage;
 
@@ -41,6 +44,9 @@ public partial class FileUploader
     [Inject]
     public UiHelperService _uiHelperService { get; set; }
 
+    [Inject]
+    public IState<AuthState> _authState { get; set; }
+    
     public InputFile _fileInput { get; set; }
     public bool _isLoading = false;
 
@@ -72,6 +78,7 @@ public partial class FileUploader
                 foreach (var file in eventArguments.GetMultipleFiles(MaxFiles))
                 {
                     var uploadedFileDto = await ApiService.StorageUploadFileAsync(
+                        _authState.Value.Workspace.Id,
                         EntityId,
                         EntityType,
                         FileType,

@@ -40,7 +40,7 @@ public class TaskDto : IResponse
 
     public string FormattedId
     {
-        get => $"TMV#{TaskId}";
+        get => $"#{TaskId}";
     }
 
     public DateTime? CalculatedStartTime

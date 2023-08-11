@@ -1,10 +1,12 @@
 ﻿using System.Timers;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
+using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Shared.Components.Storage;
 
@@ -45,6 +47,9 @@ public partial class FilesList: IDisposable
     
     [Inject]
     protected ModalDialogProviderService _dialogProvider { get; set; }
+    
+    [Inject]
+    protected IState<AuthState> _authState { get; set; }
     
     private System.Timers.Timer _timer;
 
@@ -127,7 +132,11 @@ public partial class FilesList: IDisposable
     {
         try
         {
-            var files = await _apiService.StorageGetListAsync(EntityId.Value, EntityType.Value);
+            var files = await _apiService.StorageGetListAsync(
+                _authState.Value.Workspace.Id,
+                EntityId.Value,
+                EntityType.Value
+            );
             await InvokeAsync(() => ListUpdated.InvokeAsync(files.Items));
         }
         catch (Exception e)

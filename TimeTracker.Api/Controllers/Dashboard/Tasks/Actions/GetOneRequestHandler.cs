@@ -50,7 +50,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var task = await _dbSessionProvider.CurrentSession.GetAsync<TaskEntity>(request.TaskId);
+            var task = await _taskDao.GetByWorkspaceTaskId(request.WorkspaceId, request.TaskId);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
             {
                 throw new HasNoAccessException();
