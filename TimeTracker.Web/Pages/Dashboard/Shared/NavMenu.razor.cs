@@ -34,7 +34,7 @@ public partial class NavMenu
     private string GetTasksListUrl(ProjectDto project)
     {
         var selectedTasksList = _tasksListState.Value.List
-            .FirstOrDefault(item => item.Project.Id == project.Id);
+            .FirstOrDefault(item => item?.Project.Id == project.Id);
         return string.Format(SiteUrl.Dashboard_Tasks, project.Id.ToString(), selectedTasksList?.Id.ToString() ?? string.Empty);
     }
 

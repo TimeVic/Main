@@ -13,6 +13,9 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Development' ">
         <DefineConstants>TRACE;IS_DEVELOPMENT_BUILD</DefineConstants>
     </PropertyGroup>
+    <PropertyGroup>
+        <DefineConstants>TRACE;IS_WEB_APP</DefineConstants>
+    </PropertyGroup>
     
     <ItemGroup>
         <PackageReference Include="Blazor-ApexCharts" Version="0.9.21-beta" />

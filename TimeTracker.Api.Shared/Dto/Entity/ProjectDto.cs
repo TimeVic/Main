@@ -16,6 +16,7 @@ public class ProjectDto : IResponse
     
     public ClientDto? Client { get; set; }
     
+#if IS_WEB_APP
     #region Select list methods
     
     // Note: this is important so the MudSelect can compare pizzas
@@ -35,4 +36,5 @@ public class ProjectDto : IResponse
     public override string ToString() => Name;
     
     #endregion
+#endif
 }

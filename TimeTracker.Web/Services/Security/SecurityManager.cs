@@ -45,7 +45,9 @@ public class SecurityManager: ISecurityManager
         }
 
         return projectAccesses.GroupBy(item => item.Project)
-            .Select(item => item.Key)
+            .Select(
+                item => _projectState.Value.List.First(x => x.Id == item.Key.Id)
+            )
             .ToList();
     }
     
