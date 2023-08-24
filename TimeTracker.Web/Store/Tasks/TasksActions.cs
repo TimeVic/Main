@@ -16,4 +16,15 @@ public record struct SetListFilterAction(GetListFilterRequest Filter);
 
 public record struct SetIsListLoading(bool IsLoading);
 
-public record struct UpdateListItemAction(UpdateRequest UpdateRequest);
+public record struct UpdateListItemAction(
+    UpdateRequest UpdateRequest,
+    bool IsUpdateState = true
+);
+
+public record struct UpdatePositionsAction(
+    IEnumerable<TaskDto> Tasks
+);
+
+public record struct UpdateListItemsAction(
+    IEnumerable<TaskDto> Tasks
+);

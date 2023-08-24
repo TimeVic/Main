@@ -41,6 +41,24 @@ public class TasksReducers
     }
     
     [ReducerMethod]
+    public static TasksState UpdateListItemsActionReducer(TasksState state, UpdateListItemsAction action)
+    {
+        var list = state.List.Select(item =>
+        {
+            var updatedItem = action.Tasks.FirstOrDefault(x => x.TaskId == item.TaskId);
+            if (updatedItem != null)
+            {
+                return updatedItem;
+            }
+            return item;
+        }).ToList();
+        return state with
+        {
+            List = list
+        };
+    }
+    
+    [ReducerMethod]
     public static TasksState SetProjectIsListLoadingReducer(TasksState state, SetIsListLoading action)
     {
         return state with

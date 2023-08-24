@@ -30,6 +30,11 @@ namespace TimeTracker.Web.Services.Http
 
             return response;
         }
+        
+        public async Task TasksUpdatePositionsAsync(UpdatePositionsRequest request)
+        {
+            await PostAuthorizedAsync<TaskDto>(ApiUrl.TasksUpdatePositions, request);
+        }
 
         public async Task<GetListResponse> TasksGetListAsync(GetListRequest model)
         {

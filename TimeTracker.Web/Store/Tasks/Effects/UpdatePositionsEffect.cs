@@ -10,39 +10,39 @@ using TimeTracker.Web.Store.TasksList;
 
 namespace TimeTracker.Web.Store.Tasks.Effects;
 
-public class UpdateListItemEffect: Effect<UpdateListItemAction>
+public class UpdatePositionsEffect: Effect<UpdatePositionsAction>
 {
-    private readonly IState<TasksState> _state;
-    private readonly IState<TasksListState> _tasksListState;
     private readonly ApiService _apiService;
-    private readonly ILogger<UpdateListItemEffect> _logger;
+    private readonly ILogger<UpdatePositionsEffect> _logger;
     private readonly ToastService _toastService;
 
-    public UpdateListItemEffect(
+    public UpdatePositionsEffect(
         ApiService apiService,
-        IState<TasksState> state,
-        IState<TasksListState> tasksListState,
-        ILogger<UpdateListItemEffect> logger,
+        ILogger<UpdatePositionsEffect> logger,
         ToastService toastService
     )
     {
         _apiService = apiService;
-        _state = state;
-        _tasksListState = tasksListState;
         _logger = logger;
         _toastService = toastService;
     }
 
-    public override async Task HandleAsync(UpdateListItemAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(UpdatePositionsAction action, IDispatcher dispatcher)
     {
         try
         {
-            var response = await _apiService.TasksUpdateAsync(action.UpdateRequest);
-            if (action.IsUpdateState)
+            var taskListId = action.Tasks.Select(x => x.TaskList.Id).FirstOrDefault();
+            if (taskListId == 0)
             {
-                dispatcher.Dispatch(new SetListItemAction(response));
-                dispatcher.Dispatch(new SetTasksListItemAction(response));
+                _logger.LogError("Task List Id can not be null");
             }
+
+            var items = action.Tasks.ToDictionary(x => x.TaskId, x => x.PositionIndex);
+            await _apiService.TasksUpdatePositionsAsync(new UpdatePositionsRequest()
+            {
+                TaskListId = taskListId,
+                Items = items
+            });
         }
         catch (Exception e)
         {
