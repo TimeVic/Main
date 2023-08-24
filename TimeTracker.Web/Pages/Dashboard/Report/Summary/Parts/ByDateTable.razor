@@ -1,6 +1,7 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Core.Helpers
+@using MudBlazor
 
 @code {
 
@@ -9,41 +10,19 @@
 
 }
 
-<h3>Grouped by date:</h3>
-<RadzenDataGrid
-    TItem="SummaryByDaysReportItemDto"
-    AllowSorting="false"
-    EditMode="DataGridEditMode.Single"
-    Data="@Items"
-    AllowPaging="false">
-
-    <Columns>
-        <RadzenDataGridColumn
-            TItem="SummaryByDaysReportItemDto"
-            Title="Date"
-            Width="120px"
-            TextAlign="TextAlign.Center">
-            <Template Context="item">
-                @item.Date.ToShortDateString()
-            </Template>
-        </RadzenDataGridColumn>
-
-        <RadzenDataGridColumn
-            TItem="SummaryByDaysReportItemDto"
-            Title="Duration"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.Duration.ToReadableShortString()
-            </Template>
-        </RadzenDataGridColumn>
-        
-        <RadzenDataGridColumn
-            TItem="SummaryByDaysReportItemDto"
-            Title="Amount"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.Amount.ToMoneyFormat()
-            </Template>
-        </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
+<MudTable
+    Items="@Items" 
+    Hover="true" 
+    Breakpoint="Breakpoint.Sm" 
+    LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Date</MudTh>
+        <MudTh>Duration</MudTh>
+        <MudTh>Amount</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Date">@context.Date.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Duration">@context.Duration.ToReadableShortString()</MudTd>
+        <MudTd DataLabel="Amount">@context.Amount.ToMoneyFormat()</MudTd>
+    </RowTemplate>
+</MudTable>

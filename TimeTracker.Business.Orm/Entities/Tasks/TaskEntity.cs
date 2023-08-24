@@ -58,6 +58,10 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }
         
+        [Property(NotNull = true)]
+        [Column(Name = "position_index", SqlType = "int", NotNull = true)]
+        public virtual int PositionIndex { get; set; }
+        
         [ManyToOne(
             ClassType = typeof(UserEntity), 
             Column = "user_id", 

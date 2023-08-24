@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Services.Http;
@@ -19,6 +20,8 @@ public partial class Step1
     
     private RegistrationStep1Request model = new();
     private bool _isLoading;
+    private MudForm _form;
+    private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,8 +34,13 @@ public partial class Step1
         model.ReCaptcha = await _reCaptchaService.GetReCaptchaTokenAsync();
     }
     
-    private async Task HandleSubmit()
+    private async Task Submit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
         _isLoading = true;
         try
         {
@@ -40,7 +48,7 @@ public partial class Step1
             if (isOk)
             {
                 await ToastService.ShowInfo("Registration email is sent");
-                model.Email = "";
+                model.Email = string.Empty;
             }
         }
         catch (Exception)

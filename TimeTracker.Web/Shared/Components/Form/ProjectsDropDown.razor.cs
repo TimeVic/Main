@@ -52,12 +52,10 @@ public partial class ProjectsDropDown
     [Inject]
     public IState<ProjectState> _state { get; set; }
     
-    private ProjectDto? _selectedItem;
+    private ProjectDto? _selectedItem => _state.Value.List.FirstOrDefault(item => item.Id == _selectedId);
 
     private long _selectedId = 0;
     
-    private RadzenDropDown<long> _listReference;
-
     private ICollection<ProjectDto> _list
     {
         get
@@ -72,11 +70,10 @@ public partial class ProjectsDropDown
         }
     }
 
-    private Task OnValueChanged(long selectedId)
+    private Task OnValueChanged(ProjectDto project)
     {
-        _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == selectedId);
-        SelectedItemChanged.InvokeAsync(_selectedItem);
-        ValueChanged.InvokeAsync(selectedId);
+        SelectedItemChanged.InvokeAsync(project);
+        ValueChanged.InvokeAsync(project.Id);
         return Task.CompletedTask;
     }
 }

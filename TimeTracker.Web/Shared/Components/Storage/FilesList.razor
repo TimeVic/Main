@@ -1,63 +1,59 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants.Storage
+@using MudBlazor
 
 <div class="@Class">
     @if (!Files.Any())
     {
         <div
             class="mt-3 w-100">
-            <RadzenText TextStyle="TextStyle.Subtitle1">No records to display.</RadzenText>
+            <MudText Typo="Typo.subtitle1">No records to display.</MudText>
         </div>
     }
-
-    <RadzenDataList
-        Count="Files.Count"
-        ShowPagingSummary="false"
-        WrapItems="true"
-        AllowPaging="false"
-        Data="@Files"
-        TItem="StoredFileDto">
-        <Template Context="item">
-            <RadzenCard
-                class="m-0 mt-1 w-100">
-                <RadzenRow>
-                    <RadzenColumn Style="max-width: 80px;">
-                        <RadzenIcon Icon="attach_file"/>
-                    </RadzenColumn>
-                    <RadzenColumn>
-                        @if (!string.IsNullOrEmpty(item.Title))
-                        {
-                            @item.Title
-                        }
-                        else
-                        {
-                            @item.OriginalFileName
-                        }
-                    </RadzenColumn>
-                    <RadzenColumn Style="max-width: 100px;">
-                        <RadzenButton
-                            Click="() => OnClickView(item)"
-                            Icon="visibility"
-                            IsBusy="item.Status == StoredFileStatus.Pending"
-                            Disabled="item.Status != StoredFileStatus.Uploaded"
-                            Size="ButtonSize.Small"
-                            ButtonStyle="ButtonStyle.Info"/>
-                        <RadzenButton
-                            Click="() => OnClickDownload(item)"
-                            Icon="file_download"
-                            IsBusy="item.Status == StoredFileStatus.Pending"
-                            Disabled="item.Status != StoredFileStatus.Uploaded"
-                            Size="ButtonSize.Small"
-                            ButtonStyle="ButtonStyle.Light"/>
-                        <RadzenButton
-                            Click="() => OnCLickDelete(item)"
-                            Disabled="item.Status != StoredFileStatus.Uploaded"
-                            Icon="delete_outline"
-                            Size="ButtonSize.Small"
-                            ButtonStyle="ButtonStyle.Danger"/>
-                    </RadzenColumn>
-                </RadzenRow>
-            </RadzenCard>
-        </Template>
-    </RadzenDataList>
+    else
+    {
+        <MudTable
+            Items="@Files"
+            Hover="true"
+            Breakpoint="Breakpoint.Sm"
+            Loading="@_isReloadFiles"
+            LoadingProgressColor="Color.Info">
+            <HeaderContent>
+                <MudTh>File</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="File">
+                    @if (!string.IsNullOrEmpty(context.Title))
+                    {
+                        @context.Title
+                    }
+                    else
+                    {
+                        @context.OriginalFileName
+                    }
+                </MudTd>
+                <MudTd DataLabel="Actions">
+                    <MudIconButton
+                        OnClick="() => OnClickView(context)"
+                        Icon="@Icons.Material.Filled.Visibility"
+                        Disabled="context.Status != StoredFileStatus.Uploaded"
+                        Size="Size.Small"
+                        Color="Color.Info"/>
+                    <MudIconButton
+                        OnClick="() => OnClickDownload(context)"
+                        Icon="@Icons.Material.Filled.FileDownload"
+                        Disabled="context.Status != StoredFileStatus.Uploaded"
+                        Size="Size.Small"
+                        Color="Color.Default"/>
+                    <MudIconButton
+                        OnClick="() => OnCLickDelete(context)"
+                        Icon="@Icons.Material.Filled.DeleteOutline"
+                        Disabled="context.Status != StoredFileStatus.Uploaded"
+                        Size="Size.Small"
+                        Color="Color.Warning"/>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    }
 </div>

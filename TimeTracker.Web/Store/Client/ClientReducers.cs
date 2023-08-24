@@ -37,7 +37,7 @@ public class ClientReducers
         newList.Add(new ClientDto()
         {
             Id = 0,
-            Name = ""
+            Name = string.Empty
         });
         return state with
         {

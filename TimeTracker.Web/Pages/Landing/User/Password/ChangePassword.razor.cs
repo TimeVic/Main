@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Services;
@@ -30,6 +31,8 @@ public partial class ChangePassword
     
     private ResetPasswordStep2Request model = new();
     private bool _isLoading;
+    private MudForm _form;
+    private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,8 +46,13 @@ public partial class ChangePassword
         model.ReCaptcha = await _reCaptchaService.GetReCaptchaTokenAsync();
     }
     
-    private async Task HandleSubmit()
+    private async Task Submit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
         _isLoading = true;
         try
         {

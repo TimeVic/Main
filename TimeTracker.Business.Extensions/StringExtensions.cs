@@ -254,5 +254,27 @@ namespace TimeTracker.Business.Extensions
         {
             return Encoding.UTF8.GetBytes(value);
         }
+        
+        public static string FirstChar(this string value)
+        {
+            if (String.IsNullOrEmpty(value))
+                return string.Empty;
+
+            return value.Substring(0, 1);
+        }
+        
+        public static int CountLines(this string str)
+        {
+            if (str == null)
+                throw new ArgumentNullException("str");
+            if (str == string.Empty)
+                return 0;
+            int index = -1;
+            int count = 0;
+            while (-1 != (index = str.IndexOf(Environment.NewLine, index + 1, StringComparison.Ordinal)))
+                count++;
+
+            return count + 1;
+        }
     }
 }

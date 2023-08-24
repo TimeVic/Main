@@ -4,7 +4,7 @@ using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Workspace;
 using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common.Actions;
+using TimeTracker.Web.Store.Common;
 using TimeTracker.Web.Store.Workspace;
 
 namespace TimeTracker.Web.Pages.Dashboard.Workspace;
@@ -37,7 +37,7 @@ public partial class WorkspaceChangingPage
             return;
         }
         
-        await _workspaceInitializationService.Init(true);
+        _workspaceInitializationService.Init(true);
         _workpsaceState.StateChanged += OnWorkspaceListChanged;
         await base.OnInitializedAsync();
     }
@@ -62,7 +62,7 @@ public partial class WorkspaceChangingPage
             // The page was initialized early
             Dispatcher.Dispatch(new SetWorkspaceAction(workspace));
             Dispatcher.Dispatch(new PersistDataAction());
-            _workspaceInitializationService.AfterInit(true).Wait();
+            _workspaceInitializationService.AfterInit(true);
         }
         NavigateTo();
     }

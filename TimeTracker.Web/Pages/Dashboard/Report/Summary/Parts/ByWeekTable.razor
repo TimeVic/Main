@@ -1,58 +1,32 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
 @using System.Globalization
+@using MudBlazor
 
 @code {
 
     [Parameter]
     public ICollection<SummaryByWeeksReportItemDto> Items { get; set; } = new List<SummaryByWeeksReportItemDto>();
 
-    private RadzenDataGrid<SummaryByWeeksReportItemDto> _grid { get; set; }
-
-    protected async override Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-    }
 }
 
-<h3>Grouped by project:</h3>
-
-<RadzenDataGrid
-    @ref="_grid"
-    TItem="SummaryByWeeksReportItemDto"
-    AllowSorting="false"
-    Data="@Items"
-    AllowPaging="false">
-
-    <Columns>
-        <RadzenDataGridColumn
-            TItem="SummaryByWeeksReportItemDto"
-            Title="Week"
-            Width="250px"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.WeekStartDate.ToShortDateString()
-                -
-                @item.WeekEndDate.ToShortDateString()
-            </Template>
-        </RadzenDataGridColumn>
-
-        <RadzenDataGridColumn
-            TItem="SummaryByWeeksReportItemDto"
-            Title="Duration"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.Duration.ToReadableShortString()
-            </Template>
-        </RadzenDataGridColumn>
-
-        <RadzenDataGridColumn
-            TItem="SummaryByWeeksReportItemDto"
-            Title="Amount"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.Amount.ToMoneyFormat()
-            </Template>
-        </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
+<MudTable
+    Items="@Items"
+    Hover="true"
+    Breakpoint="Breakpoint.Sm"
+    LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Week</MudTh>
+        <MudTh>Duration</MudTh>
+        <MudTh>Amount</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Week">
+            @context.WeekStartDate.ToShortDateString()
+            -
+            @context.WeekEndDate.ToShortDateString()
+        </MudTd>
+        <MudTd DataLabel="Duration">@context.Duration.ToReadableShortString()</MudTd>
+        <MudTd DataLabel="Amount">@context.Amount.ToMoneyFormat()</MudTd>
+    </RowTemplate>
+</MudTable>

@@ -6,6 +6,8 @@ namespace TimeTracker.Api.Shared.Dto.Entity.Task;
 
 public class TaskDto : IResponse
 {
+    public int PositionIndex { get; set; }
+    
     public long TaskId { get; set; }
     
     public TaskStatus Status { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
@@ -9,19 +10,24 @@ using LoadListAction = TimeTracker.Web.Store.TasksList.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 
-public partial class AddTasksListForm
+public partial class AddTasksListModalForm
 {
     [Parameter]
     public long? ProjectId { get; set; }
     
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+    
     [Inject]
-    public ILogger<AddTasksListForm> _logger { get; set; }
+    public ILogger<AddTasksListModalForm> _logger { get; set; }
     
     [Inject]
     public IState<ProjectState> ProjectState { get; set; }
     
     private AddRequest model = new();
     private bool _isLoading = false;
+    private MudForm _form;
+    private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -29,8 +35,14 @@ public partial class AddTasksListForm
         model.ProjectId = ProjectId ?? 0;
     }
 
-    private async Task HandleSubmit()
+    private async Task Submit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
+        
         _isLoading = true;
         try
         {
@@ -39,7 +51,7 @@ public partial class AddTasksListForm
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
                 await ToastService.ShowInfo("Task list has been added");
-                DialogService.CloseSide();
+                OnCloseModal();
                 
                 var navigateToProject = ProjectState.Value.List.First(
                     item => item.Id == model.ProjectId
@@ -65,8 +77,8 @@ public partial class AddTasksListForm
         StateHasChanged();
     }
     
-    private void CloseModal()
+    private void OnCloseModal()
     {
-        DialogService.CloseSide();
+        MudDialog.Close();
     }
 }

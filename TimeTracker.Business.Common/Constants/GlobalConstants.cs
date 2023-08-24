@@ -17,7 +17,7 @@ namespace TimeTracker.Business.Common.Constants
         /// <summary>
         /// Page size
         /// </summary>
-        public const int ListPageSize = 20;
+        public const int ListPageSize = 30;
 
         /// <summary>
         /// The maximum number of users who will be given access

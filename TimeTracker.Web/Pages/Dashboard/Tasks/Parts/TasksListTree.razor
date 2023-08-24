@@ -1,48 +1,42 @@
 ﻿@using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Business.Extensions
+@using MudBlazor
 
 @inherits BaseComponent
 
-@if (!_tasksList.Any())
-{
-    <RadzenButton
-        class="w-100"
-        ButtonStyle="ButtonStyle.Primary"
-        Size="ButtonSize.Medium"
-        Click="ShowAddTaskListModal"
-        Text="Add new task list"
-        Icon="add"/>
-}
-else
-{
-    <RadzenSplitButton
-        class="w-100"
-        Click="OnClickSplitButton"
-        IsBusy="@(!_commonState.Value.IsInitialized)"
-        Text="@_selectedTaskListName.TruncateAndAddDots(16)">
-        <ChildContent>
-            @foreach (var taskList in _tasksList)
-            {
-                <RadzenSplitButtonItem
-                    Text="@taskList.Name"
-                    Value="@taskList.Id.ToString()"/>
-            }
-            <hr/>
-            <RadzenSplitButtonItem
-                Value="@TaskListAction.Add.ToString()"
-                Icon="add"
-                Text="Add new"/>
-            @if (_selectedTaskListId != null)
-            {
-                <RadzenSplitButtonItem
-                    Value="@TaskListAction.Edit.ToString()"
-                    Icon="edit"
-                    Text="Edit"/>
-                <RadzenSplitButtonItem
-                    Value="@TaskListAction.Delete.ToString()"
-                    Icon="delete"
-                    Text="Delete"/>
-            }
-        </ChildContent>
-    </RadzenSplitButton>    
-}
+<MudStack Spacing="2">
+    <MudTabs
+        Position="Position.Left"
+        Outlined="true"
+        Rounded="true"
+        Border="true">
+        @foreach (var taskList in _tasksList)
+        {
+            <MudTabPanel
+                ID="@taskList.Id"
+                OnClick="() => OnTasksListSelected(taskList.Id)"
+                Text="@taskList.Name"/>
+        }
+    </MudTabs>
+
+    <MudStack Row="true">
+        <MudIconButton
+            Icon="@Icons.Material.Filled.Add"
+            Title="Add new"
+            OnClick="ShowAddTaskListModal"/>
+        @if (_selectedTaskListId != null)
+        {
+            <MudSpacer/>
+            <MudIconButton
+                Icon="@Icons.Material.Filled.Edit"
+                Title="Update active"
+                OnClick="ShowUpdateTaskListModal"/>
+            <MudSpacer/>
+            <MudIconButton
+                Color="Color.Error"
+                Icon="@Icons.Material.Filled.Delete"
+                Title="Delete active"
+                OnClick="OnDeleteTaskList"/>    
+        }
+    </MudStack>
+</MudStack>

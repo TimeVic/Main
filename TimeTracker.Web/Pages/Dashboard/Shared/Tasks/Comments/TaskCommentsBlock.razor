@@ -1,5 +1,7 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
 @using TimeTracker.Api.Shared.Dto.Entity.Task
+@using MudBlazor
+
 @inherits BaseComponent
 
 <EditCommentForm 
@@ -16,11 +18,10 @@
 @if (_isHasMore)
 {
     <div class="d-flex justify-content-center">
-        <RadzenButton
-            Icon="expand_more"
-            ButtonStyle="ButtonStyle.Light"
-            IsBusy="_isLoading"
-            Click="LoadMore"
+        <MudIconButton
+            Icon="@Icons.Material.Filled.More"
+            Disabled="_isLoading"
+            OnClick="LoadMore"
         />
     </div>    
 }

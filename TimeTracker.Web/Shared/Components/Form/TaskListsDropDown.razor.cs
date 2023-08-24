@@ -1,5 +1,7 @@
-﻿using Fluxor;
+﻿using System.Linq.Expressions;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -14,8 +16,14 @@ namespace TimeTracker.Web.Shared.Components.Form;
 
 public partial class TaskListsDropDown
 {
+    [Parameter]
+    public Expression<Func<long>>? For { get; set; }
+    
     [Parameter] 
     public bool Disabled { get; set; }
+    
+    [Parameter] 
+    public bool Required { get; set; }
 
     [Parameter]
     public bool AllowClear { get; set; } = true;
@@ -28,7 +36,7 @@ public partial class TaskListsDropDown
     }
     
     [Parameter]
-    public EventCallback<long> ValueChanged { get; set; }
+    public EventCallback<long?> ValueChanged { get; set; }
 
     [Parameter]
     public EventCallback<TaskListDto> SelectedItemChanged { get; set; }
@@ -64,8 +72,6 @@ public partial class TaskListsDropDown
 
     private long _selectedId = 0;
     
-    private RadzenDropDown<long> _listReference;
-
     private ICollection<TaskListDto> _list
     {
         get
@@ -83,11 +89,17 @@ public partial class TaskListsDropDown
         }
     }
 
-    private Task OnValueChanged(long selectedId)
+    private Task OnValueChanged(long taskListId)
     {
-        _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == selectedId);
+        _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == taskListId);
         SelectedItemChanged.InvokeAsync(_selectedItem);
-        ValueChanged.InvokeAsync(selectedId);
+        ValueChanged.InvokeAsync(_selectedItem?.Id ?? 0);
         return Task.CompletedTask;
+    }
+
+    private string ToStringFunc(long taskListId)
+    {
+        var item = _state.Value.List.FirstOrDefault(item => item.Id == taskListId);
+        return item?.Name ?? string.Empty;
     }
 }

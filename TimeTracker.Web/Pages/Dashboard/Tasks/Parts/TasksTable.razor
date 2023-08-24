@@ -4,68 +4,75 @@
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Core.Extensions.Enums
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using MudBlazor
+@using TimeTracker.Api.Shared.Dto.Entity.Task
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 @inherits BaseComponent
 
-<div class="w-task-table mt-2">
-    @foreach (var taskGroupKeyValue in _taskGroups)
-    {
-        var status = taskGroupKeyValue.Key;
-        var tasks = taskGroupKeyValue.Value;
-        <RadzenCard
-            class="w-task-col"
-            @ondrop="@(() => HandleDrop(status))"
-            ondragover="event.preventDefault();"
-            ondragstart="event.dataTransfer.setData('', event.target.id);">
-
-            <div class="d-flex justify-content-between">
-                <RadzenText
-                    class="mt-1 mb-2 rz-color-base-700"
-                    TextStyle="TextStyle.H6">
-                    @status.GetDisplayName()
-                </RadzenText>
+<MudDropContainer 
+    T="TaskDto" 
+    @ref="_dropContainer" 
+    Items="@_dropZoneTasks" 
+    ItemsSelector="DropItemSelector" 
+    ItemDropped="TaskUpdated"
+    ApplyDropClassesOnDragStarted="true"
+    Class="d-flex flex-row">
+    
+    <ChildContent>
+        @foreach (var taskStatus in _statuses)
+        {
+            <MudPaper 
+                Elevation="0"
+                Width="224px" 
+                MinHeight="400px" 
+                Class="pa-4 ma-4 d-flex flex-column mud-background-gray rounded-lg">
+                <MudToolBar DisableGutters="true">
+                    <MudText Typo="Typo.subtitle1">
+                        <b>@taskStatus.GetDisplayName()</b>
+                    </MudText>
+                    <MudSpacer />
+                    <MudIconButton
+                        OnClick="() => OnAddTask(taskStatus)"
+                        Icon="@Icons.Material.Filled.Add"/>
+                    
+                </MudToolBar>
+                <MudDropZone 
+                    T="TaskDto"
+                    Identifier="@taskStatus.ToString()" 
+                    AllowReorder="true"
+                    Class="mud-height-full" />
+            </MudPaper>
+        }
+    </ChildContent>
+    <ItemRenderer>
+        <MudPaper
+            Elevation="25"
+            Class="pa-4 rounded-lg my-3">
+            <MudStack>
+                Position: @context.PositionIndex
                 
-                <RadzenButton
-                    ButtonStyle="ButtonStyle.Light"
-                    Size="ButtonSize.ExtraSmall"
-                    Click="() => OnAddTask(status)"
-                    class="ml-3"
-                    Icon="add"/>
-            </div>
+                
+                <MudStack Row="true" Spacing="1">
+                    <TaskIdBadge
+                        IsClickable="true"
+                        InternalTask="context"/>
+                    <MudSpacer/>
+                    <MudChip
+                        Shade="Shade.Lighter"
+                        Size="Size.Small"
+                        BadgeStyle="@context.Priority.GetChipStyle()">
+                        @context.Priority.GetDisplayName()
+                    </MudChip>
+                </MudStack>
 
-            @foreach (var item in tasks)
-            {
-                <RadzenCard
-                    draggable="true"
-                    @ondragstart="@(() => OnDragStart(item))"
-                    @onclick="@(() => OnClickTask(item))"
-                    class="m-0 mt-1 w-100 w-task-item rz-background-color-base-100 rz-shadow-0 rz-p-1">
-                    <div class="row d-flex justify-content-between">
-                        <div class="col">
-                            <TaskIdBadge InternalTask="item"/>
-                        </div>
-                        <div class="col d-flex justify-content-end">
-                            <RadzenBadge
-                                Shade="Shade.Lighter"
-                                BadgeStyle="@item.Priority.GetBadgeStyle()"
-                                Text="@item.Priority.GetDisplayName()"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="w-task-title" style="">
-                                @item.Title?.Truncate(200)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <TagsBadgesList Tags="@item.Tags"/>
-                        </div>
-                    </div>
-                </RadzenCard>
-            }
-        </RadzenCard>
-    }
-</div>
+                <MudText
+                    Typo="Typo.body1">
+                    @context.Title?.Truncate(200)
+                </MudText>
+
+                <TagsBadgesList Tags="@context.Tags"/>
+            </MudStack>
+        </MudPaper>
+    </ItemRenderer>
+</MudDropContainer>

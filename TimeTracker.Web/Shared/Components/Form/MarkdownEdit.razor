@@ -1,32 +1,56 @@
 ﻿@using TimeTracker.Web.Services.UI
 @using TimeTracker.Web.Core.Helpers
+@using MudBlazor
+@using Variant = MudBlazor.Variant
 
 <div class="@($"{Class} w-markdown-editor")">
-    <RadzenTextArea
-        hidden="@(!_isShowEditBox)"
-        @ref="_markdownTextArea"
-        Name="@TextAreaName"
-        Value="@_value"
-        ValueChanged="OnChangeValue"
-        Placeholder="@Placeholder"
-        Rows="_textAreaRows"
-        @oninput="ResizeEditBox"
-        @onfocus="OnFocus"
-        MaxLength="MaxLength"
-        @onfocusout="@(OnBlur)"
-        Class="w-100"/>
 
-    <div class="w-view"
-         hidden="@(_isShowEditBox)"
-         @onclick="@OnClickView">
-        @MarkdownHtml
-    </div>
     @if (_isShowEditBox)
     {
-        <hr/>
-        <p class="w-support">
-            Supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a>
-        </p>
+        <div @onclick="OnEditTextClicked">
+            <MudTextField
+                T="string"
+                Label="@Label"
+                Variant="MudBlazor.Variant.Outlined"
+                Placeholder="@Placeholder"
+                Text="@_editValue"
+                TextChanged="@OnChangeValue"
+                Lines="@_textAreaRows"/>
+            <p class="w-support mt-2">
+                Supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a>
+            </p>
+
+        </div>
+        if (_isActionButtonsEnabled)
+        {
+            <MudStack 
+                Class="mt-2"
+                Row="true"
+                Justify="Justify.FlexStart">
+                <MudButton
+                    Size="Size.Small"
+                    OnClick="OnClickSave"
+                    Variant="Variant.Filled"
+                    Color="Color.Primary">
+                    Save
+                </MudButton>
+                <MudButton
+                    Size="Size.Small"
+                    OnClick="OnClickCancel"
+                    Variant="Variant.Filled"
+                    Color="Color.Secondary">
+                    Cancel
+                </MudButton>
+            </MudStack>
+        }
+    }
+    else
+    {
+        <MudPaper 
+            Class="w-view pa-3 cursor-pointer"
+            @onclick="@OnClickView">
+            @MarkdownHtml
+        </MudPaper>
     }
 </div>
 
@@ -34,6 +58,9 @@
 {
     [Parameter]
     public string Class { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
 
     [Parameter]
     public string Placeholder { get; set; }
@@ -50,17 +77,17 @@
         set
         {
             _value = value;
-            if (string.IsNullOrEmpty(_value))
+            if (!_isInitialized && !string.IsNullOrWhiteSpace(_value))
             {
-                _isShowEditBox = true;
-                ResizeEditBox(_value);
+                _editValue = value;
+                _isInitialized = true;
             }
         }
     }
 
     [Parameter]
     public int RowsMin { get; set; } = 6;
-    
+
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }
 
@@ -79,29 +106,27 @@
     private bool _isShowEditBox;
     private readonly int _textAreaRowsMax = 20;
     private int _textAreaRows = 3;
-    private string _value = "";
+    private string _value = string.Empty;
+    private string _editValue = string.Empty;
+    private bool _isActionButtonsEnabled = false;
+    private bool _isInitialized = false;
 
     protected override void OnInitialized()
     {
-        if (string.IsNullOrEmpty(_value))
-        {
-            _isShowEditBox = true;
-        }
-        else
-        {
-            ResizeEditBox(_value);
-        }
+        _isShowEditBox = string.IsNullOrWhiteSpace(_editValue);
+        _isActionButtonsEnabled = false;
+        ResizeEditBox(_editValue);
     }
 
     private void ResizeEditBox(ChangeEventArgs elementEvent)
     {
-        var description = (string) (elementEvent.Value ?? "");
+        var description = (string) (elementEvent.Value ?? string.Empty);
         ResizeEditBox(description);
     }
 
     private void ResizeEditBox(string? description)
     {
-        description ??= "";
+        description ??= string.Empty;
         _textAreaRows = Math.Max(description.Split('\n').Length, description.Split('\r').Length);
         _textAreaRows = Math.Max(_textAreaRows, RowsMin);
         _textAreaRows = Math.Min(_textAreaRows, _textAreaRowsMax);
@@ -109,14 +134,13 @@
 
     private void OnChangeValue(string value)
     {
-        _value = value;
-        ValueChanged.InvokeAsync(_value);
-        Changed.InvokeAsync(_value);
+        _editValue = value;
     }
 
     private void OnClickView()
     {
         _isShowEditBox = true;
+        _isActionButtonsEnabled = true;
         StateHasChanged();
         Task.Run(async () =>
         {
@@ -125,17 +149,27 @@
         });
     }
 
-    private void OnBlur()
+    private void OnClickSave()
     {
-        _isShowEditBox = string.IsNullOrWhiteSpace(_value);
-        if (_isShowEditBox)
-        {
-            ResizeEditBox(_value);
-        }
+        _isShowEditBox = string.IsNullOrWhiteSpace(_editValue);
+        _isActionButtonsEnabled = false;
+        ValueChanged.InvokeAsync(_editValue);
+        Changed.InvokeAsync(_editValue);
     }
 
-    private void OnFocus()
+    private void OnClickCancel()
     {
-        OnClickedToView.InvokeAsync();
+        _isShowEditBox = string.IsNullOrWhiteSpace(_value);
+        _editValue = _value;
+        _isActionButtonsEnabled = false;
+        _isInitialized = false;
+    }
+
+    private void OnEditTextClicked()
+    {
+        if (!_isActionButtonsEnabled && _isShowEditBox)
+        {
+            _isActionButtonsEnabled = true;    
+        }
     }
 }

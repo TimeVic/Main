@@ -24,7 +24,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Commen
         public void Fill(TaskCommentDto comment)
         {
             TaskId = comment.Task.TaskId;
-            Comment = comment.Comment;
+            Comment = $"{comment.Comment}";
             WatcherIds = comment.Watchers?.Select(item => item.Id).ToList();
         }
     }

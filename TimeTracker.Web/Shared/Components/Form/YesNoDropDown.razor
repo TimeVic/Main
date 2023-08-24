@@ -1,20 +1,23 @@
-﻿<RadzenDropDown
-    @ref="_listReference"
-    Disabled="Disabled"
-    TValue="bool?"
-    Class="@(Class)"
-    AllowFiltering="false"
-    FilterOperator="StringFilterOperator.Contains"
-    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-    AllowSorting="false"
-    Multiple="false"
-    AllowClear="true"
-    AllowVirtualization="true"
-    Data="@_listItems"
-    TextProperty="Name"
-    ValueProperty="Value"
+﻿@using MudBlazor
+
+<MudSelect
+    T="bool?"
+    Class="@Class"
+    Disabled="@Disabled"
+    Dense="true"
     Placeholder="@Placeholder"
+    EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
     Value="@Value"
-    MaxSelectedLabels="10"
-    ValueChanged="OnValueChanged">
-</RadzenDropDown>
+    Clearable="true"
+    ValueChanged="OnValueChanged"
+    ToStringFunc="ToStringFunc"
+    RequiredError="Task list is required"
+    Variant="MudBlazor.Variant.Text"
+    AnchorOrigin="Origin.BottomCenter">
+    @foreach (var item in _listItems)
+    {
+        <MudSelectItem Value="@item.Value">
+            <div>@item.Name</div>
+        </MudSelectItem>
+    }
+</MudSelect>

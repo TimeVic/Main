@@ -8,7 +8,25 @@ namespace TimeTracker.Web.Store.TimeEntry;
 public class TimeEntryReducers
 {
     [ReducerMethod]
-    public static TimeEntryState SetIsTimeEntryProcessingReducer(TimeEntryState state, SetIsTimeEntryProcessing action)
+    public static TimeEntryState SetSelectedPageActionReducer(TimeEntryState state, SetSelectedPageAction action)
+    {
+        return state with
+        {
+            SelectedPage = action.SelectedPage
+        };
+    }
+    
+    [ReducerMethod]
+    public static TimeEntryState SetFilteredSelectedPageActionReducer(TimeEntryState state, SetFilteredSelectedPageAction action)
+    {
+        return state with
+        {
+            FilteredSelectedPage = action.SelectedPage
+        };
+    }
+    
+    [ReducerMethod]
+    public static TimeEntryState SetIsTimeEntryProcessingReducer(TimeEntryState state, SetIsTimeEntryProcessingAction action)
     {
         return state with
         {

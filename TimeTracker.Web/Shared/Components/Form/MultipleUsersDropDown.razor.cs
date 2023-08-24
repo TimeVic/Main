@@ -14,7 +14,11 @@ public partial class MultipleUsersDropDown
     public bool Disabled { get; set; }
 
     [Parameter]
-    public IEnumerable<long> Value { get; set; } = new List<long>();
+    public IEnumerable<long> Value
+    {
+        get => _selectedIds;
+        set => _selectedIds = value;
+    }
 
     [Parameter]
     public EventCallback<IEnumerable<long>> ValueChanged { get; set; }
@@ -52,7 +56,7 @@ public partial class MultipleUsersDropDown
     
     private IEnumerable<UserDto> _selectedItems = new List<UserDto>();
     private IEnumerable<long> _allowedIds { get; set; } = new List<long>();
-    private RadzenDropDown<ICollection<long>> _listReference;
+    private IEnumerable<long> _selectedIds = new List<long>();
 
     private ICollection<UserDto> _list
     {
@@ -74,9 +78,16 @@ public partial class MultipleUsersDropDown
 
     private Task OnValueChanged(IEnumerable<long> selectedIds)
     {
-        _selectedItems = _list.Where(item => selectedIds.Contains(item.Id));
+        _selectedIds = selectedIds.ToList();
+        _selectedItems = _list.Where(item => _selectedIds.Contains(item.Id));
         SelectedItemChanged.InvokeAsync(_selectedItems);
-        ValueChanged.InvokeAsync(selectedIds);
+        ValueChanged.InvokeAsync(_selectedIds);
         return Task.CompletedTask;
+    }
+
+    private string ToStringFunc(long userId)
+    {
+        var item = _list.FirstOrDefault(item => item.Id == userId);
+        return item?.Name ?? string.Empty;
     }
 }

@@ -106,14 +106,8 @@ public partial class TasksListTree
     private async Task OnDeleteTaskList()
     {
         var taskList = _tasksListState.Value.List.First(item => item.Id == _selectedTaskListId);
-        var isOk = await DialogService.Confirm(
-            $"Are you sure you want to remove: {taskList.Name}?",
-            "Delete confirmation",
-            new ConfirmOptions()
-            {
-                OkButtonText = "Delete",
-                CancelButtonText = "Cancel"
-            }
+        var isOk = await _modalDialogProviderService.ShowDeleteConfirmationDialog(
+            $"Are you sure you want to remove: {taskList.Name}?"
         );
         if (isOk.HasValue && isOk.Value)
         {

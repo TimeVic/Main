@@ -1,38 +1,39 @@
 ﻿@page "/registration/verification/{verificationToken}"
 
 @using Microsoft.AspNetCore.Components
-@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
 @using TimeTracker.Web.Pages.Landing.Shared
+@using MudBlazor
 
 @layout Layout
 @inherits BaseComponent
 
-<div class="row d-flex justify-content-center">
-    <div class="col-xl-4 p-3">
-        <RadzenCard>
-            <h2 class="mb-4">Registration - Step 2</h2>
-            
-            <RadzenTemplateForm TItem="RegistrationStep2Request" Data="@model" Submit="HandleSubmit">
-                <DataAnnotationsValidator/>
-                <ValidationSummary/>
-                
-                <div class="mb-2">
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enter your password to finish registration</RadzenText>
-                    <RadzenPassword
-                        @bind-Value="model.Password"
-                        Class="w-100 mb-3"/>
-                </div>
-                @if (!_isLoading)
-                {
-                    <RadzenButton
-                        ButtonType="ButtonType.Submit"
-                        Text="Continue"/>
-                }
-            </RadzenTemplateForm>
-            @if (_isLoading)
-            {
-                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
-            }
-        </RadzenCard>
-    </div>
-</div>
+<MudStack Justify="Justify.Center" AlignItems="MudBlazor.AlignItems.Center">
+    <MudCard Style="width: 300px" Class="mt-5 mb-5">
+        <MudCardContent>
+            <MudForm
+                @ref="_form"
+                @bind-IsValid="_isValid">
+
+                <MudText Typo="Typo.h4">Registration - Step 2</MudText>
+
+                <MudStack>
+                    <MudTextField
+                        T="string"
+                        InputType="InputType.Password"
+                        For="() => model.Password"
+                        Disabled="_isLoading"
+                        @bind-Text="@model.Password"
+                        Placeholder="Enter your password to finish registration"/>
+                </MudStack>
+            </MudForm>
+        </MudCardContent>
+        <MudCardActions Class="d-flex justify-space-between">
+            <MudButton
+                Variant="MudBlazor.Variant.Filled"
+                OnClick="Submit"
+                Color="Color.Primary">
+                Continue
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudStack>

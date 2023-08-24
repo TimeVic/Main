@@ -14,7 +14,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         public long? TimeEntryId { get; set; } 
         
         [Required]
-        [IsPositive]
+        [IsPositive(ErrorMessage = "Task list is required")]
         public long TaskListId { get; set; }
         
         [StringLength(1024, MinimumLength = 1)]

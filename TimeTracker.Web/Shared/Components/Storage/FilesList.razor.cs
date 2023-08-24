@@ -43,9 +43,6 @@ public partial class FilesList: IDisposable
     public ToastService _toastService { get; set; }
     
     [Inject]
-    protected DialogService _dialogService { get; set; }
-    
-    [Inject]
     protected ModalDialogProviderService _dialogProvider { get; set; }
     
     [Inject]
@@ -83,14 +80,8 @@ public partial class FilesList: IDisposable
 
     private async Task OnCLickDelete(StoredFileDto file)
     {
-        var isOk = await _dialogService.Confirm(
-            "Are you sure you want to delete this file?",
-            "Delete confirmation",
-            new ConfirmOptions()
-            {
-                OkButtonText = "Delete",
-                CancelButtonText = "Cancel"
-            }
+        var isOk = await _dialogProvider.ShowDeleteConfirmationDialog(
+            "Are you sure you want to delete this file?"
         );
         if (!isOk.HasValue || !isOk.Value)
         {

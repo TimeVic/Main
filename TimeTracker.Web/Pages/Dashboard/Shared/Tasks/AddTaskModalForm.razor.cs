@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Radzen;
-using Radzen.Blazor;
+using Microsoft.AspNetCore.Components.Forms;
+using MudBlazor;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Store.Tasks;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
@@ -18,10 +18,13 @@ public partial class AddTaskModalForm
     [Parameter]
     public TaskStatus? TaskStatus { get; set; }
     
-    private RadzenTemplateForm<AddRequest> _form;
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
 
     private AddRequest model = new();
     private bool _isLoading = false;
+    private bool _isValid = false;
+    private MudForm _form;
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,8 +40,14 @@ public partial class AddTaskModalForm
         }
     }
 
-    private void HandleSubmit(AddRequest request)
+    private void Submit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
+
         InvokeAsync(async () =>
         {
             _isLoading = true;
@@ -48,7 +57,8 @@ public partial class AddTaskModalForm
                 if (responseDto != null)
                 {
                     Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                    Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction(0));
+                    Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.SetSelectedPageAction(1));
+                    Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction());
                     OnCloseModal();
                 }
             }
@@ -66,6 +76,6 @@ public partial class AddTaskModalForm
 
     private void OnCloseModal()
     {
-        DialogService.Close();
+        MudDialog.Close();
     }
 }

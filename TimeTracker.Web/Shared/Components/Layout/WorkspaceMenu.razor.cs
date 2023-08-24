@@ -5,7 +5,6 @@ using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common.Actions;
 using TimeTracker.Web.Store.Workspace;
 
 namespace TimeTracker.Web.Shared.Components.Layout;
@@ -26,15 +25,13 @@ public partial class WorkspaceMenu
         await base.OnInitializedAsync();
     }
 
-    private void OnClickToMenuItem(string? idString)
+    private void OnClickToMenuItem(WorkspaceDto? workspace)
     {
-        if (string.IsNullOrEmpty(idString))
+        if (workspace == null)
         {
             // Clicked on selected item
             return;
         }
-
-        var workspace = _workpsaceState.Value.List.First(item => item.Id.ToString() == idString);
         if (workspace.Id == _authState.Value.Workspace.Id)
         {
             return;
@@ -43,7 +40,7 @@ public partial class WorkspaceMenu
         _urlService.NavigateToChangeWorkspace(workspace.Id, SiteUrl.Dashboard_TimeEntry);
     }
     
-    private void NavigateToEditPage()
+    private void NavigateToEditWorkspaces()
     {
         NavigationManager.NavigateTo(SiteUrl.Workspace_List);
     }

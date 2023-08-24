@@ -1,87 +1,129 @@
 ﻿@using TimeTracker.Web.Store.Auth
+@using MudBlazor
+
 @inherits BaseComponent
 
-<RadzenSidebar>
-    <RadzenPanelMenu Match="NavLinkMatch.All">
-        <RadzenPanelMenuItem
-            Icon="timer"
-            Text="My Time Entries"
-            Path="@SiteUrl.Dashboard_TimeEntry"/>
-        <RadzenPanelMenuItem
-            Icon="dashboard"
-            Text="Dashboard"
-            Path="@SiteUrl.Dashboard_Dashboard"/>
-        <RadzenPanelMenuItem
-            Icon="event"
-            Text="Calendar"
-            Path="@SiteUrl.Dashboard_Calendar"/>
-        <RadzenPanelMenuItem
-            Icon="assessment"
-            Text="Summary"
-            Path="@SiteUrl.Dashboard_Reports_Summary"/>
-        <RadzenPanelMenuItem Text="Tasks" Icon="task">
-            <RadzenPanelMenuItem
-                Icon="supervisor_account"
-                Text="Without client">
+<MudDrawer @bind-Open="@_uiState.Value.IsMainMenuOpened" Elevation="1">
+    <MudDrawerHeader>
+        <MudLink Href="/">
+            <MudImage
+                Src="/img/logo/black/clock-256.png"
+                Width="28"
+                Alt="Mony the dog"
+                Elevation="25"
+                Class="rounded-lg"/>
+        </MudLink>
+        <MudText Typo="Typo.h6" Color="Color.Inherit">TimeVic</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu Class="mud-width-full">
+        <MudNavLink
+            Href="@SiteUrl.Dashboard_TimeEntry"
+            Icon="@Icons.Material.Filled.ViewTimeline">
+            My Time Entries
+        </MudNavLink>
+        @* <MudNavLink *@
+        @*     Href="@SiteUrl.Dashboard_Dashboard" *@
+        @*     Icon="@Icons.Material.Filled.Dashboard"> *@
+        @*     Dashboard *@
+        @* </MudNavLink> *@
+        @* <MudNavLink *@
+        @*     Href="@SiteUrl.Dashboard_Calendar" *@
+        @*     Icon="@Icons.Material.Filled.CalendarMonth"> *@
+        @*     Calendar *@
+        @* </MudNavLink> *@
+        <MudNavLink
+            Href="@SiteUrl.Dashboard_Reports_Summary"
+            Icon="@Icons.Material.Filled.Summarize">
+            Summary
+        </MudNavLink>
+        <MudNavGroup Title="Tasks" Icon="@Icons.Material.Filled.Task" Expanded="true">
+            <MudNavGroup Title="Without client" Icon="@Icons.Material.Filled.LabelImportant" Expanded="true">
                 @foreach (var project in GetClientProjects(null))
                 {
-                    <RadzenPanelMenuItem
-                        Icon="list_alt"
-                        Text="@project.Name"
-                        Path="@GetTasksListUrl(project)"/>
+                    <MudNavLink
+                        Href="@GetTasksListUrl(project)"
+                        Icon="@Icons.Material.Filled.LabelImportant"
+                        IconColor="Color.Primary">
+                        @project.Name
+                    </MudNavLink>
                 }
-            </RadzenPanelMenuItem>
+            </MudNavGroup>
             @foreach (var client in Clients)
             {
-                <RadzenPanelMenuItem
-                    @key="client"
-                    Icon="supervisor_account"
-                    Text="@client.Name">
+                <MudNavGroup Title="Without client" Expanded="true">
                     @foreach (var project in GetClientProjects(client))
                     {
-                        <RadzenPanelMenuItem
-                            Icon="list_alt"
-                            Text="@project.Name"
-                            Path="@GetTasksListUrl(project)"/>
+                        <MudNavLink
+                            Href="@GetTasksListUrl(project)"
+                            Icon="@Icons.Material.Filled.LabelImportant"
+                            IconColor="Color.Primary">
+                            @project.Name
+                        </MudNavLink>
                     }
-                </RadzenPanelMenuItem>
+                </MudNavGroup>
             }
-        </RadzenPanelMenuItem>
-        <RadzenPanelMenuItem
-            Icon="euro_symbol"
-            Text="Payments"
-            Path="@SiteUrl.Dashboard_Payments"/>
-        <RadzenPanelMenuItem Text="Reports" Icon="assessment">
-            <RadzenPanelMenuItem
-                Icon="euro_symbol"
-                Text="Payments"
-                Path="@SiteUrl.Dashboard_Reports_Payments"/>
-            <RadzenPanelMenuItem
-                Icon="line_weight"
-                Text="Detailed"
-                Path="@SiteUrl.Dashboard_Reports_TimeEntries"/>
-        </RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text="Workspace" Icon="dashboard">
-            <RadzenPanelMenuItem
-                Icon="chrome_reader_mode"
-                Text="Projects"
-                Path="@SiteUrl.Dashboard_Projects"/>
-            <RadzenPanelMenuItem
-                Icon="assignment_ind"
-                Text="Clients"
-                Path="@SiteUrl.Dashboard_Clients"/>
-            <RadzenPanelMenuItem
-                Icon="local_offer"
-                Text="Tags"
-                Path="@SiteUrl.Dashboard_Tags"/>
-            <RadzenPanelMenuItem
-                Icon="face"
-                Text="Members"
-                Path="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)"/>
-            <RadzenPanelMenuItem
-                Icon="compare_arrows"
-                Text="Integrations"
-                Path="@SiteUrl.Dashboard_Integrations"/>
-        </RadzenPanelMenuItem>
-    </RadzenPanelMenu>
-</RadzenSidebar>
+        </MudNavGroup>
+
+        <MudNavLink
+            Href="@SiteUrl.Dashboard_Payments"
+            Icon="@Icons.Material.Filled.Payment">
+            Payments
+        </MudNavLink>
+
+        <MudNavGroup
+            Title="Reports"
+            Icon="@Icons.Material.Filled.Analytics"
+            Expanded="true">
+            <MudNavLink
+                Href="@SiteUrl.Dashboard_Reports_Payments"
+                Icon="@Icons.Material.Filled.Payment"
+                IconColor="Color.Success">
+                Payments
+            </MudNavLink>
+            <MudNavLink
+                Href="@SiteUrl.Dashboard_Reports_TimeEntries"
+                Icon="@Icons.Material.Filled.AccessTimeFilled"
+                IconColor="Color.Success">
+                Detailed
+            </MudNavLink>
+        </MudNavGroup>
+        <MudNavGroup
+            Title="Workspace"
+            Icon="@Icons.Material.Filled.Workspaces"
+            Expanded="true">
+            <MudNavLink
+                Href="@SiteUrl.Dashboard_Projects"
+                Icon="@Icons.Material.Filled.Apps"
+                IconColor="Color.Success">
+                Projects
+            </MudNavLink>
+            <MudNavLink
+                Href="@SiteUrl.Dashboard_Clients"
+                Icon="@Icons.Material.Filled.People"
+                IconColor="Color.Success">
+                Clients
+            </MudNavLink>
+            <MudNavLink
+                Href="@SiteUrl.Dashboard_Tags"
+                Icon="@Icons.Material.Filled.Tag"
+                IconColor="Color.Success">
+                Tags
+            </MudNavLink>
+            @if (AuthState.Value.IsRoleAdmin)
+            {
+                <MudNavLink
+                    Href="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)"
+                    Icon="@Icons.Material.Filled.SupervisedUserCircle"
+                    IconColor="Color.Success">
+                    Members
+                </MudNavLink>
+            }
+            <MudNavLink
+                Href="@SiteUrl.Dashboard_Integrations"
+                Icon="@Icons.Material.Filled.Apps"
+                IconColor="Color.Success">
+                Integrations
+            </MudNavLink>
+        </MudNavGroup>
+    </MudNavMenu>
+</MudDrawer>

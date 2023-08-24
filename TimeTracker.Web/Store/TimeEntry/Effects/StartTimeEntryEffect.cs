@@ -35,7 +35,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
     {
         try
         {
-            dispatcher.Dispatch(new SetIsTimeEntryProcessing(true));
+            dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(true));
             if (_timeEntryState.Value.HasActiveEntry)
             {
                 await _apiService.TimeEntryStopAsync(new StopRequest()
@@ -44,7 +44,8 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                     EndTime = DateTime.Now.TimeOfDay,
                     EndDate = DateTime.Now.ToDateAndRemoveTimeZone()
                 });
-                dispatcher.Dispatch(new LoadListAction(1));
+                dispatcher.Dispatch(new SetSelectedPageAction(1));
+                dispatcher.Dispatch(new LoadListAction());
             }
 
             var project = _projectState.Value.List.FirstOrDefault(
@@ -73,7 +74,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetIsTimeEntryProcessing(false));
+            dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(false));
         }
     }
 }

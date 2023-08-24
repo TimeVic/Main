@@ -74,8 +74,9 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
                         return ValidationResult.Success;
                 }
             }
-            
-            return new ValidationResult(string.Format(RG.Error_FieldMayContainOnlyPositiveDigits, validationContext.DisplayName));
+
+            ErrorMessage ??= string.Format(RG.Error_FieldMayContainOnlyPositiveDigits, validationContext.DisplayName);
+            return new ValidationResult(ErrorMessage);
         }
     }
 }

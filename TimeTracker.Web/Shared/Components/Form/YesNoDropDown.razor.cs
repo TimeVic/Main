@@ -41,4 +41,10 @@ public partial class YesNoDropDown
     {
         InvokeAsync(async () => await ValueChanged.InvokeAsync(selectedValue));
     }
+    
+    private string ToStringFunc(bool? itemValue)
+    {
+        var item = _listItems.FirstOrDefault(item => item.Value == itemValue);
+        return item.Name;
+    }
 }

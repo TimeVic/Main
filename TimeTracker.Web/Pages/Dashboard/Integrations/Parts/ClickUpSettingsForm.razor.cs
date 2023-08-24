@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
@@ -22,6 +23,8 @@ public partial class ClickUpSettingsForm
     
     private SetClickUpSettingsRequest _model = new();
     private bool _isLoading = false;
+    private bool _isValid = false;
+    private MudForm _form;
 
     protected override async Task OnInitializedAsync()
     {
@@ -36,6 +39,12 @@ public partial class ClickUpSettingsForm
     
     private async Task HandleSubmit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
+        
         _isLoading = true;
         try
         {

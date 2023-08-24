@@ -1,4 +1,6 @@
-﻿@inherits BaseComponent
+﻿@using MudBlazor
+
+@inherits BaseComponent
 
 <div class="d-flex align-items-center justify-content-start">
     @{
@@ -9,23 +11,24 @@
     @if (IsLink)
     {
         <NavLink href="@($"/board/task/{AuthState.Value.Workspace.Id}/{InternalTask.TaskId}")" target="_blank">
-            <RadzenBadge
-                Shade="Shade.Lighter"
-                BadgeStyle="BadgeStyle.Primary"
-                Style="@(IsClickable ? "cursor: pointer" : "")"
-                @onclick="OnClick"
-                class="@($"{Class} d-flex align-items-center")"
-                Text="@taskId"/>
+            <MudChip
+                Class="@($"{Class} d-flex align-items-center")"
+                Style="@(IsClickable ? "cursor: pointer" : string.Empty)"
+                Size="Size.Small"
+                Color="Color.Info">
+                @taskId
+            </MudChip>
         </NavLink>
     }
     else
     {
-        <RadzenBadge
-            Shade="Shade.Lighter"
-            BadgeStyle="BadgeStyle.Primary"
-            Style="@(IsClickable ? "cursor: pointer" : "")"
-            @onclick="OnClick"
-            class="@($"{Class} d-flex align-items-center")"
-            Text="@taskId"/>
+        <MudChip
+            Class="@($"{Class} d-flex align-items-center")"
+            Style="@(IsClickable ? "cursor: pointer" : string.Empty)"
+            Size="Size.Small"
+            OnClick="OnClick"
+            Color="Color.Info">
+            @taskId
+        </MudChip>
     }
 </div>

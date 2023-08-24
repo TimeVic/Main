@@ -83,14 +83,14 @@ public partial class TagsList
     private string? GetColorRgb(string? colorHex)
     {
         if (string.IsNullOrEmpty(colorHex))
-            return "";
+            return string.Empty;
         return RGB.Parse(colorHex).ToCSS();
     }
     
     private string? GetColorHex(string? colorRgb)
     {
         if (string.IsNullOrEmpty(colorRgb))
-            return "";
+            return string.Empty;
         return "#" + RGB.Parse(colorRgb).ToHex();
     }
 

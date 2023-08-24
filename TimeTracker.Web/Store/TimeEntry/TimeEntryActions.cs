@@ -17,7 +17,7 @@ public record struct StopActiveTimeEntryAction();
 
 public record struct SetActiveTimeEntryAction(TimeEntryDto TimeEntry);
 
-public record struct LoadListAction(int Skip = 1);
+public record struct LoadListAction();
 
 public record struct SetTimeEntryListItemsAction(GetListResponse Response);
 
@@ -31,11 +31,15 @@ public record struct DeleteTimeEntryAction(long EntryId);
 
 public record struct DeleteTimeEntryFromListAction(long EntryId);
 
-public record struct SetIsTimeEntryProcessing(bool IsProcessing);
+public record struct SetIsTimeEntryProcessingAction(bool IsProcessing);
+
+public record struct SetSelectedPageAction(int SelectedPage);
+
+public record struct SetFilteredSelectedPageAction(int SelectedPage);
 
 #region Filtered
 
-public record struct LoadTimeEntryFilteredListAction(int Skip = 1);
+public record struct LoadTimeEntryFilteredListAction();
 
 public record struct SetTimeEntryFilterAction(TimeEntryFilterState Filter);
 

@@ -101,7 +101,7 @@ public partial class CalendarPage
 
     private void ShowTooltip(ElementReference elementReference, TaskDto task)
     {
-        var toShow = "";
+        var toShow = string.Empty;
         if (task.TaskList.Project.Client != null)
         {
             toShow = "task.TaskList.Project.Client.Name / ";

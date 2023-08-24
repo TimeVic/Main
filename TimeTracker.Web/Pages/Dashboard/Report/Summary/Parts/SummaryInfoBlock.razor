@@ -1,25 +1,23 @@
 ﻿@using TimeTracker.Business.Extensions
+@using MudBlazor
+
 @inherits BaseComponent
 
-<RadzenCard class=" no-gutters mx-n2 mt-2 row">
-    <div class="col-6 d-flex justify-content-center">
-        <RadzenText TextStyle="TextStyle.H6">
-            Duration:
-        </RadzenText>
-        <RadzenText
-            TextStyle="TextStyle.H6"
-            class="rz-color-info ml-1">
-            @_totalDuration.ToReadableShortString()
-        </RadzenText>
-    </div>
-    <div class="col-6 d-flex justify-content-center">
-        <RadzenText TextStyle="TextStyle.H6">
-            Amount:
-        </RadzenText>
-        <RadzenText
-            TextStyle="TextStyle.H6"
-            class="rz-color-info ml-1">
-            @_totalAmount.ToMoneyFormat()
-        </RadzenText>
-    </div>
-</RadzenCard>
+<div class="d-flex justify-content-center">
+    <MudText Typo="Typo.body1">
+        Total Duration: 
+    </MudText>
+    <MudText
+        Typo="Typo.body1">
+        @_totalDuration.ToReadableShortString()
+    </MudText>
+</div>
+<div class="d-flex justify-content-center">
+    <MudText Typo="Typo.body1">
+        Total Amount: 
+    </MudText>
+    <MudText
+            Typo="Typo.body1">
+        @_totalAmount.ToMoneyFormat()
+    </MudText>
+</div>

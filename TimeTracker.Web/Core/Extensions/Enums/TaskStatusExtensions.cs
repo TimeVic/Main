@@ -16,6 +16,6 @@ public static class TaskStatusExtensions
                 return "rz-color-primary";
         }
 
-        return "";
+        return string.Empty;
     }
 }

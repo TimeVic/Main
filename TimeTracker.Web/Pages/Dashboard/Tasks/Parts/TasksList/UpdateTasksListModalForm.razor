@@ -1,0 +1,32 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
+@using MudBlazor
+
+@inherits BaseComponent
+
+<MudDialog>
+    <DialogContent>
+        <MudForm
+            @ref="_form"
+            @bind-IsValid="_isValid">
+            
+            <ProjectsDropDown
+                Value="model.ProjectId"
+                ValueChanged="value => model.ProjectId = value"
+                Placeholder="Task title"/>
+
+            <MudTextField
+                T="string"
+                For="() => model.Name"
+                @bind-Value="model.Name"
+                Placeholder="Enter list name"/>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="OnCloseModal">Cancel</MudButton>
+        <MudButton 
+            ButtonType="MudBlazor.ButtonType.Submit"
+            OnClick="Submit"
+            Disabled="@_isLoading"
+            Color="Color.Primary">Update</MudButton>
+    </DialogActions>
+</MudDialog>

@@ -1,65 +1,42 @@
 ﻿@using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Business.Common.Constants.Reports
+@using MudBlazor
 
 @inherits BaseComponent
 
-<div class="row">
-    <div class="col">
-        <RadzenText
-            TextStyle="TextStyle.Subtitle2"
-            TagName="TagName.H3">
-            Group by:
-        </RadzenText>
-        <EnumDropDown
-            TItem="SummaryReportType"
-            Value="@_filterState.ReportType"
-            Class="w-100"
-            ValueChanged="OnChangeReportType"/>
-    </div>
-    <div class="col">
-        <RadzenText
-            TextStyle="TextStyle.Subtitle2"
-            TagName="TagName.H3">
-            Period:
-        </RadzenText>
-        <EnumDropDown
-            TItem="SummaryReportPeriodType"
-            Value="@_filterState.PeriodType"
-            ValueChanged="OnChangePeriodType"
-            Class="w-100"/>
-    </div>
-    <div class="col">
-        <RadzenText
-            TextStyle="TextStyle.Subtitle2"
-            TagName="TagName.H3">
-            Date start:
-        </RadzenText>
-        <RadzenDatePicker
-            TValue="DateTime?"
-            Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-            AllowClear="false"
-            DateFormat="d"
-            Class="w-100"
-            Placeholder="Date start"
-            Kind="DateTimeKind.Local"
-            Value="@_filterState.StartDate"
-            Change="OnChangeDateStart"/>
-    </div>
-    <div class="col">
-        <RadzenText
-            TextStyle="TextStyle.Subtitle2"
-            TagName="TagName.H3">
-            Date end:
-        </RadzenText>
-        <RadzenDatePicker
-            TValue="DateTime?"
-            Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-            AllowClear="false"
-            DateFormat="d"
-            Class="w-100"
-            Placeholder="Date start"
-            Kind="DateTimeKind.Local"
-            Value="@_filterState.EndDate"
-            Change="OnChangeDateEnd"/>
-    </div>
+<div class="d-flex justify-content-between">
+    <EnumDropDown
+        Label="Group by:"
+        TItem="SummaryReportType"
+        Value="@_filterState.ReportType"
+        Class="w-100"
+        ValueChanged="OnChangeReportType"/>
+    
+    <MudSpacer/>
+    
+    <EnumDropDown
+        Label="Period:"
+        TItem="SummaryReportPeriodType"
+        Value="@_filterState.PeriodType"
+        ValueChanged="OnChangePeriodType"
+        Class="w-100"/>
+    
+    <MudSpacer/>
+    
+    <MudDatePicker 
+        Label="Date start"
+        Editable="true" 
+        Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+        DateChanged="OnChangeDateStart"
+        Date="@_filterState.StartDate"/>
+    
+    <MudSpacer/>
+    
+    <MudDatePicker 
+        Label="Date end"
+        Editable="true" 
+        Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+        DateChanged="OnChangeDateEnd"
+        Date="@_filterState.StartDate"/>
+    
 </div>

@@ -42,6 +42,15 @@ public class LoadListEffect: Effect<LoadListAction>
                     TaskListId = tasksListId.Value,
                     Filter = _state.Value.Filter
                 });
+                if (response.Items.Where(x => x.PositionIndex == 0).Count() > 0)
+                {
+                    var postition = 30;
+                    response.Items = response.Items.OrderBy(x => x.Status).Select(x =>
+                    {
+                        x.PositionIndex = postition++;
+                        return x;
+                    }).ToList();
+                }
                 dispatcher.Dispatch(new SetListItemsAction(response));
             }
             else

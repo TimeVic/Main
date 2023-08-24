@@ -3,14 +3,9 @@
 namespace TimeTracker.Web.Store.Common;
 
 [FeatureState]
-public class CommonState
+public record CommonState
 {
-    public readonly bool IsInitialized;
-
-    public CommonState() { }
+    public bool IsInitialized;
     
-    public CommonState(bool isInitialized)
-    {
-        IsInitialized = isInitialized;
-    }
+    public bool IsWorkspaceInitialized;
 }

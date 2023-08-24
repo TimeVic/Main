@@ -18,6 +18,8 @@ public record TimeEntryState
     
     public ICollection<TimeEntryDto> ListToShow => List.Where(item => !item.IsActive).ToList();
 
+    public int SelectedPage { get; set; }
+    
     public int TotalCount { get; set; }
     
     public int TotalPages { get; set; }
@@ -33,6 +35,8 @@ public record TimeEntryState
     public TimeEntryFilterState Filter { get; set; } = new();
     
     public ICollection<TimeEntryDto> FilteredList { get; set; } = new List<TimeEntryDto>();
+    
+    public int FilteredSelectedPage { get; set; }
     
     public int FilteredTotalCount { get; set; }
     
@@ -51,7 +55,7 @@ public record TimeEntryFilterState
     
     public long? UserId { get; set; }
 
-    public string? Search { get; set; } = "";
+    public string? Search { get; set; } = string.Empty;
     
     public DateTime? DateFrom { get; set; }
     

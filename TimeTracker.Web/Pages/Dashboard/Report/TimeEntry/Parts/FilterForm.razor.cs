@@ -30,7 +30,7 @@ public partial class FilterForm
 
     private void OnChangeSearch(string search)
     {
-        _state.Value.Filter.Search = search ?? "";
+        _state.Value.Filter.Search = search;
         UpdateFilterState();
     }
     

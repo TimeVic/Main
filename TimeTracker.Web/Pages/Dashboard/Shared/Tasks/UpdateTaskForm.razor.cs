@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -28,10 +29,10 @@ public partial class UpdateTaskForm
     [Inject]
     private IState<WorkspaceMembershipsState> _workspaceMembershipsState { get; set; }
 
-    private RadzenTemplateForm<UpdateRequest> _form;
-
     private UpdateRequest model = new();
     private bool _isLoading = false;
+    private MudForm _form;
+    private bool _isValid = false;
 
     private string _tabLabelAttachments
     {
@@ -63,45 +64,25 @@ public partial class UpdateTaskForm
         model.Fill(Task);
     }
 
-    private void HandleSubmit(UpdateRequest request)
+    private void SubmitForm()
     {
-        InvokeAsync(async () =>
+        _form.Validate();
+        if (!_form.IsValid)
         {
-            _isLoading = true;
-            try
-            {
-                Dispatcher.Dispatch(new UpdateListItemAction(model));
-            }
-            catch (Exception)
-            {
-                await ToastService.ShowError("Task updating error");
-            }
-            finally
-            {
-                _isLoading = false;
-            }
-            StateHasChanged();
-        });
-    }
-
-    private Task SubmitForm()
-    {
-        if (_form.IsValid)
-        {
-            InvokeAsync(async () => await _form.Submit.InvokeAsync());
+            return;
         }
-        return System.Threading.Tasks.Task.CompletedTask;
+        Dispatcher.Dispatch(new UpdateListItemAction(model));
     }
 
     private async Task OnChangedAssigned(WorkspaceMembershipDto membership)
     {
         model.UserId = membership.User.Id;
-        await SubmitForm();
+        SubmitForm();
     }
 
     private async Task OnChangeTime(DateTime? time)
     {
-        await SubmitForm();
+        SubmitForm();
     }
 
     private void OnFileUploaded(StoredFileDto uploadedFile)
@@ -110,10 +91,10 @@ public partial class UpdateTaskForm
         Dispatcher.Dispatch(new SetAttachmentsAction(Task.TaskId, Task.Attachments));
     }
 
-    private async Task OnTagsChanged(ICollection<long> selectedTagIds)
+    private void OnTagsChanged(IEnumerable<long> selectedTagIds)
     {
-        model.TagIds = selectedTagIds;
-        await SubmitForm();
+        model.TagIds = selectedTagIds.ToList();
+        SubmitForm();
     }
 
     private void AttachmentsListUpdated(ICollection<StoredFileDto> attachments)

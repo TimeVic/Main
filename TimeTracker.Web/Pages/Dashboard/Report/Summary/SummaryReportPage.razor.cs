@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Model.Report;
 using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Business.Extensions;
@@ -18,7 +19,7 @@ public partial class SummaryReportPage
     {
         get => _state.Value.SummaryReportData?.ByDays ?? new List<SummaryByDaysReportItemDto>();
     }
-
+    
     public bool _isShowChartWithLineSeries
     {
         get

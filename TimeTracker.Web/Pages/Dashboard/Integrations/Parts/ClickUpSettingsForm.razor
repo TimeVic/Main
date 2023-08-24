@@ -1,71 +1,41 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
 @using Microsoft.AspNetCore.Components
+@using MudBlazor
 
 @inherits BaseComponent
 
-<RadzenTemplateForm TItem="SetClickUpSettingsRequest" Data="@_model" Submit="HandleSubmit">
-    <DataAnnotationsValidator/>
-    <ValidationSummary/>
+<MudForm
+    @ref="_form"
+    @bind-IsValid="_isValid">
 
-    <div class="row">
-        <div class="col">
-            <RadzenLabel
-                Text="Security Key"
-                TextStyle="@TextStyle.Subtitle2"/>
-            <RadzenPassword
-                disabled="@_isLoading"
-                @bind-Value="@_model.SecurityKey"
-                AutoComplete="false"
-                Name="SecurityKey"
-                Class="w-100"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <RadzenLabel
-                Text="Team Id"
-                TextStyle="@TextStyle.Subtitle2"/>
-            <RadzenTextBox
-                @bind-Value="@_model.TeamId"
-                disabled="@_isLoading"
-                Name="TeamId"
-                AutoComplete="false"
-                Class="w-100"/>
-        </div>
-        <div class="col-md-6 d-flex align-items-center">
-            <RadzenCheckBox
-                TValue="bool"
-                Name="IsCustomTaskIds"
-                AutoComplete="false"
-                disabled="@_isLoading"
-                @bind-Value="@_model.IsCustomTaskIds"/>
-            <RadzenLabel
-                Component="IsCustomTaskIds"
-                Style="margin-left: 8px; vertical-align: middle;"
-                Text="Is custom Task IDs"/>
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col">
-            <RadzenCheckBox
-                TValue="bool"
-                Name="IsFillTimeEntryWithTaskDetails"
-                disabled="@_isLoading"
-                @bind-Value="@_model.IsFillTimeEntryWithTaskDetails"/>
-            <RadzenLabel
-                Component="IsFillTimeEntryWithTaskDetails"
-                Style="margin-left: 8px; vertical-align: middle;"
-                Text="Update description of the Time Entry if empty"/>
-        </div>
-    </div>
+    <MudStack Class="pa-4">
+        <MudTextField
+            T="string"
+            Name="Security Key"
+            InputType="InputType.Password"
+            @bind-Value="@_model.SecurityKey"
+            Placeholder="Task title"/>
 
-    <div class="row justify-content-center">
-        <div class="col-md-12 d-flex align-items-end justify-content-center mt-4">
-            <RadzenButton
-                ButtonType="ButtonType.Submit"
-                Disabled="@_isLoading"
-                class="ml-3"
-                Text="Save"/>
+        <MudTextField
+            T="string"
+            Name="Team Id"
+            @bind-Value="@_model.TeamId"
+            Placeholder="External task ID"/>
+
+        <MudCheckBox
+            T="bool"
+            Label="Is custom Task IDs"
+            @bind-Value="@_model.IsCustomTaskIds"/>
+
+        <div class="d-flex align-center justify-space-end">
+            <MudButton
+                Variant="MudBlazor.Variant.Filled"
+                Color="Color.Primary"
+                Disabled="@(!_isValid || _isLoading)"
+                OnClick="HandleSubmit"
+                Class="ml-auto">
+                Save
+            </MudButton>
         </div>
-    </div>
-</RadzenTemplateForm>
+    </MudStack>
+</MudForm>

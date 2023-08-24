@@ -78,7 +78,7 @@
                     </RadzenColumn>
                     <RadzenColumn class="text-truncate">
                         <RadzenText
-                            class="@(item.Status == TaskStatus.Done ? "w-done" : "")"
+                            class="@(item.Status == TaskStatus.Done ? "w-done" : string.Empty)"
                             TextStyle="TextStyle.Subtitle1">
                             @item.Title
                         </RadzenText>

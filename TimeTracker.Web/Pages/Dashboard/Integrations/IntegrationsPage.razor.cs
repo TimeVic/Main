@@ -21,4 +21,9 @@ public partial class IntegrationsPage
         _settings = await ApiService.WorkspaceIntegrationSettingsGetAsync(_authState.Value.Workspace.Id);
         _isLoading = false;
     }
+
+    private string GetIcon(bool isActive)
+    {
+        return isActive ? MudBlazor.Icons.Material.Filled.Link : MudBlazor.Icons.Material.Filled.LinkOff;
+    }
 }

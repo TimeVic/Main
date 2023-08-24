@@ -2,21 +2,25 @@
 @page "/board/tasks/{ProjectId:long}"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
+@using MudBlazor
 @using TimeTracker.Web.Pages.Dashboard.Tasks.Parts
 @using TasksTable = TimeTracker.Web.Pages.Dashboard.Dashboard.Parts.TasksTable
 
 @inherits BaseComponent
 @layout Layout
 
-<RadzenRow class="no-gutters mx-n4">
+<MudStack>
     <CascadingValue Name="TaskListId" Value="@TaskListId">
         <CascadingValue Name="ProjectId" Value="@ProjectId">
-            <RadzenColumn>
-                <RadzenCard>
+            <MudStack>
+                <MudPaper>
                     <TasksFilterForm/>
-                </RadzenCard>
-                <TasksTable/>
-            </RadzenColumn>
+                </MudPaper>
+                <MudStack Row="true">
+                    <TasksListTree/>
+                    <TasksTable/>
+                </MudStack>
+            </MudStack>
         </CascadingValue>
     </CascadingValue>
-</RadzenRow>
+</MudStack>

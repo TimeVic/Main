@@ -35,7 +35,7 @@ public class ClientReducers
         newList.Add(new WorkspaceDto()
         {
             Id = 0,
-            Name = ""
+            Name = string.Empty
         });
         return state with
         {

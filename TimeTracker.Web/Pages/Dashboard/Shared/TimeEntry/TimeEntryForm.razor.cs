@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.TimeEntry;
@@ -11,6 +12,9 @@ namespace TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
 
 public partial class TimeEntryForm
 {
+    [Parameter]
+    public string Class { get; set; }
+    
     [Parameter]
     public bool IsShort { get; set; }
 
@@ -61,19 +65,19 @@ public partial class TimeEntryForm
         }
     }
 
-    private void StartTimeEntry()
+    private void ToggleTimeEntry(bool isStarted)
     {
-        Dispatcher.Dispatch(
-            new StartTimeEntryAction(InternalTask: InternalTask)
-        );
-    }
-
-    private void StopTimeEntry()
-    {
-        Dispatcher.Dispatch(new StopActiveTimeEntryAction());
+        if (isStarted)
+        {
+            Dispatcher.Dispatch(new StartTimeEntryAction(InternalTask: InternalTask));
+        }
+        else
+        {
+            Dispatcher.Dispatch(new StopActiveTimeEntryAction());
+        }
     }
     
-    private async Task OnChangeDescription(string value)
+    private async Task OnChangeDescription(string? value)
     {
         _activeEntry.Description = value;
         await UpdateTimeEntry(_activeEntry);

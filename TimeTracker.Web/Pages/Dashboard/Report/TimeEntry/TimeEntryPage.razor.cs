@@ -7,6 +7,7 @@ public partial class TimeEntryPage
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction(1));
+        Dispatcher.Dispatch(new SetFilteredSelectedPageAction(1));
+        Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction());
     }
 }

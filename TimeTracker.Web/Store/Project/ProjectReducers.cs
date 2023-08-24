@@ -37,7 +37,7 @@ public class ProjectReducers
         newList.Add(new ProjectDto()
         {
             Id = 0,
-            Name = ""
+            Name = string.Empty
         });
         return state with
         {

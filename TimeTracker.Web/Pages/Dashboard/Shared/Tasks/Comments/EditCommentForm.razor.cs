@@ -1,10 +1,12 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using MudBlazor;
 using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Services.UI;
@@ -30,12 +32,16 @@ public partial class EditCommentForm
     [Inject]
     public MarkdownService _markdownService { get; set; }
     
+    [Inject] 
+    private ModalDialogProviderService _dialogService { get; set; }
+    
     public IEnumerable<long> WatcherIds { get; set; } = new List<long>();
     
-    private RadzenTemplateForm<AddRequest> _form;
     private AddRequest model = new();
     private bool _isLoading = false;
     private bool _isEditMode = false;
+    private MudForm _form;
+    private bool _isValid = false;
     private bool _isNewComment => Comment.Id == 0;
 
     private string _userName => _isNewComment ? AuthState.Value.User.Name : Comment.User.Name;
@@ -44,6 +50,15 @@ public partial class EditCommentForm
 
     public MarkupString CommentHtml => (MarkupString) _markdownService.ToHtml(model.Comment);
 
+    private int _commentLinesCount
+    {
+        get
+        {
+            var lines = model.Comment.CountLines();
+            return lines > 3 ? lines : 3;
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -51,8 +66,14 @@ public partial class EditCommentForm
         model.WorkspaceId = AuthState.Value.Workspace.Id;
     }
     
-    private void HandleSubmit(AddRequest request)
+    private void Submit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
+        
         InvokeAsync(async () =>
         {
             _isLoading = true;
@@ -102,19 +123,16 @@ public partial class EditCommentForm
 
     private void OnFocusOnEditField()
     {
-        _isEditMode = true;
+        if (!_isEditMode)
+        {
+            _isEditMode = true;    
+        }
     }
 
     private async Task OnClickDelete()
     {
-        var isOk = await DialogService.Confirm(
-            "Are you sure you want to remove this comment?",
-            "Delete confirmation",
-            new ConfirmOptions()
-            {
-                OkButtonText = "Delete",
-                CancelButtonText = "Cancel"
-            }
+        var isOk = await _dialogService.ShowDeleteConfirmationDialog(
+            "Are you sure you want to remove this comment?"
         );
         if (!isOk.HasValue || !isOk.Value)
         {

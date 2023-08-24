@@ -65,7 +65,7 @@ public class ProjectReducers
         newList.Add(new TagDto()
         {
             Id = 0,
-            Name = ""
+            Name = string.Empty
         });
         return state with
         {

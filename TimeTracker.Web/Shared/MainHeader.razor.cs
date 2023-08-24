@@ -5,6 +5,7 @@ using Radzen.Blazor;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Ui;
 
 namespace TimeTracker.Web.Shared;
 
@@ -45,9 +46,19 @@ public partial class MainHeader
                 // TODO: Add user's profile page
                 break;
             case "logout":
-                Dispatcher.Dispatch(new LogoutAction());
-                NavigationManager.NavigateTo("/", true);
+                Logout();
                 break;
         }
+    }
+
+    private void Logout()
+    {
+        Dispatcher.Dispatch(new LogoutAction());
+        NavigationManager.NavigateTo("/", true);
+    }
+
+    private void ToggleMenu()
+    {
+        Dispatcher.Dispatch(new ToggleMainMenuAction());
     }
 }

@@ -1,45 +1,42 @@
-﻿using Radzen;
+﻿using MudBlazor;
 
 namespace TimeTracker.Web.Services.UI;
 
 public class ToastService
 {
-    private readonly NotificationService _notificationService;
+    private readonly ISnackbar _snackbar;
 
-    public ToastService(NotificationService notificationService)
+    public ToastService(ISnackbar snackbar)
     {
-        _notificationService = notificationService;
+        _snackbar = snackbar;
     }
 
-    public Task Show(NotificationSeverity severity, string summary)
+    public Task Show(Severity severity, string summary)
     {
-        _notificationService.Notify(new NotificationMessage()
+        _snackbar.Add(summary, severity, options =>
         {
-            Severity = severity,
-            Summary = summary,
-            CloseOnClick = true,
-            Duration = 3000
+            options.VisibleStateDuration = 3000;
         });
         return Task.CompletedTask;
     }
     
     public async Task ShowError(string summary)
     {
-        await Show(NotificationSeverity.Error, summary);
+        await Show(Severity.Error, summary);
     }
     
     public async Task ShowInfo(string summary)
     {
-        await Show(NotificationSeverity.Info, summary);
+        await Show(Severity.Info, summary);
     }
     
     public async Task ShowSuccess(string summary)
     {
-        await Show(NotificationSeverity.Success, summary);
+        await Show(Severity.Success, summary);
     }
     
     public async Task ShowWarning(string summary)
     {
-        await Show(NotificationSeverity.Warning, summary);
+        await Show(Severity.Warning, summary);
     }
 }

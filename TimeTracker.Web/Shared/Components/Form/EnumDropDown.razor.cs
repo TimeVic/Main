@@ -21,6 +21,9 @@ public partial class EnumDropDown<TItem>
     public string Placeholder { get; set; } = "Select item";
     
     [Parameter]
+    public string? Label { get; set; } = null;
+    
+    [Parameter]
     public string Class { get; set; }
     
     [Parameter]

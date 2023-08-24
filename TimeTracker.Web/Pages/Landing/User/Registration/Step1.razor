@@ -2,39 +2,44 @@
 
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
 @using TimeTracker.Web.Pages.Landing.Shared
+@using MudBlazor
 
 @inherits BaseComponent
 @layout Layout
 
-<div class="row d-flex justify-content-center">
-    <div class="col-xl-4 p-3">
-        <RadzenCard>
-            <h2 class="mb-4">Registration</h2>
-            <RadzenTemplateForm TItem="RegistrationStep1Request" Data="@model" Submit="HandleSubmit">
-                <DataAnnotationsValidator/>
-                <ValidationSummary/>
+<MudStack Justify="Justify.Center" AlignItems="MudBlazor.AlignItems.Center">
+    <MudCard Style="width: 300px" Class="mt-5 mb-5">
+        <MudCardContent>
+            <MudForm
+                @ref="_form"
+                @bind-IsValid="_isValid">
 
-                <div class="mb-2">
-                    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Enter your email</RadzenText>
-                    <RadzenTextBox @bind-Value="model.Email" Class="w-100 mb-3 col"/>
-                </div>
-                @if (_isLoading)
-                {
-                    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
-                }
-                else
-                {
-                    <div class="mb-2 d-flex justify-content-between align-items-center">
-                        <RadzenButton
-                            ButtonType="ButtonType.Submit"
-                            Text="Send verification email"/>
+                <MudText Typo="Typo.h4">Registration</MudText>
 
-                        <NavLink href="/login" class="mr-3">
-                            Login
-                        </NavLink>
-                    </div>
-                }
-            </RadzenTemplateForm>
-        </RadzenCard>
-    </div>
-</div>
+                <MudStack>
+                    <MudTextField
+                        T="string"
+                        For="() => model.Email"
+                        Disabled="_isLoading"
+                        @bind-Text="@model.Email"
+                        Placeholder="Enter your email"/>
+                </MudStack>
+            </MudForm>
+        </MudCardContent>
+        <MudCardActions Class="d-flex justify-space-between">
+            <MudButton
+                Variant="MudBlazor.Variant.Filled"
+                OnClick="Submit"
+                Color="Color.Primary">
+                Submit
+            </MudButton>
+
+            <MudButton
+                Variant="MudBlazor.Variant.Text"
+                Href="/login"
+                Color="Color.Transparent">
+                Login
+            </MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudStack>

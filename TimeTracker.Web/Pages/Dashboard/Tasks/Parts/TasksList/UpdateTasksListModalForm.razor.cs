@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
@@ -10,20 +11,25 @@ using LoadListAction = TimeTracker.Web.Store.TasksList.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 
-public partial class UpdateTasksListForm
+public partial class UpdateTasksListModalForm
 {
     [Parameter]
     public TaskListDto TaskList { get; set; }
     
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+    
     [Inject]
-    public ILogger<AddTasksListForm> _logger { get; set; }
+    public ILogger<UpdateTasksListModalForm> _logger { get; set; }
     
     [Inject]
     public IState<ProjectState> ProjectState { get; set; }
     
     private UpdateRequest model = new();
     private bool _isLoading = false;
-    
+    private MudForm _form;
+    private bool _isValid = false;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -32,8 +38,14 @@ public partial class UpdateTasksListForm
         model.Name = TaskList.Name;
     }
     
-    private async Task HandleSubmit()
+    private async Task Submit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
+        
         _isLoading = true;
         try
         {
@@ -42,7 +54,7 @@ public partial class UpdateTasksListForm
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
                 await ToastService.ShowInfo("Task list has been updated");
-                DialogService.CloseSide();
+                OnCloseModal();
                 Dispatcher.Dispatch(new SetListItemAction(taskList));
             }
         }
@@ -58,8 +70,8 @@ public partial class UpdateTasksListForm
         StateHasChanged();
     }
     
-    private void CloseModal()
+    private void OnCloseModal()
     {
-        DialogService.CloseSide();
+        MudDialog.Close();
     }
 }

@@ -1,23 +1,26 @@
-﻿<div class="w-tags-badges">
+﻿@using MudBlazor
+
+<div class="w-tags-badges">
     @foreach (var tag in Tags)
     {
         if (tag.Color != null)
         {
-            <RadzenBadge 
-                IsPill="true"
-                Text="@tag.Name"
+            <MudChip
+                Size="Size.Small"
                 class="w-badge"
-                Style="@($"background-color: {tag.Color}; color: {tag.TextColor};")"
-            />
+                Style="@($"background-color: {tag.Color}; color: {tag.TextColor};")">
+                @tag.Name
+            </MudChip>
         }
         else
         {
-            <RadzenBadge 
-                IsPill="true"
-                BadgeStyle="BadgeStyle.Secondary"
+            <MudChip
+                Size="Size.Small"
+                Color="Color.Secondary"
                 class="w-badge"
-                Text="@tag.Name"
-            />
+            >
+                @tag.Name
+            </MudChip>
         }
     }
 </div>

@@ -1,4 +1,5 @@
-﻿using Fluxor;
+﻿using System.Linq.Expressions;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -15,6 +16,9 @@ namespace TimeTracker.Web.Shared.Components.Form;
 
 public partial class MembersDropDown
 {
+    [Parameter]
+    public Expression<Func<long>>? For { get; set; }
+    
     [Parameter] 
     public bool Disabled { get; set; }
 
@@ -43,6 +47,9 @@ public partial class MembersDropDown
     [Parameter]
     public ICollection<long> AllowedIds { get; set; } = new List<long>();
 
+    [Parameter] 
+    public bool Required { get; set; }
+    
     [Parameter]
     public long? UserId
     {
@@ -86,5 +93,11 @@ public partial class MembersDropDown
         SelectedItemChanged.InvokeAsync(_selectedItem);
         ValueChanged.InvokeAsync(selectedId);
         return Task.CompletedTask;
+    }
+    
+    private string ToStringFunc(long membershipId)
+    {
+        var item = _state.Value.List.FirstOrDefault(item => item.Id == membershipId);
+        return item?.User.Name ?? string.Empty;
     }
 }

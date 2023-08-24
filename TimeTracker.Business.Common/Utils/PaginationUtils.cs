@@ -17,4 +17,9 @@ public static class PaginationUtils
         page = page - 1;
         return (int)((page <= 0 ? 0 : page) * pageSize);
     }
+    
+    public static int CalculateTotalPages(int total, int pageSize = GlobalConstants.ListPageSize)
+    {
+        return (int)Math.Round((decimal)(total / pageSize));
+    }
 }

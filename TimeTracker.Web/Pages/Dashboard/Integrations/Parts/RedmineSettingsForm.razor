@@ -1,71 +1,51 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
 @using Microsoft.AspNetCore.Components
+@using MudBlazor
 
 @inherits BaseComponent
 
-<RadzenTemplateForm TItem="SetRedmineSettingsRequest" Data="@_model" Submit="HandleSubmit">
-    <DataAnnotationsValidator/>
-    <ValidationSummary/>
+<MudForm
+    @ref="_form"
+    @bind-IsValid="_isValid">
 
-    <div class="row">
-        <div class="col">
-            <RadzenLabel
-                Text="Redmine Url"
-                TextStyle="@TextStyle.Subtitle2"/>
-            <RadzenTextBox
-                disabled="@_isLoading"
-                @bind-Value="@_model.Url"
-                AutoComplete="false"
-                Name="Url"
-                Class="w-100"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <RadzenLabel
-                Text="Api Key"
-                TextStyle="@TextStyle.Subtitle2"/>
-            <RadzenPassword
-                disabled="@_isLoading"
-                @bind-Value="@_model.ApiKey"
-                AutoComplete="false"
-                Name="ApiKey"
-                Class="w-100"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <RadzenLabel
-                Text="Redmine Activity Id"
-                TextStyle="@TextStyle.Subtitle2"/>
-            <RadzenNumeric
-                TValue="long"
-                disabled="@_isLoading"
-                @bind-Value="@_model.ActivityId"
-                AutoComplete="false"
-                Name="ActivityId"
-                Class="w-100"/>
-        </div>
-        <div class="col-md-6">
-            <RadzenLabel
-                Text="Redmine User Id"
-                TextStyle="@TextStyle.Subtitle2"/>
-            <RadzenNumeric
-                TValue="long"
-                disabled="@_isLoading"
+    <MudStack Class="pa-4">
+        <MudTextField
+            T="string"
+            Name="Security Key"
+            InputType="InputType.Url"
+            @bind-Value="@_model.Url"
+            Placeholder="Url"/>
+
+        <MudTextField
+            T="string"
+            Name="Api key"
+            InputType="InputType.Password"
+            @bind-Value="@_model.ApiKey"
+            Placeholder="Api Key"/>
+
+        <MudStack Row="true">
+            <MudTextField
+                T="long"
+                Name="Team Id"
                 @bind-Value="@_model.RedmineUserId"
-                Name="RedmineUserId"
-                AutoComplete="false"
-                Class="w-100"/>
+                Placeholder="Redmine User Id"/>
+
+            <MudTextField
+                T="long"
+                Name="Team Id"
+                @bind-Value="@_model.ActivityId"
+                Placeholder="Activity Id"/>
+        </MudStack>
+
+        <div class="d-flex align-center justify-space-end">
+            <MudButton
+                Variant="MudBlazor.Variant.Filled"
+                Color="Color.Primary"
+                Disabled="@(!_isValid || _isLoading)"
+                OnClick="HandleSubmit"
+                Class="ml-auto">
+                Save
+            </MudButton>
         </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-12 d-flex align-items-end justify-content-center mt-4">
-            <RadzenButton
-                ButtonType="ButtonType.Submit"
-                Disabled="@_isLoading"
-                class="ml-3"
-                Text="Save"/>
-        </div>
-    </div>
-</RadzenTemplateForm>
+    </MudStack>
+</MudForm>

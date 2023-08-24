@@ -2,6 +2,7 @@
 @using TimeTracker.Business.Extensions
 @using Fluxor
 @using TimeTracker.Web.Store.Client
+@using MudBlazor
 
 @code {
 
@@ -10,42 +11,19 @@
 
 }
 
-<h3>Grouped by client:</h3>
-
-<RadzenDataGrid
-    TItem="SummaryByClientsReportItemDto"
-    AllowSorting="false"
-    EditMode="DataGridEditMode.Single"
-    Data="@Items"
-    AllowPaging="false">
-
-    <Columns>
-        <RadzenDataGridColumn
-            TItem="SummaryByClientsReportItemDto"
-            Title="Client"
-            Width="250px"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @(item.ClientName ?? "- No client -")
-            </Template>
-        </RadzenDataGridColumn>
-
-        <RadzenDataGridColumn
-            TItem="SummaryByClientsReportItemDto"
-            Title="Duration"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.Duration.ToReadableShortString()
-            </Template>
-        </RadzenDataGridColumn>
-
-        <RadzenDataGridColumn
-            TItem="SummaryByClientsReportItemDto"
-            Title="Amount"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.Amount.ToMoneyFormat()
-            </Template>
-        </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
+<MudTable
+    Items="@Items" 
+    Hover="true" 
+    Breakpoint="Breakpoint.Sm" 
+    LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Client</MudTh>
+        <MudTh>Duration</MudTh>
+        <MudTh>Amount</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Client">@(context.ClientName ?? "- No client -")</MudTd>
+        <MudTd DataLabel="Duration">@context.Duration.ToReadableShortString()</MudTd>
+        <MudTd DataLabel="Amount">@context.Amount.ToMoneyFormat()</MudTd>
+    </RowTemplate>
+</MudTable>

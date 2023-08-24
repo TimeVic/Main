@@ -4,83 +4,58 @@
 @using TimeTracker.Web.Core.Helpers
 @using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
 
-<RadzenHeader class="w-header">
-    <div class="p-2 d-flex justify-content-between">
-        <div class="d-flex align-items-center">
-            <a class="navbar-brand" href="#">
-                <img
-                    style="width: 28px;"
-                    src="/img/logo/black/clock-256.png"
-                    class="d-inline-block">
-                <b>TimeVic</b>
-            </a>
+@using MudBlazor
+
+<MudAppBar Color="Color.Primary" Dense="true">
+    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleMenu" />
+    <MudSpacer/>
+    @if (AuthState.Value.IsLoggedIn && !_isShowDashboardLink)
+    {
+        <div class="d-md-inline-flex align-items-center w-time-entry-form">
+            <TimeEntryForm IsShowTimeEntriesButton="true"/>
         </div>
-        @if (AuthState.Value.IsLoggedIn && !_isShowDashboardLink)
+    }
+    <MudSpacer/>
+    @if (AuthState.Value.IsLoggedIn)
+    {
+        if (_isShowDashboardLink)
         {
-            <div class="d-md-inline-flex align-items-center w-time-entry-form">
-                <TimeEntryForm IsShowTimeEntriesButton="true"/>
-            </div>
+            <MudIconButton
+                Href="@SiteUrl.DashboardBase"
+                Icon="@Icons.Material.Filled.Dashboard" 
+                Color="Color.Inherit"
+                Edge="Edge.Start"/>
         }
-        <div class="d-flex align-items-center justify-content-end">
-            <div class="d-md-inline-flex align-items-end">
-                @if (AuthState.Value.IsLoggedIn)
-                {
-                    if (_isShowDashboardLink)
-                    {
-                        <RadzenLink
-                            class="mr-2"
-                            Path="@SiteUrl.DashboardBase"
-                            Text="Dashboard"/>
-                    }
-                    else
-                    {
-                        <WorkspaceMenu/>
-                    }
-                }
-                else
-                {
-                    <RadzenLink
-                        Path="@SiteUrl.Login"
-                        Text="Login"/>
-                    <RadzenLink
-                        Path="@SiteUrl.Registration_Step1"
-                        Text="Sign Up"
-                        class="ml-3 mr-3"/>
-                }
-            </div>
-            @if (AuthState.Value.IsLoggedIn)
-            {
-                <RadzenProfileMenu
-                    class="p-0 pl-3"
-                    Click="OnClickUserMenu">
-                    <Template>
-                        <RadzenGravatar Email="user@example.com">
-                        </RadzenGravatar>
-                    </Template>
-                    <ChildContent>
-                        <div class="pt-3 pl-3 pr-3 pb-1">
-                            <RadzenText TextStyle="TextStyle.DisplayH6">
-                                @AuthState.Value.User.Name
-                            </RadzenText>
-                            @if (AuthState.Value.User.Name != AuthState.Value.User.Email)
-                            {
-                                <RadzenText TextStyle="TextStyle.Subtitle2">
-                                    @AuthState.Value.User.Name
-                                </RadzenText>
-                            }
-                        </div>
-                        <hr/>
-                        <RadzenProfileMenuItem
-                            Text="My profile"
-                            Value="user_profile"
-                            Icon="account_circle"/>
-                        <RadzenProfileMenuItem
-                            Text="Logout"
-                            Value="logout"
-                            Icon="logout"/>
-                    </ChildContent>
-                </RadzenProfileMenu>
-            }
-        </div>
-    </div>
-</RadzenHeader>
+    }
+    else
+    {
+        <RadzenLink
+            Path="@SiteUrl.Login"
+            Text="Login"/>
+        <RadzenLink
+            Path="@SiteUrl.Registration_Step1"
+            Text="Sign Up"
+            class="ml-3 mr-3"/>
+    }
+    @if (AuthState.Value.IsLoggedIn)
+    {
+        <MudMenu 
+            Icon="@Icons.Material.Filled.Menu" 
+            Color="Color.Inherit"
+            Variant="MudBlazor.Variant.Text" 
+            AnchorOrigin="Origin.BottomLeft"
+            TransformOrigin="Origin.TopRight"
+            Dense>
+            <MudMenuItem Icon="@Icons.Material.Filled.AccountCircle">
+                @AuthState.Value.User.Name
+            </MudMenuItem>
+            <WorkspaceMenu/>
+            <MudMenuItem
+                IconSize="Size.Small"
+                Icon="@Icons.Material.Filled.Logout"
+                OnClick="Logout">
+                Logout
+            </MudMenuItem>
+        </MudMenu>
+    }
+</MudAppBar>

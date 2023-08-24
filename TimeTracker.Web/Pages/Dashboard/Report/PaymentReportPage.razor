@@ -95,7 +95,7 @@
                             <div style="@style.Trim()">
                                 Unpaid:
                                 <b>
-                                    @((unpaidAmount > 0) ? "+" : "")@unpaidAmount.ToString("0.00")
+                                    @((unpaidAmount > 0) ? "+" : string.Empty)@unpaidAmount.ToString("0.00")
                                 </b>
                             </div>
                         </FooterTemplate>

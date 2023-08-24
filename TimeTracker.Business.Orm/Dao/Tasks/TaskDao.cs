@@ -32,6 +32,21 @@ public class TaskDao: ITaskDao
         return await _sessionProvider.CurrentSession.GetAsync<TaskEntity>(taskListId);
     }
     
+    public async Task UpdatePositions(WorkspaceEntity workspace, IDictionary<long, int> items)
+    {
+        var listDto = await GetList(workspace);
+        foreach (var task in listDto.Items)
+        {
+            var indexToUpdate = items.Where(y => y.Key == task.TaskId)
+                .Select(x => (int?)x.Value)
+                .FirstOrDefault();
+            if (indexToUpdate == null)
+                continue;
+            task.PositionIndex = indexToUpdate.Value;
+            await _sessionProvider.CurrentSession.UpdateAsync(task);    
+        }
+    }
+    
     public async Task<TaskEntity?> GetByWorkspaceTaskId(
         long workspaceId,
         long workspaceTaskId

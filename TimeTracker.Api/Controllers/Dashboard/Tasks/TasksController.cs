@@ -38,6 +38,12 @@ public class TasksController : MainApiControllerBase
             .For<TaskDto>()
             .With(request);
     
+    [HttpPost("update-positions")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> UpdateTask([FromBody] UpdatePositionsRequest request)
+        => this.RequestAsync(request);
+    
     [HttpPost("get-list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

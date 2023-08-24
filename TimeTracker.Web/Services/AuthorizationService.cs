@@ -5,7 +5,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common.Actions;
+using TimeTracker.Web.Store.Common;
 
 namespace TimeTracker.Web.Services
 {

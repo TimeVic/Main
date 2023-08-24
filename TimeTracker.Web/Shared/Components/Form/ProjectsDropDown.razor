@@ -3,36 +3,38 @@
 @using Newtonsoft.Json
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
+@using MudBlazor
 
-<RadzenDropDown
-    @ref="_listReference"
-    Disabled="Disabled"
-    PageSize="GlobalConstants.ListPageSize"
-    AllowClear="AllowClear"
-    TValue="long"
-    Class="@(Class)"
-    AllowFiltering="true"
-    FilterOperator="StringFilterOperator.Contains"
-    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-    AllowSorting="false"
-    AllowVirtualization="true"
-    Multiple="false"
-    Data="@_list"
-    TextProperty="Name"
-    ValueProperty="Id"
+<MudSelect
+    T="ProjectDto"
+    Class="@Class"
+    Disabled="@Disabled"
+    Dense="true"
     Placeholder="@Placeholder"
-    Value="@_selectedId"
-    ValueChanged="async (value) => await OnValueChanged(value)">
-    <Template>
-        @{
-            var project = context as ProjectDto;
-        }
-        <div>@project.Name</div>
-        @if (project.Client != null)
-        {
-            <RadzenText class="mt-2 d-block" TextStyle="TextStyle.Caption">
-                @project.Client?.Name
-            </RadzenText>
-        }
-    </Template>
-</RadzenDropDown>
+    EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+    Value="@_selectedItem"
+    ValueChanged="OnValueChanged"
+    Variant="MudBlazor.Variant.Text"
+    AnchorOrigin="Origin.BottomCenter">
+    @foreach (var project in _list)
+    {
+        <MudSelectItem Value="@project">
+            @project.Name
+            @if (project?.Client != null)
+            {
+                @if (_selectedId == project.Id)
+                {
+                    <text>(@project.Client?.Name)</text>
+                }
+                else
+                {
+                    <MudText
+                        class="d-block"
+                        Typo="Typo.caption">
+                        <b>@project.Client?.Name</b>
+                    </MudText>    
+                }
+            }
+        </MudSelectItem>
+    }
+</MudSelect>

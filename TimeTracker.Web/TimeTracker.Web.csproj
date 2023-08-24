@@ -15,6 +15,7 @@
     </PropertyGroup>
     
     <ItemGroup>
+        <PackageReference Include="Blazor-ApexCharts" Version="0.9.21-beta" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
         <PackageReference Include="Fluxor.Blazor.Web" Version="5.9.0" />
         <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.9.0" />
@@ -22,6 +23,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.9" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.9" PrivateAssets="all" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+        <PackageReference Include="MudBlazor" Version="6.8.0" />
         <PackageReference Include="Radzen.Blazor" Version="4.14.4" />
         <PackageReference Include="System.Net.Http.Json" Version="7.0.1" />
     </ItemGroup>
@@ -56,7 +58,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Store\TaskComments\" />
       <Folder Include="wwwroot\img\logo\black" />
     </ItemGroup>
 

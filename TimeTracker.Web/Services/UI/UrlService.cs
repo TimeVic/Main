@@ -15,7 +15,7 @@ public class UrlService
 
     private readonly string _apiUrl;
 
-    private string _jwtToken => _authState?.Value.Jwt ?? "";
+    private string _jwtToken => _authState?.Value.Jwt ?? string.Empty;
 
     public UrlService(
         IConfiguration configuration,
@@ -27,7 +27,7 @@ public class UrlService
         _authState = authState;
         _navigationManager = navigationManager;
 
-        _apiUrl = _configuration.GetValue<string>("ApiUrl") ?? "";
+        _apiUrl = _configuration.GetValue<string>("ApiUrl") ?? string.Empty;
     }
 
     public string GetStorageUrl(string url)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
@@ -29,6 +30,9 @@ public partial class TimeInput
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
     
+    private TimeSpan _value;
+    private MudTimePicker _timePicker;
+
     private string _valueString;
 
     private void OnChangeValue(string timeString)

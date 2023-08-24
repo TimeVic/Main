@@ -47,7 +47,7 @@ public class ArchiveEffect: Effect<ArchiveTaskListAction>
                 string.Format(
                     SiteUrl.Dashboard_Tasks,
                     navigateToProject?.Id.ToString() ?? "0",
-                    firstTaskList?.Id.ToString() ?? ""
+                    firstTaskList?.Id.ToString() ?? string.Empty
                 )    
             );
         }

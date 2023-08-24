@@ -1,33 +1,26 @@
-﻿@inherits BaseComponent
-
-@using TimeTracker.Api.Shared.Dto.Entity
+﻿@using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
+@using MudBlazor
 
-<RadzenDropDown
-    @ref="_listReference"
-    Disabled="Disabled"
-    PageSize="GlobalConstants.ListPageSize"
-    AllowClear="Clearable"
-    TValue="ICollection<long>"
-    Class="@(Class)"
-    AllowFiltering="true"
-    FilterOperator="StringFilterOperator.Contains"
-    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-    AllowSorting="false"
-    AllowVirtualization="true"
-    Multiple="true"
-    Chips=true
-    AllowSelectAll="true"
-    Data="@_list"
-    TextProperty="Name"
-    ValueProperty="Id"
+@inherits BaseComponent
+
+<MudSelect
+    T="long"
+    Class="@Class"
+    Disabled="@Disabled"
+    Dense="true"
+    MultiSelection="true"
     Placeholder="@Placeholder"
-    Value="@Value"
-    ValueChanged="OnValueChanged">
-    <Template>
-        @{
-            var user = context as UserDto;
-        }
-        <div>@user.Name</div>
-    </Template>
-</RadzenDropDown>
+    SelectedValues="@Value"
+    SelectedValuesChanged="OnValueChanged"
+    Variant="MudBlazor.Variant.Text"
+    ToStringFunc="ToStringFunc"
+    SelectAll="true"
+    AnchorOrigin="Origin.BottomCenter">
+    @foreach (var user in _list)
+    {
+        <MudSelectItem Value="@user.Id">
+            @user.Name
+        </MudSelectItem>
+    }
+</MudSelect>

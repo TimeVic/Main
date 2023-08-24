@@ -49,4 +49,6 @@ public interface ITaskDao: IDomainService
         TaskListEntity? taskList = null,
         GetTasksFilterDto? filter = null
     );
+
+    Task UpdatePositions(WorkspaceEntity workspace, IDictionary<long, int> items);
 }
