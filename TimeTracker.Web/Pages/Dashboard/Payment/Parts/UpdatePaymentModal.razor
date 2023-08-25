@@ -1,0 +1,56 @@
+﻿@using MudBlazor
+
+@inherits BaseComponent
+
+<MudDialog>
+    <DialogContent>
+        <MudForm
+            @ref="_form"
+            @bind-IsValid="_isValid">
+
+            <MudStack>
+                <MudStack Row="true" Spacing="4">
+                    <ClientsDropDown
+                        For="() => model.ClientId"
+                        @bind-Value="@(model.ClientId)"/>
+
+                    <ProjectsDropDown
+                        For="() => model.ProjectId"
+                        ClientId="@(model.ClientId)"
+                        @bind-Value="@(_projectId)"/>
+                </MudStack>
+                <MudStack Row="true" Spacing="4">
+                    <MudNumericField
+                        T="decimal"
+                        Label="Amount"
+                        @bind-Value="@(model.Amount)"
+                        Variant="MudBlazor.Variant.Text"
+                        Step=".01M"
+                        Min="0.0M"/>
+
+                    <MudDatePicker
+                        Label="Payment date"
+                        Editable="true"
+                        Date="@(model.PaymentTime)"/>
+                </MudStack>
+
+                <MudTextField
+                    T="string?"
+                    @bind-Value="@(model.Description)"
+                    Label="Description"
+                    Variant="MudBlazor.Variant.Outlined">
+                </MudTextField>
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
+        <MudButton
+            ButtonType="MudBlazor.ButtonType.Submit"
+            OnClick="@Submit"
+            Disabled="@_isLoading"
+            Color="Color.Primary">
+            Update
+        </MudButton>
+    </DialogActions>
+</MudDialog>

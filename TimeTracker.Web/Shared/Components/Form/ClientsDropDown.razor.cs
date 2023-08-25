@@ -1,4 +1,5 @@
-﻿using Fluxor;
+﻿using System.Linq.Expressions;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -13,8 +14,14 @@ namespace TimeTracker.Web.Shared.Components.Form;
 
 public partial class ClientsDropDown
 {
+    [Parameter]
+    public Expression<Func<long>>? For { get; set; }
+    
     [Parameter] 
     public bool Disabled { get; set; }
+    
+    [Parameter] 
+    public bool Clearable { get; set; }
 
     [Parameter]
     public long Value
@@ -39,25 +46,22 @@ public partial class ClientsDropDown
     public ILogger<ClientsDropDown> _logger { get; set; }
     
     [Inject]
-    public ApiService _apiService { get; set; }
-    
-    [Inject]
-    public IState<AuthState> _authState { get; set; }
-    
-    [Inject]
     public IState<ClientState> _state { get; set; }
     
-    private ClientDto? _selectedItem;
-
     private long _selectedId = 0;
+    private ClientDto? _selectedItem;
     
-    private RadzenDropDown<long> _listReference;
-
-    private Task OnValueChanged(long selectedId)
+    private Task OnValueChanged(long id)
     {
-        _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == selectedId);
+        _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == id);
         SelectedItemChanged.InvokeAsync(_selectedItem);
-        ValueChanged.InvokeAsync(selectedId);
+        ValueChanged.InvokeAsync(_selectedItem?.Id ?? 0);
         return Task.CompletedTask;
+    }
+    
+    private string ToStringFunc(long id)
+    {
+        var item = _state.Value.List.FirstOrDefault(item => item.Id == id);
+        return item?.Name ?? string.Empty;
     }
 }

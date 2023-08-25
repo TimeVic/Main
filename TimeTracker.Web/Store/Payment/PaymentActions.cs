@@ -5,19 +5,11 @@ namespace TimeTracker.Web.Store.Payment;
 
 public record struct LoadPaymentListAction(bool IsReload = false);
 
-public record struct SetPaymentListItemsAction(GetListResponse Response);
+public record struct SetListItemsAction(GetListResponse Response);
 
-public record struct SetPaymentListItemAction(PaymentDto Payment);
+public record struct SetListItemAction(PaymentDto Payment);
 
-public record struct SetPaymentIsListLoading(bool IsLoading);
-
-public record struct AddEmptyPaymentListItemAction();
-
-public record struct RemoveEmptyPaymentListItemAction();
-
-public record struct SaveEmptyPaymentListItemAction();
-
-public record struct SavePaymentListItemAction(PaymentDto Payment);
+public record struct SetIsListLoading(bool IsLoading);
 
 public record struct DeletePaymentAction(long PaymentId);
 

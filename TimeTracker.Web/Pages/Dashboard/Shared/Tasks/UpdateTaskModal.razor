@@ -1,0 +1,26 @@
+﻿@using MudBlazor
+@using TimeTracker.Api.Shared.Dto.Entity.Task
+
+@inherits BaseComponent
+
+<MudDialog Style="min-width: 800px">
+    <DialogContent>
+        <UpdateTaskForm Task="@Task"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="OnCloseModal">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Parameter]
+    public TaskDto Task { get; set; }
+    
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+    
+    private void OnCloseModal()
+    {
+        MudDialog.Close();
+    }
+}

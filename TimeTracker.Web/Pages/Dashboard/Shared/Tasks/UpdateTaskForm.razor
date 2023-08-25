@@ -15,7 +15,7 @@
     @ref="_form"
     @bind-IsValid="_isValid">
 
-    <MudPaper Class="pa-4">
+    <MudPaper Class="pa-4" Outlined="true">
         <MudStack Row="true" AlignItems="MudBlazor.AlignItems.Center">
             <TaskIdBadge IsLink="true" InternalTask="@Task"/>
 
@@ -36,6 +36,7 @@
                         Placeholder="Title"/>
 
                     <MarkdownEdit
+                        Class="mt-3"
                         Label="Description"
                         @bind-Value="@model.Description"
                         Changed="SubmitForm"
@@ -81,8 +82,8 @@
 </MudForm>
 
 <MudTabs 
-    Elevation="2" 
-    Rounded="true" 
+    Rounded="true"
+    Outlined="true"
     ApplyEffectsToContainer="true"
     Class="mt-4 mb-4"
     PanelClass="pa-6">

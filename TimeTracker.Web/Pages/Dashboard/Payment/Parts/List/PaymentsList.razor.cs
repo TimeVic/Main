@@ -16,79 +16,32 @@ public partial class PaymentsList
     
     private RadzenDataGrid<PaymentDto> _grid;
 
+    public IEnumerable<PaymentDto> _list => _state.Value.List.OrderByDescending(x => x.PaymentTime);
+    
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         Dispatcher.Dispatch(new LoadPaymentListAction(true));
     }
 
-    private async Task OnDeleteItemAsync(PaymentDto item)
+    private async Task OnDeleteItem(PaymentDto item)
     {
-        var isOk = await DialogService.Confirm(
-            "Are you sure you want to remove this item?",
-            "Delete confirmation",
-            new ConfirmOptions()
-            {
-                OkButtonText = "Delete",
-                CancelButtonText = "Cancel"
-            }
+        var isOk = await ModalDialogProviderService.ShowDeleteConfirmationDialog(
+            "Are you sure you want to remove this payment?"
         );
         if (isOk.HasValue && isOk.Value)
         {
             Dispatcher.Dispatch(new DeletePaymentAction(item.Id));
         }
     }
-    
-    private async Task InsertRow()
+
+    private async Task OnAddPayment()
     {
-        Dispatcher.Dispatch(new AddEmptyPaymentListItemAction());
-        // await _grid.GoToPage(0);
-        await EditRow(_state.Value.ItemToAdd);
-    }
-    
-    private async Task EditRow(PaymentDto item)
-    {
-        await _grid.EditRow(item);
+        await ModalDialogProviderService.ShowAddPaymentModal();
     }
 
-    private async Task OnClickSaveRow(PaymentDto item)
+    private async Task OnEditPayment(PaymentDto item)
     {
-        if (item.Client.Id == 0)
-        {
-            await ToastService.ShowError("Client is required");
-            return;
-        }
-
-        await _grid.UpdateRow(item);
-    }
-
-    private void OnClickCancelEditMode(PaymentDto item)
-    {
-        Dispatcher.Dispatch(new RemoveEmptyPaymentListItemAction());
-        _grid.CancelEditRow(item);
-    }
-    
-    private async Task OnUpdateRow(PaymentDto item)
-    {
-        if (item.Id > 0)
-        {
-            // await UpdateApplication(item);
-            return;
-        }
-
-        Dispatcher.Dispatch(new SaveEmptyPaymentListItemAction());
-    }
-    
-    private void OnClientSelected(ClientDto client)
-    {
-        _state.Value.ItemToAdd.Client = client;
-        _state.Value.ItemToAdd.Project = null;
-        Dispatcher.Dispatch(new SetPaymentListItemAction(_state.Value.ItemToAdd));
-    }
-
-    private void OnProjectSelected(ProjectDto project)
-    {
-        _state.Value.ItemToAdd.Project = project;
-        Dispatcher.Dispatch(new SetPaymentListItemAction(_state.Value.ItemToAdd));
+        await ModalDialogProviderService.ShowUpdatePaymentModal(item);
     }
 }

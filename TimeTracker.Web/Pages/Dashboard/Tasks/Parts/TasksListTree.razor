@@ -6,6 +6,7 @@
 
 <MudStack Spacing="2">
     <MudTabs
+        @ref="_tabsPanel"
         Position="Position.Left"
         Outlined="true"
         Rounded="true"
@@ -14,7 +15,7 @@
         {
             <MudTabPanel
                 ID="@taskList.Id"
-                OnClick="() => OnTasksListSelected(taskList.Id)"
+                OnClick="@(() => OnSelectedTasksList(taskList.Id))"
                 Text="@taskList.Name"/>
         }
     </MudTabs>
@@ -23,20 +24,20 @@
         <MudIconButton
             Icon="@Icons.Material.Filled.Add"
             Title="Add new"
-            OnClick="ShowAddTaskListModal"/>
+            OnClick="@ShowAddTaskListModal"/>
         @if (_selectedTaskListId != null)
         {
             <MudSpacer/>
             <MudIconButton
                 Icon="@Icons.Material.Filled.Edit"
                 Title="Update active"
-                OnClick="ShowUpdateTaskListModal"/>
+                OnClick="@ShowUpdateTaskListModal"/>
             <MudSpacer/>
             <MudIconButton
                 Color="Color.Error"
                 Icon="@Icons.Material.Filled.Delete"
                 Title="Delete active"
-                OnClick="OnDeleteTaskList"/>    
+                OnClick="@OnDeleteTaskList"/>    
         }
     </MudStack>
 </MudStack>

@@ -6,19 +6,23 @@
 @using MudBlazor
 
 <MudSelect
-    T="ProjectDto"
+    T="long"
+    U="ProjectDto"
     Class="@Class"
     Disabled="@Disabled"
     Dense="true"
+    For="For"
+    Clearable="Clearable"
     Placeholder="@Placeholder"
     EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
-    Value="@_selectedItem"
+    Value="@_selectedId"
     ValueChanged="OnValueChanged"
+    ToStringFunc="ToStringFunc"
     Variant="MudBlazor.Variant.Text"
     AnchorOrigin="Origin.BottomCenter">
     @foreach (var project in _list)
     {
-        <MudSelectItem Value="@project">
+        <MudSelectItem Value="@project.Id">
             @project.Name
             @if (project?.Client != null)
             {

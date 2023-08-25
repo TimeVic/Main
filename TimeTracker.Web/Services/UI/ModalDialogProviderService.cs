@@ -16,7 +16,7 @@ using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Services.UI;
 
-public class ModalDialogProviderService
+public partial class ModalDialogProviderService
 {
     // Blazor
     private readonly DialogService _dialogService;
@@ -59,18 +59,21 @@ public class ModalDialogProviderService
 
     #endregion
 
+    #region Task
+    
     public async Task ShowEditTaskModal(TaskDto task)
     {
-        var parameters = new DialogParameters<UpdateTaskForm>
+        var parameters = new DialogParameters<UpdateTaskModal>
         {
             {context => context.Task, task}
         };
-        await _mudDialogService.ShowAsync<UpdateTaskForm>(
+        await _mudDialogService.ShowAsync<UpdateTaskModal>(
             $"{task.Title.Truncate(100)}", 
             parameters,
             new MudBlazor.DialogOptions()
             {
-                CloseOnEscapeKey = true
+                CloseOnEscapeKey = true,
+                CloseButton = true
             }
         );
     }
@@ -97,6 +100,23 @@ public class ModalDialogProviderService
             await _mudDialogService.ShowAsync<UpdateTasksListModalForm>(taskList.Name, parameters);
         }
     }
+    
+    public async Task ShowAddTaskModal(
+        long? timEntryId = null,
+        long? taskListId = null,
+        TaskStatus? taskStatus = null
+    )
+    {
+        var parameters = new DialogParameters<AddTaskModalForm>
+        {
+            { x => x.TimeEntryId, timEntryId },
+            { x => x.TaskListId, taskListId },
+            { x => x.TaskStatus, taskStatus },
+        };
+        await _mudDialogService.ShowAsync<AddTaskModalForm>("Add new task", parameters);
+    }
+    
+    #endregion
 
     public async Task ShowFileView(StoredFileDto file)
     {
@@ -113,21 +133,6 @@ public class ModalDialogProviderService
                 FullWidth = true
             }
         );
-    }
-
-    public async Task ShowAddTaskModal(
-        long? timEntryId = null,
-        long? taskListId = null,
-        TaskStatus? taskStatus = null
-    )
-    {
-        var parameters = new DialogParameters<AddTaskModalForm>
-        {
-            { x => x.TimeEntryId, timEntryId },
-            { x => x.TaskListId, taskListId },
-            { x => x.TaskStatus, taskStatus },
-        };
-        await _mudDialogService.ShowAsync<AddTaskModalForm>("Add new task", parameters);
     }
 
     public async Task ShowTimeEntriesModal()

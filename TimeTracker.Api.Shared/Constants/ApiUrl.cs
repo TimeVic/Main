@@ -41,7 +41,7 @@ public class ApiUrl
     #region Payment
     
     public const string PaymentAdd = "dashboard/payment/add";
-    public const string PaymentUpdate = "dashboard/payment/payment";
+    public const string PaymentUpdate = "dashboard/payment/update";
     public const string PaymentDelete = "dashboard/payment/delete";
     public const string PaymentList = "dashboard/payment/list";
     

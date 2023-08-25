@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Tasks;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
@@ -40,7 +41,7 @@ public partial class AddTaskModalForm
         }
     }
 
-    private void Submit()
+    private async Task Submit()
     {
         _form.Validate();
         if (!_form.IsValid)
@@ -48,30 +49,27 @@ public partial class AddTaskModalForm
             return;
         }
 
-        InvokeAsync(async () =>
+        _isLoading = true;
+        try
         {
-            _isLoading = true;
-            try
+            var responseDto = await ApiService.TasksAddAsync(model);
+            if (responseDto != null)
             {
-                var responseDto = await ApiService.TasksAddAsync(model);
-                if (responseDto != null)
-                {
-                    Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                    Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.SetSelectedPageAction(1));
-                    Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction());
-                    OnCloseModal();
-                }
+                Dispatcher.Dispatch(new SetListItemAction(responseDto));
+                Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.SetSelectedPageAction(1));
+                Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction());
+                OnCloseModal();
             }
-            catch (Exception e)
-            {
-                await ToastService.ShowError(e.Message);
-            }
-            finally
-            {
-                _isLoading = false;
-            }
-            StateHasChanged();    
-        });
+        }
+        catch (Exception e)
+        {
+            await ToastService.ShowError(e.Message);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+        StateHasChanged();    
     }
 
     private void OnCloseModal()

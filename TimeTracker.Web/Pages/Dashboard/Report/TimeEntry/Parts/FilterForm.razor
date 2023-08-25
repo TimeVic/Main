@@ -1,53 +1,55 @@
-﻿@inherits BaseComponent
+﻿@using MudBlazor
 
-<div class="row w-filter">
-    <div class="col-md-3">
+@inherits BaseComponent
+
+<MudGrid Spacing="2" Justify="Justify.SpaceBetween">
+    <MudItem>
         <ClientsDropDown
+            Clearable="true"
             Value="@(_state.Value.Filter.ClientId ?? 0)"
-            Class="w-100"
             ValueChanged="OnChangeClient"/>
-    </div>
-    <div class="col-md-3">
+    </MudItem>
+    <MudItem>
         <ProjectsDropDown
+            Clearable="true"
             Value="@(_state.Value.Filter.ProjectId ?? 0)"
             ClientId="@(_state.Value.Filter.ClientId ?? 0)"
-            ValueChanged="OnChangeProject"
-            Class="w-100"/>
-    </div>
-    <div class="col-md-3">
-        <RadzenDatePicker
-            TValue="DateTime?"
-            AllowClear="true"
-            DateFormat="d"
-            Placeholder="Date from"
-            Kind="DateTimeKind.Local"
-            Value="@_state.Value.Filter.DateFrom"
-            Change="OnChangeDateFrom"
-            Class="w-100"/>
-    </div>
-    <div class="col-md-3">
-        <RadzenDatePicker
-            TValue="DateTime?"
-            AllowClear="true"
-            DateFormat="d"
-            Placeholder="Date to"
-            Value="@_state.Value.Filter.DateTo"
-            Kind="DateTimeKind.Local"
-            Change="OnChangeDateTo"
-            Class="w-100"/>
-    </div>
-</div>
-<div class="row mt-3">
-    <div class="col-md-6">
+            ValueChanged="OnChangeProject"/>
+    </MudItem>
+    <MudItem>
+        <MudDatePicker
+            Clearable="true"
+            Label="Date from"
+            Date="@_state.Value.Filter.DateFrom"
+            DateChanged="OnChangeDateFrom"/>
+    </MudItem>
+    <MudItem>
+        <MudDatePicker
+            Clearable="true"
+            Label="Date to"
+            Date="@_state.Value.Filter.DateTo"
+            DateChanged="OnChangeDateTo"/>
+    </MudItem>
+</MudGrid>
+<MudGrid 
+    Spacing="2" 
+    Justify="Justify.SpaceBetween"
+    Class="mt-2">
+    <MudItem>
         <MembersDropDown
+            Clearable="true"
             Class="w-100"
+            UserId="@(_state.Value.Filter.UserId ?? 0)"
             SelectedItemChanged="OnChangeMember"/>
-    </div>
-    <div class="col-md-6">
-        <RadzenTextBox
+    </MudItem>
+    <MudItem>
+        <MudTextField
+            T="string"
             Class="w-100"
-            Placeholder="Search"
+            Clearable="true"
             Value="@_state.Value.Filter.Search"
-            ValueChanged="OnChangeSearch"/>
-    </div>
-</div>
+            ValueChanged="OnChangeSearch"
+            Placeholder="Search"
+            Variant="MudBlazor.Variant.Text"/>
+    </MudItem>
+</MudGrid>

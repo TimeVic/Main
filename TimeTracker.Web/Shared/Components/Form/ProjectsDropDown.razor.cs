@@ -1,4 +1,5 @@
-﻿using Fluxor;
+﻿using System.Linq.Expressions;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 using Radzen.Blazor;
@@ -12,11 +13,14 @@ namespace TimeTracker.Web.Shared.Components.Form;
 
 public partial class ProjectsDropDown
 {
+    [Parameter]
+    public Expression<Func<long>>? For { get; set; }
+    
     [Parameter] 
     public bool Disabled { get; set; }
 
     [Parameter]
-    public bool AllowClear { get; set; } = true;
+    public bool Clearable { get; set; } = true;
     
     [Parameter]
     public long Value
@@ -52,7 +56,7 @@ public partial class ProjectsDropDown
     [Inject]
     public IState<ProjectState> _state { get; set; }
     
-    private ProjectDto? _selectedItem => _state.Value.List.FirstOrDefault(item => item.Id == _selectedId);
+    private ProjectDto? _selectedItem;
 
     private long _selectedId = 0;
     
@@ -70,10 +74,17 @@ public partial class ProjectsDropDown
         }
     }
 
-    private Task OnValueChanged(ProjectDto project)
+    private Task OnValueChanged(long projectId)
     {
-        SelectedItemChanged.InvokeAsync(project);
-        ValueChanged.InvokeAsync(project.Id);
+        _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == projectId);
+        SelectedItemChanged.InvokeAsync(_selectedItem);
+        ValueChanged.InvokeAsync(_selectedItem?.Id ?? 0);
         return Task.CompletedTask;
+    }
+    
+    private string ToStringFunc(long projectId)
+    {
+        var item = _state.Value.List.FirstOrDefault(item => item.Id == projectId);
+        return item?.Name ?? string.Empty;
     }
 }

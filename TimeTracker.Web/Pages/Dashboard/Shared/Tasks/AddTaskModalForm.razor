@@ -28,10 +28,10 @@
         </MudForm>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="OnCloseModal">Cancel</MudButton>
+        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
         <MudButton 
             ButtonType="MudBlazor.ButtonType.Submit"
-            OnClick="Submit"
+            OnClick="@Submit"
             Disabled="@_isLoading"
             Color="Color.Primary">Add</MudButton>
     </DialogActions>

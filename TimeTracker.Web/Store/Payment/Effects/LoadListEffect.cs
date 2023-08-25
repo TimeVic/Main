@@ -35,13 +35,13 @@ public class LoadListEffect: Effect<LoadPaymentListAction>
                 return;
             }
 
-            dispatcher.Dispatch(new SetPaymentIsListLoading(true));
+            dispatcher.Dispatch(new SetIsListLoading(true));
             var response = await _apiService.PaymentGetListAsync(new GetListRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
                 Page = 1
             });
-            dispatcher.Dispatch(new SetPaymentListItemsAction(response));
+            dispatcher.Dispatch(new SetListItemsAction(response));
         }
         catch (Exception e)
         {
@@ -49,7 +49,7 @@ public class LoadListEffect: Effect<LoadPaymentListAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetPaymentIsListLoading(false));
+            dispatcher.Dispatch(new SetIsListLoading(false));
         }
     }
 }

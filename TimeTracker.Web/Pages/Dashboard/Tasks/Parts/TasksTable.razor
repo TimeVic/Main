@@ -24,10 +24,10 @@
         {
             <MudPaper 
                 Elevation="0"
-                Width="224px" 
+                Width="300px" 
                 MinHeight="400px" 
-                Class="pa-4 ma-4 d-flex flex-column mud-background-gray rounded-lg">
-                <MudToolBar DisableGutters="true">
+                Class="pa-2 ma-4 d-flex flex-column mud-background-gray rounded-lg">
+                <MudToolBar DisableGutters="true" Class="px-2">
                     <MudText Typo="Typo.subtitle1">
                         <b>@taskStatus.GetDisplayName()</b>
                     </MudText>
@@ -37,6 +37,12 @@
                         Icon="@Icons.Material.Filled.Add"/>
                     
                 </MudToolBar>
+                @if (TasksState.Value.IsListLoading)
+                {
+                    <div class="d-flex justify-center mt-4">
+                        <MudProgressLinear Color="Color.Info" Indeterminate="true" />
+                    </div>
+                }
                 <MudDropZone 
                     T="TaskDto"
                     Identifier="@taskStatus.ToString()" 
@@ -48,11 +54,8 @@
     <ItemRenderer>
         <MudPaper
             Elevation="25"
-            Class="pa-4 rounded-lg my-3">
+            Class="pa-2 rounded-lg my-3">
             <MudStack>
-                Position: @context.PositionIndex
-                
-                
                 <MudStack Row="true" Spacing="1">
                     <TaskIdBadge
                         IsClickable="true"
@@ -61,14 +64,16 @@
                     <MudChip
                         Shade="Shade.Lighter"
                         Size="Size.Small"
+                        OnClick="@(() => OnClickTask(context))"
                         BadgeStyle="@context.Priority.GetChipStyle()">
                         @context.Priority.GetDisplayName()
                     </MudChip>
                 </MudStack>
 
                 <MudText
-                    Typo="Typo.body1">
-                    @context.Title?.Truncate(200)
+                    Style="line-break: anywhere;"
+                    Typo="Typo.body2">
+                    @context.Title?.Truncate(300)
                 </MudText>
 
                 <TagsBadgesList Tags="@context.Tags"/>

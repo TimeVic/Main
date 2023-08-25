@@ -66,30 +66,33 @@ public partial class TasksTable
 
     private void TaskUpdated(MudItemDropInfo<TaskDto> eventData)
     {
-        var currentStatus = Enum.Parse<TaskStatus>(eventData.DropzoneIdentifier);
-        
-        // Update positions
-        var statusColumnOffset = 0;
-        foreach (var status in _statuses.Where(x => x < currentStatus))
+        InvokeAsync(() =>
         {
-            statusColumnOffset += _tasksToDragAndDrop.Count(x => x.Status == status);
-        }
-        _tasksToDragAndDrop.UpdateOrder(
-            eventData,
-            item => item.PositionIndex,
-            statusColumnOffset
-        );
-        Dispatcher.Dispatch(new UpdatePositionsAction(_tasksToDragAndDrop));
-        Dispatcher.Dispatch(new UpdateListItemsAction(_tasksToDragAndDrop));
+            var currentStatus = Enum.Parse<TaskStatus>(eventData.DropzoneIdentifier);
         
-        // Update status
-        var updatedItem = _tasksToDragAndDrop.First(x => x.TaskId == eventData.Item.TaskId);
-        updatedItem.Status = Enum.Parse<TaskStatus>(eventData.DropzoneIdentifier);
-        var updateModel = new UpdateRequest();
-        updateModel.Fill(updatedItem);
-        Dispatcher.Dispatch(new UpdateListItemAction(updateModel, false));
-        Dispatcher.Dispatch(new SetListItemAction(updatedItem));
-        Dispatcher.Dispatch(new SetTasksListItemAction(updatedItem));
+            // Update positions
+            var statusColumnOffset = 0;
+            foreach (var status in _statuses.Where(x => x < currentStatus))
+            {
+                statusColumnOffset += _tasksToDragAndDrop.Count(x => x.Status == status);
+            }
+            _tasksToDragAndDrop.UpdateOrder(
+                eventData,
+                item => item.PositionIndex,
+                statusColumnOffset
+            );
+            Dispatcher.Dispatch(new UpdatePositionsAction(_tasksToDragAndDrop));
+            Dispatcher.Dispatch(new UpdateListItemsAction(_tasksToDragAndDrop));
+        
+            // Update status
+            var updatedItem = _tasksToDragAndDrop.First(x => x.TaskId == eventData.Item.TaskId);
+            updatedItem.Status = Enum.Parse<TaskStatus>(eventData.DropzoneIdentifier);
+            var updateModel = new UpdateRequest();
+            updateModel.Fill(updatedItem);
+            Dispatcher.Dispatch(new UpdateListItemAction(updateModel, false));
+            Dispatcher.Dispatch(new SetListItemAction(updatedItem));
+            Dispatcher.Dispatch(new SetTasksListItemAction(updatedItem));
+        });
     }
 
     private bool DropItemSelector(TaskDto task, string columnId)

@@ -12,14 +12,14 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment
         public long WorkspaceId { get; set; }
         
         [Required]
-        [IsPositive]
+        [IsPositive(ErrorMessage = "Client is required")]
         public long ClientId { get; set; }
         
-        [IsPositive]
-        public long? ProjectId { get; set; }
+        [IsPositive(AllowZero = true)]
+        public long ProjectId { get; set; }
         
         [Required]
-        public DateTime PaymentTime { get; set; }
+        public DateTime PaymentTime { get; set; } = DateTime.Now;
     
         [StringLength(512)]
         public string? Description { get; set; }

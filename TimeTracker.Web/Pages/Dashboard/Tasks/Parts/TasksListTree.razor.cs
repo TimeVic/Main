@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Radzen;
 using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -62,27 +63,13 @@ public partial class TasksListTree
 
     private long _projectId = 0;
     private long? _taskListId = null;
-    
+    private MudTabs _tabsPanel;
+
     public long _selectedTaskListId
     {
         get => _tasksListState.Value.SelectedTaskListId ?? 0;
     }
     
-    public string _selectedTaskListName
-    {
-        get
-        {
-            var selectedTaskList = _tasksList.FirstOrDefault(
-                item => item.Id == _tasksListState.Value.SelectedTaskListId
-            );
-            if (selectedTaskList != null)
-            {
-                return selectedTaskList.Name;
-            }
-            return "Add new task list";
-        }
-    }
-
     private ICollection<TaskListDto> _tasksList
     {
         get
@@ -91,7 +78,16 @@ public partial class TasksListTree
             return list.Where(item => item.Project?.Id == _projectId).ToList();
         }
     }
-    
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _tasksListState.StateChanged += (sender, args) =>
+        {
+            _tabsPanel.ActivatePanel((object)_selectedTaskListId);
+        };
+    }
+
     private void ShowAddTaskListModal()
     {
         InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal(projectId: ProjectId));

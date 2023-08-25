@@ -16,6 +16,9 @@ public partial class TimeEntryList
     [Parameter]
     public bool IsFilteredList { get; set; } = false;
     
+    [Parameter]
+    public bool Outlined { get; set; } = false;
+    
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
     
