@@ -31,6 +31,10 @@ public class ProjectReducers
 
             return item;
         }).ToList();
+        if (listItems.All(item => item.Id != action.Tag.Id))
+        {
+            listItems.Insert(0, action.Tag);
+        }
         return state with
         {
             List = listItems
@@ -38,7 +42,7 @@ public class ProjectReducers
     }
     
     [ReducerMethod]
-    public static TagState SetListItemActionReducer(TagState state, DeleteListItemAction action)
+    public static TagState DeleteListItemReducer(TagState state, DeleteListItemAction action)
     {
         var listItems = state.List.Where(item => item.Id != action.TagId).ToList();
         return state with
@@ -55,34 +59,4 @@ public class ProjectReducers
             IsListLoading = action.IsLoading
         };
     }
-    
-    #region Add new item
-    
-    [ReducerMethod(typeof(AddEmptyListItemAction))]
-    public static TagState AddEmptyListItemActionAction(TagState state)
-    {
-        var newList = state.SortedList.ToList();
-        newList.Add(new TagDto()
-        {
-            Id = 0,
-            Name = string.Empty
-        });
-        return state with
-        {
-            List = newList,
-            TotalCount = ++state.TotalCount
-        };
-    }
-    
-    [ReducerMethod(typeof(RemoveEmptyListItemAction))]
-    public static TagState RemoveEmptyListItemActionAction(TagState state)
-    {
-        return state with
-        {
-            List = state.List.Where(item => item.Id != 0).ToList(),
-            TotalCount = --state.TotalCount
-        };
-    }
-    
-    #endregion
 }

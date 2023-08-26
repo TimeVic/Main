@@ -1,16 +1,20 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
-using TimeTracker.Web.Store.Payment;
+using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
+using TimeTracker.Web.Store.Project;
 
-namespace TimeTracker.Web.Pages.Dashboard.Payment.Parts;
+namespace TimeTracker.Web.Pages.Dashboard.Project.Parts.List;
 
-public partial class AddPaymentModal
+public partial class UpdateProjectModal
 {
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    public MudDialogInstance MudDialog { get; set; }
 
-    private AddRequest model = new();
+    [Parameter]
+    public ProjectDto Project { get; set; }
+    
+    private UpdateRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
     private MudForm _form;
@@ -24,6 +28,7 @@ public partial class AddPaymentModal
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        model.Fill(Project);
     }
 
     private async Task Submit()
@@ -37,12 +42,11 @@ public partial class AddPaymentModal
         _isLoading = true;
         try
         {
-            model.WorkspaceId = AuthState.Value.Workspace.Id;
-            var responseDto = await ApiService.PaymentAddAsync(model);
+            var responseDto = await ApiService.ProjectUpdateAsync(model);
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                await ToastService.ShowInfo("Payment added");
+                await ToastService.ShowInfo("Project was updated");
                 OnCloseModal();
             }
         }

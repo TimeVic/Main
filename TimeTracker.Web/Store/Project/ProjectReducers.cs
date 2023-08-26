@@ -7,7 +7,7 @@ public class ProjectReducers
 {
 
     [ReducerMethod]
-    public static ProjectState SetProjectListItemsActionReducer(ProjectState state, SetProjectListItemsAction action)
+    public static ProjectState SetProjectListItemsActionReducer(ProjectState state, SetListItemsAction action)
     {
         return state with
         {
@@ -28,33 +28,25 @@ public class ProjectReducers
         };
     }
     
-    #region Add new item
-    
-    [ReducerMethod(typeof(AddEmptyProjectListItemAction))]
-    public static ProjectState AddEmptyProjectListItemActionAction(ProjectState state)
+    [ReducerMethod]
+    public static ProjectState SetListItemActionReducer(ProjectState state, SetListItemAction action)
     {
-        var newList = state.SortedList.ToList();
-        newList.Add(new ProjectDto()
+        var list = state.List.Select(item =>
         {
-            Id = 0,
-            Name = string.Empty
-        });
+            if (item.Id == action.Project.Id)
+            {
+                return action.Project;
+            }
+            return item;
+        }).ToList();
+        if (list.All(item => item.Id != action.Project.Id))
+        {
+            list.Insert(0, action.Project);
+        }
+
         return state with
         {
-            List = newList,
-            TotalCount = ++state.TotalCount
+            List = list
         };
     }
-    
-    [ReducerMethod(typeof(RemoveEmptyProjectListItemAction))]
-    public static ProjectState RemoveEmptyProjectListItemActionAction(ProjectState state)
-    {
-        return state with
-        {
-            List = state.List.Where(item => item.Id != 0).ToList(),
-            TotalCount = --state.TotalCount
-        };
-    }
-    
-    #endregion
 }

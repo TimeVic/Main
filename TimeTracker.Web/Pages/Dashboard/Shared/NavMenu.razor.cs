@@ -29,7 +29,7 @@ public partial class NavMenu
     [Inject]
     public IState<UiState> _uiState { get; set; }
 
-    public ICollection<ClientDto> Clients => ClientState.Value.SortedList;
+    public ICollection<ClientDto> Clients => ClientState.Value.List;
 
     private string GetTasksListUrl(ProjectDto project)
     {

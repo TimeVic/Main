@@ -30,7 +30,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMem
                 );
                 return new MembershipProjectAccessRequest()
                 {
-                    HourlyRate = accessItem?.HourlyRate,
+                    HourlyRate = accessItem?.HourlyRate == null ? 0 : accessItem.HourlyRate ?? 0,
                     ProjectId = item.Id,
                     HasAccess = accessItem != null
                 };

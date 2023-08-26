@@ -1,0 +1,79 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership
+@using TimeTracker.Business.Common.Constants
+@using Microsoft.AspNetCore.Components
+@using MudBlazor
+
+@inherits BaseComponent
+
+<MudDialog Style="min-width: 600px">
+    <DialogContent>
+        <MudForm
+            @ref="_form"
+            @bind-IsValid="_isValid">
+
+            <EnumDropDown
+                TItem="MembershipAccessType"
+                AllowClear="false"
+                AllowedValues="_allowedAccessLevels"
+                @bind-Value="model.Access"
+                class="w-100"
+                Label="Access level"/>
+
+            <MudText
+                Typo="Typo.subtitle1"
+                Class="mt-4">
+                Access to projects
+            </MudText>
+
+            <MudGrid Spacing="2" Class="mt-2">
+                @foreach (var accessItem in model.ProjectsAccess)
+                {
+                    <MudItem xs="6">
+                        <MudPaper Class="pa-4" Outlined="true">
+                            <MudText Typo="Typo.subtitle2">
+                                @GetProjectName(accessItem.ProjectId)
+                            </MudText>
+
+                            <MudStack>
+                                <MudNumericField
+                                    T="decimal"
+                                    Label="Default hourly rate"
+                                    @bind-Value="@(accessItem.HourlyRate)"
+                                    Variant="MudBlazor.Variant.Text"
+                                    Step=".01M"
+                                    Min="0.0M"/>
+
+                                @if (model.Access == MembershipAccessType.Manager)
+                                {
+                                    <MudCheckBox
+                                        For="() => accessItem.HasAccess"
+                                        Label="Has access"
+                                        Disabled="true"
+                                        Checked="true"/>
+                                }
+                                else
+                                {
+                                    <MudCheckBox
+                                        For="() => accessItem.HasAccess"
+                                        Label="Has access"
+                                        @bind-Checked="@accessItem.HasAccess"/>
+                                }
+                            </MudStack>
+                        </MudPaper>
+                    </MudItem>
+                }
+            </MudGrid>
+
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
+        <MudButton
+            ButtonType="MudBlazor.ButtonType.Submit"
+            OnClick="@Submit"
+            Disabled="@_isLoading"
+            Color="Color.Primary">
+            Save
+        </MudButton>
+    </DialogActions>
+</MudDialog>

@@ -1,29 +1,35 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
-using TimeTracker.Web.Store.Payment;
+using MudBlazor.Utilities;
+using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
+using TimeTracker.Web.Store.Tag;
 
-namespace TimeTracker.Web.Pages.Dashboard.Payment.Parts;
+namespace TimeTracker.Web.Pages.Dashboard.Tag.Parts;
 
-public partial class AddPaymentModal
+public partial class UpdateTagModal
 {
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    public MudDialogInstance MudDialog { get; set; }
 
-    private AddRequest model = new();
+    [Parameter]
+    public TagDto Tag { get; set; }
+    
+    private UpdateRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
     private MudForm _form;
 
-    private long _projectId
+    private MudColor _mudColor
     {
-        get => model.ProjectId;
-        set => model.ProjectId = value;
+        get => string.IsNullOrEmpty(model.Color) ? new MudColor("#ffffff") : new MudColor(model.Color);
+        set => model.Color = value?.Value;
     }
-
+    
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        model.Fill(Tag);
     }
 
     private async Task Submit()
@@ -37,12 +43,12 @@ public partial class AddPaymentModal
         _isLoading = true;
         try
         {
-            model.WorkspaceId = AuthState.Value.Workspace.Id;
-            var responseDto = await ApiService.PaymentAddAsync(model);
+            model.Color = _mudColor.Value;
+            var responseDto = await ApiService.TagUpdateAsync(model);
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                await ToastService.ShowInfo("Payment added");
+                await ToastService.ShowInfo("Tag was updated");
                 OnCloseModal();
             }
         }

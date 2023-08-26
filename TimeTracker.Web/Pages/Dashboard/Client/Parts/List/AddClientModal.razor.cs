@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
-using TimeTracker.Web.Store.Payment;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client;
+using TimeTracker.Web.Store.Client;
 
-namespace TimeTracker.Web.Pages.Dashboard.Payment.Parts;
+namespace TimeTracker.Web.Pages.Dashboard.Client.Parts.List;
 
-public partial class AddPaymentModal
+public partial class AddClientModal
 {
     [CascadingParameter] 
     MudDialogInstance MudDialog { get; set; }
@@ -14,12 +14,6 @@ public partial class AddPaymentModal
     private bool _isLoading = false;
     private bool _isValid = false;
     private MudForm _form;
-
-    private long _projectId
-    {
-        get => model.ProjectId;
-        set => model.ProjectId = value;
-    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,11 +32,11 @@ public partial class AddPaymentModal
         try
         {
             model.WorkspaceId = AuthState.Value.Workspace.Id;
-            var responseDto = await ApiService.PaymentAddAsync(model);
+            var responseDto = await ApiService.ClientAddAsync(model);
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                await ToastService.ShowInfo("Payment added");
+                await ToastService.ShowInfo("Client added");
                 OnCloseModal();
             }
         }

@@ -14,10 +14,6 @@ public partial class PaymentsList
     [Inject] 
     private IState<PaymentState> _state { get; set; }
     
-    private RadzenDataGrid<PaymentDto> _grid;
-
-    public IEnumerable<PaymentDto> _list => _state.Value.List.OrderByDescending(x => x.PaymentTime);
-    
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();

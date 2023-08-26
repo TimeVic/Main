@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using MudBlazor.Utilities;
 using Radzen;
 using Radzen.Blazor;
 using Radzen.Blazor.Rendering;
@@ -22,77 +23,31 @@ public partial class TagsList
         Dispatcher.Dispatch(new LoadListAction(true));
     }
 
-    private async Task OnDeleteItemAsync(TagDto value)
-    {
-        await Task.CompletedTask;
-    }
-    
-    private async Task InsertRow()
-    {
-        Dispatcher.Dispatch(new AddEmptyListItemAction());
-        // await _grid.GoToPage(0);
-        await EditRow(_state.Value.ItemToAdd);
-    }
-    
-    private async Task EditRow(TagDto item)
-    {
-        await _grid.EditRow(item);
-    }
-
-    private async Task OnClickSaveRow(TagDto item)
-    {
-        await _grid.UpdateRow(item);
-    }
-
-    private void OnClickCancelEditMode(TagDto item)
-    {
-        Dispatcher.Dispatch(new RemoveEmptyListItemAction());
-        _grid.CancelEditRow(item);
-    }
-    
-    private async Task OnUpdateRow(TagDto item)
-    {
-        if (item.Id > 0)
-        {
-            Dispatcher.Dispatch(new UpdateItemAction(item));
-            return;
-        }
-
-        Dispatcher.Dispatch(new SaveEmptyListItemAction());
-    }
-    
     private async Task OnDelete(TagDto item)
     {
-        var isOk = await DialogService.Confirm(
-            "Are you sure you want to remove this tag?",
-            "Delete confirmation",
-            new ConfirmOptions()
-            {
-                OkButtonText = "Delete",
-                CancelButtonText = "Cancel"
-            }
+        var isOk = await ModalDialogProviderService.ShowDeleteConfirmationDialog(
+            "Are you sure you want to remove this tag?"
         );
         if (isOk.HasValue && isOk.Value)
         {
             Dispatcher.Dispatch(new DeleteItemAction(item));
         }
     }
-    
-    #region ColorPicker helpers
 
-    private string? GetColorRgb(string? colorHex)
+    public MudColor? GetMudColor(string? color)
     {
-        if (string.IsNullOrEmpty(colorHex))
-            return string.Empty;
-        return RGB.Parse(colorHex).ToCSS();
-    }
-    
-    private string? GetColorHex(string? colorRgb)
-    {
-        if (string.IsNullOrEmpty(colorRgb))
-            return string.Empty;
-        return "#" + RGB.Parse(colorRgb).ToHex();
+        if (string.IsNullOrEmpty(color))
+            return null;
+        return new MudColor(color);
     }
 
-    #endregion
+    private async Task OnAdd()
+    {
+        await ModalDialogProviderService.ShowAddTagModal();
+    }
+
+    private async Task OnEdit(TagDto item)
+    {
+        await ModalDialogProviderService.ShowUpdateTagModal(item);
+    }
 }

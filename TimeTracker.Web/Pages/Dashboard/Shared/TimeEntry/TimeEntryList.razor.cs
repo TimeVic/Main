@@ -19,6 +19,9 @@ public partial class TimeEntryList
     [Parameter]
     public bool Outlined { get; set; } = false;
     
+    [Parameter]
+    public string? Class { get; set; }
+    
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
     

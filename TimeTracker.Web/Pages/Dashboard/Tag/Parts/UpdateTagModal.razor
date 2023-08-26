@@ -1,0 +1,37 @@
+﻿@using MudBlazor
+
+@inherits BaseComponent
+
+<MudDialog>
+    <DialogContent>
+        <MudForm
+            @ref="_form"
+            @bind-IsValid="_isValid">
+
+            <MudStack>
+                <MudTextField
+                    T="string?"
+                    For="() => model.Name"
+                    @bind-Value="@(model.Name)"
+                    Label="Tag name">
+                </MudTextField>
+
+                <MudColorPicker
+                    Label="Color"
+                    Clearable="true"
+                    ColorPickerView="ColorPickerView.Palette"
+                    @bind-Value="@(_mudColor)"/>
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
+        <MudButton
+            ButtonType="MudBlazor.ButtonType.Submit"
+            OnClick="@Submit"
+            Disabled="@_isLoading"
+            Color="Color.Primary">
+            Update
+        </MudButton>
+    </DialogActions>
+</MudDialog>

@@ -9,7 +9,7 @@
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 @using Variant = MudBlazor.Variant
 
-<div class="w-time-entry-list w-100">
+<div class="w-time-entry-list w-100 @Class">
     <MudDataGrid
         T="TimeEntryDto"
         Items="@_list"

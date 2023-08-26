@@ -29,20 +29,25 @@ public class ClientReducers
     }
     
     [ReducerMethod]
-    public static PaymentState SetPaymentListItemActionReducer(PaymentState state, SetListItemAction action)
+    public static PaymentState SetListItemActionReducer(PaymentState state, SetListItemAction action)
     {
-        foreach (var item in state.List)
+        var list = state.List.Select(item =>
         {
             if (item.Id == action.Payment.Id)
             {
-                item.Amount = action.Payment.Amount;
-                item.Client = action.Payment.Client;
-                item.Description = action.Payment.Description;
-                item.Project = action.Payment.Project;
-                item.PaymentTime = action.Payment.PaymentTime;
+                return action.Payment;
             }
+            return item;
+        }).ToList();
+        if (list.All(item => item.Id != action.Payment.Id))
+        {
+            list.Insert(0, action.Payment);
         }
-        return state;
+
+        return state with
+        {
+            List = list
+        };
     }
     
     [ReducerMethod]

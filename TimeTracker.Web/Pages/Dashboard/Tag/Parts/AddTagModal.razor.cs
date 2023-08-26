@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
-using TimeTracker.Web.Store.Payment;
+using MudBlazor.Utilities;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
+using TimeTracker.Web.Store.Tag;
 
-namespace TimeTracker.Web.Pages.Dashboard.Payment.Parts;
+namespace TimeTracker.Web.Pages.Dashboard.Tag.Parts;
 
-public partial class AddPaymentModal
+public partial class AddTagModal
 {
     [CascadingParameter] 
     MudDialogInstance MudDialog { get; set; }
@@ -15,10 +16,10 @@ public partial class AddPaymentModal
     private bool _isValid = false;
     private MudForm _form;
 
-    private long _projectId
+    private MudColor _mudColor
     {
-        get => model.ProjectId;
-        set => model.ProjectId = value;
+        get => string.IsNullOrEmpty(model.Color) ? new MudColor("#ffffff") : new MudColor(model.Color);
+        set => model.Color = value.Value;
     }
 
     protected override async Task OnInitializedAsync()
@@ -38,11 +39,11 @@ public partial class AddPaymentModal
         try
         {
             model.WorkspaceId = AuthState.Value.Workspace.Id;
-            var responseDto = await ApiService.PaymentAddAsync(model);
+            var responseDto = await ApiService.TagAddAsync(model);
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                await ToastService.ShowInfo("Payment added");
+                await ToastService.ShowInfo("Tag added");
                 OnCloseModal();
             }
         }

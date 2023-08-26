@@ -3,79 +3,66 @@
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
 @using TimeTracker.Business.Extensions
+@using MudBlazor
 
-<div class="row d-flex justify-content-center w-time-form no-gutters mx-n2">
+<MudTable
+    Class="mt-2"
+    Items="@_state.Value.List"
+    Hover="true"
+    Dense="true"
+    Outlined="true"
+    Breakpoint="Breakpoint.Sm"
+    Loading="@_state.Value.IsListLoading"
+    LoadingProgressColor="Color.Info">
 
-    <RadzenCard class="w-100">
-        <RadzenButton
-            Icon="add_circle_outline"
-            Text="Add member"
-            Click="ShowAddModal"/>
-    </RadzenCard>
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Workspace memberships</MudText>
+        <MudSpacer/>
+        <MudButton
+            OnClick="@OnAdd"
+            Disabled="@(!AuthState.Value.IsRoleAdmin)"
+            StartIcon="@Icons.Material.Filled.Add">
+            Add member
+        </MudButton>
+    </ToolBarContent>
 
-    <RadzenDataGrid
-        class="mt-2"
-        TItem="WorkspaceMembershipDto"
-        AllowSorting="false"
-        PageSize="@GlobalConstants.ListPageSize"
-        Density="Density.Compact"
-        Data="@_state.Value.List"
-        AllowPaging="false"
-        IsLoading="@_state.Value.IsListLoading"
-        Count="@_state.Value.TotalCount"
-        ColumnWidth="200px">
+    <HeaderContent>
+        <MudTh>User</MudTh>
+        <MudTh>Access Level</MudTh>
+        <MudTh>Projects</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
 
-        <Columns>
-            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="User" MinWidth="200px">
-                <Template Context="item">
-                    @item.User.Email
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Access Level" Width="100px">
-                <Template Context="item">
-                    @item.Access.GetDisplayName()
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="WorkspaceMembershipDto" Title="Projects">
-                <Template Context="item">
-                    @if (item.Access is MembershipAccessType.Manager or MembershipAccessType.Owner)
-                    {
-                        <text>All</text>
-                    }
-                    else
-                    {
-                        var projectNames = GetProjectNames(item);
-                        if (string.IsNullOrEmpty(projectNames))
-                        {
-                            projectNames = "No access";
-                        }
-                        <text>@projectNames</text>
-                    }
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn
-                TItem="WorkspaceMembershipDto"
-                Context="app" Filterable="false"
-                Sortable="false"
-                TextAlign="TextAlign.Center"
-                Width="120px">
-
-                <Template Context="item">
-
-                    <RadzenButton
-                        Size="ButtonSize.Small"
-                        Icon="edit"
-                        ButtonStyle="ButtonStyle.Light"
-                        Click="@(args => ShowEditModal(item))"
-                        @onclick:stopPropagation="true">
-                    </RadzenButton>
-                    <RadzenButton
-                        Size="ButtonSize.Small"
-                        ButtonStyle="ButtonStyle.Danger"
-                        Icon="delete"
-                        Click="async () => await OnDeleteItemAsync(item)"/>
-                </Template>
-            </RadzenDataGridColumn>
-        </Columns>
-    </RadzenDataGrid>
-</div>
+    <RowTemplate>
+        <MudTd DataLabel="User">@context.User.Email</MudTd>
+        <MudTd DataLabel="AccessLevel">@context.Access.GetDisplayName()</MudTd>
+        <MudTd DataLabel="Projects">
+            @if (context.Access is MembershipAccessType.Manager or MembershipAccessType.Owner)
+            {
+                <text>All</text>
+            }
+            else
+            {
+                var projectNames = GetProjectNames(context);
+                if (string.IsNullOrEmpty(projectNames))
+                {
+                    projectNames = "No access";
+                }
+                <text>@projectNames</text>
+            }
+        </MudTd>
+        <MudTd DataLabel="Actions">
+            <MudIconButton
+                OnClick="@(() => OnEdit(context))"
+                Icon="@Icons.Material.Filled.Edit"
+                Disabled="@(!AuthState.Value.IsRoleAdmin)"
+                Size="Size.Small"/>
+            <MudIconButton
+                OnClick="@(() => OnDelete(context))"
+                Icon="@Icons.Material.Filled.Delete"
+                Disabled="@(!AuthState.Value.IsRoleAdmin)"
+                Color="Color.Error"
+                Size="Size.Small"/>
+        </MudTd>
+    </RowTemplate>
+</MudTable>

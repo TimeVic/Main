@@ -2,108 +2,52 @@
 
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
+@using MudBlazor
 
-<div class="row d-flex justify-content-center w-time-form no-gutters mx-n2">
+<MudTable
+    Class="mt-2"
+    Items="@_state.Value.List"
+    Hover="true"
+    Dense="true"
+    Outlined="true"
+    Breakpoint="Breakpoint.Sm"
+    Loading="@_state.Value.IsListLoading"
+    LoadingProgressColor="Color.Info">
 
-    <RadzenCard class="w-100">
-        <RadzenButton
-            Icon="add_circle_outline"
-            Text="Add project"
-            Click="@InsertRow"
-            Disabled="@(_state.Value.HasItemToAdd || !AuthState.Value.IsRoleAdmin)"/>
-    </RadzenCard>
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Projects</MudText>
+        <MudSpacer/>
+        <MudButton
+            OnClick="@OnAddProject"
+            Disabled="@(!AuthState.Value.IsRoleAdmin)"
+            StartIcon="@Icons.Material.Filled.Add">
+            Add
+        </MudButton>
+    </ToolBarContent>
 
-    <RadzenDataGrid
-        @ref="@_grid"
-        TItem="ProjectDto"
-        AllowSorting="false"
-        EditMode="DataGridEditMode.Single"
-        PageSize="@GlobalConstants.ListPageSize"
-        RowUpdate="@OnUpdateRow"
-        Data="@_state.Value.SortedList"
-        AllowPaging="false"
-        IsLoading="@_state.Value.IsListLoading"
-        Count="@_state.Value.TotalCount"
-        class="mt-2"
-        ColumnWidth="200px">
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Client</MudTh>
+        <MudTh>Default Hourly Rate</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
 
-        <Columns>
-            <RadzenDataGridColumn TItem="ProjectDto" Property="Name" Title="Name">
-                <EditTemplate Context="app">
-                    <RadzenTextBox @bind-Value="@app.Name" Style="width:100%; display: block" Name="Name"/>
-                    <RadzenLengthValidator
-                        Component="Name"
-                        Min="3"
-                        Max="255"
-                        Style="position: absolute"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="ProjectDto" Title="Client">
-                <Template Context="item">
-                    @item.Client?.Name
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="ProjectDto" Title="Default Hourly Rate">
-                <Template Context="item">
-                    @item.DefaultHourlyRate?.ToString("0.00")
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn
-                TItem="ProjectDto"
-                Context="app" Filterable="false"
-                Sortable="false"
-                TextAlign="TextAlign.Center"
-                Width="120px">
-
-                <Template Context="item">
-
-                    @if (item.Id == 0)
-                    {
-                        <RadzenButton
-                            Icon="edit"
-                            ButtonStyle="ButtonStyle.Light"
-                            Click="@(args => EditNewRow(item))"
-                            Disabled="@(!AuthState.Value.IsRoleAdmin)"
-                            Size="ButtonSize.Small"
-                            @onclick:stopPropagation="true">
-                        </RadzenButton>
-                    }
-                    else
-                    {
-                        <RadzenButton
-                            Icon="edit"
-                            ButtonStyle="ButtonStyle.Light"
-                            Size="ButtonSize.Small"
-                            Click="@(args => NavigateToProduct(item))"
-                            Disabled="@(!AuthState.Value.IsRoleAdmin)"
-                            @onclick:stopPropagation="true">
-                        </RadzenButton>
-                        <RadzenButton
-                            Icon="delete"
-                            ButtonStyle="ButtonStyle.Danger"
-                            Size="ButtonSize.Small"
-                            Click="@(args => DeleteProject(item))"
-                            Disabled="@(!AuthState.Value.IsRoleAdmin)"
-                            @onclick:stopPropagation="true">
-                        </RadzenButton>
-                    }
-                </Template>
-                <EditTemplate Context="item">
-
-                    <RadzenButton
-                        Icon="check"
-                        ButtonStyle="ButtonStyle.Primary"
-                        Size="ButtonSize.Small"
-                        Click="@(() => OnClickSaveRow(item))"/>
-
-                    <RadzenButton
-                        Icon="close"
-                        ButtonStyle="ButtonStyle.Light"
-                        Size="ButtonSize.Small"
-                        Click="@(() => OnClickCancelEditMode(item))">
-                    </RadzenButton>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-        </Columns>
-    </RadzenDataGrid>
-</div>
+    <RowTemplate>
+        <MudTd DataLabel="Project">@context?.Name</MudTd>
+        <MudTd DataLabel="Client">@context.Client?.Name</MudTd>
+        <MudTd DataLabel="DefaultHourlyRate">@context.DefaultHourlyRate?.ToString("0.00")</MudTd>
+        <MudTd DataLabel="Actions">
+            <MudIconButton
+                OnClick="@(() => OnEditProject(context))"
+                Icon="@Icons.Material.Filled.Edit"
+                Disabled="@(!AuthState.Value.IsRoleAdmin)"
+                Size="Size.Small"/>
+            <MudIconButton
+                OnClick="@(() => DeleteProject(context))"
+                Icon="@Icons.Material.Filled.Delete"
+                Disabled="@(!AuthState.Value.IsRoleAdmin)"
+                Color="Color.Error"
+                Size="Size.Small"/>
+        </MudTd>
+    </RowTemplate>
+</MudTable>

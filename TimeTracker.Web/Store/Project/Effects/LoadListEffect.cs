@@ -42,7 +42,7 @@ public class LoadListEffect: Effect<LoadListAction>
             {
                 WorkspaceId = _authState.Value.Workspace.Id
             });
-            dispatcher.Dispatch(new SetProjectListItemsAction(response));
+            dispatcher.Dispatch(new SetListItemsAction(response));
         }
         catch (Exception e)
         {

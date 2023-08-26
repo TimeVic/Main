@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
@@ -10,8 +11,11 @@ using LoadListAction = TimeTracker.Web.Store.WorkspaceMemberships.LoadListAction
 
 namespace TimeTracker.Web.Pages.Dashboard.Members.Parts;
 
-public partial class MemberAccessForm
+public partial class MemberAccessModal
 {
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+    
     [Inject]
     public IState<ProjectState> _projectState { get; set; }
     
@@ -21,6 +25,8 @@ public partial class MemberAccessForm
     private ProjectDto? _project;
     private UpdateRequest model = new();
     private bool _isLoading = false;
+    private bool _isValid = false;
+    private MudForm _form;
 
     private ICollection<MembershipAccessType> _allowedAccessLevels = new List<MembershipAccessType>()
     {
@@ -44,8 +50,14 @@ public partial class MemberAccessForm
         return $"{project.Name}";
     }
     
-    private async Task HandleSubmit()
+    private async Task Submit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
+        
         _isLoading = true;
         try
         {
@@ -63,7 +75,7 @@ public partial class MemberAccessForm
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
                 await ToastService.ShowInfo("Member access has been changed");
-                DialogService.Close();
+                OnCloseModal();
             }
         }
         catch (Exception)
@@ -77,8 +89,8 @@ public partial class MemberAccessForm
         StateHasChanged();
     }
 
-    private void CloseModal()
+    private void OnCloseModal()
     {
-        DialogService.Close();
+        MudDialog.Close();
     }
 }

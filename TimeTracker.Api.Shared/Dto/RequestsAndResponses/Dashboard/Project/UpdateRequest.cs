@@ -13,7 +13,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
         public long ProjectId { get; set; }
 
         [IsPositive]
-        public long? ClientId { get; set; }
+        public long ClientId { get; set; }
         
         [Required]
         [StringLength(256, MinimumLength = 2)]
@@ -27,7 +27,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
         public void Fill(ProjectDto project)
         {
             ProjectId = project.Id;
-            ClientId = project.Client?.Id;
+            ClientId = project.Client?.Id ?? 0;
             Name = project.Name;
             IsBillableByDefault = project.IsBillableByDefault;
             DefaultHourlyRate = project.DefaultHourlyRate;

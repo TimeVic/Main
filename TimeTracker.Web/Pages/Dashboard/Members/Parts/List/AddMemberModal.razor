@@ -1,0 +1,29 @@
+﻿@using MudBlazor
+
+@inherits BaseComponent
+
+<MudDialog>
+    <DialogContent>
+        <MudForm
+            @ref="_form"
+            @bind-IsValid="_isValid">
+
+            <MudTextField
+                T="string?"
+                For="() => model.Email"
+                @bind-Value="@(model.Email)"
+                Label="Email">
+            </MudTextField>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
+        <MudButton
+            ButtonType="MudBlazor.ButtonType.Submit"
+            OnClick="@Submit"
+            Disabled="@_isLoading"
+            Color="Color.Primary">
+            Send invitation
+        </MudButton>
+    </DialogActions>
+</MudDialog>

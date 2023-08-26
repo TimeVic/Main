@@ -47,6 +47,7 @@ public partial class UpdatePaymentModal
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
+                await ToastService.ShowInfo("Payment updated");
                 OnCloseModal();
             }
         }

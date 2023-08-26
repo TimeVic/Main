@@ -23,47 +23,12 @@ public partial class ProjectsList
     [Inject]
     public ILogger<ProjectsList> _logger { get; set; }
     
-    private RadzenDataGrid<ProjectDto> _grid;
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         Dispatcher.Dispatch(new LoadListAction(true));
     }
 
-    private async Task OnDeleteItemAsync(ProjectDto value)
-    {
-        await Task.CompletedTask;
-    }
-    
-    private async Task InsertRow()
-    {
-        Dispatcher.Dispatch(new AddEmptyProjectListItemAction());
-        // await _grid.GoToPage(0);
-        await EditNewRow(_state.Value.ItemToAdd);
-    }
-    
-    private async Task EditNewRow(ProjectDto item)
-    {
-        await _grid.EditRow(item);
-    }
-
-    private async Task OnClickSaveRow(ProjectDto item)
-    {
-        await _grid.UpdateRow(item);
-    }
-
-    private void OnClickCancelEditMode(ProjectDto item)
-    {
-        Dispatcher.Dispatch(new RemoveEmptyProjectListItemAction());
-        _grid.CancelEditRow(item);
-    }
-    
-    private async Task OnUpdateRow(ProjectDto item)
-    {
-        Dispatcher.Dispatch(new SaveEmptyProjectListItemAction());
-    }
-    
     private Task NavigateToProduct(ProjectDto item)
     {
         NavigationManager.NavigateTo(string.Format(SiteUrl.Dashboard_Project, item.Id));
@@ -89,5 +54,15 @@ public partial class ProjectsList
             _logger.LogError(e, e.Message);
             await ToastService.ShowError("Project deletion error");
         }
+    }
+
+    private async Task OnAddProject()
+    {
+        await _dialogService.ShowAddProjectModal();
+    }
+
+    private async Task OnEditProject(ProjectDto item)
+    {
+        await _dialogService.ShowUpdateProjectModal(item);
     }
 }
