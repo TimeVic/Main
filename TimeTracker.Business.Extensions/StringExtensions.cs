@@ -98,7 +98,7 @@ namespace TimeTracker.Business.Extensions
 
         public static string TruncateAndAddDots(this string value, int maxLength)
         {
-            return value.Length <= maxLength ? value : value.Substring(0, maxLength) + " ...";
+            return value.Length <= maxLength ? value : value.Substring(0, maxLength) + "...";
         }
 
         public static string TrimLastSlash(this string value)

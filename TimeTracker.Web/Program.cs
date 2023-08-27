@@ -3,7 +3,6 @@ using Fluxor;
 using Majorsoft.Blazor.WebAssembly.Logging.Console;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Radzen;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Web;
 using TimeTracker.Web.Services;
@@ -49,12 +48,6 @@ builder.Configuration.AddJsonStream(stream);
 
 // Init local storage
 builder.Services.AddBlazoredLocalStorage();
-
-// Radzen services
-builder.Services.AddScoped<DialogService>();
-builder.Services.AddScoped<NotificationService>();
-builder.Services.AddScoped<TooltipService>();
-builder.Services.AddScoped<ContextMenuService>();
 
 // MudBlazor
 builder.Services.AddMudServices(config =>

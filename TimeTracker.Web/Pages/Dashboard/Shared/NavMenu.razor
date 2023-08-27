@@ -1,5 +1,6 @@
 ﻿@using TimeTracker.Web.Store.Auth
 @using MudBlazor
+@using TimeTracker.Business.Extensions
 
 @inherits BaseComponent
 
@@ -37,30 +38,42 @@
             Summary
         </MudNavLink>
         <MudNavGroup Title="Tasks" Icon="@Icons.Material.Filled.Task" Expanded="true">
-            <MudNavGroup Title="Without client" Icon="@Icons.Material.Filled.LabelImportant" Expanded="true">
-                @foreach (var project in GetClientProjects(null))
-                {
-                    <MudNavLink
-                        Href="@GetTasksListUrl(project)"
-                        Icon="@Icons.Material.Filled.LabelImportant"
-                        IconColor="Color.Primary">
-                        @project.Name
-                    </MudNavLink>
-                }
-            </MudNavGroup>
-            @foreach (var client in Clients)
+            @{
+                var projectsWithoutClient = GetClientProjects(null);
+            }
+            @if (projectsWithoutClient.Any())
             {
-                <MudNavGroup Title="Without client" Expanded="true">
-                    @foreach (var project in GetClientProjects(client))
+                <MudNavGroup 
+                    Title="Without client" 
+                    Expanded="true">
+                    @foreach (var project in GetClientProjects(null))
                     {
                         <MudNavLink
                             Href="@GetTasksListUrl(project)"
-                            Icon="@Icons.Material.Filled.LabelImportant"
-                            IconColor="Color.Primary">
-                            @project.Name
+                            IconColor="Color.Default">
+                            @project.Name.TruncateAndAddDots(23)
                         </MudNavLink>
                     }
-                </MudNavGroup>
+                </MudNavGroup>    
+            }
+            @foreach (var client in Clients)
+            {
+                var projects = GetClientProjects(client);
+                if (projects.Any())
+                {
+                    <MudNavGroup 
+                        Title="@client.Name"
+                        Expanded="true">
+                        @foreach (var project in GetClientProjects(client))
+                        {
+                            <MudNavLink
+                                Href="@GetTasksListUrl(project)"
+                                IconColor="Color.Default">
+                                @project.Name.TruncateAndAddDots(23)
+                            </MudNavLink>
+                        }
+                    </MudNavGroup>    
+                }
             }
         </MudNavGroup>
 
@@ -77,13 +90,13 @@
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Reports_Payments"
                 Icon="@Icons.Material.Filled.Payment"
-                IconColor="Color.Success">
+                IconColor="Color.Default">
                 Payments
             </MudNavLink>
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Reports_TimeEntries"
                 Icon="@Icons.Material.Filled.AccessTimeFilled"
-                IconColor="Color.Success">
+                IconColor="Color.Default">
                 Detailed
             </MudNavLink>
         </MudNavGroup>
@@ -94,19 +107,19 @@
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Projects"
                 Icon="@Icons.Material.Filled.Apps"
-                IconColor="Color.Success">
+                IconColor="Color.Default">
                 Projects
             </MudNavLink>
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Clients"
                 Icon="@Icons.Material.Filled.People"
-                IconColor="Color.Success">
+                IconColor="Color.Default">
                 Clients
             </MudNavLink>
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Tags"
                 Icon="@Icons.Material.Filled.Tag"
-                IconColor="Color.Success">
+                IconColor="Color.Default">
                 Tags
             </MudNavLink>
             @if (AuthState.Value.IsRoleAdmin)
@@ -114,14 +127,14 @@
                 <MudNavLink
                     Href="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)"
                     Icon="@Icons.Material.Filled.SupervisedUserCircle"
-                    IconColor="Color.Success">
+                    IconColor="Color.Default">
                     Members
                 </MudNavLink>
             }
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Integrations"
                 Icon="@Icons.Material.Filled.Apps"
-                IconColor="Color.Success">
+                IconColor="Color.Default">
                 Integrations
             </MudNavLink>
         </MudNavGroup>

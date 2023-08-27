@@ -24,10 +24,9 @@
         <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="5.9.0" />
         <PackageReference Include="Majorsoft.Blazor.WebAssembly.Logging.Console" Version="1.5.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.9" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.9" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.10" PrivateAssets="all" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
         <PackageReference Include="MudBlazor" Version="6.8.0" />
-        <PackageReference Include="Radzen.Blazor" Version="4.14.4" />
         <PackageReference Include="System.Net.Http.Json" Version="7.0.1" />
     </ItemGroup>
 
@@ -53,6 +52,7 @@
       <Content Update="Shared\Components\Form\MarkdownEdit.razor.less">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </Content>
+      <Content Remove="Pages\Dashboard\Calendar\CalendarPage.razor" />
     </ItemGroup>
 
     <ItemGroup>
@@ -61,6 +61,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Pages\Dashboard\Calendar\" />
+      <Folder Include="Pages\Dashboard\Dashboard\Parts\" />
       <Folder Include="wwwroot\img\logo\black" />
     </ItemGroup>
 
@@ -69,6 +71,7 @@
 
     <ItemGroup>
       <Compile Remove="Services\UI\DragAndDropService.cs" />
+      <Compile Remove="Pages\Dashboard\Calendar\CalendarPage.razor.cs" />
     </ItemGroup>
 
 </Project>

@@ -1,8 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Radzen;
-using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Web.Core.Helpers;

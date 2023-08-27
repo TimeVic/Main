@@ -1,7 +1,6 @@
 ﻿using System.Timers;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Web.Services.Http;

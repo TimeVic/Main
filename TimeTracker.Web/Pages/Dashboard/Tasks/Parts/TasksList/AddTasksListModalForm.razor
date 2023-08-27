@@ -10,8 +10,8 @@
             @bind-IsValid="_isValid">
             
             <ProjectsDropDown
-                Value="@(ProjectId ?? 0)"
-                ValueChanged="value => model.ProjectId = value"
+                For="() => model.ProjectId"
+                @bind-Value="@(model.ProjectId)"
                 Placeholder="Task title"/>
 
             <MudTextField

@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen.Blazor;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Store.Auth;
@@ -38,19 +37,6 @@ public partial class MainHeader
         NavigationManager.NavigateTo("/", true);
     }
     
-    private void OnClickUserMenu(RadzenProfileMenuItem menuEvent)
-    {
-        switch (menuEvent.Value)
-        {
-            case "user_profile":
-                // TODO: Add user's profile page
-                break;
-            case "logout":
-                Logout();
-                break;
-        }
-    }
-
     private void Logout()
     {
         Dispatcher.Dispatch(new LogoutAction());

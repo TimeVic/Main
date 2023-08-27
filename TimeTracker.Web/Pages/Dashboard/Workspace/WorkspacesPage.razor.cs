@@ -1,6 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Store.Workspace;
 
@@ -11,44 +10,23 @@ public partial class WorkspacesPage
     [Inject]
     public IState<WorkspaceState> _state { get; set; }
     
-    private RadzenDataGrid<WorkspaceDto> _grid;
-    
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
     }
-    
-    private async Task InsertRow()
+
+    private Task OnAdd()
     {
-        Dispatcher.Dispatch(new AddEmptyListItemAction());
-        // await _grid.GoToPage(0);
-        await EditRow(_state.Value.ItemToAdd);
-    }
-    
-    private async Task EditRow(WorkspaceDto item)
-    {
-        await _grid.EditRow(item);
+        throw new NotImplementedException();
     }
 
-    private async Task OnClickSaveRow(WorkspaceDto item)
+    private Task OnEdit(WorkspaceDto context)
     {
-        await _grid.UpdateRow(item);
+        throw new NotImplementedException();
     }
 
-    private void OnClickCancelEditMode(WorkspaceDto item)
+    private Task OnDelete(WorkspaceDto context)
     {
-        Dispatcher.Dispatch(new RemoveEmptyListItemAction());
-        _grid.CancelEditRow(item);
-    }
-    
-    private async Task OnUpdateRow(WorkspaceDto item)
-    {
-        if (item.Id > 0)
-        {
-            Dispatcher.Dispatch(new UpdateWorkspaceAction(item));
-            return;
-        }
-
-        Dispatcher.Dispatch(new SaveEmptyListItemAction());
+        throw new NotImplementedException();
     }
 }

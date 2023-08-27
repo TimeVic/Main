@@ -39,7 +39,7 @@
                         Class="mt-3"
                         Label="Description"
                         @bind-Value="@model.Description"
-                        Changed="SubmitForm"
+                        Changed="@(SubmitForm)"
                         Placeholder="Insert your task details here"/>
                 </MudStack>
             </MudItem>
@@ -50,7 +50,7 @@
                         Clearable="false"
                         AllowedIds="@_allowedUserIds"
                         UserId="@model.UserId"
-                        SelectedItemChanged="OnChangedAssigned"/>
+                        SelectedItemChanged="@(OnChangedAssigned)"/>
 
                     <EnumDropDown
                         Placeholder="Status"

@@ -22,14 +22,7 @@
 
 <MudPaper class="mb-4">
 
-    @if (_state.Value.IsLoading)
-    {
-        <MudProgressCircular 
-            class="m-4"
-            Color="MudBlazor.Color.Primary" 
-            Indeterminate="true"/>
-    }
-    else if (_byDateItems.Any())
+    @if (_byDateItems.Any())
     {
         <ApexChart
             TItem="SummaryByDaysReportItemDto">
@@ -53,7 +46,7 @@
     }
     else
     {
-        <MudText Typo="Typo.body1">No data</MudText>
+        <MudText Typo="Typo.subtitle1" Class="mx-4">No data</MudText>
     }
 </MudPaper>
 

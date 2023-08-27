@@ -1,8 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Radzen;
-using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Web.Constants;
@@ -122,35 +120,5 @@ public partial class TasksListTree
     {
         Dispatcher.Dispatch(new SetSelectedAction(testsListId));
         Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
-    }
-
-    private async Task OnClickSplitButton(RadzenSplitButtonItem? selectedItem)
-    {
-        if (selectedItem == null)
-        {
-            return;
-        }
-
-        var isAction = Enum.TryParse(selectedItem.Value, out TaskListAction action)
-            && Enum.IsDefined(typeof(TaskListAction), action);
-        if (isAction)
-        {
-            switch (action)
-            {
-                case TaskListAction.Add:
-                    ShowAddTaskListModal();
-                    break;
-                case TaskListAction.Edit:
-                    ShowUpdateTaskListModal();
-                    break;
-                case TaskListAction.Delete:
-                    await OnDeleteTaskList();
-                    break;
-            }
-        }
-        else
-        {
-            OnSelectedTasksList(long.Parse(selectedItem.Value));
-        }
     }
 }

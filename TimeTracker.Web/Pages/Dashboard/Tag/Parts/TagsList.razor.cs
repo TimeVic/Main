@@ -1,9 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor.Utilities;
-using Radzen;
-using Radzen.Blazor;
-using Radzen.Blazor.Rendering;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Tag;
@@ -14,8 +11,6 @@ public partial class TagsList
 {
     [Inject] 
     private IState<TagState> _state { get; set; }
-    
-    private RadzenDataGrid<TagDto> _grid;
 
     protected override async Task OnInitializedAsync()
     {
@@ -25,7 +20,7 @@ public partial class TagsList
 
     private async Task OnDelete(TagDto item)
     {
-        var isOk = await ModalDialogProviderService.ShowDeleteConfirmationDialog(
+        var isOk = await ModalDialogService.ShowDeleteConfirmationDialog(
             "Are you sure you want to remove this tag?"
         );
         if (isOk.HasValue && isOk.Value)
@@ -43,11 +38,11 @@ public partial class TagsList
 
     private async Task OnAdd()
     {
-        await ModalDialogProviderService.ShowAddTagModal();
+        await ModalDialogService.ShowAddTagModal();
     }
 
     private async Task OnEdit(TagDto item)
     {
-        await ModalDialogProviderService.ShowUpdateTagModal(item);
+        await ModalDialogService.ShowUpdateTagModal(item);
     }
 }

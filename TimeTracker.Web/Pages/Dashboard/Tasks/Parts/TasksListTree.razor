@@ -18,26 +18,36 @@
                 OnClick="@(() => OnSelectedTasksList(taskList.Id))"
                 Text="@taskList.Name"/>
         }
+        @if (!_tasksList.Any())
+        {
+            <MudTabPanel
+                ID="-1"
+                OnClick="@(ShowAddTaskListModal)"
+                Text="Add new list"/>
+        }
     </MudTabs>
 
-    <MudStack Row="true">
-        <MudIconButton
-            Icon="@Icons.Material.Filled.Add"
-            Title="Add new"
-            OnClick="@ShowAddTaskListModal"/>
-        @if (_selectedTaskListId != null)
-        {
-            <MudSpacer/>
+    @if (_tasksList.Any())
+    {
+        <MudStack Row="true">
             <MudIconButton
-                Icon="@Icons.Material.Filled.Edit"
-                Title="Update active"
-                OnClick="@ShowUpdateTaskListModal"/>
-            <MudSpacer/>
-            <MudIconButton
-                Color="Color.Error"
-                Icon="@Icons.Material.Filled.Delete"
-                Title="Delete active"
-                OnClick="@OnDeleteTaskList"/>    
-        }
-    </MudStack>
+                Icon="@Icons.Material.Filled.Add"
+                Title="Add new"
+                OnClick="@ShowAddTaskListModal"/>
+            @if (_selectedTaskListId != 0)
+            {
+                <MudSpacer/>
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.Edit"
+                    Title="Update active"
+                    OnClick="@ShowUpdateTaskListModal"/>
+                <MudSpacer/>
+                <MudIconButton
+                    Color="Color.Error"
+                    Icon="@Icons.Material.Filled.Delete"
+                    Title="Delete active"
+                    OnClick="@OnDeleteTaskList"/>    
+            }
+        </MudStack>
+    }
 </MudStack>

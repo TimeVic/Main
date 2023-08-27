@@ -1,6 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Store.Client;
 using TimeTracker.Web.Store.Project;
@@ -13,8 +12,6 @@ public partial class ClientsList
     [Inject] 
     private IState<ClientState> _state { get; set; }
     
-    private RadzenDataGrid<ClientDto> _grid;
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -23,6 +20,6 @@ public partial class ClientsList
     
     private async Task OnAdd()
     {
-        await ModalDialogProviderService.ShowAddClientModal();
+        await ModalDialogService.ShowAddClientModal();
     }
 }

@@ -1,12 +1,9 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Radzen;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Web.Store.Project;
-using TimeTracker.Web.Store.TasksList;
 using LoadListAction = TimeTracker.Web.Store.TasksList.LoadListAction;
 using SetListItemAction = TimeTracker.Web.Store.TasksList.SetListItemAction;
 

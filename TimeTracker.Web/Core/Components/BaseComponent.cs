@@ -1,7 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using Radzen;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
@@ -34,10 +33,7 @@ public class BaseComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     protected ToastService ToastService { get; set; }
     
     [Inject]
-    protected DialogService DialogService { get; set; }
-    
-    [Inject]
-    protected ModalDialogProviderService ModalDialogProviderService { get; set; }
+    protected ModalDialogProviderService ModalDialogService { get; set; }
     
     #endregion
 }

@@ -2,8 +2,6 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Radzen;
-using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;

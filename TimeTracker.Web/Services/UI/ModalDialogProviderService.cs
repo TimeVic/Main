@@ -1,36 +1,26 @@
 ﻿using MudBlazor;
-using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
-using TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 using TimeTracker.Web.Shared.Components.Dialogs;
 using TimeTracker.Web.Shared.Components.Storage;
-using DialogOptions = Radzen.DialogOptions;
-using DialogService = Radzen.DialogService;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Services.UI;
 
 public partial class ModalDialogProviderService
 {
-    // Blazor
-    private readonly DialogService _dialogService;
-
     // MudRadzen
     private readonly IDialogService _mudDialogService;
 
     public ModalDialogProviderService(
-        DialogService dialogService,
         IDialogService mudDialogService
     )
     {
         _mudDialogService = mudDialogService;
-        _dialogService = dialogService;
     }
 
     #region Confirmation Dialog
@@ -147,7 +137,9 @@ public partial class ModalDialogProviderService
             new MudBlazor.DialogOptions()
             {
                 CloseOnEscapeKey = true,
-                FullWidth = true
+                FullWidth = true,
+                CloseButton = true,
+                FullScreen = true
             }
         );
     }

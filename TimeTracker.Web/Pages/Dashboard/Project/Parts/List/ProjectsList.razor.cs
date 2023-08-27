@@ -1,7 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
-using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;

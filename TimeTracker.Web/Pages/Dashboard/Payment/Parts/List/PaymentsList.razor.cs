@@ -1,7 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
-using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Client;
@@ -22,7 +20,7 @@ public partial class PaymentsList
 
     private async Task OnDeleteItem(PaymentDto item)
     {
-        var isOk = await ModalDialogProviderService.ShowDeleteConfirmationDialog(
+        var isOk = await ModalDialogService.ShowDeleteConfirmationDialog(
             "Are you sure you want to remove this payment?"
         );
         if (isOk.HasValue && isOk.Value)
@@ -33,11 +31,11 @@ public partial class PaymentsList
 
     private async Task OnAddPayment()
     {
-        await ModalDialogProviderService.ShowAddPaymentModal();
+        await ModalDialogService.ShowAddPaymentModal();
     }
 
     private async Task OnEditPayment(PaymentDto item)
     {
-        await ModalDialogProviderService.ShowUpdatePaymentModal(item);
+        await ModalDialogService.ShowUpdatePaymentModal(item);
     }
 }

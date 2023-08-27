@@ -84,7 +84,7 @@
                             @context.PaidAmountByProject.ToString("0.00")
                         </MudTd>
                     </RowTemplate>
-                    <GroupFooterTemplate>
+                    <FooterContent>
                         <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer">
                             Unpaid:
                             <b>
@@ -100,120 +100,9 @@
                         <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer">
                             Total: <b>@clientAmount.ToString("0.00")</b>
                         </MudTh>
-                    </GroupFooterTemplate>
+                    </FooterContent>
                 </MudTable>
             }
         }
     }
 </MudPaper>
-@* *@
-@* <RadzenCard class="mt-3 no-gutters mx-n2"> *@
-@*     @if (_state.Value.IsLoading) *@
-@*     { *@
-@*         <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/> *@
-@*     } *@
-@*     else *@
-@*     { *@
-@*         if (!_grouppedItems.Any()) *@
-@*         { *@
-@*             <RadzenText *@
-@*                 TextStyle="TextStyle.Subtitle1" *@
-@*                 TagName="TagName.H5" *@
-@*                 class="mt-3"> *@
-@*                 The report is empty *@
-@*             </RadzenText> *@
-@*         } *@
-@*         foreach (var groupItem in _grouppedItems) *@
-@*         { *@
-@*             var clientId = groupItem.Key ?? 0; *@
-@*             var clientDataItem = groupItem.First(); *@
-@*             var clientName = clientDataItem.ClientName; *@
-@*             var clientAmount = clientDataItem.PaidAmountByClient; *@
-@*             var unpaidAmount = GetClientUnpaidAmount(clientId); *@
-@*             var totalAmount = GetClientTotalAmount(clientId); *@
-@*             var totalDuration = GetTotalDuration(clientId); *@
-@* *@
-@*             <RadzenText *@
-@*                 TextStyle="TextStyle.H5" *@
-@*                 TagName="TagName.H3"> *@
-@*                 @if (string.IsNullOrEmpty(clientName)) *@
-@*                 { *@
-@*                     clientName = "Other projects"; *@
-@*                 } *@
-@*                 @clientName *@
-@*             </RadzenText> *@
-@* *@
-@*             <RadzenDataGrid *@
-@*                 AllowFiltering="false" *@
-@*                 AllowPaging="false" *@
-@*                 AllowSorting="false" *@
-@*                 Data="@groupItem" *@
-@*                 TItem="PaymentsReportItemDto" *@
-@*                 FooterCellRender="@(args => OnFooterCellRender(args, clientDataItem))" *@
-@*                 ColumnWidth="200px" *@
-@*                 class="mb-3"> *@
-@* *@
-@*                 <Columns> *@
-@*                     <RadzenDataGridColumn *@
-@*                         TItem="PaymentsReportItemDto" *@
-@*                         Title="Project"> *@
-@* *@
-@*                         <Template Context="item"> *@
-@*                             @(string.IsNullOrEmpty(item.ProjectName) ? "-- No project name --" : item.ProjectName) *@
-@*                         </Template> *@
-@*                         <FooterTemplate> *@
-@*                             @{ *@
-@*                                 var bgColor = unpaidAmount < 0 ? "var(--rz-series-4)" : "var(--rz-series-8)"; *@
-@*                                 var style = $@" *@
-@*                                                 margin: -8px; *@
-@*                                                 padding: 7px; *@
-@*                                                 color: var(--rz-white);  *@
-@*                                                 background-color: {bgColor}; *@
-@*                                             "; *@
-@*                             } *@
-@*                             <div style="@style.Trim()"> *@
-@*                                 Unpaid: *@
-@*                                 <b> *@
-@*                                     @((unpaidAmount > 0) ? "+" : string.Empty)@unpaidAmount.ToString("0.00") *@
-@*                                 </b> *@
-@*                             </div> *@
-@*                         </FooterTemplate> *@
-@*                     </RadzenDataGridColumn> *@
-@*                     <RadzenDataGridColumn *@
-@*                         TItem="PaymentsReportItemDto" *@
-@*                         Property="TotalDuration" *@
-@*                         Title="Total Duration"> *@
-@*                         <Template Context="item"> *@
-@*                             @item.TotalDuration.ToReadableShortString() *@
-@*                         </Template> *@
-@*                         <FooterTemplate> *@
-@*                             Total: <b>@totalDuration.ToReadableShortString()</b> *@
-@*                         </FooterTemplate> *@
-@*                     </RadzenDataGridColumn> *@
-@*                     <RadzenDataGridColumn *@
-@*                         TItem="PaymentsReportItemDto" *@
-@*                         Property="Amount" *@
-@*                         Title="Amount"> *@
-@*                         <Template Context="item"> *@
-@*                             @item.Amount.ToString("0.00") *@
-@*                         </Template> *@
-@*                         <FooterTemplate> *@
-@*                             Total: <b>@totalAmount.ToString("0.00")</b> *@
-@*                         </FooterTemplate> *@
-@*                     </RadzenDataGridColumn> *@
-@*                     <RadzenDataGridColumn *@
-@*                         TItem="PaymentsReportItemDto" *@
-@*                         Property="Paid" *@
-@*                         Title="Paid"> *@
-@*                         <Template Context="item"> *@
-@*                             @item.PaidAmountByProject.ToString("0.00") *@
-@*                         </Template> *@
-@*                         <FooterTemplate> *@
-@*                             Total: <b>@clientAmount.ToString("0.00")</b> *@
-@*                         </FooterTemplate> *@
-@*                     </RadzenDataGridColumn> *@
-@*                 </Columns> *@
-@*             </RadzenDataGrid> *@
-@*         } *@
-@*     } *@
-@* </RadzenCard> *@

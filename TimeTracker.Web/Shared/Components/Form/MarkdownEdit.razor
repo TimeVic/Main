@@ -103,7 +103,6 @@
 
     public MarkupString MarkdownHtml => (MarkupString) MarkdownService.ToHtml(_value);
 
-    private RadzenTextArea _markdownTextArea;
     private bool _isShowEditBox;
     private readonly int _textAreaRowsMax = 20;
     private int _textAreaRows = 3;
@@ -143,11 +142,6 @@
         _isShowEditBox = true;
         _isActionButtonsEnabled = true;
         StateHasChanged();
-        Task.Run(async () =>
-        {
-            await Task.Delay(10);
-            await _markdownTextArea.Element.FocusAsync();
-        });
     }
 
     private void OnClickSave()

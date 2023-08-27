@@ -1,7 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
-using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
 using TimeTracker.Business.Common.Constants;
@@ -54,17 +52,17 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
 
         private async Task OnAdd()
         {
-            await ModalDialogProviderService.ShowAddWorkspaceMembershipModal();
+            await ModalDialogService.ShowAddWorkspaceMembershipModal();
         }
 
         private async Task OnEdit(WorkspaceMembershipDto item)
         {
-            await ModalDialogProviderService.ShowUpdateWorkspaceMembershipModal(item);
+            await ModalDialogService.ShowUpdateWorkspaceMembershipModal(item);
         }
 
         private async Task OnDelete(WorkspaceMembershipDto item)
         {
-            var isOk = await ModalDialogProviderService.ShowDeleteConfirmationDialog();
+            var isOk = await ModalDialogService.ShowDeleteConfirmationDialog();
             if (isOk.HasValue && isOk.Value)
             {
                 Dispatcher.Dispatch(new DeleteMemberAction(item));

@@ -1,6 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Web.Core.Helpers;
@@ -26,9 +25,6 @@ public partial class TimeEntryForm
 
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
-    
-    [Inject] 
-    private TooltipService _tooltipService { get; set; }
     
     [Inject] 
     private ModalDialogProviderService _modalDialogProviderService { get; set; }
@@ -106,13 +102,5 @@ public partial class TimeEntryForm
     private async Task ShowTimeEntriesModal()
     {
         await _modalDialogProviderService.ShowTimeEntriesModal();
-    }
-
-    private void ShowTooltip(ElementReference elementReference)
-    {
-        _tooltipService.Open(elementReference, "Add task", new TooltipOptions()
-        {
-            Position = TooltipPosition.Bottom
-        });
     }
 }
