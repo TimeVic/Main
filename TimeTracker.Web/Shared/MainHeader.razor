@@ -7,42 +7,55 @@
 @using MudBlazor
 
 <MudAppBar Color="Color.Primary" Dense="true">
-    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleMenu" />
+    @if (!_isShowDashboardLink)
+    {
+        <MudIconButton
+            Icon="@Icons.Material.Filled.Menu"
+            Color="Color.Inherit"
+            Edge="Edge.Start"
+            OnClick="@ToggleMenu"/>
+    }
     <MudSpacer/>
     @if (AuthState.Value.IsLoggedIn && !_isShowDashboardLink)
     {
         <div class="d-md-inline-flex align-items-center w-time-entry-form">
             <TimeEntryForm IsShowTimeEntriesButton="true"/>
         </div>
+        <MudSpacer/>
     }
-    <MudSpacer/>
     @if (AuthState.Value.IsLoggedIn)
     {
         if (_isShowDashboardLink)
         {
             <MudIconButton
                 Href="@SiteUrl.DashboardBase"
-                Icon="@Icons.Material.Filled.Dashboard" 
+                Icon="@Icons.Material.Filled.Dashboard"
                 Color="Color.Inherit"
                 Edge="Edge.Start"/>
         }
     }
     else
     {
-        <RadzenLink
-            Path="@SiteUrl.Login"
-            Text="Login"/>
-        <RadzenLink
-            Path="@SiteUrl.Registration_Step1"
-            Text="Sign Up"
-            class="ml-3 mr-3"/>
+        <MudButton
+            StartIcon="@Icons.Material.Filled.Login"
+            Href="@SiteUrl.Login"
+            Color="Color.Inherit">
+            Login
+        </MudButton>
+        
+        <MudButton
+            StartIcon="@Icons.Material.Filled.FactCheck"
+            Href="@SiteUrl.Registration_Step1"
+            Color="Color.Inherit">
+            Sign Up
+        </MudButton>
     }
     @if (AuthState.Value.IsLoggedIn)
     {
-        <MudMenu 
-            Icon="@Icons.Material.Filled.Menu" 
+        <MudMenu
+            Icon="@Icons.Material.Filled.Menu"
             Color="Color.Inherit"
-            Variant="MudBlazor.Variant.Text" 
+            Variant="MudBlazor.Variant.Text"
             AnchorOrigin="Origin.BottomLeft"
             TransformOrigin="Origin.TopRight"
             Dense>
