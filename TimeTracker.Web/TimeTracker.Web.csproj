@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <DefineConstants>TRACE;IS_RELEASE_BUILD</DefineConstants>
+        <DefineConstants>TRACE;IS_RELEASE_BUILD;IS_WEB_APP</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Development' ">
-        <DefineConstants>TRACE;IS_DEVELOPMENT_BUILD</DefineConstants>
+        <DefineConstants>TRACE;IS_DEVELOPMENT_BUILD;IS_WEB_APP</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DefineConstants>TRACE;IS_WEB_APP</DefineConstants>
     </PropertyGroup>
     
