@@ -82,7 +82,7 @@ public class UpdateTest: BaseTest
         {
             ProjectId = _project.Id,
             Name = _project.Name,
-            ClientId = null
+            ClientId = 0
         });
         response.EnsureSuccessStatusCode();
 

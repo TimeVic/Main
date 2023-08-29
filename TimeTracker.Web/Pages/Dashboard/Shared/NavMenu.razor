@@ -21,6 +21,7 @@
     <MudNavMenu Class="mud-width-full">
         <MudNavLink
             Href="@SiteUrl.Dashboard_TimeEntry"
+            Match="NavLinkMatch.All"
             Icon="@Icons.Material.Filled.ViewTimeline">
             My Time Entries
         </MudNavLink>
@@ -36,6 +37,7 @@
         @* </MudNavLink> *@
         <MudNavLink
             Href="@SiteUrl.Dashboard_Reports_Summary"
+            Match="NavLinkMatch.All"
             Icon="@Icons.Material.Filled.Summarize">
             Summary
         </MudNavLink>
@@ -52,6 +54,7 @@
                     {
                         <MudNavLink
                             Href="@GetTasksListUrl(project)"
+                            Match="NavLinkMatch.All"
                             IconColor="Color.Default">
                             @project.Name.TruncateAndAddDots(23)
                         </MudNavLink>
@@ -70,6 +73,7 @@
                         {
                             <MudNavLink
                                 Href="@GetTasksListUrl(project)"
+                                Match="NavLinkMatch.All"
                                 IconColor="Color.Default">
                                 @project.Name.TruncateAndAddDots(23)
                             </MudNavLink>
@@ -81,6 +85,7 @@
 
         <MudNavLink
             Href="@SiteUrl.Dashboard_Payments"
+            Match="NavLinkMatch.All"
             Icon="@Icons.Material.Filled.Payment">
             Payments
         </MudNavLink>
@@ -91,12 +96,14 @@
             Expanded="true">
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Reports_Payments"
+                Match="NavLinkMatch.All"
                 Icon="@Icons.Material.Filled.Payment"
                 IconColor="Color.Default">
                 Payments
             </MudNavLink>
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Reports_TimeEntries"
+                Match="NavLinkMatch.All"
                 Icon="@Icons.Material.Filled.AccessTimeFilled"
                 IconColor="Color.Default">
                 Detailed
@@ -108,18 +115,21 @@
             Expanded="true">
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Projects"
+                Match="NavLinkMatch.All"
                 Icon="@Icons.Material.Filled.Apps"
                 IconColor="Color.Default">
                 Projects
             </MudNavLink>
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Clients"
+                Match="NavLinkMatch.All"
                 Icon="@Icons.Material.Filled.People"
                 IconColor="Color.Default">
                 Clients
             </MudNavLink>
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Tags"
+                Match="NavLinkMatch.All"
                 Icon="@Icons.Material.Filled.Tag"
                 IconColor="Color.Default">
                 Tags
@@ -129,6 +139,7 @@
                 <MudNavLink
                     Href="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)"
                     Icon="@Icons.Material.Filled.SupervisedUserCircle"
+                    Match="NavLinkMatch.All"
                     IconColor="Color.Default">
                     Members
                 </MudNavLink>
@@ -136,6 +147,7 @@
             <MudNavLink
                 Href="@SiteUrl.Dashboard_Integrations"
                 Icon="@Icons.Material.Filled.Apps"
+                Match="NavLinkMatch.All"
                 IconColor="Color.Default">
                 Integrations
             </MudNavLink>

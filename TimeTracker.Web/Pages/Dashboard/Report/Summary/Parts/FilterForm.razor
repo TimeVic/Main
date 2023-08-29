@@ -4,39 +4,43 @@
 
 @inherits BaseComponent
 
-<div class="d-flex justify-content-between">
-    <EnumDropDown
-        Label="Group by:"
-        TItem="SummaryReportType"
-        Value="@_filterState.ReportType"
-        Class="w-100"
-        ValueChanged="OnChangeReportType"/>
-    
-    <MudSpacer/>
-    
-    <EnumDropDown
-        Label="Period:"
-        TItem="SummaryReportPeriodType"
-        Value="@_filterState.PeriodType"
-        ValueChanged="OnChangePeriodType"
-        Class="w-100"/>
-    
-    <MudSpacer/>
-    
-    <MudDatePicker 
-        Label="Date start"
-        Editable="true" 
-        Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-        DateChanged="OnChangeDateStart"
-        Date="@_filterState.StartDate"/>
-    
-    <MudSpacer/>
-    
-    <MudDatePicker 
-        Label="Date end"
-        Editable="true" 
-        Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-        DateChanged="OnChangeDateEnd"
-        Date="@_filterState.StartDate"/>
-    
-</div>
+<MudStack>
+    <MudStack Row="true">
+        <EnumDropDown
+            Class="w-100"
+            Label="Group by:"
+            TItem="SummaryReportType"
+            Value="@_filterState.ReportType"
+            ValueChanged="OnChangeReportType"/>
+        <MudSpacer/>
+        <EnumDropDown
+            Class="w-100"
+            Label="Period:"
+            TItem="SummaryReportPeriodType"
+            Value="@_filterState.PeriodType"
+            ValueChanged="OnChangePeriodType"/>
+        <MudSpacer/>
+        <MudDatePicker
+                    Label="Date start"
+                    Editable="true"
+                    Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+                    DateChanged="OnChangeDateStart"
+                    Date="@_filterState.StartDate"/>
+        <MudSpacer/>
+        <MudDatePicker
+                    Label="Date end"
+                    Editable="true"
+                    Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+                    DateChanged="OnChangeDateEnd"
+                    Date="@_filterState.StartDate"/>
+    </MudStack>
+
+    <MudButton
+        OnClick="@(LoadReport)"
+        Class="ml-3"
+        Color="Color.Primary"
+        Variant="Variant.Filled"
+        StartIcon="@Icons.Material.Filled.Search">
+        Search
+    </MudButton>
+</MudStack>

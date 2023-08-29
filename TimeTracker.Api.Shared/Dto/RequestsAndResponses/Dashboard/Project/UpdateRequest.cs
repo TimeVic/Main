@@ -12,7 +12,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
         [IsPositive]
         public long ProjectId { get; set; }
 
-        [IsPositive]
+        [IsPositive(AllowZero = true)]
         public long ClientId { get; set; }
         
         [Required]

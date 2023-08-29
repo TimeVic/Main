@@ -68,7 +68,7 @@ public class DeleteTest: BaseTest
         {
             ProjectId = _project.Id,
             Name = _project.Name,
-            ClientId = null
+            ClientId = 0
         });
         var error = await response.GetJsonErrorAsync();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
