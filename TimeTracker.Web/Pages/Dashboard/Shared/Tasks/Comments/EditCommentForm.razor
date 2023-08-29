@@ -27,12 +27,13 @@
                     {
                         <div class="w-100" @onclick="OnFocusOnEditField">
                             <MudTextField
+                                @ref="_commentField"
                                 Margin="Margin.Dense"
                                 For="() => model.Comment"
                                 Variant="MudBlazor.Variant.Outlined"
                                 T="string"
                                 @bind-Text="@model.Comment"
-                                Lines="_commentLinesCount"
+                                Lines="@(_commentLinesCount)"
                                 Placeholder="Your comment..."/>
                         </div>
                     }
@@ -53,19 +54,19 @@
                     }
 
                     <MudStack
-                        Row="true"
+                        Row="@(true)"
                         Spacing="0">
                         @if (_isEditMode)
                         {
                             <MudButton
                                 Color="Color.Primary"
-                                OnClick="Submit"
+                                OnClick="@(Submit)"
                                 Size="MudBlazor.Size.Small">
                                 Save
                             </MudButton>
                             <MudButton
                                 Color="Color.Secondary"
-                                OnClick="ResetForm"
+                                OnClick="@(ResetForm)"
                                 Size="MudBlazor.Size.Small">
                                 Cancel
                             </MudButton>

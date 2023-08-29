@@ -58,7 +58,7 @@ public partial class ModalDialogProviderService
             {context => context.Task, task}
         };
         await _mudDialogService.ShowAsync<UpdateTaskModal>(
-            $"{task.Title.Truncate(100)}", 
+            $"{task.Title.TruncateAndAddDots(60)}", 
             parameters,
             new MudBlazor.DialogOptions()
             {

@@ -14,10 +14,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Commen
         [Required]
         [IsPositive]
         public long TaskId { get; set; }
-        
+
         [Required]
         [StringLength(10000, MinimumLength = 1)]
-        public string Comment { get; set; }
+        public string Comment { get; set; } = "";
 
         public IEnumerable<long> WatcherIds { get; set; } = new List<long>();
 

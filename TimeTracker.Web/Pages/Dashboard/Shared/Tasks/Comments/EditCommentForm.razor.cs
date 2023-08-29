@@ -38,8 +38,9 @@ public partial class EditCommentForm
     private AddRequest model = new();
     private bool _isLoading = false;
     private bool _isEditMode = false;
-    private MudForm _form;
+    private MudForm? _form;
     private bool _isValid = false;
+    private MudTextField<string>? _commentField;
     private bool _isNewComment => Comment.Id == 0;
 
     private string _userName => _isNewComment ? AuthState.Value.User.Name : Comment.User.Name;
@@ -52,13 +53,15 @@ public partial class EditCommentForm
     {
         get
         {
-            var lines = model.Comment.CountLines();
+            var lines = $"{model.Comment}".CountLines();
             return lines > 3 ? lines : 3;
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
+        RunAfterRendered(() => _form?.ResetValidation());
+        
         await base.OnInitializedAsync();
         model.Fill(Comment);
         model.WorkspaceId = AuthState.Value.Workspace.Id;
@@ -111,6 +114,7 @@ public partial class EditCommentForm
     {
         _isEditMode = false;
         model.Fill(Comment);
+        _form?.ResetValidation();
     }
 
 

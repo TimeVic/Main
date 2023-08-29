@@ -15,6 +15,9 @@ public partial class EnumDropDown<TItem>
     public EventCallback<TItem> ValueChanged { get; set; }
     
     [Parameter]
+    public EventCallback<TItem> OnChanged { get; set; }
+    
+    [Parameter]
     public string Placeholder { get; set; } = "Select item";
     
     [Parameter]
