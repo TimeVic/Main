@@ -106,7 +106,7 @@
                 <EditTemplate>
                     <MudTextField
                         T="string"
-                        Placeholder="Description"
+                        Placeholder="@(GetDescriptionLabel(context.Item))"
                         Value="@context.Item.Description"
                         ValueChanged="@(value => OnChangeDescription(context.Item, value))"
                         Variant="@Variant.Text"/>

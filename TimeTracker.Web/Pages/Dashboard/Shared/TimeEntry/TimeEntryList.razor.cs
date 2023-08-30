@@ -120,4 +120,13 @@ public partial class TimeEntryList
             Dispatcher.Dispatch(new DeleteTimeEntryAction(item.Id));
         }
     }
+    
+    private string GetDescriptionLabel(TimeEntryDto timeEntry)
+    {
+        if (timeEntry.Task != null)
+        {
+            return timeEntry.Task.Title;
+        }
+        return "Description";
+    }
 }

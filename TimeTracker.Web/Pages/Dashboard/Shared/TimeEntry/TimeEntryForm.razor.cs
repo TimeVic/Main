@@ -30,7 +30,7 @@ public partial class TimeEntryForm
     private ModalDialogProviderService _modalDialogProviderService { get; set; }
 
     public TaskDto? _internalTask;
-    
+
     private TimeEntryDto? _activeEntry
     {
         get
