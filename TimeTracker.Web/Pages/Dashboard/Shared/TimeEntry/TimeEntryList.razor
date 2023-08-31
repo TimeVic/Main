@@ -140,12 +140,20 @@
                 Property="x => x"
                 IsEditable="false">
                 <CellTemplate>
-                    <MudIconButton
-                        Size="@Size.Small"
-                        Variant="@Variant.Text"
-                        Icon="@Icons.Material.Filled.Delete"
-                        OnClick="() => OnDeleteItemAsync(context.Item)"
-                        Color="@Color.Secondary"/>
+                    <MudStack Row="true">
+                        <MudIconButton
+                            Size="@Size.Small"
+                            Variant="@Variant.Text"
+                            Icon="@Icons.Material.Filled.ContentCopy"
+                            OnClick="@(() => OnStartCloned(context.Item))"
+                            Color="@Color.Default"/>
+                        <MudIconButton
+                            Size="@Size.Small"
+                            Variant="@Variant.Text"
+                            Icon="@Icons.Material.Filled.Delete"
+                            OnClick="@(() => OnDeleteItemAsync(context.Item))"
+                            Color="@Color.Secondary"/>
+                    </MudStack>
                 </CellTemplate>
             </PropertyColumn>
         </Columns>

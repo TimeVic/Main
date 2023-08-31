@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 using TimeTracker.Web.Services.UI;
@@ -28,8 +29,6 @@ public partial class TimeEntryForm
     
     [Inject] 
     private ModalDialogProviderService _modalDialogProviderService { get; set; }
-
-    public TaskDto? _internalTask;
 
     private TimeEntryDto? _activeEntry
     {
@@ -102,5 +101,14 @@ public partial class TimeEntryForm
     private async Task ShowTimeEntriesModal()
     {
         await _modalDialogProviderService.ShowTimeEntriesModal();
+    }
+    
+    private string GetDescriptionLabel(TimeEntryDto? timeEntry)
+    {
+        if (timeEntry?.Task != null)
+        {
+            return timeEntry.Task.Title.TruncateAndAddDots(20);
+        }
+        return "Description";
     }
 }

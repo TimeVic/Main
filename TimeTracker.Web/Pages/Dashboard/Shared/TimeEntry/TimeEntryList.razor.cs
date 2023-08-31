@@ -20,6 +20,9 @@ public partial class TimeEntryList
     [Parameter]
     public string? Class { get; set; }
     
+    [CascadingParameter] 
+    MudDialogInstance? MudDialog { get; set; }
+    
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
     
@@ -128,5 +131,19 @@ public partial class TimeEntryList
             return timeEntry.Task.Title;
         }
         return "Description";
+    }
+    
+    private void OnStartCloned(TimeEntryDto timeEntry)
+    {
+        Dispatcher.Dispatch(
+            new StartTimeEntryAction(
+                IsBillable: timeEntry.IsBillable,
+                Project: timeEntry.Project,
+                Description: timeEntry.Description,
+                HourlyRate: timeEntry.HourlyRate,
+                InternalTask: timeEntry.Task
+            )
+        );
+        MudDialog?.Close();
     }
 }

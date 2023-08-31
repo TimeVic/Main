@@ -43,7 +43,7 @@
                 Disabled="@(!_state.Value.HasActiveEntry)"
                 Value="@_activeEntry?.Description"
                 ValueChanged="OnChangeDescription"
-                Label="Description"
+                Label="@(GetDescriptionLabel(@_activeEntry))"
                 Class="mr-3"
                 Variant="MudBlazor.Variant.Text"
                 Margin="Margin.Dense"></MudTextField>
