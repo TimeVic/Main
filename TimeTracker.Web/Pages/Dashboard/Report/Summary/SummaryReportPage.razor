@@ -50,33 +50,35 @@
     }
 </MudPaper>
 
-@if (_state.Value.IsLoading)
-{
-    <MudPaper class="mt-4 pa-4 d-flex justify-content-center">
-        <MudProgressCircular Color="MudBlazor.Color.Primary" Indeterminate="true"/>
-    </MudPaper>
-}
-else if (_state.Value.SummaryReportData?.GroupedByDay != null)
-{
-    <ByDateTable Items="@_state.Value.SummaryReportData.GroupedByDay"></ByDateTable>
-}
-else if (_state.Value.SummaryReportData?.GroupedByWeek != null)
-{
-    <ByWeekTable Items="@_state.Value.SummaryReportData.GroupedByWeek"></ByWeekTable>
-}
-else if (_state.Value.SummaryReportData?.GroupedByClient != null)
-{
-    <ByClientTable Items="@_state.Value.SummaryReportData.GroupedByClient"></ByClientTable>
-}
-else if (_state.Value.SummaryReportData?.GroupedByProject != null)
-{
-    <ByProjectTable Items="@_state.Value.SummaryReportData.GroupedByProject"></ByProjectTable>
-}
-else if (_state.Value.SummaryReportData?.GroupedByMonth != null)
-{
-    <ByMonthTable Items="@_state.Value.SummaryReportData.GroupedByMonth"></ByMonthTable>
-}
-else if (_state.Value.SummaryReportData?.GroupedByUser != null)
-{
-    <ByUserTable Items="@_state.Value.SummaryReportData.GroupedByUser"></ByUserTable>
-}
+<div class="mb-8">
+    @if (_state.Value.IsLoading)
+    {
+        <MudPaper class="mt-4 pa-4 d-flex justify-content-center">
+            <MudProgressCircular Color="MudBlazor.Color.Primary" Indeterminate="true"/>
+        </MudPaper>
+    }
+    else if (_state.Value.SummaryReportData?.GroupedByDay != null)
+    {
+        <ByDateTable Items="@_state.Value.SummaryReportData.GroupedByDay"></ByDateTable>
+    }
+    else if (_state.Value.SummaryReportData?.GroupedByWeek != null)
+    {
+        <ByWeekTable Items="@_state.Value.SummaryReportData.GroupedByWeek"></ByWeekTable>
+    }
+    else if (_state.Value.SummaryReportData?.GroupedByClient != null)
+    {
+        <ByClientTable Items="@_state.Value.SummaryReportData.GroupedByClient"></ByClientTable>
+    }
+    else if (_state.Value.SummaryReportData?.GroupedByProject != null)
+    {
+        <ByProjectTable Items="@_state.Value.SummaryReportData.GroupedByProject"></ByProjectTable>
+    }
+    else if (_state.Value.SummaryReportData?.GroupedByMonth != null)
+    {
+        <ByMonthTable Items="@_state.Value.SummaryReportData.GroupedByMonth"></ByMonthTable>
+    }
+    else if (_state.Value.SummaryReportData?.GroupedByUser != null)
+    {
+        <ByUserTable Items="@_state.Value.SummaryReportData.GroupedByUser"></ByUserTable>
+    }
+</div>

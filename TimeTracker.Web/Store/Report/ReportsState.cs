@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.Model;
 using TimeTracker.Api.Shared.Dto.Model.Report;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 using TimeTracker.Business.Common.Constants.Reports;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Constants;
 
 namespace TimeTracker.Web.Store.Report;
@@ -19,8 +20,8 @@ public record ReportsState
 
     public SummaryReportFilterState SummaryReportFilter { get; set; } = new(
         SummaryReportType.GroupByProject,
-        SummaryReportPeriodType.ThisWeek,
-        DateTime.Now.AddDays(-7),
+        SummaryReportPeriodType.Today,
+        DateTime.Now,
         DateTime.Now
     );
     
