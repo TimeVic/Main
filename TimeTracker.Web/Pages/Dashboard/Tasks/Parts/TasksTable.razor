@@ -65,6 +65,7 @@
                         Shade="Shade.Lighter"
                         Size="Size.Small"
                         OnClick="@(() => OnClickTask(context))"
+                        Color="@context.Priority.GetChipStyle()"
                         BadgeStyle="@context.Priority.GetChipStyle()">
                         @context.Priority.GetDisplayName()
                     </MudChip>

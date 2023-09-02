@@ -1,10 +1,6 @@
 ﻿using Fluxor;
-using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
-using TimeTracker.Business.Common.Utils;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
-using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Dashboard;
 using TimeTracker.Web.Store.TasksList;
 
@@ -40,8 +36,8 @@ public class UpdateListItemEffect: Effect<UpdateListItemAction>
             var response = await _apiService.TasksUpdateAsync(action.UpdateRequest);
             if (action.IsUpdateState)
             {
-                dispatcher.Dispatch(new SetListItemAction(response));
                 dispatcher.Dispatch(new SetTasksListItemAction(response));
+                dispatcher.Dispatch(new SetListItemAction(response));
             }
         }
         catch (Exception e)

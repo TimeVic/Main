@@ -54,5 +54,6 @@ public partial class EnumDropDown<TItem>
     {
         _value = level;
         ValueChanged.InvokeAsync(_value);
+        OnChanged.InvokeAsync(_value);
     }
 }

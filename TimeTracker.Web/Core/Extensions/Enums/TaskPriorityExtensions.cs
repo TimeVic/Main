@@ -5,12 +5,12 @@ namespace TimeTracker.Web.Core.Extensions.Enums;
 
 public static class TaskPriorityExtensions
 {
-    public static MudBlazor.Color? GetChipStyle(this TaskPriority status)
+    public static MudBlazor.Color GetChipStyle(this TaskPriority status)
     {
         switch (status)
         {
             case TaskPriority.Low:
-                return null;
+                return MudBlazor.Color.Default;
             case TaskPriority.Medium:
                 return MudBlazor.Color.Info;
             case TaskPriority.High:

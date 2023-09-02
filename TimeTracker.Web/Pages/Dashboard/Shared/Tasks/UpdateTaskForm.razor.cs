@@ -1,6 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using MudBlazor.Utilities;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
@@ -69,7 +70,7 @@ public partial class UpdateTaskForm
         {
             return;
         }
-        Dispatcher.Dispatch(new UpdateListItemAction(model));
+        Dispatcher.Dispatch(new UpdateListItemAction(model, IsUpdateState: true));
     }
 
     private async Task OnChangedAssigned(WorkspaceMembershipDto membership)
@@ -117,5 +118,11 @@ public partial class UpdateTaskForm
             return true;
         }
         return modelEndTime > model.StartTime;
+    }
+
+    private void OnTitleChanged(string value)
+    {
+        model.Title = value;
+        SubmitForm();
     }
 }

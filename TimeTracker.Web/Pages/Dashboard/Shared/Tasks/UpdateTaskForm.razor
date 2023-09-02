@@ -32,7 +32,8 @@
                     <MudTextField
                         T="string"
                         For="() => model.Title"
-                        @bind-Value="model.Title"
+                        Value="model.Title"
+                        ValueChanged="@(OnTitleChanged)"
                         Placeholder="Title"/>
 
                     <MarkdownEdit

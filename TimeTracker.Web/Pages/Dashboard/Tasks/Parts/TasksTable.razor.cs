@@ -44,7 +44,9 @@ public partial class TasksTable
         await base.OnInitializedAsync();
         TasksState.StateChanged += (sender, args) =>
         {
-            _tasksToDragAndDrop = _tasks.OrderBy(item => item.PositionIndex).ToList();
+            var state = sender as IState<TasksState>;
+            _tasksToDragAndDrop = state.Value.List.OrderBy(item => item.PositionIndex).ToList();
+            _dropContainer.Items = _tasksToDragAndDrop;
             _dropContainer?.Refresh();
         };
     }
