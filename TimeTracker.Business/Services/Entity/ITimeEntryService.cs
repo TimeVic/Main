@@ -1,6 +1,7 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Services.Entity;

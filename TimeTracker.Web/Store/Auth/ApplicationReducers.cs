@@ -16,7 +16,7 @@ public class AuthReducers
     {
         return new AuthState()
         {
-            Jwt = action.Jwt,
+            JwtToken = action.Jwt,
             Workspace = action.Workspace,
             User = action.User
         };

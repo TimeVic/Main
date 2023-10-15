@@ -2,6 +2,7 @@
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Services.Storage;
 

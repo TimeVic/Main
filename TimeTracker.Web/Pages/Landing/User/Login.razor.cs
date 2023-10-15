@@ -50,9 +50,9 @@ public partial class Login
         try
         {
             var loginResponse = await _apiService.LoginAsync(model);
-            if (!string.IsNullOrEmpty(loginResponse.Token))
+            if (!string.IsNullOrEmpty(loginResponse.JwtToken))
             {
-                _authorizationService.Login(loginResponse.Token, loginResponse.User);
+                _authorizationService.Login(loginResponse.AccessToken, loginResponse.JwtToken, loginResponse.User);
                 _navigationManager.NavigateTo(SiteUrl.DashboardBase);
             }
         }

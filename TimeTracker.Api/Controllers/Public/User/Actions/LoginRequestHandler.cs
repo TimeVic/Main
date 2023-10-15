@@ -2,7 +2,6 @@
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Auth;
 
@@ -27,13 +26,14 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
     
         public async Task<LoginResponseDto> ExecuteAsync(LoginRequest request)
         {
-            var (jwtToken, user) = await _authorizationService.Login(request.Email, request.Password);
-            var defaultWorkspace = await _userDao.GetDefaultWorkspace(user);
-            var userDto = _mapper.Map<UserDto>(user);
+            var loginResponse = await _authorizationService.Login(request.Email, request.Password);
+            var userDto = _mapper.Map<UserDto>(loginResponse.User);
+            var defaultWorkspace = await _userDao.GetDefaultWorkspace(loginResponse.User);
             userDto.DefaultWorkspace = _mapper.Map<WorkspaceDto>(defaultWorkspace);
             return new LoginResponseDto()
             {
-                Token = jwtToken,
+                JwtToken = loginResponse.JwtToken,
+                AccessToken = loginResponse.JwtToken,
                 User = userDto
             };
         }

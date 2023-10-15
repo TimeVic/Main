@@ -1,5 +1,6 @@
 ﻿using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.ExternalClients.Dto;
 
 namespace TimeTracker.Business.Services.ExternalClients.Redmine;

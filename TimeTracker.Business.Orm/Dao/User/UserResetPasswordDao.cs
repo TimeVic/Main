@@ -2,6 +2,7 @@
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Orm.Dao.User;
 

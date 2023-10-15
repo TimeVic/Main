@@ -11,6 +11,7 @@ using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.ExternalClients.ClickUp.Model;
 using TimeTracker.Business.Services.ExternalClients.Dto;

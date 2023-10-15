@@ -15,7 +15,7 @@ public class UrlService
 
     private readonly string _apiUrl;
 
-    private string _jwtToken => _authState?.Value.Jwt ?? string.Empty;
+    private string _jwtToken => _authState?.Value.JwtToken ?? string.Empty;
 
     public UrlService(
         IConfiguration configuration,

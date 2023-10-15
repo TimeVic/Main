@@ -4,6 +4,7 @@ using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
@@ -33,10 +34,18 @@ public class LoginTest: BaseTest
         var expectedPassword = "some password";
         var user = _userSeeder.CreateActivatedAsync(expectedPassword).Result;
         
-        var (jwtToken, _) = await _authService.Login(user.Email, expectedPassword);
+        var loginResponse = await _authService.Login(user.Email, expectedPassword);
         
-        Assert.True(_jwtService.IsValidJwt(jwtToken));
-        Assert.Equal(user.Id, _jwtService.GetUserId(jwtToken));
+        Assert.True(_jwtService.IsValidJwt(loginResponse.JwtToken));
+        Assert.Equal(user.Id, _jwtService.GetUserId(loginResponse.JwtToken));
+        
+        var newAccessToken = await _authService.GenerateNewJwtToken(
+            loginResponse.AccessToken,
+            loginResponse.JwtToken
+        );
+        
+        Assert.True(_jwtService.IsValidJwt(newAccessToken.JwtToken));
+        Assert.Equal(user.Id, _jwtService.GetUserId(newAccessToken.JwtToken));
     }
     
     [Fact]

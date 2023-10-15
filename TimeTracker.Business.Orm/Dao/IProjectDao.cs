@@ -2,6 +2,7 @@
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao;

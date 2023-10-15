@@ -5,6 +5,7 @@ using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Tests.Integration.Api.Core;

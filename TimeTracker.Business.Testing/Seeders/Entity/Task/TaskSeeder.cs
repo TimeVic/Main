@@ -4,6 +4,7 @@ using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Testing.Factories;
 
 namespace TimeTracker.Business.Testing.Seeders.Entity.Task;

@@ -59,7 +59,11 @@ public partial class Step2
         try
         {
             var registrationResponse = await _apiService.RegistrationStep2Async(model);
-            _authorizationService.Login(registrationResponse.JwtToken, registrationResponse.User);
+            _authorizationService.Login(
+                registrationResponse.AccessToken,
+                registrationResponse.JwtToken,
+                registrationResponse.User
+            );
             _navigationManager.NavigateTo(SiteUrl.DashboardBase);
         }
         catch (Exception)
