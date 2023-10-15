@@ -42,6 +42,12 @@ namespace TimeTracker.Web.Services
             return store?.Value.JwtToken?.Trim();
         }
         
+        public string? GetAccessToken()
+        {
+            var store = _serviceProvider.GetService<IState<AuthState>>();
+            return store?.Value.AccessToken?.Trim();
+        }
+        
         public async Task<bool> LoginAsync(LoginRequest model)
         {
             var loginData = await _apiService.LoginAsync(model);
@@ -60,6 +66,15 @@ namespace TimeTracker.Web.Services
             {
                 user.DefaultWorkspace.CurrentUserAccess = MembershipAccessType.Owner;
                 _dispatcher.Dispatch(new LoginAction(accessToken, jwtToken, user, user.DefaultWorkspace));
+                _dispatcher.Dispatch(new PersistDataAction());
+            }
+        }
+        
+        public void SetJwt(string jwtToken)
+        {
+            if (!string.IsNullOrEmpty(jwtToken))
+            {
+                _dispatcher.Dispatch(new SetJwtAction(jwtToken));
                 _dispatcher.Dispatch(new PersistDataAction());
             }
         }

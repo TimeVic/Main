@@ -8,10 +8,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
     {
         [Required]
         [StringLength(512, MinimumLength = 6)]
-        public string AccessToken { get; set; }
+        public string AccessToken { get; set; } = string.Empty;
         
         [Required]
         [StringLength(512, MinimumLength = 6)]
-        public string JwtToken { get; set; }
+        public string JwtToken { get; set; } = string.Empty;
     }
 }

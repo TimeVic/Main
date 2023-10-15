@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Exceptions\Common\Auth\" />
       <Folder Include="Exceptions\Common\User\" />
       <Folder Include="Services\Web" />
     </ItemGroup>

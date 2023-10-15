@@ -17,7 +17,7 @@ namespace TimeTracker.Web.Services.Http
             IBrowserFile file
         )
         {
-            var response = await MultipartFormDataRequestAsync<StoredFileDto>(
+            var response = await MultipartFormDataAuthorizedRequestAsync<StoredFileDto>(
                 ApiUrl.StorageUpload,
                 new Dictionary<string, object>()
                 {

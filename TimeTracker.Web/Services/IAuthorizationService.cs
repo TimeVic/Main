@@ -10,5 +10,7 @@ namespace TimeTracker.Web.Services
         Task LogoutAsync();
         Task<bool> CheckIsLoggedInAsync();
         string? GetJwt();
+        string? GetAccessToken();
+        void SetJwt(string jwtToken);
     }
 }

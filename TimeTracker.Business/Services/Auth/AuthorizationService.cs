@@ -1,5 +1,6 @@
 ﻿using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Api.Auth;
 using TimeTracker.Business.Dto.Auth;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.User;
@@ -69,7 +70,7 @@ public class AuthorizationService: IAuthorizationService
         if (accessToken.IsExpired)
         {
             await _sessionProvider.CurrentSession.DeleteAsync(accessToken);
-            throw new UserNotAuthorizedException();
+            throw new ExpiredJwtTokenException();
         }
 
         accessToken.LastJwt = _jwtAuthService.BuildJwt(accessToken.User.Id);

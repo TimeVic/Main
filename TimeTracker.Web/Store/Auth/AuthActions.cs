@@ -18,3 +18,5 @@ public record struct LoginAction(
 }
 
 public record struct SetWorkspaceAction(WorkspaceDto Workspace);
+
+public record struct SetJwtAction(string Jwt);
