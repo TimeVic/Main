@@ -18,6 +18,18 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
+        public async Task<RefreshTokenResponseDto?> RefreshTokenAsync()
+        {
+            return await PostAsync<RefreshTokenResponseDto>(
+                ApiUrl.RefreshToken, 
+                new RefreshTokenRequest()
+                {
+                    JwtToken = GetJwt() ?? string.Empty,
+                    AccessToken = GetAccessToken() ?? string.Empty
+                }
+            );
+        }
+        
         public async Task<bool> CheckIsLoggedInAsync(string token)
         {
             try

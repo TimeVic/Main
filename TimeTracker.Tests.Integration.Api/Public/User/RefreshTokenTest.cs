@@ -1,6 +1,8 @@
+using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Api.Auth;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Services.Auth;
@@ -52,6 +54,8 @@ public class RefreshTokenTest: BaseTest
             AccessToken = loginResponse.AccessToken,
             JwtToken = "aaaaaaaaaaa"
         });
+        
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         var responseData = await response.GetJsonErrorAsync();
         Assert.Equal(new UserNotAuthorizedException().GetTypeName(), responseData.Type);
     }

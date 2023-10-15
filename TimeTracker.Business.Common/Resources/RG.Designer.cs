@@ -105,6 +105,15 @@ namespace TimeTracker.Business.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Provided auth token is expired.
+        /// </summary>
+        public static string Error_ExpiredJwtToken {
+            get {
+                return ResourceManager.GetString("Error_ExpiredJwtToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field &quot;{0}&quot;contains incorrect IPv4 address!.
         /// </summary>
         public static string Error_FieldContainsIncorrectIPv4Address {

@@ -1,4 +1,5 @@
 ﻿using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Api.Auth;
 using TimeTracker.Business.Common.Exceptions.Common;
 using ValidationException = TimeTracker.Business.Common.Exceptions.Common.ValidationException;
 

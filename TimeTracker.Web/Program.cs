@@ -12,6 +12,7 @@ using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Services.Workspace;
 using MudBlazor.Services;
+using TimeTracker.Web.Services.Http.Client;
 
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -64,6 +65,7 @@ builder.Services.AddMudServices(config =>
 
 // Custom services
 builder.Services.AddScoped<ApiService>();
+builder.Services.AddScoped<CustomHttpClient>();
 builder.Services.AddScoped<IReCaptchaService, ReCaptchaService>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<ITimeParsingService, TimeParsingService>();

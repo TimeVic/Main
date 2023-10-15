@@ -1,5 +1,6 @@
 using Autofac;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Api.Auth;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
@@ -64,7 +65,7 @@ public class GenerateNewJwtTokenTest: BaseTest
         accessToken.ExpirationTime = DateTime.UtcNow.AddSeconds(-1);
         await CommitDbChanges();
         
-        await Assert.ThrowsAsync<UserNotAuthorizedException>(async () =>
+        await Assert.ThrowsAsync<ExpiredJwtTokenException>(async () =>
         {
             await _authService.GenerateNewJwtToken(
                 loginResponse.AccessToken,

@@ -30,4 +30,13 @@ public class AuthReducers
             Workspace = action.Workspace
         };
     }
+    
+    [ReducerMethod]
+    public static AuthState SetJwtReducer(AuthState state, SetJwtAction action)
+    {
+        return state with
+        {
+            JwtToken = action.Jwt
+        };
+    }
 }

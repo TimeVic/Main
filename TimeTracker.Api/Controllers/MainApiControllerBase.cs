@@ -1,8 +1,11 @@
-﻿using Api.Requests.Abstractions;
+﻿using System.Net;
+using System.Security.Authentication;
+using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Abstractions;
 using Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Exceptions;
 using TimeTracker.Business.Common.Exceptions.Api;
 
 namespace TimeTracker.Api.Controllers;
@@ -24,15 +27,28 @@ public class MainApiControllerBase: ApiControllerBase
 
     private IActionResult ProcessFail(Exception exception)
     {
-        var message = exception?.Message;
-        if (exception is not IDomainException)
+        var response = new BadResponseModel();
+        var statusCode = (int) HttpStatusCode.BadRequest;
+        if (exception is AuthenticationException)
         {
-            Logger.LogError(exception, exception?.Message);
-            exception = new ServerException();
+            response.Type = exception.GetType().Name;
+            response.Message = "User not authorized exception";
+            statusCode = (int)HttpStatusCode.Unauthorized;
         }
-
-        return new BadRequestObjectResult(
-            new BadResponseModel(exception)
-        );
+        else if (exception is DomainException)
+        {
+            response.Type = exception.GetType().Name;
+            response.Message = exception.Message;
+        }
+        else
+        {
+            Logger.LogError(exception, exception.Message);
+            statusCode = (int)HttpStatusCode.InternalServerError;
+            response.Message = "Server error";
+        }
+            
+        var badResponse = new BadRequestObjectResult(response);
+        badResponse.StatusCode = statusCode;
+        return badResponse;
     }
 }
