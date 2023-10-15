@@ -33,7 +33,7 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
             return new LoginResponseDto()
             {
                 JwtToken = loginResponse.JwtToken,
-                AccessToken = loginResponse.JwtToken,
+                AccessToken = loginResponse.AccessToken,
                 User = userDto
             };
         }

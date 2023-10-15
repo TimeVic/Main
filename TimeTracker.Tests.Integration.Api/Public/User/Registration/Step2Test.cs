@@ -6,6 +6,7 @@ using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Tests.Integration.Api.Core;
@@ -20,6 +21,7 @@ public class Step2Test: BaseTest
     private readonly IRegistrationService _registrationService;
     private readonly IJwtAuthService _jwtService;
     private readonly IQueueDao _queueDao;
+    private readonly IUserAccessTokenDao _accessTokenDao;
 
     public Step2Test(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -27,6 +29,7 @@ public class Step2Test: BaseTest
         _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
         _registrationService = ServiceProvider.GetRequiredService<IRegistrationService>();
         _jwtService = ServiceProvider.GetRequiredService<IJwtAuthService>();
+        _accessTokenDao = ServiceProvider.GetRequiredService<IUserAccessTokenDao>();
 
         _queueDao.CompleteAllPending().Wait();
     }
@@ -58,6 +61,10 @@ public class Step2Test: BaseTest
         {
             return message.Body.Contains("is verified");
         });
+        
+        var actualAccessToken = await _accessTokenDao.GetByToken(responseData.AccessToken);
+        Assert.NotNull(actualAccessToken);
+        Assert.Equal(responseData.JwtToken, actualAccessToken.LastJwt);
     }
     
     [Fact]
