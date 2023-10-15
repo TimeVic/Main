@@ -4,33 +4,40 @@ using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Business.Common.Exceptions.Api.Auth;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http.Client;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Common;
 
 namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {   
         private readonly CustomHttpClient _httpClient;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IDispatcher _dispatcher;
 
         public ApiService(
             CustomHttpClient httpClient,
-            IAuthorizationService authorizationService
+            IServiceProvider serviceProvider,
+            IDispatcher dispatcher
         )
         {
             _httpClient = httpClient;
-            _authorizationService = authorizationService;
+            _serviceProvider = serviceProvider;
+            _dispatcher = dispatcher;
         }
 
         public string? GetJwt()
         {
-            return _authorizationService.GetJwt();
+            var store = _serviceProvider.GetService<IState<AuthState>>();
+            return store?.Value.JwtToken?.Trim();
         }
         
         public string? GetAccessToken()
         {
-            return _authorizationService.GetAccessToken();
+            var store = _serviceProvider.GetService<IState<AuthState>>();
+            return store?.Value.AccessToken?.Trim();
         }
         
         private async Task<TResponse?> PostAsync<TResponse>(string requestUri, object data, string? jwtToken = null)
@@ -54,6 +61,7 @@ namespace TimeTracker.Web.Services.Http
         {
             try
             {
+                Debug.Log("11111");
                 return await _httpClient.RequestAsync<TResponse>(
                     requestUri, 
                     GetJwt(), 
@@ -63,16 +71,20 @@ namespace TimeTracker.Web.Services.Http
             }
             catch (HttpResponseException responseException)
             {
+                Debug.Log("2222");
                 if (responseException.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     try
                     {
+                        Debug.Log("333333");
                         var refreshResponse = await RefreshTokenAsync();
+                        Debug.Log("44444", refreshResponse);
                         if (refreshResponse == null)
                         {
                             // Unauthorized flow
                         }
-                        _authorizationService.SetJwt(refreshResponse.JwtToken);
+                        _dispatcher.Dispatch(new SetJwtAction(refreshResponse.JwtToken));
+                        _dispatcher.Dispatch(new PersistDataAction());
                     }
                     catch (HttpResponseException responseInnerException)
                     {

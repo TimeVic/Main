@@ -84,8 +84,12 @@ namespace TimeTracker.Api.Extensions
                         ValidIssuer = configuration.GetValue<string>("App:Auth:Issuer"),
                         ValidAudience = configuration.GetValue<string>("App:Auth:Audience"), 
                         IssuerSigningKey = jwtSecurityKey,
+                        ClockSkew = System.TimeSpan.FromMinutes(5),
                         ValidateLifetime = true,
-                        ClockSkew = System.TimeSpan.FromMinutes(30000)
+                        LifetimeValidator = (notBefore, expires, securityToken, validationParameters) =>
+                        {
+                            return notBefore <= DateTime.UtcNow && expires >= DateTime.UtcNow;
+                        }
                     };
                     options.Events = new JwtBearerEvents {
                         OnMessageReceived = (context) => {
