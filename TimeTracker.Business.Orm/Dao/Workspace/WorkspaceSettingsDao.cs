@@ -1,6 +1,7 @@
 ﻿using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao.Workspace;

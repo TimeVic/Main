@@ -37,7 +37,8 @@ public class LoginTest: BaseTest
         response.EnsureSuccessStatusCode();
         var responseData = await response.GetJsonDataAsync<LoginResponseDto>();
 
-        Assert.True(_jwtService.IsValidJwt(responseData.Token));
+        Assert.True(_jwtService.IsValidJwt(responseData.JwtToken));
+        Assert.NotEmpty(responseData.AccessToken);
         Assert.True(responseData.User.Id > 0);
         Assert.NotEmpty(responseData.User.Email);
         Assert.NotNull(responseData.User.DefaultWorkspace);

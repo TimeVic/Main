@@ -6,6 +6,7 @@ using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Queue;
 
 namespace TimeTracker.Business.Services.Auth;

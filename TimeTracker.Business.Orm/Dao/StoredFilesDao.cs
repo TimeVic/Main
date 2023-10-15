@@ -4,6 +4,7 @@ using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Orm.Dao;
 

@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Fluxor;
@@ -36,7 +37,7 @@ namespace TimeTracker.Web.Services.Http
         public string? GetJwt()
         {
             var store = _serviceProvider.GetService<IState<AuthState>>();
-            return store?.Value.Jwt;
+            return store?.Value.JwtToken;
         }
         
         private async Task<string> RequestAsync(string requestUri, string? jwtToken, object data, HttpMethod httpMethod)

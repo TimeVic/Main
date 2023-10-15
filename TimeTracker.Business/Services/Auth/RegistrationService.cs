@@ -8,6 +8,7 @@ using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Resources;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Security;

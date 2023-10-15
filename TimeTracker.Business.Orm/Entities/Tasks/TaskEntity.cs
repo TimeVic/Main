@@ -2,6 +2,7 @@ using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
 using TimeTracker.Business.Common.Constants.Task;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 

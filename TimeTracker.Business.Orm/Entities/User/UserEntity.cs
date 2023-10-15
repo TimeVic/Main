@@ -1,11 +1,10 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
-using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
-namespace TimeTracker.Business.Orm.Entities
+namespace TimeTracker.Business.Orm.Entities.User
 {
     [Class(Table = "users")]
     public class UserEntity: IEntity

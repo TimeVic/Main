@@ -27,6 +27,14 @@ public class UserController : MainApiControllerBase
             .For<LoginResponseDto>()
             .With(request);
     
+    [HttpPost("refresh-token")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        => this.RequestAsync()
+            .For<RefreshTokenResponseDto>()
+            .With(request);
+    
     [HttpPost("registration/step1")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -1,6 +1,7 @@
 ﻿using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Services.Auth;
 

@@ -27,7 +27,7 @@ namespace AspNetCore.ApiControllers.Extensions
 
 
         public static AsyncApiControllerBaseRequestBuilder RequestAsync(
-            this ApiControllerBase apiController) 
-            => new (apiController);
+            this ApiControllerBase apiController
+        ) => new (apiController);
     }
 }
