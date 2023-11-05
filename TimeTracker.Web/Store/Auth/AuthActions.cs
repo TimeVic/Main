@@ -12,7 +12,7 @@ public record struct LoginAction(
     WorkspaceDto Workspace
 )
 {
-    public LoginAction(AuthState state) : this(state.JwtToken, state.JwtToken, state.User, state.Workspace)
+    public LoginAction(AuthState state) : this(state.AccessToken, state.JwtToken, state.User, state.Workspace)
     {
     }
 }

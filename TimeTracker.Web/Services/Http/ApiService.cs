@@ -1,114 +1,42 @@
 using System.Net;
 using Fluxor;
 using Microsoft.AspNetCore.Components.Forms;
-using TimeTracker.Business.Common.Exceptions.Api.Auth;
-using TimeTracker.Business.Common.Exceptions.Common;
-using TimeTracker.Business.Extensions;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http.Client;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common;
+using TimeTracker.Web.Services.Http.Middleware;
 
 namespace TimeTracker.Web.Services.Http
 {
-    public partial class ApiService
-    {   
+    public partial class ApiService: IDisposable
+    {
         private readonly CustomHttpClient _httpClient;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IDispatcher _dispatcher;
+        private readonly HttpInterceptorService _httpInterceptorService;
 
         public ApiService(
             CustomHttpClient httpClient,
-            IServiceProvider serviceProvider,
-            IDispatcher dispatcher
+            HttpInterceptorService httpInterceptorService
         )
         {
             _httpClient = httpClient;
-            _serviceProvider = serviceProvider;
-            _dispatcher = dispatcher;
-        }
-
-        public string? GetJwt()
-        {
-            var store = _serviceProvider.GetService<IState<AuthState>>();
-            return store?.Value.JwtToken?.Trim();
+            _httpInterceptorService = httpInterceptorService;
+            _httpInterceptorService.Register();
         }
         
-        public string? GetAccessToken()
+        private async Task<TResponse?> PostAsync<TResponse>(string requestUri, object? data = null)
         {
-            var store = _serviceProvider.GetService<IState<AuthState>>();
-            return store?.Value.AccessToken?.Trim();
-        }
-        
-        private async Task<TResponse?> PostAsync<TResponse>(string requestUri, object data, string? jwtToken = null)
-        {
-            return await _httpClient.RequestAsync<TResponse>(requestUri, jwtToken, data, HttpMethod.Post);
+            return await _httpClient.RequestAsync<TResponse>(requestUri, data, HttpMethod.Post);
         }
         
         private async Task<TResponse> GetAsync<TResponse>(string requestUri)
         {
-            return await _httpClient.RequestAsync<TResponse>(requestUri, null, null, HttpMethod.Get);
+            return await _httpClient.RequestAsync<TResponse>(requestUri, null,  HttpMethod.Get);
         }
         
-        private async Task<string> GetAsync(string requestUri, object data, string jwtToken = null)
+        private async Task<string> GetAsync(string requestUri, object data)
         {
-            return await _httpClient.RequestAsync(requestUri, jwtToken, data, HttpMethod.Get);
+            return await _httpClient.RequestAsync(requestUri, data, HttpMethod.Get);
         }
         
-        #region Authorized
-        
-        private async Task<TResponse?> PostAuthorizedAsync<TResponse>(string requestUri, object data = null)
-        {
-            try
-            {
-                Debug.Log("11111");
-                return await _httpClient.RequestAsync<TResponse>(
-                    requestUri, 
-                    GetJwt(), 
-                    data, 
-                    HttpMethod.Post
-                );
-            }
-            catch (HttpResponseException responseException)
-            {
-                Debug.Log("2222");
-                if (responseException.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    try
-                    {
-                        Debug.Log("333333");
-                        var refreshResponse = await RefreshTokenAsync();
-                        Debug.Log("44444", refreshResponse);
-                        if (refreshResponse == null)
-                        {
-                            // Unauthorized flow
-                        }
-                        _dispatcher.Dispatch(new SetJwtAction(refreshResponse.JwtToken));
-                        _dispatcher.Dispatch(new PersistDataAction());
-                    }
-                    catch (HttpResponseException responseInnerException)
-                    {
-                        if (responseInnerException.StatusCode == HttpStatusCode.Unauthorized)
-                        {
-                            // Unauthorized flow
-                        }
-                    }
-                }
-            }
-            return default;
-        }
-        
-        private async Task PostAuthorizedAsync(string requestUri, object data)
-        {
-            await _httpClient.RequestAsync(
-                requestUri, 
-                GetJwt(), 
-                data, 
-                HttpMethod.Post
-            );
-        }
-        
-        private async Task<TResponse?> MultipartFormDataAuthorizedRequestAsync<TResponse>(
+        private async Task<TResponse?> MultipartFormDataRequestAsync<TResponse>(
             string requestUri,
             Dictionary<string, object>? data = null,
             IBrowserFile? file = null
@@ -116,12 +44,14 @@ namespace TimeTracker.Web.Services.Http
         {
             return await _httpClient.MultipartFormDataRequestAsync<TResponse>(
                 requestUri,
-                GetJwt(),
                 data: data,
                 file: file
             );
         }
         
-        #endregion
+        public void Dispose()
+        {
+            _httpInterceptorService.Unregister();
+        }
     }
 }

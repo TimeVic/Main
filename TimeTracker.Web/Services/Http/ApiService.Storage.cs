@@ -17,7 +17,7 @@ namespace TimeTracker.Web.Services.Http
             IBrowserFile file
         )
         {
-            var response = await MultipartFormDataAuthorizedRequestAsync<StoredFileDto>(
+            var response = await MultipartFormDataRequestAsync<StoredFileDto>(
                 ApiUrl.StorageUpload,
                 new Dictionary<string, object>()
                 {
@@ -38,7 +38,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task StorageDeleteFileAsync(long fileId)
         {
-            await PostAuthorizedAsync<object>(
+            await PostAsync<object>(
                 ApiUrl.StorageDelete,
                 new DeleteRequest()
                 {
@@ -53,7 +53,7 @@ namespace TimeTracker.Web.Services.Http
             StorageEntityType entityType
         )
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(
+            var response = await PostAsync<GetListResponse>(
                 ApiUrl.StorageList,
                 new GetListRequest()
                 {

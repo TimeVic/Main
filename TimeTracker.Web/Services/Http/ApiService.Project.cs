@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<ProjectDto> ProjectAddAsync(AddRequest model)
         {
-            var response = await PostAuthorizedAsync<ProjectDto>(ApiUrl.ProjectAdd, model);
+            var response = await PostAsync<ProjectDto>(ApiUrl.ProjectAdd, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -20,7 +20,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<ProjectDto> ProjectUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAuthorizedAsync<ProjectDto>(ApiUrl.ProjectUpdate, model);
+            var response = await PostAsync<ProjectDto>(ApiUrl.ProjectUpdate, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -31,7 +31,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<GetListResponse> ProjectGetListAsync(GetListRequest model)
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.ProjectList, model);
+            var response = await PostAsync<GetListResponse>(ApiUrl.ProjectList, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -42,7 +42,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task ProjectDeleteAsync(long projectId)
         {
-            await PostAuthorizedAsync<ProjectDto>(ApiUrl.ProjectDelete, new DeleteRequest()
+            await PostAsync<ProjectDto>(ApiUrl.ProjectDelete, new DeleteRequest()
             {
                 ProjectId = projectId
             });

@@ -11,7 +11,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<TaskDto> TasksAddAsync(AddRequest model)
         {
-            var response = await PostAuthorizedAsync<TaskDto>(ApiUrl.TasksAdd, model);
+            var response = await PostAsync<TaskDto>(ApiUrl.TasksAdd, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -22,7 +22,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<TaskDto> TasksUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAuthorizedAsync<TaskDto>(ApiUrl.TasksUpdate, model);
+            var response = await PostAsync<TaskDto>(ApiUrl.TasksUpdate, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -33,12 +33,12 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task TasksUpdatePositionsAsync(UpdatePositionsRequest request)
         {
-            await PostAuthorizedAsync<TaskDto>(ApiUrl.TasksUpdatePositions, request);
+            await PostAsync<TaskDto>(ApiUrl.TasksUpdatePositions, request);
         }
 
         public async Task<GetListResponse> TasksGetListAsync(GetListRequest model)
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TasksList, model);
+            var response = await PostAsync<GetListResponse>(ApiUrl.TasksList, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -49,7 +49,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<GetListResponse> TasksGetForCalendarAsync(GetForCalendarRequest model)
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TasksListForCalendar, model);
+            var response = await PostAsync<GetListResponse>(ApiUrl.TasksListForCalendar, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -64,7 +64,7 @@ namespace TimeTracker.Web.Services.Http
             string? searchString = null
         )
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TasksMyList, new GetMyListRequest
+            var response = await PostAsync<GetListResponse>(ApiUrl.TasksMyList, new GetMyListRequest
             {
                 WorkspaceId = workspaceId,
                 Statuses = taskStatuses,
@@ -80,7 +80,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<TaskDto?> TasksGetAsync(long workspaceId, long taskId)
         {
-            var response = await PostAuthorizedAsync<TaskDto?>(ApiUrl.TasksGetOne, new GetOneRequest()
+            var response = await PostAsync<TaskDto?>(ApiUrl.TasksGetOne, new GetOneRequest()
             {
                 WorkspaceId = workspaceId,
                 TaskId = taskId

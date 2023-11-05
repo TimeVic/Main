@@ -4,8 +4,8 @@ using NHibernate.Type;
 
 namespace TimeTracker.Business.Orm.Entities.User
 {
-    [Class(Table = "user_access_tokens")]
-    public class UserAccessTokenEntity: IEntity
+    [Class(Table = "user_jwt_tokens")]
+    public class UserJwtTokenEntity: IEntity
     {
         [Id(Name = "Id", Generator = "native")]
         [Column(Name = "id", SqlType = "bigint", NotNull = true)]
@@ -14,7 +14,7 @@ namespace TimeTracker.Business.Orm.Entities.User
         [Property(NotNull = true)]
         [Column(Name = "token", Length = 200, NotNull = true)]
         public virtual string Token { get; set; }
-        
+
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "expiration_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime ExpirationTime { get; set; }
@@ -24,21 +24,12 @@ namespace TimeTracker.Business.Orm.Entities.User
         public virtual DateTime CreateTime { get; set; }
         
         [ManyToOne(
-            ClassType = typeof(UserEntity), 
-            Column = "user_id", 
+            ClassType = typeof(UserAccessTokenEntity), 
+            Column = "access_token_id", 
             Lazy = Laziness.False,
             Cascade = "none"
         )]
-        public virtual UserEntity User { get; set; }
-        
-        [Bag(
-            Inverse = true,
-            Lazy = CollectionLazy.Extra,
-            Cascade = "none"
-        )]
-        [Key(Column = "access_token_id")]
-        [OneToMany(ClassType = typeof(UserJwtTokenEntity))]
-        public virtual ICollection<UserJwtTokenEntity> JwtTokens { get; set; } = new List<UserJwtTokenEntity>();
+        public virtual UserAccessTokenEntity AccessToken { get; set; }
         
         #region Calculated
 

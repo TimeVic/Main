@@ -35,7 +35,7 @@ public class MainApiControllerBase: ApiControllerBase
             response.Message = "User not authorized exception";
             statusCode = (int)HttpStatusCode.Unauthorized;
         }
-        else if (exception is DomainException)
+        else if (exception is IDomainException)
         {
             response.Type = exception.GetType().Name;
             response.Message = exception.Message;

@@ -98,7 +98,7 @@ public partial class BaseLayout
         {
             if (CommonState.Value.IsWorkspaceInitialized)
             {
-                await AuthService.CheckIsLoggedInAsync();
+                // await AuthService.CheckIsLoggedInAsync();
                 CheckIsLoggedInAndRedirect();    
             }
         };

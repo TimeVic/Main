@@ -22,12 +22,11 @@ public class UserAccessTokenDao: IUserAccessTokenDao
         _expirationTimeout = TimeSpan.FromDays(_configuration.GetValue<int>("App:Auth:AccessTokenLifetime"));
     }
 
-    public async Task<UserAccessTokenEntity> CreateNew(UserEntity user, string lastJwt)
+    public async Task<UserAccessTokenEntity> CreateNew(UserEntity user)
     {
         var accessToken = new UserAccessTokenEntity()
         {
             User = user,
-            LastJwt = lastJwt,
             Token = SecurityUtil.GetRandomString(64),
             CreateTime = DateTime.UtcNow,
             ExpirationTime = DateTime.UtcNow + _expirationTimeout

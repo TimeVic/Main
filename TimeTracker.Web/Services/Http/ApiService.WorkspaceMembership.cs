@@ -10,7 +10,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<WorkspaceMembershipDto> WorkspaceMembershipAddAsync(long workspaceId, string email)
         {
-            var response = await PostAuthorizedAsync<WorkspaceMembershipDto>(
+            var response = await PostAsync<WorkspaceMembershipDto>(
                 ApiUrl.WorkspaceMembershipAdd,
                 new AddRequest()
                 {
@@ -28,7 +28,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<WorkspaceMembershipDto> WorkspaceMembershipUpdateAsync(UpdateRequest request)
         {
-            var response = await PostAuthorizedAsync<WorkspaceMembershipDto>(
+            var response = await PostAsync<WorkspaceMembershipDto>(
                 ApiUrl.WorkspaceMembershipUpdate,
                 request
             );
@@ -42,7 +42,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<GetListResponse> WorkspaceMembershipGetListAsync(GetListRequest model)
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.WorkspaceMembershipList, model);
+            var response = await PostAsync<GetListResponse>(ApiUrl.WorkspaceMembershipList, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -53,7 +53,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task WorkspaceMembershipDeleteAsync(long membershipId)
         {
-            await PostAuthorizedAsync<object>(
+            await PostAsync<object>(
                 ApiUrl.WorkspaceMembershipDelete,
                 new DeleteRequest()
                 {
