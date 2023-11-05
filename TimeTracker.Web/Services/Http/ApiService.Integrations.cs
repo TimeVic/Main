@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<GetIntegrationSettingsResponse> WorkspaceIntegrationSettingsGetAsync(long workspaceId)
         {
-            var response = await PostAuthorizedAsync<GetIntegrationSettingsResponse>(
+            var response = await PostAsync<GetIntegrationSettingsResponse>(
                 ApiUrl.WorkspaceIntegrationSettingsGet,
                 new GetIntegrationSettingsRequest() {
                     WorkspaceId = workspaceId
@@ -24,7 +24,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<WorkspaceSettingsRedmineDto> WorkspaceSetRedmineIntegrationSettingsAsync(SetRedmineSettingsRequest settings)
         {
-            var response = await PostAuthorizedAsync<WorkspaceSettingsRedmineDto>(
+            var response = await PostAsync<WorkspaceSettingsRedmineDto>(
                 ApiUrl.WorkspaceIntegrationSettingsRedmineSet,
                 settings
             );
@@ -37,7 +37,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<WorkspaceSettingsClickUpDto> WorkspaceSetClickUpIntegrationSettingsAsync(SetClickUpSettingsRequest settings)
         {
-            var response = await PostAuthorizedAsync<WorkspaceSettingsClickUpDto>(
+            var response = await PostAsync<WorkspaceSettingsClickUpDto>(
                 ApiUrl.WorkspaceIntegrationSettingsClickUpSet,
                 settings
             );
@@ -50,7 +50,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<WorkspaceSettingsJiraDto> WorkspaceSetJiraIntegrationSettingsAsync(SetJiraSettingsRequest settings)
         {
-            var response = await PostAuthorizedAsync<WorkspaceSettingsJiraDto>(
+            var response = await PostAsync<WorkspaceSettingsJiraDto>(
                 ApiUrl.WorkspaceIntegrationSettingsJiraSet,
                 settings
             );

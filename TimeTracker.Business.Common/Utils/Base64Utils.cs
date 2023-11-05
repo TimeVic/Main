@@ -14,7 +14,7 @@
                 out _
             );
         }
-
+        
         private static byte[] CalculateBase64Buffer(string base64)
         {
             // Magic block. Buffer calculation.

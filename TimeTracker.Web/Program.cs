@@ -12,7 +12,10 @@ using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Services.Workspace;
 using MudBlazor.Services;
+using TimeTracker.Web.Services.Http.Auth;
 using TimeTracker.Web.Services.Http.Client;
+using TimeTracker.Web.Services.Http.Middleware;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -28,7 +31,7 @@ var apiUrl = builder.Configuration.GetValue<string>("ApiUrl");
 builder.Services.AddScoped(sp => new HttpClient()
 {
     BaseAddress = new Uri(apiUrl)
-});
+}.EnableIntercept(sp));
 
 // Init Environment config file 
 var webHttp = new HttpClient()
@@ -47,6 +50,7 @@ using var response = await webHttp.GetAsync($"appsettings.{configurationFile}.js
 using var stream = await response.Content.ReadAsStreamAsync();
 builder.Configuration.AddJsonStream(stream);
 
+builder.Services.AddHttpClientInterceptor();
 // Init local storage
 builder.Services.AddBlazoredLocalStorage();
 
@@ -65,6 +69,8 @@ builder.Services.AddMudServices(config =>
 
 // Custom services
 builder.Services.AddScoped<ApiService>();
+builder.Services.AddScoped<RefreshJwtTokenService>();
+builder.Services.AddScoped<HttpInterceptorService>();
 builder.Services.AddScoped<CustomHttpClient>();
 builder.Services.AddScoped<IReCaptchaService, ReCaptchaService>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Web.Services.Http.Dto;
+using TimeTracker.Web.Services.Http.Middleware;
 
 namespace TimeTracker.Web.Services.Http.Client;
 
@@ -15,6 +16,7 @@ public class CustomHttpClient
     
     private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
+    private readonly HttpInterceptorService _httpInterceptorService;
 
     public CustomHttpClient(
         HttpClient httpClient,
@@ -23,14 +25,14 @@ public class CustomHttpClient
     {
         _httpClient = httpClient;
         _configuration = configuration;
-        
+
         _apiUrl = _configuration.GetValue<string>("ApiUrl");
         _maxFileSizeInMb = _configuration.GetValue<int>("MaxFileSize");
     }
     
-    public async Task<TResponse?> RequestAsync<TResponse>(string requestUri, string? jwtToken, object data, HttpMethod httpMethod)
+    public async Task<TResponse?> RequestAsync<TResponse>(string requestUri, object data, HttpMethod httpMethod)
     {
-        var responseString = await RequestAsync(requestUri, jwtToken, data, httpMethod);
+        var responseString = await RequestAsync(requestUri, data, httpMethod);
         var response = JsonHelper.DeserializeObject<TResponse>(
             responseString,
             DateTimeZoneHandling.Local
@@ -38,7 +40,7 @@ public class CustomHttpClient
         return response;
     }
     
-    public async Task<string> RequestAsync(string requestUri, string? jwtToken, object data, HttpMethod httpMethod)
+    public async Task<string> RequestAsync(string requestUri, object data, HttpMethod httpMethod)
     {   
         // create request object
         var request = new HttpRequestMessage(httpMethod, $"{_apiUrl}/{requestUri}");
@@ -54,11 +56,6 @@ public class CustomHttpClient
                 "application/json"
             );
         }
-        // add authorization header
-        if (!string.IsNullOrEmpty(jwtToken))
-        {
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
-        }
 
         // send request
         var response = await _httpClient.SendAsync(request);
@@ -67,7 +64,6 @@ public class CustomHttpClient
     
     public async Task<TResponse?> MultipartFormDataRequestAsync<TResponse>(
         string requestUri,
-        string? jwtToken = null,
         Dictionary<string, object>? data = null,
         IBrowserFile? file = null
     )
@@ -93,11 +89,7 @@ public class CustomHttpClient
             multipartFormContent.Add(fileStreamContent, name: "File", fileName: file.Name);
         }
         request.Content = multipartFormContent;
-        if (jwtToken != null)
-        {
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);    
-        }
-
+        
         // send request
         var response = await _httpClient.SendAsync(request);
         var responseString = await HandleHttpResponse(response);

@@ -50,7 +50,7 @@ public class LoginTest: BaseTest
 
         var actualAccessToken = await _accessTokenDao.GetByToken(responseData.AccessToken);
         Assert.NotNull(actualAccessToken);
-        Assert.Equal(responseData.JwtToken, actualAccessToken.LastJwt);
+        Assert.Contains(actualAccessToken.JwtTokens, item => item.Token == responseData.JwtToken);
     }
     
     [Fact]

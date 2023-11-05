@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<TaskCommentDto> TaskCommentAddAsync(AddRequest model)
         {
-            var response = await PostAuthorizedAsync<TaskCommentDto>(ApiUrl.TaskCommentAdd, model);
+            var response = await PostAsync<TaskCommentDto>(ApiUrl.TaskCommentAdd, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -20,7 +20,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<TaskCommentDto> TaskCommentUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAuthorizedAsync<TaskCommentDto>(ApiUrl.TaskCommentUpdate, model);
+            var response = await PostAsync<TaskCommentDto>(ApiUrl.TaskCommentUpdate, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -31,7 +31,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task TaskCommentDeleteAsync(long commentId)
         {
-            await PostAuthorizedAsync<TaskCommentDto>(ApiUrl.TaskCommentDelete, new DeleteRequest() {
+            await PostAsync<TaskCommentDto>(ApiUrl.TaskCommentDelete, new DeleteRequest() {
                 CommentId = commentId
             });
         }
@@ -42,7 +42,7 @@ namespace TimeTracker.Web.Services.Http
             int page
         )
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TaskCommentsList, new GetListRequest()
+            var response = await PostAsync<GetListResponse>(ApiUrl.TaskCommentsList, new GetListRequest()
             {
                 WorkspaceId = workspaceId,
                 TaskId = taskId,

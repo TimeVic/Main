@@ -5,7 +5,7 @@ namespace TimeTracker.Business.Orm.Dao.User;
 
 public interface IUserAccessTokenDao: IDomainService
 {
-    Task<UserAccessTokenEntity> CreateNew(UserEntity user, string lastJwt);
+    Task<UserAccessTokenEntity> CreateNew(UserEntity user);
 
     Task<UserAccessTokenEntity?> GetByToken(string accessToken);
 }

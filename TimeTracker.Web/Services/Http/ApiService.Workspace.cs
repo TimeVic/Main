@@ -10,7 +10,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<PaginatedListDto<WorkspaceDto>> WorkspaceGetListAsync()
         {
-            var response = await PostAuthorizedAsync<PaginatedListDto<WorkspaceDto>>(ApiUrl.WorkspaceList);
+            var response = await PostAsync<PaginatedListDto<WorkspaceDto>>(ApiUrl.WorkspaceList);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -21,7 +21,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<WorkspaceDto> WorkspaceAddAsync(string name)
         {
-            var response = await PostAuthorizedAsync<WorkspaceDto>(ApiUrl.WorkspaceAdd, new AddRequest()
+            var response = await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceAdd, new AddRequest()
             {
                 Name = name
             });
@@ -35,7 +35,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<WorkspaceDto> WorkspaceUpdateAsync(long id, string name)
         {
-            var response = await PostAuthorizedAsync<WorkspaceDto>(ApiUrl.WorkspaceUpdate, new UpdateRequest()
+            var response = await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceUpdate, new UpdateRequest()
             {
                 WorkspaceId = id,
                 Name = name
