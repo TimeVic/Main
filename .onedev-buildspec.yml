@@ -228,7 +228,7 @@ jobs:
     name: Create Tag
     tagName: '@param:environment@-@build_number@'
     accessTokenSecret: build-tag-creation-token
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+    condition: NEVER
   paramSpecs:
   - !ChoiceParam
     name: environment
