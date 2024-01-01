@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="FirebaseAdmin" Version="2.4.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
     </ItemGroup>
@@ -45,6 +46,10 @@
       <EmbeddedResource Include="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
       <None Remove="Templates\Emails\en\TaskChangedNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\TaskChangedNotification.htm" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Senders\Fcm\" />
     </ItemGroup>
 
 </Project>

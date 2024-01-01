@@ -1,6 +1,7 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http.Client;
@@ -15,6 +16,8 @@ public class RefreshJwtTokenService
     private readonly IServiceProvider _serviceProvider;
     private readonly IDispatcher _dispatcher;
 
+    private string _jwtToken;
+    
     public RefreshJwtTokenService(
         CustomHttpClient httpClient,
         IServiceProvider serviceProvider,
@@ -28,8 +31,13 @@ public class RefreshJwtTokenService
     
     public string? GetJwt()
     {
-        var store = _serviceProvider.GetService<IState<AuthState>>();
-        return store?.Value.JwtToken?.Trim();
+        if (string.IsNullOrEmpty(_jwtToken))
+        {
+            var store = _serviceProvider.GetService<IState<AuthState>>();
+            _jwtToken = store?.Value.JwtToken?.Trim();
+        }
+
+        return _jwtToken;
     }
         
     public string? GetAccessToken()
@@ -40,17 +48,17 @@ public class RefreshJwtTokenService
     
     public async Task<string?> TryRefreshToken()
     {
-        Debug.Log("Try Update JWT: ", GetJwt());
-        if (string.IsNullOrEmpty(GetJwt()))
+        var jwtToken = GetJwt();
+        if (string.IsNullOrEmpty(jwtToken))
         {
             return null;
         }
 
-        var jwtExpirationTime = JwtHelper.GetExpiryTimestamp(GetJwt());
+        var jwtExpirationTime = JwtHelper.GetExpiryTimestamp(jwtToken);
         var diff = jwtExpirationTime - DateTime.UtcNow;
         if (diff.TotalMinutes <= 2)
             return await RequestNewToken();
-        return string.Empty;
+        return GetJwt();
     }
 
     private async Task<string> RequestNewToken()
@@ -59,13 +67,19 @@ public class RefreshJwtTokenService
             ApiUrl.RefreshToken, 
             new RefreshTokenRequest()
             {
-                JwtToken = GetJwt() ?? "",
+                JwtToken = _jwtToken,
                 AccessToken = GetAccessToken() ?? ""
             },
             HttpMethod.Post
         );
+        if (refreshResult == null)
+        {
+            throw new ServerException();
+        }
+
+        _jwtToken = refreshResult.JwtToken;
         _dispatcher.Dispatch(new SetJwtAction(refreshResult.JwtToken));
         _dispatcher.Dispatch(new PersistDataAction());
-        return refreshResult.JwtToken;
+        return _jwtToken;
     }
 }

@@ -38,9 +38,7 @@ public class HttpInterceptorService
     public async Task RefreshAuthTokenAsync(object sender, HttpClientInterceptorEventArgs e)
     {
         var absPath = e.Request.RequestUri.AbsolutePath;
-        Debug.Log("RefreshAuthTokenAsync", absPath, ExcludedUrls);
         var isExcludedUrl = ExcludedUrls.Any(excludedUrl => absPath.StartsWith(excludedUrl));
-        Debug.Log("isExcludedUrl", isExcludedUrl);
         if (!isExcludedUrl)
         {
             var jwtToken = await _refreshJwtTokenService.TryRefreshToken();
@@ -48,10 +46,6 @@ public class HttpInterceptorService
             {
                 e.Request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             }
-        }
-        else
-        {
-            Debug.Log("Excluded URL:", absPath);
         }
     }
 }

@@ -15,6 +15,7 @@ using MudBlazor.Services;
 using TimeTracker.Web.Services.Http.Auth;
 using TimeTracker.Web.Services.Http.Client;
 using TimeTracker.Web.Services.Http.Middleware;
+using TimeTracker.Web.Services.Messaging;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 var currentAssembly = typeof(Program).Assembly;    
@@ -82,6 +83,7 @@ builder.Services.AddScoped<UrlService>();
 builder.Services.AddScoped<MarkdownService>();
 builder.Services.AddScoped<WorkspaceInitializationService>();
 builder.Services.AddScoped<ToastService>();
+builder.Services.AddScoped<FcmService>();
 
 // Store
 builder.Services.AddFluxor(

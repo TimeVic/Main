@@ -28,6 +28,11 @@ namespace TimeTracker.Business.Di.Autofac.Modules
                 .RegisterType<EmailSendingService>()
                 .As<IEmailSendingService>()
                 .SingleInstance();
+            
+            builder
+                .RegisterType<FirebaseMessagingService>()
+                .As<IFirebaseMessagingService>()
+                .SingleInstance();
         }
     }
 }

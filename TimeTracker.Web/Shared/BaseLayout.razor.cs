@@ -7,6 +7,7 @@ using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services;
+using TimeTracker.Web.Services.Messaging;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common;
@@ -34,6 +35,9 @@ public partial class BaseLayout
     [Inject]
     protected IDispatcher Dispatcher { get; set; }
     
+    [Inject]
+    protected FcmService FcmService { get; set; }
+    
     protected bool IsRedirectIfNotLoggedIn = true;
 
     protected bool IsShowMainMenu => AuthState.Value.IsLoggedIn
@@ -52,7 +56,16 @@ public partial class BaseLayout
                 || path.StartsWith("/documentation");
         }
     }
-    
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            await FcmService.Test();
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
