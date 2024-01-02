@@ -1,6 +1,7 @@
 ﻿using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.Extensions.Logging;
 using TimeTracker.Business.Common.Utils;
 
 namespace TimeTracker.Business.Notifications.Services;
@@ -8,11 +9,14 @@ namespace TimeTracker.Business.Notifications.Services;
 public class FirebaseMessagingService: IFirebaseMessagingService
 {
     private const string CredentialsFilepath = "../../../../.credentials/firebase-credentials.json";
+ 
+    private readonly ILogger<FirebaseMessagingService> _logger;
     
     private readonly GoogleCredential _credentials;
     
-    public FirebaseMessagingService()
+    public FirebaseMessagingService(ILogger<FirebaseMessagingService> logger)
     {
+        _logger = logger;
         var filePath = Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath);
         if (!File.Exists(filePath))
         {
@@ -31,11 +35,10 @@ public class FirebaseMessagingService: IFirebaseMessagingService
         });
     }
 
-    public async Task SendMessage(string toToken, string title, string body)
+    public Task SendMessage(string toToken, string title, string body)
     {
         var message = new Message()
         {
-            // Data = data,
             Token = toToken,
             Notification = new FirebaseAdmin.Messaging.Notification()
             {
@@ -45,10 +48,10 @@ public class FirebaseMessagingService: IFirebaseMessagingService
             }
         };
 
-        await SendMessage(message);
+        return SendMessage(message);
     }
 
-    public async Task SendMessage(string toToken, Dictionary<string, string> data)
+    public Task SendMessage(string toToken, Dictionary<string, string> data)
     {
         var message = new Message()
         {
@@ -56,7 +59,7 @@ public class FirebaseMessagingService: IFirebaseMessagingService
             Data = data
         };
 
-        await SendMessage(message);
+        return SendMessage(message);
     }
 
     private async Task SendMessage(Message message)
@@ -66,10 +69,11 @@ public class FirebaseMessagingService: IFirebaseMessagingService
         try
         {
             var response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            // TODO: Remove Token if failed
         }
         catch (Exception e)
         {
-                
+            _logger.LogError(e, e.Message);
         }
     }
 }

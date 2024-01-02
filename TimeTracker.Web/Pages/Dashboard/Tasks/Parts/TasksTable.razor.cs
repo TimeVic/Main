@@ -5,6 +5,7 @@ using MudBlazor.Utilities;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Dashboard;
@@ -34,21 +35,13 @@ public partial class TasksTable
         TaskStatus.Done
     };
 
+    private ICollection<TaskPriority> _priorities = Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>().ToList();
+    
     private ICollection<TaskDto> _tasks => TasksState.Value.List;
-    private ICollection<TaskDto> _tasksToDragAndDrop = new List<TaskDto>();
-
-    private MudDropContainer<TaskDto> _dropContainer;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        TasksState.StateChanged += (sender, args) =>
-        {
-            var state = sender as IState<TasksState>;
-            _tasksToDragAndDrop = state.Value.List.OrderBy(item => item.PositionIndex).ToList();
-            _dropContainer.Items = _tasksToDragAndDrop;
-            _dropContainer?.Refresh();
-        };
     }
 
     private void OnClickTask(TaskDto task)
@@ -63,40 +56,64 @@ public partial class TasksTable
             taskStatus: status
         );
     }
-
-    private void TaskUpdated(MudItemDropInfo<TaskDto> eventData)
+    
+    private async Task OnSelectTaskPriority(TaskDto task, TaskPriority priority)
     {
-        InvokeAsync(() =>
-        {
-            var currentStatus = Enum.Parse<TaskStatus>(eventData.DropzoneIdentifier);
-        
-            // Update positions
-            var statusColumnOffset = 0;
-            foreach (var status in _statuses.Where(x => x < currentStatus))
-            {
-                statusColumnOffset += _tasksToDragAndDrop.Count(x => x.Status == status);
-            }
-            _tasksToDragAndDrop.UpdateOrder(
-                eventData,
-                item => item.PositionIndex,
-                statusColumnOffset
-            );
-            Dispatcher.Dispatch(new UpdatePositionsAction(_tasksToDragAndDrop));
-            Dispatcher.Dispatch(new UpdateListItemsAction(_tasksToDragAndDrop));
-        
-            // Update status
-            var updatedItem = _tasksToDragAndDrop.First(x => x.TaskId == eventData.Item.TaskId);
-            updatedItem.Status = Enum.Parse<TaskStatus>(eventData.DropzoneIdentifier);
-            var updateModel = new UpdateRequest();
-            updateModel.Fill(updatedItem);
-            Dispatcher.Dispatch(new UpdateListItemAction(updateModel, false));
-            Dispatcher.Dispatch(new SetListItemAction(updatedItem));
-            Dispatcher.Dispatch(new SetTasksListItemAction(updatedItem));
-        });
+        task.Priority = priority;
+        await UpdateTask(task);
+    }
+    
+    private async Task OnSelectTaskStatus(TaskDto task, TaskStatus status)
+    {
+        task.Status = status;
+        await UpdateTask(task);
     }
 
-    private bool DropItemSelector(TaskDto task, string columnId)
+    // private void TaskUpdated(MudItemDropInfo<TaskDto> eventData)
+    // {
+    //     InvokeAsync(() =>
+    //     {
+    //         var currentStatus = Enum.Parse<TaskStatus>(eventData.DropzoneIdentifier);
+    //     
+    //         // Update positions
+    //         var statusColumnOffset = 0;
+    //         foreach (var status in _statuses.Where(x => x < currentStatus))
+    //         {
+    //             statusColumnOffset += _tasksToDragAndDrop.Count(x => x.Status == status);
+    //         }
+    //         _tasksToDragAndDrop.UpdateOrder(
+    //             eventData,
+    //             item => item.PositionIndex,
+    //             statusColumnOffset
+    //         );
+    //         Dispatcher.Dispatch(new UpdatePositionsAction(_tasksToDragAndDrop));
+    //         Dispatcher.Dispatch(new UpdateListItemsAction(_tasksToDragAndDrop));
+    //     
+    //         // Update status
+    //         var updatedItem = _tasksToDragAndDrop.First(x => x.TaskId == eventData.Item.TaskId);
+    //         updatedItem.Status = Enum.Parse<TaskStatus>(eventData.DropzoneIdentifier);
+    //         var updateModel = new UpdateRequest();
+    //         updateModel.Fill(updatedItem);
+    //         Dispatcher.Dispatch(new UpdateListItemAction(updateModel, false));
+    //         Dispatcher.Dispatch(new SetListItemAction(updatedItem));
+    //         Dispatcher.Dispatch(new SetTasksListItemAction(updatedItem));
+    //     });
+    // }
+
+    // private bool DropItemSelector(TaskDto task, string columnId)
+    // {
+    //     return task.Status.ToString() == columnId;
+    // }
+
+    private async Task UpdateTask(TaskDto task)
     {
-        return task.Status.ToString() == columnId;
+        await InvokeAsync(() =>
+        {
+            var updateModel = new UpdateRequest();
+            updateModel.Fill(task);
+            Dispatcher.Dispatch(new UpdateListItemAction(updateModel, false));
+            Dispatcher.Dispatch(new SetListItemAction(task));
+            Dispatcher.Dispatch(new SetTasksListItemAction(task));
+        });
     }
 }
