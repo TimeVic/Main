@@ -55,9 +55,7 @@ public class RefreshJwtTokenService
         }
 
         var jwtExpirationTime = JwtHelper.GetExpiryTimestamp(jwtToken);
-        Debug.Log("jwtExpirationTime", jwtExpirationTime);
         var diff = jwtExpirationTime - DateTime.UtcNow;
-        Debug.Log("diff.TotalMinutes", diff.TotalMinutes);
         if (diff.TotalMinutes <= 2)
             return await RequestNewToken();
         return GetJwt();
@@ -80,7 +78,6 @@ public class RefreshJwtTokenService
         }
 
         _jwtToken = refreshResult.JwtToken;
-        Debug.Log("JwtHelper.GetExpiryTimestamp(jwtToken)", JwtHelper.GetExpiryTimestamp(refreshResult.JwtToken));
         _dispatcher.Dispatch(new SetJwtAction(refreshResult.JwtToken));
         _dispatcher.Dispatch(new PersistDataAction());
         return _jwtToken;
