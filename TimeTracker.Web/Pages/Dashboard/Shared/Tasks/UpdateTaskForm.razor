@@ -27,62 +27,119 @@
         </MudStack>
 
         <MudGrid>
-            <MudItem xs="6">
-                <MudStack Spacing="0">
-                    <MudTextField
-                        T="string"
-                        For="() => model.Title"
-                        Value="model.Title"
-                        ValueChanged="@(OnTitleChanged)"
-                        Placeholder="Title"/>
-
-                    <MarkdownEdit
-                        Class="mt-3"
-                        Label="Description"
-                        @bind-Value="@model.Description"
-                        Changed="@(SubmitForm)"
-                        Placeholder="Insert your task details here"/>
-                </MudStack>
+            <MudItem xs="12">
+                <MudTextField
+                    T="string"
+                    For="() => _model.Title"
+                    Value="_model.Title"
+                    ValueChanged="@(OnTitleChanged)"
+                    Placeholder="Title"/>
             </MudItem>
+        </MudGrid>
+
+        <MudGrid>
             <MudItem xs="6">
                 <MudStack Spacing="0">
                     <MembersDropDown
                         Placeholder="Assigned"
                         Clearable="false"
                         AllowedIds="@_allowedUserIds"
-                        UserId="@model.UserId"
+                        UserId="@_model.UserId"
                         SelectedItemChanged="@(OnChangedAssigned)"/>
 
                     <EnumDropDown
                         Placeholder="Status"
                         TItem="TaskStatus"
                         AllowClear="false"
-                        @bind-Value="model.Status"
+                        @bind-Value="_model.Status"
                         OnChanged="SubmitForm"
                         Name="Status"/>
 
                     <EnumDropDown
                         TItem="TaskPriority"
                         AllowClear="false"
-                        @bind-Value="model.Priority"
+                        @bind-Value="_model.Priority"
                         OnChanged="SubmitForm"
                         Name="Priority"/>
+                </MudStack>
+            </MudItem>
+            <MudItem xs="6">
+                <MudStack Spacing="2">
+
+                    <MudStack
+                        Spacing="0"
+                        Justify="Justify.SpaceBetween"
+                        Row="true">
+                        <MudDatePicker
+                            @ref="_startDatePicker"
+                            Clearable="true"
+                            Class="mr-2"
+                            Date="_model.StartTime"
+                            DateChanged="OnStartDateChanged"
+                            Validation="ValidateStartTime"
+                            ErrorText="Start Time can not be more than End Time"
+                            Label="Start Date:"/>
+                        <MudTimePicker
+                            @ref="_startTimePicker"
+                            Clearable="true"
+                            Disabled="@(!_model.StartTime.HasValue)"
+                            Time="_model.StartTime?.TimeOfDay"
+                            TimeChanged="OnStartTimeChanged"
+                            Label="Start Time:"/>
+                    </MudStack>
+
+                    <MudStack
+                        Spacing="0"
+                        Justify="Justify.SpaceBetween"
+                        Row="true">
+                        <MudDatePicker
+                            @ref="_endDatePicker"
+                            Clearable="true"
+                            Class="mr-2"
+                            Date="_model.EndTime"
+                            DateChanged="OnEndDateChanged"
+                            Validation="ValidateEndTime"
+                            ErrorText="End Time can not be less than Start Time"
+                            Label="Due Date:"/>
+                        <MudTimePicker
+                            @ref="_endTimePicker"
+                            Clearable="true"
+                            Disabled="@(!_model.EndTime.HasValue)"
+                            Time="_model.EndTime?.TimeOfDay"
+                            TimeChanged="OnEndTimeChanged"
+                            Label="Due Time:"/>
+                    </MudStack>
 
                     <MudCheckBox
                         T="bool"
                         Label="Archived"
-                        @bind-Value="@model.IsArchived"/>
-
-                    <TagsDropDown
-                        Value="@model.TagIds"
-                        ValueChanged="OnTagsChanged"/>
+                        @bind-Value="@(_model.IsArchived)"/>
                 </MudStack>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid>
+            <MudItem xs="12">
+                <TagsDropDown
+                    Value="@_model.TagIds"
+                    ValueChanged="@(OnTagsChanged)"/>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid>
+            <MudItem xs="12">
+                <MarkdownEdit
+                    Class="mt-3"
+                    Label="Description"
+                    @bind-Value="@_model.Description"
+                    Changed="@(SubmitForm)"
+                    Placeholder="Insert your task details here"/>
             </MudItem>
         </MudGrid>
     </MudPaper>
 </MudForm>
 
-<MudTabs 
+<MudTabs
     Rounded="true"
     Outlined="true"
     ApplyEffectsToContainer="true"

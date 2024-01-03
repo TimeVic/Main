@@ -5,6 +5,7 @@ using MudBlazor.Utilities;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Store.Dashboard;
@@ -28,11 +29,16 @@ public partial class UpdateTaskForm
     [Inject]
     private IState<WorkspaceMembershipsState> _workspaceMembershipsState { get; set; }
 
-    private UpdateRequest model = new();
+    private UpdateRequest _model = new();
     private bool _isLoading = false;
-    private MudForm _form;
-    private bool _isValid = false;
+    private MudForm? _form;
+    private MudDatePicker? _startDatePicker;
+    private MudDatePicker? _endDatePicker;
+    private MudTimePicker? _startTimePicker;
+    private MudTimePicker? _endTimePicker;
 
+    private bool _isValid = false;
+    
     private string _tabLabelAttachments
     {
         get
@@ -60,7 +66,7 @@ public partial class UpdateTaskForm
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.Fill(Task);
+        _model.Fill(Task);
     }
 
     private void SubmitForm()
@@ -70,12 +76,12 @@ public partial class UpdateTaskForm
         {
             return;
         }
-        Dispatcher.Dispatch(new UpdateListItemAction(model, IsUpdateState: true));
+        Dispatcher.Dispatch(new UpdateListItemAction(_model, IsUpdateState: true));
     }
 
     private async Task OnChangedAssigned(WorkspaceMembershipDto membership)
     {
-        model.UserId = membership.User.Id;
+        _model.UserId = membership.User.Id;
         SubmitForm();
     }
 
@@ -92,7 +98,7 @@ public partial class UpdateTaskForm
 
     private void OnTagsChanged(IEnumerable<long> selectedTagIds)
     {
-        model.TagIds = selectedTagIds.ToList();
+        _model.TagIds = selectedTagIds.ToList();
         SubmitForm();
     }
 
@@ -104,25 +110,76 @@ public partial class UpdateTaskForm
 
     private bool ValidateStartTime(DateTime? modelStartTime)
     {
-        if (!modelStartTime.HasValue || !model.EndTime.HasValue)
+        if (!modelStartTime.HasValue || !_model.EndTime.HasValue)
         {
             return true;
         }
-        return modelStartTime < model.EndTime;
+        return modelStartTime < _model.EndTime;
     }
 
     private bool ValidateEndTime(DateTime? modelEndTime)
     {
-        if (!modelEndTime.HasValue || !model.StartTime.HasValue)
+        if (!modelEndTime.HasValue || !_model.StartTime.HasValue)
         {
             return true;
         }
-        return modelEndTime > model.StartTime;
+        return modelEndTime > _model.StartTime;
     }
 
+    private async Task OnStartTimeChanged(TimeSpan? startTime)
+    {
+        _model.StartTime = _model.StartTime?.StartOfDay();
+        if (startTime.HasValue)
+        {
+            _model.StartTime = _model.StartTime?.Add(startTime.Value);
+        }
+        _model.StartTime = _model.StartTime?.ToLocalTime();
+        await ValidateDates();
+        SubmitForm();
+    }
+    
+    private async Task OnEndTimeChanged(TimeSpan? endTime)
+    {
+        _model.EndTime = _model.EndTime?.StartOfDay();
+        if (endTime.HasValue)
+        {
+            _model.EndTime = _model.EndTime?.Add(endTime.Value);
+        }
+        _model.EndTime = _model.EndTime?.ToLocalTime();
+        await ValidateDates();
+        SubmitForm();
+    }
+    
+    private async Task OnStartDateChanged(DateTime? date)
+    {
+        _model.StartTime = date;
+        await ValidateDates();
+        SubmitForm();
+    }
+    
+    private async Task OnEndDateChanged(DateTime? date)
+    {
+        _model.EndTime = date;
+        await ValidateDates();
+        SubmitForm();
+    }
+    
     private void OnTitleChanged(string value)
     {
-        model.Title = value;
+        _model.Title = value;
         SubmitForm();
+    }
+
+    private async Task<bool> ValidateDates()
+    {
+        await _startDatePicker!.Validate();
+        await _endDatePicker!.Validate();
+        await _startTimePicker!.Validate();
+        await _endTimePicker!.Validate();
+
+        return !_startDatePicker!.Error
+            && !_endDatePicker!.Error
+            && !_startTimePicker!.Error
+            && !_endTimePicker!.Error;
     }
 }
