@@ -47,38 +47,29 @@
             }
             @if (projectsWithoutClient.Any())
             {
-                <MudNavGroup 
-                    Title="Without client" 
-                    Expanded="true">
-                    @foreach (var project in GetClientProjects(null))
-                    {
-                        <MudNavLink
-                            Href="@GetTasksListUrl(project)"
-                            Match="NavLinkMatch.All"
-                            IconColor="Color.Default">
-                            @project.Name.TruncateAndAddDots(23)
-                        </MudNavLink>
-                    }
-                </MudNavGroup>    
+                foreach (var project in GetClientProjects(null))
+                {
+                    <MudNavLink
+                        Href="@GetTasksListUrl(project)"
+                        Match="NavLinkMatch.All"
+                        IconColor="Color.Default">
+                        @project.Name.TruncateAndAddDots(23)
+                    </MudNavLink>
+                }
             }
             @foreach (var client in Clients)
             {
                 var projects = GetClientProjects(client);
-                if (projects.Any())
+                foreach (var project in projects)
                 {
-                    <MudNavGroup 
-                        Title="@client.Name"
-                        Expanded="true">
-                        @foreach (var project in GetClientProjects(client))
-                        {
-                            <MudNavLink
-                                Href="@GetTasksListUrl(project)"
-                                Match="NavLinkMatch.All"
-                                IconColor="Color.Default">
-                                @project.Name.TruncateAndAddDots(23)
-                            </MudNavLink>
-                        }
-                    </MudNavGroup>    
+                    <MudNavLink
+                        Href="@GetTasksListUrl(project)"
+                        Match="NavLinkMatch.All"
+                        IconColor="Color.Default">
+                        @project.Name.TruncateAndAddDots(23)
+                        <br/>
+                        <MudText Typo="Typo.subtitle2">@client.Name</MudText>
+                    </MudNavLink>
                 }
             }
         </MudNavGroup>
