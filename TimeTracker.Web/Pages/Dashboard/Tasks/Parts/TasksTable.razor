@@ -39,15 +39,18 @@
                 foreach (var task in _tasks.Where(item => item.Status == taskStatus))
                 {
                     <MudPaper
+                        @onclick="() => OnClickTask(task)"
                         Elevation="25"
+                        Style="cursor: pointer"
                         Class="pa-2 rounded-lg my-3">
                         <MudStack>
                             <MudStack Row="true" Spacing="1">
                                 <TaskIdBadge
-                                    IsClickable="true"
+                                    IsClickable="false"
                                     InternalTask="@task"/>
                                 <MudSpacer/>
                                 <MudMenu
+                                    @onclick:stopPropagation="true"
                                     AnchorOrigin="Origin.BottomLeft"
                                     TransformOrigin="Origin.TopLeft">
                                     <ActivatorContent>
@@ -73,6 +76,7 @@
                                 </MudMenu>
 
                                 <MudMenu
+                                    @onclick:stopPropagation="true"
                                     AnchorOrigin="Origin.BottomLeft"
                                     TransformOrigin="Origin.TopLeft">
                                     <ActivatorContent>

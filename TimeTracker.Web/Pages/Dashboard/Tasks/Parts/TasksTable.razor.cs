@@ -68,7 +68,7 @@ public partial class TasksTable
         task.Status = status;
         await UpdateTask(task);
     }
-
+    
     // private void TaskUpdated(MudItemDropInfo<TaskDto> eventData)
     // {
     //     InvokeAsync(() =>
