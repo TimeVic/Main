@@ -1,12 +1,12 @@
 ﻿using Fluxor;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Dashboard;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
-namespace TimeTracker.Web.Store.Dashboard.Effects;
+namespace TimeTracker.Web.Store.Tasks.Effects;
 
-public class LoadMyTasksEffect: Effect<LoadTasksListAction>
+public class LoadMyTasksEffect: Effect<LoadOverdueTasksListAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<DashboardState> _state;
@@ -26,11 +26,11 @@ public class LoadMyTasksEffect: Effect<LoadTasksListAction>
         _logger = logger;
     }
 
-    public override async Task HandleAsync(LoadTasksListAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(LoadOverdueTasksListAction action, IDispatcher dispatcher)
     {
         try
         {
-            dispatcher.Dispatch(new SetIsTasksListLoadingAction(true));
+            dispatcher.Dispatch(new SetIsOverdueTasksListLoadingAction(true));
             var response = await _apiService.TasksGetMyListAsync(
                 _authState.Value.Workspace.Id,
                 new List<TaskStatus>()
@@ -39,7 +39,7 @@ public class LoadMyTasksEffect: Effect<LoadTasksListAction>
                     TaskStatus.InProgress
                 }
             );
-            dispatcher.Dispatch(new SetTasksListItemsAction(response));
+            dispatcher.Dispatch(new SetOverdueTasksListItemsAction(response));
         }
         catch (Exception e)
         {
@@ -47,7 +47,7 @@ public class LoadMyTasksEffect: Effect<LoadTasksListAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetIsTasksListLoadingAction(false));
+            dispatcher.Dispatch(new SetIsOverdueTasksListLoadingAction(false));
         }
     }
 }

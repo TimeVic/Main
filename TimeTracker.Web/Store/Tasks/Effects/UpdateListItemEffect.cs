@@ -36,7 +36,7 @@ public class UpdateListItemEffect: Effect<UpdateListItemAction>
             var response = await _apiService.TasksUpdateAsync(action.UpdateRequest);
             if (action.IsUpdateState)
             {
-                dispatcher.Dispatch(new SetTasksListItemAction(response));
+                dispatcher.Dispatch(new SetOverdueTasksListItemAction(response));
                 dispatcher.Dispatch(new SetListItemAction(response));
             }
         }

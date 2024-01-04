@@ -78,14 +78,14 @@
                             DateChanged="OnStartDateChanged"
                             Validation="ValidateStartTime"
                             ErrorText="Start Time can not be more than End Time"
-                            Label="Start Date:"/>
+                            Label="Start Date"/>
                         <MudTimePicker
                             @ref="_startTimePicker"
                             Clearable="true"
                             Disabled="@(!_model.StartTime.HasValue)"
                             Time="_model.StartTime?.TimeOfDay"
                             TimeChanged="OnStartTimeChanged"
-                            Label="Start Time:"/>
+                            Label="Start Time"/>
                     </MudStack>
 
                     <MudStack
@@ -100,14 +100,14 @@
                             DateChanged="OnEndDateChanged"
                             Validation="ValidateEndTime"
                             ErrorText="End Time can not be less than Start Time"
-                            Label="Due Date:"/>
+                            Label="Due Date"/>
                         <MudTimePicker
                             @ref="_endTimePicker"
                             Clearable="true"
                             Disabled="@(!_model.EndTime.HasValue)"
                             Time="_model.EndTime?.TimeOfDay"
                             TimeChanged="OnEndTimeChanged"
-                            Label="Due Time:"/>
+                            Label="Due Time"/>
                     </MudStack>
 
                     <MudCheckBox
@@ -148,7 +148,7 @@
     <MudTabPanel Text="Comments">
         <TaskCommentsBlock Task="Task"/>
     </MudTabPanel>
-    <MudTabPanel Text="@($"Attachments({Task.Attachments.Count})")">
+    <MudTabPanel Text="@_tabLabelAttachments">
         <FileUploader
             EntityId="@Task.TaskId"
             FileUploaded="OnFileUploaded"

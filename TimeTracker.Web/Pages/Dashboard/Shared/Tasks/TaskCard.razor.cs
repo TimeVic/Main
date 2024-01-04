@@ -1,12 +1,8 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
-using MudBlazor.Utilities;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Task;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Dashboard;
 using TimeTracker.Web.Store.Tasks;
@@ -14,10 +10,13 @@ using TimeTracker.Web.Store.TasksList;
 using SetListItemAction = TimeTracker.Web.Store.Tasks.SetListItemAction;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
-namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
+namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 
-public partial class TasksTable
+public partial class TaskCard
 {
+    [Parameter]
+    public TaskDto Task { get; set; }
+    
     [Inject]
     public IState<TasksState> TasksState { get; set; }
     
@@ -34,14 +33,33 @@ public partial class TasksTable
         TaskStatus.InProgress,
         TaskStatus.Done
     };
-    
-    private ICollection<TaskDto> _tasks => TasksState.Value.List;
 
-    private async Task OnAddTask(TaskStatus status)
+    private ICollection<TaskPriority> _priorities = Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>().ToList();
+    
+    private void OnClickTask()
     {
-        await ModalDialogProviderService.ShowAddTaskModal(
-            taskListId: TasksListState.Value.SelectedTaskListId,
-            taskStatus: status
-        );
+        InvokeAsync(async () => await ModalDialogProviderService.ShowEditTaskModal(Task));
+    }
+    
+    private async Task OnSelectTaskPriority(TaskPriority priority)
+    {
+        Task.Priority = priority;
+        await UpdateTask(Task);
+    }
+    
+    private async Task OnSelectTaskStatus(TaskStatus status)
+    {
+        Task.Status = status;
+        await UpdateTask(Task);
+    }
+    
+    private async Task UpdateTask(TaskDto task)
+    {
+        await InvokeAsync(() =>
+        {
+            var updateModel = new UpdateRequest();
+            updateModel.Fill(task);
+            Dispatcher.Dispatch(new UpdateListItemAction(updateModel, false));
+        });
     }
 }

@@ -93,4 +93,38 @@ public class TasksReducers
             }).ToList()
         };
     }
+    
+    [ReducerMethod]
+    public static TasksState SetOverdueTasksListItemsActionActionReducer(TasksState state, SetOverdueTasksListItemsAction action)
+    {
+        return state with
+        {
+            OverdueList = action.Response.Items
+        };
+    }
+
+    [ReducerMethod]
+    public static TasksState SetOverdueTasksListItemActionActionReducer(TasksState state, SetOverdueTasksListItemAction action)
+    {
+        return state with
+        {
+            OverdueList = state.OverdueList.Select(item =>
+            {
+                if (item.TaskId == action.Task.TaskId)
+                {
+                    return action.Task;
+                }
+                return item;
+            }).ToList()
+        };
+    }
+
+    [ReducerMethod]
+    public static TasksState SetIsOverdueTasksListLoadingActionActionReducer(TasksState state, SetIsOverdueTasksListLoadingAction action)
+    {
+        return state with
+        {
+            IsOverdueListLoading = action.IsLoading
+        };
+    }
 }

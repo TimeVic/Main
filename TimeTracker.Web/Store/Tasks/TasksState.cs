@@ -9,7 +9,6 @@ namespace TimeTracker.Web.Store.Tasks;
 public record TasksState
 {
     public ICollection<TaskDto> List { get; set; } = new List<TaskDto>();
-    
     public int TotalCount { get; set; }
     
     public int TotalPages { get; set; }
@@ -21,4 +20,12 @@ public record TasksState
     public bool IsLoaded { get; set; } = false;
 
     public GetListFilterRequest Filter { get; set; } = new();
+    
+    #region Overdue
+    
+    public ICollection<TaskDto> OverdueList { get; set; } = new List<TaskDto>();
+    
+    public bool IsOverdueListLoading { get; set; }
+    
+    #endregion
 }

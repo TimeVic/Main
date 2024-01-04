@@ -65,6 +65,7 @@
     <ItemGroup>
       <Folder Include="Pages\Dashboard\Calendar\" />
       <Folder Include="Pages\Dashboard\Dashboard\Parts\" />
+      <Folder Include="Store\Dashboard\Effects\" />
       <Folder Include="wwwroot\img\logo\black" />
     </ItemGroup>
 
