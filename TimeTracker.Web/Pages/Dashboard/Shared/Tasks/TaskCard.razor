@@ -1,0 +1,76 @@
+﻿@using TimeTracker.Web.Core.Extensions.Enums
+@using TimeTracker.Business.Extensions
+@inherits BaseComponent
+
+<MudPaper
+    @onclick="() => OnClickTask()"
+    Elevation="25"
+    Style="cursor: pointer"
+    Class="pa-2 rounded-lg my-3">
+    <MudStack>
+        <MudStack Row="true" Spacing="1">
+            <TaskIdBadge
+                IsClickable="false"
+                InternalTask="@Task"/>
+            <MudSpacer/>
+            <MudMenu
+                @onclick:stopPropagation="true"
+                AnchorOrigin="Origin.BottomLeft"
+                TransformOrigin="Origin.TopLeft">
+                <ActivatorContent>
+                    <MudChip
+                        Shade="Shade.Lighter"
+                        Size="Size.Small"
+                        Icon="@Icons.Material.Filled.ArrowDropDown"
+                        Color="@Task.Priority.GetChipStyle()"
+                        BadgeStyle="@Task.Priority.GetChipStyle()">
+                        @Task.Priority.GetDisplayName()
+                    </MudChip>
+                </ActivatorContent>
+                <ChildContent>
+                    @foreach (var priority in _priorities)
+                    {
+                        <MudMenuItem
+                            OnClick="() => OnSelectTaskPriority(priority)"
+                            Disabled="@(Task.Priority == priority)">
+                            @priority.GetDisplayName()
+                        </MudMenuItem>
+                    }
+                </ChildContent>
+            </MudMenu>
+
+            <MudMenu
+                @onclick:stopPropagation="true"
+                AnchorOrigin="Origin.BottomLeft"
+                TransformOrigin="Origin.TopLeft">
+                <ActivatorContent>
+                    <MudChip
+                        Shade="Shade.Lighter"
+                        Size="Size.Small"
+                        Icon="@Icons.Material.Filled.ArrowDropDown"
+                        Color="Color.Default">
+                        @Task.Status.GetDisplayName()
+                    </MudChip>
+                </ActivatorContent>
+                <ChildContent>
+                    @foreach (var status in _statuses)
+                    {
+                        <MudMenuItem
+                            OnClick="() => OnSelectTaskStatus(status)"
+                            Disabled="@(Task.Status == status)">
+                            @status.GetDisplayName()
+                        </MudMenuItem>
+                    }
+                </ChildContent>
+            </MudMenu>
+        </MudStack>
+
+        <MudText
+            Style="line-break: anywhere;"
+            Typo="Typo.body2">
+            @Task.Title?.Truncate(300)
+        </MudText>
+
+        <TagsBadgesList Tags="@Task.Tags"/>
+    </MudStack>
+</MudPaper>

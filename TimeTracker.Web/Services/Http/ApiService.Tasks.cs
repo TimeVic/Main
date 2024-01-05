@@ -78,6 +78,31 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
+        public async Task<GetListResponse> TasksGetOverdueListAsync(
+            long workspaceId,
+            string? searchString = null
+        )
+        {
+            var response = await PostAsync<GetListResponse>(ApiUrl.TasksMyList, new GetMyListRequest
+            {
+                WorkspaceId = workspaceId,
+                Statuses = new List<TaskStatus>()
+                {
+                    TaskStatus.Backlog,
+                    TaskStatus.ToDo,
+                    TaskStatus.InProgress,
+                },
+                SearchString = searchString,
+                EndTime = DateTime.UtcNow.AddMonths(12)
+            });
+            if (response == null)
+            {
+                throw new ServerErrorException();
+            }
+
+            return response;
+        }
+        
         public async Task<TaskDto?> TasksGetAsync(long workspaceId, long taskId)
         {
             var response = await PostAsync<TaskDto?>(ApiUrl.TasksGetOne, new GetOneRequest()

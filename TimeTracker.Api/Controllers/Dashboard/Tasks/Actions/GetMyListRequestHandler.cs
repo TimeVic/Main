@@ -54,7 +54,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             {
                 AssignedUserId = user.Id,
                 Statuses = request.Statuses,
-                SearchString = request.SearchString
+                SearchString = request.SearchString,
+                StartTime = request.StartTime,
+                EndTime = request.EndTime
             });
             return new GetListResponse(
                 _mapper.Map<ICollection<TaskDto>>(taskLists.Items),

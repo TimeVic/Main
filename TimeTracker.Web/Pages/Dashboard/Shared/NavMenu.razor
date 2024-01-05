@@ -15,8 +15,10 @@
         </MudLink>
         <MudText
             Class="ml-2"
-            Typo="Typo.h6" 
-            Color="Color.Inherit">TimeVic</MudText>
+            Typo="Typo.h6"
+            Color="Color.Inherit">
+            TimeVic
+        </MudText>
     </MudDrawerHeader>
     <MudNavMenu Class="mud-width-full">
         <MudNavLink
@@ -24,6 +26,12 @@
             Match="NavLinkMatch.All"
             Icon="@Icons.Material.Filled.ViewTimeline">
             My Time Entries
+        </MudNavLink>
+        <MudNavLink
+            Href="@SiteUrl.Dashboard_OverdueTasks"
+            Match="NavLinkMatch.All"
+            Icon="@Icons.Material.Filled.ViewTimeline">
+            Overdue Tasks
         </MudNavLink>
         @* <MudNavLink *@
         @*     Href="@SiteUrl.Dashboard_Dashboard" *@
