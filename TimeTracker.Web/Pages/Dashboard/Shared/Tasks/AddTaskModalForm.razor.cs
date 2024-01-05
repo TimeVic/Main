@@ -19,6 +19,9 @@ public partial class AddTaskModalForm
     [Parameter]
     public TaskStatus? TaskStatus { get; set; }
     
+    [Parameter]
+    public DateTime? EndTime { get; set; }
+    
     [CascadingParameter] 
     MudDialogInstance MudDialog { get; set; }
 
@@ -39,6 +42,10 @@ public partial class AddTaskModalForm
         {
             model.Status = TaskStatus.Value;
         }
+        if (EndTime.HasValue)
+        {
+            model.EndTime = EndTime.Value;
+        }
     }
 
     private async Task Submit()
@@ -56,6 +63,7 @@ public partial class AddTaskModalForm
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
+                Dispatcher.Dispatch(new SetOverdueTasksListItemAction(responseDto));
                 Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.SetSelectedPageAction(1));
                 Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction());
                 OnCloseModal();

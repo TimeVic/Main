@@ -94,6 +94,7 @@ public partial class ModalDialogProviderService
     public async Task ShowAddTaskModal(
         long? timEntryId = null,
         long? taskListId = null,
+        DateTime? endTime = null,
         TaskStatus? taskStatus = null
     )
     {
@@ -102,6 +103,7 @@ public partial class ModalDialogProviderService
             { x => x.TimeEntryId, timEntryId },
             { x => x.TaskListId, taskListId },
             { x => x.TaskStatus, taskStatus },
+            { x => x.EndTime, endTime },
         };
         await _mudDialogService.ShowAsync<AddTaskModalForm>("Add new task", parameters);
     }

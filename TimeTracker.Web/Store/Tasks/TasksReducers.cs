@@ -95,7 +95,7 @@ public class TasksReducers
     }
     
     [ReducerMethod]
-    public static TasksState SetOverdueTasksListItemsActionActionReducer(TasksState state, SetOverdueTasksListItemsAction action)
+    public static TasksState SetOverdueTasksListItemsActionReducer(TasksState state, SetOverdueTasksListItemsAction action)
     {
         return state with
         {
@@ -104,9 +104,9 @@ public class TasksReducers
     }
 
     [ReducerMethod]
-    public static TasksState SetOverdueTasksListItemActionActionReducer(TasksState state, SetOverdueTasksListItemAction action)
+    public static TasksState SetOverdueTasksListItemActionReducer(TasksState state, SetOverdueTasksListItemAction action)
     {
-        return state with
+        state = state with
         {
             OverdueList = state.OverdueList.Select(item =>
             {
@@ -117,10 +117,16 @@ public class TasksReducers
                 return item;
             }).ToList()
         };
+        if (state.OverdueList.All(item => item.TaskId != action.Task.TaskId))
+        {
+            state.OverdueList.Add(action.Task);
+        }
+
+        return state;
     }
 
     [ReducerMethod]
-    public static TasksState SetIsOverdueTasksListLoadingActionActionReducer(TasksState state, SetIsOverdueTasksListLoadingAction action)
+    public static TasksState SetIsOverdueTasksListLoadingActionReducer(TasksState state, SetIsOverdueTasksListLoadingAction action)
     {
         return state with
         {
