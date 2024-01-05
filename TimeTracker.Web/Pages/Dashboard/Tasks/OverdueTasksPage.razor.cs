@@ -28,8 +28,8 @@ public partial class OverdueTasksPage
         Dispatcher.Dispatch(new LoadOverdueTasksListAction());
     }
     
-    private Task OnAddTask()
+    private Task OnAddTask(DateTime? endTime = null)
     {
-        return ModalDialogProviderService.ShowAddTaskModal();
+        return ModalDialogProviderService.ShowAddTaskModal(endTime: endTime);
     }
 }

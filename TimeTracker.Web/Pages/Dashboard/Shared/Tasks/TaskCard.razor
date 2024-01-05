@@ -6,7 +6,7 @@
     @onclick="() => OnClickTask()"
     Elevation="25"
     Style="cursor: pointer"
-    Class="pa-2 rounded-lg my-3">
+    Class="@("pa-2 rounded-lg " + Class)">
     <MudStack>
         <MudStack Row="true" Spacing="1">
             <TaskIdBadge
@@ -56,7 +56,7 @@
                     @foreach (var status in _statuses)
                     {
                         <MudMenuItem
-                            OnClick="() => OnSelectTaskStatus(status)"
+                            OnClick="@(() => OnSelectTaskStatus(status))"
                             Disabled="@(Task.Status == status)">
                             @status.GetDisplayName()
                         </MudMenuItem>
@@ -71,6 +71,13 @@
             @Task.Title?.Truncate(300)
         </MudText>
 
-        <TagsBadgesList Tags="@Task.Tags"/>
+        <MudStack Row="true" Justify="Justify.SpaceBetween"> 
+            <TagsBadgesList Tags="@Task.Tags"/>
+            
+            @if (IsShowTaskList)
+            {
+                <MudText Typo="Typo.caption">@_taskListPath</MudText>
+            }
+        </MudStack>
     </MudStack>
 </MudPaper>

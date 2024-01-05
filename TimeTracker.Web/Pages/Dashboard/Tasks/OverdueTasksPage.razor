@@ -8,34 +8,51 @@
 @layout Layout
 
 <MudStack>
-    <MudText Typo="Typo.subtitle2">Overdue</MudText>
-    <MudDivider></MudDivider>
-    @foreach (var task in _tasks.Where(item => item.EndTime <= _listStartDate))
+    @if (TasksState.Value.IsOverdueListLoading)
     {
-        <TaskCard Task="@task"></TaskCard>
+        <MudStack AlignItems="AlignItems.Center">
+            <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+        </MudStack>
     }
-    <MudSpacer/>
-    
-    @foreach (var date in _listStartDate.GetDateRange(_listEndDate))
+    else
     {
-        <MudText Typo="Typo.subtitle2">@date.ToString("MMM dd yyyy - dddd")</MudText>
-        <MudDivider></MudDivider>
-        foreach (var task in _tasks)
+        var overdueTasks = _tasks.Where(item => item.EndTime < _listStartDate).ToList();
+        if (overdueTasks.Any())
         {
-            if (task.EndTime.HasValue && task.EndTime.Value.Date == date)
+            <MudText Typo="Typo.subtitle2">Overdue</MudText>
+            <MudDivider></MudDivider>
+            foreach (var task in overdueTasks)
             {
                 <TaskCard Task="@task"></TaskCard>
             }
+            <MudSpacer/>    
         }
 
-        <MudStack Spacing="0" Justify="Justify.FlexStart" AlignItems="AlignItems.Start">
-            <MudButton
-                Size="Size.Small"
-                OnClick="OnAddTask"
-                StartIcon="@Icons.Material.Filled.Add">
-                Add task
-            </MudButton>
-        </MudStack>
-        <MudSpacer/>
+        @foreach (var date in _listStartDate.GetDateRange(_listEndDate))
+        {
+            <MudText Typo="Typo.subtitle2">@date.ToString("MMM dd yyyy - dddd")</MudText>
+            <MudDivider></MudDivider>
+            foreach (var task in _tasks)
+            {
+                if (task.EndTime.HasValue && task.EndTime.Value.Date == date)
+                {
+                    <TaskCard
+                        Task="@task"
+                        IsShowTaskList="true">
+                    </TaskCard>
+                }
+            }
+
+            <MudStack Spacing="0" Justify="Justify.FlexStart" AlignItems="AlignItems.Start">
+                <MudButton
+                    Size="Size.Small"
+                    OnClick="@(() => OnAddTask(date))"
+                    StartIcon="@Icons.Material.Filled.Add">
+                    Add task
+                </MudButton>
+            </MudStack>
+            <MudSpacer/>
+            <MudSpacer/>
+        }
     }
 </MudStack>

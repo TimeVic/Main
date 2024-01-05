@@ -38,7 +38,7 @@
             {
                 foreach (var task in _tasks.Where(item => item.Status == taskStatus))
                 {
-                    <TaskCard Task="@task"></TaskCard>
+                    <TaskCard Class="mb-3" Task="@task"></TaskCard>
                 }
             }
         </MudPaper>

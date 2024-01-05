@@ -16,6 +16,12 @@ public partial class TaskCard
 {
     [Parameter]
     public TaskDto Task { get; set; }
+
+    [Parameter]
+    public bool IsShowTaskList { get; set; } = false;
+    
+    [Parameter]
+    public string? Class { get; set; }
     
     [Inject]
     public IState<TasksState> TasksState { get; set; }
@@ -35,7 +41,24 @@ public partial class TaskCard
     };
 
     private ICollection<TaskPriority> _priorities = Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>().ToList();
-    
+
+    private string _taskListPath
+    {
+        get
+        {
+            var projectName = Task.TaskList?.Project?.Name;
+            var clientName = Task.TaskList?.Project?.Client?.Name;
+            var parts = new List<string>();
+            if (!string.IsNullOrEmpty(clientName))
+                parts.Add(clientName);
+            if (!string.IsNullOrEmpty(projectName))
+                parts.Add(projectName);
+            parts.Add(Task.TaskList.Name);
+            
+            return string.Join(" > ", parts);
+        }
+    }
+
     private void OnClickTask()
     {
         InvokeAsync(async () => await ModalDialogProviderService.ShowEditTaskModal(Task));
@@ -47,10 +70,10 @@ public partial class TaskCard
         await UpdateTask(Task);
     }
     
-    private async Task OnSelectTaskStatus(TaskStatus status)
+    private Task OnSelectTaskStatus(TaskStatus status)
     {
         Task.Status = status;
-        await UpdateTask(Task);
+        return UpdateTask(Task);
     }
     
     private async Task UpdateTask(TaskDto task)
