@@ -13,6 +13,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         [StringLength(100)]
         public string? SearchString { get; set; }
 
+        public DateTime? StartTime { get; set; }
+        
+        public DateTime? EndTime { get; set; }
+        
         public ICollection<TaskStatus>? Statuses { get; set; } = new List<TaskStatus>();
     }
 }

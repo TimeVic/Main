@@ -6,18 +6,18 @@ using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Store.Tasks.Effects;
 
-public class LoadMyTasksEffect: Effect<LoadOverdueTasksListAction>
+public class LoadOverdueTasksEffect: Effect<LoadOverdueTasksListAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<DashboardState> _state;
     private readonly ApiService _apiService;
-    private readonly ILogger<LoadMyTasksEffect> _logger;
+    private readonly ILogger<LoadOverdueTasksEffect> _logger;
 
-    public LoadMyTasksEffect(
+    public LoadOverdueTasksEffect(
         ApiService apiService,
         IState<AuthState> authState,
         IState<DashboardState> state,
-        ILogger<LoadMyTasksEffect> logger
+        ILogger<LoadOverdueTasksEffect> logger
     )
     {
         _apiService = apiService;
@@ -31,13 +31,8 @@ public class LoadMyTasksEffect: Effect<LoadOverdueTasksListAction>
         try
         {
             dispatcher.Dispatch(new SetIsOverdueTasksListLoadingAction(true));
-            var response = await _apiService.TasksGetMyListAsync(
-                _authState.Value.Workspace.Id,
-                new List<TaskStatus>()
-                {
-                    TaskStatus.ToDo,
-                    TaskStatus.InProgress
-                }
+            var response = await _apiService.TasksGetOverdueListAsync(
+                _authState.Value.Workspace.Id
             );
             dispatcher.Dispatch(new SetOverdueTasksListItemsAction(response));
         }
