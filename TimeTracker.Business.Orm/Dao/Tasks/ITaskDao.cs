@@ -52,4 +52,6 @@ public interface ITaskDao: IDomainService
     );
 
     Task UpdatePositions(WorkspaceEntity workspace, IDictionary<long, int> items);
+
+    Task<ICollection<TaskEntity>> GetTasksToRemind();
 }

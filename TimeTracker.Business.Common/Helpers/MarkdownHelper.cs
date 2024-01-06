@@ -11,7 +11,10 @@ public class MarkdownHelper
 {
     private static readonly MarkdownPipeline MBuilderPipeline = new MarkdownPipelineBuilder()
         .UseAdvancedExtensions()
-        .UseColorCode(StyleDictionary.DefaultDark)
+        .UseColorCode(
+            HtmlFormatterType.Css,
+            styleDictionary: StyleDictionary.DefaultDark
+        )
         .Build();
     
     private static readonly ReverseMarkdown.Converter HtmlToMarkdownBuilder = new(new () {

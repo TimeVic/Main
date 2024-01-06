@@ -2,10 +2,10 @@
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using TimeTracker.Business.Clients.Smtp.Core;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Business.Notifications.Core.Emails;
 
-namespace TimeTracker.Business.Notifications.Services
+namespace TimeTracker.Business.Clients.Smtp
 {
     public class EmailSendingService : IEmailSendingService
     {

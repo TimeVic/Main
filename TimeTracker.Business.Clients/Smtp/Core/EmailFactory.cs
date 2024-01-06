@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
-namespace TimeTracker.Business.Notifications.Core.Emails
+namespace TimeTracker.Business.Clients.Smtp.Core
 {
-    class EmailFactory
+    public class EmailFactory
     {
         // cached email templates
         private static readonly ConcurrentDictionary<string, EmailTemplateModel> _cachedTemplates = new();

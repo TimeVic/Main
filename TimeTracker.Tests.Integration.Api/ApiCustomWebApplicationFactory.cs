@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using TimeTracker.Api;
+using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Helpers;
-using TimeTracker.Business.Notifications.Services;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 
 namespace TimeTracker.Tests.Integration.Api;
@@ -24,10 +24,10 @@ public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
     {
         var builder = Host.CreateDefaultBuilder()
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .UseSerilog()
             .ConfigureWebHostDefaults(builder =>
             {
                 builder.UseStartup<TestStartup>()
-                    .UseSerilog()
                     .UseContentRoot(AssemblyUtils.GetAssemblyPath(typeof(ApiAssemblyMarker).Assembly))
                     .ConfigureTestServices(services => 
                     {

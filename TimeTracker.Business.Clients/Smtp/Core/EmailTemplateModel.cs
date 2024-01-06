@@ -1,6 +1,6 @@
-﻿namespace TimeTracker.Business.Notifications.Core.Emails
+﻿namespace TimeTracker.Business.Clients.Smtp.Core
 {
-    class EmailTemplateModel
+    public class EmailTemplateModel
     {
         // this class is stored in a template cache
 

@@ -63,6 +63,22 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         [Column(Name = "position_index", SqlType = "int", NotNull = true)]
         public virtual int PositionIndex { get; set; }
         
+        #region Reminder
+        
+        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "remind_time", SqlType = "datetime", NotNull = false)]
+        public virtual DateTime? RemindTime { get; set; }
+        
+        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "reminded_at", SqlType = "datetime", NotNull = false)]
+        public virtual DateTime? RemindedAt { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "is_reminder_enabled", NotNull = true)]
+        public virtual bool IsReminderEnabled { get; set; }
+        
+        #endregion
+        
         [ManyToOne(
             ClassType = typeof(UserEntity), 
             Column = "user_id", 

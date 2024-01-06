@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace TimeTracker.Business.Notifications.Core.Emails
+namespace TimeTracker.Business.Clients.Smtp.Core
 {
     public class EmailBuilder
     {

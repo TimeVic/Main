@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Notification.Abstractions;
+using TimeTracker.Business.Clients.Smtp;
+using TimeTracker.Business.Clients.Smtp.Core;
 using TimeTracker.Business.Common.Helpers;
-using TimeTracker.Business.Notifications.Core.Emails;
-using TimeTracker.Business.Notifications.Services;
 
 namespace TimeTracker.Business.Notifications.Senders.Tasks.Comments
 {

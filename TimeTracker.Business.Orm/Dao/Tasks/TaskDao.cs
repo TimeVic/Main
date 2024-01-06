@@ -244,4 +244,26 @@ public class TaskDao: ITaskDao
         }
         return existsTaskWithMaxId.TaskId + 1;
     }
+    
+    public async Task<ICollection<TaskEntity>> GetTasksToRemind()
+    {
+        var timeToRemind = DateTime.UtcNow - GlobalConstants.TaskReminderTimeout;
+        TaskListEntity taskListAlias = null;
+        ProjectEntity projectAlias = null;
+        WorkspaceEntity workspaceAlias = null;
+        UserEntity userAlias = null;
+        return await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
+            .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
+            .Inner.JoinAlias(item => taskListAlias.Project, () => projectAlias)
+            .Inner.JoinAlias(item => projectAlias.Workspace, () => workspaceAlias)
+            .Inner.JoinAlias(item => item.User, () => userAlias)
+            .Where(item => item.IsArchived == false)
+            .Where(
+                item => item.RemindTime.HasValue 
+                    && item.RemindTime > timeToRemind
+                    && item.RemindTime != item.RemindedAt
+            )
+            .Take(100)
+            .ListAsync<TaskEntity>();
+    }
 }

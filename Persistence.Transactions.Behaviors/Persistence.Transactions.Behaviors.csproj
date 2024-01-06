@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <LangVersion>11</LangVersion>
-        <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>12</LangVersion>
+        <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="NHibernate" Version="5.4.4" />
+      <PackageReference Include="NHibernate" Version="5.5.0" />
     </ItemGroup>
 
 </Project>

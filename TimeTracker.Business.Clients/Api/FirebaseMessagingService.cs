@@ -4,7 +4,7 @@ using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Logging;
 using TimeTracker.Business.Common.Utils;
 
-namespace TimeTracker.Business.Notifications.Services;
+namespace TimeTracker.Business.Clients.Api;
 
 public class FirebaseMessagingService: IFirebaseMessagingService
 {
@@ -62,6 +62,26 @@ public class FirebaseMessagingService: IFirebaseMessagingService
         return SendMessage(message);
     }
 
+    public async Task<bool> ValidateToken(string token)
+    {
+        // Send a message to the device corresponding to the provided
+        // registration token.
+        try
+        {
+            var message = new MulticastMessage()
+            {
+                Tokens = new List<string>() { token }
+            };
+            var response = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
+            return response.SuccessCount > 0;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+        }
+        return false;
+    }
+    
     private async Task SendMessage(Message message)
     {
         // Send a message to the device corresponding to the provided

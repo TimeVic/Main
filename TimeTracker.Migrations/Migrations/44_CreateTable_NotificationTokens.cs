@@ -15,6 +15,11 @@ namespace TimeTracker.Migrations.Migrations
                 .WithColumn("token").AsString(1024).NotNullable().Unique()
                 .WithColumn("create_time").AsCustom("timestamptz").NotNullable();
             
+            Alter.Table("tasks")
+                .AddColumn("is_reminder_enabled").AsBoolean().NotNullable().WithDefaultValue(true)
+                .AddColumn("remind_time").AsCustom("timestamptz").Nullable()
+                .AddColumn("reminded_at").AsCustom("timestamptz").Nullable();
+            
             base.Up();
         }
     }

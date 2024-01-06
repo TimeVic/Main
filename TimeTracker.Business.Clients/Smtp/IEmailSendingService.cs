@@ -1,7 +1,6 @@
-﻿using Domain.Abstractions;
-using TimeTracker.Business.Notifications.Core.Emails;
+﻿using TimeTracker.Business.Clients.Smtp.Core;
 
-namespace TimeTracker.Business.Notifications.Services
+namespace TimeTracker.Business.Clients.Smtp
 {
     public interface IEmailSendingService
     {

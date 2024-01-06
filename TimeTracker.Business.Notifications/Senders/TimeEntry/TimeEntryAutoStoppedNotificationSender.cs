@@ -1,6 +1,6 @@
 ﻿using Notification.Abstractions;
-using TimeTracker.Business.Notifications.Core.Emails;
-using TimeTracker.Business.Notifications.Services;
+using TimeTracker.Business.Clients.Smtp;
+using TimeTracker.Business.Clients.Smtp.Core;
 
 namespace TimeTracker.Business.Notifications.Senders.TimeEntry
 {
