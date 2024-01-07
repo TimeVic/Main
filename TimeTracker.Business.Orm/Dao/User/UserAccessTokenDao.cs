@@ -41,4 +41,14 @@ public class UserAccessTokenDao: IUserAccessTokenDao
             .Where(item => item.Token == accessToken)
             .FirstOrDefaultAsync();
     }
+    
+    public async Task Delete(UserAccessTokenEntity accessToken)
+    {
+        await _sessionProvider.CurrentSession.Query<UserJwtTokenEntity>()
+            .Where(item => item.AccessToken == accessToken)
+            .DeleteAsync();
+        await _sessionProvider.CurrentSession.Query<UserAccessTokenEntity>()
+            .Where(item => item == accessToken)
+            .DeleteAsync();
+    }
 }

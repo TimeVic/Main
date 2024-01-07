@@ -1,7 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
+using TimeTracker.Business.Clients.Smtp.Core;
 
-namespace TimeTracker.Business.Clients.Smtp.Core
+namespace TimeTracker.Business.Notifications.Core
 {
     public class EmailFactory
     {

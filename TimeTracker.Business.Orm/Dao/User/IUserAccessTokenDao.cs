@@ -8,4 +8,6 @@ public interface IUserAccessTokenDao: IDomainService
     Task<UserAccessTokenEntity> CreateNew(UserEntity user);
 
     Task<UserAccessTokenEntity?> GetByToken(string accessToken);
+
+    Task Delete(UserAccessTokenEntity accessToken);
 }

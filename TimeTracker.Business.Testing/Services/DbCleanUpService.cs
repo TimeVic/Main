@@ -54,5 +54,6 @@ public class DbCleanUpService: IDbCleanUpService
         }
 
         await _sessionProvider.PerformCommitAsync();
+        _sessionProvider.CurrentSession.Clear();
     }
 }

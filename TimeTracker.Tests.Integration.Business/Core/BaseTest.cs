@@ -77,13 +77,14 @@ public abstract class BaseTest: IDisposable
         
         DbSessionProvider = Scope.Resolve<IDbSessionProvider>();
         _dbCleanUpService = Scope.Resolve<IDbCleanUpService>();
+        _dbCleanUpService.CleanUp().Wait();
+        
         SmtpClientServiceMock = Scope.Resolve<ISmtpClientService>() as SmtpClientServiceMock;
         FirebaseClientService = Scope.Resolve<IFirebaseClientService>() as FirebaseClientServiceMock;
         
         _queueDao = Scope.Resolve<IQueueDao>();
         SmtpClientServiceMock.Reset();
         FirebaseClientService.Reset();
-        _dbCleanUpService.CleanUp().Wait();
     }
 
     #region Uploading
