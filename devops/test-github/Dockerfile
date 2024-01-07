@@ -37,7 +37,7 @@ RUN apt update
 RUN apt-get install -y net-tools sudo netcat \
     default-jre \
     postgresql postgresql-client redis \
-    dotnet-sdk-7.0
+    dotnet-sdk-8.0
 
 # Create dirs
 RUN mkdir /tmp/test
