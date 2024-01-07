@@ -1,0 +1,9 @@
+﻿@page "/board/goals-tracker"
+
+@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts
+
+@inherits BaseComponent
+@layout Layout
+
+<GoalsTrackerTable Year="@DateTime.Now.Year" Month="@DateTime.Now.Month"/>
