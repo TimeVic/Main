@@ -2,7 +2,7 @@
 
 namespace TimeTracker.Business.Clients.Smtp;
 
-public class EmailSendingServiceMock : IEmailSendingService
+public class SmtpClientServiceMock : ISmtpClientService
 {
     public List<FakeEmailModel> SentMessages = new ();
     public bool IsEmailSent

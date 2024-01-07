@@ -6,6 +6,7 @@ using Persistence.Transactions.Behaviors;
 using Serilog;
 using Serilog.Extensions.Autofac.DependencyInjection;
 using TimeTracker.Business;
+using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Orm.Dao;
@@ -13,19 +14,22 @@ using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.ExternalClients.Jira;
 using TimeTracker.Business.Services.ExternalClients.Redmine;
 using TimeTracker.Business.Testing;
+using TimeTracker.Business.Testing.Services;
 
 namespace TimeTracker.Tests.Integration.Business.Core;
 
 public abstract class BaseTest: IDisposable
 {
     protected readonly IDbSessionProvider DbSessionProvider;
-    protected readonly EmailSendingServiceMock EmailSendingServiceMock;
+    protected readonly SmtpClientServiceMock SmtpClientServiceMock;
+    protected readonly FirebaseClientServiceMock FirebaseClientService;
     protected readonly ILifetimeScope Scope;
     
     private readonly IContainer _serviceProvider;
     protected readonly IQueueDao _queueDao;
 
     protected bool IsFakeIntegrations = true;
+    private readonly IDbCleanUpService _dbCleanUpService;
 
     public BaseTest(bool isFakeIntegrations = true)
     {
@@ -48,8 +52,11 @@ public abstract class BaseTest: IDisposable
         );
         
         // Register fackers
-        builder.RegisterType<EmailSendingServiceMock>()
-            .As<IEmailSendingService>()
+        builder.RegisterType<SmtpClientServiceMock>()
+            .As<ISmtpClientService>()
+            .InstancePerLifetimeScope();
+        builder.RegisterType<FirebaseClientServiceMock>()
+            .As<IFirebaseClientService>()
             .InstancePerLifetimeScope();
 
         if (IsFakeIntegrations)
@@ -69,10 +76,14 @@ public abstract class BaseTest: IDisposable
         Scope = _serviceProvider.BeginLifetimeScope();
         
         DbSessionProvider = Scope.Resolve<IDbSessionProvider>();
-        EmailSendingServiceMock = Scope.Resolve<IEmailSendingService>() as EmailSendingServiceMock;
+        _dbCleanUpService = Scope.Resolve<IDbCleanUpService>();
+        SmtpClientServiceMock = Scope.Resolve<ISmtpClientService>() as SmtpClientServiceMock;
+        FirebaseClientService = Scope.Resolve<IFirebaseClientService>() as FirebaseClientServiceMock;
         
         _queueDao = Scope.Resolve<IQueueDao>();
-        EmailSendingServiceMock.Reset();
+        SmtpClientServiceMock.Reset();
+        FirebaseClientService.Reset();
+        _dbCleanUpService.CleanUp().Wait();
     }
 
     #region Uploading

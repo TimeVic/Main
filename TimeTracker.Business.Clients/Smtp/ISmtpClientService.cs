@@ -2,7 +2,7 @@
 
 namespace TimeTracker.Business.Clients.Smtp
 {
-    public interface IEmailSendingService
+    public interface ISmtpClientService
     {
         public string SendEmail(
             string to,

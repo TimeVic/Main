@@ -6,12 +6,12 @@ namespace TimeTracker.Business.Notifications.Senders.User
 {
     public class EmailVerificationNotificationSender : IAsyncNotification<EmailVerificationNotificationItemContext>
     {
-        private readonly IEmailSendingService _emailSendingService;
+        private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
 
-        public EmailVerificationNotificationSender(IEmailSendingService emailSendingService)
+        public EmailVerificationNotificationSender(ISmtpClientService smtpClientService)
         {
-            _emailSendingService = emailSendingService;
+            _smtpClientService = smtpClientService;
             _emailFactory = new EmailFactory();
         }
 
@@ -22,7 +22,7 @@ namespace TimeTracker.Business.Notifications.Senders.User
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("EmailVerificationNotification.htm");
             emailBuilder.AddPlaceholder("verificationUrl", context.VerificationUrl);
-            _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
+            _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
     }

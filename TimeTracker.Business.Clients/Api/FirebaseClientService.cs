@@ -6,15 +6,15 @@ using TimeTracker.Business.Common.Utils;
 
 namespace TimeTracker.Business.Clients.Api;
 
-public class FirebaseMessagingService: IFirebaseMessagingService
+public class FirebaseClientService: IFirebaseClientService
 {
     private const string CredentialsFilepath = "../../../../.credentials/firebase-credentials.json";
  
-    private readonly ILogger<FirebaseMessagingService> _logger;
+    private readonly ILogger<FirebaseClientService> _logger;
     
     private readonly GoogleCredential _credentials;
     
-    public FirebaseMessagingService(ILogger<FirebaseMessagingService> logger)
+    public FirebaseClientService(ILogger<FirebaseClientService> logger)
     {
         _logger = logger;
         var filePath = Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath);
@@ -35,23 +35,26 @@ public class FirebaseMessagingService: IFirebaseMessagingService
         });
     }
 
-    public Task SendMessage(string toToken, string title, string body)
+    public Task<bool> SendMessage(string toToken, string title, string body)
     {
         var message = new Message()
         {
             Token = toToken,
-            Notification = new FirebaseAdmin.Messaging.Notification()
+            Webpush = new WebpushConfig()
             {
-                Body = body,
-                Title = title,
-                ImageUrl = "https://timevic.com/img/logo/black/clock-128.png"
+                Notification = new WebpushNotification()
+                {
+                    Body = body,
+                    Title = title,
+                    Icon = "https://timevic.com/img/logo/black/clock-128.png"
+                }
             }
         };
 
         return SendMessage(message);
     }
 
-    public Task SendMessage(string toToken, Dictionary<string, string> data)
+    public Task<bool> SendMessage(string toToken, Dictionary<string, string> data)
     {
         var message = new Message()
         {
@@ -82,18 +85,19 @@ public class FirebaseMessagingService: IFirebaseMessagingService
         return false;
     }
     
-    private async Task SendMessage(Message message)
+    private async Task<bool> SendMessage(Message message)
     {
         // Send a message to the device corresponding to the provided
         // registration token.
         try
         {
             var response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
-            // TODO: Remove Token if failed
+            return !string.IsNullOrEmpty(response);
         }
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
         }
+        return false;
     }
 }

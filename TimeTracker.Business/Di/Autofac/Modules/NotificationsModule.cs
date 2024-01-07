@@ -26,13 +26,13 @@ namespace TimeTracker.Business.Di.Autofac.Modules
                 .InstancePerLifetimeScope();
             
             builder
-                .RegisterType<EmailSendingService>()
-                .As<IEmailSendingService>()
+                .RegisterType<SmtpClientService>()
+                .As<ISmtpClientService>()
                 .SingleInstance();
             
             builder
-                .RegisterType<FirebaseMessagingService>()
-                .As<IFirebaseMessagingService>()
+                .RegisterType<FirebaseClientService>()
+                .As<IFirebaseClientService>()
                 .SingleInstance();
         }
     }

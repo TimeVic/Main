@@ -44,8 +44,8 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(testContext.ToAddress, actualEmail.To);
     }
     
@@ -65,8 +65,8 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        var actualEmail = EmailSendingServiceMock.SentMessages.LastOrDefault();
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
         Assert.Contains(testContext.ToAddress, actualEmail.To);
         Assert.Contains(expectedUser.VerificationToken, actualEmail.Body);
     }
@@ -94,8 +94,8 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        var actualEmail = EmailSendingServiceMock.SentMessages.LastOrDefault();
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
         Assert.Contains(testContext.ToAddress, actualEmail.To);
     }
 }

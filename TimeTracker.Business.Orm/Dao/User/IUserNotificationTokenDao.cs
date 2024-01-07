@@ -10,4 +10,8 @@ public interface IUserNotificationTokenDao: IDomainService
     Task<UserNotificationTokenEntity?> GetByToken(string accessToken);
 
     Task<UserNotificationTokenEntity?> GetByUser(UserEntity user);
+
+    Task DeleteByToken(string accessToken);
+
+    Task Delete(UserNotificationTokenEntity token);
 }

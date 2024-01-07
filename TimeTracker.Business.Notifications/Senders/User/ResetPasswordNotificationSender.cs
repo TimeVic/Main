@@ -6,12 +6,12 @@ namespace TimeTracker.Business.Notifications.Senders.User
 {
     public class ResetPasswordNotificationSender : IAsyncNotification<ResetPasswordNotificationContext>
     {
-        private readonly IEmailSendingService _emailSendingService;
+        private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
 
-        public ResetPasswordNotificationSender(IEmailSendingService emailSendingService)
+        public ResetPasswordNotificationSender(ISmtpClientService smtpClientService)
         {
-            _emailSendingService = emailSendingService;
+            _smtpClientService = smtpClientService;
             _emailFactory = new EmailFactory();
         }
 
@@ -22,7 +22,7 @@ namespace TimeTracker.Business.Notifications.Senders.User
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("ResetPasswordNotification.htm");
             emailBuilder.AddPlaceholder("resetPasswordUrl", context.ResetPasswordUrl);
-            _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
+            _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
     }

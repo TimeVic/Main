@@ -6,14 +6,14 @@ namespace TimeTracker.Business.Notifications.Senders
 {
     public class TestNotificationSender : IAsyncNotification<TestNotificationItemContext>
     {
-        private readonly IEmailSendingService _emailSendingService;
+        private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
 
         public TestNotificationSender(
-            IEmailSendingService emailSendingService
+            ISmtpClientService smtpClientService
         )
         {
-            _emailSendingService = emailSendingService;
+            _smtpClientService = smtpClientService;
             _emailFactory = new EmailFactory();
         }
 
@@ -23,7 +23,7 @@ namespace TimeTracker.Business.Notifications.Senders
         )
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("TestNotification.htm");
-            _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
+            _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
     }

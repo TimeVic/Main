@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using TimeTracker.Api;
 using TimeTracker.Business;
+using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Common.Services.Web.ReCaptcha;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
@@ -25,7 +26,8 @@ public class TestStartup: Startup
             typeof(BusinessTestingAssemblyMarker).Assembly
         );
         builder.RegisterType<FakeReCaptchaService>().As<IReCaptchaService>().InstancePerDependency();
-        builder.RegisterType<EmailSendingServiceMock>().As<IEmailSendingService>().InstancePerLifetimeScope();
+        builder.RegisterType<SmtpClientServiceMock>().As<ISmtpClientService>().InstancePerLifetimeScope();
+        builder.RegisterType<FirebaseClientServiceMock>().As<IFirebaseClientService>().InstancePerLifetimeScope();
         builder.RegisterType<ClickUpClientMock>().As<IClickUpClient>().InstancePerLifetimeScope();
         builder.RegisterType<RedmineClientMock>().As<IRedmineClient>().InstancePerLifetimeScope();
         builder.RegisterType<JiraClientMock>().As<IJiraClient>().InstancePerLifetimeScope();

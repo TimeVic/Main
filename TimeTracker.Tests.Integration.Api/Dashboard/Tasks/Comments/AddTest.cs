@@ -88,9 +88,9 @@ public class AddTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
         Assert.Contains(
-            EmailSendingServiceMock.SentMessages, 
+            SmtpClientServiceMock.SentMessages, 
             item => item.To == _user.Email
             && item.Body.Contains("added")
             && item.Body.Contains($"{_task.TaskList.Project.Workspace.Id}/{_task.TaskId}")
@@ -145,9 +145,9 @@ public class AddTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
         Assert.Contains(
-            EmailSendingServiceMock.SentMessages, 
+            SmtpClientServiceMock.SentMessages, 
             item => item.To == user2.Email || item.To == user3.Email
         );
     }

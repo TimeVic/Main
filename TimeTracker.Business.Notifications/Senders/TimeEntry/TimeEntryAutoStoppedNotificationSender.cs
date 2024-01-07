@@ -6,12 +6,12 @@ namespace TimeTracker.Business.Notifications.Senders.TimeEntry
 {
     public class TimeEntryAutoStoppedNotificationSender : IAsyncNotification<TimeEntryAutoStoppedNotificationItemContext>
     {
-        private readonly IEmailSendingService _emailSendingService;
+        private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
 
-        public TimeEntryAutoStoppedNotificationSender(IEmailSendingService emailSendingService)
+        public TimeEntryAutoStoppedNotificationSender(ISmtpClientService smtpClientService)
         {
-            _emailSendingService = emailSendingService;
+            _smtpClientService = smtpClientService;
             _emailFactory = new EmailFactory();
         }
 
@@ -21,7 +21,7 @@ namespace TimeTracker.Business.Notifications.Senders.TimeEntry
         )
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("TimeEntryAutoStoppedNotification.htm");
-            _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
+            _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
     }

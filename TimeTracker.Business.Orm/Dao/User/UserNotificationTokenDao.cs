@@ -55,6 +55,12 @@ public class UserNotificationTokenDao: IUserNotificationTokenDao
             .DeleteAsync();
     }
     
+    public async Task Delete(UserNotificationTokenEntity token)
+    {
+        token.User.NotificationTokens = token.User.NotificationTokens.Where(item => item.Id != token.Id).ToList();
+        await _sessionProvider.CurrentSession.DeleteAsync(token);
+    }
+    
     public async Task<UserNotificationTokenEntity> Set(UserEntity user, string token)
     {
         if (string.IsNullOrEmpty(token))

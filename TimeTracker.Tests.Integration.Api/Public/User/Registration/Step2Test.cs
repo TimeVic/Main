@@ -56,8 +56,8 @@ public class Step2Test: BaseTest
         Assert.True(responseData.User.DefaultWorkspace.IsDefault);
         
         await _queueService.ProcessAsync(QueueChannel.Notifications);
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        Assert.Contains(EmailSendingServiceMock.SentMessages, message =>
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        Assert.Contains(SmtpClientServiceMock.SentMessages, message =>
         {
             return message.Body.Contains("is verified");
         });

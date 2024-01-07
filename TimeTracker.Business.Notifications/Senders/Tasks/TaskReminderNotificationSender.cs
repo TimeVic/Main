@@ -9,19 +9,19 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
 {
     public class TaskReminderNotificationSender : IAsyncNotification<TaskReminderNotificationContext>
     {
-        private readonly IEmailSendingService _emailSendingService;
-        private readonly IFirebaseMessagingService _firebaseMessagingService;
+        private readonly ISmtpClientService _smtpClientService;
+        private readonly IFirebaseClientService _firebaseClientService;
         private readonly EmailFactory _emailFactory;
         private readonly string? _frontendUrl;
 
         public TaskReminderNotificationSender(
-            IEmailSendingService emailSendingService,
-            IFirebaseMessagingService firebaseMessagingService,
+            ISmtpClientService smtpClientService,
+            IFirebaseClientService firebaseClientService,
             IConfiguration configuration
         )
         {
-            _emailSendingService = emailSendingService;
-            _firebaseMessagingService = firebaseMessagingService;
+            _smtpClientService = smtpClientService;
+            _firebaseClientService = firebaseClientService;
             _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
             _emailFactory = new EmailFactory();
         }
@@ -40,7 +40,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
             emailBuilder.AddPlaceholder("userName", context.UserName);
             emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl}/board/task/{context.WorkspaceId}/{context.TaskId}");
             emailBuilder.AddPlaceholder("taskTitle", context.TaskTitle);
-            _emailSendingService.SendEmail(context.ToEmailAddress, emailBuilder, null);
+            _smtpClientService.SendEmail(context.ToEmailAddress, emailBuilder, null);
         }
         
         private async Task SendGcmNotification(TaskReminderNotificationContext context)
@@ -49,7 +49,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
             emailBuilder.AddPlaceholder("userName", context.UserName);
             emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl}/board/task/{context.WorkspaceId}/{context.TaskId}");
             emailBuilder.AddPlaceholder("taskTitle", context.TaskTitle);
-            _emailSendingService.SendEmail(context.ToEmailAddress, emailBuilder, null);
+            _smtpClientService.SendEmail(context.ToEmailAddress, emailBuilder, null);
         }
     }
 }

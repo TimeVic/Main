@@ -7,19 +7,19 @@ using TimeTracker.Business.Extensions;
 
 namespace TimeTracker.Business.Clients.Smtp
 {
-    public class EmailSendingService : IEmailSendingService
+    public class SmtpClientService : ISmtpClientService
     {
         private readonly SmtpSettings _smtpSettings;
 
         private readonly MailAddress _defaultFromAddress;
         private readonly NetworkCredential _credentials;
-        private readonly ILogger<EmailSendingService> _logger;
+        private readonly ILogger<SmtpClientService> _logger;
 
         private char[] Separators = ";".ToCharArray(); // for splitting lists of emails
 
-        public EmailSendingService(
+        public SmtpClientService(
             IConfiguration configuration, 
-            ILogger<EmailSendingService> logger
+            ILogger<SmtpClientService> logger
         )
         {
             _smtpSettings = new SmtpSettings(configuration);
@@ -108,7 +108,7 @@ namespace TimeTracker.Business.Clients.Smtp
 
         private void SendViaSmtpClient(MailMessage message)
         {
-            var smtpClient = new SmtpClient(_smtpSettings.Server);
+            var smtpClient = new System.Net.Mail.SmtpClient(_smtpSettings.Server);
             smtpClient.Port = _smtpSettings.Port;
             smtpClient.Credentials = _credentials;
             smtpClient.EnableSsl = _smtpSettings.EnableSsl;

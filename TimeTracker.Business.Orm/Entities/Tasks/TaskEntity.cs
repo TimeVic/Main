@@ -70,12 +70,8 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         public virtual DateTime? RemindTime { get; set; }
         
         [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "reminded_at", SqlType = "datetime", NotNull = false)]
-        public virtual DateTime? RemindedAt { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "is_reminder_enabled", NotNull = true)]
-        public virtual bool IsReminderEnabled { get; set; }
+        [Column(Name = "reminded_time", SqlType = "datetime", NotNull = false)]
+        public virtual DateTime? RemindedTime { get; set; }
         
         #endregion
         

@@ -11,6 +11,7 @@ using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using HttpClient = System.Net.Http.HttpClient;
 
 namespace TimeTracker.Tests.Integration.Api.Core;
 
@@ -23,7 +24,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     protected readonly IDbSessionProvider DbSessionProvider;
     protected readonly IUserSeeder UserSeeder;
     protected readonly IDataFactory<UserEntity> UserFactory;
-    protected readonly EmailSendingServiceMock EmailSendingServiceMock;
+    protected readonly SmtpClientServiceMock SmtpClientServiceMock;
 
     public BaseTest(ApiCustomWebApplicationFactory factory)
     {
@@ -33,7 +34,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         DbSessionProvider = _factory.Services.GetRequiredService<IDbSessionProvider>();
         UserSeeder = _factory.Services.GetRequiredService<IUserSeeder>();
         UserFactory = _factory.Services.GetRequiredService<IDataFactory<UserEntity>>();
-        EmailSendingServiceMock = _factory.Services.GetRequiredService<IEmailSendingService>() as EmailSendingServiceMock;
+        SmtpClientServiceMock = _factory.Services.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock;
         ServiceProvider = _factory.Services;
     }
     

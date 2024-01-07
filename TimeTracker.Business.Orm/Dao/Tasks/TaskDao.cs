@@ -247,7 +247,7 @@ public class TaskDao: ITaskDao
     
     public async Task<ICollection<TaskEntity>> GetTasksToRemind()
     {
-        var timeToRemind = DateTime.UtcNow - GlobalConstants.TaskReminderTimeout;
+        var timeToRemind = DateTime.UtcNow + GlobalConstants.TaskReminderTimeout;
         TaskListEntity taskListAlias = null;
         ProjectEntity projectAlias = null;
         WorkspaceEntity workspaceAlias = null;
@@ -259,9 +259,12 @@ public class TaskDao: ITaskDao
             .Inner.JoinAlias(item => item.User, () => userAlias)
             .Where(item => item.IsArchived == false)
             .Where(
-                item => item.RemindTime.HasValue 
-                    && item.RemindTime > timeToRemind
-                    && item.RemindTime != item.RemindedAt
+                item => item.RemindTime != null 
+                    && item.RemindTime < timeToRemind
+                    && (
+                        item.RemindedTime == null
+                        || item.RemindTime != item.RemindedTime    
+                    )
             )
             .Take(100)
             .ListAsync<TaskEntity>();

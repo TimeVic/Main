@@ -16,9 +16,8 @@ namespace TimeTracker.Migrations.Migrations
                 .WithColumn("create_time").AsCustom("timestamptz").NotNullable();
             
             Alter.Table("tasks")
-                .AddColumn("is_reminder_enabled").AsBoolean().NotNullable().WithDefaultValue(true)
                 .AddColumn("remind_time").AsCustom("timestamptz").Nullable()
-                .AddColumn("reminded_at").AsCustom("timestamptz").Nullable();
+                .AddColumn("reminded_time").AsCustom("timestamptz").Nullable();
             
             base.Up();
         }
