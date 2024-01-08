@@ -45,7 +45,7 @@ public class SendTaskReminderNotificationTest: BaseTest
         var task2 = await _taskSeeder.CreateAsync(user: _user);
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        _task.RemindTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
+        _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
         await CommitDbChanges();
 
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
@@ -59,7 +59,7 @@ public class SendTaskReminderNotificationTest: BaseTest
     {
         await _userNotificationTokenDao.Set(_user, "bad token");
         
-        _task.RemindTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
+        _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
         await CommitDbChanges();
 
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);

@@ -21,6 +21,7 @@ namespace TimeTracker.Business.Testing.Factories.Entity
                 .RuleFor(fake => fake.Priority, fake => TaskPriority.Medium)
                 .RuleFor(fake => fake.StartTime, fake => fake.Date.Past().ToUniversalTime())
                 .RuleFor(fake => fake.EndTime, fake => fake.Date.Future().ToUniversalTime())
+                .RuleFor(fake => fake.ReminderTime, fake => fake.Date.Future().ToUniversalTime())
                 .RuleFor(fake => fake.CreateTime, fake => fake.Date.Past().ToUniversalTime())
                 .RuleFor(fake => fake.UpdateTime, fake => fake.Date.Past().ToUniversalTime());
         }

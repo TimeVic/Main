@@ -22,7 +22,7 @@ public class GcmNotificationService: IGcmNotificationService
 
     public async Task SendTaskReminderNotification(TaskEntity task)
     {
-        if (!task.RemindTime.HasValue)
+        if (!task.ReminderTime.HasValue)
             throw new NullReferenceException("Task should contain RemindedAt time");
         
         foreach (var notificationToken in task.User.NotificationTokens)
@@ -30,13 +30,13 @@ public class GcmNotificationService: IGcmNotificationService
             var isSent = await _firebaseClient.SendMessage(
                 notificationToken.Token,
                 $"Reminder: {task.Title.TruncateAndAddDots(30)}",
-                $"Today {task.RemindTime:t}"
+                $"Today {task.ReminderTime:t}"
             );
             if (!isSent)
             {
                 await _userNotificationTokenDao.Delete(notificationToken);
             }
         }
-        task.RemindedTime = task.RemindTime;
+        task.RemindedTime = task.ReminderTime;
     }
 }

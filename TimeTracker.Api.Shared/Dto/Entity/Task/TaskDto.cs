@@ -24,6 +24,8 @@ public class TaskDto : IResponse
     
     public DateTime? EndTime { get; set; }
     
+    public DateTime? ReminderTime { get; set; }
+    
     public bool IsArchived { get; set; }
     
     public DateTime UpdateTime { get; set; }

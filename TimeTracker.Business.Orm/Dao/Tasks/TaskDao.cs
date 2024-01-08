@@ -110,7 +110,8 @@ public class TaskDao: ITaskDao
         TaskStatus status = TaskStatus.Backlog,
         TaskPriority priority = TaskPriority.Low,
         bool isArchived = false,
-        IEnumerable<TagEntity>? tags = null
+        IEnumerable<TagEntity>? tags = null,
+        DateTime? reminderTime = null
     )
     {
         task.TaskList = taskList;
@@ -121,6 +122,7 @@ public class TaskDao: ITaskDao
         task.Priority = priority;
         task.IsArchived = isArchived;
         task.UpdateTime = DateTime.UtcNow;
+        task.ReminderTime = reminderTime;
         SetStartEndTime(task, startTime, endTime);
         
         task.Tags.Clear();
@@ -259,11 +261,11 @@ public class TaskDao: ITaskDao
             .Inner.JoinAlias(item => item.User, () => userAlias)
             .Where(item => item.IsArchived == false)
             .Where(
-                item => item.RemindTime != null 
-                    && item.RemindTime < timeToRemind
+                item => item.ReminderTime != null 
+                    && item.ReminderTime < timeToRemind
                     && (
                         item.RemindedTime == null
-                        || item.RemindTime != item.RemindedTime    
+                        || item.ReminderTime != item.RemindedTime    
                     )
             )
             .Take(100)

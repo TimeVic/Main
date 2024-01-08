@@ -94,7 +94,8 @@ public partial class UpdateTest: BaseTest
             Priority = expectedTask.Priority,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
-            ExternalTaskId = expectedTask.ExternalTaskId
+            ExternalTaskId = expectedTask.ExternalTaskId,
+            ReminderTime = expectedTask.ReminderTime
         });
         response.EnsureSuccessStatusCode();
 
@@ -107,6 +108,8 @@ public partial class UpdateTest: BaseTest
         Assert.Equal(expectedTask.Priority, actualData.Priority);
         Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
         Assert.Equal(expectedTask.ExternalTaskId, actualData.ExternalTaskId);
+        Assert.Equal(expectedTask.ReminderTime.Value.ToShortTimeString(), actualData.ReminderTime.Value.ToUniversalTime().ToShortTimeString());
+        Assert.Equal(expectedTask.ReminderTime.Value.ToLongDateString(), actualData.ReminderTime.Value.ToUniversalTime().ToLongDateString());
     }
     
     [Fact]
@@ -161,7 +164,7 @@ public partial class UpdateTest: BaseTest
     public async Task ShouldNotSetUserIdFromWhichDoesNotHaveAccessToProject()
     {
         var user2 = await _userSeeder.CreateActivatedAsync();
-        _workspaceAccessService.ShareAccessAsync(
+        await _workspaceAccessService.ShareAccessAsync(
             _workspace,
             user2,
             MembershipAccessType.User,
@@ -169,7 +172,7 @@ public partial class UpdateTest: BaseTest
             {
                 new() { Project = _project }
             }
-        ).Wait();
+        );
         
         var project2 = _projectDao.CreateAsync(_workspace, "Test adding").Result;
         var taskList2 = _taskListSeeder.CreateAsync(project2).Result;
@@ -291,5 +294,30 @@ public partial class UpdateTest: BaseTest
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Null(actualData.StartTime);
         Assert.Null(actualData.EndTime);
+    }
+    
+    [Fact]
+    public async Task ShouldUpdateWithoutReminderTime()
+    {
+        var expectedTask = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.TaskId,
+            TaskListId = _otherTaskList.Id,
+            Title = expectedTask.Title,
+            Description = expectedTask.Description,
+            Status = expectedTask.Status,
+            Priority = expectedTask.Priority,
+            IsArchived = expectedTask.IsArchived,
+            UserId = _user.Id,
+            ExternalTaskId = expectedTask.ExternalTaskId,
+            ReminderTime = null
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.Equal(_task.TaskId, actualData.TaskId);
+        Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
+        Assert.Null(actualData.ReminderTime);
     }
 }

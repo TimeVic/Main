@@ -48,7 +48,7 @@ public class SendReminderNotificationTest: BaseTest
         // Arrange
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        _task.RemindTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
+        _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
         await CommitDbChanges();
 
         // Act
@@ -64,7 +64,7 @@ public class SendReminderNotificationTest: BaseTest
         // Arrange
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        _task.RemindTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(+1);
+        _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(+1);
         await CommitDbChanges();
 
         // Act
@@ -80,7 +80,7 @@ public class SendReminderNotificationTest: BaseTest
         // Arrange
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        _task.RemindTime = null;
+        _task.ReminderTime = null;
         await CommitDbChanges();
 
         // Act
@@ -96,7 +96,7 @@ public class SendReminderNotificationTest: BaseTest
         // Arrange
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        _task.RemindTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
+        _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
         await CommitDbChanges();
 
         // Act

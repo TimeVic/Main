@@ -35,7 +35,8 @@ public interface ITaskDao: IDomainService
         TaskStatus status = TaskStatus.Backlog,
         TaskPriority priority = TaskPriority.Low,
         bool isArchived = false,
-        IEnumerable<TagEntity>? tags = null
+        IEnumerable<TagEntity>? tags = null,
+        DateTime? reminderTime = null
     );
     
     Task<TaskEntity?> GetById(long taskListId);
