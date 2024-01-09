@@ -13,7 +13,6 @@ namespace TimeTracker.Migrations.Migrations
                 .WithColumn("year").AsInt32().NotNullable()
                 .WithColumn("month").AsInt32().NotNullable()
                 .WithColumn("user_id").AsInt64().NotNullable().ForeignKey("users", "id")
-                .WithColumn("is_archived").AsBoolean().NotNullable().WithDefaultValue(false)
                 .WithColumn("update_time").AsCustom("timestamptz").NotNullable()
                 .WithColumn("create_time").AsCustom("timestamptz").NotNullable();
             

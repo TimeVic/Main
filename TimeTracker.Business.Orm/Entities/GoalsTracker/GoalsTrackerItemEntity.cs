@@ -48,9 +48,9 @@ namespace TimeTracker.Business.Orm.Entities.GoalsTracker
             Lazy = CollectionLazy.Extra,
             Cascade = "none"
         )]
-        [Key(Column = "project_id")]
-        [OneToMany(ClassType = typeof(TaskListEntity))]
-        public virtual ICollection<TaskListEntity> TaskLists { get; set; } = new List<TaskListEntity>();
+        [Key(Column = "goals_tracker_item_id")]
+        [OneToMany(ClassType = typeof(GoalsTrackerCompletionMarkerEntity))]
+        public virtual ICollection<GoalsTrackerCompletionMarkerEntity> CompletionMarkers { get; set; } = new List<GoalsTrackerCompletionMarkerEntity>();
         
         // public virtual void SetClient(ClientEntity? client)
         // {
