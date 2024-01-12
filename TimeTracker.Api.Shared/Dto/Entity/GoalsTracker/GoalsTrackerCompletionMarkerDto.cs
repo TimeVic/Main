@@ -8,6 +8,8 @@ public class GoalsTrackerCompletionMarkerDto : IResponse
 
     public int DayOfMonth { get; set; } = 0;
 
+    public bool IsChecked { get; set; } = false;
+    
 #if IS_WEB_APP
     #region Select list methods
     

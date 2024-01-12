@@ -6,4 +6,28 @@
 @inherits BaseComponent
 @layout Layout
 
-<GoalsTrackerTable Year="@DateTime.Now.Year" Month="@DateTime.Now.Month"/>
+@if (_state.Value.IsLoading)
+{
+    
+}
+else if (_state.Value.CurrentTracker != null)
+{
+    <div>
+        @_state.Value.CurrentTracker.Year - @_state.Value.CurrentTracker.Month
+    </div>
+    
+    <MudStack>
+        <MudStack Row="true">
+            <MudButton 
+                StartIcon="@Icons.Material.Filled.ArrowBackIos"
+                OnClick="@(() => OnMonthChanged(false))"/>
+            <MudText Typo="Typo.h6">
+                @_selectedDate.ToString("MMMM, yyyy")
+            </MudText>
+            <MudButton 
+                StartIcon="@Icons.Material.Filled.ArrowForwardIos"
+                OnClick="@(() => OnMonthChanged(true))"/>
+        </MudStack>
+        <GoalsTrackerTable Tracker="@_state.Value.CurrentTracker"/>
+    </MudStack> 
+}

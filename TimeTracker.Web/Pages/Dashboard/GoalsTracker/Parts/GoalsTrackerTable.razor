@@ -1,4 +1,7 @@
-﻿<table class="w-goals-tracker-table">
+﻿
+@inherits BaseComponent
+
+<table class="w-goals-tracker-table">
     <thead>
     <tr>
         <th rowspan="2" class="pa-3">Goals</th>
@@ -17,16 +20,19 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var goal in _goals)
+    @foreach (var goal in Tracker.Items)
     {
         <tr>
-            <td class="pa-3">@goal</td>
+            <td class="pa-3">@goal.Name</td>
             @foreach (var day in _daysInCurrentMonth)
             {
                 <td
                     class="pa-3 cursor-pointer @(IsSelectedRow(goal, day) ? "w-row-selected" : "")"
                     @onclick="@(() => OnClickRow(goal, day))">
-                    <MudIcon Color="@(IsSelectedRow(goal, day) ? Color.Default : Color.Transparent)" Size="Size.Small" Icon="@Icons.Material.Filled.Check"/>
+                    <MudIcon 
+                        Color="@(IsSelectedRow(goal, day) ? Color.Default : Color.Transparent)" 
+                        Size="Size.Small" 
+                        Icon="@Icons.Material.Filled.Check"/>
                 </td>
             }
             <td class="pa-3">3</td>

@@ -1,38 +1,19 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Store.GoalsTracker;
 
 namespace TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts;
 
 public partial class GoalsTrackerTable
 {
     [Parameter]
-    public int Year { get; set; }
-
-    [Parameter]
-    public int Month { get; set; }
+    public GoalsTrackerDto Tracker { get; set; }
     
     private ICollection<DateTime> _daysInCurrentMonth = new List<DateTime>();
     
-    private ICollection<string> _goals = new List<string>()
-    {
-        "goal1",
-        "goal2",
-        "goal3",
-        "goal4",
-        "goal5",
-        "goal6",
-        "goal7",
-        "goal8",
-        "goal9",
-        "goal10",
-        "goal11",
-        "goal12",
-    };
-    
-    private IDictionary<string, ICollection<DateTime>> _completedItems = new Dictionary<string, ICollection<DateTime>>();
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -42,9 +23,9 @@ public partial class GoalsTrackerTable
     private void CalculateListOdDays()
     {
         _daysInCurrentMonth.Clear();
-        for (var dayNumber = 1; dayNumber <= DateTime.DaysInMonth(Year, Month); dayNumber++)
+        for (var dayNumber = 1; dayNumber <= DateTime.DaysInMonth(Tracker.Year, Tracker.Month); dayNumber++)
         {
-            _daysInCurrentMonth.Add(new DateTime(Year, Month, dayNumber));
+            _daysInCurrentMonth.Add(new DateTime(Tracker.Year, Tracker.Month, dayNumber));
         }
     }
 
@@ -53,33 +34,16 @@ public partial class GoalsTrackerTable
         await Task.CompletedTask;
     }
 
-    private void OnClickRow(string goal, DateTime day)
+    private void OnClickRow(GoalsTrackerItemDto goal, DateTime day)
     {
-        if (!_completedItems.ContainsKey(goal))
-        {
-            _completedItems.Add(goal, new List<DateTime>());
-        }
-
-        _completedItems.TryGetValue(goal, out var selectedItems);
-        var selectedItem = selectedItems!.FirstOrDefault(item => item == day);
-        if (selectedItem != DateTime.MinValue)
-        {
-            selectedItems = selectedItems!.Where(item => item != day).ToList();
-        }
-        else
-        {
-            selectedItems!.Add(day);
-        }
-        _completedItems[goal] = selectedItems;
+        Dispatcher.Dispatch(new CheckGoalItemAction(goal, day.Day, true));
     }
     
-    private bool IsSelectedRow(string goal, DateTime day)
+    private bool IsSelectedRow(GoalsTrackerItemDto goal, DateTime day)
     {
-        if (!_completedItems.ContainsKey(goal))
-        {
-            return false;
-        }
-        _completedItems.TryGetValue(goal, out var selectedItems);
-        return selectedItems!.Any(item => item == day);
+        var existMarker = goal.CompletionMarkers.FirstOrDefault(item => item.DayOfMonth == day.Day);
+        if (existMarker != null)
+            return existMarker.IsChecked;
+        return false;
     }
 }
