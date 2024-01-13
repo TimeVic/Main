@@ -1,15 +1,16 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Orm.Entities.GoalsTracker;
 using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao.GoalsTracker;
 
 public interface IGoalsTrackerItemsDao: IDomainService
 {
     Task<GoalsTrackerItemEntity> Create(
+        WorkspaceEntity workspace,
         UserEntity user,
-        int year,
-        int month,
+        DateTime date,
         string name,
         int numberOfTimes = 0
     );

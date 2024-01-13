@@ -2,6 +2,7 @@
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Entities.GoalsTracker;
 using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao.GoalsTracker;
 
@@ -14,17 +15,19 @@ public class GoalsTrackerDao: IGoalsTrackerDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<GoalsTrackerEntity> CheckAndCreate(UserEntity user, int year, int month)
+    public async Task<GoalsTrackerEntity> CheckAndCreate(UserEntity user, WorkspaceEntity workspace, DateTime date)
     {
-        var tracker = await GetTracker(user, year, month);
+        var tracker = await GetTracker(user, date);
         if (tracker == null)
         {
             tracker = new GoalsTrackerEntity()
             {
+                Workspace = workspace,
                 User = user,
-                Year = year,
-                Month = month,
-                CreateTime = DateTime.UtcNow
+                Year = date.Year,
+                Month = date.Month,
+                CreateTime = DateTime.UtcNow,
+                UpdateTime = DateTime.UtcNow
             };
             await _sessionProvider.CurrentSession.SaveAsync(tracker);
         }
@@ -32,11 +35,11 @@ public class GoalsTrackerDao: IGoalsTrackerDao
         return tracker;
     }
     
-    private async Task<GoalsTrackerEntity?> GetTracker(UserEntity user, int year, int month)
+    private async Task<GoalsTrackerEntity?> GetTracker(UserEntity user, DateTime date)
     {
         return await _sessionProvider.CurrentSession.Query<GoalsTrackerEntity>()
-            .Where(item => item.Year == year)
-            .Where(item => item.Month == month)
+            .Where(item => item.Year == date.Year)
+            .Where(item => item.Month == date.Month)
             .Where(item => item.User == user)
             .FirstOrDefaultAsync();
     }

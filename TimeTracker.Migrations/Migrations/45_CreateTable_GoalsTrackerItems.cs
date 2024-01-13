@@ -13,6 +13,7 @@ namespace TimeTracker.Migrations.Migrations
                 .WithColumn("year").AsInt32().NotNullable()
                 .WithColumn("month").AsInt32().NotNullable()
                 .WithColumn("user_id").AsInt64().NotNullable().ForeignKey("users", "id")
+                .WithColumn("workspace_id").AsInt64().NotNullable().ForeignKey("workspaces", "id")
                 .WithColumn("update_time").AsCustom("timestamptz").NotNullable()
                 .WithColumn("create_time").AsCustom("timestamptz").NotNullable();
             

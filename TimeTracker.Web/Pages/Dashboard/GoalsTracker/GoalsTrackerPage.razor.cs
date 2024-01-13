@@ -14,11 +14,17 @@ public partial class GoalsTrackerPage
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Dispatcher.Dispatch(new LoadTrackerAction(_selectedDate.Year, _selectedDate.Month));
+        LoadTracker();
     }
 
     private void OnMonthChanged(bool isForward = true)
     {
         _selectedDate = _selectedDate.AddMonths(isForward ? 1 : -1);
+        LoadTracker();
+    }
+
+    private void LoadTracker()
+    {
+        Dispatcher.Dispatch(new LoadTrackerAction(_selectedDate.Year, _selectedDate.Month));
     }
 }

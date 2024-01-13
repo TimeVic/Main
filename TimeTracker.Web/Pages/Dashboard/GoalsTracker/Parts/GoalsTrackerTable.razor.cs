@@ -31,12 +31,16 @@ public partial class GoalsTrackerTable
 
     private async Task OnAddGoal()
     {
-        await Task.CompletedTask;
+        await ModalDialogService.ShowAddGoalsTrackerAddModal();
     }
 
     private void OnClickRow(GoalsTrackerItemDto goal, DateTime day)
     {
-        Dispatcher.Dispatch(new CheckGoalItemAction(goal, day.Day, true));
+        Dispatcher.Dispatch(new CheckGoalItemAction(
+            goal,
+            day.Day,
+            !IsSelectedRow(goal, day)
+        ));
     }
     
     private bool IsSelectedRow(GoalsTrackerItemDto goal, DateTime day)
@@ -45,5 +49,10 @@ public partial class GoalsTrackerTable
         if (existMarker != null)
             return existMarker.IsChecked;
         return false;
+    }
+    
+    private int GetMarkedCount(GoalsTrackerItemDto goal)
+    {
+        return goal.CompletionMarkers.Count(item => item.IsChecked);
     }
 }

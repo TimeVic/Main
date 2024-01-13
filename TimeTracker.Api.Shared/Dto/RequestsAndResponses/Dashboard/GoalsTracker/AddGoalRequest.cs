@@ -8,7 +8,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker
     public class AddGoalRequest : IRequest<ClientDto>
     {
         [IsPositive]
-        public long NumberOfTimes { get; set; }
+        public int NumberOfTimes { get; set; }
         
         [Required]
         [StringLength(256, MinimumLength = 1)]

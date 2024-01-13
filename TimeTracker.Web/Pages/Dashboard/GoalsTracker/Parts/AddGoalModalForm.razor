@@ -1,0 +1,32 @@
+﻿@using MudBlazor
+
+@inherits BaseComponent
+
+<MudDialog>
+    <DialogContent>
+        <MudForm
+            @ref="_form"
+            @bind-IsValid="_isValid">
+            <MudTextField
+                T="string"
+                Name="Name"
+                @bind-Value="model.Name"
+                Placeholder="Goal"/>
+            
+            <MudTextField
+                T="int"
+                Name="Goal"
+                @bind-Value="model.NumberOfTimes"
+                Placeholder="Number of times to perform habit in a month"/>
+            
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
+        <MudButton 
+            ButtonType="MudBlazor.ButtonType.Submit"
+            OnClick="@Submit"
+            Disabled="@_isLoading"
+            Color="Color.Primary">Add</MudButton>
+    </DialogActions>
+</MudDialog>

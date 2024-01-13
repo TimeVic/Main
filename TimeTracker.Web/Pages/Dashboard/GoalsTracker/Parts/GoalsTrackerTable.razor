@@ -1,49 +1,54 @@
-﻿
-@inherits BaseComponent
+﻿@inherits BaseComponent
 
-<table class="w-goals-tracker-table">
-    <thead>
-    <tr>
-        <th rowspan="2" class="pa-3">Goals</th>
-        @foreach (var day in _daysInCurrentMonth)
-        {
-            <th class="pa-3">@day.ToString("ddd")</th>
-        }
-        <th rowspan="2" class="pa-3">Goal</th>
-        <th rowspan="2" class="pa-3">Achieved</th>
-    </tr>
-    <tr>
-        @foreach (var day in _daysInCurrentMonth)
-        {
-            <th class="pa-3">@day.Day</th>
-        }
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var goal in Tracker.Items)
-    {
-        <tr>
-            <td class="pa-3">@goal.Name</td>
-            @foreach (var day in _daysInCurrentMonth)
+<MudStack Class="me-3">
+    <div class="w-goals-tracker">
+        <table class="w-goals-tracker-table">
+            <thead>
+            <tr>
+                <th rowspan="2" class="pa-3">Goals</th>
+                @foreach (var day in _daysInCurrentMonth)
+                {
+                    <th class="pa-3">@day.ToString("ddd")</th>
+                }
+                <th rowspan="2" class="pa-3">Goal</th>
+                <th rowspan="2" class="pa-3">Achieved</th>
+            </tr>
+            <tr>
+                @foreach (var day in _daysInCurrentMonth)
+                {
+                    <th class="pa-3">@day.Day</th>
+                }
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var goal in Tracker.Items)
             {
-                <td
-                    class="pa-3 cursor-pointer @(IsSelectedRow(goal, day) ? "w-row-selected" : "")"
-                    @onclick="@(() => OnClickRow(goal, day))">
-                    <MudIcon 
-                        Color="@(IsSelectedRow(goal, day) ? Color.Default : Color.Transparent)" 
-                        Size="Size.Small" 
-                        Icon="@Icons.Material.Filled.Check"/>
-                </td>
+                <tr>
+                    <td class="pa-3">@goal.Name</td>
+                    @foreach (var day in _daysInCurrentMonth)
+                    {
+                        <td
+                            class="pa-3 cursor-pointer @(IsSelectedRow(goal, day) ? "w-row-selected" : "")"
+                            @onclick="@(() => OnClickRow(goal, day))">
+                            <MudIcon
+                                Color="@(IsSelectedRow(goal, day) ? Color.Default : Color.Transparent)"
+                                Size="Size.Small"
+                                Icon="@Icons.Material.Filled.Check"/>
+                        </td>
+                    }
+                    <td class="pa-3">@goal.NumberOfTimes</td>
+                    <td class="pa-3">@GetMarkedCount(goal)</td>
+                </tr>
             }
-            <td class="pa-3">3</td>
-            <td class="pa-3">4</td>
-        </tr>
-    }
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>
 
-<MudButton
-    OnClick="@OnAddGoal"
-    StartIcon="@Icons.Material.Filled.Add">
-    Add
-</MudButton>
+    <MudSpacer/>
+    
+    <MudButton
+        OnClick="@OnAddGoal"
+        StartIcon="@Icons.Material.Filled.Add">
+        Add
+    </MudButton>
+</MudStack>

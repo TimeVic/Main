@@ -1,1 +1,1 @@
-{"version":3,"sources":["GoalsTrackerTable.razor.less"],"names":[],"mappings":"AAAA;EACI,0BAAA;EACA,iBAAA;EACA,kBAAA;;AAHJ,sBAKI,MAAM;AALV,sBAMI,MAAM;EACF,yBAAA;EACA,kBAAA;;AAMI,sBAHR,MAEI,GACK;EACG,mBAAA","file":"GoalsTrackerTable.razor.css"}
+{"version":3,"sources":["GoalsTrackerTable.razor.less"],"names":[],"mappings":"AAAA;EACI,kBAAA;;AADJ,gBAGI;EACI,0BAAA;EACA,iBAAA;;AALR,gBAGI,uBAII,MAAM,GAAE;EACJ,gBAAA;;AARZ,gBAGI,uBAQI,MAAM;AAXd,gBAGI,uBASI,MAAM;EACF,yBAAA;EACA,kBAAA;;AAMI,gBAjBZ,uBAcI,MAEI,GACK;EACG,mBAAA","file":"GoalsTrackerTable.razor.css"}

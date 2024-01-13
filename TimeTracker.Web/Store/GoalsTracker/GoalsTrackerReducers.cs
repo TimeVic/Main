@@ -46,4 +46,31 @@ public class GoalsTrackerReducers
             CurrentTracker = currentTracker
         };
     }
+    
+    [ReducerMethod]
+    public static GoalsTrackerState SetGoalsTrackerItemActionReducer(GoalsTrackerState state, SetGoalsTrackerItemAction action)
+    {
+        var currentTracker = state.CurrentTracker;
+        if (currentTracker == null)
+        {
+            return state;
+        }
+        if (currentTracker.Items.All(item => item.Id != action.Item.Id))
+        {
+            currentTracker.Items.Add(action.Item);
+        }
+
+        currentTracker.Items = state.CurrentTracker.Items.Select(item =>
+        {
+            if (item.Id == action.Item.Id)
+            {
+                return action.Item;
+            }
+            return item;
+        }).ToList();
+        return state with
+        {
+            CurrentTracker = currentTracker
+        };
+    }
 }

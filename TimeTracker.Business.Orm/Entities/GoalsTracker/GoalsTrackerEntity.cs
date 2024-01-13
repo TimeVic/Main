@@ -2,6 +2,7 @@ using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
 using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Entities.GoalsTracker
 {
@@ -27,6 +28,14 @@ namespace TimeTracker.Business.Orm.Entities.GoalsTracker
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "update_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime UpdateTime { get; set; }
+        
+        [ManyToOne(
+            ClassType = typeof(WorkspaceEntity), 
+            Column = "workspace_id", 
+            Lazy = Laziness.False,
+            Cascade = "none"
+        )]
+        public virtual WorkspaceEntity Workspace { get; set; }
         
         [ManyToOne(
             ClassType = typeof(UserEntity), 

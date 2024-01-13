@@ -3,6 +3,7 @@ using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Entities.GoalsTracker;
 using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao.GoalsTracker;
 
@@ -28,9 +29,9 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
     }
     
     public async Task<GoalsTrackerItemEntity> Create(
+        WorkspaceEntity workspace,
         UserEntity user,
-        int year,
-        int month,
+        DateTime date,
         string name,
         int numberOfTimes = 0
     )
@@ -38,7 +39,7 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
         if (string.IsNullOrEmpty(name))
             throw new DataValidationException("Goal's name can not be empty");
         
-        var tracker = await _goalsTrackerDao.CheckAndCreate(user, year, month);
+        var tracker = await _goalsTrackerDao.CheckAndCreate(user, workspace, date);
         var trackerItem = new GoalsTrackerItemEntity()
         {
             Tracker = tracker,

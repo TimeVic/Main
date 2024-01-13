@@ -11,3 +11,5 @@ public record struct SetCompletionItemsAction(GoalsTrackerItemDto Item, ICollect
 public record struct SetIsListLoadingAction(bool IsLoading);
 
 public record struct SetTrackerAction(GoalsTrackerDto Tracker);
+
+public record struct SetGoalsTrackerItemAction(GoalsTrackerItemDto Item);

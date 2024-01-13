@@ -123,4 +123,10 @@ public class ApiUrl
     public const string TagList = "dashboard/tag/list";
     
     #endregion
+    
+    #region Goals Tracker
+
+    public const string GoalsTrackerAddGoal = "dashboard/goals-tracker/add-goal";
+    
+    #endregion
 }
