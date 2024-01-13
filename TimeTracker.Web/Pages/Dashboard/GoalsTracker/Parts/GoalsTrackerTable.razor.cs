@@ -36,7 +36,7 @@ public partial class GoalsTrackerTable
 
     private void OnClickRow(GoalsTrackerItemDto goal, DateTime day)
     {
-        Dispatcher.Dispatch(new CheckGoalItemAction(
+        Dispatcher.Dispatch(new SetItemCompletionAction(
             goal,
             day.Day,
             !IsSelectedRow(goal, day)

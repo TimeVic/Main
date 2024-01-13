@@ -25,6 +25,6 @@ public partial class GoalsTrackerPage
 
     private void LoadTracker()
     {
-        Dispatcher.Dispatch(new LoadTrackerAction(_selectedDate.Year, _selectedDate.Month));
+        Dispatcher.Dispatch(new LoadTrackerAction(_selectedDate));
     }
 }

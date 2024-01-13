@@ -32,23 +32,8 @@ public partial class AddGoalModalForm
         _isLoading = true;
         try
         {
-            Dispatcher.Dispatch(new SetGoalsTrackerItemAction(new GoalsTrackerItemDto()
-            {
-                Id = new Random().Next(100000, 10000000),
-                Name = model.Name,
-                NumberOfTimes = model.NumberOfTimes
-            }));
+            Dispatcher.Dispatch(new CreateTrackerItemAction(model.Name, model.NumberOfTimes));
             OnCloseModal();
-            
-            // var responseDto = await ApiService.TasksAddAsync(model);
-            // if (responseDto != null)
-            // {
-            //     Dispatcher.Dispatch(new SetListItemAction(responseDto));
-            //     Dispatcher.Dispatch(new SetOverdueTasksListItemAction(responseDto));
-            //     Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.SetSelectedPageAction(1));
-            //     Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction());
-            //     OnCloseModal();
-            // }
         }
         catch (Exception e)
         {
