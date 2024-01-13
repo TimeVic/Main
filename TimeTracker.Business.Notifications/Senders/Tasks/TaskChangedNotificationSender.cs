@@ -1,23 +1,24 @@
 ﻿using System.Web;
 using Microsoft.Extensions.Configuration;
 using Notification.Abstractions;
-using TimeTracker.Business.Notifications.Core.Emails;
-using TimeTracker.Business.Notifications.Services;
+using TimeTracker.Business.Clients.Smtp;
+using TimeTracker.Business.Clients.Smtp.Core;
+using TimeTracker.Business.Notifications.Core;
 
 namespace TimeTracker.Business.Notifications.Senders.Tasks
 {
     public class TaskChangedNotificationSender : IAsyncNotification<TaskChangedNotificationContext>
     {
-        private readonly IEmailSendingService _emailSendingService;
+        private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
         private readonly string? _frontendUrl;
 
         public TaskChangedNotificationSender(
-            IEmailSendingService emailSendingService,
+            ISmtpClientService smtpClientService,
             IConfiguration configuration
         )
         {
-            _emailSendingService = emailSendingService;
+            _smtpClientService = smtpClientService;
             _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
             _emailFactory = new EmailFactory();
         }
@@ -32,7 +33,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
             emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl}/board/task/{context.WorkspaceId}/{context.TaskId}");
             emailBuilder.AddPlaceholder("taskTitle", context.TaskTitle);
             emailBuilder.AddPlaceholder("changesBlock", BuildChangeSetBlock(context.ChangeSet));
-            _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
+            _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
 

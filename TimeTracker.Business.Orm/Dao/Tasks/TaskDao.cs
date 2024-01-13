@@ -110,7 +110,8 @@ public class TaskDao: ITaskDao
         TaskStatus status = TaskStatus.Backlog,
         TaskPriority priority = TaskPriority.Low,
         bool isArchived = false,
-        IEnumerable<TagEntity>? tags = null
+        IEnumerable<TagEntity>? tags = null,
+        DateTime? reminderTime = null
     )
     {
         task.TaskList = taskList;
@@ -121,6 +122,7 @@ public class TaskDao: ITaskDao
         task.Priority = priority;
         task.IsArchived = isArchived;
         task.UpdateTime = DateTime.UtcNow;
+        task.ReminderTime = reminderTime;
         SetStartEndTime(task, startTime, endTime);
         
         task.Tags.Clear();
@@ -243,5 +245,30 @@ public class TaskDao: ITaskDao
             return 1;
         }
         return existsTaskWithMaxId.TaskId + 1;
+    }
+    
+    public async Task<ICollection<TaskEntity>> GetTasksToRemind()
+    {
+        var timeToRemind = DateTime.UtcNow + GlobalConstants.TaskReminderTimeout;
+        TaskListEntity taskListAlias = null;
+        ProjectEntity projectAlias = null;
+        WorkspaceEntity workspaceAlias = null;
+        UserEntity userAlias = null;
+        return await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
+            .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
+            .Inner.JoinAlias(item => taskListAlias.Project, () => projectAlias)
+            .Inner.JoinAlias(item => projectAlias.Workspace, () => workspaceAlias)
+            .Inner.JoinAlias(item => item.User, () => userAlias)
+            .Where(item => item.IsArchived == false)
+            .Where(
+                item => item.ReminderTime != null 
+                    && item.ReminderTime < timeToRemind
+                    && (
+                        item.RemindedTime == null
+                        || item.ReminderTime != item.RemindedTime    
+                    )
+            )
+            .Take(100)
+            .ListAsync<TaskEntity>();
     }
 }

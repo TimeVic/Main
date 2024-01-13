@@ -76,6 +76,15 @@ namespace TimeTracker.Business.Orm.Entities.User
         [OneToMany(ClassType = typeof(WorkspaceMembershipEntity))]
         public virtual ICollection<WorkspaceMembershipEntity> WorkspaceMemberships { get; set; } = new List<WorkspaceMembershipEntity>();
         
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.Extra,
+            Cascade = "save-update"
+        )]
+        [Key(Column = "user_id")]
+        [OneToMany(ClassType = typeof(UserNotificationTokenEntity))]
+        public virtual ICollection<UserNotificationTokenEntity> NotificationTokens { get; set; } = new List<UserNotificationTokenEntity>();
+        
         #region Calculated
 
         public virtual bool IsActivated => VerificationTime.HasValue;

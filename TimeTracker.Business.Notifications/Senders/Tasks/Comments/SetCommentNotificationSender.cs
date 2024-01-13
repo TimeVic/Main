@@ -1,23 +1,24 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Notification.Abstractions;
+using TimeTracker.Business.Clients.Smtp;
+using TimeTracker.Business.Clients.Smtp.Core;
 using TimeTracker.Business.Common.Helpers;
-using TimeTracker.Business.Notifications.Core.Emails;
-using TimeTracker.Business.Notifications.Services;
+using TimeTracker.Business.Notifications.Core;
 
 namespace TimeTracker.Business.Notifications.Senders.Tasks.Comments
 {
     public class SetCommentNotificationSender : IAsyncNotification<SetCommentNotificationContext>
     {
-        private readonly IEmailSendingService _emailSendingService;
+        private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
         private readonly string? _frontendUrl;
 
         public SetCommentNotificationSender(
-            IEmailSendingService emailSendingService,
+            ISmtpClientService smtpClientService,
             IConfiguration configuration
         )
         {
-            _emailSendingService = emailSendingService;
+            _smtpClientService = smtpClientService;
             _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
             _emailFactory = new EmailFactory();
         }
@@ -32,7 +33,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks.Comments
             emailBuilder.AddPlaceholder("Comment", MarkdownHelper.ToHtml(context.Comment));
             emailBuilder.AddPlaceholder("TaskLink", $"{_frontendUrl}/board/task/{context.WorkspaceId}/{context.TaskId}");
             emailBuilder.AddPlaceholder("ChangeMessage", context.IsUpdated ? "updated" : "added");
-            _emailSendingService.SendEmail(context.ToAddress, emailBuilder, null);
+            _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }
     }

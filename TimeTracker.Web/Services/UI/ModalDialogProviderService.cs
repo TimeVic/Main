@@ -2,6 +2,7 @@
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts;
 using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
@@ -144,5 +145,10 @@ public partial class ModalDialogProviderService
                 FullScreen = true
             }
         );
+    }
+    
+    public async Task ShowAddGoalsTrackerAddModal()
+    {
+        await _mudDialogService.ShowAsync<AddGoalModalForm>("Create New");
     }
 }

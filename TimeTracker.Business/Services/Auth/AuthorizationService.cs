@@ -68,7 +68,7 @@ public class AuthorizationService: IAuthorizationService
 
         if (accessToken.IsExpired)
         {
-            await _sessionProvider.CurrentSession.DeleteAsync(accessToken);
+            await _accessTokenDao.Delete(accessToken);
             throw new ExpiredJwtTokenException();
         }
         

@@ -3,8 +3,8 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <LangVersion>11</LangVersion>
-        <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>12</LangVersion>
+        <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,8 +15,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="7.0.1" />
-      <PackageReference Include="Bogus" Version="34.0.2" />
+      <PackageReference Include="Autofac" Version="7.1.0" />
+      <PackageReference Include="Bogus" Version="35.3.0" />
     </ItemGroup>
 
 </Project>

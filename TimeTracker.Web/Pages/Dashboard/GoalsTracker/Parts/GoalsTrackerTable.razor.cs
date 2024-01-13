@@ -1,0 +1,58 @@
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Components;
+using MudBlazor;
+using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
+using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Store.GoalsTracker;
+
+namespace TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts;
+
+public partial class GoalsTrackerTable
+{
+    [Parameter]
+    public GoalsTrackerDto Tracker { get; set; }
+    
+    private ICollection<DateTime> _daysInCurrentMonth = new List<DateTime>();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        CalculateListOdDays();
+    }
+
+    private void CalculateListOdDays()
+    {
+        _daysInCurrentMonth.Clear();
+        for (var dayNumber = 1; dayNumber <= DateTime.DaysInMonth(Tracker.Year, Tracker.Month); dayNumber++)
+        {
+            _daysInCurrentMonth.Add(new DateTime(Tracker.Year, Tracker.Month, dayNumber));
+        }
+    }
+
+    private async Task OnAddGoal()
+    {
+        await ModalDialogService.ShowAddGoalsTrackerAddModal();
+    }
+
+    private void OnClickRow(GoalsTrackerItemDto goal, DateTime day)
+    {
+        Dispatcher.Dispatch(new CheckGoalItemAction(
+            goal,
+            day.Day,
+            !IsSelectedRow(goal, day)
+        ));
+    }
+    
+    private bool IsSelectedRow(GoalsTrackerItemDto goal, DateTime day)
+    {
+        var existMarker = goal.CompletionMarkers.FirstOrDefault(item => item.DayOfMonth == day.Day);
+        if (existMarker != null)
+            return existMarker.IsChecked;
+        return false;
+    }
+    
+    private int GetMarkedCount(GoalsTrackerItemDto goal)
+    {
+        return goal.CompletionMarkers.Count(item => item.IsChecked);
+    }
+}

@@ -18,6 +18,8 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 
         public ICollection<long> TagIds { get; set; } = new List<long>();
         
+        public DateTime? ReminderTime { get; set; }
+        
         public void Fill(TaskDto dto)
         {
             TaskId = dto.TaskId;
@@ -30,6 +32,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
             Priority = dto.Priority;
             IsArchived = dto.IsArchived;
             ExternalTaskId = dto.ExternalTaskId;
+            ReminderTime = dto.ReminderTime;
             UserId = dto.User.Id;
             TagIds = dto.Tags.Select(item => item.Id).ToList();
         }

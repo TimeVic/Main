@@ -1,0 +1,29 @@
+﻿@page "/board/goals-tracker"
+
+@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts
+
+@inherits BaseComponent
+@layout Layout
+
+@if (_state.Value.IsLoading)
+{
+    
+}
+else if (_state.Value.CurrentTracker != null)
+{
+    <MudStack>
+        <MudStack Row="true">
+            <MudButton 
+                StartIcon="@Icons.Material.Filled.ArrowBackIos"
+                OnClick="@(() => OnMonthChanged(false))"/>
+            <MudText Typo="Typo.h6">
+                @_selectedDate.ToString("MMMM, yyyy")
+            </MudText>
+            <MudButton 
+                StartIcon="@Icons.Material.Filled.ArrowForwardIos"
+                OnClick="@(() => OnMonthChanged(true))"/>
+        </MudStack>
+        <GoalsTrackerTable Tracker="@_state.Value.CurrentTracker"/>
+    </MudStack> 
+}
