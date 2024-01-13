@@ -25,7 +25,7 @@ public class GoalsTrackerController : MainApiControllerBase
     [HttpPost("get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Add([FromBody] GetRequest request)
+    public Task<IActionResult> Get([FromBody] GetRequest request)
         => this.RequestAsync()
             .For<GoalsTrackerDto>()
             .With(request);

@@ -21,7 +21,7 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
         _goalsTrackerDao = goalsTrackerDao;
     }
     
-    public async Task<GoalsTrackerItemEntity?> Get(long trackerItemId)
+    public async Task<GoalsTrackerItemEntity?> GetById(long trackerItemId)
     {
         return await _sessionProvider.CurrentSession.Query<GoalsTrackerItemEntity>()
             .Where(item => item.Id == trackerItemId)
@@ -29,9 +29,7 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
     }
     
     public async Task<GoalsTrackerItemEntity> Create(
-        WorkspaceEntity workspace,
-        UserEntity user,
-        DateTime date,
+        GoalsTrackerEntity goalsTracker,
         string name,
         int numberOfTimes = 0
     )
@@ -39,23 +37,22 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
         if (string.IsNullOrEmpty(name))
             throw new DataValidationException("Goal's name can not be empty");
         
-        var tracker = await _goalsTrackerDao.CheckAndCreate(user, workspace, date);
         var trackerItem = new GoalsTrackerItemEntity()
         {
-            Tracker = tracker,
+            Tracker = goalsTracker,
             Name = name,
             NumberOfTimes = numberOfTimes,
             IsArchived = false,
             UpdateTime = DateTime.UtcNow,
             CreateTime = DateTime.UtcNow
         };
-        tracker.Items.Add(trackerItem);
+        goalsTracker.Items.Add(trackerItem);
         await _sessionProvider.CurrentSession.SaveAsync(trackerItem);
         return trackerItem;
     }
     
     public async Task<GoalsTrackerItemEntity> Update(
-        GoalsTrackerItemEntity item,
+        GoalsTrackerItemEntity goalsTrackerItem,
         string name,
         int numberOfTimes = 0
     )
@@ -63,11 +60,11 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
         if (string.IsNullOrEmpty(name))
             throw new DataValidationException("Goal's name can not be empty");
 
-        item.Name = name;
-        item.NumberOfTimes = numberOfTimes;
-        item.UpdateTime = DateTime.UtcNow;
-        await _sessionProvider.CurrentSession.SaveAsync(item);
-        return item;
+        goalsTrackerItem.Name = name;
+        goalsTrackerItem.NumberOfTimes = numberOfTimes;
+        goalsTrackerItem.UpdateTime = DateTime.UtcNow;
+        await _sessionProvider.CurrentSession.SaveAsync(goalsTrackerItem);
+        return goalsTrackerItem;
     }
     
     public async Task<GoalsTrackerItemEntity> Archive(GoalsTrackerItemEntity item)

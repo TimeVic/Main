@@ -63,15 +63,10 @@ namespace TimeTracker.Business.Orm.Entities.GoalsTracker
         [OneToMany(ClassType = typeof(GoalsTrackerNoteEntity))]
         public virtual ICollection<GoalsTrackerNoteEntity> Notes { get; set; } = new List<GoalsTrackerNoteEntity>();
         
-        // public virtual void SetClient(ClientEntity? client)
-        // {
-        //     if (Client?.Id == client?.Id)
-        //     {
-        //         return;
-        //     }
-        //
-        //     Client = client;
-        //     client?.Projects.Add(this);
-        // }
+        #region Calculated
+
+        public virtual IEnumerable<GoalsTrackerItemEntity> ActiveItems => Items.Where(item => !item.IsArchived);
+
+        #endregion
     }
 }

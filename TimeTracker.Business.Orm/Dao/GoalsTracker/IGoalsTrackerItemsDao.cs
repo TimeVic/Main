@@ -8,17 +8,15 @@ namespace TimeTracker.Business.Orm.Dao.GoalsTracker;
 public interface IGoalsTrackerItemsDao: IDomainService
 {
     Task<GoalsTrackerItemEntity> Create(
-        WorkspaceEntity workspace,
-        UserEntity user,
-        DateTime date,
+        GoalsTrackerEntity goalsTracker,
         string name,
         int numberOfTimes = 0
     );
-
-    Task<GoalsTrackerItemEntity?> Get(long trackerItemId);
+    
+    Task<GoalsTrackerItemEntity?> GetById(long trackerItemId);
 
     Task<GoalsTrackerItemEntity> Update(
-        GoalsTrackerItemEntity item,
+        GoalsTrackerItemEntity goalsTrackerItem,
         string name,
         int numberOfTimes = 0
     );

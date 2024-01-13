@@ -15,6 +15,7 @@ using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
+using TimeTracker.Business.Testing.Seeders.Entity.GoalsTracker;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.GoalsTracker;
@@ -30,12 +31,18 @@ public class GetTest: BaseTest
     private WorkspaceEntity _workspace;
     private readonly IUserDao _userDao;
     private readonly IGoalsTrackerDao _goalsTrackerDao;
+    private readonly IGoalsTrackerSeeder _goalsTrackerSeeder;
+    private readonly IGoalsTrackerItemsSeeder _goalsTrackerItemsSeeder;
+    private readonly IGoalsTrackerItemsDao _goalsTrackerItemsDao;
 
     public GetTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _userDao = ServiceProvider.GetRequiredService<IUserDao>();
         _goalsTrackerDao = ServiceProvider.GetRequiredService<IGoalsTrackerDao>();
+        _goalsTrackerItemsDao = ServiceProvider.GetRequiredService<IGoalsTrackerItemsDao>();
+        _goalsTrackerSeeder = ServiceProvider.GetRequiredService<IGoalsTrackerSeeder>();
+        _goalsTrackerItemsSeeder = ServiceProvider.GetRequiredService<IGoalsTrackerItemsSeeder>();
         _factory = ServiceProvider.GetRequiredService<IDataFactory<ClientEntity>>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
@@ -72,6 +79,32 @@ public class GetTest: BaseTest
     }
     
     [Fact]
+    public async Task ShouldGetExistsWithItems()
+    {
+        var expectedDate = DateTime.Now.AddMonths(-3);
+        
+        var existsTracker = await _goalsTrackerSeeder.CreateAsync(_user, _workspace);
+        existsTracker.Year = expectedDate.Year;
+        existsTracker.Month = expectedDate.Month;
+        await _goalsTrackerItemsSeeder.CreateSeveralAsync(existsTracker, 4);
+        await CommitDbChanges();
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetRequest()
+        {
+            Date = expectedDate,
+            WorkspaceId = _workspace.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualProject = await response.GetJsonDataAsync<GoalsTrackerDto>();
+        Assert.True(actualProject.Id > 0);
+        Assert.Equal(expectedDate.Year, actualProject.Year);
+        Assert.Equal(expectedDate.Month, actualProject.Month);
+        Assert.Equal(4, actualProject.Items.Count);
+        Assert.Empty(actualProject.Notes);
+    }
+    
+    [Fact]
     public async Task ShouldNotAddIfIncorrectWorkspaceId()
     {
         var user2 = await UserSeeder.CreateActivatedAsync();
@@ -83,5 +116,35 @@ public class GetTest: BaseTest
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
+    }
+    
+    [Fact]
+    public async Task ShouldGetOnlyWithNotArchived()
+    {
+        var expectedDate = DateTime.Now.AddMonths(-3);
+        
+        var existsTracker = await _goalsTrackerSeeder.CreateAsync(_user, _workspace);
+        existsTracker.Year = expectedDate.Year;
+        existsTracker.Month = expectedDate.Month;
+        await _goalsTrackerItemsSeeder.CreateSeveralAsync(existsTracker, 4);
+        foreach (var item in await _goalsTrackerItemsSeeder.CreateSeveralAsync(existsTracker, 3))
+        {
+            await _goalsTrackerItemsDao.Archive(item);
+        }
+        await CommitDbChanges();
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetRequest()
+        {
+            Date = expectedDate,
+            WorkspaceId = _workspace.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualProject = await response.GetJsonDataAsync<GoalsTrackerDto>();
+        Assert.True(actualProject.Id > 0);
+        Assert.Equal(expectedDate.Year, actualProject.Year);
+        Assert.Equal(expectedDate.Month, actualProject.Month);
+        Assert.Equal(4, actualProject.Items.Count);
+        Assert.Empty(actualProject.Notes);
     }
 }

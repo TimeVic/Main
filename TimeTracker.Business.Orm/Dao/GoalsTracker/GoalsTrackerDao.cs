@@ -35,6 +35,13 @@ public class GoalsTrackerDao: IGoalsTrackerDao
         return tracker;
     }
     
+    public async Task<GoalsTrackerEntity?> GetById(long id)
+    {
+        return await _sessionProvider.CurrentSession.Query<GoalsTrackerEntity>()
+            .Where(item => item.Id == id)
+            .FirstOrDefaultAsync();
+    }
+    
     private async Task<GoalsTrackerEntity?> GetTracker(UserEntity user, DateTime date)
     {
         return await _sessionProvider.CurrentSession.Query<GoalsTrackerEntity>()

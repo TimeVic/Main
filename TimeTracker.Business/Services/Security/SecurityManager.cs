@@ -1,9 +1,11 @@
 ﻿using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.GoalsTracker;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -23,7 +25,17 @@ public class SecurityManager: ISecurityManager
         _workspaceAccessService = workspaceAccessService;
         _userDao = userDao;
     }
-    
+
+    public async Task CheckAccess<TEntity>(AccessLevel accessLevel, UserEntity user, TEntity? entity)
+    {
+        if (entity == null)
+            throw new RecordNotFoundException();
+        if (!await HasAccess(accessLevel, user, entity))
+        {
+            throw new HasNoAccessException();
+        }
+    }
+
     public async Task<bool> HasAccess<TEntity>(AccessLevel accessLevel, UserEntity user, TEntity? entity)
     {
         if (entity == null)
@@ -62,6 +74,10 @@ public class SecurityManager: ISecurityManager
         if (entity is TaskCommentEntity taskCommentEntity)
         {
             return await HasAccessToTaskComment(accessLevel, user, taskCommentEntity);
+        }
+        if (entity is GoalsTrackerEntity goalsTrackerEntity)
+        {
+            return await HasAccessToGoalsTracker(accessLevel, user, goalsTrackerEntity);
         }
 
         throw new NotImplementedException($"Security checking not implemented for {entity?.GetTypeName()}");
@@ -168,5 +184,19 @@ public class SecurityManager: ISecurityManager
     private async Task<bool> HasAccessToTaskList(UserEntity user, TaskListEntity taskList)
     {
         return await HasAccessToProject(AccessLevel.Read, user, taskList.Project);
+    }
+    
+    private async Task<bool> HasAccessToGoalsTracker(AccessLevel accessLevel, UserEntity user, GoalsTrackerEntity goalsTrackerEntity)
+    {
+        var hasAccessToWorkspace = await HasAccessToWorkspace(
+            AccessLevel.Read,
+            user,
+            goalsTrackerEntity.Workspace
+        );
+        if (!hasAccessToWorkspace)
+        {
+            return false;
+        }
+        return goalsTrackerEntity.User.Id == user.Id;
     }
 }

@@ -7,5 +7,7 @@ namespace TimeTracker.Business.Services.Security;
 
 public interface ISecurityManager: IDomainService
 {
+    Task CheckAccess<TEntity>(AccessLevel accessLevel, UserEntity user, TEntity entity);
+    
     Task<bool> HasAccess<TEntity>(AccessLevel accessLevel, UserEntity user, TEntity entity);
 }

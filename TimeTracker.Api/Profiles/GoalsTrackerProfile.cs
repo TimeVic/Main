@@ -10,8 +10,15 @@ public class GoalsTrackerProfile : Profile
 {
     public GoalsTrackerProfile()
     {
-        CreateMap<GoalsTrackerEntity, GoalsTrackerDto>();
+        CreateMap<GoalsTrackerEntity, GoalsTrackerDto>()
+            .ForMember(
+                dto => dto.Items,
+                builder => builder.MapFrom(
+                    entity => entity.ActiveItems
+                )
+            );
         CreateMap<GoalsTrackerItemEntity, GoalsTrackerItemDto>();
+        CreateMap<GoalsTrackerCompletionMarkerEntity, GoalsTrackerCompletionMarkerDto>();
         CreateMap<GoalsTrackerNoteEntity, GoalsTrackerNoteDto>();
     }
 }

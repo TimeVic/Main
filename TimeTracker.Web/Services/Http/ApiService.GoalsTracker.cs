@@ -7,7 +7,7 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<GoalsTrackerItemDto> GoalsTrackerAddGoalAsync(AddGoalRequest model)
+        public async Task<GoalsTrackerItemDto> GoalsTrackerAddGoalAsync(CreateItemRequest model)
         {
             var response = await PostAsync<GoalsTrackerItemDto>(ApiUrl.GoalsTrackerAddGoal, model);
             if (response == null)

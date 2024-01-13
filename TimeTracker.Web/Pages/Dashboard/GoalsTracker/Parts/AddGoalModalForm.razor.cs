@@ -11,7 +11,7 @@ public partial class AddGoalModalForm
     [CascadingParameter] 
     MudDialogInstance MudDialog { get; set; }
 
-    private AddGoalRequest model = new();
+    private CreateItemRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
     private MudForm _form;

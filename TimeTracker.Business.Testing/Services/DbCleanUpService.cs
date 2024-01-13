@@ -35,6 +35,12 @@ public class DbCleanUpService: IDbCleanUpService
             "workspace_memberships",
             "workspace_setting_clickups",
             "workspace_setting_redmines",
+            
+            "goals_tracker_completion_markers",
+            "goals_tracker_items",
+            "goals_tracker_notes",
+            "goals_trackers",
+            
             "workspace_setting_jiras",
             "stored_files",
             "tags",

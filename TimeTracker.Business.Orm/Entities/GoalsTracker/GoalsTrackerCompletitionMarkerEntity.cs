@@ -19,6 +19,10 @@ namespace TimeTracker.Business.Orm.Entities.GoalsTracker
         [Column(Name = "day_of_month", NotNull = true)]
         public virtual int DayOfMonth { get; set; }
         
+        [Property(NotNull = true)]
+        [Column(Name = "is_checked", NotNull = true)]
+        public virtual bool IsChecked { get; set; }
+        
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }
