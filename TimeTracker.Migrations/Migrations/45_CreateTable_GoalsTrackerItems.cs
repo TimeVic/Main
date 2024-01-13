@@ -31,6 +31,7 @@ namespace TimeTracker.Migrations.Migrations
                 .WithColumn("goals_tracker_item_id").AsInt64().NotNullable().ForeignKey("goals_tracker_items", "id")
                 .WithColumn("day_of_month").AsInt32().NotNullable()
                 .WithColumn("is_checked").AsBoolean().NotNullable().WithDefaultValue(false)
+                .WithColumn("update_time").AsCustom("timestamptz").NotNullable()
                 .WithColumn("create_time").AsCustom("timestamptz").NotNullable();
             
             Create.Table("goals_tracker_notes")

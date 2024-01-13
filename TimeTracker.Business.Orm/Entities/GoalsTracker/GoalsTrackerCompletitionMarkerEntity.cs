@@ -27,6 +27,10 @@ namespace TimeTracker.Business.Orm.Entities.GoalsTracker
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
         public virtual DateTime CreateTime { get; set; }
         
+        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "update_time", SqlType = "datetime", NotNull = true)]
+        public virtual DateTime UpdateTime { get; set; }
+        
         [ManyToOne(
             ClassType = typeof(GoalsTrackerItemEntity), 
             Column = "goals_tracker_item_id", 

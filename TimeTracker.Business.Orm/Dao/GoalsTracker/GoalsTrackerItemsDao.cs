@@ -67,40 +67,42 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
         return goalsTrackerItem;
     }
     
+    public async Task<GoalsTrackerCompletionMarkerEntity> SetCompletion(
+        GoalsTrackerItemEntity goalsTrackerItem,
+        int dayOfMonth,
+        bool isChecked
+    )
+    {
+        if (dayOfMonth > goalsTrackerItem.Tracker.DaysInCurrentMonth)
+        {
+            throw new DataValidationException("Invalid day number");
+        }
+
+        var existsMarked = await _sessionProvider.CurrentSession.Query<GoalsTrackerCompletionMarkerEntity>()
+            .Where(item => item.GoalsTrackerItem == goalsTrackerItem)
+            .Where(item => item.DayOfMonth == dayOfMonth)
+            .FirstOrDefaultAsync();
+        if (existsMarked == null)
+        {
+            existsMarked = new GoalsTrackerCompletionMarkerEntity()
+            {
+                DayOfMonth = dayOfMonth,
+                GoalsTrackerItem = goalsTrackerItem,
+                CreateTime = DateTime.UtcNow
+            };
+            goalsTrackerItem.CompletionMarkers.Add(existsMarked);
+        }
+        existsMarked.IsChecked = isChecked;
+        existsMarked.UpdateTime = DateTime.UtcNow;
+        await _sessionProvider.CurrentSession.SaveAsync(existsMarked);
+        return existsMarked;
+    }
+    
     public async Task<GoalsTrackerItemEntity> Archive(GoalsTrackerItemEntity item)
     {
         item.IsArchived = true;
         item.UpdateTime = DateTime.UtcNow;
         await _sessionProvider.CurrentSession.SaveAsync(item);
         return item;
-    }
-    
-    public async Task SetCompletion(GoalsTrackerItemEntity goalsTrackerItem, int day, bool isCompleted)
-    {
-        var completionMarker = await _sessionProvider.CurrentSession.Query<GoalsTrackerCompletionMarkerEntity>()
-            .Where(item => item.GoalsTrackerItem == goalsTrackerItem)
-            .Where(item => item.DayOfMonth == day)
-            .FirstOrDefaultAsync();
-        if (isCompleted)
-        {
-            if (completionMarker != null)
-            {
-                return;
-            }
-
-            completionMarker = new GoalsTrackerCompletionMarkerEntity()
-            {
-                CreateTime = DateTime.UtcNow,
-                DayOfMonth = day,
-                GoalsTrackerItem = goalsTrackerItem
-            };
-            goalsTrackerItem.CompletionMarkers.Add(completionMarker);
-            await _sessionProvider.CurrentSession.SaveAsync(completionMarker);
-            return;
-        }
-        if (completionMarker != null)
-        {
-            await _sessionProvider.CurrentSession.DeleteAsync(completionMarker);
-        }  
     }
 }

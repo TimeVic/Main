@@ -67,6 +67,8 @@ namespace TimeTracker.Business.Orm.Entities.GoalsTracker
 
         public virtual IEnumerable<GoalsTrackerItemEntity> ActiveItems => Items.Where(item => !item.IsArchived);
 
+        public virtual int DaysInCurrentMonth => DateTime.DaysInMonth(Year, Month);
+        
         #endregion
     }
 }

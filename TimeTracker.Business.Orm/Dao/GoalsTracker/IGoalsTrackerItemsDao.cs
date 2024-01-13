@@ -1,7 +1,5 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Orm.Entities.GoalsTracker;
-using TimeTracker.Business.Orm.Entities.User;
-using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao.GoalsTracker;
 
@@ -23,5 +21,9 @@ public interface IGoalsTrackerItemsDao: IDomainService
 
     Task<GoalsTrackerItemEntity> Archive(GoalsTrackerItemEntity item);
 
-    Task SetCompletion(GoalsTrackerItemEntity goalsTrackerItem, int day, bool isCompleted);
+    Task<GoalsTrackerCompletionMarkerEntity> SetCompletion(
+        GoalsTrackerItemEntity goalsTrackerItem,
+        int dayOfMonth,
+        bool isChecked
+    );
 }

@@ -42,4 +42,12 @@ public class GoalsTrackerItemController : MainApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Create([FromBody] DeleteItemRequest request)
         => this.RequestAsync(request);
+    
+    [HttpPost("set-completion")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> SetCompletion([FromBody] SetCompletionRequest request)
+        => this.RequestAsync()
+            .For<GoalsTrackerCompletionMarkerDto>()
+            .With(request);
 }
