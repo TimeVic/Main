@@ -1,6 +1,7 @@
 ﻿using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TimeTracker.Business.Common.Utils;
 
@@ -11,24 +12,38 @@ public class FirebaseClientService: IFirebaseClientService
     private const string CredentialsFilepath = "../../../../.credentials/firebase-credentials.json";
  
     private readonly ILogger<FirebaseClientService> _logger;
-    
+    private readonly IConfiguration _configuration;
+
     private readonly GoogleCredential _credentials;
     
-    public FirebaseClientService(ILogger<FirebaseClientService> logger)
+    public FirebaseClientService(
+        ILogger<FirebaseClientService> logger,
+        IConfiguration configuration
+    )
     {
         _logger = logger;
+        _configuration = configuration;
         var filePath = Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath);
-        if (!File.Exists(filePath))
+        if (File.Exists(filePath))
         {
-            throw new FileNotFoundException($"Google Cloud credentials file not found: {filePath}");
+            using var credentialsStream = new FileStream(
+                Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath),
+                FileMode.Open,
+                FileAccess.Read
+            );
+            _credentials = GoogleCredential.FromStream(credentialsStream);
+        }
+        else
+        {
+            var jsonConfiguration = _configuration.GetValue<string>("Google:Firebase:Credentials");
+            _credentials = GoogleCredential.FromJson(jsonConfiguration);
+        }
+        
+        if (_credentials == null)
+        {
+            throw new FileNotFoundException($"Firebase credentials file not found");
         }
 
-        using var credentialsStream = new FileStream(
-            Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath),
-            FileMode.Open,
-            FileAccess.Read
-        );
-        _credentials = GoogleCredential.FromStream(credentialsStream);
         FirebaseApp.Create(new AppOptions()
         {
             Credential = _credentials
