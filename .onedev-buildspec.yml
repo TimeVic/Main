@@ -308,8 +308,6 @@ jobs:
       commands:
       - 'echo "Environment: @param:environment@"'
       - ''
-      - echo "@secret:firebase-credentials@" > /tmp/firebase-credentials.json
-      - ''
       - if [ "@param:environment@" = "prod" ]; then
       - "\timageName=\"lampego/timevic-main\""
       - "\tportApi=\"6200:80\""
@@ -351,8 +349,6 @@ jobs:
       - -e "Google__Firebase__Credentials=@secret:firebase-credentials@" \
       - '"$imageName"'
       - ''
-      - docker cp /tmp/firebase-credentials.json "$containerNameBgJob":"/app/.credentials/firebase-credentials.json"
-      - ''
       - docker run -d -p "$portApi" --restart=always --name=$containerNameApi \
       - -e "PROJECT_DIR=TimeTracker.Api" \
       - -e "Serilog__MinimumLevel__Default=Debug" \
@@ -369,10 +365,6 @@ jobs:
       - -e "AWS__S3__BucketName=$s3BucketName" \
       - -e "Google__Firebase__Credentials=@secret:firebase-credentials@" \
       - '"$imageName"'
-      - ''
-      - docker cp /tmp/firebase-credentials.json "$containerNameApi":"/app/.credentials/firebase-credentials.json"
-      - ''
-      - rm /tmp/firebase-credentials.json
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !CommandStep
