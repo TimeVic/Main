@@ -13,6 +13,19 @@
   border: 1px solid #f0f0f0;
   text-align: center;
 }
+.w-goals-tracker .w-goals-tracker-table thead th.w-active,
+.w-goals-tracker .w-goals-tracker-table tbody td.w-active {
+  border-left: 1px solid #00BCD4;
+  border-right: 1px solid #00BCD4;
+}
+.w-goals-tracker .w-goals-tracker-table thead th.w-completed,
+.w-goals-tracker .w-goals-tracker-table tbody td.w-completed {
+  background-color: #8BC34A;
+  color: white;
+}
+.w-goals-tracker .w-goals-tracker-table thead th.w-active {
+  background-color: #80DEEA;
+}
 .w-goals-tracker .w-goals-tracker-table tbody td.w-row-selected {
   background: #ccdaf5 !important;
 }

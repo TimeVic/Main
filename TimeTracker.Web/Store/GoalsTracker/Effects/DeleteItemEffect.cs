@@ -3,46 +3,43 @@ using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.GoalsTracker.Effects;
-using TimeTracker.Web.Store.GoalsTracker;
 
 namespace TimeTracker.Web.Store.GoalsTracker.Effects;
 
-public class LoadTrackerEffect: Effect<LoadTrackerAction>
+public class DeleteItemEffect: Effect<DeleteTrackerItemAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<GoalsTrackerState> _state;
     private readonly ApiService _apiService;
-    private readonly ILogger<LoadTrackerEffect> _logger;
+    private readonly ILogger<DeleteItemEffect> _logger;
+    private readonly ToastService _toastService;
 
-    public LoadTrackerEffect(
+    public DeleteItemEffect(
         ApiService apiService,
         IState<AuthState> authState,
         IState<GoalsTrackerState> state,
-        ILogger<LoadTrackerEffect> logger
+        ILogger<DeleteItemEffect> logger,
+        ToastService toastService
     )
     {
         _apiService = apiService;
         _authState = authState;
         _state = state;
         _logger = logger;
+        _toastService = toastService;
     }
 
-    public override async Task HandleAsync(LoadTrackerAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(DeleteTrackerItemAction action, IDispatcher dispatcher)
     {
-        dispatcher.Dispatch(new SetIsListLoadingAction(true));
         try
         {
-            var tracker = await _apiService.GoalsTrackerLoadAsync(_authState.Value.Workspace.Id, action.Date);
-            dispatcher.Dispatch(new SetTrackerAction(tracker));
+            await _apiService.GoalsTrackerDeleteItemAsync(action.Item.Id);
+            dispatcher.Dispatch(new DeleteTrackerItemFromListAction(action.Item));
         }
         catch (Exception e)
         {
+            await _toastService.ShowError("Goal adding error");
             _logger.LogError(e.Message, e);
-        }
-        finally
-        {
-            dispatcher.Dispatch(new SetIsListLoadingAction(false));
         }
     }
 }

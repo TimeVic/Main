@@ -13,10 +13,13 @@ public partial class GoalsTrackerTable
     public GoalsTrackerDto Tracker { get; set; }
     
     private ICollection<DateTime> _daysInCurrentMonth = new List<DateTime>();
+
+    private DateTime _today = DateTime.Now;
     
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        _today = DateTime.Now;
         CalculateListOdDays();
     }
 
@@ -31,12 +34,12 @@ public partial class GoalsTrackerTable
 
     private async Task OnAddGoal()
     {
-        await ModalDialogService.ShowAddGoalsTrackerAddModal();
+        await ModalDialogService.ShowGoalsTrackerAddModal();
     }
 
     private void OnClickRow(GoalsTrackerItemDto goal, DateTime day)
     {
-        Dispatcher.Dispatch(new CheckGoalItemAction(
+        Dispatcher.Dispatch(new SetItemCompletionAction(
             goal,
             day.Day,
             !IsSelectedRow(goal, day)
@@ -51,8 +54,27 @@ public partial class GoalsTrackerTable
         return false;
     }
     
+    private bool IsToday(DateTime day)
+    {
+        return day.Day == _today.Day && day.Month == _today.Month && day.Year == _today.Year;
+    }
+    
     private int GetMarkedCount(GoalsTrackerItemDto goal)
     {
         return goal.CompletionMarkers.Count(item => item.IsChecked);
+    }
+
+    private async Task OnEditGoal(GoalsTrackerItemDto goal)
+    {
+        await ModalDialogService.ShowGoalsTrackerUpdateItemModal(goal);
+    }
+
+    private async Task OnDeleteGoal(GoalsTrackerItemDto goal)
+    {
+        var isDeleted = await ModalDialogService.ShowDeleteConfirmationDialog();
+        if (isDeleted.HasValue && isDeleted.Value)
+        {
+            Dispatcher.Dispatch(new DeleteTrackerItemAction(goal));
+        }
     }
 }

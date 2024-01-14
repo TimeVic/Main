@@ -20,6 +20,7 @@
                 Name="Goal"
                 @bind-Value="model.NumberOfTimes"
                 Label="Number of times to perform goal in a month"/>
+
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -29,7 +30,7 @@
             OnClick="@Submit"
             Disabled="@_isLoading"
             Color="Color.Primary">
-            Add
+            Save
         </MudButton>
     </DialogActions>
 </MudDialog>

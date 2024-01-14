@@ -6,12 +6,15 @@ using TimeTracker.Web.Store.GoalsTracker;
 
 namespace TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts;
 
-public partial class AddGoalModalForm
+public partial class UpdateGoalModalForm
 {
+    [Parameter] 
+    public GoalsTrackerItemDto Item { get; set; }
+    
     [CascadingParameter] 
     MudDialogInstance MudDialog { get; set; }
 
-    private CreateItemRequest model = new();
+    private UpdateItemRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
     private MudForm _form;
@@ -19,6 +22,9 @@ public partial class AddGoalModalForm
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        model.GoalsTrackerItemId = Item.Id;
+        model.Name = Item.Name;
+        model.NumberOfTimes = Item.NumberOfTimes;
     }
 
     private async Task Submit()
@@ -32,7 +38,7 @@ public partial class AddGoalModalForm
         _isLoading = true;
         try
         {
-            Dispatcher.Dispatch(new CreateTrackerItemAction(model.Name, model.NumberOfTimes));
+            Dispatcher.Dispatch(new UpdateTrackerItemAction(model));
             OnCloseModal();
         }
         catch (Exception e)

@@ -8,7 +8,9 @@
 
 @if (_state.Value.IsLoading)
 {
-    
+    <MudGrid Justify="Justify.Center">
+        <MudProgressCircular Color="Color.Info" Indeterminate="true"/>
+    </MudGrid>
 }
 else if (_state.Value.CurrentTracker != null)
 {

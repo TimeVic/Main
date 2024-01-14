@@ -48,6 +48,42 @@ public class GoalsTrackerReducers
     }
     
     [ReducerMethod]
+    public static GoalsTrackerState SetCompletionItemActionReducer(GoalsTrackerState state, SetCompletionItemAction action)
+    {
+        var currentTracker = state.CurrentTracker;
+        if (currentTracker == null)
+        {
+            return state;
+        }
+        currentTracker.Items = state.CurrentTracker.Items.Select(item =>
+        {
+            if (item.Id == action.Item.Id)
+            {
+                var isUpdated = false;
+                item.CompletionMarkers = item.CompletionMarkers.Select(item2 =>
+                {
+                    if (item2.Id == action.CompletionMarker.Id)
+                    {
+                        isUpdated = true;
+                        return action.CompletionMarker;
+                    }
+
+                    return item2;
+                }).ToList();
+                if (!isUpdated)
+                {
+                    item.CompletionMarkers.Add(action.CompletionMarker);
+                }
+            }
+            return item;
+        }).ToList();
+        return state with
+        {
+            CurrentTracker = currentTracker
+        };
+    }
+    
+    [ReducerMethod]
     public static GoalsTrackerState SetGoalsTrackerItemActionReducer(GoalsTrackerState state, SetGoalsTrackerItemAction action)
     {
         var currentTracker = state.CurrentTracker;
@@ -68,6 +104,21 @@ public class GoalsTrackerReducers
             }
             return item;
         }).ToList();
+        return state with
+        {
+            CurrentTracker = currentTracker
+        };
+    }
+    
+    [ReducerMethod]
+    public static GoalsTrackerState DeleteTrackerItemFromListActionReducer(GoalsTrackerState state, DeleteTrackerItemFromListAction action)
+    {
+        var currentTracker = state.CurrentTracker;
+        if (currentTracker == null)
+        {
+            return state;
+        }
+        currentTracker.Items = state.CurrentTracker.Items.Where(item => item.Id != action.Item.Id).ToList();
         return state with
         {
             CurrentTracker = currentTracker

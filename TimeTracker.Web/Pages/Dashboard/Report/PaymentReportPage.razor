@@ -8,14 +8,14 @@
 @inherits BaseComponent
 @layout Layout
 
-<MudPaper Class="pa-4">
+<MudPaper Class="pa-4 w-100">
     <MudDatePicker
         Label="Report Date:"
         Date="@_filterState.EndDate"
         DateChanged="@OnChangeDateEnd"/>
 </MudPaper>
 
-<MudPaper Class="mt-4 pa-4">
+<MudPaper Class="mt-4 pa-4 w-100">
     @if (_state.Value.IsLoading)
     {
         <MudProgressCircular Color="Color.Info" Indeterminate="true"/>

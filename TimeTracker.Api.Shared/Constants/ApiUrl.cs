@@ -126,7 +126,11 @@ public class ApiUrl
     
     #region Goals Tracker
 
-    public const string GoalsTrackerAddGoal = "dashboard/goals-tracker/add-goal";
+    public const string GoalsTrackerGet = "dashboard/goals-tracker/get";
+    public const string GoalsTrackerItemCreate = "dashboard/goals-tracker/item/create";
+    public const string GoalsTrackerItemUpdate = "dashboard/goals-tracker/item/update";
+    public const string GoalsTrackerItemDelete = "dashboard/goals-tracker/item/delete";
+    public const string GoalsTrackerItemSetCompletion = "dashboard/goals-tracker/item/set-completion";
     
     #endregion
 }

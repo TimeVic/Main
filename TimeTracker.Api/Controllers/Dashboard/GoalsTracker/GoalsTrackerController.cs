@@ -29,12 +29,4 @@ public class GoalsTrackerController : MainApiControllerBase
         => this.RequestAsync()
             .For<GoalsTrackerDto>()
             .With(request);
-    
-    // [HttpPost("add-goal")]
-    // [ProducesResponseType(StatusCodes.Status200OK)]
-    // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // public Task<IActionResult> Add([FromBody] AddRequest request)
-    //     => this.RequestAsync()
-    //         .For<ClientDto>()
-    //         .With(request);
 }
