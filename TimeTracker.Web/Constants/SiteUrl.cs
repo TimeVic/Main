@@ -19,6 +19,7 @@ public static class SiteUrl
     public static readonly string Dashboard_Calendar = "/board/calendar";
     public static readonly string Dashboard_TimeEntry = "/board";
     public static readonly string Dashboard_OverdueTasks = "/board/overdue-tasks";
+    public static readonly string Dashboard_GoalsTracker = "/board/goals-tracker";
     public static readonly string Dashboard_Projects = "/board/project";
     public static readonly string Dashboard_Project = "/board/project/{0}";
     public static readonly string Dashboard_Clients = "/board/client";

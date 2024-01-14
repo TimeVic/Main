@@ -20,10 +20,8 @@
         <MudContainer
             MaxWidth="MaxWidth.False"
             class="d-flex mt-6">
-            <MudStack
-                Justify="Justify.FlexStart"
-                AlignItems="AlignItems.Center"
-                Style="width: 100%;">
+            <MudGrid
+                Justify="Justify.FlexStart">
                 @if (CommonState.Value.IsInitialized)
                 {
                     <InitializationContainer>
@@ -34,7 +32,7 @@
                 {
                     <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
                 }
-            </MudStack>
+            </MudGrid>
             @if (!IsShowReCaptcha)
             {
                 <style>
