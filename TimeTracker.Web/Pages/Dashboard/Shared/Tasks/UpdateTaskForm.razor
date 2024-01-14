@@ -79,19 +79,6 @@
                             Validation="ValidateStartTime"
                             ErrorText="Start Time can not be more than End Time"
                             Label="Start Date"/>
-                        <MudTimePicker
-                            @ref="_startTimePicker"
-                            Clearable="true"
-                            Disabled="@(!_model.StartTime.HasValue)"
-                            Time="_model.StartTime?.TimeOfDay"
-                            TimeChanged="OnStartTimeChanged"
-                            Label="Start Time"/>
-                    </MudStack>
-
-                    <MudStack
-                        Spacing="0"
-                        Justify="Justify.SpaceBetween"
-                        Row="true">
                         <MudDatePicker
                             @ref="_endDatePicker"
                             Clearable="true"
@@ -101,13 +88,27 @@
                             Validation="ValidateEndTime"
                             ErrorText="End Time can not be less than Start Time"
                             Label="Due Date"/>
+                    </MudStack>
+
+                    <MudStack
+                        Spacing="0"
+                        Justify="Justify.SpaceBetween"
+                        Row="true">
+
+                        <MudDatePicker
+                            @ref="_reminderDatePicker"
+                            Clearable="true"
+                            Class="mr-2"
+                            Date="_model.ReminderTime"
+                            DateChanged="OnReminderDateChanged"
+                            Placeholder="Reminder Date"/>
                         <MudTimePicker
-                            @ref="_endTimePicker"
+                            @ref="_reminderTimePicker"
                             Clearable="true"
                             Disabled="@(!_model.EndTime.HasValue)"
-                            Time="_model.EndTime?.TimeOfDay"
-                            TimeChanged="OnEndTimeChanged"
-                            Label="Due Time"/>
+                            Time="_model.ReminderTime?.TimeOfDay"
+                            TimeChanged="OnReminderTimeChanged"
+                            Placeholder="Reminder Time"/>
                     </MudStack>
 
                     <MudCheckBox
