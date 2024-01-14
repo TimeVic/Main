@@ -32,11 +32,12 @@ public partial class UpdateTaskForm
     private UpdateRequest _model = new();
     private bool _isLoading = false;
     private MudForm? _form;
+    
     private MudDatePicker? _startDatePicker;
     private MudDatePicker? _endDatePicker;
-    private MudTimePicker? _startTimePicker;
-    private MudTimePicker? _endTimePicker;
-
+    private MudDatePicker? _reminderDatePicker;
+    private MudTimePicker? _reminderTimePicker;
+    
     private bool _isValid = false;
     
     private string _tabLabelAttachments
@@ -126,26 +127,14 @@ public partial class UpdateTaskForm
         return modelEndTime > _model.StartTime;
     }
 
-    private async Task OnStartTimeChanged(TimeSpan? startTime)
+    private async Task OnReminderTimeChanged(TimeSpan? endTime)
     {
-        _model.StartTime = _model.StartTime?.StartOfDay();
-        if (startTime.HasValue)
-        {
-            _model.StartTime = _model.StartTime?.Add(startTime.Value);
-        }
-        _model.StartTime = _model.StartTime?.ToLocalTime();
-        await ValidateDates();
-        SubmitForm();
-    }
-    
-    private async Task OnEndTimeChanged(TimeSpan? endTime)
-    {
-        _model.EndTime = _model.EndTime?.StartOfDay();
+        _model.ReminderTime = _model.ReminderTime?.StartOfDay();
         if (endTime.HasValue)
         {
-            _model.EndTime = _model.EndTime?.Add(endTime.Value);
+            _model.ReminderTime = _model.ReminderTime?.Add(endTime.Value);
         }
-        _model.EndTime = _model.EndTime?.ToLocalTime();
+        _model.ReminderTime = _model.ReminderTime?.ToLocalTime();
         await ValidateDates();
         SubmitForm();
     }
@@ -153,13 +142,26 @@ public partial class UpdateTaskForm
     private async Task OnStartDateChanged(DateTime? date)
     {
         _model.StartTime = date;
-        await ValidateDates();
+        if (await ValidateDates())
+        {
+            SetReminderTimeIfEmpty(_model.StartTime);
+        }
         SubmitForm();
     }
     
     private async Task OnEndDateChanged(DateTime? date)
     {
         _model.EndTime = date;
+        if (await ValidateDates())
+        {
+            SetReminderTimeIfEmpty(_model.EndTime);
+        }
+        SubmitForm();
+    }
+    
+    private async Task OnReminderDateChanged(DateTime? date)
+    {
+        _model.ReminderTime = date;
         await ValidateDates();
         SubmitForm();
     }
@@ -174,12 +176,22 @@ public partial class UpdateTaskForm
     {
         await _startDatePicker!.Validate();
         await _endDatePicker!.Validate();
-        await _startTimePicker!.Validate();
-        await _endTimePicker!.Validate();
+        await _reminderDatePicker!.Validate();
+        await _reminderTimePicker!.Validate();
 
         return !_startDatePicker!.Error
             && !_endDatePicker!.Error
-            && !_startTimePicker!.Error
-            && !_endTimePicker!.Error;
+            && !_reminderDatePicker!.Error
+            && !_reminderTimePicker!.Error;
+    }
+    
+    private void SetReminderTimeIfEmpty(DateTime? time)
+    {
+        if (!time.HasValue)
+            return;
+        if (!_model.ReminderTime.HasValue)
+        {
+            _model.ReminderTime = time?.StartOfDay().AddHours(9);
+        }
     }
 }

@@ -5,6 +5,7 @@
 <MudDialog>
     <DialogContent>
         <MudForm
+            Style="min-width: 500px;"
             @ref="_form"
             @bind-IsValid="_isValid">
             <MudTextField
@@ -12,27 +13,30 @@
                 Name="Title"
                 @bind-Value="model.Title"
                 Placeholder="Task title"/>
-            
-            <MudTextField
-                T="string"
-                Name="Title"
-                @bind-Value="model.ExternalTaskId"
-                Placeholder="External task ID"/>
-            
-            <TaskListsDropDown
-                For="() => model.TaskListId"
-                Required="true"
-                Value="@model.TaskListId"
-                ValueChanged="@(value => model.TaskListId = value ?? 0)"/>
-            
+
+            <MudStack Row="true">
+                <MudTextField
+                    T="string"
+                    Name="Title"
+                    @bind-Value="model.ExternalTaskId"
+                    Placeholder="External task ID"/>
+
+                <TaskListsDropDown
+                    For="() => model.TaskListId"
+                    Required="true"
+                    Value="@model.TaskListId"
+                    ValueChanged="@(value => model.TaskListId = value ?? 0)"/>
+            </MudStack>
         </MudForm>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
-        <MudButton 
+        <MudButton
             ButtonType="MudBlazor.ButtonType.Submit"
             OnClick="@Submit"
             Disabled="@_isLoading"
-            Color="Color.Primary">Add</MudButton>
+            Color="Color.Primary">
+            Add
+        </MudButton>
     </DialogActions>
 </MudDialog>
