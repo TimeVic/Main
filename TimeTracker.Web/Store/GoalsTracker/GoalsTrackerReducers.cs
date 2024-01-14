@@ -109,4 +109,19 @@ public class GoalsTrackerReducers
             CurrentTracker = currentTracker
         };
     }
+    
+    [ReducerMethod]
+    public static GoalsTrackerState DeleteTrackerItemFromListActionReducer(GoalsTrackerState state, DeleteTrackerItemFromListAction action)
+    {
+        var currentTracker = state.CurrentTracker;
+        if (currentTracker == null)
+        {
+            return state;
+        }
+        currentTracker.Items = state.CurrentTracker.Items.Where(item => item.Id != action.Item.Id).ToList();
+        return state with
+        {
+            CurrentTracker = currentTracker
+        };
+    }
 }

@@ -7,6 +7,12 @@ public record struct LoadTrackerAction(DateTime Date);
 
 public record struct CreateTrackerItemAction(string Name, int NumberOfTimes);
 
+public record struct UpdateTrackerItemAction(UpdateItemRequest Request);
+
+public record struct DeleteTrackerItemAction(GoalsTrackerItemDto Item);
+
+public record struct DeleteTrackerItemFromListAction(GoalsTrackerItemDto Item);
+
 public record struct SetItemCompletionAction(GoalsTrackerItemDto Item, int DayOfMonth, bool IsChecked);
 
 public record struct SetCompletionItemsAction(GoalsTrackerItemDto Item, ICollection<GoalsTrackerCompletionMarkerDto> CompletionMarkers);

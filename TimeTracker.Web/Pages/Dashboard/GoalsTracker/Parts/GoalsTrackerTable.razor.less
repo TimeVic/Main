@@ -13,6 +13,22 @@
         tbody td {
             border: 1px solid #f0f0f0;
             text-align: center;
+            
+            &.w-active {
+                border-left: 1px solid #00BCD4;
+                border-right: 1px solid #00BCD4;
+            }
+
+            &.w-completed {
+                background-color: #8BC34A;
+                color: white;
+            }
+        }
+
+        thead th {
+            &.w-active {
+                background-color: #80DEEA;
+            }
         }
 
         tbody {

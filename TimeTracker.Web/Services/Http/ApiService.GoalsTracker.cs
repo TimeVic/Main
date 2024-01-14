@@ -38,14 +38,9 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
-        public async Task<GoalsTrackerItemDto> GoalsTrackerUpdateItemAsync(long itemId, string name, int numberOfTimes)
+        public async Task<GoalsTrackerItemDto> GoalsTrackerUpdateItemAsync(UpdateItemRequest request)
         {
-            var response = await PostAsync<GoalsTrackerItemDto>(ApiUrl.GoalsTrackerItemUpdate, new UpdateItemRequest()
-            {
-                GoalsTrackerItemId = itemId,
-                NumberOfTimes = numberOfTimes,
-                Name = name
-            });
+            var response = await PostAsync<GoalsTrackerItemDto>(ApiUrl.GoalsTrackerItemUpdate, request);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -56,14 +51,10 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task GoalsTrackerDeleteItemAsync(long itemId)
         {
-            var response = await PostAsync<object>(ApiUrl.GoalsTrackerItemDelete, new DeleteItemRequest()
+            await PostAsync<object>(ApiUrl.GoalsTrackerItemDelete, new DeleteItemRequest()
             {
                 Id = itemId
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
         }
         
         public async Task<GoalsTrackerCompletionMarkerDto> GoalsTrackerSetCompletionAsync(long itemId, int dayOfMonth, bool isChecked)

@@ -16,11 +16,14 @@
     {
         <NavMenu/>
     }
-    <MudMainContent Class="pt-16 px-16">
+    <MudMainContent Class="pt-16 px-1">
         <MudContainer
-            MaxWidth="MaxWidth.Large"
+            MaxWidth="MaxWidth.False"
             class="d-flex mt-6">
-            <div class="w-container">
+            <MudStack
+                Justify="Justify.FlexStart"
+                AlignItems="AlignItems.Center"
+                Style="width: 100%;">
                 @if (CommonState.Value.IsInitialized)
                 {
                     <InitializationContainer>
@@ -31,7 +34,7 @@
                 {
                     <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
                 }
-            </div>
+            </MudStack>
             @if (!IsShowReCaptcha)
             {
                 <style>
