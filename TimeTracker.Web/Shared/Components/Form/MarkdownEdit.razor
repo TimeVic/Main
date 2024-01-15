@@ -11,7 +11,7 @@
             <MudTextField
                 T="string"
                 Label="@Label"
-                Variant="MudBlazor.Variant.Outlined"
+                Variant="Variant.Outlined"
                 Placeholder="@Placeholder"
                 Text="@_editValue"
                 TextChanged="@OnChangeValue"
@@ -29,15 +29,15 @@
                 Justify="Justify.FlexStart">
                 <MudButton
                     Size="Size.Small"
-                    OnClick="OnClickSave"
-                    Variant="Variant.Filled"
+                    OnClick="@OnClickSave"
+                    Variant="Variant.Text"
                     Color="Color.Primary">
                     Save
                 </MudButton>
                 <MudButton
                     Size="Size.Small"
-                    OnClick="OnClickCancel"
-                    Variant="Variant.Filled"
+                    OnClick="@OnClickCancel"
+                    Variant="Variant.Text"
                     Color="Color.Secondary">
                     Cancel
                 </MudButton>
