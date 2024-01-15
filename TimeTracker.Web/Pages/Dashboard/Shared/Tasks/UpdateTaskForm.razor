@@ -146,7 +146,7 @@
             <MudButton
                 OnClick="@SubmitForm"
                 Variant="Variant.Filled"
-                Disabled="@(!_form.IsValid)"
+                Disabled="@(!_form.IsValid || _tasksState.Value.IsTaskSaving)"
                 Color="Color.Primary">
                 Save
             </MudButton>

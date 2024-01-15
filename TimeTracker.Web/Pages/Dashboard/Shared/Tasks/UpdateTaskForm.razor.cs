@@ -23,6 +23,9 @@ public partial class UpdateTaskForm
     [Inject]
     public IState<Store.TasksList.TasksListState> _tasksListState { get; set; }
 
+    [Inject]
+    public IState<Store.Tasks.TasksState> _tasksState { get; set; }
+    
     [Inject] 
     private ISecurityManager _securityManager { get; set; }
 
@@ -81,7 +84,6 @@ public partial class UpdateTaskForm
             return;
         }
         Dispatcher.Dispatch(new UpdateTaskAction(_model, IsUpdateState: true));
-        OnCloseModal();
     }
 
     private async Task OnChangedAssigned(WorkspaceMembershipDto membership)

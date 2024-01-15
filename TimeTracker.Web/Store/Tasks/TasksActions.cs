@@ -18,6 +18,8 @@ public record struct SetListFilterAction(GetListFilterRequest Filter);
 
 public record struct SetIsListLoading(bool IsLoading);
 
+public record struct SetIsTaskSavingAction(bool IsSaving);
+
 public record struct SetOverdueTasksListItemsAction(GetListResponse Response);
 
 public record struct SetOverdueTasksListItemAction(TaskDto Task);
