@@ -159,13 +159,6 @@ public partial class UpdateTaskForm
         SubmitForm();
     }
     
-    private async Task OnReminderDateChanged(DateTime? date)
-    {
-        _model.ReminderTime = date;
-        await ValidateDates();
-        SubmitForm();
-    }
-    
     private void OnTitleChanged(string value)
     {
         _model.Title = value;
@@ -179,6 +172,11 @@ public partial class UpdateTaskForm
         await _reminderDatePicker!.Validate();
         await _reminderTimePicker!.Validate();
 
+        return IsDatesValidValidateDates();
+    }
+    
+    private bool IsDatesValidValidateDates()
+    {
         return !_startDatePicker!.Error
             && !_endDatePicker!.Error
             && !_reminderDatePicker!.Error

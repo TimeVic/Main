@@ -99,13 +99,12 @@
                             @ref="_reminderDatePicker"
                             Clearable="true"
                             Class="mr-2"
-                            Date="_model.ReminderTime"
-                            DateChanged="OnReminderDateChanged"
+                            @bind-Date="_model.ReminderTime"
                             Placeholder="Reminder Date"/>
                         <MudTimePicker
                             @ref="_reminderTimePicker"
                             Clearable="true"
-                            Disabled="@(!_model.EndTime.HasValue)"
+                            Disabled="@(!_model.ReminderTime.HasValue)"
                             Time="_model.ReminderTime?.TimeOfDay"
                             TimeChanged="OnReminderTimeChanged"
                             Placeholder="Reminder Time"/>
