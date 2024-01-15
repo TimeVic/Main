@@ -31,8 +31,7 @@
                 <MudTextField
                     T="string"
                     For="() => _model.Title"
-                    Value="_model.Title"
-                    ValueChanged="@(OnTitleChanged)"
+                    @bind-Value="_model.Title"
                     Placeholder="Title"/>
             </MudItem>
         </MudGrid>
@@ -99,13 +98,12 @@
                             @ref="_reminderDatePicker"
                             Clearable="true"
                             Class="mr-2"
-                            Date="_model.ReminderTime"
-                            DateChanged="OnReminderDateChanged"
+                            @bind-Date="_model.ReminderTime"
                             Placeholder="Reminder Date"/>
                         <MudTimePicker
                             @ref="_reminderTimePicker"
                             Clearable="true"
-                            Disabled="@(!_model.EndTime.HasValue)"
+                            Disabled="@(!_model.ReminderTime.HasValue)"
                             Time="_model.ReminderTime?.TimeOfDay"
                             TimeChanged="OnReminderTimeChanged"
                             Placeholder="Reminder Time"/>
@@ -137,6 +135,20 @@
                     Placeholder="Insert your task details here"/>
             </MudItem>
         </MudGrid>
+
+        <MudStack Row="true" Justify="Justify.FlexEnd">
+            <MudButton
+                OnClick="@OnCloseModal">
+                Close
+            </MudButton>
+            <MudButton
+                OnClick="@SubmitForm"
+                Variant="Variant.Filled"
+                Disabled="@_isLoading"
+                Color="Color.Primary">
+                Save
+            </MudButton>
+        </MudStack>
     </MudPaper>
 </MudForm>
 
