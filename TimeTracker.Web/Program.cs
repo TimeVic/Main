@@ -103,4 +103,5 @@ builder.Logging.AddBrowserConsole()
     .AddFilter("Microsoft", LogLevel.Information); //System logs can be filtered.
 #endif
 
-await builder.Build().RunAsync();
+var host = builder.Build();
+await host.RunAsync();

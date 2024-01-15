@@ -13,14 +13,19 @@ let firebaseConfig = {
 let app = firebase.initializeApp(firebaseConfig);
 let messaging = firebase.messaging();
 
-messaging.getToken({ vapidKey: 'BIyPXPr213LclQcFJgg3IfVOyLFDfBS8GV4f3LrHNEmckpWVMPq6lcUpcEByLacUReItPkO4eiw-uhdC2IFQ0lg' })
-    .then((currentToken) => {
-        console.info('GCM Token ', currentToken);
-    }).catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
-    });
 messaging.onMessage((payload) => {
     console.log('Message received: ', payload);
     new Notification(payload.notification.title, payload.notification);
 });
-console.log(messaging)
+
+export function getToken() {
+    return new Promise(resolve => {
+        messaging.getToken({ vapidKey: 'BIyPXPr213LclQcFJgg3IfVOyLFDfBS8GV4f3LrHNEmckpWVMPq6lcUpcEByLacUReItPkO4eiw-uhdC2IFQ0lg' })
+            .then((currentToken) => {
+                console.info('GCM Token ', currentToken);
+                resolve(currentToken);
+            }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+        });        
+    });
+}
