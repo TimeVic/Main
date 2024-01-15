@@ -29,6 +29,9 @@ public partial class UpdateTaskForm
     [Inject]
     private IState<WorkspaceMembershipsState> _workspaceMembershipsState { get; set; }
 
+    [CascadingParameter] 
+    public MudDialogInstance MudDialog { get; set; }
+    
     private UpdateRequest _model = new();
     private bool _isLoading = false;
     private MudForm? _form;
@@ -78,17 +81,12 @@ public partial class UpdateTaskForm
             return;
         }
         Dispatcher.Dispatch(new UpdateListItemAction(_model, IsUpdateState: true));
+        OnCloseModal();
     }
 
     private async Task OnChangedAssigned(WorkspaceMembershipDto membership)
     {
         _model.UserId = membership.User.Id;
-        SubmitForm();
-    }
-
-    private async Task OnChangeTime(DateTime? time)
-    {
-        SubmitForm();
     }
 
     private void OnFileUploaded(StoredFileDto uploadedFile)
@@ -100,7 +98,6 @@ public partial class UpdateTaskForm
     private void OnTagsChanged(IEnumerable<long> selectedTagIds)
     {
         _model.TagIds = selectedTagIds.ToList();
-        SubmitForm();
     }
 
     private void AttachmentsListUpdated(ICollection<StoredFileDto> attachments)
@@ -136,7 +133,6 @@ public partial class UpdateTaskForm
         }
         _model.ReminderTime = _model.ReminderTime?.ToLocalTime();
         await ValidateDates();
-        SubmitForm();
     }
     
     private async Task OnStartDateChanged(DateTime? date)
@@ -146,7 +142,6 @@ public partial class UpdateTaskForm
         {
             SetReminderTimeIfEmpty(_model.StartTime);
         }
-        SubmitForm();
     }
     
     private async Task OnEndDateChanged(DateTime? date)
@@ -156,13 +151,6 @@ public partial class UpdateTaskForm
         {
             SetReminderTimeIfEmpty(_model.EndTime);
         }
-        SubmitForm();
-    }
-    
-    private void OnTitleChanged(string value)
-    {
-        _model.Title = value;
-        SubmitForm();
     }
 
     private async Task<bool> ValidateDates()
@@ -191,5 +179,10 @@ public partial class UpdateTaskForm
         {
             _model.ReminderTime = time?.StartOfDay().AddHours(9);
         }
+    }
+    
+    private void OnCloseModal()
+    {
+        MudDialog.Close();
     }
 }
