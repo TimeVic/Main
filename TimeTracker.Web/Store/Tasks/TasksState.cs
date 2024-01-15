@@ -17,6 +17,8 @@ public record TasksState
     
     public bool IsListLoading { get; set; }
 
+    public bool IsTaskSaving { get; set; }
+    
     public bool IsLoaded { get; set; } = false;
 
     public GetListFilterRequest Filter { get; set; } = new();

@@ -133,4 +133,13 @@ public class TasksReducers
             IsOverdueListLoading = action.IsLoading
         };
     }
+    
+    [ReducerMethod]
+    public static TasksState SetIsTaskSavingLoadingActionReducer(TasksState state, SetIsTaskSavingAction action)
+    {
+        return state with
+        {
+            IsTaskSaving = action.IsSaving
+        };
+    }
 }

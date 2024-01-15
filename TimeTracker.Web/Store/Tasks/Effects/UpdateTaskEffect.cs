@@ -33,6 +33,8 @@ public class UpdateTaskEffect: Effect<UpdateTaskAction>
     {
         try
         {
+            dispatcher.Dispatch(new SetIsTaskSavingAction(true));
+
             var response = await _apiService.TasksUpdateAsync(action.UpdateRequest);
             if (action.IsUpdateState)
             {
@@ -45,6 +47,10 @@ public class UpdateTaskEffect: Effect<UpdateTaskAction>
         {
             await _toastService.ShowError("Task adding error");
             _logger.LogError(e.Message, e);
+        }
+        finally
+        {
+            dispatcher.Dispatch(new SetIsTaskSavingAction(false));
         }
     }
 }
