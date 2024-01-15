@@ -131,12 +131,14 @@
                     Class="mt-3"
                     Label="Description"
                     @bind-Value="@_model.Description"
-                    Changed="@(SubmitForm)"
                     Placeholder="Insert your task details here"/>
             </MudItem>
         </MudGrid>
-
-        <MudStack Row="true" Justify="Justify.FlexEnd">
+        
+        <MudStack 
+            Class="mt-3"
+            Row="true" 
+            Justify="Justify.FlexEnd">
             <MudButton
                 OnClick="@OnCloseModal">
                 Close
@@ -144,7 +146,7 @@
             <MudButton
                 OnClick="@SubmitForm"
                 Variant="Variant.Filled"
-                Disabled="@_isLoading"
+                Disabled="@(!_form.IsValid)"
                 Color="Color.Primary">
                 Save
             </MudButton>

@@ -7,7 +7,7 @@ public class TasksReducers
 {
 
     [ReducerMethod]
-    public static TasksState SetProjectListItemsActionReducer(TasksState state, SetListItemsAction action)
+    public static TasksState SetListItemsActionReducer(TasksState state, SetListItemsAction action)
     {
         return state with
         {

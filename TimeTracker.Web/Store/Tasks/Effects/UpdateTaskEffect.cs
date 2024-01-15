@@ -6,19 +6,19 @@ using TimeTracker.Web.Store.TasksList;
 
 namespace TimeTracker.Web.Store.Tasks.Effects;
 
-public class UpdateListItemEffect: Effect<UpdateListItemAction>
+public class UpdateTaskEffect: Effect<UpdateTaskAction>
 {
     private readonly IState<TasksState> _state;
     private readonly IState<TasksListState> _tasksListState;
     private readonly ApiService _apiService;
-    private readonly ILogger<UpdateListItemEffect> _logger;
+    private readonly ILogger<UpdateTaskEffect> _logger;
     private readonly ToastService _toastService;
 
-    public UpdateListItemEffect(
+    public UpdateTaskEffect(
         ApiService apiService,
         IState<TasksState> state,
         IState<TasksListState> tasksListState,
-        ILogger<UpdateListItemEffect> logger,
+        ILogger<UpdateTaskEffect> logger,
         ToastService toastService
     )
     {
@@ -29,7 +29,7 @@ public class UpdateListItemEffect: Effect<UpdateListItemAction>
         _toastService = toastService;
     }
 
-    public override async Task HandleAsync(UpdateListItemAction action, IDispatcher dispatcher)
+    public override async Task HandleAsync(UpdateTaskAction action, IDispatcher dispatcher)
     {
         try
         {

@@ -82,7 +82,7 @@ public partial class TaskCard
         {
             var updateModel = new UpdateRequest();
             updateModel.Fill(task);
-            Dispatcher.Dispatch(new UpdateListItemAction(updateModel, false));
+            Dispatcher.Dispatch(new UpdateTaskAction(updateModel, true));
         });
     }
 }

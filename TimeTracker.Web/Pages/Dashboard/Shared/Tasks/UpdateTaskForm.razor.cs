@@ -80,7 +80,7 @@ public partial class UpdateTaskForm
         {
             return;
         }
-        Dispatcher.Dispatch(new UpdateListItemAction(_model, IsUpdateState: true));
+        Dispatcher.Dispatch(new UpdateTaskAction(_model, IsUpdateState: true));
         OnCloseModal();
     }
 

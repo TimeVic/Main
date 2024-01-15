@@ -25,7 +25,7 @@ public record struct SetOverdueTasksListItemAction(TaskDto Task);
 
 public record struct SetIsOverdueTasksListLoadingAction(bool IsLoading);
 
-public record struct UpdateListItemAction(
+public record struct UpdateTaskAction(
     UpdateRequest UpdateRequest,
     bool IsUpdateState = true
 );
