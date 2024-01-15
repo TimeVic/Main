@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
+using TimeTracker.Web.Services.Messaging;
 using TimeTracker.Web.Store.Common;
 using TimeTracker.Web.Store.Workspace;
 
@@ -11,14 +12,17 @@ public class WorkspaceInitializationService
 {
     private readonly IDispatcher _dispatcher;
     private readonly NavigationManager _navigationManager;
+    private readonly FcmService _fcmService;
 
     public WorkspaceInitializationService(
         IDispatcher dispatcher,
-        NavigationManager navigationManager
+        NavigationManager navigationManager,
+        FcmService fcmService
     )
     {
         _dispatcher = dispatcher;
         _navigationManager = navigationManager;
+        _fcmService = fcmService;
     }
 
     public void Init(bool isReload = false)
@@ -40,5 +44,6 @@ public class WorkspaceInitializationService
         }
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Tag.LoadListAction());
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(true));
+        Task.Run(() => _fcmService.SetNotificationToken());
     }
 }

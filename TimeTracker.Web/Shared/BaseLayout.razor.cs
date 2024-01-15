@@ -35,9 +35,6 @@ public partial class BaseLayout
     [Inject]
     protected IDispatcher Dispatcher { get; set; }
     
-    [Inject]
-    protected FcmService FcmService { get; set; }
-    
     protected bool IsRedirectIfNotLoggedIn = true;
 
     protected bool IsShowMainMenu => AuthState.Value.IsLoggedIn
@@ -54,15 +51,6 @@ public partial class BaseLayout
                 || path.StartsWith("/login")
                 || path.StartsWith("/registration")
                 || path.StartsWith("/documentation");
-        }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        if (firstRender)
-        {
-            await FcmService.Test();
         }
     }
 

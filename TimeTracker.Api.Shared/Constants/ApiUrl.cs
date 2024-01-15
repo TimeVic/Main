@@ -10,6 +10,7 @@ public class ApiUrl
     public const string RegistrationStep2 = "user/registration/step2";
     public const string ResetPasswordStep1 = "user/password/reset";
     public const string ResetPasswordStep2 = "user/password/change";
+    public const string SetNotificationToken = "dashboard/user/set-notification-token";
     #endregion
     
     #region Time Entry
