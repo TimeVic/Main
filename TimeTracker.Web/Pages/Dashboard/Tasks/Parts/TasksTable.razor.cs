@@ -12,6 +12,7 @@ using TimeTracker.Web.Store.Dashboard;
 using TimeTracker.Web.Store.Tasks;
 using TimeTracker.Web.Store.TasksList;
 using SetListItemAction = TimeTracker.Web.Store.Tasks.SetListItemAction;
+using SetListItemsAction = TimeTracker.Web.Store.Tasks.SetListItemsAction;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
@@ -26,6 +27,9 @@ public partial class TasksTable
     
     [Inject]
     public ModalDialogProviderService ModalDialogProviderService { get; set; }
+    
+    [Inject]
+    public IActionSubscriber ActionSubscriber { get; set; }
     
     private ICollection<TaskStatus> _statuses = new List<TaskStatus>()
     {

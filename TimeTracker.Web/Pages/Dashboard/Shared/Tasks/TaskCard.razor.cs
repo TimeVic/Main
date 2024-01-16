@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Task;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Dashboard;
 using TimeTracker.Web.Store.Tasks;
@@ -22,9 +23,6 @@ public partial class TaskCard
     
     [Parameter]
     public string? Class { get; set; }
-    
-    [Inject]
-    public IState<TasksState> TasksState { get; set; }
     
     [Inject]
     public IState<TasksListState> TasksListState { get; set; }
@@ -57,6 +55,12 @@ public partial class TaskCard
             
             return string.Join(" > ", parts);
         }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        Debug.Log("OnAfterRender");
     }
 
     private void OnClickTask()

@@ -1,4 +1,5 @@
 ﻿using Fluxor;
+using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Store.TimeEntry;
@@ -69,6 +70,21 @@ public class ReportReducers
         return state with
         {
             SummaryReportFilter = action.FilterState
+        };
+    }
+    
+    [ReducerMethod]
+    public static ReportsState ReportResetSummaryReportFilterActionReducer(ReportsState state, ReportResetSummaryReportFilterAction action)
+    {
+        return state with
+        {
+            SummaryReportFilter = state.SummaryReportFilter with
+            {
+                ReportType = SummaryReportType.GroupByDay,
+                PeriodType = SummaryReportPeriodType.Today,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now
+            }
         };
     }
     
