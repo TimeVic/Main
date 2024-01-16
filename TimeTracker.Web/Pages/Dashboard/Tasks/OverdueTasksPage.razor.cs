@@ -16,8 +16,9 @@ public partial class OverdueTasksPage
     [Inject]
     public ModalDialogProviderService ModalDialogProviderService { get; set; }
     
-    private IEnumerable<TaskDto> _tasks => TasksState.Value.OverdueList;
-
+    private ICollection<TaskDto> _tasks = new List<TaskDto>();
+    private bool _isLoading = false;
+    
     private DateTime _listStartDate = DateTime.Now.Date;
     private DateTime _listEndDate = DateTime.Now.Date.AddMonths(6);
 
@@ -25,6 +26,13 @@ public partial class OverdueTasksPage
     {
         await base.OnInitializedAsync();
         
+        TasksState.StateChanged += (sender, args) =>
+        {
+            _tasks = TasksState.Value.OverdueList;
+            _isLoading = TasksState.Value.IsOverdueListLoading;
+            StateHasChanged();
+        };
+
         Dispatcher.Dispatch(new LoadOverdueTasksListAction());
     }
     

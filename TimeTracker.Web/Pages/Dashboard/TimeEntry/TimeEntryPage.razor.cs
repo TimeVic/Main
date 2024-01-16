@@ -2,7 +2,7 @@
 
 namespace TimeTracker.Web.Pages.Dashboard.TimeEntry;
 
-public partial class TimeEntryPage: BaseComponent
+public partial class TimeEntryPage: BaseReactiveComponent
 {
     protected override async Task OnInitializedAsync()
     {

@@ -7,7 +7,7 @@ using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Core.Components;
 
-public class BaseComponent: ComponentBase
+public class BaseReactiveComponent: Fluxor.Blazor.Web.Components.FluxorComponent
 {
     [Parameter]
     public string? Locale { get; set; }

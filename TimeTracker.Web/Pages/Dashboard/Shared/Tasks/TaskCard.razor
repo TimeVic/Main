@@ -3,7 +3,7 @@
 @inherits BaseComponent
 
 <MudPaper
-    @onclick="() => OnClickTask()"
+    @onclick="@OnClickTask"
     Elevation="25"
     Style="cursor: pointer"
     Class="@("pa-2 rounded-lg " + Class)">

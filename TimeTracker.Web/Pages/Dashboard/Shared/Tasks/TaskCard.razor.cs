@@ -57,12 +57,6 @@ public partial class TaskCard
         }
     }
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
-        Debug.Log("OnAfterRender");
-    }
-
     private void OnClickTask()
     {
         InvokeAsync(async () => await ModalDialogProviderService.ShowEditTaskModal(Task));
