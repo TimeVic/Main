@@ -34,12 +34,9 @@
                     <MudProgressLinear Color="Color.Info" Indeterminate="true"/>
                 </div>
             }
-            else
+            @foreach (var task in _tasks.Where(item => item.Status == taskStatus))
             {
-                foreach (var task in _tasks.Where(item => item.Status == taskStatus))
-                {
-                    <TaskCard Class="mb-3" Task="@task"></TaskCard>
-                }
+                <TaskCard Class="mb-3" Task="@task"></TaskCard>
             }
         </MudPaper>
     }

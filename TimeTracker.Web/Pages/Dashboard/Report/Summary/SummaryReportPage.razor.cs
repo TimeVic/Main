@@ -43,6 +43,7 @@ public partial class SummaryReportPage
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        Dispatcher.Dispatch(new ReportResetSummaryReportFilterAction());
         Dispatcher.Dispatch(new ReportFetchSummaryReportAction());
     }
     
