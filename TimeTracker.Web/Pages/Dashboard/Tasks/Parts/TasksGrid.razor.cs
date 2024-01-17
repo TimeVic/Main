@@ -33,10 +33,7 @@ public partial class TasksGrid: IDisposable
     {
         base.OnInitialized();
 
-        TasksState.StateChanged += (sender, args) =>
-        {
-            _tasksSubject.OnNext(TasksState.Value.List);
-        };
+        TasksState.StateChanged += OnTaskStateChanged;
 
         _tasksSubject
             .Throttle(TimeSpan.FromMilliseconds(1000))
@@ -64,6 +61,11 @@ public partial class TasksGrid: IDisposable
         });
     }
 
+    private void OnTaskStateChanged(object? sender, EventArgs e)
+    {
+        _tasksSubject.OnNext(TasksState.Value.List);
+    }
+
     private async Task OnAddTask()
     {
         await ModalDialogProviderService.ShowAddTaskModal(
@@ -74,6 +76,7 @@ public partial class TasksGrid: IDisposable
     
     public void Dispose()
     {
+        TasksState.StateChanged -= OnTaskStateChanged;
         ActionSubscriber.UnsubscribeFromAllActions(this);
         _tasksSubject.Dispose();
     }

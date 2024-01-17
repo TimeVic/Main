@@ -14,7 +14,7 @@
         </MudText>
         <MudSpacer/>
         <MudIconButton
-            OnClick="() => OnAddTask()"
+            OnClick="@OnAddTask"
             Icon="@Icons.Material.Filled.Add"/>
 
     </MudToolBar>
@@ -24,7 +24,8 @@
             <MudProgressLinear Color="Color.Info" Indeterminate="true"/>
         </div>
     }
-    <Virtualize Items="@_tasks">
-        <TaskCard Class="mb-3" Task="@context"></TaskCard>
-    </Virtualize>
+    @foreach (var task in _tasks)
+    {
+        <TaskCard Class="mb-3" Task="@task"></TaskCard>
+    }
 </MudPaper>
