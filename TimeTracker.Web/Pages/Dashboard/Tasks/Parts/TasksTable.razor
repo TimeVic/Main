@@ -11,33 +11,8 @@
 @inherits BaseComponent
 
 <div class="d-flex flex-row">
-    @foreach (var taskStatus in _statuses)
-    {
-        <MudPaper
-            Elevation="0"
-            Width="300px"
-            MinHeight="400px"
-            Class="pa-2 ma-4 d-flex flex-column mud-background-gray rounded-lg">
-            <MudToolBar DisableGutters="true" Class="px-2">
-                <MudText Typo="Typo.subtitle1">
-                    <b>@taskStatus.GetDisplayName()</b>
-                </MudText>
-                <MudSpacer/>
-                <MudIconButton
-                    OnClick="() => OnAddTask(taskStatus)"
-                    Icon="@Icons.Material.Filled.Add"/>
-
-            </MudToolBar>
-            @if (TasksState.Value.IsListLoading)
-            {
-                <div class="d-flex justify-center mt-4">
-                    <MudProgressLinear Color="Color.Info" Indeterminate="true"/>
-                </div>
-            }
-            @foreach (var task in _tasks.Where(item => item.Status == taskStatus))
-            {
-                <TaskCard Class="mb-3" Task="@task"></TaskCard>
-            }
-        </MudPaper>
-    }
+    <TasksGrid Status="@TaskStatus.Backlog"></TasksGrid>
+    <TasksGrid Status="@TaskStatus.ToDo"></TasksGrid>
+    <TasksGrid Status="@TaskStatus.InProgress"></TasksGrid>
+    <TasksGrid Status="@TaskStatus.Done"></TasksGrid>
 </div>

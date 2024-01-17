@@ -4,11 +4,11 @@
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Business.Extensions
 
-@inherits BaseComponent
+@inherits BaseReactiveComponent
 @layout Layout
 
 <MudStack Class="w-100">
-    @if (TasksState.Value.IsOverdueListLoading)
+    @if (_isLoading)
     {
         <MudStack AlignItems="AlignItems.Center">
             <MudProgressCircular Color="Color.Info" Indeterminate="true" />
