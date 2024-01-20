@@ -22,6 +22,18 @@ public partial class OverdueTasksPage
     private DateTime _listStartDate = DateTime.Now.Date;
     private DateTime _listEndDate = DateTime.Now.Date.AddMonths(6);
 
+    private ICollection<TaskDto> _overdueTasks => _tasks.Where(item => item.DueTime < _listStartDate).ToList();
+    
+    private ICollection<TaskDto> _featureTasks => _tasks.Where(item => item.DueTime >= _listStartDate).ToList();
+
+    private IEnumerable<IGrouping<DateTime?, TaskDto>> _groupedTasks
+    {
+        get
+        {
+            return _featureTasks.GroupBy(item => item.DueTime?.Date);
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();

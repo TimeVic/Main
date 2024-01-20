@@ -32,8 +32,14 @@ public class NotificationsCenterController : MainApiControllerBase
     [HttpPost("get-list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Add([FromBody] GetListRequest request)
+    public Task<IActionResult> GetList([FromBody] GetListRequest request)
         => this.RequestAsync()
             .For<GetListResponse>()
             .With(request);
+    
+    [HttpPost("mark-all-as-read")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> MarkAllAsRead([FromBody] MarkAllAsReadRequest request)
+        => this.RequestAsync(request);
 }

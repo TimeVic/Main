@@ -3,6 +3,7 @@
 @using TimeTracker.Web.Shared.Components.Layout
 @using TimeTracker.Web.Core.Helpers
 @using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
+@using TimeTracker.Web.Pages.Dashboard.Shared.NotificationCenter
 
 @using MudBlazor
 
@@ -25,6 +26,7 @@
     }
     @if (AuthState.Value.IsLoggedIn)
     {
+        <NotificationBadgeButton/>
         if (_isShowDashboardLink)
         {
             <MudIconButton

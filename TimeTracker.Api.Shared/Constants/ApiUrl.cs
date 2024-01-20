@@ -134,4 +134,11 @@ public class ApiUrl
     public const string GoalsTrackerItemSetCompletion = "dashboard/goals-tracker/item/set-completion";
     
     #endregion
+    
+    #region Workspace
+    
+    public const string NotificationCenterGetCount = "dashboard/notifications-center/get-count";
+    public const string NotificationCenterGetList = "dashboard/notifications-center/get-list";
+    
+    #endregion
 }

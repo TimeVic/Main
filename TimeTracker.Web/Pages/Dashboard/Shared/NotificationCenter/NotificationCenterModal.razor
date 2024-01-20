@@ -1,0 +1,30 @@
+﻿@inherits BaseReactiveComponent
+
+<MudDialog>
+    <DialogContent>
+        <MudStack Row="false" Spacing="1" Class="p-3">
+            @foreach (var notification in _state.Value.List)
+            {
+                <MudCard>
+                    @notification.Id
+                </MudCard>
+                <MudSpacer/>
+            }
+        </MudStack>
+        @if (_state.Value.IsListHasMore)
+        {
+            <MudSpacer/>
+            <MudButton
+                Size="Size.Medium"
+                StartIcon="@Icons.Material.Filled.Downloading"
+                Color="Color.Default"
+                OnClick="@LoadMore"
+                Disabled="@(!_state.Value.IsListLoading)"/>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Success" OnClick="@OnClickReadAll">Read All</MudButton>
+        <MudSpacer/>
+        <MudButton OnClick="@OnCloseModal">Close</MudButton>
+    </DialogActions>
+</MudDialog>
