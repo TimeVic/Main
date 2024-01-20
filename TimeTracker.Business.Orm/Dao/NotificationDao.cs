@@ -50,6 +50,8 @@ public class NotificationDao : INotificationDao
     )
     {        
         TaskEntity taskAlias = null;
+        TaskListEntity taskListAlias = null;
+        UserEntity taskUserAlias = null;
         TaskCommentEntity taskCommentAlias = null;
         WorkspaceEntity workspaceAlias = null;
         UserEntity performedUserAlias = null;
@@ -58,6 +60,8 @@ public class NotificationDao : INotificationDao
         
         var query = _sessionProvider.CurrentSession.QueryOver<NotificationEntity>()
             .Left.JoinAlias(item => item.Task, () => taskAlias)
+            .Left.JoinAlias(item => taskAlias.TaskList, () => taskListAlias)
+            .Left.JoinAlias(item => taskAlias.User, () => taskUserAlias)
             .Left.JoinAlias(item => item.TaskComment, () => taskCommentAlias)
             .Inner.JoinAlias(item => item.PerformedUser, () => performedUserAlias)
             .Inner.JoinAlias(item => item.ReceiverUser, () => receivedUserAlias)

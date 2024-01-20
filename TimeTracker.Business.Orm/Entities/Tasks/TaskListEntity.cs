@@ -30,7 +30,7 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         [ManyToOne(
             ClassType = typeof(ProjectEntity), 
             Column = "project_id", 
-            Lazy = Laziness.False,
+            Lazy = Laziness.Proxy,
             Cascade = "none"
         )]
         public virtual ProjectEntity Project { get; set; }
