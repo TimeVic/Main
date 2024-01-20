@@ -12,7 +12,7 @@ public record NotificationCenterState
     
     public bool IsListLoading { get; set; } = false;
     
-    public bool IsListHasMore { get; set; } = true;
+    public bool IsListHasMore { get; set; } = false;
     
     public ICollection<NotificationDto> List { get; set; } = new List<NotificationDto>();
 }

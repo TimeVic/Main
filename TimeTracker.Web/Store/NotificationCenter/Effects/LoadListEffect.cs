@@ -30,14 +30,16 @@ public class LoadListEffect: Effect<LoadListAction>
         try
         {
             dispatcher.Dispatch(new SetIsListLoadingAction(true));
+            var page = _state.Value.NextPage;
             if (action.IsRefresh)
             {
                 dispatcher.Dispatch(new RefreshListAction());
+                page = 1;
             }
 
             var response = await _apiService.NotificationCenterGetList(
                 _authState.Value.Workspace.Id,
-                _state.Value.NextPage
+                page
             );
             dispatcher.Dispatch(new SetListAction(response));
         }
