@@ -1,6 +1,12 @@
-﻿using NHibernate.Linq;
+﻿using NHibernate.Criterion;
+using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Orm.Dto;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Notifications;
+using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
@@ -35,5 +41,39 @@ public class NotificationDao : INotificationDao
                 IsRead = true,
                 UpdateTime = DateTime.UtcNow
             });
+    }
+    
+    public async Task<ListDto<NotificationEntity>> GetList(
+        UserEntity user,
+        WorkspaceEntity workspace,
+        int page
+    )
+    {        
+        TaskEntity taskAlias = null;
+        TaskCommentEntity taskCommentAlias = null;
+        WorkspaceEntity workspaceAlias = null;
+        UserEntity performedUserAlias = null;
+        UserEntity receivedUserAlias = null;
+        UserEntity userAlias = null;
+        
+        var query = _sessionProvider.CurrentSession.QueryOver<NotificationEntity>()
+            .Left.JoinAlias(item => item.Task, () => taskAlias)
+            .Left.JoinAlias(item => item.TaskComment, () => taskCommentAlias)
+            .Inner.JoinAlias(item => item.PerformedUser, () => performedUserAlias)
+            .Inner.JoinAlias(item => item.ReceiverUser, () => receivedUserAlias)
+            .Inner.JoinAlias(item => item.Workspace, () => workspaceAlias)
+            .Where(item => item.ReceiverUser == user)
+            .Where(item => workspaceAlias.Id == workspace.Id);
+
+        var offset = PaginationUtils.CalculateOffset(page);
+        var items = await query
+            .OrderBy(item => item.CreateTime).Desc()
+            .Skip(offset)
+            .Take(GlobalConstants.ListPageSize)
+            .ListAsync();
+        return new ListDto<NotificationEntity>(
+            items,
+            await query.RowCountAsync()
+        );
     }
 }

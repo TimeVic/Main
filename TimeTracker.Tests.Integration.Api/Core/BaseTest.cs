@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
@@ -27,6 +28,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     protected readonly IDataFactory<UserEntity> UserFactory;
     protected readonly SmtpClientServiceMock SmtpClientServiceMock;
     private readonly IDbCleanUpService _dbCleanUpService;
+    protected readonly FirebaseClientServiceMock FirebaseClientService;
 
     public BaseTest(ApiCustomWebApplicationFactory factory)
     {
@@ -38,6 +40,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         UserSeeder = _factory.Services.GetRequiredService<IUserSeeder>();
         UserFactory = _factory.Services.GetRequiredService<IDataFactory<UserEntity>>();
         SmtpClientServiceMock = _factory.Services.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock;
+        FirebaseClientService = _factory.Services.GetRequiredService<IFirebaseClientService>() as FirebaseClientServiceMock;
         ServiceProvider = _factory.Services;
 
         _dbCleanUpService.CleanUp().Wait();

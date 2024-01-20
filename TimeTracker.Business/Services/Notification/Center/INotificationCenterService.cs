@@ -1,5 +1,7 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Orm.Dto;
+using TimeTracker.Business.Orm.Entities.Notifications;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
@@ -16,4 +18,6 @@ public interface INotificationCenterService: IDomainService
     Task<int> GetUnreadCount(UserEntity user, WorkspaceEntity workspace);
 
     Task<int> MarkAllAsRead(UserEntity user, WorkspaceEntity workspace);
+
+    Task<ListDto<NotificationEntity>> GetList(UserEntity user, WorkspaceEntity workspace, int page = 1);
 }

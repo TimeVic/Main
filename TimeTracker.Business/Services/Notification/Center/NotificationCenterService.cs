@@ -1,6 +1,8 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dto;
+using TimeTracker.Business.Orm.Entities.Notifications;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -42,5 +44,10 @@ public class NotificationCenterService: INotificationCenterService
     public Task<int> MarkAllAsRead(UserEntity user, WorkspaceEntity workspace)
     {
         return _notificationDao.MarkAllAsRead(user, workspace);
+    }
+    
+    public Task<ListDto<NotificationEntity>> GetList(UserEntity user, WorkspaceEntity workspace, int page)
+    {
+        return _notificationDao.GetList(user, workspace, page);
     }  
 }
