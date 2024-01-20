@@ -6,7 +6,7 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<RadzenCard class="no-gutters mx-n4 w-100">
+<RadzenCard class="no-gutters w-100">
     <RadzenButton
         Click="NavigateToTasksPage"
         Icon="arrow_back_ios"
@@ -15,7 +15,7 @@
     />
 </RadzenCard>
 
-<RadzenCard class="no-gutters mx-n4 mt-1 w-100">
+<RadzenCard class="no-gutters mt-1 ml-2 w-100">
     @if (_isLoading)
     {
         <MudProgressCircular Color="Color.Info" Indeterminate="true" />

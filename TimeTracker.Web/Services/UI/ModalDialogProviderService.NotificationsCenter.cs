@@ -10,7 +10,8 @@ public partial class ModalDialogProviderService
         await _mudDialogService.ShowAsync<NotificationCenterModal>("Notifications", new DialogOptions()
         {
             Position = DialogPosition.TopCenter,
-            MaxWidth = MaxWidth.Medium
+            MaxWidth = MaxWidth.Medium,
+            CloseButton = true
         });
     }
 }

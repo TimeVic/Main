@@ -1,25 +1,79 @@
-﻿@inherits BaseReactiveComponent
+﻿@using TimeTracker.Business.Common.Constants
+@inherits BaseReactiveComponent
 
-<MudDialog>
+<MudDialog Style="min-width: 400px; min-height: 100px;">
     <DialogContent>
-        <MudStack Row="false" Spacing="1" Class="p-3">
-            @foreach (var notification in _state.Value.List)
-            {
-                <MudCard>
-                    @notification.Id
-                </MudCard>
-                <MudSpacer/>
-            }
-        </MudStack>
+        @if (_state.Value.IsListLoading && !_state.Value.List.Any())
+        {
+            <MudStack>
+                <MudProgressLinear Color="Color.Info" Indeterminate="true"/>
+            </MudStack>
+        }
+        else
+        {
+            <MudStack Row="false" Spacing="1">
+                @foreach (var notification in _state.Value.List)
+                {
+                    <MudCard
+                        Class="pa-3 cursor-pointer"
+                        @onclick="@(() => OnClickToNotification(notification))">
+                        @if (notification.Type == NotificationActionType.Reminder)
+                        {
+                            <MudStack
+                                Spacing="1"
+                                Row="true">
+                                @if (!notification.IsRead)
+                                {
+                                    <MudBadge
+                                        Icon="@Icons.Material.Filled.Markunread"
+                                        Color="Color.Error"
+                                        Overlap="true"
+                                        Bordered="true">
+                                        <MudChip
+                                            Icon="@Icons.Material.Filled.AccessTime"
+                                            Size="Size.Small"
+                                            Color="Color.Primary">
+                                            Reminder
+                                        </MudChip>
+                                    </MudBadge>
+                                }
+                                else
+                                {
+                                    <MudChip
+                                        Icon="@Icons.Material.Filled.AccessTime"
+                                        Size="Size.Small"
+                                        Color="Color.Primary">
+                                        Reminder
+                                    </MudChip>
+                                }
+                                <MudText
+                                    Class="mt-1 ml-2"
+                                    Typo="Typo.body1">
+                                    <b>Due Time:</b> @notification.Task.ReminderTime?.ToString("d h:mm:ss")
+                                </MudText>
+                            </MudStack>
+                            <MudText
+                                Class="ml-1"
+                                Style="line-break: anywhere;"
+                                Typo="Typo.body1">
+                                @notification.Task.Title
+                            </MudText>
+                        }
+                    </MudCard>
+                    <MudSpacer/>
+                }
+            </MudStack>
+        }
         @if (_state.Value.IsListHasMore)
         {
-            <MudSpacer/>
-            <MudButton
-                Size="Size.Medium"
-                StartIcon="@Icons.Material.Filled.Downloading"
-                Color="Color.Default"
-                OnClick="@LoadMore"
-                Disabled="@(!_state.Value.IsListLoading)"/>
+            <MudStack Row="true" Justify="Justify.Center" Class="mt-4 mb-3">
+                <MudIconButton
+                    Size="Size.Medium"
+                    Icon="@Icons.Material.Filled.Downloading"
+                    Color="Color.Default"
+                    OnClick="@LoadMore"
+                    Disabled="@(_state.Value.IsListLoading)"/>
+            </MudStack>
         }
     </DialogContent>
     <DialogActions>

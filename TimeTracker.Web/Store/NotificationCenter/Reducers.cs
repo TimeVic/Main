@@ -22,7 +22,8 @@ public class Reducers
         return state with
         {
             NextPage = 1,
-            List = new List<NotificationDto>()
+            List = new List<NotificationDto>(),
+            IsListHasMore = false
         };
     }
     
@@ -43,6 +44,19 @@ public class Reducers
         return state with
         {
             IsListLoading = action.IsLoading
+        };
+    }
+    
+    [ReducerMethod]
+    public static NotificationCenterState Reducer(NotificationCenterState state, SetAllAsReadAction action)
+    {
+        return state with
+        {
+            List = state.List.Select(item =>
+            {
+                item.IsRead = true;
+                return item;
+            }).ToList()
         };
     }
 }
