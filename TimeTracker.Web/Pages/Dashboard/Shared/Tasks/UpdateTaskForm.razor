@@ -10,7 +10,6 @@
 
 @inherits BaseReactiveComponent
 
-
 <MudForm
     @ref="_form"
     @bind-IsValid="_isValid">
@@ -20,10 +19,17 @@
             <TaskIdBadge IsLink="true" InternalTask="@Task"/>
 
             <MudSpacer/>
-
             <TimeEntryForm
                 InternalTask="@Task"
                 IsShort="true"/>
+            <MudSpacer/>
+            <MudButton
+                OnClick="@SubmitForm"
+                Variant="Variant.Filled"
+                Disabled="@(!_form.IsValid || _tasksState.Value.IsTaskSaving)"
+                Color="Color.Primary">
+                Save
+            </MudButton>
         </MudStack>
 
         <MudGrid>
@@ -134,23 +140,6 @@
                     Placeholder="Insert your task details here"/>
             </MudItem>
         </MudGrid>
-        
-        <MudStack 
-            Class="mt-3"
-            Row="true" 
-            Justify="Justify.FlexEnd">
-            <MudButton
-                OnClick="@OnCloseModal">
-                Close
-            </MudButton>
-            <MudButton
-                OnClick="@SubmitForm"
-                Variant="Variant.Filled"
-                Disabled="@(!_form.IsValid || _tasksState.Value.IsTaskSaving)"
-                Color="Color.Primary">
-                Save
-            </MudButton>
-        </MudStack>
     </MudPaper>
 </MudForm>
 
