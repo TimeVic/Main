@@ -6,13 +6,14 @@ using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Notification;
+using TimeTracker.Business.Services.Notification.Center;
 using TimeTracker.Business.Services.Notification.Push;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Business.Core;
 
-namespace TimeTracker.Tests.Integration.Business.Services.Notification.TaskNotificationService;
+namespace TimeTracker.Tests.Integration.Business.Services.Notification.NotificationBgJobService;
 
 public class SendReminderNotificationTest: BaseTest
 {
@@ -25,7 +26,8 @@ public class SendReminderNotificationTest: BaseTest
     private readonly IStoredFilesDao _storedFilesDao;
     private readonly IGcmNotificationService _gcmNotificationService;
     private readonly IUserNotificationTokenDao _userNotificationTokenDao;
-    private readonly ITaskNotificationService _taskNotificationService;
+    private readonly ITaskNotificationService _notificationBgJobService;
+    private readonly INotificationCenterService _notificationCenterService;
 
     public SendReminderNotificationTest(): base()
     {
@@ -34,8 +36,9 @@ public class SendReminderNotificationTest: BaseTest
         _storedFilesDao = Scope.Resolve<IStoredFilesDao>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _userNotificationTokenDao = Scope.Resolve<IUserNotificationTokenDao>();
-        _taskNotificationService = Scope.Resolve<ITaskNotificationService>();
+        _notificationBgJobService = Scope.Resolve<ITaskNotificationService>();
         _gcmNotificationService = Scope.Resolve<IGcmNotificationService>();
+        _notificationCenterService = Scope.Resolve<INotificationCenterService>();
         _user = _userSeeder.CreateActivatedAsync().Result;
 
         _storedFilesDao.MarkAsUploadedAllPending().Wait();
@@ -52,10 +55,11 @@ public class SendReminderNotificationTest: BaseTest
         await CommitDbChanges();
 
         // Act
-        await _taskNotificationService.SendReminderNotification();
+        await _notificationBgJobService.SendReminderNotification();
         
         // Assert
         Assert.True(FirebaseClientService.SentMessages.Any());
+        Assert.Equal(1, await _notificationCenterService.GetUnreadCount(_user, _task.Workspace));
     }
     
     [Fact]
@@ -68,10 +72,11 @@ public class SendReminderNotificationTest: BaseTest
         await CommitDbChanges();
 
         // Act
-        await _taskNotificationService.SendReminderNotification();
+        await _notificationBgJobService.SendReminderNotification();
         
         // Assert
         Assert.Empty(FirebaseClientService.SentMessages);
+        Assert.Equal(0, await _notificationCenterService.GetUnreadCount(_user, _task.Workspace));
     }
     
     [Fact]
@@ -84,10 +89,11 @@ public class SendReminderNotificationTest: BaseTest
         await CommitDbChanges();
 
         // Act
-        await _taskNotificationService.SendReminderNotification();
+        await _notificationBgJobService.SendReminderNotification();
         
         // Assert
         Assert.Empty(FirebaseClientService.SentMessages);
+        Assert.Equal(0, await _notificationCenterService.GetUnreadCount(_user, _task.Workspace));
     }
     
     [Fact]
@@ -100,10 +106,13 @@ public class SendReminderNotificationTest: BaseTest
         await CommitDbChanges();
 
         // Act
-        await _taskNotificationService.SendReminderNotification();
-        await _taskNotificationService.SendReminderNotification();
+        await _notificationBgJobService.SendReminderNotification();
+        await _notificationCenterService.MarkAllAsRead(_user, _task.Workspace);
+        
+        await _notificationBgJobService.SendReminderNotification();
         
         // Assert
         Assert.Single(FirebaseClientService.SentMessages);
+        Assert.Equal(0, await _notificationCenterService.GetUnreadCount(_user, _task.Workspace));
     }
 }

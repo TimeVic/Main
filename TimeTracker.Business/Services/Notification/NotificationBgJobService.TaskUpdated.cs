@@ -7,7 +7,7 @@ using TimeTracker.Business.Services.Queue;
 
 namespace TimeTracker.Business.Services.Notification;
 
-public partial class TaskNotificationService
+public partial class NotificationBgJobService
 {
     public async Task<bool> NotifyAboutTaskChanges()
     {

@@ -18,6 +18,7 @@ public class DbCleanUpService: IDbCleanUpService
     {
         var tables = new List<string>()
         {
+            "notifications",
             "payments",
             "queues",
             "task_comment_stored_files",

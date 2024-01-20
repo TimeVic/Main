@@ -3,6 +3,7 @@ using Notification.Abstractions;
 using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Notifications;
+using TimeTracker.Business.Services.Notification.Center.Handlers;
 
 namespace TimeTracker.Business.Di.Autofac.Modules
 {
@@ -34,6 +35,11 @@ namespace TimeTracker.Business.Di.Autofac.Modules
                 .RegisterType<FirebaseClientService>()
                 .As<IFirebaseClientService>()
                 .SingleInstance();
+            
+            builder
+                .RegisterAssemblyTypes(typeof(BusinessAssemblyMarker).Assembly)
+                .AsClosedTypesOf(typeof(INotificationCenterHandler<>))
+                .InstancePerLifetimeScope();
         }
     }
 }
