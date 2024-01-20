@@ -8,8 +8,6 @@ public class NotificationProfile : Profile
 {
     public NotificationProfile()
     {
-        CreateMap<NotificationEntity, NotificationDto>()
-            .ForPath(x => x.Task.Attachments, opt => opt.Ignore())
-            .ForPath(x => x.Task.TaskList.Project, opt => opt.Ignore());
+        CreateMap<NotificationEntity, NotificationDto>();
     }
 }

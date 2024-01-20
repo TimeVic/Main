@@ -75,6 +75,13 @@ public partial class GetListTest: BaseTest
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(2, actualResponse.TotalCount);
         Assert.Equal(2, actualResponse.Items.Count());
+        Assert.All(actualResponse.Items, item =>
+        {
+            Assert.True(item.Id > 0);
+            Assert.Equal(NotificationActionType.Reminder, item.Type);
+            Assert.NotNull(item.Task);
+            Assert.NotNull(item.Task.TaskList);
+        });
     }
     
     [Fact]
