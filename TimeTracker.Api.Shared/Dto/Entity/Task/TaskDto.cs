@@ -72,5 +72,15 @@ public class TaskDto : IResponse
         }
     }
     
+    public DateTime? DueTime
+    {
+        get
+        {
+            if (EndTime.HasValue)
+                return EndTime.Value;
+            return StartTime;
+        }
+    }
+    
     #endregion
 }

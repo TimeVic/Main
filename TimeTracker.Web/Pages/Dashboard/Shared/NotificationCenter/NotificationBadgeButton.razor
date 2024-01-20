@@ -1,0 +1,15 @@
+﻿@inherits BaseReactiveComponent
+
+<MudBadge
+    Content="@_state.Value.UnreadCount"
+    Color="@(_state.Value.UnreadCount > 0 ? Color.Success : Color.Inherit)"
+    Bordered="true"
+    Overlap="true" 
+    Class="@Class">
+    <MudIconButton
+        Size="Size.Small"
+        DisableElevation="true"
+        OnClick="@ShowNotificationsModal"
+        Icon="@(_state.Value.UnreadCount > 0 ? Icons.Material.Filled.NotificationsActive : Icons.Material.Filled.NotificationsNone)"
+        Color="Color.Inherit"/>
+</MudBadge>

@@ -11,42 +11,39 @@
     @if (_isLoading)
     {
         <MudStack AlignItems="AlignItems.Center">
-            <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+            <MudProgressCircular Color="Color.Info" Indeterminate="true"/>
         </MudStack>
     }
     else
     {
-        var overdueTasks = _tasks.Where(item => item.EndTime < _listStartDate).ToList();
-        if (overdueTasks.Any())
+        if (_overdueTasks.Any())
         {
             <MudText Typo="Typo.subtitle2">Overdue</MudText>
             <MudDivider></MudDivider>
-            foreach (var task in overdueTasks)
+            foreach (var task in _overdueTasks)
             {
                 <TaskCard Task="@task"></TaskCard>
             }
-            <MudSpacer/>    
+
+            <MudSpacer/>
         }
 
-        @foreach (var date in _listStartDate.GetDateRange(_listEndDate))
+        foreach (var item in _groupedTasks)
         {
-            <MudText Typo="Typo.subtitle2">@date.ToString("MMM dd yyyy - dddd")</MudText>
+            <MudText Typo="Typo.subtitle2">@item.Key?.ToString("MMM dd yyyy - dddd")</MudText>
             <MudDivider></MudDivider>
-            foreach (var task in _tasks)
+            foreach (var task in item)
             {
-                if (task.EndTime.HasValue && task.EndTime.Value.Date == date)
-                {
-                    <TaskCard
-                        Task="@task"
-                        IsShowTaskList="true">
-                    </TaskCard>
-                }
+                <TaskCard
+                    Task="@task"
+                    IsShowTaskList="true">
+                </TaskCard>
             }
 
             <MudStack Spacing="0" Justify="Justify.FlexStart" AlignItems="AlignItems.Start">
                 <MudButton
                     Size="Size.Small"
-                    OnClick="@(() => OnAddTask(date))"
+                    OnClick="@(() => OnAddTask(item.Key))"
                     StartIcon="@Icons.Material.Filled.Add">
                     Add task
                 </MudButton>
