@@ -68,6 +68,22 @@
                 T="TimeEntryDto"
                 TProperty="TimeEntryDto"
                 Property="@(x => x)"
+                Title="Date">
+                <EditTemplate>
+                    <MudDatePicker
+                        Class="ml-1"
+                        Clearable="false"
+                        Required="true"
+                        Elevation="0"
+                        IconSize="Size.Small"
+                        DateChanged="@((value) => OnChangeDate(context.Item, value))"
+                        Date="@context.Item.Date"/>
+                </EditTemplate>
+            </PropertyColumn>
+            <PropertyColumn
+                T="TimeEntryDto"
+                TProperty="TimeEntryDto"
+                Property="@(x => x)"
                 Title="Project">
                 <EditTemplate>
                     <ProjectsDropDown

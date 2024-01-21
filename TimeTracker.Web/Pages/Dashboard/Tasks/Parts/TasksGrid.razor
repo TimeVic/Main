@@ -24,8 +24,11 @@
             <MudProgressLinear Color="Color.Info" Indeterminate="true"/>
         </div>
     }
-    @foreach (var task in _tasks)
+    else
     {
-        <TaskCard Class="mb-3" Task="@task"></TaskCard>
+        foreach (var task in _tasks)
+        {
+            <TaskCard Class="mb-3" Task="@task"></TaskCard>
+        }
     }
 </MudPaper>

@@ -7,70 +7,73 @@
 
 @using MudBlazor
 
-<MudAppBar Color="Color.Primary" Dense="true">
-    @if (!_isShowDashboardLink)
-    {
-        <MudIconButton
-            Icon="@Icons.Material.Filled.Menu"
-            Color="Color.Inherit"
-            Edge="Edge.Start"
-            OnClick="@ToggleMenu"/>
-    }
-    <MudSpacer/>
-    @if (AuthState.Value.IsLoggedIn && !_isShowDashboardLink)
-    {
-        <div class="d-md-inline-flex align-items-center w-time-entry-form">
-            <TimeEntryForm IsShowTimeEntriesButton="true"/>
-        </div>
-        <MudSpacer/>
-    }
-    @if (AuthState.Value.IsLoggedIn)
-    {
-        <NotificationBadgeButton Class="mr-2"/>
-        if (_isShowDashboardLink)
+@if (CommonState.Value.IsInitialized)
+{
+    <MudAppBar Color="Color.Primary" Dense="true">
+        @if (!_isShowDashboardLink)
         {
             <MudIconButton
-                Href="@SiteUrl.DashboardBase"
-                Icon="@Icons.Material.Filled.Dashboard"
+                Icon="@Icons.Material.Filled.Menu"
                 Color="Color.Inherit"
-                Edge="Edge.Start"/>
+                Edge="Edge.Start"
+                OnClick="@ToggleMenu"/>
         }
-    }
-    else
-    {
-        <MudButton
-            StartIcon="@Icons.Material.Filled.Login"
-            Href="@SiteUrl.Login"
-            Color="Color.Inherit">
-            Login
-        </MudButton>
-        
-        <MudButton
-            StartIcon="@Icons.Material.Filled.FactCheck"
-            Href="@SiteUrl.Registration_Step1"
-            Color="Color.Inherit">
-            Sign Up
-        </MudButton>
-    }
-    @if (AuthState.Value.IsLoggedIn)
-    {
-        <MudMenu
-            Icon="@Icons.Material.Filled.Menu"
-            Color="Color.Inherit"
-            Variant="MudBlazor.Variant.Text"
-            AnchorOrigin="Origin.BottomLeft"
-            TransformOrigin="Origin.TopRight"
-            Dense>
-            <MudMenuItem Icon="@Icons.Material.Filled.AccountCircle">
-                @AuthState.Value.User.Name
-            </MudMenuItem>
-            <WorkspaceMenu/>
-            <MudMenuItem
-                IconSize="Size.Small"
-                Icon="@Icons.Material.Filled.Logout"
-                OnClick="Logout">
-                Logout
-            </MudMenuItem>
-        </MudMenu>
-    }
-</MudAppBar>
+        <MudSpacer/>
+        @if (AuthState.Value.IsLoggedIn && !_isShowDashboardLink)
+        {
+            <div class="d-md-inline-flex align-items-center w-time-entry-form">
+                <TimeEntryForm IsShowTimeEntriesButton="true"/>
+            </div>
+            <MudSpacer/>
+        }
+        @if (AuthState.Value.IsLoggedIn)
+        {
+            <NotificationBadgeButton Class="mr-2"/>
+            if (_isShowDashboardLink)
+            {
+                <MudIconButton
+                    Href="@SiteUrl.DashboardBase"
+                    Icon="@Icons.Material.Filled.Dashboard"
+                    Color="Color.Inherit"
+                    Edge="Edge.Start"/>
+            }
+        }
+        else
+        {
+            <MudButton
+                StartIcon="@Icons.Material.Filled.Login"
+                Href="@SiteUrl.Login"
+                Color="Color.Inherit">
+                Login
+            </MudButton>
+
+            <MudButton
+                StartIcon="@Icons.Material.Filled.FactCheck"
+                Href="@SiteUrl.Registration_Step1"
+                Color="Color.Inherit">
+                Sign Up
+            </MudButton>
+        }
+        @if (AuthState.Value.IsLoggedIn)
+        {
+            <MudMenu
+                Icon="@Icons.Material.Filled.Menu"
+                Color="Color.Inherit"
+                Variant="MudBlazor.Variant.Text"
+                AnchorOrigin="Origin.BottomLeft"
+                TransformOrigin="Origin.TopRight"
+                Dense>
+                <MudMenuItem Icon="@Icons.Material.Filled.AccountCircle">
+                    @AuthState.Value.User.Name
+                </MudMenuItem>
+                <WorkspaceMenu/>
+                <MudMenuItem
+                    IconSize="Size.Small"
+                    Icon="@Icons.Material.Filled.Logout"
+                    OnClick="Logout">
+                    Logout
+                </MudMenuItem>
+            </MudMenu>
+        }
+    </MudAppBar>
+}

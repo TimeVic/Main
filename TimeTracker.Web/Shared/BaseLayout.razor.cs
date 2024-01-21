@@ -1,17 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using Fluxor;
+﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services;
-using TimeTracker.Web.Services.Messaging;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common;
-using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Shared;
 
@@ -122,7 +117,6 @@ public partial class BaseLayout
         {
             NavigationManager.NavigateTo("/login");
         }
-        StateHasChanged();
     }
     
     protected virtual Task OnLoggedInAsync()
