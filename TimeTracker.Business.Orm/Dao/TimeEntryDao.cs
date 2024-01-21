@@ -135,7 +135,7 @@ public class TimeEntryDao: ITimeEntryDao
         var offset = PaginationUtils.CalculateOffset(page);
         var items = await query
             .Skip(offset)
-            .Take(GlobalConstants.ListPageSize)
+            .Take(GlobalConstants.ListPageSize * 2)
             .ListAsync();
         return new ListDto<TimeEntryEntity>(
             items,

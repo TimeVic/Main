@@ -1,6 +1,4 @@
-﻿@using MudBlazor
-
-@inherits BaseLayout
+﻿@inherits BaseLayout
 
 <RadzenContextMenu/>
 <RadzenDialog/>
@@ -8,10 +6,7 @@
 <RadzenNotification Style="bottom: 1em; top: unset"/>
 
 <MudLayout>
-    @if (CommonState.Value.IsInitialized)
-    {
-        <MainHeader/>
-    }
+    <MainHeader/>
     @if (CommonState.Value.IsInitialized && IsShowMainMenu)
     {
         <NavMenu/>

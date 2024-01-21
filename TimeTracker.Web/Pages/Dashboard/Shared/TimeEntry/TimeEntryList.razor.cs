@@ -88,6 +88,15 @@ public partial class TimeEntryList
         await UpdateTimeEntry(item);
     }
     
+    private async Task OnChangeDate(TimeEntryDto item, DateTime? date)
+    {
+        if (item.Date != date.Value)
+        {
+            item.Date = date.Value;
+            await UpdateTimeEntry(item);
+        }
+    }
+    
     private async Task OnChangeDescription(TimeEntryDto item, string? description)
     {
         item.Description = description;

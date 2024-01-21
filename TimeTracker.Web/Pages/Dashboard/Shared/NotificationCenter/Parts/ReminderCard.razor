@@ -1,0 +1,46 @@
+﻿@using TimeTracker.Business.Common.Constants
+@inherits BaseComponent
+
+<MudCard
+    Class="pa-3 cursor-pointer"
+    @onclick="@OnClickToNotification">
+    <MudStack
+        Spacing="1"
+        Row="true">
+        @if (!Notification.IsRead)
+        {
+            <MudBadge
+                Icon="@Icons.Material.Filled.Markunread"
+                Color="Color.Error"
+                Overlap="true"
+                Bordered="true">
+                <MudChip
+                    Icon="@Icons.Material.Filled.AccessTime"
+                    Size="Size.Small"
+                    Color="Color.Primary">
+                    Reminder
+                </MudChip>
+            </MudBadge>
+        }
+        else
+        {
+            <MudChip
+                Icon="@Icons.Material.Filled.AccessTime"
+                Size="Size.Small"
+                Color="Color.Primary">
+                Reminder
+            </MudChip>
+        }
+        <MudText
+            Class="mt-1 ml-2"
+            Typo="Typo.body1">
+            <b>Due Time:</b> @Notification.Task.ReminderTime?.ToString("MM/dd/yyyy h:mm:ss")
+        </MudText>
+    </MudStack>
+    <MudText
+        Class="ml-1"
+        Style="line-break: anywhere;"
+        Typo="Typo.body1">
+        @Notification.Task.Title
+    </MudText>
+</MudCard>

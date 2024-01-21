@@ -2,26 +2,39 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Web.Constants;
-using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.NotificationCenter;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.NotificationCenter;
 
-public partial class NotificationCenterModal
+public partial class NotificationCenterModal: IDisposable
 {
     [CascadingParameter] 
     public MudDialogInstance MudDialog { get; set; }
     
     [Inject]
     public IState<NotificationCenterState> _state { get; set; }
-
+    
     [Inject]
-    public IState<AuthState> _authState { get; set; }
+    public IActionSubscriber ActionSubscriber { get; set; }
+
+    private bool _isLoading = false;
+    private bool _isHasMore = false;
+    private ICollection<NotificationDto> _list = new List<NotificationDto>();
     
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        ActionSubscriber.SubscribeToAction<SetListAction>(this, action =>
+        {
+            _isHasMore = _state.Value.IsListHasMore;
+            _list = _state.Value.List;
+            StateHasChanged();
+        });
+        ActionSubscriber.SubscribeToAction<SetIsListLoadingAction>(this, action =>
+        {
+            _isLoading = action.IsLoading;
+            StateHasChanged();
+        });
         Dispatcher.Dispatch(new LoadListAction(true));
     }
 
@@ -41,9 +54,8 @@ public partial class NotificationCenterModal
         OnCloseModal();
     }
 
-    private void OnClickToNotification(NotificationDto notification)
+    public void Dispose()
     {
-        OnCloseModal();
-        NavigationManager.NavigateTo(string.Format(SiteUrl.Dashboard_Task, _authState.Value.Workspace.Id, notification.Task.TaskId));
+        ActionSubscriber.UnsubscribeFromAllActions(this);
     }
 }
