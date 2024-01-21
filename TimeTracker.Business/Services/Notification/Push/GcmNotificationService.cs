@@ -27,7 +27,7 @@ public class GcmNotificationService: IGcmNotificationService
     public async Task SendTaskReminderNotification(TaskEntity task)
     {
         if (!task.ReminderTime.HasValue)
-            throw new NullReferenceException("Task should contain RemindedAt time");
+            throw new NullReferenceException("Task should contain ReminderTime time");
         
         foreach (var notificationToken in task.User.NotificationTokens)
         {

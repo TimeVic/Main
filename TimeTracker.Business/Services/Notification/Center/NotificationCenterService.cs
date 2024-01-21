@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto;
@@ -7,6 +8,7 @@ using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Notification.Center.Handlers;
+using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Business.Services.Notification.Center;
 
@@ -14,14 +16,20 @@ public class NotificationCenterService: INotificationCenterService
 {
     private readonly INotificationDao _notificationDao;
     private readonly INotificationCenterHandler<TaskEntity> _taskHandler;
+    private readonly ISecurityManager _securityManager;
+    private readonly IDbSessionProvider _sessionProvider;
 
     public NotificationCenterService(
         INotificationDao notificationDao,
-        INotificationCenterHandler<TaskEntity> taskHandler
+        INotificationCenterHandler<TaskEntity> taskHandler,
+        ISecurityManager securityManager,
+        IDbSessionProvider sessionProvider
     )
     {
         _notificationDao = notificationDao;
         _taskHandler = taskHandler;
+        _securityManager = securityManager;
+        _sessionProvider = sessionProvider;
     }
 
     public async Task Push<T>(
@@ -36,18 +44,32 @@ public class NotificationCenterService: INotificationCenterService
         }
     }
 
-    public Task<int> GetUnreadCount(UserEntity user, WorkspaceEntity workspace)
+    public async Task<int> GetUnreadCount(UserEntity user, WorkspaceEntity workspace)
     {
-        return _notificationDao.GetCount(user, workspace, true);
+        await _securityManager.CheckAccess(AccessLevel.Read, user, workspace);
+        return await _notificationDao.GetCount(user, workspace, true);
     }
     
-    public Task<int> MarkAllAsRead(UserEntity user, WorkspaceEntity workspace)
+    public async Task<int> MarkAllAsRead(UserEntity user, WorkspaceEntity workspace)
     {
-        return _notificationDao.MarkAllAsRead(user, workspace);
+        await _securityManager.CheckAccess(AccessLevel.Read, user, workspace);
+        return await _notificationDao.MarkAllAsRead(user, workspace);
     }
     
-    public Task<ListDto<NotificationEntity>> GetList(UserEntity user, WorkspaceEntity workspace, int page)
+    public async Task MarkAsRead(NotificationEntity notification)
     {
-        return _notificationDao.GetList(user, workspace, page);
+        if (notification.IsRead)
+        {
+            return;
+        }
+        notification.IsRead = true;
+        notification.UpdateTime = DateTime.UtcNow;
+        await _sessionProvider.CurrentSession.SaveAsync(notification);
+    }
+    
+    public async Task<ListDto<NotificationEntity>> GetList(UserEntity user, WorkspaceEntity workspace, int page)
+    {
+        await _securityManager.CheckAccess(AccessLevel.Read, user, workspace);
+        return await _notificationDao.GetList(user, workspace, page);
     }  
 }

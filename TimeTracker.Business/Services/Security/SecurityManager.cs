@@ -6,6 +6,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.GoalsTracker;
+using TimeTracker.Business.Orm.Entities.Notifications;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -78,6 +79,10 @@ public class SecurityManager: ISecurityManager
         if (entity is GoalsTrackerEntity goalsTrackerEntity)
         {
             return await HasAccessToGoalsTracker(accessLevel, user, goalsTrackerEntity);
+        }
+        if (entity is NotificationEntity notificationEntity)
+        {
+            return await HasAccessToNotification(accessLevel, user, notificationEntity);
         }
 
         throw new NotImplementedException($"Security checking not implemented for {entity?.GetTypeName()}");
@@ -198,5 +203,19 @@ public class SecurityManager: ISecurityManager
             return false;
         }
         return goalsTrackerEntity.User.Id == user.Id;
+    }
+    
+    private async Task<bool> HasAccessToNotification(AccessLevel accessLevel, UserEntity user, NotificationEntity notificationEntity)
+    {
+        var hasAccessToWorkspace = await HasAccessToWorkspace(
+            AccessLevel.Read,
+            user,
+            notificationEntity.Workspace
+        );
+        if (!hasAccessToWorkspace)
+        {
+            return false;
+        }
+        return notificationEntity.ReceiverUser.Id == user.Id;
     }
 }
