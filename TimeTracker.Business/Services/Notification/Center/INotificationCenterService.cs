@@ -20,4 +20,6 @@ public interface INotificationCenterService: IDomainService
     Task<int> MarkAllAsRead(UserEntity user, WorkspaceEntity workspace);
 
     Task<ListDto<NotificationEntity>> GetList(UserEntity user, WorkspaceEntity workspace, int page = 1);
+
+    Task MarkAsRead(NotificationEntity notification);
 }

@@ -42,4 +42,10 @@ public class NotificationsCenterController : MainApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> MarkAllAsRead([FromBody] MarkAllAsReadRequest request)
         => this.RequestAsync(request);
+    
+    [HttpPost("mark-as-read")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> MarkAsRead([FromBody] MarkAsReadRequest request)
+        => this.RequestAsync(request);
 }

@@ -38,7 +38,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
-            await _securityManager.CheckAccess(AccessLevel.Read, user, workspace);
             await _notificationCenterService.MarkAllAsRead(user, workspace);
         }
     }

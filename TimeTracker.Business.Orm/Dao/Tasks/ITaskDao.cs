@@ -36,7 +36,8 @@ public interface ITaskDao: IDomainService
         TaskPriority priority = TaskPriority.Low,
         bool isArchived = false,
         IEnumerable<TagEntity>? tags = null,
-        DateTime? reminderTime = null
+        DateTime? reminderTime = null,
+        bool isAddHistoryItem = true
     );
     
     Task<TaskEntity?> GetById(long taskListId);
