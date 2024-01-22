@@ -75,6 +75,18 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             if (!string.IsNullOrEmpty(request.ExternalTaskId))
             {
                 task = await CreateFromExternalId(request, taskList, user);
+                task = await _taskDao.UpdateTaskAsync(
+                    task,
+                    taskList: taskList,
+                    user: user,
+                    title: task.Title,
+                    description: task.Description,
+                    startTime: request.StartTime,
+                    endTime: request.EndTime,
+                    status: request.Status,
+                    priority: request.Priority,
+                    isAddHistoryItem: false
+                );
             }
             if (task == null)
             {

@@ -111,7 +111,8 @@ public class TaskDao: ITaskDao
         TaskPriority priority = TaskPriority.Low,
         bool isArchived = false,
         IEnumerable<TagEntity>? tags = null,
-        DateTime? reminderTime = null
+        DateTime? reminderTime = null,
+        bool isAddHistoryItem = true
     )
     {
         task.TaskList = taskList;
@@ -135,7 +136,10 @@ public class TaskDao: ITaskDao
         }
 
         await _sessionProvider.CurrentSession.SaveAsync(task);
-        await _taskHistoryItemDao.Create(task, user, false);
+        if (isAddHistoryItem)
+        {
+            await _taskHistoryItemDao.Create(task, user, false);
+        }
         return task;
     }
 

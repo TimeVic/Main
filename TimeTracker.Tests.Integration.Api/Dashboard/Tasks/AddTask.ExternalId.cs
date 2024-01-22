@@ -82,4 +82,39 @@ public partial class AddTask
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
+    
+    [Fact]
+    public async Task ShouldAddByJiraExternalIdAndTimeEntryWithAdditionalData()
+    {
+        var expectedTask = _taskFactory.Generate();
+        
+        var timeEntry = await _timeEntrySeeder.CreateAsync(_workspace, _user);
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            TaskListId = _taskList.Id,
+            ExternalTaskId = _jiraTaskId,
+            TimeEntryId = timeEntry.Id,
+            Status = expectedTask.Status,
+            StartTime = expectedTask.StartTime,
+            EndTime = expectedTask.EndTime,
+            Priority = expectedTask.Priority
+        });
+        response.EnsureSuccessStatusCode();
+
+        await CommitDbChanges();
+        
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.True(actualData.TaskId > 0);
+        Assert.Equal(_taskList.Id, actualData.TaskList.Id);
+        Assert.NotEmpty(actualData.Title);
+        Assert.Equal(_jiraTaskId, actualData.ExternalTaskId);
+
+        Assert.Equal(expectedTask.Status, actualData.Status);
+        Assert.Equal(expectedTask.StartTime?.ToString("g"), actualData.StartTime?.ToUniversalTime().ToString("g"));
+        Assert.Equal(expectedTask.EndTime?.ToString("g"), actualData.EndTime?.ToUniversalTime().ToString("g"));
+        Assert.Equal(expectedTask.Priority, actualData.Priority);
+        
+        var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
+    }
 }
