@@ -140,6 +140,7 @@ public class ApiUrl
     public const string NotificationCenterGetCount = "dashboard/notifications-center/get-count";
     public const string NotificationCenterGetList = "dashboard/notifications-center/get-list";
     public const string NotificationCenterMarkAllAsRead = "dashboard/notifications-center/mark-all-as-read";
+    public const string NotificationCenterMarkAsRead = "dashboard/notifications-center/mark-as-read";
     
     #endregion
 }
