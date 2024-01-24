@@ -1,11 +1,11 @@
 ﻿@inherits BaseComponent
 
-<MudStack Class="me-3">
+<MudStack Class="me-3 w-100">
     <div class="w-goals-tracker">
         <table class="w-goals-tracker-table">
             <thead>
             <tr>
-                <th rowspan="2" class="pa-3">Goals</th>
+                <th rowspan="2" class="pa-3 w-sticky-column">Goals</th>
                 @foreach (var day in _daysInCurrentMonth)
                 {
                     <th class="pa-3 @(IsToday(day) ? "w-active" : "")">@day.ToString("ddd")</th>
@@ -27,7 +27,7 @@
             {
                 var markedCount = GetMarkedCount(goal);
                 <tr>
-                    <td class="pa-3">@goal.Name</td>
+                    <td class="pa-3 w-sticky-column">@goal.Name</td>
                     @foreach (var day in _daysInCurrentMonth)
                     {
                         <td
