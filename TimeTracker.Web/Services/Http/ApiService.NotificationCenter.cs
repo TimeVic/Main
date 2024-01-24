@@ -34,11 +34,20 @@ namespace TimeTracker.Web.Services.Http
 
             return response;
         }
+        
         public async Task NotificationCenterMarkAllAsRead(long workspaceId)
         {
             await PostAsync<GetListResponse>(ApiUrl.NotificationCenterMarkAllAsRead, new MarkAllAsReadRequest()
             {
                 WorkspaceId = workspaceId
+            });
+        }
+        
+        public async Task NotificationCenterMarkAsRead(long notificationId)
+        {
+            await PostAsync<GetListResponse>(ApiUrl.NotificationCenterMarkAsRead, new MarkAsReadRequest()
+            {
+                NotificationId = notificationId
             });
         }
     }

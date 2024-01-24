@@ -59,4 +59,20 @@ public class Reducers
             }).ToList()
         };
     }
+    
+    [ReducerMethod]
+    public static NotificationCenterState Reducer(NotificationCenterState state, SetAsReadAction action)
+    {
+        return state with
+        {
+            List = state.List.Select(item =>
+            {
+                if (item.Id == action.NotificationId)
+                {
+                    item.IsRead = true;    
+                }
+                return item;
+            }).ToList()
+        };
+    }
 }

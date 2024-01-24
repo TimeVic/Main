@@ -9,7 +9,11 @@ public record struct LoadListAction(bool IsRefresh = true);
 
 public record struct MarkAllAsReadAction();
 
+public record struct MarkAsReadAction(long NotificationId);
+
 public record struct SetAllAsReadAction();
+
+public record struct SetAsReadAction(long NotificationId);
 
 public record struct RefreshListAction();
 
