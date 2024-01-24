@@ -1,14 +1,27 @@
+.w-goals-tracker {
+  max-width: 100%;
+  overflow-x: scroll;
+}
 .w-goals-tracker .w-goals-tracker-table {
+  max-width: 100%;
+  width: 100%;
   border-radius: 2px 2px 0 0;
   border-spacing: 0;
 }
-.w-goals-tracker .w-goals-tracker-table thead th:first-child {
+.w-goals-tracker .w-goals-tracker-table tbody td:first-child {
   min-width: 200px;
 }
 .w-goals-tracker .w-goals-tracker-table thead th,
 .w-goals-tracker .w-goals-tracker-table tbody td {
   border: 1px solid #f0f0f0;
   text-align: center;
+}
+.w-goals-tracker .w-goals-tracker-table thead th.w-sticky-column,
+.w-goals-tracker .w-goals-tracker-table tbody td.w-sticky-column {
+  position: sticky;
+  left: 0;
+  background-color: white;
+  z-index: 1;
 }
 .w-goals-tracker .w-goals-tracker-table thead th.w-active,
 .w-goals-tracker .w-goals-tracker-table tbody td.w-active {

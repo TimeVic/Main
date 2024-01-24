@@ -1,17 +1,30 @@
 .w-goals-tracker {
-    
+    max-width: 100%;
+    overflow-x: scroll;
+
     .w-goals-tracker-table {
+        max-width: 100%;
+        width: 100%;
         border-radius: 2px 2px 0 0;
         border-spacing: 0;
 
-        thead th:first-child {
-            min-width: 200px;    
+        tbody td {
+            &:first-child {
+                min-width: 200px;
+            }
         }
         
         thead th,
         tbody td {
             border: 1px solid #f0f0f0;
             text-align: center;
+
+            &.w-sticky-column {
+                position: sticky;
+                left: 0;
+                background-color: white;
+                z-index: 1;
+            }
             
             &.w-active {
                 border-left: 1px solid #00BCD4;
