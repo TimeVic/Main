@@ -19,6 +19,7 @@
         EditMode="MudBlazor.DataGridEditMode.Cell"
         EditTrigger="DataGridEditTrigger.OnRowClick"
         Loading="@_state.Value.IsListLoading"
+        RowsPerPage="@(GlobalConstants.ListPageSize * 2)"
         Groupable="true"
         FixedHeader="true"
         GroupExpanded="@true"
@@ -33,6 +34,26 @@
                     Property="@(x => x.User.Name)"
                     Title="User"/>
             }
+
+            <PropertyColumn
+                T="TimeEntryDto"
+                TProperty="TimeEntryDto"
+                Property="@(x => x)"
+                Title="Date">
+                <EditTemplate>
+                    <MudDatePicker
+                        Class="ml-1"
+                        Style="min-width: 110px"
+                        Clearable="false"
+                        Required="true"
+                        Elevation="0"
+                        AutoClose="true"
+                        IconSize="Size.Small"
+                        DateChanged="@((value) => OnChangeDate(context.Item, value))"
+                        Date="@context.Item.Date"/>
+                </EditTemplate>
+            </PropertyColumn>
+
             <PropertyColumn
                 T="TimeEntryDto"
                 TProperty="string"
@@ -62,22 +83,6 @@
                         Class="ml-1"
                         ValueChanged="@((value) => OnChangeEndTime(context.Item, value))"
                         Value="@context.Item.EndTime.Value"/>
-                </EditTemplate>
-            </PropertyColumn>
-            <PropertyColumn
-                T="TimeEntryDto"
-                TProperty="TimeEntryDto"
-                Property="@(x => x)"
-                Title="Date">
-                <EditTemplate>
-                    <MudDatePicker
-                        Class="ml-1"
-                        Clearable="false"
-                        Required="true"
-                        Elevation="0"
-                        IconSize="Size.Small"
-                        DateChanged="@((value) => OnChangeDate(context.Item, value))"
-                        Date="@context.Item.Date"/>
                 </EditTemplate>
             </PropertyColumn>
             <PropertyColumn
