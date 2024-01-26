@@ -9,6 +9,7 @@ namespace TimeTracker.Business.Clients.Api;
 public class FirebaseClientServiceMock: IFirebaseClientService
 {
     public const string SuccessToken = "SuccessToken";
+    public const string SuccessToken2 = "SuccessToken2";
 
     public ICollection<Message> SentMessages = new List<Message>();
     
@@ -58,7 +59,7 @@ public class FirebaseClientServiceMock: IFirebaseClientService
     
     private async Task<bool> SendMessage(Message message)
     {
-        if (message.Token == SuccessToken)
+        if (message.Token is SuccessToken or SuccessToken2)
         {
             SentMessages.Add(message);
             return true;

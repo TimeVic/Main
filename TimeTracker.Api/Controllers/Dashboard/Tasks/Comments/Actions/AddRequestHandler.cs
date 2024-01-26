@@ -14,6 +14,7 @@ using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Services.Queue.Handlers;
 using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
@@ -86,6 +87,13 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
 
         private async Task SendNotification(TaskCommentEntity comment)
         {
+            await _queueService.PushDefaultAsync(new NotificationCenterPushRequestContext()
+            {
+                Action = NotificationActionType.AddEntity,
+                TaskCommentId = comment.Id,
+                ProducedUserId = comment.User.Id
+            });
+            
             var receivers = new List<UserEntity>();
             receivers.Add(comment.User);
             receivers = receivers.Concat(comment.Watchers).ToList();

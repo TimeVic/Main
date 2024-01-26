@@ -13,5 +13,9 @@ public interface ITaskCommentSeeder: IDomainService
         UserEntity? user = null
     );
 
-    Task<TaskCommentEntity> CreateAsync(TaskEntity? task = null, UserEntity? user = null);
+    Task<TaskCommentEntity> CreateAsync(
+        TaskEntity? task = null,
+        UserEntity? user = null,
+        ICollection<UserEntity>? watchers = null
+    );
 }

@@ -58,7 +58,11 @@ public class TaskCommentSeeder: ITaskCommentSeeder
         return result;
     }
     
-    public async Task<TaskCommentEntity> CreateAsync(TaskEntity? task = null, UserEntity? user = null)
+    public async Task<TaskCommentEntity> CreateAsync(
+        TaskEntity? task = null,
+        UserEntity? user = null,
+        ICollection<UserEntity>? watchers = null
+    )
     {
         user ??= await _userSeeder.CreateActivatedAsync();
         if (task == null)
@@ -73,7 +77,8 @@ public class TaskCommentSeeder: ITaskCommentSeeder
         var entry = await _taskCommentDao.AddAsync(
             task,
             user,
-            fakeEntry.Comment
+            fakeEntry.Comment,
+            watchers
         );
         return entry;
     }

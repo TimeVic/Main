@@ -8,7 +8,7 @@ public interface INotificationCenterHandler<T>: IDomainService where T: IEntity
 {
     Task Handle<T>(
         NotificationActionType action,
-        UserEntity user,
+        UserEntity performedUser,
         T entity
     );
 }

@@ -2,16 +2,19 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
+using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
+using TimeTracker.Business.Services.Notification.Center;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Security.Model;
@@ -41,6 +44,8 @@ public class UpdateTest: BaseTest
     private readonly ITaskCommentSeeder _taskCommentSeeder;
     private readonly TaskCommentEntity _comment;
     private readonly ITaskListSeeder _taskListSeeder;
+    private readonly IUserNotificationTokenDao _userNotificationTokenDao;
+    private readonly INotificationCenterService _notificationCenterService;
 
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -52,6 +57,8 @@ public class UpdateTest: BaseTest
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _taskCommentSeeder = ServiceProvider.GetRequiredService<ITaskCommentSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
+        _userNotificationTokenDao = ServiceProvider.GetRequiredService<IUserNotificationTokenDao>();
+        _notificationCenterService = ServiceProvider.GetRequiredService<INotificationCenterService>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
@@ -99,6 +106,58 @@ public class UpdateTest: BaseTest
                 && item.Body.Contains("updated")
                 && item.Body.Contains($"{_task.TaskList.Project.Workspace.Id}/{_task.TaskId}")
         );
+    }
+    
+    [Fact]
+    public async Task ShouldUpdateWithGcmNotification()
+    {
+        // Arrange
+        var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
+        var (otherToken3, user3, otherWorkspace3) = await UserSeeder.CreateAuthorizedAsync();
+        
+        await _userNotificationTokenDao.Set(user3, FirebaseClientServiceMock.SuccessToken);
+        
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            user2,
+            MembershipAccessType.User, 
+            new List<ProjectAccessModel>()
+            {
+                new()
+                {
+                    Project = _project
+                }
+            }
+        );
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            user3,
+            MembershipAccessType.User, 
+            new List<ProjectAccessModel>()
+            {
+                new()
+                {
+                    Project = _project
+                }
+            }
+        );
+        await _notificationCenterService.MarkAllAsRead(_user, _task.Workspace);
+        
+        // Act
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            CommentId = _comment.Id,
+            Comment = _fakeComment.Comment,
+            WatcherIds = new List<long>() { user2.Id, user3.Id }
+        });
+        await _queueService.ProcessAsync(QueueChannel.Default);
+        
+        // Assert
+        response.EnsureSuccessStatusCode();
+
+        Assert.Equal(0, await _notificationCenterService.GetUnreadCount(_user, _task.Workspace));
+        Assert.Equal(1, await _notificationCenterService.GetUnreadCount(user2, _task.Workspace));
+        Assert.Equal(1, await _notificationCenterService.GetUnreadCount(user3, _task.Workspace));
     }
     
     [Fact]
