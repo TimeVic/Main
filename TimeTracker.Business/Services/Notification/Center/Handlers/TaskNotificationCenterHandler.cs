@@ -25,7 +25,7 @@ public class TaskNotificationCenterHandler: INotificationCenterHandler<TaskEntit
 
     public async Task Handle<T>(
         NotificationActionType action,
-        UserEntity user,
+        UserEntity performedUser,
         T entity
     )
     {
@@ -36,7 +36,7 @@ public class TaskNotificationCenterHandler: INotificationCenterHandler<TaskEntit
             {
                 Type = action,
                 Workspace = task.Workspace,
-                PerformedUser = user,
+                PerformedUser = performedUser,
                 Task = task,
                 ReceiverUser = task.User
             };

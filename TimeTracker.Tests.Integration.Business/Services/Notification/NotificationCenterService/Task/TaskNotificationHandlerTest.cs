@@ -6,6 +6,7 @@ using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Notification;
 using TimeTracker.Business.Services.Notification.Center;
 using TimeTracker.Business.Services.Notification.Push;
+using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Business.Testing.Seeders.Entity.Task;
@@ -26,6 +27,7 @@ public partial class TaskNotificationHandlerTest: BaseTest
     private readonly IUserNotificationTokenDao _userNotificationTokenDao;
     private readonly ITaskNotificationService _notificationBgJobService;
     private readonly INotificationCenterService _notificationCenterService;
+    private readonly IQueueService _queueService;
 
     public TaskNotificationHandlerTest(): base()
     {
@@ -37,6 +39,7 @@ public partial class TaskNotificationHandlerTest: BaseTest
         _notificationBgJobService = Scope.Resolve<ITaskNotificationService>();
         _gcmNotificationService = Scope.Resolve<IGcmNotificationService>();
         _notificationCenterService = Scope.Resolve<INotificationCenterService>();
+        _queueService = Scope.Resolve<IQueueService>();
         _user = _userSeeder.CreateActivatedAsync().Result;
 
         _storedFilesDao.MarkAsUploadedAllPending().Wait();

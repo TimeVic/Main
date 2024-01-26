@@ -16,18 +16,21 @@ public class NotificationCenterService: INotificationCenterService
 {
     private readonly INotificationDao _notificationDao;
     private readonly INotificationCenterHandler<TaskEntity> _taskHandler;
+    private readonly INotificationCenterHandler<TaskCommentEntity> _taskCommentHandler;
     private readonly ISecurityManager _securityManager;
     private readonly IDbSessionProvider _sessionProvider;
 
     public NotificationCenterService(
         INotificationDao notificationDao,
         INotificationCenterHandler<TaskEntity> taskHandler,
+        INotificationCenterHandler<TaskCommentEntity> taskCommentHandler,
         ISecurityManager securityManager,
         IDbSessionProvider sessionProvider
     )
     {
         _notificationDao = notificationDao;
         _taskHandler = taskHandler;
+        _taskCommentHandler = taskCommentHandler;
         _securityManager = securityManager;
         _sessionProvider = sessionProvider;
     }
@@ -41,6 +44,10 @@ public class NotificationCenterService: INotificationCenterService
         if (entity is TaskEntity)
         {
             await _taskHandler.Handle(action, user, entity);
+        }
+        if (entity is TaskCommentEntity)
+        {
+            await _taskCommentHandler.Handle(action, user, entity);
         }
     }
 

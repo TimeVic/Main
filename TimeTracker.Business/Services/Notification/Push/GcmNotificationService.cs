@@ -24,23 +24,50 @@ public class GcmNotificationService: IGcmNotificationService
         _firebaseClient = firebaseClient;
     }
 
+    private async Task SendGcmNotification(
+        ICollection<UserNotificationTokenEntity> tokens,
+        string title,
+        string body
+    )
+    {
+        foreach (var token in tokens)
+        {
+            var isSent = await _firebaseClient.SendMessage(
+                token.Token,
+                title,
+                body
+            );
+            if (!isSent)
+            {
+                await _userNotificationTokenDao.Delete(token);
+            }
+        }
+    }
+
     public async Task SendTaskReminderNotification(TaskEntity task)
     {
         if (!task.ReminderTime.HasValue)
             throw new NullReferenceException("Task should contain ReminderTime time");
-        
-        foreach (var notificationToken in task.User.NotificationTokens)
-        {
-            var isSent = await _firebaseClient.SendMessage(
-                notificationToken.Token,
-                $"Reminder: {task.Title.TruncateAndAddDots(30)}",
-                $"Today {task.ReminderTime:t}"
-            );
-            if (!isSent)
-            {
-                await _userNotificationTokenDao.Delete(notificationToken);
-            }
-        }
+
+        await SendGcmNotification(
+            task.User.NotificationTokens,
+            $"Reminder: {task.Title.TruncateAndAddDots(30)}",
+            $"Today {task.ReminderTime:t}"
+        );
         task.RemindedTime = task.ReminderTime;
+    }
+    
+    public async Task SendTaskCommentNotification(
+        TaskCommentEntity comment,
+        UserEntity receiverUser,
+        UserEntity performedUsed,
+        bool isChanged
+    )
+    {
+        await SendGcmNotification(
+            receiverUser.NotificationTokens,
+            performedUsed.Name + (isChanged ? " changed" : " added") + " comment:",
+            comment.Comment.Truncate(200, true)
+        );
     }
 }

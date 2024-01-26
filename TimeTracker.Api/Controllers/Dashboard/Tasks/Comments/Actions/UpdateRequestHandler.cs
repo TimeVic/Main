@@ -13,6 +13,7 @@ using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Services.Queue.Handlers;
 using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
@@ -71,12 +72,19 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
                 request.Comment,
                 watchers
             );
-            await SendNotification(taskComment);
+            await SendNotification(taskComment, user);
             return _mapper.Map<TaskCommentDto>(taskComment);
         }
         
-        private async Task SendNotification(TaskCommentEntity comment)
+        private async Task SendNotification(TaskCommentEntity comment, UserEntity producedUser)
         {
+            await _queueService.PushDefaultAsync(new NotificationCenterPushRequestContext()
+            {
+                Action = NotificationActionType.EditEntity,
+                TaskCommentId = comment.Id,
+                ProducedUserId = producedUser.Id
+            });
+            
             var receivers = new List<UserEntity>();
             receivers.Add(comment.User);
             receivers = receivers.Concat(comment.Watchers).ToList();
