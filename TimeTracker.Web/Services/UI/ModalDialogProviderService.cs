@@ -147,33 +147,4 @@ public partial class ModalDialogProviderService
             }
         );
     }
-    
-    public async Task ShowGoalsTrackerAddModal()
-    {
-        await _mudDialogService.ShowAsync<AddGoalModalForm>(
-            "Create New",
-            new MudBlazor.DialogOptions()
-            {
-                CloseButton = true,
-                MaxWidth = MaxWidth.Medium
-            }
-        );
-    }
-    
-    public async Task ShowGoalsTrackerUpdateItemModal(GoalsTrackerItemDto item)
-    {
-        var parameters = new DialogParameters<UpdateGoalModalForm>
-        {
-            {context => context.Item, item}
-        };
-        await _mudDialogService.ShowAsync<UpdateGoalModalForm>(
-            $"Update goal", 
-            parameters,
-            new MudBlazor.DialogOptions()
-            {
-                CloseButton = true,
-                MaxWidth = MaxWidth.Medium
-            }
-        );
-    }
 }

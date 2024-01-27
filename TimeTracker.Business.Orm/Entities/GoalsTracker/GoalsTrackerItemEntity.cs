@@ -22,6 +22,10 @@ namespace TimeTracker.Business.Orm.Entities.GoalsTracker
         [Property(NotNull = true)]
         [Column(Name = "number_of_times", NotNull = true)]
         public virtual int NumberOfTimes { get; set; }
+
+        [Property(NotNull = true)]
+        [Column(Name = "position", NotNull = true)]
+        public virtual int Position { get; set; } = 0;
         
         [Property(NotNull = true)]
         [Column(Name = "is_archived", NotNull = true)]
