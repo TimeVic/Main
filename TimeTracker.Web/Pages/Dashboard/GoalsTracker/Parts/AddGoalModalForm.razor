@@ -11,11 +11,13 @@
                 FullWidth="true"
                 T="string"
                 Name="Name"
+                OnKeyUp="@OnKeyUp"
                 Label="Goal"
                 @bind-Value="model.Name"/>
             <MudSpacer/>
             <MudTextField
                 FullWidth="true"
+                OnKeyUp="@OnKeyUp"
                 T="int"
                 Name="Goal"
                 @bind-Value="model.NumberOfTimes"

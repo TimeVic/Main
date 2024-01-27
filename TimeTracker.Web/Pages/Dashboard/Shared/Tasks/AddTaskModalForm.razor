@@ -11,6 +11,7 @@
             <MudTextField
                 T="string"
                 Name="Title"
+                OnKeyUp="@OnKeyUp"
                 @bind-Value="model.Title"
                 Placeholder="Task title"/>
 
@@ -18,6 +19,7 @@
                 <MudTextField
                     T="string"
                     Name="Title"
+                    OnKeyUp="@OnKeyUp"
                     @bind-Value="model.ExternalTaskId"
                     Placeholder="External task ID"/>
 

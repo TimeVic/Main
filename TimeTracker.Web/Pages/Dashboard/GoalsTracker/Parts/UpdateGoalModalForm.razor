@@ -9,6 +9,7 @@
             @bind-IsValid="_isValid">
             <MudTextField
                 FullWidth="true"
+                OnKeyUp="@OnKeyUp"
                 T="string"
                 Name="Name"
                 Label="Goal"
@@ -16,6 +17,7 @@
             <MudSpacer/>
             <MudTextField
                 FullWidth="true"
+                OnKeyUp="@OnKeyUp"
                 T="int"
                 Name="Goal"
                 @bind-Value="model.NumberOfTimes"

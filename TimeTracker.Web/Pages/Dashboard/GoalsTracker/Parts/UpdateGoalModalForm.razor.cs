@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker;
@@ -55,5 +56,14 @@ public partial class UpdateGoalModalForm
     private void OnCloseModal()
     {
         MudDialog.Close();
+    }
+    
+    private async Task OnKeyUp(KeyboardEventArgs arg)
+    {
+        if (arg.Code == "Enter")
+        {
+            await Submit();
+        }
+        await Task.CompletedTask;
     }
 }

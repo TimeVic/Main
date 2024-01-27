@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Core.Helpers;
@@ -83,5 +84,14 @@ public partial class AddTaskModalForm
     private void OnCloseModal()
     {
         MudDialog.Close();
+    }
+
+    private async Task OnKeyUp(KeyboardEventArgs arg)
+    {
+        if (arg.Code == "Enter")
+        {
+            await Submit();
+        }
+        await Task.CompletedTask;
     }
 }
