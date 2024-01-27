@@ -12,6 +12,8 @@ public class GoalsTrackerDto : IResponse
 
     public ICollection<GoalsTrackerItemDto> Items { get; set; } = new List<GoalsTrackerItemDto>();
     
+    public IOrderedEnumerable<GoalsTrackerItemDto> SortedItems => Items.OrderBy(x => x.Position);
+    
     public ICollection<GoalsTrackerNoteDto> Notes { get; set; } = new List<GoalsTrackerNoteDto>();
 
 #if IS_WEB_APP

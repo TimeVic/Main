@@ -23,7 +23,7 @@
             <tr></tr>
             </thead>
             <tbody>
-            @foreach (var goal in Tracker.Items)
+            @foreach (var goal in Tracker.SortedItems)
             {
                 var markedCount = GetMarkedCount(goal);
                 <tr>

@@ -5,6 +5,8 @@ namespace TimeTracker.Web.Store.GoalsTracker;
 
 public record struct LoadTrackerAction(DateTime Date);
 
+public record struct ChangePositionsAction(ICollection<GoalsTrackerItemDto> Goals);
+
 public record struct CreateTrackerItemAction(string Name, int NumberOfTimes);
 
 public record struct UpdateTrackerItemAction(UpdateItemRequest Request);
@@ -24,3 +26,5 @@ public record struct SetIsListLoadingAction(bool IsLoading);
 public record struct SetTrackerAction(GoalsTrackerDto Tracker);
 
 public record struct SetGoalsTrackerItemAction(GoalsTrackerItemDto Item);
+
+public record struct SetGoalsTrackerItemsAction(ICollection<GoalsTrackerItemDto> Items);
