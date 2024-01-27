@@ -7,7 +7,7 @@ public class GoalsTrackerReducers
 {
 
     [ReducerMethod]
-    public static GoalsTrackerState SetTrackerActionReducer(GoalsTrackerState state, SetTrackerAction action)
+    public static GoalsTrackerState Reducer(GoalsTrackerState state, SetTrackerAction action)
     {
         return state with
         {
@@ -16,7 +16,7 @@ public class GoalsTrackerReducers
     }
     
     [ReducerMethod]
-    public static GoalsTrackerState SetIsListLoadingActionReducer(GoalsTrackerState state, SetIsListLoadingAction action)
+    public static GoalsTrackerState Reducer(GoalsTrackerState state, SetIsListLoadingAction action)
     {
         return state with
         {
@@ -25,7 +25,7 @@ public class GoalsTrackerReducers
     }
     
     [ReducerMethod]
-    public static GoalsTrackerState SetCompletionItemsActionReducer(GoalsTrackerState state, SetCompletionItemsAction action)
+    public static GoalsTrackerState Reducer(GoalsTrackerState state, SetCompletionItemsAction action)
     {
         var currentTracker = state.CurrentTracker;
         if (currentTracker == null)
@@ -48,7 +48,7 @@ public class GoalsTrackerReducers
     }
     
     [ReducerMethod]
-    public static GoalsTrackerState SetCompletionItemActionReducer(GoalsTrackerState state, SetCompletionItemAction action)
+    public static GoalsTrackerState Reducer(GoalsTrackerState state, SetCompletionItemAction action)
     {
         var currentTracker = state.CurrentTracker;
         if (currentTracker == null)
@@ -84,7 +84,7 @@ public class GoalsTrackerReducers
     }
     
     [ReducerMethod]
-    public static GoalsTrackerState SetGoalsTrackerItemActionReducer(GoalsTrackerState state, SetGoalsTrackerItemAction action)
+    public static GoalsTrackerState Reducer(GoalsTrackerState state, SetGoalsTrackerItemAction action)
     {
         var currentTracker = state.CurrentTracker;
         if (currentTracker == null)
@@ -111,7 +111,30 @@ public class GoalsTrackerReducers
     }
     
     [ReducerMethod]
-    public static GoalsTrackerState DeleteTrackerItemFromListActionReducer(GoalsTrackerState state, DeleteTrackerItemFromListAction action)
+    public static GoalsTrackerState Reducer(GoalsTrackerState state, SetGoalsTrackerItemsAction action)
+    {
+        var currentTracker = state.CurrentTracker;
+        if (currentTracker == null)
+        {
+            return state;
+        }
+        currentTracker.Items = state.CurrentTracker.Items.Select(item =>
+        {
+            var foundItem = action.Items.FirstOrDefault(x => x.Id == item.Id);
+            if (foundItem != null)
+            {
+                return foundItem;
+            }
+            return item;
+        }).ToList();
+        return state with
+        {
+            CurrentTracker = currentTracker
+        };
+    }
+    
+    [ReducerMethod]
+    public static GoalsTrackerState Reducer(GoalsTrackerState state, DeleteTrackerItemFromListAction action)
     {
         var currentTracker = state.CurrentTracker;
         if (currentTracker == null)

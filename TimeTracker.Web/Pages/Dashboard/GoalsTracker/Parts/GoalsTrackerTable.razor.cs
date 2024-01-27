@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
@@ -13,8 +14,8 @@ public partial class GoalsTrackerTable
     public GoalsTrackerDto Tracker { get; set; }
     
     private ICollection<DateTime> _daysInCurrentMonth = new List<DateTime>();
-
     private DateTime _today = DateTime.Now;
+    private IEnumerable<GoalsTrackerItemDto> _goals = new List<GoalsTrackerItemDto>();
     
     protected override async Task OnInitializedAsync()
     {

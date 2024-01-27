@@ -22,6 +22,20 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
+        public async Task GoalsTrackerChangePositionsAsync(
+            long workspaceId,
+            DateTime date,
+            ICollection<GoalsTrackerItemDto> items
+        )
+        {
+            await PostAsync<object>(ApiUrl.GoalsTrackerChangePositions, new ChangePositionsRequest()
+            {
+                Date = date,
+                WorkspaceId = workspaceId,
+                Positions = items.ToDictionary(x => x.Id, y => y.Position)
+            });
+        }
+        
         public async Task<GoalsTrackerItemDto> GoalsTrackerCreateItemAsync(long trackerId, string name, int numberOfTimes)
         {
             var response = await PostAsync<GoalsTrackerItemDto>(ApiUrl.GoalsTrackerItemCreate, new CreateItemRequest()

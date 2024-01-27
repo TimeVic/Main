@@ -2,7 +2,7 @@
 
 <MudDialog Style="min-width: 300px;">
     <DialogContent>
-        <Dropzone Items="@Tracker.Items.ToList()">
+        <Dropzone Items="@_goals">
             <MudCard Class="pa-2 mb-2 cursor-move">@context.Name</MudCard>
         </Dropzone>
     </DialogContent>
@@ -11,7 +11,6 @@
         <MudButton
             ButtonType="MudBlazor.ButtonType.Submit"
             OnClick="@Submit"
-            Disabled="@_isLoading"
             Color="Color.Primary">
             Save
         </MudButton>

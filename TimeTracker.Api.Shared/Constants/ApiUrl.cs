@@ -128,6 +128,7 @@ public class ApiUrl
     #region Goals Tracker
 
     public const string GoalsTrackerGet = "dashboard/goals-tracker/get";
+    public const string GoalsTrackerChangePositions = "dashboard/goals-tracker/change-positions";
     public const string GoalsTrackerItemCreate = "dashboard/goals-tracker/item/create";
     public const string GoalsTrackerItemUpdate = "dashboard/goals-tracker/item/update";
     public const string GoalsTrackerItemDelete = "dashboard/goals-tracker/item/delete";
