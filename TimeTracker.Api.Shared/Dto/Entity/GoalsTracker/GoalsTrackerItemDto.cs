@@ -10,6 +10,8 @@ public class GoalsTrackerItemDto : IResponse
 
     public int NumberOfTimes { get; set; } = 0;
 
+    public int Position { get; set; } = 0;
+    
     public virtual ICollection<GoalsTrackerCompletionMarkerDto> CompletionMarkers { get; set; } = new List<GoalsTrackerCompletionMarkerDto>();
     
 #if IS_WEB_APP

@@ -32,11 +32,6 @@ public partial class GoalsTrackerTable
         }
     }
 
-    private async Task OnAddGoal()
-    {
-        await ModalDialogService.ShowGoalsTrackerAddModal();
-    }
-
     private void OnClickRow(GoalsTrackerItemDto goal, DateTime day)
     {
         Dispatcher.Dispatch(new SetItemCompletionAction(

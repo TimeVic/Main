@@ -12,6 +12,7 @@ using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Services.Workspace;
 using MudBlazor.Services;
+using Plk.Blazor.DragDrop;
 using TimeTracker.Web.Services.Http.Auth;
 using TimeTracker.Web.Services.Http.Client;
 using TimeTracker.Web.Services.Http.Middleware;
@@ -84,6 +85,9 @@ builder.Services.AddScoped<MarkdownService>();
 builder.Services.AddScoped<WorkspaceInitializationService>();
 builder.Services.AddScoped<ToastService>();
 builder.Services.AddScoped<FcmService>();
+
+// Drag and drop
+builder.Services.AddBlazorDragDrop();
 
 // Store
 builder.Services.AddFluxor(

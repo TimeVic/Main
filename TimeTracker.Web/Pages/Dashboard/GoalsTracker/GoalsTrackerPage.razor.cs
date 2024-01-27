@@ -27,4 +27,14 @@ public partial class GoalsTrackerPage
     {
         Dispatcher.Dispatch(new LoadTrackerAction(_selectedDate));
     }
+    
+    private async Task OnAddGoal()
+    {
+        await ModalDialogService.ShowGoalsTrackerAddModal();
+    }
+    
+    private async Task OnChangePositions()
+    {
+        await ModalDialogService.ShowGoalsTrackerChangePositionsModal(_state.Value.CurrentTracker);
+    }
 }

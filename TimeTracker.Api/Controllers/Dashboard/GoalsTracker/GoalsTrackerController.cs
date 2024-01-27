@@ -29,4 +29,10 @@ public class GoalsTrackerController : MainApiControllerBase
         => this.RequestAsync()
             .For<GoalsTrackerDto>()
             .With(request);
+    
+    [HttpPost("change-positions")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> ChangePositions([FromBody] ChangePositionsRequest request)
+        => this.RequestAsync(request);
 }
