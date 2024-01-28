@@ -63,11 +63,11 @@ public partial class AddTaskModalForm
             var responseDto = await ApiService.TasksAddAsync(model);
             if (responseDto != null)
             {
+                OnCloseModal();
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
                 Dispatcher.Dispatch(new SetOverdueTasksListItemAction(responseDto));
                 Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.SetSelectedPageAction(1));
                 Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction());
-                OnCloseModal();
             }
         }
         catch (Exception e)

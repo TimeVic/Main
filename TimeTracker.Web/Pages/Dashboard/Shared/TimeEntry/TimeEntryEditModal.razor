@@ -1,0 +1,82 @@
+﻿@inherits BaseComponent
+
+<MudDialog Style="min-width: 400px">
+    <DialogContent>
+        <MudForm
+            @ref="_form"
+            @bind-IsValid="_isValid">
+
+            <MudDatePicker
+                Class="ml-1"
+                Style="min-width: 110px"
+                Clearable="false"
+                Required="true"
+                Elevation="3"
+                AutoClose="true"
+                IconSize="Size.Small"
+                DateChanged="@((value) => TimeEntry.Date = value.Value)"
+                Date="@TimeEntry.Date"/>
+
+            <MudStack
+                Row="true"
+                Spacing="3">
+                <TimeInput
+                    ValueChanged="@((value) => OnChangeStartTime(value))"
+                    Value="@TimeEntry.StartTime"/>
+
+                <TimeInput
+                    Class="ml-1"
+                    ValueChanged="@((value) => OnChangeEndTime(value))"
+                    Value="@TimeEntry.EndTime.Value"/>
+
+                <MudField Label="Duration" Variant="Variant.Text">
+                    @_timeParsingService.TimeSpanToTimeString(_duration, true)
+                </MudField>
+            </MudStack>
+
+            <MudStack
+                Row="true"
+                Spacing="3">
+
+                <MudCheckBox
+                    T="Boolean"
+                    Class="mt-3"
+                    Label="Billable"
+                    @bind-Checked="@TimeEntry.IsBillable"/>
+
+                <MudNumericField
+                    T="decimal?"
+                    Label="Hourly Rate"
+                    Required="@TimeEntry.IsBillable"
+                    @bind-Value="@(TimeEntry.HourlyRate)"
+                    Variant="MudBlazor.Variant.Text"
+                    Disabled="@(!TimeEntry.IsBillable)"
+                    Step=".01M"
+                    Min="0.0M"/>
+            </MudStack>
+
+            <ProjectsDropDown
+                Value="@(TimeEntry.Project?.Id ?? 0)"
+                SelectedItemChanged="@(project => TimeEntry.Project = project)"/>
+
+            <MudTextField
+                T="string"
+                Required="false"
+                Placeholder="Description"
+                Variant="Variant.Outlined"
+                @bind-Value="@TimeEntry.Description"
+                Lines="5"
+                MaxLength="512"/>
+
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@OnCloseModal">Close</MudButton>
+        <MudButton
+            OnClick="@SubmitForm"
+            Variant="Variant.Filled"
+            Color="Color.Primary">
+            Save
+        </MudButton>
+    </DialogActions>
+</MudDialog>

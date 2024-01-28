@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.TimeEntry;
@@ -40,8 +41,6 @@ public partial class TimeEntryList
     
     private int _selectedPage => IsFilteredList ? _state.Value.FilteredSelectedPage : _state.Value.SelectedPage;
     
-    private int _totalFilteredPages => _state.Value.FilteredTotalPages;
-    
     private bool _isLoading => _state.Value.IsListLoading;
 
     private Func<TimeEntryDto, object> _groupBy = x =>
@@ -75,55 +74,6 @@ public partial class TimeEntryList
         await _modalDialogProviderService.ShowAddTaskModal(timEntryId);
     }
 
-    #region On Change
-    private async Task OnChangeStartTime(TimeEntryDto item, TimeSpan startTime)
-    {
-        item.StartTime = startTime > item.EndTime ? item.EndTime.Value : startTime;
-        await UpdateTimeEntry(item);
-    }
-
-    private async Task OnChangeEndTime(TimeEntryDto item, TimeSpan endTime)
-    {
-        item.EndTime = endTime < item.StartTime ? item.StartTime : endTime;
-        await UpdateTimeEntry(item);
-    }
-    
-    private async Task OnChangeDate(TimeEntryDto item, DateTime? date)
-    {
-        if (item.Date != date.Value)
-        {
-            item.Date = date.Value;
-            await UpdateTimeEntry(item);
-        }
-    }
-    
-    private async Task OnChangeDescription(TimeEntryDto item, string? description)
-    {
-        item.Description = description;
-        await UpdateTimeEntry(item);
-    }
-    
-    private async Task OnChangeIsBillable(TimeEntryDto item, bool? isBillable)
-    {
-        item.IsBillable = isBillable ?? false;
-        await UpdateTimeEntry(item);
-    }
-    
-    private async Task OnChangeProject(TimeEntryDto item, ProjectDto? project)
-    {
-        item.Project = project;
-        await UpdateTimeEntry(item);
-    }
-    
-    private async Task UpdateTimeEntry(TimeEntryDto entry)
-    {
-        Dispatcher.Dispatch(new UpdateTimeEntryAction(entry));
-        Dispatcher.Dispatch(new SaveTimeEntryAction(entry, false));
-        await Task.CompletedTask;
-    }
-    
-    #endregion
-    
     private async Task OnDeleteItemAsync(TimeEntryDto item)
     {
         var isOk = await _modalDialogProviderService.ShowDeleteConfirmationDialog();
@@ -133,13 +83,13 @@ public partial class TimeEntryList
         }
     }
     
-    private string GetDescriptionLabel(TimeEntryDto timeEntry)
+    private string? GetDescriptionLabel(TimeEntryDto timeEntry)
     {
-        if (timeEntry.Task != null)
+        if (string.IsNullOrEmpty(timeEntry.Description) && timeEntry.Task != null)
         {
-            return timeEntry.Task.Title;
+            return timeEntry.Task.Title.TruncateAndAddDots(20);
         }
-        return "Description";
+        return timeEntry.Description?.TruncateAndAddDots(20);
     }
     
     private void OnStartCloned(TimeEntryDto timeEntry)
@@ -154,5 +104,10 @@ public partial class TimeEntryList
             )
         );
         MudDialog?.Close();
+    }
+
+    private async Task OnRowClick(TableRowClickEventArgs<TimeEntryDto> arg)
+    {
+        await ModalDialogService.ShowTimeEntryEditModal(arg.Item);
     }
 }

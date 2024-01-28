@@ -36,7 +36,6 @@ public partial class TasksGrid: IDisposable
         TasksState.StateChanged += OnTaskStateChanged;
 
         _tasksSubject
-            .Throttle(TimeSpan.FromMilliseconds(300))
             .Select(items =>
             {
                 return items.Where(item => item.Status == Status)

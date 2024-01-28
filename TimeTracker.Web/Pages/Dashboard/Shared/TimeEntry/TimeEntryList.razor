@@ -9,184 +9,113 @@
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 @using Variant = MudBlazor.Variant
 
-<div class="w-time-entry-list w-100 @Class">
-    <MudDataGrid
-        T="TimeEntryDto"
-        Items="@_list"
-        SortMode="SortMode.None"
-        ReadOnly="false"
-        Outlined="Outlined"
-        EditMode="MudBlazor.DataGridEditMode.Cell"
-        EditTrigger="DataGridEditTrigger.OnRowClick"
-        Loading="@_state.Value.IsListLoading"
-        RowsPerPage="@(GlobalConstants.ListPageSize * 2)"
-        Groupable="true"
-        FixedHeader="true"
-        GroupExpanded="@true"
-        Dense="true"
-        GroupClassFunc="OnGroupTimeEntry">
-        <Columns>
-            @if (IsFilteredList)
-            {
-                <PropertyColumn
-                    T="TimeEntryDto"
-                    TProperty="string"
-                    Property="@(x => x.User.Name)"
-                    Title="User"/>
-            }
-
-            <PropertyColumn
-                T="TimeEntryDto"
-                TProperty="TimeEntryDto"
-                Property="@(x => x)"
-                Title="Date">
-                <EditTemplate>
-                    <MudDatePicker
-                        Class="ml-1"
-                        Style="min-width: 110px"
-                        Clearable="false"
-                        Required="true"
-                        Elevation="0"
-                        AutoClose="true"
-                        IconSize="Size.Small"
-                        DateChanged="@((value) => OnChangeDate(context.Item, value))"
-                        Date="@context.Item.Date"/>
-                </EditTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn
-                T="TimeEntryDto"
-                TProperty="string"
-                Property="@(x => _timeParsingService.TimeSpanToTimeString(x.Duration, true))"
-                IsEditable="false"
-                Title="Duration"/>
-
-            <PropertyColumn
-                T="TimeEntryDto"
-                TProperty="TimeEntryDto"
-                Property="@(x => x)"
-                Title="Start Time">
-                <EditTemplate>
-                    <TimeInput
-                        Class="mr-1"
-                        ValueChanged="@((value) => OnChangeStartTime(context.Item, value))"
-                        Value="@context.Item.StartTime"/>
-                </EditTemplate>
-            </PropertyColumn>
-            <PropertyColumn
-                T="TimeEntryDto"
-                TProperty="TimeEntryDto"
-                Property="@(x => x)"
-                Title="End Time">
-                <EditTemplate>
-                    <TimeInput
-                        Class="ml-1"
-                        ValueChanged="@((value) => OnChangeEndTime(context.Item, value))"
-                        Value="@context.Item.EndTime.Value"/>
-                </EditTemplate>
-            </PropertyColumn>
-            <PropertyColumn
-                T="TimeEntryDto"
-                TProperty="TimeEntryDto"
-                Property="@(x => x)"
-                Title="Project">
-                <EditTemplate>
-                    <ProjectsDropDown
-                        Value="@(context.Item.Project?.Id ?? 0)"
-                        SelectedItemChanged="project => OnChangeProject(context.Item, project)"/>
-                </EditTemplate>
-            </PropertyColumn>
-            <PropertyColumn
-                T="TimeEntryDto"
-                TProperty="TimeEntryDto"
-                Property="@(x => x)"
-                Title="Task ID">
-                <EditTemplate>
-                    @if (context.Item.Task != null)
-                    {
-                        <TaskIdBadge
-                            IsClickable="true"
-                            InternalTask="@context.Item.Task"/>
-                    }
-                    else
-                    {
-                        <MudIconButton
-                            Size="Size.Small"
-                            Variant="Variant.Outlined"
-                            Color="Color.Info"
-                            OnClick="@(() => ShowAddTaskModal(context.Item.Id))"
-                            Icon="@Icons.Material.Filled.Add"/>
-                    }
-                </EditTemplate>
-            </PropertyColumn>
-            <PropertyColumn
-                T="TimeEntryDto"
-                TProperty="TimeEntryDto"
-                Property="x => x"
-                Title="Description">
-                <EditTemplate>
-                    <MudTextField
-                        T="string"
-                        Placeholder="@(GetDescriptionLabel(context.Item))"
-                        Value="@context.Item.Description"
-                        ValueChanged="@(value => OnChangeDescription(context.Item, value))"
-                        Variant="@Variant.Text"/>
-                </EditTemplate>
-            </PropertyColumn>
-            <PropertyColumn
-                T="TimeEntryDto"
-                TProperty="TimeEntryDto"
-                Property="x => x"
-                Title="Billable">
-                <EditTemplate>
-                    <MudCheckBox
-                        T="Boolean"
-                        CheckedChanged="@(value => OnChangeIsBillable(context.Item, value))"
-                        Checked="@context.Item.IsBillable"/>
-                </EditTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn
-                Property="x => x.Date.ToShortDateString()"
-                Title="Category"
-                Grouping
-                Hidden="true"
-                GroupBy="@_groupBy">
-                <GroupTemplate>
-                    <span style="font-weight:bold">@context.Grouping.Key</span>
-                </GroupTemplate>
-            </PropertyColumn>
-
-            <PropertyColumn
-                Property="x => x"
-                IsEditable="false">
-                <CellTemplate>
-                    <MudStack Row="true">
-                        <MudIconButton
-                            Size="@Size.Small"
-                            Variant="@Variant.Text"
-                            Icon="@Icons.Material.Filled.ContentCopy"
-                            OnClick="@(() => OnStartCloned(context.Item))"
-                            Color="@Color.Default"/>
-                        <MudIconButton
-                            Size="@Size.Small"
-                            Variant="@Variant.Text"
-                            Icon="@Icons.Material.Filled.Delete"
-                            OnClick="@(() => OnDeleteItemAsync(context.Item))"
-                            Color="@Color.Secondary"/>
+<div class="w-time-entry-list w-100 mb-3 @Class">
+@foreach (var groupItem in _groupedList)
+{
+    <MudText Typo="Typo.h5">
+        @groupItem.Key.ToShortDateString()
+    </MudText>
+    <MudCard Elevation="0" Class="mb-4">
+        <MudTable
+            T="TimeEntryDto"
+            Items="@groupItem"
+            Hover="true"
+            Striped="true"
+            RowsPerPage="@(groupItem.Count())"
+            FixedHeader="true"
+            Virtualize="false"
+            RowClass="cursor-pointer"
+            OnRowClick="@OnRowClick"
+            Breakpoint="Breakpoint.Xs">
+            <HeaderContent>
+                @if (IsFilteredList)
+                {
+                    <MudTh>User</MudTh>
+                }
+                <MudTh>Duration</MudTh>
+                <MudTh>Start Time</MudTh>
+                <MudTh>End Time</MudTh>
+                <MudTh>Project</MudTh>
+                <MudTh>Task</MudTh>
+                <MudTh>Description</MudTh>
+                <MudTh>Billable</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                @if (IsFilteredList)
+                {
+                    <MudTd DataLabel="Nr">@context.User.Name</MudTd>
+                }
+                <MudTd DataLabel="Duration">@_timeParsingService.TimeSpanToTimeString(context.Duration, true)</MudTd>
+                <MudTd DataLabel="Start Time">@_timeParsingService.TimeSpanToTimeString(context.StartTime)</MudTd>
+                <MudTd DataLabel="End Time">@(context.EndTime.HasValue ? _timeParsingService.TimeSpanToTimeString(context.EndTime.Value) : "")</MudTd>
+                <MudTd DataLabel="Project">
+                    @context.Project?.Name.TruncateAndAddDots(20)
+                </MudTd>
+                <MudTd DataLabel="Task">
+                    <MudStack Row="true" Justify="Justify.Center">
+                        @if (context.Task != null)
+                        {
+                            <TaskIdBadge
+                                IsClickable="true"
+                                InternalTask="@context.Task"/>
+                        }
+                        else
+                        {
+                            <MudIconButton
+                                Size="Size.Small"
+                                Variant="Variant.Outlined"
+                                Color="Color.Info"
+                                OnClick="@(() => ShowAddTaskModal(context.Id))"
+                                Icon="@Icons.Material.Filled.Add"/>
+                        }
                     </MudStack>
-                </CellTemplate>
-            </PropertyColumn>
-        </Columns>
-        <PagerContent>
-            <MudPagination
-                class="pa-4"
-                Disabled="_isLoading"
-                Color="Color.Primary"
-                Count="@_totalPages"
-                Selected="@_selectedPage"
-                SelectedChanged="@OnSelectPage"/>
-        </PagerContent>
-    </MudDataGrid>
+                </MudTd>
+                <MudTd DataLabel="Description">
+                    @GetDescriptionLabel(context)
+                </MudTd>
+                <MudTd DataLabel="Billable">
+                    @if (context.IsBillable)
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.AttachMoney"/>
+                    }
+                </MudTd>
+                <MudTd DataLabel="Actions">
+                    <MudIconButton
+                        Size="@Size.Small"
+                        Variant="@Variant.Text"
+                        Icon="@Icons.Material.Filled.ContentCopy"
+                        OnClick="@(() => OnStartCloned(context))"
+                        Color="@Color.Default"/>
+                    <MudIconButton
+                        Size="@Size.Small"
+                        Variant="@Variant.Text"
+                        Icon="@Icons.Material.Filled.Delete"
+                        OnClick="@(() => OnDeleteItemAsync(context))"
+                        Color="@Color.Secondary"/>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudCard>
+}
+
+@if (_groupedList.Any())
+{
+    <MudCard Elevation="0">
+        <MudPagination
+            class="pa-4"
+            Disabled="_isLoading"
+            Color="Color.Primary"
+            Count="@_totalPages"
+            Selected="@_selectedPage"
+            SelectedChanged="@OnSelectPage"/>
+    </MudCard>    
+}
+else
+{
+    <MudText Typo="Typo.body1">
+        No entries
+    </MudText>
+}
 
 </div>
