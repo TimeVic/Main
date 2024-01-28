@@ -94,9 +94,6 @@ builder.Services.AddFluxor(
     options =>
     {
         options.ScanAssemblies(currentAssembly);
-#if DEBUG
-        options.UseReduxDevTools();
-#endif
     }
 );
             
