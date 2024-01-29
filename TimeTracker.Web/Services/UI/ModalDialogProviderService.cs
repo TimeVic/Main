@@ -131,19 +131,19 @@ public partial class ModalDialogProviderService
 
     public async Task ShowTimeEntriesModal()
     {
-        var parameters = new DialogParameters<TimeEntryList>
+        var parameters = new DialogParameters<TimeEntryListModal>
         {
             {context => context.IsFilteredList, false}
         };
-        await _mudDialogService.ShowAsync<TimeEntryList>(
+        await _mudDialogService.ShowAsync<TimeEntryListModal>(
             "My Time Entries", 
             parameters,
             new MudBlazor.DialogOptions()
-            {
+            {                
                 CloseOnEscapeKey = true,
                 FullWidth = true,
                 CloseButton = true,
-                FullScreen = true
+                FullScreen = false
             }
         );
     }

@@ -28,7 +28,7 @@
     {
         foreach (var task in _tasks)
         {
-            <TaskCard Class="mb-3" Task="@task"></TaskCard>
+            <TaskCard @key="@task" Class="mb-3" Task="@task"></TaskCard>
         }
     }
 </MudPaper>

@@ -2,7 +2,6 @@
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Report.Summary.Parts
-@using MudBlazor
 @using ApexCharts
 @using TimeTracker.Api.Shared.Dto.Model.Report
 
@@ -21,66 +20,71 @@
         </MudPaper>
     }
 
-    <MudPaper class="mb-4">
+    <MudGrid>
+        <MudItem xs="12" md="12" lg="6">
+            <MudPaper class="mb-4">
 
-        @if (_byDateItems.Any())
-        {
-            <ApexChart
-                TItem="SummaryByDaysReportItemDto">
+                @if (_byDateItems.Any())
+                {
+                    <ApexChart
+                        TItem="SummaryByDaysReportItemDto">
 
-                <ApexPointSeries
-                    TItem="SummaryByDaysReportItemDto"
-                    Items="_byDateItems"
-                    Name="Hours"
-                    SeriesType="@(_isShowChartWithLineSeries ? SeriesType.Line : SeriesType.Bar)"
-                    XValue="@(e => e.Date.ToShortDateString())"
-                    YValue="@(e => Math.Round((decimal) e.Duration.TotalHours, 2))"/>
+                        <ApexPointSeries
+                            TItem="SummaryByDaysReportItemDto"
+                            Items="_byDateItems"
+                            Name="Hours"
+                            SeriesType="@(_isShowChartWithLineSeries ? SeriesType.Line : SeriesType.Bar)"
+                            XValue="@(e => e.Date.ToShortDateString())"
+                            YValue="@(e => Math.Round((decimal) e.Duration.TotalHours, 2))"/>
 
-                <ApexPointSeries
-                    TItem="SummaryByDaysReportItemDto"
-                    Items="_byDateItems"
-                    Name="Amount"
-                    SeriesType="@(_isShowChartWithLineSeries ? SeriesType.Line : SeriesType.Bar)"
-                    XValue="@(e => e.Date.ToShortDateString())"
-                    YValue="@(e => Math.Round((decimal) e.Amount, 2))"/>
-            </ApexChart>
-        }
-        else
-        {
-            <MudText Typo="Typo.subtitle1" Class="mx-4">No data</MudText>
-        }
-    </MudPaper>
-
-    <div class="mb-8">
-        @if (_state.Value.IsLoading)
-        {
-            <MudPaper class="mt-4 pa-4 d-flex justify-content-center">
-                <MudProgressCircular Color="MudBlazor.Color.Primary" Indeterminate="true"/>
+                        <ApexPointSeries
+                            TItem="SummaryByDaysReportItemDto"
+                            Items="_byDateItems"
+                            Name="Amount"
+                            SeriesType="@(_isShowChartWithLineSeries ? SeriesType.Line : SeriesType.Bar)"
+                            XValue="@(e => e.Date.ToShortDateString())"
+                            YValue="@(e => Math.Round((decimal) e.Amount, 2))"/>
+                    </ApexChart>
+                }
+                else
+                {
+                    <MudText Typo="Typo.subtitle1" Class="mx-4">No data</MudText>
+                }
             </MudPaper>
-        }
-        else if (_state.Value.SummaryReportData?.GroupedByDay != null)
-        {
-            <ByDateTable Items="@_state.Value.SummaryReportData.GroupedByDay"></ByDateTable>
-        }
-        else if (_state.Value.SummaryReportData?.GroupedByWeek != null)
-        {
-            <ByWeekTable Items="@_state.Value.SummaryReportData.GroupedByWeek"></ByWeekTable>
-        }
-        else if (_state.Value.SummaryReportData?.GroupedByClient != null)
-        {
-            <ByClientTable Items="@_state.Value.SummaryReportData.GroupedByClient"></ByClientTable>
-        }
-        else if (_state.Value.SummaryReportData?.GroupedByProject != null)
-        {
-            <ByProjectTable Items="@_state.Value.SummaryReportData.GroupedByProject"></ByProjectTable>
-        }
-        else if (_state.Value.SummaryReportData?.GroupedByMonth != null)
-        {
-            <ByMonthTable Items="@_state.Value.SummaryReportData.GroupedByMonth"></ByMonthTable>
-        }
-        else if (_state.Value.SummaryReportData?.GroupedByUser != null)
-        {
-            <ByUserTable Items="@_state.Value.SummaryReportData.GroupedByUser"></ByUserTable>
-        }
-    </div>
+        </MudItem>
+        <MudItem xs="12" md="12" lg="6">
+            <div>
+                @if (_state.Value.IsLoading)
+                {
+                    <MudPaper class="mt-4 pa-4 d-flex justify-content-center">
+                        <MudProgressCircular Color="MudBlazor.Color.Primary" Indeterminate="true"/>
+                    </MudPaper>
+                }
+                else if (_state.Value.SummaryReportData?.GroupedByDay != null)
+                {
+                    <ByDateTable Items="@_state.Value.SummaryReportData.GroupedByDay"></ByDateTable>
+                }
+                else if (_state.Value.SummaryReportData?.GroupedByWeek != null)
+                {
+                    <ByWeekTable Items="@_state.Value.SummaryReportData.GroupedByWeek"></ByWeekTable>
+                }
+                else if (_state.Value.SummaryReportData?.GroupedByClient != null)
+                {
+                    <ByClientTable Items="@_state.Value.SummaryReportData.GroupedByClient"></ByClientTable>
+                }
+                else if (_state.Value.SummaryReportData?.GroupedByProject != null)
+                {
+                    <ByProjectTable Items="@_state.Value.SummaryReportData.GroupedByProject"></ByProjectTable>
+                }
+                else if (_state.Value.SummaryReportData?.GroupedByMonth != null)
+                {
+                    <ByMonthTable Items="@_state.Value.SummaryReportData.GroupedByMonth"></ByMonthTable>
+                }
+                else if (_state.Value.SummaryReportData?.GroupedByUser != null)
+                {
+                    <ByUserTable Items="@_state.Value.SummaryReportData.GroupedByUser"></ByUserTable>
+                }
+            </div>
+        </MudItem>
+    </MudGrid>
 </MudStack>
