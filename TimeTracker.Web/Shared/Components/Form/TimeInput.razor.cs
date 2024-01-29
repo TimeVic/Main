@@ -9,7 +9,13 @@ namespace TimeTracker.Web.Shared.Components.Form;
 public partial class TimeInput
 {
     [Parameter]
-    public string Class { get; set; }
+    public string? Class { get; set; }
+    
+    [Parameter]
+    public string? Label { get; set; }
+    
+    [Parameter]
+    public string? Style { get; set; }
     
     [Parameter]
     public bool IsDisabled { get; set; }

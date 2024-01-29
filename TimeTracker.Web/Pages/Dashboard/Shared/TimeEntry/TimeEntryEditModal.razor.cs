@@ -10,7 +10,7 @@ public partial class TimeEntryEditModal
 {
     [Parameter]
     public TimeEntryDto TimeEntry { get; set; }
-
+    
     [CascadingParameter] 
     public MudDialogInstance MudDialog { get; set; }
 

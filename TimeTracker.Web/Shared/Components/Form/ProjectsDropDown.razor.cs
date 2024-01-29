@@ -18,6 +18,9 @@ public partial class ProjectsDropDown
     public bool Disabled { get; set; }
 
     [Parameter]
+    public string? Label { get; set; }
+    
+    [Parameter]
     public bool Clearable { get; set; } = true;
     
     [Parameter]

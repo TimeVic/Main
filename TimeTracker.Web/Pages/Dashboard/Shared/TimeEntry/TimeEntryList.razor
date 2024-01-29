@@ -10,112 +10,116 @@
 @using Variant = MudBlazor.Variant
 
 <div class="w-time-entry-list w-100 mb-3 @Class">
-@foreach (var groupItem in _groupedList)
-{
-    <MudText Typo="Typo.h5">
-        @groupItem.Key.ToShortDateString()
-    </MudText>
-    <MudCard Elevation="0" Class="mb-4">
-        <MudTable
-            T="TimeEntryDto"
-            Items="@groupItem"
-            Hover="true"
-            Striped="true"
-            RowsPerPage="@(groupItem.Count())"
-            FixedHeader="true"
-            Virtualize="false"
-            RowClass="cursor-pointer"
-            OnRowClick="@OnRowClick"
-            Breakpoint="Breakpoint.Xs">
-            <HeaderContent>
-                @if (IsFilteredList)
-                {
-                    <MudTh>User</MudTh>
-                }
-                <MudTh>Duration</MudTh>
-                <MudTh>Start Time</MudTh>
-                <MudTh>End Time</MudTh>
-                <MudTh>Project</MudTh>
-                <MudTh>Task</MudTh>
-                <MudTh>Description</MudTh>
-                <MudTh>Billable</MudTh>
-                <MudTh></MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                @if (IsFilteredList)
-                {
-                    <MudTd DataLabel="Nr">@context.User.Name</MudTd>
-                }
-                <MudTd DataLabel="Duration">@_timeParsingService.TimeSpanToTimeString(context.Duration, true)</MudTd>
-                <MudTd DataLabel="Start Time">@_timeParsingService.TimeSpanToTimeString(context.StartTime)</MudTd>
-                <MudTd DataLabel="End Time">@(context.EndTime.HasValue ? _timeParsingService.TimeSpanToTimeString(context.EndTime.Value) : "")</MudTd>
-                <MudTd DataLabel="Project">
-                    @context.Project?.Name.TruncateAndAddDots(20)
-                </MudTd>
-                <MudTd DataLabel="Task">
-                    <MudStack Row="true" Justify="Justify.Center">
-                        @if (context.Task != null)
-                        {
-                            <TaskIdBadge
-                                IsClickable="true"
-                                InternalTask="@context.Task"/>
-                        }
-                        else
-                        {
-                            <MudIconButton
-                                Size="Size.Small"
-                                Variant="Variant.Outlined"
-                                Color="Color.Info"
-                                OnClick="@(() => ShowAddTaskModal(context.Id))"
-                                Icon="@Icons.Material.Filled.Add"/>
-                        }
-                    </MudStack>
-                </MudTd>
-                <MudTd DataLabel="Description">
-                    @GetDescriptionLabel(context)
-                </MudTd>
-                <MudTd DataLabel="Billable">
-                    @if (context.IsBillable)
+    @foreach (var groupItem in _groupedList)
+    {
+        <MudText Typo="Typo.h5">
+            @groupItem.Key.ToShortDateString()
+        </MudText>
+        <MudCard Elevation="0" Class="mb-4">
+            <MudTable
+                T="TimeEntryDto"
+                Items="@groupItem"
+                Hover="true"
+                Striped="true"
+                RowsPerPage="@(groupItem.Count())"
+                FixedHeader="true"
+                Virtualize="false"
+                RowClass="cursor-pointer"
+                OnRowClick="@OnRowClick"
+                Breakpoint="Breakpoint.Xs">
+                <HeaderContent>
+                    @if (IsFilteredList)
                     {
-                        <MudIcon Icon="@Icons.Material.Filled.AttachMoney"/>
+                        <MudTh>User</MudTh>
                     }
-                </MudTd>
-                <MudTd DataLabel="Actions">
-                    <MudIconButton
-                        Size="@Size.Small"
-                        Variant="@Variant.Text"
-                        Icon="@Icons.Material.Filled.ContentCopy"
-                        OnClick="@(() => OnStartCloned(context))"
-                        Color="@Color.Default"/>
-                    <MudIconButton
-                        Size="@Size.Small"
-                        Variant="@Variant.Text"
-                        Icon="@Icons.Material.Filled.Delete"
-                        OnClick="@(() => OnDeleteItemAsync(context))"
-                        Color="@Color.Secondary"/>
-                </MudTd>
-            </RowTemplate>
-        </MudTable>
-    </MudCard>
-}
+                    <MudTh>Duration</MudTh>
+                    <MudTh>Start Time</MudTh>
+                    <MudTh>End Time</MudTh>
+                    <MudTh>Project</MudTh>
+                    <MudTh>Task</MudTh>
+                    <MudTh>Description</MudTh>
+                    <MudTh>Billable</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    @if (IsFilteredList)
+                    {
+                        <MudTd DataLabel="Nr">@context.User.Name</MudTd>
+                    }
+                    <MudTd DataLabel="Duration">@_timeParsingService.TimeSpanToTimeString(context.Duration, true)</MudTd>
+                    <MudTd DataLabel="Start Time">@_timeParsingService.TimeSpanToTimeString(context.StartTime)</MudTd>
+                    <MudTd DataLabel="End Time">@(context.EndTime.HasValue ? _timeParsingService.TimeSpanToTimeString(context.EndTime.Value) : "")</MudTd>
+                    <MudTd DataLabel="Project">
+                        @context.Project?.Name.TruncateAndAddDots(20)
+                    </MudTd>
+                    <MudTd DataLabel="Task">
+                        <MudStack
+                            @onclick:stopPropagation="true"
+                            Row="true"
+                            Justify="Justify.Center">
+                            @if (context.Task != null)
+                            {
+                                <TaskIdBadge
+                                    IsClickable="true"
+                                    InternalTask="@context.Task"/>
+                            }
+                            else
+                            {
+                                <MudIconButton
+                                    Size="Size.Small"
+                                    Variant="Variant.Outlined"
+                                    Color="Color.Info"
+                                    OnClick="@(() => ShowAddTaskModal(context.Id))"
+                                    Icon="@Icons.Material.Filled.Add"/>
+                            }
+                        </MudStack>
+                    </MudTd>
+                    <MudTd DataLabel="Description">
+                        @GetDescriptionLabel(context)
+                    </MudTd>
+                    <MudTd DataLabel="Billable">
+                        <MudIcon 
+                            Icon="@Icons.Material.Filled.AttachMoney"
+                            Color="@(context.IsBillable ? Color.Success : Color.Transparent)"/>
+                    </MudTd>
+                    <MudTd DataLabel="Actions">
+                        <div @onclick:stopPropagation="true">
+                            <MudIconButton
+                                Size="@Size.Small"
+                                Variant="@Variant.Text"
+                                Icon="@Icons.Material.Filled.ContentCopy"
+                                OnClick="@(() => OnStartCloned(context))"
+                                Color="@Color.Default"/>
+                            <MudIconButton
+                                Size="@Size.Small"
+                                Variant="@Variant.Text"
+                                Icon="@Icons.Material.Filled.Delete"
+                                OnClick="@(() => OnDeleteItemAsync(context))"
+                                Color="@Color.Secondary"/>
+                        </div>
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudCard>
+    }
 
-@if (_groupedList.Any())
-{
-    <MudCard Elevation="0">
-        <MudPagination
-            class="pa-4"
-            Disabled="_isLoading"
-            Color="Color.Primary"
-            Count="@_totalPages"
-            Selected="@_selectedPage"
-            SelectedChanged="@OnSelectPage"/>
-    </MudCard>    
-}
-else
-{
-    <MudText Typo="Typo.body1">
-        No entries
-    </MudText>
-}
+    @if (_groupedList.Any())
+    {
+        <MudCard Elevation="0">
+            <MudPagination
+                class="pa-4"
+                Disabled="_isLoading"
+                Color="Color.Primary"
+                Count="@_totalPages"
+                Selected="@_selectedPage"
+                SelectedChanged="@OnSelectPage"/>
+        </MudCard>
+    }
+    else
+    {
+        <MudText Typo="Typo.body1">
+            No entries
+        </MudText>
+    }
 
 </div>

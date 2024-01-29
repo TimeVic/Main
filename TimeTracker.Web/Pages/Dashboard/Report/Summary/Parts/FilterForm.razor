@@ -4,8 +4,8 @@
 
 @inherits BaseReactiveComponent
 
-<MudStack>
-    <MudStack Row="true">
+<MudGrid>
+    <MudItem xs="12" md="6" lg="2">
         <EnumDropDown
             Class="w-100"
             Label="Group by:"
@@ -13,34 +13,40 @@
             Value="@_filterState.ReportType"
             ValueChanged="OnChangeReportType"/>
         <MudSpacer/>
+    </MudItem>
+    <MudItem xs="12" md="6" lg="2">
         <EnumDropDown
             Class="w-100"
             Label="Period:"
             TItem="SummaryReportPeriodType"
             Value="@_filterState.PeriodType"
             ValueChanged="OnChangePeriodType"/>
-        <MudSpacer/>
+    </MudItem>
+    <MudItem xs="12" md="6" lg="3">
         <MudDatePicker
-                    Label="Date start"
-                    Editable="true"
-                    Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-                    DateChanged="OnChangeDateStart"
-                    Date="@_filterState.StartDate"/>
+            Label="Date start"
+            Editable="true"
+            Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+            DateChanged="OnChangeDateStart"
+            Date="@_filterState.StartDate"/>
         <MudSpacer/>
+    </MudItem>
+    <MudItem xs="12" md="6" lg="3">
         <MudDatePicker
-                    Label="Date end"
-                    Editable="true"
-                    Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-                    DateChanged="OnChangeDateEnd"
-                    Date="@_filterState.StartDate"/>
-    </MudStack>
-
-    <MudButton
-        OnClick="@(LoadReport)"
-        Class="ml-3"
-        Color="Color.Primary"
-        Variant="Variant.Filled"
-        StartIcon="@Icons.Material.Filled.Search">
-        Search
-    </MudButton>
-</MudStack>
+            Label="Date end"
+            Editable="true"
+            Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+            DateChanged="OnChangeDateEnd"
+            Date="@_filterState.StartDate"/>
+    </MudItem>
+    <MudItem xs="12" md="6" lg="2">
+        <MudButton
+            OnClick="@(LoadReport)"
+            Class="mt-3 w-100"
+            Color="Color.Primary"
+            Variant="Variant.Filled"
+            StartIcon="@Icons.Material.Filled.Search">
+            Search
+        </MudButton>
+    </MudItem>
+</MudGrid>
