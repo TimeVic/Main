@@ -27,7 +27,9 @@
             {
                 var markedCount = GetMarkedCount(goal);
                 <tr>
-                    <td class="pa-3 w-sticky-column">@goal.Name</td>
+                    <td class="pa-3 w-sticky-column text-le">
+                        <MudText Align="Align.Left">@goal.Name</MudText>
+                    </td>
                     @foreach (var day in _daysInCurrentMonth)
                     {
                         <td
