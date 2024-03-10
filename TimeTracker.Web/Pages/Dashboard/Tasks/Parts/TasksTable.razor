@@ -10,9 +10,9 @@
 
 @inherits BaseComponent
 
-<div class="d-flex flex-row">
+<MudGrid Style="gap: 8px; min-width: 1226px; margin-left: 2px;">
     <TasksGrid Status="@TaskStatus.Backlog"></TasksGrid>
     <TasksGrid Status="@TaskStatus.ToDo"></TasksGrid>
     <TasksGrid Status="@TaskStatus.InProgress"></TasksGrid>
     <TasksGrid Status="@TaskStatus.Done"></TasksGrid>
-</div>
+</MudGrid>
