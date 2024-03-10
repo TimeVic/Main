@@ -5,49 +5,48 @@
 @inherits BaseReactiveComponent
 
 <MudStack Spacing="2">
-    <MudTabs
-        @ref="_tabsPanel"
-        Position="Position.Left"
-        Outlined="true"
-        Rounded="true"
-        Border="true">
+    <MudList 
+        @ref="@_taskListList"
+        SelectedValue="@_selectedTaskListId"
+        Clickable="true">
         @foreach (var taskList in _tasksList)
         {
-            <MudTabPanel
-                ID="@taskList.Id"
+            <MudListItem
+                
+                Value="@taskList.Id"
                 OnClick="@(() => OnSelectedTasksList(taskList.Id))"
-                Text="@taskList.Name"/>
+                Text="@taskList.Name.Truncate(32, true)"/>
         }
+        <MudDivider/>
         @if (!_tasksList.Any())
         {
-            <MudTabPanel
-                ID="-1"
+            <MudListItem
+                IconSize="Size.Small"
+                Icon="@Icons.Material.Filled.Add"
                 OnClick="@(ShowAddTaskListModal)"
                 Text="Add new list"/>
         }
-    </MudTabs>
-
-    @if (_tasksList.Any())
-    {
-        <MudStack Row="true">
-            <MudIconButton
+        else
+        {
+            <MudListItem 
+                IconSize="Size.Small"
+                OnClick="@ShowAddTaskListModal"
                 Icon="@Icons.Material.Filled.Add"
-                Title="Add new"
-                OnClick="@ShowAddTaskListModal"/>
+                Text="Add"/>
             @if (_selectedTaskListId != 0)
             {
-                <MudSpacer/>
-                <MudIconButton
+                <MudListItem 
+                    IconSize="Size.Small"
+                    OnClick="@ShowUpdateTaskListModal"
                     Icon="@Icons.Material.Filled.Edit"
-                    Title="Update active"
-                    OnClick="@ShowUpdateTaskListModal"/>
-                <MudSpacer/>
-                <MudIconButton
-                    Color="Color.Error"
+                    Text="Update"/>
+                <MudListItem 
+                    IconSize="Size.Small"
+                    OnClick="@OnDeleteTaskList"
                     Icon="@Icons.Material.Filled.Delete"
-                    Title="Delete active"
-                    OnClick="@OnDeleteTaskList"/>    
+                    Text="Delete"/>
             }
-        </MudStack>
-    }
+        }
+        
+    </MudList>
 </MudStack>

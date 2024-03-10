@@ -9,13 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentMigrator" Version="5.0.0" />
-      <PackageReference Include="FluentMigrator.Extensions.Postgres" Version="5.0.0" />
-      <PackageReference Include="FluentMigrator.Runner" Version="5.0.0" />
-      <PackageReference Include="FluentMigrator.Runner.Postgres" Version="5.0.0" />
+      <PackageReference Include="FluentMigrator" Version="5.1.0" />
+      <PackageReference Include="FluentMigrator.Extensions.Postgres" Version="5.1.0" />
+      <PackageReference Include="FluentMigrator.Runner" Version="5.1.0" />
+      <PackageReference Include="FluentMigrator.Runner.Postgres" Version="5.1.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-      <PackageReference Include="Npgsql" Version="8.0.1" />
+      <PackageReference Include="Npgsql" Version="8.0.2" />
     </ItemGroup>
 
     <ItemGroup>
