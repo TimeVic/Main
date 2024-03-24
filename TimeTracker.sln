@@ -50,6 +50,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Web", "TimeTrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Business.Clients", "TimeTracker.Business.Clients\TimeTracker.Business.Clients.csproj", "{F4034357-EED2-4AC8-A181-C40457D0411F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Business.FileStorage", "TimeTracker.Business.FileStorage\TimeTracker.Business.FileStorage.csproj", "{3E0BC026-EB37-4734-83E8-28AF0EC6E178}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Api.FileStorage", "TimeTracker.Api.FileStorage\TimeTracker.Api.FileStorage.csproj", "{A8D7865A-B8DC-42F2-AB1E-D6A32B1EFD57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -144,6 +148,14 @@ Global
 		{F4034357-EED2-4AC8-A181-C40457D0411F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4034357-EED2-4AC8-A181-C40457D0411F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4034357-EED2-4AC8-A181-C40457D0411F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E0BC026-EB37-4734-83E8-28AF0EC6E178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E0BC026-EB37-4734-83E8-28AF0EC6E178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E0BC026-EB37-4734-83E8-28AF0EC6E178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E0BC026-EB37-4734-83E8-28AF0EC6E178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8D7865A-B8DC-42F2-AB1E-D6A32B1EFD57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8D7865A-B8DC-42F2-AB1E-D6A32B1EFD57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8D7865A-B8DC-42F2-AB1E-D6A32B1EFD57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8D7865A-B8DC-42F2-AB1E-D6A32B1EFD57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A0B3A29D-0064-4CA1-8B54-E2F74A1AECE7} = {EEEB1AA4-B6FE-4153-9CCB-565250FC147E}
@@ -163,5 +175,6 @@ Global
 		{B7629112-B6B2-41BA-AA12-5538B0482136} = {5E30EE13-E6A0-41D8-B90F-1A52666978ED}
 		{8455D35E-F8AD-46A4-86F3-77EDBF360487} = {89355D2D-34BA-406F-8B6E-96ECB3B361A4}
 		{F4034357-EED2-4AC8-A181-C40457D0411F} = {5E30EE13-E6A0-41D8-B90F-1A52666978ED}
+		{3E0BC026-EB37-4734-83E8-28AF0EC6E178} = {5E30EE13-E6A0-41D8-B90F-1A52666978ED}
 	EndGlobalSection
 EndGlobal

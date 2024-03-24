@@ -6,6 +6,7 @@ volumes:
   kafka-2-volume: {}
   zookeeper-volume: {}
   redis-volume: {}
+  mongodb-volume: {}
 
 services:
   postgres:
@@ -27,3 +28,13 @@ services:
       - "6111:6379"
     volumes:
       - redis-volume:/data
+  mongodb:
+    image: mongo:7.0-jammy
+    container_name: timevic-local-mongodb
+    ports:
+      - "8232:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongodb-volume:/data/db

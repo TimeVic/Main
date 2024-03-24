@@ -24,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Entities\FileStorage\" />
       <Folder Include="Hibernate\Queries" />
     </ItemGroup>
 

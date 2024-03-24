@@ -85,7 +85,7 @@ public partial class FileStorage: IFileStorage
     ) where TEntity : IEntity
     {
         var fileExtension = Path.GetExtension(fileName).Replace(".", "");
-        var mimeType = MimeTypeHelper.GetMimeType(fileExtension);
+        var mimeType = MimeTypeHelper.GetMimeTypeByExtension(fileExtension);
         var cloudFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath(fileExtension)}";
 
         if (IsImageMimeType(mimeType))
@@ -134,7 +134,7 @@ public partial class FileStorage: IFileStorage
             throw new IncorrectFileException($"File can not be large than {(MaxFileSize / 1024 / 1024)}Mb");
         }
 
-        var mimeType = MimeTypeHelper.GetMimeType(file.GetExtension());
+        var mimeType = MimeTypeHelper.GetMimeTypeByExtension(file.GetExtension());
         if (string.IsNullOrEmpty(mimeType))
         {
             throw new IncorrectFileException("Incorrect file extension");

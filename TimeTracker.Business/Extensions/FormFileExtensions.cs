@@ -25,6 +25,6 @@ public static class FormFileExtensions
     
     public static string GetMimeType(IFormFile file)
     {
-        return MimeTypeHelper.GetMimeType(file.GetExtension());
+        return MimeTypeHelper.GetMimeTypeByExtension(file.GetExtension());
     }
 }

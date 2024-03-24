@@ -4,6 +4,7 @@ using Persistence.Transactions.Behaviors;
 using AspNetCore.ApiControllers.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Business.Common.Mvc.Controllers;
 
 namespace TimeTracker.Api.Controllers.Public.User;
 

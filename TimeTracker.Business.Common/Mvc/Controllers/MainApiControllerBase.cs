@@ -4,11 +4,10 @@ using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Abstractions;
 using Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Common.Exceptions;
-using TimeTracker.Business.Common.Exceptions.Api;
 
-namespace TimeTracker.Api.Controllers;
+namespace TimeTracker.Business.Common.Mvc.Controllers;
 
 public class MainApiControllerBase: ApiControllerBase
 {
