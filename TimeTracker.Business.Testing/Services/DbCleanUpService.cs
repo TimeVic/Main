@@ -37,6 +37,11 @@ public class DbCleanUpService: IDbCleanUpService
             "workspace_setting_clickups",
             "workspace_setting_redmines",
             
+            "fs_access_keys",
+            "fs_files",
+            "fs_directories",
+            "fs_buckets",
+            
             "goals_tracker_completion_markers",
             "goals_tracker_items",
             "goals_tracker_notes",

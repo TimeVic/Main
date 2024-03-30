@@ -21,4 +21,13 @@ public class UploadFromStreamTest: BaseTest
         Assert.NotEmpty(fileId.ToString());
         Assert.True(fileId.CreationTime.ToUniversalTime() >= DateTime.MinValue);
     }
+    
+    [Fact]
+    public async Task ShouldUploadWithDirectory()
+    {
+        var file = CreateFormFile();
+        var fileId = await _mongoClient.UploadFileFromStream("test_bucket_2", "some/Directory", file.FileName, file.OpenReadStream());
+        Assert.NotEmpty(fileId.ToString());
+        Assert.True(fileId.CreationTime.ToUniversalTime() >= DateTime.MinValue);
+    }
 }

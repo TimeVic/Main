@@ -2,6 +2,7 @@
 using System.Security.Authentication;
 using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Abstractions;
+using Autofac;
 using Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,13 @@ public class MainApiControllerBase: ApiControllerBase
     ) : base(asyncRequestBuilder, commitPerformer)
     {
         Logger = logger;
+    }
+    
+    public MainApiControllerBase(ILifetimeScope scope) : base(
+        scope.Resolve<IAsyncRequestBuilder>()
+    )
+    {
+        Logger = scope.Resolve<ILogger<MainApiControllerBase>>();
     }
         
     public override Func<Exception, IActionResult> Fail => ProcessFail;

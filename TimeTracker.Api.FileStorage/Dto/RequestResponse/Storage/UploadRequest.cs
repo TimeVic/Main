@@ -8,8 +8,8 @@ public class UploadRequest: IRequest<UploadResponse>
 {
     [Required]
     [IsStorageBucketName]
-    public string BucketName { get; set; }
+    public required string BucketName { get; set; }
         
     [Required]
-    public IFormFile File { get; set; }
+    public required IFormFile File { get; set; }
 }
