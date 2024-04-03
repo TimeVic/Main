@@ -2,6 +2,8 @@ using Autofac.Extensions.DependencyInjection;
 using Serilog;
 using TimeTracker.Business.Helpers;
 
+namespace TimeTracker.Api.FileStorage;
+
 public class Program
 {
     public static void Main(string[] args)

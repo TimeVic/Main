@@ -12,4 +12,6 @@ public interface IFileStorageBucketDao: IDomainService
     );
 
     Task<FileStorageBucketEntity> Create(UserEntity user, string name);
+
+    Task<FileStorageBucketEntity?> GetByName(UserEntity user, string name);
 }

@@ -15,8 +15,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="8.0.0" />
-      <PackageReference Include="Bogus" Version="35.4.1" />
+      <PackageReference Include="Bogus" Version="35.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Core\" />
     </ItemGroup>
 
 </Project>

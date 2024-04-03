@@ -11,11 +11,13 @@ namespace TimeTracker.Migrations.Migrations
             Create.Table("fs_access_keys")
                 .WithColumn("id").AsInt64().PrimaryKey().Identity()
                 .WithColumn("user_id").AsInt64().NotNullable().ForeignKey("users", "id")
-                .WithColumn("access_key").AsString(100).NotNullable().Unique()
+                .WithColumn("access_key").AsString(100).NotNullable()
                 .WithColumn("secret_key").AsString(100).NotNullable()
                 .WithColumn("expiration_time").AsCustom("timestamptz").Nullable()
                 .WithColumn("update_time").AsCustom("timestamptz").NotNullable()
                 .WithColumn("create_time").AsCustom("timestamptz").NotNullable();
+
+            Create.UniqueConstraint().OnTable("fs_access_keys").Columns(["access_key", "secret_key"]);
             
             Create.Table("fs_buckets")
                 .WithColumn("id").AsInt64().PrimaryKey().Identity()

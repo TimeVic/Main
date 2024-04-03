@@ -3,9 +3,9 @@ using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.FileStorage.Services.Api;
 
-public interface IFileStorageSecurityService: IDomainService
+public interface IFileStorageSecurityService: IScopedDomainService
 {
-    public UserEntity GetCurrentUser();
+    Task<UserEntity> GetCurrentUser();
     
-    public Task CheckIsAuthenticated();
+    Task CheckIsAuthenticated();
 }

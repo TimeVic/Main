@@ -39,11 +39,25 @@ public class PutTest: BaseTest
         // Assert
         Assert.NotEmpty(actualFile.ExternalId);
         Assert.NotEmpty(actualFile.MongoId);
-        Assert.NotEmpty(actualFile.InternalFilePath);
+        Assert.NotEmpty(actualFile.InternalFileName);
         Assert.Equal("application/pdf", actualFile.MimeType);
         Assert.Equal("test.pdf", actualFile.OriginalFileName);
         Assert.Equal("pdf", actualFile.Extension);
         Assert.Equal(file.Length, actualFile.Size);
         Assert.Equal(_user, actualFile.Bucket!.User);
+    }
+    
+    [Fact]
+    public async Task ShouldPutNewFileWithDirectory()
+    {
+        // Arrange
+        var file = CreateFormFile();
+        
+        // Act
+        var actualFile = await _fileStorageService.Put(_bucket, file, "some/Test Directory");
+
+        // Assert
+        Assert.Equal("application/pdf", actualFile.MimeType);
+        Assert.Equal("Test Directory", actualFile.Directory!.Name);
     }
 }

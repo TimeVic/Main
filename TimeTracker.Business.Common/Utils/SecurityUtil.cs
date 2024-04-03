@@ -97,9 +97,10 @@ namespace TimeTracker.Business.Common.Utils
                 }
 
                 return Convert.ToBase64String(ticksBytes.ToArray())
-                    .Replace('+', '-')
-                    .Replace('/', '_')
-                    .Replace('#', '.');
+                    .Replace('+', 'H')
+                    .Replace('/', 'k')
+                    .Replace('#', 's')
+                    .Replace('=', 'i');
             }
         }
     }

@@ -32,10 +32,10 @@ public class FileStorageAccessKeyDao: IFileStorageAccessKeyDao
         return entity;
     }
 
-    public async Task<FileStorageAccessKeyEntity?> GetByKey(string key)
+    public async Task<FileStorageAccessKeyEntity?> GetByKey(string accessKey, string secretKey)
     {
         return await _sessionProvider.CurrentSession.Query<FileStorageAccessKeyEntity>()
-            .Where(item => item.AccessKey == key)
+            .Where(item => item.AccessKey == accessKey && item.SecretKey == secretKey)
             .FirstOrDefaultAsync();
     }
 }

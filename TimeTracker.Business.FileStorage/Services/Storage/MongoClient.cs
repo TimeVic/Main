@@ -3,9 +3,8 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using TimeTracker.Business.Common.Helpers;
-using TimeTracker.Business.Extensions;
 
-namespace TimeTracker.Business.FileStorage.Services;
+namespace TimeTracker.Business.FileStorage.Services.Storage;
 
 public class MongoClient: IMongoClient
 {
@@ -13,7 +12,6 @@ public class MongoClient: IMongoClient
     
     private const string KEY_USER_BUCKET = "bucket";
     private const string KEY_FILE_NAME = "fileName";
-    private const string KEY_FILE_DIRECTORY = "fileDirectory";
     private const string KEY_FILE_MIME_TYPE = "mimeType";
     
     private readonly IConfiguration _configuration;
@@ -41,53 +39,40 @@ public class MongoClient: IMongoClient
 
     public async Task<ObjectId> UploadFileFromStream(
         string usersBucketName,
-        string directory,
         string fileName,
         Stream fileStream
     )
     {
-        directory = PrepareFileDirectory(directory);
         return await _mongoFsBucket.UploadFromStreamAsync(
-            PrepareFileName(usersBucketName, directory, fileName),
+            PrepareFileName(usersBucketName, fileName),
             fileStream,
             new GridFSUploadOptions()
             {
-                Metadata = new BsonDocument()
-                {
+                Metadata =
+                [
                     new BsonElement(KEY_FILE_NAME, fileName),
-                    new BsonElement(KEY_FILE_DIRECTORY, directory),
                     new BsonElement(KEY_USER_BUCKET, usersBucketName),
-                    new BsonElement(KEY_FILE_MIME_TYPE, MimeTypeHelper.GetMimeTypeByName(fileName)),
-                }
+                    new BsonElement(KEY_FILE_MIME_TYPE, MimeTypeHelper.GetMimeTypeByName(fileName))
+                ]
             }
         );
     }
     
     public async Task<Stream> DownloadToStream(
         string usersBucketName,
-        string directory,
         string fileName
     )
     {
-        directory = PrepareFileDirectory(directory);
         var stream = new MemoryStream();
         await _mongoFsBucket.DownloadToStreamByNameAsync(
-            PrepareFileName(usersBucketName, directory, fileName), 
+            PrepareFileName(usersBucketName, fileName), 
             stream
         );
         return stream;
     }
 
-    private string PrepareFileName(string usersBucket, string directory, string fileName)
+    private string PrepareFileName(string usersBucket, string fileName)
     {
-        return $"{usersBucket}/{directory}{fileName}";
-    }
-    
-    private string PrepareFileDirectory(string directory)
-    {
-        directory = directory.Trim().RemoveLeadingSlash().RemoveTrailingSlash();
-        if (!string.IsNullOrEmpty(directory))
-            directory += "/";
-        return directory;
+        return $"{usersBucket}/{fileName}";
     }
 }

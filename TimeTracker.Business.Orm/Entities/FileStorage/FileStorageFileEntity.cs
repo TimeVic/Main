@@ -13,15 +13,15 @@ namespace TimeTracker.Business.Orm.Entities.FileStorage
         
         [Property(NotNull = false)]
         [Column(Name = "external_id", Length = 50, NotNull = false)]
-        public virtual string ExternalId { get; set; } = string.Empty;
+        public virtual required string ExternalId { get; set; }
         
         [Property(NotNull = false)]
         [Column(Name = "mongo_id", Length = 50, NotNull = false)]
-        public virtual string MongoId { get; set; } = string.Empty;
+        public virtual required string MongoId { get; set; }
         
         [Property(NotNull = false)]
         [Column(Name = "name", Length = 1024, NotNull = false)]
-        public virtual string Name { get; set; } = string.Empty;
+        public virtual required string Name { get; set; }
         
         [Property(NotNull = false)]
         [Column(Name = "extension", Length = 10, NotNull = false)]
@@ -29,11 +29,11 @@ namespace TimeTracker.Business.Orm.Entities.FileStorage
         
         [Property(NotNull = true)]
         [Column(Name = "mime_type", Length = 30, NotNull = true)]
-        public virtual string MimeType { get; set; } = string.Empty;
+        public virtual required string MimeType { get; set; }
 
         [Property(NotNull = true)]
         [Column(Name = "original_file_name", Length = 1024, NotNull = true)]
-        public virtual string OriginalFileName { get; set; } = string.Empty;
+        public virtual required string OriginalFileName { get; set; }
         
         [Property(NotNull = false)]
         [Column(Name = "title", Length = 1024, NotNull = false)]
@@ -61,11 +61,19 @@ namespace TimeTracker.Business.Orm.Entities.FileStorage
             Lazy = Laziness.False,
             Cascade = "none"
         )]
-        public virtual FileStorageBucketEntity? Bucket { get; set; }
+        public virtual required FileStorageBucketEntity Bucket { get; set; }
+        
+        [ManyToOne(
+            ClassType = typeof(FileStorageDirectoryEntity), 
+            Column = "directory_id", 
+            Lazy = Laziness.False,
+            Cascade = "none"
+        )]
+        public virtual FileStorageDirectoryEntity? Directory { get; set; }
         
         #region Calculated
 
-        public virtual string InternalFilePath
+        public virtual string InternalFileName
         {
             get
             {

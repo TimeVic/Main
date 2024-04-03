@@ -8,5 +8,5 @@ public interface IFileStorageAccessKeyDao: IDomainService
 {
     Task<FileStorageAccessKeyEntity> Create(UserEntity user, DateTime? expirationTime = null);
     
-    Task<FileStorageAccessKeyEntity?> GetByKey(string key);
+    Task<FileStorageAccessKeyEntity?> GetByKey(string accessKey, string secretKey);
 }

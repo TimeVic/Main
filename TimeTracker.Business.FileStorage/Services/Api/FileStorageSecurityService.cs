@@ -18,15 +18,20 @@ public class FileStorageSecurityService: IFileStorageSecurityService
         _accessKeyDao = accessKeyDao;
     }
 
-    public UserEntity GetCurrentUser()
+    public async Task<UserEntity> GetCurrentUser()
     {
-        throw new NotImplementedException();
+        var accessKey = await _accessKeyDao.GetByKey(_requestService.GetApiKey(), _requestService.GetApiSecret());
+        if (accessKey == null)
+        {
+            throw new AuthenticationException();
+        }
+        return accessKey.User;
     }
 
     public async Task CheckIsAuthenticated()
     {
-        var accessKey = await _accessKeyDao.GetByKey(_requestService.GetApiKey());
-        if (accessKey == null || accessKey.SecretKey != _requestService.GetApiSecret())
+        var accessKey = await _accessKeyDao.GetByKey(_requestService.GetApiKey(), _requestService.GetApiSecret());
+        if (accessKey == null)
         {
             throw new AuthenticationException();
         }

@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using Serilog;
 using TimeTracker.Api.Di.Autofac.Modules;
-using TimeTracker.Api.Extensions;
 using TimeTracker.Api.Middleware;
 using TimeTracker.Business;
+using TimeTracker.Business.Extensions;
 
 namespace TimeTracker.Api;
 
@@ -23,10 +23,11 @@ public class Startup
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public virtual void ConfigureServices(IServiceCollection services)
     {
+        var assembly = typeof(ApiAssemblyMarker).Assembly;
         services.AddCors();
-        services.AddAutoMapper(typeof(ApiAssemblyMarker).Assembly);
-        services.InitControllers();
-        services.InitAuthServices(Configuration);
+        services.AddAutoMapper(assembly);
+        services.InitControllers(assembly);
+        services.InitApiAuthServices(Configuration);
     }
 
     public virtual void ConfigureContainer(ContainerBuilder containerBuilder)

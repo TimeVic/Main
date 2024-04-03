@@ -1,23 +1,25 @@
 ﻿using System.Net;
+using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
-using TimeTracker.Business.Extensions;
 
-namespace TimeTracker.Api.Extensions
+namespace TimeTracker.Business.Extensions
 {
     public static class AppInitExtensions
     {
-        public static void InitControllers(this IServiceCollection services)
+        public static void InitControllers(this IServiceCollection services, Assembly assembly)
         {
             services.AddControllers()
                 // We should provide correct assembly for the tests
-                .AddApplicationPart(typeof(TimeTracker.Api.Startup).Assembly)
+                .AddApplicationPart(assembly)
                 .ConfigureApiBehaviorOptions(options =>
                 {
                     // Disable pre-model validation of the models
@@ -59,11 +61,11 @@ namespace TimeTracker.Api.Extensions
                 });
         }
 
-        public static void InitAuthServices(this IServiceCollection services, IConfiguration configuration)
+        public static void InitApiAuthServices(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSecurityKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(
-                    configuration.GetValue<string>("App:Auth:SymmetricSecurityKey")
+                    configuration.GetValue<string>("App:Auth:SymmetricSecurityKey")!
                 )
             );
             services.AddAuthentication(options =>

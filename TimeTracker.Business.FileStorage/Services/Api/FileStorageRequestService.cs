@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using TimeTracker.Business.Common.Exceptions.Common;
+using TimeTracker.Business.FileStorage.Constants;
 using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.FileStorage.Services.Api;
 
 public class FileStorageRequestService: IFileStorageRequestService
-{
-    private const string HeaderApiKey = "x-tmv-storage-key";
-    private const string HeaderApiSecret = "x-tmv-storage-secret";
-    
+{   
     private readonly IHttpContextAccessor _httpContext;
     
     public FileStorageRequestService(
@@ -21,20 +19,20 @@ public class FileStorageRequestService: IFileStorageRequestService
     public string GetApiKey()
     {
         var headers = _httpContext.HttpContext?.Request.Headers;
-        if (headers == null || !headers.ContainsKey(HeaderApiKey) || string.IsNullOrEmpty(headers[HeaderApiKey]))
+        if (headers == null || !headers.ContainsKey(HttpConstants.HeaderApiKey) || string.IsNullOrEmpty(headers[HttpConstants.HeaderApiKey]))
         {
-            throw new DataValidationException($"{HeaderApiKey} header was not found");
+            throw new DataValidationException($"{HttpConstants.HeaderApiKey} header was not found");
         }
-        return headers[HeaderApiKey]!;
+        return headers[HttpConstants.HeaderApiKey]!;
     }
 
     public string GetApiSecret()
     {
         var headers = _httpContext.HttpContext?.Request.Headers;
-        if (headers == null || !headers.ContainsKey(HeaderApiSecret) || string.IsNullOrEmpty(headers[HeaderApiSecret]))
+        if (headers == null || !headers.ContainsKey(HttpConstants.HeaderApiSecret) || string.IsNullOrEmpty(headers[HttpConstants.HeaderApiSecret]))
         {
-            throw new DataValidationException($"{HeaderApiSecret} header was not found");
+            throw new DataValidationException($"{HttpConstants.HeaderApiSecret} header was not found");
         }
-        return headers[HeaderApiSecret]!;
+        return headers[HttpConstants.HeaderApiSecret]!;
     }
 }

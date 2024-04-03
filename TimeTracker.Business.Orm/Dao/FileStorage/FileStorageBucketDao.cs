@@ -20,6 +20,13 @@ public class FileStorageBucketDao: IFileStorageBucketDao
             .Where(item => item.Id == id || item.Name == name)
             .FirstOrDefaultAsync();
     }
+    
+    public async Task<FileStorageBucketEntity?> GetByName(UserEntity user, string name)
+    {
+        return await _sessionProvider.CurrentSession.Query<FileStorageBucketEntity>()
+            .Where(item => item.User == user && item.Name == name)
+            .FirstOrDefaultAsync();
+    }
 
     public async Task<FileStorageBucketEntity> Create(UserEntity user, string name)
     {

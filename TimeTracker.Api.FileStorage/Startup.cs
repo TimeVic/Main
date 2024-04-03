@@ -1,6 +1,9 @@
 ﻿using Autofac;
 using Serilog;
+using TimeTracker.Api.FileStorage.Di;
 using TimeTracker.Business;
+using TimeTracker.Business.Extensions;
+using TimeTracker.Business.FileStorage;
 
 namespace TimeTracker.Api.FileStorage;
 
@@ -20,17 +23,19 @@ public class Startup
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public virtual void ConfigureServices(IServiceCollection services)
     {
+        var assembly = typeof(ApiFileStorageAssemblyMarker).Assembly;
+        
         services.AddCors();
-        services.AddAutoMapper(typeof(ApiAssemblyMarker).Assembly);
-        services.InitControllers();
-        services.InitAuthServices(Configuration);
+        services.AddAutoMapper(assembly);
+        services.InitControllers(assembly);
     }
 
     public virtual void ConfigureContainer(ContainerBuilder containerBuilder)
     {
         containerBuilder
-            // .RegisterModule<ApiModule>()
-            .RegisterAssemblyModules(typeof(BusinessAssemblyMarker).Assembly);
+            .RegisterModule<ApiModule>()
+            .RegisterAssemblyModules(typeof(BusinessAssemblyMarker).Assembly)
+            .RegisterAssemblyModules(typeof(BusinessFileStorageAssemblyMarker).Assembly);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +49,7 @@ public class Startup
 
         if (_isRequestResponseLoggingEnabled)
         {
-            app.UseMiddleware<RequestResponseLoggerMiddleware>();
+            // app.UseMiddleware<RequestResponseLoggerMiddleware>();
         }
 
         app.UseAuthentication();

@@ -11,7 +11,7 @@ public class BaseStorageController: MainApiControllerBase
 {
     public BaseStorageController(ILifetimeScope scope) : base(scope)
     {
-        var securityService = scope.Resolve<IFileStorageSecurityService>();    
-        securityService.CheckIsAuthenticated().Wait();
+        // var securityService = scope.Resolve<IFileStorageSecurityService>();    
+        // securityService.CheckIsAuthenticated().Wait();
     }
 }
