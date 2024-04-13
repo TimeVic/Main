@@ -7,7 +7,7 @@ using TimeTracker.Business.Orm.Dao.FileStorage;
 
 namespace TimeTracker.Api.FileStorage.Controllers.File.Actions;
 
-public class GetHandle : IAsyncRequestHandler<GetRequest, GetResponse>
+public class GetHandle: IAsyncRequestHandler<GetRequest, GetResponse>
 {
     private readonly IFileStorageService _fileStorageService;
     private readonly IFileStorageFileDao _storageFileDao;
@@ -29,6 +29,11 @@ public class GetHandle : IAsyncRequestHandler<GetRequest, GetResponse>
         {
             throw new DataValidationException("Bucket was not found or not available for this user");
         }
+        
+        // Add file info
+        // request.HttpContext!.Response.Headers.Append(FileInfoHttpHeader.Directory, file.Directory?.FullPath);
+        // request.HttpContext!.Response.Headers.Append(FileInfoHttpHeader.FileName, file.OriginalFileName);
+        
         var fileStream = await _fileStorageService.DownloadToStream(file);
         fileStream.PrepareToCopy();
         return new GetResponse(fileStream, file.MimeType);

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using TimeTracker.Business.Common.Exceptions.Common;
-using TimeTracker.Business.FileStorage.Constants;
-using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.FileStorage.Commons.Constants;
 
 namespace TimeTracker.Business.FileStorage.Services.Api;
 
@@ -19,20 +18,20 @@ public class FileStorageRequestService: IFileStorageRequestService
     public string GetApiKey()
     {
         var headers = _httpContext.HttpContext?.Request.Headers;
-        if (headers == null || !headers.ContainsKey(HttpConstants.HeaderApiKey) || string.IsNullOrEmpty(headers[HttpConstants.HeaderApiKey]))
+        if (headers == null || !headers.ContainsKey(HttpHeader.ApiKey) || string.IsNullOrEmpty(headers[HttpHeader.ApiKey]))
         {
-            throw new DataValidationException($"{HttpConstants.HeaderApiKey} header was not found");
+            throw new DataValidationException($"{HttpHeader.ApiKey} header was not found");
         }
-        return headers[HttpConstants.HeaderApiKey]!;
+        return headers[HttpHeader.ApiKey]!;
     }
 
     public string GetApiSecret()
     {
         var headers = _httpContext.HttpContext?.Request.Headers;
-        if (headers == null || !headers.ContainsKey(HttpConstants.HeaderApiSecret) || string.IsNullOrEmpty(headers[HttpConstants.HeaderApiSecret]))
+        if (headers == null || !headers.ContainsKey(HttpHeader.ApiSecret) || string.IsNullOrEmpty(headers[HttpHeader.ApiSecret]))
         {
-            throw new DataValidationException($"{HttpConstants.HeaderApiSecret} header was not found");
+            throw new DataValidationException($"{HttpHeader.ApiSecret} header was not found");
         }
-        return headers[HttpConstants.HeaderApiSecret]!;
+        return headers[HttpHeader.ApiSecret]!;
     }
 }

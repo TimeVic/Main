@@ -17,8 +17,4 @@
         <InternalsVisibleTo Include="TimeTracker.Tests.Integration.Api" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Extensions\" />
-    </ItemGroup>
-
 </Project>

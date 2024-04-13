@@ -1,8 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
+using TimeTracker.Business.FileStorage.Constants;
 using TimeTracker.Business.FileStorage.Services.Storage;
 using TimeTracker.Business.Orm.Dao.FileStorage;
 using TimeTracker.Business.Orm.Entities.FileStorage;
 using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Seeders.Entity.GoalsTracker;
 using TimeTracker.Tests.Integration.Api.FileStorage.Core;
 
@@ -52,16 +54,20 @@ public class GetTest: BaseTest
         // Arrange
         var bucket = await _fileStorageBucketSeeder.CreateAsync(_user);
         var fileToUpload = CreateFormFile("image.jpg");
-        var uploadedFile = await _fileStorageService.Put(bucket, fileToUpload);
+        var uploadedFile = await _fileStorageService.Put(bucket, fileToUpload, "Test/My Directory");
         
         // Act
         var response = await GetRequestAsync(
             string.Format($"{Url}{bucket.Name}/{uploadedFile.ExternalId}"),
             accessKey: _accessKey
         );
-        response.EnsureSuccessStatusCode();
+        await response.GetJsonErrorAsync();
+        // response.EnsureSuccessStatusCode();
 
         var fileContent = await response.Content.ReadAsStringAsync();
         Assert.NotEmpty(fileContent);
+        
+        Assert.Equal("Test/My Directory", response.Headers.GetValues(FileInfoHttpHeader.Directory).First());
+        Assert.Equal("image.jpg", response.Headers.GetValues(FileInfoHttpHeader.FileName).First());
     }
 }

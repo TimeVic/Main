@@ -97,8 +97,8 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         urlParams ??= new Dictionary<string, string>();
         if (accessKey != null)
         {
-            HttpClient.DefaultRequestHeaders.Add(HttpConstants.HeaderApiKey, accessKey.AccessKey);
-            HttpClient.DefaultRequestHeaders.Add(HttpConstants.HeaderApiSecret, accessKey.SecretKey);
+            HttpClient.DefaultRequestHeaders.Add(HttpHeader.ApiKey, accessKey.AccessKey);
+            HttpClient.DefaultRequestHeaders.Add(HttpHeader.ApiSecret, accessKey.SecretKey);
         }
         HttpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
         HttpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "text/json");
@@ -118,8 +118,8 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
 
         if (accessKey != null)
         {
-            HttpClient.DefaultRequestHeaders.Add(HttpConstants.HeaderApiKey, accessKey.AccessKey);
-            HttpClient.DefaultRequestHeaders.Add(HttpConstants.HeaderApiSecret, accessKey.SecretKey);
+            HttpClient.DefaultRequestHeaders.Add(HttpHeader.ApiKey, accessKey.AccessKey);
+            HttpClient.DefaultRequestHeaders.Add(HttpHeader.ApiSecret, accessKey.SecretKey);
         }
         using var multipartFormContent = new MultipartFormDataContent();
         if (data != null)

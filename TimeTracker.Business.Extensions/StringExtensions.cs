@@ -145,7 +145,7 @@ namespace TimeTracker.Business.Extensions
             }
         }
 
-        public static string EnsureLeadingSlash(this string url)
+        public static string? EnsureLeadingSlash(this string? url)
         {
             if (url != null && !url.StartsWith("/"))
             {
@@ -155,7 +155,7 @@ namespace TimeTracker.Business.Extensions
             return url;
         }
 
-        public static string EnsureTrailingSlash(this string url)
+        public static string? EnsureTrailingSlash(this string? url)
         {
             if (url != null && !url.EndsWith("/"))
             {
@@ -165,7 +165,7 @@ namespace TimeTracker.Business.Extensions
             return url;
         }
 
-        public static string RemoveLeadingSlash(this string url)
+        public static string? RemoveLeadingSlash(this string? url)
         {
             if (url != null && url.StartsWith("/"))
             {
@@ -175,7 +175,7 @@ namespace TimeTracker.Business.Extensions
             return url;
         }
 
-        public static string RemoveTrailingSlash(this string url)
+        public static string? RemoveTrailingSlash(this string? url)
         {
             if (url != null && url.EndsWith("/"))
             {
@@ -185,6 +185,16 @@ namespace TimeTracker.Business.Extensions
             return url;
         }
 
+        public static string? RemoveLeadingPathSeparator(this string? url)
+        {
+            if (url != null && (url.StartsWith("/") || url.StartsWith("\\")))
+            {
+                url = url.Substring(1);
+            }
+
+            return url;
+        }
+        
         public static string CleanUrlPath(this string url)
         {
             if (String.IsNullOrWhiteSpace(url)) url = "/";
