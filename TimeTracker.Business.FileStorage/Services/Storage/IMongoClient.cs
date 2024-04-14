@@ -15,4 +15,11 @@ public interface IMongoClient: IDomainService
         string usersBucketName,
         string fileName
     );
+
+    Task Delete(string mongoObjectId);
+
+    Task<bool> IsExists(
+        string usersBucketName,
+        string fileName
+    );
 }

@@ -3,6 +3,7 @@ using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Dao.FileStorage;
 using TimeTracker.Business.Orm.Entities.FileStorage;
 
 namespace TimeTracker.Business.FileStorage.Services.Storage;
@@ -12,16 +13,19 @@ public class FileStorageService: IFileStorageService
     private readonly IMongoClient _mongoClient;
     private readonly IDbSessionProvider _dbSessionProvider;
     private readonly IFileStorageDirectoryManagerService _directoryManagerService;
+    private readonly IFileStorageFileDao _storageFileDao;
 
     public FileStorageService(
         IMongoClient mongoClient,
         IDbSessionProvider dbSessionProvider,
-        IFileStorageDirectoryManagerService directoryManagerService
+        IFileStorageDirectoryManagerService directoryManagerService,
+        IFileStorageFileDao storageFileDao
     )
     {
         _mongoClient = mongoClient;
         _dbSessionProvider = dbSessionProvider;
         _directoryManagerService = directoryManagerService;
+        _storageFileDao = storageFileDao;
     }
 
     public async Task<FileStorageFileEntity> Put(
@@ -30,17 +34,24 @@ public class FileStorageService: IFileStorageService
         string? directoryPath = null
     )
     {
+        var fileName = file.FileName;
         var directory = await _directoryManagerService.CreateRecursive(bucket, directoryPath);
+        var existsFile = await _storageFileDao.GetByName(fileName, directory);
+        if (existsFile != null)
+        {
+            await Delete(existsFile);
+        }
+
         var fileEntity = new FileStorageFileEntity()
         {
             MongoId = string.Empty,
             ExternalId = SecurityUtil.GetTimeBasedToken(),
             Bucket = bucket,
             Directory = directory,
-            OriginalFileName = file.FileName,
+            OriginalFileName = fileName,
             Name = file.Name,
             Extension = file.GetExtension(),
-            MimeType = MimeTypeHelper.GetMimeTypeByName(file.FileName),
+            MimeType = MimeTypeHelper.GetMimeTypeByName(fileName),
             CreateTime = DateTime.UtcNow,
             UpdateTime = DateTime.UtcNow
         };
@@ -68,5 +79,11 @@ public class FileStorageService: IFileStorageService
             file.Bucket!.Name,
             file.InternalFileName
         );
+    }
+    
+    public async Task Delete(FileStorageFileEntity file)
+    {
+        await _mongoClient.Delete(file.MongoId);
+        await _dbSessionProvider.CurrentSession.DeleteAsync(file);
     }
 }

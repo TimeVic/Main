@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using TimeTracker.Business.FileStorage.Constants;
+using TimeTracker.Business.FileStorage.Commons.Constants;
 using TimeTracker.Business.FileStorage.Services.Storage;
 using TimeTracker.Business.Orm.Dao.FileStorage;
 using TimeTracker.Business.Orm.Entities.FileStorage;
@@ -61,8 +61,7 @@ public class GetTest: BaseTest
             string.Format($"{Url}{bucket.Name}/{uploadedFile.ExternalId}"),
             accessKey: _accessKey
         );
-        await response.GetJsonErrorAsync();
-        // response.EnsureSuccessStatusCode();
+        response.EnsureSuccessStatusCode();
 
         var fileContent = await response.Content.ReadAsStringAsync();
         Assert.NotEmpty(fileContent);

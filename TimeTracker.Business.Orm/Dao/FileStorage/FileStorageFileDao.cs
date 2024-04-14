@@ -21,4 +21,11 @@ public class FileStorageFileDao: IFileStorageFileDao
             .Where(item => item.ExternalId == externalId && item.Bucket!.Name == bucket)
             .FirstOrDefaultAsync();
     }
+    
+    public async Task<FileStorageFileEntity?> GetByName(string fileName, FileStorageDirectoryEntity? directory = null)
+    {
+        return await _sessionProvider.CurrentSession.Query<FileStorageFileEntity>()
+            .Where(item => item.Directory == directory && item.OriginalFileName == fileName)
+            .FirstOrDefaultAsync();
+    }
 }

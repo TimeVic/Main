@@ -58,6 +58,20 @@ public class MongoClient: IMongoClient
         );
     }
     
+    public async Task Delete(string mongoObjectId)
+    {
+        await _mongoFsBucket.DeleteAsync(new ObjectId(mongoObjectId));
+    }
+    
+    public async Task<bool> IsExists(
+        string usersBucketName,
+        string fileName
+    )
+    {
+        var filter = Builders<GridFSFileInfo>.Filter.Eq(info => info.Filename, PrepareFileName(usersBucketName, fileName));
+        return (await _mongoFsBucket.FindAsync(filter)).FirstOrDefault() != null;
+    }
+    
     public async Task<Stream> DownloadToStream(
         string usersBucketName,
         string fileName

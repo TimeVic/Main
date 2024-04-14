@@ -11,4 +11,6 @@ public interface IFileStorageService: IDomainService
     Task<FileStorageFileEntity> Put(FileStorageFileEntity file, Stream fileStream);
 
     Task<Stream> DownloadToStream(FileStorageFileEntity file);
+
+    Task Delete(FileStorageFileEntity file);
 }

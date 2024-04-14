@@ -16,12 +16,14 @@ public class PutTest: BaseTest
     private readonly IUserSeeder _userSeeder;
     private readonly UserEntity _user;
     private readonly FileStorageBucketEntity _bucket;
+    private readonly IMongoClient _mongoClient;
 
     public PutTest(): base()
     {
         _fileStorageService = Scope.Resolve<IFileStorageService>();
         _fileStorageBucketSeeder = Scope.Resolve<IFileStorageBucketSeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
+        _mongoClient = Scope.Resolve<IMongoClient>();
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _bucket = _fileStorageBucketSeeder.CreateAsync(_user).Result;
@@ -59,5 +61,50 @@ public class PutTest: BaseTest
         // Assert
         Assert.Equal("application/pdf", actualFile.MimeType);
         Assert.Equal("Test Directory", actualFile.Directory!.Name);
+    }
+    
+    [Fact]
+    public async Task ShouldRemovePreviousFileWithSameFileNameWithoutDirectory()
+    {
+        // Arrange
+        var fileName = "Test File.png";
+        var file = CreateFormFile(fileName);
+        var previousFile = await _fileStorageService.Put(_bucket, file);
+        Assert.True(await _mongoClient.IsExists(previousFile.Bucket.Name, previousFile.InternalFileName));
+        
+        // Act
+        file = CreateFormFile(fileName);
+        var actualFile = await _fileStorageService.Put(_bucket, file);
+
+        // Assert
+        Assert.NotEqual(previousFile.Id, actualFile.Id);
+        Assert.Null(await DbSessionProvider.CurrentSession.GetAsync<FileStorageFileEntity>(previousFile.Id));
+        Assert.False(await _mongoClient.IsExists(previousFile.Bucket.Name, previousFile.InternalFileName));
+    }
+    
+    [Fact]
+    public async Task ShouldRemovePreviousFileWithSameFileNameInDirectory()
+    {
+        // Arrange
+        var fileName = "Test File.png";
+        var directory = "Test Directory1/Test Directory2";
+        var otherDirectory = "Test Directory1/Test Directory3";
+        
+        var file = CreateFormFile(fileName);
+        var previousFile = await _fileStorageService.Put(_bucket, file, directory);
+        Assert.True(await _mongoClient.IsExists(previousFile.Bucket.Name, previousFile.InternalFileName));
+        
+        var otherFile = await _fileStorageService.Put(_bucket, file, otherDirectory);
+        Assert.True(await _mongoClient.IsExists(previousFile.Bucket.Name, previousFile.InternalFileName));
+        
+        // Act
+        file = CreateFormFile(fileName);
+        var actualFile = await _fileStorageService.Put(_bucket, file, directory);
+
+        // Assert
+        Assert.NotEqual(previousFile.Id, actualFile.Id);
+        Assert.Null(await DbSessionProvider.CurrentSession.GetAsync<FileStorageFileEntity>(previousFile.Id));
+        Assert.False(await _mongoClient.IsExists(previousFile.Bucket.Name, previousFile.InternalFileName));
+        Assert.True(await _mongoClient.IsExists(otherFile.Bucket.Name, otherFile.InternalFileName));
     }
 }
