@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:noble
 WORKDIR /app
 USER root
 
@@ -18,9 +18,9 @@ RUN apt-get install -y tzdata lsb-release
 #RUN echo "fs.inotify.max_user_instances=524288" >> /etc/sysctl.conf
 #RUN sysctl -p
 
-# Install .Net Core 7.0
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-RUN curl https://packages.microsoft.com/config/ubuntu/20.10/prod.list | tee /etc/apt/sources.list.d/msprod.list
+# Install .Net Core 8.0
+#RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+#RUN curl https://packages.microsoft.com/config/ubuntu/20.10/prod.list | tee /etc/apt/sources.list.d/msprod.list
 
 # Install Redis repositories
 RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
