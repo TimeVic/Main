@@ -96,7 +96,7 @@ node('testing-node') {
 
             runStage(Stage.INIT_DB) {
                 sh 'psql --version'
-                sh 'pg_ctlcluster 15 main start'
+                sh 'pg_ctlcluster 16 main start'
                 sh 'pg_isready'
                 sh "sudo -u postgres psql -c \"ALTER USER postgres PASSWORD '$postresUserPassword';\""
                 sh "PGPASSWORD=postgres psql -h localhost --username=$postresUserPassword --dbname=$postresUserPassword -c \"select 1\""
