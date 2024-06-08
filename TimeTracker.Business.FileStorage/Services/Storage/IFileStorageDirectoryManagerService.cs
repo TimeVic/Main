@@ -8,4 +8,6 @@ public interface IFileStorageDirectoryManagerService: IDomainService
     Task<FileStorageDirectoryEntity?> CreateRecursive(FileStorageBucketEntity bucket, string? path);
 
     ICollection<FileStorageDirectoryEntity> GetTreeBranchByPath(FileStorageBucketEntity bucket, string? path);
+
+    ICollection<FileStorageDirectoryEntity> GetTreeBranchAsListByPath(FileStorageBucketEntity bucket, string? path);
 }

@@ -8,7 +8,7 @@ using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.FileStorage.FileStorageDirectoryManagerServiceTests;
 
-public class GetRecursiveByPathTest: BaseTest
+public class GetTreeBranchAsListByPathTest: BaseTest
 {
     private readonly IFileStorageService _fileStorageService;
     private readonly IFileStorageBucketSeeder _fileStorageBucketSeeder;
@@ -17,7 +17,7 @@ public class GetRecursiveByPathTest: BaseTest
     private readonly FileStorageBucketEntity _bucket;
     private readonly IFileStorageDirectoryManagerService _directoryManagerService;
 
-    public GetRecursiveByPathTest(): base()
+    public GetTreeBranchAsListByPathTest(): base()
     {
         _fileStorageService = Scope.Resolve<IFileStorageService>();
         _fileStorageBucketSeeder = Scope.Resolve<IFileStorageBucketSeeder>();
@@ -36,15 +36,20 @@ public class GetRecursiveByPathTest: BaseTest
         await _directoryManagerService.CreateRecursive(_bucket, "Test dir 1/Test Sub Dir2");
         await _directoryManagerService.CreateRecursive(_bucket, " Test dir 2/Test Sub Dir3");
         await _directoryManagerService.CreateRecursive(_bucket, "Test dir 3/Test Sub Dir3");
+        await _directoryManagerService.CreateRecursive(_bucket, "Test dir 3/Test Sub Dir3/Test sub dir 4");
         
         // Act
-        var actualTree = _directoryManagerService.GetTreeBranchByPath(_bucket, "");
+        var actualList = _directoryManagerService.GetTreeBranchAsListByPath(_bucket, "");
 
         // Assert
-        Assert.Equal(3, actualTree.Count);
-        Assert.Contains(actualTree, item => item.Name == "Test dir 1");
-        Assert.Contains(actualTree, item => item.Name == "Test dir 2");
-        Assert.Contains(actualTree, item => item.Name == "Test dir 3");
+        Assert.Equal(7, actualList.Count);
+        Assert.Contains(actualList, item => item.Name == "Test dir 1");
+        Assert.Contains(actualList, item => item.Name == "Test dir 2");
+        Assert.Contains(actualList, item => item.Name == "Test dir 3");
+        Assert.Contains(actualList, item => item.Name == "Test Sub Dir1");
+        Assert.Contains(actualList, item => item.Name == "Test Sub Dir2");
+        Assert.Contains(actualList, item => item.Name == "Test Sub Dir3");
+        Assert.Contains(actualList, item => item.Name == "Test sub dir 4");
     }
     
     [Fact]

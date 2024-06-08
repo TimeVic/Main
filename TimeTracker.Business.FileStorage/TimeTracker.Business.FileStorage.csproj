@@ -9,7 +9,7 @@
     <ItemGroup>
       <PackageReference Include="Autofac" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
-      <PackageReference Include="MongoDB.Driver.GridFS" Version="2.24.0" />
+      <PackageReference Include="MongoDB.Driver.GridFS" Version="2.25.0" />
     </ItemGroup>
 
     <ItemGroup>

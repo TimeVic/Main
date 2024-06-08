@@ -56,10 +56,10 @@ public class FileStorageDirectoryManagerService: IFileStorageDirectoryManagerSer
         {
             return directoriesTree;
         }
-        return GetRecursive(bucket.DirectoriesTree, directoriesToFind);
+        return GetTreeBranchByPathRecursive(bucket.DirectoriesTree, directoriesToFind);
     }
     
-    private ICollection<FileStorageDirectoryEntity> GetRecursive(
+    private ICollection<FileStorageDirectoryEntity> GetTreeBranchByPathRecursive(
         ICollection<FileStorageDirectoryEntity> currentTreeBranch,
         string[] directories
     )
@@ -75,7 +75,35 @@ public class FileStorageDirectoryManagerService: IFileStorageDirectoryManagerSer
             return new List<FileStorageDirectoryEntity>();
         }
 
-        return GetRecursive(parentDir.Children, directories.Skip(1).ToArray());
+        return GetTreeBranchByPathRecursive(parentDir.Children, directories.Skip(1).ToArray());
+    }
+    
+    public ICollection<FileStorageDirectoryEntity> GetTreeBranchAsListByPath(FileStorageBucketEntity bucket, string? path)
+    {
+        var resultList = new List<FileStorageDirectoryEntity>();
+        var pathDirectories = GetTreeBranchByPath(bucket, path);
+        foreach (var directory in pathDirectories)
+        {
+            resultList.Add(directory);
+            resultList = resultList.Concat(
+                GetTreeBranchAsListByPathRecursive(directory.Children)    
+            ).ToList();
+        }
+        return resultList;
+    }
+    
+    private ICollection<FileStorageDirectoryEntity> GetTreeBranchAsListByPathRecursive(
+        ICollection<FileStorageDirectoryEntity> directories
+    )
+    {
+        var actualList = new List<FileStorageDirectoryEntity>();
+        foreach (var directory in directories)
+        {
+            actualList.Add(directory);
+            var children = GetTreeBranchAsListByPathRecursive(directory.Children);
+            actualList = actualList.Concat(children).ToList();
+        }
+        return actualList;
     }
     
     #endregion
@@ -90,8 +118,8 @@ public class FileStorageDirectoryManagerService: IFileStorageDirectoryManagerSer
 
         var trimmedPath = path.Replace("\\", "/").TrimLastSlash().RemoveLeadingSlash();
         return (trimmedPath ?? string.Empty).Split('/')
-            .Where(item => !string.IsNullOrWhiteSpace(item))
             .Select(item => item.Trim())
+            .Where(item => !string.IsNullOrWhiteSpace(item))
             .ToArray();
     }
 }
