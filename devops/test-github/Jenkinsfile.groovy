@@ -97,7 +97,6 @@ node('testing-node') {
             runStage(Stage.INIT_DB) {
                 sh 'psql --version'
                 sh 'pg_ctlcluster 16 main start'
-                
                 sh 'pg_isready'
                 sh "sudo -u postgres psql -c \"ALTER USER postgres PASSWORD '$postresUserPassword';\""
                 sh "PGPASSWORD=postgres psql -h localhost --username=$postresUserPassword --dbname=$postresUserPassword -c \"select 1\""
@@ -205,7 +204,8 @@ def runStage(Stage stageAction, Closure callback) {
         try {
             callback()
         } catch (Exception e) {
-            throw new Exception(e.getMessage())
+            error e.getMessage()
+            currentBuild.result = 'FAILED'
         }
     }
 }
