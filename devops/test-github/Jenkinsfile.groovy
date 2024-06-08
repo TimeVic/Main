@@ -39,7 +39,10 @@ node('testing-node') {
                 git config --global http.maxRequestBuffer 1024M
                 git config --global core.compression 9
             """
-            checkout scm
+            checkout([
+                $class: 'GitSCM',
+                branches: [[name: "${env.GIT_BRANCH_CURRENT}"]]
+            ])
         }
         
         runStage(Stage.SET_VARS) {
@@ -97,6 +100,7 @@ node('testing-node') {
             runStage(Stage.INIT_DB) {
                 sh 'psql --version'
                 sh 'pg_ctlcluster 16 main start'
+                
                 sh 'pg_isready'
                 sh "sudo -u postgres psql -c \"ALTER USER postgres PASSWORD '$postresUserPassword';\""
                 sh "PGPASSWORD=postgres psql -h localhost --username=$postresUserPassword --dbname=$postresUserPassword -c \"select 1\""
