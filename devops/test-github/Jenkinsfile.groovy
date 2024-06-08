@@ -41,7 +41,7 @@ node('testing-node') {
             """
             checkout([
                 $class: 'GitSCM',
-                branches: [[name: "${env.GIT_BRANCH_CURRENT}"]]
+                branches: [[name: "${env.GIT_BRANCH}"]]
             ])
         }
         
