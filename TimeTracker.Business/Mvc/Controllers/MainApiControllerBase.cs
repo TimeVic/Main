@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Persistence.Transactions.Behaviors;
 
-namespace TimeTracker.Business.Common.Mvc.Controllers;
+namespace TimeTracker.Business.Mvc.Controllers;
 
 public class MainApiControllerBase: ApiControllerBase
 {

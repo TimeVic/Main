@@ -76,9 +76,4 @@
       <Compile Remove="Services\UI\DragAndDropService.cs" />
       <Compile Remove="Pages\Dashboard\Calendar\CalendarPage.razor.cs" />
     </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\sample-data\weather.json" />
-    </ItemGroup>
-
 </Project>

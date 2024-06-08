@@ -31,6 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\AspNetCore.ApiControllers.Abstractions\AspNetCore.ApiControllers.Abstractions.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Common\TimeTracker.Business.Common.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Notifications\TimeTracker.Business.Notifications.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Orm\TimeTracker.Business.Orm.csproj" />
