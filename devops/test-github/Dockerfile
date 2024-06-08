@@ -37,7 +37,9 @@ RUN apt update
 RUN apt-get install -y net-tools
 RUN apt-get install -y sudo
 RUN apt-get install -y default-jre 
-RUN apt-get postgresql postgresql-client redis 
+RUN apt-get install -y postgresql
+RUN apt-get install -y postgresql-client
+RUN apt-get install -y redis 
 RUN apt-get install -y dotnet-sdk-8.0
 
 # Create dirs
