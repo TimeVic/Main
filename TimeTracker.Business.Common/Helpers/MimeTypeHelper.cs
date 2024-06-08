@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Business.Helpers;
+﻿namespace TimeTracker.Business.Common.Helpers;
 
 public static class MimeTypeHelper
 {
@@ -572,7 +572,7 @@ public static class MimeTypeHelper
             #endregion
         };
 
-    public static string GetMimeType(string extension)
+    public static string GetMimeTypeByExtension(string extension)
     {
         if (extension == null)
         {
@@ -586,5 +586,11 @@ public static class MimeTypeHelper
 
         string mime;
         return Mappings.TryGetValue(extension.Trim().ToLower(), out mime) ? mime : "application/octet-stream";
+    }
+    
+    public static string GetMimeTypeByName(string fileName)
+    {
+        var extension = Path.GetExtension(fileName);
+        return GetMimeTypeByExtension(extension);
     }
 }

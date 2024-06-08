@@ -6,10 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using TimeTracker.Api;
-using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Helpers;
-using TimeTracker.Business.Services.ExternalClients.ClickUp;
 
 namespace TimeTracker.Tests.Integration.Api;
 

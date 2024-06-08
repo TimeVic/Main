@@ -61,7 +61,8 @@ public partial class TasksListTree
 
     private long _projectId = 0;
     private long? _taskListId = null;
-    private MudTabs _tabsPanel;
+
+    private MudList _taskListList;
 
     public long _selectedTaskListId
     {
@@ -80,10 +81,6 @@ public partial class TasksListTree
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _tasksListState.StateChanged += (sender, args) =>
-        {
-            _tabsPanel.ActivatePanel((object)_selectedTaskListId);
-        };
     }
 
     private void ShowAddTaskListModal()

@@ -6,6 +6,7 @@ using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
+using TimeTracker.Business.Mvc.Controllers;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Workspace;
 

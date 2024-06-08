@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
+using TimeTracker.Business.Mvc.Controllers;
 
 namespace TimeTracker.Api.Controllers.Dashboard.User;
 

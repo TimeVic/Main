@@ -6,16 +6,16 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<RadzenCard class="no-gutters w-100">
-    <RadzenButton
+<MudCard class="no-gutters w-100">
+    <MudButton
         Click="NavigateToTasksPage"
         Icon="arrow_back_ios"
         ButtonStyle="ButtonStyle.Light"
         Text="To list"
     />
-</RadzenCard>
+</MudCard>
 
-<RadzenCard class="no-gutters mt-1 ml-2 w-100">
+<MudCard class="no-gutters mt-1 ml-2 w-100">
     @if (_isLoading)
     {
         <MudProgressCircular Color="Color.Info" Indeterminate="true" />
@@ -24,4 +24,4 @@
     {
         <UpdateTaskForm Task="_task"/>
     }
-</RadzenCard>
+</MudCard>

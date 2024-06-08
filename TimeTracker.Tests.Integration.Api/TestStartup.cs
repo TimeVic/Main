@@ -9,6 +9,7 @@ using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.ExternalClients.Jira;
 using TimeTracker.Business.Services.ExternalClients.Redmine;
 using TimeTracker.Business.Testing;
+using TimeTracker.Business.Testing.Extensions;
 
 namespace TimeTracker.Tests.Integration.Api;
 
@@ -21,15 +22,6 @@ public class TestStartup: Startup
     public override void ConfigureContainer(ContainerBuilder builder)
     {
         base.ConfigureContainer(builder);
-        builder.RegisterAssemblyModules(
-            typeof(BusinessAssemblyMarker).Assembly,
-            typeof(BusinessTestingAssemblyMarker).Assembly
-        );
-        builder.RegisterType<FakeReCaptchaService>().As<IReCaptchaService>().InstancePerDependency();
-        builder.RegisterType<SmtpClientServiceMock>().As<ISmtpClientService>().InstancePerLifetimeScope();
-        builder.RegisterType<FirebaseClientServiceMock>().As<IFirebaseClientService>().InstancePerLifetimeScope();
-        builder.RegisterType<ClickUpClientMock>().As<IClickUpClient>().InstancePerLifetimeScope();
-        builder.RegisterType<RedmineClientMock>().As<IRedmineClient>().InstancePerLifetimeScope();
-        builder.RegisterType<JiraClientMock>().As<IJiraClient>().InstancePerLifetimeScope();
+        builder.ConfigureTestingScope();
     }
 }

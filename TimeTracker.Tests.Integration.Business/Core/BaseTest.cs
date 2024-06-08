@@ -8,6 +8,7 @@ using Serilog.Extensions.Autofac.DependencyInjection;
 using TimeTracker.Business;
 using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Clients.Smtp;
+using TimeTracker.Business.FileStorage;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
@@ -48,6 +49,7 @@ public abstract class BaseTest: IDisposable
         
         builder.RegisterAssemblyModules(
             typeof(BusinessAssemblyMarker).Assembly,
+            typeof(BusinessFileStorageAssemblyMarker).Assembly,
             typeof(BusinessTestingAssemblyMarker).Assembly
         );
         
@@ -79,8 +81,8 @@ public abstract class BaseTest: IDisposable
         _dbCleanUpService = Scope.Resolve<IDbCleanUpService>();
         _dbCleanUpService.CleanUp().Wait();
         
-        SmtpClientServiceMock = Scope.Resolve<ISmtpClientService>() as SmtpClientServiceMock;
-        FirebaseClientService = Scope.Resolve<IFirebaseClientService>() as FirebaseClientServiceMock;
+        SmtpClientServiceMock = (Scope.Resolve<ISmtpClientService>() as SmtpClientServiceMock)!;
+        FirebaseClientService = (Scope.Resolve<IFirebaseClientService>() as FirebaseClientServiceMock)!;
         
         _queueDao = Scope.Resolve<IQueueDao>();
         SmtpClientServiceMock.Reset();
