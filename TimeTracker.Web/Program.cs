@@ -38,7 +38,7 @@ builder.Services.AddScoped(sp => new HttpClient()
 // Init Environment config file 
 var webHttp = new HttpClient()
 {
-    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+    BaseAddresss = new Uri(builder.HostEnvironment.BaseAddress)
 };
 var configurationFile = "Debug";
 #if IS_RELEASE_BUILD
