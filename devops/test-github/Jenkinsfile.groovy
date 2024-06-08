@@ -41,10 +41,18 @@ node('testing-node') {
             """
             echo "**** Branch is ${env.BRANCH_NAME} ****"
             echo "**** scm.branches is ${scm.branches} ****"
-            echo "**** scm.userRemoteConfigs[0] is ${scm.userRemoteConfigs[0]} ****"
+
+            println params
+            println env
+            println scm
+
             checkout([
-                $class: 'GitSCM',
-                branches: [[name: "${env.GIT_BRANCH}"]]
+                $class: 'GitSCM', 
+                branches: [[name: "FETCH_HEAD"]],
+                extensions: [[$class: 'LocalBranch']],
+                userRemoteConfigs: [[
+                    refspec: "+refs/pull/${params.PR_NUMBER}/head:refs/remotes/origin/PR-${params.PR_NUMBER}"
+                ]]
             ])
         }
         
