@@ -39,7 +39,10 @@ node('testing-node') {
                 git config --global http.maxRequestBuffer 1024M
                 git config --global core.compression 9
             """
-            checkout scm
+            checkout([
+                $class: 'GitSCM',
+                branches: [[name: "${env.GIT_BRANCH_CURRENT}"]]
+            ])
         }
         
         runStage(Stage.SET_VARS) {
