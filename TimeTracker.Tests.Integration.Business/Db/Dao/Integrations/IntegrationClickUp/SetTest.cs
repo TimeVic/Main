@@ -7,6 +7,9 @@ using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
 using System.Threading.Tasks;
+using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Tests.Integration.Business.Db.Dao.Integrations.IntegrationClickUp;
 

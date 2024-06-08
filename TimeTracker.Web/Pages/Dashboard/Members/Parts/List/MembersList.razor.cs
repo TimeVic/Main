@@ -1,7 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
-using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
 using TimeTracker.Business.Common.Constants;
@@ -47,53 +45,29 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
             );
         }
         
-        private async Task OnDeleteItemAsync(WorkspaceMembershipDto item)
+        private void OnProjectsChanged(IEnumerable<ProjectDto> projects)
         {
-            var isOk = await DialogService.Confirm(
-                "Are you sure you want to remove this item?",
-                "Delete confirmation",
-                new ConfirmOptions()
-                {
-                    OkButtonText = "Delete",
-                    CancelButtonText = "Cancel"
-                }
-            );
+            _selectedProjects = projects;
+        }
+
+        private async Task OnAdd()
+        {
+            await ModalDialogService.ShowAddWorkspaceMembershipModal();
+        }
+
+        private async Task OnEdit(WorkspaceMembershipDto item)
+        {
+            await ModalDialogService.ShowUpdateWorkspaceMembershipModal(item);
+        }
+
+        private async Task OnDelete(WorkspaceMembershipDto item)
+        {
+            var isOk = await ModalDialogService.ShowDeleteConfirmationDialog();
             if (isOk.HasValue && isOk.Value)
             {
                 Dispatcher.Dispatch(new DeleteMemberAction(item));
             }
             await Task.CompletedTask;
-        }
-        
-        private async Task ShowEditModal(WorkspaceMembershipDto item)
-        {
-            await DialogService.OpenAsync<MemberAccessForm>(
-                "Change access",
-                parameters: new Dictionary<string, object>()
-                {
-                    { "WorkspaceMembership", item }
-                },
-                options: new DialogOptions
-                {
-                    Width = "600px",
-                    Height = "400px",
-                    Resizable = true, 
-                    Draggable = false
-                }
-            );
-        }
-
-        private async Task ShowAddModal()
-        {
-            await DialogService.OpenAsync<AddMemberForm>(
-                "Add new member",
-                options: new DialogOptions { Width = "400px", Height = "300px", Resizable = true, Draggable = false }
-            );
-        }
-        
-        private void OnProjectsChanged(IEnumerable<ProjectDto> projects)
-        {
-            _selectedProjects = projects;
         }
     }
 }

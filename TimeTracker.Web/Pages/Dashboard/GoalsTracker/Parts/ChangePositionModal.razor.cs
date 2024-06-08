@@ -1,0 +1,34 @@
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
+using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
+using TimeTracker.Web.Store.GoalsTracker;
+
+namespace TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts;
+
+public partial class ChangePositionModal
+{
+    [Parameter]
+    public GoalsTrackerDto Tracker { get; set; }
+    
+    [CascadingParameter] 
+    MudDialogInstance MudDialog { get; set; }
+
+    public IList<GoalsTrackerItemDto> _goals { get; set; } = new List<GoalsTrackerItemDto>();
+    
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _goals = Tracker.SortedItems.ToList();
+    }
+
+    private void Submit()
+    {
+        Dispatcher.Dispatch(new ChangePositionsAction(_goals));
+        OnCloseModal();
+    }
+
+    private void OnCloseModal()
+    {
+        MudDialog.Close();
+    }
+}

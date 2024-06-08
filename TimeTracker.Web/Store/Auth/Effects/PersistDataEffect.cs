@@ -1,5 +1,5 @@
 ﻿using Fluxor;
-using TimeTracker.Web.Store.Common.Actions;
+using TimeTracker.Web.Store.Common;
 using TimeTracker.Web.Store.Common.Effects;
 
 namespace TimeTracker.Web.Store.Auth.Effects;

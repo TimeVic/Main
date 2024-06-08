@@ -98,7 +98,7 @@ namespace TimeTracker.Business.Extensions
 
         public static string TruncateAndAddDots(this string value, int maxLength)
         {
-            return value.Length <= maxLength ? value : value.Substring(0, maxLength) + " ...";
+            return value.Length <= maxLength ? value : value.Substring(0, maxLength) + "...";
         }
 
         public static string TrimLastSlash(this string value)
@@ -145,7 +145,7 @@ namespace TimeTracker.Business.Extensions
             }
         }
 
-        public static string EnsureLeadingSlash(this string url)
+        public static string? EnsureLeadingSlash(this string? url)
         {
             if (url != null && !url.StartsWith("/"))
             {
@@ -155,7 +155,7 @@ namespace TimeTracker.Business.Extensions
             return url;
         }
 
-        public static string EnsureTrailingSlash(this string url)
+        public static string? EnsureTrailingSlash(this string? url)
         {
             if (url != null && !url.EndsWith("/"))
             {
@@ -165,7 +165,7 @@ namespace TimeTracker.Business.Extensions
             return url;
         }
 
-        public static string RemoveLeadingSlash(this string url)
+        public static string? RemoveLeadingSlash(this string? url)
         {
             if (url != null && url.StartsWith("/"))
             {
@@ -175,7 +175,7 @@ namespace TimeTracker.Business.Extensions
             return url;
         }
 
-        public static string RemoveTrailingSlash(this string url)
+        public static string? RemoveTrailingSlash(this string? url)
         {
             if (url != null && url.EndsWith("/"))
             {
@@ -185,6 +185,16 @@ namespace TimeTracker.Business.Extensions
             return url;
         }
 
+        public static string? RemoveLeadingPathSeparator(this string? url)
+        {
+            if (url != null && (url.StartsWith("/") || url.StartsWith("\\")))
+            {
+                url = url.Substring(1);
+            }
+
+            return url;
+        }
+        
         public static string CleanUrlPath(this string url)
         {
             if (String.IsNullOrWhiteSpace(url)) url = "/";
@@ -227,6 +237,13 @@ namespace TimeTracker.Business.Extensions
                 .Replace("\t", "");
         }
         
+        public static string RemoveNewLineSymbolsWithChars(this string str)
+        {
+            return str.RemoveNewLineSymbols()
+                .Replace("\\n", "\n")
+                .Replace("\\r", "\n");
+        }
+        
         public static string FirstCharToUpper(this string input) =>
             input switch
             {
@@ -242,16 +259,32 @@ namespace TimeTracker.Business.Extensions
             var dots = isAddDots ? "..." : "";
             return value.Length <= maxLength ? value : $"{value[..maxLength]}${dots}"; 
         }
-        
-        public static string RemoveNewLines(this string value)
-        {
-            return value.Replace("\n", "")
-                .Replace("\r", ""); 
-        }
-        
+
         public static byte[] GetUtf8Bytes(this string value)
         {
             return Encoding.UTF8.GetBytes(value);
+        }
+        
+        public static string FirstChar(this string value)
+        {
+            if (String.IsNullOrEmpty(value))
+                return string.Empty;
+
+            return value.Substring(0, 1);
+        }
+        
+        public static int CountLines(this string str)
+        {
+            if (str == null)
+                throw new ArgumentNullException("str");
+            if (str == string.Empty)
+                return 0;
+            int index = -1;
+            int count = 0;
+            while (-1 != (index = str.IndexOf(Environment.NewLine, index + 1, StringComparison.Ordinal)))
+                count++;
+
+            return count + 1;
         }
     }
 }

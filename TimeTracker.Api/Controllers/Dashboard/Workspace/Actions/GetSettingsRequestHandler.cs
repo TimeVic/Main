@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dao.Workspace;
 using TimeTracker.Business.Services.ExternalClients.Redmine;
 using TimeTracker.Business.Services.Http;
@@ -53,10 +54,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
 
             var redmineSettings = workspace.GetRedmineSettings(user.Id);
             var clickUpSettings = workspace.GetClickUpSettings(user.Id);
+            var jiraSettings = workspace.GetJiraSettings(user.Id);
             return new GetIntegrationSettingsResponse()
             {
                 IntegrationRedmine = _mapper.Map<WorkspaceSettingsRedmineDto>(redmineSettings),
                 IntegrationClickUp = _mapper.Map<WorkspaceSettingsClickUpDto>(clickUpSettings),
+                IntegrationJira = _mapper.Map<WorkspaceSettingsJiraDto>(jiraSettings),
             };
         }
     }

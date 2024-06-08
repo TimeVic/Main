@@ -3,13 +3,20 @@ using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
+using TimeTracker.Business.Common.Constants.Task;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
 
@@ -74,10 +81,11 @@ public class GetListTest: BaseTest
         
         Assert.All(actualDto.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.True(item.TaskId > 0);
             Assert.NotEmpty(item.Title);
             Assert.NotNull(item.TaskList);
             Assert.NotEmpty(item.Description);
+            Assert.Equal(TaskPriority.Medium, item.Priority);
             Assert.Equal(_taskList.Id, item.TaskList.Id);
         });
         Assert.Contains(actualDto.Items, item =>
@@ -86,6 +94,40 @@ public class GetListTest: BaseTest
         });
     }
 
+    [Fact]
+    public async Task ShouldSortByPriority()
+    {
+        var expectedCounter = 6;
+        var urgentTasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        foreach (var task in urgentTasks)
+        {
+            task.Priority = TaskPriority.Urgent;
+        }
+        var mediumTasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
+        foreach (var task in mediumTasks)
+        {
+            task.Priority = TaskPriority.Medium;
+        }
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(12, actualDto.TotalCount);
+        
+        Assert.All(actualDto.Items.Take(6).ToList(), item =>
+        {
+            Assert.Equal(TaskPriority.Urgent, item.Priority);
+        });
+        Assert.All(actualDto.Items.Skip(6).Take(6).ToList(), item =>
+        {
+            Assert.Equal(TaskPriority.Medium, item.Priority);
+        });
+    }
+    
     [Fact]
     public async Task ShouldFilterByAssignee()
     {
@@ -109,19 +151,19 @@ public class GetListTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldFilterByIsDone()
+    public async Task ShouldFilterByStatus()
     {
         var expectedCounter = 7;
         var otherTasks = await _taskSeeder.CreateSeveralAsync(_taskList, 4);
         foreach (var task in otherTasks)
         {
-            task.IsDone = false;
+            task.Status = TaskStatus.Done;
             await DbSessionProvider.CurrentSession.SaveAsync(task);
         }
         var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
         foreach (var task in tasks)
         {
-            task.IsDone = true;
+            task.Status = TaskStatus.InProgress;;
             await DbSessionProvider.CurrentSession.SaveAsync(task);
         }
         
@@ -130,7 +172,7 @@ public class GetListTest: BaseTest
             TaskListId = _taskList.Id,
             Filter = new GetListFilterRequest()
             {
-                IsDone = true
+                Status = TaskStatus.InProgress
             }
         });
         response.EnsureSuccessStatusCode();
@@ -247,4 +289,5 @@ public class GetListTest: BaseTest
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Contains(actualDto.Items, item => item.Tags.Any());
     }
+    
 }

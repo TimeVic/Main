@@ -1,6 +1,8 @@
 ﻿using NHibernate.Transform;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Orm.Dao.Tasks;
 
@@ -44,8 +46,10 @@ public class TaskHistoryItemDao: ITaskHistoryItemDao
             Description = task.Description,
             Tags = task.TagsString,
             Attachments = task.AttachmentsString,
-            NotificationTime = task.NotificationTime,
-            IsDone = task.IsDone,
+            StartTime = task.StartTime,
+            EndTime = task.EndTime,
+            Status = task.Status,
+            Priority = task.Priority,
             IsArchived = task.IsArchived,
             ExternalTaskId = task.ExternalTaskId,
             AssigneeUser = task.User,

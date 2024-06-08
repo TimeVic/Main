@@ -1,10 +1,15 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
-using Radzen.Blazor;
+using MudBlazor;
+using MudBlazor.Utilities;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Business.Extensions;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
+using TimeTracker.Web.Store.Dashboard;
+using TimeTracker.Web.Store.Tasks;
 using TimeTracker.Web.Store.WorkspaceMemberships;
 using SetListItemAction = TimeTracker.Web.Store.Tasks.SetListItemAction;
 
@@ -16,23 +21,31 @@ public partial class UpdateTaskForm
     public TaskDto Task { get; set; }
     
     [Inject]
-    public IState<TimeTracker.Web.Store.TasksList.TasksListState> _tasksListState { get; set; }
+    public IState<Store.TasksList.TasksListState> _tasksListState { get; set; }
 
+    [Inject]
+    public IState<Store.Tasks.TasksState> _tasksState { get; set; }
+    
     [Inject] 
     private ISecurityManager _securityManager { get; set; }
 
     [Inject]
     private IState<WorkspaceMembershipsState> _workspaceMembershipsState { get; set; }
 
-    private RadzenTemplateForm<UpdateRequest> _form;
-
-    private UpdateRequest model = new();
-    private bool _isLoading = false;
+    [CascadingParameter] 
+    public MudDialogInstance MudDialog { get; set; }
     
-    private readonly int _descriptionTextAreaRowsMin = 10;
-    private readonly int _descriptionTextAreaRowsMax = 20;
-    private int _descriptionTextAreaRows = 6;
-
+    private UpdateRequest _model = new();
+    private bool _isLoading = false;
+    private MudForm? _form;
+    
+    private MudDatePicker? _startDatePicker;
+    private MudDatePicker? _endDatePicker;
+    private MudDatePicker? _reminderDatePicker;
+    private MudTimePicker? _reminderTimePicker;
+    
+    private bool _isValid = false;
+    
     private string _tabLabelAttachments
     {
         get
@@ -60,94 +73,118 @@ public partial class UpdateTaskForm
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.Fill(Task);
-        ResizeDescriptionField(model.Description);
+        _model.Fill(Task);
     }
 
-    private void HandleSubmit(UpdateRequest request)
+    private void SubmitForm()
     {
-        InvokeAsync(async () =>
+        _form.Validate();
+        if (!_form.IsValid)
         {
-            _isLoading = true;
-            try
-            {
-                var responseDto = await ApiService.TasksUpdateAsync(model);
-                if (responseDto != null)
-                {
-                    Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                }
-            }
-            catch (Exception)
-            {
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Error,
-                    Summary = "Task adding error"
-                });
-            }
-            finally
-            {
-                _isLoading = false;
-            }
-            StateHasChanged();    
-        });
-    }
-
-    private Task SubmitForm()
-    {
-        if (_form.IsValid)
-        {
-            InvokeAsync(async () => await _form.Submit.InvokeAsync());
+            return;
         }
-        return System.Threading.Tasks.Task.CompletedTask;
-    }
-
-    private void ResizeDescriptionTextArea(ChangeEventArgs elementEvent)
-    {
-        var description = (string)(elementEvent.Value ?? "");
-        ResizeDescriptionField(description);
-    }
-
-    private void ResizeDescriptionField(string? description)
-    {
-        description ??= "";
-        _descriptionTextAreaRows = Math.Max(description.Split('\n').Length, description.Split('\r').Length);
-        _descriptionTextAreaRows = Math.Max(_descriptionTextAreaRows, _descriptionTextAreaRowsMin);
-        _descriptionTextAreaRows = Math.Min(_descriptionTextAreaRows, _descriptionTextAreaRowsMax);
+        Dispatcher.Dispatch(new UpdateTaskAction(_model, IsUpdateState: true));
     }
 
     private async Task OnChangedAssigned(WorkspaceMembershipDto membership)
     {
-        model.UserId = membership.User.Id;
-        await SubmitForm();
-    }
-
-    private async Task OnChangeNotificationTime(DateTime? notificationTime)
-    {
-        model.NotificationTime = notificationTime;
-        await SubmitForm();
-    }
-
-    private void OnRenderNotificationTime(DateRenderEventArgs renderEvent)
-    {
-        renderEvent.Disabled = renderEvent.Disabled || renderEvent.Date < DateTime.Now;
+        _model.UserId = membership.User.Id;
     }
 
     private void OnFileUploaded(StoredFileDto uploadedFile)
     {
         Task.Attachments.Add(uploadedFile);
-        Dispatcher.Dispatch(new SetListItemAction(Task));
+        Dispatcher.Dispatch(new SetAttachmentsAction(Task.TaskId, Task.Attachments));
     }
 
-    private async Task OnTagsChanged(ICollection<long> selectedTagIds)
+    private void OnTagsChanged(IEnumerable<long> selectedTagIds)
     {
-        model.TagIds = selectedTagIds;
-        await SubmitForm();
+        _model.TagIds = selectedTagIds.ToList();
     }
 
     private void AttachmentsListUpdated(ICollection<StoredFileDto> attachments)
     {
         Task.Attachments = attachments;
-        Dispatcher.Dispatch(new SetListItemAction(Task));
+        Dispatcher.Dispatch(new SetAttachmentsAction(Task.TaskId, Task.Attachments));
+    }
+
+    private bool ValidateStartTime(DateTime? modelStartTime)
+    {
+        if (!modelStartTime.HasValue || !_model.EndTime.HasValue)
+        {
+            return true;
+        }
+        return modelStartTime < _model.EndTime;
+    }
+
+    private bool ValidateEndTime(DateTime? modelEndTime)
+    {
+        if (!modelEndTime.HasValue || !_model.StartTime.HasValue)
+        {
+            return true;
+        }
+        return modelEndTime > _model.StartTime;
+    }
+
+    private async Task OnReminderTimeChanged(TimeSpan? endTime)
+    {
+        _model.ReminderTime = _model.ReminderTime?.StartOfDay();
+        if (endTime.HasValue)
+        {
+            _model.ReminderTime = _model.ReminderTime?.Add(endTime.Value);
+        }
+        _model.ReminderTime = _model.ReminderTime?.ToLocalTime();
+        await ValidateDates();
+    }
+    
+    private async Task OnStartDateChanged(DateTime? date)
+    {
+        _model.StartTime = date;
+        if (await ValidateDates())
+        {
+            SetReminderTimeIfEmpty(_model.StartTime);
+        }
+    }
+    
+    private async Task OnEndDateChanged(DateTime? date)
+    {
+        _model.EndTime = date;
+        if (await ValidateDates())
+        {
+            SetReminderTimeIfEmpty(_model.EndTime);
+        }
+    }
+
+    private async Task<bool> ValidateDates()
+    {
+        await _startDatePicker!.Validate();
+        await _endDatePicker!.Validate();
+        await _reminderDatePicker!.Validate();
+        await _reminderTimePicker!.Validate();
+
+        return IsDatesValidValidateDates();
+    }
+    
+    private bool IsDatesValidValidateDates()
+    {
+        return !_startDatePicker!.Error
+            && !_endDatePicker!.Error
+            && !_reminderDatePicker!.Error
+            && !_reminderTimePicker!.Error;
+    }
+    
+    private void SetReminderTimeIfEmpty(DateTime? time)
+    {
+        if (!time.HasValue)
+            return;
+        if (!_model.ReminderTime.HasValue)
+        {
+            _model.ReminderTime = time?.StartOfDay().AddHours(9);
+        }
+    }
+    
+    private void OnCloseModal()
+    {
+        MudDialog.Close();
     }
 }

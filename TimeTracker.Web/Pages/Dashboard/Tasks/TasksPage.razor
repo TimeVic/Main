@@ -1,5 +1,5 @@
-﻿@page "/board/tasks/{ClientId:long}/{TaskListId:long}"
-@page "/board/tasks/{ClientId:long}"
+﻿@page "/board/tasks/{ProjectId:long}/{TaskListId:long}"
+@page "/board/tasks/{ProjectId:long}"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Tasks.Parts
@@ -7,13 +7,18 @@
 @inherits BaseComponent
 @layout Layout
 
-<RadzenRow class="no-gutters mx-n4">
-    <RadzenColumn Size="3">
-        <TasksListTree ClientId="ClientId"/>
-    </RadzenColumn>
-    <RadzenColumn>
-        <AddTaskForm/>
-        <TasksFilterForm/>
-        <TasksTable/>
-    </RadzenColumn>
-</RadzenRow>
+<MudStack Class="w-100">
+    <CascadingValue Name="TaskListId" Value="@TaskListId">
+        <CascadingValue Name="ProjectId" Value="@ProjectId">
+            <MudStack>
+                <MudPaper>
+                    <TasksFilterForm/>
+                </MudPaper>
+                <MudStack Row="true">
+                    <TasksListTree/>
+                    <TasksTable/>
+                </MudStack>
+            </MudStack>
+        </CascadingValue>
+    </CascadingValue>
+</MudStack>

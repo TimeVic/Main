@@ -1,0 +1,95 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Core.Helpers
+@using MudBlazor
+
+@inherits BaseReactiveComponent
+
+<div class="w-comment-edit-form mb-5">
+    <MudForm
+        @ref="_form"
+        @bind-IsValid="_isValid">
+
+        <MudStack Row="true" Spacing="0">
+            <MudAvatar Class="mr-2" Color="Color.Primary">@_userName.FirstChar().ToUpper()</MudAvatar>
+
+            <MudStack Spacing="0" Class="w-100">
+                <MudStack Class="w-100 ml-1">
+                    @if (!_isNewComment)
+                    {
+                        <div>
+                            <b>@_userName</b>
+                            @Comment.UpdateTime.TimeAgo(DateTimeKind.Local)
+                        </div>
+                    }
+
+                    @if (_isEditMode || _isNewComment)
+                    {
+                        <div class="w-100" @onclick="OnFocusOnEditField">
+                            <MudTextField
+                                @ref="_commentField"
+                                Margin="Margin.Dense"
+                                For="() => model.Comment"
+                                Variant="MudBlazor.Variant.Outlined"
+                                T="string"
+                                @bind-Text="@model.Comment"
+                                Lines="@(_commentLinesCount)"
+                                Placeholder="Your comment..."/>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="w-view w-100">
+                            @CommentHtml
+                        </div>
+                    }
+
+                    @if (_isEditMode)
+                    {
+                        <MultipleUsersDropDown
+                            Class="w-100"
+                            Project="@Comment.Task.TaskList.Project"
+                            Placeholder="Select watchers"
+                            @bind-Value="@model.WatcherIds"/>
+                    }
+
+                    <MudStack
+                        Row="@(true)"
+                        Spacing="0">
+                        @if (_isEditMode)
+                        {
+                            <MudButton
+                                Color="Color.Primary"
+                                OnClick="@(Submit)"
+                                Size="MudBlazor.Size.Small">
+                                Save
+                            </MudButton>
+                            <MudButton
+                                Color="Color.Secondary"
+                                OnClick="@(ResetForm)"
+                                Size="MudBlazor.Size.Small">
+                                Cancel
+                            </MudButton>
+                        }
+                        else if (!_isNewComment && _canEdit)
+                        {
+                            <a
+                                href="#"
+                                @onclick:preventDefault="true"
+                                @onclick="OnClickEdit">
+                                <b>Edit</b>
+                            </a>
+                            <div class="fw-bold ml-1 mr-1"> - </div>
+                            <a
+                                href="#"
+                                @onclick:preventDefault="true"
+                                @onclick="OnClickDelete">
+                                <b>Delete</b>
+                            </a>
+                        }
+                    </MudStack>
+                </MudStack>
+            </MudStack>
+        </MudStack>
+    </MudForm>
+</div>

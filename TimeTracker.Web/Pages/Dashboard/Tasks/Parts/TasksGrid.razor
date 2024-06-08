@@ -1,0 +1,34 @@
+﻿@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+
+@inherits BaseComponent
+
+<MudPaper
+    Elevation="0"
+    Width="300px"
+    MinHeight="400px"
+    Class="pa-2 mt-2 d-flex flex-column mud-background-gray rounded-lg">
+    <MudToolBar DisableGutters="true" Class="px-2">
+        <MudText Typo="Typo.subtitle1">
+            <b>@Status.GetDisplayName()</b>
+        </MudText>
+        <MudSpacer/>
+        <MudIconButton
+            OnClick="@OnAddTask"
+            Icon="@Icons.Material.Filled.Add"/>
+
+    </MudToolBar>
+    @if (_isLoading)
+    {
+        <div class="d-flex justify-center mt-4">
+            <MudProgressLinear Color="Color.Info" Indeterminate="true"/>
+        </div>
+    }
+    else
+    {
+        foreach (var task in _tasks)
+        {
+            <TaskCard @key="@task" Class="mb-3" Task="@task"></TaskCard>
+        }
+    }
+</MudPaper>

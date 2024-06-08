@@ -36,7 +36,7 @@ public class LoadListEffect: Effect<LoadListAction>
             var response = await _apiService.TimeEntryGetListAsync(new GetListRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
-                Page = PaginationUtils.CalculatePage(action.Skip)
+                Page = _state.Value.SelectedPage
             });
             dispatcher.Dispatch(new SetTimeEntryListItemsAction(response));
         }

@@ -1,31 +1,24 @@
-﻿@inherits BaseComponent
+﻿@inherits BaseReactiveComponent
 
 @using TimeTracker.Web.Shared.Components.Form
 @using TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using MudBlazor
+@using Variant = MudBlazor.Variant
 
-<div Class="w-100 w-time-form">
-    <div class="w-100 d-flex justify-content-start">
-        @if (_hasActiveEntry)
-        {
-            <RadzenButton
-                ButtonStyle="ButtonStyle.Secondary"
-                Class="mr-1"
-                Click="@(StopTimeEntry)"
-                Disabled="@_state.Value.IsTimeEntryProcessing"
-                Text="Stop"/>
-        }
-        else
-        {
-            <RadzenButton
-                ButtonStyle="ButtonStyle.Success"
-                Click="@(StartTimeEntry)"
-                Class="mr-1"
-                Disabled="@_state.Value.IsTimeEntryProcessing"
-                Text="Start"/>
-        }
+<div Class="w-time-form @Class">
+    <MudPaper class="w-100 d-flex justify-content-start align-items-center ps-3">
+        <MudToggleIconButton 
+            Toggled="@_hasActiveEntry"
+            ToggledChanged="ToggleTimeEntry"
+            Icon="@Icons.Material.Filled.PlayCircle" 
+            Color="@Color.Success"
+            Class="mr-3"
+            ToggledIcon="@Icons.Material.Filled.StopCircle"
+            Disabled="@_state.Value.IsTimeEntryProcessing"
+            ToggledColor="@Color.Error"/>
         <TimeCounterField
-            Class="mr-1"
+            Class="mr-3"
             Value="@_activeEntry?.StartTime"
             IsActive="@_hasActiveEntry"/>
 
@@ -35,31 +28,44 @@
                 Disabled="!_state.Value.HasActiveEntry"
                 Value="@(_activeEntry?.Project?.Id ?? 0)"
                 SelectedItemChanged="OnChangeProject"
-                Class="mr-1"/>
+                Class="mr-3"/>
 
             @if (_activeEntry?.Task != null)
             {
-                <TaskIdBadge 
-                    Class="mr-1"
+                <TaskIdBadge
+                    Class="mr-3 mt-4"
                     InternalTask="@_activeEntry?.Task"
                     IsClickable="true"/>
             }
-            else
-            {
-                <RadzenTextBox
-                    Class="mr-1 col-1"
-                    Placeholder="Task ID"
-                    Disabled="!_state.Value.HasActiveEntry"
-                    Value="@_activeEntry?.TaskId"
-                    ValueChanged="OnChangeTaskId"/>
-            }
-
-            <RadzenTextBox
-                Class="mr-1 col"
-                Placeholder="Description"
-                Disabled="!_state.Value.HasActiveEntry"
+            
+            <MudTextField
+                T="string"
+                Disabled="@(!_state.Value.HasActiveEntry)"
                 Value="@_activeEntry?.Description"
-                ValueChanged="OnChangeDescription"/>    
+                ValueChanged="OnChangeDescription"
+                Label="@(GetDescriptionLabel(@_activeEntry))"
+                Class="mr-3"
+                Variant="MudBlazor.Variant.Text"
+                Margin="Margin.Dense"></MudTextField>
+            
+            if (_activeEntry?.Task  == null && _activeEntry != null)
+            {
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.AddCircle"
+                    Disabled="@_state.Value.IsTimeEntryProcessing"
+                    Class="mr-3"
+                    Color="Color.Inherit"
+                    OnClick="@(() => ShowAddTaskModal(_activeEntry.Id))"/>
+            }
         }
-    </div>
+        @if (IsShowTimeEntriesButton)
+        {
+            <MudIconButton
+                Icon="@Icons.Material.Filled.History"
+                Disabled="@_state.Value.IsTimeEntryProcessing"
+                Class="mr-3"
+                Color="Color.Inherit"
+                OnClick="@ShowTimeEntriesModal"/>
+        }
+    </MudPaper>
 </div>

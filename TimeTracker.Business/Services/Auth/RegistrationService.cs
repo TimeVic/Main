@@ -6,7 +6,9 @@ using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Resources;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Security;
@@ -19,6 +21,7 @@ public class RegistrationService: IRegistrationService
     private readonly IQueueService _queueService;
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
+    private readonly IPasswordService _passwordService;
     private readonly string _frontendUrl;
 
     public RegistrationService(
@@ -26,13 +29,15 @@ public class RegistrationService: IRegistrationService
         IQueueService queueService,
         IConfiguration configuration,
         IWorkspaceDao workspaceDao,
-        IWorkspaceAccessService workspaceAccessService
+        IWorkspaceAccessService workspaceAccessService,
+        IPasswordService passwordService
     )
     {
         _userDao = userDao;
         _queueService = queueService;
         _workspaceDao = workspaceDao;
         _workspaceAccessService = workspaceAccessService;
+        _passwordService = passwordService;
         _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
     }
 
@@ -67,8 +72,7 @@ public class RegistrationService: IRegistrationService
         user.VerificationTime = DateTime.UtcNow;
         user.VerificationToken = null;
 
-        user.PasswordSalt = SecurityUtil.GenerateSalt(32);
-        user.PasswordHash = SecurityUtil.GeneratePasswordHash(password, user.PasswordSalt);
+        user = _passwordService.SetUserPassword(user, password);
 
         var userName = StringUtils.GetUserNameFromEmail(user.Email);
         var workspaceName = string.Format(

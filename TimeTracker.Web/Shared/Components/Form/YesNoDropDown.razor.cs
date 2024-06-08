@@ -1,6 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen.Blazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Store.Tag;
 
@@ -28,8 +27,6 @@ public partial class YesNoDropDown
     [Inject]
     public ILogger<YesNoDropDown> _logger { get; set; }
     
-    private RadzenDropDown<bool?> _listReference;
-
     private ICollection<YesNoDropDownItem> _listItems = new List<YesNoDropDownItem>()
     {
         new(null, "Not set"),
@@ -40,5 +37,11 @@ public partial class YesNoDropDown
     private void OnValueChanged(bool? selectedValue)
     {
         InvokeAsync(async () => await ValueChanged.InvokeAsync(selectedValue));
+    }
+    
+    private string ToStringFunc(bool? itemValue)
+    {
+        var item = _listItems.FirstOrDefault(item => item.Value == itemValue);
+        return item.Name;
     }
 }

@@ -3,6 +3,7 @@ using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Auth;
 
 namespace TimeTracker.Api.Controllers.Public.User.Actions
@@ -11,18 +12,21 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
     {
         private readonly IRegistrationService _registrationService;
         private readonly IJwtAuthService _jwtAuthService;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IMapper _mapper;
         private readonly IUserDao _userDao;
 
         public RegistrationStep2RequestHandler(
             IRegistrationService registrationService,
             IJwtAuthService jwtAuthService,
+            IAuthorizationService authorizationService,
             IMapper mapper,
             IUserDao userDao
         )
         {
             _registrationService = registrationService;
             _jwtAuthService = jwtAuthService;
+            _authorizationService = authorizationService;
             _mapper = mapper;
             _userDao = userDao;
         }
@@ -31,11 +35,14 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
         {
             var user = await _registrationService.ActivateUser(request.Token, request.Password);
             var defaultWorkspace = await _userDao.GetDefaultWorkspace(user);
-            var userDto = _mapper.Map<UserDto>(user);
+
+            var loginResponse = await _authorizationService.Login(user);
+            var userDto = _mapper.Map<UserDto>(loginResponse.User);
             userDto.DefaultWorkspace = _mapper.Map<WorkspaceDto>(defaultWorkspace);
             return new RegistrationStep2ResponseDto()
             {
-                JwtToken = _jwtAuthService.BuildJwt(user.Id),
+                JwtToken = loginResponse.JwtToken,
+                AccessToken = loginResponse.AccessToken,
                 User = userDto
             };
         }

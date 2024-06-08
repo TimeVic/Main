@@ -1,0 +1,46 @@
+﻿@page "/board/goals-tracker"
+
+@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+@if (_state.Value.IsLoading)
+{
+    <MudGrid Justify="Justify.Center">
+        <MudProgressCircular Color="Color.Info" Indeterminate="true"/>
+    </MudGrid>
+}
+else if (_state.Value.CurrentTracker != null)
+{
+    <MudStack Class="w-100">
+        <MudStack Row="true" Class="mb-3" Spacing="3">
+            <MudStack Row="true">
+                <MudIconButton
+                    Size="Size.Small"
+                    Icon="@Icons.Material.Filled.ArrowBackIos"
+                    OnClick="@(() => OnMonthChanged(false))"/>
+                <MudText Typo="Typo.h6">
+                    @_selectedDate.ToString("MMMM, yyyy")
+                </MudText>
+                <MudIconButton
+                    Size="Size.Small"
+                    Icon="@Icons.Material.Filled.ArrowForwardIos"
+                    OnClick="@(() => OnMonthChanged(true))"/>
+            </MudStack>
+            <MudDivider Vertical="true" FlexItem="true" />
+            <MudButton
+                OnClick="@OnAddGoal"
+                StartIcon="@Icons.Material.Filled.Add">
+                Add
+            </MudButton>
+            <MudButton
+                OnClick="@OnChangePositions"
+                StartIcon="@Icons.Material.Filled.ClearAll">
+                Change positions
+            </MudButton>
+        </MudStack>
+        <GoalsTrackerTable Tracker="@_state.Value.CurrentTracker"/>
+    </MudStack>
+}

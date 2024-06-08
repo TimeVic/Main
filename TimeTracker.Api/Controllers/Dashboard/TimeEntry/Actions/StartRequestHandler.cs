@@ -8,6 +8,7 @@ using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
@@ -58,7 +59,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
-            var task = await _taskDao.GetById(request.InternalTaskId ?? 0);
+            var task = await _taskDao.GetByWorkspaceTaskId(request.WorkspaceId, request.InternalTaskId ?? 0);
             if (task != null)
             {
                 if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
@@ -96,7 +97,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 description: request.Description,
                 projectId: request.ProjectId,
                 hourlyRate: request.HourlyRate,
-                taskId: request.TaskId,
                 internalTask: task
             );
             await _sessionProvider.PerformCommitAsync();

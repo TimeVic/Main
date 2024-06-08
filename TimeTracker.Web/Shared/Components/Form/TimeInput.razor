@@ -1,9 +1,12 @@
-﻿
+﻿@using MudBlazor
+@using Variant = MudBlazor.Variant
+
 <div class="w-input-time @Class">
-    <RadzenTextBox
-        @onchange:stopPropagation
-        Disabled="IsDisabled"
-        Change="@(OnChangeValue)"
-        Style="text-align: center;"
+    <MudTextField
+        T="string"
+        Label="@Label"
+        Style="@Style"
+        Variant="Variant.Text"
+        ValueChanged="OnChangeValue"
         Value="@_valueString"/>
 </div>

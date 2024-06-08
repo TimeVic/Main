@@ -10,5 +10,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
         public virtual WorkspaceSettingsClickUpDto? IntegrationClickUp { get; set; }
         
         public virtual WorkspaceSettingsRedmineDto? IntegrationRedmine { get; set; }
+        
+        public virtual WorkspaceSettingsJiraDto? IntegrationJira { get; set; }
     }
 }

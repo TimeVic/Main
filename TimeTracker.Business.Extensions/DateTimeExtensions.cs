@@ -20,10 +20,11 @@ namespace TimeTracker.Business.Extensions
             ).TotalMilliseconds;
         }
 
-        public static string TimeAgo(this DateTime dt)
+        public static string TimeAgo(this DateTime dt, DateTimeKind dateTimeKind = DateTimeKind.Utc)
         {
             string resultTemplate;
-            TimeSpan span = DateTime.UtcNow - dt;
+            var timeNow = dateTimeKind == DateTimeKind.Utc ? DateTime.UtcNow : DateTime.Now;
+            TimeSpan span = timeNow - dt;
             if (span.Days > 365)
             {
                 int years = (span.Days / 365);
@@ -214,6 +215,18 @@ namespace TimeTracker.Business.Extensions
         public static DateTime ToDateAndRemoveTimeZone(this DateTime now)
         {
             return new DateTime(now.Year, now.Month, now.Day);
+        }
+        
+        public static IEnumerable<DateTime> GetDateRange(this DateTime startDate, DateTime endDate)
+        {
+            if (endDate < startDate)
+                throw new ArgumentException("endDate must be greater than or equal to startDate");
+
+            while (startDate <= endDate)
+            {
+                yield return startDate;
+                startDate = startDate.AddDays(1);
+            }
         }
     }
 }

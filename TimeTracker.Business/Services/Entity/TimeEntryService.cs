@@ -3,6 +3,8 @@ using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Queue.Handlers;
 
@@ -63,7 +65,7 @@ public class TimeEntryService : ITimeEntryService
         return timeEntry;
     }
 
-    public async System.Threading.Tasks.Task DeleteAsync(TimeEntryEntity timeEntry)
+    public async Task DeleteAsync(TimeEntryEntity timeEntry)
     {
         timeEntry.IsMarkedToDelete = true;
         await _dbSessionProvider.CurrentSession.SaveAsync(timeEntry);

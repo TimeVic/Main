@@ -1,0 +1,8 @@
+﻿@if (CommonState.Value.IsWorkspaceInitialized)
+{
+    @ChildContent
+}
+else
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+}

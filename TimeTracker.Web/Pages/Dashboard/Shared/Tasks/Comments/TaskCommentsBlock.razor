@@ -1,0 +1,27 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
+@using TimeTracker.Api.Shared.Dto.Entity.Task
+@using MudBlazor
+
+@inherits BaseReactiveComponent
+
+<EditCommentForm 
+    OnSaved="OnCommentSaved"
+    Comment="@(new TaskCommentDto { Task = Task })"></EditCommentForm>
+@foreach (var comment in _comments)
+{
+    <EditCommentForm
+        @key="comment"
+        OnSaved="OnCommentSaved"
+        OnDeleted="OnCommentDeleted"
+        Comment="@comment"></EditCommentForm>
+}
+@if (_isHasMore)
+{
+    <div class="d-flex justify-content-center">
+        <MudIconButton
+            Icon="@Icons.Material.Filled.More"
+            Disabled="_isLoading"
+            OnClick="LoadMore"
+        />
+    </div>    
+}

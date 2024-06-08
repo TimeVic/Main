@@ -1,0 +1,26 @@
+﻿@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
+@using MudBlazor
+
+@inherits BaseReactiveComponent
+
+<MudSelect
+    T="long"
+    Class="@Class"
+    Disabled="@Disabled"
+    Dense="true"
+    MultiSelection="true"
+    Placeholder="@Placeholder"
+    SelectedValues="@Value"
+    SelectedValuesChanged="OnValueChanged"
+    Variant="MudBlazor.Variant.Text"
+    ToStringFunc="ToStringFunc"
+    SelectAll="true"
+    AnchorOrigin="Origin.BottomCenter">
+    @foreach (var user in _list)
+    {
+        <MudSelectItem Value="@user.Id">
+            @user.Name
+        </MudSelectItem>
+    }
+</MudSelect>

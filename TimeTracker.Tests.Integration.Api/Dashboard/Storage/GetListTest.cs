@@ -4,14 +4,19 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Storage;
@@ -28,6 +33,7 @@ public class GetListTest: BaseTest
     private readonly IFileStorage _fileStorage;
     private readonly StoredFileEntity _uploadedFile;
     private readonly IStoredFilesDao _storedFilesDao;
+    private WorkspaceEntity _workspace;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -36,7 +42,7 @@ public class GetListTest: BaseTest
         _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
 
         _storedFilesDao.MarkAsUploadedAllPending().Wait();
-        (_jwtToken, _user, var workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
         _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Wait();
@@ -51,7 +57,8 @@ public class GetListTest: BaseTest
             Url,
             new GetListRequest()
             {
-                EntityId = task.Id,
+                WorkspaceId = _workspace.Id,
+                EntityId = task.TaskId,
                 EntityType = StorageEntityType.Task
             }
         );
@@ -72,7 +79,8 @@ public class GetListTest: BaseTest
             _jwtToken,
             new GetListRequest()
             {
-                EntityId = task.Id,
+                WorkspaceId = _workspace.Id,
+                EntityId = task.TaskId,
                 EntityType = StorageEntityType.Task
             }
         );
@@ -97,7 +105,8 @@ public class GetListTest: BaseTest
             jwtToken2,
             new GetListRequest()
             {
-                EntityId = task.Id,
+                WorkspaceId = _workspace.Id,
+                EntityId = task.TaskId,
                 EntityType = StorageEntityType.Task
             }
         );

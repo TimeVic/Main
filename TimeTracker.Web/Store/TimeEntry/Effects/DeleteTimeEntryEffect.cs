@@ -1,7 +1,6 @@
 ﻿using Fluxor;
-using Radzen;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.TimeEntry.Effects;
@@ -11,13 +10,13 @@ public class DeleteTimeEntryEffect: Effect<DeleteTimeEntryAction>
     private readonly IState<AuthState> _authState;
     private readonly ApiService _apiService;
     private readonly ILogger<DeleteTimeEntryEffect> _logger;
-    private readonly NotificationService _toastService;
+    private readonly ToastService _toastService;
 
     public DeleteTimeEntryEffect(
         ApiService apiService,
         IState<AuthState> authState,
         ILogger<DeleteTimeEntryEffect> logger,
-        NotificationService toastService
+        ToastService toastService
     )
     {
         _apiService = apiService;
@@ -32,12 +31,7 @@ public class DeleteTimeEntryEffect: Effect<DeleteTimeEntryAction>
         {
             await _apiService.TimeEntryDeleteAsync(action.EntryId);
             dispatcher.Dispatch(new DeleteTimeEntryFromListAction(action.EntryId));
-            _toastService.Notify(new NotificationMessage()
-            {
-                Summary = "Time entry deleted!",
-                Severity = NotificationSeverity.Info,
-                
-            });
+            await _toastService.ShowInfo("Time entry deleted!");
         }
         catch (Exception e)
         {

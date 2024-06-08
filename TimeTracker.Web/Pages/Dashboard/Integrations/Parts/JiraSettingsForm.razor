@@ -1,0 +1,43 @@
+﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
+@using Microsoft.AspNetCore.Components
+@using MudBlazor
+
+@inherits BaseReactiveComponent
+
+<MudForm
+    @ref="_form"
+    @bind-IsValid="_isValid">
+
+    <MudStack Class="pa-4">
+        <MudTextField
+            T="string"
+            Name="Security Key"
+            InputType="InputType.Url"
+            @bind-Value="@_model.Url"
+            Placeholder="Url"/>
+
+        <MudTextField
+            T="string"
+            Name="Team Id"
+            @bind-Value="@_model.UserName"
+            Placeholder="User Name"/>
+
+        <MudTextField
+            T="string"
+            Name="Api key"
+            InputType="InputType.Password"
+            @bind-Value="@_model.ApiKey"
+            Placeholder="Api Key"/>
+
+        <div class="d-flex align-center justify-space-end">
+            <MudButton
+                Variant="MudBlazor.Variant.Filled"
+                Color="Color.Primary"
+                Disabled="@(!_isValid || _isLoading)"
+                OnClick="HandleSubmit"
+                Class="ml-auto">
+                Save
+            </MudButton>
+        </div>
+    </MudStack>
+</MudForm>

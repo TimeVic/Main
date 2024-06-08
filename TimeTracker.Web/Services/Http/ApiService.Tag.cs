@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<TagDto> TagAddAsync(AddRequest model)
         {
-            var response = await PostAuthorizedAsync<TagDto>(ApiUrl.TagAdd, model);
+            var response = await PostAsync<TagDto>(ApiUrl.TagAdd, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -20,7 +20,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<TagDto> TagUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAuthorizedAsync<TagDto>(ApiUrl.TagUpdate, model);
+            var response = await PostAsync<TagDto>(ApiUrl.TagUpdate, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -31,7 +31,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task TagDeleteAsync(long tagId)
         {
-            await PostAuthorizedAsync<object>(ApiUrl.TagDelete, new DeleteRequest()
+            await PostAsync<object>(ApiUrl.TagDelete, new DeleteRequest()
             {
                 TagId = tagId
             });
@@ -39,7 +39,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<GetListResponse> TagGetListAsync(GetListRequest model)
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TagList, model);
+            var response = await PostAsync<GetListResponse>(ApiUrl.TagList, model);
             if (response == null)
             {
                 throw new ServerErrorException();

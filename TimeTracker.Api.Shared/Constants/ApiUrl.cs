@@ -4,9 +4,13 @@ public class ApiUrl
 {
     #region Public
     public const string Login = "user/login";
+    public const string RefreshToken = "user/refresh-token";
     public const string UserCheckIsLoggedIn = "user/check-is-logged-in";
     public const string RegistrationStep1 = "user/registration/step1";
     public const string RegistrationStep2 = "user/registration/step2";
+    public const string ResetPasswordStep1 = "user/password/reset";
+    public const string ResetPasswordStep2 = "user/password/change";
+    public const string SetNotificationToken = "dashboard/user/set-notification-token";
     #endregion
     
     #region Time Entry
@@ -24,6 +28,7 @@ public class ApiUrl
     
     public const string ProjectAdd = "dashboard/project/add";
     public const string ProjectUpdate = "dashboard/project/update";
+    public const string ProjectDelete = "dashboard/project/delete";
     public const string ProjectList = "dashboard/project/list";
     
     #endregion
@@ -38,7 +43,7 @@ public class ApiUrl
     #region Payment
     
     public const string PaymentAdd = "dashboard/payment/add";
-    public const string PaymentUpdate = "dashboard/payment/payment";
+    public const string PaymentUpdate = "dashboard/payment/update";
     public const string PaymentDelete = "dashboard/payment/delete";
     public const string PaymentList = "dashboard/payment/list";
     
@@ -74,6 +79,7 @@ public class ApiUrl
     public const string WorkspaceIntegrationSettingsGet = "dashboard/workspace/settings/integrations/get";
     public const string WorkspaceIntegrationSettingsRedmineSet = "dashboard/workspace/settings/set-redmine";
     public const string WorkspaceIntegrationSettingsClickUpSet = "dashboard/workspace/settings/set-clickup";
+    public const string WorkspaceIntegrationSettingsJiraSet = "dashboard/workspace/settings/set-jira";
     
     #endregion
     
@@ -90,8 +96,15 @@ public class ApiUrl
     
     public const string TasksAdd = "dashboard/tasks/add";
     public const string TasksUpdate = "dashboard/tasks/update";
+    public const string TasksUpdatePositions = "dashboard/tasks/update-positions";
     public const string TasksList = "dashboard/tasks/get-list";
+    public const string TasksListForCalendar = "dashboard/tasks/get-for-calendar";
+    public const string TasksMyList = "dashboard/tasks/get-my-list";
     public const string TasksGetOne = "dashboard/tasks/get-one";
+    public const string TaskCommentAdd = "dashboard/tasks/comment/add";
+    public const string TaskCommentUpdate = "dashboard/tasks/comment/update";
+    public const string TaskCommentDelete = "dashboard/tasks/comment/delete";
+    public const string TaskCommentsList = "dashboard/tasks/comment/get-list";
     
     #endregion
 
@@ -109,6 +122,26 @@ public class ApiUrl
     public const string TagUpdate = "dashboard/tag/update";
     public const string TagDelete = "dashboard/tag/delete";
     public const string TagList = "dashboard/tag/list";
+    
+    #endregion
+    
+    #region Goals Tracker
+
+    public const string GoalsTrackerGet = "dashboard/goals-tracker/get";
+    public const string GoalsTrackerChangePositions = "dashboard/goals-tracker/change-positions";
+    public const string GoalsTrackerItemCreate = "dashboard/goals-tracker/item/create";
+    public const string GoalsTrackerItemUpdate = "dashboard/goals-tracker/item/update";
+    public const string GoalsTrackerItemDelete = "dashboard/goals-tracker/item/delete";
+    public const string GoalsTrackerItemSetCompletion = "dashboard/goals-tracker/item/set-completion";
+    
+    #endregion
+    
+    #region Workspace
+    
+    public const string NotificationCenterGetCount = "dashboard/notifications-center/get-count";
+    public const string NotificationCenterGetList = "dashboard/notifications-center/get-list";
+    public const string NotificationCenterMarkAllAsRead = "dashboard/notifications-center/mark-all-as-read";
+    public const string NotificationCenterMarkAsRead = "dashboard/notifications-center/mark-as-read";
     
     #endregion
 }

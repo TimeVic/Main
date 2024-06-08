@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using TimeTracker.Api;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Helpers;
-using TimeTracker.Business.Notifications.Services;
-using TimeTracker.Business.Services.ExternalClients.ClickUp;
 
 namespace TimeTracker.Tests.Integration.Api;
 
@@ -23,15 +22,14 @@ public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
     {
         var builder = Host.CreateDefaultBuilder()
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .UseSerilog()
             .ConfigureWebHostDefaults(builder =>
             {
                 builder.UseStartup<TestStartup>()
-                    .UseSerilog()
-                    .UseContentRoot(AssemblyUtils.GetAssemblyPath())
+                    .UseContentRoot(AssemblyUtils.GetAssemblyPath(typeof(ApiAssemblyMarker).Assembly))
                     .ConfigureTestServices(services => 
                     {
                         services.AddHttpContextAccessor();
-                        services.AddScoped<IEmailSendingService, EmailSendingServiceMock>();
                         // We can further customize our application setup here.
                     })
                     .ConfigureAppConfiguration(builder =>

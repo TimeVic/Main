@@ -37,7 +37,7 @@ public class ArchiveEffect: Effect<ArchiveTaskListAction>
         {
             await _apiService.TaskListArchiveAsync(action.TaskList.Id);
             dispatcher.Dispatch(new RemoveListItemsAction(action.TaskList.Id));
-            var navigateToProjectsClient = _projectState.Value.List.FirstOrDefault(
+            var navigateToProject = _projectState.Value.List.First(
                 item => item.Id == action.TaskList.Project.Id
             );
             var firstTaskList = _taskListState.Value.List.FirstOrDefault(
@@ -46,8 +46,8 @@ public class ArchiveEffect: Effect<ArchiveTaskListAction>
             _navigationManager.NavigateTo(
                 string.Format(
                     SiteUrl.Dashboard_Tasks,
-                    navigateToProjectsClient?.Client?.Id.ToString() ?? "0",
-                    firstTaskList?.Id.ToString() ?? ""
+                    navigateToProject?.Id.ToString() ?? "0",
+                    firstTaskList?.Id.ToString() ?? string.Empty
                 )    
             );
         }

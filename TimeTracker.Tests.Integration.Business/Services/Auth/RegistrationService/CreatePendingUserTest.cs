@@ -3,6 +3,7 @@ using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
@@ -40,8 +41,8 @@ public class CreatePendingUserTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(user.Email, actualEmail.To);
     }
     
@@ -52,14 +53,14 @@ public class CreatePendingUserTest: BaseTest
         
         var user = await _authService.CreatePendingUser(expectedEmail);
         await _queueService.ProcessAsync(QueueChannel.Notifications);
-        EmailSendingServiceMock.Reset();
+        SmtpClientServiceMock.Reset();
 
         await _authService.CreatePendingUser(expectedEmail);
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(user.Email, actualEmail.To);
     }
     

@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
+using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Web.Store.Auth;
@@ -20,6 +20,8 @@ public partial class RedmineSettingsForm
     
     private SetRedmineSettingsRequest _model = new();
     private bool _isLoading = false;
+    private MudForm _form;
+    private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,42 +36,32 @@ public partial class RedmineSettingsForm
     
     private async Task HandleSubmit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
+        
         _isLoading = true;
         try
         {
             var responseDto = await ApiService.WorkspaceSetRedmineIntegrationSettingsAsync(_model);
             if (responseDto != null)
             {
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Info,
-                    Summary = "The settings was saved"
-                });
+                await ToastService.ShowInfo("The settings was saved");
                 if (!responseDto.IsActive)
                 {
-                    NotificationService.Notify(new NotificationMessage()
-                    {
-                        Severity = NotificationSeverity.Warning,
-                        Summary = "Integration to Redmine was not activated. Please check the settings"
-                    });
+                    await ToastService.ShowWarning("Integration to Redmine was not activated. Please check the settings");
                 }
                 else
                 {
-                    NotificationService.Notify(new NotificationMessage()
-                    {
-                        Severity = NotificationSeverity.Info,
-                        Summary = "Integration to Redmine is activated"
-                    });
+                    await ToastService.ShowInfo("Integration to Redmine is activated");
                 }
             }
         }
         catch (Exception)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Settings saving error"
-            });
+            await ToastService.ShowError("Settings saving error");
         }
         finally
         {

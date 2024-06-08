@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
@@ -17,15 +18,21 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 
         public ICollection<long> TagIds { get; set; } = new List<long>();
         
+        public DateTime? ReminderTime { get; set; }
+        
         public void Fill(TaskDto dto)
         {
-            TaskId = dto.Id;
+            TaskId = dto.TaskId;
             TaskListId = dto.TaskList.Id;
             Title = dto.Title;
             Description = dto.Description;
-            NotificationTime = dto.NotificationTime;
-            IsDone = dto.IsDone;
+            StartTime = dto.StartTime;
+            EndTime = dto.EndTime;
+            Status = dto.Status;
+            Priority = dto.Priority;
             IsArchived = dto.IsArchived;
+            ExternalTaskId = dto.ExternalTaskId;
+            ReminderTime = dto.ReminderTime;
             UserId = dto.User.Id;
             TagIds = dto.Tags.Select(item => item.Id).ToList();
         }

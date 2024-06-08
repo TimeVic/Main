@@ -1,10 +1,11 @@
 ﻿using System.Globalization;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen.Blazor;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Common;
+using TimeTracker.Web.Store.Ui;
 
 namespace TimeTracker.Web.Shared;
 
@@ -16,6 +17,9 @@ public partial class MainHeader
     [Inject]
     private IState<AuthState> AuthState { get; set; }
 
+    [Inject]
+    private IState<CommonState> CommonState { get; set; }
+    
     private bool _isShowDashboardLink
     {
         get => !NavigationManager.GetPath().StartsWith(SiteUrl.DashboardBase);
@@ -37,17 +41,14 @@ public partial class MainHeader
         NavigationManager.NavigateTo("/", true);
     }
     
-    private void OnClickUserMenu(RadzenProfileMenuItem menuEvent)
+    private void Logout()
     {
-        switch (menuEvent.Value)
-        {
-            case "user_profile":
-                // TODO: Add user's profile page
-                break;
-            case "logout":
-                Dispatcher.Dispatch(new LogoutAction());
-                NavigationManager.NavigateTo("/", true);
-                break;
-        }
+        Dispatcher.Dispatch(new LogoutAction());
+        NavigationManager.NavigateTo("/", true);
+    }
+
+    private void ToggleMenu()
+    {
+        Dispatcher.Dispatch(new ToggleMainMenuAction());
     }
 }

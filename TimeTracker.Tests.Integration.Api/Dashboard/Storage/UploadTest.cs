@@ -5,14 +5,19 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Storage;
@@ -31,6 +36,7 @@ public class UploadTest: BaseTest
     private readonly TaskEntity _task;
     private readonly IStoredFilesDao _storedFilesDao;
     private readonly IFileStorage _fileStorage;
+    private WorkspaceEntity _workspace;
 
     public UploadTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -42,7 +48,7 @@ public class UploadTest: BaseTest
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
 
         _storedFilesDao.MarkAsUploadedAllPending().Wait();
-        (_jwtToken, _user, var workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _task = _taskSeeder.CreateAsync(user: _user).Result;
     }
 
@@ -53,7 +59,8 @@ public class UploadTest: BaseTest
             Url,
             data: new Dictionary<string, object>()
             {
-                { "EntityId", _task.Id },
+                { "WorkspaceId", _workspace.Id },
+                { "EntityId", _task.TaskId },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
@@ -73,7 +80,8 @@ public class UploadTest: BaseTest
             _jwtToken,
             new Dictionary<string, object>()
             {
-                { "EntityId", _task.Id },
+                { "WorkspaceId", _workspace.Id },
+                { "EntityId", _task.TaskId },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
@@ -106,7 +114,8 @@ public class UploadTest: BaseTest
             _jwtToken,
             new Dictionary<string, object>()
             {
-                { "EntityId", task.Id },
+                { "WorkspaceId", otherWorkspace.Id },
+                { "EntityId", task.TaskId },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
@@ -128,7 +137,8 @@ public class UploadTest: BaseTest
             _jwtToken,
             new Dictionary<string, object>()
             {
-                { "EntityId", _task.Id },
+                { "WorkspaceId", _workspace.Id },
+                { "EntityId", _task.TaskId },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },

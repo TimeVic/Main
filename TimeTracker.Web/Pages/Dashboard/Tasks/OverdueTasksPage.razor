@@ -1,0 +1,55 @@
+﻿@page "/board/overdue-tasks"
+
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Business.Extensions
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+<MudStack Class="w-100">
+    @if (_isLoading)
+    {
+        <MudStack AlignItems="AlignItems.Center">
+            <MudProgressCircular Color="Color.Info" Indeterminate="true"/>
+        </MudStack>
+    }
+    else
+    {
+        if (_overdueTasks.Any())
+        {
+            <MudText Typo="Typo.subtitle2">Overdue</MudText>
+            <MudDivider></MudDivider>
+            foreach (var task in _overdueTasks)
+            {
+                <TaskCard Task="@task"></TaskCard>
+            }
+
+            <MudSpacer/>
+        }
+
+        foreach (var item in _groupedTasks)
+        {
+            <MudText Typo="Typo.subtitle2">@item.Key?.ToString("MMM dd yyyy - dddd")</MudText>
+            <MudDivider></MudDivider>
+            foreach (var task in item)
+            {
+                <TaskCard
+                    Task="@task"
+                    IsShowTaskList="true">
+                </TaskCard>
+            }
+
+            <MudStack Spacing="0" Justify="Justify.FlexStart" AlignItems="AlignItems.Start">
+                <MudButton
+                    Size="Size.Small"
+                    OnClick="@(() => OnAddTask(item.Key))"
+                    StartIcon="@Icons.Material.Filled.Add">
+                    Add task
+                </MudButton>
+            </MudStack>
+            <MudSpacer/>
+            <MudSpacer/>
+        }
+    }
+</MudStack>

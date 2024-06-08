@@ -15,7 +15,11 @@ public static class SiteUrl
     #endregion
     
     public static readonly string DashboardBase = "/board";
+    public static readonly string Dashboard_Dashboard = "/board/dashboard";
+    public static readonly string Dashboard_Calendar = "/board/calendar";
     public static readonly string Dashboard_TimeEntry = "/board";
+    public static readonly string Dashboard_OverdueTasks = "/board/overdue-tasks";
+    public static readonly string Dashboard_GoalsTracker = "/board/goals-tracker";
     public static readonly string Dashboard_Projects = "/board/project";
     public static readonly string Dashboard_Project = "/board/project/{0}";
     public static readonly string Dashboard_Clients = "/board/client";
@@ -30,6 +34,8 @@ public static class SiteUrl
     
     public static readonly string Dashboard_Tasks_Default = "/board/tasks/0";
     public static readonly string Dashboard_Tasks = "/board/tasks/{0}/{1}";
+    public static readonly string Dashboard_Task = "/board/task/{0}/{1}";
     
     public static readonly string Workspace_List = "/board/workspaces";
+    public static readonly string Workspace_Change = "/board-change/{0}";
 }

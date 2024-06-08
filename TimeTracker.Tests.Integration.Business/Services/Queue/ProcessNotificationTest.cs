@@ -5,10 +5,12 @@ using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Services.Queue;
@@ -42,8 +44,8 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(testContext.ToAddress, actualEmail.To);
     }
     
@@ -63,8 +65,8 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        var actualEmail = EmailSendingServiceMock.SentMessages.LastOrDefault();
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
         Assert.Contains(testContext.ToAddress, actualEmail.To);
         Assert.Contains(expectedUser.VerificationToken, actualEmail.Body);
     }
@@ -82,6 +84,7 @@ public class ProcessNotificationTest: BaseTest
                 { "test", "test" }
             },
             TaskId = task.Id,
+            WorkspaceId = task.TaskList.Project.Workspace.Id,
             TaskTitle = "Task title",
             UserName = expectedUser.Name
         };
@@ -91,8 +94,8 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        var actualEmail = EmailSendingServiceMock.SentMessages.LastOrDefault();
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
         Assert.Contains(testContext.ToAddress, actualEmail.To);
     }
 }

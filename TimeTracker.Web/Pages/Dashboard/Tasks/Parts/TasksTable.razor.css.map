@@ -1,1 +1,1 @@
-{"version":3,"sources":["TasksTable.razor.less"],"names":[],"mappings":"AAAA,aAAc;EACV,QAAQ,mBAAR;EACA,kBAAA;;AAII,aANM,OAIV,aAEK;EACG,eAAA;;AAPZ,aAAc,OAIV,aAMI;EACI,6BAAA;;AAXZ,aAAc,OAeV;EACI,eAAA;EACA,gBAAA;EACA,iBAAA;;AAlBR,aAAc,OAeV,kBAKI;EACI,SAAA","file":"TasksTable.razor.css"}
+{"version":3,"sources":["TasksTable.razor.less"],"names":[],"mappings":"AAAA,aAAc;EACV,YAAY,mBAAZ;EACA,kBAAA;EACA,aAAA;EACA,iBAAA;EACA,2BAAA","file":"TasksTable.razor.css"}

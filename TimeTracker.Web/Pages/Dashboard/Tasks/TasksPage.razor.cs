@@ -6,33 +6,8 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks;
 public partial class TasksPage
 {
     [Parameter]
-    public long ClientId
-    {
-        get => _clientId;
-        set
-        {
-            _clientId = value;
-            OnTasksListSelected(null);
-        }
-    }
-    
+    public long ProjectId { get; set; }
+
     [Parameter]
-    public long? TaskListId
-    {
-        get => _taskListId;
-        set
-        {
-            _taskListId = value;
-            OnTasksListSelected(_taskListId);
-        }
-    }
-
-    private long _clientId = 0;
-    private long? _taskListId = null;
-
-    private void OnTasksListSelected(long? testsListId)
-    {
-        Dispatcher.Dispatch(new Store.TasksList.SetSelectedAction(testsListId));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
-    }
+    public long? TaskListId { get; set; }
 }

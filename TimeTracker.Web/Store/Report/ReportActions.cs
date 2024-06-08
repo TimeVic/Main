@@ -16,6 +16,8 @@ public record struct ReportSetSummaryReportItemsAction(SummaryReportResponse Rep
 
 public record struct ReportSetSummaryReportFilterAction(SummaryReportFilterState FilterState);
 
+public record struct ReportResetSummaryReportFilterAction();
+
 public record struct ReportSetPaymentReportFilterAction(PaymentReportFilterState FilterState);
 
 public record struct ReportSetIsLoadingAction(bool IsLoading);

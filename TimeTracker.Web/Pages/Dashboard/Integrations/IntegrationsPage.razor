@@ -2,24 +2,34 @@
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Integrations.Parts
+@using MudBlazor
 
-@inherits BaseComponent
+@inherits BaseReactiveComponent
 @layout Layout
 
-@if (_isLoading)
-{
-    <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
-}
-else
-{
-    <RadzenTabs TabPosition="@TabPosition.Top" RenderMode="TabRenderMode.Client" >
-        <Tabs>
-            <RadzenTabsItem Text="ClickUp">
+<MudPaper Class="w-100">
+    @if (_isLoading)
+    {
+        <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+    }
+    else
+    {
+        <MudTabs Outlined="true">
+            <MudTabPanel 
+                Text="ClickUp"
+                Icon="@(GetIcon(_settings.IntegrationClickUp is { IsActive: true }))">
                 <ClickUpSettingsForm @bind-Value="_settings.IntegrationClickUp"/>
-            </RadzenTabsItem>
-            <RadzenTabsItem Text="Redmine">
+            </MudTabPanel>
+            <MudTabPanel 
+                Text="Redmine"
+                Icon="@(GetIcon(_settings.IntegrationRedmine is { IsActive: true }))">
                 <RedmineSettingsForm @bind-Value="_settings.IntegrationRedmine"/>
-            </RadzenTabsItem>
-        </Tabs>
-    </RadzenTabs>    
-}
+            </MudTabPanel>
+            <MudTabPanel 
+                Text="Jira"
+                Icon="@(GetIcon(_settings.IntegrationJira is { IsActive: true }))">
+                <JiraSettingsForm @bind-Value="_settings.IntegrationJira"/>
+            </MudTabPanel>
+        </MudTabs>
+    }
+</MudPaper>

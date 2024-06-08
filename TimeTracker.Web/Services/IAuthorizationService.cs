@@ -6,9 +6,11 @@ namespace TimeTracker.Web.Services
     public interface IAuthorizationService
     {
         Task<bool> LoginAsync(LoginRequest model);
-        void Login(string jwtToken, UserDto user);
+        void Login(string accessToken, string jwtToken, UserDto user);
         Task LogoutAsync();
         Task<bool> CheckIsLoggedInAsync();
         string? GetJwt();
+        string? GetAccessToken();
+        void SetJwt(string jwtToken);
     }
 }

@@ -3,6 +3,8 @@ using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Entities.WorkspaceAccess
 {

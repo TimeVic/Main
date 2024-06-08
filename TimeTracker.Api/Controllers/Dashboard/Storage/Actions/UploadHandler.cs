@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Storage;
@@ -48,6 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
             var user = await _userDao.GetById(userId);
 
             var entity = await _fileStorageRelationshipService.GetFileRelationship(
+                request.WorkspaceId,
                 request.EntityId,
                 request.EntityType
             );

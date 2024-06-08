@@ -1,18 +1,24 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
@@ -23,7 +29,7 @@ public class GetOneTest: BaseTest
     
     private readonly UserEntity _user;
     private readonly string _jwtToken;
-    private readonly WorkspaceEntity _defaultWorkspace;
+    private readonly WorkspaceEntity _workspace;
     private readonly TaskListEntity _taskList;
     
     private readonly IProjectSeeder _projectSeeder;
@@ -46,8 +52,8 @@ public class GetOneTest: BaseTest
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
         
-        (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
-        _project = _projectSeeder.CreateAsync(_defaultWorkspace).Result;
+        (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
         _taskList = _taskListSeeder.CreateAsync(_project).Result;
         
         _task = _taskSeeder.CreateAsync(_taskList).Result;
@@ -58,7 +64,8 @@ public class GetOneTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetOneRequest()
         {
-            TaskId = _task.Id
+            WorkspaceId = _workspace.Id,
+            TaskId = _task.TaskId
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -70,12 +77,13 @@ public class GetOneTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetOneRequest()
         {
-            TaskId = _task.Id
+            WorkspaceId = _workspace.Id,
+            TaskId = _task.TaskId
         });
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.True(actualDto.TaskId > 0);
         Assert.NotEmpty(actualDto.Title);
         Assert.NotEmpty(actualDto.Description);
         Assert.NotNull(actualDto.TaskList?.Project?.Client);
@@ -89,7 +97,7 @@ public class GetOneTest: BaseTest
     public async Task ShouldReceiveIfHasAccess()
     {
         var (_otherToken, _otherUser, _otherWorkspace) = await UserSeeder.CreateAuthorizedAndShareAsync(
-            _defaultWorkspace,
+            _workspace,
             MembershipAccessType.User,
             new List<ProjectAccessModel>()
             {
@@ -102,25 +110,27 @@ public class GetOneTest: BaseTest
         
         var response = await PostRequestAsync(Url, _otherToken, new GetOneRequest()
         {
-            TaskId = _task.Id
+            WorkspaceId = _workspace.Id,
+            TaskId = _task.TaskId
         });
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TaskDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.True(actualDto.TaskId > 0);
     }
     
     [Fact]
     public async Task ShouldNotReceiveIfHasNoAccessToProject()
     {
         var (_otherToken, _otherUser, _otherWorkspace) = await UserSeeder.CreateAuthorizedAndShareAsync(
-            _defaultWorkspace,
+            _workspace,
             MembershipAccessType.User
         );
         
         var response = await PostRequestAsync(Url, _otherToken, new GetOneRequest()
         {
-            TaskId = _task.Id
+            WorkspaceId = _workspace.Id,
+            TaskId = _task.TaskId
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();

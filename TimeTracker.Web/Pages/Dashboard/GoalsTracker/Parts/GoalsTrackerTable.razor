@@ -1,0 +1,59 @@
+﻿@inherits BaseComponent
+
+<MudStack Class="me-3 w-100">
+    <div class="w-goals-tracker">
+        <table class="w-goals-tracker-table">
+            <thead>
+            <tr>
+                <th rowspan="2" class="pa-3 w-sticky-column">Goals</th>
+                @foreach (var day in _daysInCurrentMonth)
+                {
+                    <th class="pa-3 @(IsToday(day) ? "w-active" : "")">@day.ToString("ddd")</th>
+                }
+                <th rowspan="2" class="pa-3">Goal</th>
+                <th rowspan="2" class="pa-3">Achieved</th>
+                <th rowspan="2" class="pa-3"></th>
+            </tr>
+            <tr>
+                @foreach (var day in _daysInCurrentMonth)
+                {
+                    <th class="pa-3 @(IsToday(day) ? "w-active" : "")">@day.Day</th>
+                }
+            </tr>
+            <tr></tr>
+            </thead>
+            <tbody>
+            @foreach (var goal in Tracker.SortedItems)
+            {
+                var markedCount = GetMarkedCount(goal);
+                <tr>
+                    <td class="pa-3 w-sticky-column text-le">
+                        <MudText Align="Align.Left">@goal.Name</MudText>
+                    </td>
+                    @foreach (var day in _daysInCurrentMonth)
+                    {
+                        <td
+                            class="pa-3 cursor-pointer @(IsSelectedRow(goal, day) ? "w-row-selected" : "") @(IsToday(day) ? "w-active" : "")"
+                            @onclick="@(() => OnClickRow(goal, day))">
+                            <MudIcon
+                                Color="@(IsSelectedRow(goal, day) ? Color.Default : Color.Transparent)"
+                                Size="Size.Small"
+                                Icon="@Icons.Material.Filled.Check"/>
+                        </td>
+                    }
+                    <td class="pa-3">@goal.NumberOfTimes</td>
+                    <td class="pa-3 @(markedCount >= goal.NumberOfTimes ? "w-completed" : "")">@markedCount</td>
+                    <td>
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+                            <MudMenuItem OnClick="@(() => OnEditGoal(goal))">Edit</MudMenuItem>
+                            <MudMenuItem OnClick="@(() => OnDeleteGoal(goal))">Delete</MudMenuItem>
+                        </MudMenu>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <MudSpacer/>
+</MudStack>

@@ -1,7 +1,6 @@
 ﻿using Fluxor;
-using Radzen;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Store.Payment.Effects;
@@ -12,14 +11,14 @@ public class DeleteEffect: Effect<DeletePaymentAction>
     private readonly IState<PaymentState> _state;
     private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
-    private readonly NotificationService _notificationService;
+    private readonly ToastService _notificationService;
 
     public DeleteEffect(
         ApiService apiService,
         IState<AuthState> authState,
         IState<PaymentState> state,
         ILogger<LoadListEffect> logger,
-        NotificationService notificationService
+        ToastService notificationService
     )
     {
         _apiService = apiService;
@@ -34,14 +33,9 @@ public class DeleteEffect: Effect<DeletePaymentAction>
         try
         {
             await _apiService.PaymentDeleteAsync(action.PaymentId);
-            dispatcher.Dispatch(new RemoveEmptyPaymentListItemAction());
             dispatcher.Dispatch(new RemovePaymentListItemAction(action.PaymentId));
             
-            _notificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Info,
-                Summary = "Payment was deleted"
-            });
+            await _notificationService.ShowInfo("Payment was deleted");
         }
         catch (Exception e)
         {
@@ -49,7 +43,7 @@ public class DeleteEffect: Effect<DeletePaymentAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetPaymentIsListLoading(false));
+            dispatcher.Dispatch(new SetIsListLoading(false));
         }
     }
 }

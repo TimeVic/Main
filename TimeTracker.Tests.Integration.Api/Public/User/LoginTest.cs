@@ -2,8 +2,11 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Api.Auth;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Extensions;
@@ -16,10 +19,12 @@ public class LoginTest: BaseTest
     private readonly string Url = "/user/login";
     
     private readonly IJwtAuthService _jwtService;
+    private readonly IUserAccessTokenDao _accessTokenDao;
 
     public LoginTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _jwtService = ServiceProvider.GetRequiredService<IJwtAuthService>();
+        _accessTokenDao = ServiceProvider.GetRequiredService<IUserAccessTokenDao>();
     }
 
     [Fact]
@@ -36,11 +41,16 @@ public class LoginTest: BaseTest
         response.EnsureSuccessStatusCode();
         var responseData = await response.GetJsonDataAsync<LoginResponseDto>();
 
-        Assert.True(_jwtService.IsValidJwt(responseData.Token));
+        Assert.True(_jwtService.IsValidJwt(responseData.JwtToken));
+        Assert.NotEmpty(responseData.AccessToken);
         Assert.True(responseData.User.Id > 0);
         Assert.NotEmpty(responseData.User.Email);
         Assert.NotNull(responseData.User.DefaultWorkspace);
         Assert.True(responseData.User.DefaultWorkspace.IsDefault);
+
+        var actualAccessToken = await _accessTokenDao.GetByToken(responseData.AccessToken);
+        Assert.NotNull(actualAccessToken);
+        Assert.Contains(actualAccessToken.JwtTokens, item => item.Token == responseData.JwtToken);
     }
     
     [Fact]

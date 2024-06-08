@@ -24,6 +24,7 @@ namespace TimeTracker.WorkerServices.Services.Tasks
             while (!cancellationToken.IsCancellationRequested)
             {
                 await _taskNotificationService.NotifyAboutTaskChanges();
+                await _taskNotificationService.SendReminderNotification();
                 await DbSessionProvider.PerformCommitAsync(cancellationToken);
                 DbSessionProvider.CurrentSession.Clear();
                 await Task.Delay(5000, cancellationToken);

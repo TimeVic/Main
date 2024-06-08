@@ -1,26 +1,34 @@
-﻿@inherits BaseComponent
+﻿@using MudBlazor
 
-<div class="d-flex align-items-center">
+@inherits BaseReactiveComponent
+
+<div class="d-flex align-items-center justify-content-start">
+    @{
+        var taskId = string.IsNullOrEmpty(InternalTask.ExternalTaskId) && !IsReplaceWithExternal
+            ? InternalTask.FormattedId
+            : InternalTask.ExternalTaskId;
+    }
     @if (IsLink)
     {
-        <NavLink href="@("/board/task/" + InternalTask.Id)" target="_blank">
-            <RadzenBadge
-                Shade="Shade.Lighter"
-                BadgeStyle="BadgeStyle.Primary"
-                Style="@(IsClickable ? "cursor: pointer" : "")"
-                @onclick="OnClick"
-                class="@($"{Class} d-flex align-items-center")"
-                Text="@InternalTask.FormattedId"/>
+        <NavLink href="@($"/board/task/{AuthState.Value.Workspace.Id}/{InternalTask.TaskId}")" target="_blank">
+            <MudChip
+                Class="@($"{Class} d-flex align-items-center")"
+                Style="@(IsClickable ? "cursor: pointer" : string.Empty)"
+                Size="Size.Small"
+                Color="Color.Info">
+                @taskId
+            </MudChip>
         </NavLink>
     }
     else
     {
-        <RadzenBadge
-            Shade="Shade.Lighter"
-            BadgeStyle="BadgeStyle.Primary"
-            Style="@(IsClickable ? "cursor: pointer" : "")"
-            @onclick="OnClick"
-            class="@($"{Class} d-flex align-items-center")"
-            Text="@InternalTask.FormattedId"/>
+        <MudChip
+            Class="@($"{Class} d-flex align-items-center")"
+            Style="@(IsClickable ? "cursor: pointer" : string.Empty)"
+            Size="Size.Small"
+            OnClick="OnClick"
+            Color="Color.Info">
+            @taskId
+        </MudChip>
     }
 </div>

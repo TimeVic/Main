@@ -7,12 +7,14 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.ExternalClients.Dto;
 using TimeTracker.Business.Services.ExternalClients.Redmine.Dto;
 
 namespace TimeTracker.Business.Services.ExternalClients.Redmine;
 
-public class RedmineClient: AExternalClientService, IRedmineClient
+public partial class RedmineClient: AExternalClientService, IRedmineClient
 {
     /**
      * Redmine integration documentation: https://www.redmine.org/projects/redmine/wiki/Rest_TimeEntries

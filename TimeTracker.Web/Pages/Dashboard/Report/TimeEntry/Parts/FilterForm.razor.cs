@@ -28,9 +28,9 @@ public partial class FilterForm
         UpdateFilterState();
     }
 
-    private void OnChangeSearch(string search)
+    private void OnChangeSearch(string? search)
     {
-        _state.Value.Filter.Search = search ?? "";
+        _state.Value.Filter.Search = search;
         UpdateFilterState();
     }
     

@@ -1,26 +1,25 @@
-﻿@inherits BaseComponent
+﻿@using TimeTracker.Business.Common.Constants
+@using MudBlazor
 
-@using TimeTracker.Business.Common.Constants
+@inherits BaseReactiveComponent
 
-<RadzenDropDown
-    @ref="_listReference"
-    Disabled="Disabled"
-    TValue="IEnumerable<long>"
-    Class="@(Class)"
-    AllowFiltering="true"
-    FilterOperator="StringFilterOperator.Contains"
-    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-    AllowSorting="false"
-    Multiple="true"
-    AllowClear="true"
-    AllowVirtualization="true"
-    Count="@_state.Value.TotalCount"
-    Data="@_state.Value.List"
-    TextProperty="Name"
-    ValueProperty="Id"
-    Chips="true"
+<MudSelect
+    T="long"
+    @ref="_select"
+    Class="@Class"
+    Disabled="@Disabled"
+    Dense="true"
+    MultiSelection="true"
     Placeholder="@Placeholder"
-    Value="@_selectedIds"
-    MaxSelectedLabels="10"
-    ValueChanged="OnValueChanged">
-</RadzenDropDown>
+    SelectedValues="@_selectedIds"
+    SelectedValuesChanged="OnValueChanged"
+    Variant="MudBlazor.Variant.Text"
+    ToStringFunc="ToStringFunc"
+    AnchorOrigin="Origin.BottomCenter">
+    @foreach (var tag in _state.Value.List)
+    {
+        <MudSelectItem Value="@tag.Id">
+            @tag.Name
+        </MudSelectItem>
+    }
+</MudSelect>

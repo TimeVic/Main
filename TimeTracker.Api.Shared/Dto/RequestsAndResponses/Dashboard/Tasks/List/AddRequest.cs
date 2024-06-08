@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
@@ -8,7 +9,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
     public class AddRequest : IRequest<TaskListDto>
     {
         [Required]
-        [IsPositive]
+        [IsPositive(ErrorMessage = "Project is required")]
         public long ProjectId { get; set; }
         
         [Required]

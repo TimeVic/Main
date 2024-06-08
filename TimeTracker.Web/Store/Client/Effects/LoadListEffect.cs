@@ -35,13 +35,13 @@ public class LoadListEffect: Effect<LoadListAction>
                 return;
             }
 
-            dispatcher.Dispatch(new SetClientIsListLoading(true));
+            dispatcher.Dispatch(new SetIsListLoading(true));
             var response = await _apiService.ClientGetListAsync(new GetListRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
                 Page = 1
             });
-            dispatcher.Dispatch(new SetClientListItemsAction(response));
+            dispatcher.Dispatch(new SetListItemsAction(response));
         }
         catch (Exception e)
         {
@@ -49,7 +49,7 @@ public class LoadListEffect: Effect<LoadListAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetClientIsListLoading(false));
+            dispatcher.Dispatch(new SetIsListLoading(false));
         }
     }
 }

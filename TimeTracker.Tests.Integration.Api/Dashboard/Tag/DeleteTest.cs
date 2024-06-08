@@ -6,9 +6,12 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tag;

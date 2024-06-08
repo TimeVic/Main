@@ -1,81 +1,149 @@
-﻿using Radzen;
+﻿using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts;
 using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
-using TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
+using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
 using TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
+using TimeTracker.Web.Shared.Components.Dialogs;
 using TimeTracker.Web.Shared.Components.Storage;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Services.UI;
 
-public class ModalDialogProviderService
+public partial class ModalDialogProviderService
 {
-    private readonly DialogService _dialogService;
+    // MudRadzen
+    private readonly IDialogService _mudDialogService;
 
-    public ModalDialogProviderService(DialogService dialogService)
+    public ModalDialogProviderService(
+        IDialogService mudDialogService
+    )
     {
-        _dialogService = dialogService;
+        _mudDialogService = mudDialogService;
     }
 
+    #region Confirmation Dialog
+
+    public async Task<bool?> ShowDeleteConfirmationDialog(
+        string messsage = "Are you sure you want to remove this item?")
+    {
+        var parameters = new DialogParameters<ConfirmationDialog>
+        {
+            {x => x.Message, messsage},
+            {x => x.ButtonColor, MudBlazor.Color.Error},
+            {x => x.ButtonText, "Delete"}
+        };
+        var dialog = await _mudDialogService.ShowAsync<ConfirmationDialog>(
+            "Delete confirmation",
+            parameters,
+            new MudBlazor.DialogOptions()
+            {
+                CloseButton = true,
+                MaxWidth = MaxWidth.ExtraSmall
+            }
+        );
+        var result = await dialog.Result;
+        return !result.Canceled;
+    }
+
+    #endregion
+
+    #region Task
+    
     public async Task ShowEditTaskModal(TaskDto task)
     {
-        await _dialogService.OpenAsync<UpdateTaskForm>(
-            $"{task.Title.Truncate(50)}",
-            parameters: new Dictionary<string, object>()
+        var parameters = new DialogParameters<UpdateTaskModal>
+        {
+            {context => context.Task, task}
+        };
+        await _mudDialogService.ShowAsync<UpdateTaskModal>(
+            $"{task.Title.TruncateAndAddDots(60)}", 
+            parameters,
+            new MudBlazor.DialogOptions()
             {
-                { "Task", task }
-            },
-            options: new DialogOptions()
-            {
-                Style = "top: 6em; bottom: 6em;",
-                ShowClose = true,
-                CloseDialogOnEsc = true,
-                AutoFocusFirstElement = true,
-                Resizable = false,
-                CloseDialogOnOverlayClick = true,
+                CloseOnEscapeKey = true,
+                CloseButton = true
             }
         );
     }
-    
-    public async Task ShowEditTaskListModal(TaskListDto? taskList = null)
+
+    public async Task ShowEditTaskListModal(
+        TaskListDto? taskList = null,
+        long? projectId = null
+    )
     {
         if (taskList == null)
         {
-            await _dialogService.OpenSideAsync<AddTasksListForm>(
-                "Add task list",
-                options: new SideDialogOptions { CloseDialogOnOverlayClick = true }
-            );
+            var parameters = new MudBlazor.DialogParameters<AddTasksListModalForm>
+            {
+                {context => context.ProjectId, projectId}
+            };
+            await _mudDialogService.ShowAsync<AddTasksListModalForm>("Add task list", parameters);
         }
         else
         {
-            await _dialogService.OpenSideAsync<UpdateTasksListForm>(
-                taskList.Name,
-                parameters: new Dictionary<string, object>()
-                {
-                    { "TaskList", taskList }
-                },
-                options: new SideDialogOptions { CloseDialogOnOverlayClick = true }
-            );
+            var parameters = new MudBlazor.DialogParameters<UpdateTasksListModalForm>
+            {
+                {context => context.TaskList, taskList}
+            };
+            await _mudDialogService.ShowAsync<UpdateTasksListModalForm>(taskList.Name, parameters);
         }
     }
     
+    public async Task ShowAddTaskModal(
+        long? timEntryId = null,
+        long? taskListId = null,
+        DateTime? endTime = null,
+        TaskStatus? taskStatus = null
+    )
+    {
+        var parameters = new DialogParameters<AddTaskModalForm>
+        {
+            { x => x.TimeEntryId, timEntryId },
+            { x => x.TaskListId, taskListId },
+            { x => x.TaskStatus, taskStatus },
+            { x => x.EndTime, endTime },
+        };
+        await _mudDialogService.ShowAsync<AddTaskModalForm>("Add new task", parameters);
+    }
+    
+    #endregion
+
     public async Task ShowFileView(StoredFileDto file)
     {
-        await _dialogService.OpenAsync<FileView>(
-            file.OriginalFileName,
-            parameters: new Dictionary<string, object>()
+        var parameters = new DialogParameters<FileView>
+        {
+            {context => context.File, file}
+        };
+        await _mudDialogService.ShowAsync<FileView>(
+            file.OriginalFileName, 
+            parameters,
+            new MudBlazor.DialogOptions()
             {
-                { "File", file }
-            },
-            options: new DialogOptions()
-            {
-                Style = "top: 1em; bottom: 1em; right: 1em; left: 1em",
-                Width = "auto",
-                ShowClose = true,
-                CloseDialogOnEsc = true,
-                AutoFocusFirstElement = true,
-                Resizable = true,
-                CloseDialogOnOverlayClick = true,
+                CloseOnEscapeKey = true,
+                FullWidth = true
+            }
+        );
+    }
+
+    public async Task ShowTimeEntriesModal()
+    {
+        var parameters = new DialogParameters<TimeEntryListModal>
+        {
+            {context => context.IsFilteredList, false}
+        };
+        await _mudDialogService.ShowAsync<TimeEntryListModal>(
+            "My Time Entries", 
+            parameters,
+            new MudBlazor.DialogOptions()
+            {                
+                CloseOnEscapeKey = true,
+                FullWidth = true,
+                CloseButton = true,
+                FullScreen = false
             }
         );
     }

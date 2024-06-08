@@ -3,13 +3,17 @@ using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Linq;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.TimeEntry;
@@ -109,8 +113,7 @@ public partial class StartTest: BaseTest
             Description = fakeTimeEntry.Description,
             IsBillable = fakeTimeEntry.IsBillable,
             Date = DateTime.UtcNow.Date,
-            StartTime = TimeSpan.FromSeconds(1),
-            TaskId = fakeTimeEntry.TaskId
+            StartTime = TimeSpan.FromSeconds(1)
         });
         response.EnsureSuccessStatusCode();
 
@@ -120,7 +123,6 @@ public partial class StartTest: BaseTest
         Assert.Equal(project.Id, actualDto.Project.Id);
         Assert.Equal(fakeTimeEntry.IsBillable, actualDto.IsBillable);
         Assert.Null(actualDto.EndTime);
-        Assert.Equal(fakeTimeEntry.TaskId, actualDto.TaskId);
     }
     
     [Fact]

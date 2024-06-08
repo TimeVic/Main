@@ -6,10 +6,14 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Notifications.Services;
+using TimeTracker.Business.Clients.Api;
+using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Services;
+using HttpClient = System.Net.Http.HttpClient;
 
 namespace TimeTracker.Tests.Integration.Api.Core;
 
@@ -22,7 +26,9 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     protected readonly IDbSessionProvider DbSessionProvider;
     protected readonly IUserSeeder UserSeeder;
     protected readonly IDataFactory<UserEntity> UserFactory;
-    protected readonly EmailSendingServiceMock EmailSendingServiceMock;
+    protected readonly SmtpClientServiceMock SmtpClientServiceMock;
+    private readonly IDbCleanUpService _dbCleanUpService;
+    protected readonly FirebaseClientServiceMock FirebaseClientService;
 
     public BaseTest(ApiCustomWebApplicationFactory factory)
     {
@@ -30,15 +36,19 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         HttpClient = _factory.CreateClient();
         
         DbSessionProvider = _factory.Services.GetRequiredService<IDbSessionProvider>();
+        _dbCleanUpService = _factory.Services.GetRequiredService<IDbCleanUpService>();
         UserSeeder = _factory.Services.GetRequiredService<IUserSeeder>();
         UserFactory = _factory.Services.GetRequiredService<IDataFactory<UserEntity>>();
-        EmailSendingServiceMock = _factory.Services.GetRequiredService<IEmailSendingService>() as EmailSendingServiceMock;
+        SmtpClientServiceMock = _factory.Services.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock;
+        FirebaseClientService = _factory.Services.GetRequiredService<IFirebaseClientService>() as FirebaseClientServiceMock;
         ServiceProvider = _factory.Services;
+
+        _dbCleanUpService.CleanUp().Wait();
     }
     
     public void Dispose()
     {
-        DbSessionProvider.PerformCommitAsync().Wait();
+        CommitDbChanges().Wait();
         GC.SuppressFinalize(this);
     }
 

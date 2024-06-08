@@ -1,4 +1,5 @@
 ﻿using TimeTracker.Api.Shared.Constants;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Core.Exceptions;
 using TimeTracker.Web.Core.Helpers;
@@ -22,7 +23,7 @@ namespace TimeTracker.Web.Services.Http
         {
             try
             {
-                await GetAsync(ApiUrl.UserCheckIsLoggedIn, null, token);
+                await GetAsync(ApiUrl.UserCheckIsLoggedIn, token);
                 return true;
             }
             catch (Exception e)
@@ -55,6 +56,51 @@ namespace TimeTracker.Web.Services.Http
             }
 
             return response;
+        }
+        
+        public async Task<bool> ResetPasswordStep1(ResetPasswordStep1Request model)
+        {
+            try
+            {
+                await PostAsync<object>(ApiUrl.ResetPasswordStep1, model);
+                return true;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return false;
+        }
+        
+        public async Task<bool> ResetPasswordStep2(ResetPasswordStep2Request model)
+        {
+            try
+            {
+                await PostAsync<object>(ApiUrl.ResetPasswordStep2, model);
+                return true;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return false;
+        }
+        
+        public async Task SendNotificationToken(string token)
+        {
+            try
+            {
+                await PostAsync<object>(ApiUrl.SetNotificationToken, new SetNotificationTokenRequest()
+                {
+                    Token = token
+                });
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
     }
 }

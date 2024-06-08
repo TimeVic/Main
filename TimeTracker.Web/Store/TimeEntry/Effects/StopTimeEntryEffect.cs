@@ -27,7 +27,7 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
     {
         try
         {
-            dispatcher.Dispatch(new SetIsTimeEntryProcessing(true));
+            dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(true));
             await _apiService.TimeEntryStopAsync(new StopRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
@@ -35,7 +35,8 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
                 EndDate = DateTime.Now.ToDateAndRemoveTimeZone()
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(null));
-            dispatcher.Dispatch(new LoadListAction(1));
+            dispatcher.Dispatch(new SetSelectedPageAction(1));
+            dispatcher.Dispatch(new LoadListAction());
         }
         catch (Exception e)
         {
@@ -43,7 +44,7 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetIsTimeEntryProcessing(false));
+            dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(false));
         }
     }
 }

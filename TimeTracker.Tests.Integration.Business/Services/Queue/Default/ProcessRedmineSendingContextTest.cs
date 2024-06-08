@@ -3,13 +3,18 @@ using Microsoft.Extensions.Configuration;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dao.Workspace;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.ExternalClients.Redmine;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Queue.Handlers;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Services.Queue.Default;
@@ -25,18 +30,27 @@ public class ProcessRedmineSendingContextTest : BaseTest
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
     private readonly IUserDao _userDao;
+    private readonly ITaskSeeder _taskSeeder;
+    private readonly IProjectSeeder _projectSeeder;
+    private readonly ITaskListSeeder _taskListSeeder;
 
     private readonly string _apiKey;
     private readonly long _userId;
     private readonly string _taskId;
     private readonly string? _redmineUrl;
     private readonly long _activityId;
+    private readonly ProjectEntity _project;
+    private readonly TaskListEntity _taskList;
+    private readonly TaskEntity _task;
 
     public ProcessRedmineSendingContextTest() : base()
     {
         _queueService = Scope.Resolve<IQueueService>();
         _timeEntrySeeder = Scope.Resolve<ITimeEntrySeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
+        _taskSeeder = Scope.Resolve<ITaskSeeder>();
+        _taskListSeeder = Scope.Resolve<ITaskListSeeder>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _redmineClient = Scope.Resolve<IRedmineClient>() as RedmineClientMock;
         _workspaceSettingsDao = Scope.Resolve<IWorkspaceSettingsDao>();
         _userDao = Scope.Resolve<IUserDao>();
@@ -50,8 +64,13 @@ public class ProcessRedmineSendingContextTest : BaseTest
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
+        _taskList = _taskListSeeder.CreateAsync(_project).Result;
+        _task = _taskSeeder.CreateAsync(_taskList).Result;
+        
         _timeEntry = _timeEntrySeeder.CreateSeveralAsync(_workspace, _user).Result.First();
-        _timeEntry.TaskId = _taskId;
+        _task.ExternalTaskId = _taskId;
+        _timeEntry.Task = _task;
 
         var settings = _workspaceSettingsDao.SetRedmineAsync(
             _user,

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 {
@@ -14,14 +15,14 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         
         public bool? IsArchived { get; set; }
         
-        public bool? IsDone { get; set; }
+        public TaskStatus? Status { get; set; }
 
         public void Fill(GetListFilterRequest request)
         {
             AssignedUserId = request.AssignedUserId;
             SearchString = request.SearchString;
             IsArchived = request.IsArchived;
-            IsDone = request.IsDone;
+            Status = request.Status;
         }
     }
 }

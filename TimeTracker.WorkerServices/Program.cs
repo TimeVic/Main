@@ -36,6 +36,10 @@ public class Program
         return Host.CreateDefaultBuilder(args)
             .UseSerilog(Log.Logger)
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureAppConfiguration(config =>
+            {
+                config.ConfigureConfigurationProvider();
+            })
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();

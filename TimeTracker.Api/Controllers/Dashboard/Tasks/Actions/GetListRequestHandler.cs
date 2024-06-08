@@ -1,11 +1,13 @@
 ﻿using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dto.Tasks;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
@@ -49,7 +51,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             }
 
             var filter = _mapper.Map<GetTasksFilterDto>(request.Filter);
-            var taskLists = await _taskDao.GetList(taskList, filter);
+            var taskLists = await _taskDao.GetList(taskList: taskList, filter: filter);
             return new GetListResponse(
                 _mapper.Map<ICollection<TaskDto>>(taskLists.Items),
                 taskLists.TotalCount

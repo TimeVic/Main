@@ -6,6 +6,7 @@ using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Notifications;
 using TimeTracker.Business.Notifications.Senders;
 using TimeTracker.Business.Notifications.Senders.Tasks;
+using TimeTracker.Business.Notifications.Senders.Tasks.Comments;
 using TimeTracker.Business.Notifications.Senders.TimeEntry;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Constants;
@@ -15,7 +16,7 @@ using TimeTracker.Business.Services.Queue.Handlers;
 
 namespace TimeTracker.Business.Services.Queue;
 
-public class QueueService: IQueueService
+public partial class QueueService: IQueueService
 {
     private readonly IQueueDao _queueDao;
     private readonly ILogger<QueueService> _logger;
@@ -64,6 +65,11 @@ public class QueueService: IQueueService
             string error = null;
             try
             {
+                if (channel == QueueChannel.Default)
+                {
+                    await ProcessDefaultItem(queueItem, cancellationToken);
+                    processedCounter++;
+                } 
                 if (channel == QueueChannel.Notifications)
                 {
                     await ProcessNotificationItem(queueItem, cancellationToken);
@@ -89,65 +95,7 @@ public class QueueService: IQueueService
 
         return processedCounter;
     }
-
-    private async Task ProcessExternalClientItem(QueueEntity queueItem, CancellationToken cancellationToken = default)
-    {
-        var contextType = GetContextType(queueItem, typeof(BusinessAssemblyMarker));
-        if (contextType == null)
-        {
-            throw new Exception($"Queue context was not found in assembly: {queueItem.ContextType}");
-        }
-        if (IsContext<SendSetTimeEntryIntegrationRequestContext>(contextType))
-        {
-            await HandleQueueItem<SendSetTimeEntryIntegrationRequestContext>(queueItem, cancellationToken);
-        }
-        else if (IsContext<SendDeleteTimeEntryIntegrationRequestContext>(contextType))
-        {
-            await HandleQueueItem<SendDeleteTimeEntryIntegrationRequestContext>(queueItem, cancellationToken);
-        }
-        else
-        {
-            throw new Exception($"Incorrect queue context: {queueItem.ContextType}");
-        }
-    }
     
-    private async Task ProcessNotificationItem(QueueEntity queueItem, CancellationToken cancellationToken = default)
-    {
-        var contextType = GetContextType(queueItem, typeof(BusinessNotificationsAssemblyMarker));
-        if (contextType == null)
-        {
-            throw new Exception($"Notification context was not found in assembly: {queueItem.ContextType}");
-        }
-        if (IsContext<TestNotificationItemContext>(contextType))
-        {
-            await SendNotification<TestNotificationItemContext>(queueItem, cancellationToken);
-        }
-        else if (IsContext<RegistrationNotificationItemContext>(contextType))
-        {
-            await SendNotification<RegistrationNotificationItemContext>(queueItem, cancellationToken);
-        }
-        else if (IsContext<EmailVerifiedNotificationItemContext>(contextType))
-        {
-            await SendNotification<EmailVerifiedNotificationItemContext>(queueItem, cancellationToken);
-        }
-        else if (IsContext<TimeEntryAutoStoppedNotificationItemContext>(contextType))
-        {
-            await SendNotification<TimeEntryAutoStoppedNotificationItemContext>(queueItem, cancellationToken);
-        }
-        else if (IsContext<EmailVerificationNotificationItemContext>(contextType))
-        {
-            await SendNotification<EmailVerificationNotificationItemContext>(queueItem, cancellationToken);
-        }
-        else if (IsContext<TaskChangedNotificationContext>(contextType))
-        {
-            await SendNotification<TaskChangedNotificationContext>(queueItem, cancellationToken);
-        }
-        else
-        {
-            throw new Exception($"Incorrect notification context: {queueItem.ContextType}");
-        }
-    }
-
     private static Type? GetContextType(QueueEntity queueItem, Type markerType)
     {
         var activationResult = Activator.CreateInstance(

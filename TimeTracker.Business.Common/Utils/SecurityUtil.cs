@@ -12,7 +12,8 @@ namespace TimeTracker.Business.Common.Utils
         private static readonly int HASH_SIZE = 1023;
         private static readonly int HASH_ITERATIONS = 300;
         
-        private static readonly object _TimeBasedRandomizerLock = new {};
+        private static readonly object TimeBasedRandomizerLock = new {};
+        private static readonly Random Randomizer = new Random();
 
         public static byte[] GenerateSalt(int? size = null)
         {
@@ -80,16 +81,26 @@ namespace TimeTracker.Business.Common.Utils
             return randomString;
         }
         
-        public static string GetTimeBasedToken()
+        public static string GetTimeBasedToken(bool isShort = false)
         {
-            lock (_TimeBasedRandomizerLock)
+            lock (TimeBasedRandomizerLock)
             {
-                var ticks = DateTime.UtcNow.Ticks;
-                var ticksBytes = BitConverter.GetBytes(ticks);
-                var guidBytes = Guid.NewGuid().ToByteArray();
-                return Convert.ToBase64String(
-                    ticksBytes.Concat(guidBytes).ToArray()
-                ); 
+                IEnumerable<byte> ticksBytes = BitConverter.GetBytes(DateTime.UtcNow.Ticks);
+                if (isShort)
+                {
+                    var guidBytes = Guid.NewGuid().ToByteArray();
+                    ticksBytes = ticksBytes.Concat(guidBytes);
+                }
+                else
+                {
+                    ticksBytes = ticksBytes.Concat(BitConverter.GetBytes(Randomizer.NextInt64(0, 1000_000)));
+                }
+
+                return Convert.ToBase64String(ticksBytes.ToArray())
+                    .Replace('+', 'H')
+                    .Replace('/', 'k')
+                    .Replace('#', 's')
+                    .Replace('=', 'i');
             }
         }
     }

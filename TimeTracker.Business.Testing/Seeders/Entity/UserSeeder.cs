@@ -1,7 +1,10 @@
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Security.Model;

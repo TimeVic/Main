@@ -1,79 +1,52 @@
 ﻿@using TimeTracker.Web.Pages.Dashboard.Shared
+@using TimeTracker.Business.Extensions
+@using MudBlazor
 
-@inherits BaseComponent
+@inherits BaseReactiveComponent
 
-<RadzenCard class="mx-auto">
-    <RadzenTree Style="width: 100%;" ValueChanged="OnSelectedTestsList">
-        @if (!TasksList.Any())
+<MudStack Spacing="2">
+    <MudList 
+        @ref="@_taskListList"
+        SelectedValue="@_selectedTaskListId"
+        Clickable="true">
+        @foreach (var taskList in _tasksList)
         {
-            <RadzenText TextStyle="TextStyle.Caption">Task lists not found</RadzenText>
+            <MudListItem
+                
+                Value="@taskList.Id"
+                OnClick="@(() => OnSelectedTasksList(taskList.Id))"
+                Text="@taskList.Name.Truncate(32, true)"/>
         }
-        @foreach (var project in Projects)
+        <MudDivider/>
+        @if (!_tasksList.Any())
         {
-            var tasksList = GetTasksList(project);
-            if (tasksList.Any())
+            <MudListItem
+                IconSize="Size.Small"
+                Icon="@Icons.Material.Filled.Add"
+                OnClick="@(ShowAddTaskListModal)"
+                Text="Add new list"/>
+        }
+        else
+        {
+            <MudListItem 
+                IconSize="Size.Small"
+                OnClick="@ShowAddTaskListModal"
+                Icon="@Icons.Material.Filled.Add"
+                Text="Add"/>
+            @if (_selectedTaskListId != 0)
             {
-                <RadzenTreeItem
-                    Text="@project.Name"
-                    Expanded="true"
-                    Selected="false">
-                    <ChildContent>
-                        @foreach (var list in tasksList)
-                        {
-                            <RadzenTreeItem
-                                Selected="@(list.Id == _selectedTaskListId)"
-                                Text="@list.Name"
-                                Value="@list.Id">
-                                <Template>
-                                    <RadzenText
-                                        TextStyle="TextStyle.Subtitle2"
-                                        class="w-100">
-                                        @context.Text
-                                    </RadzenText>
-                                </Template>
-                            </RadzenTreeItem>
-                        }
-                    </ChildContent>
-                    <Template>
-                        <b>
-                            @context.Text
-                        </b>
-                    </Template>
-                </RadzenTreeItem>
+                <MudListItem 
+                    IconSize="Size.Small"
+                    OnClick="@ShowUpdateTaskListModal"
+                    Icon="@Icons.Material.Filled.Edit"
+                    Text="Update"/>
+                <MudListItem 
+                    IconSize="Size.Small"
+                    OnClick="@OnDeleteTaskList"
+                    Icon="@Icons.Material.Filled.Delete"
+                    Text="Delete"/>
             }
         }
-    </RadzenTree>
-    <hr/>
-    <RadzenRow>
-        <RadzenColumn>
-            <RadzenButton
-                Variant="Variant.Text"
-                ButtonStyle="ButtonStyle.Primary"
-                Class="w-100"
-                Click="ShowAddTaskListModal"
-                Icon="add">
-                Add list
-            </RadzenButton>
-        </RadzenColumn>
-        <RadzenColumn Style="max-width: 36px;">
-            <RadzenButton
-                Variant="Variant.Text"
-                ButtonStyle="ButtonStyle.Secondary"
-                Class="w-100"
-                Disabled="@(_selectedTaskListId == null)"
-                Click="ShowUpdateTaskListModal"
-                Icon="edit"/>
-        </RadzenColumn>
-        <RadzenColumn Style="max-width: 36px;">
-            <RadzenButton
-                Variant="Variant.Text"
-                ButtonStyle="ButtonStyle.Danger"
-                Class="w-100"
-                Disabled="@(_selectedTaskListId == null)"
-                Click="OnDeleteTaskList"
-                Icon="delete"/>
-        </RadzenColumn>
-    </RadzenRow>
-
-
-</RadzenCard>
+        
+    </MudList>
+</MudStack>

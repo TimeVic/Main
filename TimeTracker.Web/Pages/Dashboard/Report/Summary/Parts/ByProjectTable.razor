@@ -3,58 +3,27 @@
 @using Fluxor
 @using TimeTracker.Web.Store.Client
 @using TimeTracker.Web.Store.Project
+@using MudBlazor
 
 @code {
 
     [Parameter]
     public ICollection<SummaryByProjectsReportItemDto> Items { get; set; } = new List<SummaryByProjectsReportItemDto>();
-
-    private RadzenDataGrid<SummaryByProjectsReportItemDto> _grid { get; set; }
-
-    protected async override Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-    }
-
 }
 
-<h3>Grouped by project:</h3>
-
-<RadzenDataGrid
-    @ref="_grid"
-    TItem="SummaryByProjectsReportItemDto"
-    AllowSorting="false"
-    EditMode="DataGridEditMode.Single"
-    Data="@Items"
-    AllowPaging="false">
-
-    <Columns>
-        <RadzenDataGridColumn
-            TItem="SummaryByProjectsReportItemDto"
-            Title="Project"
-            Width="250px"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @(item.ProjectName ?? "- No project -")
-            </Template>
-        </RadzenDataGridColumn>
-
-        <RadzenDataGridColumn
-            TItem="SummaryByProjectsReportItemDto"
-            Title="Duration"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.Duration.ToReadableShortString()
-            </Template>
-        </RadzenDataGridColumn>
-        
-        <RadzenDataGridColumn
-            TItem="SummaryByProjectsReportItemDto"
-            Title="Amount"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.Amount.ToMoneyFormat()
-            </Template>
-        </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
+<MudTable
+    Items="@Items" 
+    Hover="true" 
+    Breakpoint="Breakpoint.Sm" 
+    LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Project</MudTh>
+        <MudTh>Duration</MudTh>
+        <MudTh>Amount</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Project">@(context.ProjectName ?? "- No project -")</MudTd>
+        <MudTd DataLabel="Duration">@context.Duration.ToReadableShortString()</MudTd>
+        <MudTd DataLabel="Amount">@context.Amount.ToMoneyFormat()</MudTd>
+    </RowTemplate>
+</MudTable>

@@ -4,7 +4,10 @@ using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Queue;
@@ -64,7 +67,7 @@ public class GetUsersHourlyRateForProjectTest: BaseTest
     public async Task ShouldReturnHourlyRateForUser()
     {
         var expectedRate = 15.78m;
-        
+
         var userWithUserRole = await _userSeeder.CreateActivatedAsync();
         await _workspaceAccessService.ShareAccessAsync(
             _workspace,

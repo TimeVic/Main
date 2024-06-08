@@ -1,5 +1,6 @@
 ﻿using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Web.Core.Exceptions;
 
@@ -9,7 +10,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<TaskListDto> TaskListAddAsync(AddRequest model)
         {
-            var response = await PostAuthorizedAsync<TaskListDto>(ApiUrl.TaskListAdd, model);
+            var response = await PostAsync<TaskListDto>(ApiUrl.TaskListAdd, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -20,7 +21,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<TaskListDto> TaskListUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAuthorizedAsync<TaskListDto>(ApiUrl.TaskListUpdate, model);
+            var response = await PostAsync<TaskListDto>(ApiUrl.TaskListUpdate, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -31,7 +32,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<GetListResponse> TaskListGetListAsync(GetListRequest model)
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TaskListList, model);
+            var response = await PostAsync<GetListResponse>(ApiUrl.TaskListList, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -42,7 +43,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task TaskListArchiveAsync(long taskListId)
         {
-            await PostAuthorizedAsync<TaskListDto>(ApiUrl.TaskListArchive, new ArchiveTaskListRequest()
+            await PostAsync<TaskListDto>(ApiUrl.TaskListArchive, new ArchiveTaskListRequest()
             {
                 TaskListId = taskListId
             });

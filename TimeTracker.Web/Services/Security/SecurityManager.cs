@@ -28,6 +28,10 @@ public class SecurityManager: ISecurityManager
     public ICollection<ProjectDto> GetSharedProjects(UserDto? user = null)
     {
         user ??= _authState.Value.User;
+        if (_authState.Value.Workspace.IsFullAccess)
+        {
+            return _projectState.Value.List;
+        }
 
         var projectAccesses = _workspaceMembershipsState
             .Value
@@ -41,7 +45,9 @@ public class SecurityManager: ISecurityManager
         }
 
         return projectAccesses.GroupBy(item => item.Project)
-            .Select(item => item.Key)
+            .Select(
+                item => _projectState.Value.List.First(x => x.Id == item.Key.Id)
+            )
             .ToList();
     }
     

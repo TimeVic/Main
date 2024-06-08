@@ -3,10 +3,13 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Db.Dao.TimeEntry;

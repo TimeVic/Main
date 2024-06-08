@@ -9,7 +9,7 @@ public class MembershipProjectAccessRequest
     [IsPositive]
     public long ProjectId { get; set; }
 
-    [IsPositive]
+    [IsPositive(AllowZero = true)]
     public decimal? HourlyRate { get; set; }
     
     public bool HasAccess { get; set; }

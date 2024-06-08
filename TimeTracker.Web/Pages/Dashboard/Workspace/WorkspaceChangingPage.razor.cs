@@ -4,7 +4,7 @@ using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Workspace;
 using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common.Actions;
+using TimeTracker.Web.Store.Common;
 using TimeTracker.Web.Store.Workspace;
 
 namespace TimeTracker.Web.Pages.Dashboard.Workspace;
@@ -37,7 +37,7 @@ public partial class WorkspaceChangingPage
             return;
         }
         
-        await _workspaceInitializationService.Init(true);
+        _workspaceInitializationService.Init(true);
         _workpsaceState.StateChanged += OnWorkspaceListChanged;
         await base.OnInitializedAsync();
     }
@@ -55,14 +55,14 @@ public partial class WorkspaceChangingPage
             _navigationManager.NavigateTo(SiteUrl.Error404);
             return;
         }
-
+        
         if (_authState.Value.Workspace == null || workspace.Id != _authState.Value.Workspace?.Id)
         {
             _workpsaceState.StateChanged -= OnWorkspaceListChanged;
             // The page was initialized early
             Dispatcher.Dispatch(new SetWorkspaceAction(workspace));
             Dispatcher.Dispatch(new PersistDataAction());
-            _workspaceInitializationService.AfterInit(true).Wait();
+            _workspaceInitializationService.AfterInit(true);
         }
         NavigateTo();
     }
@@ -70,7 +70,8 @@ public partial class WorkspaceChangingPage
     private void NavigateTo()
     {
         _navigationManager.NavigateTo(
-            string.IsNullOrEmpty(PageRoute) ? SiteUrl.DashboardBase : PageRoute  
+            string.IsNullOrEmpty(PageRoute) ? SiteUrl.DashboardBase : PageRoute,
+            replace: true
         );
     }
 }

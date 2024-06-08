@@ -2,6 +2,7 @@
 using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao;
 

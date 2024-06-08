@@ -12,33 +12,47 @@ public partial class TasksFilterForm
     [Inject]
     public IState<TasksState> TasksListState { get; set; }
 
-    private GetListFilterRequest model = new();
+    public GetListFilterRequest Filter
+    {
+        get => TasksListState.Value.Filter;
+    }
     
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.Fill(TasksListState.Value.Filter);
     }
     
     private void ResetForm()
     {
-        model = new GetListFilterRequest();
-        HandleSubmit(model);
+        Dispatcher.Dispatch(new SetListFilterAction(new GetListFilterRequest()));
     }
 
     private void LoadList()
     {
+        Dispatcher.Dispatch(new SetListFilterAction(Filter));
         Dispatcher.Dispatch(new LoadListAction());
-    }
-
-    private void OnChangeAssignedUserId(long userId)
-    {
-        model.AssignedUserId = userId == 0 ? null : userId;
     }
 
     private void HandleSubmit(GetListFilterRequest filterData)
     {
         Dispatcher.Dispatch(new SetListFilterAction(filterData));
+    }
+
+    private void OnChangeSearchString(string searchString)
+    {
+        Filter.SearchString = searchString;
+        LoadList();
+    }
+
+    private void OnChangeIsArchived(bool? isArchived)
+    {
+        Filter.IsArchived = isArchived;
+        LoadList();
+    }
+    
+    private void OnChangeAssignedUserId(long userId)
+    {
+        Filter.AssignedUserId = userId == 0 ? null : userId;
         LoadList();
     }
 }

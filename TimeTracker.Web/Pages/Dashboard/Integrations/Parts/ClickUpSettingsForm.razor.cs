@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
+using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Web.Constants;
@@ -22,6 +22,8 @@ public partial class ClickUpSettingsForm
     
     private SetClickUpSettingsRequest _model = new();
     private bool _isLoading = false;
+    private bool _isValid = false;
+    private MudForm _form;
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,48 +33,37 @@ public partial class ClickUpSettingsForm
             _model.Fill(Value);    
         }
 
-        Debug.Log(_model);
         _model.WorkspaceId = _authState.Value.Workspace.Id;
     }
     
     private async Task HandleSubmit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
+        
         _isLoading = true;
         try
         {
             var responseDto = await ApiService.WorkspaceSetClickUpIntegrationSettingsAsync(_model);
             if (responseDto != null)
             {
-                NotificationService.Notify(new NotificationMessage()
-                {
-                    Severity = NotificationSeverity.Info,
-                    Summary = "The settings was saved"
-                });
+                await ToastService.ShowInfo("The settings was saved");
                 if (!responseDto.IsActive)
                 {
-                    NotificationService.Notify(new NotificationMessage()
-                    {
-                        Severity = NotificationSeverity.Warning,
-                        Summary = "Integration to ClickUp was not activated. Please check the settings"
-                    });
+                    await ToastService.ShowWarning("Integration to ClickUp was not activated. Please check the settings");
                 }
                 else
                 {
-                    NotificationService.Notify(new NotificationMessage()
-                    {
-                        Severity = NotificationSeverity.Info,
-                        Summary = "Integration to ClickUp is activated"
-                    });
+                    await ToastService.ShowInfo("Integration to ClickUp is activated");
                 }
             }
         }
         catch (Exception)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Settings saving error"
-            });
+            await ToastService.ShowError("Settings saving error");
         }
         finally
         {

@@ -1,124 +1,54 @@
-﻿@inherits BaseComponent
+﻿@inherits BaseReactiveComponent
 
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
+@using MudBlazor
 
-<div class="row w-time-form no-gutters mx-n2">
+<MudTable
+    Class="mt-2 w-100"
+    Items="@_state.Value.List"
+    Hover="true"
+    Dense="true"
+    Outlined="true"
+    Breakpoint="Breakpoint.Sm"
+    Loading="@_state.Value.IsListLoading"
+    LoadingProgressColor="Color.Info">
 
-    <RadzenCard class="w-100">
-        <RadzenButton
-            Icon="add_circle_outline"
-            Text="Add payment"
-            Click="@InsertRow"
-            Disabled="@_state.Value.HasItemToAdd"/>
-    </RadzenCard>
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Payments</MudText>
+        <MudSpacer/>
+        <MudButton
+            OnClick="OnAddPayment"
+            StartIcon="@Icons.Material.Filled.Add">
+            Add
+        </MudButton>
+    </ToolBarContent>
 
-    <RadzenDataGrid
-        class="mt-2"
-        @ref="@_grid"
-        TItem="PaymentDto"
-        AllowSorting="false"
-        EditMode="DataGridEditMode.Single"
-        PageSize="@GlobalConstants.ListPageSize"
-        RowUpdate="@OnUpdateRow"
-        Data="@_state.Value.SortedList"
-        AllowPaging="false"
-        IsLoading="@_state.Value.IsListLoading"
-        Count="@_state.Value.TotalCount"
-        ColumnWidth="100px">
+    <HeaderContent>
+        <MudTh>Client</MudTh>
+        <MudTh>Project</MudTh>
+        <MudTh>Amount</MudTh>
+        <MudTh>Payment time</MudTh>
+        <MudTh>Description</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
 
-        <Columns>
-            <RadzenDataGridColumn TItem="PaymentDto" Title="Client">
-                <Template Context="item">
-                    @item.Client.Name
-                </Template>
-                <EditTemplate Context="item">
-                    <ClientsDropDown
-                        Value="@(item.Client.Id)"
-                        SelectedItemChanged="OnClientSelected"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="PaymentDto" Title="Project">
-                <Template Context="item">
-                    @item.Project?.Name
-                </Template>
-                <EditTemplate Context="item">
-                    <ProjectsDropDown
-                        Disabled="@(item.Client.Id == 0)"
-                        ClientId="@item.Client.Id"
-                        Value="@(item.Project?.Id ?? 0)"
-                        SelectedItemChanged="OnProjectSelected"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="PaymentDto" Title="Amount">
-                <Template Context="item">
-                    <RadzenNumeric @bind-Value="@item.Amount" Format="0.##" Disabled="true" Name="Amount"/>
-                </Template>
-                <EditTemplate Context="item">
-                    <RadzenNumeric 
-                        TValue="decimal"
-                        @bind-Value="@item.Amount"
-                        Step="0.01"
-                        Format="0.00"
-                        Style="width:100%; display: block"
-                        Name="Amount"/>
-                    <RadzenRequiredValidator Component="Amount"Popup="true" Style="position: absolute"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="PaymentDto" Title="Payment Date">
-                <Template Context="item">
-                    @item.PaymentTime.ToString("d")
-                </Template>
-                <EditTemplate Context="item">
-                    <RadzenDatePicker
-                        DateFormat="d"
-                        @bind-Value="@item.PaymentTime"
-                        Name="PaymentTime"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="PaymentDto" Property="Description" Title="Description">
-                <EditTemplate Context="item">
-                    <RadzenTextBox @bind-Value="@item.Description" Style="width:100%; display: block" Name="Description"/>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn
-                TItem="PaymentDto"
-                Context="app" Filterable="false"
-                Sortable="false"
-                TextAlign="TextAlign.Center"
-                Width="120px">
-
-                <Template Context="item">
-
-                    <RadzenButton
-                        Size="ButtonSize.Small"
-                        Icon="edit"
-                        ButtonStyle="ButtonStyle.Light"
-                        Click="@(args => EditRow(item))"
-                        @onclick:stopPropagation="true">
-                    </RadzenButton>
-                    <RadzenButton
-                        Size="ButtonSize.Small"
-                        ButtonStyle="ButtonStyle.Danger"
-                        Icon="delete"
-                        Click="async () => await OnDeleteItemAsync(item)"/>
-                </Template>
-                <EditTemplate Context="item">
-
-                    <RadzenButton
-                        Size="ButtonSize.Small"
-                        Icon="check"
-                        ButtonStyle="ButtonStyle.Primary"
-                        Click="@(() => OnClickSaveRow(item))"/>
-
-                    <RadzenButton
-                        Size="ButtonSize.Small"
-                        Icon="close"
-                        ButtonStyle="ButtonStyle.Light"
-                        Click="@(() => OnClickCancelEditMode(item))">
-                    </RadzenButton>
-                </EditTemplate>
-            </RadzenDataGridColumn>
-        </Columns>
-    </RadzenDataGrid>
-</div>
+    <RowTemplate>
+        <MudTd DataLabel="Client">@context.Client?.Name</MudTd>
+        <MudTd DataLabel="Project">@context.Project?.Name</MudTd>
+        <MudTd DataLabel="Amount">@context.Amount.ToString("0.##")</MudTd>
+        <MudTd DataLabel="PaymentTime">@context.PaymentTime.ToString("d")</MudTd>
+        <MudTd DataLabel="Description">@context.Description</MudTd>
+        <MudTd DataLabel="Actions">
+            <MudIconButton
+                OnClick="@(() => OnEditPayment(context))"
+                Icon="@Icons.Material.Filled.Edit"
+                Size="Size.Small"/>
+            <MudIconButton
+                OnClick="@(() => OnDeleteItem(context))"
+                Icon="@Icons.Material.Filled.Delete"
+                Color="Color.Error"
+                Size="Size.Small"/>
+        </MudTd>
+    </RowTemplate>
+</MudTable>

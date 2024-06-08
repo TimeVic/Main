@@ -1,30 +1,30 @@
-﻿@inherits BaseComponent
+﻿@inherits BaseReactiveComponent
 
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
+@using MudBlazor
 
-<RadzenDropDown
-    @ref="_listReference"
-    Disabled="Disabled"
-    PageSize="GlobalConstants.ListPageSize"
-    AllowClear="Clearable"
-    TValue="long"
-    Class="@(Class)"
-    AllowFiltering="true"
-    FilterOperator="StringFilterOperator.Contains"
-    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-    AllowSorting="false"
-    AllowVirtualization="true"
-    Multiple="false"
-    Data="@_list"
-    ValueProperty="Id"
+<MudSelect
+    T="long"
+    U="TaskListDto"
+    Class="@Class"
+    Disabled="@Disabled"
+    Dense="true"
+    Required="Required"
+    Clearable="Clearable"
     Placeholder="@Placeholder"
+    EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+    For="For"
     Value="@_selectedId"
-    ValueChanged="async (value) => await OnValueChanged(value)">
-    <Template>
-        @{
-            var membership = context as WorkspaceMembershipDto;
-        }
-        <div>@membership.User.Name</div>
-    </Template>
-</RadzenDropDown>
+    ValueChanged="OnValueChanged"
+    ToStringFunc="ToStringFunc"
+    RequiredError="Task list is required"
+    Variant="MudBlazor.Variant.Text"
+    AnchorOrigin="Origin.BottomCenter">
+    @foreach (var membership in _list)
+    {
+        <MudSelectItem Value="@membership.Id">
+            <div>@membership.User.Name</div>
+        </MudSelectItem>
+    }
+</MudSelect>

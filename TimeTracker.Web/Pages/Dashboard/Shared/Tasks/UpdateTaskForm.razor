@@ -1,157 +1,170 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 @using TimeTracker.Business.Common.Constants.Storage
+@using TimeTracker.Business.Common.Constants.Task
 @using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks.Comments
+@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+@using TimeTracker.Api.Shared.Dto.Entity.Task
+@using MudBlazor
 
-@inherits BaseComponent
+@inherits BaseReactiveComponent
 
-<RadzenTemplateForm
-    @ref="@_form"
-    TItem="UpdateRequest"
-    Data="@model"
-    Submit="HandleSubmit">
-    <DataAnnotationsValidator/>
+<MudForm
+    @ref="_form"
+    @bind-IsValid="_isValid">
 
-    <RadzenStack
-        Orientation="Orientation.Vertical"
-        AlignItems="AlignItems.Start"
-        Wrap="FlexWrap.Wrap">
+    <MudPaper Class="pa-4" Outlined="true">
+        <MudStack Row="true" AlignItems="MudBlazor.AlignItems.Center">
+            <TaskIdBadge IsLink="true" InternalTask="@Task"/>
 
-        <RadzenRow Class="w-100">
-            <RadzenColumn
-                class="d-flex align-items-center"
-                Style="max-width: 60px;">
-                <TaskIdBadge IsLink="true" InternalTask="@Task"/>
-            </RadzenColumn>
-            <RadzenColumn>
-                <RadzenTextBox
-                    Name="Title"
-                    @bind-Value="model.Title"
-                    Placeholder="Enter a title for new task"
-                    Change="SubmitForm"
-                    Class="w-100"/>
-            </RadzenColumn>
-            <RadzenColumn Style="max-width: 150px;">
-                <TimeEntryForm
-                    InternalTask="@Task"
-                    IsShort="true"/>
-            </RadzenColumn>
-        </RadzenRow>
+            <MudSpacer/>
+            <TimeEntryForm
+                InternalTask="@Task"
+                IsShort="true"/>
+            <MudSpacer/>
+            <MudButton
+                OnClick="@SubmitForm"
+                Variant="Variant.Filled"
+                Disabled="@(!_form.IsValid || _tasksState.Value.IsTaskSaving)"
+                Color="Color.Primary">
+                Save
+            </MudButton>
+        </MudStack>
 
-        <RadzenRow Class="w-100">
-            <RadzenColumn Style="max-width: 200px">
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    Assigned
-                </RadzenText>
-                <MembersDropDown
-                    Clearable="false"
-                    AllowedIds="_allowedUserIds"
-                    UserId="@model.UserId"
-                    SelectedItemChanged="OnChangedAssigned"/>
-            </RadzenColumn>
-            <RadzenColumn Style="max-width: 200px">
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    Notify me at
-                </RadzenText>
-                <RadzenDatePicker
-                    TValue="DateTime?"
-                    ShowTime="true"
-                    ShowSeconds="true"
-                    HoursStep="1"
-                    MinutesStep="30"
-                    Change="OnChangeNotificationTime"
-                    DateRender="OnRenderNotificationTime"
-                    Value="model.NotificationTime"
-                    DateFormat="MM/dd/yyyy HH:mm"/>
-            </RadzenColumn>
-        </RadzenRow>
+        <MudGrid>
+            <MudItem xs="12">
+                <MudTextField
+                    T="string"
+                    For="() => _model.Title"
+                    @bind-Value="_model.Title"
+                    Placeholder="Title"/>
+            </MudItem>
+        </MudGrid>
 
-        <RadzenRow Class="w-100">
-            <RadzenColumn Style="max-width: 200px">
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    External Task Id
-                </RadzenText>
-                <RadzenTextBox
-                    Class="w-100"
-                    Placeholder="Task ID"
-                    @bind-Value="@model.ExternalTaskId"
-                    Change="SubmitForm"/>
-            </RadzenColumn>
-            <RadzenColumn>
-                <RadzenStack
-                    Orientation="Orientation.Horizontal"
-                    AlignItems="AlignItems.End"
-                    JustifyContent="JustifyContent.End"
-                    Style="height: 100%;">
-                    <div>
-                        <RadzenCheckBox
-                            @bind-Value=@model.IsDone
-                            Name="IsArchived"
-                            Change="SubmitForm"
-                            TValue="bool"/>
-                        <RadzenLabel Text="Done" Component="IsDone" class="ml-1"/>
-                    </div>
-                    <div>
-                        <RadzenCheckBox
-                            @bind-Value=@model.IsArchived
-                            Name="IsArchived"
-                            Change="SubmitForm"
-                            TValue="bool"/>
-                        <RadzenLabel Text="Archived" Component="IsArchived" class="ml-1"/>
-                    </div>
-                </RadzenStack>
-            </RadzenColumn>
-        </RadzenRow>
+        <MudGrid>
+            <MudItem xs="6">
+                <MudStack Spacing="0">
+                    <MembersDropDown
+                        Placeholder="Assigned"
+                        Clearable="false"
+                        AllowedIds="@_allowedUserIds"
+                        UserId="@_model.UserId"
+                        SelectedItemChanged="@(OnChangedAssigned)"/>
 
-        <RadzenRow Class="w-100">
-            <RadzenColumn>
-                <RadzenText
-                    TextStyle="TextStyle.Subtitle2"
-                    TagName="TagName.H3">
-                    Tags
-                </RadzenText>
+                    <EnumDropDown
+                        Placeholder="Status"
+                        TItem="TaskStatus"
+                        AllowClear="false"
+                        @bind-Value="_model.Status"
+                        OnChanged="SubmitForm"
+                        Name="Status"/>
+
+                    <EnumDropDown
+                        TItem="TaskPriority"
+                        AllowClear="false"
+                        @bind-Value="_model.Priority"
+                        OnChanged="SubmitForm"
+                        Name="Priority"/>
+                </MudStack>
+            </MudItem>
+            <MudItem xs="6">
+                <MudStack Spacing="2">
+
+                    <MudStack
+                        Spacing="0"
+                        Justify="Justify.SpaceBetween"
+                        Row="true">
+                        <MudDatePicker
+                            @ref="_startDatePicker"
+                            Clearable="true"
+                            Class="mr-2"
+                            Date="_model.StartTime"
+                            DateChanged="OnStartDateChanged"
+                            Validation="ValidateStartTime"
+                            ErrorText="Start Time can not be more than End Time"
+                            Label="Start Date"/>
+                        <MudDatePicker
+                            @ref="_endDatePicker"
+                            Clearable="true"
+                            Class="mr-2"
+                            Date="_model.EndTime"
+                            DateChanged="OnEndDateChanged"
+                            Validation="ValidateEndTime"
+                            ErrorText="End Time can not be less than Start Time"
+                            Label="Due Date"/>
+                    </MudStack>
+
+                    <MudStack
+                        Spacing="0"
+                        Justify="Justify.SpaceBetween"
+                        Row="true">
+
+                        <MudDatePicker
+                            @ref="_reminderDatePicker"
+                            Clearable="true"
+                            Class="mr-2"
+                            @bind-Date="_model.ReminderTime"
+                            Placeholder="Reminder Date"/>
+                        <MudTimePicker
+                            @ref="_reminderTimePicker"
+                            Clearable="true"
+                            Disabled="@(!_model.ReminderTime.HasValue)"
+                            Time="_model.ReminderTime?.TimeOfDay"
+                            TimeChanged="OnReminderTimeChanged"
+                            Placeholder="Reminder Time"/>
+                    </MudStack>
+
+                    <MudCheckBox
+                        T="bool"
+                        Label="Archived"
+                        @bind-Value="@(_model.IsArchived)"/>
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+
+        <MudGrid>
+            <MudItem xs="12">
                 <TagsDropDown
-                    Value="@model.TagIds"
-                    ValueChanged="OnTagsChanged"
-                    Class="w-100"/>
-            </RadzenColumn>
-        </RadzenRow>
+                    Value="@_model.TagIds"
+                    ValueChanged="@(OnTagsChanged)"/>
+            </MudItem>
+        </MudGrid>
 
-        <RadzenTabs RenderMode="@TabRenderMode.Client" class="w-100">
-            <Tabs>
-                <RadzenTabsItem Text="Description">
-                    <RadzenTextArea
-                        Name="Description"
-                        @bind-Value="model.Description"
-                        Placeholder="Insert your task details here"
-                        Rows="_descriptionTextAreaRows"
-                        @oninput="ResizeDescriptionTextArea"
-                        MaxLength="10000"
-                        Change="SubmitForm"
-                        Class="w-100"/>
-                </RadzenTabsItem>
-                <RadzenTabsItem Text="@_tabLabelAttachments">
-                    <FileUploader
-                        Class="w-100"
-                        EntityId="@Task.Id"
-                        FileUploaded="OnFileUploaded"
-                        EntityType="StorageEntityType.Task"
-                        FileType="StoredFileType.Attachment"/>
-                    <FilesList
-                        Class="mt-1"
-                        EntityId="@Task.Id"
-                        EntityType="StorageEntityType.Task"
-                        ListUpdated="AttachmentsListUpdated"
-                        Files="@Task.Attachments"/>
-                </RadzenTabsItem>
-            </Tabs>
-        </RadzenTabs>
+        <MudGrid>
+            <MudItem xs="12">
+                <MarkdownEdit
+                    Class="mt-3"
+                    Label="Description"
+                    @bind-Value="@_model.Description"
+                    Placeholder="Insert your task details here"/>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudForm>
 
-    </RadzenStack>
-</RadzenTemplateForm>
+<MudTabs
+    Rounded="true"
+    Outlined="true"
+    ApplyEffectsToContainer="true"
+    Class="mt-4 mb-4"
+    PanelClass="pa-6">
+    <MudTabPanel Text="Comments">
+        <TaskCommentsBlock Task="Task"/>
+    </MudTabPanel>
+    <MudTabPanel Text="@_tabLabelAttachments">
+        <FileUploader
+            EntityId="@Task.TaskId"
+            FileUploaded="OnFileUploaded"
+            EntityType="StorageEntityType.Task"
+            FileType="StoredFileType.Attachment"/>
+
+
+        <FilesList
+            Class=" mt-2"
+            EntityId="@Task.TaskId"
+            EntityType="StorageEntityType.Task"
+            ListUpdated="AttachmentsListUpdated"
+            Files="@Task.Attachments"/>
+    </MudTabPanel>
+</MudTabs>

@@ -1,0 +1,147 @@
+using Domain.Abstractions;
+using NHibernate.Mapping.Attributes;
+using NHibernate.Type;
+using TimeTracker.Business.Common.Constants.Task;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+
+namespace TimeTracker.Business.Orm.Entities.Tasks
+{
+    [Class(Table = "tasks")]
+    public class TaskEntity: IEntity
+    {
+        [Id(Name = "Id", Generator = "native")]
+        [Column(Name = "id", SqlType = "bigint", NotNull = true)]
+        public virtual long Id { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "task_id", SqlType = "bigint", NotNull = true)]
+        public virtual long TaskId { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "status", SqlType = "int", NotNull = true)]
+        public virtual TaskStatus Status { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "priority", SqlType = "int", NotNull = true)]
+        public virtual TaskPriority Priority { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "title", Length = 1024, NotNull = true)]
+        public virtual string Title { get; set; }
+        
+        [Property(NotNull = false)]
+        [Column(Name = "description", Length = 10000, NotNull = false)]
+        public virtual string? Description { get; set; }
+        
+        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "start_time", SqlType = "datetime", NotNull = false)]
+        public virtual DateTime? StartTime { get; set; }
+        
+        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "end_time", SqlType = "datetime", NotNull = false)]
+        public virtual DateTime? EndTime { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "is_archived", NotNull = true)]
+        public virtual bool IsArchived { get; set; }
+        
+        [Property(NotNull = false)]
+        [Column(Name = "external_task_id", Length = 512, NotNull = false)]
+        public virtual string? ExternalTaskId { get; set; }
+        
+        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "update_time", SqlType = "datetime", NotNull = true)]
+        public virtual DateTime UpdateTime { get; set; }
+        
+        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
+        public virtual DateTime CreateTime { get; set; }
+        
+        [Property(NotNull = true)]
+        [Column(Name = "position_index", SqlType = "int", NotNull = true)]
+        public virtual int PositionIndex { get; set; }
+        
+        #region Reminder
+        
+        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "reminder_time", SqlType = "datetime", NotNull = false)]
+        public virtual DateTime? ReminderTime { get; set; }
+        
+        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "reminded_time", SqlType = "datetime", NotNull = false)]
+        public virtual DateTime? RemindedTime { get; set; }
+        
+        #endregion
+        
+        [ManyToOne(
+            ClassType = typeof(UserEntity), 
+            Column = "user_id", 
+            Lazy = Laziness.Proxy,
+            Fetch = FetchMode.Join,
+            Cascade = "none"
+        )]
+        public virtual UserEntity User { get; set; }
+        
+        [ManyToOne(
+            ClassType = typeof(TaskListEntity), 
+            Column = "task_list_id", 
+            Lazy = Laziness.Proxy,
+            Fetch = FetchMode.Join,
+            Cascade = "none"
+        )]
+        public virtual TaskListEntity TaskList { get; set; }
+
+        [Set(
+            Table = "task_stored_files",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "task_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            ClassType = typeof(StoredFileEntity),
+            Column = "stored_file_id"
+        )]
+        public virtual ICollection<StoredFileEntity> Attachments { get; set; } = new List<StoredFileEntity>();
+
+        [Set(
+            Table = "task_tags",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "task_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            ClassType = typeof(TagEntity),
+            Column = "tag_id"
+        )]
+        public virtual ICollection<TagEntity> Tags { get; set; } = new List<TagEntity>();
+        
+        [Bag(
+            Inverse = true,
+            Lazy = CollectionLazy.True,
+            Cascade = "none"
+        )]
+        [Key(Column = "task_id")]
+        [OneToMany(ClassType = typeof(TaskHistoryItemEntity))]
+        public virtual ICollection<TaskHistoryItemEntity> HistoryItems { get; set; } = new List<TaskHistoryItemEntity>();
+        
+        #region Calculated
+
+        public virtual WorkspaceEntity Workspace => TaskList.Project.Workspace;
+
+        public virtual string TagsString => string.Join(";", Tags.Select(item => item.Name));
+        
+        public virtual string AttachmentsString => string.Join(";", Tags.Select(item => item.Name));
+        
+        #endregion
+    }
+}

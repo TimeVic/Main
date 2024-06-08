@@ -11,7 +11,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<TimeEntryDto> TimeEntryStartAsync(StartRequest model)
         {
-            var response = await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntryStart, model);
+            var response = await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryStart, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -22,12 +22,12 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task TimeEntryStopAsync(StopRequest model)
         {
-            await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntryStop, model);
+            await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryStop, model);
         }
         
         public async Task<TimeEntryDto> TimeEntrySetAsync(SetRequest model)
         {
-            var response = await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntrySet, model);
+            var response = await PostAsync<TimeEntryDto>(ApiUrl.TimeEntrySet, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -38,7 +38,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<GetListResponse> TimeEntryGetListAsync(GetListRequest model)
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TimeEntryGetList, model);
+            var response = await PostAsync<GetListResponse>(ApiUrl.TimeEntryGetList, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -49,7 +49,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<GetFilteredListResponse> TimeEntryGetFilteredListAsync(GetFilteredListRequest model)
         {
-            var response = await PostAuthorizedAsync<GetFilteredListResponse>(ApiUrl.TimeEntryGetFilteredList, model);
+            var response = await PostAsync<GetFilteredListResponse>(ApiUrl.TimeEntryGetFilteredList, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -60,7 +60,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task TimeEntryDeleteAsync(long id)
         {
-            await PostAuthorizedAsync<TimeEntryDto>(ApiUrl.TimeEntryDelete, new DeleteRequest()
+            await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryDelete, new DeleteRequest()
             {
                 TimeEntryId = id
             });

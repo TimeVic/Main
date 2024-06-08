@@ -35,16 +35,17 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
     {
         try
         {
-            dispatcher.Dispatch(new SetIsTimeEntryProcessing(true));
+            var isWasStopped = false;
+            dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(true));
             if (_timeEntryState.Value.HasActiveEntry)
             {
                 await _apiService.TimeEntryStopAsync(new StopRequest()
                 {
                     WorkspaceId = _authState.Value.Workspace.Id,
                     EndTime = DateTime.Now.TimeOfDay,
-                    EndDate = DateTime.Now
+                    EndDate = DateTime.Now.ToDateAndRemoveTimeZone()
                 });
-                dispatcher.Dispatch(new LoadListAction(1));
+                isWasStopped = true;
             }
 
             var project = _projectState.Value.List.FirstOrDefault(
@@ -59,15 +60,18 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 WorkspaceId = _authState.Value.Workspace.Id,
                 Date = DateTime.Now.ToDateAndRemoveTimeZone(),
                 StartTime = DateTime.Now.TimeOfDay,
-
-                TaskId = action.TaskId,
                 IsBillable = project != null ? project.IsBillableByDefault : action.IsBillable,
                 ProjectId = action.Project?.Id,
                 Description = action.Description,
                 HourlyRate = action.HourlyRate,
-                InternalTaskId = action.InternalTask?.Id
+                InternalTaskId = action.InternalTask?.TaskId
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(response));
+            if (isWasStopped)
+            {
+                dispatcher.Dispatch(new SetSelectedPageAction(1));
+                dispatcher.Dispatch(new LoadListAction());
+            }
         }
         catch (Exception e)
         {
@@ -75,7 +79,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetIsTimeEntryProcessing(false));
+            dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(false));
         }
     }
 }

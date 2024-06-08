@@ -1,7 +1,10 @@
 using Autofac;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
@@ -45,6 +48,19 @@ public class GetListTest: BaseTest
             Assert.True(item.Id > 0);
             Assert.NotEmpty(item.Name);
         });
+    }
+    
+    [Fact]
+    public async Task ShouldReceiveOnlyActiveProjects()
+    {
+        var expectedCounter = 7;
+        var projects = await _projectSeeder.CreateSeveralAsync(_workspace, expectedCounter);
+        var firstProject = projects.First();
+        firstProject.IsArchived = true;
+        await CommitDbChanges();
+
+        var actualList = await _projectDao.GetAvailableForUserListAsync(_workspace);
+        Assert.Equal(expectedCounter - 1, actualList.TotalCount);
     }
     
     [Fact]

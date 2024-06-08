@@ -10,6 +10,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Report;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 

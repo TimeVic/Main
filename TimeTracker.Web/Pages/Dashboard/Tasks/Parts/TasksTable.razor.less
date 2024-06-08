@@ -1,27 +1,10 @@
 ﻿.w-task-table ::deep {
-    height: calc(100vh - 295px);
-    overflow-y:scroll;
+    min-height: calc(100vh - 295px);
+    overflow-y: scroll;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
     
-    .w-task-item {
-        
-        &:hover {
-            cursor: pointer;    
-        }
-        
-        .w-done {
-            text-decoration: line-through;
-        }
-    }
-    
-    .rz-datalist-data {
-        padding-left: 0;
-        padding-right: 0;
-        padding-bottom: 0;
-        
-        li {
-            margin: 0;
-        }
-    }
 }
 
 

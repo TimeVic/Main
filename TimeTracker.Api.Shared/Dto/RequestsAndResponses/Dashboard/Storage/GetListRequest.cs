@@ -10,6 +10,9 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
 public class GetListRequest: IRequest<GetListResponse>
 {
     [Required]
+    public long WorkspaceId { get; set; }
+    
+    [Required]
     public long EntityId { get; set; }
         
     [Required]

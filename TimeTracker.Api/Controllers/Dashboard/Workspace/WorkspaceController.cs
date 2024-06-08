@@ -6,6 +6,7 @@ using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
+using TimeTracker.Business.Mvc.Controllers;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Workspace;
 
@@ -68,5 +69,13 @@ public class WorkspaceController : MainApiControllerBase
     public Task<IActionResult> SetRedmineSettings([FromBody] SetClickUpSettingsRequest request)
         => this.RequestAsync()
             .For<WorkspaceSettingsClickUpDto>()
+            .With(request);
+    
+    [HttpPost("settings/set-jira")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> SetJiraSettings([FromBody] SetJiraSettingsRequest request)
+        => this.RequestAsync()
+            .For<WorkspaceSettingsJiraDto>()
             .With(request);
 }

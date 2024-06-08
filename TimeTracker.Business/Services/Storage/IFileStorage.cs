@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Services.Storage;
 

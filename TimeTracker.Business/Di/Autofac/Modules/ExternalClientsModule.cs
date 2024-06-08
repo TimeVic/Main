@@ -3,6 +3,7 @@ using Domain.Abstractions;
 using TimeTracker.Business.Notifications;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.ExternalClients.Redmine;
+using TimeTracker.Business.Services.ExternalClients.Jira;
 
 namespace TimeTracker.Business.Di.Autofac.Modules
 {
@@ -13,11 +14,15 @@ namespace TimeTracker.Business.Di.Autofac.Modules
             builder
                 .RegisterType<ClickUpClient>()
                 .As<IClickUpClient>()
-                .SingleInstance();
+                .InstancePerDependency();
             builder
                 .RegisterType<RedmineClient>()
                 .As<IRedmineClient>()
-                .SingleInstance();
+                .InstancePerDependency();
+            builder
+                .RegisterType<JiraClient>()
+                .As<IJiraClient>()
+                .InstancePerDependency();
         }
     }
 }

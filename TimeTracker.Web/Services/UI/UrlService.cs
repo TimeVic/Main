@@ -15,7 +15,7 @@ public class UrlService
 
     private readonly string _apiUrl;
 
-    private string _jwtToken => _authState?.Value.Jwt ?? "";
+    private string _jwtToken => _authState?.Value.JwtToken ?? string.Empty;
 
     public UrlService(
         IConfiguration configuration,
@@ -27,7 +27,7 @@ public class UrlService
         _authState = authState;
         _navigationManager = navigationManager;
 
-        _apiUrl = _configuration.GetValue<string>("ApiUrl") ?? "";
+        _apiUrl = _configuration.GetValue<string>("ApiUrl") ?? string.Empty;
     }
 
     public string GetStorageUrl(string url)
@@ -43,6 +43,6 @@ public class UrlService
     public void NavigateToChangeWorkspace(long workspaceId, string subUrl)
     {
         subUrl = subUrl.StartsWith("/") ? subUrl : $"/{subUrl}";
-        _navigationManager.NavigateTo($"/board-change/{workspaceId}{subUrl}");
+        _navigationManager.NavigateTo($"/board-change/{workspaceId}{subUrl}", replace: true);
     }
 }

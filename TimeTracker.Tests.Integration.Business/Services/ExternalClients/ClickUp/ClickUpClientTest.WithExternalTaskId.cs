@@ -18,7 +18,7 @@ public partial class SendNewTimeEntityTest : BaseTest
     public async Task ShouldUseTaskIdFromTaskIfExists()
     {
         var task = await _taskSeeder.CreateAsync(user: _user);
-        task.ExternalTaskId = _taskId;
+        task.ExternalTaskId = _externalTaskId;
         await DbSessionProvider.PerformCommitAsync();
         
         var date = DateTime.UtcNow.Date;

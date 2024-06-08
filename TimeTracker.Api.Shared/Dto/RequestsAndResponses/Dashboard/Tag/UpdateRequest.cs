@@ -18,5 +18,12 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag
         
         [IsColor]
         public string? Color { get; set; }
+        
+        public void Fill(TagDto tag)
+        {
+            TagId = tag.Id;
+            Name = tag.Name;
+            Color = tag.Color;
+        }
     }
 }

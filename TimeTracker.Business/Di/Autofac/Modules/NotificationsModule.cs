@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Notification.Abstractions;
+using TimeTracker.Business.Clients.Api;
+using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Notifications;
-using TimeTracker.Business.Notifications.Services;
+using TimeTracker.Business.Services.Notification.Center.Handlers;
 
 namespace TimeTracker.Business.Di.Autofac.Modules
 {
@@ -25,9 +27,19 @@ namespace TimeTracker.Business.Di.Autofac.Modules
                 .InstancePerLifetimeScope();
             
             builder
-                .RegisterType<EmailSendingService>()
-                .As<IEmailSendingService>()
+                .RegisterType<SmtpClientService>()
+                .As<ISmtpClientService>()
                 .SingleInstance();
+            
+            builder
+                .RegisterType<FirebaseClientService>()
+                .As<IFirebaseClientService>()
+                .SingleInstance();
+            
+            builder
+                .RegisterAssemblyTypes(typeof(BusinessAssemblyMarker).Assembly)
+                .AsClosedTypesOf(typeof(INotificationCenterHandler<>))
+                .InstancePerLifetimeScope();
         }
     }
 }

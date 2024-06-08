@@ -1,5 +1,11 @@
-﻿<div class="w-time-counter @Class">
-    <RadzenTextBox
+﻿@using MudBlazor
+
+<div class="w-time-counter @Class">
+    <MudField
+        Margin="Margin.Dense"
         Disabled="true"
-        Value="@_durationString"/>
+        AdornmentColor="Color.Inherit"
+        Variant="@MudBlazor.Variant.Text">
+        @_durationString
+    </MudField>
 </div>

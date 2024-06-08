@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
+using TimeTracker.Business.Mvc.Controllers;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Payments;
 

@@ -3,10 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Security.Model;
@@ -123,7 +126,6 @@ public class SetTest: BaseTest
             IsBillable = fakeEntry.IsBillable,
             ProjectId = expectedProject.Id,
             Date = fakeEntry.Date,
-            TaskId = fakeEntry.TaskId,
         });
         response.EnsureSuccessStatusCode();
 
@@ -136,8 +138,7 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.HourlyRate, actualDto.HourlyRate);
         Assert.Equal(fakeEntry.Date, actualDto.Date.ToUniversalTime());
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
-        Assert.Equal(fakeEntry.TaskId, actualDto.TaskId);
-        
+
         var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
@@ -175,7 +176,6 @@ public class SetTest: BaseTest
             IsBillable = fakeEntry.IsBillable,
             ProjectId = expectedProject.Id,
             Date = fakeEntry.Date,
-            TaskId = fakeEntry.TaskId,
         });
         response.EnsureSuccessStatusCode();
 

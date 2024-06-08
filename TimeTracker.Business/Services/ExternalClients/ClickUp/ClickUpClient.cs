@@ -5,15 +5,22 @@ using System.Web;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.ExternalClients.ClickUp.Model;
 using TimeTracker.Business.Services.ExternalClients.Dto;
 
 namespace TimeTracker.Business.Services.ExternalClients.ClickUp;
 
-public class ClickUpClient: AExternalClientService, IClickUpClient
+public partial class ClickUpClient: AExternalClientService, IClickUpClient
 {
+    private readonly ITaskDao _taskDao;
+    private readonly IDbSessionProvider _dbSessionProvider;
+
     private static readonly Regex DefaultTaskIdRegex = new(@"^\#{0,1}[a-zA-Z0-9]{1,10}$");
     private static readonly Regex CustomTaskIdRegex = new(@"^[a-zA-Z0-9\-]{1,12}$");
     
@@ -21,13 +28,19 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
     
     private static HttpClient _newHttpClient => new();
 
-    public ClickUpClient(ILogger<ClickUpClient> logger): base(logger)
+    public ClickUpClient(
+        ILogger<ClickUpClient> logger,
+        ITaskDao taskDao,
+        IDbSessionProvider dbSessionProvider
+    ): base(logger)
     {
+        _taskDao = taskDao;
+        _dbSessionProvider = dbSessionProvider;
     }
 
     public override Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry)
     {
-        var settings = GetSettings(timeEntry);
+        var settings = GetSettings(timeEntry.Workspace, timeEntry.User);
         return Task.FromResult(
             settings.IsFillTimeEntryWithTaskDetails && string.IsNullOrEmpty(timeEntry.Description)    
         );
@@ -35,31 +48,19 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
 
     public override bool IsCorrectTaskId(TimeEntryEntity timeEntry)
     {
-        return DefaultTaskIdRegex.IsMatch(timeEntry.TaskId ?? "")
-            || CustomTaskIdRegex.IsMatch(timeEntry.TaskId ?? "");
+        return IsCorrectTaskId(timeEntry.TaskId ?? "");
     }
-    
-    public async Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry)
+
+    public bool IsCorrectTaskId(string externalTaskId)
     {
-        var httpClient = _newHttpClient;
-        var settings = GetSettings(timeEntry);
-        httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
-        
-        var uri = BuildGetTaskUri(
-            settings.TeamId,
-            timeEntry.ExternalTaskId,
-            settings.IsCustomTaskIds,
-            timeEntry.ClickUpId
-        );
-        _logger.LogDebug("ClickUp. Send request to: {Uri}", uri);
-        var response = await httpClient.GetAsync(uri);
-        return await HandleResponse<GetTaskResponseDto>(uri, response);
+        return DefaultTaskIdRegex.IsMatch(externalTaskId ?? "")
+            || CustomTaskIdRegex.IsMatch(externalTaskId ?? "");
     }
 
     protected override async Task<SynchronizedTimeEntryDto?> SendTimeEntryAsync(TimeEntryEntity timeEntry)
     {
         var httpClient = _newHttpClient;
-        var settings = GetSettings(timeEntry);
+        var settings = GetSettings(timeEntry.Workspace, timeEntry.User);
         
         var startTime = timeEntry.Date.Add(timeEntry.StartTime);
         var endTime = timeEntry.Date.Add(timeEntry.EndTime.Value);
@@ -96,7 +97,7 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
                 return new SynchronizedTimeEntryDto { IsError = true };
             }
 
-            var clickUpTask = await GetTaskAsync(timeEntry);
+            var clickUpTask = await GetTaskAsync(timeEntry, timeEntry.ExternalTaskId);
             return new SynchronizedTimeEntryDto()
             {
                 Id = responseData.Data?.Id ?? "",
@@ -117,7 +118,7 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
                 return new SynchronizedTimeEntryDto { IsError = true };
             }
 
-            var clickUpTask = await GetTaskAsync(timeEntry);
+            var clickUpTask = await GetTaskAsync(timeEntry, timeEntry.ExternalTaskId);
             var responseEntry = responseData.Data.FirstOrDefault();
             return new SynchronizedTimeEntryDto()
             {
@@ -131,7 +132,7 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
     protected override async Task<bool> SendDeleteTimeEntryRequestAsync(TimeEntryEntity timeEntry)
     {
         var httpClient = _newHttpClient;
-        var settings = GetSettings(timeEntry);
+        var settings = GetSettings(timeEntry.Workspace, timeEntry.User);
         httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
         
         var uri = BaseUrl 
@@ -186,36 +187,20 @@ public class ClickUpClient: AExternalClientService, IClickUpClient
         url.Query = queryParams.ToString();
         return url.ToString();
     }
-    
-    private string BuildGetTaskUri(string teamId, string taskId, bool isCustomTaskIds, string? timeEntryId = null)
-    {
-        teamId = HttpUtility.UrlEncode(teamId);
-        taskId = HttpUtility.UrlEncode(
-            CleanUpTaskId(taskId, isCustomTaskIds)
-        );
-        
-        var queryParams = HttpUtility.ParseQueryString(string.Empty);
-        queryParams.Add("custom_task_ids", isCustomTaskIds.ToString().ToLower());
-        queryParams.Add("team_id", teamId);
-        queryParams.Add("include_subtasks", "false");
-        var url = new UriBuilder($"{BaseUrl}/task/{taskId}");
-        url.Query = queryParams.ToString();
-        return url.ToString();
-    }
 
-    private WorkspaceSettingsClickUpEntity GetSettings(TimeEntryEntity timeEntry)
+    private WorkspaceSettingsClickUpEntity GetSettings(WorkspaceEntity workspace, UserEntity user)
     {
-        var settings = timeEntry.Workspace.GetClickUpSettings(timeEntry.User.Id);
+        var settings = workspace.GetClickUpSettings(user.Id);
         if (settings == null)
         {
-            throw new Exception($"ClickUp settings not found EntryId: {timeEntry.Id}");
+            throw new Exception($"ClickUp settings not found WorkspaceId: {workspace.Id}");
         }
         return settings;
     }
     
     public static string CleanUpTaskId(string taskId, bool isCustomTaskId)
     {
-        taskId = taskId.Trim();
+        taskId = (taskId ?? "").Trim();
         if (!isCustomTaskId && taskId.StartsWith("#"))
         {
             return taskId.TrimStart('#');

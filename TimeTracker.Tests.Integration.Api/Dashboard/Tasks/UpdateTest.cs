@@ -1,19 +1,25 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Dashboard.Tasks;
@@ -63,10 +69,11 @@ public partial class UpdateTest: BaseTest
         var task = _taskFactory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
-            TaskId = task.Id,
+            TaskId = task.TaskId,
             Title = task.Title,
             Description = task.Description,
-            NotificationTime = task.NotificationTime
+            StartTime = task.StartTime,
+            EndTime = task.EndTime,
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -77,26 +84,32 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
-            NotificationTime = expectedTask.NotificationTime,
-            IsDone = expectedTask.IsDone,
+            StartTime = expectedTask.StartTime,
+            EndTime = expectedTask.EndTime,
+            Status = expectedTask.Status,
+            Priority = expectedTask.Priority,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
-            ExternalTaskId = expectedTask.ExternalTaskId
+            ExternalTaskId = expectedTask.ExternalTaskId,
+            ReminderTime = expectedTask.ReminderTime
         });
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.Equal(_task.Id, actualData.Id);
+        Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Equal(expectedTask.Title, actualData.Title);
         Assert.Equal(expectedTask.Description, actualData.Description);
-        Assert.Equal(expectedTask.IsDone, actualData.IsDone);
+        Assert.Equal(expectedTask.Status, actualData.Status);
+        Assert.Equal(expectedTask.Priority, actualData.Priority);
         Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
         Assert.Equal(expectedTask.ExternalTaskId, actualData.ExternalTaskId);
+        Assert.Equal(expectedTask.ReminderTime.Value.ToShortTimeString(), actualData.ReminderTime.Value.ToUniversalTime().ToShortTimeString());
+        Assert.Equal(expectedTask.ReminderTime.Value.ToLongDateString(), actualData.ReminderTime.Value.ToUniversalTime().ToLongDateString());
     }
     
     [Fact]
@@ -109,18 +122,19 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = otherTaskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
-            NotificationTime = newTask.NotificationTime,
-            IsDone = newTask.IsDone,
+            StartTime = newTask.StartTime,
+            EndTime = newTask.EndTime,
+            Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = _user.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new ValidationException().GetTypeName(), error.Type);
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
     }
     
     [Fact]
@@ -131,12 +145,13 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = _taskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
-            NotificationTime = newTask.NotificationTime,
-            IsDone = newTask.IsDone,
+            StartTime = newTask.StartTime,
+            EndTime = newTask.EndTime,
+            Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = user2.Id
         });
@@ -149,7 +164,7 @@ public partial class UpdateTest: BaseTest
     public async Task ShouldNotSetUserIdFromWhichDoesNotHaveAccessToProject()
     {
         var user2 = await _userSeeder.CreateActivatedAsync();
-        _workspaceAccessService.ShareAccessAsync(
+        await _workspaceAccessService.ShareAccessAsync(
             _workspace,
             user2,
             MembershipAccessType.User,
@@ -157,7 +172,7 @@ public partial class UpdateTest: BaseTest
             {
                 new() { Project = _project }
             }
-        ).Wait();
+        );
         
         var project2 = _projectDao.CreateAsync(_workspace, "Test adding").Result;
         var taskList2 = _taskListSeeder.CreateAsync(project2).Result;
@@ -166,12 +181,13 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = task2.Id,
+            TaskId = task2.TaskId,
             TaskListId = _taskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
-            NotificationTime = newTask.NotificationTime,
-            IsDone = newTask.IsDone,
+            StartTime = newTask.StartTime,
+            EndTime = newTask.EndTime,
+            Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = user2.Id
         });
@@ -206,8 +222,9 @@ public partial class UpdateTest: BaseTest
             TaskListId = taskList2.Id,
             Title = newTask.Title,
             Description = newTask.Description,
-            NotificationTime = newTask.NotificationTime,
-            IsDone = newTask.IsDone,
+            StartTime = newTask.StartTime,
+            EndTime = newTask.EndTime,
+            Status = newTask.Status,
             IsArchived = newTask.IsArchived,
             UserId = user2.Id
         });
@@ -225,12 +242,13 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
-            NotificationTime = expectedTask.NotificationTime,
-            IsDone = expectedTask.IsDone,
+            StartTime = expectedTask.StartTime,
+            EndTime = expectedTask.EndTime,
+            Status = expectedTask.Status,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
             ExternalTaskId = expectedTask.ExternalTaskId,
@@ -240,13 +258,66 @@ public partial class UpdateTest: BaseTest
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_task);
         Assert.Equal(2, _task.HistoryItems.Count);
-        var historyItem = _task.HistoryItems.Last();
+        var historyItem = _task.HistoryItems.OrderBy(item => item.CreateTime).Last();
         Assert.Equal(expectedTask.Title, historyItem.Title);
         Assert.Equal(expectedTask.Description, historyItem.Description);
-        Assert.Equal(expectedTask.NotificationTime.ToString(), historyItem.NotificationTime.ToString());
-        Assert.Equal(expectedTask.IsDone, historyItem.IsDone);
+        Assert.Equal(expectedTask.StartTime.ToString(), historyItem.StartTime.ToString());
+        Assert.Equal(expectedTask.EndTime.ToString(), historyItem.EndTime.ToString());
+        Assert.Equal(expectedTask.Status, historyItem.Status);
         Assert.Equal(expectedTask.IsArchived, historyItem.IsArchived);
         Assert.NotEmpty(historyItem.Tags ?? "");
         Assert.False(historyItem.IsNewTask);
+    }
+    
+    [Fact]
+    public async Task ShouldUpdateWithoutEndAndStartTime()
+    {
+        var expectedTask = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.TaskId,
+            TaskListId = _otherTaskList.Id,
+            Title = expectedTask.Title,
+            Description = expectedTask.Description,
+            StartTime = null,
+            EndTime = null,
+            Status = expectedTask.Status,
+            Priority = expectedTask.Priority,
+            IsArchived = expectedTask.IsArchived,
+            UserId = _user.Id,
+            ExternalTaskId = expectedTask.ExternalTaskId
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.Equal(_task.TaskId, actualData.TaskId);
+        Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
+        Assert.Null(actualData.StartTime);
+        Assert.Null(actualData.EndTime);
+    }
+    
+    [Fact]
+    public async Task ShouldUpdateWithoutReminderTime()
+    {
+        var expectedTask = _taskFactory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.TaskId,
+            TaskListId = _otherTaskList.Id,
+            Title = expectedTask.Title,
+            Description = expectedTask.Description,
+            Status = expectedTask.Status,
+            Priority = expectedTask.Priority,
+            IsArchived = expectedTask.IsArchived,
+            UserId = _user.Id,
+            ExternalTaskId = expectedTask.ExternalTaskId,
+            ReminderTime = null
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.Equal(_task.TaskId, actualData.TaskId);
+        Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
+        Assert.Null(actualData.ReminderTime);
     }
 }

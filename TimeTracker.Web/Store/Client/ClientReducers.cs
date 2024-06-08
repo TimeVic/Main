@@ -7,7 +7,7 @@ public class ClientReducers
 {
 
     [ReducerMethod]
-    public static ClientState SetClientListItemsActionReducer(ClientState state, SetClientListItemsAction action)
+    public static ClientState SetClientListItemsActionReducer(ClientState state, SetListItemsAction action)
     {
         return state with
         {
@@ -20,7 +20,7 @@ public class ClientReducers
     }
 
     [ReducerMethod]
-    public static ClientState SetClientIsListLoadingReducer(ClientState state, SetClientIsListLoading action)
+    public static ClientState SetClientIsListLoadingReducer(ClientState state, SetIsListLoading action)
     {
         return state with
         {
@@ -28,33 +28,25 @@ public class ClientReducers
         };
     }
     
-    #region Add new item
-    
-    [ReducerMethod(typeof(AddEmptyClientListItemAction))]
-    public static ClientState AddEmptyClientListItemActionAction(ClientState state)
+    [ReducerMethod]
+    public static ClientState SetListItemActionReducer(ClientState state, SetListItemAction action)
     {
-        var newList = state.SortedList.ToList();
-        newList.Add(new ClientDto()
+        var list = state.List.Select(item =>
         {
-            Id = 0,
-            Name = ""
-        });
+            if (item.Id == action.Client.Id)
+            {
+                return action.Client;
+            }
+            return item;
+        }).ToList();
+        if (list.All(item => item.Id != action.Client.Id))
+        {
+            list.Insert(0, action.Client);
+        }
+
         return state with
         {
-            List = newList,
-            TotalCount = ++state.TotalCount
+            List = list
         };
     }
-    
-    [ReducerMethod(typeof(RemoveEmptyClientListItemAction))]
-    public static ClientState RemoveEmptyClientListItemActionAction(ClientState state)
-    {
-        return state with
-        {
-            List = state.List.Where(item => item.Id != 0).ToList(),
-            TotalCount = --state.TotalCount
-        };
-    }
-    
-    #endregion
 }

@@ -6,6 +6,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Services.Entity;
 using TimeTracker.Business.Services.Http;
@@ -79,7 +80,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 {
                     Id = timeEntry?.Id,
                     Description = request.Description, 
-                    TaskId = request.TaskId,
                     StartTime = request.StartTime,
                     EndTime = request.EndTime,
                     HourlyRate = request.HourlyRate,

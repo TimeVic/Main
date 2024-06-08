@@ -1,4 +1,7 @@
 ﻿using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.ExternalClients.Dto;
 
 namespace TimeTracker.Business.Services.ExternalClients.Redmine;
@@ -43,5 +46,14 @@ public class RedmineClientMock: IRedmineClient
     public Task<bool> IsValidClientSettings(WorkspaceEntity workspace, UserEntity user)
     {
         return Task.FromResult<bool>(true);
+    }
+
+    public Task<TaskEntity> SetTimeEntryTaskAsync(
+        TimeEntryEntity timeEntry,
+        TaskListEntity taskListEntity,
+        string externalTaskId
+    )
+    {
+        throw new NotImplementedException();
     }
 }

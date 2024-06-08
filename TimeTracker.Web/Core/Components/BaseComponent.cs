@@ -1,14 +1,13 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using Radzen;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Core.Components;
 
-public class BaseComponent: Fluxor.Blazor.Web.Components.FluxorComponent
+public class BaseComponent: ComponentBase
 {
     [Parameter]
     public string? Locale { get; set; }
@@ -28,16 +27,28 @@ public class BaseComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     [Inject]
     protected IState<AuthState> AuthState { get; set; }
     
-    #region Radzen
-    
     [Inject] 
-    protected NotificationService NotificationService { get; set; }
+    protected ToastService ToastService { get; set; }
     
     [Inject]
-    protected DialogService DialogService { get; set; }
+    protected ModalDialogProviderService ModalDialogService { get; set; }
     
-    [Inject]
-    protected ModalDialogProviderService ModalDialogProviderService { get; set; }
+    private List<Action> _actionsToRunAfterRender = new List<Action>();
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        // run all the actions (.NET code) **once** after rendering
+        foreach (var actionToRun in _actionsToRunAfterRender)
+        {
+            actionToRun();
+        }
+        // clear the actions to make sure the actions only run **once**
+        _actionsToRunAfterRender.Clear();
+        return base.OnAfterRenderAsync(firstRender);
+    }
     
-    #endregion
+    /// <summary>
+    /// Run an action once after the component is rendered
+    /// </summary>
+    /// <param name="action">Action to invoke after render</param>
+    protected void RunAfterRendered(Action action) => _actionsToRunAfterRender.Add(action);
 }

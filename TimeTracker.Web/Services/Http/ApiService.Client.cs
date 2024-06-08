@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<ClientDto> ClientAddAsync(AddRequest model)
         {
-            var response = await PostAuthorizedAsync<ClientDto>(ApiUrl.ClientAdd, model);
+            var response = await PostAsync<ClientDto>(ApiUrl.ClientAdd, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -20,7 +20,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<GetListResponse> ClientGetListAsync(GetListRequest model)
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.ClientList, model);
+            var response = await PostAsync<GetListResponse>(ApiUrl.ClientList, model);
             if (response == null)
             {
                 throw new ServerErrorException();

@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<PaymentReportResponse> ReportsGetPaymentsReportAsync(long workspaceId, DateTime endDate)
         {
-            var response = await PostAuthorizedAsync<PaymentReportResponse>(ApiUrl.ReportPayments, new PaymentReportRequest()
+            var response = await PostAsync<PaymentReportResponse>(ApiUrl.ReportPayments, new PaymentReportRequest()
             {
                 WorkspaceId = workspaceId,
                 EndDate = endDate
@@ -29,7 +29,7 @@ namespace TimeTracker.Web.Services.Http
             SummaryReportType reportType
         )
         {
-            var response = await PostAuthorizedAsync<SummaryReportResponse>(ApiUrl.ReportSummary, new SummaryReportRequest()
+            var response = await PostAsync<SummaryReportResponse>(ApiUrl.ReportSummary, new SummaryReportRequest()
             {
                 WorkspaceId = workspaceId,
                 StartTime = startDate,

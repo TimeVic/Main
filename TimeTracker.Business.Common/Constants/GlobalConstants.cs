@@ -17,7 +17,7 @@ namespace TimeTracker.Business.Common.Constants
         /// <summary>
         /// Page size
         /// </summary>
-        public const int ListPageSize = 20;
+        public const int ListPageSize = 30;
 
         /// <summary>
         /// The maximum number of users who will be given access
@@ -28,5 +28,10 @@ namespace TimeTracker.Business.Common.Constants
             .Add(TimeSpan.FromMinutes(59))
             .Add(TimeSpan.FromSeconds(59))
             .Add(TimeSpan.FromMilliseconds(999));
+        
+        /// <summary>
+        /// Number of minutes before which a notification must be sent to the user
+        /// </summary>
+        public static readonly TimeSpan TaskReminderTimeout = TimeSpan.FromMinutes(35);
     }
 }

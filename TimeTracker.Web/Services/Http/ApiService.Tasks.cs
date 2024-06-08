@@ -1,7 +1,9 @@
 ﻿using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Core.Exceptions;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Services.Http
 {
@@ -9,7 +11,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<TaskDto> TasksAddAsync(AddRequest model)
         {
-            var response = await PostAuthorizedAsync<TaskDto>(ApiUrl.TasksAdd, model);
+            var response = await PostAsync<TaskDto>(ApiUrl.TasksAdd, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -20,18 +22,7 @@ namespace TimeTracker.Web.Services.Http
 
         public async Task<TaskDto> TasksUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAuthorizedAsync<TaskDto>(ApiUrl.TasksUpdate, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
-        }
-
-        public async Task<GetListResponse> TasksGetListAsync(GetListRequest model)
-        {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.TasksList, model);
+            var response = await PostAsync<TaskDto>(ApiUrl.TasksUpdate, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -40,10 +31,83 @@ namespace TimeTracker.Web.Services.Http
             return response;
         }
         
-        public async Task<TaskDto?> TasksGetAsync(long taskId)
+        public async Task TasksUpdatePositionsAsync(UpdatePositionsRequest request)
         {
-            var response = await PostAuthorizedAsync<TaskDto?>(ApiUrl.TasksGetOne, new GetOneRequest()
+            await PostAsync<TaskDto>(ApiUrl.TasksUpdatePositions, request);
+        }
+
+        public async Task<GetListResponse> TasksGetListAsync(GetListRequest model)
+        {
+            var response = await PostAsync<GetListResponse>(ApiUrl.TasksList, model);
+            if (response == null)
             {
+                throw new ServerErrorException();
+            }
+
+            return response;
+        }
+        
+        public async Task<GetListResponse> TasksGetForCalendarAsync(GetForCalendarRequest model)
+        {
+            var response = await PostAsync<GetListResponse>(ApiUrl.TasksListForCalendar, model);
+            if (response == null)
+            {
+                throw new ServerErrorException();
+            }
+
+            return response;
+        }
+        
+        public async Task<GetListResponse> TasksGetMyListAsync(
+            long workspaceId,
+            ICollection<TaskStatus>? taskStatuses = null,
+            string? searchString = null
+        )
+        {
+            var response = await PostAsync<GetListResponse>(ApiUrl.TasksMyList, new GetMyListRequest
+            {
+                WorkspaceId = workspaceId,
+                Statuses = taskStatuses,
+                SearchString = searchString
+            });
+            if (response == null)
+            {
+                throw new ServerErrorException();
+            }
+
+            return response;
+        }
+        
+        public async Task<GetListResponse> TasksGetOverdueListAsync(
+            long workspaceId,
+            string? searchString = null
+        )
+        {
+            var response = await PostAsync<GetListResponse>(ApiUrl.TasksMyList, new GetMyListRequest
+            {
+                WorkspaceId = workspaceId,
+                Statuses = new List<TaskStatus>()
+                {
+                    TaskStatus.Backlog,
+                    TaskStatus.ToDo,
+                    TaskStatus.InProgress,
+                },
+                SearchString = searchString,
+                EndTime = DateTime.UtcNow.AddMonths(12)
+            });
+            if (response == null)
+            {
+                throw new ServerErrorException();
+            }
+
+            return response;
+        }
+        
+        public async Task<TaskDto?> TasksGetAsync(long workspaceId, long taskId)
+        {
+            var response = await PostAsync<TaskDto?>(ApiUrl.TasksGetOne, new GetOneRequest()
+            {
+                WorkspaceId = workspaceId,
                 TaskId = taskId
             });
             if (response == null)

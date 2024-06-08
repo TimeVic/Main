@@ -3,8 +3,8 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <LangVersion>11</LangVersion>
-        <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>12</LangVersion>
+        <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,18 +17,24 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Domain.Abstractions\Domain.Abstractions.csproj" />
       <ProjectReference Include="..\Notification.Abstractions\Notification.Abstractions.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Clients\TimeTracker.Business.Clients.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Common\TimeTracker.Business.Common.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="Templates\Emails\en\_EmailLayout.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\PasswordHasBeenChangedNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\ResetPasswordNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\TaskCommentSetNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\TaskReminderNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\TimeEntryAutoStoppedNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\_EmailLayout.htm" />
       <None Remove="Templates\Emails\en\EmailVerificationNotification.htm" />
@@ -41,6 +47,10 @@
       <EmbeddedResource Include="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
       <None Remove="Templates\Emails\en\TaskChangedNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\TaskChangedNotification.htm" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

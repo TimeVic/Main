@@ -1,0 +1,54 @@
+﻿using Api.Requests.Abstractions;
+using AspNetCore.ApiControllers.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Persistence.Transactions.Behaviors;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
+using TimeTracker.Business.Mvc.Controllers;
+
+namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments;
+
+[ApiController]
+[Authorize]
+[Route("/dashboard/tasks/comment")]
+public class TaskCommentsController : MainApiControllerBase
+{
+    public TaskCommentsController(
+        IAsyncRequestBuilder asyncRequestBuilder, 
+        IDbSessionProvider commitPerformer,
+        ILogger<TaskCommentsController> logger
+    ) : base(asyncRequestBuilder, commitPerformer, logger)
+    {
+    }
+
+    [HttpPost("add")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> AddTaskList([FromBody] AddRequest request)
+        => this.RequestAsync()
+            .For<TaskCommentDto>()
+            .With(request);
+    
+    [HttpPost("update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> UpdateTaskList([FromBody] UpdateRequest request)
+        => this.RequestAsync()
+            .For<TaskCommentDto>()
+            .With(request);
+    
+    [HttpPost("get-list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> UpdateTaskList([FromBody] GetListRequest listRequest)
+        => this.RequestAsync()
+            .For<GetListResponse>()
+            .With(listRequest);
+    
+    [HttpPost("delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Add([FromBody] DeleteRequest request)
+        => this.RequestAsync(request);
+}

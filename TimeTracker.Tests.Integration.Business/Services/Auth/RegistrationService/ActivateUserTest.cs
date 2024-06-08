@@ -3,7 +3,9 @@ using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
@@ -57,8 +59,8 @@ public class ActivateUserTest: BaseTest
         
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
-        Assert.True(EmailSendingServiceMock.IsEmailSent);
-        var actualEmail = EmailSendingServiceMock.SentMessages.FirstOrDefault();
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
         Assert.Contains(user.Email, actualEmail.To);
     }
     

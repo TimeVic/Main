@@ -1,63 +1,32 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
 @using System.Globalization
+@using MudBlazor
 
 @code {
 
     [Parameter]
     public ICollection<SummaryByMonthsReportItemDto> Items { get; set; } = new List<SummaryByMonthsReportItemDto>();
 
-    private RadzenDataGrid<SummaryByMonthsReportItemDto> _grid { get; set; }
-
-    protected async override Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-    }
-
     private string GetName(int month, int year)
     {
         return new DateTime(year, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
     }
-
 }
 
-<h3>Grouped by project:</h3>
-
-<RadzenDataGrid
-    @ref="_grid"
-    TItem="SummaryByMonthsReportItemDto"
-    AllowSorting="false"
-    EditMode="DataGridEditMode.Single"
-    Data="@Items"
-    AllowPaging="false">
-
-    <Columns>
-        <RadzenDataGridColumn
-            TItem="SummaryByMonthsReportItemDto"
-            Title="Month"
-            Width="250px"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @GetName(item.Month, item.Year)
-            </Template>
-        </RadzenDataGridColumn>
-
-        <RadzenDataGridColumn
-            TItem="SummaryByMonthsReportItemDto"
-            Title="Duration"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.Duration.ToReadableShortString()
-            </Template>
-        </RadzenDataGridColumn>
-        
-        <RadzenDataGridColumn
-            TItem="SummaryByMonthsReportItemDto"
-            Title="Amount"
-            TextAlign="TextAlign.Left">
-            <Template Context="item">
-                @item.Amount.ToMoneyFormat()
-            </Template>
-        </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
+<MudTable
+    Items="@Items" 
+    Hover="true" 
+    Breakpoint="Breakpoint.Sm" 
+    LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh>Month</MudTh>
+        <MudTh>Duration</MudTh>
+        <MudTh>Amount</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Month">@GetName(context.Month, context.Year)</MudTd>
+        <MudTd DataLabel="Duration">@context.Duration.ToReadableShortString()</MudTd>
+        <MudTd DataLabel="Amount">@context.Amount.ToMoneyFormat()</MudTd>
+    </RowTemplate>
+</MudTable>

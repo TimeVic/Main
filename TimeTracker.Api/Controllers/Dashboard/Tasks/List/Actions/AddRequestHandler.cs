@@ -2,11 +2,13 @@
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -48,7 +50,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var project = await _projectDao.GetById(request.ProjectId);
+            var project = await _projectDao.GetById(request.ProjectId, true);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
             {
                 throw new HasNoAccessException();

@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Services.Http
     {
         public async Task<PaymentDto> PaymentAddAsync(AddRequest model)
         {
-            var response = await PostAuthorizedAsync<PaymentDto>(ApiUrl.PaymentAdd, model);
+            var response = await PostAsync<PaymentDto>(ApiUrl.PaymentAdd, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -20,7 +20,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<PaymentDto> PaymentUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAuthorizedAsync<PaymentDto>(ApiUrl.PaymentUpdate, model);
+            var response = await PostAsync<PaymentDto>(ApiUrl.PaymentUpdate, model);
             if (response == null)
             {
                 throw new ServerErrorException();
@@ -31,7 +31,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task PaymentDeleteAsync(long paymentId)
         {
-            await PostAuthorizedAsync<object>(ApiUrl.PaymentDelete, new DeleteRequest()
+            await PostAsync<object>(ApiUrl.PaymentDelete, new DeleteRequest()
             {
                 PaymentId = paymentId
             });
@@ -39,7 +39,7 @@ namespace TimeTracker.Web.Services.Http
         
         public async Task<GetListResponse> PaymentGetListAsync(GetListRequest model)
         {
-            var response = await PostAuthorizedAsync<GetListResponse>(ApiUrl.PaymentList, model);
+            var response = await PostAsync<GetListResponse>(ApiUrl.PaymentList, model);
             if (response == null)
             {
                 throw new ServerErrorException();

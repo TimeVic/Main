@@ -1,10 +1,12 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -29,12 +31,13 @@ public partial class UpdateTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
-            NotificationTime = expectedTask.NotificationTime,
-            IsDone = expectedTask.IsDone,
+            StartTime = expectedTask.StartTime,
+            EndTime = expectedTask.EndTime,
+            Status = expectedTask.Status,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
             ExternalTaskId = expectedTask.ExternalTaskId,
@@ -43,11 +46,11 @@ public partial class UpdateTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.Equal(_task.Id, actualData.Id);
+        Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Equal(expectedTask.Title, actualData.Title);
         Assert.Equal(expectedTask.Description, actualData.Description);
-        Assert.Equal(expectedTask.IsDone, actualData.IsDone);
+        Assert.Equal(expectedTask.Status, actualData.Status);
         Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
         Assert.Equal(expectedTask.ExternalTaskId, actualData.ExternalTaskId);
         Assert.Equal(expectedTags, actualData.Tags.Count);
@@ -68,12 +71,13 @@ public partial class UpdateTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.Id,
+            TaskId = _task.TaskId,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
-            NotificationTime = expectedTask.NotificationTime,
-            IsDone = expectedTask.IsDone,
+            StartTime = expectedTask.StartTime,
+            EndTime = expectedTask.EndTime,
+            Status = expectedTask.Status,
             IsArchived = expectedTask.IsArchived,
             UserId = _user.Id,
             ExternalTaskId = expectedTask.ExternalTaskId,
@@ -82,11 +86,11 @@ public partial class UpdateTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<TaskDto>();
-        Assert.Equal(_task.Id, actualData.Id);
+        Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Equal(expectedTask.Title, actualData.Title);
         Assert.Equal(expectedTask.Description, actualData.Description);
-        Assert.Equal(expectedTask.IsDone, actualData.IsDone);
+        Assert.Equal(expectedTask.Status, actualData.Status);
         Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
         Assert.Equal(expectedTask.ExternalTaskId, actualData.ExternalTaskId);
         Assert.Equal(expectedTags, actualData.Tags.Count);

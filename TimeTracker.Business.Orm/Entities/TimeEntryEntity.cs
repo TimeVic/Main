@@ -1,6 +1,9 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
+using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -35,6 +38,7 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "end_time", SqlType = "time", NotNull = false)]
         public virtual TimeSpan? EndTime { get; set; }
 
+        [Obsolete("This property moved to TaskEntity")]
         [Property(NotNull = false)]
         [Column(Name = "task_id", Length = 512, NotNull = false)]
         public virtual string? TaskId { get; set; }
@@ -46,7 +50,11 @@ namespace TimeTracker.Business.Orm.Entities
         [Property(NotNull = false)]
         [Column(Name = "redmine_id", NotNull = false)]
         public virtual string? RedmineId { get; set; }
-
+        
+        [Property(NotNull = false)]
+        [Column(Name = "jira_id", NotNull = false)]
+        public virtual long? JiraId { get; set; }
+        
         [Property(NotNull = true)]
         [Column(Name = "is_marked_to_delete", NotNull = true)]
         public virtual bool IsMarkedToDelete { get; set; }
@@ -113,7 +121,8 @@ namespace TimeTracker.Business.Orm.Entities
         
         #region Calculated
 
-        public virtual bool IsSynced => !string.IsNullOrEmpty(RedmineId) || !string.IsNullOrEmpty(ClickUpId);
+        public virtual bool IsSynced => !string.IsNullOrEmpty(RedmineId) 
+            || !string.IsNullOrEmpty(ClickUpId);
 
         public virtual bool IsActive => EndTime == null;
 
@@ -121,17 +130,7 @@ namespace TimeTracker.Business.Orm.Entities
 
         public virtual TimeSpan Duration => EndTime != null ? EndTime.Value - StartTime : TimeSpan.Zero;
 
-        public virtual string? ExternalTaskId => Task?.ExternalTaskId ?? TaskId;
-
-        public virtual void SetTaskId(string? taskId)
-        {
-            if (IsSynced)
-            {
-                return;
-            }
-
-            TaskId = taskId;
-        }
+        public virtual string? ExternalTaskId => Task?.ExternalTaskId;
 
         #endregion
     }

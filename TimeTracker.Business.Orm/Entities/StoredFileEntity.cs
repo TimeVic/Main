@@ -4,6 +4,7 @@ using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
+using TimeTracker.Business.Orm.Entities.Tasks;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -83,6 +84,23 @@ namespace TimeTracker.Business.Orm.Entities
         )]
         public virtual ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
         
+        [Set(
+            Table = "task_comment_stored_files",
+            Lazy = CollectionLazy.True,
+            Cascade = "none",
+            BatchSize = 20
+        )]
+        [Key(
+            Column = "stored_file_id"
+        )]
+        [ManyToMany(
+            Unique = true,
+            Fetch = FetchMode.Join,
+            ClassType = typeof(TaskCommentEntity),
+            Column = "comment_id"
+        )]
+        public virtual ICollection<TaskCommentEntity> TaskComments { get; set; } = new List<TaskCommentEntity>();
+        
         #region Calculated
 
         public virtual IEntity? Relationship
@@ -92,6 +110,10 @@ namespace TimeTracker.Business.Orm.Entities
                 if (Tasks.Any())
                 {
                     return Tasks.First();
+                }
+                if (TaskComments.Any())
+                {
+                    return TaskComments.First();
                 }
 
                 return null;

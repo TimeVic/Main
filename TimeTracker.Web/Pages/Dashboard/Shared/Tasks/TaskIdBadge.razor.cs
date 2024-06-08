@@ -1,6 +1,9 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Tasks;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
@@ -14,6 +17,9 @@ public partial class TaskIdBadge
     public bool IsClickable { get; set; } = false;
 
     [Parameter]
+    public bool IsReplaceWithExternal { get; set; } = false;
+    
+    [Parameter]
     public string Class { get; set; }
 
     [Parameter]
@@ -21,6 +27,9 @@ public partial class TaskIdBadge
     
     [Inject]
     public IState<TasksState> TaskState { get; set; }
+    
+    [Inject]
+    public IState<AuthState> AuthState { get; set; }
     
     private async Task OnClick()
     {
@@ -31,8 +40,8 @@ public partial class TaskIdBadge
         }
 
         // TODO: Read task data from the server?
-        var task = TaskState.Value.List.FirstOrDefault(item => item.Id == InternalTask.Id);
+        var task = TaskState.Value.List.FirstOrDefault(item => item.TaskId == InternalTask.TaskId);
         task ??= InternalTask;
-        await ModalDialogProviderService.ShowEditTaskModal(task);
+        await ModalDialogService.ShowEditTaskModal(task);
     }
 }

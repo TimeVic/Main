@@ -12,4 +12,9 @@ public class WorkspaceDto : IResponse
     public bool IsDefault { get; set; }
     
     public MembershipAccessType? CurrentUserAccess { get; set; }
+
+    public bool IsFullAccess
+    {
+        get => CurrentUserAccess is MembershipAccessType.Manager or MembershipAccessType.Owner;
+    }
 }

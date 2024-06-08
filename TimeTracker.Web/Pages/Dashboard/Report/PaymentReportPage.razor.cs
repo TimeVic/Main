@@ -1,9 +1,7 @@
-﻿using Fluxor;
+﻿using System.Security.Cryptography;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
-using TimeTracker.Api.Shared.Dto.Model;
 using TimeTracker.Api.Shared.Dto.Model.Report;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Report;
 
 namespace TimeTracker.Web.Pages.Dashboard.Report;
@@ -28,17 +26,7 @@ public partial class PaymentReportPage
         await base.OnInitializedAsync();
         Dispatcher.Dispatch(new ReportFetchPaymentsReportAction());
     }
-
-    private void OnFooterCellRender(DataGridCellRenderEventArgs<PaymentsReportItemDto> args, PaymentsReportItemDto data)
-    {
-        if (args.Column.Property == "ProjectName")
-        {
-            var unpaidAmount = GetClientUnpaidAmount(data.ClientId ?? 0);
-            args.Attributes.Add("style", $"background-color: {(unpaidAmount < 0 ? "var(--rz-danger)" : "var(--rz-success)")};");
-            args.Attributes.Add("colspan", 1);
-        }
-    }
-
+    
     private TimeSpan GetTotalDuration(long clientId)
     {
         var totalTicks = _state.Value.PaymentReportItems.Where(item => item.ClientId == clientId)

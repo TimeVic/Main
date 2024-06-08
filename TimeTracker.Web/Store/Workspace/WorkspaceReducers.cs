@@ -26,33 +26,25 @@ public class ClientReducers
         };
     }
     
-    #region Add new item
-    
-    [ReducerMethod(typeof(AddEmptyListItemAction))]
-    public static WorkspaceState AddEmptyListItemActionAction(WorkspaceState state)
+    [ReducerMethod]
+    public static WorkspaceState SetListItemActionReducer(WorkspaceState state, SetListItemAction action)
     {
-        var newList = state.SortedList.ToList();
-        newList.Add(new WorkspaceDto()
+        var list = state.List.Select(item =>
         {
-            Id = 0,
-            Name = ""
-        });
+            if (item.Id == action.Workspace.Id)
+            {
+                return action.Workspace;
+            }
+            return item;
+        }).ToList();
+        if (list.All(item => item.Id != action.Workspace.Id))
+        {
+            list.Insert(0, action.Workspace);
+        }
+
         return state with
         {
-            List = newList,
-            TotalCount = ++state.TotalCount
+            List = list
         };
     }
-    
-    [ReducerMethod(typeof(RemoveEmptyListItemAction))]
-    public static WorkspaceState RemoveEmptyWorkspaceListItemActionAction(WorkspaceState state)
-    {
-        return state with
-        {
-            List = state.List.Where(item => item.Id != 0).ToList(),
-            TotalCount = --state.TotalCount
-        };
-    }
-    
-    #endregion
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Linq;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
@@ -32,15 +33,14 @@ public partial class StartTest
             IsBillable = fakeTimeEntry.IsBillable,
             Date = DateTime.UtcNow.Date,
             StartTime = TimeSpan.FromSeconds(1),
-            TaskId = fakeTimeEntry.TaskId,
-            InternalTaskId = task.Id
+            InternalTaskId = task.TaskId
         });
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.True(actualDto.Id > 0);
-        Assert.Null(actualDto.TaskId);
         Assert.NotNull(actualDto.Task);
-        Assert.True(actualDto.Task.Id > 0);
+        Assert.True(actualDto.Task.TaskId > 0);
     }
+    
 }

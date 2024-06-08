@@ -5,14 +5,8 @@ namespace TimeTracker.Web.Store.Client;
 
 public record struct LoadListAction(bool IsReload = false);
 
-public record struct SetClientListItemsAction(GetListResponse Response);
+public record struct SetListItemsAction(GetListResponse Response);
 
-public record struct SetClientListItemAction(ClientDto Client);
+public record struct SetListItemAction(ClientDto Client);
 
-public record struct SetClientIsListLoading(bool IsLoading);
-
-public record struct AddEmptyClientListItemAction();
-
-public record struct RemoveEmptyClientListItemAction();
-
-public record struct SaveEmptyClientListItemAction();
+public record struct SetIsListLoading(bool IsLoading);

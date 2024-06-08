@@ -1,63 +1,52 @@
 ﻿@using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Business.Common.Constants.Reports
+@using MudBlazor
 
-@inherits BaseComponent
+@inherits BaseReactiveComponent
 
-<div class="row">
-    <div class="col">
-        <RadzenText
-            TextStyle="TextStyle.Subtitle2"
-            TagName="TagName.H3">
-            Group by:
-        </RadzenText>
+<MudGrid>
+    <MudItem xs="12" md="6" lg="2">
         <EnumDropDown
+            Class="w-100"
+            Label="Group by:"
             TItem="SummaryReportType"
             Value="@_filterState.ReportType"
-            Class="w-100"
             ValueChanged="OnChangeReportType"/>
-    </div>
-    <div class="col">
-        <RadzenText
-            TextStyle="TextStyle.Subtitle2"
-            TagName="TagName.H3">
-            Period:
-        </RadzenText>
+        <MudSpacer/>
+    </MudItem>
+    <MudItem xs="12" md="6" lg="2">
         <EnumDropDown
+            Class="w-100"
+            Label="Period:"
             TItem="SummaryReportPeriodType"
             Value="@_filterState.PeriodType"
-            ValueChanged="OnChangePeriodType"
-            Class="w-100"/>
-    </div>
-    <div class="col">
-        <RadzenText
-            TextStyle="TextStyle.Subtitle2"
-            TagName="TagName.H3">
-            Date start:
-        </RadzenText>
-        <RadzenDatePicker
-            TValue="DateTime?"
+            ValueChanged="OnChangePeriodType"/>
+    </MudItem>
+    <MudItem xs="12" md="6" lg="3">
+        <MudDatePicker
+            Label="Date start"
+            Editable="true"
             Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-            AllowClear="false"
-            DateFormat="d"
-            Class="w-100"
-            Placeholder="Date start"
-            Value="@_filterState.StartDate"
-            Change="OnChangeDateStart"/>
-    </div>
-    <div class="col">
-        <RadzenText
-            TextStyle="TextStyle.Subtitle2"
-            TagName="TagName.H3">
-            Date end:
-        </RadzenText>
-        <RadzenDatePicker
-            TValue="DateTime?"
+            DateChanged="OnChangeDateStart"
+            Date="@_filterState.StartDate"/>
+        <MudSpacer/>
+    </MudItem>
+    <MudItem xs="12" md="6" lg="3">
+        <MudDatePicker
+            Label="Date end"
+            Editable="true"
             Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-            AllowClear="false"
-            DateFormat="d"
-            Class="w-100"
-            Placeholder="Date start"
-            Value="@_filterState.EndDate"
-            Change="OnChangeDateEnd"/>
-    </div>
-</div>
+            DateChanged="OnChangeDateEnd"
+            Date="@_filterState.StartDate"/>
+    </MudItem>
+    <MudItem xs="12" md="6" lg="2">
+        <MudButton
+            OnClick="@(LoadReport)"
+            Class="mt-3 w-100"
+            Color="Color.Primary"
+            Variant="Variant.Filled"
+            StartIcon="@Icons.Material.Filled.Search">
+            Search
+        </MudButton>
+    </MudItem>
+</MudGrid>

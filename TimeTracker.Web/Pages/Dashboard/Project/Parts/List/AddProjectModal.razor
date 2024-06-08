@@ -1,0 +1,29 @@
+﻿@using MudBlazor
+
+@inherits BaseReactiveComponent
+
+<MudDialog>
+    <DialogContent>
+        <MudForm
+            @ref="_form"
+            @bind-IsValid="_isValid">
+
+            <MudTextField
+                T="string?"
+                For="() => model.Name"
+                @bind-Value="@(model.Name)"
+                Label="Project name">
+            </MudTextField>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
+        <MudButton
+            ButtonType="MudBlazor.ButtonType.Submit"
+            OnClick="@Submit"
+            Disabled="@_isLoading"
+            Color="Color.Primary">
+            Add
+        </MudButton>
+    </DialogActions>
+</MudDialog>

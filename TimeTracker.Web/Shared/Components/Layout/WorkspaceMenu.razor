@@ -1,28 +1,26 @@
-﻿@inherits BaseComponent
+﻿@using MudBlazor
+
+@inherits BaseReactiveComponent
 
 @if (_workpsaceState.Value.IsLoaded)
 {
-    <RadzenSplitButton 
-        Text="@_authState.Value.Workspace.Name"
-        Variant="Variant.Outlined" 
-        ButtonStyle="ButtonStyle.Secondary"
-        Click=@(args => OnClickToMenuItem(args?.Value))
-        class="mr-2"
-    >
-        <ChildContent>
-            @foreach (var workspace in _workpsaceState.Value.List)
-            {
-                if (_authState.Value.Workspace.Id != @workspace.Id)
-                {
-                    <RadzenSplitButtonItem Text="@workspace.Name" Value="@workspace.Id.ToString()"/>     
-                }  
-            }
-        </ChildContent>
-    </RadzenSplitButton>
-    <RadzenButton
-        ButtonStyle="ButtonStyle.Secondary"
-        Icon="build"
-        Click="NavigateToEditPage"
-        class="mr-2"
-    />
+    <MudDivider/>
+    <MudMenuItem Disabled="true">Switch workspace:</MudMenuItem>
+    @foreach (var workspace in _workpsaceState.Value.List)
+    {
+        if (_authState.Value.Workspace.Id != @workspace.Id)
+        {
+            <MudMenuItem
+                OnClick=@(args => OnClickToMenuItem(workspace))>
+                @workspace.Name
+            </MudMenuItem>
+        }
+    }
+    <MudDivider/>
+    <MudMenuItem
+        IconSize="Size.Small"
+        Icon="@Icons.Material.Filled.Dashboard"
+        OnClick="NavigateToEditWorkspaces">
+        Manage workspaces
+    </MudMenuItem>
 }

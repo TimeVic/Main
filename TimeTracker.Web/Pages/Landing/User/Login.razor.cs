@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Radzen;
+using MudBlazor;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
@@ -25,6 +25,8 @@ public partial class Login
     
     private LoginRequest model = new();
     private bool _isLoading;
+    private MudForm _form;
+    private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -37,25 +39,26 @@ public partial class Login
         model.ReCaptcha = await _reCaptchaService.GetReCaptchaTokenAsync();
     }
     
-    private async Task HandleSubmit()
+    private async Task Submit()
     {
+        _form.Validate();
+        if (!_form.IsValid)
+        {
+            return;
+        }
         _isLoading = true;
         try
         {
             var loginResponse = await _apiService.LoginAsync(model);
-            if (!string.IsNullOrEmpty(loginResponse.Token))
+            if (!string.IsNullOrEmpty(loginResponse.JwtToken))
             {
-                _authorizationService.Login(loginResponse.Token, loginResponse.User);
+                _authorizationService.Login(loginResponse.AccessToken, loginResponse.JwtToken, loginResponse.User);
                 _navigationManager.NavigateTo(SiteUrl.DashboardBase);
             }
         }
         catch (Exception)
         {
-            NotificationService.Notify(new NotificationMessage()
-            {
-                Severity = NotificationSeverity.Error,
-                Summary = "Incorrect email or password"
-            });
+            await ToastService.ShowError("Incorrect email or password");
         }
         finally
         {

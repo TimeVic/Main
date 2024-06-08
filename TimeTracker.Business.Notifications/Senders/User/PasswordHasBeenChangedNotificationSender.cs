@@ -1,0 +1,29 @@
+﻿using Notification.Abstractions;
+using TimeTracker.Business.Clients.Smtp;
+using TimeTracker.Business.Clients.Smtp.Core;
+using TimeTracker.Business.Notifications.Core;
+
+namespace TimeTracker.Business.Notifications.Senders.User
+{
+    public class PasswordHasBeenChangedNotificationSender : IAsyncNotification<PasswordHasBeenChangedNotificationContext>
+    {
+        private readonly ISmtpClientService _smtpClientService;
+        private readonly EmailFactory _emailFactory;
+
+        public PasswordHasBeenChangedNotificationSender(ISmtpClientService smtpClientService)
+        {
+            _smtpClientService = smtpClientService;
+            _emailFactory = new EmailFactory();
+        }
+
+        public Task SendAsync(
+            PasswordHasBeenChangedNotificationContext context, 
+            CancellationToken cancellationToken = default
+        )
+        {
+            var emailBuilder = _emailFactory.GetEmailBuilder("PasswordHasBeenChangedNotification.htm");
+            _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
+            return Task.CompletedTask;
+        }
+    }
+}

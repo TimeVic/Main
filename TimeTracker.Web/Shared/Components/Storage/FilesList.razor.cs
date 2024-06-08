@@ -1,10 +1,11 @@
 ﻿using System.Timers;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Radzen;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
+using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Shared.Components.Storage;
 
@@ -38,13 +39,13 @@ public partial class FilesList: IDisposable
     public ILogger<FilesList> _logger { get; set; }
     
     [Inject]
-    public NotificationService _toastService { get; set; }
-    
-    [Inject]
-    protected DialogService _dialogService { get; set; }
+    public ToastService _toastService { get; set; }
     
     [Inject]
     protected ModalDialogProviderService _dialogProvider { get; set; }
+    
+    [Inject]
+    protected IState<AuthState> _authState { get; set; }
     
     private System.Timers.Timer _timer;
 
@@ -78,14 +79,8 @@ public partial class FilesList: IDisposable
 
     private async Task OnCLickDelete(StoredFileDto file)
     {
-        var isOk = await _dialogService.Confirm(
-            "Are you sure you want to delete this file?",
-            "Delete confirmation",
-            new ConfirmOptions()
-            {
-                OkButtonText = "Delete",
-                CancelButtonText = "Cancel"
-            }
+        var isOk = await _dialogProvider.ShowDeleteConfirmationDialog(
+            "Are you sure you want to delete this file?"
         );
         if (!isOk.HasValue || !isOk.Value)
         {
@@ -101,11 +96,7 @@ public partial class FilesList: IDisposable
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            _toastService.Notify(new NotificationMessage()
-            {
-                Summary = e.Message,
-                Severity = NotificationSeverity.Error,
-            });
+            await _toastService.ShowError(e.Message);
         }
     }
 
@@ -131,7 +122,11 @@ public partial class FilesList: IDisposable
     {
         try
         {
-            var files = await _apiService.StorageGetListAsync(EntityId.Value, EntityType.Value);
+            var files = await _apiService.StorageGetListAsync(
+                _authState.Value.Workspace.Id,
+                EntityId.Value,
+                EntityType.Value
+            );
             await InvokeAsync(() => ListUpdated.InvokeAsync(files.Items));
         }
         catch (Exception e)

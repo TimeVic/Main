@@ -1,4 +1,6 @@
-﻿@inherits BaseComponent
+﻿@using MudBlazor
+
+@inherits BaseReactiveComponent
 
 <div class="w-file-upload @Class">
     <InputFile 
@@ -7,5 +9,11 @@
         OnChange="@OnInputFileChange" 
         multiple 
         accept="@_acceptTypes" />
-    <RadzenButton Click="OnClickSelectFile" IsBusy="_isLoading">@_buttonLabel</RadzenButton>
+    <MudButton
+        StartIcon="@Icons.Material.Filled.Upload"
+        Color="Color.Default"
+        OnClick="OnClickSelectFile"
+        Disabled="_isLoading">
+        @_buttonLabel
+    </MudButton>
 </div>

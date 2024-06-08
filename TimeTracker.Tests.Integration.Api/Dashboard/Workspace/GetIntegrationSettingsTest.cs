@@ -5,9 +5,12 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao.Workspace;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Business.Testing.Factories;
@@ -35,6 +38,9 @@ public class GetIntegrationSettingsTest: BaseTest
     private readonly string? _clickUpsecurityKey;
     private readonly string? _clickUpteamId;
     private readonly string? _clickUptaskId;
+    private readonly string? _jiraApiKey;
+    private readonly string? _jiraUserName;
+    private readonly string? _jiraUrl;
 
     public GetIntegrationSettingsTest(ApiCustomWebApplicationFactory factory) : base(factory)
     { 
@@ -70,6 +76,18 @@ public class GetIntegrationSettingsTest: BaseTest
             true,
             true
         ).Wait();
+        
+        _jiraApiKey = configuration.GetValue<string>("Integration:Jira:ApiToken");
+        _jiraUserName = configuration.GetValue<string>("Integration:Jira:UserName");
+        _jiraUrl = configuration.GetValue<string>("Integration:Jira:Url");
+        _workspaceSettingsDao.SetJiraAsync(
+            _user,
+            _workspace,
+            _jiraUrl,
+            _jiraApiKey,
+            _jiraUserName,
+            true
+        ).Wait();
     }
 
     [Fact]
@@ -101,6 +119,10 @@ public class GetIntegrationSettingsTest: BaseTest
         Assert.NotNull(actualResponse.IntegrationClickUp);
         Assert.Equal(_clickUpsecurityKey, actualResponse.IntegrationClickUp.SecurityKey);
         Assert.Equal(_clickUpteamId, actualResponse.IntegrationClickUp.TeamId);
+        
+        Assert.NotNull(actualResponse.IntegrationJira);
+        Assert.Equal(_jiraApiKey, actualResponse.IntegrationJira.ApiKey);
+        Assert.Equal(_jiraUserName, actualResponse.IntegrationJira.UserName);
     }
     
     [Fact]

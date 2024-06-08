@@ -1,37 +1,41 @@
 ﻿@inherits BaseLayout
 
 <RadzenContextMenu/>
-<RadzenDialog />
-<RadzenTooltip />
-<RadzenNotification/>
+<RadzenDialog/>
+<RadzenTooltip/>
+<RadzenNotification Style="bottom: 1em; top: unset"/>
 
-<RadzenLayout>
-    @if (CommonState.Value.IsInitialized)
+<MudLayout>
+    <MainHeader/>
+    @if (CommonState.Value.IsInitialized && IsShowMainMenu)
     {
-        <MainHeader/>
-        @if (IsShowMainMenu)
-        {
-            <NavMenu/>
-        }    
+        <NavMenu/>
     }
-    <RadzenBody>
-        <div class="w-container container-fluid">
-            @if (CommonState.Value.IsInitialized)
+    <MudMainContent Class="pt-16 px-1">
+        <MudContainer
+            MaxWidth="MaxWidth.False"
+            class="d-flex mt-6">
+            <MudGrid
+                Justify="Justify.FlexStart">
+                @if (CommonState.Value.IsInitialized)
+                {
+                    <InitializationContainer>
+                        @Body
+                    </InitializationContainer>
+                }
+                else
+                {
+                    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+                }
+            </MudGrid>
+            @if (!IsShowReCaptcha)
             {
-                @Body
-            }
-            else
-            {
-                <RadzenProgressBar Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate"/>
-            }
-        </div>
-        @if (!IsShowReCaptcha)
-        {
-            <style>
+                <style>
                     .grecaptcha-badge {
                         visibility: hidden;
                     }
                 </style>
-        }
-    </RadzenBody>
-</RadzenLayout> 
+            }
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>

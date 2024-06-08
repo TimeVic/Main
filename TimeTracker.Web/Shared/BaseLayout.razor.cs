@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using Fluxor;
+﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Core.Helpers;
@@ -10,8 +7,6 @@ using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common;
-using TimeTracker.Web.Store.Common.Actions;
-using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Shared;
 
@@ -33,13 +28,7 @@ public partial class BaseLayout
     protected IState<CommonState> CommonState { get; set; }
     
     [Inject]
-    protected IState<TimeEntryState> TimeEntryState { get; set; }
-    
-    [Inject]
     protected IDispatcher Dispatcher { get; set; }
-
-    [Inject]
-    protected IJSRuntime Js { get; set; }
     
     protected bool IsRedirectIfNotLoggedIn = true;
 
@@ -54,9 +43,9 @@ public partial class BaseLayout
         {
             var path = NavigationManager.GetPath();
             return path.Equals("/") 
-                   || path.StartsWith("/login")
-                   || path.StartsWith("/registration")
-                   || path.StartsWith("/documentation");
+                || path.StartsWith("/login")
+                || path.StartsWith("/registration")
+                || path.StartsWith("/documentation");
         }
     }
 
@@ -68,23 +57,26 @@ public partial class BaseLayout
         {
             if (CommonState.Value.IsInitialized)
             {
-                await InitAppAsync();
+                InitAppAsync();
+                IsShowReCaptcha = ReCaptchaService.GetIsEnabled();
+                StateHasChanged();
             }
         };
-        TimeEntryState.StateChanged += async (sender, args) =>
-        {
-            var faviconName = "black/clock-64.png";
-            if (TimeEntryState.Value.HasActiveEntry)
-            {
-                faviconName = "play_1/play-64.png";
-            }
-
-            await Js.InvokeAsync<object>("window.setFavicon", faviconName);
-        };
+        ReCaptchaService.IsShowChanged += OnReCaptchaShowChanged;
         Dispatcher.Dispatch(new LoadPersistedDataAction());
     }
 
-    private async Task InitAppAsync()
+    public void Dispose()
+    {
+        ReCaptchaService.IsShowChanged -= OnReCaptchaShowChanged;
+    }
+    
+    private void OnReCaptchaShowChanged(bool isShow)
+    {
+        IsShowReCaptcha = isShow;
+    }
+    
+    private void InitAppAsync()
     {
         NavigationManager.LocationChanged += (sender, args) =>
         {
@@ -98,25 +90,20 @@ public partial class BaseLayout
                 await OnLoggedInAsync();
             }
         };
-        ReCaptchaService.IsShowChanged += OnReCaptchaShowChanged;
-        IsShowReCaptcha = ReCaptchaService.GetIsEnabled();
+        CommonState.StateChanged += async (sender, args) =>
+        {
+            if (CommonState.Value.IsWorkspaceInitialized)
+            {
+                // await AuthService.CheckIsLoggedInAsync();
+                CheckIsLoggedInAndRedirect();    
+            }
+        };
         
-        await AuthService.CheckIsLoggedInAsync();
-        CheckIsLoggedInAndRedirect();
+        
         if (AuthState.Value.IsLoggedIn)
         {
-            await OnLoggedInAsync();
+            OnLoggedInAsync();
         }
-    }
-
-    public void Dispose()
-    {
-        ReCaptchaService.IsShowChanged -= OnReCaptchaShowChanged;
-    }
-
-    private void OnReCaptchaShowChanged(bool isShow)
-    {
-        IsShowReCaptcha = isShow;
     }
     
     private void CheckIsLoggedInAndRedirect()
@@ -130,9 +117,8 @@ public partial class BaseLayout
         {
             NavigationManager.NavigateTo("/login");
         }
-        StateHasChanged();
     }
-
+    
     protected virtual Task OnLoggedInAsync()
     {
         return Task.CompletedTask;

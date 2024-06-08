@@ -150,7 +150,7 @@ namespace AspNetCore.ApiControllers.Extensions
                     await apiController.CommitPerformer.PerformCommitAsync();
                 }
 
-                if (response is FileResponse)
+                if (response is FileResponse or FileResult)
                 {
                     return response as IActionResult;
                 }

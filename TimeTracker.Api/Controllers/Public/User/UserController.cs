@@ -4,6 +4,7 @@ using Persistence.Transactions.Behaviors;
 using AspNetCore.ApiControllers.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Business.Mvc.Controllers;
 
 namespace TimeTracker.Api.Controllers.Public.User;
 
@@ -27,6 +28,14 @@ public class UserController : MainApiControllerBase
             .For<LoginResponseDto>()
             .With(request);
     
+    [HttpPost("refresh-token")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        => this.RequestAsync()
+            .For<RefreshTokenResponseDto>()
+            .With(request);
+    
     [HttpPost("registration/step1")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -47,5 +56,19 @@ public class UserController : MainApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public Task<IActionResult> CheckIsLoggedIn([FromQuery] CheckIsLoggedInRequest request)
+        => this.RequestAsync(request);
+    
+    [HttpPost("password/reset")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public Task<IActionResult> PasswordResetStep1([FromBody] ResetPasswordStep1Request request)
+        => this.RequestAsync(request);
+    
+    [HttpPost("password/change")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public Task<IActionResult> PasswordResetStep1([FromBody] ResetPasswordStep2Request request)
         => this.RequestAsync(request);
 }

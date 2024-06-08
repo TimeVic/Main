@@ -1,23 +1,28 @@
-﻿@inherits BaseComponent
+﻿@inherits BaseReactiveComponent
 
 @using TimeTracker.Business.Common.Constants
+@using MudBlazor
+@using TimeTracker.Api.Shared.Dto.Entity
 
-<RadzenDropDown
-    @ref="_listReference"
-    Disabled="Disabled"
-    AllowClear="true"
-    TValue="long"
-    Class="@(Class)"
-    AllowFiltering="true"
-    FilterOperator="StringFilterOperator.Contains"
-    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-    AllowSorting="false"
-    AllowVirtualization="true"
-    Count="@_state.Value.TotalCount"
-    Data="@_state.Value.List"
-    TextProperty="Name"
-    ValueProperty="Id"
+<MudSelect
+    T="long"
+    U="ClientDto"
+    Class="@Class"
+    Disabled="@Disabled"
+    Dense="true"
+    For="For"
+    Clearable="@Clearable"
     Placeholder="@Placeholder"
+    EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
     Value="@_selectedId"
-    ValueChanged="async (value) => await OnValueChanged(value)">
-</RadzenDropDown>
+    ValueChanged="OnValueChanged"
+    ToStringFunc="ToStringFunc"
+    Variant="MudBlazor.Variant.Text"
+    AnchorOrigin="Origin.BottomCenter">
+    @foreach (var client in _state.Value.List)
+    {
+        <MudSelectItem Value="@client.Id">
+            @client.Name
+        </MudSelectItem>
+    }
+</MudSelect>

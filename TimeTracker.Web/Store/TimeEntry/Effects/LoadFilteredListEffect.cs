@@ -36,7 +36,7 @@ public class LoadFilteredListEffect: Effect<LoadTimeEntryFilteredListAction>
             var response = await _apiService.TimeEntryGetFilteredListAsync(new GetFilteredListRequest()
             {
                 WorkspaceId = _authState.Value.Workspace.Id,
-                Page = PaginationUtils.CalculatePage(action.Skip),
+                Page = _state.Value.FilteredSelectedPage,
                 Search = _state.Value.Filter.Search,
                 ClientId = _state.Value.Filter.ClientId,
                 ProjectId = _state.Value.Filter.ProjectId,
