@@ -42,11 +42,25 @@ node('testing-node') {
             
             echo "**** Branch is ${env.BRANCH_NAME} ****"
             echo "**** scm.branches is ${scm.branches} ****"
+            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
+            echo "**** GITHUB_PR_SOURCE_BRANCH  is ${GITHUB_PR_SOURCE_BRANCH} ****"
+            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
+            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
+            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
 
             echo sh(script: 'env|sort', returnStdout: true)
 
             echo "**** getCommitSha1 ${getCommitSha()} ****"
 
+
+            checkout([
+                $class: 'GitSCM', 
+                branches: [[name: "FETCH_HEAD"]],
+                extensions: [[$class: 'LocalBranch']],
+                userRemoteConfigs: [[
+                    refspec: "+refs/pull/${GITHUB_PR_NUMBER}/merge:refs/remotes/origin-pull/pull/${GITHUB_PR_NUMBER}/merge"
+                ]]
+            ])
             checkout scm
 //             checkout([
 //                 $class: 'GitSCM', 
