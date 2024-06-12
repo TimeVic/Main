@@ -47,7 +47,7 @@ var configurationFile = "Debug";
 #if IS_DEVELOPMENT_BUILD
     configurationFile = "Development";
 #endif
-Console.WriteLine($"Application loaded with {configurationFile} configuration")11;
+Console.WriteLine($"Application loaded with {configurationFile} configuration");
 using var response = await webHttp.GetAsync($"appsettings.{configurationFile}.json");
 using var stream = await response.Content.ReadAsStreamAsync();
 builder.Configuration.AddJsonStream(stream);

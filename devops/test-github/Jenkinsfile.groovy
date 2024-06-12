@@ -39,13 +39,8 @@ node('testing-node') {
                 git config --global http.maxRequestBuffer 1024M
                 git config --global core.compression 9
             """
-            
-            echo sh(script: 'env|sort', returnStdout: true)
-
-            echo "**** getCommitSha1 ${getCommitSha()} ****"
 
             checkout scm
-            echo "**** getCommitSha2 ${getCommitSha()} ****"
         }
         
         runStage(Stage.SET_VARS) {
