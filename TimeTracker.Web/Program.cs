@@ -36,7 +36,7 @@ builder.Services.AddScoped(sp => new HttpClient()
 }.EnableIntercept(sp));
 
 // Init Environment config file 
-var webHttp = new HttpClientt()
+var webHttp = new HttpClienttt()
 {
     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
 };
