@@ -52,24 +52,7 @@ node('testing-node') {
 
             echo "**** getCommitSha1 ${getCommitSha()} ****"
 
-
-            checkout([
-                $class: 'GitSCM', 
-                branches: [[name: "FETCH_HEAD"]],
-                extensions: [[$class: 'LocalBranch']],
-                userRemoteConfigs: [[
-                    refspec: "+refs/pull/${GITHUB_PR_NUMBER}/merge:refs/remotes/origin-pull/pull/${GITHUB_PR_NUMBER}/merge"
-                ]]
-            ])
             checkout scm
-//             checkout([
-//                 $class: 'GitSCM', 
-//                 branches: [[name: "FETCH_HEAD"]],
-//                 extensions: [[$class: 'LocalBranch']],
-//                 userRemoteConfigs: [[
-//                     refspec: "+refs/pull/${params.PR_NUMBER}/head:refs/remotes/origin/PR-${params.PR_NUMBER}"
-//                 ]]
-//             ])
             echo "**** getCommitSha2 ${getCommitSha()} ****"
         }
         
