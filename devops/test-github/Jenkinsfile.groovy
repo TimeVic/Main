@@ -39,21 +39,21 @@ node('testing-node') {
                 git config --global http.maxRequestBuffer 1024M
                 git config --global core.compression 9
             """
+            
             echo "**** Branch is ${env.BRANCH_NAME} ****"
             echo "**** scm.branches is ${scm.branches} ****"
+            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
+            echo "**** GITHUB_PR_SOURCE_BRANCH  is ${GITHUB_PR_SOURCE_BRANCH} ****"
+            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
+            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
+            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
 
-            println params
-            println env
-            println scm
+            echo sh(script: 'env|sort', returnStdout: true)
 
-            checkout([
-                $class: 'GitSCM', 
-                branches: [[name: "FETCH_HEAD"]],
-                extensions: [[$class: 'LocalBranch']],
-                userRemoteConfigs: [[
-                    refspec: "+refs/pull/${params.PR_NUMBER}/head:refs/remotes/origin/PR-${params.PR_NUMBER}"
-                ]]
-            ])
+            echo "**** getCommitSha1 ${getCommitSha()} ****"
+
+            checkout scm
+            echo "**** getCommitSha2 ${getCommitSha()} ****"
         }
         
         runStage(Stage.SET_VARS) {
