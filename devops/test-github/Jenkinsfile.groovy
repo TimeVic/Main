@@ -91,6 +91,14 @@ node('testing-node') {
                 }
             }
 
+            runStage(Stage.INIT_MONGO) {
+                sh 'mongod --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log --fork &'
+                sh 'netstat -tulpn | grep LISTEN'
+                sh 'until nc -z localhost 27017; do sleep 1; done'
+                sh 'netstat -tulpn | grep LISTEN'
+                echo "MongoDb is started"
+            }
+
             runStage(Stage.INIT_DB) {
                 sh 'psql --version'
                 sh 'pg_ctlcluster 16 main start'
@@ -102,18 +110,10 @@ node('testing-node') {
 
             runStage(Stage.INIT_REDIS) {
                 sh '/usr/bin/redis-server &'
+                sh 'netstat -tulpn | grep LISTEN'
                 sh 'until nc -z localhost 6379; do sleep 1; done'
-                echo "Redis is started"
-                
                 sh 'netstat -tulpn | grep LISTEN'
-            }
-            
-            runStage(Stage.INIT_MONGO) {
-                sh '/usr/bin/mongod --config /etc/mongod.conf &'
-                sh 'until nc -z localhost 27017; do sleep 1; done'
                 echo "Redis is started"
-                
-                sh 'netstat -tulpn | grep LISTEN'
             }
             
             runStage(Stage.BUILD) {
