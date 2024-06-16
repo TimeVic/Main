@@ -92,7 +92,6 @@ node('testing-node') {
             }
 
             runStage(Stage.INIT_MONGO) {
-                sh 'cat /etc/mongod.conf'
                 sh 'mongod --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log --fork --port 27017'
                 sh 'until nc -z localhost 27017; do sleep 1; done'
                 sh 'netstat -tulpn | grep LISTEN'
@@ -134,7 +133,7 @@ node('testing-node') {
             }
             
             runStage(Stage.RUN_INTEGRATION_TESTS_3) {
-                sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api.FileStorage'
+                sh 'dotnet test --logger trx --verbosity=detailed --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api.FileStorage'
             }
             
             runStage(Stage.RUN_INTEGRATION_TESTS_1) {
