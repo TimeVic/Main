@@ -100,6 +100,7 @@ public partial class MarkAllAsReadTest: BaseTest
         await CommitDbChanges();
         
         Assert.Equal(2, await _notificationCenterService.GetUnreadCount(_user, _workspace));
+        await DbSessionProvider.CurrentSession.RefreshAsync(otherTask.Workspace);
         Assert.Equal(1, await _notificationCenterService.GetUnreadCount(otherUser, otherTask.Workspace));
         
         // Act

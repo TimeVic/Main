@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace TimeTracker.Business.Services.Auth
 {
-    public class JwtAuthService: IJwtAuthService
+    public class JwtAuthService : IJwtAuthService
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<IJwtAuthService> _logger;
@@ -15,7 +15,7 @@ namespace TimeTracker.Business.Services.Auth
         private readonly string _issuer;
         private readonly string _audience;
         private readonly SymmetricSecurityKey _key;
-        
+
         public JwtAuthService(
             IConfiguration configuration,
             ILogger<IJwtAuthService> logger
@@ -25,11 +25,11 @@ namespace TimeTracker.Business.Services.Auth
             _logger = logger;
             _key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(
-                    _configuration.GetValue<string>("App:Auth:SymmetricSecurityKey")
+                    _configuration.GetValue<string>("App:Auth:SymmetricSecurityKey")!
                 )
             );
-            _issuer = _configuration.GetValue<string>("App:Auth:Issuer");
-            _audience = _configuration.GetValue<string>("App:Auth:Audience");
+            _issuer = _configuration.GetValue<string>("App:Auth:Issuer")!;
+            _audience = _configuration.GetValue<string>("App:Auth:Audience")!;
         }
 
         public string BuildJwt(long userId)
@@ -40,41 +40,45 @@ namespace TimeTracker.Business.Services.Auth
                 new(ClaimsIdentity.DefaultRoleClaimType, "user"),
                 new(ClaimTypes.NameIdentifier, userId.ToString())
             };
-            
+
             var now = DateTime.UtcNow;
             var expirationTime = now.Add(TimeSpan.FromHours(
                 _configuration.GetValue<int>("App:Auth:JwtLifetime")
             ));
-            var signingCredentials =
-                new SigningCredentials(
-                    _key, 
-                    SecurityAlgorithms.HmacSha256
-                );
-            var jwt = new JwtSecurityToken(
-                _issuer,
-                _audience,
-                notBefore: now,
-                claims: claims,
-                expires: expirationTime,
-                signingCredentials: signingCredentials
+            var signingCredentials = new SigningCredentials(
+                _key,
+                SecurityAlgorithms.HmacSha256
             );
-            return new JwtSecurityTokenHandler().WriteToken(jwt);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Issuer = _issuer,
+                Audience = _audience,
+                NotBefore = now,
+                Subject = new ClaimsIdentity(claims),
+                Expires = expirationTime,
+                SigningCredentials = signingCredentials
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenObject = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(tokenObject);
         }
-        
+
         public long GetUserId(string jwtString)
         {
             jwtString = jwtString ?? throw new ArgumentNullException(nameof(jwtString));
             try
-            {   
+            {
                 var jwt = new JwtSecurityToken(jwtString);
-                return long.Parse(jwt.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+                var userIdClaim = jwt.Claims.FirstOrDefault(c => c.Type == "nameid");
+                ArgumentNullException.ThrowIfNull(userIdClaim);
+                return long.Parse(userIdClaim.Value);
             }
             catch (Exception)
             {
                 return 0;
             }
         }
-        
+
         public bool IsValidJwt(string token)
         {
             token = token ?? throw new ArgumentNullException(nameof(token));
@@ -102,6 +106,7 @@ namespace TimeTracker.Business.Services.Auth
                 _logger.LogDebug($"Jwt Auth Token is Incorrect: ${e.Message}", e);
                 return false;
             }
+
             return true;
         }
     }

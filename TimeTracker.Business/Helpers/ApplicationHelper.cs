@@ -7,7 +7,7 @@ namespace TimeTracker.Business.Helpers
 {
     public static class ApplicationHelper
     {
-        private static string HostingEnvironment
+        public static string HostingEnvironment
         {
             get
             {
