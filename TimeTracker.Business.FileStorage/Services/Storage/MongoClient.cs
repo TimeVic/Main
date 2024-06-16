@@ -28,8 +28,13 @@ public class MongoClient: IMongoClient
         var mongoLogin = _configuration.GetValue<string>("Mongo:Login");
         var mongoPassword = _configuration.GetValue<string>("Mongo:Password");
         var dbName = _configuration.GetValue<string>("Mongo:DbName");
-        
-        _mongoClient = new MongoDB.Driver.MongoClient($"mongodb://{mongoLogin}:{mongoPassword}@{mongoHost}:{mongoPort}");
+
+        var loginConnectionPath = "";
+        if (!string.IsNullOrEmpty(mongoLogin))
+        {
+            loginConnectionPath = $"{mongoLogin}:{mongoPassword}@";
+        }
+        _mongoClient = new MongoDB.Driver.MongoClient($"mongodb://{loginConnectionPath}{mongoHost}:{mongoPort}");
         _mongoDb = _mongoClient.GetDatabase(dbName);
         _mongoFsBucket = new GridFSBucket(_mongoDb, new GridFSBucketOptions()
         {

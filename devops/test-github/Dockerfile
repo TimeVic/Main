@@ -5,7 +5,7 @@ USER root
 RUN cat /etc/os-release
 
 RUN apt update --fix-missing
-RUN apt install -y apt-transport-https wget ca-certificates iputils-ping telnet curl gnupg2
+RUN apt install -y apt-transport-https wget ca-certificates iputils-ping telnet curl gnupg2 net-tools sudo gnupg curl
 
 # Configure time
 ARG DEBIAN_FRONTEND=noninteractive
@@ -32,16 +32,20 @@ RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-
 # Import the repository signing key:
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
+# Install MongoDb repostories
+RUN curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+RUN echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | \
+    sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+
 # Install packages
 RUN apt update
-RUN apt-get install -y net-tools
-RUN apt-get install -y sudo
-RUN apt-get install -y default-jre 
-RUN apt-get install -y postgresql
-RUN apt-get install -y postgresql-client
+RUN apt-get install -y net-tools sudo gnupg curl
+RUN apt-get install -y postgresql postgresql-client
 RUN apt-get install -y netcat-traditional
 RUN apt-get install -y redis 
+RUN apt-get install -y mongo
 RUN apt-get install -y dotnet-sdk-8.0
+RUN apt-get install -y mongodb-org
 
 # Create dirs
 RUN mkdir /tmp/test

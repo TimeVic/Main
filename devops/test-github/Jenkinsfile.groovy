@@ -24,7 +24,12 @@ node('testing-node') {
         'POSTGRES_DATABASE': "template1",
 
         'ConnectionStrings__DefaultConnection': "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres;Pooling=true;Include Error Detail=true;Log Parameters=true;",
-        'Hibernate__IsShowSql': "false"
+        'Hibernate__IsShowSql': "false",
+        
+        'Mongo__Host': "127.0.0.1",
+        'Mongo__Port': "27017",
+        'Mongo__Login': "",
+        'Mongo__Password': "",
     ]
 
     runStage(Stage.UPDATE_GIT_STATUS) {
@@ -86,15 +91,6 @@ node('testing-node') {
                 }
             }
 
-            runStage(Stage.BUILD) {
-                sh 'echo "{}" > appsettings.Local.json'
-                sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
-                sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
-                sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
-                sh 'echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json'
-                sh 'dotnet build --'
-            }
-
             runStage(Stage.INIT_DB) {
                 sh 'psql --version'
                 sh 'pg_ctlcluster 16 main start'
@@ -111,7 +107,24 @@ node('testing-node') {
                 
                 sh 'netstat -tulpn | grep LISTEN'
             }
-
+            
+            runStage(Stage.INIT_MONGO) {
+                sh '/usr/bin/mongod --config /etc/mongod.conf &'
+                sh 'until nc -z localhost 27017; do sleep 1; done'
+                echo "Redis is started"
+                
+                sh 'netstat -tulpn | grep LISTEN'
+            }
+            
+            runStage(Stage.BUILD) {
+                sh 'echo "{}" > appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json'
+                sh 'dotnet build --'
+            }
+            
             runStage(Stage.RUN_MIGRATIONS) {
                 sh 'dotnet run --no-restore --no-build --project ./TimeTracker.Migrations'
             }
@@ -148,6 +161,7 @@ enum Stage {
     BUILD('Build projects'),
     INIT_DB('Init DB'),
     INIT_REDIS('Init Redis'),
+    INIT_MONGO('Init Mongo'),
     RUN_MIGRATIONS('Run migrations'),
     RUN_UNIT_TESTS('Run unit tests'),
     RUN_INTEGRATION_TESTS_1('Run business logic integration tests'),
