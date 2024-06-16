@@ -47,10 +47,8 @@ RUN apt-get install -y dotnet-sdk-8.0
 RUN apt-get install -y mongodb-org
 
 # Configure MongoDB
-
-RUN chown -R mongod:mongod /var/lib/mongo
-RUN chown -R mongod:mongod /var/log/mongodb
-RUN chown mongod:mongod /tmp/mongodb-27017.sock
+RUN mkdir -p /var/lib/mongo
+RUN mkdir -p /var/log/mongodb
 
 # Create dirs
 RUN mkdir /tmp/test
