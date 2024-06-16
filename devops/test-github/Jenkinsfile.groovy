@@ -94,8 +94,6 @@ node('testing-node') {
             runStage(Stage.INIT_MONGO) {
                 sh 'cat /etc/mongod.conf'
                 sh 'mongod --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log --fork --port 27017'
-                sh 'cat /var/log/mongodb/mongod.log'
-                sh 'netstat -tulpn | grep LISTEN'
                 sh 'until nc -z localhost 27017; do sleep 1; done'
                 sh 'netstat -tulpn | grep LISTEN'
                 echo "MongoDb is started"
@@ -112,7 +110,6 @@ node('testing-node') {
 
             runStage(Stage.INIT_REDIS) {
                 sh '/usr/bin/redis-server &'
-                sh 'netstat -tulpn | grep LISTEN'
                 sh 'until nc -z localhost 6379; do sleep 1; done'
                 sh 'netstat -tulpn | grep LISTEN'
                 echo "Redis is started"
@@ -124,6 +121,7 @@ node('testing-node') {
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Tests.Integration.Api.FileStorage/appsettings.Local.json'
                 sh 'dotnet build --'
             }
             
@@ -133,6 +131,10 @@ node('testing-node') {
 
             runStage(Stage.RUN_UNIT_TESTS) {
                 sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Unit.Business'
+            }
+            
+            runStage(Stage.RUN_INTEGRATION_TESTS_3) {
+                sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api.FileStorage'
             }
             
             runStage(Stage.RUN_INTEGRATION_TESTS_1) {
@@ -168,6 +170,7 @@ enum Stage {
     RUN_UNIT_TESTS('Run unit tests'),
     RUN_INTEGRATION_TESTS_1('Run business logic integration tests'),
     RUN_INTEGRATION_TESTS_2('Run API integration tests'),
+    RUN_INTEGRATION_TESTS_3('Run File Storage API integration tests'),
 
 //    SAVE_ARTIFACTS('Save artifacts'),
 

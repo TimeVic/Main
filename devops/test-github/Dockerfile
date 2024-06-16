@@ -1,4 +1,4 @@
-FROM ubuntu:noble
+FROM ubuntu:jammy
 WORKDIR /app
 USER root
 
@@ -44,9 +44,9 @@ RUN apt-get install -y postgresql postgresql-client
 RUN apt-get install -y netcat-traditional
 RUN apt-get install -y redis
 RUN apt-get install -y dotnet-sdk-8.0
-RUN apt-get install -y mongodb-org
 
-# Configure MongoDB
+# Install MongoDB
+RUN apt-get install -y mongodb-org
 RUN mkdir -p /var/lib/mongo
 RUN mkdir -p /var/log/mongodb
 
