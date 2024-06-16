@@ -93,7 +93,8 @@ node('testing-node') {
 
             runStage(Stage.INIT_MONGO) {
                 sh 'cat /etc/mongod.conf'
-                sh 'mongod --fork'
+                sh 'mongod --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log --fork --port 27017'
+                sh 'cat /var/log/mongodb/mongod.log'
                 sh 'netstat -tulpn | grep LISTEN'
                 sh 'until nc -z localhost 27017; do sleep 1; done'
                 sh 'netstat -tulpn | grep LISTEN'
