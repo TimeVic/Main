@@ -92,6 +92,9 @@ node('testing-node') {
             }
 
             runStage(Stage.INIT_MONGO) {
+            echo "Waiting for mongodb"
+            sh 'until nc -z localhost 27017; do sleep 1; done'
+            
                 sh 'mongod --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log --fork --port 27017'
                 sh 'netstat -tulpn | grep LISTEN'
                 sh 'until nc -z localhost 27017; do sleep 1; done'
