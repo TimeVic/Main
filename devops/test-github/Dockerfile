@@ -42,8 +42,7 @@ RUN apt update
 RUN apt-get install -y net-tools sudo gnupg curl
 RUN apt-get install -y postgresql postgresql-client
 RUN apt-get install -y netcat-traditional
-RUN apt-get install -y redis 
-RUN apt-get install -y mongo
+RUN apt-get install -y redis
 RUN apt-get install -y dotnet-sdk-8.0
 RUN apt-get install -y mongodb-org
 
