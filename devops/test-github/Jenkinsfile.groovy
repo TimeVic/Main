@@ -26,7 +26,7 @@ node('testing-node') {
         'ConnectionStrings__DefaultConnection': "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres;Pooling=true;Include Error Detail=true;Log Parameters=true;",
         'Hibernate__IsShowSql': "false",
         
-        'Mongo__Host': "127.0.0.1",
+        'Mongo__Host': "localhost",
         'Mongo__Port': "27017",
         'Mongo__Login': "",
         'Mongo__Password': "",
