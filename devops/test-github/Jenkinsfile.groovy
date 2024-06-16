@@ -236,15 +236,15 @@ def getCommitSha() {
 }
 
 def updateGithubCommitStatus(String message, String state) {
-        String commitHash = getCommitSha()
-        String repositoryUrl = getRepoURL()
+    String commitHash = getCommitSha()
+    String repositoryUrl = getRepoURL()
 
-        // workaround https://issues.jenkins-ci.org/browse/JENKINS-38674
-        step([
-            $class: 'GitHubCommitStatusSetter',
-            reposSource: [$class: "ManuallyEnteredRepositorySource", url: repositoryUrl],
-            commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitHash],
-            errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
-            statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
-        ])
-    }
+    // workaround https://issues.jenkins-ci.org/browse/JENKINS-38674
+    step([
+        $class: 'GitHubCommitStatusSetter',
+        reposSource: [$class: "ManuallyEnteredRepositorySource", url: repositoryUrl],
+        commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitHash],
+        errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+        statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+    ])
+}
