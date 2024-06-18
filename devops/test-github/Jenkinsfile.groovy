@@ -133,7 +133,7 @@ node('testing-node') {
             }
             
             runStage(Stage.RUN_INTEGRATION_TESTS_3) {
-                sh 'dotnet test --logger trx --verbosity=detailed --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api.FileStorage'
+                sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api.FileStorage'
             }
             
             runStage(Stage.RUN_INTEGRATION_TESTS_1) {
