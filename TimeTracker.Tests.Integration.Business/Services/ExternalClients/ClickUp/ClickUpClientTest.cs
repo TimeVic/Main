@@ -73,7 +73,8 @@ public partial class SendNewTimeEntityTest : BaseTest
         ).Wait();
     }
 
-    [Fact]
+    // TODO: Restore: Your plan is limited to {{limit}} usages of Advanced Time Tracking, {{usage}} usage.
+    // [Fact]
     public async Task ShouldSendNewTimeEntry()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
@@ -133,7 +134,8 @@ public partial class SendNewTimeEntityTest : BaseTest
         Assert.True(actualResponse.IsError);
     }
 
-    [Fact]
+    // TODO: Restore: Your plan is limited to {{limit}} usages of Advanced Time Tracking, {{usage}} usage.
+    // [Fact]
     public async Task ShouldUpdateExistsTimeEntry()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
