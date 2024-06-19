@@ -61,6 +61,13 @@ node('testing-node') {
                 containerEnvVars.put('Integration__Redmine__Url', AUTH_SECRET)
             }
 
+            withCredentials([
+                usernamePassword(credentialsId: "timevic_testing_jira_api_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
+            ]) {
+                containerEnvVars.put('Integration__Jira__UserName', USER_NAME)
+                containerEnvVars.put('Integration__Jira__ApiToken', PASSWORD)
+            }
+
             withCredentials([string(credentialsId: "timevic_testing_google__storage_project_id", variable: 'AUTH_SECRET')]) {
                 containerEnvVars.put('Google__Storage__ProjectId', AUTH_SECRET)
             }
