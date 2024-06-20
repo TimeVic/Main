@@ -102,7 +102,11 @@ namespace TimeTracker.Business.Extensions
                             
                             StringValues values;
                             context.Request.Query.TryGetValue(HttpRequestExtension.ApiTokenKey, out values);
-                            
+                            if (!values.Any())
+                            {
+                                return Task.CompletedTask;
+                            }
+
                             if (values.Count > 1) {
                                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                                 context.Fail(
