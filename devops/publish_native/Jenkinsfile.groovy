@@ -23,13 +23,14 @@ def webAppContainer = new DockerContainer(
 
 properties([
     parameters([
+        // https://plugins.jenkins.io/git-parameter/
         gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE'),
         choice(name: 'ENVIRONMENT', choices: ['Development', 'Production'], description: 'Select environment to deploy'),
     ]),
     disableConcurrentBuilds()
 ])
 
-node('abedor-mainframe-web-2') {
+node('abedor-mainframe-web') {
 
     stage('Show deployment parameters') {
         echo "Environment: ${params.ENVIRONMENT}"
