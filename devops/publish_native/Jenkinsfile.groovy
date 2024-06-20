@@ -40,6 +40,10 @@ node('abedor-mainframe-web') {
         echo "Tag: ${params.GIT_TAG}"
     }
 
+    stage('Switch to GIT tag') {
+            git branch: "${params.BRANCH}", url: repositoryUrl
+        } 
+
     if (!params.GIT_TAG?.trim())
     {
         stage('Switch to GIT tag') {
