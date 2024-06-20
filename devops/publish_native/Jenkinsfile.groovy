@@ -23,7 +23,7 @@ def webAppContainer = new DockerContainer(
 
 properties([
     parameters([
-        gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE')
+        gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE'),
         choice(name: 'ENVIRONMENT', choices: ['Development', 'Production'], description: 'Select environment to deploy'),
     ]),
     disableConcurrentBuilds()
