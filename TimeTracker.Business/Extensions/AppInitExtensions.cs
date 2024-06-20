@@ -96,40 +96,40 @@ namespace TimeTracker.Business.Extensions
                             return notBefore <= DateTime.UtcNow && expires >= DateTime.UtcNow;
                         }
                     };
-                    // options.Events = new JwtBearerEvents { 
-                    //     
-                    //     OnMessageReceived = (context) => {
-                    //         
-                    //         StringValues values;
-                    //         context.Request.Query.TryGetValue(HttpRequestExtension.ApiTokenKey, out values);
-                    //         
-                    //         if (values.Count > 1) {
-                    //             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    //             context.Fail(
-                    //                 $"Only one '{HttpRequestExtension.ApiTokenKey}' query string parameter can be defined. " +
-                    //                 $"However, {values.Count:N0} were included in the request."
-                    //             );
-                    //
-                    //             return Task.CompletedTask;
-                    //         }
-                    //
-                    //         var token = values.Single();
-                    //
-                    //         if (string.IsNullOrWhiteSpace(token)) {
-                    //             context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    //             context.Fail(
-                    //                 "The 'access_token' query string parameter was defined, " +
-                    //                 "but a value to represent the token was not included."
-                    //             );
-                    //
-                    //             return Task.CompletedTask;
-                    //         }
-                    //
-                    //         context.Token = token;
-                    //
-                    //         return Task.CompletedTask;
-                    //     }
-                    // };
+                    options.Events = new JwtBearerEvents { 
+                        
+                        OnMessageReceived = (context) => {
+                            
+                            StringValues values;
+                            context.Request.Query.TryGetValue(HttpRequestExtension.ApiTokenKey, out values);
+                            
+                            if (values.Count > 1) {
+                                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                                context.Fail(
+                                    $"Only one '{HttpRequestExtension.ApiTokenKey}' query string parameter can be defined. " +
+                                    $"However, {values.Count:N0} were included in the request."
+                                );
+                    
+                                return Task.CompletedTask;
+                            }
+                    
+                            var token = values.Single();
+                    
+                            if (string.IsNullOrWhiteSpace(token)) {
+                                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                                context.Fail(
+                                    "The 'access_token' query string parameter was defined, " +
+                                    "but a value to represent the token was not included."
+                                );
+                    
+                                return Task.CompletedTask;
+                            }
+                    
+                            context.Token = token;
+                    
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
         }
     }
