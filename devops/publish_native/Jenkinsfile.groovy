@@ -22,11 +22,19 @@ def webAppContainer = new DockerContainer(
 );
 
 properties([
+    parameters([
+        gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE')
+        choice(name: 'ENVIRONMENT', choices: ['Development', 'Production'], description: 'Select environment to deploy'),
+    ]),
     disableConcurrentBuilds()
 ])
 
 node('abedor-mainframe-web-2') {
-    env.ENVIRONMENT = "Development"
+
+    stage('Show deployment parameters') {
+        echo "Environment: ${params.ENVIRONMENT}"
+        echo "Tag: ${params.GIT_TAG}"
+    }
 
     stage('CleanUp Docker') {
         sh """
@@ -104,46 +112,46 @@ node('abedor-mainframe-web-2') {
         
     }
 
-    stage('Stop containers') {
-        dockerHelper.stopContainer(webAppContainer)
-
-        mainContainer.tagName = 'timevic-api';
-        dockerHelper.stopContainer(mainContainer)
-    
-        mainContainer.tagName = 'timevic-worker';
-        dockerHelper.stopContainer(mainContainer)
-    }
-
-    stage('Run migrations') {
-        dockerHelper.stopContainer(migrationContainer)
-            
-        migrationContainer.envVariables = envVariables.clone()
-        migrationContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Migrations')
-        dockerHelper.runContainer(migrationContainer)
-    }
-
-    stage('Run common API') {
-        mainContainer.tagName = 'timevic-api';
-        mainContainer.port = '6200:80';
-        
-        mainContainer.envVariables = envVariables.clone()
-        mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Api')
-        dockerHelper.runContainer(mainContainer)
-    }
-
-    stage('Run worker') {
-        mainContainer.tagName = 'timevic-worker';
-        mainContainer.port = '';
-        
-        mainContainer.envVariables = envVariables.clone()
-        mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerServices')
-        dockerHelper.runContainer(mainContainer)
-    }
-
-    stage('Run web app') {
-        webAppContainer.port = '6201:80';
-        dockerHelper.runContainer(webAppContainer)
-    }
+//     stage('Stop containers') {
+//         dockerHelper.stopContainer(webAppContainer)
+// 
+//         mainContainer.tagName = 'timevic-api';
+//         dockerHelper.stopContainer(mainContainer)
+//     
+//         mainContainer.tagName = 'timevic-worker';
+//         dockerHelper.stopContainer(mainContainer)
+//     }
+// 
+//     stage('Run migrations') {
+//         dockerHelper.stopContainer(migrationContainer)
+//             
+//         migrationContainer.envVariables = envVariables.clone()
+//         migrationContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Migrations')
+//         dockerHelper.runContainer(migrationContainer)
+//     }
+// 
+//     stage('Run common API') {
+//         mainContainer.tagName = 'timevic-api';
+//         mainContainer.port = '6200:80';
+//         
+//         mainContainer.envVariables = envVariables.clone()
+//         mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Api')
+//         dockerHelper.runContainer(mainContainer)
+//     }
+// 
+//     stage('Run worker') {
+//         mainContainer.tagName = 'timevic-worker';
+//         mainContainer.port = '';
+//         
+//         mainContainer.envVariables = envVariables.clone()
+//         mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerServices')
+//         dockerHelper.runContainer(mainContainer)
+//     }
+// 
+//     stage('Run web app') {
+//         webAppContainer.port = '6201:80';
+//         dockerHelper.runContainer(webAppContainer)
+//     }
 
     stage("Clean workspace") {
         cleanWs()

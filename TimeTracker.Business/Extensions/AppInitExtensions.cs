@@ -7,9 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
+using TimeTracker.Business.Helpers;
 
 namespace TimeTracker.Business.Extensions
 {
@@ -76,28 +78,32 @@ namespace TimeTracker.Business.Extensions
                 })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
-                    options.RequireHttpsMetadata = true;
+                    options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
+                    options.IncludeErrorDetails = ApplicationHelper.HostingEnvironment != "Production";
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
                         ValidateIssuer = true,
                         ValidateAudience = true,
+                        ValidateLifetime = true,
                         ValidIssuer = configuration.GetValue<string>("App:Auth:Issuer"),
                         ValidAudience = configuration.GetValue<string>("App:Auth:Audience"), 
                         IssuerSigningKey = jwtSecurityKey,
                         ClockSkew = System.TimeSpan.FromMinutes(5),
-                        ValidateLifetime = true,
                         LifetimeValidator = (notBefore, expires, securityToken, validationParameters) =>
                         {
                             return notBefore <= DateTime.UtcNow && expires >= DateTime.UtcNow;
                         }
                     };
-                    options.Events = new JwtBearerEvents {
+                    options.Events = new JwtBearerEvents { 
+                        
                         OnMessageReceived = (context) => {
+                            
                             StringValues values;
-
-                            if (!context.Request.Query.TryGetValue(HttpRequestExtension.ApiTokenKey, out values)) {
+                            context.Request.Query.TryGetValue(HttpRequestExtension.ApiTokenKey, out values);
+                            if (!values.Any())
+                            {
                                 return Task.CompletedTask;
                             }
 
@@ -107,24 +113,24 @@ namespace TimeTracker.Business.Extensions
                                     $"Only one '{HttpRequestExtension.ApiTokenKey}' query string parameter can be defined. " +
                                     $"However, {values.Count:N0} were included in the request."
                                 );
-
+                    
                                 return Task.CompletedTask;
                             }
-
+                    
                             var token = values.Single();
-
+                    
                             if (string.IsNullOrWhiteSpace(token)) {
                                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                                 context.Fail(
                                     "The 'access_token' query string parameter was defined, " +
                                     "but a value to represent the token was not included."
                                 );
-
+                    
                                 return Task.CompletedTask;
                             }
-
+                    
                             context.Token = token;
-
+                    
                             return Task.CompletedTask;
                         }
                     };

@@ -24,7 +24,15 @@ node('testing-node') {
         'POSTGRES_DATABASE': "template1",
 
         'ConnectionStrings__DefaultConnection': "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres;Pooling=true;Include Error Detail=true;Log Parameters=true;",
-        'Hibernate__IsShowSql': "false"
+        'Hibernate__IsShowSql': "false",
+        
+        'Mongo__Host': "localhost",
+        'Mongo__Port': "27017",
+        'Mongo__Login': "",
+        'Mongo__Password': "",
+        
+        "Integration__Jira__Url": "https://lampego.atlassian.net/",
+        "Integration__Jira__TaskId": "TV-1",
     ]
 
     runStage(Stage.UPDATE_GIT_STATUS) {
@@ -39,21 +47,8 @@ node('testing-node') {
                 git config --global http.maxRequestBuffer 1024M
                 git config --global core.compression 9
             """
-            
-            echo "**** Branch is ${env.BRANCH_NAME} ****"
-            echo "**** scm.branches is ${scm.branches} ****"
-            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
-            echo "**** GITHUB_PR_SOURCE_BRANCH  is ${GITHUB_PR_SOURCE_BRANCH} ****"
-            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
-            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
-            echo "**** GITHUB_PR_NUMBER is ${GITHUB_PR_NUMBER} ****"
-
-            echo sh(script: 'env|sort', returnStdout: true)
-
-            echo "**** getCommitSha1 ${getCommitSha()} ****"
 
             checkout scm
-            echo "**** getCommitSha2 ${getCommitSha()} ****"
         }
         
         runStage(Stage.SET_VARS) {
@@ -67,6 +62,13 @@ node('testing-node') {
 
             withCredentials([string(credentialsId: "timevic_testing_redmine_url", variable: 'AUTH_SECRET')]) {
                 containerEnvVars.put('Integration__Redmine__Url', AUTH_SECRET)
+            }
+
+            withCredentials([
+                usernamePassword(credentialsId: "timevic_testing_jira_api_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
+            ]) {
+                containerEnvVars.put('Integration__Jira__UserName', USER_NAME)
+                containerEnvVars.put('Integration__Jira__ApiToken', PASSWORD)
             }
 
             withCredentials([string(credentialsId: "timevic_testing_google__storage_project_id", variable: 'AUTH_SECRET')]) {
@@ -99,13 +101,11 @@ node('testing-node') {
                 }
             }
 
-            runStage(Stage.BUILD) {
-                sh 'echo "{}" > appsettings.Local.json'
-                sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
-                sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
-                sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
-                sh 'echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json'
-                sh 'dotnet build --'
+            runStage(Stage.INIT_MONGO) {
+                sh 'mongod --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log --fork --port 27017'
+                sh 'until nc -z localhost 27017; do sleep 1; done'
+                sh 'netstat -tulpn | grep LISTEN'
+                echo "MongoDb is started"
             }
 
             runStage(Stage.INIT_DB) {
@@ -120,17 +120,30 @@ node('testing-node') {
             runStage(Stage.INIT_REDIS) {
                 sh '/usr/bin/redis-server &'
                 sh 'until nc -z localhost 6379; do sleep 1; done'
-                echo "Redis is started"
-                
                 sh 'netstat -tulpn | grep LISTEN'
+                echo "Redis is started"
             }
-
+            
+            runStage(Stage.BUILD) {
+                sh 'echo "{}" > appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Tests.Integration.Api.FileStorage/appsettings.Local.json'
+                sh 'dotnet build --'
+            }
+            
             runStage(Stage.RUN_MIGRATIONS) {
                 sh 'dotnet run --no-restore --no-build --project ./TimeTracker.Migrations'
             }
 
             runStage(Stage.RUN_UNIT_TESTS) {
                 sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Unit.Business'
+            }
+            
+            runStage(Stage.RUN_INTEGRATION_TESTS_3) {
+                sh 'dotnet test --logger trx --verbosity=quiet --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api.FileStorage'
             }
             
             runStage(Stage.RUN_INTEGRATION_TESTS_1) {
@@ -161,10 +174,12 @@ enum Stage {
     BUILD('Build projects'),
     INIT_DB('Init DB'),
     INIT_REDIS('Init Redis'),
+    INIT_MONGO('Init Mongo'),
     RUN_MIGRATIONS('Run migrations'),
     RUN_UNIT_TESTS('Run unit tests'),
     RUN_INTEGRATION_TESTS_1('Run business logic integration tests'),
     RUN_INTEGRATION_TESTS_2('Run API integration tests'),
+    RUN_INTEGRATION_TESTS_3('Run File Storage API integration tests'),
 
 //    SAVE_ARTIFACTS('Save artifacts'),
 
@@ -235,15 +250,15 @@ def getCommitSha() {
 }
 
 def updateGithubCommitStatus(String message, String state) {
-        String commitHash = getCommitSha()
-        String repositoryUrl = getRepoURL()
+    String commitHash = getCommitSha()
+    String repositoryUrl = getRepoURL()
 
-        // workaround https://issues.jenkins-ci.org/browse/JENKINS-38674
-        step([
-            $class: 'GitHubCommitStatusSetter',
-            reposSource: [$class: "ManuallyEnteredRepositorySource", url: repositoryUrl],
-            commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitHash],
-            errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
-            statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
-        ])
-    }
+    // workaround https://issues.jenkins-ci.org/browse/JENKINS-38674
+    step([
+        $class: 'GitHubCommitStatusSetter',
+        reposSource: [$class: "ManuallyEnteredRepositorySource", url: repositoryUrl],
+        commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitHash],
+        errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+        statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+    ])
+}
