@@ -21,7 +21,7 @@ def webAppContainer = new DockerContainer(
     dockerFile: 'devops/publish_native/web/Dockerfile',
 );
 
-def repositoryUrl = scm.locations[0].remote;
+def repositoryUrl = scm.userRemoteConfigs[0].url;
 
 properties([
     parameters([
