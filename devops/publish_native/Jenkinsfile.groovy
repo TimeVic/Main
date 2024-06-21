@@ -127,6 +127,9 @@ node('abedor-mainframe-web') {
         withCredentials([file(credentialsId: 'timevic_production_gcloud_credentials', variable: 'FILE')]) {
             sh 'cp $FILE .credentials/google.json'
         }
+        withCredentials([file(credentialsId: 'timevic_production_firebase_credentials', variable: 'FILE')]) {
+            sh 'cp $FILE .credentials/firebase-credentials.json'
+        }
         dockerHelper.buildContainer(mainContainer)
     }
 
