@@ -65,17 +65,6 @@ node('abedor-mainframe-web') {
         checkout scm
     }
 
-    stage('Build main image') {
-        withCredentials([file(credentialsId: 'timevic_production_gcloud_credentials', variable: 'FILE')]) {
-            sh 'cp $FILE .credentials/google.json'
-        }
-        dockerHelper.buildContainer(mainContainer)
-    }
-
-    stage('Build web image') {
-        dockerHelper.buildContainer(webAppContainer)
-    }
-
     stage('Set environment vars') {
         // Redis
         envVariables.put('Redis__Server', '10.10.0.2:6379')
@@ -134,13 +123,24 @@ node('abedor-mainframe-web') {
         }
     }
 
+    stage('Build main image') {
+        withCredentials([file(credentialsId: 'timevic_production_gcloud_credentials', variable: 'FILE')]) {
+            sh 'cp $FILE .credentials/google.json'
+        }
+        dockerHelper.buildContainer(mainContainer)
+    }
+
+    stage('Build web image') {
+        dockerHelper.buildContainer(webAppContainer)
+    }
+
     stage('Stop containers') {
         dockerHelper.stopContainer(webAppContainer)
 
-        mainContainer.tagName = 'timevic-api';
+        mainContainer.tagName = "timevic-api-${environmentKey}";
         dockerHelper.stopContainer(mainContainer)
     
-        mainContainer.tagName = 'timevic-worker';
+        mainContainer.tagName = "timevic-worker-${environmentKey}";
         dockerHelper.stopContainer(mainContainer)
     }
 
