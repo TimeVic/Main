@@ -83,6 +83,17 @@ node('abedor-mainframe-web') {
             dbName = 'timevic-dev'
         }
 
+        // Common
+        withCredentials([
+                usernamePassword(credentialsId: "timevic_production_smtp_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
+        ]) {
+            envVariables.put('Smtp__UserName', USER_NAME)
+            envVariables.put('Smtp__Password', PASSWORD)
+        }
+        withCredentials([string(credentialsId: "timevic_production_recaptcha_secret", variable: 'AUTH_SECRET')]) {
+            envVariables.put('ReCaptcha__Secret', AUTH_SECRET)
+        }
+
         withCredentials([
                 usernamePassword(credentialsId: "timevic_${environmentKey}_db_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
         ]) {
@@ -91,25 +102,17 @@ node('abedor-mainframe-web') {
                 "User ID=${USER_NAME};Password=${PASSWORD};Host=192.168.99.8;Port=5433;Database=${dbName};Pooling=true;"
             )
         }
-        withCredentials([
-                usernamePassword(credentialsId: "timevic_${environmentKey}_smtp_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
-        ]) {
-            envVariables.put('Smtp__UserName', USER_NAME)
-            envVariables.put('Smtp__Password', PASSWORD)
-        }
         withCredentials([string(credentialsId: "timevic_${environmentKey}_user_jwt", variable: 'AUTH_SECRET')]) {
             envVariables.put('App__Auth__SymmetricSecurityKey', AUTH_SECRET)
         }
-        withCredentials([string(credentialsId: "timevic_${environmentKey}_recaptcha_secret", variable: 'AUTH_SECRET')]) {
-            envVariables.put('ReCaptcha__Secret', AUTH_SECRET)
-        }
-        withCredentials([string(credentialsId: "timevic_${environmentKey}_google__storage_project_id", variable: 'AUTH_SECRET')]) {
-            envVariables.put('Google__Storage__ProjectId', AUTH_SECRET)
-        }
+        
+        // withCredentials([string(credentialsId: "timevic_${environmentKey}_google__storage_project_id", variable: 'AUTH_SECRET')]) {
+        //     envVariables.put('Google__Storage__ProjectId', AUTH_SECRET)
+        // }
 
-        withCredentials([string(credentialsId: "timevic_${environmentKey}_google__storage_bucket_name", variable: 'AUTH_SECRET')]) {
-            envVariables.put('Google__Storage__BucketName', AUTH_SECRET)
-        }
+        // withCredentials([string(credentialsId: "timevic_${environmentKey}_google__storage_bucket_name", variable: 'AUTH_SECRET')]) {
+        //     envVariables.put('Google__Storage__BucketName', AUTH_SECRET)
+        // }
         
         withCredentials([
             usernamePassword(credentialsId: "timevic_${environmentKey}_aws_s3_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
@@ -117,10 +120,7 @@ node('abedor-mainframe-web') {
             envVariables.put('AWS__S3__AccessKey', USER_NAME)
             envVariables.put('AWS__S3__SecretKey', PASSWORD)
         }
-        
-        withCredentials([string(credentialsId: "timevic_${environmentKey}_aws_s3_bucket_name", variable: 'AUTH_SECRET')]) {
-            envVariables.put('AWS__S3__BucketName', AUTH_SECRET)
-        }
+        envVariables.put('AWS__S3__BucketName', 'timevic-${environmentKey}')
     }
 
     stage('Build main image') {
