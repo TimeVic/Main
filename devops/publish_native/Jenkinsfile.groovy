@@ -80,7 +80,7 @@ node('abedor-mainframe-web') {
         else if (params.ENVIRONMENT == 'Development')
         {
             envVariables.put('App__FrontendUrl', 'https://dev.timevic.com')
-            dbName = 'timevic-dev'
+            dbName = 'timevic_dev'
         }
 
         // Common
