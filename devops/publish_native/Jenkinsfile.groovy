@@ -135,20 +135,15 @@ node('abedor-mainframe-web') {
             def (VER_MAJOR, VER_MINOR, VER_PATCH, VER_BUILD) = params.NEW_VERSION.tokenize('.').collect { it.toInteger() }
             env.VERSION_INCREMENT = VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH + "." + VER_BUILD
 
-            sh '''
-                git tag "${VERSION_INCREMENT}"
-                git push --tags
-            '''
-
-            // withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
-            //     sh '''
-            //         git config core.sshCommand 'ssh -i ${key}'
-            //         git config user.email "lampego@gmail.com"
-            //         git config user.name "lampego"
-            //         git tag "${VERSION_INCREMENT}"
-            //         git push --tags
-            //     '''
-            // }
+            withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
+                sh '''
+                    git config core.sshCommand 'ssh -i ${key}'
+                    git config user.email "lampego@gmail.com"
+                    git config user.name "lampego"
+                    git tag "${VERSION_INCREMENT}"
+                    git push --tags
+                '''
+            }
         }
     }
 
