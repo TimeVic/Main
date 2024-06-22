@@ -5,6 +5,7 @@ using Serilog;
 using Serilog.Extensions.Autofac.DependencyInjection;
 using TimeTracker.Business;
 using TimeTracker.Business.Helpers;
+using TimeTracker.Business.Logging;
 using TimeTracker.Business.Notifications;
 
 namespace TimeTracker.WorkerServices;
@@ -13,7 +14,7 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        using var log = ApplicationHelper.BuildSerilogInstance();
+        using var log = LoggerInitializer.BuildSerilogInstance();
         Log.Logger = log;
 
         Serilog.Debugging.SelfLog.Enable(Console.WriteLine);

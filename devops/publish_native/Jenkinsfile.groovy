@@ -70,6 +70,11 @@ node('abedor-mainframe-web') {
         envVariables.put('Redis__Server', '10.10.0.2:6379')
         envVariables.put('Serilog__IsSendEmailIfError', 'false')
         envVariables.put('Serilog__MinimumLevel__Default', 'Debug')
+        envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
+
+        // GrayLog
+        envVariables.put('App__Logging__GrayLog__Host', '192.168.99.7')
+        envVariables.put('App__Logging__GrayLog__Port', '12201')
 
         def dbName = ''
         if (params.ENVIRONMENT == 'Production')
