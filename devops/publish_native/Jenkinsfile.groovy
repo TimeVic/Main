@@ -138,7 +138,7 @@ node('abedor-mainframe-web') {
             withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
                 sh '''
                     git config core.sshCommand 'ssh -i ${key}'
-                    git config user.email "git@github.org"
+                    git config user.email "lampego@gmail.com"
                     git config user.name "lampego"
                     git tag "${VERSION_INCREMENT}"
                     git push --tags
