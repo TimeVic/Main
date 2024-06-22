@@ -130,6 +130,20 @@ node('abedor-mainframe-web') {
         envVariables.put('AWS__S3__BucketName', "timevic-${environmentKey}")
     }
 
+    if (params.VERSION) {
+        stage('Create GIT tag') {
+            withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
+                sh '''
+                    git config core.sshCommand 'ssh -i ${key}'
+                    git config user.email "git@bitbucket.org"
+                    git config user.name "BitBucket"
+                    git tag "${VERSION_INCREMENT}"
+                    git push --tags
+                '''
+            }
+        }
+    }
+
     stage('Build main image') {
         withCredentials([file(credentialsId: 'timevic_production_gcloud_credentials', variable: 'FILE')]) {
             sh 'cp $FILE .credentials/google.json'
@@ -197,21 +211,7 @@ node('abedor-mainframe-web') {
             webAppContainer.port = '8216:80';
         }
         dockerHelper.runContainer(webAppContainer)
-    }
-
-    if (params.VERSION) {
-        stage('Create GIT tag') {
-            withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
-                sh '''
-                    git config core.sshCommand 'ssh -i ${key}'
-                    git config user.email "git@bitbucket.org"
-                    git config user.name "BitBucket"
-                    git tag "${VERSION_INCREMENT}"
-                    git push --tags
-                '''
-            }
-        }
-    }
+    }   
 
     stage("Clean workspace") {
         cleanWs()
