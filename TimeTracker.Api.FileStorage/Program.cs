@@ -1,6 +1,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Serilog;
 using TimeTracker.Business.Helpers;
+using TimeTracker.Business.Logging;
 
 namespace TimeTracker.Api.FileStorage;
 
@@ -8,7 +9,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        using var log = ApplicationHelper.BuildSerilogInstance();
+        using var log = LoggerInitializer.BuildSerilogInstance();
         Log.Logger = log;
             
         Serilog.Debugging.SelfLog.Enable(Console.WriteLine);

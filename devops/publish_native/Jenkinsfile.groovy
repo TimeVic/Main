@@ -24,11 +24,13 @@ def webAppContainer = new DockerContainer(
 );
 
 def repositoryUrl = scm.userRemoteConfigs[0].url;
+def gitCredentials="timevic_ssh_key_github"
 
 properties([
     parameters([
         // https://plugins.jenkins.io/git-parameter/
         gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE'),
+        string (name: 'VERSION', defaultValue: '', description: 'Create GIT tag')
         choice(name: 'ENVIRONMENT', choices: ['Development', 'Production'], description: 'Select environment to deploy'),
     ]),
     disableConcurrentBuilds()
@@ -195,6 +197,20 @@ node('abedor-mainframe-web') {
             webAppContainer.port = '8216:80';
         }
         dockerHelper.runContainer(webAppContainer)
+    }
+
+    if (params.VERSION) {
+        stage('Create GIT tag') {
+            withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
+                sh '''
+                    git config core.sshCommand 'ssh -i ${key}'
+                    git config user.email "git@bitbucket.org"
+                    git config user.name "BitBucket"
+                    git tag "${VERSION_INCREMENT}"
+                    git push --tags
+                '''
+            }
+        }
     }
 
     stage("Clean workspace") {
