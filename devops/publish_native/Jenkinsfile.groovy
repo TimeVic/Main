@@ -30,7 +30,7 @@ properties([
     parameters([
         // https://plugins.jenkins.io/git-parameter/
         gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE'),
-        string (name: 'VERSION', defaultValue: '', description: 'Create GIT tag'),
+        string (name: 'NEW_VERSION', defaultValue: '', description: 'Provide version to create GIT tag'),
         choice(name: 'ENVIRONMENT', choices: ['Development', 'Production'], description: 'Select environment to deploy'),
     ]),
     disableConcurrentBuilds()
@@ -130,8 +130,11 @@ node('abedor-mainframe-web') {
         envVariables.put('AWS__S3__BucketName', "timevic-${environmentKey}")
     }
 
-    if (params.VERSION) {
+    if (params.NEW_VERSION) {
         stage('Create GIT tag') {
+            def (TAG_MAJOR, TAG_MINOR, TAG_PATCH, TAG_BUILD) = NEW_VERSION.tokenize('.').collect { it.toInteger() }
+            env.VERSION_INCREMENT = VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH + "." + VER_BUILD
+
             withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
                 sh '''
                     git config core.sshCommand 'ssh -i ${key}'
