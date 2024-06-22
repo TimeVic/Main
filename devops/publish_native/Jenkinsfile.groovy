@@ -120,7 +120,7 @@ node('abedor-mainframe-web') {
             envVariables.put('AWS__S3__AccessKey', USER_NAME)
             envVariables.put('AWS__S3__SecretKey', PASSWORD)
         }
-        envVariables.put('AWS__S3__BucketName', 'timevic-${environmentKey}')
+        envVariables.put('AWS__S3__BucketName', "timevic-${environmentKey}")
     }
 
     stage('Build main image') {
