@@ -132,7 +132,7 @@ node('abedor-mainframe-web') {
 
     if (params.NEW_VERSION) {
         stage('Create GIT tag') {
-            def (TAG_MAJOR, TAG_MINOR, TAG_PATCH, TAG_BUILD) = NEW_VERSION.tokenize('.').collect { it.toInteger() }
+            def (TAG_MAJOR, TAG_MINOR, TAG_PATCH, TAG_BUILD) = params.NEW_VERSION.tokenize('.').collect { it.toInteger() }
             env.VERSION_INCREMENT = VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH + "." + VER_BUILD
 
             withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
