@@ -42,7 +42,7 @@ namespace TimeTracker.Business.Services.Auth
             };
 
             var now = DateTime.UtcNow;
-            var expirationTime = now.Add(TimeSpan.FromHours(
+            var expirationTime = now.Add(TimeSpan.FromMinutes(
                 _configuration.GetValue<int>("App:Auth:JwtLifetime")
             ));
             var signingCredentials = new SigningCredentials(
