@@ -11,6 +11,8 @@ public class HttpInterceptorService
     private readonly IConfiguration _configuration;
     private readonly RefreshJwtTokenService _refreshJwtTokenService;
 
+    private readonly object _requestLockObject = new();
+    
     private string[] ExcludedUrls
     {
         get
@@ -37,15 +39,18 @@ public class HttpInterceptorService
 
     public async Task RefreshAuthTokenAsync(object sender, HttpClientInterceptorEventArgs e)
     {
-        var absPath = e.Request.RequestUri.AbsolutePath;
-        var isExcludedUrl = ExcludedUrls.Any(excludedUrl => absPath.StartsWith(excludedUrl));
-        if (!isExcludedUrl)
+        lock (_requestLockObject)
         {
-            var jwtToken = await _refreshJwtTokenService.TryRefreshToken();
-            if(!string.IsNullOrEmpty(jwtToken))
+            var absPath = e.Request.RequestUri!.AbsolutePath;
+            var isExcludedUrl = ExcludedUrls.Any(excludedUrl => absPath.StartsWith(excludedUrl));
+            if (!isExcludedUrl)
             {
-                e.Request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
-            }
+                var jwtToken = _refreshJwtTokenService.TryRefreshToken().Result;
+                if(!string.IsNullOrEmpty(jwtToken))
+                {
+                    e.Request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+                }
+            }    
         }
     }
 }
