@@ -69,7 +69,7 @@ public partial class TasksListTree
         get => _tasksListState.Value.SelectedTaskListId ?? 0;
     }
     
-    private ICollection<TaskListDto> _tasksList
+    private ICollection<TaskListDto> _projectTasksList
     {
         get
         {
@@ -106,10 +106,20 @@ public partial class TasksListTree
         }
     }
     
-    private void OnSelectedTasksList(long tasksListId)
+    private void OnSelectedProject(ProjectDto? project)
     {
+        if (project is null)
+            return;
+        _projectId = project.Id;
+        _taskListId = null;
+    }
+    
+    private void OnSelectedTasksList(TaskListDto? tasksList)
+    {
+        if (tasksList is null)
+            return;
         NavigationManager.NavigateTo(
-            string.Format(SiteUrl.Dashboard_Tasks, ProjectId, tasksListId)    
+            string.Format(SiteUrl.Dashboard_Tasks, ProjectId, tasksList.Id)    
         );
     }
     
