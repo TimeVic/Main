@@ -4,49 +4,52 @@
 
 @inherits BaseReactiveComponent
 
-<MudStack Spacing="2">
-    <MudList 
-        @ref="@_taskListList"
-        SelectedValue="@_selectedTaskListId"
-        Clickable="true">
-        @foreach (var taskList in _tasksList)
-        {
-            <MudListItem
-                
-                Value="@taskList.Id"
-                OnClick="@(() => OnSelectedTasksList(taskList.Id))"
-                Text="@taskList.Name.Truncate(32, true)"/>
-        }
-        <MudDivider/>
-        @if (!_tasksList.Any())
-        {
-            <MudListItem
-                IconSize="Size.Small"
-                Icon="@Icons.Material.Filled.Add"
-                OnClick="@(ShowAddTaskListModal)"
-                Text="Add new list"/>
-        }
-        else
-        {
-            <MudListItem 
+<MudStack Spacing="2" Row="true" Justify="Justify.SpaceBetween" Class="pa-4">
+    <ProjectsDropDown
+        Label="Project"
+        Value="ProjectId"
+        SelectedItemChanged="OnSelectedProject"/>
+    @if (_projectTasksList.Any())
+    {
+        <TaskListsDropDown
+            Label="Tasks list"
+            ProjectId="_projectId"
+            Disabled="@(_projectId == 0)"
+            Value="@(TaskListId ?? 0)"
+            SelectedItemChanged="@OnSelectedTasksList"/>
+        
+        <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+            <MudMenuItem
                 IconSize="Size.Small"
                 OnClick="@ShowAddTaskListModal"
-                Icon="@Icons.Material.Filled.Add"
-                Text="Add"/>
-            @if (_selectedTaskListId != 0)
-            {
-                <MudListItem 
-                    IconSize="Size.Small"
-                    OnClick="@ShowUpdateTaskListModal"
-                    Icon="@Icons.Material.Filled.Edit"
-                    Text="Update"/>
-                <MudListItem 
-                    IconSize="Size.Small"
-                    OnClick="@OnDeleteTaskList"
-                    Icon="@Icons.Material.Filled.Delete"
-                    Text="Delete"/>
-            }
-        }
-        
-    </MudList>
+                Icon="@Icons.Material.Filled.Add">
+                Add tasks list
+            </MudMenuItem>
+            <MudMenuItem
+                Disabled="@(_selectedTaskListId == 0)"
+                IconSize="Size.Small"
+                OnClick="@ShowUpdateTaskListModal"
+                Icon="@Icons.Material.Filled.Edit">
+                Update current
+            </MudMenuItem>
+            <MudMenuItem
+                Disabled="@(_selectedTaskListId == 0)"
+                IconSize="Size.Small"
+                OnClick="@OnDeleteTaskList"
+                Icon="@Icons.Material.Filled.Delete">
+                Delete current
+            </MudMenuItem>
+        </MudMenu>
+    }
+    else
+    {
+        <MudButton
+            Variant="Variant.Filled"
+            Color="Color.Info"
+            IconSize="Size.Small"
+            StartIcon="@Icons.Material.Filled.Add"
+            OnClick="@(ShowAddTaskListModal)">
+            Add new list
+        </MudButton>
+    }
 </MudStack>

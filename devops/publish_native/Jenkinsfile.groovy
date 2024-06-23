@@ -130,23 +130,6 @@ node('abedor-mainframe-web') {
         envVariables.put('AWS__S3__BucketName', "timevic-${environmentKey}")
     }
 
-    if (params.NEW_VERSION) {
-        stage('Create GIT tag') {
-            def (VER_MAJOR, VER_MINOR, VER_PATCH, VER_BUILD) = params.NEW_VERSION.tokenize('.').collect { it.toInteger() }
-            env.VERSION_INCREMENT = VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH + "." + VER_BUILD
-
-            withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
-                sh '''
-                    git config core.sshCommand 'ssh -i ${key}'
-                    git config user.email "lampego@gmail.com"
-                    git config user.name "lampego"
-                    git tag "${VERSION_INCREMENT}"
-                    git push --tags
-                '''
-            }
-        }
-    }
-
     stage('Build main image') {
         withCredentials([file(credentialsId: 'timevic_production_gcloud_credentials', variable: 'FILE')]) {
             sh 'cp $FILE .credentials/google.json'
@@ -215,6 +198,23 @@ node('abedor-mainframe-web') {
         }
         dockerHelper.runContainer(webAppContainer)
     }   
+
+    if (params.NEW_VERSION) {
+        stage('Create GIT tag') {
+            def (VER_MAJOR, VER_MINOR, VER_PATCH, VER_BUILD) = params.NEW_VERSION.tokenize('.').collect { it.toInteger() }
+            env.VERSION_INCREMENT = VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH + "." + VER_BUILD
+
+            withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
+                sh '''
+                    git config core.sshCommand 'ssh -i ${key}'
+                    git config user.email "lampego@gmail.com"
+                    git config user.name "lampego"
+                    git tag "${VERSION_INCREMENT}"
+                    git push --tags
+                '''
+            }
+        }
+    }
 
     stage("Clean workspace") {
         cleanWs()

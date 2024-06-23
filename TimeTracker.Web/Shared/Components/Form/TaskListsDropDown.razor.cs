@@ -43,6 +43,9 @@ public partial class TaskListsDropDown
     public string Placeholder { get; set; } = "Select task list";
     
     [Parameter]
+    public string? Label { get; set; }
+    
+    [Parameter]
     public string Class { get; set; }
 
     [Parameter]

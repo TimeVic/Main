@@ -1,18 +1,14 @@
-﻿@using TimeTracker.Web.Pages.Dashboard.Shared
-@using TimeTracker.Api.Shared.Dto.Entity
-@using TimeTracker.Business.Common.Constants
-@using TimeTracker.Business.Extensions
-@using TimeTracker.Web.Core.Extensions.Enums
-@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
-@using MudBlazor
-@using TimeTracker.Api.Shared.Dto.Entity.Task
-@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+﻿@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 @inherits BaseComponent
 
-<MudGrid Style="gap: 8px; min-width: 1226px; margin-left: 2px;">
-    <TasksGrid Status="@TaskStatus.Backlog"></TasksGrid>
-    <TasksGrid Status="@TaskStatus.ToDo"></TasksGrid>
-    <TasksGrid Status="@TaskStatus.InProgress"></TasksGrid>
-    <TasksGrid Status="@TaskStatus.Done"></TasksGrid>
-</MudGrid>
+<MudStack Spacing="2" Row="false" Justify="Justify.SpaceBetween">
+    <MudText Typo="Typo.h4">@_selectedTasksList?.Name</MudText>
+
+    <MudGrid Style="gap: 8px; min-width: 1226px; margin-left: 2px;">
+        <TasksGrid Status="@TaskStatus.Backlog"></TasksGrid>
+        <TasksGrid Status="@TaskStatus.ToDo"></TasksGrid>
+        <TasksGrid Status="@TaskStatus.InProgress"></TasksGrid>
+        <TasksGrid Status="@TaskStatus.Done"></TasksGrid>
+    </MudGrid>
+</MudStack>

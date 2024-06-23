@@ -12,10 +12,13 @@
         <CascadingValue Name="ProjectId" Value="@ProjectId">
             <MudStack>
                 <MudPaper>
-                    <TasksFilterForm/>
-                </MudPaper>
-                <MudStack Row="true">
                     <TasksListTree/>
+                </MudPaper>
+                @* <MudPaper> *@
+                @*     <TasksFilterForm/> *@
+                @* </MudPaper> *@
+                <hr/>
+                <MudStack Row="true">
                     <TasksTable/>
                 </MudStack>
             </MudStack>
