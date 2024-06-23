@@ -7,6 +7,9 @@
         <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Production' ">
+        <DefineConstants>TRACE;IS_RELEASE_BUILD;IS_WEB_APP</DefineConstants>
+    </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <DefineConstants>TRACE;IS_RELEASE_BUILD;IS_WEB_APP</DefineConstants>
     </PropertyGroup>
