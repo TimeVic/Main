@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
@@ -24,8 +25,9 @@ public partial class Login
     private IAuthorizationService _authorizationService { get; set; }
     
     private LoginRequest model = new();
+    
     private bool _isLoading;
-    private MudForm _form;
+    private EditForm _form;
     private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
@@ -41,8 +43,7 @@ public partial class Login
     
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -58,7 +59,8 @@ public partial class Login
         }
         catch (Exception)
         {
-            await ToastService.ShowError("Incorrect email or password");
+            Debug.Log("aaaa");
+            ToastService.ShowError("Incorrect email or password");
         }
         finally
         {

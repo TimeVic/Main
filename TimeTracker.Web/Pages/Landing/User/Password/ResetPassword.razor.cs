@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Services;
@@ -28,7 +28,7 @@ public partial class ResetPassword
     
     private ResetPasswordStep1Request model = new();
     private bool _isLoading;
-    private MudForm _form;
+    private EditForm _form;
     private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()

@@ -1,6 +1,7 @@
-﻿using MudBlazor;
+﻿using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Pages.Dashboard.Payment.Parts;
+using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 
 namespace TimeTracker.Web.Services.UI;
 
@@ -8,15 +9,29 @@ public partial class ModalDialogProviderService
 {
     public async Task ShowAddPaymentModal()
     {
-        await _mudDialogService.ShowAsync<AddPaymentModal>("Add new payment");
+        var parameters = new DialogParameters
+        {
+            Width = "400px",
+            PrimaryAction = "",
+            TrapFocus = false
+        };
+        await _dialogService.ShowDialogAsync<AddPaymentModal>(parameters);
     }
     
     public async Task ShowUpdatePaymentModal(PaymentDto payment)
     {
-        var parameters = new DialogParameters<UpdatePaymentModal>
+        var parameters = new DialogParameters
         {
-            { x => x.Payment, payment },
+            Width = "400px",
+            PrimaryAction = "",
+            TrapFocus = false
         };
-        await _mudDialogService.ShowAsync<UpdatePaymentModal>("Update payment", parameters);
+        await _dialogService.ShowDialogAsync<UpdatePaymentModal>(
+            new UpdatePaymentModal.Parameters()
+            {
+                Payment = payment,
+            },
+            parameters
+        );
     }
 }

@@ -2,7 +2,6 @@
 
 @using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
 @using TimeTracker.Web.Pages.Landing.Shared
-@using MudBlazor
 
 @inherits BaseComponent
 @layout Layout
@@ -17,7 +16,7 @@
                 <MudText Typo="Typo.h4">Registration</MudText>
 
                 <MudStack>
-                    <MudTextField
+                    <FluentTextField
                         T="string"
                         For="() => model.Email"
                         Disabled="_isLoading"

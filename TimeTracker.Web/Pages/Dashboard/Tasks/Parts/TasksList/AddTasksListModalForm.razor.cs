@@ -1,6 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Store.Project;
@@ -10,11 +11,16 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 
 public partial class AddTasksListModalForm
 {
+    public class Parameters
+    {
+        public long? ProjectId { get; set; }
+    }
+    
     [Parameter]
-    public long? ProjectId { get; set; }
+    public required Parameters Content { get; set; }
     
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    FluentDialog MudDialog { get; set; }
     
     [Inject]
     public ILogger<AddTasksListModalForm> _logger { get; set; }
@@ -24,19 +30,18 @@ public partial class AddTasksListModalForm
     
     private AddRequest model = new();
     private bool _isLoading = false;
-    private MudForm _form;
+    private EditForm _form;
     private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.ProjectId = ProjectId ?? 0;
+        model.ProjectId = Content.ProjectId ?? 0;
     }
 
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -48,7 +53,7 @@ public partial class AddTasksListModalForm
             if (taskList != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
-                await ToastService.ShowInfo("Task list has been added");
+                ToastService.ShowInfo("Task list has been added");
                 OnCloseModal();
                 
                 var navigateToProject = ProjectState.Value.List.First(
@@ -66,7 +71,7 @@ public partial class AddTasksListModalForm
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            await ToastService.ShowError("Task list adding error");
+            ToastService.ShowError("Task list adding error");
         }
         finally
         {
@@ -77,6 +82,6 @@ public partial class AddTasksListModalForm
     
     private void OnCloseModal()
     {
-        MudDialog.Close();
+        MudDialog.Hide();
     }
 }

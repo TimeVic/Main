@@ -2,29 +2,19 @@
 
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
-@using MudBlazor
 
-<MudSelect
-    T="long"
-    U="TaskListDto"
+<FluentSelect
+    TOption="WorkspaceMembershipDto?"
+    Label="@Label"
     Class="@Class"
     Disabled="@Disabled"
-    Dense="true"
-    Required="Required"
-    Clearable="Clearable"
     Placeholder="@Placeholder"
-    EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
-    For="For"
-    Value="@_selectedId"
-    ValueChanged="OnValueChanged"
-    ToStringFunc="ToStringFunc"
-    RequiredError="Task list is required"
-    Variant="MudBlazor.Variant.Text"
-    AnchorOrigin="Origin.BottomCenter">
-    @foreach (var membership in _list)
-    {
-        <MudSelectItem Value="@membership.Id">
-            <div>@membership.User.Name</div>
-        </MudSelectItem>
-    }
-</MudSelect>
+    Items="@_list.ToList()"
+    SelectedOption="@_selectedItem"
+    OptionValue="@(dto => dto?.Id.ToString())"
+    OptionSelected="@(dto => dto?.Id == _selectedItem?.Id)"
+    SelectedOptionChanged="OnValueChanged">
+    <OptionTemplate>
+        @context?.User.Name
+    </OptionTemplate>
+</FluentSelect>

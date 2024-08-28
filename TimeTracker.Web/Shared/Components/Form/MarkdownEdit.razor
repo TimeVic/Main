@@ -1,21 +1,22 @@
 ﻿@using TimeTracker.Web.Services.UI
 @using TimeTracker.Web.Core.Helpers
-@using MudBlazor
-@using Variant = MudBlazor.Variant
 
-<div class="@($"{Class} w-markdown-editor")">
+<div class="@($"{Class} w-markdown-editor w-100")">
 
+    @if (string.IsNullOrEmpty(Label))
+    {
+        <FluentLabel>@Label</FluentLabel>
+    }
     @if (_isShowEditBox)
     {
-        <div @onclick="OnEditTextClicked">
-            <MudTextField
+        <div @onclick="OnEditTextClicked" class="w-100">
+            <FluentTextArea
                 T="string"
-                Label="@Label"
-                Variant="Variant.Outlined"
                 Placeholder="@Placeholder"
-                Text="@_editValue"
-                TextChanged="@OnChangeValue"
-                Lines="@_textAreaRows"/>
+                Value="@_editValue"
+                ValueChanged="@OnChangeValue"
+                Class="w-100"
+                Rows="@_textAreaRows"/>
             <p class="w-support mt-2">
                 Supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a>
             </p>
@@ -23,35 +24,35 @@
         </div>
         if (_isActionButtonsEnabled)
         {
-            <MudStack 
-                Class="mt-2"
-                Row="true"
-                Justify="Justify.FlexStart">
-                <MudButton
-                    Size="Size.Small"
-                    OnClick="@OnClickSave"
-                    Variant="Variant.Text"
-                    Color="Color.Primary">
-                    Save
-                </MudButton>
-                <MudButton
-                    Size="Size.Small"
-                    OnClick="@OnClickCancel"
-                    Variant="Variant.Text"
-                    Color="Color.Secondary">
+            <FluentStack
+                Class="mt-2 w-100"
+                Orientation="Orientation.Horizontal">
+
+                <FluentButton
+                    Class="mr-3"
+                    OnClick="@OnClickCancel">
                     Cancel
-                </MudButton>
-            </MudStack>
+                </FluentButton>
+                
+                <FluentButton
+                    IconEnd="@(new Icons.Filled.Size24.Save())"
+                    Class="mr-3"
+                    Appearance="Appearance.Accent"
+                    OnClick="@OnClickSave">
+                    Save
+                </FluentButton>
+            </FluentStack>
         }
     }
     else
     {
-        <MudPaper
-            Outlined="true"
-            Class="w-view pa-3 cursor-pointer"
+        <FluentCard
+            Class="w-view"
+            Style="width: calc(100% - 40px)"
+            MinimalStyle="true"
             @onclick="@OnClickView">
             @MarkdownHtml
-        </MudPaper>
+        </FluentCard>
     }
 </div>
 

@@ -1,10 +1,11 @@
 ﻿using System.Linq.Expressions;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Project;
@@ -30,14 +31,15 @@ public partial class TaskListsDropDown
     public long Value
     {
         get => _selectedId;
-        set => _selectedId = value;
+        set
+        {
+            if (_selectedId != value)
+                _selectedId = value;
+        }
     }
     
     [Parameter]
-    public EventCallback<long?> ValueChanged { get; set; }
-
-    [Parameter]
-    public EventCallback<TaskListDto> SelectedItemChanged { get; set; }
+    public EventCallback<TaskListDto?> SelectedItemChanged { get; set; }
     
     [Parameter]
     public string Placeholder { get; set; } = "Select task list";
@@ -49,52 +51,50 @@ public partial class TaskListsDropDown
     public string Class { get; set; }
 
     [Parameter]
-    public long? ProjectId { get; set; }
+    public long? ProjectId
+    {
+        get => _projectId;
+        set
+        {
+            _projectId = value;
+            UpdateList();
+        }
+    }
     
     [Parameter]
     public long? ClientId { get; set; }
 
     [Parameter]
     public bool IsExtendedInfo { get; set; } = true;
-
-    [Inject]
-    public ILogger<TaskListDto> _logger { get; set; }
-    
-    [Inject]
-    public ApiService _apiService { get; set; }
-    
-    [Inject]
-    public IState<AuthState> _authState { get; set; }
     
     [Inject]
     public IState<TasksListState> _state { get; set; }
     
-    private TaskListDto? _selectedItem;
-
+    private TaskListDto? _selectedItem => _list.FirstOrDefault(item => item.Id == _selectedId);
+    private ICollection<TaskListDto> _list = new List<TaskListDto>();
     private long _selectedId = 0;
-    
-    private ICollection<TaskListDto> _list
-    {
-        get
-        {
-            var list = _state.Value.List;
-            if (ProjectId.HasValue)
-            {
-                return list.Where(item => item.Project?.Id == ProjectId).ToList();
-            }
-            else if (ClientId.HasValue)
-            {
-                return list.Where(item => item.Project?.Client?.Id == ClientId).ToList();
-            }
-            return list;
-        }
-    }
+    private long? _projectId = null;
+    private string? _searchString = null;
 
-    private Task OnValueChanged(long taskListId)
+    protected override void OnInitialized()
     {
-        _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == taskListId);
-        SelectedItemChanged.InvokeAsync(_selectedItem);
-        ValueChanged.InvokeAsync(_selectedItem?.Id ?? 0);
+        base.OnInitialized();
+
+        _state.StateChanged += (sender, args) =>
+        {
+            UpdateList();
+        };
+        UpdateList();
+    }
+    
+    private Task OnValueChanged(string? project)
+    {
+        long.TryParse(project, out long selectedId);
+        if (selectedId != (_selectedItem?.Id ?? 0))
+        {
+            _selectedId = selectedId;
+            SelectedItemChanged.InvokeAsync(_selectedItem);    
+        }
         return Task.CompletedTask;
     }
 
@@ -102,5 +102,18 @@ public partial class TaskListsDropDown
     {
         var item = _state.Value.List.FirstOrDefault(item => item.Id == taskListId);
         return item?.Name ?? string.Empty;
+    }
+    
+    private void UpdateList()
+    {
+        _list = _state.Value.List;
+        if (ProjectId.HasValue)
+        {
+            _list = _list.Where(item => item.Project?.Id == ProjectId).ToList();
+        }
+        else if (ClientId.HasValue)
+        {
+            _list = _list.Where(item => item.Project?.Client?.Id == ClientId).ToList();
+        }
     }
 }

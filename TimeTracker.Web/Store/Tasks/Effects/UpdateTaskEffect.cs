@@ -40,12 +40,11 @@ public class UpdateTaskEffect: Effect<UpdateTaskAction>
             {
                 dispatcher.Dispatch(new SetOverdueTasksListItemAction(response));
                 dispatcher.Dispatch(new SetListItemAction(response));
-                await _toastService.ShowSuccess("Task updated");
             }
         }
         catch (Exception e)
         {
-            await _toastService.ShowError("Task adding error");
+            _toastService.ShowError("Task adding error");
             _logger.LogError(e.Message, e);
         }
         finally

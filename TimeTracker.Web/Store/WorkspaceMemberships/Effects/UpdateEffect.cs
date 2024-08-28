@@ -39,7 +39,7 @@ public class UpdateEffect: Effect<UpdateMemberAction>
             //     // action.Projects?.Select(item => item.Id).ToArray()
             // );
             dispatcher.Dispatch(new LoadListAction(true));
-            await _notificationService.ShowInfo("The member was updated");
+            _notificationService.ShowInfo("The member was updated");
         }
         catch (Exception e)
         {

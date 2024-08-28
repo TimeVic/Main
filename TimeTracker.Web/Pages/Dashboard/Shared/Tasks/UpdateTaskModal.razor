@@ -1,26 +1,43 @@
-﻿@using MudBlazor
-@using TimeTracker.Api.Shared.Dto.Entity.Task
+﻿@using TimeTracker.Api.Shared.Dto.Entity.Task
+@using TimeTracker.Business.Extensions
 
+@implements IDialogContentComponent<UpdateTaskModal.Parameters>
 @inherits BaseReactiveComponent
 
-<MudDialog Style="min-width: 800px">
-    <DialogContent>
-        <UpdateTaskForm Task="@Task"/>
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="@OnCloseModal">Close</MudButton>
-    </DialogActions>
-</MudDialog>
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Content.Task.Title.TruncateAndAddDots(50)
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton
+        Appearance="Appearance.Neutral"
+        OnClick="@OnCloseModal">Cancel</FluentButton>
+</FluentDialogFooter>
+
+<FluentDialogBody>
+    <UpdateTaskForm Task="@Content.Task"/>
+</FluentDialogBody>
 
 @code {
+    public class Parameters
+    {
+        public required TaskDto Task { get; set; }
+    }
+    
     [Parameter]
-    public TaskDto Task { get; set; }
+    public required Parameters Content { get; set; }
     
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    public required FluentDialog MudDialog { get; set; }
     
     private void OnCloseModal()
     {
-        MudDialog.Close();
+        MudDialog.Hide();
     }
 }

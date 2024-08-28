@@ -74,7 +74,7 @@ public partial class TaskPage
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            await ToastService.ShowError("Task loading error");
+            ToastService.ShowError("Task loading error");
         }
         finally
         {
@@ -88,9 +88,9 @@ public partial class TaskPage
         if (_task == null)
         {
             _navigationManager.NavigateTo(SiteUrl.Dashboard_Tasks_Default);
-            InvokeAsync(async () =>
+            InvokeAsync(() =>
             {
-                await ToastService.ShowError("Task not found");
+                ToastService.ShowError("Task not found");
             });
             return;
         }

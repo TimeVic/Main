@@ -1,7 +1,8 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
 using TimeTracker.Business.Extensions;
@@ -38,9 +39,9 @@ public partial class EditCommentForm
     private AddRequest model = new();
     private bool _isLoading = false;
     private bool _isEditMode = false;
-    private MudForm? _form;
+    private EditForm? _form;
     private bool _isValid = false;
-    private MudTextField<string>? _commentField;
+    private FluentTextArea? _commentField;
     private bool _isNewComment => Comment.Id == 0;
 
     private string _userName => _isNewComment ? AuthState.Value.User.Name : Comment.User.Name;
@@ -60,17 +61,16 @@ public partial class EditCommentForm
 
     protected override async Task OnInitializedAsync()
     {
-        RunAfterRendered(() => _form?.ResetValidation());
+        RunAfterRendered(() => _form?.EditContext!.NotifyValidationStateChanged());
         
         await base.OnInitializedAsync();
         model.Fill(Comment);
-        model.WorkspaceId = AuthState.Value.Workspace.Id;
+        model.WorkspaceId = AuthState.Value.Workspace!.Id;
     }
     
     private void Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form!.EditContext!.Validate())
         {
             return;
         }
@@ -95,7 +95,7 @@ public partial class EditCommentForm
             }
             catch (Exception e)
             {
-                await ToastService.ShowError(e.Message);
+                ToastService.ShowError(e.Message);
             }
             finally
             {
@@ -114,7 +114,7 @@ public partial class EditCommentForm
     {
         _isEditMode = false;
         model.Fill(Comment);
-        _form?.ResetValidation();
+        // _form?.ResetValidation();
     }
 
 
@@ -151,7 +151,7 @@ public partial class EditCommentForm
             }
             catch (Exception e)
             {
-                await ToastService.ShowError(e.Message);
+                ToastService.ShowError(e.Message);
             }
             finally
             {

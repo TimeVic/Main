@@ -35,7 +35,7 @@ public class DeleteEffect: Effect<DeleteItemAction>
             await _apiService.TagDeleteAsync(action.Tag.Id);
             dispatcher.Dispatch(new DeleteListItemAction(action.Tag.Id));
             
-            await _notificationService.ShowInfo("Tag was updated");
+            _notificationService.ShowInfo("Tag was updated");
         }
         catch (Exception e)
         {

@@ -1,41 +1,42 @@
 ﻿@inherits BaseLayout
-
-<RadzenContextMenu/>
-<RadzenDialog/>
-<RadzenTooltip/>
-<RadzenNotification Style="bottom: 1em; top: unset"/>
-
-<MudLayout>
-    <MainHeader/>
-    @if (CommonState.Value.IsInitialized && IsShowMainMenu)
-    {
+<FluentMainLayout NavMenuTitle="TimeVic" Style="min-height: calc(100% - 40px)">
+    <Header>
+        TimeVic
+        <FluentStack HorizontalAlignment="HorizontalAlignment.Center">
+            <MainHeader/>
+        </FluentStack>
+    </Header>
+    <Body>
+        @if (CommonState.Value.IsInitialized)
+        {
+            <InitializationContainer>
+                <FluentBodyContent>
+                    @Body
+                </FluentBodyContent>
+            </InitializationContainer>
+        }
+        else
+        {
+            <FluentProgressRing></FluentProgressRing>
+        }
+        @if (!IsShowReCaptcha)
+        {
+            <style>
+                .grecaptcha-badge {
+                    visibility: hidden;
+                }
+            </style>
+        }
+    </Body>
+    <NavMenuContent>
         <NavMenu/>
-    }
-    <MudMainContent Class="pt-16 px-1">
-        <MudContainer
-            MaxWidth="MaxWidth.False"
-            class="d-flex mt-6">
-            <MudGrid
-                Justify="Justify.FlexStart">
-                @if (CommonState.Value.IsInitialized)
-                {
-                    <InitializationContainer>
-                        @Body
-                    </InitializationContainer>
-                }
-                else
-                {
-                    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
-                }
-            </MudGrid>
-            @if (!IsShowReCaptcha)
-            {
-                <style>
-                    .grecaptcha-badge {
-                        visibility: hidden;
-                    }
-                </style>
-            }
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+    </NavMenuContent>
+</FluentMainLayout>
+<FluentFooter>
+    Copyright © @DateTime.Now.Year <a href="https://georgyshira.info/" target="_blank">Georgy Shira</a> Apache License Version 2.0
+</FluentFooter>
+
+<FluentToastProvider />
+<FluentDialogProvider />
+<FluentTooltipProvider />
+<FluentMessageBarProvider />

@@ -22,6 +22,7 @@ public partial class FilterForm
         {
             ReportType = type
         }));
+        LoadReport();
     }
     
     private void OnChangePeriodType(SummaryReportPeriodType type)
@@ -32,6 +33,7 @@ public partial class FilterForm
         {
             PeriodType = type
         }));
+        LoadReport();
     }
 
     private void OnChangeDateStart(DateTime? dateStart)
@@ -42,6 +44,7 @@ public partial class FilterForm
         {
             StartDate = dateStart.Value
         }));
+        LoadReport();
     }
 
     private void OnChangeDateEnd(DateTime? endDate)
@@ -52,6 +55,7 @@ public partial class FilterForm
         {
             EndDate = endDate.Value
         }));
+        LoadReport();
     }
 
     private void LoadReport()

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Services;

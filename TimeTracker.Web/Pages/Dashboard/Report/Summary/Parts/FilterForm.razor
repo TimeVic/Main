@@ -1,52 +1,30 @@
 ﻿@using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Business.Common.Constants.Reports
-@using MudBlazor
 
 @inherits BaseReactiveComponent
 
-<MudGrid>
-    <MudItem xs="12" md="6" lg="2">
-        <EnumDropDown
-            Class="w-100"
-            Label="Group by:"
-            TItem="SummaryReportType"
-            Value="@_filterState.ReportType"
-            ValueChanged="OnChangeReportType"/>
-        <MudSpacer/>
-    </MudItem>
-    <MudItem xs="12" md="6" lg="2">
-        <EnumDropDown
-            Class="w-100"
-            Label="Period:"
-            TItem="SummaryReportPeriodType"
-            Value="@_filterState.PeriodType"
-            ValueChanged="OnChangePeriodType"/>
-    </MudItem>
-    <MudItem xs="12" md="6" lg="3">
-        <MudDatePicker
-            Label="Date start"
-            Editable="true"
-            Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-            DateChanged="OnChangeDateStart"
-            Date="@_filterState.StartDate"/>
-        <MudSpacer/>
-    </MudItem>
-    <MudItem xs="12" md="6" lg="3">
-        <MudDatePicker
-            Label="Date end"
-            Editable="true"
-            Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-            DateChanged="OnChangeDateEnd"
-            Date="@_filterState.StartDate"/>
-    </MudItem>
-    <MudItem xs="12" md="6" lg="2">
-        <MudButton
-            OnClick="@(LoadReport)"
-            Class="mt-3 w-100"
-            Color="Color.Primary"
-            Variant="Variant.Filled"
-            StartIcon="@Icons.Material.Filled.Search">
-            Search
-        </MudButton>
-    </MudItem>
-</MudGrid>
+<FluentToolbar class="mb-2 w-100" Orientation="Orientation.Horizontal">
+    <EnumDropDown
+        Label="Group by:"
+        TItem="SummaryReportType"
+        Value="@_filterState.ReportType"
+        ValueChanged="OnChangeReportType"/>
+
+    <EnumDropDown
+        Label="Period:"
+        TItem="SummaryReportPeriodType"
+        Value="@_filterState.PeriodType"
+        ValueChanged="OnChangePeriodType"/>
+
+    <FluentDatePicker
+        Label="Date start"
+        Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+        Value="@_filterState.StartDate"
+        ValueChanged="@OnChangeDateStart"/>
+
+    <FluentDatePicker
+        Label="Date end"
+        Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+        Value="@_filterState.EndDate"
+        ValueChanged="@OnChangeDateEnd"/>
+</FluentToolbar>

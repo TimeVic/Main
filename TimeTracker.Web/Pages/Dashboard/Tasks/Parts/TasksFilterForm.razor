@@ -1,30 +1,27 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 @using Microsoft.AspNetCore.Components
-@using MudBlazor
 
 @inherits BaseReactiveComponent
 
-<MudStack Row="true" Class="pa-4">
-    <MudTextField
-        T="string"
-        Clearable="true"
-        Value="Filter.SearchString"
+<FluentStack Orientation="Orientation.Horizontal" Class="pa-2">
+    <FluentTextField
+        Value="@Filter.SearchString"
         ValueChanged="OnChangeSearchString"
         Placeholder="Write anything"/>
     
-    <MudSpacer/>
+    @* <MudSpacer/> *@
+    @* *@
+    @* <MembersDropDown *@
+    @*     Clearable="true" *@
+    @*     Value="@(Filter.AssignedUserId ?? 0)" *@
+    @*     ValueChanged="OnChangeAssignedUserId"/> *@
+    @* *@
+    @* <MudSpacer/> *@
+    @* *@
+    @* <YesNoDropDown *@
+    @*     Placeholder="Only archived" *@
+    @*     ValueChanged="OnChangeIsArchived" *@
+    @*     Value="@Filter.IsArchived"/> *@
     
-    <MembersDropDown
-        Clearable="true"
-        Value="@(Filter.AssignedUserId ?? 0)"
-        ValueChanged="OnChangeAssignedUserId"/>
-    
-    <MudSpacer/>
-    
-    <YesNoDropDown
-        Placeholder="Only archived"
-        ValueChanged="OnChangeIsArchived"
-        Value="@Filter.IsArchived"/>
-    
-</MudStack>
+</FluentStack>
 

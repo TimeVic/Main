@@ -1,6 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Model.Report;
 using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Business.Extensions;

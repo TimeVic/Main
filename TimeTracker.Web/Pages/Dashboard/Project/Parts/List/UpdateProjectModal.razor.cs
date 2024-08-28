@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Web.Store.Project;
@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Pages.Dashboard.Project.Parts.List;
 public partial class UpdateProjectModal
 {
     [CascadingParameter] 
-    public MudDialogInstance MudDialog { get; set; }
+    public FluentDialog MudDialog { get; set; }
 
     [Parameter]
     public ProjectDto Project { get; set; }

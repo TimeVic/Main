@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Web.Store.Project;
 
@@ -8,12 +8,12 @@ namespace TimeTracker.Web.Pages.Dashboard.Project.Parts.List;
 public partial class AddProjectModal
 {
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    FluentDialog MudDialog { get; set; }
 
     private AddRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
-    private MudForm _form;
+    private FluentEditForm _form;
 
     protected override async Task OnInitializedAsync()
     {

@@ -6,22 +6,22 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<MudCard class="no-gutters w-100">
-    <MudButton
-        Click="NavigateToTasksPage"
-        Icon="arrow_back_ios"
-        ButtonStyle="ButtonStyle.Light"
-        Text="To list"
-    />
-</MudCard>
+<FluentCard class="w-100">
+    <FluentButton
+        IconStart="@(new Icons.Filled.Size32.ArrowLeft())"
+        Appearance="Appearance.Neutral"
+        OnClick="@NavigateToTasksPage">
+        To list
+    </FluentButton>
+</FluentCard>
 
-<MudCard class="no-gutters mt-1 ml-2 w-100">
+<FluentCard class="w-100">
     @if (_isLoading)
     {
-        <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+        <FluentProgressRing></FluentProgressRing>
     }
     else
     {
         <UpdateTaskForm Task="_task"/>
     }
-</MudCard>
+</FluentCard>

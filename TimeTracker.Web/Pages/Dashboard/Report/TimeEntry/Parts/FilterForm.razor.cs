@@ -11,20 +11,15 @@ public partial class FilterForm
     [Inject]
     public IState<TimeEntryState> _state { get; set; }
 
-    protected override Task OnInitializedAsync()
+    private void OnChangeClient(ClientDto? client)
     {
-        return base.OnInitializedAsync();
-    }
-
-    private void OnChangeClient(long clientId)
-    {
-        _state.Value.Filter.ClientId = clientId == 0 ? null : clientId;
+        _state.Value.Filter.ClientId = client?.Id;
         UpdateFilterState();
     }
 
-    private void OnChangeProject(long projectId)
+    private void OnChangeProject(ProjectDto? project)
     {
-        _state.Value.Filter.ProjectId = projectId == 0 ? null : projectId;
+        _state.Value.Filter.ProjectId = project?.Id;
         UpdateFilterState();
     }
 

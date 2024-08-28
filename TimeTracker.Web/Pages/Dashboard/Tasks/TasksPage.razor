@@ -1,5 +1,5 @@
-﻿@page "/board/tasks/{ProjectId:long}/{TaskListId:long}"
-@page "/board/tasks/{ProjectId:long}"
+﻿@page "/board/tasks/{TaskListId:long}"
+@page "/board/tasks"
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Tasks.Parts
@@ -7,21 +7,22 @@
 @inherits BaseComponent
 @layout Layout
 
-<MudStack Class="w-100">
+<FluentStack Class="w-100 p-2">
     <CascadingValue Name="TaskListId" Value="@TaskListId">
-        <CascadingValue Name="ProjectId" Value="@ProjectId">
-            <MudStack>
-                <MudPaper>
-                    <TasksListTree/>
-                </MudPaper>
-                @* <MudPaper> *@
-                @*     <TasksFilterForm/> *@
-                @* </MudPaper> *@
-                <hr/>
-                <MudStack Row="true">
-                    <TasksTable/>
-                </MudStack>
-            </MudStack>
-        </CascadingValue>
+        <FluentStack Orientation="Orientation.Vertical">
+            <TasksListTree/>
+
+            <FluentLabel
+                Class="mt-2 mb-2"
+                Typo="Typography.H3">
+                @_selectedTaskList?.Name
+            </FluentLabel>
+
+            <TasksFilterForm/>
+
+            <FluentStack Orientation="Orientation.Horizontal">
+                <TasksTable/>
+            </FluentStack>
+        </FluentStack>
     </CascadingValue>
-</MudStack>
+</FluentStack>

@@ -2,7 +2,6 @@
 
 @using Microsoft.AspNetCore.Components
 @using TimeTracker.Web.Pages.Landing.Shared
-@using MudBlazor
 
 @layout Layout
 @inherits BaseComponent
@@ -17,7 +16,7 @@
                 <MudText Typo="Typo.h4">Registration - Step 2</MudText>
 
                 <MudStack>
-                    <MudTextField
+                    <FluentTextField
                         T="string"
                         InputType="InputType.Password"
                         For="() => model.Password"

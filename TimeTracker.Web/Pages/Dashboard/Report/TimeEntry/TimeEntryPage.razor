@@ -3,14 +3,13 @@
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Report.TimeEntry.Parts
 @using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
-@using MudBlazor
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<MudPaper Class="pa-4">
+<FluentStack Orientation="Orientation.Vertical" Class="p-2">
     <FilterForm/>
-</MudPaper>
-<TimeEntryList 
-    Class="mt-4"
-    IsFilteredList="@true"/>
+    <TimeEntryList
+        Class="mt-4"
+        IsFilteredList="@true"/>
+</FluentStack>

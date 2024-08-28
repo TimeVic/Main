@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
 using TimeTracker.Business.Common.Constants;
@@ -24,7 +24,7 @@ public partial class MemberAccessModal
     private UpdateRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
-    private MudForm _form;
+    private FluentEditForm _form;
 
     private ICollection<MembershipAccessType> _allowedAccessLevels = new List<MembershipAccessType>()
     {

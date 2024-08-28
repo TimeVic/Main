@@ -77,7 +77,7 @@ public partial class FileUploader
                 foreach (var file in eventArguments.GetMultipleFiles(MaxFiles))
                 {
                     var uploadedFileDto = await ApiService.StorageUploadFileAsync(
-                        _authState.Value.Workspace.Id,
+                        _authState.Value.Workspace!.Id,
                         EntityId,
                         EntityType,
                         FileType,
@@ -89,7 +89,7 @@ public partial class FileUploader
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                await _toastService.ShowError(e.Message);
+                _toastService.ShowError(e.Message);
             }  
             _isLoading = false;
         }

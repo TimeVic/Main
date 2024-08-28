@@ -1,55 +1,74 @@
-﻿@using TimeTracker.Web.Pages.Dashboard.Shared
-@using TimeTracker.Business.Extensions
-@using MudBlazor
+﻿@using TimeTracker.Web.Shared.Components.Form
 
 @inherits BaseReactiveComponent
 
-<MudStack Spacing="2" Row="true" Justify="Justify.SpaceBetween" Class="pa-4">
-    <ProjectsDropDown
-        Label="Project"
-        Value="ProjectId"
-        SelectedItemChanged="OnSelectedProject"/>
-    @if (_projectTasksList.Any())
+<FluentToolbar Class="w-100">
+    <FluentButton
+        id="taskListsMenuAnchor"
+        Appearance="Appearance.Accent"
+        Disabled="@(!_tasksListState.Value.List.Any())"
+        @onclick="@(() => _isTaskListsMenuOpened = !_isTaskListsMenuOpened)">
+        <text>Select task list</text>
+    </FluentButton>
+
+    <FluentMenu Anchor="taskListsMenuAnchor" @bind-Open="_isTaskListsMenuOpened" VerticalThreshold="170">
+
+        @foreach (var groupedItem in _groupedTasksList)
+        {
+            var project = _projectState.Value.List.First(item => item.Id == groupedItem.Key);
+            <FluentLabel
+                Class="mt-1"
+                Typo="Typography.Body">
+                @project.Name
+            </FluentLabel>
+            <hr/>
+            foreach (var taskList in groupedItem)
+            {
+                <FluentMenuItem
+                    Checked="@(taskList.Id == _selectedTaskList?.Id)"
+                    OnClick="@((e) => OnSelectedTasksList(taskList))">
+                    @taskList.Name
+                </FluentMenuItem>
+            }
+        }
+    </FluentMenu>
+
+    <FluentButton
+        Appearance="Appearance.Accent"
+        Disabled="@(_selectedTaskList is null)"
+        @onclick="@(ShowAddTaskModal)">
+        Add task
+    </FluentButton>
+
+    @if (_selectedTaskList is not null)
     {
-        <TaskListsDropDown
-            Label="Tasks list"
-            ProjectId="_projectId"
-            Disabled="@(_projectId == 0)"
-            Value="@(TaskListId ?? 0)"
-            SelectedItemChanged="@OnSelectedTasksList"/>
-        
-        <MudMenu Icon="@Icons.Material.Filled.MoreVert">
-            <MudMenuItem
-                IconSize="Size.Small"
-                OnClick="@ShowAddTaskListModal"
-                Icon="@Icons.Material.Filled.Add">
-                Add tasks list
-            </MudMenuItem>
-            <MudMenuItem
-                Disabled="@(_selectedTaskListId == 0)"
-                IconSize="Size.Small"
-                OnClick="@ShowUpdateTaskListModal"
-                Icon="@Icons.Material.Filled.Edit">
+        <FluentButton
+            Id="taskListMenuAnchor"
+            IconStart="@(new Icons.Regular.Size24.Navigation())"
+            Appearance="Appearance.Lightweight"
+            @onclick="@(() => _isTaskListMenuOpened = !_isTaskListMenuOpened)"/>
+
+        <FluentMenu Anchor="taskListMenuAnchor" @bind-Open="_isTaskListMenuOpened" VerticalThreshold="170">
+            <FluentMenuItem
+                OnClick="@(ShowAddTaskListModal)">
+                Add new
+            </FluentMenuItem>
+            <FluentMenuItem
+                Disabled="@(_selectedTaskList is null)"
+                OnClick="@(ShowUpdateTaskListModal)">
                 Update current
-            </MudMenuItem>
-            <MudMenuItem
-                Disabled="@(_selectedTaskListId == 0)"
-                IconSize="Size.Small"
-                OnClick="@OnDeleteTaskList"
-                Icon="@Icons.Material.Filled.Delete">
+            </FluentMenuItem>
+            <FluentMenuItem OnClick="@(OnDeleteTaskList)">
                 Delete current
-            </MudMenuItem>
-        </MudMenu>
+            </FluentMenuItem>
+        </FluentMenu>
     }
     else
     {
-        <MudButton
-            Variant="Variant.Filled"
-            Color="Color.Info"
-            IconSize="Size.Small"
-            StartIcon="@Icons.Material.Filled.Add"
-            OnClick="@(ShowAddTaskListModal)">
-            Add new list
-        </MudButton>
+        <FluentButton
+            Appearance="Appearance.Accent"
+            @onclick="@(ShowAddTaskListModal)">
+            Add tasks list
+        </FluentButton>
     }
-</MudStack>
+</FluentToolbar>

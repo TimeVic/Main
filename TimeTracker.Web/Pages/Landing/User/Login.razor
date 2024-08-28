@@ -1,53 +1,55 @@
 ﻿@page "/login"
 
-@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
 @using TimeTracker.Web.Pages.Landing.Shared
-@using MudBlazor
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<MudStack Justify="Justify.Center" AlignItems="MudBlazor.AlignItems.Center">
-    <MudCard Style="width: 300px" Class="mt-5 mb-5">
-        <MudCardContent>
-            <MudForm
-                @ref="_form"
-                @bind-IsValid="_isValid">
+<FluentStack HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+    <FluentCard Style="width: 300px" Class="mt-5 mb-5">
+        <EditForm
+            Model="model"
+            @ref="_form"
+            novalidate>
+            <DataAnnotationsValidator />
 
-                <MudText Typo="Typo.h4">Sign In</MudText>
+            <FluentLabel Typo="Typography.H2" Class="mb-3">Sign In</FluentLabel>
 
-                <MudStack>
-                    <MudTextField
-                        T="string"
-                        For="() => model.Email"
-                        Disabled="_isLoading"
-                        @bind-Text="@model.Email"
-                        Placeholder="Enter your email"/>
+            <FluentStack Orientation="Orientation.Vertical" Class="mb-3">
+                <FluentLabel>Email</FluentLabel>
+                <FluentTextField
+                    style="width: 100%;"
+                    Disabled="_isLoading"
+                    ValueExpression="() => model.Email"
+                    ValueChanged="value => model.Email = value"
+                    InputMode="InputMode.Email"
+                    Placeholder="Enter your email">
+                    <FluentIcon Value="@(new Icons.Regular.Size16.Edit())" Slot="start" Color="Color.Neutral"/>
+                </FluentTextField>
 
-                    <MudTextField
-                        T="string"
-                        InputType="InputType.Password"
-                        For="() => model.Password"
-                        Disabled="_isLoading"
-                        @bind-Text="@model.Password"
-                        Placeholder="Your password"/>
-                </MudStack>
-            </MudForm>
-        </MudCardContent>
-        <MudCardActions Class="d-flex justify-space-between">
-            <MudButton
-                Variant="MudBlazor.Variant.Filled"
+                <FluentLabel>Password</FluentLabel>
+                <FluentTextField
+                    style="width: 100%;"
+                    Disabled="_isLoading"
+                    ValueExpression="() => model.Password"
+                    ValueChanged="value => model.Password = value"
+                    TextFieldType="TextFieldType.Password"
+                    Placeholder="Your password">
+                    <FluentIcon Value="@(new Icons.Regular.Size16.Password())" Slot="start" Color="Color.Neutral"/>
+                </FluentTextField>
+            </FluentStack>
+        </EditForm>
+        <div Class="d-flex justify-space-between">
+            <FluentButton
                 OnClick="Submit"
-                Color="Color.Primary">
+                Appearance="@Appearance.Accent">
                 Login
-            </MudButton>
-
-            <MudButton
-                Variant="MudBlazor.Variant.Text"
-                Href="/user/password-reset"
-                Color="Color.Transparent">
+            </FluentButton>
+            <FluentSpacer></FluentSpacer>
+            <FluentAnchor
+                Href="/user/password-reset">
                 Forgot password?
-            </MudButton>
-        </MudCardActions>
-    </MudCard>
-</MudStack>
+            </FluentAnchor>
+        </div>
+    </FluentCard>
+</FluentStack>

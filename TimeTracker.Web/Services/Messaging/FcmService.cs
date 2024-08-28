@@ -1,7 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.JSInterop;
-using MudBlazor;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 

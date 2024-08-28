@@ -1,5 +1,4 @@
-﻿@using MudBlazor
-
+﻿
 @inherits BaseReactiveComponent
 
 <MudDialog>
@@ -8,12 +7,12 @@
             @ref="_form"
             @bind-IsValid="_isValid">
 
-            <MudTextField
+            <FluentTextField
                 T="string?"
                 For="() => model.Name"
                 @bind-Value="@(model.Name)"
                 Label="Tag name">
-            </MudTextField>
+            </FluentTextField>
 
             <MudColorPicker
                 Label="Color"

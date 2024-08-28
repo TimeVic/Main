@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Tasks;
@@ -11,48 +11,46 @@ namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 
 public partial class AddTaskModalForm
 {
-    [Parameter]
-    public long? TimeEntryId { get; set; }
+    public class Parameters
+    {
+        public long? TimeEntryId { get; set; }
+        public long? TaskListId { get; set; }
+        public TaskStatus? TaskStatus { get; set; }
+        public DateTime? EndTime { get; set; }
+    }
     
     [Parameter]
-    public long? TaskListId { get; set; }
-    
-    [Parameter]
-    public TaskStatus? TaskStatus { get; set; }
-    
-    [Parameter]
-    public DateTime? EndTime { get; set; }
+    public required Parameters Content { get; set; }
     
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    public required FluentDialog MudDialog { get; set; }
 
     private AddRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
-    private MudForm _form;
+    private EditForm _form;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.TimeEntryId = TimeEntryId;
-        if (TaskListId.HasValue)
+        model.TimeEntryId = Content.TimeEntryId;
+        if (Content.TaskListId.HasValue)
         {
-            model.TaskListId = TaskListId.Value;
+            model.TaskListId = Content.TaskListId.Value;
         }
-        if (TaskStatus.HasValue)
+        if (Content.TaskStatus.HasValue)
         {
-            model.Status = TaskStatus.Value;
+            model.Status = Content.TaskStatus.Value;
         }
-        if (EndTime.HasValue)
+        if (Content.EndTime.HasValue)
         {
-            model.EndTime = EndTime.Value;
+            model.EndTime = Content.EndTime.Value;
         }
     }
 
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -72,7 +70,7 @@ public partial class AddTaskModalForm
         }
         catch (Exception e)
         {
-            await ToastService.ShowError(e.Message);
+            ToastService.ShowError(e.Message);
         }
         finally
         {
@@ -83,7 +81,7 @@ public partial class AddTaskModalForm
 
     private void OnCloseModal()
     {
-        MudDialog.Close();
+        MudDialog.Hide();
     }
 
     private async Task OnKeyUp(KeyboardEventArgs arg)

@@ -10,6 +10,9 @@ namespace TimeTracker.Web.Shared.Components.Form;
 public partial class MultipleUsersDropDown
 {
     [Parameter] 
+    public string Label { get; set; }
+    
+    [Parameter] 
     public bool Disabled { get; set; }
 
     [Parameter]
@@ -44,6 +47,11 @@ public partial class MultipleUsersDropDown
                 _allowedIds = _securityManager.GetMembersWhichHaveAccessToProject(value)
                     .Select(item => item.User.Id);    
             }
+            else
+            {
+                _allowedIds = new List<long>();
+            }
+            UpdateList();
         }
     }
     
@@ -53,40 +61,48 @@ public partial class MultipleUsersDropDown
     [Inject]
     public IState<WorkspaceMembershipsState> _state { get; set; }
     
-    private IEnumerable<UserDto> _selectedItems = new List<UserDto>();
+    private ICollection<UserDto> _selectedItems => _list.Where(item => _selectedIds.Contains(item.Id)).ToList();
     private IEnumerable<long> _allowedIds { get; set; } = new List<long>();
     private IEnumerable<long> _selectedIds = new List<long>();
+    private ICollection<UserDto> _list = new List<UserDto>();
 
-    private ICollection<UserDto> _list
+    protected override void OnInitialized()
     {
-        get
+        base.OnInitialized();
+
+        _state.StateChanged += (sender, args) =>
         {
-            if (_allowedIds.Any())
-            {
-                return _state.Value.List
-                    .Select(item => item.User)
-                    .Where(
-                        item => _allowedIds.Any(allowedId => allowedId == item.Id)
-                    ) 
-                    .ToList();
-            }
-
-            return _state.Value.List.Select(item => item.User).ToList();
-        }
+            UpdateList();
+        };
+        UpdateList();
     }
-
-    private Task OnValueChanged(IEnumerable<long> selectedIds)
+    
+    private void OnValueChanged(IEnumerable<UserDto> selectedUsers)
     {
-        _selectedIds = selectedIds.ToList();
-        _selectedItems = _list.Where(item => _selectedIds.Contains(item.Id));
+        _selectedIds = selectedUsers.Select(item => item.Id).ToList();
         SelectedItemChanged.InvokeAsync(_selectedItems);
         ValueChanged.InvokeAsync(_selectedIds);
-        return Task.CompletedTask;
     }
 
     private string ToStringFunc(long userId)
     {
         var item = _list.FirstOrDefault(item => item.Id == userId);
         return item?.Name ?? string.Empty;
+    }
+    
+    private void UpdateList()
+    {
+        if (_allowedIds.Any())
+        {
+            _list = _state.Value.List
+                .Select(item => item.User)
+                .Where(
+                    item => _allowedIds.Any(allowedId => allowedId == item.Id)
+                ) 
+                .ToList();
+            return;
+        }
+
+        _list = _state.Value.List.Select(item => item.User).ToList();
     }
 }

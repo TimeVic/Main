@@ -31,7 +31,7 @@ public class DeleteTimeEntryEffect: Effect<DeleteTimeEntryAction>
         {
             await _apiService.TimeEntryDeleteAsync(action.EntryId);
             dispatcher.Dispatch(new DeleteTimeEntryFromListAction(action.EntryId));
-            await _toastService.ShowInfo("Time entry deleted!");
+            _toastService.ShowInfo("Time entry deleted!");
         }
         catch (Exception e)
         {

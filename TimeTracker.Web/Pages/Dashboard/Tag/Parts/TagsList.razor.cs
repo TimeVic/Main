@@ -1,6 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor.Utilities;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Tag;

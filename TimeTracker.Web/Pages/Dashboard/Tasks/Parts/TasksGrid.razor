@@ -1,34 +1,57 @@
-﻿@using TimeTracker.Business.Extensions
+﻿@using TimeTracker.Api.Shared.Dto.Entity.Task
+@using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus
 
 @inherits BaseComponent
 
-<MudPaper
-    Elevation="0"
-    Width="300px"
-    MinHeight="400px"
-    Class="pa-2 mt-2 d-flex flex-column mud-background-gray rounded-lg">
-    <MudToolBar DisableGutters="true" Class="px-2">
-        <MudText Typo="Typo.subtitle1">
-            <b>@Status.GetDisplayName()</b>
-        </MudText>
-        <MudSpacer/>
-        <MudIconButton
-            OnClick="@OnAddTask"
-            Icon="@Icons.Material.Filled.Add"/>
-
-    </MudToolBar>
-    @if (_isLoading)
+<FluentLabel Typo="Typography.H3" Class="mt-3">
+    @if (Statuses.Contains(TaskStatus.Backlog))
     {
-        <div class="d-flex justify-center mt-4">
-            <MudProgressLinear Color="Color.Info" Indeterminate="true"/>
-        </div>
+        @TaskStatus.Backlog.GetDisplayName()
     }
     else
     {
-        foreach (var task in _tasks)
-        {
-            <TaskCard @key="@task" Class="mb-3" Task="@task"></TaskCard>
-        }
+        @TaskStatus.ToDo.GetDisplayName()
     }
-</MudPaper>
+</FluentLabel>
+
+<FluentDataGrid
+    TGridItem="TaskDto"
+    Class="w-100"
+    Loading="_isLoading"
+    Virtualize="true"
+    ItemSize="45"
+    OnRowClick="@(async (eventObj) => await OnEditTask(eventObj.Item))"
+    Items="@_tasks.AsQueryable()"
+    ShowHover="true">
+
+    <PropertyColumn 
+        Title="Id" Property="@(p => p.FormattedId)"
+        Width="100px"
+        Sortable="false"/>
+    <PropertyColumn 
+        Title="Title" 
+        Property="@(p => p.Title)"
+        Sortable="false"/>
+    <PropertyColumn 
+        Title="Status" 
+        Property="@(p => p.Status.GetDisplayName())"
+        Width="100px"
+        Sortable="true"/>
+    <PropertyColumn 
+        Title="Priority"
+        Property="@(p => p.Priority.GetDisplayName())"
+        Width="100px"
+        Sortable="true"/>
+    <PropertyColumn 
+        Title="Description" 
+        Property="@(p => p.Description)"
+        Width="200px"
+        Sortable="false"/>
+    <PropertyColumn 
+        Title="Assigned" 
+        Property="@(p => p.User.Name)"
+        Width="200px"
+        Sortable="false"/>
+</FluentDataGrid>

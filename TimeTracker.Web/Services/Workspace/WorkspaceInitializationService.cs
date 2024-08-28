@@ -42,6 +42,7 @@ public class WorkspaceInitializationService
             _dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.SetSelectedPageAction(1));
             _dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction());
         }
+        
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Tag.LoadListAction());
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(true));
         Task.Run(() => _fcmService.SetNotificationToken());

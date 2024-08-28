@@ -1,20 +1,18 @@
-﻿@using MudBlazor
-
-@inherits BaseReactiveComponent
+﻿@inherits BaseReactiveComponent
 
 <MudDialog>
     <DialogContent>
-        <MudForm
+        <FluentEditForm
             @ref="_form"
             @bind-IsValid="_isValid">
 
-            <MudTextField
+            <FluentTextField
                 T="string?"
                 For="() => model.Name"
                 @bind-Value="@(model.Name)"
                 Label="Project name">
-            </MudTextField>
-        </MudForm>
+            </FluentTextField>
+        </FluentEditForm>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="@OnCloseModal">Cancel</MudButton>

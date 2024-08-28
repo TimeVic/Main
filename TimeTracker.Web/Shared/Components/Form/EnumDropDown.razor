@@ -1,23 +1,23 @@
 ﻿@using TimeTracker.Web.Core.Helpers
-@using MudBlazor
 
 @typeparam TItem where TItem: struct, IConvertible
 
-<MudSelect
-    T="TItem"
-    Class="@Class"
-    Dense="true"
-    Placeholder="@Placeholder"
+<FluentSelect
+    TOption="TItem?"
     Label="@Label"
-    EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
-    Value="@_value"
-    ValueChanged="OnItemSelected"
-    Variant="MudBlazor.Variant.Text"
-    AnchorOrigin="Origin.BottomCenter">
-    @foreach (var item in _list)
-    {
-        <MudSelectItem Value="@item">
-            <text>@(EnumHelpers.GetDisplayName(typeof(TItem), item))</text>
-        </MudSelectItem>
-    }
-</MudSelect>
+    Class="@Class"
+    Placeholder="@Placeholder"
+    Items="@_list.ToList()"
+    SelectedOption="@_value"
+    Disabled="@Disabled"
+    OptionValue="@(dto => dto?.ToString())"
+    OptionSelected="@(value => value!.Value.Equals(_value))"
+    ValueChanged="OnItemSelected">
+    <OptionTemplate>
+        @if (context is null)
+        {
+            return;
+        }
+        @(EnumHelpers.GetDisplayName(typeof(TItem), context))
+    </OptionTemplate>
+</FluentSelect>

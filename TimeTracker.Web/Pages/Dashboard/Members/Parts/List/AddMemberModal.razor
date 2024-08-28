@@ -1,5 +1,4 @@
-﻿@using MudBlazor
-
+﻿
 @inherits BaseComponent
 
 <MudDialog>
@@ -8,12 +7,12 @@
             @ref="_form"
             @bind-IsValid="_isValid">
 
-            <MudTextField
+            <FluentTextField
                 T="string?"
                 For="() => model.Email"
                 @bind-Value="@(model.Email)"
                 Label="Email">
-            </MudTextField>
+            </FluentTextField>
         </MudForm>
     </DialogContent>
     <DialogActions>

@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
-using MudBlazor.Utilities;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Web.Store.Tag;

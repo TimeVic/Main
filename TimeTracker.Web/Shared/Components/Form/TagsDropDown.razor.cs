@@ -1,6 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Tag;
@@ -9,6 +8,9 @@ namespace TimeTracker.Web.Shared.Components.Form;
 
 public partial class TagsDropDown
 {
+    [Parameter] 
+    public string Label { get; set; }
+    
     [Parameter] 
     public bool Disabled { get; set; }
 
@@ -37,32 +39,35 @@ public partial class TagsDropDown
     [Inject]
     public IState<TagState> _state { get; set; }
 
-    private IEnumerable<TagDto> _selectedItems
-    {
-        get
-        {
-            return _state.Value.List.Where(
-                item => _selectedIds.Any(selectedId => selectedId == item.Id)
-            ).ToList();
-        }
-    }
-
     private IEnumerable<long> _selectedIds = new List<long>();
-    private MudSelect<long> _select;
+    
+    private ICollection<TagDto> _selectedItems => _list.Where(item => _selectedIds.Contains(item.Id)).ToList();
+    private ICollection<TagDto> _list = new List<TagDto>();
+    private long _selectedId = 0;
 
-    private void OnValueChanged(IEnumerable<long>? selectedIds)
+    protected override void OnInitialized()
     {
-        _selectedIds = selectedIds ?? new List<long>();
+        base.OnInitialized();
+
+        _state.StateChanged += (sender, args) =>
+        {
+            UpdateList();
+        };
+        UpdateList();
+    }
+    
+    private void OnValueChanged(IEnumerable<TagDto> selectedTags)
+    {
+        _selectedIds = selectedTags.Select(item => item.Id);
         InvokeAsync(async () =>
         {
             await SelectedItemChanged.InvokeAsync(_selectedItems);
             await ValueChanged.InvokeAsync(_selectedIds.ToList());
         });
     }
-
-    private string ToStringFunc(long tagId)
+    
+    private void UpdateList()
     {
-        var item = _state.Value.List.FirstOrDefault(item => item.Id == tagId);
-        return item?.Name ?? string.Empty;
+        _list = _state.Value.List;
     }
 }

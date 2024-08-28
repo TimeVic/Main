@@ -14,6 +14,9 @@ namespace TimeTracker.Web.Shared.Components.Form;
 
 public partial class MembersDropDown
 {
+    [Parameter] 
+    public string? Label { get; set; }
+    
     [Parameter]
     public Expression<Func<long>>? For { get; set; }
     
@@ -26,9 +29,6 @@ public partial class MembersDropDown
         get => _selectedId;
         set => _selectedId = value;
     }
-    
-    [Parameter]
-    public EventCallback<long> ValueChanged { get; set; }
 
     [Parameter]
     public EventCallback<WorkspaceMembershipDto> SelectedItemChanged { get; set; }
@@ -47,53 +47,47 @@ public partial class MembersDropDown
 
     [Parameter] 
     public bool Required { get; set; }
-    
-    [Parameter]
-    public long? UserId
-    {
-        get => _selectedItem?.User.Id;
-        set
-        {
-            _selectedItem = _state.Value.List.FirstOrDefault(item => item.User.Id == value);
-            _selectedId = _selectedItem?.Id ?? 0;
-        }
-    }
-    
+
+    [Parameter] public long? UserId { get; set; }
+
     [Inject]
     public IState<WorkspaceMembershipsState> _state { get; set; }
     
-    private WorkspaceMembershipDto? _selectedItem;
-
+    private ICollection<WorkspaceMembershipDto> _list = new List<WorkspaceMembershipDto>();
+    private WorkspaceMembershipDto? _selectedItem => _list.FirstOrDefault(
+        item => UserId is not null && item.User.Id == UserId || item.Id == _selectedId
+    );
     private long _selectedId = 0;
     
-    private ICollection<WorkspaceMembershipDto> _list
+    protected override void OnInitialized()
     {
-        get
+        base.OnInitialized();
+
+        _state.StateChanged += (sender, args) =>
         {
-            if (AllowedIds.Any())
-            {
-                return _state.Value.List
-                    .Where(
-                        item => AllowedIds.Any(allowedId => allowedId == item.Id)
-                    ) 
-                    .ToList();
-            }
-
-            return _state.Value.List;
-        }
-    }
-
-    private Task OnValueChanged(long selectedId)
-    {
-        _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == selectedId);
-        SelectedItemChanged.InvokeAsync(_selectedItem);
-        ValueChanged.InvokeAsync(selectedId);
-        return Task.CompletedTask;
+            UpdateList();
+        };
+        UpdateList();
     }
     
-    private string ToStringFunc(long membershipId)
+    private void OnValueChanged(WorkspaceMembershipDto? membership)
     {
-        var item = _state.Value.List.FirstOrDefault(item => item.Id == membershipId);
-        return item?.User.Name ?? string.Empty;
+        long.TryParse($"{membership?.Id}", out _selectedId);
+        SelectedItemChanged.InvokeAsync(_selectedItem);
+    }
+    
+    private void UpdateList()
+    {
+        if (AllowedIds.Any())
+        {
+            _list = _state.Value.List
+                .Where(
+                    item => AllowedIds.Any(allowedId => allowedId == item.Id)
+                ) 
+                .ToList();
+            return;
+        }
+
+        _list = _state.Value.List;
     }
 }

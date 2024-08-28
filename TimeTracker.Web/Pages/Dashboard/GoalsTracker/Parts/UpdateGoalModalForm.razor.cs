@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker;
 using TimeTracker.Web.Store.GoalsTracker;

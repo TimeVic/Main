@@ -3,6 +3,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Client;
@@ -13,7 +14,7 @@ namespace TimeTracker.Web.Shared.Components.Form;
 public partial class ClientsDropDown
 {
     [Parameter]
-    public Expression<Func<long>>? For { get; set; }
+    public string? Label { get; set; }
     
     [Parameter] 
     public bool Disabled { get; set; }
@@ -25,11 +26,14 @@ public partial class ClientsDropDown
     public long Value
     {
         get => _selectedId;
-        set => _selectedId = value;
+        set
+        {
+            if (_selectedId != value)
+            {
+                _selectedId = value;
+            }
+        }
     }
-    
-    [Parameter]
-    public EventCallback<long> ValueChanged { get; set; }
 
     [Parameter]
     public EventCallback<ClientDto> SelectedItemChanged { get; set; }
@@ -46,20 +50,29 @@ public partial class ClientsDropDown
     [Inject]
     public IState<ClientState> _state { get; set; }
     
+    private ClientDto? _selectedItem => _list.FirstOrDefault(item => item.Id == _selectedId);
+    private ICollection<ClientDto> _list = new List<ClientDto>();
     private long _selectedId = 0;
-    private ClientDto? _selectedItem;
     
-    private Task OnValueChanged(long id)
+    protected override void OnInitialized()
     {
-        _selectedItem = _state.Value.List.FirstOrDefault(item => item.Id == id);
-        SelectedItemChanged.InvokeAsync(_selectedItem);
-        ValueChanged.InvokeAsync(_selectedItem?.Id ?? 0);
-        return Task.CompletedTask;
+        base.OnInitialized();
+
+        _state.StateChanged += (sender, args) =>
+        {
+            UpdateList();
+        };
+        UpdateList();
     }
     
-    private string ToStringFunc(long id)
+    private void OnValueChanged(string? project)
     {
-        var item = _state.Value.List.FirstOrDefault(item => item.Id == id);
-        return item?.Name ?? string.Empty;
+        long.TryParse(project, out _selectedId);
+        SelectedItemChanged.InvokeAsync(_selectedItem);
+    }
+    
+    private void UpdateList()
+    {
+        _list = _state.Value.List;
     }
 }

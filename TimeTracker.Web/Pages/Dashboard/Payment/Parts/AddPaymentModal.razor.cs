@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
 using TimeTracker.Web.Store.Payment;
 
@@ -8,18 +9,12 @@ namespace TimeTracker.Web.Pages.Dashboard.Payment.Parts;
 public partial class AddPaymentModal
 {
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    FluentDialog MudDialog { get; set; }
 
     private AddRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
-    private MudForm _form;
-
-    private long _projectId
-    {
-        get => model.ProjectId;
-        set => model.ProjectId = value;
-    }
+    private EditForm _form;
 
     protected override async Task OnInitializedAsync()
     {
@@ -28,8 +23,8 @@ public partial class AddPaymentModal
 
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        model.WorkspaceId = AuthState.Value.Workspace!.Id;
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -37,18 +32,17 @@ public partial class AddPaymentModal
         _isLoading = true;
         try
         {
-            model.WorkspaceId = AuthState.Value.Workspace.Id;
             var responseDto = await ApiService.PaymentAddAsync(model);
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                await ToastService.ShowInfo("Payment added");
+                ToastService.ShowInfo("Payment added");
                 OnCloseModal();
             }
         }
         catch (Exception e)
         {
-            await ToastService.ShowError(e.Message);
+            ToastService.ShowError(e.Message);
         }
         finally
         {
@@ -57,8 +51,16 @@ public partial class AddPaymentModal
         StateHasChanged();    
     }
 
+    private void OnUpdateTime(DateTime? paymentTime)
+    {
+        if (paymentTime.HasValue)
+        {
+            model.PaymentTime = paymentTime.Value;
+        }
+    }
+    
     private void OnCloseModal()
     {
-        MudDialog.Close();
+        MudDialog.Hide();
     }
 }

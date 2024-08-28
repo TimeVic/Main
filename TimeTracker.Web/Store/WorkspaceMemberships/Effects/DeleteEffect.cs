@@ -29,7 +29,7 @@ public class DeleteEffect: Effect<DeleteMemberAction>
             await _apiService.WorkspaceMembershipDeleteAsync(action.Membership.Id);
             dispatcher.Dispatch(new LoadListAction(true));
             
-            await _notificationService.ShowInfo("The member was deleted");
+            _notificationService.ShowInfo("The member was deleted");
         }
         catch (Exception e)
         {

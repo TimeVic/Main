@@ -44,7 +44,7 @@ public class TaskDto : IResponse
 
     public string FormattedId
     {
-        get => $"#{TaskId}";
+        get => string.IsNullOrEmpty(ExternalTaskId) ? $"#{TaskId}" : ExternalTaskId;
     }
 
     public DateTime? CalculatedStartTime

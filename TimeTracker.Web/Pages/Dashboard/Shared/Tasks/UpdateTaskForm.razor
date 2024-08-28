@@ -6,165 +6,154 @@
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks.Comments
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TimeTracker.Api.Shared.Dto.Entity.Task
-@using MudBlazor
+@using TimeTracker.Web.Shared.Components.Form
+@using TimeTracker.Web.Shared.Components.Storage
 
 @inherits BaseReactiveComponent
 
-<MudForm
+<EditForm
     @ref="_form"
-    @bind-IsValid="_isValid">
+    Model="_model">
+    <DataAnnotationsValidator/>
+    <FluentValidationSummary/>
 
-    <MudPaper Class="pa-4" Outlined="true">
-        <MudStack Row="true" AlignItems="MudBlazor.AlignItems.Center">
-            <TaskIdBadge IsLink="true" InternalTask="@Task"/>
+    <FluentStack Orientation="Orientation.Horizontal">
 
-            <MudSpacer/>
-            <TimeEntryForm
-                InternalTask="@Task"
-                IsShort="true"/>
-            <MudSpacer/>
-            <MudButton
-                OnClick="@SubmitForm"
-                Variant="Variant.Filled"
-                Disabled="@(!_form.IsValid || _tasksState.Value.IsTaskSaving)"
-                Color="Color.Primary">
-                Save
-            </MudButton>
-        </MudStack>
+        <TaskIdBadge IsLink="true" InternalTask="@Task"/>
+        <FluentSpacer/>
+        <TimeEntryForm
+            InternalTask="@Task"
+            IsShort="@true"/>
+        <FluentSpacer/>
+        <FluentCheckbox
+            Disabled="_tasksState.Value.IsTaskSaving"
+            Label="Archived"
+            Value="@_model.IsArchived"
+            ValueChanged="@OnArchivedChanged"/>
+    </FluentStack>
+    <FluentSpacer/>
+    <FluentStack Orientation="Orientation.Vertical" Class="pt-2">
+        <FluentTextField
+            Class="w-100 mt-2"
+            Value="@_model.Title"
+            ValueChanged="@OnChangeTitle"
+            Placeholder="Title"></FluentTextField>
 
-        <MudGrid>
-            <MudItem xs="12">
-                <MudTextField
-                    T="string"
-                    For="() => _model.Title"
-                    @bind-Value="_model.Title"
-                    Placeholder="Title"/>
-            </MudItem>
-        </MudGrid>
+        <FluentStack Orientation="Orientation.Horizontal" Class="pt-2">
+            <div>
+                <MembersDropDown
+                    Label="Assigned"
+                    Clearable="false"
+                    AllowedIds="@_allowedUserIds"
+                    UserId="@_model.UserId"
+                    SelectedItemChanged="@(OnChangedAssigned)"/>
+            </div>
+            <FluentSpacer/>
+            <div>
+                <EnumDropDown
+                    Label="Status"
+                    TItem="TaskStatus"
+                    AllowClear="false"
+                    @bind-Value="_model.Status"
+                    OnChanged="SubmitForm"
+                    Name="Status"/>
+            </div>
+            <FluentSpacer/>
+            <div>
+                <EnumDropDown
+                    TItem="TaskPriority"
+                    Label="Priority"
+                    AllowClear="false"
+                    @bind-Value="_model.Priority"
+                    OnChanged="SubmitForm"/>
+            </div>
+        </FluentStack>
 
-        <MudGrid>
-            <MudItem xs="6">
-                <MudStack Spacing="0">
-                    <MembersDropDown
-                        Placeholder="Assigned"
-                        Clearable="false"
-                        AllowedIds="@_allowedUserIds"
-                        UserId="@_model.UserId"
-                        SelectedItemChanged="@(OnChangedAssigned)"/>
+        <FluentStack Orientation="Orientation.Horizontal" Class="pt-2">
 
-                    <EnumDropDown
-                        Placeholder="Status"
-                        TItem="TaskStatus"
-                        AllowClear="false"
-                        @bind-Value="_model.Status"
-                        OnChanged="SubmitForm"
-                        Name="Status"/>
+            <div>
+                <FluentLabel>Start Time</FluentLabel>
+                <FluentStack Orientation="Orientation.Horizontal">
+                    <FluentDatePicker
+                        DisabledDateFunc="DisabledStartTime"
+                        Value="@_model.StartTime"
+                        ValueChanged="@(OnStartDateChanged)"/>
+                    <FluentTimePicker
+                        Value="@_model.StartTime"
+                        ValueChanged="@(OnStartDateChanged)"/>
+                </FluentStack>
+            </div>
+            <FluentSpacer/>
+            <div>
+                <FluentLabel>Reminder</FluentLabel>
+                <FluentStack Orientation="Orientation.Horizontal">
+                    <FluentDatePicker
+                        Value="@_model.ReminderTime"/>
+                    <FluentTimePicker
+                        Value="@_model.ReminderTime"
+                        ValueChanged="@(date => OnReminderTimeChanged(date?.TimeOfDay))"/>
+                </FluentStack>
+            </div>
+        </FluentStack>
 
-                    <EnumDropDown
-                        TItem="TaskPriority"
-                        AllowClear="false"
-                        @bind-Value="_model.Priority"
-                        OnChanged="SubmitForm"
-                        Name="Priority"/>
-                </MudStack>
-            </MudItem>
-            <MudItem xs="6">
-                <MudStack Spacing="2">
+        <FluentStack Orientation="Orientation.Horizontal">
+            <div class="mt-2">
+                <FluentLabel>End Time</FluentLabel>
+                <FluentStack Orientation="Orientation.Horizontal">
+                    <FluentDatePicker
+                        DisabledDateFunc="DisabledEndTime"
+                        Value="@_model.EndTime"
+                        ValueChanged="@(OnEndDateChanged)"/>
+                    <FluentTimePicker
+                        Value="@_model.EndTime"
+                        ValueChanged="@(OnEndDateChanged)"/>
+                </FluentStack>
+            </div>
+            
+            <FluentSpacer/>
+        </FluentStack>
 
-                    <MudStack
-                        Spacing="0"
-                        Justify="Justify.SpaceBetween"
-                        Row="true">
-                        <MudDatePicker
-                            @ref="_startDatePicker"
-                            Clearable="true"
-                            Class="mr-2"
-                            Date="_model.StartTime"
-                            DateChanged="OnStartDateChanged"
-                            Validation="ValidateStartTime"
-                            ErrorText="Start Time can not be more than End Time"
-                            Label="Start Date"/>
-                        <MudDatePicker
-                            @ref="_endDatePicker"
-                            Clearable="true"
-                            Class="mr-2"
-                            Date="_model.EndTime"
-                            DateChanged="OnEndDateChanged"
-                            Validation="ValidateEndTime"
-                            ErrorText="End Time can not be less than Start Time"
-                            Label="Due Date"/>
-                    </MudStack>
+        <FluentLabel Class="mt-2">Tags</FluentLabel>
+        <TagsDropDown
+            Value="@_model.TagIds"
+            ValueChanged="@(OnTagsChanged)"/>
 
-                    <MudStack
-                        Spacing="0"
-                        Justify="Justify.SpaceBetween"
-                        Row="true">
+        <FluentLabel Class="mt-2">Description</FluentLabel>
+        <MarkdownEdit
+            Label="Description"
+            Value="@_model.Description"
+            ValueChanged="@OnDescriptionChanged"
+            Placeholder="Insert your task details here"/>
 
-                        <MudDatePicker
-                            @ref="_reminderDatePicker"
-                            Clearable="true"
-                            Class="mr-2"
-                            @bind-Date="_model.ReminderTime"
-                            Placeholder="Reminder Date"/>
-                        <MudTimePicker
-                            @ref="_reminderTimePicker"
-                            Clearable="true"
-                            Disabled="@(!_model.ReminderTime.HasValue)"
-                            Time="_model.ReminderTime?.TimeOfDay"
-                            TimeChanged="OnReminderTimeChanged"
-                            Placeholder="Reminder Time"/>
-                    </MudStack>
+    </FluentStack>
 
-                    <MudCheckBox
-                        T="bool"
-                        Label="Archived"
-                        @bind-Value="@(_model.IsArchived)"/>
-                </MudStack>
-            </MudItem>
-        </MudGrid>
+    <FluentTabs Class="mt-3">
+        <FluentTab
+            Label="Comments"
+            Icon="@(new Icons.Regular.Size24.Comment())"
+            Id="tab-1"
+            Class="pt-2">
+            <TaskCommentsBlock Task="Task"/>
+        </FluentTab>
 
-        <MudGrid>
-            <MudItem xs="12">
-                <TagsDropDown
-                    Value="@_model.TagIds"
-                    ValueChanged="@(OnTagsChanged)"/>
-            </MudItem>
-        </MudGrid>
-
-        <MudGrid>
-            <MudItem xs="12">
-                <MarkdownEdit
-                    Class="mt-3"
-                    Label="Description"
-                    @bind-Value="@_model.Description"
-                    Placeholder="Insert your task details here"/>
-            </MudItem>
-        </MudGrid>
-    </MudPaper>
-</MudForm>
-
-<MudTabs
-    Rounded="true"
-    Outlined="true"
-    ApplyEffectsToContainer="true"
-    Class="mt-4 mb-4"
-    PanelClass="pa-6">
-    <MudTabPanel Text="Comments">
-        <TaskCommentsBlock Task="Task"/>
-    </MudTabPanel>
-    <MudTabPanel Text="@_tabLabelAttachments">
-        <FileUploader
-            EntityId="@Task.TaskId"
-            FileUploaded="OnFileUploaded"
-            EntityType="StorageEntityType.Task"
-            FileType="StoredFileType.Attachment"/>
+        <FluentTab
+            Label="@_tabLabelAttachments"
+            Icon="@(new Icons.Regular.Size24.ArrowUpload())"
+            Id="tab-2"
+            Class="pt-2">
+            <FileUploader
+                EntityId="@Task.TaskId"
+                FileUploaded="OnFileUploaded"
+                EntityType="StorageEntityType.Task"
+                FileType="StoredFileType.Attachment"/>
 
 
-        <FilesList
-            Class=" mt-2"
-            EntityId="@Task.TaskId"
-            EntityType="StorageEntityType.Task"
-            ListUpdated="AttachmentsListUpdated"
-            Files="@Task.Attachments"/>
-    </MudTabPanel>
-</MudTabs>
+            <FilesList
+                Class=" mt-2"
+                EntityId="@Task.TaskId"
+                EntityType="StorageEntityType.Task"
+                ListUpdated="AttachmentsListUpdated"
+                Files="@Task.Attachments"/>
+        </FluentTab>
+    </FluentTabs>
+</EditForm>

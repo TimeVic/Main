@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker;
 using TimeTracker.Web.Store.GoalsTracker;
@@ -10,12 +10,12 @@ namespace TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts;
 public partial class AddGoalModalForm
 {
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    FluentDialog MudDialog { get; set; }
 
     private CreateItemRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
-    private MudForm _form;
+    private FluentEditForm _form;
 
     protected override async Task OnInitializedAsync()
     {
@@ -24,8 +24,7 @@ public partial class AddGoalModalForm
 
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form.EditContext.Validate())
         {
             return;
         }

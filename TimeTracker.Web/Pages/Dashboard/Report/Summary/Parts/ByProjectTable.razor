@@ -3,7 +3,6 @@
 @using Fluxor
 @using TimeTracker.Web.Store.Client
 @using TimeTracker.Web.Store.Project
-@using MudBlazor
 
 @code {
 
@@ -11,19 +10,8 @@
     public ICollection<SummaryByProjectsReportItemDto> Items { get; set; } = new List<SummaryByProjectsReportItemDto>();
 }
 
-<MudTable
-    Items="@Items" 
-    Hover="true" 
-    Breakpoint="Breakpoint.Sm" 
-    LoadingProgressColor="Color.Info">
-    <HeaderContent>
-        <MudTh>Project</MudTh>
-        <MudTh>Duration</MudTh>
-        <MudTh>Amount</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Project">@(context.ProjectName ?? "- No project -")</MudTd>
-        <MudTd DataLabel="Duration">@context.Duration.ToReadableShortString()</MudTd>
-        <MudTd DataLabel="Amount">@context.Amount.ToMoneyFormat()</MudTd>
-    </RowTemplate>
-</MudTable>
+<FluentDataGrid TGridItem="SummaryByProjectsReportItemDto" Items="@Items.AsQueryable()">
+    <PropertyColumn Title="Project" Property="@(p => p.ProjectName ?? "- No project -")" Sortable="false"/>
+    <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/>
+    <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/>
+</FluentDataGrid>

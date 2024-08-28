@@ -1,6 +1,4 @@
-﻿@using MudBlazor
-
-@inherits BaseReactiveComponent
+﻿@inherits BaseReactiveComponent
 
 <div class="w-file-upload @Class">
     <InputFile 
@@ -9,11 +7,12 @@
         OnChange="@OnInputFileChange" 
         multiple 
         accept="@_acceptTypes" />
-    <MudButton
-        StartIcon="@Icons.Material.Filled.Upload"
-        Color="Color.Default"
-        OnClick="OnClickSelectFile"
-        Disabled="_isLoading">
+    <FluentButton
+        IconEnd="@(new Icons.Filled.Size24.SelectObject())"
+        Class="mr-3"
+        Appearance="Appearance.Accent"
+        Disabled="_isLoading"
+        OnClick="@OnClickSelectFile">
         @_buttonLabel
-    </MudButton>
+    </FluentButton>
 </div>

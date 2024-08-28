@@ -96,7 +96,7 @@ public partial class FilesList: IDisposable
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            await _toastService.ShowError(e.Message);
+            _toastService.ShowError(e.Message);
         }
     }
 

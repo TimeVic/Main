@@ -1,161 +1,44 @@
 ﻿@using TimeTracker.Web.Store.Auth
-@using MudBlazor
 @using TimeTracker.Business.Extensions
 
 @inherits BaseReactiveComponent
 
-<MudDrawer @bind-Open="@_uiState.Value.IsMainMenuOpened" Elevation="1">
-    <MudDrawerHeader>
-        <MudLink Href="/">
-            <MudImage
-                Src="/img/logo/black/clock-256.png"
-                Width="28"
-                Alt="Mony the dog"
-                Elevation="25"/>
-        </MudLink>
-        <MudText
-            Class="ml-2"
-            Typo="Typo.h6"
-            Color="Color.Inherit">
-            TimeVic
-        </MudText>
-    </MudDrawerHeader>
-    <MudNavMenu Class="mud-width-full">
-        <MudNavLink
-            Href="@SiteUrl.Dashboard_TimeEntry"
-            Match="NavLinkMatch.All"
-            Icon="@Icons.Material.Filled.AccessTime">
-            My Time Entries
-        </MudNavLink>
-        <MudNavLink
-            Href="@SiteUrl.Dashboard_OverdueTasks"
-            Match="NavLinkMatch.All"
-            Icon="@Icons.Material.Filled.ViewTimeline">
-            Overdue Tasks
-        </MudNavLink>
-        <MudNavLink
-            Href="@SiteUrl.Dashboard_GoalsTracker"
-            Match="NavLinkMatch.All"
-            Icon="@Icons.Material.Filled.ChecklistRtl">
-            Goals Tracker
-        </MudNavLink>
-        @* <MudNavLink *@
-        @*     Href="@SiteUrl.Dashboard_Dashboard" *@
-        @*     Icon="@Icons.Material.Filled.Dashboard"> *@
-        @*     Dashboard *@
-        @* </MudNavLink> *@
-        @* <MudNavLink *@
-        @*     Href="@SiteUrl.Dashboard_Calendar" *@
-        @*     Icon="@Icons.Material.Filled.CalendarMonth"> *@
-        @*     Calendar *@
-        @* </MudNavLink> *@
-        <MudNavLink
-            Href="@SiteUrl.Dashboard_Reports_Summary"
-            Match="NavLinkMatch.All"
-            Icon="@Icons.Material.Filled.Summarize">
-            Summary
-        </MudNavLink>
-        <MudNavGroup Title="Tasks" Icon="@Icons.Material.Filled.Task" Expanded="true">
-            @{
-                var projectsWithoutClient = GetClientProjects(null);
-            }
-            @if (projectsWithoutClient.Any())
-            {
-                foreach (var project in GetClientProjects(null))
-                {
-                    <MudNavLink
-                        Href="@GetTasksListUrl(project)"
-                        Match="NavLinkMatch.All"
-                        IconColor="Color.Default">
-                        @project.Name.TruncateAndAddDots(23)
-                    </MudNavLink>
-                }
-            }
-            @foreach (var client in Clients)
-            {
-                var projects = GetClientProjects(client);
-                foreach (var project in projects)
-                {
-                    <MudNavLink
-                        Href="@GetTasksListUrl(project)"
-                        Match="NavLinkMatch.All"
-                        IconColor="Color.Default">
-                        @project.Name.TruncateAndAddDots(23)
-                        <br/>
-                        <MudText Typo="Typo.subtitle2">@client.Name</MudText>
-                    </MudNavLink>
-                }
-            }
-        </MudNavGroup>
+<FluentNavLink Href="@SiteUrl.Dashboard_TimeEntry" Text="My Time Entries">My Time Entries</FluentNavLink>
+@* <FluentNavLink Href="@SiteUrl.Dashboard_OverdueTasks" Text="Overdue Tasks">Overdue Tasks</FluentNavLink> *@
+@* <FluentNavLink Href="@SiteUrl.Dashboard_GoalsTracker" Text="Goals Tracker">Goals Tracker</FluentNavLink> *@
+<FluentNavLink Href="@SiteUrl.Dashboard_Reports_Summary" Text="Summary">Summary</FluentNavLink>
+<FluentNavLink Href="@SiteUrl.Dashboard_Tasks_Main" Text="Tasks">Tasks</FluentNavLink>
+<FluentNavLink Href="@SiteUrl.Dashboard_Payments" Text="Payments">Payments</FluentNavLink>
 
-        <MudNavLink
-            Href="@SiteUrl.Dashboard_Payments"
-            Match="NavLinkMatch.All"
-            Icon="@Icons.Material.Filled.Payment">
-            Payments
-        </MudNavLink>
+<FluentNavGroup Title="" Icon="@(new Icons.Regular.Size20.EarthLeaf())">
+    <TitleTemplate>
+        <h3>Reports</h3></TitleTemplate>
+    <ChildContent>
+        <FluentNavLink Href="@SiteUrl.Dashboard_Reports_Payments" Icon="@(new Icons.Regular.Size20.LeafOne())">Payments</FluentNavLink>
+        <FluentNavLink Href="@SiteUrl.Dashboard_Reports_TimeEntries" Icon="@(new Icons.Regular.Size20.LeafOne())">Detailed</FluentNavLink>
+    </ChildContent>
+</FluentNavGroup>
 
-        <MudNavGroup
-            Title="Reports"
-            Icon="@Icons.Material.Filled.Analytics"
-            Expanded="true">
-            <MudNavLink
-                Href="@SiteUrl.Dashboard_Reports_Payments"
-                Match="NavLinkMatch.All"
-                Icon="@Icons.Material.Filled.Payment"
-                IconColor="Color.Default">
-                Payments
-            </MudNavLink>
-            <MudNavLink
-                Href="@SiteUrl.Dashboard_Reports_TimeEntries"
-                Match="NavLinkMatch.All"
-                Icon="@Icons.Material.Filled.AccessTimeFilled"
-                IconColor="Color.Default">
-                Detailed
-            </MudNavLink>
-        </MudNavGroup>
-        <MudNavGroup
-            Title="Workspace"
-            Icon="@Icons.Material.Filled.Workspaces"
-            Expanded="true">
-            <MudNavLink
-                Href="@SiteUrl.Dashboard_Projects"
-                Match="NavLinkMatch.All"
-                Icon="@Icons.Material.Filled.Apps"
-                IconColor="Color.Default">
-                Projects
-            </MudNavLink>
-            <MudNavLink
-                Href="@SiteUrl.Dashboard_Clients"
-                Match="NavLinkMatch.All"
-                Icon="@Icons.Material.Filled.People"
-                IconColor="Color.Default">
-                Clients
-            </MudNavLink>
-            <MudNavLink
-                Href="@SiteUrl.Dashboard_Tags"
-                Match="NavLinkMatch.All"
-                Icon="@Icons.Material.Filled.Tag"
-                IconColor="Color.Default">
-                Tags
-            </MudNavLink>
-            @if (AuthState.Value.IsRoleAdmin)
-            {
-                <MudNavLink
-                    Href="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)"
-                    Icon="@Icons.Material.Filled.SupervisedUserCircle"
-                    Match="NavLinkMatch.All"
-                    IconColor="Color.Default">
-                    Members
-                </MudNavLink>
-            }
-            <MudNavLink
-                Href="@SiteUrl.Dashboard_Integrations"
-                Icon="@Icons.Material.Filled.Apps"
-                Match="NavLinkMatch.All"
-                IconColor="Color.Default">
-                Integrations
-            </MudNavLink>
-        </MudNavGroup>
-    </MudNavMenu>
-</MudDrawer>
+<FluentNavGroup Title="" Icon="@(new Icons.Regular.Size20.EarthLeaf())">
+    <TitleTemplate>
+        <h3>Workspace</h3></TitleTemplate>
+    <ChildContent>
+        <FluentNavLink Href="@SiteUrl.Dashboard_Projects" Icon="@(new Icons.Regular.Size20.LeafOne())">Projects</FluentNavLink>
+        <FluentNavLink Href="@SiteUrl.Dashboard_Clients" Icon="@(new Icons.Regular.Size20.LeafOne())">Clients</FluentNavLink>
+        <FluentNavLink Href="@SiteUrl.Dashboard_Tags" Icon="@(new Icons.Regular.Size20.LeafOne())">Tags</FluentNavLink>
+        @if (AuthState.Value.IsRoleAdmin)
+        {
+            <FluentNavLink Href="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)" Icon="@(new Icons.Regular.Size20.LeafOne())">Members</FluentNavLink>
+        }
+        <FluentNavLink Href="@SiteUrl.Dashboard_Integrations" Icon="@(new Icons.Regular.Size20.LeafOne())">Integrations</FluentNavLink>
+    </ChildContent>
+</FluentNavGroup>
+
+<FluentNavGroup Title="" Icon="@(new Icons.Regular.Size20.EarthLeaf())">
+    <TitleTemplate>
+        <h3>Reports</h3></TitleTemplate>
+    <ChildContent>
+        <FluentNavLink Icon="@(new Icons.Regular.Size20.LeafOne())">Item 3.1</FluentNavLink>
+        <FluentNavLink Icon="@(new Icons.Regular.Size20.LeafTwo())">Item 3.2</FluentNavLink>
+    </ChildContent>
+</FluentNavGroup>

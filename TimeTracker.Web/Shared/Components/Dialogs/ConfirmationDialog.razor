@@ -1,28 +1,33 @@
-﻿@using MudBlazor
+﻿@implements IDialogContentComponent<ConfirmationDialog.Parameters>
 
-<MudDialog>
-    <DialogContent>
-        @Message
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton Color="@ButtonColor" Variant="MudBlazor.Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
-    </DialogActions>
-</MudDialog>
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@Submit">Save</FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" OnClick="@Cancel">Cancel</FluentButton>
+</FluentDialogFooter>
+
+@* Body *@
+<FluentDialogBody>
+    @Content.Message
+</FluentDialogBody>
 
 @code {
+
+    public class Parameters
+    {
+        public required string Message { get; set; }
+    
+        public required Color ButtonColor { get; set; }
+    
+        public required string ButtonText { get; set; }
+    }
+
     [CascadingParameter]
-    MudDialogInstance MudDialog { get; set; }
+    FluentDialog Dialog { get; set; }
 
     [Parameter]
-    public string Message { get; set; }
+    public Parameters Content { get; set; }
     
-    [Parameter]
-    public MudBlazor.Color ButtonColor { get; set; }
-    
-    [Parameter]
-    public string ButtonText { get; set; }
-    
-    void Submit() => MudDialog.Close(DialogResult.Ok(true));
-    void Cancel() => MudDialog.Cancel();
+    void Submit() => Dialog.CloseAsync(DialogResult.Ok(true));
+    void Cancel() => Dialog.CloseAsync();
 }

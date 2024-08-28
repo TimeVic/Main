@@ -21,7 +21,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="Blazor-ApexCharts" Version="3.3.0" />
+        <PackageReference Include="Blazor-ApexCharts" Version="3.4.0" />
         <PackageReference Include="blazor-dragdrop" Version="2.6.1" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
         <PackageReference Include="Fluxor.Blazor.Web" Version="6.0.0" />
@@ -29,8 +29,9 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.6" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.6" PrivateAssets="all" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.6" />
+        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.9.3" />
+        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.9.3" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.0" />
-        <PackageReference Include="MudBlazor" Version="6.20.0" />
         <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
         <PackageReference Include="System.Reactive.Linq" Version="6.0.1" />
         <PackageReference Include="Toolbelt.Blazor.HttpClientInterceptor" Version="10.2.0" />
@@ -59,6 +60,28 @@
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </Content>
       <Content Remove="Pages\Dashboard\Calendar\CalendarPage.razor" />
+      <Content Remove="Shared\Components\Form\TimeInput.razor" />
+      <Content Remove="Shared\Components\Form\YesNoDropDown.razor" />
+      <Content Remove="Shared\Components\Layout\WorkspaceMenu.razor" />
+      <Content Remove="Pages\Landing\User\Password\ResetPassword.razor" />
+      <Content Remove="Pages\Landing\User\Password\ChangePassword.razor" />
+      <Content Remove="Store\GoalsTracker\**" />
+      <Content Remove="Pages\Landing\User\Password\**" />
+      <Content Remove="Pages\Landing\User\Registration\**" />
+      <Content Remove="Pages\Dashboard\Dashboard\**" />
+      <Content Remove="Pages\Dashboard\GoalsTracker\**" />
+      <Content Remove="Pages\Dashboard\Integrations\**" />
+      <Content Remove="Pages\Dashboard\Members\**" />
+      <Content Remove="Pages\Dashboard\Project\**" />
+      <Content Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
+      <Content Remove="Pages\Dashboard\Tag\**" />
+      <Content Remove="Pages\Dashboard\Workspace\**" />
+      <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css" />
+      <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css.map" />
+      <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.less" />
+      <Content Include="Pages\Dashboard\Tasks\Parts\TasksTable.razor.less" />
+      <Content Include="Shared\Components\Form\MarkdownEdit.razor.less" />
+      <Content Include="Shared\Components\Storage\FileUploader.razor.less" />
     </ItemGroup>
 
     <ItemGroup>
@@ -67,9 +90,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\Dashboard\Dashboard\Parts\" />
+      <Folder Include="Shared\Components\Layout\" />
       <Folder Include="Store\Dashboard\Effects\" />
       <Folder Include="wwwroot\img\logo\black" />
+      <Folder Include="wwwroot\libraries\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -78,5 +102,211 @@
     <ItemGroup>
       <Compile Remove="Services\UI\DragAndDropService.cs" />
       <Compile Remove="Pages\Dashboard\Calendar\CalendarPage.razor.cs" />
+      <Compile Remove="Shared\Components\Form\TimeInput.razor.cs" />
+      <Compile Remove="Shared\Components\Form\YesNoDropDown.razor.cs" />
+      <Compile Remove="Shared\Components\Layout\WorkspaceMenu.razor.cs" />
+      <Compile Remove="Pages\Landing\User\Password\ResetPassword.razor.cs" />
+      <Compile Remove="Pages\Landing\User\Password\ChangePassword.razor.cs" />
+      <Compile Remove="Services\UI\ModalDialogProviderService.GoalsTracker.cs" />
+      <Compile Remove="Services\UI\ModalDialogProviderService.NotificationsCenter.cs" />
+      <Compile Remove="Services\UI\ModalDialogProviderService.Projects.cs" />
+      <Compile Remove="Services\UI\ModalDialogProviderService.Tags.cs" />
+      <Compile Remove="Services\UI\ModalDialogProviderService.WorkspaceMembership.cs" />
+      <Compile Remove="Store\GoalsTracker\**" />
+      <Compile Remove="Pages\Landing\User\Password\**" />
+      <Compile Remove="Pages\Landing\User\Registration\**" />
+      <Compile Remove="Pages\Dashboard\Dashboard\**" />
+      <Compile Remove="Pages\Dashboard\GoalsTracker\**" />
+      <Compile Remove="Pages\Dashboard\Integrations\**" />
+      <Compile Remove="Pages\Dashboard\Members\**" />
+      <Compile Remove="Pages\Dashboard\Project\**" />
+      <Compile Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
+      <Compile Remove="Pages\Dashboard\Tag\**" />
+      <Compile Remove="Pages\Dashboard\Workspace\**" />
+    <Compile Remove="Pages\Dashboard\Shared\Components\Storage\FileView.razor.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Store\GoalsTracker\**" />
+      <EmbeddedResource Remove="Pages\Landing\User\Password\**" />
+      <EmbeddedResource Remove="Pages\Landing\User\Registration\**" />
+      <EmbeddedResource Remove="Pages\Dashboard\Dashboard\**" />
+      <EmbeddedResource Remove="Pages\Dashboard\GoalsTracker\**" />
+      <EmbeddedResource Remove="Pages\Dashboard\Integrations\**" />
+      <EmbeddedResource Remove="Pages\Dashboard\Members\**" />
+      <EmbeddedResource Remove="Pages\Dashboard\Project\**" />
+      <EmbeddedResource Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
+      <EmbeddedResource Remove="Pages\Dashboard\Tag\**" />
+      <EmbeddedResource Remove="Pages\Dashboard\Workspace\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Shared\Components\Form\MarkdownEdit.razor.less" />
+      <None Remove="Shared\Components\Form\MarkdownEdit.razor.css.map" />
+      <None Remove="Shared\Components\Form\ProjectsMultipleDropDown.razor.less" />
+      <None Remove="Shared\Components\Form\ProjectsMultipleDropDown.razor.css.map" />
+      <None Remove="Shared\Components\Form\TimeInput.razor.less" />
+      <None Remove="Shared\Components\Form\TimeInput.razor.css.map" />
+      <None Remove="Shared\Components\Storage\FileUploader.razor.less" />
+      <None Remove="Shared\Components\Storage\FileUploader.razor.css.map" />
+      <None Remove="Store\GoalsTracker\**" />
+      <None Remove="Pages\Landing\User\Password\**" />
+      <None Remove="Pages\Landing\User\Registration\**" />
+      <None Remove="Pages\Dashboard\Dashboard\**" />
+      <None Remove="Pages\Dashboard\GoalsTracker\**" />
+      <None Remove="Pages\Dashboard\Integrations\**" />
+      <None Remove="Pages\Dashboard\Members\**" />
+      <None Remove="Pages\Dashboard\Project\**" />
+      <None Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
+      <None Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css" />
+      <None Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.less" />
+      <None Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css.map" />
+      <None Remove="Pages\Dashboard\Tag\**" />
+      <None Remove="Pages\Dashboard\Workspace\**" />
+      <None Remove="Shared\Components\Form\TimeInput.razor.css" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Client\Parts\List\AddClientModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Client\Parts\List\ClientsList.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Dashboard\Index.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\GoalsTracker\GoalsTrackerPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\GoalsTracker\Parts\AddGoalModalForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\GoalsTracker\Parts\ChangePositionModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\GoalsTracker\Parts\GoalsTrackerTable.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\GoalsTracker\Parts\UpdateGoalModalForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Integrations\IntegrationsPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Integrations\Parts\ClickUpSettingsForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Integrations\Parts\JiraSettingsForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Integrations\Parts\RedmineSettingsForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Members\MembersPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Members\Parts\List\AddMemberModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Members\Parts\List\MembersList.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Members\Parts\MemberAccessModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Payment\Parts\AddPaymentModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Payment\Parts\List\PaymentsList.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Payment\Parts\UpdatePaymentModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Project\IndexPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Project\Parts\List\AddProjectModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Project\Parts\List\ProjectsList.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Project\Parts\List\UpdateProjectModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\PaymentReportPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByClientTable.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByDateTable.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByMonthTable.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByProjectTable.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByUserTable.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByWeekTable.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\FilterForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\SummaryInfoBlock.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\SummaryReportPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\TimeEntry\Parts\FilterForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\TimeEntry\TimeEntryPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\InitializationContainer.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\Layout.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\NavMenu.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\NotificationCenter\NotificationBadgeButton.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\NotificationCenter\NotificationCenterModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\NotificationCenter\Parts\ReminderCard.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\Tasks\AddTaskModalForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\Tasks\Comments\EditCommentForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\Tasks\Comments\TaskCommentsBlock.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\Tasks\TaskCard.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\Tasks\TaskIdBadge.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\Tasks\UpdateTaskForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\Tasks\UpdateTaskModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryEditModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryListModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tag\Parts\AddTagModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tag\Parts\TagsList.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tag\Parts\UpdateTagModal.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tag\TagsListPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tasks\OverdueTasksPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tasks\Parts\TasksFilterForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tasks\Parts\TasksGrid.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tasks\Parts\TasksListTree.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tasks\Parts\TasksList\AddTasksListModalForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tasks\Parts\TasksList\UpdateTasksListModalForm.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tasks\Parts\TasksTable.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tasks\TaskPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Tasks\TasksPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\TimeEntry\Parts\DurationField.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\TimeEntry\Parts\TimeCounterField.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\TimeEntry\TimeEntryPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Workspace\WorkspaceChangingPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Dashboard\Workspace\WorkspacesPage.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\ClientsDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\EnumDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\MarkdownEdit.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\MembersDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\MultipleUsersDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\ProjectsDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\TagsDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\TaskListsDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\TimeInput.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\YesNoDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Storage\FilesList.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Storage\FileUploader.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Storage\FileView.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Landing\User\Password\ChangePassword.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Landing\User\Password\ResetPassword.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Landing\User\Registration\Step1.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Landing\User\Registration\Step2.razor" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-grid.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-grid.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-grid.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-grid.min.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-grid.rtl.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-grid.rtl.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-grid.rtl.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-grid.rtl.min.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-reboot.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-reboot.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-reboot.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-reboot.min.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-reboot.rtl.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-reboot.rtl.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-reboot.rtl.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-reboot.rtl.min.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-utilities.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-utilities.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-utilities.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-utilities.min.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-utilities.rtl.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-utilities.rtl.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-utilities.rtl.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap-utilities.rtl.min.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap.min.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap.rtl.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap.rtl.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap.rtl.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\css\bootstrap.rtl.min.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.bundle.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.bundle.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.bundle.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.bundle.min.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.esm.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.esm.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.esm.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.esm.min.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.min.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\js\bootstrap.min.js.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\FONT-LICENSE" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\css\open-iconic-bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.eot" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.otf" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.ttf" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\font\fonts\open-iconic.woff" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\ICON-LICENSE" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\README.md" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\radzen\fluent-base.min.css" />
     </ItemGroup>
 </Project>

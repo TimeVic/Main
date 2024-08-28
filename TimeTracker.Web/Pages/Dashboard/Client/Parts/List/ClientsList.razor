@@ -1,42 +1,38 @@
-﻿@inherits BaseReactiveComponent
+﻿@using TimeTracker.Api.Shared.Dto.Entity
+@inherits BaseReactiveComponent
 
-@using TimeTracker.Api.Shared.Dto.Entity
-@using TimeTracker.Business.Common.Constants
-@using MudBlazor
-
-<MudTable
-    Class="mt-2 w-100"
-    Items="@_state.Value.List"
-    Hover="true"
-    Dense="true"
-    Outlined="true"
-    Breakpoint="Breakpoint.Sm"
-    Loading="@_state.Value.IsListLoading"
-    LoadingProgressColor="Color.Info">
-
-    <ToolBarContent>
-        <MudText Typo="Typo.h6">Clients</MudText>
-        <MudSpacer/>
-        <MudButton
-            OnClick="@OnAdd"
+<FluentStack Orientation="Orientation.Vertical" Class="p-2">
+    <FluentToolbar Class="w-100">
+        <FluentButton
+            IconStart="@(new Icons.Regular.Size24.Add())"
+            Appearance="Appearance.Accent"
             Disabled="@(!AuthState.Value.IsRoleAdmin)"
-            StartIcon="@Icons.Material.Filled.Add">
+            OnClick="@OnAdd">
             Add
-        </MudButton>
-    </ToolBarContent>
+        </FluentButton>
+    </FluentToolbar>
 
-    <HeaderContent>
-        <MudTh>Name</MudTh>
-        <MudTh></MudTh>
-    </HeaderContent>
+    <FluentDataGrid
+        TGridItem="ClientDto"
+        Class="w-100"
+        Items="@_state.Value.List.AsQueryable()"
+        ShowHover="true">
 
-    <RowTemplate>
-        <MudTd DataLabel="Project">@context?.Name</MudTd>
-        <MudTd DataLabel="Actions">
-            <MudIconButton
-                Icon="@Icons.Material.Filled.Edit"
-                Disabled="@(!AuthState.Value.IsRoleAdmin || true)"
-                Size="Size.Small"/>
-        </MudTd>
-    </RowTemplate>
-</MudTable>
+        <TemplateColumn
+            Title="Name"
+            Sortable="false">
+            @context?.Name
+        </TemplateColumn>
+
+        <TemplateColumn
+            Title=""
+            Sortable="false">
+
+            <FluentButton
+                IconStart="@(new Icons.Regular.Size24.Edit())"
+                Appearance="Appearance.Lightweight"
+                Disabled="true"
+                OnClick="@OnAdd"/>
+        </TemplateColumn>
+    </FluentDataGrid>
+</FluentStack>

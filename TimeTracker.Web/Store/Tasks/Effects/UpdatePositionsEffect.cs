@@ -46,7 +46,7 @@ public class UpdatePositionsEffect: Effect<UpdatePositionsAction>
         }
         catch (Exception e)
         {
-            await _toastService.ShowError("Task adding error");
+            _toastService.ShowError("Task adding error");
             _logger.LogError(e.Message, e);
         }
     }

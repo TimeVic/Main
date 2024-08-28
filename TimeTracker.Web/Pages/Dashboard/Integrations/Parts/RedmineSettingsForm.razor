@@ -1,22 +1,21 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
 @using Microsoft.AspNetCore.Components
-@using MudBlazor
 
 @inherits BaseReactiveComponent
 
-<MudForm
+<FluentEditForm
     @ref="_form"
     @bind-IsValid="_isValid">
 
     <MudStack Class="pa-4">
-        <MudTextField
+        <FluentTextField
             T="string"
             Name="Security Key"
             InputType="InputType.Url"
             @bind-Value="@_model.Url"
             Placeholder="Url"/>
 
-        <MudTextField
+        <FluentTextField
             T="string"
             Name="Api key"
             InputType="InputType.Password"
@@ -24,13 +23,13 @@
             Placeholder="Api Key"/>
 
         <MudStack Row="true">
-            <MudTextField
+            <FluentTextField
                 T="long"
                 Name="Team Id"
                 @bind-Value="@_model.RedmineUserId"
                 Placeholder="Redmine User Id"/>
 
-            <MudTextField
+            <FluentTextField
                 T="long"
                 Name="Team Id"
                 @bind-Value="@_model.ActivityId"
@@ -48,4 +47,4 @@
             </MudButton>
         </div>
     </MudStack>
-</MudForm>
+</FluentEditForm>

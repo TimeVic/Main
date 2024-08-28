@@ -2,41 +2,30 @@
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Api.Shared.Dto.Entity.Task
 @using TimeTracker.Business.Common.Constants
-@using MudBlazor
 
 @inherits BaseReactiveComponent
 
-<MudSelect
-    T="long"
-    U="TaskListDto"
+<FluentSelect
+    TOption="TaskListDto"
     Label="@Label"
     Class="@Class"
+    Autofocus="false"
     Disabled="@Disabled"
-    Dense="true"
-    Required="Required"
     Placeholder="@Placeholder"
-    EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
-    For="For"
-    Value="@_selectedId"
+    Items="@_list.ToList()"
+    OptionValue="@(dto => dto?.Id.ToString() ?? string.Empty)"
+    Value="@(_selectedId.ToString())"
     ValueChanged="OnValueChanged"
-    ToStringFunc="ToStringFunc"
-    RequiredError="Task list is required"
-    Variant="MudBlazor.Variant.Text"
-    AnchorOrigin="Origin.BottomCenter">
-    @foreach (var taskList in _list)
-    {
-        <MudSelectItem Value="@taskList.Id">
-            <div>@taskList.Name</div>
-            @if (taskList.Project != null && IsExtendedInfo)
-            {
-                <RadzenText class="mt-2 d-block" TextStyle="TextStyle.Caption">
-                    @taskList.Project?.Name
-                    @if (taskList.Project?.Client != null)
-                    {
-                        <text> - @taskList.Project?.Client.Name</text>
-                    }
-                </RadzenText>
-            }
-        </MudSelectItem>
-    }
-</MudSelect>
+    >
+    <OptionTemplate>
+        @if (context is null)
+        {
+            return;
+        }
+        @context.Name
+        @if (context.Project != null && IsExtendedInfo)
+        {
+            <text> (@context.Project?.Name)</text>
+        }
+    </OptionTemplate>
+</FluentSelect>

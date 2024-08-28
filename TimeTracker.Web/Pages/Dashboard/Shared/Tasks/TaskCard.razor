@@ -2,82 +2,81 @@
 @using TimeTracker.Business.Extensions
 @inherits BaseComponent
 
-<MudPaper
+<FluentCard
     @onclick="@OnClickTask"
-    Elevation="25"
     Style="cursor: pointer"
-    Class="@("pa-2 rounded-lg " + Class)">
-    <MudStack>
-        <MudStack Row="true" Spacing="1">
+    Class="@("pa-2" + Class)">
+    <FluentStack>
+        <FluentStack Orientation="Orientation.Horizontal">
             <TaskIdBadge
                 IsClickable="false"
                 InternalTask="@Task"/>
-            <MudSpacer/>
-            <MudMenu
-                @onclick:stopPropagation="true"
-                AnchorOrigin="Origin.BottomLeft"
-                TransformOrigin="Origin.TopLeft">
-                <ActivatorContent>
-                    <MudChip
-                        Shade="Shade.Lighter"
-                        Size="Size.Small"
-                        Icon="@Icons.Material.Filled.ArrowDropDown"
-                        Color="@Task.Priority.GetChipStyle()"
-                        BadgeStyle="@Task.Priority.GetChipStyle()">
-                        @Task.Priority.GetDisplayName()
-                    </MudChip>
-                </ActivatorContent>
-                <ChildContent>
-                    @foreach (var priority in _priorities)
-                    {
-                        <MudMenuItem
-                            OnClick="() => OnSelectTaskPriority(priority)"
-                            Disabled="@(Task.Priority == priority)">
-                            @priority.GetDisplayName()
-                        </MudMenuItem>
-                    }
-                </ChildContent>
-            </MudMenu>
+            <FluentSpacer/>
+            @* <MudMenu *@
+            @*     @onclick:stopPropagation="true" *@
+            @*     AnchorOrigin="Origin.BottomLeft" *@
+            @*     TransformOrigin="Origin.TopLeft"> *@
+            @*     <ActivatorContent> *@
+            @*         <MudChip *@
+            @*             Shade="Shade.Lighter" *@
+            @*             Size="Size.Small" *@
+            @*             Icon="@Icons.Material.Filled.ArrowDropDown" *@
+            @*             Color="@Task.Priority.GetChipStyle()" *@
+            @*             BadgeStyle="@Task.Priority.GetChipStyle()"> *@
+            @*             @Task.Priority.GetDisplayName() *@
+            @*         </MudChip> *@
+            @*     </ActivatorContent> *@
+            @*     <ChildContent> *@
+            @*         @foreach (var priority in _priorities) *@
+            @*         { *@
+            @*             <MudMenuItem *@
+            @*                 OnClick="() => OnSelectTaskPriority(priority)" *@
+            @*                 Disabled="@(Task.Priority == priority)"> *@
+            @*                 @priority.GetDisplayName() *@
+            @*             </MudMenuItem> *@
+            @*         } *@
+            @*     </ChildContent> *@
+            @* </MudMenu> *@
+            @* *@
+            @* <MudMenu *@
+            @*     @onclick:stopPropagation="true" *@
+            @*     AnchorOrigin="Origin.BottomLeft" *@
+            @*     TransformOrigin="Origin.TopLeft"> *@
+            @*     <ActivatorContent> *@
+            @*         <MudChip *@
+            @*             Shade="Shade.Lighter" *@
+            @*             Size="Size.Small" *@
+            @*             Icon="@Icons.Material.Filled.ArrowDropDown" *@
+            @*             Color="Color.Default"> *@
+            @*             @Task.Status.GetDisplayName() *@
+            @*         </MudChip> *@
+            @*     </ActivatorContent> *@
+            @*     <ChildContent> *@
+            @*         @foreach (var status in _statuses) *@
+            @*         { *@
+            @*             <MudMenuItem *@
+            @*                 OnClick="@(() => OnSelectTaskStatus(status))" *@
+            @*                 Disabled="@(Task.Status == status)"> *@
+            @*                 @status.GetDisplayName() *@
+            @*             </MudMenuItem> *@
+            @*         } *@
+            @*     </ChildContent> *@
+            @* </MudMenu> *@
+        </FluentStack>
 
-            <MudMenu
-                @onclick:stopPropagation="true"
-                AnchorOrigin="Origin.BottomLeft"
-                TransformOrigin="Origin.TopLeft">
-                <ActivatorContent>
-                    <MudChip
-                        Shade="Shade.Lighter"
-                        Size="Size.Small"
-                        Icon="@Icons.Material.Filled.ArrowDropDown"
-                        Color="Color.Default">
-                        @Task.Status.GetDisplayName()
-                    </MudChip>
-                </ActivatorContent>
-                <ChildContent>
-                    @foreach (var status in _statuses)
-                    {
-                        <MudMenuItem
-                            OnClick="@(() => OnSelectTaskStatus(status))"
-                            Disabled="@(Task.Status == status)">
-                            @status.GetDisplayName()
-                        </MudMenuItem>
-                    }
-                </ChildContent>
-            </MudMenu>
-        </MudStack>
-
-        <MudText
+        <FluentLabel
             Style="line-break: anywhere;"
-            Typo="Typo.body2">
+            Typo="Typography.Subject">
             @Task.Title?.Truncate(300)
-        </MudText>
+        </FluentLabel>
 
-        <MudStack Row="true" Justify="Justify.SpaceBetween"> 
+        <FluentStack HorizontalAlignment="HorizontalAlignment.Center"> 
             <TagsBadgesList Tags="@Task.Tags"/>
             
             @if (IsShowTaskList)
             {
-                <MudText Typo="Typo.caption">@_taskListPath</MudText>
+                <FluentLabel Typo="Typography.PaneHeader">@_taskListPath</FluentLabel>
             }
-        </MudStack>
-    </MudStack>
-</MudPaper>
+        </FluentStack>
+    </FluentStack>
+</FluentCard>

@@ -2,10 +2,12 @@
 using System.Reactive.Subjects;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Tasks;
+using TimeTracker.Web.Store.TasksList;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
@@ -13,7 +15,10 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 public partial class TasksGrid: IDisposable
 {
     [Parameter]
-    public TaskStatus Status { get; set; }
+    public ICollection<TaskStatus> Statuses { get; set; }
+ 
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
     
     [Inject]
     public ModalDialogProviderService ModalDialogProviderService { get; set; }
@@ -24,10 +29,12 @@ public partial class TasksGrid: IDisposable
     [Inject]
     public IState<TasksState> TasksState { get; set; }
     
+    [Inject]
+    public IState<TasksListState> _tasksListState { get; set; }
+    
     private readonly Subject<ICollection<TaskDto>> _tasksSubject = new();
     private ICollection<TaskDto> _tasks = new List<TaskDto>();
     private bool _isLoading = true;
-    private long? _taskListId;
 
     protected override void OnInitialized()
     {
@@ -38,7 +45,7 @@ public partial class TasksGrid: IDisposable
         _tasksSubject
             .Select(items =>
             {
-                return items.Where(item => item.Status == Status)
+                return items.Where(item => Statuses.Contains(item.Status))
                     .OrderByDescending(item => item.UpdateTime)
                     .ToArray();
             })
@@ -53,11 +60,6 @@ public partial class TasksGrid: IDisposable
             _isLoading = action.IsLoading;
             StateHasChanged();
         });
-        ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.TasksList.SetSelectedAction>(this, action =>
-        {
-            _taskListId = action.TaskListId;
-            StateHasChanged();
-        });
     }
 
     private void OnTaskStateChanged(object? sender, EventArgs e)
@@ -68,9 +70,16 @@ public partial class TasksGrid: IDisposable
     private async Task OnAddTask()
     {
         await ModalDialogProviderService.ShowAddTaskModal(
-            taskListId: _taskListId,
-            taskStatus: Status
+            taskListId: _tasksListState.Value.SelectedTaskListId,
+            taskStatus: TaskStatus.Backlog
         );
+    }
+    
+    private async Task OnEditTask(TaskDto? task)
+    {
+        if (task == null)
+            return;
+        await ModalDialogProviderService.ShowEditTaskModal(task);
     }
     
     public void Dispose()
