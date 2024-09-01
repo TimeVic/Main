@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Web.Store.Project;
@@ -13,7 +14,7 @@ public partial class AddProjectModal
     private AddRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
-    private FluentEditForm _form;
+    private EditForm _form;
 
     protected override async Task OnInitializedAsync()
     {
@@ -22,8 +23,8 @@ public partial class AddProjectModal
 
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        model.WorkspaceId = AuthState.Value.Workspace!.Id;
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -31,18 +32,17 @@ public partial class AddProjectModal
         _isLoading = true;
         try
         {
-            model.WorkspaceId = AuthState.Value.Workspace.Id;
             var responseDto = await ApiService.ProjectAddAsync(model);
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                await ToastService.ShowInfo("Project added");
+                ToastService.ShowInfo("Project added");
                 OnCloseModal();
             }
         }
         catch (Exception e)
         {
-            await ToastService.ShowError(e.Message);
+            ToastService.ShowError(e.Message);
         }
         finally
         {
@@ -53,6 +53,6 @@ public partial class AddProjectModal
 
     private void OnCloseModal()
     {
-        MudDialog.Close();
+        MudDialog.Hide();
     }
 }

@@ -5,17 +5,14 @@ namespace TimeTracker.Web.Shared.Components.Form;
 public partial class EnumDropDown<TItem>
 {
     [Parameter]
-    public TItem Value
+    public TItem? Value
     {
         get => _value;
         set => _value = value;
     }
     
     [Parameter]
-    public EventCallback<TItem> ValueChanged { get; set; }
-    
-    [Parameter]
-    public EventCallback<TItem> OnChanged { get; set; }
+    public EventCallback<TItem?> ValueChanged { get; set; }
     
     [Parameter]
     public string Placeholder { get; set; } = "Select item";
@@ -42,7 +39,8 @@ public partial class EnumDropDown<TItem>
     public bool Disabled { get; set; }
     
     private List<TItem?> _list;
-    private TItem _value;
+    private TItem? _value;
+    public string? _placeholder => _value is null ? Placeholder : null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,6 +62,5 @@ public partial class EnumDropDown<TItem>
             _value = default;
         }
         ValueChanged.InvokeAsync(_value);
-        OnChanged.InvokeAsync(_value);
     }
 }

@@ -1,7 +1,4 @@
-﻿@using Newtonsoft.Json
-@using TimeTracker.Api.Shared.Dto.Entity
-@using TimeTracker.Api.Shared.Dto.Entity.Task
-@using TimeTracker.Business.Common.Constants
+﻿@using TimeTracker.Api.Shared.Dto.Entity.Task
 
 @inherits BaseReactiveComponent
 
@@ -9,23 +6,30 @@
     TOption="TaskListDto"
     Label="@Label"
     Class="@Class"
+    Multiple="false"
     Autofocus="false"
     Disabled="@Disabled"
-    Placeholder="@Placeholder"
-    Items="@_list.ToList()"
-    OptionValue="@(dto => dto?.Id.ToString() ?? string.Empty)"
-    Value="@(_selectedId.ToString())"
-    ValueChanged="OnValueChanged"
-    >
-    <OptionTemplate>
-        @if (context is null)
+    Placeholder="@_placeholder"
+    SelectedOption="_selectedItem"
+    Appearance="Appearance.Outline"
+    OptionText="@(item => item.Name)"
+    Height="400px">
+
+    @foreach (var listGroup in _groupedList)
+    {
+        var project = listGroup.First().Project;
+        <FluentLabel Typo="Typography.H3" Class="mt-2 mb-1">
+            @project.Name
+        </FluentLabel>
+        <FluentDivider Orientation="Orientation.Horizontal"/>
+        foreach (var taskList in listGroup)
         {
-            return;
+            <FluentOption 
+                Value="@taskList.Id.ToString()"
+                Selected="@(taskList.Id == _selectedId)"
+                OnSelect="@(() => OnValueChanged(taskList))">
+                @taskList.Name
+            </FluentOption>        
         }
-        @context.Name
-        @if (context.Project != null && IsExtendedInfo)
-        {
-            <text> (@context.Project?.Name)</text>
-        }
-    </OptionTemplate>
+    }
 </FluentSelect>

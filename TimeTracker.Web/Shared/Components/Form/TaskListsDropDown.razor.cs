@@ -1,14 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Microsoft.FluentUI.AspNetCore.Components;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
-using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Services.Http;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Project;
 using TimeTracker.Web.Store.TasksList;
 
 namespace TimeTracker.Web.Shared.Components.Form;
@@ -72,9 +65,11 @@ public partial class TaskListsDropDown
     
     private TaskListDto? _selectedItem => _list.FirstOrDefault(item => item.Id == _selectedId);
     private ICollection<TaskListDto> _list = new List<TaskListDto>();
+    private IEnumerable<IGrouping<long, TaskListDto>> _groupedList => _list.GroupBy(item => item.Project.Id).AsQueryable();
     private long _selectedId = 0;
     private long? _projectId = null;
     private string? _searchString = null;
+    public string? _placeholder => _selectedItem is null ? Placeholder : null;
 
     protected override void OnInitialized()
     {
@@ -87,9 +82,9 @@ public partial class TaskListsDropDown
         UpdateList();
     }
     
-    private Task OnValueChanged(string? project)
+    private Task OnValueChanged(TaskListDto taskList)
     {
-        long.TryParse(project, out long selectedId);
+        var selectedId = taskList.Id; 
         if (selectedId != (_selectedItem?.Id ?? 0))
         {
             _selectedId = selectedId;
@@ -106,7 +101,7 @@ public partial class TaskListsDropDown
     
     private void UpdateList()
     {
-        _list = _state.Value.List;
+        _list = _state.Value.List.ToList();
         if (ProjectId.HasValue)
         {
             _list = _list.Where(item => item.Project?.Id == ProjectId).ToList();

@@ -1,5 +1,9 @@
 ﻿/** Common */
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     --body-font: "Segoe UI Variable", "Segoe UI", sans-serif;
     font-family: var(--body-font);

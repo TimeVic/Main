@@ -8,37 +8,35 @@
 @* <FluentNavLink Href="@SiteUrl.Dashboard_GoalsTracker" Text="Goals Tracker">Goals Tracker</FluentNavLink> *@
 <FluentNavLink Href="@SiteUrl.Dashboard_Reports_Summary" Text="Summary">Summary</FluentNavLink>
 <FluentNavLink Href="@SiteUrl.Dashboard_Tasks_Main" Text="Tasks">Tasks</FluentNavLink>
-<FluentNavLink Href="@SiteUrl.Dashboard_Payments" Text="Payments">Payments</FluentNavLink>
 
-<FluentNavGroup Title="" Icon="@(new Icons.Regular.Size20.EarthLeaf())">
+<FluentNavGroup Title="" Icon="@(new Icons.Filled.Size24.CurrencyDollarEuro())" Expanded="true">
     <TitleTemplate>
-        <h3>Reports</h3></TitleTemplate>
+        <h3>Finances</h3></TitleTemplate>
     <ChildContent>
-        <FluentNavLink Href="@SiteUrl.Dashboard_Reports_Payments" Icon="@(new Icons.Regular.Size20.LeafOne())">Payments</FluentNavLink>
-        <FluentNavLink Href="@SiteUrl.Dashboard_Reports_TimeEntries" Icon="@(new Icons.Regular.Size20.LeafOne())">Detailed</FluentNavLink>
+        <FluentNavLink Href="@SiteUrl.Dashboard_Payments" Icon="@(new Icons.Regular.Size28.Payment())" Text="Payments">Payments</FluentNavLink>
     </ChildContent>
 </FluentNavGroup>
 
-<FluentNavGroup Title="" Icon="@(new Icons.Regular.Size20.EarthLeaf())">
+<FluentNavGroup Title="" Icon="@(new Icons.Regular.Size20.ArrowTrendingLines())" Expanded="true">
+    <TitleTemplate>
+        <h3>Reports</h3></TitleTemplate>
+    <ChildContent>
+        <FluentNavLink Href="@SiteUrl.Dashboard_Reports_Payments" Icon="@(new Icons.Regular.Size20.ArrowTrendingLines())">Payments</FluentNavLink>
+        <FluentNavLink Href="@SiteUrl.Dashboard_Reports_TimeEntries" Icon="@(new Icons.Regular.Size20.ArrowTrendingLines())">Detailed</FluentNavLink>
+    </ChildContent>
+</FluentNavGroup>
+
+<FluentNavGroup Title="" Icon="@(new Icons.Regular.Size20.AlignSpaceAroundHorizontal())" Expanded="true">
     <TitleTemplate>
         <h3>Workspace</h3></TitleTemplate>
     <ChildContent>
-        <FluentNavLink Href="@SiteUrl.Dashboard_Projects" Icon="@(new Icons.Regular.Size20.LeafOne())">Projects</FluentNavLink>
-        <FluentNavLink Href="@SiteUrl.Dashboard_Clients" Icon="@(new Icons.Regular.Size20.LeafOne())">Clients</FluentNavLink>
-        <FluentNavLink Href="@SiteUrl.Dashboard_Tags" Icon="@(new Icons.Regular.Size20.LeafOne())">Tags</FluentNavLink>
-        @if (AuthState.Value.IsRoleAdmin)
-        {
-            <FluentNavLink Href="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)" Icon="@(new Icons.Regular.Size20.LeafOne())">Members</FluentNavLink>
-        }
-        <FluentNavLink Href="@SiteUrl.Dashboard_Integrations" Icon="@(new Icons.Regular.Size20.LeafOne())">Integrations</FluentNavLink>
-    </ChildContent>
-</FluentNavGroup>
-
-<FluentNavGroup Title="" Icon="@(new Icons.Regular.Size20.EarthLeaf())">
-    <TitleTemplate>
-        <h3>Reports</h3></TitleTemplate>
-    <ChildContent>
-        <FluentNavLink Icon="@(new Icons.Regular.Size20.LeafOne())">Item 3.1</FluentNavLink>
-        <FluentNavLink Icon="@(new Icons.Regular.Size20.LeafTwo())">Item 3.2</FluentNavLink>
+        <FluentNavLink Href="@SiteUrl.Dashboard_Projects" Icon="@(new Icons.Regular.Size20.AlignSpaceEvenlyVertical())">Projects</FluentNavLink>
+        <FluentNavLink Href="@SiteUrl.Dashboard_Clients" Icon="@(new Icons.Regular.Size20.AlignSpaceEvenlyVertical())">Clients</FluentNavLink>
+        @* <FluentNavLink Href="@SiteUrl.Dashboard_Tags" Icon="@(new Icons.Regular.Size20.AlignSpaceEvenlyVertical())">Tags</FluentNavLink> *@
+        @* @if (AuthState.Value.IsRoleAdmin) *@
+        @* { *@
+        @*     <FluentNavLink Href="@(AuthState.Value.IsRoleAdmin ? SiteUrl.Dashboard_Members : null)" Icon="@(new Icons.Regular.Size20.AlignSpaceEvenlyVertical())">Members</FluentNavLink> *@
+        @* } *@
+        @* <FluentNavLink Href="@SiteUrl.Dashboard_Integrations" Icon="@(new Icons.Regular.Size20.AlignSpaceEvenlyVertical())">Integrations</FluentNavLink> *@
     </ChildContent>
 </FluentNavGroup>

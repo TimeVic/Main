@@ -28,6 +28,8 @@
     <EditForm
         @ref="_form"
         Model="model">
+        <DataAnnotationsValidator />
+        <FluentValidationSummary />
 
         <FluentTextField
             @bind-Value="@(model.Name)"

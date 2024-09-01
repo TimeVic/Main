@@ -58,6 +58,7 @@ public partial class MembersDropDown
         item => UserId is not null && item.User.Id == UserId || item.Id == _selectedId
     );
     private long _selectedId = 0;
+    public string? _placeholder => _selectedItem is null ? Placeholder : null;
     
     protected override void OnInitialized()
     {

@@ -2,12 +2,11 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Workspace;
 
-namespace TimeTracker.Web.Shared.Components.Layout;
+namespace TimeTracker.Web.Pages.Dashboard.Shared;
 
 public partial class WorkspaceMenu
 {
@@ -32,7 +31,7 @@ public partial class WorkspaceMenu
             // Clicked on selected item
             return;
         }
-        if (workspace.Id == _authState.Value.Workspace.Id)
+        if (workspace.Id == _authState.Value.Workspace?.Id)
         {
             return;
         }

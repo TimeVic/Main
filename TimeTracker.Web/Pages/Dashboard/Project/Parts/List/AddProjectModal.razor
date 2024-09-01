@@ -1,27 +1,38 @@
 ﻿@inherits BaseReactiveComponent
 
-<MudDialog>
-    <DialogContent>
-        <FluentEditForm
-            @ref="_form"
-            @bind-IsValid="_isValid">
+@implements IDialogContentComponent
 
-            <FluentTextField
-                T="string?"
-                For="() => model.Name"
-                @bind-Value="@(model.Name)"
-                Label="Project name">
-            </FluentTextField>
-        </FluentEditForm>
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
-        <MudButton
-            ButtonType="MudBlazor.ButtonType.Submit"
-            OnClick="@Submit"
-            Disabled="@_isLoading"
-            Color="Color.Primary">
-            Add
-        </MudButton>
-    </DialogActions>
-</MudDialog>
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            Add new project
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton
+        Appearance="Appearance.Accent"
+        Disabled="@_isLoading"
+        OnClick="@Submit">Add</FluentButton>
+    <FluentButton
+        Appearance="Appearance.Neutral"
+        OnClick="@OnCloseModal">Cancel</FluentButton>
+</FluentDialogFooter>
+
+@* Body *@
+<FluentDialogBody>
+    <EditForm
+        @ref="_form"
+        Model="model">
+        <DataAnnotationsValidator />
+        <FluentValidationSummary />
+
+        <FluentTextField
+            @bind-Value="@(model.Name)"
+            Label="Project name">
+        </FluentTextField>
+    </EditForm>
+</FluentDialogBody>

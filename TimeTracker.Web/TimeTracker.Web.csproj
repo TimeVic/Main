@@ -62,7 +62,6 @@
       <Content Remove="Pages\Dashboard\Calendar\CalendarPage.razor" />
       <Content Remove="Shared\Components\Form\TimeInput.razor" />
       <Content Remove="Shared\Components\Form\YesNoDropDown.razor" />
-      <Content Remove="Shared\Components\Layout\WorkspaceMenu.razor" />
       <Content Remove="Pages\Landing\User\Password\ResetPassword.razor" />
       <Content Remove="Pages\Landing\User\Password\ChangePassword.razor" />
       <Content Remove="Store\GoalsTracker\**" />
@@ -72,15 +71,14 @@
       <Content Remove="Pages\Dashboard\GoalsTracker\**" />
       <Content Remove="Pages\Dashboard\Integrations\**" />
       <Content Remove="Pages\Dashboard\Members\**" />
-      <Content Remove="Pages\Dashboard\Project\**" />
       <Content Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
       <Content Remove="Pages\Dashboard\Tag\**" />
-      <Content Remove="Pages\Dashboard\Workspace\**" />
       <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css" />
       <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css.map" />
       <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.less" />
       <Content Include="Pages\Dashboard\Tasks\Parts\TasksTable.razor.less" />
       <Content Include="Shared\Components\Form\MarkdownEdit.razor.less" />
+      <Content Include="Shared\Components\Storage\FileUploader.razor.css.map" />
       <Content Include="Shared\Components\Storage\FileUploader.razor.less" />
     </ItemGroup>
 
@@ -104,12 +102,10 @@
       <Compile Remove="Pages\Dashboard\Calendar\CalendarPage.razor.cs" />
       <Compile Remove="Shared\Components\Form\TimeInput.razor.cs" />
       <Compile Remove="Shared\Components\Form\YesNoDropDown.razor.cs" />
-      <Compile Remove="Shared\Components\Layout\WorkspaceMenu.razor.cs" />
       <Compile Remove="Pages\Landing\User\Password\ResetPassword.razor.cs" />
       <Compile Remove="Pages\Landing\User\Password\ChangePassword.razor.cs" />
       <Compile Remove="Services\UI\ModalDialogProviderService.GoalsTracker.cs" />
       <Compile Remove="Services\UI\ModalDialogProviderService.NotificationsCenter.cs" />
-      <Compile Remove="Services\UI\ModalDialogProviderService.Projects.cs" />
       <Compile Remove="Services\UI\ModalDialogProviderService.Tags.cs" />
       <Compile Remove="Services\UI\ModalDialogProviderService.WorkspaceMembership.cs" />
       <Compile Remove="Store\GoalsTracker\**" />
@@ -119,10 +115,8 @@
       <Compile Remove="Pages\Dashboard\GoalsTracker\**" />
       <Compile Remove="Pages\Dashboard\Integrations\**" />
       <Compile Remove="Pages\Dashboard\Members\**" />
-      <Compile Remove="Pages\Dashboard\Project\**" />
       <Compile Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
       <Compile Remove="Pages\Dashboard\Tag\**" />
-      <Compile Remove="Pages\Dashboard\Workspace\**" />
     <Compile Remove="Pages\Dashboard\Shared\Components\Storage\FileView.razor.cs" />
     </ItemGroup>
 
@@ -134,10 +128,8 @@
       <EmbeddedResource Remove="Pages\Dashboard\GoalsTracker\**" />
       <EmbeddedResource Remove="Pages\Dashboard\Integrations\**" />
       <EmbeddedResource Remove="Pages\Dashboard\Members\**" />
-      <EmbeddedResource Remove="Pages\Dashboard\Project\**" />
       <EmbeddedResource Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
       <EmbeddedResource Remove="Pages\Dashboard\Tag\**" />
-      <EmbeddedResource Remove="Pages\Dashboard\Workspace\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -156,13 +148,11 @@
       <None Remove="Pages\Dashboard\GoalsTracker\**" />
       <None Remove="Pages\Dashboard\Integrations\**" />
       <None Remove="Pages\Dashboard\Members\**" />
-      <None Remove="Pages\Dashboard\Project\**" />
       <None Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
       <None Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css" />
       <None Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.less" />
       <None Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css.map" />
       <None Remove="Pages\Dashboard\Tag\**" />
-      <None Remove="Pages\Dashboard\Workspace\**" />
       <None Remove="Shared\Components\Form\TimeInput.razor.css" />
     </ItemGroup>
 
@@ -186,7 +176,6 @@
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Payment\Parts\AddPaymentModal.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Payment\Parts\List\PaymentsList.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Payment\Parts\UpdatePaymentModal.razor" />
-      <_ContentIncludedByDefault Remove="Pages\Dashboard\Project\IndexPage.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Project\Parts\List\AddProjectModal.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Project\Parts\List\ProjectsList.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Project\Parts\List\UpdateProjectModal.razor" />
@@ -235,7 +224,6 @@
       <_ContentIncludedByDefault Remove="Pages\Dashboard\TimeEntry\Parts\DurationField.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\TimeEntry\Parts\TimeCounterField.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\TimeEntry\TimeEntryPage.razor" />
-      <_ContentIncludedByDefault Remove="Pages\Dashboard\Workspace\WorkspaceChangingPage.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Workspace\WorkspacesPage.razor" />
       <_ContentIncludedByDefault Remove="Shared\Components\Form\ClientsDropDown.razor" />
       <_ContentIncludedByDefault Remove="Shared\Components\Form\EnumDropDown.razor" />

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
@@ -8,16 +9,24 @@ namespace TimeTracker.Web.Pages.Dashboard.Project.Parts.List;
 
 public partial class UpdateProjectModal
 {
-    [CascadingParameter] 
-    public FluentDialog MudDialog { get; set; }
+    public class Parameters
+    {
+        public required ProjectDto Project { get; set; }
+    }
 
     [Parameter]
-    public ProjectDto Project { get; set; }
+    public required Parameters Content { get; set; }
     
-    private UpdateRequest model = new();
+    [CascadingParameter] 
+    public FluentDialog MudDialog { get; set; }
+    
+    private UpdateRequest model = new()
+    {
+        Name = string.Empty
+    };
     private bool _isLoading = false;
     private bool _isValid = false;
-    private MudForm _form;
+    private EditForm _form;
 
     private long _projectId
     {
@@ -28,13 +37,12 @@ public partial class UpdateProjectModal
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.Fill(Project);
+        model.Fill(Content.Project);
     }
 
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -46,13 +54,13 @@ public partial class UpdateProjectModal
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                await ToastService.ShowInfo("Project was updated");
+                ToastService.ShowInfo("Project was updated");
                 OnCloseModal();
             }
         }
         catch (Exception e)
         {
-            await ToastService.ShowError(e.Message);
+            ToastService.ShowError(e.Message);
         }
         finally
         {
@@ -63,6 +71,6 @@ public partial class UpdateProjectModal
 
     private void OnCloseModal()
     {
-        MudDialog.Close();
+        MudDialog.Hide();
     }
 }

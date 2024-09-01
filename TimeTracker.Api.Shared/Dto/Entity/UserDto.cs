@@ -1,4 +1,6 @@
-﻿namespace TimeTracker.Api.Shared.Dto.Entity;
+﻿using TimeTracker.Business.Extensions;
+
+namespace TimeTracker.Api.Shared.Dto.Entity;
 
 public class UserDto
 {
@@ -13,6 +15,11 @@ public class UserDto
     public string Name
     {
         get => string.IsNullOrEmpty(UserName) ? Email : UserName;
+    }
+    
+    public string Initials
+    {
+        get => Name.GetFirstUpperLetters(2);
     }
     
     public WorkspaceDto? DefaultWorkspace { get; set; }

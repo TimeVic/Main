@@ -17,7 +17,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
         
         [Required]
         [StringLength(256, MinimumLength = 2)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
         
         public bool IsBillableByDefault { get; set; }
         

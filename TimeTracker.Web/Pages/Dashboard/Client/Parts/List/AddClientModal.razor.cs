@@ -23,6 +23,7 @@ public partial class AddClientModal
 
     private async Task Submit()
     {
+        model.WorkspaceId = AuthState.Value.Workspace!.Id;
         if (!_form.EditContext!.Validate())
         {
             return;
@@ -31,7 +32,6 @@ public partial class AddClientModal
         _isLoading = true;
         try
         {
-            model.WorkspaceId = AuthState.Value.Workspace!.Id;
             var responseDto = await ApiService.ClientAddAsync(model);
             if (responseDto != null)
             {

@@ -2,9 +2,7 @@
 <FluentMainLayout NavMenuTitle="TimeVic" Style="min-height: calc(100% - 40px)">
     <Header>
         TimeVic
-        <FluentStack HorizontalAlignment="HorizontalAlignment.Center">
-            <MainHeader/>
-        </FluentStack>
+        <MainHeader/>
     </Header>
     <Body>
         @if (CommonState.Value.IsInitialized)
@@ -29,6 +27,7 @@
         }
     </Body>
     <NavMenuContent>
+        <WorkspaceMenu/>
         <NavMenu/>
     </NavMenuContent>
 </FluentMainLayout>

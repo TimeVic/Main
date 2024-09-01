@@ -71,6 +71,7 @@ public partial class ProjectsDropDown
     private ICollection<ProjectDto> _list = new List<ProjectDto>();
     private long _selectedId = 0;
     private long? _clientId;
+    public string? _placeholder => _selectedItem is null ? Placeholder : null;
 
     protected override void OnInitialized()
     {

@@ -6,7 +6,7 @@
     TOption="ProjectDto?"
     Label="@Label"
     Class="@Class"
-    Placeholder="@Placeholder"
+    Placeholder="@_placeholder"
     Items="@_list.ToList()"
     Disabled="@(!_list.Any() || Disabled)"
     OptionSelected="@(dto => dto?.Id == _selectedItem?.Id)"
