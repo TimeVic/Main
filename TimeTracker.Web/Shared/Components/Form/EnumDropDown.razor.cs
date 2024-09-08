@@ -15,6 +15,9 @@ public partial class EnumDropDown<TItem>
     public EventCallback<TItem?> ValueChanged { get; set; }
     
     [Parameter]
+    public EventCallback<TItem?> OnChanged { get; set; }
+    
+    [Parameter]
     public string Placeholder { get; set; } = "Select item";
     
     [Parameter]
@@ -35,6 +38,9 @@ public partial class EnumDropDown<TItem>
     [Parameter]
     public ICollection<TItem> AllowedValues { get; set; } = new List<TItem>();
 
+    [Parameter]
+    public bool Clearable { get; set; } = false;
+    
     [Parameter]
     public bool Disabled { get; set; }
     
@@ -62,5 +68,13 @@ public partial class EnumDropDown<TItem>
             _value = default;
         }
         ValueChanged.InvokeAsync(_value);
+        OnChanged.InvokeAsync(_value);
+    }
+    
+    private void OnClear()
+    {
+        if (!_value.HasValue)
+            return;
+        _value = null;
     }
 }

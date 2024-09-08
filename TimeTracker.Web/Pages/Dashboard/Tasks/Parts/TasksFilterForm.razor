@@ -3,25 +3,24 @@
 
 @inherits BaseReactiveComponent
 
-<FluentStack Orientation="Orientation.Horizontal" Class="pa-2">
+<FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Start" Class="pa-2">
+    
     <FluentTextField
         Value="@Filter.SearchString"
         ValueChanged="OnChangeSearchString"
         Placeholder="Write anything"/>
     
-    @* <MudSpacer/> *@
-    @* *@
-    @* <MembersDropDown *@
-    @*     Clearable="true" *@
-    @*     Value="@(Filter.AssignedUserId ?? 0)" *@
-    @*     ValueChanged="OnChangeAssignedUserId"/> *@
-    @* *@
-    @* <MudSpacer/> *@
+    <MembersDropDown
+        Clearable="true"
+        UserId="@(Filter.AssignedUserId ?? 0)"
+        SelectedItemChanged="OnChangeAssignedUser"/>
+
+    @* <FluentSpacer/> *@
     @* *@
     @* <YesNoDropDown *@
     @*     Placeholder="Only archived" *@
     @*     ValueChanged="OnChangeIsArchived" *@
     @*     Value="@Filter.IsArchived"/> *@
-    
+
 </FluentStack>
 

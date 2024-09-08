@@ -25,12 +25,17 @@ public partial class ClientsDropDown
     [Parameter]
     public long Value
     {
-        get => _selectedId;
+        get
+        {
+            long.TryParse(_selectedId, out var id);
+            return id;
+        }
         set
         {
-            if (_selectedId != value)
+            if (value.ToString() != _selectedId)
             {
-                _selectedId = value;
+                _selectedId = value.ToString();
+                UpdateSelectedItem();
             }
         }
     }
@@ -50,9 +55,9 @@ public partial class ClientsDropDown
     [Inject]
     public IState<ClientState> _state { get; set; }
     
-    private ClientDto? _selectedItem => _list.FirstOrDefault(item => item.Id == _selectedId);
+    private ClientDto? _selectedItem;
     private ICollection<ClientDto> _list = new List<ClientDto>();
-    private long _selectedId = 0;
+    private string? _selectedId = null;
     
     protected override void OnInitialized()
     {
@@ -65,14 +70,31 @@ public partial class ClientsDropDown
         UpdateList();
     }
     
-    private void OnValueChanged(string? project)
+    private void OnValueChanged(ClientDto? client)
     {
-        long.TryParse(project, out _selectedId);
-        SelectedItemChanged.InvokeAsync(_selectedItem);
+        if (_selectedItem?.Id != client?.Id)
+        {
+            UpdateSelectedItem();
+            SelectedItemChanged.InvokeAsync(_selectedItem);
+        }
     }
     
     private void UpdateList()
     {
         _list = _state.Value.List;
+    }
+    
+    private void OnClear()
+    {
+        if (string.IsNullOrEmpty(_selectedId))
+            return;
+        _selectedId = null;
+    }
+    
+    private void UpdateSelectedItem()
+    {
+        _selectedItem = _list.FirstOrDefault(
+            item => item.Id.ToString() == _selectedId
+        );
     }
 }

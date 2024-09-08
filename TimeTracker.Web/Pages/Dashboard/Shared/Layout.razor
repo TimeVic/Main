@@ -1,39 +1,48 @@
 ﻿@inherits BaseLayout
-<FluentMainLayout NavMenuTitle="TimeVic" Style="min-height: calc(100% - 40px)">
-    <Header>
+<FluentLayout Style="min-height: calc(100% - 40px)">
+    <FluentHeader>
         TimeVic
-        <MainHeader/>
-    </Header>
-    <Body>
+        <FluentSpacer/>
         @if (CommonState.Value.IsInitialized)
         {
-            <InitializationContainer>
-                <FluentBodyContent>
+            <MainHeader/>
+        }
+    </FluentHeader>
+    <FluentStack Orientation="Orientation.Horizontal" Width="100%">
+        @if (CommonState.Value.IsInitialized)
+        {
+            <FluentNavMenu Width="250" Class="ms-2 mt-2">
+                <NavMenu/>
+            </FluentNavMenu>
+        }
+        <FluentBodyContent>
+            @if (CommonState.Value.IsInitialized)
+            {
+                <InitializationContainer>
                     @Body
-                </FluentBodyContent>
-            </InitializationContainer>
-        }
-        else
-        {
-            <FluentProgressRing></FluentProgressRing>
-        }
-        @if (!IsShowReCaptcha)
-        {
-            <style>
-                .grecaptcha-badge {
-                    visibility: hidden;
-                }
-            </style>
-        }
-    </Body>
-    <NavMenuContent>
-        <WorkspaceMenu/>
-        <NavMenu/>
-    </NavMenuContent>
-</FluentMainLayout>
-<FluentFooter>
-    Copyright © @DateTime.Now.Year <a href="https://georgyshira.info/" target="_blank">Georgy Shira</a> Apache License Version 2.0
-</FluentFooter>
+                </InitializationContainer>
+            }
+            else
+            {
+                <FluentGrid Justify="JustifyContent.Center" Class="mt-3">
+                    <FluentProgressRing></FluentProgressRing>
+                </FluentGrid>
+            }
+            @if (!IsShowReCaptcha)
+            {
+                <style>
+                    .grecaptcha-badge {
+                        visibility: hidden;
+                    }
+                </style>
+            }
+        </FluentBodyContent>
+    </FluentStack>
+
+    <FluentFooter>
+        Copyright © @DateTime.Now.Year <a href="https://georgyshira.info/" target="_blank">Georgy Shira</a> Apache License Version 2.0
+    </FluentFooter>
+</FluentLayout>
 
 <FluentToastProvider />
 <FluentDialogProvider />

@@ -26,10 +26,32 @@ public partial class MembersDropDown
     [Parameter]
     public long Value
     {
-        get => _selectedId;
-        set => _selectedId = value;
+        get
+        {
+            long.TryParse(_selectedId, out var id);
+            return id;
+        }
+        set
+        {
+            if (value.ToString() != _selectedId)
+            {
+                _selectedId = value.ToString();
+                UpdateSelectedItem();
+            }
+        }
     }
 
+    [Parameter]
+    public long? UserId
+    {
+        get => _userId;
+        set
+        {
+            _userId = value;
+            UpdateSelectedItem();
+        }
+    }
+    
     [Parameter]
     public EventCallback<WorkspaceMembershipDto> SelectedItemChanged { get; set; }
     
@@ -48,16 +70,13 @@ public partial class MembersDropDown
     [Parameter] 
     public bool Required { get; set; }
 
-    [Parameter] public long? UserId { get; set; }
-
     [Inject]
     public IState<WorkspaceMembershipsState> _state { get; set; }
     
     private ICollection<WorkspaceMembershipDto> _list = new List<WorkspaceMembershipDto>();
-    private WorkspaceMembershipDto? _selectedItem => _list.FirstOrDefault(
-        item => UserId is not null && item.User.Id == UserId || item.Id == _selectedId
-    );
-    private long _selectedId = 0;
+    private WorkspaceMembershipDto? _selectedItem;
+    private string? _selectedId;
+    private long? _userId;
     public string? _placeholder => _selectedItem is null ? Placeholder : null;
     
     protected override void OnInitialized()
@@ -73,8 +92,11 @@ public partial class MembersDropDown
     
     private void OnValueChanged(WorkspaceMembershipDto? membership)
     {
-        long.TryParse($"{membership?.Id}", out _selectedId);
-        SelectedItemChanged.InvokeAsync(_selectedItem);
+        if (_selectedItem?.Id != membership?.Id)
+        {
+            UpdateSelectedItem();
+            SelectedItemChanged.InvokeAsync(_selectedItem);
+        }
     }
     
     private void UpdateList()
@@ -86,9 +108,26 @@ public partial class MembersDropDown
                     item => AllowedIds.Any(allowedId => allowedId == item.Id)
                 ) 
                 .ToList();
-            return;
         }
-
-        _list = _state.Value.List;
+        else
+        {
+            _list = _state.Value.List;    
+        }
+        UpdateSelectedItem();
+    }
+    
+    private void OnClear()
+    {
+        if (string.IsNullOrEmpty(_selectedId))
+            return;
+        _selectedId = null;
+        _userId = null;
+    }
+    
+    private void UpdateSelectedItem()
+    {
+        _selectedItem = _list.FirstOrDefault(
+            item => (_userId is not null && item.User.Id == _userId) || item.Id.ToString() == _selectedId
+        );
     }
 }

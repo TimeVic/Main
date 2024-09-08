@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Store.TasksList;
 
@@ -59,6 +60,7 @@ public class TasksListReducers
     [ReducerMethod]
     public static TasksListState SetSelectedReducer(TasksListState state, SetSelectedAction action)
     {
+        Debug.Log("action.TaskListId", action.TaskListId);
         return state with
         {
             SelectedTaskListId = action.TaskListId

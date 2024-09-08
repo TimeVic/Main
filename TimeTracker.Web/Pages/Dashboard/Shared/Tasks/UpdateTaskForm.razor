@@ -54,7 +54,8 @@
                     Label="Status"
                     TItem="TaskStatus"
                     AllowClear="false"
-                    @bind-Value="_model.Status"
+                    Value="_model.Status"
+                    ValueChanged="@(item => _model.Status = item ?? default)"
                     OnChanged="SubmitForm"
                     Name="Status"/>
             </div>
@@ -64,7 +65,8 @@
                     TItem="TaskPriority"
                     Label="Priority"
                     AllowClear="false"
-                    @bind-Value="_model.Priority"
+                    Value="_model.Priority"
+                    ValueChanged="@(item => _model.Priority = item ?? default)"
                     OnChanged="SubmitForm"/>
             </div>
         </FluentStack>

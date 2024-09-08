@@ -2,22 +2,32 @@
 
 @typeparam TItem where TItem: struct, IConvertible
 
-<FluentSelect
-    TOption="TItem?"
-    Label="@Label"
-    Class="@Class"
-    Placeholder="@_placeholder"
-    Items="@_list.ToList()"
-    SelectedOption="@_value"
-    Disabled="@Disabled"
-    OptionValue="@(dto => dto?.ToString())"
-    OptionSelected="@(value => value!.Value.Equals(_value))"
-    ValueChanged="OnItemSelected">
-    <OptionTemplate>
-        @if (context is null)
-        {
-            return;
-        }
-        @(EnumHelpers.GetDisplayName(typeof(TItem), context))
-    </OptionTemplate>
-</FluentSelect>
+<div class="justify-content-start">
+    <FluentSelect
+        TOption="TItem?"
+        Label="@Label"
+        Class="@Class"
+        Placeholder="@_placeholder"
+        Items="@_list.ToList()"
+        SelectedOption="@_value"
+        Disabled="@Disabled"
+        OptionValue="@(dto => dto?.ToString())"
+        OptionSelected="@(value => value!.Value.Equals(_value))"
+        ValueChanged="OnItemSelected">
+        <OptionTemplate>
+            @if (context is null)
+            {
+                return;
+            }
+            @(EnumHelpers.GetDisplayName(typeof(TItem), context))
+        </OptionTemplate>
+    </FluentSelect>
+
+    @if (Clearable)
+    {
+        <FluentButton
+            Class="w-select-clear-btn"
+            IconStart="@(new Icons.Filled.Size16.Dismiss())"
+            OnClick="OnClear"/>
+    }
+</div>

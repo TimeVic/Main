@@ -1,25 +1,41 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Tasks;
+using TimeTracker.Web.Store.TasksList;
+using LoadListAction = TimeTracker.Web.Store.Tasks.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts;
 
 public partial class TasksFilterForm
 {
     [Inject]
-    public IState<TasksState> TasksListState { get; set; }
+    public IState<TasksState> TasksState { get; set; }
 
+    [Inject]
+    public IState<TasksListState> TasksListState { get; set; }
+    
     public GetListFilterRequest Filter
     {
-        get => TasksListState.Value.Filter;
+        get => TasksState.Value.Filter;
     }
-    
+
+    public TaskListDto? _selectedTaskList
+    {
+        get => TasksListState.Value.SelectedTaskList;
+    }
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        if (_selectedTaskList != null)
+        {
+            LoadList();
+        }
     }
     
     private void ResetForm()
@@ -38,7 +54,7 @@ public partial class TasksFilterForm
         Dispatcher.Dispatch(new SetListFilterAction(filterData));
     }
 
-    private void OnChangeSearchString(string searchString)
+    private void OnChangeSearchString(string? searchString)
     {
         Filter.SearchString = searchString;
         LoadList();
@@ -50,9 +66,9 @@ public partial class TasksFilterForm
         LoadList();
     }
     
-    private void OnChangeAssignedUserId(long userId)
+    private void OnChangeAssignedUser(WorkspaceMembershipDto? membership)
     {
-        Filter.AssignedUserId = userId == 0 ? null : userId;
+        Filter.AssignedUserId = membership?.Id;
         LoadList();
     }
 }

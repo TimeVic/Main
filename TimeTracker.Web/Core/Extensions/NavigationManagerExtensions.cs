@@ -7,6 +7,11 @@ namespace TimeTracker.Web.Core.Extensions
 {
     public static class NavigationManagerExtensions
     {
+        public static void ReloadPage(this NavigationManager manager)
+        {
+            manager.NavigateTo(manager.Uri, true);
+        }
+        
         public static string GetPath(this NavigationManager manager)
         {
             return new Uri(manager.Uri).AbsolutePath;

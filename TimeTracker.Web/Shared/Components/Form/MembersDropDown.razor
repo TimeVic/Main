@@ -3,18 +3,27 @@
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
 
-<FluentSelect
-    TOption="WorkspaceMembershipDto?"
-    Label="@Label"
-    Class="@Class"
-    Disabled="@Disabled"
-    Placeholder="@_placeholder"
-    Items="@_list.ToList()"
-    SelectedOption="@_selectedItem"
-    OptionValue="@(dto => dto?.Id.ToString())"
-    OptionSelected="@(dto => dto?.Id == _selectedItem?.Id)"
-    SelectedOptionChanged="OnValueChanged">
-    <OptionTemplate>
-        @context?.User.Name
-    </OptionTemplate>
-</FluentSelect>
+<div class="justify-content-start">
+    <FluentSelect
+        TOption="WorkspaceMembershipDto?"
+        Label="@Label"
+        Class="@Class"
+        Disabled="@Disabled"
+        Placeholder="@_placeholder"
+        Items="@_list.ToList()"
+        @bind-Value="@_selectedId"
+        OptionValue="@(dto => dto?.Id.ToString())"
+        SelectedOptionChanged="OnValueChanged">
+        <OptionTemplate>
+            @context?.User.Name
+        </OptionTemplate>
+    </FluentSelect>
+
+    @if (Clearable)
+    {
+        <FluentButton 
+            Class="w-select-clear-btn"
+            IconStart="@(new Icons.Filled.Size16.Dismiss())" 
+            OnClick="OnClear"/>
+    }
+</div>

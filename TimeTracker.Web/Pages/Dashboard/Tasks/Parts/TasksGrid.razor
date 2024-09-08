@@ -1,5 +1,6 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Entity.Task
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Core.Extensions.Enums
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus
 
@@ -39,11 +40,18 @@
         Property="@(p => p.Status.GetDisplayName())"
         Width="100px"
         Sortable="true"/>
-    <PropertyColumn 
+    <TemplateColumn
         Title="Priority"
-        Property="@(p => p.Priority.GetDisplayName())"
         Width="100px"
-        Sortable="true"/>
+        Sortable="true">
+
+        @{
+            (string backgroundColor, string textColor) = context.Priority.GetColors();
+        }
+        <FluentBadge Appearance="Appearance.Neutral" Fill="lowlight" BackgroundColor="@backgroundColor" Color="@textColor">
+            @context.Priority.GetDisplayName()
+        </FluentBadge>
+    </TemplateColumn>
     <PropertyColumn 
         Title="Description" 
         Property="@(p => p.Description)"

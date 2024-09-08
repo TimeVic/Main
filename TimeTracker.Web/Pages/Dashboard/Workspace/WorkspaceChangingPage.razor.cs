@@ -56,14 +56,8 @@ public partial class WorkspaceChangingPage
             return;
         }
         
-        if (_authState.Value.Workspace == null || workspace.Id != _authState.Value.Workspace?.Id)
-        {
-            _workpsaceState.StateChanged -= OnWorkspaceListChanged;
-            // The page was initialized early
-            Dispatcher.Dispatch(new SetWorkspaceAction(workspace));
-            Dispatcher.Dispatch(new PersistDataAction());
-            _workspaceInitializationService.AfterInit(true);
-        }
+        _workpsaceState.StateChanged -= OnWorkspaceListChanged;
+        _workspaceInitializationService.ChangeWorkspace(workspace);
         NavigateTo();
     }
 

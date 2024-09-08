@@ -122,9 +122,12 @@ public partial class TasksListTree
         );
     }
     
-    private void OnTasksListSelected(long? testsListId)
+    private void OnTasksListSelected(long? tasksListId)
     {
-        Dispatcher.Dispatch(new SetSelectedAction(testsListId));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
+        if (tasksListId.HasValue)
+        {
+            Dispatcher.Dispatch(new SetSelectedAction(tasksListId));
+            Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());    
+        }
     }
 }

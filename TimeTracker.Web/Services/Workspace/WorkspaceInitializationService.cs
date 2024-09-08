@@ -1,8 +1,10 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Services.Messaging;
+using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common;
 using TimeTracker.Web.Store.Workspace;
 
@@ -13,16 +15,19 @@ public class WorkspaceInitializationService
     private readonly IDispatcher _dispatcher;
     private readonly NavigationManager _navigationManager;
     private readonly FcmService _fcmService;
+    private readonly IState<AuthState> _authState;
 
     public WorkspaceInitializationService(
         IDispatcher dispatcher,
         NavigationManager navigationManager,
-        FcmService fcmService
+        FcmService fcmService,
+        IState<AuthState> authState
     )
     {
         _dispatcher = dispatcher;
         _navigationManager = navigationManager;
         _fcmService = fcmService;
+        _authState = authState;
     }
 
     public void Init(bool isReload = false)
@@ -46,5 +51,16 @@ public class WorkspaceInitializationService
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Tag.LoadListAction());
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(true));
         Task.Run(() => _fcmService.SetNotificationToken());
+    }
+    
+    public void ChangeWorkspace(WorkspaceDto workspace)
+    {
+        if (workspace.Id == _authState.Value.Workspace?.Id)
+        {
+            return;
+        }
+        _dispatcher.Dispatch(new SetWorkspaceAction(workspace));
+        _dispatcher.Dispatch(new PersistDataAction());
+        _navigationManager.ReloadPage();
     }
 }

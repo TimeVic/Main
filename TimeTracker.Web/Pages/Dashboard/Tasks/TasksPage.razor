@@ -18,11 +18,18 @@
                 @_selectedTaskList?.Name
             </FluentLabel>
 
-            <TasksFilterForm/>
+            <FluentDivider 
+                Class="mb-2 w-100"
+                Orientation="Orientation.Horizontal"/>
+            
+            @if (_selectedTaskList != null)
+            {
+                <TasksFilterForm/>
 
-            <FluentStack Orientation="Orientation.Horizontal">
-                <TasksTable/>
-            </FluentStack>
+                <FluentStack Orientation="Orientation.Horizontal">
+                    <TasksTable/>
+                </FluentStack>
+            }
         </FluentStack>
     </CascadingValue>
 </FluentStack>

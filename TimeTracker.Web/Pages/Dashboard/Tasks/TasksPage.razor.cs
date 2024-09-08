@@ -18,4 +18,17 @@ public partial class TasksPage
     {
         get => _tasksListState.Value.SelectedTaskList;
     }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        if (TaskListId.HasValue)
+        {
+            Dispatcher.Dispatch(new SetSelectedAction(TaskListId));
+        }
+        _tasksListState.StateChanged += (sender, args) =>
+        {   
+            StateHasChanged();
+        };
+    }
 }
