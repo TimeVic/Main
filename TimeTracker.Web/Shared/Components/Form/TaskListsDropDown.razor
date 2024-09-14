@@ -2,34 +2,47 @@
 
 @inherits BaseReactiveComponent
 
-<FluentSelect
-    TOption="TaskListDto"
-    Label="@Label"
-    Class="@Class"
-    Multiple="false"
-    Autofocus="false"
-    Disabled="@Disabled"
-    Placeholder="@_placeholder"
-    SelectedOption="_selectedItem"
-    Appearance="Appearance.Outline"
-    OptionText="@(item => item.Name)"
-    Height="400px">
+<div class="justify-content-start w-select @Class @(FullWidth ? "w-100" : "")">
+    <FluentSelect
+        TOption="TaskListDto"
+        Label="@Label"
+        Class="@(FullWidth ? "w-select-w-100" : "")"
+        Multiple="false"
+        Autofocus="false"
+        Disabled="@Disabled"
+        Placeholder="@_placeholder"
+        SelectedOption="_selectedItem"
+        Appearance="Appearance.Outline"
+        OptionText="@(item => item.Name)"
+        @bind-Value="@_selectedId"
+        OptionValue="@(dto => dto?.Id.ToString())"
+        SelectedOptionChanged="OnValueChanged"
+        Height="400px">
 
-    @foreach (var listGroup in _groupedList)
-    {
-        var project = listGroup.First().Project;
-        <FluentLabel Typo="Typography.H3" Class="mt-2 mb-1">
-            @project.Name
-        </FluentLabel>
-        <FluentDivider Orientation="Orientation.Horizontal"/>
-        foreach (var taskList in listGroup)
+        @foreach (var listGroup in _groupedList)
         {
-            <FluentOption 
-                Value="@taskList.Id.ToString()"
-                Selected="@(taskList.Id == _selectedId)"
-                OnSelect="@(() => OnValueChanged(taskList))">
-                @taskList.Name
-            </FluentOption>        
+            var project = listGroup.First().Project;
+            <FluentLabel Typo="Typography.H3" Class="mt-2 mb-1">
+                @project.Name
+            </FluentLabel>
+            <FluentDivider Orientation="Orientation.Horizontal"/>
+            foreach (var taskList in listGroup)
+            {
+                <FluentOption
+                    Value="@taskList.Id.ToString()"
+                    Selected="@(taskList.Id.ToString() == _selectedId)"
+                    OnSelect="@(() => OnValueChanged(taskList))">
+                    @taskList.Name
+                </FluentOption>
+            }
         }
+    </FluentSelect>
+
+    @if (Clearable)
+    {
+        <FluentButton
+            Class="w-select-clear-btn"
+            IconStart="@(new Icons.Filled.Size16.Dismiss())"
+            OnClick="OnClear"/>
     }
-</FluentSelect>
+</div>

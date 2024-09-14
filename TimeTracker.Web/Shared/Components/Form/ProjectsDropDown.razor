@@ -2,22 +2,31 @@
 
 @using TimeTracker.Api.Shared.Dto.Entity
 
-<FluentSelect
-    TOption="ProjectDto?"
-    Label="@Label"
-    Class="@Class"
-    Placeholder="@_placeholder"
-    Items="@_list.ToList()"
-    Disabled="@(!_list.Any() || Disabled)"
-    OptionSelected="@(dto => dto?.Id == _selectedItem?.Id)"
-    OptionValue="@(dto => dto?.Id.ToString() ?? string.Empty)"
-    SelectedOption="@_selectedItem"
-    ValueChanged="OnValueChanged">
-    <OptionTemplate>
-        @context?.Name
-        @if (context?.Client != null)
-        {
+<div class="justify-content-start w-select @Class @(FullWidth ? "w-100" : "")">
+    <FluentSelect
+        TOption="ProjectDto?"
+        Label="@Label"
+        Class="@(FullWidth ? "w-select-w-100" : "")"
+        Placeholder="@_placeholder"
+        Disabled="@(!_list.Any() || Disabled)"
+        Items="@_list.ToList()"
+        @bind-Value="@_selectedId"
+        OptionValue="@(dto => dto?.Id.ToString())"
+        SelectedOptionChanged="OnValueChanged">
+        <OptionTemplate>
+            @context?.Name
+            @if (context?.Client != null)
+            {
             <text>(@context?.Client?.Name)</text>
-        }
-    </OptionTemplate>
-</FluentSelect>
+            }
+        </OptionTemplate>
+    </FluentSelect>
+
+    @if (Clearable)
+    {
+        <FluentButton
+            Class="w-select-clear-btn"
+            IconStart="@(new Icons.Filled.Size16.Dismiss())"
+            OnClick="OnClear"/>
+    }
+</div>

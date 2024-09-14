@@ -28,12 +28,17 @@ public partial class ProjectsDropDown
     [Parameter]
     public long Value
     {
-        get => _selectedId;
+        get
+        {
+            long.TryParse(_selectedId, out var id);
+            return id;
+        }
         set
         {
-            if (_selectedId != value)
+            if (value.ToString() != _selectedId)
             {
-                _selectedId = value;
+                _selectedId = value.ToString();
+                UpdateSelectedItem();
             }
         }
     }
@@ -57,19 +62,23 @@ public partial class ProjectsDropDown
             {
                 _clientId = value;
                 UpdateList();
+                UpdateSelectedItem();
             }
         }
     }
 
+    [Parameter]
+    public bool FullWidth { get; set; } = false;
+    
     [Inject]
     public ILogger<ProjectDto> _logger { get; set; }
     
     [Inject]
     public IState<ProjectState> _state { get; set; }
     
-    private ProjectDto? _selectedItem => _list.FirstOrDefault(item => item.Id == _selectedId);
+    private ProjectDto? _selectedItem = null;
     private ICollection<ProjectDto> _list = new List<ProjectDto>();
-    private long _selectedId = 0;
+    private string? _selectedId = null;
     private long? _clientId;
     public string? _placeholder => _selectedItem is null ? Placeholder : null;
 
@@ -84,10 +93,20 @@ public partial class ProjectsDropDown
         UpdateList();
     }
 
-    private void OnValueChanged(string? project)
+    private void OnClear()
     {
-        long.TryParse(project, out _selectedId);
-        SelectedItemChanged.InvokeAsync(_selectedItem);
+        if (string.IsNullOrEmpty(_selectedId))
+            return;
+        _selectedId = null;
+    }
+    
+    private void OnValueChanged(ProjectDto? project)
+    {
+        if (_selectedItem?.Id != project?.Id)
+        {
+            UpdateSelectedItem();
+            SelectedItemChanged.InvokeAsync(_selectedItem);
+        }
     }
 
     private void UpdateList()
@@ -103,5 +122,12 @@ public partial class ProjectsDropDown
             return;
         }
         _list = _list.Where(item => item.Client?.Id == _clientId).ToList();
+    }
+    
+    private void UpdateSelectedItem()
+    {
+        _selectedItem = _list.FirstOrDefault(
+            item => item.Id.ToString() == _selectedId
+        );
     }
 }

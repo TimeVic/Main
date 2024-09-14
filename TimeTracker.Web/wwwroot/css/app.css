@@ -165,7 +165,17 @@ a, .btn-link {
 }
 
 /** Global rules for Selects */
-.w-select-clear-btn {
+.w-select {
+    min-width: calc(200px + 33px);
+}
+
+.w-select .w-select-clear-btn {
     margin-left: -10px;
     border-radius: 0 calc(var(--control-corner-radius)* 1px) calc(var(--control-corner-radius)* 1px) 0;
+}
+
+.w-select .w-select-w-100 {
+    max-width: calc(100% - 33px);
+    min-width: calc(250px - 35px);
+    width: calc(100% - 33px);
 }

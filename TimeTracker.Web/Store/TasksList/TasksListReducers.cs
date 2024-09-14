@@ -60,7 +60,6 @@ public class TasksListReducers
     [ReducerMethod]
     public static TasksListState SetSelectedReducer(TasksListState state, SetSelectedAction action)
     {
-        Debug.Log("action.TaskListId", action.TaskListId);
         return state with
         {
             SelectedTaskListId = action.TaskListId

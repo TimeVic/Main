@@ -4,27 +4,38 @@
 @inherits BaseReactiveComponent
 
 <FluentToolbar class="mb-2 w-100" Orientation="Orientation.Horizontal">
-    <EnumDropDown
-        Label="Group by:"
-        TItem="SummaryReportType"
-        Value="@_filterState.ReportType"
-        ValueChanged="OnChangeReportType"/>
-
-    <EnumDropDown
-        Label="Period:"
-        TItem="SummaryReportPeriodType"
-        Value="@_filterState.PeriodType"
-        ValueChanged="OnChangePeriodType"/>
-
-    <FluentDatePicker
-        Label="Date start"
-        Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-        Value="@_filterState.StartDate"
-        ValueChanged="@OnChangeDateStart"/>
-
-    <FluentDatePicker
-        Label="Date end"
-        Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-        Value="@_filterState.EndDate"
-        ValueChanged="@OnChangeDateEnd"/>
+    <FluentGrid Class="w-100">
+        <FluentGridItem lg="3" md="6" sm="12">
+            <EnumDropDown
+                Label="Group by"
+                FullWidth="true"
+                TItem="SummaryReportType"
+                Value="@_filterState.ReportType"
+                ValueChanged="OnChangeReportType"/>
+        </FluentGridItem>
+        <FluentGridItem lg="3" md="6" sm="12">
+            <EnumDropDown
+                Label="Period"
+                FullWidth="true"
+                TItem="SummaryReportPeriodType"
+                Value="@_filterState.PeriodType"
+                ValueChanged="OnChangePeriodType"/>
+        </FluentGridItem>
+        <FluentGridItem lg="3" md="6" sm="12">
+            <FluentDatePicker
+                Label="Date start"
+                Class="w-100"
+                Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+                Value="@_filterState.StartDate"
+                ValueChanged="@OnChangeDateStart"/>
+        </FluentGridItem>
+        <FluentGridItem lg="3" md="6" sm="12">
+            <FluentDatePicker
+                Label="Date end"
+                Class="w-100"
+                Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
+                Value="@_filterState.EndDate"
+                ValueChanged="@OnChangeDateEnd"/>
+        </FluentGridItem>
+    </FluentGrid>
 </FluentToolbar>

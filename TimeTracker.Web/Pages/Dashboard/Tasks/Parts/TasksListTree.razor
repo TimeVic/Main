@@ -5,6 +5,7 @@
 <FluentToolbar Class="w-100">
 
     <TaskListsDropDown
+        Clearable="false"
         Value="@(_selectedTaskList?.Id ?? 0)"
         Disabled="@(!_tasksListState.Value.List.Any())"
         SelectedItemChanged="@((taskList) => OnSelectedTasksList(taskList))"/>

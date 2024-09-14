@@ -5,31 +5,37 @@
 <div class="w-time-entry-list w-100 mb-3 @Class">
 
     <FluentDataGrid 
+        Loading="_state.Value.IsListLoading"
         Items="@_list.AsQueryable()" 
         ShowHover="true">
         @if (IsFilteredList)
         {
-            <PropertyColumn Title="User" Property="@(p => p.User.Name)" Sortable="false"/>
+            <PropertyColumn 
+                Width="100px"
+                Title="User"
+                Property="@(p => p.User.Name)" 
+                Sortable="false"/>
         }
         <TemplateColumn
             Title="Date"
-            Width="120px"
+            Width="100px"
             Sortable="false">
             @context.Date.ToShortDateString()
         </TemplateColumn>
         <TemplateColumn
             Title="Time"
-            Width="160px"
+            Width="130px"
             Sortable="false">
             @_timeParsingService.TimeSpanToTimeString(context.StartTime) - @_timeParsingService.TimeSpanToTimeString(context.EndTime.Value)
         </TemplateColumn>
         <PropertyColumn
             Title="Duration"
-            Width="120px"
+            Width="90px"
             Property="@(p => @_timeParsingService.TimeSpanToTimeString(p.Duration, true))"
             Sortable="false"/>
         <TemplateColumn
             Title="Project"
+            Tooltip="true"
             Sortable="false">
             @context.Project?.Name
         </TemplateColumn>
@@ -54,6 +60,7 @@
         </TemplateColumn>
         <TemplateColumn
             Title="Description"
+            Tooltip="true"
             Sortable="false">
             @GetDescriptionLabel(context)
         </TemplateColumn>
@@ -69,7 +76,7 @@
         </TemplateColumn>
         <TemplateColumn
             Title="Actions"
-            Width="120px"
+            Width="140px"
             Sortable="false">
             <FluentButton
                 IconStart="@(new Icons.Regular.Size20.Copy())"

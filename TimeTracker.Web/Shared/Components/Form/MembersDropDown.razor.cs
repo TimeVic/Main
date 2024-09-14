@@ -70,6 +70,9 @@ public partial class MembersDropDown
     [Parameter] 
     public bool Required { get; set; }
 
+    [Parameter]
+    public bool FullWidth { get; set; } = false;
+    
     [Inject]
     public IState<WorkspaceMembershipsState> _state { get; set; }
     

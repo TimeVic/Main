@@ -17,17 +17,24 @@ public partial class TaskListsDropDown
     [Parameter] 
     public bool Required { get; set; }
 
-    [Parameter]
-    public bool AllowClear { get; set; } = true;
+    [Parameter] 
+    public bool Clearable { get; set; }
     
     [Parameter]
     public long Value
     {
-        get => _selectedId;
+        get
+        {
+            long.TryParse(_selectedId, out var id);
+            return id;
+        }
         set
         {
-            if (_selectedId != value)
-                _selectedId = value;
+            if (value.ToString() != _selectedId)
+            {
+                _selectedId = value.ToString();
+                UpdateSelectedItem();
+            }
         }
     }
     
@@ -60,13 +67,16 @@ public partial class TaskListsDropDown
     [Parameter]
     public bool IsExtendedInfo { get; set; } = true;
     
+    [Parameter]
+    public bool FullWidth { get; set; } = false;
+    
     [Inject]
     public IState<TasksListState> _state { get; set; }
     
-    private TaskListDto? _selectedItem => _list.FirstOrDefault(item => item.Id == _selectedId);
+    private TaskListDto? _selectedItem;
     private ICollection<TaskListDto> _list = new List<TaskListDto>();
     private IEnumerable<IGrouping<long, TaskListDto>> _groupedList => _list.GroupBy(item => item.Project.Id).AsQueryable();
-    private long _selectedId = 0;
+    private string? _selectedId = null;
     private long? _projectId = null;
     private string? _searchString = null;
     public string? _placeholder => _selectedItem is null ? Placeholder : null;
@@ -82,21 +92,13 @@ public partial class TaskListsDropDown
         UpdateList();
     }
     
-    private Task OnValueChanged(TaskListDto taskList)
+    private void OnValueChanged(TaskListDto? taskList)
     {
-        var selectedId = taskList.Id; 
-        if (selectedId != (_selectedItem?.Id ?? 0))
+        if (_selectedItem?.Id != taskList?.Id)
         {
-            _selectedId = selectedId;
-            SelectedItemChanged.InvokeAsync(_selectedItem);    
+            UpdateSelectedItem();
+            SelectedItemChanged.InvokeAsync(_selectedItem);
         }
-        return Task.CompletedTask;
-    }
-
-    private string ToStringFunc(long taskListId)
-    {
-        var item = _state.Value.List.FirstOrDefault(item => item.Id == taskListId);
-        return item?.Name ?? string.Empty;
     }
     
     private void UpdateList()
@@ -110,5 +112,21 @@ public partial class TaskListsDropDown
         {
             _list = _list.Where(item => item.Project?.Client?.Id == ClientId).ToList();
         }
+
+        UpdateSelectedItem();
+    }
+    
+    private void OnClear()
+    {
+        if (string.IsNullOrEmpty(_selectedId))
+            return;
+        _selectedId = null;
+    }
+    
+    private void UpdateSelectedItem()
+    {
+        _selectedItem = _list.FirstOrDefault(
+            item => item.Id.ToString() == _selectedId
+        );
     }
 }

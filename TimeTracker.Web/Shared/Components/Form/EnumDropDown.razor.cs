@@ -43,6 +43,9 @@ public partial class EnumDropDown<TItem>
     
     [Parameter]
     public bool Disabled { get; set; }
+
+    [Parameter]
+    public bool FullWidth { get; set; } = false;
     
     private List<TItem?> _list;
     private TItem? _value;

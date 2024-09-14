@@ -49,6 +49,9 @@ public partial class ClientsDropDown
     [Parameter]
     public string Class { get; set; }
     
+    [Parameter]
+    public bool FullWidth { get; set; } = false;
+    
     [Inject]
     public ILogger<ClientsDropDown> _logger { get; set; }
     
