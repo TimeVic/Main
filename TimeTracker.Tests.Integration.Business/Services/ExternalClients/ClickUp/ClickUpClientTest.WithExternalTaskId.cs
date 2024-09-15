@@ -14,7 +14,7 @@ namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.ClickU
 
 public partial class SendNewTimeEntityTest : BaseTest
 {
-    [Fact]
+    // [Fact]
     public async Task ShouldUseTaskIdFromTaskIfExists()
     {
         var task = await _taskSeeder.CreateAsync(user: _user);

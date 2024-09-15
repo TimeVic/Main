@@ -32,7 +32,7 @@ node('testing-node') {
         'Mongo__Password': "",
         
         "Integration__Jira__Url": "https://lampego.atlassian.net/",
-        "Integration__Jira__TaskId": "TV-1",
+        "Integration__Jira__TaskId": "TM-2",
     ]
 
     runStage(Stage.UPDATE_GIT_STATUS) {
