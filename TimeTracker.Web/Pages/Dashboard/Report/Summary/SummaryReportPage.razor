@@ -5,45 +5,45 @@
 @using ApexCharts
 @using TimeTracker.Api.Shared.Dto.Model.Report
 @using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation
+@using TimeTracker.Web.Pages.Dashboard.Shared.LayoutParts
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<FluentStack Orientation="Orientation.Vertical" Class="w-100 p-2">
-
+<BodyLayout Title="Summary">
     <FilterForm/>
 
     @if (!_state.Value.IsLoading)
     {
-    <FluentCard class="mb-4 pa-4 w-100">
-        @if (_byDateItems.Any())
-        {
-            <ApexChart
-                TItem="SummaryByDaysReportItemDto">
+        <FluentCard class="mb-4 pa-4 w-100">
+            @if (_byDateItems.Any())
+            {
+                <ApexChart
+                    TItem="SummaryByDaysReportItemDto">
 
-                <ApexPointSeries
-                    TItem="SummaryByDaysReportItemDto"
-                    Items="_byDateItems"
-                    Name="Hours"
-                    SeriesType="@(_isShowChartWithLineSeries ? SeriesType.Line : SeriesType.Bar)"
-                    XValue="@(e => e.Date.ToShortDateString())"
-                    YValue="@(e => Math.Round((decimal) e.Duration.TotalHours, 2))"/>
+                    <ApexPointSeries
+                        TItem="SummaryByDaysReportItemDto"
+                        Items="_byDateItems"
+                        Name="Hours"
+                        SeriesType="@(_isShowChartWithLineSeries ? SeriesType.Line : SeriesType.Bar)"
+                        XValue="@(e => e.Date.ToShortDateString())"
+                        YValue="@(e => Math.Round((decimal)e.Duration.TotalHours, 2))"/>
 
-                <ApexPointSeries
-                    TItem="SummaryByDaysReportItemDto"
-                    Items="_byDateItems"
-                    Name="Amount"
-                    SeriesType="@(_isShowChartWithLineSeries ? SeriesType.Line : SeriesType.Bar)"
-                    XValue="@(e => e.Date.ToShortDateString())"
-                    YValue="@(e => Math.Round((decimal) e.Amount, 2))"/>
-            </ApexChart>
-        }
-        else
-        {
-            <FluentLabel Typo="Typography.Subject" Class="mx-4">No data</FluentLabel>
-        }
+                    <ApexPointSeries
+                        TItem="SummaryByDaysReportItemDto"
+                        Items="_byDateItems"
+                        Name="Amount"
+                        SeriesType="@(_isShowChartWithLineSeries ? SeriesType.Line : SeriesType.Bar)"
+                        XValue="@(e => e.Date.ToShortDateString())"
+                        YValue="@(e => Math.Round((decimal)e.Amount, 2))"/>
+                </ApexChart>
+            }
+            else
+            {
+                <FluentLabel Typo="Typography.Subject" Class="mx-4">No data</FluentLabel>
+            }
 
-    </FluentCard>
+        </FluentCard>
     }
 
     <FluentGrid class="w-100">
@@ -55,34 +55,34 @@
         <FluentGridItem xs="12" md="12" lg="10">
             @if (_state.Value.IsLoading)
             {
-            <FluentCard class="mt-4 pa-4 d-flex justify-content-center">
-                <FluentProgressRing/>
-            </FluentCard>
+                <FluentCard class="mt-4 pa-4 d-flex justify-content-center">
+                    <FluentProgressRing/>
+                </FluentCard>
             }
             else if (_state.Value.SummaryReportData?.GroupedByDay != null)
             {
-            <ByDateTable Items="@_state.Value.SummaryReportData.GroupedByDay"></ByDateTable>
+                <ByDateTable Items="@_state.Value.SummaryReportData.GroupedByDay"></ByDateTable>
             }
             else if (_state.Value.SummaryReportData?.GroupedByWeek != null)
             {
-            <ByWeekTable Items="@_state.Value.SummaryReportData.GroupedByWeek"></ByWeekTable>
+                <ByWeekTable Items="@_state.Value.SummaryReportData.GroupedByWeek"></ByWeekTable>
             }
             else if (_state.Value.SummaryReportData?.GroupedByClient != null)
             {
-            <ByClientTable Items="@_state.Value.SummaryReportData.GroupedByClient"></ByClientTable>
+                <ByClientTable Items="@_state.Value.SummaryReportData.GroupedByClient"></ByClientTable>
             }
             else if (_state.Value.SummaryReportData?.GroupedByProject != null)
             {
-            <ByProjectTable Items="@_state.Value.SummaryReportData.GroupedByProject"></ByProjectTable>
+                <ByProjectTable Items="@_state.Value.SummaryReportData.GroupedByProject"></ByProjectTable>
             }
             else if (_state.Value.SummaryReportData?.GroupedByMonth != null)
             {
-            <ByMonthTable Items="@_state.Value.SummaryReportData.GroupedByMonth"></ByMonthTable>
+                <ByMonthTable Items="@_state.Value.SummaryReportData.GroupedByMonth"></ByMonthTable>
             }
             else if (_state.Value.SummaryReportData?.GroupedByUser != null)
             {
-            <ByUserTable Items="@_state.Value.SummaryReportData.GroupedByUser"></ByUserTable>
+                <ByUserTable Items="@_state.Value.SummaryReportData.GroupedByUser"></ByUserTable>
             }
         </FluentGridItem>
     </FluentGrid>
-</FluentStack>
+</BodyLayout>

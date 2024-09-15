@@ -1,5 +1,6 @@
 ﻿
 @inherits BaseComponent
+@using TimeTracker.Web.Shared.Components.Form.Select
 @implements IDialogContentComponent
 
 <FluentDialogHeader ShowDismiss="true">
@@ -33,12 +34,13 @@
 
         <ClientsDropDown
             Label="Client"
+            FullWidth="true"
             Value="@(model.ClientId)"
             SelectedItemChanged="@(item => model.ClientId = item?.Id ?? 0)"/>
 
         <ProjectsDropDown
             Label="Project"
-            Class="w-100"
+            FullWidth="true"
             ClientId="@(model.ClientId)"
             Value="@model.ProjectId"
             ShowProjectsWithoutClients="false"

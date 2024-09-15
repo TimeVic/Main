@@ -1,11 +1,10 @@
-﻿using TimeTracker.Business.Extensions;
+﻿using TimeTracker.Api.Shared.Dto.Entity.Common;
+using TimeTracker.Business.Extensions;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 
-public class UserDto
-{
-    public long Id { get; set; }
-    
+public class UserDto: BaseDto
+{   
     public string? UserName { get; set; }
     
     public string Email { get; set; }

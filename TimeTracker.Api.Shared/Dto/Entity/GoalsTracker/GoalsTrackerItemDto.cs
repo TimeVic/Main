@@ -1,11 +1,10 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Common;
 
 namespace TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 
-public class GoalsTrackerItemDto : IResponse
+public class GoalsTrackerItemDto : BaseDto
 {
-    public long Id { get; set; }
-
     public string Name { get; set; } = string.Empty;
 
     public int NumberOfTimes { get; set; } = 0;

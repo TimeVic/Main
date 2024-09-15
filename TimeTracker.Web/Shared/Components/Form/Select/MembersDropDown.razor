@@ -1,29 +1,30 @@
-﻿@inherits BaseReactiveComponent
+﻿@inherits TimeTracker.Web.Shared.Components.Form.Select.Core.BaseSingleSelect<WorkspaceMembershipDto>
 
-@using TimeTracker.Business.Common.Constants
 @using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
 
 <div class="justify-content-start w-select @Class @(FullWidth ? "w-100" : "")">
     <FluentSelect
-        TOption="ClientDto?"
+        TOption="WorkspaceMembershipDto?"
         Label="@Label"
+        Class="@SelectClass"
         Disabled="@Disabled"
-        Class="@(FullWidth ? "w-select-w-100" : "")"
-        Placeholder="@Placeholder"
+        Required="Required"
+        Placeholder="@_placeholder"
         Items="@_list.ToList()"
         @bind-Value="@_selectedId"
         OptionValue="@(dto => dto?.Id.ToString())"
         SelectedOptionChanged="OnValueChanged">
         <OptionTemplate>
-            @context?.Name
+            @context?.User.Name
         </OptionTemplate>
     </FluentSelect>
 
     @if (Clearable)
     {
-        <FluentButton
+        <FluentButton 
             Class="w-select-clear-btn"
-            IconStart="@(new Icons.Filled.Size16.Dismiss())"
+            IconStart="@(new Icons.Filled.Size16.Dismiss())" 
             OnClick="OnClear"/>
     }
 </div>

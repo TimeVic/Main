@@ -81,4 +81,10 @@ public partial class TimeEntryEditModal
         Content.TimeEntry.Date = date.Value.Date;
         SubmitForm();
     }
+
+    private void OnProjectChanged(ProjectDto? project)
+    {
+        Content.TimeEntry.Project = project;
+        SubmitForm();
+    }
 }

@@ -1,6 +1,7 @@
 ﻿
 @implements IDialogContentComponent<TimeEntryEditModal.Parameters>
 @using TimeTracker.Web.Shared.Components.Form
+@using TimeTracker.Web.Shared.Components.Form.Select
 @inherits BaseComponent
 
 <FluentDialogHeader ShowDismiss="true">
@@ -50,11 +51,12 @@
         </FluentLabel>
 
         <ProjectsDropDown
-            Class="mb-3 w-100"
+            Class="mb-3"
+            FullWidth="true"
             Label="Project"
             Clearable="true"
             Value="@(Content.TimeEntry.Project?.Id ?? 0)"
-            SelectedItemChanged="@(project => Content.TimeEntry.Project = project)"/>
+            SelectedItemChanged="@OnProjectChanged"/>
 
         <FluentStack Class="mb-3" Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
             <FluentCheckbox
@@ -82,3 +84,10 @@
 
     </EditForm>
 </FluentDialogBody>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton
+        Appearance="Appearance.Neutral"
+        OnClick="@OnCloseModal">OK</FluentButton>
+</FluentDialogFooter>

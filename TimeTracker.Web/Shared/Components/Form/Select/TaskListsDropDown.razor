@@ -1,15 +1,16 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Entity.Task
 
-@inherits BaseReactiveComponent
+@inherits TimeTracker.Web.Shared.Components.Form.Select.Core.BaseSingleSelect<TaskListDto>
 
 <div class="justify-content-start w-select @Class @(FullWidth ? "w-100" : "")">
     <FluentSelect
         TOption="TaskListDto"
         Label="@Label"
-        Class="@(FullWidth ? "w-select-w-100" : "")"
+        Class="@SelectClass"
         Multiple="false"
         Autofocus="false"
         Disabled="@Disabled"
+        Required="Required"
         Placeholder="@_placeholder"
         SelectedOption="_selectedItem"
         Appearance="Appearance.Outline"

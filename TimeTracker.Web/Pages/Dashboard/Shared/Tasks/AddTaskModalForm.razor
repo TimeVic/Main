@@ -1,5 +1,6 @@
 ﻿
 @using TimeTracker.Web.Shared.Components.Form
+@using TimeTracker.Web.Shared.Components.Form.Select
 
 @inherits BaseComponent
 @implements IDialogContentComponent<AddTaskModalForm.Parameters>
@@ -35,7 +36,8 @@
 
         <TaskListsDropDown
             Required="true"
-            Class="w-100 mb-3"
+            Class="mb-3"
+            FullWidth="true"
             Value="@model.TaskListId"
             SelectedItemChanged="@(value => model.TaskListId = value?.Id ?? 0)"/>
         

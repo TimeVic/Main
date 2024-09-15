@@ -1,11 +1,10 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Common;
 
 namespace TimeTracker.Api.Shared.Dto.Entity.Task;
 
-public class TaskCommentDto : IResponse
-{
-    public long Id { get; set; }
-    
+public class TaskCommentDto: BaseDto
+{   
     public string Comment { get; set; }
     
     public DateTime UpdateTime { get; set; }

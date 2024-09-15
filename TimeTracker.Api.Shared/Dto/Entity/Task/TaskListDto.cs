@@ -1,11 +1,10 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Common;
 
 namespace TimeTracker.Api.Shared.Dto.Entity.Task;
 
-public class TaskListDto : IResponse
-{
-    public long Id { get; set; }
-    
+public class TaskListDto: BaseDto
+{   
     public string Name { get; set; }
     
     public ProjectDto Project { get; set; }

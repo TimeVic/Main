@@ -1,5 +1,6 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
 @using TimeTracker.Web.Shared.Components.Form
+@using TimeTracker.Web.Shared.Components.Form.Select
 
 @inherits BaseReactiveComponent
 @implements IDialogContentComponent<AddTasksListModalForm.Parameters>
@@ -35,7 +36,7 @@
 
         <div class="mb-2">
             <ProjectsDropDown
-                Class="w-100"
+                FullWidth="true"
                 Label="Project"
                 Value="@(model.ProjectId)"
                 SelectedItemChanged="@(item => model.ProjectId = item?.Id ?? 0)"

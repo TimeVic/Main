@@ -3,13 +3,15 @@
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Report.TimeEntry.Parts
 @using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
+@using TimeTracker.Web.Pages.Dashboard.Shared.LayoutParts
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<FluentStack Orientation="Orientation.Vertical" Class="p-2">
+<BodyLayout Title="Time entries">
     <FilterForm/>
+
     <TimeEntryList
         Class="mt-4"
         IsFilteredList="@true"/>
-</FluentStack>
+</BodyLayout>

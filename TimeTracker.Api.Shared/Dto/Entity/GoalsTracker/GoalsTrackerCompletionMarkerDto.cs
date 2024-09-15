@@ -1,11 +1,10 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Common;
 
 namespace TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 
-public class GoalsTrackerCompletionMarkerDto : IResponse
+public class GoalsTrackerCompletionMarkerDto: BaseDto
 {
-    public long Id { get; set; }
-
     public int DayOfMonth { get; set; } = 0;
 
     public bool IsChecked { get; set; } = false;

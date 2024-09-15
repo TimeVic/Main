@@ -1,10 +1,9 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Tag;
 
-namespace TimeTracker.Web.Shared.Components.Form;
+namespace TimeTracker.Web.Shared.Components.Form.Select;
 
 public partial class TagsDropDown
 {

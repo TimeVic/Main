@@ -10,7 +10,6 @@ public partial class ModalDialogProviderService
     {
         var parameters = new DialogParameters
         {
-            Width = "300px",
             PrimaryAction = "",
             TrapFocus = false
         };

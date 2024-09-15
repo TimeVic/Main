@@ -35,7 +35,7 @@
                 Disabled="@_state.Value.IsTimeEntryProcessing"
                 Class="mr-3"
                 Appearance="Appearance.Neutral"
-                IconStart="@(new Icons.Filled.Size28.TasksApp())"
+                IconStart="@(new Icons.Regular.Size28.Add())"
                 OnClick="@(() => ShowAddTaskModal(_activeEntry!.Id))"/>
         }
 
@@ -53,7 +53,7 @@
             Appearance="Appearance.Neutral"
             Class="mr-3"
             Disabled="@(!_state.Value.HasActiveEntry || _state.Value.IsTimeEntryProcessing)"
-            IconStart="@(new Icons.Filled.Size24.ArrowDown())"/>
+            IconStart="@(new Icons.Regular.Size24.ArrowDown())"/>
 
         @if (IsShowTimeEntriesButton)
         {

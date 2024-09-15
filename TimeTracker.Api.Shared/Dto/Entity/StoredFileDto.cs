@@ -1,13 +1,12 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 
-public class StoredFileDto : IResponse
+public class StoredFileDto: BaseDto
 {
-    public long Id { get; set; }
-    
     public StoredFileType Type { get; set; }
     
     public StoredFileStatus Status { get; set; }

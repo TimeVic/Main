@@ -3,11 +3,12 @@
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Pages.Dashboard.Shared.LayoutParts
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<FluentStack Orientation="Orientation.Vertical" Class="p-2">
+<BodyLayout Title="Payments report">
     <FluentToolbar class="mb-2 w-100" Orientation="Orientation.Horizontal">
         <FluentDatePicker
             Label="Date start"
@@ -48,7 +49,7 @@
                     @clientName
                 </FluentLabel>
 
-                <FluentDataGrid 
+                <FluentDataGrid
                     TGridItem="PaymentsReportItemDto"
                     Class="w-100"
                     Items="@groupItem.AsQueryable()">
@@ -85,9 +86,9 @@
                         </FluentGridItem>
                     </FluentGrid>
                 </FluentCard>
-                
+
                 <hr/>
             }
         </FluentStack>
     }
-</FluentStack>
+</BodyLayout>

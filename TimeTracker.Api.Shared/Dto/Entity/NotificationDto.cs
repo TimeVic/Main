@@ -1,13 +1,12 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Constants;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 
-public class NotificationDto : IResponse
-{
-    public long Id { get; set; }
-    
+public class NotificationDto: BaseDto
+{   
     public virtual NotificationActionType Type { get; set; }
     
     public virtual bool IsRead { get; set; } = false;

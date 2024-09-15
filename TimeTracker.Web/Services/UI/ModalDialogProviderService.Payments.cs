@@ -11,7 +11,6 @@ public partial class ModalDialogProviderService
     {
         var parameters = new DialogParameters
         {
-            Width = "400px",
             PrimaryAction = "",
             TrapFocus = false
         };
@@ -22,9 +21,8 @@ public partial class ModalDialogProviderService
     {
         var parameters = new DialogParameters
         {
-            Width = "400px",
             PrimaryAction = "",
-            TrapFocus = false
+            TrapFocus = false,
         };
         await _dialogService.ShowDialogAsync<UpdatePaymentModal>(
             new UpdatePaymentModal.Parameters()

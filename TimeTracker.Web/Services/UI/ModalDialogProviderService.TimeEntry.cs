@@ -10,7 +10,6 @@ public partial class ModalDialogProviderService
     {
         var parameters = new DialogParameters
         {
-            Width = "500px",
             PrimaryAction = ""
         };
         await _dialogService.ShowDialogAsync<TimeEntryEditModal>(

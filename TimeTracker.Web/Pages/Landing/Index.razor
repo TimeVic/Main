@@ -5,28 +5,46 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<div>
-    <MudText 
+<FluentStack Orientation="Orientation.Horizontal">
+    <FluentLabel
         Class="mt-4"
-        Typo="Typo.h3"
-        Align="Align.Center">
-        Free and <a href="https://github.com/TimeVic/Main" target="_blank">open source</a> time tracker 
+        Typo="Typography.H3">
+        Free and <a href="https://github.com/TimeVic/Main" target="_blank">open source</a> time tracker
         <br/>
         for you or your team.
-    </MudText>
-</div>
-<div>
-    <MudText
-        Class="mt-4"
-        Typo="Typo.subtitle1"
-        Align="Align.Center">
-        Track your time across projects.
-    </MudText>
-</div>
-<div class="mb-4">
-    <MudText 
-        Typo="Typo.subtitle1"
-        Align="Align.Center">
+    </FluentLabel>
+
+    <FluentLabel
+        Class="mb-4"
+        Typo="Typography.Body">
         Add your team members to your workspace to track time spent within a team.
-    </MudText>
-</div>
+    </FluentLabel>
+
+    <FluentLabel
+        Class="mt-4"
+        Typo="Typography.Body">
+        Track your time across projects.
+    </FluentLabel>
+</FluentStack>
+
+@code
+{
+    [Inject] 
+    private NavigationManager _navigationManager { get; set; }
+    
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        AuthState.StateChanged += (sender, args) =>
+        {
+            if (AuthState.Value.IsLoggedIn)
+            {
+                _navigationManager.NavigateTo(SiteUrl.DashboardBase);
+            }
+            else
+            {
+                _navigationManager.NavigateTo(SiteUrl.Login);
+            }
+        };
+    }
+}

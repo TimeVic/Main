@@ -3,11 +3,12 @@
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Tasks.Parts
+@using TimeTracker.Web.Pages.Dashboard.Shared.LayoutParts
 
 @inherits BaseComponent
 @layout Layout
 
-<FluentStack Class="w-100 p-2">
+<BodyLayout Title="Tasks">
     <CascadingValue Name="TaskListId" Value="@TaskListId">
         <FluentStack Orientation="Orientation.Vertical">
             <TasksListTree/>
@@ -18,10 +19,10 @@
                 @_selectedTaskList?.Name
             </FluentLabel>
 
-            <FluentDivider 
+            <FluentDivider
                 Class="mb-2 w-100"
                 Orientation="Orientation.Horizontal"/>
-            
+
             @if (_selectedTaskList != null)
             {
                 <TasksFilterForm/>
@@ -32,4 +33,4 @@
             }
         </FluentStack>
     </CascadingValue>
-</FluentStack>
+</BodyLayout>

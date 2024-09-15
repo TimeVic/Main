@@ -1,24 +1,25 @@
-﻿@inherits BaseReactiveComponent
+﻿@using TimeTracker.Web.Core.Helpers
 
-@using TimeTracker.Api.Shared.Dto.Entity
+@typeparam TItem where TItem: struct, IConvertible
 
 <div class="justify-content-start w-select @Class @(FullWidth ? "w-100" : "")">
     <FluentSelect
-        TOption="ProjectDto?"
+        TOption="TItem?"
         Label="@Label"
-        Class="@(FullWidth ? "w-select-w-100" : "")"
+        Class="@SelectClass"
         Placeholder="@_placeholder"
-        Disabled="@(!_list.Any() || Disabled)"
         Items="@_list.ToList()"
-        @bind-Value="@_selectedId"
-        OptionValue="@(dto => dto?.Id.ToString())"
-        SelectedOptionChanged="OnValueChanged">
+        SelectedOption="@_value"
+        Disabled="@Disabled"
+        OptionValue="@(dto => dto?.ToString())"
+        OptionSelected="@(value => value!.Value.Equals(_value))"
+        ValueChanged="OnItemSelected">
         <OptionTemplate>
-            @context?.Name
-            @if (context?.Client != null)
+            @if (context is null)
             {
-            <text>(@context?.Client?.Name)</text>
+                return;
             }
+            @(EnumHelpers.GetDisplayName(typeof(TItem), context))
         </OptionTemplate>
     </FluentSelect>
 

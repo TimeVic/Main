@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace TimeTracker.Web.Shared.Components.Form;
+namespace TimeTracker.Web.Shared.Components.Form.Select;
 
 public partial class EnumDropDown<TItem>
 {
@@ -51,6 +51,17 @@ public partial class EnumDropDown<TItem>
     private TItem? _value;
     public string? _placeholder => _value is null ? Placeholder : null;
 
+    protected string SelectClass
+    {
+        get
+        {
+            if (FullWidth && Clearable)
+                return "w-select-w-100";
+            if (FullWidth)
+                return "w-100";
+            return "";        }
+    }
+    
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
