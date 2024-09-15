@@ -6,16 +6,16 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<FluentCard class="w-100">
-    <FluentButton
-        IconStart="@(new Icons.Filled.Size32.ArrowLeft())"
-        Appearance="Appearance.Neutral"
-        OnClick="@NavigateToTasksPage">
-        To list
-    </FluentButton>
-</FluentCard>
+<FluentStack Class="w-100" Orientation="Orientation.Vertical">
+    <FluentToolbar Class="w-100">
+        <FluentButton
+            IconStart="@(new Icons.Filled.Size32.ArrowLeft())"
+            Appearance="Appearance.Neutral"
+            OnClick="@NavigateToTasksPage">
+            To list
+        </FluentButton>
+    </FluentToolbar>
 
-<FluentCard class="w-100">
     @if (_isLoading)
     {
         <FluentProgressRing></FluentProgressRing>
@@ -24,4 +24,4 @@
     {
         <UpdateTaskForm Task="_task"/>
     }
-</FluentCard>
+</FluentStack>

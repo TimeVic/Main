@@ -3,6 +3,7 @@
 @using TimeTracker.Web.Shared.Components.Form
 @using TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using TimeTracker.Web.Shared.Components.Form.Select
 
 <div Class="w-time-form @Class">
     <FluentToolbar>
@@ -24,10 +25,13 @@
                 IconStart="@(new Icons.Regular.Size24.Play())"
                 Disabled="@_state.Value.IsTimeEntryProcessing"/>
         }
-        <TimeCounterField
-            Class="mr-3"
-            Value="@_activeEntry?.StartTime"
-            IsActive="@_hasActiveEntry"/>
+        @if (!IsShort)
+        {
+            <TimeCounterField
+                Class="mr-3"
+                Value="@_activeEntry?.StartTime"
+                IsActive="@_hasActiveEntry"/>
+        }
 
         @if (_activeEntry?.Task  == null && _activeEntry != null)
         {
@@ -39,22 +43,25 @@
                 OnClick="@(() => ShowAddTaskModal(_activeEntry!.Id))"/>
         }
 
-        @if (_activeEntry?.Task != null)
+        @if (_activeEntry?.Task != null && !IsShort)
         {
             <TaskIdBadge
                 Class="mr-3"
                 InternalTask="@_activeEntry?.Task"
                 IsClickable="true"/>
         }
-        
-        <FluentButton
-            id="js_time_entry_details_btn"
-            OnClick="@(() => _isDetailsOpened = !_isDetailsOpened)"
-            Appearance="Appearance.Neutral"
-            Class="mr-3"
-            Disabled="@(!_state.Value.HasActiveEntry || _state.Value.IsTimeEntryProcessing)"
-            IconStart="@(new Icons.Regular.Size24.ArrowDown())"/>
 
+        @if (!IsShort)
+        {
+            <FluentButton
+                id="js_time_entry_details_btn"
+                OnClick="@(() => _isDetailsOpened = !_isDetailsOpened)"
+                Appearance="Appearance.Neutral"
+                Class="mr-3"
+                Disabled="@(!_state.Value.HasActiveEntry || _state.Value.IsTimeEntryProcessing)"
+                IconStart="@(new Icons.Regular.Size24.ArrowDown())"/>
+        }
+        
         @if (IsShowTimeEntriesButton)
         {
             <FluentButton
@@ -69,6 +76,7 @@
                 <div style="width: calc(100% - 30px)">
                     <ProjectsDropDown
                         Label="Project"
+                        FullWidth="true"
                         Disabled="!_state.Value.HasActiveEntry"
                         Value="@(_activeEntry?.Project?.Id ?? 0)"
                         SelectedItemChanged="OnChangeProject"
