@@ -22,21 +22,9 @@ public partial class FileStorage: IFileStorage
         {
             using var fileStream = new MemoryStream();
             fileStream.Write(fileToUpload.DataToUpload);
-
-            var s3Request = new PutObjectRequest
-            {
-                BucketName = _bucketName,
-                Key = fileToUpload.CloudFilePath,
-                InputStream = fileStream,
-                AutoCloseStream = false,
-                StreamTransferProgress = (sender, args) =>
-                {
-                    _logger.LogTrace($"S3 file uploading progress: {args.PercentDone}%");
-                }
-            };
             
             _logger.LogDebug($"S3 file uploading started: {fileToUpload.CloudFilePath}");
-            var cloudFile = await _s3Client.PutObjectAsync(s3Request, cancellationToken);
+            var cloudFile = await _storageClient.Upload(fileToUpload, cancellationToken);
             if (cloudFile == null)
             {
                 throw new Exception($"File was not uploaded to cloud: {fileToUpload.CloudFilePath}");
@@ -58,13 +46,9 @@ public partial class FileStorage: IFileStorage
                     var cloudThumbFileName = $"{GetParentDir(fileToUpload)}/{fileToUpload.Type.GetFilePath("png")}";
                     
                     _logger.LogDebug($"S3 file thumb uploading started: {cloudThumbFileName}");
-                    var cloudThumbResponse = await _s3Client.PutObjectAsync(
-                        new PutObjectRequest()
-                        {
-                            BucketName = _bucketName,
-                            Key = cloudThumbFileName,
-                            InputStream = thumbStream
-                        },
+                    var cloudThumbResponse = await _storageClient.Upload(
+                        cloudThumbFileName, 
+                        thumbStream,
                         cancellationToken: cancellationToken
                     );
                     if (cloudThumbResponse != null)
