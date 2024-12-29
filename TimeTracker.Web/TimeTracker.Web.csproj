@@ -4,7 +4,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>12</LangVersion>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Production' ">
@@ -21,18 +21,18 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="Blazor-ApexCharts" Version="3.4.0" />
+        <PackageReference Include="Blazor-ApexCharts" Version="5.0.0" />
         <PackageReference Include="blazor-dragdrop" Version="2.6.1" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
-        <PackageReference Include="Fluxor.Blazor.Web" Version="6.0.0" />
+        <PackageReference Include="Fluxor.Blazor.Web" Version="6.2.1.5" />
         <PackageReference Include="Majorsoft.Blazor.WebAssembly.Logging.Console" Version="1.5.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.6" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.6" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.6" />
-        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.9.3" />
-        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.9.3" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.0" />
-        <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.0" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.0" />
+        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.11.0" />
+        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.11.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.3.0" />
+        <PackageReference Include="System.Net.Http.Json" Version="9.0.0" />
         <PackageReference Include="System.Reactive.Linq" Version="6.0.1" />
         <PackageReference Include="Toolbelt.Blazor.HttpClientInterceptor" Version="10.2.0" />
     </ItemGroup>

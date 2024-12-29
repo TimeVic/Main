@@ -32,6 +32,7 @@ public partial class Login
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         _isLoading = false;
         await UpdateReCaptchaAsync();
     }
