@@ -53,6 +53,6 @@ public partial class AddClientModal
 
     private void OnCloseModal()
     {
-        MudDialog.Hide();
+        MudDialog.CloseAsync();
     }
 }

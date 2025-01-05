@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Services;
@@ -30,7 +31,7 @@ public partial class ChangePassword
     
     private ResetPasswordStep2Request model = new();
     private bool _isLoading;
-    private MudForm _form;
+    private EditForm _form;
     private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
@@ -47,8 +48,7 @@ public partial class ChangePassword
     
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -58,13 +58,13 @@ public partial class ChangePassword
             var isSuccess = await _apiService.ResetPasswordStep2(model);
             if (isSuccess)
             {
-                await _toastService.ShowInfo("Your password has been changed");
+                _toastService.ShowInfo("Your password has been changed");
                 NavigationManager.NavigateTo("/");
             }
         }
         catch (Exception)
         {
-            await ToastService.ShowError("Incorrect email or password");
+            ToastService.ShowError("Incorrect email or password");
         }
         finally
         {

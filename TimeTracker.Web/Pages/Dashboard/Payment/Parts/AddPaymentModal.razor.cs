@@ -61,6 +61,6 @@ public partial class AddPaymentModal
     
     private void OnCloseModal()
     {
-        MudDialog.Hide();
+        MudDialog.CloseAsync();
     }
 }

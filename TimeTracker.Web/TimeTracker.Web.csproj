@@ -62,10 +62,7 @@
       <Content Remove="Pages\Dashboard\Calendar\CalendarPage.razor" />
       <Content Remove="Shared\Components\Form\TimeInput.razor" />
       <Content Remove="Shared\Components\Form\YesNoDropDown.razor" />
-      <Content Remove="Pages\Landing\User\Password\ResetPassword.razor" />
-      <Content Remove="Pages\Landing\User\Password\ChangePassword.razor" />
       <Content Remove="Store\GoalsTracker\**" />
-      <Content Remove="Pages\Landing\User\Password\**" />
       <Content Remove="Pages\Landing\User\Registration\**" />
       <Content Remove="Pages\Dashboard\Dashboard\**" />
       <Content Remove="Pages\Dashboard\GoalsTracker\**" />
@@ -102,14 +99,11 @@
       <Compile Remove="Pages\Dashboard\Calendar\CalendarPage.razor.cs" />
       <Compile Remove="Shared\Components\Form\TimeInput.razor.cs" />
       <Compile Remove="Shared\Components\Form\YesNoDropDown.razor.cs" />
-      <Compile Remove="Pages\Landing\User\Password\ResetPassword.razor.cs" />
-      <Compile Remove="Pages\Landing\User\Password\ChangePassword.razor.cs" />
       <Compile Remove="Services\UI\ModalDialogProviderService.GoalsTracker.cs" />
       <Compile Remove="Services\UI\ModalDialogProviderService.NotificationsCenter.cs" />
       <Compile Remove="Services\UI\ModalDialogProviderService.Tags.cs" />
       <Compile Remove="Services\UI\ModalDialogProviderService.WorkspaceMembership.cs" />
       <Compile Remove="Store\GoalsTracker\**" />
-      <Compile Remove="Pages\Landing\User\Password\**" />
       <Compile Remove="Pages\Landing\User\Registration\**" />
       <Compile Remove="Pages\Dashboard\Dashboard\**" />
       <Compile Remove="Pages\Dashboard\GoalsTracker\**" />
@@ -122,7 +116,6 @@
 
     <ItemGroup>
       <EmbeddedResource Remove="Store\GoalsTracker\**" />
-      <EmbeddedResource Remove="Pages\Landing\User\Password\**" />
       <EmbeddedResource Remove="Pages\Landing\User\Registration\**" />
       <EmbeddedResource Remove="Pages\Dashboard\Dashboard\**" />
       <EmbeddedResource Remove="Pages\Dashboard\GoalsTracker\**" />
@@ -142,7 +135,6 @@
       <None Remove="Shared\Components\Storage\FileUploader.razor.less" />
       <None Remove="Shared\Components\Storage\FileUploader.razor.css.map" />
       <None Remove="Store\GoalsTracker\**" />
-      <None Remove="Pages\Landing\User\Password\**" />
       <None Remove="Pages\Landing\User\Registration\**" />
       <None Remove="Pages\Dashboard\Dashboard\**" />
       <None Remove="Pages\Dashboard\GoalsTracker\**" />

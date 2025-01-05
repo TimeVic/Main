@@ -5,26 +5,92 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<FluentStack Orientation="Orientation.Horizontal">
-    <FluentLabel
-        Class="mt-4"
-        Typo="Typography.H3">
-        Free and <a href="https://github.com/TimeVic/Main" target="_blank">open source</a> time tracker
-        <br/>
-        for you or your team.
-    </FluentLabel>
+<FluentStack Orientation="Orientation.Vertical" Class="align-items-center">
+    
+    <div style="max-width: 800px" class="mt-3">
+        <FluentLabel Typo="Typography.H1">
+            Full free time tracker
+        </FluentLabel>
+        <FluentLabel Typo="Typography.Subject" Class="mt-2">
+            A completely free time tracker for you and your team. This project was created by computer engineers for their own needs.
+            Our team would like similar services to be available for small teams without extra financial costs.
+        </FluentLabel>
+        
+        <FluentLabel Typo="Typography.H2" Class="mt-5">
+            Timer
+        </FluentLabel>
+        <FluentCard Class="mt-2">
+            Track the time spent on work in real-time.
+        </FluentCard>
 
-    <FluentLabel
-        Class="mb-4"
-        Typo="Typography.Body">
-        Add your team members to your workspace to track time spent within a team.
-    </FluentLabel>
+        <FluentLabel Typo="Typography.H2" Class="mt-3">
+            Timesheets
+        </FluentLabel>
+        <FluentCard Class="mt-2">
+            Time tracking on convenient charts.
+        </FluentCard>
 
-    <FluentLabel
-        Class="mt-4"
-        Typo="Typography.Body">
-        Track your time across projects.
-    </FluentLabel>
+        <FluentLabel Typo="Typography.H2" Class="mt-3">
+            Reports
+        </FluentLabel>
+        <FluentCard Class="mt-2">
+            Generate convenient reports to track the productivity of you and your team.
+        </FluentCard>
+
+        <FluentLabel Typo="Typography.H2" Class="mt-3">
+            Rates/Payments
+        </FluentLabel>
+        <FluentCard Class="mt-2">
+            Keep track of the funds paid to you or still owed based on time spent and set rates.
+        </FluentCard>
+
+        <FluentLabel Typo="Typography.H2" Class="mt-3">
+            Sync with external services
+        </FluentLabel>
+        <FluentCard Class="mt-2">
+            Automatic synchronization with Jira.
+        </FluentCard>
+
+        <FluentLabel Typo="Typography.H2" Class="mt-3">
+            Tasks
+        </FluentLabel>
+        <FluentCard Class="mt-2">
+            <ul>
+                <li>Add tasks planned for completion.</li>
+                <li>Track the time spent on each task.</li>
+            </ul>
+        </FluentCard>
+
+        <FluentLabel Typo="Typography.H2" Class="mt-3">
+            Dashboards
+        </FluentLabel>
+        <FluentCard Class="mt-2">
+            <ul>
+                <li>Create separate environments for different teams.</li>
+                <li>Each environment includes its own set of clients, projects, and participants.</li>
+            </ul>
+        </FluentCard>
+    </div>
+    
+    @* <FluentLabel *@
+    @*     Class="mt-4" *@
+    @*     Typo="Typography.H3"> *@
+    @*     Free and <a href="https://github.com/TimeVic/Main" target="_blank">open source</a> time tracker *@
+    @*     <br/> *@
+    @*     for you or your team. *@
+    @* </FluentLabel> *@
+    @* *@
+    @* <FluentLabel *@
+    @*     Class="mb-4" *@
+    @*     Typo="Typography.Body"> *@
+    @*     Add your team members to your workspace to track time spent within a team. *@
+    @* </FluentLabel> *@
+    @* *@
+    @* <FluentLabel *@
+    @*     Class="mt-4" *@
+    @*     Typo="Typography.Body"> *@
+    @*     Track your time across projects. *@
+    @* </FluentLabel> *@
 </FluentStack>
 
 @code
@@ -37,14 +103,14 @@
         base.OnInitialized();
         AuthState.StateChanged += (sender, args) =>
         {
-            if (AuthState.Value.IsLoggedIn)
-            {
-                _navigationManager.NavigateTo(SiteUrl.DashboardBase);
-            }
-            else
-            {
-                _navigationManager.NavigateTo(SiteUrl.Login);
-            }
+            // if (AuthState.Value.IsLoggedIn)
+            // {
+            //     _navigationManager.NavigateTo(SiteUrl.DashboardBase);
+            // }
+            // else
+            // {
+            //     _navigationManager.NavigateTo(SiteUrl.Login);
+            // }
         };
     }
 }

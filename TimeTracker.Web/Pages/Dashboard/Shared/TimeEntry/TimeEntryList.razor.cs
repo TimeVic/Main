@@ -115,7 +115,7 @@ public partial class TimeEntryList
                 InternalTask: timeEntry.Task
             )
         );
-        MudDialog?.Hide();
+        MudDialog?.CloseAsync();
     }
 
     private async Task OnEditClick(TimeEntryDto timeEntry)

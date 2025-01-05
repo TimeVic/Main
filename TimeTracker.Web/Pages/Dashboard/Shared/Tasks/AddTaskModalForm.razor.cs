@@ -23,7 +23,7 @@ public partial class AddTaskModalForm
     public required Parameters Content { get; set; }
     
     [CascadingParameter] 
-    public required FluentDialog MudDialog { get; set; }
+    public required FluentDialog? Dialog { get; set; }
 
     private AddRequest model = new();
     private bool _isLoading = false;
@@ -81,15 +81,6 @@ public partial class AddTaskModalForm
 
     private void OnCloseModal()
     {
-        MudDialog.Hide();
-    }
-
-    private async Task OnKeyUp(KeyboardEventArgs arg)
-    {
-        if (arg.Code == "Enter")
-        {
-            await Submit();
-        }
-        await Task.CompletedTask;
+        Dialog?.CloseAsync();
     }
 }

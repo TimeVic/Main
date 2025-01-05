@@ -71,6 +71,6 @@ public partial class UpdateProjectModal
 
     private void OnCloseModal()
     {
-        MudDialog.Hide();
+        MudDialog.CloseAsync();
     }
 }

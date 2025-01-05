@@ -75,6 +75,6 @@ public partial class UpdateTasksListModalForm
     
     private void OnCloseModal()
     {
-        MudDialog.Hide();
+        MudDialog.CloseAsync();
     }
 }

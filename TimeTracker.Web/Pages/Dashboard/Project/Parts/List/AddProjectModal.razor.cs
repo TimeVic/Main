@@ -53,6 +53,6 @@ public partial class AddProjectModal
 
     private void OnCloseModal()
     {
-        MudDialog.Hide();
+        MudDialog.CloseAsync();
     }
 }

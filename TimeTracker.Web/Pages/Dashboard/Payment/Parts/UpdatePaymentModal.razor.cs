@@ -69,7 +69,7 @@ public partial class UpdatePaymentModal
 
     private void OnCloseModal()
     {
-        MudDialog.Hide();
+        MudDialog.CloseAsync();
     }
 
     private void OnUpdateTime(DateTime? paymentTime)

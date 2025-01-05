@@ -66,7 +66,7 @@ public partial class TimeEntryEditModal
     
     private void OnCloseModal()
     {
-        MudDialog.Hide();
+        MudDialog.CloseAsync();
     }
 
     private void OnChangeDescription(string? description)

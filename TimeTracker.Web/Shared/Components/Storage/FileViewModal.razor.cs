@@ -41,6 +41,6 @@ public partial class FileViewModal
     
     private void OnCloseModal()
     {
-        MudDialog.Hide();
+        MudDialog.CloseAsync();
     }
 }

@@ -173,6 +173,6 @@ public partial class UpdateTaskForm
     
     private void OnCloseModal()
     {
-        MudDialog.Hide();
+        MudDialog.CloseAsync();
     }
 }

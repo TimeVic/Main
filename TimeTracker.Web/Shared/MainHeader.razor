@@ -14,7 +14,17 @@
             <div class="d-md-inline-flex align-items-center w-time-entry-form">
                 <TimeEntryForm IsShowTimeEntriesButton="true"/>
             </div>
+        }
+        
+        @if (AuthState.Value.IsLoggedIn)
+        {
             <FluentGrid Justify="JustifyContent.FlexEnd">
+                @if (_isShowDashboardLink)
+                {
+                    <FluentNavLink Href="@SiteUrl.Dashboard_TimeEntry">
+                        <FluentButton Appearance="Appearance.Stealth">Dashboard</FluentButton>
+                    </FluentNavLink>
+                }
                 <FluentProfileMenu
                     Status="@PresenceStatus.Available"
                     HeaderLabel="@_workspace.Name"
@@ -23,8 +33,20 @@
                     EMail="@_user.Email"
                     OnHeaderButtonClick="Logout"
                     PopoverStyle="min-width: 380px;"/>
-            </FluentGrid>
+            </FluentGrid>    
         }
+        else
+        {
+            <FluentToolbar>
+                <FluentNavLink Href="@SiteUrl.Login">
+                    <FluentButton Appearance="Appearance.Stealth">Login</FluentButton>
+                </FluentNavLink>
+                <FluentNavLink Href="@SiteUrl.Registration_Step1">
+                    <FluentButton Appearance="Appearance.Stealth">Registration</FluentButton>
+                </FluentNavLink>
+            </FluentToolbar>
+        }
+        
         @* <FluentSpacer/> *@
 
         @* <MudAppBar Color="Color.Primary" Dense="true"> *@

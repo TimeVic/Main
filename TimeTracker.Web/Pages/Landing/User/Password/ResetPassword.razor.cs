@@ -33,6 +33,7 @@ public partial class ResetPassword
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         _isLoading = false;
         await UpdateReCaptchaAsync();
     }
@@ -44,8 +45,7 @@ public partial class ResetPassword
     
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -55,13 +55,13 @@ public partial class ResetPassword
             var isSuccess = await _apiService.ResetPasswordStep1(model);
             if (isSuccess)
             {
-                await _toastService.ShowInfo("Email has been sent");
+                _toastService.ShowInfo("Email has been sent");
                 model.Email = string.Empty;
             }
         }
         catch (Exception)
         {
-            await ToastService.ShowError("Incorrect email or password");
+            ToastService.ShowError("Incorrect email or password");
         }
         finally
         {
