@@ -17,6 +17,8 @@
     <FluentDataGrid
         Class="w-100"
         Items="@_state.Value.List.AsQueryable()"
+        Virtualize="true"
+        ItemSize="46"
         ShowHover="true">
 
         <TemplateColumn

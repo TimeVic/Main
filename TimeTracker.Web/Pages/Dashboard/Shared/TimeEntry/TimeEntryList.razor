@@ -32,7 +32,7 @@
         </TemplateColumn>
         <PropertyColumn
             Title="Duration"
-            Width="90px"
+            Width="110px"
             Property="@(p => @_timeParsingService.TimeSpanToTimeString(p.Duration, true))"
             Sortable="false"/>
         <TemplateColumn
@@ -68,7 +68,7 @@
         </TemplateColumn>
         <TemplateColumn
             Title="Billable"
-            Width="120px"
+            Width="95px"
             Align="Align.Center"
             Sortable="false">
             @if (context.IsBillable)
@@ -78,7 +78,7 @@
         </TemplateColumn>
         <TemplateColumn
             Title="Actions"
-            Width="140px"
+            Width="115px"
             Sortable="false">
             <FluentButton
                 IconStart="@(new Icons.Regular.Size20.Copy())"
