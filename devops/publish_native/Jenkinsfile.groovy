@@ -2,7 +2,7 @@
 import com.shared.jenkins.docker.DockerHelper
 import com.shared.jenkins.docker.DockerContainer
 
-def environmentKey = params.ENVIRONMENT.toLowerCase()
+def environmentKey = params.ENVIRONMENT?.toLowerCase()
 
 def dockerHelper = new DockerHelper(this)
 public Map<String, String> envVariables = new HashMap<String, String>()
