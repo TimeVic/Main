@@ -16,6 +16,7 @@
     <FluentDataGrid
         TGridItem="PaymentDto"
         class="mb-2 w-100"
+        RowSize="DataGridRowSize.Medium"
         Loading="@_state.Value.IsListLoading"
         Items="@_state.Value.List.AsQueryable()">
         <PropertyColumn Title="Client" Property="@(p => p.Client.Name)" Sortable="false"/>

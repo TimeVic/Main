@@ -7,8 +7,7 @@
     <FluentDataGrid 
         Loading="_state.Value.IsListLoading"
         Items="@_list.AsQueryable()"
-        ItemSize="46"
-        Virtualize="true"
+        RowSize="DataGridRowSize.Medium"
         ShowHover="true">
         @if (IsFilteredList)
         {

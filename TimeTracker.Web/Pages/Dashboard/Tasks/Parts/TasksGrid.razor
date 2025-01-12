@@ -22,7 +22,7 @@
     Class="w-100"
     Loading="_isLoading"
     Virtualize="true"
-    ItemSize="45"
+    ItemSize="46"
     OnRowClick="@(async (eventObj) => await OnEditTask(eventObj.Item))"
     Items="@_tasks.AsQueryable()"
     ShowHover="true">

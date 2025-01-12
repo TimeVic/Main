@@ -1,12 +1,12 @@
 ﻿
 @implements IDialogContentComponent<TimeEntryEditModal.Parameters>
-@using TimeTracker.Web.Shared.Components.Form
 @using TimeTracker.Web.Shared.Components.Form.Select
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 @inherits BaseComponent
 
 <FluentDialogHeader ShowDismiss="true">
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
-        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())"/>
         <FluentLabel Typo="Typography.PaneHeader">
             Edit time entry
         </FluentLabel>
@@ -50,13 +50,16 @@
             Duration: <b>@_timeParsingService.TimeSpanToTimeString(_duration, true)</b>
         </FluentLabel>
 
-        <ProjectsDropDown
-            Class="mb-3"
-            FullWidth="true"
-            Label="Project"
-            Clearable="true"
-            Value="@(Content.TimeEntry.Project?.Id ?? 0)"
-            SelectedItemChanged="@OnProjectChanged"/>
+        @if (Content.TimeEntry.Task == null)
+        {
+            <ProjectsDropDown
+                Class="mb-3"
+                FullWidth="true"
+                Label="Project"
+                Clearable="true"
+                Value="@(Content.TimeEntry.Project?.Id ?? 0)"
+                SelectedItemChanged="@OnProjectChanged"/>
+        }
 
         <FluentStack Class="mb-3" Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
             <FluentCheckbox
@@ -70,6 +73,11 @@
                 Disabled="@(!Content.TimeEntry.IsBillable)"
                 Step=".01M"
                 Min="0.0M"/>
+
+            @if (Content.TimeEntry.Task != null)
+            {
+                <TaskIdBadge IsLink="true" InternalTask="Content.TimeEntry.Task"/>
+            }
         </FluentStack>
 
         <FluentTextArea

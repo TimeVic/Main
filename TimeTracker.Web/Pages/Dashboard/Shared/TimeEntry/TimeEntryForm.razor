@@ -74,20 +74,16 @@
         <FluentPopover Style="width: 400px;" VerticalThreshold="170" AnchorId="js_time_entry_details_btn" @bind-Open="_isDetailsOpened">
             <Body>
                 <div style="width: calc(100% - 30px)">
-                    <ProjectsDropDown
-                        Label="Project"
-                        FullWidth="true"
-                        Disabled="!_state.Value.HasActiveEntry"
-                        Value="@(_activeEntry?.Project?.Id ?? 0)"
-                        SelectedItemChanged="OnChangeProject"
-                        Class="mb-3 w-100"/>
-                    @* @if (_activeEntry?.Task != null) *@
-                    @* { *@
-                    @*     <TaskIdBadge *@
-                    @*         Class="mr-3 mt-4" *@
-                    @*         InternalTask="@_activeEntry?.Task" *@
-                    @*         IsClickable="true"/> *@
-                    @* } *@
+                    @if (_activeEntry?.Task == null)
+                    {
+                        <ProjectsDropDown
+                            Label="Project"
+                            FullWidth="true"
+                            Disabled="!_state.Value.HasActiveEntry"
+                            Value="@(_activeEntry?.Project?.Id ?? 0)"
+                            SelectedItemChanged="OnChangeProject"
+                            Class="mb-3 w-100"/>
+                    }
                     <FluentTextArea
                         AriaLabel="Description"
                         Disabled="@(!_state.Value.HasActiveEntry)"
