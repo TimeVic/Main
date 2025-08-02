@@ -41,6 +41,7 @@ public class FileStorageGoogleClient: IFileStorageGoogleClient
             FileMode.Open,
             FileAccess.Read
         );
+        
         _credentials = GoogleCredential.FromStream(credentialsStream);
         if (_credentials == null)
             throw new ArgumentNullException(nameof(_credentials));
