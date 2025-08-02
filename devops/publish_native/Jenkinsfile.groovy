@@ -30,7 +30,7 @@ def gitCredentials="timevic_ssh_key_github"
 properties([
     parameters([
         // https://plugins.jenkins.io/git-parameter/
-        gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE'),
+        gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE', defaultValue: ''),
         string (name: 'NEW_VERSION', defaultValue: '', description: 'Provide version to create GIT tag'),
         choice(name: 'ENVIRONMENT', choices: ['Development', 'Production'], description: 'Select environment to deploy'),
     ]),
