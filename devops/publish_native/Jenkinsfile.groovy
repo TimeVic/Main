@@ -218,12 +218,11 @@ node('build-node') {
 //     }
 
     stage("Clean workspace") {
-        sh 'docker sytem prune -f'
         cleanWs()
     }
     
     stage('CleanUp Docker') {
-        sh 'docker sytem prune -f'
+        sh 'docker system prune -f'
     }
 }
 
@@ -305,12 +304,4 @@ node('web-node') {
 //             }
 //         }
 //     }
-
-    stage("Clean workspace") {
-        cleanWs()
-    }
-    
-    stage('CleanUp Docker') {
-        sh 'docker system prune -f'
-    }
 }
