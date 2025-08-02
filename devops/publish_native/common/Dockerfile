@@ -22,7 +22,7 @@ RUN echo "{}" > TimeTracker.Migrations/appsettings.Local.json
 RUN echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json
 
 RUN ["dotnet", "restore", "--verbosity=q"]
-RUN ["dotnet", "build", "--verbosity=q", "--configuration ${ASPNETCORE_ENVIRONMENT}"]
+RUN ["dotnet", "build", "--verbosity=q"]
 
 COPY ./devops/publish_native/common/boot.sh /usr/local/bin/php_boot
 

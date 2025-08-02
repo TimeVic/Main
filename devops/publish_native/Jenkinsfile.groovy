@@ -137,6 +137,10 @@ node('build-node') {
         envVariables.put('AWS__S3__BucketName', "timevic-${environmentKey}")
     }
 
+    stage('Build web image') {
+        dockerHelper.buildAndSave(webAppContainer, imageWebTmpName)
+    }
+
     stage('Build main image') {
         withCredentials([file(credentialsId: 'timevic_production_gcloud_credentials', variable: 'FILE')]) {
             sh 'cp $FILE .credentials/google.json'
@@ -145,10 +149,6 @@ node('build-node') {
             sh 'cp $FILE .credentials/firebase-credentials.json'
         }
         dockerHelper.buildAndSave(mainContainer, imageCommonTmpName)
-    }
-
-    stage('Build web image') {
-        dockerHelper.buildAndSave(webAppContainer, imageWebTmpName)
     }
     
     stage("Clean workspace") {
