@@ -83,12 +83,14 @@ node('build-node') {
             envVariables.put('App__FrontendUrl', 'https://timevic.com')
             dbName = 'timevic'
             dbPort = '5434'
+            mainContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', 'Production')
         }
         else if (params.ENVIRONMENT == 'Development')
         {
             envVariables.put('App__FrontendUrl', 'https://dev.timevic.com')
             dbName = 'timevic_dev'
             dbPort = '5432'
+            mainContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', 'Development')
         }
 
         // Common
@@ -232,4 +234,11 @@ node('web-node') {
             }
         }
     }
+    
+    stage('CleanUp') {
+        sh '''
+            rm ${imageCommonTmpName}
+            rm ${imageWebTmpName}
+        '''
+    }   
 }
