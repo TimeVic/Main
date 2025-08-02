@@ -71,6 +71,7 @@ node('build-node') {
         envVariables.put('Serilog__IsSendEmailIfError', 'false')
         envVariables.put('Serilog__MinimumLevel__Default', 'Debug')
         envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
+        webAppContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
 
         // GrayLog
         envVariables.put('App__Logging__GrayLog__Host', 'graylog.expertwith.com')
@@ -83,14 +84,12 @@ node('build-node') {
             envVariables.put('App__FrontendUrl', 'https://timevic.com')
             dbName = 'timevic'
             dbPort = '5434'
-            mainContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', 'Production')
         }
         else if (params.ENVIRONMENT == 'Development')
         {
             envVariables.put('App__FrontendUrl', 'https://dev.timevic.com')
             dbName = 'timevic_dev'
             dbPort = '5432'
-            mainContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', 'Development')
         }
 
         // Common
