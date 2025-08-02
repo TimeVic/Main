@@ -235,10 +235,10 @@ node('web-node') {
         }
     }
     
-    stage('CleanUp') {
-        sh '''
-            rm ${imageCommonTmpName}
-            rm ${imageWebTmpName}
-        '''
-    }   
+//     stage('CleanUp') {
+//         sh '''
+//             rm ${imageCommonTmpName}
+//             rm ${imageWebTmpName}
+//         '''
+//     }   
 }
