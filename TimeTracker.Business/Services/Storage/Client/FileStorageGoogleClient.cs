@@ -48,6 +48,7 @@ public class FileStorageGoogleClient: IFileStorageGoogleClient
         _bucketName = configuration.GetValue<string>("Google:Storage:BucketName");
         if (_bucketName == null)
             throw new ArgumentNullException(nameof(_bucketName));
+        
     }
     
     
