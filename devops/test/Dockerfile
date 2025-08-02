@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:noble
 WORKDIR /app
 USER root
 
@@ -19,8 +19,9 @@ RUN apt-get install -y tzdata lsb-release
 #RUN sysctl -p
 
 # Install .Net Core 7.0
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-RUN curl https://packages.microsoft.com/config/ubuntu/20.10/prod.list | tee /etc/apt/sources.list.d/msprod.list
+#RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+#RUN curl https://packages.microsoft.com/config/ubuntu/20.10/prod.list | tee /etc/apt/sources.list.d/msprod.list
+RUN add-apt-repository ppa:dotnet/backports
 
 # Install Redis repositories
 RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
@@ -28,16 +29,16 @@ RUN echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://
 
 # Install Postgres repositories
 # Create the file repository configuration:
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+#RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 # Import the repository signing key:
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+#RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 # Install packages
-RUN apt update
+RUN apt update 
 RUN apt-get install -y net-tools sudo netcat \
     default-jre \
-    postgresql postgresql-client redis \
-    dotnet-sdk-8.0
+    postgresql postgresql-contrib redis \
+    dotnet-sdk-9.0
 
 # Configure Postgres
 ENV PGTZ=Etc/UTC
