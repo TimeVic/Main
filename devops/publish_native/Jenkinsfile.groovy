@@ -5,8 +5,8 @@ import com.shared.jenkins.docker.DockerContainer
 def environmentKey = params.ENVIRONMENT?.toLowerCase()
 def containerSharedDir = "/mnt/local_share/docker_images/timevic"
 def imageName = "latest"
-def imageWebTmpName = "${containerSharedDir}/web_latest"
-def imageCommonTmpName = "${containerSharedDir}/common_latest"
+def imageWebTmpName = "${containerSharedDir}/${environmentKey}_web_latest"
+def imageCommonTmpName = "${containerSharedDir}/${environmentKey}_common_latest"
 
 def dockerHelper = new DockerHelper(this)
 public Map<String, String> envVariables = new HashMap<String, String>()
