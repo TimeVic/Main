@@ -91,6 +91,7 @@ node('build-node') {
                 sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json'
                 sh 'dotnet build --'
             }
 
@@ -200,7 +201,10 @@ def preconfigureAndStart(Closure<String> inner) {
 //         }
         inner.call(networkId)
     } finally {
-        sh "docker network rm ${networkId}"
+        def code = sh(script: "docker network rm ${networkId}", returnStatus: true)
+        if (code == 1) {
+            echo "Network was not removed..."
+        }
     }
 }
 
