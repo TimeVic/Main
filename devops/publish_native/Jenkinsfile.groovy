@@ -5,7 +5,8 @@ import com.shared.jenkins.docker.DockerContainer
 def environmentKey = params.ENVIRONMENT?.toLowerCase()
 def containerSharedDir = "/mnt/local_share/docker_images/timevic"
 def imageName = "latest"
-def imagTmpName = "${containerSharedDir}/${imageName}"
+def imageWebTmpName = "${containerSharedDir}/web_latest"
+def imageCommonTmpName = "${containerSharedDir}/common_latest"
 
 def dockerHelper = new DockerHelper(this)
 public Map<String, String> envVariables = new HashMap<String, String>()
@@ -137,11 +138,11 @@ node('build-node') {
         withCredentials([file(credentialsId: 'timevic_production_firebase_credentials', variable: 'FILE')]) {
             sh 'cp $FILE .credentials/firebase-credentials.json'
         }
-        dockerHelper.buildAndSave(mainContainer, imagTmpName)
+        dockerHelper.buildAndSave(mainContainer, imageCommonTmpName)
     }
 
     stage('Build web image') {
-        dockerHelper.buildAndSave(webAppContainer, imagTmpName)
+        dockerHelper.buildAndSave(webAppContainer, imageWebTmpName)
     }
 
 //     stage('Stop containers') {
