@@ -3,6 +3,7 @@ import com.shared.jenkins.docker.DockerHelper
 import com.shared.jenkins.docker.DockerContainer
 
 def environmentKey = params.ENVIRONMENT?.toLowerCase()
+def containerSharedDir = "/mnt/local_share/docker_images/timevic"
 
 def dockerHelper = new DockerHelper(this)
 public Map<String, String> envVariables = new HashMap<String, String>()
@@ -140,84 +141,84 @@ node('abedor-mainframe-web') {
         withCredentials([file(credentialsId: 'timevic_production_firebase_credentials', variable: 'FILE')]) {
             sh 'cp $FILE .credentials/firebase-credentials.json'
         }
-        dockerHelper.buildContainer(mainContainer)
+        dockerHelper.buildAndSave(mainContainer, containerSharedDir)
     }
 
     stage('Build web image') {
-        dockerHelper.buildContainer(webAppContainer)
+        dockerHelper.buildAndSave(webAppContainer, containerSharedDir)
     }
 
-    stage('Stop containers') {
-        dockerHelper.stopContainer(webAppContainer)
-
-        mainContainer.tagName = "timevic-api-${environmentKey}";
-        dockerHelper.stopContainer(mainContainer)
-    
-        mainContainer.tagName = "timevic-worker-${environmentKey}";
-        dockerHelper.stopContainer(mainContainer)
-    }
-
-    stage('Run migrations') {
-        dockerHelper.stopContainer(migrationContainer)
-            
-        migrationContainer.envVariables = envVariables.clone()
-        migrationContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Migrations')
-        dockerHelper.runContainer(migrationContainer)
-    }
-
-    stage('Run common API') {
-        mainContainer.tagName = "timevic-api-${environmentKey}";
-         if (params.ENVIRONMENT == 'Production')
-        {
-            mainContainer.port = '6200:80';
-        }
-        else if (params.ENVIRONMENT == 'Development')
-        {
-            mainContainer.port = '8215:80';
-        }
-        
-        mainContainer.envVariables = envVariables.clone()
-        mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Api')
-        dockerHelper.runContainer(mainContainer)
-    }
-
-    stage('Run worker') {
-        mainContainer.tagName = "timevic-worker-${environmentKey}";
-        mainContainer.port = '';
-        
-        mainContainer.envVariables = envVariables.clone()
-        mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerServices')
-        dockerHelper.runContainer(mainContainer)
-    }
-
-    stage('Run web app') {
-        if (params.ENVIRONMENT == 'Production')
-        {
-            webAppContainer.port = '6201:80';
-        }
-        else if (params.ENVIRONMENT == 'Development')
-        {
-            webAppContainer.port = '8216:80';
-        }
-        dockerHelper.runContainer(webAppContainer)
-    }   
-
-    if (params.NEW_VERSION) {
-        stage('Create GIT tag') {
-            def (VER_MAJOR, VER_MINOR, VER_PATCH, VER_BUILD) = params.NEW_VERSION.tokenize('.').collect { it.toInteger() }
-            env.VERSION_INCREMENT = VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH + "." + VER_BUILD
-
-            withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
-                sh '''
-                    git config core.sshCommand 'ssh -i ${key}'
-                    git config user.email "lampego@gmail.com"
-                    git config user.name "lampego"
-                    git tag "${VERSION_INCREMENT}"
-                    git push --tags
-                '''
-            }
-        }
-    }
+//     stage('Stop containers') {
+//         dockerHelper.stopContainer(webAppContainer)
+// 
+//         mainContainer.tagName = "timevic-api-${environmentKey}";
+//         dockerHelper.stopContainer(mainContainer)
+//     
+//         mainContainer.tagName = "timevic-worker-${environmentKey}";
+//         dockerHelper.stopContainer(mainContainer)
+//     }
+// 
+//     stage('Run migrations') {
+//         dockerHelper.stopContainer(migrationContainer)
+//             
+//         migrationContainer.envVariables = envVariables.clone()
+//         migrationContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Migrations')
+//         dockerHelper.runContainer(migrationContainer)
+//     }
+// 
+//     stage('Run common API') {
+//         mainContainer.tagName = "timevic-api-${environmentKey}";
+//          if (params.ENVIRONMENT == 'Production')
+//         {
+//             mainContainer.port = '6200:80';
+//         }
+//         else if (params.ENVIRONMENT == 'Development')
+//         {
+//             mainContainer.port = '8215:80';
+//         }
+//         
+//         mainContainer.envVariables = envVariables.clone()
+//         mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Api')
+//         dockerHelper.runContainer(mainContainer)
+//     }
+// 
+//     stage('Run worker') {
+//         mainContainer.tagName = "timevic-worker-${environmentKey}";
+//         mainContainer.port = '';
+//         
+//         mainContainer.envVariables = envVariables.clone()
+//         mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerServices')
+//         dockerHelper.runContainer(mainContainer)
+//     }
+// 
+//     stage('Run web app') {
+//         if (params.ENVIRONMENT == 'Production')
+//         {
+//             webAppContainer.port = '6201:80';
+//         }
+//         else if (params.ENVIRONMENT == 'Development')
+//         {
+//             webAppContainer.port = '8216:80';
+//         }
+//         dockerHelper.runContainer(webAppContainer)
+//     }   
+// 
+//     if (params.NEW_VERSION) {
+//         stage('Create GIT tag') {
+//             def (VER_MAJOR, VER_MINOR, VER_PATCH, VER_BUILD) = params.NEW_VERSION.tokenize('.').collect { it.toInteger() }
+//             env.VERSION_INCREMENT = VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH + "." + VER_BUILD
+// 
+//             withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
+//                 sh '''
+//                     git config core.sshCommand 'ssh -i ${key}'
+//                     git config user.email "lampego@gmail.com"
+//                     git config user.name "lampego"
+//                     git tag "${VERSION_INCREMENT}"
+//                     git push --tags
+//                 '''
+//             }
+//         }
+//     }
 
     stage("Clean workspace") {
         cleanWs()
