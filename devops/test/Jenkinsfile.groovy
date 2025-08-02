@@ -208,7 +208,7 @@ def runStage(Stage stageAction, Closure callback) {
 //             updateGitlabCommitStatus name: stageAction.toString(), state: 'success'
 //         } catch (Exception e) {
 //             updateGitlabCommitStatus name: stageAction.toString(), state: 'failed'
-//             throw new Exception(e.getMessage())
+            throw new Exception(e.getMessage())
 //         }
     }
 }
