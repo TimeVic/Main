@@ -192,9 +192,9 @@ def preconfigureAndStart(Closure<String> inner) {
     }
     try {
         sh "docker network create ${networkId}"
-        gitlabBuilds(builds: Stage.toListOfStrings()) {
-            inner.call(networkId)
-        }
+//         gitlabBuilds(builds: Stage.toListOfStrings()) {
+//             inner.call(networkId)
+//         }
     } finally {
         sh "docker network rm ${networkId}"
     }
