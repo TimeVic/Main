@@ -54,12 +54,6 @@ node('build-node') {
         }    
     }
 
-    stage('CleanUp Docker') {
-        sh """
-            docker image prune -f
-        """
-    }
-
     stage('Checkout') {
         cleanWs()
         sh """
@@ -223,6 +217,11 @@ node('build-node') {
 //     }
 
     stage("Clean workspace") {
+        sh 'docker sytem prune -f'
         cleanWs()
+    }
+    
+    stage('CleanUp Docker') {
+        sh 'docker sytem prune -f'
     }
 }
