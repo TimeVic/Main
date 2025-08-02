@@ -1,4 +1,4 @@
-node('testing-node') {
+node('build-node') {
     properties([
         disableConcurrentBuilds(),
         gitLabConnection('gitlab_lampego'),
