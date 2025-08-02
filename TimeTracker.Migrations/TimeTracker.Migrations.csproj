@@ -33,4 +33,12 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="appsettings.Local.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

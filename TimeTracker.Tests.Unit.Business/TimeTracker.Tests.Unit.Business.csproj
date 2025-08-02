@@ -29,10 +29,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Helpers\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="stubs\markdown\actual_1.htm">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
