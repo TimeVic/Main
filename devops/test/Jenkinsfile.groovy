@@ -204,7 +204,7 @@ def runStage(Stage stageAction, Closure callback) {
     stage(stageAction.toString()) {
 //         try {
 //             updateGitlabCommitStatus name: stageAction.toString(), state: 'running'
-//             callback()
+            callback()
 //             updateGitlabCommitStatus name: stageAction.toString(), state: 'success'
 //         } catch (Exception e) {
 //             updateGitlabCommitStatus name: stageAction.toString(), state: 'failed'
