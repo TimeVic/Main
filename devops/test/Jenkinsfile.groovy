@@ -188,7 +188,7 @@ def preconfigureAndStart(Closure<String> inner) {
     try {
         def code = sh(script: "docker network rm ${networkId}", returnStatus: true)
         if (code == 1) {
-            echo "Testing netowrk not found. Create..."
+            echo "Testing netowrk not found. Skip removing..."
         }
     } catch(Exception exception) {
         println exception.getMessage()
