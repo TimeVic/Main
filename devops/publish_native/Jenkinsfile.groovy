@@ -37,7 +37,7 @@ properties([
     disableConcurrentBuilds()
 ])
 
-node('abedor-mainframe-web') {
+node('build-node') {
 
     stage('Show deployment parameters') {
         echo "Repository: ${repositoryUrl}"
