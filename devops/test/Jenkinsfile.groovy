@@ -202,13 +202,13 @@ def preconfigureAndStart(Closure<String> inner) {
 
 def runStage(Stage stageAction, Closure callback) {
     stage(stageAction.toString()) {
-        try {
-            updateGitlabCommitStatus name: stageAction.toString(), state: 'running'
-            callback()
-            updateGitlabCommitStatus name: stageAction.toString(), state: 'success'
-        } catch (Exception e) {
-            updateGitlabCommitStatus name: stageAction.toString(), state: 'failed'
-            throw new Exception(e.getMessage())
-        }
+//         try {
+//             updateGitlabCommitStatus name: stageAction.toString(), state: 'running'
+//             callback()
+//             updateGitlabCommitStatus name: stageAction.toString(), state: 'success'
+//         } catch (Exception e) {
+//             updateGitlabCommitStatus name: stageAction.toString(), state: 'failed'
+//             throw new Exception(e.getMessage())
+//         }
     }
 }
