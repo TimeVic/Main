@@ -186,7 +186,10 @@ def mapToEnvVars(Map<String, String> list) {
 def preconfigureAndStart(Closure<String> inner) {
     def networkId = UUID.randomUUID().toString()
     try {
-        sh "docker network rm ${networkId}"
+        def code = sh(script: "docker network rm ${networkId}", returnStatus: true)
+        if (code == 1) {
+            echo "Testing netowrk not found. Create..."
+        }
     } catch(Exception exception) {
         println exception.getMessage()
     }
