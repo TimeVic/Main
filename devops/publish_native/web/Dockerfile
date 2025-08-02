@@ -2,7 +2,7 @@ FROM nginx:latest AS base
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS dot_net
 
-ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
 ENV DOTNET_USE_POLLING_FILE_WATCHER=true  
 ENV ASPNETCORE_URLS=http://+:80  
 
@@ -16,7 +16,7 @@ WORKDIR /app/TimeTracker.Web
 RUN apt update
 RUN apt install -y apt-transport-https wget ca-certificates
 RUN echo "{}" > appsettings.Local.json
-RUN dotnet publish --configuration=Development -o "/var/www" -f net9.0 -r linux-x64 --self-contained true
+RUN dotnet publish --configuration=${ENVIRONMENT} -o "/var/www" -f net9.0 -r linux-x64 --self-contained true /p:WasmApplicationEnvironmentName=${ENVIRONMENT}
 
 FROM base
 WORKDIR /usr/share/nginx/html

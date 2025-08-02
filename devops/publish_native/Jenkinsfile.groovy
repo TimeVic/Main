@@ -72,6 +72,7 @@ node('build-node') {
         envVariables.put('Serilog__MinimumLevel__Default', 'Debug')
         envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
         webAppContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
+        webAppContainer.buildVariables.put('ENVIRONMENT', params.ENVIRONMENT)
 
         // GrayLog
         envVariables.put('App__Logging__GrayLog__Host', 'graylog.expertwith.com')
