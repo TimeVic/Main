@@ -39,7 +39,7 @@ RUN echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://
 
 # Install packages
 RUN apt update 
-RUN apt-get install -y net-tools netcat-traditional
+RUN apt-get install -y net-tools netcat-traditional sudo
 #RUN apt-get default-jre
 RUN apt-get install -y postgresql postgresql-contrib
 RUN apt-get install -y redis
