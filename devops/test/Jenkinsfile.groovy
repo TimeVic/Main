@@ -1,7 +1,7 @@
 node('build-node') {
     properties([
         disableConcurrentBuilds(),
-        gitLabConnection('gitlab_lampego'),
+//         gitLabConnection('gitlab_lampego'),
     ])
 
     String testScriptParameters = '--logger=trx --no-restore --no-build --results-directory=./results'
