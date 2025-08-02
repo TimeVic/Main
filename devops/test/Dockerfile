@@ -33,17 +33,17 @@ RUN echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://
 # Import the repository signing key:
 #RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
-RUN apt install curl ca-certificates gnupg
-RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg
-RUN echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+#RUN apt install curl ca-certificates gnupg
+#RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg
+#RUN echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
 
 # Install packages
 RUN apt update 
 RUN apt-get install -y net-tools sudo
 #RUN apt-get default-jre
-RUN apt-get postgresql postgresql-contrib postgresql-client-17
-RUN apt-get redis
-RUN apt-get dotnet-sdk-9.0 
+RUN apt-get install postgresql postgresql-contrib
+RUN apt-get install redis
+RUN apt-get install dotnet-sdk-9.0 
 
 # Configure Postgres
 ENV PGTZ=Etc/UTC
