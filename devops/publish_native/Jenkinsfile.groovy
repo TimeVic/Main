@@ -68,11 +68,15 @@ node('build-node') {
     stage('Set environment vars') {
         // Redis
         envVariables.put('Redis__Server', '10.10.0.2:6379')
+        
         envVariables.put('Serilog__IsSendEmailIfError', 'false')
         envVariables.put('Serilog__MinimumLevel__Default', 'Debug')
+        
+        mainContainer.buildVariables.put('ENVIRONMENT', params.ENVIRONMENT)
         envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
-        webAppContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
+        
         webAppContainer.buildVariables.put('ENVIRONMENT', params.ENVIRONMENT)
+        webAppContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
 
         // GrayLog
         envVariables.put('App__Logging__GrayLog__Host', 'graylog.expertwith.com')
