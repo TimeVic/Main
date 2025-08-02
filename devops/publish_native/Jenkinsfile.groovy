@@ -75,19 +75,22 @@ node('abedor-mainframe-web') {
         envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
 
         // GrayLog
-        envVariables.put('App__Logging__GrayLog__Host', '192.168.99.7')
+        envVariables.put('App__Logging__GrayLog__Host', 'graylog.expertwith.com')
         envVariables.put('App__Logging__GrayLog__Port', '12201')
 
         def dbName = ''
+        def dbPort = ''
         if (params.ENVIRONMENT == 'Production')
         {
             envVariables.put('App__FrontendUrl', 'https://timevic.com')
             dbName = 'timevic'
+            dbPort = '5434'
         }
         else if (params.ENVIRONMENT == 'Development')
         {
             envVariables.put('App__FrontendUrl', 'https://dev.timevic.com')
             dbName = 'timevic_dev'
+            dbPort = '5432'
         }
 
         // Common
@@ -106,7 +109,7 @@ node('abedor-mainframe-web') {
         ]) {
             envVariables.put(
                 'ConnectionStrings__DefaultConnection',
-                "User ID=${USER_NAME};Password=${PASSWORD};Host=192.168.99.8;Port=5433;Database=${dbName};Pooling=true;"
+                "User ID=${USER_NAME};Password=${PASSWORD};Host=192.168.88.31;Port=${dbPort};Database=${dbName};Pooling=true;"
             )
         }
         withCredentials([string(credentialsId: "timevic_${environmentKey}_user_jwt", variable: 'AUTH_SECRET')]) {
