@@ -5,7 +5,7 @@ USER root
 RUN cat /etc/os-release
 
 RUN apt update --fix-missing
-RUN apt install -y apt-transport-https wget ca-certificates iputils-ping telnet curl gnupg2
+RUN apt install -y apt-transport-https wget ca-certificates iputils-ping telnet curl gnupg2 software-properties-common
 
 # Configure time
 ARG DEBIAN_FRONTEND=noninteractive
