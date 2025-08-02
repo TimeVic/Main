@@ -35,10 +35,11 @@ RUN echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://
 
 # Install packages
 RUN apt update 
-RUN apt-get install -y net-tools sudo netcat \
-    default-jre \
-    postgresql postgresql-contrib redis \
-    dotnet-sdk-9.0
+RUN apt-get install -y net-tools sudo
+#RUN apt-get default-jre
+RUN apt-get postgresql postgresql-contrib
+RUN apt-get redis
+RUN apt-get dotnet-sdk-9.0 
 
 # Configure Postgres
 ENV PGTZ=Etc/UTC
