@@ -229,6 +229,11 @@ node('build-node') {
 
 node('web-node') {
 
+    stage('Load container') {
+        dockerHelper.loadFromFile(imageCommonTmpName)
+        dockerHelper.loadFromFile(imageWebTmpName)
+    }
+
     stage('Stop containers') {
         dockerHelper.stopContainer(webAppContainer)
 
