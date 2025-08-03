@@ -33,11 +33,12 @@ public partial class Step2
     private RegistrationStep2Request model = new();
     private EditContext _editContext;
     private bool _isLoading;
-    private MudForm _form;
+    private EditForm _form;
     private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         _isLoading = false;
         await UpdateReCaptchaAsync();
     }
@@ -49,8 +50,7 @@ public partial class Step2
     
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -67,7 +67,7 @@ public partial class Step2
         }
         catch (Exception)
         {
-            await ToastService.ShowError("Registration error");
+            ToastService.ShowError("Registration error");
         }
         finally
         {

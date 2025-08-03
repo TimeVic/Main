@@ -6,33 +6,34 @@
 @layout Layout
 @inherits BaseComponent
 
-<MudStack Justify="Justify.Center" AlignItems="MudBlazor.AlignItems.Center">
-    <MudCard Style="width: 300px" Class="mt-5 mb-5">
-        <MudCardContent>
-            <MudForm
-                @ref="_form"
-                @bind-IsValid="_isValid">
+<FluentStack HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+    <FluentCard Style="width: 300px" Class="mt-5 mb-5">
+        <EditForm
+            Model="model"
+            @ref="_form"
+            novalidate>
+            <DataAnnotationsValidator />
 
-                <MudText Typo="Typo.h4">Registration - Step 2</MudText>
-
-                <MudStack>
-                    <FluentTextField
-                        T="string"
-                        InputType="InputType.Password"
-                        For="() => model.Password"
-                        Disabled="_isLoading"
-                        @bind-Text="@model.Password"
-                        Placeholder="Enter your password to finish registration"/>
-                </MudStack>
-            </MudForm>
-        </MudCardContent>
-        <MudCardActions Class="d-flex justify-space-between">
-            <MudButton
-                Variant="MudBlazor.Variant.Filled"
+            <FluentLabel Typo="Typography.H2" Class="mb-3">Registration - Step 2</FluentLabel>
+            
+            <FluentStack Orientation="Orientation.Vertical" Class="mb-3">
+                <FluentLabel>Enter your password to finish registration</FluentLabel>
+                <FluentTextField
+                    TextFieldType="TextFieldType.Password"
+                    style="width: 100%;"
+                    Disabled="_isLoading"
+                    @bind-Value="@model.Password"
+                    InputMode="InputMode.Email">
+                    <FluentIcon Value="@(new Icons.Regular.Size16.Edit())" Slot="start" Color="Color.Neutral"/>
+                </FluentTextField>
+            </FluentStack>
+        </EditForm>
+        <div Class="d-flex justify-space-between">
+            <FluentButton
                 OnClick="Submit"
-                Color="Color.Primary">
+                Appearance="@Appearance.Accent">
                 Continue
-            </MudButton>
-        </MudCardActions>
-    </MudCard>
-</MudStack>
+            </FluentButton>
+        </div>
+    </FluentCard>
+</FluentStack>
