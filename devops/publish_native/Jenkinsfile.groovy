@@ -79,7 +79,7 @@ node('build-node') {
         webAppContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
 
         // GrayLog
-        envVariables.put('App__Logging__GrayLog__Host', 'graylog.expertwith.com')
+        envVariables.put('App__Logging__GrayLog__Host', '192.168.88.30')
         envVariables.put('App__Logging__GrayLog__Port', '12201')
 
         def dbName = ''
