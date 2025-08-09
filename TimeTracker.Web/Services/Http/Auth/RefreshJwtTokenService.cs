@@ -19,7 +19,7 @@ public class RefreshJwtTokenService
 
     private string _jwtToken;
     
-    private readonly SemaphoreSlim _jwtReceivingLock = new(1, 1);
+    private TaskCompletionSource<bool>? _lockReleased = null;
     
     public RefreshJwtTokenService(
         CustomHttpClient httpClient,
@@ -34,9 +34,9 @@ public class RefreshJwtTokenService
         _dispatcher = dispatcher;
     }
     
-    public string? GetJwt()
+    public async Task<string?> GetJwt()
     {
-        WaitUntilJwtRefreshed();
+        await WaitUntilUnlockedAsync();
         if (string.IsNullOrEmpty(_jwtToken))
         {
             var store = _serviceProvider.GetService<IState<AuthState>>();
@@ -46,40 +46,39 @@ public class RefreshJwtTokenService
         return _jwtToken;
     }
         
-    public string? GetAccessToken()
+    public async Task<string?> GetAccessToken()
     {
-        WaitUntilJwtRefreshed();
         var store = _serviceProvider.GetService<IState<AuthState>>();
         return store?.Value.AccessToken?.Trim();
     }
     
     public async Task<string?> TryRefreshToken()
     {
-        var jwtToken = GetJwt();
+        var jwtToken = await GetJwt();
         if (string.IsNullOrEmpty(jwtToken))
         {
             return null;
         }
 
         var jwtExpirationTime = JwtHelper.GetExpiryTimestamp(jwtToken);
-        Debug.Log($"JWT expiration time: {jwtExpirationTime}", DateTime.UtcNow);
         var diff = jwtExpirationTime - DateTime.UtcNow;
         if (diff.TotalMinutes <= 2)
             return await RequestNewToken();
-        return GetJwt();
+        return await GetJwt();
     }
 
     private async Task<string> RequestNewToken()
     {
         _logger.LogInformation("Try to re-new JWT token...");
-        await _jwtReceivingLock.WaitAsync();
+        StartLock();
         
+        _logger.LogInformation("Call HTTP request to refresh JWT token");
         var refreshResult = await _httpClient.RequestAsync<RefreshTokenResponseDto>(
             ApiUrl.RefreshToken, 
             new RefreshTokenRequest()
             {
                 JwtToken = _jwtToken,
-                AccessToken = GetAccessToken() ?? ""
+                AccessToken = await GetAccessToken() ?? string.Empty
             },
             HttpMethod.Post
         );
@@ -93,14 +92,29 @@ public class RefreshJwtTokenService
         _dispatcher.Dispatch(new SetJwtAction(refreshResult.JwtToken));
         _dispatcher.Dispatch(new PersistDataAction());
         
-        _logger.LogInformation("Token updated release lock");
-        _jwtReceivingLock.Release();
+        ReleaseLock();
         return _jwtToken;
     }
 
-    private void WaitUntilJwtRefreshed()
+    public void StartLock()
     {
-        _jwtReceivingLock.WaitAsync().Wait();
-        _jwtReceivingLock.Release();
+        _logger.LogInformation("Start JWT receiving lock");
+        _lockReleased = new TaskCompletionSource<bool>();
+    }
+
+    public void ReleaseLock()
+    {
+        _lockReleased?.TrySetResult(true);
+        _lockReleased = null;
+        _logger.LogInformation("Lock released");
+    }
+
+    public async Task WaitUntilUnlockedAsync()
+    {
+        if (_lockReleased != null)
+        {
+            _logger.LogInformation("Wait when lock will be released");
+            await _lockReleased.Task;
+        }
     }
 }
