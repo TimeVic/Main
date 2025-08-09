@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using Serilog;
 using TimeTracker.Business.Common.Utils;
 
 namespace TimeTracker.Business.Helpers
@@ -24,6 +25,7 @@ namespace TimeTracker.Business.Helpers
 
         public static IConfigurationBuilder ConfigureConfigurationProvider(this IConfigurationBuilder builder)
         {
+            Log.Logger.Information($"Initializing configuration with \"{HostingEnvironment}\" environment");
             var basePath = AssemblyUtils.GetAssemblyPath();
             return builder.SetBasePath(basePath)
                 .AddJsonFile("appsettings.json")
