@@ -37,3 +37,7 @@ window.openFile = function(data) {
     link.click();
     this.document.body.removeChild(link);
 }
+
+window.isTextSelected = function () {
+    return window.getSelection().toString().length > 0;
+};

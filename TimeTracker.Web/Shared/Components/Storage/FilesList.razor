@@ -11,7 +11,7 @@
     }
     else
     {
-        <FluentDataGrid Items="@Files.AsQueryable()">
+        <FluentDataGrid Items="@Files.AsQueryable()" RowSize="@DataGridRowSize.Medium">
             <TemplateColumn Title="File">
                 @if (!string.IsNullOrEmpty(context.Title))
                 {

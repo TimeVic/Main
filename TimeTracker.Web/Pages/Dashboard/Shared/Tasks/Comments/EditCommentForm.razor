@@ -6,7 +6,10 @@
 
 @inherits BaseReactiveComponent
 
-<div class="w-comment-edit-form pb-2 mb-2">
+<FluentCard
+    Class="w-comment-edit-form pb-2 mb-2"
+    MinimalStyle="true">
+    
     <EditForm
         @ref="_form"
         Model="model">
@@ -99,4 +102,5 @@
             </FluentStack>
         </FluentStack>
     </EditForm>
-</div>
+    
+</FluentCard>

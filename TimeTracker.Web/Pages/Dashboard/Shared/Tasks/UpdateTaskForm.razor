@@ -1,7 +1,6 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 @using TimeTracker.Business.Common.Constants.Storage
 @using TimeTracker.Business.Common.Constants.Task
-@using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks.Comments
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
@@ -19,13 +18,6 @@
     <FluentValidationSummary/>
 
     <FluentStack Orientation="Orientation.Horizontal">
-
-        <TaskIdBadge IsLink="true" InternalTask="@Task"/>
-        <FluentSpacer/>
-        <TimeEntryForm
-            InternalTask="@Task"
-            IsShort="@true"/>
-        <FluentSpacer/>
         <FluentCheckbox
             Disabled="_tasksState.Value.IsTaskSaving"
             Label="Archived"
@@ -72,6 +64,8 @@
             </div>
         </FluentStack>
 
+        <FluentDivider Class="w-100" Orientation="Orientation.Horizontal"/>
+        
         <FluentStack Orientation="Orientation.Horizontal" Class="pt-2">
 
             <div>
@@ -88,19 +82,6 @@
             </div>
             <FluentSpacer/>
             <div>
-                <FluentLabel>Reminder</FluentLabel>
-                <FluentStack Orientation="Orientation.Horizontal">
-                    <FluentDatePicker
-                        Value="@_model.ReminderTime"/>
-                    <FluentTimePicker
-                        Value="@_model.ReminderTime"
-                        ValueChanged="@(date => OnReminderTimeChanged(date?.TimeOfDay))"/>
-                </FluentStack>
-            </div>
-        </FluentStack>
-
-        <FluentStack Orientation="Orientation.Horizontal">
-            <div class="mt-2">
                 <FluentLabel>End Time</FluentLabel>
                 <FluentStack Orientation="Orientation.Horizontal">
                     <FluentDatePicker
@@ -112,16 +93,30 @@
                         ValueChanged="@(OnEndDateChanged)"/>
                 </FluentStack>
             </div>
+        </FluentStack>
+        <FluentDivider Class="w-100" Orientation="Orientation.Horizontal"/>
+        <FluentStack Orientation="Orientation.Horizontal">
+            <div class="mt-2">
+                <FluentLabel>Reminder</FluentLabel>
+                <FluentStack Orientation="Orientation.Horizontal">
+                    <FluentDatePicker
+                        Value="@_model.ReminderTime"/>
+                    <FluentTimePicker
+                        Value="@_model.ReminderTime"
+                        ValueChanged="@(date => OnReminderTimeChanged(date?.TimeOfDay))"/>
+                </FluentStack>
+            </div>
             
             <FluentSpacer/>
         </FluentStack>
 
-        <FluentLabel Class="mt-2">Tags</FluentLabel>
-        <TagsDropDown
-            Value="@_model.TagIds"
-            ValueChanged="@(OnTagsChanged)"/>
+        @* <FluentLabel Class="mt-2">Tags</FluentLabel> *@
+        @* <TagsDropDown *@
+        @*     Value="@_model.TagIds" *@
+        @*     ValueChanged="@(OnTagsChanged)"/> *@
 
         <FluentLabel Class="mt-2">Description</FluentLabel>
+        <FluentDivider Class="w-100" Orientation="Orientation.Horizontal"/>
         <MarkdownEdit
             Label="Description"
             Value="@_model.Description"
@@ -133,17 +128,19 @@
     <FluentTabs Class="mt-3">
         <FluentTab
             Label="Comments"
-            Icon="@(new Icons.Regular.Size24.Comment())"
             Id="tab-1"
             Class="pt-2">
+            <FluentDivider Class="w-100 mb-2" Orientation="Orientation.Horizontal"/>
+            
             <TaskCommentsBlock Task="Task"/>
         </FluentTab>
 
         <FluentTab
             Label="@_tabLabelAttachments"
-            Icon="@(new Icons.Regular.Size24.ArrowUpload())"
             Id="tab-2"
             Class="pt-2">
+            <FluentDivider Class="w-100 mb-2" Orientation="Orientation.Horizontal"/>
+            
             <FileUploader
                 EntityId="@Task.TaskId"
                 FileUploaded="OnFileUploaded"

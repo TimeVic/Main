@@ -14,6 +14,8 @@
                 T="string"
                 Placeholder="@Placeholder"
                 Value="@_editValue"
+                Immediate="true" 
+                ImmediateDelay="0" 
                 ValueChanged="@OnChangeValue"
                 Class="w-100"
                 Rows="@_textAreaRows"/>
@@ -47,8 +49,8 @@
     else
     {
         <FluentCard
-            Class="w-view"
-            Style="width: calc(100% - 40px)"
+            Class="w-view p-2"
+            Style="width: calc(100% - 2px)"
             MinimalStyle="true"
             @onclick="@OnClickView">
             @MarkdownHtml
@@ -102,6 +104,9 @@
     [Inject]
     public MarkdownService MarkdownService { get; set; }
 
+    [Inject]
+    public UiHelperService UiHelperService { get; set; }
+    
     public MarkupString MarkdownHtml => (MarkupString) MarkdownService.ToHtml(_value);
 
     private bool _isShowEditBox;
@@ -136,10 +141,16 @@
     private void OnChangeValue(string value)
     {
         _editValue = value;
+        ResizeEditBox(value);
     }
 
-    private void OnClickView()
+    private async Task OnClickView()
     {
+        if (await UiHelperService.IsTextSelected())
+        {
+            return;
+        }
+
         _isShowEditBox = true;
         _isActionButtonsEnabled = true;
         StateHasChanged();

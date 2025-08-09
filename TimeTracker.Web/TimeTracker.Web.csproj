@@ -84,7 +84,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Shared\Components\Layout\" />
       <Folder Include="Store\Dashboard\Effects\" />
       <Folder Include="wwwroot\img\logo\black" />
       <Folder Include="wwwroot\libraries\" />

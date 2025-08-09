@@ -1,5 +1,6 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Entity.Task
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry
 
 @implements IDialogContentComponent<UpdateTaskModal.Parameters>
 @inherits BaseReactiveComponent
@@ -10,15 +11,15 @@
         <FluentLabel Typo="Typography.PaneHeader">
             @Content.Task.Title.TruncateAndAddDots(50)
         </FluentLabel>
+        @* <FluentSpacer/> *@
+        @* <TaskIdBadge IsLink="true" InternalTask="@Content.Task"/> *@
+        <FluentSpacer/>
+        <TimeEntryForm
+            InternalTask="@Content.Task"
+            IsShort="@true"/>
+        <FluentSpacer/>
     </FluentStack>
 </FluentDialogHeader>
-
-@* Footer *@
-<FluentDialogFooter>
-    <FluentButton
-        Appearance="Appearance.Neutral"
-        OnClick="@OnCloseModal">Cancel</FluentButton>
-</FluentDialogFooter>
 
 <FluentDialogBody>
     <UpdateTaskForm Task="@Content.Task"/>

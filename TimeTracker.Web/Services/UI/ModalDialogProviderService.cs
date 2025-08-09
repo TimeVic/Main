@@ -62,7 +62,8 @@ public partial class ModalDialogProviderService
         var parameters = new DialogParameters
         {
             Width = "900px",
-            PrimaryAction = ""
+            Alignment = HorizontalAlignment.Right,
+            DialogType = DialogType.Panel
         };
         var dialog = await _dialogService.ShowDialogAsync<UpdateTaskModal>(
             new UpdateTaskModal.Parameters

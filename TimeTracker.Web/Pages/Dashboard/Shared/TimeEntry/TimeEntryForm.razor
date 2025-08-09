@@ -25,13 +25,10 @@
                 IconStart="@(new Icons.Regular.Size24.Play())"
                 Disabled="@_state.Value.IsTimeEntryProcessing"/>
         }
-        @if (!IsShort)
-        {
-            <TimeCounterField
-                Class="mr-3"
-                Value="@_activeEntry?.StartTime"
-                IsActive="@_hasActiveEntry"/>
-        }
+        <TimeCounterField
+            Class="mr-3"
+            Value="@_activeEntry?.StartTime"
+            IsActive="@_hasActiveEntry"/>
 
         @if (_activeEntry?.Task  == null && _activeEntry != null)
         {
