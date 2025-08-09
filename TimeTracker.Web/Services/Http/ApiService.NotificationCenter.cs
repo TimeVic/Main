@@ -14,25 +14,19 @@ namespace TimeTracker.Web.Services.Http
             });
             if (response == null)
             {
-                throw new ServerErrorException();
+                return 0;
             }
 
             return response.UnreadCount;
         }
         
-        public async Task<GetListResponse> NotificationCenterGetList(long workspaceId, int page)
+        public async Task<GetListResponse?> NotificationCenterGetList(long workspaceId, int page)
         {
-            var response = await PostAsync<GetListResponse>(ApiUrl.NotificationCenterGetList, new GetListRequest()
+            return await PostAsync<GetListResponse?>(ApiUrl.NotificationCenterGetList, new GetListRequest()
             {
                 WorkspaceId = workspaceId,
                 Page = page
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
         
         public async Task NotificationCenterMarkAllAsRead(long workspaceId)

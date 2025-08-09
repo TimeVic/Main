@@ -8,9 +8,9 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<WorkspaceMembershipDto> WorkspaceMembershipAddAsync(long workspaceId, string email)
+        public async Task<WorkspaceMembershipDto?> WorkspaceMembershipAddAsync(long workspaceId, string email)
         {
-            var response = await PostAsync<WorkspaceMembershipDto>(
+            return await PostAsync<WorkspaceMembershipDto>(
                 ApiUrl.WorkspaceMembershipAdd,
                 new AddRequest()
                 {
@@ -18,37 +18,19 @@ namespace TimeTracker.Web.Services.Http
                     Email = email
                 }
             );
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
         
-        public async Task<WorkspaceMembershipDto> WorkspaceMembershipUpdateAsync(UpdateRequest request)
+        public async Task<WorkspaceMembershipDto?> WorkspaceMembershipUpdateAsync(UpdateRequest request)
         {
-            var response = await PostAsync<WorkspaceMembershipDto>(
+            return await PostAsync<WorkspaceMembershipDto>(
                 ApiUrl.WorkspaceMembershipUpdate,
                 request
             );
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
         
-        public async Task<GetListResponse> WorkspaceMembershipGetListAsync(GetListRequest model)
+        public async Task<GetListResponse?> WorkspaceMembershipGetListAsync(GetListRequest model)
         {
-            var response = await PostAsync<GetListResponse>(ApiUrl.WorkspaceMembershipList, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<GetListResponse>(ApiUrl.WorkspaceMembershipList, model);
         }
         
         public async Task WorkspaceMembershipDeleteAsync(long membershipId)

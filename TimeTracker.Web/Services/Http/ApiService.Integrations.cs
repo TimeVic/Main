@@ -7,58 +7,29 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<GetIntegrationSettingsResponse> WorkspaceIntegrationSettingsGetAsync(long workspaceId)
+        public async Task<GetIntegrationSettingsResponse?> WorkspaceIntegrationSettingsGetAsync(long workspaceId)
         {
-            var response = await PostAsync<GetIntegrationSettingsResponse>(
+            return await PostAsync<GetIntegrationSettingsResponse?>(
                 ApiUrl.WorkspaceIntegrationSettingsGet,
                 new GetIntegrationSettingsRequest() {
                     WorkspaceId = workspaceId
                 }
             );
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-            return response;
         }
 
-        public async Task<WorkspaceSettingsRedmineDto> WorkspaceSetRedmineIntegrationSettingsAsync(SetRedmineSettingsRequest settings)
+        public async Task<WorkspaceSettingsRedmineDto?> WorkspaceSetRedmineIntegrationSettingsAsync(SetRedmineSettingsRequest settings)
         {
-            var response = await PostAsync<WorkspaceSettingsRedmineDto>(
-                ApiUrl.WorkspaceIntegrationSettingsRedmineSet,
-                settings
-            );
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-            return response;
+            return await PostAsync<WorkspaceSettingsRedmineDto?>(ApiUrl.WorkspaceIntegrationSettingsRedmineSet, settings);
         }
 
-        public async Task<WorkspaceSettingsClickUpDto> WorkspaceSetClickUpIntegrationSettingsAsync(SetClickUpSettingsRequest settings)
+        public async Task<WorkspaceSettingsClickUpDto?> WorkspaceSetClickUpIntegrationSettingsAsync(SetClickUpSettingsRequest settings)
         {
-            var response = await PostAsync<WorkspaceSettingsClickUpDto>(
-                ApiUrl.WorkspaceIntegrationSettingsClickUpSet,
-                settings
-            );
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-            return response;
+            return await PostAsync<WorkspaceSettingsClickUpDto?>(ApiUrl.WorkspaceIntegrationSettingsClickUpSet, settings);
         }
         
-        public async Task<WorkspaceSettingsJiraDto> WorkspaceSetJiraIntegrationSettingsAsync(SetJiraSettingsRequest settings)
+        public async Task<WorkspaceSettingsJiraDto?> WorkspaceSetJiraIntegrationSettingsAsync(SetJiraSettingsRequest settings)
         {
-            var response = await PostAsync<WorkspaceSettingsJiraDto>(
-                ApiUrl.WorkspaceIntegrationSettingsJiraSet,
-                settings
-            );
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-            return response;
+            return await PostAsync<WorkspaceSettingsJiraDto?>(ApiUrl.WorkspaceIntegrationSettingsJiraSet, settings);
         }
     }
 }

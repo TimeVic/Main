@@ -8,44 +8,26 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<PaginatedListDto<WorkspaceDto>> WorkspaceGetListAsync()
+        public async Task<PaginatedListDto<WorkspaceDto>?> WorkspaceGetListAsync()
         {
-            var response = await PostAsync<PaginatedListDto<WorkspaceDto>>(ApiUrl.WorkspaceList);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<PaginatedListDto<WorkspaceDto>>(ApiUrl.WorkspaceList);
         }
         
-        public async Task<WorkspaceDto> WorkspaceAddAsync(string name)
+        public async Task<WorkspaceDto?> WorkspaceAddAsync(string name)
         {
-            var response = await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceAdd, new AddRequest()
+            return await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceAdd, new AddRequest()
             {
                 Name = name
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
         
-        public async Task<WorkspaceDto> WorkspaceUpdateAsync(long id, string name)
+        public async Task<WorkspaceDto?> WorkspaceUpdateAsync(long id, string name)
         {
-            var response = await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceUpdate, new UpdateRequest()
+            return await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceUpdate, new UpdateRequest()
             {
                 WorkspaceId = id,
                 Name = name
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
     }
 }

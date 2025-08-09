@@ -7,37 +7,19 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<ProjectDto> ProjectAddAsync(AddRequest model)
+        public async Task<ProjectDto?> ProjectAddAsync(AddRequest model)
         {
-            var response = await PostAsync<ProjectDto>(ApiUrl.ProjectAdd, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<ProjectDto?>(ApiUrl.ProjectAdd, model);
         }
 
-        public async Task<ProjectDto> ProjectUpdateAsync(UpdateRequest model)
+        public async Task<ProjectDto?> ProjectUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAsync<ProjectDto>(ApiUrl.ProjectUpdate, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<ProjectDto?>(ApiUrl.ProjectUpdate, model);
         }
 
-        public async Task<GetListResponse> ProjectGetListAsync(GetListRequest model)
+        public async Task<GetListResponse?> ProjectGetListAsync(GetListRequest model)
         {
-            var response = await PostAsync<GetListResponse>(ApiUrl.ProjectList, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<GetListResponse?>(ApiUrl.ProjectList, model);
         }
         
         public async Task ProjectDeleteAsync(long projectId)

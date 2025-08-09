@@ -16,29 +16,25 @@ public class CustomHttpClient
     private readonly int _maxFileSizeInMb;
     
     private readonly HttpClient _httpClient;
-    private readonly IConfiguration _configuration;
-    private readonly HttpInterceptorService _httpInterceptorService;
+    private readonly ILogger<CustomHttpClient> _logger;
 
     public CustomHttpClient(
         HttpClient httpClient,
-        IConfiguration configuration
+        IConfiguration configuration,
+        ILogger<CustomHttpClient> logger
     )
     {
         _httpClient = httpClient;
-        _configuration = configuration;
+        _logger = logger;
 
-        _apiUrl = _configuration.GetValue<string>("ApiUrl");
-        _maxFileSizeInMb = _configuration.GetValue<int>("MaxFileSize");
+        _apiUrl = configuration.GetValue<string>("ApiUrl")!;
+        _maxFileSizeInMb = configuration.GetValue<int>("MaxFileSize");
     }
     
     public async Task<TResponse?> RequestAsync<TResponse>(string requestUri, object data, HttpMethod httpMethod)
     {
         var responseString = await RequestAsync(requestUri, data, httpMethod);
-        var response = JsonHelper.DeserializeObject<TResponse>(
-            responseString,
-            DateTimeZoneHandling.Local
-        );
-        return response;
+        return Deserialize<TResponse>(responseString);
     }
     
     public async Task<string> RequestAsync(string requestUri, object data, HttpMethod httpMethod)
@@ -94,10 +90,7 @@ public class CustomHttpClient
         // send request
         var response = await _httpClient.SendAsync(request);
         var responseString = await HandleHttpResponse(response);
-        return JsonHelper.DeserializeObject<TResponse>(
-            responseString,
-            DateTimeZoneHandling.Local
-        );
+        return Deserialize<TResponse>(responseString);
     }
     
     private async Task<string> HandleHttpResponse(HttpResponseMessage response)
@@ -111,18 +104,36 @@ public class CustomHttpClient
         BadResponseDto? badResponse = null;
         try
         {
-            badResponse = JsonHelper.DeserializeObject<BadResponseDto>(
-                responseString,
-                DateTimeZoneHandling.Local
-            );
+            badResponse = Deserialize<BadResponseDto>(responseString);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
         }
         finally
         {
             throw new HttpResponseException(
                 response.StatusCode,
                 badResponse?.Message ?? "Server error",
-                badResponse?.Type
+                badResponse?.Type ?? "HttpResponseException"
             );
         }
+    }
+
+    private T? Deserialize<T>(string responseString)
+    {
+        try
+        {
+            return JsonHelper.DeserializeObject<T>(
+                responseString,
+                DateTimeZoneHandling.Local
+            );
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+        }
+
+        return default;
     }
 }

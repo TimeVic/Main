@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Store.Auth;
 
@@ -8,6 +9,7 @@ public class AuthReducers
     [ReducerMethod(typeof(LogoutAction))]
     public static AuthState ReduceLogoutActionActionReducer(AuthState state)
     {
+        Debug.Log("LogoutAction");
         return new AuthState();
     }
     

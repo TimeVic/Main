@@ -8,15 +8,9 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<LoginResponseDto> LoginAsync(LoginRequest model)
+        public async Task<LoginResponseDto?> LoginAsync(LoginRequest model)
         {
-            var response = await PostAsync<LoginResponseDto>(ApiUrl.Login, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<LoginResponseDto?>(ApiUrl.Login, model);
         }
         
         public async Task<bool> CheckIsLoggedInAsync(string token)
@@ -47,15 +41,9 @@ namespace TimeTracker.Web.Services.Http
             return false;
         }
         
-        public async Task<RegistrationStep2ResponseDto> RegistrationStep2Async(RegistrationStep2Request model)
+        public async Task<RegistrationStep2ResponseDto?> RegistrationStep2Async(RegistrationStep2Request model)
         {
-            var response = await PostAsync<RegistrationStep2ResponseDto>(ApiUrl.RegistrationStep2, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<RegistrationStep2ResponseDto>(ApiUrl.RegistrationStep2, model);
         }
         
         public async Task<bool> ResetPasswordStep1(ResetPasswordStep1Request model)

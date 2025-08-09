@@ -7,41 +7,29 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<PaymentReportResponse> ReportsGetPaymentsReportAsync(long workspaceId, DateTime endDate)
+        public async Task<PaymentReportResponse?> ReportsGetPaymentsReportAsync(long workspaceId, DateTime endDate)
         {
-            var response = await PostAsync<PaymentReportResponse>(ApiUrl.ReportPayments, new PaymentReportRequest()
+            return await PostAsync<PaymentReportResponse?>(ApiUrl.ReportPayments, new PaymentReportRequest()
             {
                 WorkspaceId = workspaceId,
                 EndDate = endDate
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
         
-        public async Task<SummaryReportResponse> ReportsGetSummaryReportAsync(
+        public async Task<SummaryReportResponse?> ReportsGetSummaryReportAsync(
             long workspaceId,
             DateTime startDate,
             DateTime endTime,
             SummaryReportType reportType
         )
         {
-            var response = await PostAsync<SummaryReportResponse>(ApiUrl.ReportSummary, new SummaryReportRequest()
+            return await PostAsync<SummaryReportResponse?>(ApiUrl.ReportSummary, new SummaryReportRequest()
             {
                 WorkspaceId = workspaceId,
                 StartTime = startDate,
                 EndTime = endTime,
                 Type = reportType
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
     }
 }

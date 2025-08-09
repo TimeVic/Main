@@ -37,11 +37,14 @@ public class LoadListEffect: Effect<LoadListAction>
                 page = 1;
             }
 
-            var response = await _apiService.NotificationCenterGetList(
-                _authState.Value.Workspace.Id,
-                page
-            );
-            dispatcher.Dispatch(new SetListAction(response));
+            if (_authState.Value.Workspace != null)
+            {
+                var response = await _apiService.NotificationCenterGetList(
+                    _authState.Value.Workspace.Id,
+                    page
+                );
+                dispatcher.Dispatch(new SetListAction(response));
+            }
         }
         catch (Exception e)
         {

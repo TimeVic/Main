@@ -1,8 +1,10 @@
 ﻿using Fluxor;
+using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Helpers;
+using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http.Client;
 using TimeTracker.Web.Store.Auth;
@@ -40,7 +42,7 @@ public class RefreshJwtTokenService
         if (string.IsNullOrEmpty(_jwtToken))
         {
             var store = _serviceProvider.GetService<IState<AuthState>>();
-            _jwtToken = store?.Value.JwtToken?.Trim();
+            _jwtToken = store?.Value.JwtToken.Trim() ?? string.Empty;
         }
 
         return _jwtToken;
@@ -73,43 +75,53 @@ public class RefreshJwtTokenService
         StartLock();
         
         _logger.LogInformation("Call HTTP request to refresh JWT token");
-        var refreshResult = await _httpClient.RequestAsync<RefreshTokenResponseDto>(
-            ApiUrl.RefreshToken, 
-            new RefreshTokenRequest()
-            {
-                JwtToken = _jwtToken,
-                AccessToken = await GetAccessToken() ?? string.Empty
-            },
-            HttpMethod.Post
-        );
-        if (refreshResult == null)
+        try
         {
-            _logger.LogInformation("Token can not be refreshed");
-            throw new ServerException();
+            var refreshResult = await _httpClient.RequestAsync<RefreshTokenResponseDto>(
+                ApiUrl.RefreshToken,
+                new RefreshTokenRequest()
+                {
+                    JwtToken = _jwtToken,
+                    AccessToken = await GetAccessToken() ?? string.Empty
+                },
+                HttpMethod.Post
+            );
+            if (refreshResult == null)
+            {
+                _logger.LogInformation("Token can not be refreshed");
+                throw new ServerException();
+            }
+            
+            _jwtToken = refreshResult.JwtToken;
+            _dispatcher.Dispatch(new SetJwtAction(refreshResult.JwtToken));
         }
-
-        _jwtToken = refreshResult.JwtToken;
-        _dispatcher.Dispatch(new SetJwtAction(refreshResult.JwtToken));
-        _dispatcher.Dispatch(new PersistDataAction());
-        
-        ReleaseLock();
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"JWT Token can not be refreshed. Logout: {e.Message}");
+            throw;
+        }
+        finally
+        {
+            _dispatcher.Dispatch(new PersistDataAction());
+            ReleaseLock();
+        } 
         return _jwtToken;
     }
 
-    public void StartLock()
+    private void StartLock()
     {
         _logger.LogInformation("Start JWT receiving lock");
         _lockReleased = new TaskCompletionSource<bool>();
     }
 
-    public void ReleaseLock()
+    private void ReleaseLock()
     {
         _lockReleased?.TrySetResult(true);
         _lockReleased = null;
         _logger.LogInformation("Lock released");
     }
 
-    public async Task WaitUntilUnlockedAsync()
+    private async Task WaitUntilUnlockedAsync()
     {
         if (_lockReleased != null)
         {
