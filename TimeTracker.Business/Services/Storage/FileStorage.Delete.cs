@@ -24,7 +24,7 @@ public partial class FileStorage: IFileStorage
             throw new RecordCanNotBeModifiedException();
         }
 
-        await _s3Client.DeleteObjectAsync(_bucketName, file.CloudFilePath);
+        await _storageClient.Delete(file.CloudFilePath);
         
         file.Tasks.Clear();
         await _dbSessionProvider.CurrentSession.DeleteAsync(file);

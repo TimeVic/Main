@@ -19,14 +19,7 @@ public partial class FileStorage: IFileStorage
             throw new HasNoAccessException();
         }
 
-        var fileResponse = await _s3Client.GetObjectAsync(_bucketName, file.CloudFilePath);
-        if (fileResponse == null)
-        {
-            throw new RecordNotFoundException($"S3 File not found: {file.CloudFilePath}");
-        }
-
-        var fileStream = new MemoryStream();
-        await fileResponse.ResponseStream.CopyToAsync(fileStream);
+        var fileStream = await _storageClient.GetAsStream(file.CloudFilePath);
         return (file, fileStream);
     }
 }

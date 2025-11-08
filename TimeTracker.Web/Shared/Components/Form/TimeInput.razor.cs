@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;

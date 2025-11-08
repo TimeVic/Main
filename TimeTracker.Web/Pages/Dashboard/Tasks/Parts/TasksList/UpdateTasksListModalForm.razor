@@ -1,32 +1,54 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
-@using MudBlazor
+@using TimeTracker.Web.Shared.Components.Form
+@using TimeTracker.Web.Shared.Components.Form.Select
 
 @inherits BaseReactiveComponent
+@implements IDialogContentComponent<UpdateTasksListModalForm.Parameters>
 
-<MudDialog>
-    <DialogContent>
-        <MudForm
-            @ref="_form"
-            @bind-IsValid="_isValid">
-            
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            Update task list
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton 
+        Appearance="Appearance.Accent"
+        Disabled="@_isLoading"
+        OnClick="@Submit">Update</FluentButton>
+    <FluentButton 
+        Appearance="Appearance.Neutral"
+        OnClick="@OnCloseModal">Cancel</FluentButton>
+</FluentDialogFooter>
+
+@* Body *@
+<FluentDialogBody>
+    <EditForm
+        @ref="_form"
+        Model="@model"
+        novalidate>
+        <DataAnnotationsValidator />
+        <FluentValidationSummary />
+
+        <div class="mb-2">
             <ProjectsDropDown
-                Value="model.ProjectId"
-                ValueChanged="value => model.ProjectId = value"
+                FullWidth="true"
+                Label="Project"
+                Value="@(model.ProjectId)"
+                SelectedItemChanged="@(item => model.ProjectId = item?.Id ?? 0)"
                 Placeholder="Task title"/>
+        </div>
 
-            <MudTextField
-                T="string"
-                For="() => model.Name"
+        <div>
+            <FluentTextField
+                Class="w-100"
+                Label="Name"
                 @bind-Value="model.Name"
                 Placeholder="Enter list name"/>
-        </MudForm>
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="OnCloseModal">Cancel</MudButton>
-        <MudButton 
-            ButtonType="MudBlazor.ButtonType.Submit"
-            OnClick="Submit"
-            Disabled="@_isLoading"
-            Color="Color.Primary">Update</MudButton>
-    </DialogActions>
-</MudDialog>
+        </div>
+    </EditForm>
+</FluentDialogBody>

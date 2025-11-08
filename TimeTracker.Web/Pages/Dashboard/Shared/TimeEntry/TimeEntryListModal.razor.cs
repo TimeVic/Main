@@ -4,6 +4,11 @@ namespace TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
 
 public partial class TimeEntryListModal
 {
+    public class Parameters
+    {
+        public bool IsFilteredList { get; set; } = false;
+    }
+
     [Parameter]
-    public bool IsFilteredList { get; set; } = false;
+    public required Parameters Content { get; set; }
 }

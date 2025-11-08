@@ -1,6 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Web.Store.Project;
@@ -11,11 +12,16 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks.Parts.TasksList;
 
 public partial class UpdateTasksListModalForm
 {
-    [Parameter]
-    public TaskListDto TaskList { get; set; }
+    public class Parameters
+    {
+        public TaskListDto TaskList { get; set; }
+    }
     
+    [Parameter]
+    public required Parameters Content { get; set; }
+
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    FluentDialog MudDialog { get; set; }
     
     [Inject]
     public ILogger<UpdateTasksListModalForm> _logger { get; set; }
@@ -25,21 +31,20 @@ public partial class UpdateTasksListModalForm
     
     private UpdateRequest model = new();
     private bool _isLoading = false;
-    private MudForm _form;
+    private EditForm _form;
     private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.ProjectId = TaskList.Project.Id;
-        model.TaskListId = TaskList.Id;
-        model.Name = TaskList.Name;
+        model.ProjectId = Content.TaskList.Project.Id;
+        model.TaskListId = Content.TaskList.Id;
+        model.Name = Content.TaskList.Name;
     }
     
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -51,7 +56,7 @@ public partial class UpdateTasksListModalForm
             if (taskList != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
-                await ToastService.ShowInfo("Task list has been updated");
+                ToastService.ShowInfo("Task list has been updated");
                 OnCloseModal();
                 Dispatcher.Dispatch(new SetListItemAction(taskList));
             }
@@ -59,7 +64,7 @@ public partial class UpdateTasksListModalForm
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            await ToastService.ShowError("Task list adding error");
+            ToastService.ShowError("Task list adding error");
         }
         finally
         {
@@ -70,6 +75,6 @@ public partial class UpdateTasksListModalForm
     
     private void OnCloseModal()
     {
-        MudDialog.Close();
+        MudDialog.CloseAsync();
     }
 }

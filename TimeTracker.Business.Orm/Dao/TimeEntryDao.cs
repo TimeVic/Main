@@ -59,7 +59,7 @@ public class TimeEntryDao: ITimeEntryDao
         var query = _sessionProvider.CurrentSession.QueryOver<TimeEntryEntity>()
             .Inner.JoinAlias(item => item.User, () => rootUserAlias)
             .Left.JoinAlias(item => item.Project, () => rootProjectAlias)
-            .Left.JoinAlias(() => rootProjectAlias.Client, () => rootClientAlias)
+            .Left.JoinAlias(() => rootProjectAlias!.Client, () => rootClientAlias)
             .OrderBy(item => item.Date).Desc
             .OrderBy(item => item.StartTime).Desc
             .Where(item => item.Workspace.Id == workspace.Id && item.IsMarkedToDelete == false);
@@ -68,11 +68,11 @@ public class TimeEntryDao: ITimeEntryDao
         {
             if (filter.ClientId.HasValue)
             {
-                query = query.And(() => rootClientAlias.Id == filter.ClientId);
+                query = query.And(() => rootClientAlias!.Id == filter.ClientId);
             }
             if (filter.ProjectId.HasValue)
             {
-                query = query.And(() => rootProjectAlias.Id == filter.ProjectId);
+                query = query.And(() => rootProjectAlias!.Id == filter.ProjectId);
             }
             if (filter.IsBillable.HasValue)
             {
@@ -80,7 +80,7 @@ public class TimeEntryDao: ITimeEntryDao
             }
             if (filter.MemberId.HasValue)
             {
-                query = query.And(() => rootUserAlias.Id == filter.MemberId);
+                query = query.And(() => rootUserAlias!.Id == filter.MemberId);
             }
             if (!string.IsNullOrEmpty(filter.Search))
             {
@@ -116,10 +116,10 @@ public class TimeEntryDao: ITimeEntryDao
             UserEntity userAlias = null;
             var allowedIdsSubQuery = QueryOver.Of<TimeEntryEntity>()
                 .Inner.JoinAlias(item => item.Project, () => projectAlias)
-                .Inner.JoinAlias(item => projectAlias.MembershipProjectAccess, () => projectAccessAlias)
-                .Inner.JoinAlias(() => projectAccessAlias.WorkspaceMembership, () => workspaceMembershipAlias)
+                .Inner.JoinAlias(item => projectAlias!.MembershipProjectAccess, () => projectAccessAlias)
+                .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMembership, () => workspaceMembershipAlias)
                 .And(
-                    item => workspaceMembershipAlias.User.Id == user.Id 
+                    item => workspaceMembershipAlias!.User.Id == user.Id 
                         && workspaceMembershipAlias.Workspace.Id == workspace.Id
                 )
                 .Select(

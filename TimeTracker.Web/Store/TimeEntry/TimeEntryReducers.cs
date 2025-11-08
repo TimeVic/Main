@@ -1,7 +1,7 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Store.Tasks;
+// using TimeTracker.Web.Store.Tasks;
 
 namespace TimeTracker.Web.Store.TimeEntry;
 
@@ -68,16 +68,22 @@ public class TimeEntryReducers
     [ReducerMethod]
     public static TimeEntryState UpdateTimeEntryActionReducer(TimeEntryState state, UpdateTimeEntryAction action)
     {
-        var timeEntry = state.List.FirstOrDefault(item => item.Id == action.TimeEntry.Id);
-        if (timeEntry != null)
+        state.List = state.List.Select(item =>
         {
-            timeEntry.UpdateFrom(action.TimeEntry);
-        }
+            if (item.Id == action.TimeEntry.Id)
+                item.UpdateFrom(action.TimeEntry);
+            return item;
+        }).ToList();
+        state.FilteredList = state.FilteredList.Select(item =>
+        {
+            if (item.Id == action.TimeEntry.Id)
+                item.UpdateFrom(action.TimeEntry);
+            return item;
+        }).ToList();
         if (state.ActiveEntry != null && state.ActiveEntry?.Id == action.TimeEntry.Id)
         {
             state.ActiveEntry.UpdateFrom(action.TimeEntry);
         }
-
         return state;
     }
     

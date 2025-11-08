@@ -1,8 +1,10 @@
 ﻿using System.Globalization;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common;
 using TimeTracker.Web.Store.Ui;
@@ -19,6 +21,16 @@ public partial class MainHeader
 
     [Inject]
     private IState<CommonState> CommonState { get; set; }
+    
+    private UserDto _user
+    {
+        get => AuthState.Value.User;
+    }
+    
+    private WorkspaceDto _workspace
+    {
+        get => AuthState.Value.Workspace;
+    }
     
     private bool _isShowDashboardLink
     {

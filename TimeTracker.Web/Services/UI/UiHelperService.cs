@@ -26,4 +26,9 @@ public class UiHelperService
             url
         });
     }
+    
+    public async Task<bool> IsTextSelected()
+    {
+        return await _js.InvokeAsync<bool>("isTextSelected");
+    }
 }

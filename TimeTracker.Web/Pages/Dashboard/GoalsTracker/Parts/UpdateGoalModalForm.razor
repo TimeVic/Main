@@ -1,13 +1,11 @@
-﻿@using MudBlazor
-
-@inherits BaseComponent
+﻿@inherits BaseComponent
 
 <MudDialog Style="min-width: 500px;">
     <DialogContent>
-        <MudForm
+        <EditForm
             @ref="_form"
             @bind-IsValid="_isValid">
-            <MudTextField
+            <FluentTextField
                 FullWidth="true"
                 OnKeyUp="@OnKeyUp"
                 T="string"
@@ -15,7 +13,7 @@
                 Label="Goal"
                 @bind-Value="model.Name"/>
             <MudSpacer/>
-            <MudTextField
+            <FluentTextField
                 FullWidth="true"
                 OnKeyUp="@OnKeyUp"
                 T="int"
@@ -23,7 +21,7 @@
                 @bind-Value="model.NumberOfTimes"
                 Label="Number of times to perform goal in a month"/>
 
-        </MudForm>
+        </EditForm>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="@OnCloseModal">Cancel</MudButton>

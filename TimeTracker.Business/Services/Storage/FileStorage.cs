@@ -20,6 +20,7 @@ using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Storage.Client;
 
 namespace TimeTracker.Business.Services.Storage;
 
@@ -34,9 +35,7 @@ public partial class FileStorage: IFileStorage
     private readonly IFileStorageRelationshipService _relationshipService;
     private readonly ISecurityManager _securityManager;
     private readonly IStoredFilesDao _storedFilesDao;
-
-    private readonly string? _bucketName;
-    private readonly AmazonS3Client _s3Client;
+    private readonly IFileStorageClient _storageClient;
     
     public FileStorage(
         IConfiguration configuration,
@@ -44,7 +43,9 @@ public partial class FileStorage: IFileStorage
         ILogger<IFileStorage> logger,
         IFileStorageRelationshipService relationshipService,
         ISecurityManager securityManager,
-        IStoredFilesDao storedFilesDao
+        IStoredFilesDao storedFilesDao,
+        IFileStorageS3Client storageS3Client,
+        IFileStorageGoogleClient storageGoogleClient
     )
     {
         _dbSessionProvider = dbSessionProvider;
@@ -52,28 +53,9 @@ public partial class FileStorage: IFileStorage
         _relationshipService = relationshipService;
         _securityManager = securityManager;
         _storedFilesDao = storedFilesDao;
-
-        var accessKey = configuration.GetValue<string>("AWS:S3:AccessKey");
-        if (accessKey == null)
-            throw new ArgumentNullException(nameof(accessKey));
-        var secretKey = configuration.GetValue<string>("AWS:S3:SecretKey");
-        if (secretKey == null)
-            throw new ArgumentNullException(nameof(secretKey));
-        _bucketName = configuration.GetValue<string>("AWS:S3:BucketName");
-        if (_bucketName == null)
-            throw new ArgumentNullException(nameof(_bucketName));
-
-        var config = new AmazonS3Config()
-        {
-            RegionEndpoint = Amazon.RegionEndpoint.EUCentral1,
-            DisableLogging = true,
-            BufferSize = 65536, // 64KB Use a larger buffer size, normally 8K default.
-            DefaultConfigurationMode = DefaultConfigurationMode.InRegion,
-            UseFIPSEndpoint = false,
-            ProgressUpdateInterval = 1 * 1024 * 1024
-        };
-        var options = new BasicAWSCredentials(accessKey, secretKey);
-        _s3Client = new AmazonS3Client(options, config);
+        
+        // Google Client selected by default
+        _storageClient = storageGoogleClient;
     }
 
     public async Task<StoredFileEntity> PutFileAsync<TEntity>(

@@ -2,7 +2,11 @@
 import com.shared.jenkins.docker.DockerHelper
 import com.shared.jenkins.docker.DockerContainer
 
-def environmentKey = params.ENVIRONMENT.toLowerCase()
+def environmentKey = params.ENVIRONMENT?.toLowerCase()
+def containerSharedDir = "/mnt/local_share/docker_images/timevic"
+def imageName = "latest"
+def imageWebTmpName = "${containerSharedDir}/${environmentKey}_web_latest"
+def imageCommonTmpName = "${containerSharedDir}/${environmentKey}_common_latest"
 
 def dockerHelper = new DockerHelper(this)
 public Map<String, String> envVariables = new HashMap<String, String>()
@@ -29,14 +33,14 @@ def gitCredentials="timevic_ssh_key_github"
 properties([
     parameters([
         // https://plugins.jenkins.io/git-parameter/
-        gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE'),
+        gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE', defaultValue: 'main'),
         string (name: 'NEW_VERSION', defaultValue: '', description: 'Provide version to create GIT tag'),
         choice(name: 'ENVIRONMENT', choices: ['Development', 'Production'], description: 'Select environment to deploy'),
     ]),
     disableConcurrentBuilds()
 ])
 
-node('abedor-mainframe-web') {
+node('build-node') {
 
     stage('Show deployment parameters') {
         echo "Repository: ${repositoryUrl}"
@@ -49,12 +53,6 @@ node('abedor-mainframe-web') {
         stage('Switch to GIT tag') {
             git branch: "${params.BRANCH}", url: repositoryUrl
         }    
-    }
-
-    stage('CleanUp Docker') {
-        sh """
-            docker image prune -f
-        """
     }
 
     stage('Checkout') {
@@ -70,24 +68,33 @@ node('abedor-mainframe-web') {
     stage('Set environment vars') {
         // Redis
         envVariables.put('Redis__Server', '10.10.0.2:6379')
+        
         envVariables.put('Serilog__IsSendEmailIfError', 'false')
         envVariables.put('Serilog__MinimumLevel__Default', 'Debug')
+        
+        mainContainer.buildVariables.put('ENVIRONMENT', params.ENVIRONMENT)
         envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
+        
+        webAppContainer.buildVariables.put('ENVIRONMENT', params.ENVIRONMENT)
+        webAppContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
 
         // GrayLog
-        envVariables.put('App__Logging__GrayLog__Host', '192.168.99.7')
+        envVariables.put('App__Logging__GrayLog__Host', '192.168.88.30')
         envVariables.put('App__Logging__GrayLog__Port', '12201')
 
         def dbName = ''
+        def dbPort = ''
         if (params.ENVIRONMENT == 'Production')
         {
             envVariables.put('App__FrontendUrl', 'https://timevic.com')
             dbName = 'timevic'
+            dbPort = '5434'
         }
         else if (params.ENVIRONMENT == 'Development')
         {
             envVariables.put('App__FrontendUrl', 'https://dev.timevic.com')
             dbName = 'timevic_dev'
+            dbPort = '5432'
         }
 
         // Common
@@ -106,7 +113,7 @@ node('abedor-mainframe-web') {
         ]) {
             envVariables.put(
                 'ConnectionStrings__DefaultConnection',
-                "User ID=${USER_NAME};Password=${PASSWORD};Host=192.168.99.8;Port=5433;Database=${dbName};Pooling=true;"
+                "User ID=${USER_NAME};Password=${PASSWORD};Host=192.168.88.31;Port=${dbPort};Database=${dbName};Pooling=true;"
             )
         }
         withCredentials([string(credentialsId: "timevic_${environmentKey}_user_jwt", variable: 'AUTH_SECRET')]) {
@@ -130,6 +137,10 @@ node('abedor-mainframe-web') {
         envVariables.put('AWS__S3__BucketName', "timevic-${environmentKey}")
     }
 
+    stage('Build web image') {
+        dockerHelper.buildAndSave(webAppContainer, imageWebTmpName)
+    }
+
     stage('Build main image') {
         withCredentials([file(credentialsId: 'timevic_production_gcloud_credentials', variable: 'FILE')]) {
             sh 'cp $FILE .credentials/google.json'
@@ -137,11 +148,23 @@ node('abedor-mainframe-web') {
         withCredentials([file(credentialsId: 'timevic_production_firebase_credentials', variable: 'FILE')]) {
             sh 'cp $FILE .credentials/firebase-credentials.json'
         }
-        dockerHelper.buildContainer(mainContainer)
+        dockerHelper.buildAndSave(mainContainer, imageCommonTmpName)
     }
+    
+    stage("Clean workspace") {
+        cleanWs()
+    }
+    
+    stage('CleanUp Docker') {
+        sh 'docker system prune -f'
+    }
+}
 
-    stage('Build web image') {
-        dockerHelper.buildContainer(webAppContainer)
+node('web-node') {
+
+    stage('Load container') {
+        dockerHelper.loadFromFile(imageCommonTmpName)
+        dockerHelper.loadFromFile(imageWebTmpName)
     }
 
     stage('Stop containers') {
@@ -149,14 +172,14 @@ node('abedor-mainframe-web') {
 
         mainContainer.tagName = "timevic-api-${environmentKey}";
         dockerHelper.stopContainer(mainContainer)
-    
+
         mainContainer.tagName = "timevic-worker-${environmentKey}";
         dockerHelper.stopContainer(mainContainer)
     }
 
     stage('Run migrations') {
         dockerHelper.stopContainer(migrationContainer)
-            
+
         migrationContainer.envVariables = envVariables.clone()
         migrationContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Migrations')
         dockerHelper.runContainer(migrationContainer)
@@ -172,7 +195,7 @@ node('abedor-mainframe-web') {
         {
             mainContainer.port = '8215:80';
         }
-        
+
         mainContainer.envVariables = envVariables.clone()
         mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Api')
         dockerHelper.runContainer(mainContainer)
@@ -181,7 +204,7 @@ node('abedor-mainframe-web') {
     stage('Run worker') {
         mainContainer.tagName = "timevic-worker-${environmentKey}";
         mainContainer.port = '';
-        
+
         mainContainer.envVariables = envVariables.clone()
         mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerServices')
         dockerHelper.runContainer(mainContainer)
@@ -215,8 +238,11 @@ node('abedor-mainframe-web') {
             }
         }
     }
-
-    stage("Clean workspace") {
-        cleanWs()
-    }
+    
+//     stage('CleanUp') {
+//         sh '''
+//             rm ${imageCommonTmpName}
+//             rm ${imageWebTmpName}
+//         '''
+//     }   
 }

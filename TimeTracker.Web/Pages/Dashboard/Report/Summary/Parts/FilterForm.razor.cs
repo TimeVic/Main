@@ -14,24 +14,26 @@ public partial class FilterForm
 
     public SummaryReportFilterState _filterState => _reportsState.Value.SummaryReportFilter;
 
-    private void OnChangeReportType(SummaryReportType type)
+    private void OnChangeReportType(SummaryReportType? type)
     {
-        if (_filterState.ReportType == type)
+        if (_filterState.ReportType == type || type == null)
             return;
         Dispatcher.Dispatch(new ReportSetSummaryReportFilterAction(_filterState with
         {
-            ReportType = type
+            ReportType = type.Value
         }));
+        LoadReport();
     }
     
-    private void OnChangePeriodType(SummaryReportPeriodType type)
+    private void OnChangePeriodType(SummaryReportPeriodType? type)
     {
-        if (_filterState.PeriodType == type)
+        if (_filterState.PeriodType == type || type == null)
             return;
         Dispatcher.Dispatch(new ReportSetSummaryReportFilterAction(_filterState with
         {
-            PeriodType = type
+            PeriodType = type.Value
         }));
+        LoadReport();
     }
 
     private void OnChangeDateStart(DateTime? dateStart)
@@ -42,6 +44,7 @@ public partial class FilterForm
         {
             StartDate = dateStart.Value
         }));
+        LoadReport();
     }
 
     private void OnChangeDateEnd(DateTime? endDate)
@@ -52,6 +55,7 @@ public partial class FilterForm
         {
             EndDate = endDate.Value
         }));
+        LoadReport();
     }
 
     private void LoadReport()

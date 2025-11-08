@@ -1,7 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
-using MudBlazor.Utilities;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
@@ -16,9 +16,9 @@ using SetListItemAction = TimeTracker.Web.Store.Tasks.SetListItemAction;
 namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 
 public partial class UpdateTaskForm
-{
+{   
     [Parameter]
-    public TaskDto Task { get; set; }
+    public required TaskDto Task { get; set; }
     
     [Inject]
     public IState<Store.TasksList.TasksListState> _tasksListState { get; set; }
@@ -33,18 +33,11 @@ public partial class UpdateTaskForm
     private IState<WorkspaceMembershipsState> _workspaceMembershipsState { get; set; }
 
     [CascadingParameter] 
-    public MudDialogInstance MudDialog { get; set; }
+    public required FluentDialog MudDialog { get; set; }
     
     private UpdateRequest _model = new();
     private bool _isLoading = false;
-    private MudForm? _form;
-    
-    private MudDatePicker? _startDatePicker;
-    private MudDatePicker? _endDatePicker;
-    private MudDatePicker? _reminderDatePicker;
-    private MudTimePicker? _reminderTimePicker;
-    
-    private bool _isValid = false;
+    private EditForm? _form;
     
     private string _tabLabelAttachments
     {
@@ -78,17 +71,23 @@ public partial class UpdateTaskForm
 
     private void SubmitForm()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form!.EditContext!.Validate())
         {
             return;
         }
         Dispatcher.Dispatch(new UpdateTaskAction(_model, IsUpdateState: true));
     }
 
-    private async Task OnChangedAssigned(WorkspaceMembershipDto membership)
+    private void OnChangeTitle(string title)
+    {
+        _model.Title = title;
+        SubmitForm();
+    }
+    
+    private void OnChangedAssigned(WorkspaceMembershipDto membership)
     {
         _model.UserId = membership.User.Id;
+        SubmitForm();
     }
 
     private void OnFileUploaded(StoredFileDto uploadedFile)
@@ -100,6 +99,7 @@ public partial class UpdateTaskForm
     private void OnTagsChanged(IEnumerable<long> selectedTagIds)
     {
         _model.TagIds = selectedTagIds.ToList();
+        SubmitForm();
     }
 
     private void AttachmentsListUpdated(ICollection<StoredFileDto> attachments)
@@ -108,25 +108,25 @@ public partial class UpdateTaskForm
         Dispatcher.Dispatch(new SetAttachmentsAction(Task.TaskId, Task.Attachments));
     }
 
-    private bool ValidateStartTime(DateTime? modelStartTime)
+    private bool DisabledStartTime(DateTime modelStartTime)
     {
-        if (!modelStartTime.HasValue || !_model.EndTime.HasValue)
+        if (!_model.EndTime.HasValue)
         {
-            return true;
+            return false;
         }
-        return modelStartTime < _model.EndTime;
+        return modelStartTime.Date >= _model.EndTime.Value.Date;
     }
 
-    private bool ValidateEndTime(DateTime? modelEndTime)
+    private bool DisabledEndTime(DateTime modelEndTime)
     {
-        if (!modelEndTime.HasValue || !_model.StartTime.HasValue)
+        if (!_model.StartTime.HasValue)
         {
-            return true;
+            return false;
         }
-        return modelEndTime > _model.StartTime;
+        return modelEndTime.Date <= _model.StartTime.Value.Date;
     }
 
-    private async Task OnReminderTimeChanged(TimeSpan? endTime)
+    private void OnReminderTimeChanged(TimeSpan? endTime)
     {
         _model.ReminderTime = _model.ReminderTime?.StartOfDay();
         if (endTime.HasValue)
@@ -134,43 +134,18 @@ public partial class UpdateTaskForm
             _model.ReminderTime = _model.ReminderTime?.Add(endTime.Value);
         }
         _model.ReminderTime = _model.ReminderTime?.ToLocalTime();
-        await ValidateDates();
     }
     
-    private async Task OnStartDateChanged(DateTime? date)
+    private void OnStartDateChanged(DateTime? date)
     {
         _model.StartTime = date;
-        if (await ValidateDates())
-        {
-            SetReminderTimeIfEmpty(_model.StartTime);
-        }
+        SubmitForm();
     }
     
-    private async Task OnEndDateChanged(DateTime? date)
+    private void OnEndDateChanged(DateTime? date)
     {
         _model.EndTime = date;
-        if (await ValidateDates())
-        {
-            SetReminderTimeIfEmpty(_model.EndTime);
-        }
-    }
-
-    private async Task<bool> ValidateDates()
-    {
-        await _startDatePicker!.Validate();
-        await _endDatePicker!.Validate();
-        await _reminderDatePicker!.Validate();
-        await _reminderTimePicker!.Validate();
-
-        return IsDatesValidValidateDates();
-    }
-    
-    private bool IsDatesValidValidateDates()
-    {
-        return !_startDatePicker!.Error
-            && !_endDatePicker!.Error
-            && !_reminderDatePicker!.Error
-            && !_reminderTimePicker!.Error;
+        SubmitForm();
     }
     
     private void SetReminderTimeIfEmpty(DateTime? time)
@@ -181,10 +156,23 @@ public partial class UpdateTaskForm
         {
             _model.ReminderTime = time?.StartOfDay().AddHours(9);
         }
+        SubmitForm();
+    }
+    
+    private void OnArchivedChanged(bool val)
+    {
+        _model.IsArchived = val;
+        SubmitForm();
+    }
+    
+    private void OnDescriptionChanged(string description)
+    {
+        _model.Description = description;
+        SubmitForm();
     }
     
     private void OnCloseModal()
     {
-        MudDialog.Close();
+        MudDialog.CloseAsync();
     }
 }

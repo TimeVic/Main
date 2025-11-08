@@ -1,4 +1,4 @@
-﻿using MudBlazor;
+﻿using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
 
@@ -8,16 +8,16 @@ public partial class ModalDialogProviderService
 {
     public async Task ShowTimeEntryEditModal(TimeEntryDto timeEntry)
     {
-        var parameters = new DialogParameters<TimeEntryEditModal>
+        var parameters = new DialogParameters
         {
-            { x => x.TimeEntry, timeEntry },
+            PrimaryAction = ""
         };
-        await _mudDialogService.ShowAsync<TimeEntryEditModal>("Edit Time Entry", parameters, new DialogOptions()
-        {
-            Position = DialogPosition.TopCenter,
-            MaxWidth = MaxWidth.Medium,
-            NoHeader = true,
-            CloseButton = true
-        });
+        await _dialogService.ShowDialogAsync<TimeEntryEditModal>(
+            new TimeEntryEditModal.Parameters
+            {
+                TimeEntry = timeEntry,
+            },
+            parameters
+        );
     }
 }

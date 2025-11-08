@@ -1,11 +1,10 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Common;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 
-public class PaymentDto : IResponse
+public class PaymentDto: BaseDto
 {
-    public long Id { get; set; }
-    
     public DateTime PaymentTime { get; set; }
     
     public string? Description { get; set; }

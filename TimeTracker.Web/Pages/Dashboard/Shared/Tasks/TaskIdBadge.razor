@@ -1,5 +1,4 @@
-﻿@using MudBlazor
-
+﻿
 @inherits BaseReactiveComponent
 
 <div class="d-flex align-items-center justify-content-start">
@@ -10,25 +9,23 @@
     }
     @if (IsLink)
     {
-        <NavLink href="@($"/board/task/{AuthState.Value.Workspace.Id}/{InternalTask.TaskId}")" target="_blank">
-            <MudChip
+        <FluentAnchor href="@($"/board/task/{AuthState.Value.Workspace.Id}/{InternalTask.TaskId}")" target="_blank">
+            <FluentBadge
                 Class="@($"{Class} d-flex align-items-center")"
                 Style="@(IsClickable ? "cursor: pointer" : string.Empty)"
-                Size="Size.Small"
-                Color="Color.Info">
+                Appearance="Appearance.Accent">
                 @taskId
-            </MudChip>
-        </NavLink>
+            </FluentBadge>
+        </FluentAnchor>
     }
     else
     {
-        <MudChip
+        <FluentBadge
             Class="@($"{Class} d-flex align-items-center")"
             Style="@(IsClickable ? "cursor: pointer" : string.Empty)"
-            Size="Size.Small"
             OnClick="OnClick"
-            Color="Color.Info">
+            Appearance="Appearance.Accent">
             @taskId
-        </MudChip>
+        </FluentBadge>
     }
 </div>

@@ -1,6 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Web.Constants;
@@ -22,17 +21,6 @@ internal enum TaskListAction
 
 public partial class TasksListTree
 {
-    [CascadingParameter(Name = "ProjectId")]
-    public long ProjectId
-    {
-        get => _projectId;
-        set
-        {
-            _projectId = value;
-            OnTasksListSelected(null);
-        }
-    }
-    
     [CascadingParameter(Name = "TaskListId")]
     public long? TaskListId
     {
@@ -61,12 +49,12 @@ public partial class TasksListTree
 
     private long _projectId = 0;
     private long? _taskListId = null;
-
-    private MudList _taskListList;
-
-    public long _selectedTaskListId
+    private bool _isTaskListsMenuOpened = false;
+    private bool _isTaskListMenuOpened = false;
+    
+    public TaskListDto? _selectedTaskList
     {
-        get => _tasksListState.Value.SelectedTaskListId ?? 0;
+        get => _tasksListState.Value.SelectedTaskList;
     }
     
     private ICollection<TaskListDto> _projectTasksList
@@ -77,6 +65,14 @@ public partial class TasksListTree
             return list.Where(item => item.Project?.Id == _projectId).ToList();
         }
     }
+    
+    private IEnumerable<IGrouping<long, TaskListDto>> _groupedTasksList
+    {
+        get
+        {
+            return _tasksListState.Value.List.GroupBy(item => item.Project.Id);
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -85,24 +81,27 @@ public partial class TasksListTree
 
     private void ShowAddTaskListModal()
     {
-        InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal(projectId: ProjectId));
+        InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal(projectId: null));
     }
     
     private void ShowUpdateTaskListModal()
     {
-        var taskList = _tasksListState.Value.List.First(item => item.Id == _selectedTaskListId);
-        InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal(taskList));
+        InvokeAsync(async () => await _modalDialogProviderService.ShowEditTaskListModal(_selectedTaskList));
     }
 
+    private async Task ShowAddTaskModal()
+    {
+        await _modalDialogProviderService.ShowAddTaskModal(taskListId: _taskListId);
+    }
+    
     private async Task OnDeleteTaskList()
     {
-        var taskList = _tasksListState.Value.List.First(item => item.Id == _selectedTaskListId);
         var isOk = await _modalDialogProviderService.ShowDeleteConfirmationDialog(
-            $"Are you sure you want to remove: {taskList.Name}?"
+            $"Are you sure you want to remove: {_selectedTaskList!.Name}?"
         );
         if (isOk.HasValue && isOk.Value)
         {
-            Dispatcher.Dispatch(new ArchiveTaskListAction(taskList));
+            Dispatcher.Dispatch(new ArchiveTaskListAction(_selectedTaskList));
         }
     }
     
@@ -119,13 +118,16 @@ public partial class TasksListTree
         if (tasksList is null)
             return;
         NavigationManager.NavigateTo(
-            string.Format(SiteUrl.Dashboard_Tasks, ProjectId, tasksList.Id)    
+            string.Format(SiteUrl.Dashboard_Tasks, tasksList.Id)    
         );
     }
     
-    private void OnTasksListSelected(long? testsListId)
+    private void OnTasksListSelected(long? tasksListId)
     {
-        Dispatcher.Dispatch(new SetSelectedAction(testsListId));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
+        if (tasksListId.HasValue)
+        {
+            Dispatcher.Dispatch(new SetSelectedAction(tasksListId));
+            Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());    
+        }
     }
 }

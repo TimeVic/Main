@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Web.Store.GoalsTracker;
 
@@ -11,7 +11,7 @@ public partial class ChangePositionModal
     public GoalsTrackerDto Tracker { get; set; }
     
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    FluentDialog MudDialog { get; set; }
 
     public IList<GoalsTrackerItemDto> _goals { get; set; } = new List<GoalsTrackerItemDto>();
     

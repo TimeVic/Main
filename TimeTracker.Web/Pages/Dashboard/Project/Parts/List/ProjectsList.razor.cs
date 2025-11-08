@@ -50,7 +50,7 @@ public partial class ProjectsList
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            await ToastService.ShowError("Project deletion error");
+            ToastService.ShowError("Project deletion error");
         }
     }
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Services;
@@ -28,11 +28,12 @@ public partial class ResetPassword
     
     private ResetPasswordStep1Request model = new();
     private bool _isLoading;
-    private MudForm _form;
+    private EditForm _form;
     private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         _isLoading = false;
         await UpdateReCaptchaAsync();
     }
@@ -44,8 +45,7 @@ public partial class ResetPassword
     
     private async Task Submit()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        if (!_form.EditContext!.Validate())
         {
             return;
         }
@@ -55,13 +55,13 @@ public partial class ResetPassword
             var isSuccess = await _apiService.ResetPasswordStep1(model);
             if (isSuccess)
             {
-                await _toastService.ShowInfo("Email has been sent");
+                _toastService.ShowInfo("Email has been sent");
                 model.Email = string.Empty;
             }
         }
         catch (Exception)
         {
-            await ToastService.ShowError("Incorrect email or password");
+            ToastService.ShowError("Incorrect email or password");
         }
         finally
         {

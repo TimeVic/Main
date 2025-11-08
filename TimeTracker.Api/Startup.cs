@@ -25,7 +25,7 @@ public class Startup
     {
         var assembly = typeof(ApiAssemblyMarker).Assembly;
         services.AddCors();
-        services.AddAutoMapper(assembly);
+        services.AddAutoMapper(cfg => {}, assembly);
         services.InitControllers(assembly);
         services.InitApiAuthServices(Configuration);
     }

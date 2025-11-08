@@ -26,7 +26,7 @@ public class Startup
         var assembly = typeof(ApiFileStorageAssemblyMarker).Assembly;
         
         services.AddCors();
-        services.AddAutoMapper(assembly);
+        services.AddAutoMapper(cfg => {}, assembly);
         services.InitControllers(assembly);
     }
 

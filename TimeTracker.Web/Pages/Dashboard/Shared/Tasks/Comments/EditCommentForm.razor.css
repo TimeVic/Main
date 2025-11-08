@@ -1,4 +1,7 @@
-.w-comment-edit-form ::deep .w-circle {
+.w-comment-edit-form {
+  border-bottom: 1px lightgray solid;
+}
+.w-comment-edit-form .w-circle {
   font-size: 6px;
   color: var(--rz-base-400);
   margin: 0 4px;

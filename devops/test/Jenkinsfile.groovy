@@ -1,7 +1,7 @@
-node('testing-node') {
+node('build-node') {
     properties([
         disableConcurrentBuilds(),
-        gitLabConnection('gitlab_lampego'),
+//         gitLabConnection('gitlab_lampego'),
     ])
 
     String testScriptParameters = '--logger=trx --no-restore --no-build --results-directory=./results'
@@ -66,8 +66,8 @@ node('testing-node') {
             withCredentials([
                 usernamePassword(credentialsId: "timevic_testing_aws_s3_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
             ]) {
-                envVariables.put('AWS__S3__AccessKey', USER_NAME)
-                envVariables.put('AWS__S3__SecretKey', PASSWORD)
+                containerEnvVars.put('AWS__S3__AccessKey', USER_NAME)
+                containerEnvVars.put('AWS__S3__SecretKey', PASSWORD)
             }
             
             withCredentials([string(credentialsId: "timevic_testing_aws_s3_bucket_name", variable: 'AUTH_SECRET')]) {
@@ -91,6 +91,7 @@ node('testing-node') {
                 sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json'
                 sh 'dotnet build --'
             }
 
@@ -186,28 +187,35 @@ def mapToEnvVars(Map<String, String> list) {
 def preconfigureAndStart(Closure<String> inner) {
     def networkId = UUID.randomUUID().toString()
     try {
-        sh "docker network rm ${networkId}"
+        def code = sh(script: "docker network rm ${networkId}", returnStatus: true)
+        if (code == 1) {
+            echo "Testing netowrk not found. Skip removing..."
+        }
     } catch(Exception exception) {
         println exception.getMessage()
     }
     try {
         sh "docker network create ${networkId}"
-        gitlabBuilds(builds: Stage.toListOfStrings()) {
-            inner.call(networkId)
-        }
+//         gitlabBuilds(builds: Stage.toListOfStrings()) {
+//             inner.call(networkId)
+//         }
+        inner.call(networkId)
     } finally {
-        sh "docker network rm ${networkId}"
+        def code = sh(script: "docker network rm ${networkId}", returnStatus: true)
+        if (code == 1) {
+            echo "Network was not removed..."
+        }
     }
 }
 
 def runStage(Stage stageAction, Closure callback) {
     stage(stageAction.toString()) {
         try {
-            updateGitlabCommitStatus name: stageAction.toString(), state: 'running'
+//             updateGitlabCommitStatus name: stageAction.toString(), state: 'running'
             callback()
-            updateGitlabCommitStatus name: stageAction.toString(), state: 'success'
+//             updateGitlabCommitStatus name: stageAction.toString(), state: 'success'
         } catch (Exception e) {
-            updateGitlabCommitStatus name: stageAction.toString(), state: 'failed'
+//             updateGitlabCommitStatus name: stageAction.toString(), state: 'failed'
             throw new Exception(e.getMessage())
         }
     }

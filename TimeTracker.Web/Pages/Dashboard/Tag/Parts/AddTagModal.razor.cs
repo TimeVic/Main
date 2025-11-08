@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
-using MudBlazor.Utilities;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Web.Store.Tag;
 
@@ -9,14 +8,14 @@ namespace TimeTracker.Web.Pages.Dashboard.Tag.Parts;
 public partial class AddTagModal
 {
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    FluentDialog MudDialog { get; set; }
 
     private AddRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
-    private MudForm _form;
+    private FluentEditForm _form;
 
-    private MudColor _mudColor
+    private Color _mudColor
     {
         get => string.IsNullOrEmpty(model.Color) ? new MudColor("#ffffff") : new MudColor(model.Color);
         set => model.Color = value.Value;

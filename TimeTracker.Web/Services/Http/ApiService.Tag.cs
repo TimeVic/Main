@@ -7,26 +7,14 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<TagDto> TagAddAsync(AddRequest model)
+        public async Task<TagDto?> TagAddAsync(AddRequest model)
         {
-            var response = await PostAsync<TagDto>(ApiUrl.TagAdd, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<TagDto?>(ApiUrl.TagAdd, model);
         }
 
-        public async Task<TagDto> TagUpdateAsync(UpdateRequest model)
+        public async Task<TagDto?> TagUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAsync<TagDto>(ApiUrl.TagUpdate, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<TagDto?>(ApiUrl.TagUpdate, model);
         }
         
         public async Task TagDeleteAsync(long tagId)
@@ -37,15 +25,9 @@ namespace TimeTracker.Web.Services.Http
             });
         }
 
-        public async Task<GetListResponse> TagGetListAsync(GetListRequest model)
+        public async Task<GetListResponse?> TagGetListAsync(GetListRequest model)
         {
-            var response = await PostAsync<GetListResponse>(ApiUrl.TagList, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<GetListResponse?>(ApiUrl.TagList, model);
         }
     }
 }

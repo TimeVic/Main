@@ -35,13 +35,16 @@ public class LoadListEffect: Effect<LoadListAction>
                 return;
             }
 
-            dispatcher.Dispatch(new SetIsListLoading(true));
-            var response = await _apiService.ClientGetListAsync(new GetListRequest()
+            if (_authState.Value.IsLoggedIn)
             {
-                WorkspaceId = _authState.Value.Workspace.Id,
-                Page = 1
-            });
-            dispatcher.Dispatch(new SetListItemsAction(response));
+                dispatcher.Dispatch(new SetIsListLoading(true));
+                var response = await _apiService.ClientGetListAsync(new GetListRequest()
+                {
+                    WorkspaceId = _authState.Value.Workspace!.Id,
+                    Page = 1
+                });
+                dispatcher.Dispatch(new SetListItemsAction(response));    
+            }
         }
         catch (Exception e)
         {

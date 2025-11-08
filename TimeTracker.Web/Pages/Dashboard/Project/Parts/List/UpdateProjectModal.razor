@@ -1,51 +1,71 @@
-﻿@using MudBlazor
-
+﻿
 @inherits BaseReactiveComponent
+@using TimeTracker.Web.Shared.Components.Form.Select
+@implements IDialogContentComponent<UpdateProjectModal.Parameters>
 
-<MudDialog>
-    <DialogContent>
-        <MudForm
-            @ref="_form"
-            @bind-IsValid="_isValid">
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            Update project
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
 
-            <MudStack>
-                <MudStack Row="true" Spacing="4">
-                    <ClientsDropDown
-                        For="() => model.ClientId"
-                        @bind-Value="@(model.ClientId)"/>
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton
+        Appearance="Appearance.Accent"
+        Disabled="@_isLoading"
+        OnClick="@Submit">Update</FluentButton>
+    <FluentButton
+        Disabled="@_isLoading"
+        Appearance="Appearance.Neutral"
+        OnClick="@OnCloseModal">Cancel</FluentButton>
+</FluentDialogFooter>
 
-                    <MudTextField
-                        T="string?"
-                        For="() => model.Name"
-                        @bind-Value="@(model.Name)"
-                        Label="Project name">
-                    </MudTextField>
-                </MudStack>
-                <MudStack Row="true" Spacing="4">
-                    <MudNumericField
-                        T="decimal?"
-                        Label="Amount"
-                        @bind-Value="@(model.DefaultHourlyRate)"
-                        Variant="MudBlazor.Variant.Text"
-                        Step=".01M"
-                        Min="0.0M"/>
+@* Body *@
+<FluentDialogBody>
+    <EditForm
+        @ref="_form"
+        Model="model">
+        <DataAnnotationsValidator />
+        <FluentValidationSummary />
 
-                    <MudCheckBox
-                        T="bool"
-                        For="() => model.IsBillableByDefault"
-                        @bind-Value="@(model.IsBillableByDefault)"/>
-                </MudStack>
-            </MudStack>
-        </MudForm>
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
-        <MudButton
-            ButtonType="MudBlazor.ButtonType.Submit"
-            OnClick="@Submit"
-            Disabled="@_isLoading"
-            Color="Color.Primary">
-            Update
-        </MudButton>
-    </DialogActions>
-</MudDialog>
+        <FluentStack Orientation="Orientation.Vertical">
+            <div class="w-100">
+                <FluentTextField
+                    Class="w-100 mb-2"
+                    @bind-Value="@(model.Name)"
+                    Label="Project name">
+                </FluentTextField>
+            </div>
+            
+            <ClientsDropDown
+                Label="Client"
+                Clearable="true"
+                FullWidth="true"
+                Class="mb-2"
+                Value="@(model.ClientId)"
+                SelectedItemChanged="@(item => model.ClientId = item?.Id ?? 0)"/>
+
+            <div class="w-100">
+                <FluentCheckbox
+                    Class="w-100 mb-2"
+                    Label="Billable by default"
+                    @bind-Value="@(model.IsBillableByDefault)"/>
+            </div>
+
+            <div class="w-100">
+                <FluentNumberField
+                    TValue="decimal?"
+                    Label="Amount"
+                    Class="w-100"
+                    Disabled="@(!model.IsBillableByDefault)"
+                    @bind-Value="@(model.DefaultHourlyRate)"
+                    Step=".01M"
+                    Min="0.0M"/>
+            </div>
+        </FluentStack>
+    </EditForm>
+</FluentDialogBody>

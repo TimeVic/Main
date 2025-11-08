@@ -286,5 +286,15 @@ namespace TimeTracker.Business.Extensions
 
             return count + 1;
         }
+        
+        public static string GetFirstUpperLetters(this string str, int maxLetters = 2)
+        {
+            if (string.IsNullOrEmpty(str))
+                throw new ArgumentNullException(nameof(str));
+            var letters = str.Split([" "], StringSplitOptions.RemoveEmptyEntries)
+                .Select(item => item.FirstChar().ToUpper())
+                .Take(maxLetters);
+            return string.Join("", letters);
+        }
     }
 }

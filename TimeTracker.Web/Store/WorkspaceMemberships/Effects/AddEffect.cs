@@ -35,7 +35,7 @@ public class AddEffect: Effect<AddNewMemberAction>
             await _apiService.WorkspaceMembershipAddAsync(_authState.Value.Workspace.Id, action.Email);
             dispatcher.Dispatch(new LoadListAction(true));
             
-            await _notificationService.ShowInfo("New member was added");
+            _notificationService.ShowInfo("New member was added");
         }
         catch (Exception e)
         {

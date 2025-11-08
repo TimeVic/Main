@@ -8,37 +8,19 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<TaskListDto> TaskListAddAsync(AddRequest model)
+        public async Task<TaskListDto?> TaskListAddAsync(AddRequest model)
         {
-            var response = await PostAsync<TaskListDto>(ApiUrl.TaskListAdd, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<TaskListDto?>(ApiUrl.TaskListAdd, model);
         }
 
-        public async Task<TaskListDto> TaskListUpdateAsync(UpdateRequest model)
+        public async Task<TaskListDto?> TaskListUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAsync<TaskListDto>(ApiUrl.TaskListUpdate, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<TaskListDto?>(ApiUrl.TaskListUpdate, model);
         }
 
-        public async Task<GetListResponse> TaskListGetListAsync(GetListRequest model)
+        public async Task<GetListResponse?> TaskListGetListAsync(GetListRequest model)
         {
-            var response = await PostAsync<GetListResponse>(ApiUrl.TaskListList, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<GetListResponse?>(ApiUrl.TaskListList, model);
         }
         
         public async Task TaskListArchiveAsync(long taskListId)

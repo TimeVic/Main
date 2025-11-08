@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Web.Constants;
@@ -22,7 +22,7 @@ public partial class JiraSettingsForm
     
     private SetJiraSettingsRequest _model = new();
     private bool _isLoading = false;
-    private MudForm _form;
+    private FluentDialog _form;
     private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()

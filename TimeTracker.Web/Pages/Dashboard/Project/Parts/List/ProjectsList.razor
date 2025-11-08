@@ -2,52 +2,62 @@
 
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
-@using MudBlazor
 
-<MudTable
-    Class="mt-2 w-100"
-    Items="@_state.Value.List"
-    Hover="true"
-    Dense="true"
-    Outlined="true"
-    Breakpoint="Breakpoint.Sm"
-    Loading="@_state.Value.IsListLoading"
-    LoadingProgressColor="Color.Info">
-
-    <ToolBarContent>
-        <MudText Typo="Typo.h6">Projects</MudText>
-        <MudSpacer/>
-        <MudButton
-            OnClick="@OnAddProject"
+<FluentStack Orientation="Orientation.Vertical" Class="p-2">
+    <FluentToolbar Class="w-100">
+        <FluentButton
+            IconStart="@(new Icons.Regular.Size24.Add())"
+            Appearance="Appearance.Accent"
             Disabled="@(!AuthState.Value.IsRoleAdmin)"
-            StartIcon="@Icons.Material.Filled.Add">
+            OnClick="@OnAddProject">
             Add
-        </MudButton>
-    </ToolBarContent>
+        </FluentButton>
+    </FluentToolbar>
 
-    <HeaderContent>
-        <MudTh>Name</MudTh>
-        <MudTh>Client</MudTh>
-        <MudTh>Default Hourly Rate</MudTh>
-        <MudTh></MudTh>
-    </HeaderContent>
+    <FluentDataGrid
+        Class="w-100"
+        Items="@_state.Value.List.AsQueryable()"
+        RowSize="DataGridRowSize.Medium"
+        ShowHover="true">
 
-    <RowTemplate>
-        <MudTd DataLabel="Project">@context?.Name</MudTd>
-        <MudTd DataLabel="Client">@context.Client?.Name</MudTd>
-        <MudTd DataLabel="DefaultHourlyRate">@context.DefaultHourlyRate?.ToString("0.00")</MudTd>
-        <MudTd DataLabel="Actions">
-            <MudIconButton
-                OnClick="@(() => OnEditProject(context))"
-                Icon="@Icons.Material.Filled.Edit"
+        <TemplateColumn
+            Title="Name"
+            Sortable="false">
+            @context?.Name
+        </TemplateColumn>
+
+        <TemplateColumn
+            Title="Client"
+            Sortable="false">
+            @context?.Client?.Name
+        </TemplateColumn>
+
+        <TemplateColumn
+            Title="Default Hourly Rate"
+            Sortable="false">
+            @context?.DefaultHourlyRate?.ToString("0.##")
+        </TemplateColumn>
+
+        <PropertyColumn
+            Title="Billable"
+            Sortable="false"
+            Property="arg => arg.IsBillableByDefault"/>
+        
+        <TemplateColumn
+            Title=""
+            Sortable="false">
+
+            <FluentButton
+                IconStart="@(new Icons.Regular.Size24.Edit())"
+                Appearance="Appearance.Lightweight"
                 Disabled="@(!AuthState.Value.IsRoleAdmin)"
-                Size="Size.Small"/>
-            <MudIconButton
-                OnClick="@(() => DeleteProject(context))"
-                Icon="@Icons.Material.Filled.Delete"
+                OnClick="@(() => OnEditProject(context))"/>
+
+            <FluentButton
+                IconStart="@(new Icons.Regular.Size24.Delete())"
+                Appearance="Appearance.Lightweight"
                 Disabled="@(!AuthState.Value.IsRoleAdmin)"
-                Color="Color.Error"
-                Size="Size.Small"/>
-        </MudTd>
-    </RowTemplate>
-</MudTable>
+                OnClick="@(() => DeleteProject(context))"/>
+        </TemplateColumn>
+    </FluentDataGrid>
+</FluentStack>

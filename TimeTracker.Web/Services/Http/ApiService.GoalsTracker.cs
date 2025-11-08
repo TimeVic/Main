@@ -7,19 +7,13 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<GoalsTrackerDto> GoalsTrackerLoadAsync(long workspaceId, DateTime date)
+        public async Task<GoalsTrackerDto?> GoalsTrackerLoadAsync(long workspaceId, DateTime date)
         {
-            var response = await PostAsync<GoalsTrackerDto>(ApiUrl.GoalsTrackerGet, new GetRequest()
+            return await PostAsync<GoalsTrackerDto?>(ApiUrl.GoalsTrackerGet, new GetRequest()
             {
                 Date = date,
                 WorkspaceId = workspaceId
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
         
         public async Task GoalsTrackerChangePositionsAsync(
@@ -36,31 +30,19 @@ namespace TimeTracker.Web.Services.Http
             });
         }
         
-        public async Task<GoalsTrackerItemDto> GoalsTrackerCreateItemAsync(long trackerId, string name, int numberOfTimes)
+        public async Task<GoalsTrackerItemDto?> GoalsTrackerCreateItemAsync(long trackerId, string name, int numberOfTimes)
         {
-            var response = await PostAsync<GoalsTrackerItemDto>(ApiUrl.GoalsTrackerItemCreate, new CreateItemRequest()
+            return await PostAsync<GoalsTrackerItemDto?>(ApiUrl.GoalsTrackerItemCreate, new CreateItemRequest()
             {
                 GoalsTrackerId = trackerId,
                 NumberOfTimes = numberOfTimes,
                 Name = name
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
         
-        public async Task<GoalsTrackerItemDto> GoalsTrackerUpdateItemAsync(UpdateItemRequest request)
+        public async Task<GoalsTrackerItemDto?> GoalsTrackerUpdateItemAsync(UpdateItemRequest request)
         {
-            var response = await PostAsync<GoalsTrackerItemDto>(ApiUrl.GoalsTrackerItemUpdate, request);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<GoalsTrackerItemDto?>(ApiUrl.GoalsTrackerItemUpdate, request);
         }
         
         public async Task GoalsTrackerDeleteItemAsync(long itemId)
@@ -71,20 +53,14 @@ namespace TimeTracker.Web.Services.Http
             });
         }
         
-        public async Task<GoalsTrackerCompletionMarkerDto> GoalsTrackerSetCompletionAsync(long itemId, int dayOfMonth, bool isChecked)
+        public async Task<GoalsTrackerCompletionMarkerDto?> GoalsTrackerSetCompletionAsync(long itemId, int dayOfMonth, bool isChecked)
         {
-            var response = await PostAsync<GoalsTrackerCompletionMarkerDto>(ApiUrl.GoalsTrackerItemSetCompletion, new SetCompletionRequest()
+            return await PostAsync<GoalsTrackerCompletionMarkerDto?>(ApiUrl.GoalsTrackerItemSetCompletion, new SetCompletionRequest()
             {
                 GoalsTrackerItemId = itemId,
                 DayOfMonth = dayOfMonth,
                 IsChecked = isChecked
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
     }
 }

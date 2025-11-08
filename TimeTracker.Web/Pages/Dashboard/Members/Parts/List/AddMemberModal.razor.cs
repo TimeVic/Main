@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
 using TimeTracker.Web.Store.WorkspaceMemberships;
 
@@ -8,7 +8,7 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List;
 public partial class AddMemberModal
 {
     [CascadingParameter] 
-    MudDialogInstance MudDialog { get; set; }
+    FluentDialog MudDialog { get; set; }
 
     private AddRequest model = new();
     private bool _isLoading = false;

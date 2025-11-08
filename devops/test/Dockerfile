@@ -1,11 +1,11 @@
-FROM ubuntu:focal
+FROM ubuntu:noble
 WORKDIR /app
 USER root
 
 RUN cat /etc/os-release
 
 RUN apt update --fix-missing
-RUN apt install -y apt-transport-https wget ca-certificates iputils-ping telnet curl gnupg2
+RUN apt install -y apt-transport-https wget ca-certificates iputils-ping telnet curl gnupg2 software-properties-common
 
 # Configure time
 ARG DEBIAN_FRONTEND=noninteractive
@@ -19,8 +19,9 @@ RUN apt-get install -y tzdata lsb-release
 #RUN sysctl -p
 
 # Install .Net Core 7.0
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-RUN curl https://packages.microsoft.com/config/ubuntu/20.10/prod.list | tee /etc/apt/sources.list.d/msprod.list
+#RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+#RUN curl https://packages.microsoft.com/config/ubuntu/20.10/prod.list | tee /etc/apt/sources.list.d/msprod.list
+RUN add-apt-repository ppa:dotnet/backports
 
 # Install Redis repositories
 RUN curl -fsSL https://packages.redis.io/gpg | gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
@@ -28,16 +29,21 @@ RUN echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://
 
 # Install Postgres repositories
 # Create the file repository configuration:
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+#RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 # Import the repository signing key:
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+#RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+
+#RUN apt install curl ca-certificates gnupg
+#RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg
+#RUN echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
 
 # Install packages
-RUN apt update
-RUN apt-get install -y net-tools sudo netcat \
-    default-jre \
-    postgresql postgresql-client redis \
-    dotnet-sdk-8.0
+RUN apt update 
+RUN apt-get install -y net-tools netcat-traditional sudo
+#RUN apt-get default-jre
+RUN apt-get install -y postgresql postgresql-contrib
+RUN apt-get install -y redis
+RUN apt-get install -y dotnet-sdk-9.0 
 
 # Configure Postgres
 ENV PGTZ=Etc/UTC

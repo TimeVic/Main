@@ -4,7 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
+// using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.TimeEntry;
 
@@ -30,6 +30,8 @@ public partial class TimeEntryForm
     [Inject] 
     private ModalDialogProviderService _modalDialogProviderService { get; set; }
 
+    private bool _isDetailsOpened = false;
+    
     private TimeEntryDto? _activeEntry
     {
         get
@@ -88,7 +90,6 @@ public partial class TimeEntryForm
     
     private async Task UpdateTimeEntry(TimeEntryDto entry)
     {
-        Dispatcher.Dispatch(new UpdateTimeEntryAction(entry));
         Dispatcher.Dispatch(new SaveTimeEntryAction(entry, true));
         await Task.CompletedTask;
     }

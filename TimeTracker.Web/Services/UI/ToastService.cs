@@ -1,42 +1,35 @@
-﻿using MudBlazor;
+﻿using Microsoft.FluentUI.AspNetCore.Components;
 
 namespace TimeTracker.Web.Services.UI;
 
 public class ToastService
 {
-    private readonly ISnackbar _snackbar;
+    private readonly int _timeout = 3000;
+    
+    private readonly IToastService _toastService;
 
-    public ToastService(ISnackbar snackbar)
+    public ToastService(IToastService toastService)
     {
-        _snackbar = snackbar;
-    }
-
-    public Task Show(Severity severity, string summary)
-    {
-        _snackbar.Add(summary, severity, options =>
-        {
-            options.VisibleStateDuration = 3000;
-        });
-        return Task.CompletedTask;
+        _toastService = toastService;
     }
     
-    public async Task ShowError(string summary)
+    public void ShowError(string summary)
     {
-        await Show(Severity.Error, summary);
+        _toastService.ShowError(summary, _timeout);
     }
     
-    public async Task ShowInfo(string summary)
+    public void ShowInfo(string summary)
     {
-        await Show(Severity.Info, summary);
+        _toastService.ShowInfo(summary, _timeout);
     }
     
-    public async Task ShowSuccess(string summary)
+    public void ShowSuccess(string summary)
     {
-        await Show(Severity.Success, summary);
+        _toastService.ShowSuccess(summary, _timeout);
     }
     
-    public async Task ShowWarning(string summary)
+    public void ShowWarning(string summary)
     {
-        await Show(Severity.Warning, summary);
+        _toastService.ShowWarning(summary, _timeout);
     }
 }

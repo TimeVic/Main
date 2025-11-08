@@ -1,55 +1,90 @@
-﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Web.Store.TimeEntry;
+using Debug = TimeTracker.Web.Core.Helpers.Debug;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.TimeEntry;
 
 public partial class TimeEntryEditModal
 {
+    public class Parameters
+    {
+        public required TimeEntryDto TimeEntry { get; set; }
+    }
+    
     [Parameter]
-    public TimeEntryDto TimeEntry { get; set; }
+    public required Parameters Content { get; set; }
     
     [CascadingParameter] 
-    public MudDialogInstance MudDialog { get; set; }
+    public required FluentDialog MudDialog { get; set; }
 
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
     
-    private MudForm? _form;
+    private EditForm? _form;
     private bool _isValid = false;
-    public TimeSpan _duration => TimeEntry.EndTime == null ? TimeSpan.Zero : TimeEntry.EndTime.Value - TimeEntry.StartTime;
+    public TimeSpan _duration => Content.TimeEntry.EndTime == null ? TimeSpan.Zero : Content.TimeEntry.EndTime.Value - Content.TimeEntry.StartTime;
     
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
     }
     
-    private void OnChangeStartTime(TimeSpan startTime)
+    private void OnChangeStartTime(DateTime? startDateTime)
     {
-        TimeEntry.StartTime = startTime > TimeEntry.EndTime ? TimeEntry.EndTime.Value : startTime;
+        ArgumentNullException.ThrowIfNull(startDateTime);
+        Debug.Log(startDateTime, startDateTime.Value.TimeOfDay);
+        var startTime = startDateTime.Value.TimeOfDay;
+        Content.TimeEntry.StartTime = startTime > Content.TimeEntry.EndTime ? Content.TimeEntry.EndTime.Value : startTime;
+        SubmitForm();
     }
 
-    private void OnChangeEndTime(TimeSpan endTime)
+    private void OnChangeEndTime(DateTime? endDateTime)
     {
-        TimeEntry.EndTime = endTime < TimeEntry.StartTime ? TimeEntry.StartTime : endTime;
+        ArgumentNullException.ThrowIfNull(endDateTime);
+        var endTime = endDateTime.Value.TimeOfDay;
+        Content.TimeEntry.EndTime = endTime < Content.TimeEntry.StartTime ? Content.TimeEntry.StartTime : endTime;
+        SubmitForm();
     }
     
     private void SubmitForm()
     {
-        _form.Validate();
-        if (!_form.IsValid)
+        ArgumentNullException.ThrowIfNull(_form);
+        ArgumentNullException.ThrowIfNull(_form.EditContext);
+        
+        if (!_form.EditContext.Validate())
         {
             return;
         }
-        OnCloseModal();
-        Dispatcher.Dispatch(new UpdateTimeEntryAction(TimeEntry));
-        Dispatcher.Dispatch(new SaveTimeEntryAction(TimeEntry));
+        Dispatcher.Dispatch(new UpdateTimeEntryAction(Content.TimeEntry));
+        Dispatcher.Dispatch(new SaveTimeEntryAction(Content.TimeEntry));
     }
     
     private void OnCloseModal()
     {
-        MudDialog.Close();
+        MudDialog.CloseAsync();
+    }
+
+    private void OnChangeDescription(string? description)
+    {
+        Content.TimeEntry.Description = description;
+        SubmitForm();
+    }
+
+    private void OnDateChanged(DateTime? date)
+    {
+        ArgumentNullException.ThrowIfNull(date);
+        Content.TimeEntry.Date = date.Value.Date;
+        SubmitForm();
+    }
+
+    private void OnProjectChanged(ProjectDto? project)
+    {
+        Content.TimeEntry.Project = project;
+        SubmitForm();
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Store.NotificationCenter;
 

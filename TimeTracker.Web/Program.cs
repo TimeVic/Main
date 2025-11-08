@@ -11,13 +11,14 @@ using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Services.Workspace;
-using MudBlazor.Services;
 using Plk.Blazor.DragDrop;
 using TimeTracker.Web.Services.Http.Auth;
 using TimeTracker.Web.Services.Http.Client;
 using TimeTracker.Web.Services.Http.Middleware;
 using TimeTracker.Web.Services.Messaging;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
+using Microsoft.FluentUI.AspNetCore.Components;
+using ToastService = TimeTracker.Web.Services.UI.ToastService;
 
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -56,18 +57,18 @@ builder.Services.AddHttpClientInterceptor();
 // Init local storage
 builder.Services.AddBlazoredLocalStorage();
 
-// MudBlazor
-builder.Services.AddMudServices(config =>
-{
-    config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomRight;
-    config.SnackbarConfiguration.SnackbarVariant = MudBlazor.Variant.Filled;
-    config.SnackbarConfiguration.PreventDuplicates = false;
-    config.SnackbarConfiguration.NewestOnTop = false;
-    config.SnackbarConfiguration.ShowCloseIcon = true;
-    config.SnackbarConfiguration.VisibleStateDuration = 3000;
-    config.SnackbarConfiguration.HideTransitionDuration = 500;
-    config.SnackbarConfiguration.ShowTransitionDuration = 500;
-});
+// // MudBlazor
+// builder.Services.AddMudServices(config =>
+// {
+//     config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomRight;
+//     config.SnackbarConfiguration.SnackbarVariant = MudBlazor.Variant.Filled;
+//     config.SnackbarConfiguration.PreventDuplicates = false;
+//     config.SnackbarConfiguration.NewestOnTop = false;
+//     config.SnackbarConfiguration.ShowCloseIcon = true;
+//     config.SnackbarConfiguration.VisibleStateDuration = 3000;
+//     config.SnackbarConfiguration.HideTransitionDuration = 500;
+//     config.SnackbarConfiguration.ShowTransitionDuration = 500;
+// });
 
 // Custom services
 builder.Services.AddScoped<ApiService>();
@@ -88,6 +89,9 @@ builder.Services.AddScoped<FcmService>();
 
 // Drag and drop
 builder.Services.AddBlazorDragDrop();
+
+// Fluent UI
+builder.Services.AddFluentUIComponents();
 
 // Store
 builder.Services.AddFluxor(

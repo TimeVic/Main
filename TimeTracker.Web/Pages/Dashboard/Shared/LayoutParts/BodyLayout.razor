@@ -1,0 +1,18 @@
+﻿
+<FluentStack Orientation="Orientation.Vertical" Class="w-100 p-2">
+    <FluentLabel 
+        Typo="Typography.H2" 
+        Class="mb-3 mt-2">@Title</FluentLabel>
+    
+    @ChildContent
+</FluentStack>
+
+@code {
+
+    [Parameter]
+    public string? Title { get; set; }
+    
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+}

@@ -1,59 +1,43 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants.Storage
-@using MudBlazor
 
 <div class="@Class">
     @if (!Files.Any())
     {
         <div
             class="mt-3 w-100">
-            <MudText Typo="Typo.subtitle1">No records to display.</MudText>
+            <FluentLabel Typo="Typography.Subject">No records to display.</FluentLabel>
         </div>
     }
     else
     {
-        <MudTable
-            Items="@Files"
-            Hover="true"
-            Breakpoint="Breakpoint.Sm"
-            Loading="@_isReloadFiles"
-            LoadingProgressColor="Color.Info">
-            <HeaderContent>
-                <MudTh>File</MudTh>
-                <MudTh></MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd DataLabel="File">
-                    @if (!string.IsNullOrEmpty(context.Title))
-                    {
-                        @context.Title
-                    }
-                    else
-                    {
-                        @context.OriginalFileName
-                    }
-                </MudTd>
-                <MudTd DataLabel="Actions">
-                    <MudIconButton
-                        OnClick="() => OnClickView(context)"
-                        Icon="@Icons.Material.Filled.Visibility"
-                        Disabled="context.Status != StoredFileStatus.Uploaded"
-                        Size="Size.Small"
-                        Color="Color.Info"/>
-                    <MudIconButton
-                        OnClick="() => OnClickDownload(context)"
-                        Icon="@Icons.Material.Filled.FileDownload"
-                        Disabled="context.Status != StoredFileStatus.Uploaded"
-                        Size="Size.Small"
-                        Color="Color.Default"/>
-                    <MudIconButton
-                        OnClick="() => OnCLickDelete(context)"
-                        Icon="@Icons.Material.Filled.DeleteOutline"
-                        Disabled="context.Status != StoredFileStatus.Uploaded"
-                        Size="Size.Small"
-                        Color="Color.Warning"/>
-                </MudTd>
-            </RowTemplate>
-        </MudTable>
+        <FluentDataGrid Items="@Files.AsQueryable()" RowSize="@DataGridRowSize.Medium">
+            <TemplateColumn Title="File">
+                @if (!string.IsNullOrEmpty(context.Title))
+                {
+                    @context.Title
+                }
+                else
+                {
+                    @context.OriginalFileName
+                }
+            </TemplateColumn>
+            <TemplateColumn Title="Action">
+                <FluentButton
+                    Appearance="Appearance.Lightweight"
+                    @onclick="@(() => OnClickView(context))">
+                    View
+                </FluentButton>
+                <FluentButton
+                    Appearance="Appearance.Lightweight"
+                    @onclick="@(() => OnClickDownload(context))">
+                    Download
+                </FluentButton>
+                <FluentButton
+                    IconStart="@(new Icons.Filled.Size24.Delete())"
+                    Appearance="Appearance.Lightweight"
+                    @onclick="@(() => OnCLickDelete(context))"/>
+            </TemplateColumn>
+        </FluentDataGrid>
     }
 </div>

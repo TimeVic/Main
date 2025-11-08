@@ -1,12 +1,11 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Business.Common.Constants;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 
-public class WorkspaceDto : IResponse
-{
-    public long Id { get; set; }
-    
+public class WorkspaceDto: BaseDto
+{   
     public string Name { get; set; }
     
     public bool IsDefault { get; set; }

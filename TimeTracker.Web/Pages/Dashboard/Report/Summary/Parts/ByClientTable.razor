@@ -1,29 +1,14 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
-@using Fluxor
-@using TimeTracker.Web.Store.Client
-@using MudBlazor
+@using System.Linq;
 
 @code {
-
     [Parameter]
     public ICollection<SummaryByClientsReportItemDto> Items { get; set; } = new List<SummaryByClientsReportItemDto>();
-
 }
 
-<MudTable
-    Items="@Items" 
-    Hover="true" 
-    Breakpoint="Breakpoint.Sm" 
-    LoadingProgressColor="Color.Info">
-    <HeaderContent>
-        <MudTh>Client</MudTh>
-        <MudTh>Duration</MudTh>
-        <MudTh>Amount</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Client">@(context.ClientName ?? "- No client -")</MudTd>
-        <MudTd DataLabel="Duration">@context.Duration.ToReadableShortString()</MudTd>
-        <MudTd DataLabel="Amount">@context.Amount.ToMoneyFormat()</MudTd>
-    </RowTemplate>
-</MudTable>
+<FluentDataGrid TGridItem="SummaryByClientsReportItemDto" Items="@Items.AsQueryable()">
+    <PropertyColumn Title="Client" Property="@(p => p.ClientName)" Sortable="false"/>
+    <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/>
+    <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/>
+</FluentDataGrid>

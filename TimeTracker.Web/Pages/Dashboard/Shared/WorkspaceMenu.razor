@@ -1,0 +1,14 @@
+﻿
+@using TimeTracker.Api.Shared.Dto.Entity
+@inherits BaseReactiveComponent
+
+<FluentSelect
+    TOption="WorkspaceDto"
+    Label="Workspace:"
+    Style="min-width: 100%"
+    Disabled="@(!_workpsaceState.Value.IsLoaded)"
+    Items="@_workpsaceState.Value.List"
+    OptionText="@(item => item.Name)"
+    OptionValue="@(item => item.Id.ToString())"
+    OptionSelected="@(dto => dto?.Id == _authState.Value.Workspace?.Id)"
+    SelectedOptionChanged="@(OnClickToMenuItem)"/>

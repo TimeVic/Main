@@ -1,11 +1,10 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Common;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 
-public class ProjectDto : IResponse
+public class ProjectDto : BaseDto
 {
-    public long Id { get; set; }
-    
     public string Name { get; set; }
     
     public bool IsBillableByDefault { get; set; }

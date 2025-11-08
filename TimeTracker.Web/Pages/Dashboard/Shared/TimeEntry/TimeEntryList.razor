@@ -1,125 +1,107 @@
 ﻿@inherits BaseReactiveComponent
 
-@using TimeTracker.Web.Shared.Components.Form
-@using TimeTracker.Api.Shared.Dto.Entity
-@using TimeTracker.Business.Common.Constants
-@using MudBlazor
-@using TimeTracker.Business.Common.Utils
-@using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
-@using Variant = MudBlazor.Variant
 
 <div class="w-time-entry-list w-100 mb-3 @Class">
-    @foreach (var groupItem in _groupedList)
-    {
-        <MudText Typo="Typo.h5">
-            @groupItem.Key.ToShortDateString()
-        </MudText>
-        <MudCard Elevation="0" Class="mb-4">
-            <MudTable
-                T="TimeEntryDto"
-                Items="@groupItem"
-                Hover="true"
-                Striped="true"
-                RowsPerPage="@(groupItem.Count())"
-                FixedHeader="true"
-                Virtualize="false"
-                RowClass="cursor-pointer"
-                OnRowClick="@OnRowClick"
-                Breakpoint="Breakpoint.Xs">
-                <HeaderContent>
-                    @if (IsFilteredList)
-                    {
-                        <MudTh>User</MudTh>
-                    }
-                    <MudTh>Duration</MudTh>
-                    <MudTh>Start Time</MudTh>
-                    <MudTh>End Time</MudTh>
-                    <MudTh>Project</MudTh>
-                    <MudTh>Task</MudTh>
-                    <MudTh>Description</MudTh>
-                    <MudTh>Billable</MudTh>
-                    <MudTh></MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    @if (IsFilteredList)
-                    {
-                        <MudTd DataLabel="Nr">@context.User.Name</MudTd>
-                    }
-                    <MudTd DataLabel="Duration">@_timeParsingService.TimeSpanToTimeString(context.Duration, true)</MudTd>
-                    <MudTd DataLabel="Start Time">@_timeParsingService.TimeSpanToTimeString(context.StartTime)</MudTd>
-                    <MudTd DataLabel="End Time">@(context.EndTime.HasValue ? _timeParsingService.TimeSpanToTimeString(context.EndTime.Value) : "")</MudTd>
-                    <MudTd DataLabel="Project">
-                        @context.Project?.Name.TruncateAndAddDots(20)
-                    </MudTd>
-                    <MudTd DataLabel="Task">
-                        <MudStack
-                            @onclick:stopPropagation="true"
-                            Row="true"
-                            Justify="Justify.Center">
-                            @if (context.Task != null)
-                            {
-                                <TaskIdBadge
-                                    IsClickable="true"
-                                    InternalTask="@context.Task"/>
-                            }
-                            else
-                            {
-                                <MudIconButton
-                                    Size="Size.Small"
-                                    Variant="Variant.Outlined"
-                                    Color="Color.Info"
-                                    OnClick="@(() => ShowAddTaskModal(context.Id))"
-                                    Icon="@Icons.Material.Filled.Add"/>
-                            }
-                        </MudStack>
-                    </MudTd>
-                    <MudTd DataLabel="Description">
-                        @GetDescriptionLabel(context)
-                    </MudTd>
-                    <MudTd DataLabel="Billable">
-                        <MudIcon 
-                            Icon="@Icons.Material.Filled.AttachMoney"
-                            Color="@(context.IsBillable ? Color.Success : Color.Transparent)"/>
-                    </MudTd>
-                    <MudTd DataLabel="Actions">
-                        <div @onclick:stopPropagation="true">
-                            <MudIconButton
-                                Size="@Size.Small"
-                                Variant="@Variant.Text"
-                                Icon="@Icons.Material.Filled.ContentCopy"
-                                OnClick="@(() => OnStartCloned(context))"
-                                Color="@Color.Default"/>
-                            <MudIconButton
-                                Size="@Size.Small"
-                                Variant="@Variant.Text"
-                                Icon="@Icons.Material.Filled.Delete"
-                                OnClick="@(() => OnDeleteItemAsync(context))"
-                                Color="@Color.Secondary"/>
-                        </div>
-                    </MudTd>
-                </RowTemplate>
-            </MudTable>
-        </MudCard>
-    }
+
+    <FluentDataGrid 
+        Loading="_state.Value.IsListLoading"
+        Items="@_list.AsQueryable()"
+        RowSize="DataGridRowSize.Medium"
+        ShowHover="true">
+        @if (IsFilteredList)
+        {
+            <PropertyColumn 
+                Width="100px"
+                Title="User"
+                Property="@(p => p.User.Name)" 
+                Sortable="false"/>
+        }
+        <TemplateColumn
+            Title="Date"
+            Width="100px"
+            Sortable="false">
+            @context.Date.ToShortDateString()
+        </TemplateColumn>
+        <TemplateColumn
+            Title="Time"
+            Width="130px"
+            Sortable="false">
+            @_timeParsingService.TimeSpanToTimeString(context.StartTime) - @_timeParsingService.TimeSpanToTimeString(context.EndTime.Value)
+        </TemplateColumn>
+        <PropertyColumn
+            Title="Duration"
+            Width="110px"
+            Property="@(p => @_timeParsingService.TimeSpanToTimeString(p.Duration, true))"
+            Sortable="false"/>
+        <TemplateColumn
+            Title="Project"
+            Tooltip="true"
+            Sortable="false">
+            @context.Project?.Name
+        </TemplateColumn>
+        <TemplateColumn
+            Title="Task"
+            Width="100px"
+            Sortable="false">
+            <div @onclick:stopPropagation="true">
+                @if (context.Task != null)
+                {
+                    <TaskIdBadge
+                        IsClickable="true"
+                        InternalTask="@context.Task"/>
+                }
+                else
+                {
+                    <FluentButton
+                        IconStart="@(new Icons.Regular.Size16.Add())"
+                        OnClick="@(() => ShowAddTaskModal(context.Id))"/>
+                }
+            </div>
+        </TemplateColumn>
+        <TemplateColumn
+            Title="Description"
+            Tooltip="true"
+            Sortable="false">
+            @GetDescriptionLabel(context)
+        </TemplateColumn>
+        <TemplateColumn
+            Title="Billable"
+            Width="95px"
+            Align="Align.Center"
+            Sortable="false">
+            @if (context.IsBillable)
+            {
+                <FluentIcon Value="@(new Icons.Regular.Size20.Check())"></FluentIcon>
+            }
+        </TemplateColumn>
+        <TemplateColumn
+            Title="Actions"
+            Width="115px"
+            Sortable="false">
+            <FluentButton
+                IconStart="@(new Icons.Regular.Size20.Copy())"
+                OnClick="@(() => OnStartCloned(context))"/>
+            <FluentButton
+                IconStart="@(new Icons.Regular.Size20.Edit())"
+                OnClick="@(() => OnEditClick(context))"/>
+            <FluentButton
+                IconStart="@(new Icons.Regular.Size20.Delete())"
+                OnClick="@(() => OnDeleteItemAsync(context))"/>
+        </TemplateColumn>
+    </FluentDataGrid>
 
     @if (_groupedList.Any())
     {
-        <MudCard Elevation="0">
-            <MudPagination
-                class="pa-4"
-                Disabled="_isLoading"
-                Color="Color.Primary"
-                Count="@_totalPages"
-                Selected="@_selectedPage"
-                SelectedChanged="@OnSelectPage"/>
-        </MudCard>
+        <FluentPaginator
+            CurrentPageIndexChanged="OnPaginated"
+            State="@_paginationState"/>
     }
     else
     {
-        <MudText Typo="Typo.body1">
+        <FluentLabel Typo="Typography.Body">
             No entries
-        </MudText>
+        </FluentLabel>
     }
 
 </div>

@@ -2,8 +2,11 @@
 
 @using TimeTracker.Web.Pages.Dashboard.Shared
 @using TimeTracker.Web.Pages.Dashboard.Payment.Parts.List
+@using TimeTracker.Web.Pages.Dashboard.Shared.LayoutParts
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<PaymentsList/>
+<BodyLayout Title="Payments">
+    <PaymentsList/>
+</BodyLayout>

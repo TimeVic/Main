@@ -1,56 +1,70 @@
-﻿@using MudBlazor
-
+﻿
 @inherits BaseComponent
+@using TimeTracker.Web.Shared.Components.Form.Select
+@implements IDialogContentComponent
 
-<MudDialog>
-    <DialogContent>
-        <MudForm
-            @ref="_form"
-            @bind-IsValid="_isValid">
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            Add new payment
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
 
-            <MudStack>
-                <MudStack Row="true" Spacing="4">
-                    <ClientsDropDown
-                        For="() => model.ClientId"
-                        @bind-Value="@(model.ClientId)"/>
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton
+        Appearance="Appearance.Accent"
+        Disabled="@_isLoading"
+        OnClick="@Submit">Add</FluentButton>
+    <FluentButton
+        Appearance="Appearance.Neutral"
+        OnClick="@OnCloseModal">Cancel</FluentButton>
+</FluentDialogFooter>
 
-                    <ProjectsDropDown
-                        For="() => model.ProjectId"
-                        ClientId="@(model.ClientId)"
-                        @bind-Value="@(_projectId)"/>
-                </MudStack>
-                <MudStack Row="true" Spacing="4">
-                    <MudNumericField
-                        T="decimal"
-                        Label="Amount"
-                        @bind-Value="@(model.Amount)"
-                        Variant="MudBlazor.Variant.Text"
-                        Step=".01M"
-                        Min="0.0M"/>
+@* Body *@
+<FluentDialogBody>
+    <EditForm
+        @ref="_form"
+        Model="@model"
+        novalidate>
+        <DataAnnotationsValidator />
+        <FluentValidationSummary />
 
-                    <MudDatePicker
-                        Label="Payment date"
-                        Editable="true"
-                        Date="@(model.PaymentTime)"/>
-                </MudStack>
+        <ClientsDropDown
+            Label="Client"
+            FullWidth="true"
+            Value="@(model.ClientId)"
+            SelectedItemChanged="@(item => model.ClientId = item?.Id ?? 0)"/>
 
-                <MudTextField
-                    T="string?"
-                    @bind-Value="@(model.Description)"
-                    Label="Description"
-                    Variant="MudBlazor.Variant.Outlined">
-                </MudTextField>
-            </MudStack>
-        </MudForm>
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
-        <MudButton
-            ButtonType="MudBlazor.ButtonType.Submit"
-            OnClick="@Submit"
-            Disabled="@_isLoading"
-            Color="Color.Primary">
-            Add
-        </MudButton>
-    </DialogActions>
-</MudDialog>
+        <ProjectsDropDown
+            Label="Project"
+            FullWidth="true"
+            ClientId="@(model.ClientId)"
+            Value="@model.ProjectId"
+            ShowProjectsWithoutClients="false"
+            SelectedItemChanged="@(item => model.ProjectId = item?.Id ?? 0)"/>
+
+        <FluentNumberField
+            T="decimal"
+            Class="w-100"
+            Label="Amount"
+            @bind-Value="@(model.Amount)"
+            Step=".01M"
+            Min="0.0M"/>
+
+        <FluentDatePicker
+            Required="true"
+            Class="w-100"
+            Label="Payment date"
+            Value="@model.PaymentTime"
+            ValueChanged="OnUpdateTime"/>
+
+        <FluentTextArea
+            Label="Description"
+            Class="w-100"
+            @bind-Value="@(model.Description)">
+        </FluentTextArea>
+    </EditForm>
+</FluentDialogBody>

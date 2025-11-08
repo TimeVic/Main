@@ -7,26 +7,14 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<ClientDto> ClientAddAsync(AddRequest model)
+        public async Task<ClientDto?> ClientAddAsync(AddRequest model)
         {
-            var response = await PostAsync<ClientDto>(ApiUrl.ClientAdd, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<ClientDto?>(ApiUrl.ClientAdd, model);
         }
         
-        public async Task<GetListResponse> ClientGetListAsync(GetListRequest model)
+        public async Task<GetListResponse?> ClientGetListAsync(GetListRequest model)
         {
-            var response = await PostAsync<GetListResponse>(ApiUrl.ClientList, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<GetListResponse?>(ApiUrl.ClientList, model);
         }
     }
 }

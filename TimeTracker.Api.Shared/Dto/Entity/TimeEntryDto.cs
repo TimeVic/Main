@@ -1,12 +1,11 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 
-public class TimeEntryDto : IResponse
-{
-    public long Id { get; set; }
-    
+public class TimeEntryDto: BaseDto
+{   
     public string? Description { get; set; }
     
     public decimal? HourlyRate { get; set; }

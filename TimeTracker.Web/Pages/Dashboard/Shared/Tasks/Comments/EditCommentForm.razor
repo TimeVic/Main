@@ -1,95 +1,106 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Core.Helpers
-@using MudBlazor
+@using TimeTracker.Web.Shared.Components.Form
+@using TimeTracker.Web.Shared.Components.Form.Select
 
 @inherits BaseReactiveComponent
 
-<div class="w-comment-edit-form mb-5">
-    <MudForm
+<FluentCard
+    Class="w-comment-edit-form pb-2 mb-2"
+    MinimalStyle="true">
+    
+    <EditForm
         @ref="_form"
-        @bind-IsValid="_isValid">
+        Model="model">
 
-        <MudStack Row="true" Spacing="0">
-            <MudAvatar Class="mr-2" Color="Color.Primary">@_userName.FirstChar().ToUpper()</MudAvatar>
+        <FluentStack Orientation="Orientation.Vertical">
 
-            <MudStack Spacing="0" Class="w-100">
-                <MudStack Class="w-100 ml-1">
+            @if (!_isNewComment)
+            {
+                <FluentStack Orientation="Orientation.Horizontal">
+                    <FluentPersona
+                        Initials="@_userName.FirstChar().ToUpper()"
+                        StatusSize="PresenceBadgeSize.Small"
+                        StatusTitle="@_userName"
+                        Image="@(new Icons.Regular.Size48.Person().ToDataUri(size: "25px", color: "white"))"
+                        ImageSize="50px">
+                    </FluentPersona>
+
                     @if (!_isNewComment)
                     {
-                        <div>
+                        <div class="pt-3">
                             <b>@_userName</b>
                             @Comment.UpdateTime.TimeAgo(DateTimeKind.Local)
                         </div>
                     }
+                </FluentStack>
+            }
 
-                    @if (_isEditMode || _isNewComment)
-                    {
-                        <div class="w-100" @onclick="OnFocusOnEditField">
-                            <MudTextField
-                                @ref="_commentField"
-                                Margin="Margin.Dense"
-                                For="() => model.Comment"
-                                Variant="MudBlazor.Variant.Outlined"
-                                T="string"
-                                @bind-Text="@model.Comment"
-                                Lines="@(_commentLinesCount)"
-                                Placeholder="Your comment..."/>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="w-view w-100">
-                            @CommentHtml
-                        </div>
-                    }
+            @if (_isEditMode || _isNewComment)
+            {
+                <div class="w-100" @onclick="OnFocusOnEditField">
+                    <FluentTextArea
+                        @ref="_commentField"
+                        @bind-Value="@model.Comment"
+                        Class="w-100"
+                        Resize="TextAreaResize.Vertical"
+                        Rows="@(_commentLinesCount)"
+                        Placeholder="Your comment..."/>
+                </div>
+            }
+            else
+            {
+                <div class="w-view w-100">
+                    @CommentHtml
+                </div>
+            }
 
-                    @if (_isEditMode)
-                    {
-                        <MultipleUsersDropDown
-                            Class="w-100"
-                            Project="@Comment.Task.TaskList.Project"
-                            Placeholder="Select watchers"
-                            @bind-Value="@model.WatcherIds"/>
-                    }
+            @if (_isEditMode)
+            {
+                <MultipleUsersDropDown
+                    Class="w-100"
+                    Project="@Comment.Task.TaskList.Project"
+                    Placeholder="Select watchers"
+                    @bind-Value="@model.WatcherIds"/>
+            }
 
-                    <MudStack
-                        Row="@(true)"
-                        Spacing="0">
-                        @if (_isEditMode)
-                        {
-                            <MudButton
-                                Color="Color.Primary"
-                                OnClick="@(Submit)"
-                                Size="MudBlazor.Size.Small">
-                                Save
-                            </MudButton>
-                            <MudButton
-                                Color="Color.Secondary"
-                                OnClick="@(ResetForm)"
-                                Size="MudBlazor.Size.Small">
-                                Cancel
-                            </MudButton>
-                        }
-                        else if (!_isNewComment && _canEdit)
-                        {
-                            <a
-                                href="#"
-                                @onclick:preventDefault="true"
-                                @onclick="OnClickEdit">
-                                <b>Edit</b>
-                            </a>
-                            <div class="fw-bold ml-1 mr-1"> - </div>
-                            <a
-                                href="#"
-                                @onclick:preventDefault="true"
-                                @onclick="OnClickDelete">
-                                <b>Delete</b>
-                            </a>
-                        }
-                    </MudStack>
-                </MudStack>
-            </MudStack>
-        </MudStack>
-    </MudForm>
-</div>
+            <FluentStack
+                Orientation="Orientation.Horizontal">
+                @if (_isEditMode)
+                {
+                    <FluentButton
+                        Appearance="Appearance.Accent"
+                        Disabled="@_isLoading"
+                        OnClick="@Submit">
+                        Save
+                    </FluentButton>
+
+                    <FluentButton
+                        Appearance="Appearance.Neutral"
+                        Disabled="@_isLoading"
+                        OnClick="@ResetForm">
+                        Cancel
+                    </FluentButton>
+                }
+                else if (!_isNewComment && _canEdit)
+                {
+                    <a
+                        href="#"
+                        @onclick:preventDefault="true"
+                        @onclick="OnClickEdit">
+                        <b>Edit</b>
+                    </a>
+                    <div class="fw-bold ml-1 mr-1"> - </div>
+                    <a
+                        href="#"
+                        @onclick:preventDefault="true"
+                        @onclick="OnClickDelete">
+                        <b>Delete</b>
+                    </a>
+                }
+            </FluentStack>
+        </FluentStack>
+    </EditForm>
+    
+</FluentCard>

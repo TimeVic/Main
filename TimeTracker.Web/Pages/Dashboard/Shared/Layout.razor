@@ -1,33 +1,33 @@
 ﻿@inherits BaseLayout
-
-<RadzenContextMenu/>
-<RadzenDialog/>
-<RadzenTooltip/>
-<RadzenNotification Style="bottom: 1em; top: unset"/>
-
-<MudLayout>
-    <MainHeader/>
-    @if (CommonState.Value.IsInitialized && IsShowMainMenu)
-    {
-        <NavMenu/>
-    }
-    <MudMainContent Class="pt-16 px-1">
-        <MudContainer
-            MaxWidth="MaxWidth.False"
-            class="d-flex mt-6">
-            <MudGrid
-                Justify="Justify.FlexStart">
-                @if (CommonState.Value.IsInitialized)
-                {
-                    <InitializationContainer>
-                        @Body
-                    </InitializationContainer>
-                }
-                else
-                {
-                    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
-                }
-            </MudGrid>
+<FluentLayout Style="min-height: calc(100% - 40px)">
+    <FluentHeader>
+        TimeVic
+        @if (CommonState.Value.IsInitialized)
+        {
+            <FluentSpacer/>
+            <MainHeader/>
+        }
+    </FluentHeader>
+    <FluentStack Orientation="Orientation.Horizontal" Width="100%">
+        @if (CommonState.Value.IsInitialized)
+        {
+            <FluentNavMenu Width="250" Class="ms-2 mt-2">
+                <NavMenu/>
+            </FluentNavMenu>
+        }
+        <FluentBodyContent>
+            @if (CommonState.Value.IsInitialized)
+            {
+                <InitializationContainer>
+                    @Body
+                </InitializationContainer>
+            }
+            else
+            {
+                <FluentGrid Justify="JustifyContent.Center" Class="mt-3">
+                    <FluentProgressRing></FluentProgressRing>
+                </FluentGrid>
+            }
             @if (!IsShowReCaptcha)
             {
                 <style>
@@ -36,6 +36,16 @@
                     }
                 </style>
             }
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+        </FluentBodyContent>
+    </FluentStack>
+
+    <FluentFooter>
+        Copyright&nbsp;©&nbsp;@DateTime.Now.Year&nbsp;<a href="https://georgyshira.info/" target="_blank">Georgy Shira</a>&nbsp;Apache License Version 2.0
+    </FluentFooter>
+</FluentLayout>
+
+<FluentToastProvider />
+<FluentDialogProvider />
+<FluentMenuProvider />
+<FluentTooltipProvider />
+<FluentMessageBarProvider />

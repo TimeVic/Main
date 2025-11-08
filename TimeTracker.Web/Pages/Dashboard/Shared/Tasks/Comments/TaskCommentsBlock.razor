@@ -1,6 +1,5 @@
 ﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
 @using TimeTracker.Api.Shared.Dto.Entity.Task
-@using MudBlazor
 
 @inherits BaseReactiveComponent
 
@@ -13,15 +12,15 @@
         @key="comment"
         OnSaved="OnCommentSaved"
         OnDeleted="OnCommentDeleted"
-        Comment="@comment"></EditCommentForm>
+        Comment="@comment"/>
 }
 @if (_isHasMore)
 {
     <div class="d-flex justify-content-center">
-        <MudIconButton
-            Icon="@Icons.Material.Filled.More"
-            Disabled="_isLoading"
-            OnClick="LoadMore"
-        />
+        <FluentButton
+            IconStart="@(new Icons.Filled.Size24.MoreCircle())"
+            Appearance="Appearance.Neutral"
+            Disabled="@_isLoading"
+            OnClick="@LoadMore"/>
     </div>    
 }

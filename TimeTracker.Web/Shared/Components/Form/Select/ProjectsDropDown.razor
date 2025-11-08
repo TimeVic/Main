@@ -1,0 +1,33 @@
+﻿@inherits TimeTracker.Web.Shared.Components.Form.Select.Core.BaseSingleSelect<ProjectDto>
+
+@using TimeTracker.Api.Shared.Dto.Entity
+
+<div class="justify-content-start w-select @Class @(FullWidth ? "w-100" : "")">
+    <FluentSelect
+        TOption="ProjectDto?"
+        Label="@Label"
+        Class="@SelectClass"
+        Placeholder="@_placeholder"
+        Disabled="@(!_list.Any() || Disabled)"
+        Required="Required"
+        Items="@_list.ToList()"
+        @bind-Value="@_selectedId"
+        OptionValue="@(dto => dto?.Id.ToString())"
+        SelectedOptionChanged="OnValueChanged">
+        <OptionTemplate>
+            @context?.Name
+            @if (context?.Client != null)
+            {
+            <text>(@context?.Client?.Name)</text>
+            }
+        </OptionTemplate>
+    </FluentSelect>
+
+    @if (Clearable)
+    {
+        <FluentButton
+            Class="w-select-clear-btn"
+            IconStart="@(new Icons.Filled.Size16.Dismiss())"
+            OnClick="OnClear"/>
+    }
+</div>

@@ -1,44 +1,61 @@
-﻿@using MudBlazor
+﻿@using TimeTracker.Web.Shared.Components.Form.Select
 
 @inherits BaseComponent
+@implements IDialogContentComponent<AddTaskModalForm.Parameters>
 
-<MudDialog>
-    <DialogContent>
-        <MudForm
-            Style="min-width: 500px;"
-            @ref="_form"
-            @bind-IsValid="_isValid">
-            <MudTextField
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            Add new task
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton 
+        Appearance="Appearance.Accent"
+        Disabled="@_isLoading"
+        OnClick="@Submit">Add</FluentButton>
+    <FluentButton 
+        Appearance="Appearance.Neutral"
+        OnClick="@OnCloseModal">Cancel</FluentButton>
+</FluentDialogFooter>
+
+@* Body *@
+<FluentDialogBody>
+    <EditForm
+        @ref="_form"
+        Model="@model"
+        novalidate>
+        <DataAnnotationsValidator />
+        <FluentValidationSummary />
+
+        <TaskListsDropDown
+            Required="true"
+            Class="mb-3"
+            FullWidth="true"
+            Value="@model.TaskListId"
+            SelectedItemChanged="@(value => model.TaskListId = value?.Id ?? 0)"/>
+        
+        <FluentDivider Class="mb-3"/>
+        <FluentStack Orientation="Orientation.Horizontal">
+
+            <FluentTextField
                 T="string"
                 Name="Title"
-                OnKeyUp="@OnKeyUp"
                 @bind-Value="model.Title"
+                Class="w-100"
                 Placeholder="Task title"/>
-
-            <MudStack Row="true">
-                <MudTextField
-                    T="string"
-                    Name="Title"
-                    OnKeyUp="@OnKeyUp"
-                    @bind-Value="model.ExternalTaskId"
-                    Placeholder="External task ID"/>
-
-                <TaskListsDropDown
-                    For="() => model.TaskListId"
-                    Required="true"
-                    Value="@model.TaskListId"
-                    ValueChanged="@(value => model.TaskListId = value ?? 0)"/>
-            </MudStack>
-        </MudForm>
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
-        <MudButton
-            ButtonType="MudBlazor.ButtonType.Submit"
-            OnClick="@Submit"
-            Disabled="@_isLoading"
-            Color="Color.Primary">
-            Add
-        </MudButton>
-    </DialogActions>
-</MudDialog>
+            
+            <FluentTextField
+                T="string"
+                Name="Title"
+                Class="w-100"
+                @bind-Value="model.ExternalTaskId"
+                Placeholder="External task ID"/>
+            
+        </FluentStack>
+    </EditForm>
+</FluentDialogBody>

@@ -1,0 +1,41 @@
+﻿@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
+
+@inherits BaseReactiveComponent
+
+<FluentAutocomplete
+    TOption="UserDto"
+    AutoComplete="off"
+    Multiple="true"
+    Label="@Label"
+    Class="@Class"
+    Disabled="@Disabled"
+    Placeholder="@Placeholder"
+    MaxAutoHeight="200px"
+    Items="@_list.ToArray()"
+    OptionValue="@(dto => dto?.Id.ToString())"
+    OptionText="@(item => item.Name)"
+    OptionSelected="@(dto => _selectedIds.Contains(dto.Id))"
+    SelectedOptions="@_selectedItems"
+    SelectedOptionsChanged="@(OnValueChanged)"/>
+
+<MudSelect
+    T="long"
+    Class="@Class"
+    Disabled="@Disabled"
+    Dense="true"
+    MultiSelection="true"
+    Placeholder="@Placeholder"
+    SelectedValues="@Value"
+    SelectedValuesChanged="OnValueChanged"
+    Variant="MudBlazor.Variant.Text"
+    ToStringFunc="ToStringFunc"
+    SelectAll="true"
+    AnchorOrigin="Origin.BottomCenter">
+    @foreach (var user in _list)
+    {
+        <MudSelectItem Value="@user.Id">
+            @user.Name
+        </MudSelectItem>
+    }
+</MudSelect>

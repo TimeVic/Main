@@ -43,7 +43,7 @@ public partial class BaseLayout
         {
             var path = NavigationManager.GetPath();
             return path.Equals("/") 
-                || path.StartsWith("/login")
+                || path.StartsWith(SiteUrl.Login)
                 || path.StartsWith("/registration")
                 || path.StartsWith("/documentation");
         }
@@ -115,7 +115,7 @@ public partial class BaseLayout
 
         if (!AuthState.Value.IsLoggedIn && !IsSharedPage)
         {
-            NavigationManager.NavigateTo("/login");
+            NavigationManager.NavigateTo(SiteUrl.Login);
         }
     }
     

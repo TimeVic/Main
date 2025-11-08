@@ -1,7 +1,8 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
@@ -16,13 +17,10 @@ public partial class TimeEntryList
     public bool IsFilteredList { get; set; } = false;
     
     [Parameter]
-    public bool Outlined { get; set; } = false;
-    
-    [Parameter]
     public string? Class { get; set; }
     
     [CascadingParameter] 
-    MudDialogInstance? MudDialog { get; set; }
+    public required FluentDialog MudDialog { get; set; }
     
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
@@ -37,19 +35,40 @@ public partial class TimeEntryList
     
     private IEnumerable<IGrouping<DateTime, TimeEntryDto>> _groupedList => _list.GroupBy(item => item.Date);
     
-    private int _totalPages => IsFilteredList ? _state.Value.FilteredTotalPages : _state.Value.TotalPages;
+    private int _totalCount => IsFilteredList ? _state.Value.FilteredTotalCount : _state.Value.TotalCount;
     
     private int _selectedPage => IsFilteredList ? _state.Value.FilteredSelectedPage : _state.Value.SelectedPage;
     
     private bool _isLoading => _state.Value.IsListLoading;
 
+    private readonly PaginationState _paginationState;
+
     private Func<TimeEntryDto, object> _groupBy = x =>
     {
         return x.Date.ToShortDateString();
     };
-    
-    private void OnSelectPage(int selectedPage)
+
+    public TimeEntryList()
     {
+        _paginationState = new()
+        {
+            ItemsPerPage = GlobalConstants.ListPageSize
+        };
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _state.StateChanged += (sender, args) =>
+        {
+            _paginationState.SetTotalItemCountAsync(_totalCount);
+        };
+        _paginationState.SetTotalItemCountAsync(_totalCount);
+    }
+
+    private void OnPaginated(int selectedPageIndex)
+    {
+        var selectedPage = selectedPageIndex + 1;
         if (IsFilteredList)
         {
             Dispatcher.Dispatch(new SetFilteredSelectedPageAction(selectedPage));
@@ -60,13 +79,6 @@ public partial class TimeEntryList
             Dispatcher.Dispatch(new SetSelectedPageAction(selectedPage));
             Dispatcher.Dispatch(new LoadListAction());
         }
-    }
-
-    private string OnGroupTimeEntry(GroupDefinition<TimeEntryDto> item)
-    {
-        return item.Grouping.Key?.ToString() == "Nonmetal" || item.Grouping.Key?.ToString() == "Other"
-            ? "mud-theme-warning"
-            : string.Empty;
     }
     
     private async Task ShowAddTaskModal(long timEntryId)
@@ -103,11 +115,11 @@ public partial class TimeEntryList
                 InternalTask: timeEntry.Task
             )
         );
-        MudDialog?.Close();
+        MudDialog?.CloseAsync();
     }
 
-    private async Task OnRowClick(TableRowClickEventArgs<TimeEntryDto> arg)
+    private async Task OnEditClick(TimeEntryDto timeEntry)
     {
-        await ModalDialogService.ShowTimeEntryEditModal(arg.Item);
+        await _modalDialogProviderService.ShowTimeEntryEditModal(timeEntry);
     }
 }

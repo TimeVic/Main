@@ -7,26 +7,14 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<TaskCommentDto> TaskCommentAddAsync(AddRequest model)
+        public async Task<TaskCommentDto?> TaskCommentAddAsync(AddRequest model)
         {
-            var response = await PostAsync<TaskCommentDto>(ApiUrl.TaskCommentAdd, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<TaskCommentDto?>(ApiUrl.TaskCommentAdd, model);            
         }
 
-        public async Task<TaskCommentDto> TaskCommentUpdateAsync(UpdateRequest model)
+        public async Task<TaskCommentDto?> TaskCommentUpdateAsync(UpdateRequest model)
         {
-            var response = await PostAsync<TaskCommentDto>(ApiUrl.TaskCommentUpdate, model);
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
+            return await PostAsync<TaskCommentDto?>(ApiUrl.TaskCommentUpdate, model);
         }
         
         public async Task TaskCommentDeleteAsync(long commentId)
@@ -36,24 +24,18 @@ namespace TimeTracker.Web.Services.Http
             });
         }
 
-        public async Task<GetListResponse> TaskCommentsGetListAsync(
+        public async Task<GetListResponse?> TaskCommentsGetListAsync(
             long workspaceId,
             long taskId,
             int page
         )
         {
-            var response = await PostAsync<GetListResponse>(ApiUrl.TaskCommentsList, new GetListRequest()
+            return await PostAsync<GetListResponse?>(ApiUrl.TaskCommentsList, new GetListRequest()
             {
                 WorkspaceId = workspaceId,
                 TaskId = taskId,
                 Page = page
             });
-            if (response == null)
-            {
-                throw new ServerErrorException();
-            }
-
-            return response;
         }
     }
 }

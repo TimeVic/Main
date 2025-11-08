@@ -1,28 +1,14 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Core.Helpers
-@using MudBlazor
 
 @code {
-
     [Parameter]
     public ICollection<SummaryByDaysReportItemDto> Items { get; set; } = new List<SummaryByDaysReportItemDto>();
-
 }
 
-<MudTable
-    Items="@Items" 
-    Hover="true" 
-    Breakpoint="Breakpoint.Sm" 
-    LoadingProgressColor="Color.Info">
-    <HeaderContent>
-        <MudTh>Date</MudTh>
-        <MudTh>Duration</MudTh>
-        <MudTh>Amount</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Date">@context.Date.ToShortDateString()</MudTd>
-        <MudTd DataLabel="Duration">@context.Duration.ToReadableShortString()</MudTd>
-        <MudTd DataLabel="Amount">@context.Amount.ToMoneyFormat()</MudTd>
-    </RowTemplate>
-</MudTable>
+<FluentDataGrid TGridItem="SummaryByDaysReportItemDto" Items="@Items.AsQueryable()">
+    <PropertyColumn Title="Date" Property="@(p => p.Date.ToShortDateString())" Sortable="false"/>
+    <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/>
+    <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/>
+</FluentDataGrid>

@@ -3,7 +3,6 @@
 @using Fluxor
 @using TimeTracker.Web.Store.Client
 @using TimeTracker.Web.Store.Project
-@using MudBlazor
 
 @code {
 
@@ -12,19 +11,8 @@
 
 }
 
-<MudTable
-    Items="@Items" 
-    Hover="true" 
-    Breakpoint="Breakpoint.Sm" 
-    LoadingProgressColor="Color.Info">
-    <HeaderContent>
-        <MudTh>User</MudTh>
-        <MudTh>Duration</MudTh>
-        <MudTh>Amount</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="User">@context.Name</MudTd>
-        <MudTd DataLabel="Duration">@context.Duration.ToReadableShortString()</MudTd>
-        <MudTd DataLabel="Amount">@context.Amount.ToMoneyFormat()</MudTd>
-    </RowTemplate>
-</MudTable>
+<FluentDataGrid TGridItem="SummaryByUsersReportItemDto" Items="@Items.AsQueryable()">
+    <PropertyColumn Title="User" Property="@(p => p.Name)" Sortable="false"/>
+    <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/>
+    <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/>
+</FluentDataGrid>

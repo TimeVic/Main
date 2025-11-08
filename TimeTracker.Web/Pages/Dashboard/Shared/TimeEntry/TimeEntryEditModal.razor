@@ -1,91 +1,101 @@
-﻿@inherits BaseComponent
+﻿
+@implements IDialogContentComponent<TimeEntryEditModal.Parameters>
+@using TimeTracker.Web.Shared.Components.Form.Select
+@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@inherits BaseComponent
 
-<MudDialog Style="min-width: 500px">
-    <DialogContent>
-        <MudForm
-            @ref="_form"
-            @bind-IsValid="_isValid">
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())"/>
+        <FluentLabel Typo="Typography.PaneHeader">
+            Edit time entry
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
 
-            <MudDatePicker
-                Class="ml-1 mb-2"
-                Label="Date"
-                Style="min-width: 110px"
-                Clearable="false"
-                Required="true"
-                Elevation="3"
-                AutoClose="true"
-                IconSize="Size.Small"
-                DateChanged="@((value) => TimeEntry.Date = value.Value)"
-                Date="@TimeEntry.Date"/>
+@* Body *@
+<FluentDialogBody>
+    <EditForm
+        @ref="_form"
+        Model="@Content.TimeEntry"
+        novalidate>
+        <DataAnnotationsValidator />
+        <FluentValidationSummary />
 
-            <MudStack
-                Row="true"
-                Class="mb-2"
-                Spacing="3">
-                <TimeInput
-                    Label="Start Time"
-                    Style="min-width: 100px"
-                    ValueChanged="@((value) => OnChangeStartTime(value))"
-                    Value="@TimeEntry.StartTime"/>
+        <FluentStack Orientation="Orientation.Horizontal">
+            <div>
+                <FluentDatePicker
+                    Label="Date"
+                    Value="@Content.TimeEntry.Date"
+                    ValueChanged="@OnDateChanged"/>
+            </div>
 
-                <TimeInput
-                    Label="End Time"
-                    Style="min-width: 100px"
-                    ValueChanged="@((value) => OnChangeEndTime(value))"
-                    Value="@TimeEntry.EndTime.Value"/>
+            <div>
+                <FluentTimePicker
+                    Label="Start"
+                    Value="@(Content.TimeEntry.Date.ToUniversalTime().Add(Content.TimeEntry.StartTime))"
+                    ValueChanged="@OnChangeStartTime"/>
 
-                <MudField Label="Duration" Variant="Variant.Text">
-                    @_timeParsingService.TimeSpanToTimeString(_duration, true)
-                </MudField>
-            </MudStack>
+            </div>
+            <div>
+                <FluentTimePicker
+                    Label="End"
+                    Value="@(Content.TimeEntry.Date.ToUniversalTime().Add(Content.TimeEntry.EndTime!.Value))"
+                    ValueChanged="@OnChangeEndTime"/>
 
+            </div>
+        </FluentStack>
+
+        <FluentLabel Typo="Typography.Body" Class="mb-3">
+            Duration: <b>@_timeParsingService.TimeSpanToTimeString(_duration, true)</b>
+        </FluentLabel>
+
+        @if (Content.TimeEntry.Task == null)
+        {
             <ProjectsDropDown
+                Class="mb-3"
+                FullWidth="true"
                 Label="Project"
                 Clearable="true"
-                Value="@(TimeEntry.Project?.Id ?? 0)"
-                SelectedItemChanged="@(project => TimeEntry.Project = project)"/>
+                Value="@(Content.TimeEntry.Project?.Id ?? 0)"
+                SelectedItemChanged="@OnProjectChanged"/>
+        }
 
-            <MudStack
-                Row="true"
-                Class="mb-2"
-                Spacing="3">
+        <FluentStack Class="mb-3" Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
+            <FluentCheckbox
+                Label="Billable"
+                @bind-Value="@Content.TimeEntry.IsBillable"/>
 
-                <MudCheckBox
-                    T="Boolean"
-                    Class="mt-3"
-                    Label="Billable"
-                    @bind-Checked="@TimeEntry.IsBillable"/>
+            <FluentNumberField
+                Label="Hourly Rate"
+                Required="@Content.TimeEntry.IsBillable"
+                @bind-Value="@(Content.TimeEntry.HourlyRate)"
+                Disabled="@(!Content.TimeEntry.IsBillable)"
+                Step=".01M"
+                Min="0.0M"/>
 
-                <MudNumericField
-                    T="decimal?"
-                    Label="Hourly Rate"
-                    Required="@TimeEntry.IsBillable"
-                    @bind-Value="@(TimeEntry.HourlyRate)"
-                    Variant="MudBlazor.Variant.Text"
-                    Disabled="@(!TimeEntry.IsBillable)"
-                    Step=".01M"
-                    Min="0.0M"/>
-            </MudStack>
+            @if (Content.TimeEntry.Task != null)
+            {
+                <TaskIdBadge IsLink="true" InternalTask="Content.TimeEntry.Task"/>
+            }
+        </FluentStack>
 
-            <MudTextField
-                T="string"
-                Required="false"
-                Label="Description"
-                Placeholder="Enter description"
-                Variant="Variant.Outlined"
-                @bind-Value="@TimeEntry.Description"
-                Lines="5"
-                MaxLength="512"/>
+        <FluentTextArea
+            AriaLabel="Description"
+            Value="@Content.TimeEntry.Description"
+            ValueChanged="OnChangeDescription"
+            Label="Description"
+            Class="mb-3 w-100"
+            Maxlength="500"
+            Rows="5">
+        </FluentTextArea>
 
-        </MudForm>
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="@OnCloseModal">Close</MudButton>
-        <MudButton
-            OnClick="@SubmitForm"
-            Variant="Variant.Filled"
-            Color="Color.Primary">
-            Save
-        </MudButton>
-    </DialogActions>
-</MudDialog>
+    </EditForm>
+</FluentDialogBody>
+
+@* Footer *@
+<FluentDialogFooter>
+    <FluentButton
+        Appearance="Appearance.Neutral"
+        OnClick="@OnCloseModal">OK</FluentButton>
+</FluentDialogFooter>
