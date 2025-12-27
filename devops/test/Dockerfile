@@ -43,7 +43,7 @@ RUN apt-get install -y net-tools netcat-traditional sudo
 #RUN apt-get default-jre
 RUN apt-get install -y postgresql postgresql-contrib
 RUN apt-get install -y redis
-RUN apt-get install -y dotnet-sdk-9.0 
+RUN apt-get install -y dotnet-sdk-10.0 
 
 # Configure Postgres
 ENV PGTZ=Etc/UTC

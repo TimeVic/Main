@@ -1,6 +1,6 @@
 FROM nginx:latest AS base
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS dot_net
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS dot_net
 
 ARG ENVIRONMENT=Production
 ENV ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
