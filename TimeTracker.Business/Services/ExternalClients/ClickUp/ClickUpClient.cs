@@ -62,8 +62,8 @@ public partial class ClickUpClient: AExternalClientService, IClickUpClient
         var httpClient = _newHttpClient;
         var settings = GetSettings(timeEntry.Workspace, timeEntry.User);
         
-        var startTime = timeEntry.Date.Add(timeEntry.StartTime);
-        var endTime = timeEntry.Date.Add(timeEntry.EndTime.Value);
+        var startTime = timeEntry.Date.ToDateTime(TimeOnly.MinValue).Add(timeEntry.StartTime);
+        var endTime = timeEntry.Date.ToDateTime(TimeOnly.MinValue).Add(timeEntry.EndTime.Value);
         var requestData = JsonContent.Create(new SetTimeEntryDto()
         {
             Start = startTime.ToUnixTime(),

@@ -14,9 +14,16 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
                 return ValidationResult.Success;
             }
 
-            if (value is DateTime dateValue)
+            if (value is DateTime dateTimeValue)
             {
-                if (dateValue.Date >= DateTime.UtcNow.Date)
+                if (dateTimeValue.Date >= DateTime.UtcNow.Date)
+                {
+                    return ValidationResult.Success;
+                }
+            }
+            if (value is DateOnly dateValue)
+            {
+                if (dateValue >= DateOnly.FromDateTime(DateTime.UtcNow))
                 {
                     return ValidationResult.Success;
                 }

@@ -23,7 +23,7 @@ public class TimeEntryRequestDto
     public long ActivityId { get; set;  }
     
     [JsonIgnore]
-    public DateTime SpentOnDate
+    public DateOnly SpentOnDate
     {
         set
         {

@@ -31,7 +31,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
          */
         [Required]
         [IsFutureOrNowDate]
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         
         [Required]
         [IsCorrectTimeEntryTime]

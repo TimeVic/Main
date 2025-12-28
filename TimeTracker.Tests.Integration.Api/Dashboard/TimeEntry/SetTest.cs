@@ -57,7 +57,7 @@ public class SetTest: BaseTest
         var timeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,
-            DateTime.UtcNow, 
+            DateOnly.FromDateTime(DateTime.UtcNow), 
             TimeSpan.FromSeconds(1)
         );
         var response = await PostRequestAsAnonymousAsync(Url, new SetRequest()
@@ -111,7 +111,7 @@ public class SetTest: BaseTest
         var timeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,
-            DateTime.UtcNow, 
+            DateOnly.FromDateTime(DateTime.UtcNow), 
             TimeSpan.FromSeconds(1)
         );
 
@@ -136,7 +136,7 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.Description, actualDto.Description);
         Assert.Equal(fakeEntry.IsBillable, actualDto.IsBillable);
         Assert.Equal(fakeEntry.HourlyRate, actualDto.HourlyRate);
-        Assert.Equal(fakeEntry.Date, actualDto.Date.ToUniversalTime());
+        Assert.Equal(fakeEntry.Date, actualDto.Date);
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
 
         var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
@@ -158,7 +158,7 @@ public class SetTest: BaseTest
         var timeEntry = await _timeEntryDao.StartNewAsync(
             otherUser,
             _defaultWorkspace,
-            DateTime.UtcNow, 
+            DateOnly.FromDateTime(DateTime.UtcNow), 
             TimeSpan.FromSeconds(1)
         );
         
@@ -199,7 +199,7 @@ public class SetTest: BaseTest
             WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
-            Date = DateTime.UtcNow.Date,
+            Date = DateOnly.FromDateTime(DateTime.UtcNow),
             StartTime = TimeSpan.FromSeconds(1),
             
             IsBillable = true,

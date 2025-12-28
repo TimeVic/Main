@@ -64,7 +64,7 @@ public partial class JiraClient: AExternalClientService, IJiraClient
         
         var request = new SetTimeEntryDto
         {
-            Started = timeEntry.Date.Add(timeEntry.StartTime).ToString("yyyy-MM-ddTHH:mm:ss.fff+0000"),
+            Started = timeEntry.Date.ToDateTime(TimeOnly.MinValue).Add(timeEntry.StartTime).ToString("yyyy-MM-ddTHH:mm:ss.fff+0000"),
             TimeSpentSeconds = GetTotalSeconds(timeEntry)
         };
         request.Comment.SetText(timeEntry.Description);

@@ -52,7 +52,7 @@ public class DeleteTest: BaseTest
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
         
-        _timeEntry = _timeEntryDao.StartNewAsync(_user, _defaultWorkspace, DateTime.Now, TimeSpan.Zero).Result;
+        _timeEntry = _timeEntryDao.StartNewAsync(_user, _defaultWorkspace, DateOnly.FromDateTime(DateTime.UtcNow), TimeSpan.Zero).Result;
 
         var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
         _redmineApiKey = configuration.GetValue<string>("Integration:Redmine:ApiKey");
