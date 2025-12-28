@@ -43,7 +43,7 @@ public class StopActiveTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow, 
+            DateTime.UtcNow.ToDateOnly(), 
             DateTimeOffset.UtcNow.TimeOfDay
         );
         Assert.Null(activeEntry.EndTime);
@@ -52,7 +52,7 @@ public class StopActiveTest: BaseTest
             _workspace,
             _user,
             startTime + TimeSpan.FromMinutes(1),
-            DateTimeOffset.UtcNow.Date
+            DateOnly.FromDateTime(DateTime.UtcNow)
         );
         await CommitDbChanges();
     
@@ -67,7 +67,7 @@ public class StopActiveTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow, 
+            DateOnly.FromDateTime(DateTime.UtcNow), 
             DateTimeOffset.UtcNow.TimeOfDay
         );
         Assert.Null(activeEntry.EndTime);
@@ -78,7 +78,7 @@ public class StopActiveTest: BaseTest
                 _workspace,
                 _user,
                 startTime + TimeSpan.FromSeconds(-1),
-                DateTimeOffset.UtcNow.Date
+                DateOnly.FromDateTime(DateTime.UtcNow)
             );
         });
     }
@@ -90,7 +90,7 @@ public class StopActiveTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow, 
+            DateOnly.FromDateTime(DateTime.UtcNow), 
             DateTimeOffset.UtcNow.TimeOfDay
         );
         Assert.Null(activeEntry.EndTime);
@@ -101,7 +101,7 @@ public class StopActiveTest: BaseTest
                 _workspace,
                 _user,
                 startTime + TimeSpan.FromSeconds(5),
-                DateTimeOffset.UtcNow.Date.AddDays(-1)
+                DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1)
             );
         });
     }
@@ -109,7 +109,7 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task ShouldStopActiveOnlyForCurrentUser()
     {
-        var date = DateTime.UtcNow;
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var startTime = DateTime.UtcNow.TimeOfDay;
 
         var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
@@ -145,7 +145,7 @@ public class StopActiveTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow, 
+            DateOnly.FromDateTime(DateTime.UtcNow), 
             DateTimeOffset.UtcNow.TimeOfDay
         );
         Assert.Null(activeEntry.EndTime);
@@ -156,7 +156,7 @@ public class StopActiveTest: BaseTest
                 _workspace,
                 _user,
                 TimeSpan.FromHours(24),
-                DateTimeOffset.UtcNow.Date
+                DateOnly.FromDateTime(DateTime.UtcNow)
             );
         });
     }
@@ -164,7 +164,7 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task ShouldNotStopForOtherWorkspace()
     {
-        var date = DateTime.UtcNow;
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var startTime = DateTime.UtcNow.TimeOfDay;
         
         var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
@@ -185,7 +185,7 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task EndTimeShouldBeMoreThanStartTime()
     {
-        var date = DateTime.UtcNow;
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var startTime = DateTime.UtcNow.TimeOfDay;
         
         var startedEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
@@ -203,7 +203,7 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task IfEndTimeMoreThanOneDayActiveEntryShouldBeFinishedAndNewEntriesShouldBeCreated()
     {
-        var date = DateTime.UtcNow.StartOfDay();
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var startTime = DateTime.UtcNow.TimeOfDay;
         var endTime = startTime;
         
@@ -238,7 +238,7 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task ShouldNotCreateTooManyItems()
     {
-        var date = DateTime.UtcNow.StartOfDay();
+        var date = DateTime.UtcNow.ToDateOnly();
         var startTime = DateTime.UtcNow.TimeOfDay;
         var endTime = startTime;
         

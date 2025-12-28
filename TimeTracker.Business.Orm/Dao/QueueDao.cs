@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Linq;
+using NHibernate.Transform;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Orm.Constants;
@@ -19,9 +20,11 @@ public class QueueDao: IQueueDao
         _session = sessionProvider.CreateSession();
     }
 
-    public async System.Threading.Tasks.Task Push(
+    public async Task Push(
         object context,
         QueueChannel channel = QueueChannel.Default,
+        DateTime? processAt = null,
+        QueuePriority? priority = null,
         CancellationToken cancellationToken = default
     )
     {
@@ -35,8 +38,10 @@ public class QueueDao: IQueueDao
             {
                 Channel = channel,
                 Status = QueueStatus.Pending,
+                Priority = priority ?? QueuePriority.Normal,
                 ContextType = typeString,
                 ContextData = JsonHelper.SerializeToString(context),
+                ProcessAt = processAt ?? DateTime.UtcNow,
                 CreateTime = DateTime.UtcNow,
                 UpdateTime = DateTime.UtcNow
             };
@@ -67,40 +72,27 @@ public class QueueDao: IQueueDao
         CancellationToken cancellationToken = default
     )
     {
-        using var transaction = _session.BeginTransaction();
-
         try
         {
-            var query = _session.Query<QueueEntity>()
-                .Where(item => item.Status == QueueStatus.Pending);
-
-            if (channel.HasValue)
-            {
-                query = query.Where(item => item.Channel == channel);
-            }
-
-            var result = await query
-                .OrderBy(item => item.CreateTime)
-                .FirstOrDefaultAsync(cancellationToken: cancellationToken);
-
-            if (result != null)
-            {
-                result.Status = QueueStatus.InProcess;
-                await _session.SaveAsync(result, cancellationToken);    
-            }
-
-            await transaction.CommitAsync(cancellationToken);
-            return result;
+            var result = await _session.CreateSQLQuery(@"SELECT * FROM fn_queue_get_top(:channel)")
+                .AddEntity(typeof(QueueEntity))
+                .SetParameter("channel", channel ?? QueueChannel.Default)
+                .SetFlushMode(FlushMode.Always)
+                .SetResultTransformer(new RootEntityResultTransformer())
+                .ListAsync<QueueEntity>();
+            var entity = result?.FirstOrDefault();
+            if (entity != null)
+                await _session.RefreshAsync(entity);
+            return entity;
         }
         catch (Exception e)
         {
-            await transaction.RollbackAsync(cancellationToken);
             _logger.LogError(e, e.Message);
         }
         return null;
     }
 
-    public async System.Threading.Tasks.Task MarkAsProcessed(
+    public async Task MarkAsProcessed(
         QueueEntity item,
         string? error = null,
         CancellationToken cancellationToken = default
@@ -131,9 +123,24 @@ public class QueueDao: IQueueDao
             }, cancellationToken: cancellationToken);
     }
     
+    public async Task UpdateProcessAtForPending()
+    {
+        await _session.Query<QueueEntity>()
+            .Where(x => x.Status == QueueStatus.Pending)
+            .UpdateBuilder()
+            .Set(x => x.ProcessAt, DateTime.UtcNow)
+            .UpdateAsync();
+
+    }
+    
     public void Dispose()
     {
-        _session.Flush();
+        Flush();
         _session.Dispose();
+    }
+    
+    public void Flush()
+    {
+        _session.Flush();
     }
 }

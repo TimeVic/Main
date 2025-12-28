@@ -186,17 +186,17 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task ShouldFilterByDateFrom()
     {
-        var dateFrom = DateTime.UtcNow.StartOfDay().AddDays(-5);
+        var dateFrom = DateTime.UtcNow.ToDateOnly().AddDays(-5);
         
         var expectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
         foreach (var entry in expectedEntries)
         {
-            entry.Date = DateTime.UtcNow.StartOfDay().AddDays(-5);
+            entry.Date = DateTime.UtcNow.ToDateOnly().AddDays(-5);
         }
         var notExpectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 2);
         foreach (var entry in notExpectedEntries)
         {
-            entry.Date = DateTime.UtcNow.StartOfDay().AddDays(-6);
+            entry.Date = DateTime.UtcNow.ToDateOnly().AddDays(-6);
         }
         await CommitDbChanges();
 
@@ -205,7 +205,7 @@ public class GetListTest: BaseTest
             1,
             filter: new FilterDataDto()
             {
-                DateFrom = dateFrom
+                DateFrom = dateFrom.ToDateTime(TimeOnly.MinValue)
             }
         );
         
@@ -219,22 +219,22 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task ShouldFilterByDateTo()
     {
-        var dateTo = DateTime.UtcNow.EndOfDay();
+        var dateTo = DateTime.UtcNow.ToDateOnly();
         
         var expectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
         foreach (var entry in expectedEntries)
         {
-            entry.Date = DateTime.UtcNow.EndOfDay().AddDays(-1);
+            entry.Date = DateTime.UtcNow.ToDateOnly().AddDays(-1);
         }
         expectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
         foreach (var entry in expectedEntries)
         {
-            entry.Date = DateTime.UtcNow.EndOfDay();
+            entry.Date = DateTime.UtcNow.ToDateOnly();
         }
         var notExpectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 2);
         foreach (var entry in notExpectedEntries)
         {
-            entry.Date = DateTime.UtcNow.StartOfDay().AddDays(1);
+            entry.Date = DateTime.UtcNow.ToDateOnly().AddDays(1);
         }
         await CommitDbChanges();
 
@@ -243,7 +243,7 @@ public class GetListTest: BaseTest
             1,
             filter: new FilterDataDto()
             {
-                DateTo = dateTo
+                DateTo = dateTo.ToDateTime(TimeOnly.MinValue)
             }
         );
         

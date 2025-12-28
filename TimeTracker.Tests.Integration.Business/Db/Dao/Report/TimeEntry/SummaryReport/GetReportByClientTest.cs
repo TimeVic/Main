@@ -50,7 +50,7 @@ public class GetReportByClientTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(-1),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
                 StartTime = TimeSpan.FromHours(10),
                 EndTime = TimeSpan.FromHours(15),
                 IsBillable = true,
@@ -64,7 +64,7 @@ public class GetReportByClientTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
                 StartTime = TimeSpan.FromHours(1),
                 EndTime = TimeSpan.FromHours(5),
                 IsBillable = true,
@@ -76,7 +76,7 @@ public class GetReportByClientTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(1),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(1),
                 StartTime = TimeSpan.FromHours(5),
                 EndTime = TimeSpan.FromHours(11),
                 IsBillable = true,
@@ -149,7 +149,7 @@ public class GetReportByClientTest: BaseTest
         {
             await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(-1),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
                 StartTime = TimeSpan.FromHours(10),
                 EndTime = TimeSpan.FromHours(15),
                 IsBillable = true,
@@ -162,7 +162,7 @@ public class GetReportByClientTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
                 StartTime = TimeSpan.FromHours(1),
                 EndTime = TimeSpan.FromHours(5),
                 IsBillable = true,
@@ -174,7 +174,7 @@ public class GetReportByClientTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(1),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(1),
                 StartTime = TimeSpan.FromHours(5),
                 EndTime = TimeSpan.FromHours(11),
                 IsBillable = true,

@@ -11,9 +11,7 @@ namespace TimeTracker.Tests.Unit.Business.Utils.MarkdownHelperTests
         [InlineData("This a sample <strong>paragraph</strong> from <a href=\"http://test.com\">my site</a>", "This a sample **paragraph** from [my site](http://test.com)")]
         [InlineData(
             "<p>Testing description</p>\n\n\n\n<p>Another paragraph</p>", 
-            @"Testing description
-
-Another paragraph"
+            "Testing description\n\nAnother paragraph"
         )]
         public void ShouldConvert(string html, string expectedMarkdown)
         {

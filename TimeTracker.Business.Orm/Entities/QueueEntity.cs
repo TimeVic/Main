@@ -20,6 +20,10 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "channel", SqlType = "int", NotNull = true)]
         public virtual QueueChannel Channel { get; set; }
         
+        [Property(NotNull = true)]
+        [Column(Name = "priority", SqlType = "int", NotNull = true)]
+        public virtual QueuePriority Priority { get; set; }
+        
         [Property(NotNull = false)]
         [Column(Name = "error", Length = 1000, NotNull = false)]
         public virtual string Error { get; set; }
@@ -31,6 +35,10 @@ namespace TimeTracker.Business.Orm.Entities
         [Property(NotNull = true)]
         [Column(Name = "context_data", NotNull = true)]
         public virtual string ContextData { get; set; }
+        
+        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
+        [Column(Name = "process_at", SqlType = "datetime", NotNull = true)]
+        public virtual DateTime ProcessAt { get; set; }
         
         [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
         [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]

@@ -82,11 +82,11 @@ public partial class SendNewTimeEntityTest : BaseTest
         
         var fakeTimeEntry = _timeEntryFactory.Generate();
         
-        var date = DateTime.UtcNow.Date;
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date,
+            DateOnly.FromDateTime(DateTime.UtcNow),
             DateTime.UtcNow.TimeOfDay,
             true,
             description: fakeTimeEntry.Description
@@ -114,7 +114,7 @@ public partial class SendNewTimeEntityTest : BaseTest
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
         var taskList = await _taskListSeeder.CreateAsync(project);
-        var date = DateTime.UtcNow.Date;
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
@@ -142,7 +142,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         var taskList = await _taskListSeeder.CreateAsync(project);
         var fakeTimeEntry = _timeEntryFactory.Generate();
         
-        var date = DateTime.UtcNow.Date;
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
@@ -181,7 +181,7 @@ public partial class SendNewTimeEntityTest : BaseTest
     [Fact]
     public async Task ShouldGetTaskDetails()
     {
-        var date = DateTime.UtcNow.Date;
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,

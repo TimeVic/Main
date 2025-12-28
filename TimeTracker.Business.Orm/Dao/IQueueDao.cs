@@ -11,9 +11,11 @@ public interface IQueueDao: IScopedDomainService, IDisposable
         CancellationToken cancellationToken = default
     );
 
-    System.Threading.Tasks.Task Push(
+    Task Push(
         object context,
         QueueChannel channel = QueueChannel.Default,
+        DateTime? processAt = null,
+        QueuePriority? priority = null,
         CancellationToken cancellationToken = default
     );
 
@@ -26,4 +28,8 @@ public interface IQueueDao: IScopedDomainService, IDisposable
     );
 
     Task<int> CompleteAllPending(CancellationToken cancellationToken = default);
+
+    void Flush();
+
+    Task UpdateProcessAtForPending();
 }

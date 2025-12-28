@@ -29,7 +29,7 @@ public partial class StartNewTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             workspace,
-            DateTime.UtcNow,
+            DateTime.UtcNow.ToDateOnly(),
             DateTime.UtcNow.TimeOfDay,
             isBillable: true,
             projectId: project.Id,

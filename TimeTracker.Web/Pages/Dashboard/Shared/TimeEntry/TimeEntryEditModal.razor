@@ -26,21 +26,21 @@
             <div>
                 <FluentDatePicker
                     Label="Date"
-                    Value="@Content.TimeEntry.Date"
+                    Value="@Content.TimeEntry.Date.ToDateTime(TimeOnly.MinValue)"
                     ValueChanged="@OnDateChanged"/>
             </div>
 
             <div>
                 <FluentTimePicker
                     Label="Start"
-                    Value="@(Content.TimeEntry.Date.ToUniversalTime().Add(Content.TimeEntry.StartTime))"
+                    Value="@(Content.TimeEntry.Date.ToDateTime(TimeOnly.MinValue).ToUniversalTime().Add(Content.TimeEntry.StartTime))"
                     ValueChanged="@OnChangeStartTime"/>
 
             </div>
             <div>
                 <FluentTimePicker
                     Label="End"
-                    Value="@(Content.TimeEntry.Date.ToUniversalTime().Add(Content.TimeEntry.EndTime!.Value))"
+                    Value="@(Content.TimeEntry.Date.ToDateTime(TimeOnly.MinValue).ToUniversalTime().Add(Content.TimeEntry.EndTime!.Value))"
                     ValueChanged="@OnChangeEndTime"/>
 
             </div>

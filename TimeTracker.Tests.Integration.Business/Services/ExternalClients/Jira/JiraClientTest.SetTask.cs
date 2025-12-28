@@ -1,4 +1,5 @@
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.Jira;
@@ -29,7 +30,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date,
+            DateTime.UtcNow.Date.ToDateOnly(),
             DateTime.UtcNow.TimeOfDay,
             true
         );
@@ -53,7 +54,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date,
+            DateTime.UtcNow.Date.ToDateOnly(),
             DateTime.UtcNow.TimeOfDay,
             true
         );

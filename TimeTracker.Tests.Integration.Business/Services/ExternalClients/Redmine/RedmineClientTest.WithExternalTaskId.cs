@@ -1,6 +1,7 @@
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Workspace;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
@@ -22,11 +23,11 @@ public partial class RedmineClientTest
         await DbSessionProvider.PerformCommitAsync();
         
         var expectedDescription = "Test description";
-        var date = DateTime.UtcNow.Date;
+        var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date,
+            DateTime.UtcNow.Date.ToDateOnly(),
             TimeSpan.FromMinutes(1),
             true,
             description: expectedDescription,

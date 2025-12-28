@@ -1,5 +1,6 @@
 using Autofac;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
@@ -125,7 +126,7 @@ public partial class SetTest: BaseTest
         var initialEntry = await _timeEntryDao.StartNewAsync(
             _user,
             initialWorkspace,
-            DateTime.Now, 
+            DateTime.Now.ToDateOnly(), 
             TimeSpan.FromSeconds(1),
             fakeTimeEntry.IsBillable,
             fakeTimeEntry.Description,

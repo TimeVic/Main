@@ -47,6 +47,8 @@ public class QueueDaoTest: BaseTest
         
         var actualItem1 = await _queueDao.GetTop(QueueChannel.Default);
         var actualItem2 = await _queueDao.GetTop(QueueChannel.Default);
+        _queueDao.Flush();
+        
         Assert.True(actualItem1.Id > 0);
         Assert.Equal(QueueStatus.InProcess, actualItem1.Status);
         Assert.True(actualItem2.Id > 0);
@@ -65,9 +67,12 @@ public class QueueDaoTest: BaseTest
 
         await _queueDao.Push(testContext, QueueChannel.Default);
         await _queueDao.Push(testContext, QueueChannel.Default);
+        _queueDao.Flush();
         
         var actualItem1 = await _queueDao.GetTop(QueueChannel.Default);
         var actualItem2 = await _queueDao.GetTop(QueueChannel.Default);
+        Assert.NotNull(actualItem1);
+        Assert.NotNull(actualItem2);
         Assert.NotEqual(actualItem1.Id, actualItem2.Id);
     }
     
