@@ -2,6 +2,7 @@
 @implements IDialogContentComponent<TimeEntryEditModal.Parameters>
 @using TimeTracker.Web.Shared.Components.Form.Select
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
+@using TimeTracker.Web.Shared.Components.Form.TextField
 @inherits BaseComponent
 
 <FluentDialogHeader ShowDismiss="true">
@@ -31,16 +32,16 @@
             </div>
 
             <div>
-                <FluentTimePicker
+                <TimeEditField
                     Label="Start"
-                    Value="@(Content.TimeEntry.Date.ToDateTime(TimeOnly.MinValue).ToUniversalTime().Add(Content.TimeEntry.StartTime))"
-                    ValueChanged="@OnChangeStartTime"/>
-
+                    Value="@Content.TimeEntry.StartTime"
+                    ValueChanged="@OnChangeStartTime"
+                />
             </div>
             <div>
-                <FluentTimePicker
+                <TimeEditField
                     Label="End"
-                    Value="@(Content.TimeEntry.Date.ToDateTime(TimeOnly.MinValue).ToUniversalTime().Add(Content.TimeEntry.EndTime!.Value))"
+                    Value="@Content.TimeEntry.EndTime"
                     ValueChanged="@OnChangeEndTime"/>
 
             </div>
