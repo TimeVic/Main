@@ -203,7 +203,7 @@ public class GetReportByWeeksTest: BaseTest
         var project1 = projects.First();
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.Parse("2021-12-26T01:00:00Z"),
+            Date = DateOnly.Parse("2021-12-26"),
             StartTime = TimeSpan.FromHours(1),
             EndTime = TimeSpan.FromHours(2),
             IsBillable = true,
@@ -211,7 +211,7 @@ public class GetReportByWeeksTest: BaseTest
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.Parse("2021-12-31T01:00:00Z"),
+            Date = DateOnly.Parse("2021-12-31"),
             StartTime = TimeSpan.FromHours(2),
             EndTime = TimeSpan.FromHours(4),
             IsBillable = true,
@@ -219,7 +219,7 @@ public class GetReportByWeeksTest: BaseTest
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.Parse("2022-01-01T01:00:00Z"),
+            Date = DateOnly.Parse("2022-01-01"),
             StartTime = TimeSpan.FromHours(2),
             EndTime = TimeSpan.FromHours(4),
             IsBillable = true,
@@ -227,7 +227,7 @@ public class GetReportByWeeksTest: BaseTest
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.Parse("2022-01-03T01:00:00Z"),
+            Date = DateOnly.Parse("2022-01-03"),
             StartTime = TimeSpan.FromHours(5),
             EndTime = TimeSpan.FromHours(8),
             IsBillable = true,
