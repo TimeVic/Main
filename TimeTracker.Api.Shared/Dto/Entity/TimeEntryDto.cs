@@ -12,7 +12,7 @@ public class TimeEntryDto: BaseDto
     
     public bool IsBillable { get; set; }
     
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
     
     public TimeSpan StartTime { get; set; }
     

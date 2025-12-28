@@ -55,7 +55,7 @@ public class PaymentReportTest: BaseTest
         var project1 = projects.First();
         await _timeEntryDao.SetAsync(_user, _defaultWorkspace, new TimeEntryCreationDto()
         {
-            Date = DateTime.UtcNow,
+            Date = DateOnly.FromDateTime(DateTime.UtcNow),
             StartTime = TimeSpan.FromHours(10),
             EndTime = TimeSpan.FromHours(15),
             IsBillable = true,

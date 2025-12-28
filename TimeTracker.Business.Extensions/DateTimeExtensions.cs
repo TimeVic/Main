@@ -212,9 +212,9 @@ namespace TimeTracker.Business.Extensions
          * This method is used to get the date in the current time zone. It is necessary to
          * transfer to the server the local date of the client without the time zone
          */
-        public static DateTime ToDateAndRemoveTimeZone(this DateTime now)
+        public static DateOnly ToDateAndRemoveTimeZone(this DateTime now)
         {
-            return new DateTime(now.Year, now.Month, now.Day);
+            return DateOnly.FromDateTime(new DateTime(now.Year, now.Month, now.Day));
         }
         
         public static IEnumerable<DateTime> GetDateRange(this DateTime startDate, DateTime endDate)
@@ -227,6 +227,11 @@ namespace TimeTracker.Business.Extensions
                 yield return startDate;
                 startDate = startDate.AddDays(1);
             }
+        }
+        
+        public static DateOnly ToDateOnly(this DateTime d)
+        {
+            return DateOnly.FromDateTime(d);
         }
     }
 }

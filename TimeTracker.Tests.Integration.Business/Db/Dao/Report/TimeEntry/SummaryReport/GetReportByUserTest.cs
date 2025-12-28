@@ -1,5 +1,6 @@
 using Autofac;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Report;
 using TimeTracker.Business.Orm.Dao.User;
@@ -50,7 +51,7 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(user1, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(-1),
+                Date = DateTime.UtcNow.ToDateOnly().AddDays(-1),
                 StartTime = TimeSpan.FromHours(10),
                 EndTime = TimeSpan.FromHours(15),
                 IsBillable = true,
@@ -64,7 +65,7 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(user2, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow,
+                Date = DateTime.UtcNow.ToDateOnly(),
                 StartTime = TimeSpan.FromHours(1),
                 EndTime = TimeSpan.FromHours(5),
                 IsBillable = true,
@@ -76,7 +77,7 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(1),
+                Date = DateTime.UtcNow.ToDateOnly().AddDays(1),
                 StartTime = TimeSpan.FromHours(5),
                 EndTime = TimeSpan.FromHours(11),
                 IsBillable = true,
@@ -152,7 +153,7 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(user1, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(-1),
+                Date = DateTime.UtcNow.ToDateOnly().AddDays(-1),
                 StartTime = TimeSpan.FromHours(10),
                 EndTime = TimeSpan.FromHours(15),
                 IsBillable = true,
@@ -165,7 +166,7 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(user2, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow,
+                Date = DateTime.UtcNow.ToDateOnly(),
                 StartTime = TimeSpan.FromHours(1),
                 EndTime = TimeSpan.FromHours(5),
                 IsBillable = true,
@@ -177,7 +178,7 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(1),
+                Date = DateTime.UtcNow.ToDateOnly().AddDays(1),
                 StartTime = TimeSpan.FromHours(5),
                 EndTime = TimeSpan.FromHours(11),
                 IsBillable = true,

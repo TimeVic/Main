@@ -1,10 +1,4 @@
-﻿using NHibernate;
-using NHibernate.Transform;
-using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Common.Constants;
-using TimeTracker.Business.Common.Constants.Reports;
-using TimeTracker.Business.Extensions;
-using TimeTracker.Business.Orm.Dto.Reports.Summary;
+﻿using TimeTracker.Business.Orm.Dto.Reports.Summary;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Orm.Dao.Report;
@@ -14,7 +8,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     #region By Date
     private const string SqlQuerySummaryByDayForOwner = @"
         select
-            te.date as Date,
+            CAST(te.date AS timestamp) as Date,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
             sum(
 	            round(
@@ -47,7 +41,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     
     private const string SqlQuerySummaryByDayForOthers = @"
         select
-            te.date as Date,
+            CAST(te.date AS timestamp) as Date,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
             sum(
                 case when te.user_id = :userId

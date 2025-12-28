@@ -17,7 +17,7 @@ public interface ITimeEntryDao: IDomainService
     Task<TimeEntryEntity> StartNewAsync(
         UserEntity user,
         WorkspaceEntity workspace,
-        DateTime date,
+        DateOnly date,
         TimeSpan startTime,
         bool isBillable = false,
         string? description = null,
@@ -30,7 +30,7 @@ public interface ITimeEntryDao: IDomainService
         WorkspaceEntity workspace,
         UserEntity user,
         TimeSpan endTime,
-        DateTime endDate
+        DateOnly endDate
     );
 
     Task<TimeEntryEntity> SetAsync(

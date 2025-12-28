@@ -14,5 +14,5 @@ public class TimeEntryCreationDto
     
     public virtual TimeSpan? EndTime { get; set; }
     
-    public virtual DateTime Date { get; set; }
+    public virtual DateOnly Date { get; set; }
 }

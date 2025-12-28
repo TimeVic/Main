@@ -52,7 +52,7 @@ public class StopTest: BaseTest
     [Fact]
     public async Task ShouldStopActive()
     {
-        var date = DateTime.Now;
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var expectedEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,
@@ -82,7 +82,7 @@ public class StopTest: BaseTest
         {
             WorkspaceId = _defaultWorkspace.Id,
             EndTime = TimeSpan.FromHours(1),
-            EndDate = DateTime.Now
+            EndDate = DateOnly.FromDateTime(DateTime.UtcNow)
         });
         response.EnsureSuccessStatusCode();
 

@@ -34,7 +34,7 @@ public class TimeEntryService : ITimeEntryService
         WorkspaceEntity workspace,
         UserEntity user,
         TimeSpan endTime,
-        DateTime stopDate
+        DateOnly stopDate
     )
     {
         var timeEntries = await _timeEntryDao.StopActiveAsync(

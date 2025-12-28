@@ -51,7 +51,7 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(-7),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-7),
                 StartTime = TimeSpan.FromHours(10),
                 EndTime = TimeSpan.FromHours(15),
                 IsBillable = true,
@@ -64,7 +64,7 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(-14),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-14),
                 StartTime = TimeSpan.FromHours(1),
                 EndTime = TimeSpan.FromHours(5),
                 IsBillable = true,
@@ -76,7 +76,7 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(-21),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-21),
                 StartTime = TimeSpan.FromHours(5),
                 EndTime = TimeSpan.FromHours(11),
                 IsBillable = true,
@@ -144,7 +144,7 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(-1),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
                 StartTime = TimeSpan.FromHours(10),
                 EndTime = TimeSpan.FromHours(15),
                 IsBillable = true,
@@ -157,7 +157,7 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(user2, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(-14),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-14),
                 StartTime = TimeSpan.FromHours(1),
                 EndTime = TimeSpan.FromHours(5),
                 IsBillable = true,
@@ -169,7 +169,7 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.AddDays(-21),
+                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-21),
                 StartTime = TimeSpan.FromHours(5),
                 EndTime = TimeSpan.FromHours(11),
                 IsBillable = true,
@@ -203,7 +203,7 @@ public class GetReportByWeeksTest: BaseTest
         var project1 = projects.First();
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateTime.Parse("2021-12-26T01:00:00Z"),
+            Date = DateOnly.Parse("2021-12-26"),
             StartTime = TimeSpan.FromHours(1),
             EndTime = TimeSpan.FromHours(2),
             IsBillable = true,
@@ -211,7 +211,7 @@ public class GetReportByWeeksTest: BaseTest
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateTime.Parse("2021-12-31T01:00:00Z"),
+            Date = DateOnly.Parse("2021-12-31"),
             StartTime = TimeSpan.FromHours(2),
             EndTime = TimeSpan.FromHours(4),
             IsBillable = true,
@@ -219,7 +219,7 @@ public class GetReportByWeeksTest: BaseTest
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateTime.Parse("2022-01-01T01:00:00Z"),
+            Date = DateOnly.Parse("2022-01-01"),
             StartTime = TimeSpan.FromHours(2),
             EndTime = TimeSpan.FromHours(4),
             IsBillable = true,
@@ -227,7 +227,7 @@ public class GetReportByWeeksTest: BaseTest
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateTime.Parse("2022-01-03T01:00:00Z"),
+            Date = DateOnly.Parse("2022-01-03"),
             StartTime = TimeSpan.FromHours(5),
             EndTime = TimeSpan.FromHours(8),
             IsBillable = true,

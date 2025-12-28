@@ -4,6 +4,7 @@ using NHibernate.Type;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
+using TimeTracker.Business.Orm.Hibernate.DataTypes;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -26,15 +27,15 @@ namespace TimeTracker.Business.Orm.Entities
         [Column(Name = "is_billable", NotNull = false)]
         public virtual bool IsBillable { get; set; }
 
-        [Property(NotNull = true, TypeType = typeof(DateType))]
+        [Property(NotNull = true, TypeType = typeof(DateOnlyCustomType))]
         [Column(Name = "date", SqlType = "date", NotNull = true)]
-        public virtual DateTime Date { get; set; }
+        public virtual DateOnly Date { get; set; }
 
-        [Property(NotNull = true, TypeType = typeof(TimeAsTimeSpanType))]
+        [Property(NotNull = true, TypeType = typeof(TimeOnlyCustomType))]
         [Column(Name = "start_time", SqlType = "time", NotNull = true)]
         public virtual TimeSpan StartTime { get; set; }
 
-        [Property(NotNull = false, TypeType = typeof(TimeAsTimeSpanType))]
+        [Property(NotNull = false, TypeType = typeof(TimeOnlyCustomType))]
         [Column(Name = "end_time", SqlType = "time", NotNull = false)]
         public virtual TimeSpan? EndTime { get; set; }
 

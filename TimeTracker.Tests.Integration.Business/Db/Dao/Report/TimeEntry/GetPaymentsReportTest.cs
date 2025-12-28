@@ -46,7 +46,7 @@ public class GetPaymentsReportTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
                 StartTime = TimeSpan.FromHours(10),
                 EndTime = TimeSpan.FromHours(15),
                 IsBillable = true,
@@ -59,7 +59,7 @@ public class GetPaymentsReportTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
                 StartTime = TimeSpan.FromHours(1),
                 EndTime = TimeSpan.FromHours(5),
                 IsBillable = true,
@@ -71,7 +71,7 @@ public class GetPaymentsReportTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
                 StartTime = TimeSpan.FromHours(1),
                 EndTime = TimeSpan.FromHours(5),
                 IsBillable = true,
@@ -129,7 +129,7 @@ public class GetPaymentsReportTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
                 StartTime = TimeSpan.FromHours(10),
                 EndTime = TimeSpan.FromHours(15),
                 IsBillable = true,
@@ -200,7 +200,7 @@ public class GetPaymentsReportTest: BaseTest
         );
         await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateTime.UtcNow,
+            Date = DateOnly.FromDateTime(DateTime.UtcNow),
             StartTime = TimeSpan.FromHours(10),
             EndTime = TimeSpan.FromHours(15),
             IsBillable = true,
@@ -209,7 +209,7 @@ public class GetPaymentsReportTest: BaseTest
         
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateTime.UtcNow,
+            Date = DateOnly.FromDateTime(DateTime.UtcNow),
             StartTime = TimeSpan.FromHours(10),
             EndTime = TimeSpan.FromHours(15),
             IsBillable = true,
@@ -269,7 +269,7 @@ public class GetPaymentsReportTest: BaseTest
         );
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateTime.UtcNow,
+            Date = DateOnly.FromDateTime(DateTime.UtcNow),
             StartTime = TimeSpan.FromHours(10),
             EndTime = TimeSpan.FromHours(15),
             IsBillable = true,
@@ -278,7 +278,7 @@ public class GetPaymentsReportTest: BaseTest
         
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateTime.UtcNow.AddDays(-10),
+            Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-10),
             StartTime = TimeSpan.FromHours(10),
             EndTime = TimeSpan.FromHours(15),
             IsBillable = true,
@@ -286,7 +286,7 @@ public class GetPaymentsReportTest: BaseTest
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateTime.UtcNow.AddDays(-4),
+            Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-4),
             StartTime = TimeSpan.FromHours(10),
             EndTime = TimeSpan.FromHours(15),
             IsBillable = true,

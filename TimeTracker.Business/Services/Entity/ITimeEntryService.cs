@@ -12,7 +12,7 @@ public interface ITimeEntryService: IDomainService
         WorkspaceEntity workspace,
         UserEntity user,
         TimeSpan endTime,
-        DateTime stopDate
+        DateOnly stopDate
     );
 
     Task<TimeEntryEntity> SetAsync(

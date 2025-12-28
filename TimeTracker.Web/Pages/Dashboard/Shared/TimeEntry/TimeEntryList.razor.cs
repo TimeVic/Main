@@ -33,7 +33,7 @@ public partial class TimeEntryList
     
     private ICollection<TimeEntryDto> _list => IsFilteredList ? _state.Value.FilteredList : _state.Value.ListToShow;
     
-    private IEnumerable<IGrouping<DateTime, TimeEntryDto>> _groupedList => _list.GroupBy(item => item.Date);
+    private IEnumerable<IGrouping<DateOnly, TimeEntryDto>> _groupedList => _list.GroupBy(item => item.Date);
     
     private int _totalCount => IsFilteredList ? _state.Value.FilteredTotalCount : _state.Value.TotalCount;
     

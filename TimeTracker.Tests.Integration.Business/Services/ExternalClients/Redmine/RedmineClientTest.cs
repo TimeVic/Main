@@ -1,6 +1,7 @@
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dao.Workspace;
@@ -81,11 +82,11 @@ public partial class RedmineClientTest : BaseTest
     public async Task ShouldSendNewTimeEntry()
     {
         var expectedDescription = "Test description";
-        var date = DateTime.UtcNow.Date;
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date,
+            DateOnly.FromDateTime(DateTime.UtcNow),
             TimeSpan.FromMinutes(1),
             true,
             description: expectedDescription
@@ -109,7 +110,7 @@ public partial class RedmineClientTest : BaseTest
     [Fact]
     public async Task ShouldReceiveErrorIfTaskNotFound()
     {
-        var date = DateTime.UtcNow.Date;
+        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
@@ -132,7 +133,7 @@ public partial class RedmineClientTest : BaseTest
     [Fact]
     public async Task ShouldUpdateExistsTimeEntry()
     {
-        var date = DateTime.UtcNow.Date;
+        var date = DateTime.UtcNow.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,

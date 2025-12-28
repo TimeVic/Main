@@ -1,6 +1,7 @@
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dao.Workspace;
@@ -80,11 +81,11 @@ public partial class SendNewTimeEntityTest : BaseTest
         
         var fakeTimeEntry = _timeEntryFactory.Generate();
         
-        var date = DateTime.UtcNow.Date;
+        var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date,
+            DateTime.UtcNow.Date.ToDateOnly(),
             DateTime.UtcNow.TimeOfDay,
             true,
             description: fakeTimeEntry.Description
@@ -112,7 +113,7 @@ public partial class SendNewTimeEntityTest : BaseTest
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
         var taskList = await _taskListSeeder.CreateAsync(project);
-        var date = DateTime.UtcNow.Date;
+        var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
@@ -139,7 +140,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         var taskList = await _taskListSeeder.CreateAsync(project);
         var fakeTimeEntry = _timeEntryFactory.Generate();
         
-        var date = DateTime.UtcNow.Date;
+        var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
@@ -178,7 +179,7 @@ public partial class SendNewTimeEntityTest : BaseTest
     [Fact]
     public async Task ShouldGetTaskDetails()
     {
-        var date = DateTime.UtcNow.Date;
+        var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,

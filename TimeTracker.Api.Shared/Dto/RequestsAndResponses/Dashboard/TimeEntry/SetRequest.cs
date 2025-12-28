@@ -29,6 +29,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         [IsCorrectTimeEntryTime]
         public TimeSpan? EndTime { get; set; }
         
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
     }
 }

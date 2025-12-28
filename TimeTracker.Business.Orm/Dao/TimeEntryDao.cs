@@ -93,13 +93,13 @@ public class TimeEntryDao: ITimeEntryDao
             }
             if (filter.DateFrom.HasValue)
             {
-                var startOfDay = filter.DateFrom.Value.StartOfDay();
-                query = query.And(item => item.Date >= startOfDay);
+                var fromDate = DateOnly.FromDateTime(filter.DateFrom.Value);
+                query = query.And(item => item.Date >= fromDate);
             }
             if (filter.DateTo.HasValue)
             {
-                var endOfDay = filter.DateTo.Value.EndOfDay();
-                query = query.And(item => item.Date <= endOfDay);
+                var toDate = DateOnly.FromDateTime(filter.DateTo.Value);
+                query = query.And(item => item.Date <= toDate);
             }
         }
 
@@ -146,7 +146,7 @@ public class TimeEntryDao: ITimeEntryDao
     public async Task<TimeEntryEntity> StartNewAsync(
         UserEntity user,
         WorkspaceEntity workspace,
-        DateTime date,
+        DateOnly date,
         TimeSpan startTime,
         bool isBillable = false,
         string? description = "",
@@ -168,7 +168,7 @@ public class TimeEntryDao: ITimeEntryDao
         {
             IsBillable = isBillable,
             Description = description,
-            Date = date.StartOfDay(),
+            Date = date,
             StartTime = startTime,
             EndTime = null,
             Workspace = workspace,
@@ -194,14 +194,13 @@ public class TimeEntryDao: ITimeEntryDao
         WorkspaceEntity workspace,
         UserEntity user,
         TimeSpan endTime,
-        DateTime endDate
+        DateOnly endDate
     )
     {
         if (endTime > GlobalConstants.EndOfDay)
         {
             throw new DataInconsistencyException("End time can not be more than 24 hours");
         }
-        endDate = endDate.Date;
         
         var activeTimeEntries = await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
             .Where(
@@ -234,13 +233,13 @@ public class TimeEntryDao: ITimeEntryDao
             {
                 // Time Entry was not stopped on the day it was started
                 // This difference should be added to endTime
-                endTimeForCurrent = endTime + (endDate - activeTimeEntry.Date);
+                endTimeForCurrent = endTime + (endDate.ToDateTime(TimeOnly.MinValue) - activeTimeEntry.Date.ToDateTime(TimeOnly.MinValue));
             }
             
             var dateOfEntry = activeTimeEntry.Date;
             if (endTimeForCurrent > GlobalConstants.EndOfDay)
             {
-                activeTimeEntry.EndTime = activeTimeEntry.Date.EndOfDay().TimeOfDay;
+                activeTimeEntry.EndTime = activeTimeEntry.Date.ToDateTime(TimeOnly.MinValue).EndOfDay().TimeOfDay;
                 endTimeForCurrent -= GlobalConstants.EndOfDay;
             }
             else
@@ -258,7 +257,7 @@ public class TimeEntryDao: ITimeEntryDao
                     user,
                     workspace,
                     dateOfEntry,
-                    dateOfEntry.StartOfDay().TimeOfDay,
+                    dateOfEntry.ToDateTime(TimeOnly.MinValue).StartOfDay().TimeOfDay,
                     isBillable: activeTimeEntry.IsBillable,
                     description: activeTimeEntry.Description,
                     projectId: activeTimeEntry.Project?.Id,
@@ -266,7 +265,7 @@ public class TimeEntryDao: ITimeEntryDao
                 );
                 if (endTimeForCurrent > GlobalConstants.EndOfDay)
                 {
-                    newTimeEntry.EndTime = activeTimeEntry.Date.EndOfDay().TimeOfDay;
+                    newTimeEntry.EndTime = activeTimeEntry.Date.ToDateTime(TimeOnly.MinValue).EndOfDay().TimeOfDay;
                     endTimeForCurrent -= GlobalConstants.EndOfDay;
                 }
                 else
@@ -330,7 +329,7 @@ public class TimeEntryDao: ITimeEntryDao
         timeEntry.HourlyRate = timeEntryDto.HourlyRate;
         timeEntry.IsBillable = timeEntryDto.IsBillable;
         timeEntry.StartTime = timeEntryDto.StartTime;
-        if (timeEntryDto.Date > DateTime.MinValue)
+        if (timeEntryDto.Date > DateOnly.MinValue)
         {
             timeEntry.Date = timeEntryDto.Date;    
         }
@@ -368,7 +367,7 @@ public class TimeEntryDao: ITimeEntryDao
         session = session ?? _sessionProvider.CurrentSession;
         return await session.Query<TimeEntryEntity>()
             .FirstOrDefaultAsync(
-                entry => entry.EndTime == null && entry.Date < DateTime.UtcNow,
+                entry => entry.EndTime == null && entry.Date < DateOnly.FromDateTime(DateTime.UtcNow),
                 cancellationToken: cancellationToken
             );
     }

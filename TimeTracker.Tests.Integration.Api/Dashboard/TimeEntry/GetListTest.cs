@@ -65,7 +65,7 @@ public class GetListTest: BaseTest
             Assert.NotEmpty(item.Description);
             Assert.True(item.StartTime > TimeSpan.MinValue);
             Assert.True(item.EndTime > TimeSpan.MinValue);
-            Assert.True(item.Date > DateTime.MinValue);
+            Assert.True(item.Date > DateOnly.MinValue);
         });
     }
     
@@ -77,7 +77,7 @@ public class GetListTest: BaseTest
         await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,
-            DateTime.UtcNow, 
+            DateOnly.FromDateTime(DateTime.UtcNow), 
             TimeSpan.FromSeconds(1)
         );
      
@@ -106,7 +106,7 @@ public class GetListTest: BaseTest
         await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,
-            DateTime.UtcNow, 
+            DateOnly.FromDateTime(DateTime.UtcNow), 
             TimeSpan.FromSeconds(1)
         );
         

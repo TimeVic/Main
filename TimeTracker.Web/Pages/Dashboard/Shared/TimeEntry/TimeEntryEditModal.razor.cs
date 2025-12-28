@@ -78,7 +78,7 @@ public partial class TimeEntryEditModal
     private void OnDateChanged(DateTime? date)
     {
         ArgumentNullException.ThrowIfNull(date);
-        Content.TimeEntry.Date = date.Value.Date;
+        Content.TimeEntry.Date = DateOnly.FromDateTime(date.Value.Date);
         SubmitForm();
     }
 

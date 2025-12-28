@@ -1,6 +1,7 @@
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Workspace;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
@@ -21,11 +22,11 @@ public partial class SendNewTimeEntityTest : BaseTest
         task.ExternalTaskId = _externalTaskId;
         await DbSessionProvider.PerformCommitAsync();
         
-        var date = DateTime.UtcNow.Date;
+        var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date,
+            DateTime.UtcNow.Date.ToDateOnly(),
             DateTime.UtcNow.TimeOfDay,
             true,
             internalTask: task

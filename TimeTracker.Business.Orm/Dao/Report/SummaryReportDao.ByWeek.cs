@@ -13,8 +13,8 @@ public partial class SummaryReportDao: ISummaryReportDao
 {
     private const string SqlQuerySummaryByWeekForOwner = @"
         select
-            cast(date_trunc('week', te.date) as date) as WeekStartDate,
-            cast(date_trunc('week', te.date) + '6 days' as date) as WeekEndDate,
+            cast(date_trunc('week', te.date) as timestamp) as WeekStartDate,
+            cast(date_trunc('week', te.date) + '6 days' as timestamp) as WeekEndDate,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
             sum(
 	            round(
@@ -46,8 +46,8 @@ public partial class SummaryReportDao: ISummaryReportDao
     
     private const string SqlQuerySummaryByWeekForOther = @"
         select
-            cast(date_trunc('week', te.date) as date) as WeekStartDate,
-            cast(date_trunc('week', te.date) + '6 days' as date) as WeekEndDate,
+            cast(date_trunc('week', te.date) as timestamp) as WeekStartDate,
+            cast(date_trunc('week', te.date) + '6 days' as timestamp) as WeekEndDate,
             sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
             sum(
                 case when te.user_id = :userId

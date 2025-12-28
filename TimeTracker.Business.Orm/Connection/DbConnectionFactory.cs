@@ -47,8 +47,6 @@ namespace TimeTracker.Business.Orm.Connection
 
         private ISessionFactory BuildFactory(IDictionary<string, string> properties)
         {
-            // Logging
-
             var currentAssembly = Assembly.GetExecutingAssembly();
             var hibernateConfiguration = new Configuration()
                 .AddProperties(properties)
