@@ -50,7 +50,7 @@ public class WorkspaceInitializationService
         
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Tag.LoadListAction());
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(true));
-        Task.Run(() => _fcmService.SetNotificationToken());
+        // Task.Run(() => _fcmService.SetNotificationToken());
     }
     
     public void ChangeWorkspace(WorkspaceDto workspace)
