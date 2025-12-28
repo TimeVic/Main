@@ -40,13 +40,19 @@ public class TimeParsingService: ITimeParsingService
         }
         hours = hours >= 24 ? 00 : hours;
 
-        return $"{hours:0}:{minutes:00}";
+        return $"{hours:00}:{minutes:00}";
     }
     
-    public TimeSpan ParseTime(string timeString)
+    public TimeSpan ParseTimeSpan(string timeString)
     {
         var formattedTime = FormatTime(timeString);
         return TimeSpan.Parse(formattedTime);
+    }
+    
+    public TimeOnly ParseTimeOnly(string timeString)
+    {
+        var formattedTime = FormatTime(timeString);
+        return TimeOnly.ParseExact(formattedTime, "HH:mm");
     }
     
     public TimeSpan GetTimeSpanFromDateTime(DateTime dateTime)
@@ -60,5 +66,10 @@ public class TimeParsingService: ITimeParsingService
             + (
                 isAddSecond ? $":{Math.Abs(timeSpan.Seconds):00}" : ""
             );
+    }
+    
+    public string TimeOnlyToStringString(TimeOnly time)
+    {
+        return time.ToString("HH:mm");
     }
 }

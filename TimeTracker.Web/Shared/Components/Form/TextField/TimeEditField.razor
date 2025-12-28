@@ -1,0 +1,73 @@
+﻿@using TimeTracker.Business.Common.Services.Format
+
+<FluentTextField
+    style="width: 100%;"
+    Class="@Class"
+    Disabled="Disabled"
+    Value="@_editValue"
+    Label="@Label"
+    ValueChanged="OnChangeValue"
+    InputMode="InputMode.Email"
+    Maxlength="10"
+    Placeholder="12:00">
+    <FluentIcon Value="@(new Icons.Regular.Size20.TimePicker())" Slot="start" Color="Color.Neutral"/>
+</FluentTextField>
+
+@code
+{
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Placeholder { get; set; }
+
+    [Parameter] 
+    public Boolean Disabled { get; set; } = false;
+
+    [Inject]
+    public ITimeParsingService _timeParsingService { get; set; }
+    
+    [Parameter]
+    public TimeSpan? Value
+    {
+        set
+        {
+            _value = value;
+            if (_value != null)
+            {
+                _editValue = _timeParsingService.TimeSpanToTimeString(_value.Value);
+            }
+            else
+            {
+                _editValue = string.Empty;
+            }
+        }
+    }
+
+    [Parameter]
+    public int RowsMin { get; set; } = 6;
+
+    [Parameter]
+    public EventCallback<TimeSpan?> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> Changed { get; set; }
+
+    private TimeSpan? _value;
+    private string _editValue;
+
+    protected override void OnInitialized()
+    {
+    }
+
+    private void OnChangeValue(string value)
+    {
+        _editValue = _timeParsingService.FormatTime(value);
+        _value = _timeParsingService.ParseTimeSpan(value);
+        StateHasChanged();
+        ValueChanged.InvokeAsync(_value);
+    }
+}

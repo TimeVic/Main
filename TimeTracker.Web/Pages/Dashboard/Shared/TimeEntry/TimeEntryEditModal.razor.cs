@@ -34,21 +34,22 @@ public partial class TimeEntryEditModal
         await base.OnInitializedAsync();
     }
     
-    private void OnChangeStartTime(DateTime? startDateTime)
+    private void OnChangeStartTime(TimeSpan? startTime)
     {
-        ArgumentNullException.ThrowIfNull(startDateTime);
-        Debug.Log(startDateTime, startDateTime.Value.TimeOfDay);
-        var startTime = startDateTime.Value.TimeOfDay;
-        Content.TimeEntry.StartTime = startTime > Content.TimeEntry.EndTime ? Content.TimeEntry.EndTime.Value : startTime;
-        SubmitForm();
+        if (startTime != null)
+        {
+            Content.TimeEntry.StartTime = startTime > Content.TimeEntry.EndTime ? Content.TimeEntry.EndTime.Value : startTime.Value;
+            SubmitForm();
+        }
     }
 
-    private void OnChangeEndTime(DateTime? endDateTime)
+    private void OnChangeEndTime(TimeSpan? endTime)
     {
-        ArgumentNullException.ThrowIfNull(endDateTime);
-        var endTime = endDateTime.Value.TimeOfDay;
-        Content.TimeEntry.EndTime = endTime < Content.TimeEntry.StartTime ? Content.TimeEntry.StartTime : endTime;
-        SubmitForm();
+        if (endTime != null)
+        {
+            Content.TimeEntry.EndTime = endTime < Content.TimeEntry.StartTime ? Content.TimeEntry.StartTime : endTime;
+            SubmitForm();
+        }
     }
     
     private void SubmitForm()
@@ -86,5 +87,10 @@ public partial class TimeEntryEditModal
     {
         Content.TimeEntry.Project = project;
         SubmitForm();
+    }
+
+    private void TimeOnlyChanged(TimeOnly? obj)
+    {
+        Debug.Log(obj, obj?.ToString("HH:m:s"));
     }
 }
