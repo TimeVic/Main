@@ -1,13 +1,10 @@
 ﻿@inherits BaseReactiveComponent
-
-@using TimeTracker.Web.Shared.Components.Form
 @using TimeTracker.Web.Pages.Dashboard.TimeEntry.Parts
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
-@using TimeTracker.Web.Shared.Components.Form.Select
 
 <div Class="w-time-form @Class">
     <FluentToolbar>
-        @if (_state.Value.HasActiveEntry)
+        @if (_hasActiveEntry)
         {
             <FluentButton
                 OnClick="@(() => ToggleTimeEntry(false))"
@@ -30,7 +27,7 @@
             Value="@_activeEntry?.StartTime"
             IsActive="@_hasActiveEntry"/>
 
-        @if (_activeEntry?.Task  == null && _activeEntry != null)
+        @if (_activeEntry?.Task == null && _activeEntry != null)
         {
             <FluentButton
                 Disabled="@_state.Value.IsTimeEntryProcessing"
