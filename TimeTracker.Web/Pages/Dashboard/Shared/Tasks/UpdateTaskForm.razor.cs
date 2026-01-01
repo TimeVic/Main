@@ -24,7 +24,7 @@ public partial class UpdateTaskForm
     public IState<Store.TasksList.TasksListState> _tasksListState { get; set; }
 
     [Inject]
-    public IState<Store.Tasks.TasksState> _tasksState { get; set; }
+    public IState<TasksState> _tasksState { get; set; }
     
     [Inject] 
     private ISecurityManager _securityManager { get; set; }
@@ -98,6 +98,7 @@ public partial class UpdateTaskForm
 
     private void OnTagsChanged(IEnumerable<long> selectedTagIds)
     {
+        Debug.Log("OnTagsChanged");
         _model.TagIds = selectedTagIds.ToList();
         SubmitForm();
     }
@@ -126,14 +127,10 @@ public partial class UpdateTaskForm
         return modelEndTime.Date <= _model.StartTime.Value.Date;
     }
 
-    private void OnReminderTimeChanged(TimeSpan? endTime)
+    private void OnReminderTimeChanged(DateTime? time)
     {
-        _model.ReminderTime = _model.ReminderTime?.StartOfDay();
-        if (endTime.HasValue)
-        {
-            _model.ReminderTime = _model.ReminderTime?.Add(endTime.Value);
-        }
-        _model.ReminderTime = _model.ReminderTime?.ToLocalTime();
+        _model.ReminderTime = time?.ToLocalTime();
+        SubmitForm();
     }
     
     private void OnStartDateChanged(DateTime? date)
@@ -145,17 +142,6 @@ public partial class UpdateTaskForm
     private void OnEndDateChanged(DateTime? date)
     {
         _model.EndTime = date;
-        SubmitForm();
-    }
-    
-    private void SetReminderTimeIfEmpty(DateTime? time)
-    {
-        if (!time.HasValue)
-            return;
-        if (!_model.ReminderTime.HasValue)
-        {
-            _model.ReminderTime = time?.StartOfDay().AddHours(9);
-        }
         SubmitForm();
     }
     

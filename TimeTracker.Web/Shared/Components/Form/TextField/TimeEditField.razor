@@ -6,11 +6,11 @@
     Disabled="Disabled"
     Value="@_editValue"
     Label="@Label"
-    ValueChanged="OnChangeValue"
+    ValueChanged="@OnChangeValue"
     InputMode="InputMode.Email"
     Maxlength="10"
     Placeholder="12:00">
-    <FluentIcon Value="@(new Icons.Regular.Size20.TimePicker())" Slot="start" Color="Color.Neutral"/>
+    <FluentIcon Value="@(new Icons.Regular.Size20.Clock())" Slot="end" Color="Color.Neutral"/>
 </FluentTextField>
 
 @code
@@ -63,10 +63,10 @@
     {
     }
 
-    private void OnChangeValue(string value)
+    private void OnChangeValue(string? value)
     {
-        _editValue = _timeParsingService.FormatTime(value);
-        _value = _timeParsingService.ParseTimeSpan(value);
+        _editValue = value != null ? _timeParsingService.FormatTime(value) : string.Empty;
+        _value = value != null ? _timeParsingService.ParseTimeSpan(value) : null;
         StateHasChanged();
         ValueChanged.InvokeAsync(_value);
     }

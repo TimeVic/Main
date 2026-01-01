@@ -68,45 +68,28 @@
         
         <FluentStack Orientation="Orientation.Horizontal" Class="pt-2">
 
-            <div>
-                <FluentLabel>Start Time</FluentLabel>
-                <FluentStack Orientation="Orientation.Horizontal">
-                    <FluentDatePicker
-                        DisabledDateFunc="DisabledStartTime"
-                        Value="@_model.StartTime"
-                        ValueChanged="@(OnStartDateChanged)"/>
-                    <FluentTimePicker
-                        Value="@_model.StartTime"
-                        ValueChanged="@(OnStartDateChanged)"/>
-                </FluentStack>
-            </div>
+            <DateTimeEditField
+                Label="Start Time"
+                DisabledDateFunc="@DisabledStartTime"
+                Value="@_model.StartTime"
+                ValueChanged="@(OnStartDateChanged)"
+            />
             <FluentSpacer/>
-            <div>
-                <FluentLabel>End Time</FluentLabel>
-                <FluentStack Orientation="Orientation.Horizontal">
-                    <FluentDatePicker
-                        DisabledDateFunc="DisabledEndTime"
-                        Value="@_model.EndTime"
-                        ValueChanged="@(OnEndDateChanged)"/>
-                    <FluentTimePicker
-                        Value="@_model.EndTime"
-                        ValueChanged="@(OnEndDateChanged)"/>
-                </FluentStack>
-            </div>
+            <DateTimeEditField
+                Label="End Time"
+                DisabledDateFunc="@DisabledEndTime"
+                Value="@_model.EndTime"
+                ValueChanged="@(OnEndDateChanged)"
+            />
         </FluentStack>
         <FluentDivider Class="w-100" Orientation="Orientation.Horizontal"/>
         <FluentStack Orientation="Orientation.Horizontal">
-            <div class="mt-2">
-                <FluentLabel>Reminder</FluentLabel>
-                <FluentStack Orientation="Orientation.Horizontal">
-                    <FluentDatePicker
-                        Value="@_model.ReminderTime"/>
-                    <FluentTimePicker
-                        Value="@_model.ReminderTime"
-                        ValueChanged="@(date => OnReminderTimeChanged(date?.TimeOfDay))"/>
-                </FluentStack>
-            </div>
-            
+            <DateTimeEditField
+                Class="mt-2"
+                Label="Reminder"
+                Value="@_model.ReminderTime"
+                ValueChanged="@OnReminderTimeChanged"
+            />
             <FluentSpacer/>
         </FluentStack>
 
