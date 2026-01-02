@@ -99,7 +99,18 @@
                         IconStart="@(new Icons.Regular.Size20.Delete())"
                         OnClick="@(() => OnDeleteItemAsync(context))"/>
                 </TemplateColumn>
-            </FluentDataGrid>    
+            </FluentDataGrid>
+            
+            <div>
+                @{
+                    var totalDuration = TimeSpan.FromTicks(
+                        groupedItem.Sum(item => item.Duration.Ticks)
+                    );
+                }
+                <FluentLabel Typo="Typography.H4" Class="mt-3">
+                    Total duration: @_timeParsingService.TimeSpanToTimeString(totalDuration,  true)
+                </FluentLabel> 
+            </div>
         </FluentCard>
     }
 

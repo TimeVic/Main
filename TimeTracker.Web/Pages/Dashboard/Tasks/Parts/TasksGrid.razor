@@ -1,65 +1,68 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Entity.Task
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Core.Extensions.Enums
-@using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus
 
 @inherits BaseComponent
 
-<FluentLabel Typo="Typography.H3" Class="mt-3">
-    @if (Statuses.Contains(TaskStatus.Backlog))
-    {
-        @TaskStatus.Backlog.GetDisplayName()
-    }
-    else
-    {
-        @TaskStatus.ToDo.GetDisplayName()
-    }
-</FluentLabel>
-
-<FluentDataGrid
-    TGridItem="TaskDto"
-    Class="w-100"
-    Loading="_isLoading"
-    Virtualize="true"
-    ItemSize="46"
-    OnRowClick="@(async (eventObj) => await OnEditTask(eventObj.Item))"
-    Items="@_tasks.AsQueryable()"
-    ShowHover="true">
-
-    <PropertyColumn 
-        Title="Id" Property="@(p => p.FormattedId)"
-        Width="100px"
-        Sortable="false"/>
-    <PropertyColumn 
-        Title="Title" 
-        Property="@(p => p.Title)"
-        Sortable="false"/>
-    <PropertyColumn 
-        Title="Status" 
-        Property="@(p => p.Status.GetDisplayName())"
-        Width="100px"
-        Sortable="true"/>
-    <TemplateColumn
-        Title="Priority"
-        Width="100px"
-        Sortable="true">
-
-        @{
-            (string backgroundColor, string textColor) = context.Priority.GetColors();
+<FluentCard class="mb-3" MinimalStyle="true">
+    <FluentLabel Typo="Typography.H3" Class="mb-2">
+        @if (Statuses.Contains(TaskStatus.Backlog))
+        {
+            <text>📄 </text> @TaskStatus.Backlog.GetDisplayName()
         }
-        <FluentBadge Appearance="Appearance.Neutral" Fill="lowlight" BackgroundColor="@backgroundColor" Color="@textColor">
-            @context.Priority.GetDisplayName()
-        </FluentBadge>
-    </TemplateColumn>
-    <PropertyColumn 
-        Title="Description" 
-        Property="@(p => p.Description)"
-        Width="200px"
-        Sortable="false"/>
-    <PropertyColumn 
-        Title="Assigned" 
-        Property="@(p => p.User.Name)"
-        Width="200px"
-        Sortable="false"/>
-</FluentDataGrid>
+        else
+        {
+            <text>📋 </text> @TaskStatus.ToDo.GetDisplayName()
+        }
+    </FluentLabel>
+    
+    <FluentDivider Style="width: 100%;" Role="@DividerRole.Presentation"></FluentDivider>
+    
+    <FluentDataGrid
+        TGridItem="TaskDto"
+        Class="w-100"
+        Loading="_isLoading"
+        Virtualize="true"
+        ItemSize="46"
+        OnRowClick="@(async (eventObj) => await OnEditTask(eventObj.Item))"
+        Items="@_tasks.AsQueryable()"
+        ShowHover="true">
+
+        <PropertyColumn 
+            Title="Id" Property="@(p => p.FormattedId)"
+            Width="100px"
+            Sortable="false"/>
+        <PropertyColumn 
+            Title="Title" 
+            Property="@(p => p.Title)"
+            Sortable="false"/>
+        <PropertyColumn 
+            Title="Status" 
+            Property="@(p => p.Status.GetDisplayName())"
+            Width="100px"
+            Sortable="true"/>
+        <TemplateColumn
+            Title="Priority"
+            Width="100px"
+            Sortable="true">
+
+            @{
+                (string backgroundColor, string textColor) = context.Priority.GetColors();
+            }
+            <FluentBadge Appearance="Appearance.Neutral" Fill="lowlight" BackgroundColor="@backgroundColor" Color="@textColor">
+                @context.Priority.GetDisplayName()
+            </FluentBadge>
+        </TemplateColumn>
+        <PropertyColumn 
+            Title="Description" 
+            Property="@(p => p.Description)"
+            Width="200px"
+            Sortable="false"/>
+        <PropertyColumn 
+            Title="Assigned" 
+            Property="@(p => p.User.Name)"
+            Width="200px"
+            Sortable="false"/>
+    </FluentDataGrid>
+</FluentCard>

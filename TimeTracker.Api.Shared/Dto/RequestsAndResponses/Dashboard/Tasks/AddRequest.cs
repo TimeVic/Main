@@ -30,7 +30,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         
         public DateTime? EndTime { get; set; }
 
-        public TaskStatus Status { get; set; } = TaskStatus.Backlog;
+        public TaskStatus Status { get; set; } = TaskStatus.ToDo;
 
         public TaskPriority Priority { get; set; } = TaskPriority.Medium;
     
