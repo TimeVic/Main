@@ -162,25 +162,25 @@ public class TaskDao: ITaskDao
         UserEntity userAlias = null;
         var query = _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
-            .Inner.JoinAlias(item => taskListAlias.Project, () => projectAlias)
-            .Inner.JoinAlias(item => projectAlias.Workspace, () => workspaceAlias)
+            .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
+            .Inner.JoinAlias(item => projectAlias!.Workspace, () => workspaceAlias)
             .Inner.JoinAlias(item => item.User, () => userAlias)
             .Where(item => item.IsArchived == isArchived);
 
         if (taskList != null)
         {
-            query = query.Where(() => taskListAlias.Id == taskList.Id);
+            query = query.Where(() => taskListAlias!.Id == taskList.Id);
         }
         else
         {
-            query = query.Where(() => workspaceAlias.Id == workspace.Id);
+            query = query.Where(() => workspaceAlias!.Id == workspace!.Id);
         }
 
         if (filter != null)
         {
             if (filter.AssignedUserId.HasValue)
             {
-                query = query.Where(() => userAlias.Id == filter.AssignedUserId);
+                query = query.Where(() => userAlias!.Id == filter.AssignedUserId);
             }
             if (filter.Status.HasValue)
             {
@@ -194,8 +194,8 @@ public class TaskDao: ITaskDao
             if (!string.IsNullOrWhiteSpace(filter.SearchString))
             {
                 query = query.Where(
-                    item => item.Title.IsLike(filter.SearchString.ToLower(), MatchMode.Anywhere)
-                    || item.Description.IsLike(filter.SearchString.ToLower(), MatchMode.Anywhere)
+                    item => item.Title.IsInsensitiveLike(filter.SearchString.ToLower(), MatchMode.Anywhere)
+                    || item.Description.IsInsensitiveLike(filter.SearchString.ToLower(), MatchMode.Anywhere)
                 );
             }
             if (filter is {StartTime: not null, EndTime: not null})
@@ -237,10 +237,10 @@ public class TaskDao: ITaskDao
         UserEntity userAlias = null;
         var existsTaskWithMaxId = (await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
-            .Inner.JoinAlias(item => taskListAlias.Project, () => projectAlias)
-            .Inner.JoinAlias(item => projectAlias.Workspace, () => workspaceAlias)
+            .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
+            .Inner.JoinAlias(item => projectAlias!.Workspace, () => workspaceAlias)
             .Inner.JoinAlias(item => item.User, () => userAlias)
-            .Where(item => workspaceAlias.Id == project.Workspace.Id)
+            .Where(item => workspaceAlias!.Id == project!.Workspace.Id)
             .ThenBy(item => item.TaskId).Desc
             .Take(1)
             .ListAsync()).FirstOrDefault();
@@ -260,8 +260,8 @@ public class TaskDao: ITaskDao
         UserEntity userAlias = null;
         return await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
-            .Inner.JoinAlias(item => taskListAlias.Project, () => projectAlias)
-            .Inner.JoinAlias(item => projectAlias.Workspace, () => workspaceAlias)
+            .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
+            .Inner.JoinAlias(item => projectAlias!.Workspace, () => workspaceAlias)
             .Inner.JoinAlias(item => item.User, () => userAlias)
             .Where(item => item.IsArchived == false)
             .Where(
