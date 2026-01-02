@@ -47,12 +47,14 @@
                 Name="Title"
                 @bind-Value="model.Title"
                 Class="w-100"
+                @onkeydown="HandleKeyDown"
                 Placeholder="Task title"/>
             
             <FluentTextField
                 T="string"
                 Name="Title"
                 Class="w-100"
+                @onkeydown="HandleKeyDown"
                 @bind-Value="model.ExternalTaskId"
                 Placeholder="External task ID"/>
             

@@ -83,4 +83,12 @@ public partial class AddTaskModalForm
     {
         Dialog?.CloseAsync();
     }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await Submit();
+        }
+    }
 }
