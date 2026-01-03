@@ -17,4 +17,10 @@
         <InternalsVisibleTo Include="TimeTracker.Tests.Integration.Api" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

@@ -33,6 +33,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
+            RecordNotFoundException.ThrowIfNull(user);
             await _fileStorage.DeleteFile(user, request.Id);
         }
     }

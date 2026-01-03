@@ -35,17 +35,15 @@ public partial class FileStorage: IFileStorage
     private readonly IFileStorageRelationshipService _relationshipService;
     private readonly ISecurityManager _securityManager;
     private readonly IStoredFilesDao _storedFilesDao;
-    private readonly IFileStorageClient _storageClient;
+    private readonly IFileStorageGarageClient _storageClient;
     
     public FileStorage(
-        IConfiguration configuration,
         IDbSessionProvider dbSessionProvider,
         ILogger<IFileStorage> logger,
         IFileStorageRelationshipService relationshipService,
         ISecurityManager securityManager,
         IStoredFilesDao storedFilesDao,
-        IFileStorageS3Client storageS3Client,
-        IFileStorageGoogleClient storageGoogleClient
+        IFileStorageGarageClient storageGoogleClient
     )
     {
         _dbSessionProvider = dbSessionProvider;
