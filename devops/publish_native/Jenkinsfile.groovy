@@ -135,6 +135,13 @@ node('build-node') {
             envVariables.put('AWS__S3__SecretKey', PASSWORD)
         }
         envVariables.put('AWS__S3__BucketName', "timevic-${environmentKey}")
+
+        withCredentials([
+            usernamePassword(credentialsId: "timevic_${environmentKey}_garage_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
+        ]) {
+            envVariables.put('Garage__AccessKey', USER_NAME)
+            envVariables.put('Garage__SecretKey', PASSWORD)
+        }
     }
 
     stage('Build web image') {
