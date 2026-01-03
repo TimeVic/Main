@@ -69,6 +69,13 @@ node('build-node') {
                 containerEnvVars.put('AWS__S3__AccessKey', USER_NAME)
                 containerEnvVars.put('AWS__S3__SecretKey', PASSWORD)
             }
+
+            withCredentials([
+                usernamePassword(credentialsId: "timevic_testing_garage_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
+            ]) {
+                containerEnvVars.put('Garage__AccessKey', USER_NAME)
+                containerEnvVars.put('Garage__SecretKey', PASSWORD)
+            }
             
             withCredentials([string(credentialsId: "timevic_testing_aws_s3_bucket_name", variable: 'AUTH_SECRET')]) {
                 containerEnvVars.put('AWS__S3__BucketName', AUTH_SECRET)
