@@ -3,4 +3,4 @@
 echo "Start application.."
 echo "Project dir is: $PROJECT_DIR"
 cd "./$PROJECT_DIR"
-dotnet run --no-launch-profile
+dotnet run --no-launch-profile --no-build --configuration=Release --environment="$ASPNETCORE_ENVIRONMENT"
