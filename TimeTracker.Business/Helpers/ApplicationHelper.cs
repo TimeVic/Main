@@ -29,7 +29,10 @@ namespace TimeTracker.Business.Helpers
             var basePath = AssemblyUtils.GetAssemblyPath();
             return builder.SetBasePath(basePath)
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.${HostingEnvironment}.json", true)
+#if DEBUG
+                .AddJsonFile("appsettings.Debug.json", true, true)
+#endif
+                .AddJsonFile($"appsettings.{HostingEnvironment}.json", true)
                 .AddJsonFile($"appsettings.Local.json", optional: true)
                 .AddEnvironmentVariables();
         }
