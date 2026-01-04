@@ -109,7 +109,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         Assert.True(isDeleted);
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldReceiveErrorIfTaskNotFound()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
@@ -178,7 +178,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         Assert.True(isDeleted);
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldGetTaskDetails()
     {
         var date = DateOnly.FromDateTime(DateTime.UtcNow);

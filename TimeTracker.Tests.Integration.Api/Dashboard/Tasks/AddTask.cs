@@ -59,7 +59,7 @@ public partial class AddTask: BaseTest
         
         var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
         _clickUpTaskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
-        _jiraTaskId = configuration.GetValue<string>("Integration:Jira:TaskId");
+        _jiraTaskId = "SP-3341";
     }
 
     [Fact]

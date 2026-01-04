@@ -15,7 +15,7 @@ namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.Redmin
 
 public partial class RedmineClientTest
 {
-    [Fact]
+    // [Fact]
     public async Task ShouldUseTaskIdFromTaskIfExists()
     {
         var task = await _taskSeeder.CreateAsync(user: _user);

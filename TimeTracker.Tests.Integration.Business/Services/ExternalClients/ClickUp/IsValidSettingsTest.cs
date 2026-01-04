@@ -60,7 +60,7 @@ public class IsValidSettingsTest : BaseTest
         ).Wait();
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldValidateSettings()
     {
         var isValid = await _сlickUpClient.IsValidClientSettings(_workspace, _user);

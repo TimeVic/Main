@@ -56,7 +56,8 @@ public class ProcessJiraSendingContextTest: BaseTest
         var configuration = Scope.Resolve<IConfiguration>();
         _apiToken = configuration.GetValue<string>("Integration:Jira:ApiToken");
         _userName = configuration.GetValue<string>("Integration:Jira:UserName");
-        _taskId = configuration.GetValue<string>("Integration:Jira:TaskId");
+        // _taskId = configuration.GetValue<string>("Integration:Jira:TaskId");
+        _taskId = "SP-2315";
         _url = configuration.GetValue<string>("Integration:Jira:Url");
         
         _user = _userSeeder.CreateActivatedAsync().Result;

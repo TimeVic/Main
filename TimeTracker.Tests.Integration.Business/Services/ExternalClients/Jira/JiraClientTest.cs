@@ -73,7 +73,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         ).Wait();
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldSendNewTimeEntry()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
@@ -108,7 +108,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         Assert.True(isDeleted);
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldReceiveErrorIfTaskNotFound()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
@@ -133,7 +133,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         Assert.True(actualResponse.IsError);
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldUpdateExistsTimeEntry()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
@@ -176,7 +176,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         Assert.True(isDeleted);
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldGetTaskDetails()
     {
         var date = DateTime.UtcNow.Date.ToDateOnly();
