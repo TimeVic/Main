@@ -1,10 +1,8 @@
 ﻿using Api.Requests.Abstractions;
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
@@ -14,8 +12,6 @@ using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
-using TimeTracker.Business.Services.Entity;
-using TimeTracker.Business.Services.ExternalClients;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.ExternalClients.Jira;
 using TimeTracker.Business.Services.Http;
@@ -65,7 +61,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
+            RecordNotFoundException.ThrowIfNull(user);
             var taskList = await _taskListDao.GetById(request.TaskListId);
+            RecordNotFoundException.ThrowIfNull(taskList);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList.Project))
             {
                 throw new HasNoAccessException();

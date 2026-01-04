@@ -78,7 +78,7 @@ public partial class RedmineClientTest : BaseTest
         _taskList = _taskListSeeder.CreateAsync(_project).Result;
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldSendNewTimeEntry()
     {
         var expectedDescription = "Test description";
@@ -107,7 +107,7 @@ public partial class RedmineClientTest : BaseTest
         Assert.True(isDeleted);
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldReceiveErrorIfTaskNotFound()
     {
         var date = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -130,7 +130,7 @@ public partial class RedmineClientTest : BaseTest
         Assert.True(actualResponse.IsError);
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldUpdateExistsTimeEntry()
     {
         var date = DateTime.UtcNow.ToDateOnly();

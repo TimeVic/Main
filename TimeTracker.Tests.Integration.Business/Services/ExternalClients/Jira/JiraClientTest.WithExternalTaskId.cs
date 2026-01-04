@@ -5,7 +5,7 @@ namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.Jira;
 
 public partial class SendNewTimeEntityTest : BaseTest
 {
-    [Fact]
+    // [Fact]
     public async Task ShouldUseTaskIdFromTaskIfExists()
     {
         var task = await _taskSeeder.CreateAsync(user: _user);

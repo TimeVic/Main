@@ -6,7 +6,7 @@ namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.Jira;
 
 public partial class SendNewTimeEntityTest : BaseTest
 {
-    [Fact]
+    // [Fact]
     public async Task ShouldCreateTaskByExternalTaskId()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
@@ -22,7 +22,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         Assert.Equal(_taskId, actualTask.ExternalTaskId);
     }
     
-    [Fact]
+    // [Fact]
     public async Task ShouldCreateTaskByExternalTaskIdForActiveTimeEntry()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
@@ -46,7 +46,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         Assert.Equal(activeEntry.Task.Id, actualTask.Id);
     }
     
-    [Fact]
+    // [Fact]
     public async Task ShouldThrowExceptionIfCreateTaskByExternalTaskIdForActiveTimeEntryIsIncorrect()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);

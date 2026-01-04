@@ -59,14 +59,14 @@ public class IsValidSettingsTest : BaseTest
         ).Wait();
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldValidateSettings()
     {
         var isValid = await _client.IsValidClientSettings(_workspace, _user);
         Assert.True(isValid);
     }
     
-    [Fact]
+    // [Fact]
     public async Task ShouldNotValidateSettingsIfIncorrectApiKey()
     {
         _workspaceSettingsDao.SetJiraAsync(

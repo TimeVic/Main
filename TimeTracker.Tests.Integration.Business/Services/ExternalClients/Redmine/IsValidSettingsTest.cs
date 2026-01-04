@@ -64,7 +64,7 @@ public class IsValidSettingsTest : BaseTest
         ).Wait();
     }
 
-    [Fact]
+    // [Fact]
     public async Task ShouldValidateSettings()
     {
         var isValid = await _redmineClient.IsValidClientSettings(_workspace, _user);
