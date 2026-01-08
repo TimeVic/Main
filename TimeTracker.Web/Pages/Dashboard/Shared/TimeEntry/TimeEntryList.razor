@@ -18,6 +18,7 @@
                 Items="@groupedItem.AsQueryable()"
                 RowSize="DataGridRowSize.Medium"
                 OnRowClick="@(itemEntry => OnEditClick(itemEntry.Item!))"
+                
                 ShowHover="true">
                 @if (IsFilteredList)
                 {
@@ -91,12 +92,15 @@
                     Sortable="false">
                     <FluentButton
                         IconStart="@(new Icons.Regular.Size20.Copy())"
+                        StopPropagation="true"
                         OnClick="@(() => OnStartCloned(context))"/>
                     <FluentButton
                         IconStart="@(new Icons.Regular.Size20.Edit())"
+                        StopPropagation="true"
                         OnClick="@(() => OnEditClick(context))"/>
                     <FluentButton
                         IconStart="@(new Icons.Regular.Size20.Delete())"
+                        StopPropagation="true"
                         OnClick="@(() => OnDeleteItemAsync(context))"/>
                 </TemplateColumn>
             </FluentDataGrid>
