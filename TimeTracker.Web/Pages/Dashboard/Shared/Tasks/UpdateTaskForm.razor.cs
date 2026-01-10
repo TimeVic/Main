@@ -5,13 +5,10 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
-using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
-using TimeTracker.Web.Store.Dashboard;
 using TimeTracker.Web.Store.Tasks;
 using TimeTracker.Web.Store.WorkspaceMemberships;
-using SetListItemAction = TimeTracker.Web.Store.Tasks.SetListItemAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 
