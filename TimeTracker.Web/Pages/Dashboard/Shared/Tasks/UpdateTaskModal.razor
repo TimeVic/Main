@@ -6,18 +6,25 @@
 @inherits BaseReactiveComponent
 
 <FluentDialogHeader ShowDismiss="true">
-    <FluentStack VerticalAlignment="VerticalAlignment.Center">
-        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
-        <FluentLabel Typo="Typography.PaneHeader">
-            @Content.Task.Title.TruncateAndAddDots(50)
-        </FluentLabel>
-        @* <FluentSpacer/> *@
-        @* <TaskIdBadge IsLink="true" InternalTask="@Content.Task"/> *@
-        <FluentSpacer/>
-        <TimeEntryForm
-            InternalTask="@Content.Task"
-            IsShort="@true"/>
-        <FluentSpacer/>
+    <FluentStack VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Vertical">
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Start">
+            <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())"/>
+            <FluentLabel Typo="Typography.PaneHeader">
+                @Content.Task.Title.TruncateAndAddDots(50)
+            </FluentLabel>
+        </FluentStack>
+        <FluentStack 
+            Orientation="Orientation.Horizontal" 
+            HorizontalAlignment="HorizontalAlignment.SpaceBetween"
+            VerticalAlignment="VerticalAlignment.Center"
+        >
+            <TaskIdBadge IsLink="false" InternalTask="@Content.Task"/>
+            <FluentSpacer/>
+            <TimeEntryForm
+                InternalTask="@Content.Task"
+                IsShort="@true"/>
+            <FluentSpacer/>
+        </FluentStack>
     </FluentStack>
 </FluentDialogHeader>
 
