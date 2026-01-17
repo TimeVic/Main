@@ -32,7 +32,21 @@ public partial class ModalDialogProviderService
     #region Confirmation Dialog
 
     public async Task<bool?> ShowDeleteConfirmationDialog(
-        string messsage = "Are you sure you want to remove this item?")
+        string message = "Are you sure you want to remove this item?"
+    )
+    {
+        return await ShowConfirmationDialog(
+            message,
+            "Delete",
+            Color.Error
+        );
+    }
+
+    public async Task<bool?> ShowConfirmationDialog(
+        string messsage,
+        string buttonText = "Accept",
+        Color buttonColor = Color.Accent
+    )
     {
         var parameters = new DialogParameters
         {
@@ -44,15 +58,15 @@ public partial class ModalDialogProviderService
             new ConfirmationDialog.Parameters
             {
                 Message = messsage,
-                ButtonColor = Color.Error,
-                ButtonText = "Delete"
+                ButtonColor = buttonColor,
+                ButtonText = buttonText
             },
             parameters
         );
         var result = await dialog.Result;
         return result.Data is bool;
     }
-
+    
     #endregion
 
     // #region Task

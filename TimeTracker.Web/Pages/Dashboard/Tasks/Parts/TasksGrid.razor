@@ -48,11 +48,27 @@
         <TemplateColumn
             Width="50px"
             Sortable="false">
-            <FluentCheckbox
-                @onclick:stopPropagation="true"
-                Label=" "
-                Value="@(IsSelectedTask(context))"
-                ValueChanged="@(() => OnSelectTask(context))"/>
+            <HeaderCellItemTemplate>
+                <FluentStack
+                    HorizontalAlignment="HorizontalAlignment.Center"
+                    VerticalAlignment="VerticalAlignment.Center"
+                    Class="ps-3"
+                    Style="height: 100%;">
+                    <FluentCheckbox
+                        @onclick:stopPropagation="true"
+                        Label=" "
+                        Value="@(IsSelectedAllTasks())"
+                        ValueChanged="@(() => OnSelectAllTasks())"/>
+                </FluentStack>
+            </HeaderCellItemTemplate>
+            <ChildContent>
+                <FluentCheckbox
+                    @onclick:stopPropagation="true"
+                    Label=" "
+                    Value="@(IsSelectedTask(context))"
+                    ValueChanged="@(() => OnSelectTask(context))"/>
+            </ChildContent>
+
         </TemplateColumn>
         <PropertyColumn
             Title="Id" Property="@(p => p.FormattedId)"
