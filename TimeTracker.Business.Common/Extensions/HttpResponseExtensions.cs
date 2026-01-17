@@ -5,17 +5,10 @@ namespace TimeTracker.Business.Common.Extensions
 {
     public static class HttpResponseExtensions
     {
-        public static async Task<T?> GetJsonDataAsync<T>(this HttpResponseMessage response)
+        public static async Task<T> GetJsonDataAsync<T>(this HttpResponseMessage response)
         {
             var stringData = await response.GetDataAsStringAsync();
-            try
-            {
-                return JsonHelper.DeserializeObject<T>(stringData, DateTimeZoneHandling.Local);
-            }
-            catch (Exception _)
-            {
-                return default;
-            }
+            return JsonHelper.DeserializeObject<T>(stringData, DateTimeZoneHandling.Local)!;
         }
         
         public static async Task<object?> GetJsonDataAsync(this HttpResponseMessage response)

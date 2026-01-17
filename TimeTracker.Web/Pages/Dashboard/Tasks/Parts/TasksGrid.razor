@@ -1,24 +1,40 @@
-﻿@using TimeTracker.Api.Shared.Dto.Entity.Task
-@using TimeTracker.Business.Extensions
+﻿@using Microsoft.FluentUI.AspNetCore.Components.Extensions
+@using TimeTracker.Api.Shared.Dto.Entity.Task
 @using TimeTracker.Web.Core.Extensions.Enums
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus
 
 @inherits BaseComponent
 
 <FluentCard class="mb-3" MinimalStyle="true">
-    <FluentLabel Typo="Typography.H3" Class="mb-2">
-        @if (Statuses.Contains(TaskStatus.Backlog))
-        {
-            <text>📄 </text> @TaskStatus.Backlog.GetDisplayName()
-        }
-        else
-        {
-            <text>📋 </text> @TaskStatus.ToDo.GetDisplayName()
-        }
-    </FluentLabel>
-    
+    <FluentStack
+        HorizontalAlignment="HorizontalAlignment.SpaceBetween"
+        VerticalAlignment="VerticalAlignment.Center"
+        Class="pb-3">
+        
+        <FluentLabel Typo="Typography.H3" Class="mb-2">
+            @if (Statuses.Contains(TaskStatus.Backlog))
+            {
+                <text>📄 </text>
+                @TaskStatus.Backlog.GetDisplayName()
+            }
+            else
+            {
+                <text>📋 </text>
+                @TaskStatus.ToDo.GetDisplayName()
+            }
+        </FluentLabel>
+
+        <FluentButton
+            Disabled="@(!_selectedTasks.Any() || _isLoading)"
+            Appearance="Appearance.Accent"
+            BackgroundColor="@Color.Warning.GetDescription()"
+            OnClick="@ArchiveTasks">
+            To Archive(@_selectedTasks.Count)
+        </FluentButton>
+    </FluentStack>
+
     <FluentDivider Style="width: 100%;" Role="@DividerRole.Presentation"></FluentDivider>
-    
+
     <FluentDataGrid
         TGridItem="TaskDto"
         Class="w-100"
@@ -29,16 +45,33 @@
         Items="@_tasks.AsQueryable()"
         ShowHover="true">
 
-        <PropertyColumn 
+        <TemplateColumn
+            Width="50px"
+            Sortable="false">
+            <FluentCheckbox
+                @onclick:stopPropagation="true"
+                Label=" "
+                Value="@(IsSelectedTask(context))"
+                ValueChanged="@(() => OnSelectTask(context))"/>
+        </TemplateColumn>
+        <PropertyColumn
             Title="Id" Property="@(p => p.FormattedId)"
             Width="100px"
             Sortable="false"/>
-        <PropertyColumn 
-            Title="Title" 
-            Property="@(p => p.Title)"
-            Sortable="false"/>
-        <PropertyColumn 
-            Title="Status" 
+        <TemplateColumn
+            Title="Title"
+            Sortable="false">
+            @if (context.IsArchived)
+            {
+                <s>@context.Title</s>
+            }
+            else
+            {
+                @context.Title
+            }
+        </TemplateColumn>
+        <PropertyColumn
+            Title="Status"
             Property="@(p => p.Status.GetDisplayName())"
             Width="100px"
             Sortable="true"/>
@@ -54,13 +87,13 @@
                 @context.Priority.GetDisplayName()
             </FluentBadge>
         </TemplateColumn>
-        <PropertyColumn 
-            Title="Description" 
+        <PropertyColumn
+            Title="Description"
             Property="@(p => p.Description)"
             Width="200px"
             Sortable="false"/>
-        <PropertyColumn 
-            Title="Assigned" 
+        <PropertyColumn
+            Title="Assigned"
             Property="@(p => p.User.Name)"
             Width="200px"
             Sortable="false"/>

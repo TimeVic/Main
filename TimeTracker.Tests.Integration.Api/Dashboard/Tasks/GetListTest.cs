@@ -213,6 +213,36 @@ public class GetListTest: BaseTest
     }
     
     [Fact]
+    public async Task ShouldFilterByIsArchivedIsNull()
+    {
+        var otherTasks = await _taskSeeder.CreateSeveralAsync(_taskList, 4);
+        foreach (var task in otherTasks)
+        {
+            task.IsArchived = false;
+            await DbSessionProvider.CurrentSession.SaveAsync(task);
+        }
+        var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, 7);
+        foreach (var task in tasks)
+        {
+            task.IsArchived = true;
+            await DbSessionProvider.CurrentSession.SaveAsync(task);
+        }
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id,
+            Filter = new GetListFilterRequest()
+            {
+                IsArchived = null
+            }
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(11, actualDto.TotalCount);
+    }
+    
+    [Fact]
     public async Task ShouldFilterBySearchStringInTitle()
     {
         var expectedCounter = 7;
