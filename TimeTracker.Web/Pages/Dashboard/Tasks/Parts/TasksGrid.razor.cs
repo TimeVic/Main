@@ -96,9 +96,27 @@ public partial class TasksGrid: IDisposable
         }
     }
     
+    private void OnSelectAllTasks()
+    {
+        if (IsSelectedAllTasks())
+        {
+            _selectedTasks.Clear();
+        }
+        else
+        {
+            _selectedTasks.Clear();
+            _selectedTasks = _selectedTasks.Concat(_tasks).ToList();
+        }
+    }
+    
     private bool IsSelectedTask(TaskDto task)
     {
         return _selectedTasks.Contains(task);
+    }
+    
+    private bool IsSelectedAllTasks()
+    {
+        return _selectedTasks.Count == _tasks.Count;
     }
     
     public void Dispose()
@@ -108,15 +126,21 @@ public partial class TasksGrid: IDisposable
         _tasksSubject.Dispose();
     }
 
-    private void ArchiveTasks()
+    private async Task ArchiveTasks()
     {
-        foreach (var selectedTask in _selectedTasks)
+        var isConfirm = await ModalDialogProviderService.ShowConfirmationDialog(
+            "Are you sure you want to archive selected items?"
+        );
+        if (isConfirm.HasValue && isConfirm.Value)
         {
-            selectedTask.IsArchived = true;
-            var updateRequest = new UpdateRequest();
-            updateRequest.Fill(selectedTask);
-            Dispatcher.Dispatch(new UpdateTaskAction(updateRequest, IsUpdateState: true));
+            foreach (var selectedTask in _selectedTasks)
+            {
+                selectedTask.IsArchived = true;
+                var updateRequest = new UpdateRequest();
+                updateRequest.Fill(selectedTask);
+                Dispatcher.Dispatch(new UpdateTaskAction(updateRequest, IsUpdateState: true));
+            }
+            _selectedTasks.Clear();    
         }
-        _selectedTasks.Clear();
     }
 }
