@@ -3,7 +3,11 @@
 
 @inherits BaseReactiveComponent
 
-<FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Start" Class="pa-2">
+<FluentStack 
+    Orientation="Orientation.Horizontal" 
+    HorizontalAlignment="HorizontalAlignment.Start" 
+    VerticalAlignment="VerticalAlignment.Center"
+    Class="pa-2">
     
     <FluentTextField
         Value="@Filter.SearchString"
@@ -15,12 +19,11 @@
         UserId="@(Filter.AssignedUserId ?? 0)"
         SelectedItemChanged="OnChangeAssignedUser"/>
 
-    @* <FluentSpacer/> *@
-    @* *@
-    @* <YesNoDropDown *@
-    @*     Placeholder="Only archived" *@
-    @*     ValueChanged="OnChangeIsArchived" *@
-    @*     Value="@Filter.IsArchived"/> *@
+    <FluentCheckbox
+        Label="Only archived"
+        ThreeState="true"
+        CheckStateChanged="OnChangeIsArchived"
+        CheckState="@Filter.IsArchived"/>
 
 </FluentStack>
 

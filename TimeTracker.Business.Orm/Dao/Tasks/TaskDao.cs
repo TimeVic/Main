@@ -153,8 +153,6 @@ public class TaskDao: ITaskDao
         {
             throw new ArgumentNullException($"{nameof(workspace)}, {nameof(taskList)}");
         }
-
-        var isArchived = filter?.IsArchived ?? false;
         
         TaskListEntity taskListAlias = null;
         ProjectEntity projectAlias = null;
@@ -164,8 +162,7 @@ public class TaskDao: ITaskDao
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
             .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
             .Inner.JoinAlias(item => projectAlias!.Workspace, () => workspaceAlias)
-            .Inner.JoinAlias(item => item.User, () => userAlias)
-            .Where(item => item.IsArchived == isArchived);
+            .Inner.JoinAlias(item => item.User, () => userAlias);
 
         if (taskList != null)
         {
@@ -178,6 +175,10 @@ public class TaskDao: ITaskDao
 
         if (filter != null)
         {
+            if (filter.IsArchived.HasValue)
+            {
+                query = query.Where(item => item.IsArchived == filter.IsArchived);
+            }
             if (filter.AssignedUserId.HasValue)
             {
                 query = query.Where(() => userAlias!.Id == filter.AssignedUserId);

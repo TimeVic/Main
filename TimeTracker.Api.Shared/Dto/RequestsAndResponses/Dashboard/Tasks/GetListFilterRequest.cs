@@ -12,8 +12,8 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         
         [StringLength(100)]
         public string? SearchString { get; set; }
-        
-        public bool? IsArchived { get; set; }
+
+        public bool? IsArchived { get; set; } = false;
         
         public TaskStatus? Status { get; set; }
 

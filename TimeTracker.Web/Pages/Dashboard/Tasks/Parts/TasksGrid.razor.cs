@@ -4,6 +4,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Tasks;
@@ -34,6 +35,7 @@ public partial class TasksGrid: IDisposable
     
     private readonly Subject<ICollection<TaskDto>> _tasksSubject = new();
     private ICollection<TaskDto> _tasks = new List<TaskDto>();
+    private ICollection<TaskDto> _selectedTasks = new List<TaskDto>();
     private bool _isLoading = true;
 
     protected override void OnInitialized()
@@ -82,10 +84,39 @@ public partial class TasksGrid: IDisposable
         await ModalDialogProviderService.ShowEditTaskModal(task);
     }
     
+    private void OnSelectTask(TaskDto task)
+    {
+        if (IsSelectedTask(task))
+        {
+            _selectedTasks.Remove(task);
+        }
+        else
+        {
+            _selectedTasks.Add(task);
+        }
+    }
+    
+    private bool IsSelectedTask(TaskDto task)
+    {
+        return _selectedTasks.Contains(task);
+    }
+    
     public void Dispose()
     {
         TasksState.StateChanged -= OnTaskStateChanged;
         ActionSubscriber.UnsubscribeFromAllActions(this);
         _tasksSubject.Dispose();
+    }
+
+    private void ArchiveTasks()
+    {
+        foreach (var selectedTask in _selectedTasks)
+        {
+            selectedTask.IsArchived = true;
+            var updateRequest = new UpdateRequest();
+            updateRequest.Fill(selectedTask);
+            Dispatcher.Dispatch(new UpdateTaskAction(updateRequest, IsUpdateState: true));
+        }
+        _selectedTasks.Clear();
     }
 }

@@ -27,25 +27,8 @@ public partial class TasksTable
         set
         {
             _selectedTasksListId = value;
-            UpdateTaskList();
         }
     }
 
     private long? _selectedTasksListId = null;
-    private TaskListDto? _selectedTasksList = null;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        _tasksListState.StateChanged += (sender, args) =>
-        {
-            UpdateTaskList();
-        };
-    }
-
-    private void UpdateTaskList()
-    {
-        _selectedTasksList = _tasksListState.Value.List.FirstOrDefault(item => item.Id == _selectedTasksListId);
-        StateHasChanged();
-    }
 }
