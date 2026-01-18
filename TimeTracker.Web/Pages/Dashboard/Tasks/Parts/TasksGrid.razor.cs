@@ -116,7 +116,7 @@ public partial class TasksGrid: IDisposable
     
     private bool IsSelectedAllTasks()
     {
-        return _selectedTasks.Count == _tasks.Count;
+        return _selectedTasks.Count != 0 && _selectedTasks.Count == _tasks.Count;
     }
     
     public void Dispose()
