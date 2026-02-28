@@ -11,6 +11,8 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "less": "^4.5.1"
+    "bootstrap": "^5.3.8",
+    "less": "^4.5.1",
+    "open-iconic": "^1.1.1"
   }
 }
