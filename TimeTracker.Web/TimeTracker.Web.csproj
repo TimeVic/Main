@@ -312,7 +312,7 @@
         <!-- Compile .less → .css -->
         <Exec Command="npm i" />
         <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
-        <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc styles/app.less wwwroot/css/app.css" />
+        <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc styles/app.less wwwroot/app.css" />
     </Target>
 
 

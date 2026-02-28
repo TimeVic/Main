@@ -14,6 +14,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY . /app
 WORKDIR /app/TimeTracker.Web
 
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \ && apt-get install -y nodejs
+
 RUN apt update
 RUN apt install -y apt-transport-https wget ca-certificates
 RUN echo "{}" > appsettings.Local.json
