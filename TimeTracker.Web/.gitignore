@@ -1,0 +1,6 @@
+package-lock.json
+node_modules
+wwwroot/app.css
+Shared/**/*.razor.css
+Pages/**/*.razor.css
+Ignore/**/*.razor.css

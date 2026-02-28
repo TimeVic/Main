@@ -69,13 +69,22 @@
       <Content Remove="Pages\Dashboard\Members\**" />
       <Content Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
       <Content Remove="Pages\Dashboard\Tag\**" />
-      <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css" />
       <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css.map" />
       <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.less" />
       <Content Include="Pages\Dashboard\Tasks\Parts\TasksTable.razor.less" />
       <Content Include="Shared\Components\Form\MarkdownEdit.razor.less" />
       <Content Include="Shared\Components\Storage\FileUploader.razor.css.map" />
       <Content Include="Shared\Components\Storage\FileUploader.razor.less" />
+      <Content Remove="Ignore\GoalsTracker\Parts\AddGoalModalForm.razor" />
+      <Content Remove="Ignore\GoalsTracker\Parts\ChangePositionModal.razor" />
+      <Content Remove="Ignore\GoalsTracker\Parts\GoalsTrackerTable.razor" />
+      <Content Remove="Ignore\GoalsTracker\Parts\UpdateGoalModalForm.razor" />
+      <Content Remove="Ignore\GoalsTracker\GoalsTrackerPage.razor" />
+      <Content Remove="Ignore\Members\Parts\**" />
+      <Content Remove="Ignore\Members\MembersPage.razor" />
+      <Content Remove="Ignore\Integrations\Parts\**" />
+      <Content Remove="Ignore\Integrations\IntegrationsPage.razor" />
+      <Content Remove="Ignore\Dashboard\Index.razor" />
     </ItemGroup>
 
     <ItemGroup>
@@ -84,9 +93,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Ignore\" />
+      <Folder Include="Ignore\Dashboard\" />
+      <Folder Include="Ignore\GoalsTracker\Parts\" />
+      <Folder Include="Ignore\Integrations\" />
+      <Folder Include="Ignore\Members\" />
       <Folder Include="Store\Dashboard\Effects\" />
       <Folder Include="wwwroot\img\logo\black" />
       <Folder Include="wwwroot\libraries\" />
+      <Folder Remove="node_modules" />
     </ItemGroup>
 
     <ItemGroup>
@@ -109,6 +124,15 @@
       <Compile Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
       <Compile Remove="Pages\Dashboard\Tag\**" />
     <Compile Remove="Pages\Dashboard\Shared\Components\Storage\FileView.razor.cs" />
+    <Compile Remove="Ignore\GoalsTracker\Parts\AddGoalModalForm.razor.cs" />
+    <Compile Remove="Ignore\GoalsTracker\Parts\ChangePositionModal.razor.cs" />
+    <Compile Remove="Ignore\GoalsTracker\Parts\GoalsTrackerTable.razor.cs" />
+    <Compile Remove="Ignore\GoalsTracker\Parts\UpdateGoalModalForm.razor.cs" />
+    <Compile Remove="Ignore\GoalsTracker\GoalsTrackerPage.razor.cs" />
+    <Compile Remove="Ignore\Members\Parts\**" />
+    <Compile Remove="Ignore\Members\MembersPage.razor.cs" />
+    <Compile Remove="Ignore\Integrations\Parts\**" />
+    <Compile Remove="Ignore\Integrations\IntegrationsPage.razor.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -119,28 +143,8 @@
       <EmbeddedResource Remove="Pages\Dashboard\Members\**" />
       <EmbeddedResource Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
       <EmbeddedResource Remove="Pages\Dashboard\Tag\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Shared\Components\Form\MarkdownEdit.razor.less" />
-      <None Remove="Shared\Components\Form\MarkdownEdit.razor.css.map" />
-      <None Remove="Shared\Components\Form\ProjectsMultipleDropDown.razor.less" />
-      <None Remove="Shared\Components\Form\ProjectsMultipleDropDown.razor.css.map" />
-      <None Remove="Shared\Components\Form\TimeInput.razor.less" />
-      <None Remove="Shared\Components\Form\TimeInput.razor.css.map" />
-      <None Remove="Shared\Components\Storage\FileUploader.razor.less" />
-      <None Remove="Shared\Components\Storage\FileUploader.razor.css.map" />
-      <None Remove="Store\GoalsTracker\**" />
-      <None Remove="Pages\Dashboard\Dashboard\**" />
-      <None Remove="Pages\Dashboard\GoalsTracker\**" />
-      <None Remove="Pages\Dashboard\Integrations\**" />
-      <None Remove="Pages\Dashboard\Members\**" />
-      <None Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
-      <None Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css" />
-      <None Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.less" />
-      <None Remove="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css.map" />
-      <None Remove="Pages\Dashboard\Tag\**" />
-      <None Remove="Shared\Components\Form\TimeInput.razor.css" />
+      <EmbeddedResource Remove="Ignore\Members\Parts\**" />
+      <EmbeddedResource Remove="Ignore\Integrations\Parts\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -283,5 +287,33 @@
       <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\ICON-LICENSE" />
       <_ContentIncludedByDefault Remove="wwwroot\css\open-iconic\README.md" />
       <_ContentIncludedByDefault Remove="wwwroot\css\radzen\fluent-base.min.css" />
+      <_ContentIncludedByDefault Remove="Ignore\Members\Parts\List\AddMemberModal.razor" />
+      <_ContentIncludedByDefault Remove="Ignore\Members\Parts\List\MembersList.razor" />
+      <_ContentIncludedByDefault Remove="Ignore\Members\Parts\MemberAccessModal.razor" />
+      <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\ClickUpSettingsForm.razor" />
+      <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\JiraSettingsForm.razor" />
+      <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\RedmineSettingsForm.razor" />
     </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Ignore\GoalsTracker\Parts\GoalsTrackerTable.razor.less" />
+      <None Remove="Ignore\Members\Parts\**" />
+      <None Remove="Ignore\Integrations\Parts\**" />
+    </ItemGroup>
+
+    <Target Name="CompileLess" BeforeTargets="Build">
+        <ItemGroup>
+            <LessFiles 
+                Include="**\*.less"
+                Exclude="node_modules\**\*.less;wwwroot\**\*.less;styles\**\*.less;Ignore\**\*.less"
+            />
+        </ItemGroup>
+
+        <!-- Compile .less → .css -->
+        <Exec Command="npm i" />
+        <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
+        <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc styles/app.less wwwroot/app.css" />
+    </Target>
+
+
 </Project>
