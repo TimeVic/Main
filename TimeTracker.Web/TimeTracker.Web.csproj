@@ -293,6 +293,7 @@
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\ClickUpSettingsForm.razor" />
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\JiraSettingsForm.razor" />
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\RedmineSettingsForm.razor" />
+      <_ContentIncludedByDefault Remove="wwwroot\libraries\radzen\fluent-base.min.css" />
     </ItemGroup>
 
     <ItemGroup>
@@ -307,12 +308,15 @@
                 Include="**\*.less"
                 Exclude="node_modules\**\*.less;wwwroot\**\*.less;styles\**\*.less;Ignore\**\*.less"
             />
+            <BootstrapFiles Include="$(ProjectDir)node_modules/bootstrap/dist/**/*.*" />
         </ItemGroup>
 
         <!-- Compile .less → .css -->
         <Exec Command="npm i" />
         <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
         <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc styles/app.less wwwroot/app.css" />
+        <Copy SourceFiles="@(BootstrapFiles)"
+              DestinationFolder="wwwroot/lib/bootstrap/%(RecursiveDir)" />
     </Target>
 
 
