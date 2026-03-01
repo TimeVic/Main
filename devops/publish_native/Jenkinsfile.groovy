@@ -28,7 +28,7 @@ def webAppContainer = new DockerContainer(
 );
 
 def repositoryUrl = scm.userRemoteConfigs[0].url;
-def gitCredentials="gitea-jenkins-access-token"
+def gitCredentials="gitea-jenkins-ssh-key"
 
 properties([
     parameters([
