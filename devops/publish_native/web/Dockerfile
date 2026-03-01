@@ -18,7 +18,7 @@ RUN apt update
 RUN apt install -y apt-transport-https wget ca-certificates curl
 
 # Install Node.js
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs npm
 RUN node -v
 RUN npm -v
 
