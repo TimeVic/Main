@@ -23,7 +23,7 @@ RUN node -v
 RUN npm -v
 
 RUN echo "{}" > appsettings.Local.json
-RUN dotnet publish --configuration=${ASPNETCORE_ENVIRONMENT} -o "/var/www" -r linux-x64 --self-contained true /p:WasmApplicationEnvironmentName=${ASPNETCORE_ENVIRONMENT} -v detailed
+RUN dotnet publish --configuration=${ASPNETCORE_ENVIRONMENT} -o "/var/www" -r linux-x64 --self-contained true /p:WasmApplicationEnvironmentName=${ASPNETCORE_ENVIRONMENT}
 RUN ls /var/www/ /var/www/wwwroot/
 
 FROM base
