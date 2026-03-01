@@ -23,12 +23,12 @@ RUN node -v
 RUN npm -v
 
 RUN echo "{}" > appsettings.Local.json
-RUN dotnet publish --configuration=${ASPNETCORE_ENVIRONMENT} -o "/var/www" -r linux-x64 --self-contained true /p:WasmApplicationEnvironmentName=${ASPNETCORE_ENVIRONMENT} -v diag
-RUN ls -a /var/www
+RUN dotnet publish --configuration=${ASPNETCORE_ENVIRONMENT} -o "/var/www" -r linux-x64 --self-contained true /p:WasmApplicationEnvironmentName=${ASPNETCORE_ENVIRONMENT} -v detailed
+RUN ls /var/www/ /var/www/wwwroot/
 
 FROM base
 WORKDIR /usr/share/nginx/html
 COPY ./devops/publish_native/web/nginx.conf /etc/nginx/nginx.conf 
 COPY --from=dot_net /var/www/ /var/www/
-RUN ls /var/www/
+RUN ls -a /var/www/ /var/www/wwwroot/
 EXPOSE 80
