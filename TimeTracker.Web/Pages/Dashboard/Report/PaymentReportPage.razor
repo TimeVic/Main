@@ -22,73 +22,75 @@
     }
     else
     {
-        <FluentStack Orientation="Orientation.Vertical">
-            @if (!_grouppedItems.Any())
-            {
-                <FluentLabel
-                    Typo="Typography.H2"
-                    class="mt-4">
-                    The report is empty
-                </FluentLabel>
-            }
-            @foreach (var groupItem in _grouppedItems)
-            {
-                var clientId = groupItem.Key ?? 0;
-                var clientDataItem = groupItem.First();
-                var clientName = clientDataItem.ClientName;
-                var clientAmount = clientDataItem.PaidAmountByClient;
-                var unpaidAmount = GetClientUnpaidAmount(clientId);
-                var totalAmount = GetClientTotalAmount(clientId);
-                var totalDuration = GetTotalDuration(clientId);
+        <FluentCard>
+            <FluentStack Orientation="Orientation.Vertical">
+                @if (!_grouppedItems.Any())
+                {
+                    <FluentLabel
+                        Typo="Typography.H2"
+                        class="mt-4">
+                        The report is empty
+                    </FluentLabel>
+                }
+                @foreach (var groupItem in _grouppedItems)
+                {
+                    var clientId = groupItem.Key ?? 0;
+                    var clientDataItem = groupItem.First();
+                    var clientName = clientDataItem.ClientName;
+                    var clientAmount = clientDataItem.PaidAmountByClient;
+                    var unpaidAmount = GetClientUnpaidAmount(clientId);
+                    var totalAmount = GetClientTotalAmount(clientId);
+                    var totalDuration = GetTotalDuration(clientId);
 
-                <FluentLabel Typo="Typography.H2">
-                    @if (string.IsNullOrEmpty(clientName))
-                    {
-                        clientName = "Other projects";
-                    }
-                    @clientName
-                </FluentLabel>
+                    <FluentLabel Typo="Typography.H2">
+                        @if (string.IsNullOrEmpty(clientName))
+                        {
+                            clientName = "Other projects";
+                        }
+                        @clientName
+                    </FluentLabel>
 
-                <FluentDataGrid
-                    TGridItem="PaymentsReportItemDto"
-                    Class="w-100"
-                    Items="@groupItem.AsQueryable()">
-                    <TemplateColumn Title="Project" Sortable="false">
-                        @(string.IsNullOrEmpty(context.ProjectName) ? "-- No project name --" : context.ProjectName)
-                    </TemplateColumn>
-                    <TemplateColumn Title="TotalDuration" Sortable="false">
-                        @context.TotalDuration.ToReadableShortString()
-                    </TemplateColumn>
-                    <TemplateColumn Title="Amount" Sortable="false">
-                        @context.Amount.ToString("0.00")
-                    </TemplateColumn>
-                    <TemplateColumn Title="Paid" Sortable="false">
-                        @context.PaidAmountByProject.ToString("0.00")
-                    </TemplateColumn>
-                </FluentDataGrid>
+                    <FluentDataGrid
+                        TGridItem="PaymentsReportItemDto"
+                        Class="w-100"
+                        Items="@groupItem.AsQueryable()">
+                        <TemplateColumn Title="Project" Sortable="false">
+                            @(string.IsNullOrEmpty(context.ProjectName) ? "-- No project name --" : context.ProjectName)
+                        </TemplateColumn>
+                        <TemplateColumn Title="TotalDuration" Sortable="false">
+                            @context.TotalDuration.ToReadableShortString()
+                        </TemplateColumn>
+                        <TemplateColumn Title="Amount" Sortable="false">
+                            @context.Amount.ToString("0.00")
+                        </TemplateColumn>
+                        <TemplateColumn Title="Paid" Sortable="false">
+                            @context.PaidAmountByProject.ToString("0.00")
+                        </TemplateColumn>
+                    </FluentDataGrid>
 
-                <FluentCard Class="mt-2">
-                    <FluentGrid>
-                        <FluentGridItem>
-                            Unpaid:
-                            <b>
-                                @((unpaidAmount > 0) ? "+" : string.Empty)@unpaidAmount.ToString("0.00")
-                            </b>
-                        </FluentGridItem>
-                        <FluentGridItem>
-                            Total: <b>@totalDuration.ToReadableShortString()</b>
-                        </FluentGridItem>
-                        <FluentGridItem>
-                            Total: <b>@totalAmount.ToString("0.00")</b>
-                        </FluentGridItem>
-                        <FluentGridItem>
-                            Total: <b>@clientAmount.ToString("0.00")</b>
-                        </FluentGridItem>
-                    </FluentGrid>
-                </FluentCard>
+                    <FluentCard Class="mt-2">
+                        <FluentGrid>
+                            <FluentGridItem>
+                                Unpaid:
+                                <b>
+                                    @((unpaidAmount > 0) ? "+" : string.Empty)@unpaidAmount.ToString("0.00")
+                                </b>
+                            </FluentGridItem>
+                            <FluentGridItem>
+                                Total: <b>@totalDuration.ToReadableShortString()</b>
+                            </FluentGridItem>
+                            <FluentGridItem>
+                                Total: <b>@totalAmount.ToString("0.00")</b>
+                            </FluentGridItem>
+                            <FluentGridItem>
+                                Total: <b>@clientAmount.ToString("0.00")</b>
+                            </FluentGridItem>
+                        </FluentGrid>
+                    </FluentCard>
 
-                <hr/>
-            }
-        </FluentStack>
+                    <hr/>
+                }
+            </FluentStack>
+        </FluentCard>
     }
 </BodyLayout>

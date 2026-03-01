@@ -13,34 +13,36 @@
         </FluentButton>
     </FluentToolbar>
 
-    <FluentDataGrid
-        TGridItem="PaymentDto"
-        class="mb-2 w-100"
-        RowSize="DataGridRowSize.Medium"
-        Loading="@_state.Value.IsListLoading"
-        Items="@_state.Value.List.AsQueryable()">
-        <PropertyColumn Title="Client" Property="@(p => p.Client.Name)" Sortable="false"/>
-        <TemplateColumn Title="Project" Sortable="false">
-            @context.Project?.Name
-        </TemplateColumn>
-        <TemplateColumn Title="Amount" Sortable="false">
-            @context.Amount.ToString("0.##")
-        </TemplateColumn>
-        <TemplateColumn Title="Payment time" Sortable="false">
-            @context.PaymentTime.ToString("d")
-        </TemplateColumn>
-        <TemplateColumn Title="Description" Sortable="false">
-            @context.Description
-        </TemplateColumn>
-        <TemplateColumn Title="" Sortable="false">
-            <FluentButton
-                IconStart="@(new Icons.Regular.Size24.Edit())"
-                Appearance="Appearance.Neutral"
-                OnClick="@(() => OnEditPayment(context))"/>
-            <FluentButton
-                IconStart="@(new Icons.Filled.Size24.Delete())"
-                Appearance="Appearance.Neutral"
-                OnClick="@(() => OnDeleteItem(context))"/>
-        </TemplateColumn>
-    </FluentDataGrid>
+    <FluentCard>
+        <FluentDataGrid
+            TGridItem="PaymentDto"
+            class="mb-2 w-100"
+            RowSize="DataGridRowSize.Medium"
+            Loading="@_state.Value.IsListLoading"
+            Items="@_state.Value.List.AsQueryable()">
+            <PropertyColumn Title="Client" Property="@(p => p.Client.Name)" Sortable="false"/>
+            <TemplateColumn Title="Project" Sortable="false">
+                @context.Project?.Name
+            </TemplateColumn>
+            <TemplateColumn Title="Amount" Sortable="false">
+                @context.Amount.ToString("0.##")
+            </TemplateColumn>
+            <TemplateColumn Title="Payment time" Sortable="false">
+                @context.PaymentTime.ToString("d")
+            </TemplateColumn>
+            <TemplateColumn Title="Description" Sortable="false">
+                @context.Description
+            </TemplateColumn>
+            <TemplateColumn Title="" Sortable="false">
+                <FluentButton
+                    IconStart="@(new Icons.Regular.Size24.Edit())"
+                    Appearance="Appearance.Neutral"
+                    OnClick="@(() => OnEditPayment(context))"/>
+                <FluentButton
+                    IconStart="@(new Icons.Filled.Size24.Delete())"
+                    Appearance="Appearance.Neutral"
+                    OnClick="@(() => OnDeleteItem(context))"/>
+            </TemplateColumn>
+        </FluentDataGrid>
+    </FluentCard>
 </FluentStack>
