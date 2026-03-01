@@ -64,6 +64,7 @@ public class RefreshJwtTokenService
 
         var jwtExpirationTime = JwtHelper.GetExpiryTimestamp(jwtToken);
         var diff = jwtExpirationTime - DateTime.UtcNow;
+        
         if (diff.TotalMinutes <= 2)
             return await RequestNewToken();
         return await GetJwt();

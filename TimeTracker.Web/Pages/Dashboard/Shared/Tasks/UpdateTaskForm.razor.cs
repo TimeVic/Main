@@ -68,6 +68,7 @@ public partial class UpdateTaskForm
 
     private void SubmitForm()
     {
+        Debug.Log("SubmitForm");
         if (!_form!.EditContext!.Validate())
         {
             return;
