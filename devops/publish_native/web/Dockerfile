@@ -18,7 +18,7 @@ RUN apt update
 RUN apt install -y apt-transport-https wget ca-certificates curl
 
 # Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \ && apt-get install -y nodejs
+RUN apt-get install -y nodejs
 
 RUN echo "{}" > appsettings.Local.json
 RUN dotnet publish --configuration=${ASPNETCORE_ENVIRONMENT} -o "/var/www" -r linux-x64 --self-contained true /p:WasmApplicationEnvironmentName=${ASPNETCORE_ENVIRONMENT}
