@@ -100,7 +100,6 @@
       <Folder Include="Ignore\Members\" />
       <Folder Include="Store\Dashboard\Effects\" />
       <Folder Include="wwwroot\img\logo\black" />
-      <Folder Include="wwwroot\libraries\" />
       <Folder Remove="node_modules" />
     </ItemGroup>
 
@@ -293,7 +292,6 @@
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\ClickUpSettingsForm.razor" />
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\JiraSettingsForm.razor" />
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\RedmineSettingsForm.razor" />
-      <_ContentIncludedByDefault Remove="wwwroot\libraries\radzen\fluent-base.min.css" />
     </ItemGroup>
 
     <ItemGroup>
