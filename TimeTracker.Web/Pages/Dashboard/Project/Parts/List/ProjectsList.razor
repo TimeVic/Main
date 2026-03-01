@@ -14,50 +14,53 @@
         </FluentButton>
     </FluentToolbar>
 
-    <FluentDataGrid
-        Class="w-100"
-        Items="@_state.Value.List.AsQueryable()"
-        RowSize="DataGridRowSize.Medium"
-        ShowHover="true">
-
-        <TemplateColumn
-            Title="Name"
-            Sortable="false">
-            @context?.Name
-        </TemplateColumn>
-
-        <TemplateColumn
-            Title="Client"
-            Sortable="false">
-            @context?.Client?.Name
-        </TemplateColumn>
-
-        <TemplateColumn
-            Title="Default Hourly Rate"
-            Sortable="false">
-            @context?.DefaultHourlyRate?.ToString("0.##")
-        </TemplateColumn>
-
-        <PropertyColumn
-            Title="Billable"
-            Sortable="false"
-            Property="arg => arg.IsBillableByDefault"/>
+    <FluentCard>
         
-        <TemplateColumn
-            Title=""
-            Sortable="false">
+        <FluentDataGrid
+            Class="w-100"
+            Items="@_state.Value.List.AsQueryable()"
+            RowSize="DataGridRowSize.Medium"
+            ShowHover="true">
 
-            <FluentButton
-                IconStart="@(new Icons.Regular.Size24.Edit())"
-                Appearance="Appearance.Lightweight"
-                Disabled="@(!AuthState.Value.IsRoleAdmin)"
-                OnClick="@(() => OnEditProject(context))"/>
+            <TemplateColumn
+                Title="Name"
+                Sortable="false">
+                @context?.Name
+            </TemplateColumn>
 
-            <FluentButton
-                IconStart="@(new Icons.Regular.Size24.Delete())"
-                Appearance="Appearance.Lightweight"
-                Disabled="@(!AuthState.Value.IsRoleAdmin)"
-                OnClick="@(() => DeleteProject(context))"/>
-        </TemplateColumn>
-    </FluentDataGrid>
+            <TemplateColumn
+                Title="Client"
+                Sortable="false">
+                @context?.Client?.Name
+            </TemplateColumn>
+
+            <TemplateColumn
+                Title="Default Hourly Rate"
+                Sortable="false">
+                @context?.DefaultHourlyRate?.ToString("0.##")
+            </TemplateColumn>
+
+            <PropertyColumn
+                Title="Billable"
+                Sortable="false"
+                Property="arg => arg.IsBillableByDefault"/>
+        
+            <TemplateColumn
+                Title=""
+                Sortable="false">
+
+                <FluentButton
+                    IconStart="@(new Icons.Regular.Size24.Edit())"
+                    Appearance="Appearance.Lightweight"
+                    Disabled="@(!AuthState.Value.IsRoleAdmin)"
+                    OnClick="@(() => OnEditProject(context))"/>
+
+                <FluentButton
+                    IconStart="@(new Icons.Regular.Size24.Delete())"
+                    Appearance="Appearance.Lightweight"
+                    Disabled="@(!AuthState.Value.IsRoleAdmin)"
+                    OnClick="@(() => DeleteProject(context))"/>
+            </TemplateColumn>
+        </FluentDataGrid>
+    </FluentCard>
 </FluentStack>

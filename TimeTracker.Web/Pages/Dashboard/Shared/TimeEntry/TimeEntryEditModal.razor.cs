@@ -88,9 +88,4 @@ public partial class TimeEntryEditModal
         Content.TimeEntry.Project = project;
         SubmitForm();
     }
-
-    private void TimeOnlyChanged(TimeOnly? obj)
-    {
-        Debug.Log(obj, obj?.ToString("HH:m:s"));
-    }
 }

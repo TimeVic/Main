@@ -60,7 +60,6 @@ public partial class Login
         }
         catch (Exception)
         {
-            Debug.Log("aaaa");
             ToastService.ShowError("Incorrect email or password");
         }
         finally

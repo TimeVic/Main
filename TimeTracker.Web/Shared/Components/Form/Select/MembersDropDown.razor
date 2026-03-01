@@ -6,6 +6,7 @@
 <div class="justify-content-start w-select @Class @(FullWidth ? "w-100" : "")">
     <FluentSelect
         TOption="WorkspaceMembershipDto?"
+        
         Label="@Label"
         Class="@SelectClass"
         Disabled="@Disabled"
@@ -14,6 +15,7 @@
         Items="@_list.ToList()"
         @bind-Value="@_selectedId"
         OptionValue="@(dto => dto?.Id.ToString())"
+        
         SelectedOptionChanged="OnValueChanged">
         <OptionTemplate>
             @context?.User.Name

@@ -12,28 +12,31 @@
         </FluentButton>
     </FluentToolbar>
 
-    <FluentDataGrid
-        TGridItem="ClientDto"
-        Class="w-100"
-        Items="@_state.Value.List.AsQueryable()"
-        RowSize="DataGridRowSize.Medium"
-        ShowHover="true">
+    <FluentCard>
+        
+        <FluentDataGrid
+            TGridItem="ClientDto"
+            Class="w-100"
+            Items="@_state.Value.List.AsQueryable()"
+            RowSize="DataGridRowSize.Medium"
+            ShowHover="true">
 
-        <TemplateColumn
-            Title="Name"
-            Sortable="false">
-            @context?.Name
-        </TemplateColumn>
+            <TemplateColumn
+                Title="Name"
+                Sortable="false">
+                @context?.Name
+            </TemplateColumn>
 
-        <TemplateColumn
-            Title=""
-            Sortable="false">
+            <TemplateColumn
+                Title=""
+                Sortable="false">
 
-            <FluentButton
-                IconStart="@(new Icons.Regular.Size24.Edit())"
-                Appearance="Appearance.Lightweight"
-                Disabled="true"
-                OnClick="@OnAdd"/>
-        </TemplateColumn>
-    </FluentDataGrid>
+                <FluentButton
+                    IconStart="@(new Icons.Regular.Size24.Edit())"
+                    Appearance="Appearance.Lightweight"
+                    Disabled="true"
+                    OnClick="@OnAdd"/>
+            </TemplateColumn>
+        </FluentDataGrid>
+    </FluentCard>
 </FluentStack>

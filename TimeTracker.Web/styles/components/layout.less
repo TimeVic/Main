@@ -1,0 +1,38 @@
+.main {
+    min-height: calc(100dvh - 86px);
+    color: var(--neutral-foreground-rest);
+    align-items: stretch !important;
+}
+
+.body-content {
+    align-self: stretch;
+    height: calc(100dvh - 86px) !important;
+    display: flex;
+}
+
+.content {
+    padding: 0.5rem 1.5rem;
+    align-self: stretch !important;
+    width: 100%;
+}
+
+footer {
+    background: var(--neutral-layer-4);
+    color: var(--neutral-foreground-rest);
+    align-items: center;
+    padding: 10px 10px;
+
+    a {
+        color: var(--neutral-foreground-rest);
+        text-decoration: none;
+
+        &:focus {
+            outline: 1px dashed;
+            outline-offset: 3px;
+        }
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
