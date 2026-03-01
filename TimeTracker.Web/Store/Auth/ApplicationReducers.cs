@@ -9,7 +9,6 @@ public class AuthReducers
     [ReducerMethod(typeof(LogoutAction))]
     public static AuthState ReduceLogoutActionActionReducer(AuthState state)
     {
-        Debug.Log("LogoutAction");
         return new AuthState();
     }
     

@@ -96,7 +96,6 @@ public partial class UpdateTaskForm
 
     private void OnTagsChanged(IEnumerable<long> selectedTagIds)
     {
-        Debug.Log("OnTagsChanged");
         _model.TagIds = selectedTagIds.ToList();
         SubmitForm();
     }
