@@ -1,8 +1,6 @@
 ﻿
 @implements IDialogContentComponent<TimeEntryEditModal.Parameters>
-@using TimeTracker.Web.Shared.Components.Form.Select
 @using TimeTracker.Web.Pages.Dashboard.Shared.Tasks
-@using TimeTracker.Web.Shared.Components.Form.TextField
 @inherits BaseComponent
 
 <FluentDialogHeader ShowDismiss="true">
@@ -11,6 +9,10 @@
         <FluentLabel Typo="Typography.PaneHeader">
             Edit time entry
         </FluentLabel>
+        @if (Content.TimeEntry.Task != null)
+        {
+            <TaskIdBadge IsLink="true" InternalTask="Content.TimeEntry.Task"/>
+        }
     </FluentStack>
 </FluentDialogHeader>
 
@@ -23,34 +25,6 @@
         <DataAnnotationsValidator />
         <FluentValidationSummary />
 
-        <FluentStack Orientation="Orientation.Horizontal">
-            <div>
-                <FluentDatePicker
-                    Label="Date"
-                    Value="@Content.TimeEntry.Date.ToDateTime(TimeOnly.MinValue)"
-                    ValueChanged="@OnDateChanged"/>
-            </div>
-
-            <div>
-                <TimeEditField
-                    Label="Start"
-                    Value="@Content.TimeEntry.StartTime"
-                    ValueChanged="@OnChangeStartTime"
-                />
-            </div>
-            <div>
-                <TimeEditField
-                    Label="End"
-                    Value="@Content.TimeEntry.EndTime"
-                    ValueChanged="@OnChangeEndTime"/>
-
-            </div>
-        </FluentStack>
-
-        <FluentLabel Typo="Typography.Body" Class="mb-3">
-            Duration: <b>@_timeParsingService.TimeSpanToTimeString(_duration, true)</b>
-        </FluentLabel>
-
         @if (Content.TimeEntry.Task == null)
         {
             <ProjectsDropDown
@@ -61,35 +35,64 @@
                 Value="@(Content.TimeEntry.Project?.Id ?? 0)"
                 SelectedItemChanged="@OnProjectChanged"/>
         }
+        
+        <FluentCard>
+            <FluentStack Orientation="Orientation.Horizontal">
+                <div>
+                    <FluentDatePicker
+                        Label="Date"
+                        Value="@Content.TimeEntry.Date.ToDateTime(TimeOnly.MinValue)"
+                        ValueChanged="@OnDateChanged"/>
+                </div>
 
-        <FluentStack Class="mb-3" Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
-            <FluentCheckbox
-                Label="Billable"
-                @bind-Value="@Content.TimeEntry.IsBillable"/>
+                <div>
+                    <TimeEditField
+                        Label="Start"
+                        Value="@Content.TimeEntry.StartTime"
+                        ValueChanged="@OnChangeStartTime"
+                    />
+                </div>
+                <div>
+                    <TimeEditField
+                        Label="End"
+                        Value="@Content.TimeEntry.EndTime"
+                        ValueChanged="@OnChangeEndTime"/>
 
-            <FluentNumberField
-                Label="Hourly Rate"
-                Required="@Content.TimeEntry.IsBillable"
-                @bind-Value="@(Content.TimeEntry.HourlyRate)"
-                Disabled="@(!Content.TimeEntry.IsBillable)"
-                Step=".01M"
-                Min="0.0M"/>
+                </div>
+            </FluentStack>
 
-            @if (Content.TimeEntry.Task != null)
-            {
-                <TaskIdBadge IsLink="true" InternalTask="Content.TimeEntry.Task"/>
-            }
-        </FluentStack>
+            <FluentLabel Typo="Typography.Body" Class="mb-3">
+                Duration: <b>@_timeParsingService.TimeSpanToTimeString(_duration, true)</b>
+            </FluentLabel>
+        </FluentCard>
 
-        <FluentTextArea
-            AriaLabel="Description"
-            Value="@Content.TimeEntry.Description"
-            ValueChanged="OnChangeDescription"
-            Label="Description"
-            Class="mb-3 w-100"
-            Maxlength="500"
-            Rows="5">
-        </FluentTextArea>
+        <FluentCard Class="mt-3 mb-3">
+            <FluentLabel Typo="Typography.Subject">Description</FluentLabel>
+            <FluentTextArea
+                Value="@Content.TimeEntry.Description"
+                ValueChanged="OnChangeDescription"
+                Class="mb-3 w-100"
+                Maxlength="500"
+                Rows="5">
+            </FluentTextArea>
+        </FluentCard>
+
+        <FluentCard Class="mt-3">
+            <FluentLabel Typo="Typography.Subject">Pricing</FluentLabel>
+            <FluentStack Class="mb-3" Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
+                <FluentCheckbox
+                    Label="Billable"
+                    @bind-Value="@Content.TimeEntry.IsBillable"/>
+
+                <FluentNumberField
+                    Label="Hourly Rate"
+                    Required="@Content.TimeEntry.IsBillable"
+                    @bind-Value="@(Content.TimeEntry.HourlyRate)"
+                    Disabled="@(!Content.TimeEntry.IsBillable)"
+                    Step=".01M"
+                    Min="0.0M"/>
+            </FluentStack>
+        </FluentCard>
 
     </EditForm>
 </FluentDialogBody>
@@ -97,6 +100,6 @@
 @* Footer *@
 <FluentDialogFooter>
     <FluentButton
-        Appearance="Appearance.Neutral"
+        Appearance="Appearance.Accent"
         OnClick="@OnCloseModal">OK</FluentButton>
 </FluentDialogFooter>
