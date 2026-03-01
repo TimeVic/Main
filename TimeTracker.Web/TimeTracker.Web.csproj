@@ -101,6 +101,7 @@
       <Folder Include="Store\Dashboard\Effects\" />
       <Folder Include="wwwroot\img\logo\black" />
       <Folder Remove="node_modules" />
+      <Folder Include="wwwroot\lib\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -300,7 +301,7 @@
       <None Remove="Ignore\Integrations\Parts\**" />
     </ItemGroup>
 
-    <Target Name="CompileLess" BeforeTargets="Build">
+    <Target Name="CompileLess" BeforeTargets="Build;Publish">
         <ItemGroup>
             <LessFiles 
                 Include="**\*.less"
