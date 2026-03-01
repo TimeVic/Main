@@ -14,6 +14,14 @@ ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 ENV ASPNETCORE_URLS=http://+:80  
 EXPOSE 80
 
+RUN apt update
+RUN apt install -y apt-transport-https wget ca-certificates curl
+
+# Install Node.js
+RUN apt-get install -y nodejs npm
+RUN node -v
+RUN npm -v
+
 RUN echo "{}" > appsettings.Local.json
 RUN echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json
 RUN echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json
