@@ -301,7 +301,7 @@
       <None Remove="Ignore\Integrations\Parts\**" />
     </ItemGroup>
 
-    <Target Name="CompileLess" BeforeTargets="Build;Publish">
+    <Target Name="CompileLess" BeforeTargets="Build;PrepareForPublish">
         <ItemGroup>
             <LessFiles 
                 Include="**\*.less"
