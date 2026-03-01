@@ -157,7 +157,24 @@ node('build-node') {
         }
         dockerHelper.buildAndSave(mainContainer, imageCommonTmpName)
     }
-    
+
+    if (params.NEW_VERSION) {
+        stage('Create GIT tag') {
+            def (VER_MAJOR, VER_MINOR, VER_PATCH, VER_BUILD) = params.NEW_VERSION.tokenize('.').collect { it.toInteger() }
+            env.VERSION_INCREMENT = VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH + "." + VER_BUILD
+
+            withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
+                sh '''
+                    git config core.sshCommand 'ssh -i ${key}'
+                    git config user.email "lampego@gmail.com"
+                    git config user.name "lampego"
+                    git tag "${VERSION_INCREMENT}"
+                    git push --tags
+                '''
+            }
+        }
+    }
+
     stage("Clean workspace") {
         cleanWs()
     }
@@ -227,23 +244,6 @@ node('web-node') {
             webAppContainer.port = '8216:80';
         }
         dockerHelper.runContainer(webAppContainer)
-    }   
-
-    if (params.NEW_VERSION) {
-        stage('Create GIT tag') {
-            def (VER_MAJOR, VER_MINOR, VER_PATCH, VER_BUILD) = params.NEW_VERSION.tokenize('.').collect { it.toInteger() }
-            env.VERSION_INCREMENT = VER_MAJOR + "." + VER_MINOR + "." + VER_PATCH + "." + VER_BUILD
-
-            withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
-                sh '''
-                    git config core.sshCommand 'ssh -i ${key}'
-                    git config user.email "lampego@gmail.com"
-                    git config user.name "lampego"
-                    git tag "${VERSION_INCREMENT}"
-                    git push --tags
-                '''
-            }
-        }
     }
     
 //     stage('CleanUp') {
