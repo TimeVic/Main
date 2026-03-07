@@ -39,7 +39,7 @@ public partial class WorkspaceMenu
         _workspaceInitialization.ChangeWorkspace(workspace);
     }
     
-    private void NavigateToEditWorkspaces()
+    private void OnManageWorkspaces()
     {
         NavigationManager.NavigateTo(SiteUrl.Workspace_List);
     }
