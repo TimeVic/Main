@@ -1,9 +1,11 @@
 ﻿using Autofac;
+using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 using TimeTracker.Api.Di.Autofac.Modules;
 using TimeTracker.Api.Middleware;
 using TimeTracker.Business;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Mvc.Middleware;
 
 namespace TimeTracker.Api;
 
@@ -26,8 +28,16 @@ public class Startup
         var assembly = typeof(ApiAssemblyMarker).Assembly;
         services.AddCors();
         services.AddAutoMapper(cfg => {}, assembly);
+        
+        services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        });
         services.InitControllers(assembly);
         services.InitApiAuthServices(Configuration);
+        
+        // Disable X-Frame headers
+        services.AddAntiforgery(o => o.SuppressXFrameOptionsHeader = true);
     }
 
     public virtual void ConfigureContainer(ContainerBuilder containerBuilder)
@@ -51,7 +61,7 @@ public class Startup
             app.UseMiddleware<RequestResponseLoggerMiddleware>();
         }
 
-        app.UseAuthentication();
+        app.UseForwardedHeaders();
         app.UseRouting();
         app.UseCors(x => x
             .AllowAnyMethod()
@@ -59,7 +69,12 @@ public class Startup
             .SetIsOriginAllowed(origin => true) // allow any origin
             .AllowCredentials()
         );
+        
+        app.UseMiddleware<CommitPerformerMiddleware>();
+
+        app.UseAuthentication();
         app.UseAuthorization();
+        
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }

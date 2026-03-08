@@ -17,7 +17,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
     public class GetFilteredListRequestHandler : IAsyncRequestHandler<GetFilteredListRequest, GetFilteredListResponse>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ITimeEntryDao _timeEntryDao;
         private readonly ISecurityManager _securityManager;
@@ -25,7 +25,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 
         public GetFilteredListRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ITimeEntryDao timeEntryDao,
             ISecurityManager securityManager,
@@ -33,7 +33,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _timeEntryDao = timeEntryDao;
             _securityManager = securityManager;
@@ -42,7 +42,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
     
         public async Task<GetFilteredListResponse> ExecuteAsync(GetFilteredListRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))

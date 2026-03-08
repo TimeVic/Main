@@ -22,7 +22,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     public class AddRequestHandler : IAsyncRequestHandler<AddRequest, TaskDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IDbSessionProvider _sessionProvider;
         private readonly ISecurityManager _securityManager;
@@ -34,7 +34,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 
         public AddRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IDbSessionProvider sessionProvider,
             ISecurityManager securityManager,
@@ -46,7 +46,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _sessionProvider = sessionProvider;
             _securityManager = securityManager;
@@ -59,7 +59,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     
         public async Task<TaskDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             RecordNotFoundException.ThrowIfNull(user);
             var taskList = await _taskListDao.GetById(request.TaskListId);
@@ -113,8 +113,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                     }
                 }
             }
-            await _sessionProvider.PerformCommitAsync();
-            
             return _mapper.Map<TaskDto>(task);
         }
 

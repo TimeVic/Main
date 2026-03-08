@@ -15,8 +15,6 @@ public class WorkspaceSettingsClickUpMapping: BaseGuidMappings<WorkspaceSettings
         Map(x => x.IsFillTimeEntryWithTaskDetails);
         Map(x => x.IsActive);
         Map(x => x.TeamId);
-        Map(x => x.TeamId);
-        Map(x => x.TeamId);
         
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();

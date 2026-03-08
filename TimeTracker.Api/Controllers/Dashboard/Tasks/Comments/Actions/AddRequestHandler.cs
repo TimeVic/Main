@@ -22,7 +22,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
     public class AddRequestHandler : IAsyncRequestHandler<AddRequest, TaskCommentDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ITaskDao _taskDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -32,7 +32,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
 
         public AddRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ITaskDao taskDao,
             IDbSessionProvider sessionProvider,
@@ -42,7 +42,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _taskDao = taskDao;
             _sessionProvider = sessionProvider;
@@ -53,7 +53,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
     
         public async Task<TaskCommentDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var task = await _taskDao.GetById(request.TaskId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, task))
@@ -80,7 +80,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
                 request.Comment,
                 watchers
             );
-            await _sessionProvider.PerformCommitAsync();
             await SendNotification(taskComment);
             return _mapper.Map<TaskCommentDto>(taskComment);
         }

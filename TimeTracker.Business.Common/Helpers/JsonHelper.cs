@@ -31,4 +31,12 @@ public static class JsonHelper
             DateTimeZoneHandling = dateTimeZoneHandling ?? DateTimeZoneHandling.Utc
         });
     }
+    
+    public static object? DeserializeObject(string value, Type type, DateTimeZoneHandling? dateTimeZoneHandling = null)
+    {
+        return JsonConvert.DeserializeObject(value, type, new JsonSerializerSettings()
+        {
+            DateTimeZoneHandling = dateTimeZoneHandling ?? DateTimeZoneHandling.Utc
+        });
+    }
 }

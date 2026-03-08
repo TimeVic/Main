@@ -2,8 +2,10 @@
 
 namespace TimeTracker.Business.Services.Http;
 
-public interface IRequestService: IDomainService
+public interface IApiRequestService: IDomainService
 {
     string GetApiToken();
     Guid GetUserIdFromJwt();
+    
+    string? GetRequestUrl();
 }

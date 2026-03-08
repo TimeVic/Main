@@ -1,5 +1,6 @@
 ﻿using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Extensions;
+using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
@@ -12,16 +13,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments;
 [ApiController]
 [Authorize]
 [Route("/dashboard/[controller]")]
-public class PaymentController : MainApiControllerBase
+public class PaymentController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
-    public PaymentController(
-        IAsyncRequestBuilder asyncRequestBuilder, 
-        IDbSessionProvider commitPerformer,
-        ILogger<PaymentController> logger
-    ) : base(asyncRequestBuilder, commitPerformer, logger)
-    {
-    }
-
     [HttpPost("add")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

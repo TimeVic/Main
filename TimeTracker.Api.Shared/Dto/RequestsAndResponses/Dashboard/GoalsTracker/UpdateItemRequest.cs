@@ -9,7 +9,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker
     public class UpdateItemRequest : IRequest<GoalsTrackerItemDto>
     {
         [Required]
-        [IsPositive]
         public Guid GoalsTrackerItemId { get; set; }
         
         [IsPositive]

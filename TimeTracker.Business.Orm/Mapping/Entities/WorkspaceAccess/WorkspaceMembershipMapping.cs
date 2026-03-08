@@ -11,7 +11,9 @@ public class WorkspaceMembershipMapping: BaseGuidMappings<WorkspaceMembershipEnt
     {
         Table("workspace_memberships");
         
-        Map(x => x.Access).Enum<MembershipAccessType>();
+        Map(x => x.Access)
+            .Column("membership_access_type_id")
+            .Enum<MembershipAccessType>();
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         
@@ -29,7 +31,7 @@ public class WorkspaceMembershipMapping: BaseGuidMappings<WorkspaceMembershipEnt
         
         HasMany(x => x.ProjectAccesses)
             .KeyColumn("workspace_membership_id")
-            .Fetch.Join()
+            .Fetch.Select()
             .ExtraLazyLoad()
             .Cascade.AllDeleteOrphan()
             .Inverse();

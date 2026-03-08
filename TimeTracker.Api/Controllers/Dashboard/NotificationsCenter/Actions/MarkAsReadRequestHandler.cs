@@ -14,7 +14,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
 {
     public class MarkAsReadRequestHandler : IAsyncRequestHandler<MarkAsReadRequest>
     {
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly INotificationCenterService _notificationCenterService;
@@ -22,7 +22,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
         private readonly IMapper _mapper;
 
         public MarkAsReadRequestHandler(
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             INotificationCenterService notificationCenterService,
@@ -30,7 +30,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
             IMapper mapper
         )
         {
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _notificationCenterService = notificationCenterService;
@@ -40,7 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
     
         public async Task ExecuteAsync(MarkAsReadRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var notification = await _sessionProvider.CurrentSession.GetAsync<NotificationEntity>(request.NotificationId);
             await _securityManager.CheckAccess(AccessLevel.Read, user, notification);

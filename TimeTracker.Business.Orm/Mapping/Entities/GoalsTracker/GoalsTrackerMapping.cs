@@ -29,15 +29,15 @@ public class GoalsTrackerMapping: BaseGuidMappings<GoalsTrackerEntity>
         
         HasMany(x => x.Items)
             .KeyColumn("goals_tracker_id")
-            .Fetch.Join()
-            .ExtraLazyLoad()
+            .Fetch.Select()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
         
         HasMany(x => x.Notes)
             .KeyColumn("goals_tracker_id")
-            .Fetch.Join()
-            .ExtraLazyLoad()
+            .Fetch.Select()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
     }

@@ -16,21 +16,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
     public class SetCompletionRequestHandler : IAsyncRequestHandler<SetCompletionRequest, GoalsTrackerCompletionMarkerDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly IGoalsTrackerItemsDao _goalsTrackerItemsDao;
 
         public SetCompletionRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             IGoalsTrackerItemsDao goalsTrackerItemsDao
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _goalsTrackerItemsDao = goalsTrackerItemsDao;
@@ -38,7 +38,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
     
         public async Task<GoalsTrackerCompletionMarkerDto> ExecuteAsync(SetCompletionRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var goalsTrackerItem = await _goalsTrackerItemsDao.GetById(request.GoalsTrackerItemId);
             await _securityManager.CheckAccess(AccessLevel.Write, user, goalsTrackerItem?.Tracker);

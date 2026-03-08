@@ -54,7 +54,7 @@ public class DeleteTest: BaseTest
             new () { Project = _projectDao.CreateAsync(_workspace, "test 2").Result },
             new () { Project = _projectDao.CreateAsync(_workspace, "test 3").Result },
         };
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
         _membership = _workspaceAccessService.ShareAccessAsync(
             _workspace,
             _otherUser,

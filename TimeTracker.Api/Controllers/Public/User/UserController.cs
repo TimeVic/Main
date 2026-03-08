@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
 using AspNetCore.ApiControllers.Extensions;
+using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Mvc.Controllers;
@@ -13,10 +14,8 @@ namespace TimeTracker.Api.Controllers.Public.User;
 public class UserController : MainApiControllerBase
 {
     public UserController(
-        IAsyncRequestBuilder asyncRequestBuilder, 
-        IDbSessionProvider commitPerformer,
-        ILogger<UserController> logger
-    ) : base(asyncRequestBuilder, commitPerformer, logger)
+        ILifetimeScope scope
+    ) : base(scope)
     {
     }
 

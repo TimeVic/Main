@@ -32,7 +32,7 @@ public class TaskMapping: BaseGuidMappings<TaskEntity>
             .Cascade.SaveUpdate();
         
         References(x => x.TaskList)
-            .Column("user_id")
+            .Column("task_list_id")
             .Fetch.Select()
             .LazyLoad()
             .Cascade.SaveUpdate();
@@ -55,7 +55,7 @@ public class TaskMapping: BaseGuidMappings<TaskEntity>
         
         HasMany(x => x.HistoryItems)
             .KeyColumn("task_id")
-            .Fetch.Join()
+            .Fetch.Select()
             .ExtraLazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();

@@ -14,24 +14,24 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
 {
     public class DeleteHandler : IAsyncRequestHandler<DeleteRequest>
     {
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IFileStorage _fileStorage;
 
         public DeleteHandler(
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IFileStorage fileStorage
         )
         {
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _fileStorage = fileStorage;
         }
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             RecordNotFoundException.ThrowIfNull(user);
             await _fileStorage.DeleteFile(user, request.Id);

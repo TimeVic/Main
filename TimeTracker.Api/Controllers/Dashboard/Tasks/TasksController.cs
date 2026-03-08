@@ -1,5 +1,6 @@
 ﻿using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Extensions;
+using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
@@ -13,16 +14,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks;
 [ApiController]
 [Authorize]
 [Route("/dashboard/tasks")]
-public class TasksController : MainApiControllerBase
+public class TasksController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
-    public TasksController(
-        IAsyncRequestBuilder asyncRequestBuilder, 
-        IDbSessionProvider commitPerformer,
-        ILogger<TasksController> logger
-    ) : base(asyncRequestBuilder, commitPerformer, logger)
-    {
-    }
-
     [HttpPost("add")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

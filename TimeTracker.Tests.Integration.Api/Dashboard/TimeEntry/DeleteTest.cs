@@ -82,7 +82,7 @@ public class DeleteTest: BaseTest
             true
         ).Result;
         clickUpSettings.IsActive = true;
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
         
         _queueDao.CompleteAllPending().Wait();
         _clickUpClient.Reset();
@@ -122,7 +122,7 @@ public class DeleteTest: BaseTest
     public async Task ShouldDeleteOldEntry()
     {
         var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user)).First();
-        await CommitDbChanges();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new DeleteRequest()
         {
             TimeEntryId = expectedEntry.Id

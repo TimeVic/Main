@@ -5,6 +5,6 @@ namespace Persistence.Transactions.Behaviors
 {
     public interface IExpectCommit
     {
-        Task PerformCommitAsync(CancellationToken cancellationToken = default);
+        Task PerformCommitAsync(bool isCloseConnection = true, CancellationToken cancellationToken = default);
     }
 }

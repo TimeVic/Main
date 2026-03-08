@@ -32,4 +32,6 @@ public interface IQueueDao: IScopedDomainService, IDisposable
     void Flush();
 
     Task UpdateProcessAtForPending();
+    
+    void Clear();
 }

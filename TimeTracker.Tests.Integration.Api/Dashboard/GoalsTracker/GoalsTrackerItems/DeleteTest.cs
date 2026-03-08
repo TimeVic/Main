@@ -60,8 +60,9 @@ public class DeleteTest: BaseTest
         });
         
         // Assert
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
+        await FlushDbChanges(true);
         var actualItem = await DbSessionProvider.CurrentSession.GetAsync<GoalsTrackerItemEntity>(_trackerItem.Id);
         Assert.True(actualItem.IsArchived);
     }

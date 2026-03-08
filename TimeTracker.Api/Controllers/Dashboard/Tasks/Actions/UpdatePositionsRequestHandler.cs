@@ -17,21 +17,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 {
     public class UpdatePositionsRequestHandler : IAsyncRequestHandler<UpdatePositionsRequest>
     {
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly ITaskListDao _taskListDao;
         private readonly ITaskDao _taskDao;
 
         public UpdatePositionsRequestHandler(
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             ITaskListDao taskListDao,
             ITaskDao taskDao
         )
         {
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _taskListDao = taskListDao;
@@ -40,7 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     
         public async Task ExecuteAsync(UpdatePositionsRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             
             var taskList = await _taskListDao.GetById(request.TaskListId);

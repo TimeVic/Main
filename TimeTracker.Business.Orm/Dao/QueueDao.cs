@@ -79,10 +79,10 @@ public class QueueDao: IQueueDao
                 .SetParameter("channel", channel ?? QueueChannel.Default)
                 .SetFlushMode(FlushMode.Always)
                 .SetResultTransformer(new RootEntityResultTransformer())
-                .ListAsync<QueueEntity>();
+                .ListAsync<QueueEntity>(cancellationToken);
             var entity = result?.FirstOrDefault();
             if (entity != null)
-                await _session.RefreshAsync(entity);
+                await _session.RefreshAsync(entity, cancellationToken);
             return entity;
         }
         catch (Exception e)
@@ -133,10 +133,18 @@ public class QueueDao: IQueueDao
 
     }
     
+    public void Clear()
+    {
+        _session.Clear();
+    }
+    
     public void Dispose()
     {
         Flush();
-        _session.Dispose();
+        if (_session.IsOpen)
+        {
+            _session.Dispose();
+        }
     }
     
     public void Flush()

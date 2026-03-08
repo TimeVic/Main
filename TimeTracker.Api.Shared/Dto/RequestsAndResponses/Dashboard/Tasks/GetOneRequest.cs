@@ -9,7 +9,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
     public class GetOneRequest : IRequest<TaskDto>
     {   
         [Required]
-        [IsPositive]
         public Guid TaskId { get; set; }
     }
 }

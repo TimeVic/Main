@@ -11,10 +11,8 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment
         public Guid WorkspaceId { get; set; }
         
         [Required]
-        [IsPositive(ErrorMessage = "Client is required")]
         public Guid ClientId { get; set; }
         
-        [IsPositive(AllowZero = true)]
         public Guid ProjectId { get; set; }
         
         [Required]

@@ -1,18 +1,13 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using Autofac;
 using Domain.Abstractions;
 using Microsoft.Extensions.Logging;
 using Notification.Abstractions;
+using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Helpers;
-using TimeTracker.Business.Notifications;
-using TimeTracker.Business.Notifications.Senders;
-using TimeTracker.Business.Notifications.Senders.Tasks;
-using TimeTracker.Business.Notifications.Senders.Tasks.Comments;
-using TimeTracker.Business.Notifications.Senders.TimeEntry;
-using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Services.Queue.Handlers;
 
 namespace TimeTracker.Business.Services.Queue;
 
@@ -20,20 +15,25 @@ public partial class QueueService: IQueueService
 {
     private readonly IQueueDao _queueDao;
     private readonly ILogger<QueueService> _logger;
-    private readonly IAsyncNotificationBuilder _notificationBuilder;
     private readonly ILifetimeScope _scope;
+    private readonly IDbSessionProvider _dbSessionProvider;
+    private readonly IEnumerable<Type> _queueItemAssemblyTypes;
 
     public QueueService(
         IQueueDao queueDao,
         ILogger<QueueService> logger,
-        IAsyncNotificationBuilder notificationBuilder,
-        ILifetimeScope scope
+        ILifetimeScope scope,
+        IDbSessionProvider dbSessionProvider
     )
     {
         _queueDao = queueDao;
         _logger = logger;
-        _notificationBuilder = notificationBuilder;
         _scope = scope;
+        _dbSessionProvider = dbSessionProvider;
+        
+        _queueItemAssemblyTypes = AppDomain.CurrentDomain
+            .GetAssemblies()
+            .SelectMany(a => a.GetTypes());
     }
 
     public async Task PushDefaultAsync(IQueueItemContext itemContext)
@@ -51,11 +51,20 @@ public partial class QueueService: IQueueService
         await _queueDao.Push(itemContext, QueueChannel.ExternalClient);
     }
     
-    public async Task<int> ProcessAsync(QueueChannel channel, CancellationToken cancellationToken = default)
+    public async Task<int> ProcessAsync(
+        QueueChannel channel,
+        CancellationToken cancellationToken = default,
+        bool isClearSessionForEachIteration = true
+    )
     {
         var processedCounter = 0;
         while (true)
         {
+            if (isClearSessionForEachIteration)
+            {
+                _dbSessionProvider.CurrentSession.Clear();
+            }
+            
             var queueItem = await _queueDao.GetTop(channel, cancellationToken);
             if (queueItem == null)
             {
@@ -65,25 +74,8 @@ public partial class QueueService: IQueueService
             string error = null;
             try
             {
-                if (channel == QueueChannel.Default)
-                {
-                    await ProcessDefaultItem(queueItem, cancellationToken);
-                    processedCounter++;
-                } 
-                if (channel == QueueChannel.Notifications)
-                {
-                    await ProcessNotificationItem(queueItem, cancellationToken);
-                    processedCounter++;
-                } 
-                else if (channel == QueueChannel.ExternalClient)
-                {
-                    await ProcessExternalClientItem(queueItem, cancellationToken);
-                    processedCounter++;
-                }
-                else
-                {
-                    throw new Exception($"Channel handler is not exists: {channel}");
-                }
+                await HandleQueueItem(queueItem, cancellationToken);
+                await _dbSessionProvider.PerformCommitAsync(false, cancellationToken);
             }
             catch (Exception e)
             {
@@ -96,41 +88,54 @@ public partial class QueueService: IQueueService
         return processedCounter;
     }
     
-    private static Type? GetContextType(QueueEntity queueItem, Type markerType)
+    private async Task HandleQueueItem(QueueEntity queueEntity, CancellationToken cancellationToken = default)
     {
-        var activationResult = Activator.CreateInstance(
-            markerType.Assembly.GetName().Name,
-            queueItem.ContextType
-        );
-        return activationResult?.Unwrap()?.GetType();
-    }
+        var queueItemContextType = _queueItemAssemblyTypes.FirstOrDefault(t => t.FullName == queueEntity.ContextType);
+        
+        if (queueItemContextType == null)
+            throw new InvalidOperationException($"Queue item context type {queueEntity.ContextType} not found");
 
-    private static bool IsContext<TConext>(Type contextType) where TConext: IQueueItemContext
-    {
-        return contextType == typeof(TConext);
-    }
-    
-    private async Task SendNotification<TConext>(QueueEntity queueEntity, CancellationToken cancellationToken = default) where TConext: INotificationItemContext
-    {
-        var context = JsonHelper.DeserializeObject<TConext>(queueEntity.ContextData);
-        if (context == null)
+        Type handlerType = typeof(IAsyncQueueHandler<>).MakeGenericType(queueItemContextType);
+
+        var contextObject = JsonHelper.DeserializeObject(queueEntity.ContextData, queueItemContextType);
+        if (contextObject == null)
         {
-            _logger.LogError("Notification context parsing error: {Type}", typeof(TConext));
+            _logger.LogError("Notification context parsing error: {Type}", queueEntity.ContextType);
             return;
         }
-
-        await _notificationBuilder.SendAsync(context, cancellationToken);
-    }
-    
-    private async Task HandleQueueItem<TConext>(QueueEntity queueEntity, CancellationToken cancellationToken = default) where TConext: IQueueItemContext
-    {
-        var context = JsonHelper.DeserializeObject<TConext>(queueEntity.ContextData);
-        if (context == null)
+        
+        var handlerInstance = _scope.ResolveOptional(handlerType);
+        if (handlerInstance == null)
+            throw new InvalidOperationException($"Queue item context handler {queueEntity.ContextType} not found");
+        if (contextObject is IQueueItemContext queueItemContext)
         {
-            _logger.LogError("Notification context parsing error: {Type}", typeof(TConext));
-            return;
+            var handlerMethod = handlerType.GetMethod("HandleAsync", [queueItemContextType, typeof(CancellationToken)]);
+            if (handlerMethod == null)
+                throw new InvalidOperationException($"Method HandleAsync not found for {handlerType.FullName}");
+
+            try
+            {
+                await (Task)handlerMethod!.Invoke(handlerInstance, [queueItemContext, cancellationToken])!;
+            }
+            catch (TargetInvocationException tie)
+            {
+                // Unbox async/await wrapped exception to original exception
+                if (tie.InnerException != null)
+                {
+                    throw tie.InnerException;    
+                }
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        else
+        {
+            throw new Exception($"Incorrect context type for Queue item: {queueEntity.Id}");
         }
 
-        await _scope.Resolve<IAsyncQueueHandler<TConext>>().HandleAsync(context, cancellationToken);
+        await Task.CompletedTask;
     }
 }

@@ -1,10 +1,8 @@
-using NHibernate.Mapping.Attributes;
 using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Entities
 {
-    [Class(Table = "clients")]
     public class ClientEntity: AEntity
     {
         public virtual required string Name { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Extensions;
+using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
@@ -12,16 +13,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry;
 [ApiController]
 [Authorize]
 [Route("/dashboard/time-entry")]
-public class TimeEntryController : MainApiControllerBase
+public class TimeEntryController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
-    public TimeEntryController(
-        IAsyncRequestBuilder asyncRequestBuilder, 
-        IDbSessionProvider commitPerformer,
-        ILogger<TimeEntryController> logger
-    ) : base(asyncRequestBuilder, commitPerformer, logger)
-    {
-    }
-
     [HttpPost("start")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -15,7 +15,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
     public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, ProjectDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -23,7 +23,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
 
         public UpdateRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
@@ -31,7 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
@@ -40,7 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
     
         public async Task<ProjectDto> ExecuteAsync(UpdateRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
 
             var project = await _projectDao.GetById(request.ProjectId, true);

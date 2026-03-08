@@ -36,7 +36,7 @@ public partial class AddTask
         });
         response.EnsureSuccessStatusCode();
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var actualData = await response.GetJsonDataAsync<TaskDto>();
         Assert.True(actualData.TaskId > 0);
@@ -60,7 +60,7 @@ public partial class AddTask
         });
         response.EnsureSuccessStatusCode();
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var actualData = await response.GetJsonDataAsync<TaskDto>();
         Assert.True(actualData.TaskId > 0);
@@ -90,7 +90,7 @@ public partial class AddTask
         });
         response.EnsureSuccessStatusCode();
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var actualData = await response.GetJsonDataAsync<TaskDto>();
         Assert.True(actualData.TaskId > 0);

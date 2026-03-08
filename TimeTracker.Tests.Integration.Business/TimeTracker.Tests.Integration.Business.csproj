@@ -31,10 +31,11 @@
       <ProjectReference Include="..\Persistence.Transactions.Behaviors\Persistence.Transactions.Behaviors.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Testing\TimeTracker.Business.Testing.csproj" />
       <ProjectReference Include="..\TimeTracker.Business\TimeTracker.Business.csproj" />
+      <Content Include="..\Shared\appsettings.json" Link="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="appsettings.json">
+      <Content Include="appsettings.Testing.json">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

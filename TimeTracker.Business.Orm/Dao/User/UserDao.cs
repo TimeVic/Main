@@ -53,8 +53,8 @@ public class UserDao: IUserDao
             Email = email.Trim().ToLower(),
             VerificationToken = SecurityUtil.GetRandomString(32),
             VerificationTime = null,
-            PasswordHash = new byte[] {},
-            PasswordSalt = new byte[] {},
+            PasswordHash = [],
+            PasswordSalt = [],
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Timezone = TimeZoneInfo.Utc.Id

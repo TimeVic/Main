@@ -66,7 +66,7 @@ public class GetListTest: BaseTest
         var otherUser = await _userSeeder.CreateActivatedAsync();
 
         var expectWorkspaces = await _workspaceSeeder.CreateSeveralAsync(otherUser, 2);
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var workspaceWithUserAccess = expectWorkspaces.First();
         await _workspaceAccessService.ShareAccessAsync(

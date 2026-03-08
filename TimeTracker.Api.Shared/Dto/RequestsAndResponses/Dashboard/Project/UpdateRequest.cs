@@ -9,10 +9,8 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
     public class UpdateRequest : IRequest<ProjectDto>
     {
         [Required]
-        [IsPositive]
         public Guid ProjectId { get; set; }
 
-        [IsPositive(AllowZero = true)]
         public Guid ClientId { get; set; }
         
         [Required]

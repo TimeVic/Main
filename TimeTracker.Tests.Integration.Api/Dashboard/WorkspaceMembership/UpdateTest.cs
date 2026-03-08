@@ -151,7 +151,7 @@ public class UpdateTest: BaseTest
     {
         var expectAccess = MembershipAccessType.User;
     
-        await CommitDbChanges();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             MembershipId = _membership.Id,
@@ -198,7 +198,7 @@ public class UpdateTest: BaseTest
     {
         var anotherProject = await _projectDao.CreateAsync(_otherWorkspace, "other 1");
         var anotherProject2 = await _projectDao.CreateAsync(_otherWorkspace, "other 1");
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var expectAccess = MembershipAccessType.User;
         

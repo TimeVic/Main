@@ -11,19 +11,19 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
 {
     public class ChangePositionsRequestHandler : IAsyncRequestHandler<ChangePositionsRequest>
     {
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly IGoalsTrackerDao _goalsTrackerDao;
 
         public ChangePositionsRequestHandler(
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             IGoalsTrackerDao goalsTrackerDao
         )
         {
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _goalsTrackerDao = goalsTrackerDao;
@@ -31,7 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
     
         public async Task ExecuteAsync(ChangePositionsRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (workspace == null)

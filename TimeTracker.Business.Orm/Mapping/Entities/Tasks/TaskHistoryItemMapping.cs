@@ -24,7 +24,6 @@ public class TaskHistoryItemMapping: BaseGuidMappings<TaskHistoryItemEntity>
         Map(x => x.ExternalTaskId);
         Map(x => x.IsNotified);
         Map(x => x.IsNewTask);
-        Map(x => x.ExternalTaskId);
         Map(x => x.CreatedAt).DateTime();
         
         References(x => x.User)

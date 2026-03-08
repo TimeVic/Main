@@ -16,7 +16,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
     public class AddRequestHandler : IAsyncRequestHandler<AddRequest, TagDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -25,7 +25,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
 
         public AddRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
@@ -34,7 +34,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
@@ -44,7 +44,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
     
         public async Task<TagDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
@@ -56,8 +56,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
                 request.Name,
                 request.Color != null ? ColorTranslator.FromHtml(request.Color) : null
             );
-            await _sessionProvider.PerformCommitAsync();
-            
             return _mapper.Map<TagDto>(tag);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Extensions;
+using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
@@ -12,16 +13,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments;
 [ApiController]
 [Authorize]
 [Route("/dashboard/tasks/comment")]
-public class TaskCommentsController : MainApiControllerBase
+public class TaskCommentsController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
-    public TaskCommentsController(
-        IAsyncRequestBuilder asyncRequestBuilder, 
-        IDbSessionProvider commitPerformer,
-        ILogger<TaskCommentsController> logger
-    ) : base(asyncRequestBuilder, commitPerformer, logger)
-    {
-    }
-
     [HttpPost("add")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -73,7 +73,7 @@ public class CreateTest: BaseTest
             Name = expectedItem.Name,
             NumberOfTimes = expectedItem.NumberOfTimes
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         // Assert
         var actualItem = await response.GetJsonDataAsync<GoalsTrackerItemDto>();
@@ -81,6 +81,7 @@ public class CreateTest: BaseTest
         Assert.Equal(expectedItem.Name, actualItem.Name);
         Assert.Equal(expectedItem.NumberOfTimes, actualItem.NumberOfTimes);
 
+        await FlushDbChanges(true);
         var actualTracker = await DbSessionProvider.CurrentSession.GetAsync<GoalsTrackerEntity>(_tracker.Id);
         Assert.Single(actualTracker.Items);
         Assert.Contains(actualTracker.Items, item => item.Id == actualItem.Id);

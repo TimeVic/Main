@@ -14,21 +14,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
 {
     public class DeleteRequestHandler : IAsyncRequestHandler<DeleteRequest>
     {
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IDbSessionProvider _sessionProvider;
         private readonly IPaymentDao _paymentDao;
         private readonly ISecurityManager _securityManager;
 
         public DeleteRequestHandler(
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IDbSessionProvider sessionProvider,
             IPaymentDao paymentDao,
             ISecurityManager securityManager
         )
         {
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _sessionProvider = sessionProvider;
             _paymentDao = paymentDao;
@@ -37,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var payment = await _paymentDao.GetById(request.PaymentId);
             if (

@@ -84,6 +84,7 @@ public class SetCompletionTest: BaseTest
         Assert.Equal(expectedDayOfMonth, actualMarker.DayOfMonth);
         Assert.True(actualMarker.IsChecked);
 
+        await FlushDbChanges(true);
         var actualItem = await DbSessionProvider.CurrentSession.GetAsync<GoalsTrackerItemEntity>(_trackerItem.Id);
         Assert.Single(actualItem.CompletionMarkers);
     }
@@ -110,6 +111,7 @@ public class SetCompletionTest: BaseTest
         Assert.Equal(expectedDayOfMonth, actualMarker.DayOfMonth);
         Assert.True(actualMarker.IsChecked);
 
+        await FlushDbChanges(true);
         var actualItem = await DbSessionProvider.CurrentSession.GetAsync<GoalsTrackerItemEntity>(_trackerItem.Id);
         Assert.Equal(2, actualItem.CompletionMarkers.Count);
     }
@@ -140,6 +142,7 @@ public class SetCompletionTest: BaseTest
         Assert.Equal(expectedDayOfMonth, actualMarker.DayOfMonth);
         Assert.False(actualMarker.IsChecked);
 
+        await FlushDbChanges(true);
         actualItem = await DbSessionProvider.CurrentSession.GetAsync<GoalsTrackerItemEntity>(_trackerItem.Id);
         Assert.Single(actualItem.CompletionMarkers);
         Assert.False(actualItem.CompletionMarkers.First().IsChecked);

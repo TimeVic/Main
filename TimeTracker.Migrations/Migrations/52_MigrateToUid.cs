@@ -8,7 +8,7 @@ namespace TimeTracker.Migrations.Migrations
     {
         public override void Up()
         {
-            ExecuteScriptByName("");
+            ExecuteScriptByName("52_MigrateToUid");
             
             base.Up();
         }

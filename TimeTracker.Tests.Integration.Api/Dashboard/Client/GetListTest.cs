@@ -48,7 +48,7 @@ public class GetListTest: BaseTest
             WorkspaceId = _defaultWorkspace.Id,
             Page = 1
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(expectedCounter, actualDto.TotalCount);

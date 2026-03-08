@@ -1,61 +1,50 @@
-﻿using System.Net;
-using System.Security.Authentication;
-using Api.Requests.Abstractions;
+﻿using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Abstractions;
 using Autofac;
-using Domain.Abstractions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Dto;
 
 namespace TimeTracker.Business.Mvc.Controllers;
 
 public class MainApiControllerBase: ApiControllerBase
 {
     protected readonly ILogger<MainApiControllerBase> Logger;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public MainApiControllerBase(
-        IAsyncRequestBuilder asyncRequestBuilder, 
-        IDbSessionProvider commitPerformer,
-        ILogger<MainApiControllerBase> logger
-    ) : base(asyncRequestBuilder, commitPerformer)
-    {
-        Logger = logger;
-    }
-    
     public MainApiControllerBase(ILifetimeScope scope) : base(
         scope.Resolve<IAsyncRequestBuilder>()
     )
     {
         Logger = scope.Resolve<ILogger<MainApiControllerBase>>();
+        _httpContextAccessor = scope.Resolve<IHttpContextAccessor>();
     }
-        
-    public override Func<Exception, IActionResult> Fail => ProcessFail;
 
-    private IActionResult ProcessFail(Exception exception)
+    public override Func<IActionResult> Success => () =>
     {
-        var response = new BadResponseModel();
-        var statusCode = (int) HttpStatusCode.BadRequest;
-        if (exception is AuthenticationException)
+        var httpResponse = _httpContextAccessor.HttpContext?.Response;
+        if (httpResponse != null)
         {
-            response.Type = exception.GetType().Name;
-            response.Message = "User not authorized exception";
-            statusCode = (int)HttpStatusCode.Unauthorized;
+            // If Redirect was completed in action
+            if (httpResponse.StatusCode is StatusCodes.Status302Found)
+            {
+                var redirectUrl = httpResponse.Headers.Location!.FirstOrDefault();
+                if (string.IsNullOrEmpty(redirectUrl))
+                    throw new Exception("Redirect URL was not configured but status code yes");
+                return Redirect(redirectUrl);
+            }
+            if (httpResponse.StatusCode is StatusCodes.Status301MovedPermanently)
+            {
+                var redirectUrl = httpResponse.Headers.Location!.FirstOrDefault();
+                if (string.IsNullOrEmpty(redirectUrl))
+                    throw new Exception("Redirect URL was not configured but status code yes");
+                return RedirectPermanent(redirectUrl);
+            }
         }
-        else if (exception is IDomainException)
-        {
-            response.Type = exception.GetType().Name;
-            response.Message = exception.Message;
-        }
-        else
-        {
-            Logger.LogError(exception, exception.Message);
-            statusCode = (int)HttpStatusCode.InternalServerError;
-            response.Message = "Server error";
-        }
-            
-        var badResponse = new BadRequestObjectResult(response);
-        badResponse.StatusCode = statusCode;
-        return badResponse;
-    }
+        return new OkObjectResult(
+            new JsonCommonResponse { Status = HttpResponseStatus.Ok }
+        );
+    };
 }

@@ -7,7 +7,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 {
     public class GetMyListRequest : IRequest<GetListResponse>
     {
-        [IsPositive]
         public Guid WorkspaceId { get; set; }
         
         [StringLength(100)]

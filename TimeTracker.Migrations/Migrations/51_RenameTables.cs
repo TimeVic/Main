@@ -70,6 +70,7 @@ namespace TimeTracker.Migrations.Migrations
             
             Rename.Column("create_time").OnTable("notifications").To("created_at");
             Rename.Column("update_time").OnTable("notifications").To("updated_at");
+            Alter.Table("notifications").AlterColumn("updated_at").AsDateTime().Nullable();
             
             Rename.Column("create_time").OnTable("goals_trackers").To("created_at");
             Rename.Column("update_time").OnTable("goals_trackers").To("updated_at");

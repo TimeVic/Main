@@ -19,21 +19,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
     public class PaymentReportRequestHandler : IAsyncRequestHandler<PaymentReportRequest, PaymentReportResponse>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ITimeEntryReportsDao _entryReportsDao;
         private readonly ISecurityManager _securityManager;
 
         public PaymentReportRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ITimeEntryReportsDao entryReportsDao,
             ISecurityManager securityManager
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _entryReportsDao = entryReportsDao;
             _securityManager = securityManager;
@@ -41,7 +41,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
     
         public async Task<PaymentReportResponse> ExecuteAsync(PaymentReportRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))

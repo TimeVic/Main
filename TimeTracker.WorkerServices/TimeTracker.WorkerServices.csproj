@@ -22,11 +22,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TimeTracker.Business\TimeTracker.Business.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="appsettings.Local.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <Content Include="..\Shared\appsettings.json" Link="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 </Project>

@@ -13,26 +13,26 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
     public class GetListRequestHandler : IAsyncRequestHandler<GetListRequest, PaginatedListDto<WorkspaceDto>>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public GetListRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IWorkspaceAccessService workspaceAccessService
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _workspaceAccessService = workspaceAccessService;
         }
     
         public async Task<PaginatedListDto<WorkspaceDto>> ExecuteAsync(GetListRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var allWorkspaces = await _userDao.GetUsersWorkspaces(user);
             var responseList = _mapper.Map<ICollection<WorkspaceDto>>(allWorkspaces);

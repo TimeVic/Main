@@ -8,7 +8,7 @@ public class GoalsTrackerNoteMapping: BaseGuidMappings<GoalsTrackerNoteEntity>
 {
     public GoalsTrackerNoteMapping()
     {
-        Table("goals_trackers");
+        Table("goals_tracker_notes");
         
         Map(x => x.Text);
         Map(x => x.IsArchived);

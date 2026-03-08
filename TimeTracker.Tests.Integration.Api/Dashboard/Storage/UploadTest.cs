@@ -94,7 +94,7 @@ public class UploadTest: BaseTest
         Assert.NotEmpty(actualData.Url);
         Assert.NotEmpty(actualData.ThumbUrl);
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
 
@@ -151,7 +151,7 @@ public class UploadTest: BaseTest
         Assert.NotEmpty(actualData.Url);
         Assert.NotEmpty(actualData.ThumbUrl);
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
         

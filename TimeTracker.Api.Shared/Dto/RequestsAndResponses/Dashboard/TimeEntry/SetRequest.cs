@@ -11,10 +11,8 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         public Guid? Id { get; set; }
 
         [Required]
-        [IsPositive]
         public Guid WorkspaceId { get; set; }
         
-        [IsPositive]
         public Guid? ProjectId { get; set; }
 
         public string? Description { get; set; }

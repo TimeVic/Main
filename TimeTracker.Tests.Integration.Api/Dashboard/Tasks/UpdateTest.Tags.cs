@@ -66,7 +66,7 @@ public partial class UpdateTest
         {
             _task.Tags.Add(tag);    
         }
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()

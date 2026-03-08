@@ -13,7 +13,6 @@ public class PaymentMapping: BaseGuidMappings<PaymentEntity>
         Map(x => x.PaymentTime).DateTime();
         Map(x => x.Description);
         Map(x => x.Amount);
-        Map(x => x.Amount);
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         

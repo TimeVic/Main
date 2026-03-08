@@ -1,5 +1,6 @@
 ﻿using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Extensions;
+using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
@@ -13,16 +14,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker;
 [ApiController]
 [Authorize]
 [Route("/dashboard/goals-tracker")]
-public class GoalsTrackerController : MainApiControllerBase
+public class GoalsTrackerController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
-    public GoalsTrackerController(
-        IAsyncRequestBuilder asyncRequestBuilder, 
-        IDbSessionProvider commitPerformer,
-        ILogger<GoalsTrackerController> logger
-    ) : base(asyncRequestBuilder, commitPerformer, logger)
-    {
-    }
-
     [HttpPost("get")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

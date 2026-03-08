@@ -76,7 +76,7 @@ public class ChangePositionsTest: BaseTest
         var goal3 = goals.Skip(2).First();
         var goal4 = goals.Skip(3).First();
         
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new ChangePositionsRequest()
@@ -95,6 +95,7 @@ public class ChangePositionsTest: BaseTest
         // Assert
         response.EnsureSuccessStatusCode();
 
+        await FlushDbChanges(true);
         await DbSessionProvider.CurrentSession.RefreshAsync(existsTracker);
         Assert.Equal(6, existsTracker.Items.First(item => item.Id == goal1.Id).Position);
         Assert.Equal(2, existsTracker.Items.First(item => item.Id == goal2.Id).Position);

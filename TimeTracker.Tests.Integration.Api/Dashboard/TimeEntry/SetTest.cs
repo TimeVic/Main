@@ -72,7 +72,7 @@ public class SetTest: BaseTest
     {
         var fakeEntry = _timeEntryFactory.Generate();
         var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         var startTime = TimeSpan.FromSeconds(1);
         var endTime = TimeSpan.FromHours(1);

@@ -12,16 +12,12 @@ public class GetFilteredListRequest: IRequest<GetFilteredListResponse>
     public int Page { get; set; }
     
     [Required]
-    [IsPositive]
     public Guid WorkspaceId { get; set; }
     
-    [IsPositive]
     public Guid? ClientId { get; set; }
     
-    [IsPositive]
     public Guid? ProjectId { get; set; }
 
-    [IsPositive]
     public Guid? MemberId { get; set; }
     
     [StringLength(255)]

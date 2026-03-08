@@ -24,7 +24,7 @@ public partial class StartTest
         
         var fakeTimeEntry = _timeEntryFactory.Generate();
         var project = await _projectDao.CreateAsync(_defaultWorkspace, "Test project");
-        await CommitDbChanges();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,

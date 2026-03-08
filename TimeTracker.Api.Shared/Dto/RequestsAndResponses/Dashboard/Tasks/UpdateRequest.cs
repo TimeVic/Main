@@ -12,7 +12,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         public Guid TaskId { get; set; }
         
         [Required]
-        [IsPositive]
         public Guid UserId { get; set; }
 
         public ICollection<Guid> TagIds { get; set; } = new List<Guid>();

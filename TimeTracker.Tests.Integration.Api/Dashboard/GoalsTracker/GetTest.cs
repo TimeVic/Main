@@ -87,14 +87,14 @@ public class GetTest: BaseTest
         existsTracker.Year = expectedDate.Year;
         existsTracker.Month = expectedDate.Month;
         await _goalsTrackerItemsSeeder.CreateSeveralAsync(existsTracker, 4);
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetRequest()
         {
             Date = expectedDate,
             WorkspaceId = _workspace.Id
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualProject = await response.GetJsonDataAsync<GoalsTrackerDto>();
         Assert.NotEqual(Guid.Empty, actualProject.Id);
@@ -131,7 +131,7 @@ public class GetTest: BaseTest
         {
             await _goalsTrackerItemsDao.Archive(item);
         }
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetRequest()
         {

@@ -27,12 +27,13 @@
 
     <ItemGroup>
       <Folder Include="Dao\FileStorage\" />
-      <Folder Include="Hibernate\Queries" />
+      <Folder Include="Hibernate\Queries\" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="Hibernate\hibernate.hbm.xml" />
       <EmbeddedResource Include="Hibernate\hibernate.hbm.xml" />
+      <None Remove="Queries\Test\TestNamedQuery.hbm.xml" />
     </ItemGroup>
 
     <ItemGroup>

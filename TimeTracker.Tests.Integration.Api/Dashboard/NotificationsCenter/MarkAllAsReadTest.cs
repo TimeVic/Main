@@ -56,7 +56,7 @@ public partial class MarkAllAsReadTest: BaseTest
         // Arrange
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_task);
         await _notificationCenterService.Push(NotificationActionType.Reminder, _task.User, _task);
@@ -81,7 +81,7 @@ public partial class MarkAllAsReadTest: BaseTest
         // Arrange
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_task);
         await _notificationCenterService.Push(NotificationActionType.Reminder, _task.User, _task);
@@ -93,11 +93,11 @@ public partial class MarkAllAsReadTest: BaseTest
         
         await _userNotificationTokenDao.Set(otherUser, FirebaseClientServiceMock.SuccessToken);
         otherTask.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(otherTask);
         await _notificationCenterService.Push(NotificationActionType.Reminder, otherTask.User, otherTask);
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         Assert.Equal(2, await _notificationCenterService.GetUnreadCount(_user, _workspace));
         await DbSessionProvider.CurrentSession.RefreshAsync(otherTask.Workspace);

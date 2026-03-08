@@ -20,14 +20,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     public class GetOneRequestHandler : IAsyncRequestHandler<GetOneRequest, TaskDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly ITaskDao _taskDao;
 
         public GetOneRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             ITaskListDao taskListDao,
@@ -36,7 +36,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _taskDao = taskDao;
@@ -44,7 +44,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     
         public async Task<TaskDto> ExecuteAsync(GetOneRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var task = await _taskDao.GetById(request.TaskId);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))

@@ -31,7 +31,7 @@ public partial class GetCountTest: BaseTest
         // Arrange
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_task);
         await _notificationCenterService.Push(NotificationActionType.Reminder, _task.User, _task);
@@ -44,7 +44,7 @@ public partial class GetCountTest: BaseTest
         });
         
         // Assert
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
         Assert.True(FirebaseClientService.SentMessages.Any());
         var actualResponse = await response.GetJsonDataAsync<GetCountResponse>();
         Assert.Equal(2, actualResponse.UnreadCount);

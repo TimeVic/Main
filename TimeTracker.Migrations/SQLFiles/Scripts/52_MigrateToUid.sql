@@ -2,7 +2,7 @@
 -- Требуется расширение pgcrypto для gen_random_uuid()
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-BEGIN;
+-- BEGIN;
 
 -- =========================================
 -- Служебные временные таблицы
@@ -23,10 +23,8 @@ INSERT INTO _exclude_tables(nspname, relname) VALUES
                                                   ('public','stored_file_statuses'),
                                                   ('public','stored_file_types'),
                                                   ('public','task_priorities'),
-                                                  ('public','task_statuses');
-
--- OPTIONAL: если хотите не трогать и эту таблицу:
--- INSERT INTO _exclude_tables(nspname, relname) VALUES ('enum','queue_priorities');
+                                                  ('public','task_statuses'),
+                                                  ('enum','queue_priorities');
 
 CREATE TEMP TABLE _pk_tables (
     parent_nsp   text,
@@ -376,7 +374,7 @@ END IF;
 END LOOP;
 END$$;
 
-COMMIT;
+-- COMMIT;
 
 -- =========================================
 -- (ОПЦИОНАЛЬНО) Агрессивная очистка дублирующих UNIQUE:
