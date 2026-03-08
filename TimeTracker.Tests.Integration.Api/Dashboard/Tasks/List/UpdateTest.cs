@@ -1,6 +1,5 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
