@@ -5,13 +5,13 @@ namespace TimeTracker.Business.Services.Queue.Handlers;
 
 public class SendSetTimeEntryIntegrationRequestContext: IExternalServiceItemContext
 {
-    public long TimeEntryId { get; set; }
+    public Guid TimeEntryId { get; set; }
 
     public SendSetTimeEntryIntegrationRequestContext()
     {
     }
 
-    public SendSetTimeEntryIntegrationRequestContext(long timeEntryId)
+    public SendSetTimeEntryIntegrationRequestContext(Guid timeEntryId)
     {
         TimeEntryId = timeEntryId;
     }

@@ -92,7 +92,7 @@ public class ActivateUserTest: BaseTest
         });
         Assert.All(workspaces, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Id);
         });
     }
 }

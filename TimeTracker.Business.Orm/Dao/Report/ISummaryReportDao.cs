@@ -7,7 +7,7 @@ namespace TimeTracker.Business.Orm.Dao.Report;
 public interface ISummaryReportDao: IDomainService
 {
     Task<ICollection<ByDaysReportItemDto>> GetReportByDayForOwnerOrManagerAsync(
-        long workspaceId,
+        Guid workspaceId,
         DateTime startDate,
         DateTime endDate
     );
@@ -15,12 +15,12 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByDaysReportItemDto>> GetReportByDayForOtherAsync(
         DateTime startDate,
         DateTime endDate,
-        long userId,
+        Guid userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 
     Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectForOwnerOrManagerAsync(
-        long workspaceId,
+        Guid workspaceId,
         DateTime startDate,
         DateTime endDate
     );
@@ -28,12 +28,12 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectForOtherAsync(
         DateTime startDate,
         DateTime endDate,
-        long userId,
+        Guid userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 
     Task<ICollection<ByClientsReportItemDto>> GetReportByClientForOwnerOrManagerAsync(
-        long workspaceId,
+        Guid workspaceId,
         DateTime startDate,
         DateTime endDate
     );
@@ -41,12 +41,12 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByClientsReportItemDto>> GetReportByClientForOtherAsync(
         DateTime startDate,
         DateTime endDate,
-        long userId,
+        Guid userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 
     Task<ICollection<ByUsersReportItemDto>> GetReportByUserForOwnerOrManagerAsync(
-        long workspaceId,
+        Guid workspaceId,
         DateTime startDate,
         DateTime endDate
     );
@@ -54,12 +54,12 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByUsersReportItemDto>> GetReportByUserForOtherAsync(
         DateTime startDate,
         DateTime endDate,
-        long userId,
+        Guid userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 
     Task<ICollection<ByMonthsReportItemDto>> GetReportByMonthForOwnerOrManagerAsync(
-        long workspaceId,
+        Guid workspaceId,
         DateTime startDate,
         DateTime endDate
     );
@@ -67,12 +67,12 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByMonthsReportItemDto>> GetReportByMonthForOtherAsync(
         DateTime startDate,
         DateTime endDate,
-        long userId,
+        Guid userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 
     Task<ICollection<ByWeeksReportItemDto>> GetReportByWeekForOwnerOrManagerAsync(
-        long workspaceId,
+        Guid workspaceId,
         DateTime startDate,
         DateTime endDate
     );
@@ -80,7 +80,7 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByWeeksReportItemDto>> GetReportByWeekForOtherAsync(
         DateTime startDate,
         DateTime endDate,
-        long userId,
+        Guid userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     );
 }

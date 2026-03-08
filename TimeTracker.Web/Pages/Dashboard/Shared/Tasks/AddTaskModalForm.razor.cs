@@ -13,8 +13,8 @@ public partial class AddTaskModalForm
 {
     public class Parameters
     {
-        public long? TimeEntryId { get; set; }
-        public long? TaskListId { get; set; }
+        public Guid? TimeEntryId { get; set; }
+        public Guid? TaskListId { get; set; }
         public TaskStatus? TaskStatus { get; set; }
         public DateTime? EndTime { get; set; }
     }

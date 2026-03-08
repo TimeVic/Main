@@ -8,8 +8,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
     public class GetForCalendarRequest : IRequest<GetListResponse>
     {
         [Required]
-        [IsPositive]
-        public long WorkspaceId { get; set; }
+        public Guid WorkspaceId { get; set; }
         
         [Required]
         public DateTime StartTime { get; set; }

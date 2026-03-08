@@ -6,7 +6,7 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<int> NotificationCenterGetUnreadCount(long workspaceId)
+        public async Task<int> NotificationCenterGetUnreadCount(Guid workspaceId)
         {
             var response = await PostAsync<GetCountResponse>(ApiUrl.NotificationCenterGetCount, new GetCountRequest()
             {
@@ -20,7 +20,7 @@ namespace TimeTracker.Web.Services.Http
             return response.UnreadCount;
         }
         
-        public async Task<GetListResponse?> NotificationCenterGetList(long workspaceId, int page)
+        public async Task<GetListResponse?> NotificationCenterGetList(Guid workspaceId, int page)
         {
             return await PostAsync<GetListResponse?>(ApiUrl.NotificationCenterGetList, new GetListRequest()
             {
@@ -29,7 +29,7 @@ namespace TimeTracker.Web.Services.Http
             });
         }
         
-        public async Task NotificationCenterMarkAllAsRead(long workspaceId)
+        public async Task NotificationCenterMarkAllAsRead(Guid workspaceId)
         {
             await PostAsync<GetListResponse>(ApiUrl.NotificationCenterMarkAllAsRead, new MarkAllAsReadRequest()
             {
@@ -37,7 +37,7 @@ namespace TimeTracker.Web.Services.Http
             });
         }
         
-        public async Task NotificationCenterMarkAsRead(long notificationId)
+        public async Task NotificationCenterMarkAsRead(Guid notificationId)
         {
             await PostAsync<GetListResponse>(ApiUrl.NotificationCenterMarkAsRead, new MarkAsReadRequest()
             {

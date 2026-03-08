@@ -61,7 +61,7 @@ public class AddTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<TagDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(project.Name, actualProject.Name);
         Assert.Equal(_expectedColor.ToHexString(), actualProject.Color);
         Assert.Equal(Color.Black.ToHexString(), actualProject.TextColor);

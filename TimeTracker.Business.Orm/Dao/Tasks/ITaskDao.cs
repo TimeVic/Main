@@ -40,10 +40,10 @@ public interface ITaskDao: IDomainService
         bool isAddHistoryItem = true
     );
     
-    Task<TaskEntity?> GetById(long taskListId);
+    Task<TaskEntity?> GetById(Guid taskId);
 
     Task<TaskEntity?> GetByWorkspaceTaskId(
-        long workspaceId,
+        Guid workspaceId,
         long workspaceTaskId
     );
     

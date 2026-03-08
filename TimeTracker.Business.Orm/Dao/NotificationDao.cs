@@ -71,7 +71,7 @@ public class NotificationDao : INotificationDao
 
         var offset = PaginationUtils.CalculateOffset(page);
         var items = await query
-            .OrderBy(item => item.CreateTime).Desc()
+            .OrderBy(item => item.CreatedAt).Desc()
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
             .ListAsync();

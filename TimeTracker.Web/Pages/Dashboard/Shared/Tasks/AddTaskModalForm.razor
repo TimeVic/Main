@@ -37,7 +37,7 @@
             Class="mb-3"
             FullWidth="true"
             Value="@model.TaskListId"
-            SelectedItemChanged="@(value => model.TaskListId = value?.Id ?? 0)"/>
+            SelectedItemChanged="@(value => model.TaskListId = value?.Id ?? Guid.Empty)"/>
         
         <FluentDivider Class="mb-3"/>
         <FluentStack Orientation="Orientation.Horizontal">

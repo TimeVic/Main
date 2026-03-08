@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Shared.Components.Form.Select;
 public partial class TaskListsDropDown
 { 
     [Parameter]
-    public long? ProjectId
+    public Guid? ProjectId
     {
         get => _projectId;
         set
@@ -20,7 +20,7 @@ public partial class TaskListsDropDown
     }
     
     [Parameter]
-    public long? ClientId { get; set; }
+    public Guid? ClientId { get; set; }
 
     [Parameter]
     public bool IsExtendedInfo { get; set; } = true;
@@ -28,8 +28,8 @@ public partial class TaskListsDropDown
     [Inject]
     public IState<TasksListState> _state { get; set; }
     
-    private IEnumerable<IGrouping<long, TaskListDto>> _groupedList => _list.GroupBy(item => item.Project.Id).AsQueryable();
-    private long? _projectId = null;
+    private IEnumerable<IGrouping<Guid, TaskListDto>> _groupedList => _list.GroupBy(item => item.Project.Id).AsQueryable();
+    private Guid? _projectId = null;
     private string? _searchString = null;
     
     protected override void OnInitialized()

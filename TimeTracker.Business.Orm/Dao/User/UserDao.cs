@@ -32,7 +32,7 @@ public class UserDao: IUserDao
             .FirstOrDefaultAsync();
     }
     
-    public async Task<UserEntity?> GetById(long id)
+    public async Task<UserEntity?> GetById(Guid id)
     {
         return await _sessionProvider.CurrentSession.Query<UserEntity>()
             .Where(item => item.Id == id)
@@ -55,15 +55,15 @@ public class UserDao: IUserDao
             VerificationTime = null,
             PasswordHash = new byte[] {},
             PasswordSalt = new byte[] {},
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
             Timezone = TimeZoneInfo.Utc.Id
         };
         await _sessionProvider.CurrentSession.SaveAsync(user);
         return user;
     }
     
-    public async Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, long workspaceId)
+    public async Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, Guid workspaceId)
     {
         var allWorkspaces = await GetUsersWorkspaces(user);
         return allWorkspaces.FirstOrDefault(item => item.Id == workspaceId);

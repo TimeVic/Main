@@ -49,11 +49,11 @@ public class QueueDaoTest: BaseTest
         var actualItem2 = await _queueDao.GetTop(QueueChannel.Default);
         _queueDao.Flush();
         
-        Assert.True(actualItem1.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualItem1.Id);
         Assert.Equal(QueueStatus.InProcess, actualItem1.Status);
-        Assert.True(actualItem2.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualItem2.Id);
         
-        Assert.True(actualItem2.CreateTime > actualItem1.CreateTime);
+        Assert.True(actualItem2.CreatedAt > actualItem1.CreatedAt);
     }
     
     [Fact]

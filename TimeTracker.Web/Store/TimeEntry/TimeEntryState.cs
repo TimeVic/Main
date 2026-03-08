@@ -49,11 +49,11 @@ public record TimeEntryState
 
 public record TimeEntryFilterState
 {
-    public long? ClientId { get; set; }
+    public Guid? ClientId { get; set; }
     
-    public long? ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
     
-    public long? UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     public string? Search { get; set; } = string.Empty;
     

@@ -92,7 +92,7 @@ public partial class ModalDialogProviderService
     
     public async Task ShowEditTaskListModal(
         TaskListDto? taskList = null,
-        long? projectId = null
+        Guid? projectId = null
     )
     {
         var parameters = new DialogParameters
@@ -125,8 +125,8 @@ public partial class ModalDialogProviderService
     }
     
     public async Task ShowAddTaskModal(
-        long? timEntryId = null,
-        long? taskListId = null,
+        Guid? timEntryId = null,
+        Guid? taskListId = null,
         DateTime? endTime = null,
         TaskStatus? taskStatus = null
     )

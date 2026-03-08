@@ -12,8 +12,8 @@ namespace TimeTracker.Business.Testing.Factories.Entity.GoalsTracker
             _factory = new Faker<GoalsTrackerItemEntity>()
                 .RuleFor(fake => fake.Name, fake => fake.Name.JobTitle())
                 .RuleFor(fake => fake.NumberOfTimes, fake => fake.Random.Number(50))
-                .RuleFor(fake => fake.CreateTime, fake => fake.Date.Past())
-                .RuleFor(fake => fake.UpdateTime, fake => fake.Date.Past());
+                .RuleFor(fake => fake.CreatedAt, fake => fake.Date.Past())
+                .RuleFor(fake => fake.UpdatedAt, fake => fake.Date.Past());
         }
 
         public GoalsTrackerItemEntity Generate()

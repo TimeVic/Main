@@ -71,7 +71,7 @@ public class GetTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<GoalsTrackerDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(expectedDate.Year, actualProject.Year);
         Assert.Equal(expectedDate.Month, actualProject.Month);
         Assert.Empty(actualProject.Items);
@@ -97,7 +97,7 @@ public class GetTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<GoalsTrackerDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(expectedDate.Year, actualProject.Year);
         Assert.Equal(expectedDate.Month, actualProject.Month);
         Assert.Equal(4, actualProject.Items.Count);
@@ -141,7 +141,7 @@ public class GetTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<GoalsTrackerDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(expectedDate.Year, actualProject.Year);
         Assert.Equal(expectedDate.Month, actualProject.Month);
         Assert.Equal(4, actualProject.Items.Count);

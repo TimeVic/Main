@@ -60,10 +60,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
 
             if (request.EntityType == StorageEntityType.Task)
             {
-                var task = await _taskDao.GetByWorkspaceTaskId(
-                    request.WorkspaceId,
-                    request.EntityId
-                );
+                var task = await _taskDao.GetById(request.EntityId);
                 if (task == null)
                 {
                     throw new RecordNotFoundException();

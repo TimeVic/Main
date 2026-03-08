@@ -69,7 +69,7 @@ public partial class UpdateTest: BaseTest
         var task = _taskFactory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
-            TaskId = task.TaskId,
+            TaskId = task.Id,
             Title = task.Title,
             Description = task.Description,
             StartTime = task.StartTime,
@@ -84,7 +84,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -122,7 +122,7 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = otherTaskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
@@ -145,7 +145,7 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _taskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
@@ -181,7 +181,7 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = task2.TaskId,
+            TaskId = task2.Id,
             TaskListId = _taskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
@@ -242,7 +242,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -258,7 +258,7 @@ public partial class UpdateTest: BaseTest
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_task);
         Assert.Equal(2, _task.HistoryItems.Count);
-        var historyItem = _task.HistoryItems.OrderBy(item => item.CreateTime).Last();
+        var historyItem = _task.HistoryItems.OrderBy(item => item.CreatedAt).Last();
         Assert.Equal(expectedTask.Title, historyItem.Title);
         Assert.Equal(expectedTask.Description, historyItem.Description);
         Assert.Equal(expectedTask.StartTime.ToString(), historyItem.StartTime.ToString());
@@ -275,7 +275,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -302,7 +302,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,

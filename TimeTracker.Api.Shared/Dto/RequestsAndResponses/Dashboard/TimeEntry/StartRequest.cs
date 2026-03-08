@@ -8,17 +8,14 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
     public class StartRequest : IRequest<TimeEntryDto>
     {
         [Required]
-        [IsPositive]
-        public long WorkspaceId { get; set; }
+        public Guid WorkspaceId { get; set; }
         
-        [IsPositive]
-        public long? ProjectId { get; set; }
+        public Guid? ProjectId { get; set; }
         
         [StringLength(1000)]
         public string? Description { get; set; }
 
-        [IsPositive]
-        public long? InternalTaskId { get; set; }
+        public Guid? InternalTaskId { get; set; }
         
         public bool? IsBillable { get; set; }
         

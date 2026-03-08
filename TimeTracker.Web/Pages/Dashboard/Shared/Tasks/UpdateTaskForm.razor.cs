@@ -50,7 +50,7 @@ public partial class UpdateTaskForm
         }
     }
 
-    private ICollection<long> _allowedUserIds
+    private ICollection<Guid> _allowedUserIds
     {
         get
         {
@@ -94,7 +94,7 @@ public partial class UpdateTaskForm
         Dispatcher.Dispatch(new SetAttachmentsAction(Task.TaskId, Task.Attachments));
     }
 
-    private void OnTagsChanged(IEnumerable<long> selectedTagIds)
+    private void OnTagsChanged(IEnumerable<Guid> selectedTagIds)
     {
         _model.TagIds = selectedTagIds.ToList();
         SubmitForm();

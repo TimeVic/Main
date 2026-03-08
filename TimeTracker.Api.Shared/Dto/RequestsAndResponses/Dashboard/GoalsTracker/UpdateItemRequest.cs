@@ -10,7 +10,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker
     {
         [Required]
         [IsPositive]
-        public long GoalsTrackerItemId { get; set; }
+        public Guid GoalsTrackerItemId { get; set; }
         
         [IsPositive]
         public int NumberOfTimes { get; set; }

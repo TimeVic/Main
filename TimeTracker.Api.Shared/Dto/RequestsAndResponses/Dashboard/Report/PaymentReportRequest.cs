@@ -8,7 +8,7 @@ public class PaymentReportRequest: IRequest<PaymentReportResponse>
 {
     [Required]
     [IsPositive]
-    public long WorkspaceId { get; set; }
+    public Guid WorkspaceId { get; set; }
     
     public DateTime EndDate { get; set; }
 }

@@ -60,7 +60,7 @@ public class UploadToCloudTest: BaseTest
     {
         var formFile = CreateFormFile("images/image.jpg");
         var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
-        Assert.True(actualFile.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualFile.Id);
         
         var uploadedFile = await _fileStorage.UploadFirstPendingToCloud();
         Assert.Null(uploadedFile.DataToUpload);

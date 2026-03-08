@@ -35,7 +35,7 @@ public class PutFileForTaskCommentTest: BaseTest
     public async Task ShouldPutFile()
     {
         var actualFile = await _fileStorage.PutFileAsync(_taskComment, CreateFormFile(), StoredFileType.Attachment);
-        Assert.True(actualFile.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualFile.Id);
         Assert.NotEmpty(actualFile.MimeType);
         Assert.NotEmpty(actualFile.CloudFilePath);
         Assert.NotNull(actualFile.Extension);

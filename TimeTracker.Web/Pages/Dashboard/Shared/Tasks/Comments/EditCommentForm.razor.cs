@@ -42,7 +42,7 @@ public partial class EditCommentForm
     private EditForm? _form;
     private bool _isValid = false;
     private FluentTextArea? _commentField;
-    private bool _isNewComment => Comment.Id == 0;
+    private bool _isNewComment => Comment.Id == Guid.Empty;
 
     private string _userName => _isNewComment ? AuthState.Value.User.Name : Comment.User.Name;
 
@@ -65,7 +65,6 @@ public partial class EditCommentForm
         
         await base.OnInitializedAsync();
         model.Fill(Comment);
-        model.WorkspaceId = AuthState.Value.Workspace!.Id;
     }
     
     private void Submit()

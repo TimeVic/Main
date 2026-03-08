@@ -28,9 +28,9 @@ public class TaskDao: ITaskDao
         _taskHistoryItemDao = taskHistoryItemDao;
     }
 
-    public async Task<TaskEntity?> GetById(long taskListId)
+    public async Task<TaskEntity?> GetById(Guid taskId)
     {
-        return await _sessionProvider.CurrentSession.GetAsync<TaskEntity>(taskListId);
+        return await _sessionProvider.CurrentSession.GetAsync<TaskEntity>(taskId);
     }
     
     public async Task UpdatePositions(WorkspaceEntity workspace, IDictionary<long, int> items)
@@ -49,7 +49,7 @@ public class TaskDao: ITaskDao
     }
     
     public async Task<TaskEntity?> GetByWorkspaceTaskId(
-        long workspaceId,
+        Guid workspaceId,
         long workspaceTaskId
     )
     {
@@ -58,11 +58,11 @@ public class TaskDao: ITaskDao
         WorkspaceEntity workspaceAlias = null;
         return await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
-            .Inner.JoinAlias(item => taskListAlias.Project, () => projectAlias)
-            .Inner.JoinAlias(item => projectAlias.Workspace, () => workspaceAlias)
+            .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
+            .Inner.JoinAlias(item => projectAlias!.Workspace, () => workspaceAlias)
             .Where(
                 item => item.TaskId == workspaceTaskId
-                && workspaceAlias.Id == workspaceId
+                && workspaceAlias!.Id == workspaceId
             )
             .SingleOrDefaultAsync();
     }
@@ -89,8 +89,8 @@ public class TaskDao: ITaskDao
             Status = status,
             Priority = priority,
             IsArchived = isArchived,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
         };
         SetStartEndTime(task, startTime, endTime);
 
@@ -122,7 +122,7 @@ public class TaskDao: ITaskDao
         task.Status = status;
         task.Priority = priority;
         task.IsArchived = isArchived;
-        task.UpdateTime = DateTime.UtcNow;
+        task.UpdatedAt = DateTime.UtcNow;
         task.ReminderTime = reminderTime;
         SetStartEndTime(task, startTime, endTime);
         
@@ -211,7 +211,7 @@ public class TaskDao: ITaskDao
         var items = await query
             .OrderBy(item => item.Priority).Asc
             .OrderBy(item => item.IsArchived).Asc
-            .ThenBy(item => item.UpdateTime).Desc
+            .ThenBy(item => item.UpdatedAt).Desc
             .Take(1000)
             .ListAsync<TaskEntity>();
         return new ListDto<TaskEntity>(

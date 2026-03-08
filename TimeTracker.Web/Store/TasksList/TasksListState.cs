@@ -7,7 +7,7 @@ namespace TimeTracker.Web.Store.TasksList;
 [FeatureState]
 public record TasksListState
 {
-    public long? SelectedTaskListId { get; set; }
+    public Guid? SelectedTaskListId { get; set; }
     
     public ICollection<TaskListDto> List { get; set; } = new List<TaskListDto>();
     

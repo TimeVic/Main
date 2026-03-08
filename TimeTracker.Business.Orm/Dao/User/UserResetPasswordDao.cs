@@ -19,7 +19,7 @@ public class UserResetPasswordRequestDao: IUserResetPasswordRequestDao
     {
         return await _sessionProvider.CurrentSession.Query<UserResetPasswordRequestEntity>()
             .Where(item => item.User == user)
-            .OrderByDescending(item => item.CreateTime)
+            .OrderByDescending(item => item.CreatedAt)
             .FirstOrDefaultAsync();
     }
     
@@ -27,7 +27,7 @@ public class UserResetPasswordRequestDao: IUserResetPasswordRequestDao
     {
         return await _sessionProvider.CurrentSession.Query<UserResetPasswordRequestEntity>()
             .Where(item => item.VerificationToken == token)
-            .OrderByDescending(item => item.CreateTime)
+            .OrderByDescending(item => item.CreatedAt)
             .FirstOrDefaultAsync();
     }
     
@@ -38,7 +38,7 @@ public class UserResetPasswordRequestDao: IUserResetPasswordRequestDao
             User = user,
             VerificationToken = SecurityUtil.GetBase58RandomString(256),
             ExpirationTime = DateTime.UtcNow.AddMinutes(5),
-            CreateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
         await _sessionProvider.CurrentSession.SaveAsync(request);
         return request;

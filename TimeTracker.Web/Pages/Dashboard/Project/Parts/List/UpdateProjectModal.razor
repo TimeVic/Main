@@ -47,7 +47,7 @@
                 FullWidth="true"
                 Class="mb-2"
                 Value="@(model.ClientId)"
-                SelectedItemChanged="@(item => model.ClientId = item?.Id ?? 0)"/>
+                SelectedItemChanged="@(item => model.ClientId = item?.Id ?? Guid.Empty)"/>
 
             <div class="w-100">
                 <FluentCheckbox

@@ -20,6 +20,14 @@
 
     <ItemGroup>
       <Folder Include="Core\" />
+      <Folder Include="Factories\Entity\FileStorage\" />
+      <Folder Include="Seeders\Entity\FileStorage\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Seeders\Entity\FileStorage\FileStorageBucketSeeder.cs" />
+      <Compile Remove="Seeders\Entity\FileStorage\IFileStorageBucketSeeder.cs" />
+      <Compile Remove="Factories\Entity\FileStorage\FileStorageBucketEntityFactory.cs" />
     </ItemGroup>
 
 </Project>

@@ -34,7 +34,7 @@ public class CreatePendingUserTest: BaseTest
         var expectedEmail = _userFactory.Generate().Email;
         
         var user = await _authService.CreatePendingUser(expectedEmail);
-        Assert.True(user.Id > 0);
+        Assert.NotEqual(Guid.Empty, user.Id);
         Assert.False(user.IsActivated);
         Assert.Equal(expectedEmail.ToLower(), user.Email);
 

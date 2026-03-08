@@ -23,15 +23,15 @@ public class ClientDao: IClientDao
         {
             Name = name,
             Workspace = workspace,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
         workspace.Clients.Add(entity);
         await _sessionProvider.CurrentSession.SaveAsync(entity);
         return entity;
     }
 
-    public async Task<ClientEntity?> GetById(long? clientId, WorkspaceEntity? workspace = null)
+    public async Task<ClientEntity?> GetById(Guid? clientId, WorkspaceEntity? workspace = null)
     {
         if (clientId == null)
             return null;

@@ -14,14 +14,14 @@ public partial class TagsDropDown
     public bool Disabled { get; set; }
 
     [Parameter]
-    public IEnumerable<long> Value
+    public IEnumerable<Guid> Value
     {
         get => _selectedIds;
         set => _selectedIds = value;
     }
     
     [Parameter]
-    public EventCallback<IEnumerable<long>> ValueChanged { get; set; }
+    public EventCallback<IEnumerable<Guid>> ValueChanged { get; set; }
 
     [Parameter]
     public EventCallback<IEnumerable<TagDto>> SelectedItemChanged { get; set; }
@@ -38,7 +38,7 @@ public partial class TagsDropDown
     [Inject]
     public IState<TagState> _state { get; set; }
 
-    private IEnumerable<long> _selectedIds = new List<long>();
+    private IEnumerable<Guid> _selectedIds = new List<Guid>();
     
     private ICollection<TagDto> _selectedItems => _list.Where(item => _selectedIds.Contains(item.Id)).ToList();
     private ICollection<TagDto> _list = new List<TagDto>();

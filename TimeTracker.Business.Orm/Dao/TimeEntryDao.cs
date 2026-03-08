@@ -38,7 +38,7 @@ public class TimeEntryDao: ITimeEntryDao
         _projectDao = projectDao;
     }
 
-    public async Task<TimeEntryEntity?> GetByIdAsync(long? id)
+    public async Task<TimeEntryEntity?> GetByIdAsync(Guid? id)
     {
         if (id == null)
             return null;
@@ -150,7 +150,7 @@ public class TimeEntryDao: ITimeEntryDao
         TimeSpan startTime,
         bool isBillable = false,
         string? description = "",
-        long? projectId = null,
+        Guid? projectId = null,
         decimal? hourlyRate = null,
         TaskEntity? internalTask = null
     )
@@ -174,8 +174,8 @@ public class TimeEntryDao: ITimeEntryDao
             Workspace = workspace,
             User = user,
             Task = internalTask,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
         if (internalTask != null)
         {
@@ -312,8 +312,8 @@ public class TimeEntryDao: ITimeEntryDao
             {
                 Workspace = workspace,
                 User = user,
-                CreateTime = DateTime.UtcNow,
-                UpdateTime = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
         }
         if (timeEntry.Task != null)

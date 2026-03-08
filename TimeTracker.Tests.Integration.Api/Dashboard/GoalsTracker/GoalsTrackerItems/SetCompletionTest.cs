@@ -80,7 +80,7 @@ public class SetCompletionTest: BaseTest
 
         // Assert
         var actualMarker = await response.GetJsonDataAsync<GoalsTrackerCompletionMarkerDto>();
-        Assert.True(actualMarker.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMarker.Id);
         Assert.Equal(expectedDayOfMonth, actualMarker.DayOfMonth);
         Assert.True(actualMarker.IsChecked);
 
@@ -106,7 +106,7 @@ public class SetCompletionTest: BaseTest
 
         // Assert
         var actualMarker = await response.GetJsonDataAsync<GoalsTrackerCompletionMarkerDto>();
-        Assert.True(actualMarker.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMarker.Id);
         Assert.Equal(expectedDayOfMonth, actualMarker.DayOfMonth);
         Assert.True(actualMarker.IsChecked);
 
@@ -136,7 +136,7 @@ public class SetCompletionTest: BaseTest
         
         // Assert
         var actualMarker = await response.GetJsonDataAsync<GoalsTrackerCompletionMarkerDto>();
-        Assert.True(actualMarker.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMarker.Id);
         Assert.Equal(expectedDayOfMonth, actualMarker.DayOfMonth);
         Assert.False(actualMarker.IsChecked);
 
@@ -151,7 +151,7 @@ public class SetCompletionTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new SetCompletionRequest()
         {
-            GoalsTrackerItemId = 9999,
+            GoalsTrackerItemId = Guid.Empty,
             DayOfMonth = 2,
             IsChecked = true
         });

@@ -55,7 +55,7 @@ public class TaskHistoryItemDao: ITaskHistoryItemDao
             AssigneeUser = task.User,
             TaskList = task.TaskList,
             IsNewTask = isNewTask,
-            CreateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
         await _dbSessionProvider.CurrentSession.SaveAsync(historyItem);
         return historyItem;

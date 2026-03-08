@@ -114,7 +114,7 @@ public class DeleteTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new DeleteRequest()
         {
-            CommentId = 999999,
+            CommentId = Guid.Empty,
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();

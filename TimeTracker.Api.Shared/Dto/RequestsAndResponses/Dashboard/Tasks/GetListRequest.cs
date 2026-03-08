@@ -7,8 +7,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
     public class GetListRequest : IRequest<GetListResponse>
     {
         [Required]
-        [IsPositive]
-        public long TaskListId { get; set; }
+        public Guid TaskListId { get; set; }
 
         public GetListFilterRequest? Filter { get; set; }
     }

@@ -32,7 +32,7 @@
                 FullWidth="true"
                 Label="Project"
                 Clearable="true"
-                Value="@(Content.TimeEntry.Project?.Id ?? 0)"
+                Value="@(Content.TimeEntry.Project?.Id ?? Guid.Empty)"
                 SelectedItemChanged="@OnProjectChanged"/>
         }
         

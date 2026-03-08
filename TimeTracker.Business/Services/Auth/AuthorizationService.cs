@@ -76,7 +76,7 @@ public class AuthorizationService: IAuthorizationService
         var jwtTokenEntity = new UserJwtTokenEntity()
         {
             Token = jwtToken,
-            CreateTime = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
             ExpirationTime = JwtHelper.GetExpiryTimestamp(jwtToken),
             AccessToken = accessToken
         };

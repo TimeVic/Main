@@ -83,7 +83,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualPayment = await response.GetJsonDataAsync<PaymentDto>();
-        Assert.True(actualPayment.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(expectedClient.Id, actualPayment.Client.Id);
         Assert.Equal(expectProject.Id, actualPayment.Project.Id);
         Assert.Equal(expectPayment.Amount, actualPayment.Amount);

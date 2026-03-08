@@ -72,7 +72,7 @@ public class DeleteTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new DeleteItemRequest()
         {
-            Id = 9999
+            Id = Guid.Empty
         });
         
         // Assert

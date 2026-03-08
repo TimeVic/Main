@@ -37,11 +37,11 @@ public class WorkspaceAccessService: IWorkspaceAccessService
             {
                 User = user,
                 Workspace = workspace,
-                CreateTime = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow
             };
             workspace.Memberships.Add(membership);
         }
-        membership.UpdateTime = DateTime.UtcNow;
+        membership.UpdatedAt = DateTime.UtcNow;
         membership.Access = access;
 
         projectsAccess ??= new List<ProjectAccessModel>();
@@ -54,8 +54,8 @@ public class WorkspaceAccessService: IWorkspaceAccessService
                 {
                     Project = projectAccess.Project,
                     HourlyRate = projectAccess.HourlyRate,
-                    CreateTime = DateTime.UtcNow,
-                    UpdateTime = DateTime.UtcNow,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
                     WorkspaceMembership = membership
                 };
                 membership.ProjectAccesses.Add(accessEntity);
@@ -65,7 +65,7 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         return membership;
     }
 
-    public async Task<bool> RemoveAccessAsync(long membershipId)
+    public async Task<bool> RemoveAccessAsync(Guid membershipId)
     {
         await _sessionProvider.CurrentSession.Query<WorkspaceMembershipProjectAccessEntity>()
             .Where(item => item.WorkspaceMembership.Id == membershipId)

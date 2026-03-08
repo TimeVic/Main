@@ -8,6 +8,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notification
     {
         [Required]
         [IsPositive]
-        public long WorkspaceId { get; set; }
+        public Guid WorkspaceId { get; set; }
     }
 }

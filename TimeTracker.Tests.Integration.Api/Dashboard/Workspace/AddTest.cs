@@ -50,7 +50,7 @@ public class AddTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<WorkspaceDto>();
-        Assert.True(actual.Id > 0);
+        Assert.NotEqual(Guid.Empty, actual.Id);
         Assert.Equal(workspace.Name, actual.Name);
         Assert.Equal(MembershipAccessType.Owner, actual.CurrentUserAccess);
     }

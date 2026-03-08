@@ -79,7 +79,7 @@ public class UpdateTest: BaseTest
 
         // Assert
         var actualItem = await response.GetJsonDataAsync<GoalsTrackerItemDto>();
-        Assert.True(actualItem.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualItem.Id);
         Assert.Equal(expectedItem.Name, actualItem.Name);
         Assert.Equal(expectedItem.NumberOfTimes, actualItem.NumberOfTimes);
     }
@@ -93,7 +93,7 @@ public class UpdateTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateItemRequest()
         {
-            GoalsTrackerItemId = 99999,
+            GoalsTrackerItemId = Guid.Empty,
             Name = expectedItem.Name,
             NumberOfTimes = expectedItem.NumberOfTimes
         });

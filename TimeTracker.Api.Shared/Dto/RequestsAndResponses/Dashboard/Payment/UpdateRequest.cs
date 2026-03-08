@@ -8,14 +8,13 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment
     public class UpdateRequest : AddRequest
     {
         [Required]
-        [IsPositive]
-        public long PaymentId { get; set; }
+        public Guid PaymentId { get; set; }
 
         public void Fill(PaymentDto payment)
         {
             PaymentId = payment.Id;
             ClientId = payment.Client.Id;
-            ProjectId = payment.Project?.Id ?? 0;
+            ProjectId = payment.Project?.Id ?? Guid.Empty;
             Amount = payment.Amount;
             Description = payment.Description;
             PaymentTime = payment.PaymentTime;

@@ -21,7 +21,7 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
         _goalsTrackerDao = goalsTrackerDao;
     }
     
-    public async Task<GoalsTrackerItemEntity?> GetById(long trackerItemId)
+    public async Task<GoalsTrackerItemEntity?> GetById(Guid trackerItemId)
     {
         return await _sessionProvider.CurrentSession.Query<GoalsTrackerItemEntity>()
             .Where(item => item.Id == trackerItemId)
@@ -43,8 +43,8 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
             Name = name,
             NumberOfTimes = numberOfTimes,
             IsArchived = false,
-            UpdateTime = DateTime.UtcNow,
-            CreateTime = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow
         };
         goalsTracker.Items.Add(trackerItem);
         await _sessionProvider.CurrentSession.SaveAsync(trackerItem);
@@ -62,7 +62,7 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
 
         goalsTrackerItem.Name = name;
         goalsTrackerItem.NumberOfTimes = numberOfTimes;
-        goalsTrackerItem.UpdateTime = DateTime.UtcNow;
+        goalsTrackerItem.UpdatedAt = DateTime.UtcNow;
         await _sessionProvider.CurrentSession.SaveAsync(goalsTrackerItem);
         return goalsTrackerItem;
     }
@@ -88,12 +88,12 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
             {
                 DayOfMonth = dayOfMonth,
                 GoalsTrackerItem = goalsTrackerItem,
-                CreateTime = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow
             };
             goalsTrackerItem.CompletionMarkers.Add(existsMarked);
         }
         existsMarked.IsChecked = isChecked;
-        existsMarked.UpdateTime = DateTime.UtcNow;
+        existsMarked.UpdatedAt = DateTime.UtcNow;
         await _sessionProvider.CurrentSession.SaveAsync(existsMarked);
         return existsMarked;
     }
@@ -101,7 +101,7 @@ public class GoalsTrackerItemsDao: IGoalsTrackerItemsDao
     public async Task<GoalsTrackerItemEntity> Archive(GoalsTrackerItemEntity item)
     {
         item.IsArchived = true;
-        item.UpdateTime = DateTime.UtcNow;
+        item.UpdatedAt = DateTime.UtcNow;
         await _sessionProvider.CurrentSession.SaveAsync(item);
         return item;
     }

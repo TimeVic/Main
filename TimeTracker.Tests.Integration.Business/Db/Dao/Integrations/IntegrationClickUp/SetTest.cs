@@ -57,7 +57,7 @@ public class SetTest: BaseTest
         await DbSessionProvider.CurrentSession.RefreshAsync(actualIntegration);
         await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
 
-        Assert.True(actualIntegration.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualIntegration.Id);
         Assert.Equal(_workspace.Id, actualIntegration.Workspace.Id);
         Assert.Equal(expectIntegration.SecurityKey, actualIntegration.SecurityKey);
         Assert.Equal(expectIntegration.TeamId, actualIntegration.TeamId);

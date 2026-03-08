@@ -8,7 +8,7 @@ namespace TimeTracker.Business.Orm.Dao.Tasks;
 
 public interface ITaskCommentDao: IDomainService
 {
-    Task<TaskCommentEntity?> GetById(long taskCommentId);
+    Task<TaskCommentEntity?> GetById(Guid taskCommentId);
 
     Task<TaskCommentEntity> AddAsync(
         TaskEntity task,

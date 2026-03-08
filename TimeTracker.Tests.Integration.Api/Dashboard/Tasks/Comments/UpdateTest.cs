@@ -92,7 +92,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualEntity = await response.GetJsonDataAsync<TaskCommentDto>();
-        Assert.True(actualEntity.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualEntity.Id);
         Assert.Equal(_fakeComment.Comment, actualEntity.Comment);
         Assert.Equal(_user.Id, actualEntity.User.Id);
         
@@ -148,7 +148,7 @@ public class UpdateTest: BaseTest
         {
             CommentId = _comment.Id,
             Comment = _fakeComment.Comment,
-            WatcherIds = new List<long>() { user2.Id, user3.Id }
+            WatcherIds = new List<Guid>() { user2.Id, user3.Id }
         });
         await _queueService.ProcessAsync(QueueChannel.Default);
         
@@ -194,12 +194,12 @@ public class UpdateTest: BaseTest
         {
             CommentId = _comment.Id,
             Comment = _fakeComment.Comment,
-            WatcherIds = new List<long>() { user2.Id, user3.Id }
+            WatcherIds = new List<Guid>() { user2.Id, user3.Id }
         });
         response.EnsureSuccessStatusCode();
 
         var actualEntity = await response.GetJsonDataAsync<TaskCommentDto>();
-        Assert.True(actualEntity.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualEntity.Id);
         Assert.Equal(2, actualEntity.Watchers.Count);
         Assert.Contains(actualEntity.Watchers, item => item.Id == user2.Id);
         Assert.Contains(actualEntity.Watchers, item => item.Id == user3.Id);
@@ -236,7 +236,7 @@ public class UpdateTest: BaseTest
         {
             CommentId = _comment.Id,
             Comment = _fakeComment.Comment,
-            WatcherIds = new List<long>() { user2.Id, user3.Id }
+            WatcherIds = new List<Guid>() { user2.Id, user3.Id }
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();
@@ -295,7 +295,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualEntity = await response.GetJsonDataAsync<TaskCommentDto>();
-        Assert.True(actualEntity.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualEntity.Id);
         Assert.Equal(_fakeComment.Comment, actualEntity.Comment);
         Assert.Equal(user2.Id, actualEntity.User.Id);
     }
@@ -305,7 +305,7 @@ public class UpdateTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            CommentId = 999999,
+            CommentId = Guid.Empty,
             Comment = _fakeComment.Comment
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

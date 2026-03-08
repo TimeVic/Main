@@ -58,8 +58,8 @@ public class TimeEntryReportsDao: ITimeEntryReportsDao
     ";
 
     public async Task<ICollection<ProjectPaymentsReportItemDto>> GetProjectPaymentsReport(
-        long workspaceId,
-        long userId,
+        Guid workspaceId,
+        Guid userId,
         DateTime endDate
     )
     {

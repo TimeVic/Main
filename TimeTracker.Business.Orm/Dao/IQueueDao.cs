@@ -7,7 +7,7 @@ namespace TimeTracker.Business.Orm.Dao;
 public interface IQueueDao: IScopedDomainService, IDisposable
 {
     Task<QueueEntity?> GetById(
-        long id,
+        Guid id,
         CancellationToken cancellationToken = default
     );
 

@@ -7,7 +7,7 @@ namespace TimeTracker.Business.Services.Storage;
 
 public partial class FileStorage: IFileStorage
 {
-    public async Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, long fileId)
+    public async Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, Guid fileId)
     {
         var file = await _dbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(fileId);
         if (file == null)

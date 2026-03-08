@@ -15,14 +15,14 @@ public partial class MultipleUsersDropDown
     public bool Disabled { get; set; }
 
     [Parameter]
-    public IEnumerable<long> Value
+    public IEnumerable<Guid> Value
     {
         get => _selectedIds;
         set => _selectedIds = value;
     }
 
     [Parameter]
-    public EventCallback<IEnumerable<long>> ValueChanged { get; set; }
+    public EventCallback<IEnumerable<Guid>> ValueChanged { get; set; }
 
     [Parameter]
     public EventCallback<IEnumerable<UserDto>> SelectedItemChanged { get; set; }
@@ -48,7 +48,7 @@ public partial class MultipleUsersDropDown
             }
             else
             {
-                _allowedIds = new List<long>();
+                _allowedIds = new List<Guid>();
             }
             UpdateList();
         }
@@ -61,8 +61,8 @@ public partial class MultipleUsersDropDown
     public IState<WorkspaceMembershipsState> _state { get; set; }
     
     private ICollection<UserDto> _selectedItems => _list.Where(item => _selectedIds.Contains(item.Id)).ToList();
-    private IEnumerable<long> _allowedIds { get; set; } = new List<long>();
-    private IEnumerable<long> _selectedIds = new List<long>();
+    private IEnumerable<Guid> _allowedIds { get; set; } = new List<Guid>();
+    private IEnumerable<Guid> _selectedIds = new List<Guid>();
     private ICollection<UserDto> _list = new List<UserDto>();
 
     protected override void OnInitialized()
@@ -83,7 +83,7 @@ public partial class MultipleUsersDropDown
         ValueChanged.InvokeAsync(_selectedIds);
     }
 
-    private string ToStringFunc(long userId)
+    private string ToStringFunc(Guid userId)
     {
         var item = _list.FirstOrDefault(item => item.Id == userId);
         return item?.Name ?? string.Empty;

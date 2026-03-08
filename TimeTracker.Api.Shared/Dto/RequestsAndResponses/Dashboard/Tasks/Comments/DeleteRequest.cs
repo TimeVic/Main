@@ -8,7 +8,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Commen
     public class DeleteRequest : IRequest
     {
         [Required]
-        [IsPositive]
-        public long CommentId { get; set; }
+        public Guid CommentId { get; set; }
     }
 }

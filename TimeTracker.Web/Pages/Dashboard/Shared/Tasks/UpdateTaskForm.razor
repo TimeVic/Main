@@ -124,7 +124,7 @@
             <FluentDivider Class="w-100 mb-2" Orientation="Orientation.Horizontal"/>
             
             <FileUploader
-                EntityId="@Task.TaskId"
+                EntityId="@Task.Id"
                 FileUploaded="OnFileUploaded"
                 EntityType="StorageEntityType.Task"
                 FileType="StoredFileType.Attachment"/>
@@ -132,7 +132,7 @@
 
             <FilesList
                 Class=" mt-2"
-                EntityId="@Task.TaskId"
+                EntityId="@Task.Id"
                 EntityType="StorageEntityType.Task"
                 ListUpdated="AttachmentsListUpdated"
                 Files="@Task.Attachments"/>

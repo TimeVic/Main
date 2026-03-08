@@ -15,7 +15,7 @@ public partial class FilesList: IDisposable
     public ICollection<StoredFileDto> Files { get; set; }
 
     [Parameter]
-    public long? EntityId { get; set; }
+    public Guid? EntityId { get; set; }
     
     [Parameter]
     public StorageEntityType? EntityType { get; set; }
@@ -123,7 +123,6 @@ public partial class FilesList: IDisposable
         try
         {
             var files = await _apiService.StorageGetListAsync(
-                _authState.Value.Workspace.Id,
                 EntityId.Value,
                 EntityType.Value
             );

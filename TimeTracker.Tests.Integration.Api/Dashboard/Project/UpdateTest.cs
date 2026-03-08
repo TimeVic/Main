@@ -66,7 +66,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<ProjectDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(expectedProject.Name, actualProject.Name);
         Assert.Equal(expectedProject.DefaultHourlyRate, actualProject.DefaultHourlyRate);
         Assert.Equal(expectedProject.IsBillableByDefault, actualProject.IsBillableByDefault);
@@ -83,12 +83,12 @@ public class UpdateTest: BaseTest
         {
             ProjectId = _project.Id,
             Name = _project.Name,
-            ClientId = 0
+            ClientId = Guid.Empty
         });
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<ProjectDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Null(actualProject.Client);
     }
     
@@ -107,7 +107,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<ProjectDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Null(actualProject.Client);
     }
     

@@ -77,7 +77,7 @@ public partial class GetListTest: BaseTest
         Assert.Equal(2, actualResponse.Items.Count());
         Assert.All(actualResponse.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Id);
             Assert.Equal(NotificationActionType.Reminder, item.Type);
             Assert.NotNull(item.Task);
             Assert.NotNull(item.Task.TaskList);

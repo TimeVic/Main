@@ -62,7 +62,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<WorkspaceDto>();
-        Assert.True(actual.Id > 0);
+        Assert.NotEqual(Guid.Empty, actual.Id);
         Assert.Equal(expectWorkspace.Name, actual.Name);
         Assert.Equal(MembershipAccessType.Owner, actual.CurrentUserAccess);
     }
@@ -84,7 +84,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<WorkspaceDto>();
-        Assert.True(actual.Id > 0);
+        Assert.NotEqual(Guid.Empty, actual.Id);
         Assert.Equal(expectWorkspace.Name, actual.Name);
         Assert.Equal(MembershipAccessType.Manager, actual.CurrentUserAccess);
     }

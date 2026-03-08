@@ -8,5 +8,5 @@ namespace TimeTracker.Api.Dto.RequestsAndResponses.Storage;
 public class GetFileRequest: IRequest<FileResponse>
 {
     [Required]
-    public long FileId { get; set; }
+    public Guid FileId { get; set; }
 }

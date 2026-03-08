@@ -11,5 +11,5 @@ public interface IClientDao: IDomainService
 
     Task<ListDto<ClientEntity>> GetListAsync(WorkspaceEntity workspace, int page);
 
-    Task<ClientEntity?> GetById(long? clientId, WorkspaceEntity? workspace = null);
+    Task<ClientEntity?> GetById(Guid? clientId, WorkspaceEntity? workspace = null);
 }

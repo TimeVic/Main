@@ -2,15 +2,15 @@
 
 public class FilterDataDto
 {
-    public long? ClientId { get; set; }
+    public Guid? ClientId { get; set; }
     
-    public long? ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
     public string? Search { get; set; }
     
     public bool? IsBillable { get; set; }
     
-    public long? MemberId { get; set; }
+    public Guid? MemberId { get; set; }
     
     public DateTime? DateFrom { get; set; }
     

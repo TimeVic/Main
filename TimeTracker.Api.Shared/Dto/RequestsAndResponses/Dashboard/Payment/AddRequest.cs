@@ -8,15 +8,14 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment
     public class AddRequest : IRequest<PaymentDto>
     {
         [Required]
-        [IsPositive]
-        public long WorkspaceId { get; set; }
+        public Guid WorkspaceId { get; set; }
         
         [Required]
         [IsPositive(ErrorMessage = "Client is required")]
-        public long ClientId { get; set; }
+        public Guid ClientId { get; set; }
         
         [IsPositive(AllowZero = true)]
-        public long ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
         
         [Required]
         public DateTime PaymentTime { get; set; } = DateTime.Now;

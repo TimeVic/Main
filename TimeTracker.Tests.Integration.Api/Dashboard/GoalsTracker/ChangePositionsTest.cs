@@ -83,7 +83,7 @@ public class ChangePositionsTest: BaseTest
         {
             Date = expectedDate,
             WorkspaceId = _workspace.Id,
-            Positions = new Dictionary<long, int>()
+            Positions = new Dictionary<Guid, int>()
             {
                 { goal1.Id, 6 },
                 { goal2.Id, 2 },

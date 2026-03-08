@@ -12,13 +12,13 @@ public interface IUserDao: IDomainService
     
     Task<UserEntity?> GetByEmail(string email);
 
-    Task<UserEntity?> GetById(long id);
+    Task<UserEntity?> GetById(Guid id);
     
     Task<UserEntity> CreatePendingUser(string email);
 
     Task<UserEntity?> GetByVerificationToken(string token);
 
-    Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, long workspaceId);
+    Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, Guid workspaceId);
 
     Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user, MembershipAccessType? accessType = null);
 

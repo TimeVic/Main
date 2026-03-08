@@ -10,9 +10,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
 
         public Dictionary<string, string?> ChangeSet { get; set; }
 
-        public long TaskId { get; set; }
-        
-        public long WorkspaceId { get; set; }
+        public Guid TaskId { get; set; }
         
         public string TaskTitle { get; set; }
         

@@ -22,15 +22,15 @@ public class TaskListDao: ITaskListDao
         {
             Name = name,
             Project = project,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
         };
         taskList.SetProject(project);
         await _sessionProvider.CurrentSession.SaveAsync(taskList);
         return taskList;
     }
     
-    public async Task<TaskListEntity?> GetById(long taskListId)
+    public async Task<TaskListEntity?> GetById(Guid taskListId)
     {
         return await _sessionProvider.CurrentSession.GetAsync<TaskListEntity>(taskListId);
     }

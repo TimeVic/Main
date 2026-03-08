@@ -73,7 +73,7 @@ public class UpdateTest: BaseTest
             expectedPayment.Description
         );
         
-        Assert.True(actualPayment.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(expectedPayment.Amount, actualPayment.Amount);
         Assert.Equal(expectedPayment.Description, actualPayment.Description);
         Assert.Equal(expectedPayment.PaymentTime, actualPayment.PaymentTime);
@@ -113,7 +113,7 @@ public class UpdateTest: BaseTest
             expectedPayment.Description
         );
         
-        Assert.True(actualPayment.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Null(actualPayment.Project);
     }
 }

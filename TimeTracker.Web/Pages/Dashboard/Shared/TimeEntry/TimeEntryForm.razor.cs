@@ -94,7 +94,7 @@ public partial class TimeEntryForm
         await Task.CompletedTask;
     }
     
-    private async Task ShowAddTaskModal(long timEntryId)
+    private async Task ShowAddTaskModal(Guid timEntryId)
     {
         await _modalDialogProviderService.ShowAddTaskModal(timEntryId);
     }

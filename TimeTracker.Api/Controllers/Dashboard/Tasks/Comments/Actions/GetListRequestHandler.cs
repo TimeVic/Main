@@ -42,7 +42,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
         {
             var userId = _requestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
-            var task = await _taskDao.GetByWorkspaceTaskId(request.WorkspaceId, request.TaskId);
+            var task = await _taskDao.GetById(request.TaskId);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
             {
                 throw new HasNoAccessException();

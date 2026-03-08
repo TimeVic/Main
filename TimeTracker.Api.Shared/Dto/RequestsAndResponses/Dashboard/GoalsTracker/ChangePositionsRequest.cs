@@ -8,12 +8,11 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker
 public class ChangePositionsRequest : IRequest
 {
     [Required]
-    [IsPositive]
-    public long WorkspaceId { get; set; }
+    public Guid WorkspaceId { get; set; }
     
     [Required]
     public DateTime Date { get; set; }
 
     [Required]
-    public IDictionary<long, int> Positions { get; set; } = new Dictionary<long, int>();
+    public IDictionary<Guid, int> Positions { get; set; } = new Dictionary<Guid, int>();
 }

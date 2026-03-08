@@ -23,7 +23,7 @@ public class RequestService: IRequestService
         return _httpContext.HttpContext?.Request.GetApiToken();
     }
 
-    public long GetUserIdFromJwt()
+    public Guid GetUserIdFromJwt()
     {
         return _jwtAuthService.GetUserId(GetApiToken());
     }

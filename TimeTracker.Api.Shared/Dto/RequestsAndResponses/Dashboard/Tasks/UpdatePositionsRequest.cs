@@ -9,8 +9,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
     public class UpdatePositionsRequest : IRequest
     {   
         [Required]
-        [IsPositive]
-        public long TaskListId { get; set; }
+        public Guid TaskListId { get; set; }
         
         public IDictionary<long, int> Items { get; set; } = new Dictionary<long, int>();
     }

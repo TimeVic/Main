@@ -7,7 +7,7 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<GoalsTrackerDto?> GoalsTrackerLoadAsync(long workspaceId, DateTime date)
+        public async Task<GoalsTrackerDto?> GoalsTrackerLoadAsync(Guid workspaceId, DateTime date)
         {
             return await PostAsync<GoalsTrackerDto?>(ApiUrl.GoalsTrackerGet, new GetRequest()
             {
@@ -17,7 +17,7 @@ namespace TimeTracker.Web.Services.Http
         }
         
         public async Task GoalsTrackerChangePositionsAsync(
-            long workspaceId,
+            Guid workspaceId,
             DateTime date,
             ICollection<GoalsTrackerItemDto> items
         )
@@ -30,7 +30,7 @@ namespace TimeTracker.Web.Services.Http
             });
         }
         
-        public async Task<GoalsTrackerItemDto?> GoalsTrackerCreateItemAsync(long trackerId, string name, int numberOfTimes)
+        public async Task<GoalsTrackerItemDto?> GoalsTrackerCreateItemAsync(Guid trackerId, string name, int numberOfTimes)
         {
             return await PostAsync<GoalsTrackerItemDto?>(ApiUrl.GoalsTrackerItemCreate, new CreateItemRequest()
             {
@@ -45,7 +45,7 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<GoalsTrackerItemDto?>(ApiUrl.GoalsTrackerItemUpdate, request);
         }
         
-        public async Task GoalsTrackerDeleteItemAsync(long itemId)
+        public async Task GoalsTrackerDeleteItemAsync(Guid itemId)
         {
             await PostAsync<object>(ApiUrl.GoalsTrackerItemDelete, new DeleteItemRequest()
             {
@@ -53,7 +53,7 @@ namespace TimeTracker.Web.Services.Http
             });
         }
         
-        public async Task<GoalsTrackerCompletionMarkerDto?> GoalsTrackerSetCompletionAsync(long itemId, int dayOfMonth, bool isChecked)
+        public async Task<GoalsTrackerCompletionMarkerDto?> GoalsTrackerSetCompletionAsync(Guid itemId, int dayOfMonth, bool isChecked)
         {
             return await PostAsync<GoalsTrackerCompletionMarkerDto?>(ApiUrl.GoalsTrackerItemSetCompletion, new SetCompletionRequest()
             {

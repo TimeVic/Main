@@ -6,8 +6,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMem
 public class MembershipProjectAccessRequest
 {
     [Required]
-    [IsPositive]
-    public long ProjectId { get; set; }
+    public Guid ProjectId { get; set; }
 
     [IsPositive(AllowZero = true)]
     public decimal? HourlyRate { get; set; }

@@ -13,7 +13,7 @@ public partial class AddTasksListModalForm
 {
     public class Parameters
     {
-        public long? ProjectId { get; set; }
+        public Guid? ProjectId { get; set; }
     }
     
     [Parameter]
@@ -36,7 +36,7 @@ public partial class AddTasksListModalForm
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.ProjectId = Content.ProjectId ?? 0;
+        model.ProjectId = Content.ProjectId ?? Guid.Empty;
     }
 
     private async Task Submit()

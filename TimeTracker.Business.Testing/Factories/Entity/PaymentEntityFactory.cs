@@ -13,8 +13,8 @@ namespace TimeTracker.Business.Testing.Factories.Entity
                 .RuleFor(fake => fake.PaymentTime, fake => fake.Date.Past().ToUniversalTime())
                 .RuleFor(fake => fake.Amount, fake => fake.Random.Decimal(1, 200))
                 .RuleFor(fake => fake.Description, fake => fake.Lorem.Sentence(3))
-                .RuleFor(fake => fake.CreateTime, fake => fake.Date.Past().ToUniversalTime())
-                .RuleFor(fake => fake.UpdateTime, fake => fake.Date.Past().ToUniversalTime());
+                .RuleFor(fake => fake.CreatedAt, fake => fake.Date.Past().ToUniversalTime())
+                .RuleFor(fake => fake.UpdatedAt, fake => fake.Date.Past().ToUniversalTime());
         }
 
         public PaymentEntity Generate()

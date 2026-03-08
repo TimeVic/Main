@@ -26,12 +26,27 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Dao\FileStorage\" />
       <Folder Include="Hibernate\Queries" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="Hibernate\hibernate.hbm.xml" />
       <EmbeddedResource Include="Hibernate\hibernate.hbm.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Entities\FileStorage\FileStorageBucketEntity.cs" />
+      <Compile Remove="Entities\FileStorage\FileStorageDirectoryEntity.cs" />
+      <Compile Remove="Entities\FileStorage\FileStorageFileEntity.cs" />
+      <Compile Remove="Dao\FileStorage\FileStorageAccessKeyDao.cs" />
+      <Compile Remove="Dao\FileStorage\FileStorageBucketDao.cs" />
+      <Compile Remove="Dao\FileStorage\FileStorageDirectoryDao.cs" />
+      <Compile Remove="Dao\FileStorage\FileStorageFileDao.cs" />
+      <Compile Remove="Dao\FileStorage\IFileStorageAccessKeyDao.cs" />
+      <Compile Remove="Dao\FileStorage\IFileStorageBucketDao.cs" />
+      <Compile Remove="Dao\FileStorage\IFileStorageDirectoryDao.cs" />
+      <Compile Remove="Dao\FileStorage\IFileStorageFileDao.cs" />
     </ItemGroup>
 
 </Project>

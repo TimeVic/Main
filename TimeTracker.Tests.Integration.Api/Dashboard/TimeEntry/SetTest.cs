@@ -89,7 +89,7 @@ public class SetTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Equal(endTime, actualDto.EndTime);
         Assert.Equal(startTime, actualDto.StartTime);
         Assert.Equal(fakeEntry.Description, actualDto.Description);
@@ -130,7 +130,7 @@ public class SetTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Null(actualDto.EndTime);
         Assert.Equal(fakeEntry.StartTime, actualDto.StartTime);
         Assert.Equal(fakeEntry.Description, actualDto.Description);
@@ -180,7 +180,7 @@ public class SetTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Null(actualDto.EndTime);
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
     }

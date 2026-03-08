@@ -55,7 +55,7 @@ public partial class SetTest: BaseTest
         var expectProject = await _projectDao.CreateAsync(expectWorkspace, "Test project");
         
         var newEntry = await _timeEntryDao.SetAsync(_user, expectWorkspace, expectedDto, expectProject);
-        Assert.True(newEntry.Id > 0);
+        Assert.NotEqual(Guid.Empty, newEntry.Id);
         Assert.Equal(expectWorkspace.Id, newEntry.Workspace.Id);
         Assert.Equal(expectProject.Id, newEntry.Project.Id);
         Assert.Equal(expectedDto.Description, newEntry.Description);

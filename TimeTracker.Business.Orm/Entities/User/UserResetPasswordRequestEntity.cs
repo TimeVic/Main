@@ -1,35 +1,17 @@
-using Domain.Abstractions;
-using NHibernate.Mapping.Attributes;
-using NHibernate.Type;
+using TimeTracker.Business.Orm.Core;
 
 namespace TimeTracker.Business.Orm.Entities.User
 {
-    [Class(Table = "user_reset_password_requests")]
-    public class UserResetPasswordRequestEntity: IEntity
+    public class UserResetPasswordRequestEntity: AEntity
     {
-        [Id(Name = "Id", Generator = "native")]
-        [Column(Name = "id", SqlType = "bigint", NotNull = true)]
-        public virtual long Id { get; set; }
-        
-        [Property(NotNull = false)]
-        [Column(Name = "verification_token", Length = 200, NotNull = false)]
-        public virtual string VerificationToken { get; set; }
-        
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
-        public virtual DateTime CreateTime { get; set; }
-        
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "expiration_time", SqlType = "datetime", NotNull = true)]
+        public virtual required string VerificationToken { get; set; }
         public virtual DateTime ExpirationTime { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(UserEntity), 
-            Column = "user_id", 
-            Lazy = Laziness.False,
-            Cascade = "none"
-        )]
-        public virtual UserEntity User { get; set; }
+
+        #region Relationships
+
+        public virtual required UserEntity User { get; set; }
+
+        #endregion
         
         #region Calculated
 

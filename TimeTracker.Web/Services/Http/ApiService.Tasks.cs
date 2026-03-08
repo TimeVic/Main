@@ -35,7 +35,7 @@ namespace TimeTracker.Web.Services.Http
         }
         
         public async Task<GetListResponse?> TasksGetMyListAsync(
-            long workspaceId,
+            Guid workspaceId,
             ICollection<TaskStatus>? taskStatuses = null,
             string? searchString = null
         )
@@ -49,7 +49,7 @@ namespace TimeTracker.Web.Services.Http
         }
         
         public async Task<GetListResponse?> TasksGetOverdueListAsync(
-            long workspaceId,
+            Guid workspaceId,
             string? searchString = null
         )
         {
@@ -67,11 +67,10 @@ namespace TimeTracker.Web.Services.Http
             });
         }
         
-        public async Task<TaskDto?> TasksGetAsync(long workspaceId, long taskId)
+        public async Task<TaskDto?> TasksGetAsync(Guid taskId)
         {
             return await PostAsync<TaskDto?>(ApiUrl.TasksGetOne, new GetOneRequest()
             {
-                WorkspaceId = workspaceId,
                 TaskId = taskId
             });
         }

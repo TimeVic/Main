@@ -17,7 +17,7 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<TagDto?>(ApiUrl.TagUpdate, model);
         }
         
-        public async Task TagDeleteAsync(long tagId)
+        public async Task TagDeleteAsync(Guid tagId)
         {
             await PostAsync<object>(ApiUrl.TagDelete, new DeleteRequest()
             {

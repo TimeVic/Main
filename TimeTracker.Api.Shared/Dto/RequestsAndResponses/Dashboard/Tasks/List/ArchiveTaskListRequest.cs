@@ -7,7 +7,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
     public class ArchiveTaskListRequest : IRequest
     {
         [Required]
-        [IsPositive]
-        public long TaskListId { get; set; }
+        public Guid TaskListId { get; set; }
     }
 }

@@ -9,8 +9,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMem
     public class UpdateRequest : IRequest<WorkspaceMembershipDto>
     {
         [Required]
-        [IsPositive]
-        public long MembershipId { get; set; }
+        public Guid MembershipId { get; set; }
         
         [Required]
         public MembershipAccessType Access { get; set; }

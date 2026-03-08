@@ -10,7 +10,7 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks;
 public partial class TaskPage
 {
     [Parameter]
-    public long? TaskId
+    public Guid? TaskId
     {
         get => _taskId;
         set
@@ -21,7 +21,7 @@ public partial class TaskPage
     }
 
     [Parameter]
-    public long WorkspaceId { get; set; }
+    public Guid WorkspaceId { get; set; }
 
     [Inject]
     private ILogger<TaskPage> _logger { get; set; }
@@ -38,7 +38,7 @@ public partial class TaskPage
     [Inject]
     private IState<AuthState> _authState { get; set; }
     
-    private long? _taskId = 0;
+    private Guid? _taskId = Guid.Empty;
     private TaskDto? _task;
     private bool _isLoading = false;
 
@@ -62,10 +62,7 @@ public partial class TaskPage
         
         try
         {
-            _task = await ApiService.TasksGetAsync(
-                _authState.Value.Workspace.Id,
-                _taskId.Value
-            );
+            _task = await ApiService.TasksGetAsync(_taskId.Value);
             if (_task == null)
             {
                 NavigateToTasksPage();    
@@ -94,7 +91,7 @@ public partial class TaskPage
             });
             return;
         }
-        var clientId = _task.TaskList.Project.Client?.Id ?? 0;
+        var clientId = _task.TaskList.Project.Client?.Id ?? Guid.Empty;
         NavigationManager.NavigateTo(
             string.Format(SiteUrl.Dashboard_Tasks, clientId, _task.TaskList.Id)    
         );

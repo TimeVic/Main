@@ -18,7 +18,7 @@ public class PaymentDao: IPaymentDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<PaymentEntity?> GetById(long? id)
+    public async Task<PaymentEntity?> GetById(Guid? id)
     {
         if (id == null)
             return null;
@@ -34,7 +34,7 @@ public class PaymentDao: IPaymentDao
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
-        long? projectId = null,
+        Guid? projectId = null,
         string? description = null
     )
     {
@@ -43,15 +43,16 @@ public class PaymentDao: IPaymentDao
             throw new DataInconsistencyException($"This workspace does not contain client: {client.Id}");
         }
 
-        var entity = new PaymentEntity()
+        var entity = new PaymentEntity
         {
             Workspace = workspace,
             User = user,
             Amount = amount,
             PaymentTime = paymentTime,
             Description = description,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Client = client
         };
         client.AddPayment(entity);
         var project = client.Projects
@@ -67,11 +68,11 @@ public class PaymentDao: IPaymentDao
     }
     
     public async Task<PaymentEntity?> UpdatePaymentAsync(
-        long paymentId,
+        Guid paymentId,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
-        long? projectId,
+        Guid? projectId,
         string? description    
     )
     {
@@ -79,7 +80,7 @@ public class PaymentDao: IPaymentDao
             .FirstOrDefaultAsync(item => item.Id == paymentId);
         if (payment != null)
         {
-            payment.UpdateTime = DateTime.UtcNow;
+            payment.UpdatedAt = DateTime.UtcNow;
             payment.Client = client;
             payment.Amount = amount;
             payment.PaymentTime = paymentTime;

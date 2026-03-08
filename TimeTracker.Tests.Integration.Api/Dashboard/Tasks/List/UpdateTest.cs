@@ -72,7 +72,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<TaskListDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(expectedName, actualProject.Name);
         Assert.Equal(taskList.Id, actualProject.Id);
     }
@@ -123,7 +123,7 @@ public class UpdateTest: BaseTest
         {
             Name = project.Name,
             ProjectId = _project.Id,
-            TaskListId = 9999999
+            TaskListId = Guid.Empty
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();

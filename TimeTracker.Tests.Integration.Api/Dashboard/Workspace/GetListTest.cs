@@ -55,7 +55,7 @@ public class GetListTest: BaseTest
         
         Assert.All(actualDto.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Id);
             Assert.NotNull(item.Name);
         });
     }

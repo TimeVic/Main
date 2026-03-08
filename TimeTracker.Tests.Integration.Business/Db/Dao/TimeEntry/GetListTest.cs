@@ -51,8 +51,8 @@ public class GetListTest: BaseTest
         
         Assert.All(actualList.Items, item =>
         {
-            Assert.True(item.Id > 0);
-            Assert.True(item.CreateTime > DateTime.MinValue);
+            Assert.NotEqual(Guid.Empty, item.Id);
+            Assert.True(item.CreatedAt > DateTime.MinValue);
             Assert.True(item.EndTime > TimeSpan.MinValue);
             Assert.NotNull(item.Project);
         });

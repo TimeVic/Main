@@ -74,10 +74,10 @@ public class GetBatchToNotifyTest: BaseTest
         var expetedTimeOut = 30;
         var task1 = await _taskSeeder.CreateAsync();
         var firstItem = await _taskHistoryItemDao.Create(task1, _user);
-        firstItem.CreateTime = firstItem.CreateTime.AddSeconds(-expetedTimeOut);
+        firstItem.CreatedAt = firstItem.CreatedAt.AddSeconds(-expetedTimeOut);
         
         var secondItem = await _taskHistoryItemDao.Create(task1, _user);
-        secondItem.CreateTime = DateTime.UtcNow;
+        secondItem.CreatedAt = DateTime.UtcNow;
         await CommitDbChanges();
         
         var actualHistoryItems = await _taskHistoryItemDao.GetBatchToNotify(30);

@@ -51,10 +51,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                 throw new ValidationException("Incorrect TaskListId");
             }
             
-            var task = await _taskDao.GetByWorkspaceTaskId(
-                taskList.Project.Workspace.Id,
-                request.TaskId
-            );
+            var task = await _taskDao.GetById(request.TaskId);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList))
                 throw new HasNoAccessException("This user has no permissions for provided task list");
             

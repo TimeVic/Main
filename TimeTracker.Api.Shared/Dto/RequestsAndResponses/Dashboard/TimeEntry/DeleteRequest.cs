@@ -8,7 +8,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
     public class DeleteRequest : IRequest
     {
         [Required]
-        [IsPositive]
-        public long TimeEntryId { get; set; }
+        public Guid TimeEntryId { get; set; }
     }
 }

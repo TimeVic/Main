@@ -19,7 +19,7 @@ public class TaskCommentDao: ITaskCommentDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<TaskCommentEntity?> GetById(long taskCommentId)
+    public async Task<TaskCommentEntity?> GetById(Guid taskCommentId)
     {
         return await _sessionProvider.CurrentSession.GetAsync<TaskCommentEntity>(taskCommentId);
     }
@@ -36,8 +36,8 @@ public class TaskCommentDao: ITaskCommentDao
             Task = task,
             User = user,
             Comment = comment,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
         if (watchers != null)
         {
@@ -58,7 +58,7 @@ public class TaskCommentDao: ITaskCommentDao
     )
     {
         taskComment.Comment = comment;
-        taskComment.UpdateTime = DateTime.UtcNow;
+        taskComment.UpdatedAt = DateTime.UtcNow;
         taskComment.Watchers.Clear();
         if (watchers != null)
         {
@@ -93,7 +93,7 @@ public class TaskCommentDao: ITaskCommentDao
 
         var offset = PaginationUtils.CalculateOffset(page);
         var items = await query
-            .OrderBy(item => item.CreateTime).Desc()
+            .OrderBy(item => item.CreatedAt).Desc()
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
             .ListAsync<TaskCommentEntity>();

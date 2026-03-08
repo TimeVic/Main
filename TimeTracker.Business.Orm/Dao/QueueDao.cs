@@ -42,8 +42,8 @@ public class QueueDao: IQueueDao
                 ContextType = typeString,
                 ContextData = JsonHelper.SerializeToString(context),
                 ProcessAt = processAt ?? DateTime.UtcNow,
-                CreateTime = DateTime.UtcNow,
-                UpdateTime = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
             await _session.SaveAsync(queueItem, cancellationToken);
             await transaction.CommitAsync(cancellationToken);
@@ -56,14 +56,14 @@ public class QueueDao: IQueueDao
     }
     
     public async Task<QueueEntity?> GetById(
-        long id,
+        Guid id,
         CancellationToken cancellationToken = default
     )
     {
         var query = _session.Query<QueueEntity>()
             .Where(item => item.Id == id);
         return await query
-            .OrderBy(item => item.CreateTime)
+            .OrderBy(item => item.CreatedAt)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
     

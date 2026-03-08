@@ -8,7 +8,7 @@ namespace TimeTracker.Business.Orm.Dao;
 
 public interface IPaymentDao: IDomainService
 {
-    Task<PaymentEntity?> GetById(long? id);
+    Task<PaymentEntity?> GetById(Guid? id);
     
     Task<PaymentEntity> CreateAsync(
         WorkspaceEntity workspace,
@@ -16,16 +16,16 @@ public interface IPaymentDao: IDomainService
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
-        long? projectId = null,
+        Guid? projectId = null,
         string? description = null
     );
 
     Task<PaymentEntity?> UpdatePaymentAsync(
-        long paymentId,
+        Guid paymentId,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
-        long? projectId,
+        Guid? projectId,
         string? description
     );
     

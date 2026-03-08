@@ -8,8 +8,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 public class SummaryReportRequest: IRequest<SummaryReportResponse>
 {
     [Required]
-    [IsPositive]
-    public long WorkspaceId { get; set; }
+    public Guid WorkspaceId { get; set; }
     
     [Required]
     public DateTime StartTime { get; set; }

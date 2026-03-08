@@ -22,7 +22,7 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<GetListResponse?>(ApiUrl.ProjectList, model);
         }
         
-        public async Task ProjectDeleteAsync(long projectId)
+        public async Task ProjectDeleteAsync(Guid projectId)
         {
             await PostAsync<ProjectDto>(ApiUrl.ProjectDelete, new DeleteRequest()
             {

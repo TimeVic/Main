@@ -64,8 +64,7 @@ public class GetOneTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetOneRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId
+            TaskId = _task.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -77,8 +76,7 @@ public class GetOneTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetOneRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId
+            TaskId = _task.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -110,8 +108,7 @@ public class GetOneTest: BaseTest
         
         var response = await PostRequestAsync(Url, _otherToken, new GetOneRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId
+            TaskId = _task.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -129,8 +126,7 @@ public class GetOneTest: BaseTest
         
         var response = await PostRequestAsync(Url, _otherToken, new GetOneRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId
+            TaskId = _task.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();

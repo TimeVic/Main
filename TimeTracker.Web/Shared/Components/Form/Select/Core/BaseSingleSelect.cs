@@ -16,11 +16,11 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent where T : BaseD
     public bool Clearable { get; set; }
 
     [Parameter]
-    public long Value
+    public Guid Value
     {
         get
         {
-            long.TryParse(_selectedId, out var id);
+            Guid.TryParse(_selectedId, out var id);
             return id;
         }
         set

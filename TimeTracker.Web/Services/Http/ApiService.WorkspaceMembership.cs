@@ -8,7 +8,7 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<WorkspaceMembershipDto?> WorkspaceMembershipAddAsync(long workspaceId, string email)
+        public async Task<WorkspaceMembershipDto?> WorkspaceMembershipAddAsync(Guid workspaceId, string email)
         {
             return await PostAsync<WorkspaceMembershipDto>(
                 ApiUrl.WorkspaceMembershipAdd,
@@ -33,7 +33,7 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<GetListResponse>(ApiUrl.WorkspaceMembershipList, model);
         }
         
-        public async Task WorkspaceMembershipDeleteAsync(long membershipId)
+        public async Task WorkspaceMembershipDeleteAsync(Guid membershipId)
         {
             await PostAsync<object>(
                 ApiUrl.WorkspaceMembershipDelete,

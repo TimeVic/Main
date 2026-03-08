@@ -70,7 +70,7 @@ public class NotificationCenterService: INotificationCenterService
             return;
         }
         notification.IsRead = true;
-        notification.UpdateTime = DateTime.UtcNow;
+        notification.UpdatedAt = DateTime.UtcNow;
         await _sessionProvider.CurrentSession.SaveAsync(notification);
     }
     

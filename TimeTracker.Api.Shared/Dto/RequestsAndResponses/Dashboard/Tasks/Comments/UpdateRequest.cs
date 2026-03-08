@@ -9,19 +9,19 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Commen
     {
         [Required]
         [IsPositive]
-        public long CommentId { get; set; }
+        public Guid CommentId { get; set; }
         
         [Required]
         [StringLength(10000, MinimumLength = 1)]
         public string Comment { get; set; }
         
-        public IEnumerable<long>? WatcherIds { get; set; }
+        public IEnumerable<Guid>? WatcherIds { get; set; }
 
         public UpdateRequest()
         {
         }
         
-        public UpdateRequest(long commentId, AddRequest addRequest)
+        public UpdateRequest(Guid commentId, AddRequest addRequest)
         {
             CommentId = commentId;
             Comment = addRequest.Comment;

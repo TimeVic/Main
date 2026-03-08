@@ -8,11 +8,11 @@ public class NotificationCenterPushRequestContext: IQueueItemContext
 {
     public NotificationActionType Action { get; set; }
     
-    public long ProducedUserId { get; set; }
+    public Guid ProducedUserId { get; set; }
     
-    public long? TaskCommentId { get; set; }
+    public Guid? TaskCommentId { get; set; }
     
-    public long? TaskId { get; set; }
+    public Guid? TaskId { get; set; }
 
     public NotificationCenterPushRequestContext()
     {

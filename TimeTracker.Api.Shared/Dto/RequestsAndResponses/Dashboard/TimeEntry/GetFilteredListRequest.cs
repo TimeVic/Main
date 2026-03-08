@@ -13,16 +13,16 @@ public class GetFilteredListRequest: IRequest<GetFilteredListResponse>
     
     [Required]
     [IsPositive]
-    public long WorkspaceId { get; set; }
+    public Guid WorkspaceId { get; set; }
     
     [IsPositive]
-    public long? ClientId { get; set; }
+    public Guid? ClientId { get; set; }
     
     [IsPositive]
-    public long? ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
 
     [IsPositive]
-    public long? MemberId { get; set; }
+    public Guid? MemberId { get; set; }
     
     [StringLength(255)]
     public string? Search { get; set; }

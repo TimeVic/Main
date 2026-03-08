@@ -17,7 +17,7 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<TaskCommentDto?>(ApiUrl.TaskCommentUpdate, model);
         }
         
-        public async Task TaskCommentDeleteAsync(long commentId)
+        public async Task TaskCommentDeleteAsync(Guid commentId)
         {
             await PostAsync<TaskCommentDto>(ApiUrl.TaskCommentDelete, new DeleteRequest() {
                 CommentId = commentId
@@ -25,14 +25,12 @@ namespace TimeTracker.Web.Services.Http
         }
 
         public async Task<GetListResponse?> TaskCommentsGetListAsync(
-            long workspaceId,
-            long taskId,
+            Guid taskId,
             int page
         )
         {
             return await PostAsync<GetListResponse?>(ApiUrl.TaskCommentsList, new GetListRequest()
             {
-                WorkspaceId = workspaceId,
                 TaskId = taskId,
                 Page = page
             });

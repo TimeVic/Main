@@ -90,7 +90,7 @@ public class UploadTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<StoredFileDto>();
-        Assert.True(actualData.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualData.Id);
         Assert.NotEmpty(actualData.Url);
         Assert.NotEmpty(actualData.ThumbUrl);
 
@@ -147,7 +147,7 @@ public class UploadTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<StoredFileDto>();
-        Assert.True(actualData.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualData.Id);
         Assert.NotEmpty(actualData.Url);
         Assert.NotEmpty(actualData.ThumbUrl);
 

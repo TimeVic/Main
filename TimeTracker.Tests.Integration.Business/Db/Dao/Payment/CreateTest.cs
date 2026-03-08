@@ -59,7 +59,7 @@ public class CreateTest: BaseTest
             expectPayment.Description
         );
         
-        Assert.True(actualPayment.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(expectPayment.Amount, actualPayment.Amount);
         Assert.Equal(expectPayment.Description, actualPayment.Description);
         Assert.Equal(expectPayment.PaymentTime, actualPayment.PaymentTime);

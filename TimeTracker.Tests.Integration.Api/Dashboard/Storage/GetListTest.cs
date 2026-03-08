@@ -57,8 +57,7 @@ public class GetListTest: BaseTest
             Url,
             new GetListRequest()
             {
-                WorkspaceId = _workspace.Id,
-                EntityId = task.TaskId,
+                EntityId = task.Id,
                 EntityType = StorageEntityType.Task
             }
         );
@@ -79,8 +78,7 @@ public class GetListTest: BaseTest
             _jwtToken,
             new GetListRequest()
             {
-                WorkspaceId = _workspace.Id,
-                EntityId = task.TaskId,
+                EntityId = task.Id,
                 EntityType = StorageEntityType.Task
             }
         );
@@ -105,8 +103,7 @@ public class GetListTest: BaseTest
             jwtToken2,
             new GetListRequest()
             {
-                WorkspaceId = _workspace.Id,
-                EntityId = task.TaskId,
+                EntityId = task.Id,
                 EntityType = StorageEntityType.Task
             }
         );

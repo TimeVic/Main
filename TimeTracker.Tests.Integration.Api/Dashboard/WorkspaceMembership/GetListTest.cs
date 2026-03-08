@@ -61,9 +61,9 @@ public class GetListTest: BaseTest
         
         Assert.All(actualDto.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Id);
             Assert.True(item.Access == MembershipAccessType.User || item.Access == MembershipAccessType.Owner);
-            Assert.True(item.User.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.User.Id);
         });
     }
     

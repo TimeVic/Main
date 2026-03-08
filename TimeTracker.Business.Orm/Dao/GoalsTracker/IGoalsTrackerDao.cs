@@ -9,5 +9,5 @@ public interface IGoalsTrackerDao: IDomainService
 {
     Task<GoalsTrackerEntity> CheckAndCreate(UserEntity user, WorkspaceEntity workspace, DateTime date);
 
-    Task<GoalsTrackerEntity?> GetById(long id);
+    Task<GoalsTrackerEntity?> GetById(Guid id);
 }

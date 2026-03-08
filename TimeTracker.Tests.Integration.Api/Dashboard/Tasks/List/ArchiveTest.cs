@@ -76,7 +76,7 @@ public class ArchiveTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new ArchiveTaskListRequest()
         {
-            TaskListId = 9999999
+            TaskListId = Guid.Empty
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonErrorAsync();

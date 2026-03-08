@@ -169,7 +169,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             return null;
         }
 
-        private async Task<TimeEntryEntity> GetTimeEntry(long timeEntryId, UserEntity user)
+        private async Task<TimeEntryEntity> GetTimeEntry(Guid timeEntryId, UserEntity user)
         {
             var timeEntry = await _sessionProvider.CurrentSession
                 .GetAsync<TimeEntryEntity>(timeEntryId);

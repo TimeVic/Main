@@ -43,7 +43,7 @@ public class LoginTest: BaseTest
 
         Assert.True(_jwtService.IsValidJwt(responseData.JwtToken));
         Assert.NotEmpty(responseData.AccessToken);
-        Assert.True(responseData.User.Id > 0);
+        Assert.NotEqual(Guid.Empty, responseData.User.Id);
         Assert.NotEmpty(responseData.User.Email);
         Assert.NotNull(responseData.User.DefaultWorkspace);
         Assert.True(responseData.User.DefaultWorkspace.IsDefault);

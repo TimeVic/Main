@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Pages.Dashboard.Tasks;
 public partial class TasksPage
 {
     [Parameter]
-    public long? TaskListId { get; set; }
+    public Guid? TaskListId { get; set; }
     
     [Inject]
     public IState<TasksListState> _tasksListState { get; set; }

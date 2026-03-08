@@ -32,7 +32,7 @@ public class StoredFilesDao: IStoredFilesDao
         return storedFile;
     }
     
-    public async Task<ICollection<StoredFileEntity>> GetListByEntity(long entityId, StorageEntityType entityType)
+    public async Task<ICollection<StoredFileEntity>> GetListByEntity(Guid entityId, StorageEntityType entityType)
     {
         TaskEntity taskAlias = null;
         UserEntity userAlias = null;
