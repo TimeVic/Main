@@ -39,7 +39,7 @@ public class NotificationDao : INotificationDao
             .UpdateAsync(item => new
             {
                 IsRead = true,
-                UpdateTime = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow
             });
     }
     

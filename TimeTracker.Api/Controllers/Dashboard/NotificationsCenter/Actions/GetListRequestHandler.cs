@@ -41,7 +41,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
 
             var listDto = await _notificationCenterService.GetList(user, workspace, request.Page);
             return new GetListResponse(
-                _mapper.Map<ICollection<NotificationDto>>(listDto.Items),
+                _mapper.Map<List<NotificationDto>>(listDto.Items),
                 listDto.TotalCount
             );
         }

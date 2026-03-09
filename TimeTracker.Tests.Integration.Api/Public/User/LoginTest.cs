@@ -63,7 +63,7 @@ public class LoginTest: BaseTest
             Password = "some incorrect password",
             ReCaptcha = "captcha"
         });
-        var responseData = await response.GetJsonErrorAsync();
-        Assert.Equal(new UserNotAuthorizedException().GetTypeName(), responseData.Type);
+        var responseData = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new UserNotAuthorizedException().GetTypeName(), responseData.ErrorCode);
     }
 }

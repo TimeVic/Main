@@ -25,8 +25,6 @@ public class StoredFileMapping: BaseGuidMappings<StoredFileEntity>
         Map(x => x.DataToUpload).Nullable();
         Map(x => x.UploadingError).Nullable();
         
-        Map(x => x.CreateTime).Nullable();
-        
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         

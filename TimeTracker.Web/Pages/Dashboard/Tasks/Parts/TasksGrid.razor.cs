@@ -48,7 +48,7 @@ public partial class TasksGrid: IDisposable
             .Select(items =>
             {
                 return items.Where(item => Statuses.Contains(item.Status))
-                    .OrderByDescending(item => item.UpdateTime)
+                    .OrderByDescending(item => item.UpdatedAt)
                     .ToArray();
             })
             .Subscribe(results =>

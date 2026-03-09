@@ -22,21 +22,7 @@ namespace TimeTracker.Business.Orm.Entities.Notifications
         #endregion
         
         #region Optional
-        
-        [ManyToOne(
-            ClassType = typeof(TaskEntity), 
-            Column = "task_id", 
-            Lazy = Laziness.False,
-            Cascade = "none"
-        )]
         public virtual TaskEntity? Task { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(TaskCommentEntity), 
-            Column = "task_comment_id", 
-            Lazy = Laziness.False,
-            Cascade = "none"
-        )]
         public virtual TaskCommentEntity? TaskComment { get; set; }
         
         #endregion

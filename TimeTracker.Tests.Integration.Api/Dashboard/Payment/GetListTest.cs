@@ -93,8 +93,8 @@ public class GetListTest: BaseTest
             WorkspaceId = _workspace.Id,
             Page = 1
         });
-        var errorResponse = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), errorResponse.Type);
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), errorResponse.ErrorCode);
     }
     
     [Fact]

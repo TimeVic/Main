@@ -107,7 +107,7 @@ public class UpdateTest: BaseTest
             PaymentTime = expectPayment.PaymentTime,
             ProjectId = _payment.Project.Id
         });
-        var errorResponse = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.Type);
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
 }

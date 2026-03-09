@@ -149,7 +149,7 @@ public class AddTest: BaseTest
             PaymentTime = payment.PaymentTime
         });
         
-        var responseData = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), responseData.Type);
+        var responseData = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), responseData.ErrorCode);
     }
 }

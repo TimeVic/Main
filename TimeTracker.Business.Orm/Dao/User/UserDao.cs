@@ -78,6 +78,7 @@ public class UserDao: IUserDao
     public async Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user, MembershipAccessType? accessType = null)
     {
         var query = _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Fetch(item => item.Workspace)
             .Where(item => item.User.Id == user.Id);
         if (accessType != null)
         {

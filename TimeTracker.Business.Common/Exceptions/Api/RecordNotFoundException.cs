@@ -18,7 +18,6 @@ namespace TimeTracker.Business.Common.Exceptions.Api
         }
     
         [DoesNotReturn]
-        internal static void Throw(string? message) =>
-            throw new RecordNotFoundException(message);
+        internal static void Throw(string? message) => throw new RecordNotFoundException(message);
     }
 }

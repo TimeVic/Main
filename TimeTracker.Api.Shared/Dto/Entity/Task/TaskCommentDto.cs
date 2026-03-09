@@ -7,13 +7,13 @@ public class TaskCommentDto: BaseDto
 {   
     public string Comment { get; set; }
     
-    public DateTime UpdateTime { get; set; }
+    public DateTime CreatedAt { get; set; }
     
-    public DateTime CreateTime { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     
-    public UserDto User { get; set; }
+    public required UserDto User { get; set; }
     
-    public TaskDto Task { get; set; }
+    public required TaskDto Task { get; set; }
 
     public ICollection<StoredFileDto> Attachments { get; set; } = new List<StoredFileDto>();
     

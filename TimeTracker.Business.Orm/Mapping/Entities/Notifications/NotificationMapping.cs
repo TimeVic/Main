@@ -17,20 +17,28 @@ public class NotificationMapping: BaseGuidMappings<NotificationEntity>
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         
+        References(x => x.Task)
+            .Column("task_id")
+            .Fetch.Select()
+            .LazyLoad()
+            .Cascade.SaveUpdate();
+        
+        References(x => x.TaskComment)
+            .Fetch.Select()
+            .LazyLoad()
+            .Cascade.SaveUpdate();
+        
         References(x => x.Workspace)
-            .Column("workspace_id")
             .Fetch.Select()
             .LazyLoad()
             .Cascade.SaveUpdate();
         
         References(x => x.PerformedUser)
-            .Column("performed_user_id")
             .Fetch.Select()
             .LazyLoad()
             .Cascade.SaveUpdate();
         
         References(x => x.ReceiverUser)
-            .Column("receiver_user_id")
             .Fetch.Select()
             .LazyLoad()
             .Cascade.SaveUpdate();

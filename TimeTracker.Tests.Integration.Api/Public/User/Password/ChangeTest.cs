@@ -59,7 +59,7 @@ public class ChangeTest: BaseTest
             Password = "somePass123",
             ReCaptcha = "captcha"
         });
-        var responseData = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), responseData.Type);
+        var responseData = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), responseData.ErrorCode);
     }
 }

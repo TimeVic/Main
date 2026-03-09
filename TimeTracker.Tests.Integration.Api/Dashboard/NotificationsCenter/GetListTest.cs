@@ -70,7 +70,8 @@ public partial class GetListTest: BaseTest
         });
         
         // Assert
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
+        
         Assert.True(FirebaseClientService.SentMessages.Any());
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(2, actualResponse.TotalCount);

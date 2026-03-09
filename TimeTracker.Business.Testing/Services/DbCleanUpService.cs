@@ -64,8 +64,6 @@ public class DbCleanUpService: IDbCleanUpService
         {
             await _sessionProvider.CurrentSession.CreateSQLQuery($"delete from {table} where 1=1;").ExecuteUpdateAsync();    
         }
-
-        await _sessionProvider.PerformCommitAsync();
         _sessionProvider.CurrentSession.Clear();
     }
 }

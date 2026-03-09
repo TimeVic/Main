@@ -86,7 +86,7 @@ public class GetListTest: BaseTest
         {
             Assert.NotEqual(Guid.Empty, currentItem.Id);
             Assert.NotEmpty(currentItem.Comment);
-            Assert.True(currentItem.CreateTime.ToUniversalTime() <= DateTime.UtcNow);
+            Assert.True(currentItem.CreatedAt.ToUniversalTime() <= DateTime.UtcNow);
             Assert.Equal(_task.TaskId, currentItem.Task.TaskId);
         }
     }
@@ -124,7 +124,7 @@ public class GetListTest: BaseTest
             TaskId = _task.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 }

@@ -58,7 +58,7 @@ public class AddTest: BaseTest
             Name = client.Name,
             WorkspaceId = _workspace.Id
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualProject = await response.GetJsonDataAsync<ProjectDto>();
         Assert.NotEqual(Guid.Empty, actualProject.Id);
@@ -70,13 +70,15 @@ public class AddTest: BaseTest
     {
         var user2 = await UserSeeder.CreateActivatedAsync();
         var client = _factory.Generate();
-        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        var workspaces = await _userDao.GetUsersWorkspaces(user2, MembershipAccessType.Owner);
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest
         {
             Name = client.Name,
-            WorkspaceId = (await _userDao.GetUsersWorkspaces(user2, MembershipAccessType.Owner)).First().Id
+            WorkspaceId = workspaces.First().Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
+        var responseData = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), responseData.ErrorCode);
     }
 }

@@ -110,8 +110,8 @@ public class GetListTest: BaseTest
             WorkspaceId = _workspace.Id,
             Page = 1
         });
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 
     private async Task CreateUsersAndAddMembers(int counter)

@@ -104,7 +104,7 @@ public class UpdateTest: BaseTest
             Name = expectWorkspace.Name,
         });
 
-        var actual = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), actual.Type);
+        var actual = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), actual.ErrorCode);
     }
 }

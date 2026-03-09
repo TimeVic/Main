@@ -40,8 +40,8 @@ public class TaskNotificationCenterHandler: INotificationCenterHandler<TaskEntit
                 Task = task,
                 ReceiverUser = task.User
             };
-            await _gcmNotificationService.SendTaskReminderNotification(task);
             await _sessionProvider.CurrentSession.SaveAsync(notification);
+            await _gcmNotificationService.SendTaskReminderNotification(task);
         }
     }
 }

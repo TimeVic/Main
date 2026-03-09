@@ -30,6 +30,7 @@ public class UserNotificationTokenDao: IUserNotificationTokenDao
             Token = token,
             CreatedAt = DateTime.UtcNow
         };
+        user.NotificationTokens.Add(accessToken);
         await _sessionProvider.CurrentSession.SaveAsync(accessToken);
         return accessToken;
     }

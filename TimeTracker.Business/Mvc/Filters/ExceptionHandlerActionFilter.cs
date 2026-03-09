@@ -1,5 +1,6 @@
 using System.Net;
 using System.Security.Authentication;
+using Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
@@ -40,7 +41,7 @@ public class ExceptionHandlerActionFilter : ActionFilterAttribute
                 response.Message = "User not authorized(action executing)";
                 statusCode = (int)HttpStatusCode.Unauthorized;
             }
-            else if (exception is DomainException)
+            else if (exception is IDomainException)
             {
                 response.ErrorCode = exception.GetType().Name;
                 response.Message = exception.Message;
@@ -65,6 +66,7 @@ public class ExceptionHandlerActionFilter : ActionFilterAttribute
                 StatusCode = statusCode
             };
             context.Result = badResponse;
+            context.ExceptionHandled = true;
         }
         
         // Code to execute after the action

@@ -19,8 +19,6 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual long? Size { get; set; }
         public virtual byte[]? DataToUpload { get; set; }
         public virtual string? UploadingError { get; set; }
-        
-        public virtual DateTime CreateTime { get; set; }
         public virtual ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
         public virtual ICollection<TaskCommentEntity> TaskComments { get; set; } = new List<TaskCommentEntity>();
         

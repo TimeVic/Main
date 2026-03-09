@@ -12,7 +12,6 @@ namespace AspNetCore.ApiControllers.Abstractions
             IAsyncApiController,
             IHasDefaultSuccessActionResult,
             IHasDefaultResponseSuccessActionResult,
-            IHasDefaultFailActionResult,
             IHasInvalidModelStateActionResult,
             IShouldPerformCommit
     {
@@ -39,11 +38,6 @@ namespace AspNetCore.ApiControllers.Abstractions
         public virtual Func<TResponse, IActionResult> ResponseSuccess<TResponse>()
             where TResponse : IResponse
             => (TResponse response) => new OkObjectResult(response);
-
-        public virtual Func<Exception, IActionResult> Fail
-            => (Exception exception) => new BadRequestObjectResult(
-                new BadResponseModel(exception)
-            );
 
         public virtual Func<ModelStateDictionary, IActionResult> InvalidModelState
             => (ModelStateDictionary modelState) => new BadRequestObjectResult(new ValidationProblemDetails(modelState).Errors);
