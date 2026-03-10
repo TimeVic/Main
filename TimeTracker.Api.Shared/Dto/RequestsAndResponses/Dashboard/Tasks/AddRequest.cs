@@ -6,7 +6,7 @@ using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 {
-    public class AddRequest : IRequest<TaskDto>
+    public class AddRequest : IRequest<TaskFullDto>
     {
         public Guid? TimeEntryId { get; set; } 
         

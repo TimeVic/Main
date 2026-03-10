@@ -18,7 +18,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         
         public DateTime? ReminderTime { get; set; }
         
-        public void Fill(TaskFullDto dto)
+        public void Fill(TaskDto dto)
         {
             TaskId = dto.Id;
             TaskListId = dto.TaskList.Id;

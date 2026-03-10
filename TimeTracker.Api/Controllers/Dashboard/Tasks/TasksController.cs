@@ -21,7 +21,7 @@ public class TasksController(ILifetimeScope scope) : MainApiControllerBase(scope
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> AddTask([FromBody] AddRequest request)
         => this.RequestAsync()
-            .For<TaskDto>()
+            .For<TaskFullDto>()
             .With(request);
     
     [HttpPost("update")]
@@ -29,7 +29,7 @@ public class TasksController(ILifetimeScope scope) : MainApiControllerBase(scope
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> UpdateTask([FromBody] UpdateRequest request)
         => this.RequestAsync()
-            .For<TaskDto>()
+            .For<TaskFullDto>()
             .With(request);
     
     [HttpPost("update-positions")]
@@ -67,6 +67,6 @@ public class TasksController(ILifetimeScope scope) : MainApiControllerBase(scope
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> GetOneTask([FromBody] GetOneRequest request)
         => this.RequestAsync()
-            .For<TaskDto>()
+            .For<TaskFullDto>()
             .With(request);
 }

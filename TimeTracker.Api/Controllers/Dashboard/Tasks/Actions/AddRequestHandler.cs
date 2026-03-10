@@ -19,7 +19,7 @@ using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 {
-    public class AddRequestHandler : IAsyncRequestHandler<AddRequest, TaskDto>
+    public class AddRequestHandler : IAsyncRequestHandler<AddRequest, TaskFullDto>
     {
         private readonly IMapper _mapper;
         private readonly IApiRequestService _apiRequestService;
@@ -57,7 +57,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _timeEntryDao = timeEntryDao;
         }
     
-        public async Task<TaskDto> ExecuteAsync(AddRequest request)
+        public async Task<TaskFullDto> ExecuteAsync(AddRequest request)
         {
             var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
@@ -113,7 +113,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                     }
                 }
             }
-            return _mapper.Map<TaskDto>(task);
+            return _mapper.Map<TaskFullDto>(task);
         }
 
         private async Task<TaskEntity> CreateFromExternalId(

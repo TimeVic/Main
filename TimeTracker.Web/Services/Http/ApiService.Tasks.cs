@@ -9,24 +9,29 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<TaskDto?> TasksAddAsync(AddRequest model)
+        public async Task<TaskFullDto?> TasksAddAsync(AddRequest model)
         {
-            return await PostAsync<TaskDto>(ApiUrl.TasksAdd, model);
+            return await PostAsync<TaskFullDto>(ApiUrl.TasksAdd, model);
         }
 
-        public async Task<TaskDto?> TasksUpdateAsync(UpdateRequest model)
+        public async Task<TaskFullDto?> TasksUpdateAsync(UpdateRequest model)
         {
-            return await PostAsync<TaskDto>(ApiUrl.TasksUpdate, model);
+            return await PostAsync<TaskFullDto>(ApiUrl.TasksUpdate, model);
         }
         
         public async Task TasksUpdatePositionsAsync(UpdatePositionsRequest request)
         {
-            await PostAsync<TaskDto>(ApiUrl.TasksUpdatePositions, request);
+            await PostAsync<TaskFullDto>(ApiUrl.TasksUpdatePositions, request);
         }
-
+        
         public async Task<GetListResponse?> TasksGetListAsync(GetListRequest model)
         {
             return await PostAsync<GetListResponse>(ApiUrl.TasksList, model);
+        }
+        
+        public async Task<TaskFullDto?> TasksGetOneAsync(Guid taskId)
+        {
+            return await PostAsync<TaskFullDto>(ApiUrl.TasksGetOne, new GetOneRequest() { TaskId = taskId });
         }
         
         public async Task<GetListResponse?> TasksGetForCalendarAsync(GetForCalendarRequest model)

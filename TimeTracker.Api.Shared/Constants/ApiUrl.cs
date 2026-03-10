@@ -98,6 +98,7 @@ public class ApiUrl
     public const string TasksUpdate = "dashboard/tasks/update";
     public const string TasksUpdatePositions = "dashboard/tasks/update-positions";
     public const string TasksList = "dashboard/tasks/get-list";
+    public const string TasksGet = "dashboard/tasks/get";
     public const string TasksListForCalendar = "dashboard/tasks/get-for-calendar";
     public const string TasksMyList = "dashboard/tasks/get-my-list";
     public const string TasksGetOne = "dashboard/tasks/get-one";

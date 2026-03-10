@@ -78,23 +78,6 @@ public class TasksReducers
     }
     
     [ReducerMethod]
-    public static TasksState SetAttachmentsActionReducer(TasksState state, SetAttachmentsAction action)
-    {
-        return state with
-        {
-            List = state.List.Select(item =>
-            {
-                if (item.TaskId == action.TaskId)
-                {
-                    item.Attachments = action.Attachments;
-                }
-
-                return item;
-            }).ToList()
-        };
-    }
-    
-    [ReducerMethod]
     public static TasksState SetOverdueTasksListItemsActionReducer(TasksState state, SetOverdueTasksListItemsAction action)
     {
         return state with

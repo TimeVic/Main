@@ -289,7 +289,7 @@ public partial class UpdateTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Null(actualData.StartTime);
@@ -315,7 +315,7 @@ public partial class UpdateTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Null(actualData.ReminderTime);

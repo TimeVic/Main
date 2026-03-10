@@ -26,7 +26,6 @@ public class StoredFileMapping: BaseGuidMappings<StoredFileEntity>
         Map(x => x.UploadingError).Nullable();
         
         Map(x => x.CreatedAt).DateTime();
-        Map(x => x.UpdatedAt).DateTimeNullable();
         
         HasManyToMany(x => x.Tasks)
             .Table("task_comment_stored_files")

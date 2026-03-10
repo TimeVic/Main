@@ -114,7 +114,7 @@
             Class="pt-2">
             <FluentDivider Class="w-100 mb-2" Orientation="Orientation.Horizontal"/>
             
-            <TaskCommentsBlock Task="Task"/>
+            <TaskCommentsBlock Task="_task"/>
         </FluentTab>
 
         <FluentTab
@@ -124,7 +124,7 @@
             <FluentDivider Class="w-100 mb-2" Orientation="Orientation.Horizontal"/>
             
             <FileUploader
-                EntityId="@Task.Id"
+                EntityId="@_task.Id"
                 FileUploaded="OnFileUploaded"
                 EntityType="StorageEntityType.Task"
                 FileType="StoredFileType.Attachment"/>
@@ -132,10 +132,10 @@
 
             <FilesList
                 Class=" mt-2"
-                EntityId="@Task.Id"
+                EntityId="@_task.Id"
                 EntityType="StorageEntityType.Task"
                 ListUpdated="AttachmentsListUpdated"
-                Files="@Task.Attachments"/>
+                Files="@_task.Attachments"/>
         </FluentTab>
     </FluentTabs>
 </EditForm>

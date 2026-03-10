@@ -88,10 +88,6 @@ public class GetListTest: BaseTest
             Assert.Equal(TaskPriority.Medium, item.Priority);
             Assert.Equal(_taskList.Id, item.TaskList.Id);
         });
-        Assert.Contains(actualDto.Items, item =>
-        {
-            return item.Attachments.Any() && !string.IsNullOrEmpty(item.Attachments.First().Url);
-        });
     }
 
     [Fact]

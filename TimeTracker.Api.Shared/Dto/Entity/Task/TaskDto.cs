@@ -36,6 +36,10 @@ public class TaskDto : IResponse
 
     public TaskListDto TaskList { get; set; }
     
+    public ICollection<TagDto> Tags { get; set; } = new List<TagDto>();
+    
+    public UserDto User { get; set; }
+    
     #region Calculated
 
     public string FormattedId

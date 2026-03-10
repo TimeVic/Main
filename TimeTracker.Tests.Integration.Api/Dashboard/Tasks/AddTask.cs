@@ -94,7 +94,7 @@ public partial class AddTask: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
@@ -120,7 +120,7 @@ public partial class AddTask: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
@@ -166,7 +166,7 @@ public partial class AddTask: BaseTest
         });
         response.EnsureSuccessStatusCode();
         
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         var actualTask = await _taskDao.GetByWorkspaceTaskId(_workspace.Id, actualData.TaskId);
         Assert.Single(actualTask.HistoryItems);
         var historyItem = actualTask.HistoryItems.First();
@@ -193,7 +193,7 @@ public partial class AddTask: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);

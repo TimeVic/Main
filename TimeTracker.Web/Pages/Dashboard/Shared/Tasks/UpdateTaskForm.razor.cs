@@ -15,7 +15,7 @@ namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 public partial class UpdateTaskForm
 {   
     [Parameter]
-    public required TaskDto Task { get; set; }
+    public required Guid TaskId { get; set; }
     
     [Inject]
     public IState<Store.TasksList.TasksListState> _tasksListState { get; set; }
@@ -29,21 +29,25 @@ public partial class UpdateTaskForm
     [Inject]
     private IState<WorkspaceMembershipsState> _workspaceMembershipsState { get; set; }
 
+    [Inject]
+    public ILogger<UpdateTaskForm> _logger { get; set; }
+    
     [CascadingParameter] 
     public required FluentDialog MudDialog { get; set; }
     
     private UpdateRequest _model = new();
     private bool _isLoading = false;
     private EditForm? _form;
+    public TaskFullDto _task { get; set; }
     
     private string _tabLabelAttachments
     {
         get
         {
             var label = "Attachments";
-            if (Task.Attachments.Any())
+            if (_task.Attachments.Any())
             {
-                label += $"({Task.Attachments.Count})";
+                label += $"({_task.Attachments.Count})";
             }
 
             return label;
@@ -54,7 +58,7 @@ public partial class UpdateTaskForm
     {
         get
         {
-            return _securityManager.GetMembersWhichHaveAccessToProject(Task.TaskList.Project)
+            return _securityManager.GetMembersWhichHaveAccessToProject(_task.TaskList.Project)
                 .Select(item => item.Id)
                 .ToList();
         }
@@ -63,7 +67,13 @@ public partial class UpdateTaskForm
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _model.Fill(Task);
+        _task = await ApiService.TasksGetOneAsync(TaskId);
+        if (_task != null)
+        {
+            _model.Fill(_task);
+            return;
+        }
+        _logger.LogError("Task with id {TaskId} not found", TaskId);
     }
 
     private void SubmitForm()
@@ -90,8 +100,7 @@ public partial class UpdateTaskForm
 
     private void OnFileUploaded(StoredFileDto uploadedFile)
     {
-        Task.Attachments.Add(uploadedFile);
-        Dispatcher.Dispatch(new SetAttachmentsAction(Task.TaskId, Task.Attachments));
+        _task.Attachments.Add(uploadedFile);
     }
 
     private void OnTagsChanged(IEnumerable<Guid> selectedTagIds)
@@ -102,8 +111,7 @@ public partial class UpdateTaskForm
 
     private void AttachmentsListUpdated(ICollection<StoredFileDto> attachments)
     {
-        Task.Attachments = attachments;
-        Dispatcher.Dispatch(new SetAttachmentsAction(Task.TaskId, Task.Attachments));
+        _task.Attachments = attachments;
     }
 
     private bool DisabledStartTime(DateTime modelStartTime)

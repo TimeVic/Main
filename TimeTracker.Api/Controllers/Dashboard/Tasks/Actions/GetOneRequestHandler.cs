@@ -1,23 +1,18 @@
 ﻿using Api.Requests.Abstractions;
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
-using TimeTracker.Business.Orm.Dto.Tasks;
-using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 {
-    public class GetOneRequestHandler : IAsyncRequestHandler<GetOneRequest, TaskDto>
+    public class GetOneRequestHandler : IAsyncRequestHandler<GetOneRequest, TaskFullDto>
     {
         private readonly IMapper _mapper;
         private readonly IApiRequestService _apiRequestService;
@@ -42,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _taskDao = taskDao;
         }
     
-        public async Task<TaskDto> ExecuteAsync(GetOneRequest request)
+        public async Task<TaskFullDto> ExecuteAsync(GetOneRequest request)
         {
             var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
@@ -51,7 +46,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             {
                 throw new HasNoAccessException();
             }
-            return _mapper.Map<TaskDto>(task);
+            return _mapper.Map<TaskFullDto>(task);
         }
     }
 }
