@@ -8,10 +8,6 @@ namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.ClickU
 public class IsCorrectTaskIdTest : BaseTest
 {
     private readonly IClickUpClient _сlickUpClient;
-    private readonly string _securityKey;
-
-    private readonly string _teamId;
-    private readonly string _taskId;
 
     public IsCorrectTaskIdTest() : base(false)
     {

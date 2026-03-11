@@ -46,7 +46,7 @@ public class UploadToCloudTest: BaseTest
     {
         var formFile = CreateFormFile("images/image.jpg");
         var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
-        await CommitDbChanges();
+        await FlushDbChanges();
         Assert.Null(actualFile.ThumbCloudFilePath);
         
         var uploadedFile = await _fileStorage.UploadFirstPendingToCloud();

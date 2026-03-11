@@ -23,7 +23,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         );
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
         var actualResponse = await _client.SetTimeEntryAsync(activeEntry);

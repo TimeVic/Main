@@ -52,7 +52,7 @@ public partial class StartNewTest: BaseTest
         Assert.Equal(DateOnly.FromDateTime(DateTime.UtcNow), activeEntry.Date);
         Assert.Null(activeEntry.EndTime);
 
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
+        await FlushDbChanges();
         Assert.Equal(DateOnly.FromDateTime(DateTime.UtcNow), activeEntry.Date);
         Assert.Null(activeEntry.EndTime);
     }
@@ -69,6 +69,7 @@ public partial class StartNewTest: BaseTest
         );
         Assert.Null(activeEntry.EndTime);
 
+        await FlushDbChanges();
         await Assert.ThrowsAsync<DataInconsistencyException>(async () =>
         {
             await _timeEntryDao.StartNewAsync(
@@ -101,6 +102,7 @@ public partial class StartNewTest: BaseTest
             DateTime.UtcNow.TimeOfDay
         );
         
+        await FlushDbChanges();
         Assert.NotEqual(activeEntryFor1.Id, activeEntryFor2.Id);
         Assert.True(activeEntryFor1.IsActive);
         Assert.True(activeEntryFor2.IsActive);
@@ -125,6 +127,8 @@ public partial class StartNewTest: BaseTest
             isBillable: true,
             projectId: project.Id
         );
+        await FlushDbChanges();
+        
         Assert.Equal(project.DefaultHourlyRate, activeEntry.HourlyRate);
         Assert.True(activeEntry.IsBillable);
     }

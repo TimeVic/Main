@@ -85,7 +85,7 @@ public class GetReportByUserTest: BaseTest
             });
         }
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var result = await _reportsDao.GetReportByUserForOwnerOrManagerAsync(
             _workspace.Id,
@@ -186,7 +186,7 @@ public class GetReportByUserTest: BaseTest
             });
         }
 
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         var result = await _reportsDao.GetReportByUserForOtherAsync(
             DateTime.UtcNow.AddDays(-1),

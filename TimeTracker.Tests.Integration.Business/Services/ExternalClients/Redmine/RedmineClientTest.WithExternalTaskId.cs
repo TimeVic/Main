@@ -35,10 +35,11 @@ public partial class RedmineClientTest
         );
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
         var actualResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
+        Assert.NotNull(actualResponse);
         Assert.NotEmpty(actualResponse.Id);
         Assert.Equal(expectedDescription, actualResponse.Comment);
 

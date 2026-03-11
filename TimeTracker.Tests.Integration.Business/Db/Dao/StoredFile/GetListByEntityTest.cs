@@ -57,7 +57,7 @@ public class GetListByEntityTest: BaseTest
         var actualFile1 = await _fileStorage.PutFileAsync(task, CreateFormFile(), StoredFileType.Attachment);
         var actualFile2 = await _fileStorage.PutFileAsync(task, CreateFormFile(), StoredFileType.Attachment);
         var actualFile3 = await _fileStorage.PutFileAsync(task, CreateFormFile("images/image.jpg"), StoredFileType.Image);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         var actualFiles = await _storedFilesDao.GetListByEntity(task.Id, StorageEntityType.Task);
         

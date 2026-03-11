@@ -84,7 +84,7 @@ public class GetReportByDayForOwnerTest: BaseTest
             });
         }
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var result = await _reportsDao.GetReportByDayForOwnerOrManagerAsync(
             _workspace.Id,
@@ -178,7 +178,7 @@ public class GetReportByDayForOwnerTest: BaseTest
             });
         }
 
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         var result = await _reportsDao.GetReportByDayForOtherAsync(
             DateTime.UtcNow.AddDays(-1),

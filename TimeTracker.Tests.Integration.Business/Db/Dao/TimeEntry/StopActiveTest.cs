@@ -48,15 +48,15 @@ public class StopActiveTest: BaseTest
         );
         Assert.Null(activeEntry.EndTime);
         
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(
             _workspace,
             _user,
             startTime + TimeSpan.FromMinutes(1),
             DateOnly.FromDateTime(DateTime.UtcNow)
         );
-        await CommitDbChanges();
+        await FlushDbChanges();
     
-        await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
         Assert.NotNull(activeEntry.EndTime);
     }
 
@@ -72,6 +72,7 @@ public class StopActiveTest: BaseTest
         );
         Assert.Null(activeEntry.EndTime);
 
+        await FlushDbChanges();
         await Assert.ThrowsAsync<DataInconsistencyException>(async () =>
         {
             await _timeEntryDao.StopActiveAsync(
@@ -95,6 +96,7 @@ public class StopActiveTest: BaseTest
         );
         Assert.Null(activeEntry.EndTime);
 
+        await FlushDbChanges();
         await Assert.ThrowsAsync<DataInconsistencyException>(async () =>
         {
             await _timeEntryDao.StopActiveAsync(
@@ -118,16 +120,18 @@ public class StopActiveTest: BaseTest
         await _workspaceAccessService.ShareAccessAsync(_workspace, otherUser, MembershipAccessType.User);
         var otherActiveEntry = await _timeEntryDao.StartNewAsync(otherUser, _workspace, date, startTime);
     
+        await FlushDbChanges();
         var activeEntries = await _timeEntryDao.GetActiveEntriesAsync(_workspace);
         Assert.Equal(2, activeEntries.Count);
         
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(
             _workspace, 
             _user,
             startTime + TimeSpan.FromSeconds(1),
             date
         );
-        await CommitDbChanges();
+        await FlushDbChanges();
     
         activeEntries = await _timeEntryDao.GetActiveEntriesAsync(_workspace);
         Assert.Equal(1, activeEntries.Count);
@@ -150,6 +154,7 @@ public class StopActiveTest: BaseTest
         );
         Assert.Null(activeEntry.EndTime);
 
+        await FlushDbChanges();
         await Assert.ThrowsAsync<DataInconsistencyException>(async () =>
         {
             await _timeEntryDao.StopActiveAsync(
@@ -172,12 +177,15 @@ public class StopActiveTest: BaseTest
         
         var workspace2 = await _workspaceDao.CreateWorkspaceAsync(_user, "Test 2");
         await _workspaceAccessService.ShareAccessAsync(workspace2, _user, MembershipAccessType.Owner);
+        
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(
             workspace2,
             _user,
             startTime + TimeSpan.FromSeconds(1),
             date
         );
+        await FlushDbChanges();
         var stoppedEntry = await _timeEntryDao.GetActiveEntryAsync(workspace2, _user);
         Assert.Null(stoppedEntry);
     }
@@ -189,14 +197,15 @@ public class StopActiveTest: BaseTest
         var startTime = DateTime.UtcNow.TimeOfDay;
         
         var startedEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(
             _workspace,
             _user,
             startTime + TimeSpan.FromSeconds(1),
             date
         );
-        await CommitDbChanges();
-        await DbSessionProvider.CurrentSession.RefreshAsync(startedEntry);
+        await FlushDbChanges();
+        
         Assert.True(startedEntry.EndTime >= startedEntry.StartTime);
     }
     
@@ -208,16 +217,15 @@ public class StopActiveTest: BaseTest
         var endTime = startTime;
         
         var startedEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(
             _workspace,
             _user,
             endTime,
             date.AddDays(3)
         );
-        await CommitDbChanges();
-        
-        await DbSessionProvider.CurrentSession.RefreshAsync(startedEntry);
 
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
         Assert.Equal(4, actualList.TotalCount);
 
@@ -243,16 +251,15 @@ public class StopActiveTest: BaseTest
         var endTime = startTime;
         
         var startedEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(
             _workspace,
             _user,
             endTime,
             date.AddDays(100)
         );
-        await CommitDbChanges();
+        await FlushDbChanges();
         
-        await DbSessionProvider.CurrentSession.RefreshAsync(startedEntry);
-
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
         Assert.Equal(11, actualList.TotalCount);
     }

@@ -126,6 +126,7 @@ public partial class AddTask: BaseTest
         Assert.Equal(task.Title, actualData.Title);
         
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.NotNull(actualTimeEntry.Task);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
     
@@ -168,6 +169,7 @@ public partial class AddTask: BaseTest
         
         var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         var actualTask = await _taskDao.GetByWorkspaceTaskId(_workspace.Id, actualData.TaskId);
+        Assert.NotNull(actualTask);
         Assert.Single(actualTask.HistoryItems);
         var historyItem = actualTask.HistoryItems.First();
         Assert.Equal(task.Title, historyItem.Title);
@@ -199,6 +201,7 @@ public partial class AddTask: BaseTest
         Assert.Equal(task.Title, actualData.Title);
         
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.NotNull(actualTimeEntry.Project);
         Assert.Equal(_taskList.Project.Id, actualTimeEntry.Project.Id);
     }
 }

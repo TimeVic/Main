@@ -39,7 +39,7 @@ public class ConnectionTest: BaseTest
         user.UpdatedAt = expectedTime;
         
         var userId = await DbSessionProvider.CurrentSession.SaveAsync(user);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         user = await DbSessionProvider.CurrentSession.GetAsync<UserEntity>(userId);
         Assert.Equal(expectedTime.Date, user.CreatedAt.Date);

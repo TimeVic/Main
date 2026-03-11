@@ -55,6 +55,7 @@ public class GetFilteredListTest: BaseTest
         expectedEntry.IsBillable = true;
         expectedEntry.Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-5);
         
+        Assert.NotNull(expectedProject.Client);
         var response = await PostRequestAsync(Url, _jwtToken, new GetFilteredListRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,

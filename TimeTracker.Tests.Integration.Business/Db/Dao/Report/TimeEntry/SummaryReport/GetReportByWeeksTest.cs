@@ -84,7 +84,7 @@ public class GetReportByWeeksTest: BaseTest
             });
         }
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var result = await _reportsDao.GetReportByWeekForOwnerOrManagerAsync(
             _workspace.Id,
@@ -105,6 +105,7 @@ public class GetReportByWeeksTest: BaseTest
         Assert.Equal(120m, secondReportItem.Amount);
         Assert.Equal(360m, thirdReportItem.Amount);
         
+        await FlushDbChanges();
         result = await _reportsDao.GetReportByWeekForOwnerOrManagerAsync(
             _workspace.Id,
             DateTime.UtcNow.AddMonths(-3),
@@ -177,6 +178,7 @@ public class GetReportByWeeksTest: BaseTest
             });
         }
 
+        await FlushDbChanges();
         var result = await _reportsDao.GetReportByWeekForOtherAsync(
             DateTime.UtcNow.AddDays(-21),
             DateTime.UtcNow,
@@ -233,7 +235,7 @@ public class GetReportByWeeksTest: BaseTest
             IsBillable = true,
             HourlyRate = 12
         }, project1);
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var result = await _reportsDao.GetReportByWeekForOwnerOrManagerAsync(
             _workspace.Id,

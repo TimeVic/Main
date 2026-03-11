@@ -42,9 +42,9 @@ public class DeleteTest: BaseTest
         var file = await _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment);
         await _fileStorage.UploadFirstPendingToCloud();
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         await _fileStorage.DeleteFile(_user, file.Id);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         var actualFile = await DbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(file.Id);
         Assert.Null(actualFile);
@@ -66,7 +66,7 @@ public class DeleteTest: BaseTest
     public async Task ShouldNotDeleteIfPendingStatus()
     {
         var file = await _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await Assert.ThrowsAsync<RecordCanNotBeModifiedException>(async () =>
         {

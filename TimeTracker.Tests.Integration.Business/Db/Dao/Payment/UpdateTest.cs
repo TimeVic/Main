@@ -64,6 +64,7 @@ public class UpdateTest: BaseTest
             payment.Description
         );
         
+        await FlushDbChanges();
         actualPayment = await _paymentDao.UpdatePaymentAsync(
             actualPayment.Id,
             expectClient,
@@ -106,6 +107,7 @@ public class UpdateTest: BaseTest
             payment.Description
         );
         
+        await FlushDbChanges();
         actualPayment = await _paymentDao.UpdatePaymentAsync(
             actualPayment.Id,
             expectClient,

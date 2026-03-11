@@ -85,6 +85,8 @@ public class DeleteTest: BaseTest
         FlushDbChanges().Wait();
         
         _queueDao.CompleteAllPending().Wait();
+        Assert.NotNull(_clickUpClient);
+        Assert.NotNull(_redmineClient);
         _clickUpClient.Reset();
         _redmineClient.Reset();
     }

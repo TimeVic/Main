@@ -15,16 +15,16 @@ public class TaskHistoryItemDao: ITaskHistoryItemDao
         from task_history_items
         where is_notified is false 
             and is_new_task is false
-            and create_time >= :startTime
-            and create_time <= :endTime
-        order by task_id, create_time desc
+            and created_at >= :startTime
+            and created_at <= :endTime
+        order by task_id, created_at desc
         limit 50
     ";
     
     private const string SqlQuerySetNotifyToFalse = @"
         update task_history_items 
         set is_notified = true
-        where task_id in (:taskIds) and create_time < :endTime
+        where task_id in (:taskIds) and created_at < :endTime
     ";
     
     private readonly IDbSessionProvider _dbSessionProvider;
@@ -68,7 +68,7 @@ public class TaskHistoryItemDao: ITaskHistoryItemDao
         var historyItemIds = await _dbSessionProvider.CurrentSession.CreateSQLQuery(SqlQueryGetItemsToNotify)
             .SetParameter("startTime", DateTime.UtcNow.AddDays(-1))
             .SetParameter("endTime", endTime)
-            .ListAsync<long>();
+            .ListAsync<Guid>();
 
         UserEntity assigneeUserAlias = null;
         UserEntity userAlias = null;

@@ -46,6 +46,7 @@ public class ProcessNotificationTest: BaseTest
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(testContext.ToAddress, actualEmail.To);
     }
     
@@ -67,6 +68,7 @@ public class ProcessNotificationTest: BaseTest
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(testContext.ToAddress, actualEmail.To);
         Assert.Contains(expectedUser.VerificationToken, actualEmail.Body);
     }
@@ -95,6 +97,7 @@ public class ProcessNotificationTest: BaseTest
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(testContext.ToAddress, actualEmail.To);
     }
 }

@@ -40,7 +40,7 @@ public class PutFileForTaskTest: BaseTest
         Assert.True(actualFile.Size > 0);
         Assert.Equal(StoredFileType.Attachment, actualFile.Type);
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Contains(actualTask.Attachments, item => item.Id == actualFile.Id);
     }

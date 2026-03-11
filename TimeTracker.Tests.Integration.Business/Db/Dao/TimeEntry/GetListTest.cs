@@ -46,6 +46,7 @@ public class GetListTest: BaseTest
         var expectedCounter = 7;
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter);
 
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
         Assert.Equal(expectedCounter, actualList.TotalCount);
         
@@ -68,6 +69,7 @@ public class GetListTest: BaseTest
         var user2Workspace = _userDao.GetUsersWorkspaces(user2, MembershipAccessType.Owner).Result.First();
         await _timeEntrySeeder.CreateSeveralAsync(user2Workspace, user2, 15);
         
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
         Assert.Equal(expectedCounter, actualList.TotalCount);
     }
@@ -77,6 +79,7 @@ public class GetListTest: BaseTest
     {
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
 
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
 
         var actualFirst = actualList.Items.First();
@@ -91,8 +94,10 @@ public class GetListTest: BaseTest
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 9);
 
         var expectedProject = (await _projectSeeder.CreateSeveralAsync(_workspace)).First();
+        Assert.NotNull(expectedProject.Client);
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter, expectedProject);
 
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1, new FilterDataDto()
         {
             ClientId = expectedProject.Client.Id
@@ -109,6 +114,7 @@ public class GetListTest: BaseTest
         var expectedProject = (await _projectSeeder.CreateSeveralAsync(_workspace)).First();
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter, expectedProject);
 
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1, new FilterDataDto()
         {
             ProjectId = expectedProject.Id
@@ -129,8 +135,8 @@ public class GetListTest: BaseTest
         {
             timeEntryEntity.IsBillable = true;
         }
-        await CommitDbChanges();
-
+        
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1, new FilterDataDto()
         {
             IsBillable = true
@@ -145,8 +151,8 @@ public class GetListTest: BaseTest
         var user = await _userSeeder.CreateActivatedAsync();
         var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_workspace, user, 9)).First();
         expectedEntry.Description = expectedDescription;
-        await CommitDbChanges();
-
+        
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1, new FilterDataDto()
         {
             Search = "FAKE"
@@ -165,8 +171,8 @@ public class GetListTest: BaseTest
             access: MembershipAccessType.User
         );
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, expectedUser, 3);
-        await CommitDbChanges();
-
+        
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(
             _workspace, 
             1,
@@ -198,8 +204,8 @@ public class GetListTest: BaseTest
         {
             entry.Date = DateTime.UtcNow.ToDateOnly().AddDays(-6);
         }
-        await CommitDbChanges();
-
+        
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(
             _workspace, 
             1,
@@ -236,8 +242,8 @@ public class GetListTest: BaseTest
         {
             entry.Date = DateTime.UtcNow.ToDateOnly().AddDays(1);
         }
-        await CommitDbChanges();
-
+        
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(
             _workspace, 
             1,
@@ -275,8 +281,8 @@ public class GetListTest: BaseTest
             }
         );
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, expectedUser, 3);
-        await CommitDbChanges();
-
+        
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(
             _workspace, 
             1,
@@ -287,6 +293,7 @@ public class GetListTest: BaseTest
         Assert.Equal(6, actualList.TotalCount);
         Assert.All(actualList.Items, item =>
         {
+            Assert.NotNull(item.Project);
             Assert.True(
                 item.Project.Id == expectedProject1.Id 
                 || item.Project.Id == expectedProject2.Id
@@ -309,8 +316,8 @@ public class GetListTest: BaseTest
             access: accessType
         );
         await _timeEntrySeeder.CreateSeveralAsync(_workspace, expectedUser, 3);
-        await CommitDbChanges();
-
+        
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(
             _workspace, 
             1,
@@ -332,8 +339,8 @@ public class GetListTest: BaseTest
         var entries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, expectedCounter);
         var markedToDelete = entries.First();
         markedToDelete.IsMarkedToDelete = true;
-        await CommitDbChanges();
         
+        await FlushDbChanges();
         var actualList = await _timeEntryDao.GetListAsync(_workspace, 1);
         Assert.Equal(expectedCounter - 1, actualList.TotalCount);
     }

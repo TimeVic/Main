@@ -70,6 +70,7 @@ public class UpdateTest: BaseTest
         Assert.Equal(expectedProject.Name, actualProject.Name);
         Assert.Equal(expectedProject.DefaultHourlyRate, actualProject.DefaultHourlyRate);
         Assert.Equal(expectedProject.IsBillableByDefault, actualProject.IsBillableByDefault);
+        Assert.NotNull(actualProject.Client);
         Assert.Equal(expectedClient.Id, actualProject.Client.Id);
     }
     

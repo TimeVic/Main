@@ -70,7 +70,7 @@ public partial class TaskCommentNotificationHandlerTest: BaseTest
         await _userNotificationTokenDao.Set(watcher1, FirebaseClientServiceMock.SuccessToken2);
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(comment);
         
@@ -113,7 +113,7 @@ public partial class TaskCommentNotificationHandlerTest: BaseTest
         await _userNotificationTokenDao.Set(watcher1, FirebaseClientServiceMock.SuccessToken2);
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(comment);
         
@@ -154,7 +154,7 @@ public partial class TaskCommentNotificationHandlerTest: BaseTest
         await _userNotificationTokenDao.Set(watcher1, FirebaseClientServiceMock.SuccessToken2);
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(comment);
         

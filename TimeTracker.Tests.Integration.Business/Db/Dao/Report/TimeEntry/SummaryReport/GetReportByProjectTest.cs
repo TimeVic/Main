@@ -83,6 +83,7 @@ public class GetReportByProjectTest: BaseTest
             });
         }
         
+        await FlushDbChanges();
         var result = await _reportsDao.GetReportByProjectForOwnerOrManagerAsync(
             _workspace.Id,
             DateTime.UtcNow.AddDays(-1),
@@ -105,6 +106,7 @@ public class GetReportByProjectTest: BaseTest
         Assert.Equal(120m, secondReportItem.Amount);
         Assert.Equal(360m, thirdReportItem.Amount);
         
+        await FlushDbChanges();
         result = await _reportsDao.GetReportByProjectForOwnerOrManagerAsync(
             _workspace.Id,
             DateTime.UtcNow.AddDays(-1),
@@ -179,6 +181,7 @@ public class GetReportByProjectTest: BaseTest
             });
         }
 
+        await FlushDbChanges();
         var result = await _reportsDao.GetReportByProjectForOtherAsync(
             DateTime.UtcNow.AddDays(-1),
             DateTime.UtcNow.AddDays(1),

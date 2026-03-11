@@ -45,6 +45,7 @@ public partial class AddTask
         Assert.Equal(_clickUpTaskId, actualData.ExternalTaskId);
 
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.NotNull(actualTimeEntry.Task);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
     
@@ -69,6 +70,7 @@ public partial class AddTask
         Assert.Equal(_jiraTaskId, actualData.ExternalTaskId);
 
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.NotNull(actualTimeEntry.Task);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
     

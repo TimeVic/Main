@@ -52,6 +52,7 @@ public class AddTaskAsyncTest: BaseTest
             fakeTask.Title
         );
         Assert.Equal(1, firstTask.TaskId);
+        await FlushDbChanges();
         
         fakeTask = _taskFactory.Generate();
         var secondTask = await _taskDao.AddTaskAsync(
@@ -60,6 +61,7 @@ public class AddTaskAsyncTest: BaseTest
             fakeTask.Title
         );
         Assert.Equal(2, secondTask.TaskId);
+        await FlushDbChanges();
         
         fakeTask = _taskFactory.Generate();
         var thirdTask = await _taskDao.AddTaskAsync(
@@ -81,6 +83,7 @@ public class AddTaskAsyncTest: BaseTest
             fakeTask.Title
         );
         Assert.Equal(1, firstTask.TaskId);
+        await FlushDbChanges();
         
         fakeTask = _taskFactory.Generate();
         var secondTask = await _taskDao.AddTaskAsync(

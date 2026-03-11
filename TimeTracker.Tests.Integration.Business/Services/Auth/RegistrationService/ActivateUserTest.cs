@@ -61,6 +61,7 @@ public class ActivateUserTest: BaseTest
         Assert.True(actualProcessedCounter > 0);
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(user.Email, actualEmail.To);
     }
     
@@ -81,7 +82,7 @@ public class ActivateUserTest: BaseTest
         
         var user = await _registrationService.CreatePendingUser(expectedEmail);
         var activatedUser = await _registrationService.ActivateUser(user.VerificationToken, expectedPassword);
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         Assert.Equal(1, activatedUser.CreatedWorkspaces.Count);
         var workspaces = await _userDao.GetUsersWorkspaces(user);

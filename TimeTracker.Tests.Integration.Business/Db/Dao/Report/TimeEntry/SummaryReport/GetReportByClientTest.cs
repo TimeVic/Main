@@ -83,7 +83,7 @@ public class GetReportByClientTest: BaseTest
                 HourlyRate = 15
             });
         }
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var result = await _reportsDao.GetReportByClientForOwnerOrManagerAsync(
             _workspace.Id,
@@ -95,6 +95,8 @@ public class GetReportByClientTest: BaseTest
         var firstReportItem = result.First();
         var secondReportItem = result.Skip(1).First();
         var thirdReportItem = result.Last();
+        Assert.NotNull(client1);
+        Assert.NotNull(client2);
         Assert.Equal(client1.Id, firstReportItem.ClientId);
         Assert.Equal(client2.Id, secondReportItem.ClientId);
         Assert.Null(thirdReportItem.ClientId);
@@ -182,7 +184,7 @@ public class GetReportByClientTest: BaseTest
             });
         }
 
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         var result = await _reportsDao.GetReportByClientForOtherAsync(
             DateTime.UtcNow.AddDays(-1),
@@ -198,6 +200,8 @@ public class GetReportByClientTest: BaseTest
         Assert.Equal(180, firstReportItem.Amount);
         Assert.Equal(0, secondReportItem.Amount);
         
+        Assert.NotNull(client1);
+        Assert.NotNull(client2);
         Assert.Equal(client2.Id, secondReportItem.ClientId);
         Assert.Equal(client1.Id, firstReportItem.ClientId);
         

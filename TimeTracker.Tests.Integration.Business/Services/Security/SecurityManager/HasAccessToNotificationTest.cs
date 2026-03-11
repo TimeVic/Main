@@ -44,7 +44,7 @@ public class HasAccessToNotificationTest: BaseTest
         _ownWorkspace = _userDao.GetUsersWorkspaces(_owner, MembershipAccessType.Owner).Result.First();
         _task = _taskSeeder.CreateAsync(user: _owner).Result;
         _task.ReminderTime = DateTime.UtcNow;
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
     }
 
     [Theory]
@@ -84,7 +84,7 @@ public class HasAccessToNotificationTest: BaseTest
         var notification = notifications.Items.First();
         
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        await CommitDbChanges();
+        await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,
@@ -107,7 +107,7 @@ public class HasAccessToNotificationTest: BaseTest
         var notification = notifications.Items.First();
         
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        await CommitDbChanges();
+        await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,

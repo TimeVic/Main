@@ -86,7 +86,7 @@ public class HasAccessToProjectTest: BaseTest
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
         var project = await _projectDao.CreateAsync(_ownWorkspace, "Test 1");
-        await CommitDbChanges();
+        await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,
@@ -110,7 +110,7 @@ public class HasAccessToProjectTest: BaseTest
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
         var project = await _projectDao.CreateAsync(_ownWorkspace, "Test 1");
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,

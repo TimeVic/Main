@@ -49,6 +49,7 @@ public class GetListTest: BaseTest
         var expectedTotal = 30;
         await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
 
+        await FlushDbChanges();
         var listModel = await _paymentDao.GetListAsync(_workspace, _user, 1);
         Assert.Equal(PaginationUtils.DefaultPageSize, listModel.Items.Count);
         Assert.Equal(expectedTotal, listModel.TotalCount);
@@ -76,7 +77,8 @@ public class GetListTest: BaseTest
         var otherWorkspace = await _workspaceDao.CreateWorkspaceAsync(_user, "Test 2");
         var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
         await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherClient, null, 15);
-        
+
+        await FlushDbChanges();
         var listModel = await _paymentDao.GetListAsync(_workspace, _user, 1);
         Assert.Equal(expectedTotal, listModel.Items.Count);
         Assert.Equal(expectedTotal, listModel.TotalCount);
@@ -91,6 +93,7 @@ public class GetListTest: BaseTest
         var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
         await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherClient, null, 15);
         
+        await FlushDbChanges();
         var listModel = await _paymentDao.GetListAsync(_workspace, _user, 1);
         Assert.Equal(expectedTotal, listModel.Items.Count);
         Assert.Equal(expectedTotal, listModel.TotalCount);
@@ -105,6 +108,7 @@ public class GetListTest: BaseTest
         var otherUser = await _userSeeder.CreateActivatedAndShareAsync(_workspace);
         await _paymentSeeder.CreateSeveralAsync(_workspace, otherUser, expectedTotal);
 
+        await FlushDbChanges();
         var listModel = await _paymentDao.GetListAsync(_workspace, otherUser, 1);
         Assert.Equal(expectedTotal, listModel.Items.Count);
         Assert.Equal(expectedTotal, listModel.TotalCount);

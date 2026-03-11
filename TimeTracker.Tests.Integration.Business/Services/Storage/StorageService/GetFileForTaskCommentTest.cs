@@ -46,7 +46,7 @@ public class GetFileForTaskCommentTest: BaseTest
         var actualFile = await _fileStorage.PutFileAsync(_taskComment, CreateFormFile(), StoredFileType.Attachment);
         await _fileStorage.UploadFirstPendingToCloud();
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         var (expectedFile, fileStream) = await _fileStorage.GetFileStream(_user, actualFile.Id);
 
         Assert.True(fileStream.Length > 0);

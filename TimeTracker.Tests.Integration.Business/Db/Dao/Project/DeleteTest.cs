@@ -40,10 +40,10 @@ public class DeleteTest: BaseTest
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
         await _taskListSeeder.CreateSeveralAsync(project, 3);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await _projectDao.ArchiveProject(project);
-        await DbSessionProvider.CurrentSession.RefreshAsync(project);
+        await FlushDbChanges();
         
         Assert.True(project.IsArchived);
         

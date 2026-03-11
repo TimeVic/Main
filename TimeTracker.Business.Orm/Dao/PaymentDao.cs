@@ -55,9 +55,7 @@ public class PaymentDao: IPaymentDao
             Client = client
         };
         client.AddPayment(entity);
-        var project = client.Projects
-            .AsQueryable()
-            .FirstOrDefault(item => item.Id == projectId);
+        var project = client.Projects.FirstOrDefault(item => item.Id == projectId);
         if (project != null)
         {
             project.AddPayment(entity);
@@ -85,9 +83,7 @@ public class PaymentDao: IPaymentDao
             payment.Amount = amount;
             payment.PaymentTime = paymentTime;
             payment.Description = description;
-            var project = payment.Client.Projects
-                .AsQueryable()
-                .FirstOrDefault(item => item.Id == projectId);
+            var project = payment.Client.Projects.FirstOrDefault(item => item.Id == projectId);
             if (project != null)
             {
                 project.AddPayment(payment);

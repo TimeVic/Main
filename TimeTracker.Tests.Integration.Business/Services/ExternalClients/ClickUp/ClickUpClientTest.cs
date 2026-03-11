@@ -95,7 +95,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         activeEntry.Task.ExternalTaskId = _externalTaskId;
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
         var actualResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
@@ -126,7 +126,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         activeEntry.Task.ExternalTaskId = "fake";
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
 
         var actualResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
@@ -154,14 +154,15 @@ public partial class SendNewTimeEntityTest : BaseTest
         activeEntry.Task.ExternalTaskId = _externalTaskId;
         await DbSessionProvider.PerformCommitAsync();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
         var creatingResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
+        Assert.NotNull(creatingResponse);
         Assert.False(creatingResponse.IsError);
         activeEntry.ClickUpId = creatingResponse.Id;
         await DbSessionProvider.CurrentSession.SaveAsync(activeEntry);
-        await CommitDbChanges();
+        await FlushDbChanges();
     
         activeEntry = await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
@@ -171,6 +172,7 @@ public partial class SendNewTimeEntityTest : BaseTest
             Description = fakeTimeEntry.Description,
         });
         var actualResponse = await _сlickUpClient.SetTimeEntryAsync(activeEntry);
+        Assert.NotNull(actualResponse);
         Assert.False(actualResponse.IsError);
         Assert.Equal(fakeTimeEntry.Description, actualResponse.Comment);
         
@@ -193,9 +195,9 @@ public partial class SendNewTimeEntityTest : BaseTest
         
         // Description should be empty
         activeEntry.Description = "";
-        await CommitDbChanges();
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
         var getTaskResponse = await _сlickUpClient.GetTaskAsync(

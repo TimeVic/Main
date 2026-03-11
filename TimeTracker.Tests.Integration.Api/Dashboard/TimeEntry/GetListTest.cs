@@ -95,6 +95,8 @@ public class GetListTest: BaseTest
         Assert.Equal(expectedCounter + 1, actualDto.List.TotalCount);
 
         var activeEntry = await _timeEntryDao.GetActiveEntryAsync(_defaultWorkspace, _user);
+        Assert.NotNull(actualDto.ActiveTimeEntry);
+        Assert.NotNull(activeEntry);
         Assert.Equal(activeEntry.Id, actualDto.ActiveTimeEntry.Id);
     }
     

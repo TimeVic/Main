@@ -79,6 +79,7 @@ public class GetPaymentsReportTest: BaseTest
             });
         }
         
+        await FlushDbChanges();
         var result = await _reportsDao.GetProjectPaymentsReport(
             _workspace.Id,
             _user.Id,
@@ -93,6 +94,7 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(0, actualForProject1.PaidAmountByClient);
         Assert.Equal(0, actualForProject1.PaidAmountByProject);
         Assert.Equal(TimeSpan.FromHours(15), actualForProject1.TotalDuration);
+        Assert.NotNull(project1.Client);
         Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
         Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
         
@@ -104,6 +106,7 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(0, actualForProject2.PaidAmountByClient);
         Assert.Equal(0, actualForProject2.PaidAmountByProject);
         Assert.Equal(TimeSpan.FromHours(12), actualForProject2.TotalDuration);
+        Assert.NotNull(project2.Client);
         Assert.Equal(project2.Client.Id, actualForProject2.ClientId);
         Assert.Equal(project2.Client.Name, actualForProject2.ClientName);
         
@@ -163,6 +166,7 @@ public class GetPaymentsReportTest: BaseTest
             DateTime.UtcNow
         );
         
+        await FlushDbChanges();
         var result = await _reportsDao.GetProjectPaymentsReport(
             _workspace.Id,
             _user.Id,
@@ -225,6 +229,7 @@ public class GetPaymentsReportTest: BaseTest
             ""
         );
 
+        await FlushDbChanges();
         var result = await _reportsDao.GetProjectPaymentsReport(
             _workspace.Id,
             _user.Id,
@@ -252,7 +257,7 @@ public class GetPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client,
+            project1.Client!,
             15,
             DateTime.UtcNow.AddDays(-4),
             project1.Id,
@@ -261,7 +266,7 @@ public class GetPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client,
+            project1.Client!,
             15,
             DateTime.UtcNow.AddDays(-10),
             project1.Id,
@@ -292,8 +297,9 @@ public class GetPaymentsReportTest: BaseTest
             IsBillable = true,
             HourlyRate = 1
         }, project1);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
+        await FlushDbChanges();
         var result = await _reportsDao.GetProjectPaymentsReport(
             _workspace.Id,
             _user.Id,

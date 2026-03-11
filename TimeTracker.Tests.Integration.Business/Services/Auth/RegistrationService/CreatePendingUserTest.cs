@@ -43,6 +43,7 @@ public class CreatePendingUserTest: BaseTest
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(user.Email, actualEmail.To);
     }
     
@@ -61,6 +62,7 @@ public class CreatePendingUserTest: BaseTest
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(user.Email, actualEmail.To);
     }
     

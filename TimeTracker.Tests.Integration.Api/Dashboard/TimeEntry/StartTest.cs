@@ -120,6 +120,7 @@ public partial class StartTest: BaseTest
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Equal(fakeTimeEntry.Description, actualDto.Description);
+        Assert.NotNull(actualDto.Project);
         Assert.Equal(project.Id, actualDto.Project.Id);
         Assert.Equal(fakeTimeEntry.IsBillable, actualDto.IsBillable);
         Assert.Null(actualDto.EndTime);

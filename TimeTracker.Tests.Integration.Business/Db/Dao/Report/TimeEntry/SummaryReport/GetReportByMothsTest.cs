@@ -83,7 +83,7 @@ public class GetReportByMothsTest: BaseTest
             });
         }
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var result = await _reportsDao.GetReportByMonthForOwnerOrManagerAsync(
             _workspace.Id,
@@ -110,6 +110,7 @@ public class GetReportByMothsTest: BaseTest
         Assert.Equal(120m, secondReportItem.Amount);
         Assert.Equal(360m, thirdReportItem.Amount);
         
+        await FlushDbChanges();
         result = await _reportsDao.GetReportByMonthForOwnerOrManagerAsync(
             _workspace.Id,
             DateTime.UtcNow.AddMonths(-3),
@@ -184,6 +185,7 @@ public class GetReportByMothsTest: BaseTest
             });
         }
 
+        await FlushDbChanges();
         var result = await _reportsDao.GetReportByMonthForOtherAsync(
             DateTime.UtcNow.AddMonths(-3),
             DateTime.UtcNow,

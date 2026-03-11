@@ -43,6 +43,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         );
         Assert.NotNull(actualTask);
         Assert.Equal(_taskId, actualTask.ExternalTaskId);
+        Assert.NotNull(activeEntry.Task);
         Assert.Equal(activeEntry.Task.Id, actualTask.Id);
     }
     

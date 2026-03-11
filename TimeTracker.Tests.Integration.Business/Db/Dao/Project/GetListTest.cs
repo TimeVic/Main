@@ -40,6 +40,7 @@ public class GetListTest: BaseTest
         var expectedCounter = 7;
         await _projectSeeder.CreateSeveralAsync(_workspace, expectedCounter);
 
+        await FlushDbChanges();
         var actualList = await _projectDao.GetAvailableForUserListAsync(_workspace);
         Assert.Equal(expectedCounter, actualList.TotalCount);
         
@@ -57,8 +58,8 @@ public class GetListTest: BaseTest
         var projects = await _projectSeeder.CreateSeveralAsync(_workspace, expectedCounter);
         var firstProject = projects.First();
         firstProject.IsArchived = true;
-        await CommitDbChanges();
-
+        
+        await FlushDbChanges();
         var actualList = await _projectDao.GetAvailableForUserListAsync(_workspace);
         Assert.Equal(expectedCounter - 1, actualList.TotalCount);
     }
@@ -73,6 +74,7 @@ public class GetListTest: BaseTest
         var user2Workspace = (await _userDao.GetUsersWorkspaces(user2, MembershipAccessType.Owner)).First();
         await _projectSeeder.CreateSeveralAsync(user2Workspace, 15);
         
+        await FlushDbChanges();
         var actualList = await _projectDao.GetAvailableForUserListAsync(_workspace);
         Assert.Equal(expectedCounter, actualList.TotalCount);
     }
@@ -95,6 +97,7 @@ public class GetListTest: BaseTest
             }
         );
         
+        await FlushDbChanges();
         var actualList = await _projectDao.GetAvailableForUserListAsync(_workspace, otherUser);
         Assert.Equal(2, actualList.TotalCount);
         
@@ -110,6 +113,7 @@ public class GetListTest: BaseTest
             }
         );
         
+        await FlushDbChanges();
         actualList = await _projectDao.GetAvailableForUserListAsync(_workspace, otherUser2);
         Assert.Equal(2, actualList.TotalCount);
     }

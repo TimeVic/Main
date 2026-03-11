@@ -43,7 +43,7 @@ public class PutFileForTaskCommentTest: BaseTest
         Assert.True(actualFile.Size > 0);
         Assert.Equal(StoredFileType.Attachment, actualFile.Type);
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         var actualTaskComment = await DbSessionProvider.CurrentSession.GetAsync<TaskCommentEntity>(_taskComment.Id);
         Assert.Contains(actualTaskComment.Attachments, item => item.Id == actualFile.Id);
     }

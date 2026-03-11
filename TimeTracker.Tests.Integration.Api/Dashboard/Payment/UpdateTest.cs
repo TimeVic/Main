@@ -56,7 +56,7 @@ public class UpdateTest: BaseTest
             Amount = expectPayment.Amount,
             Description = expectPayment.Description,
             PaymentTime = expectPayment.PaymentTime,
-            ProjectId = _payment.Project.Id,
+            ProjectId = _payment.Project!.Id,
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -108,7 +108,7 @@ public class UpdateTest: BaseTest
             Amount = expectPayment.Amount,
             Description = expectPayment.Description,
             PaymentTime = expectPayment.PaymentTime,
-            ProjectId = _payment.Project.Id
+            ProjectId = _payment.Project!.Id
         });
         var errorResponse = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);

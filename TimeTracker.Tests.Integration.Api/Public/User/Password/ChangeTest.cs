@@ -37,6 +37,7 @@ public class ChangeTest: BaseTest
     {
         var expectedPassword = "somePass123";
         var actualRequest = await _resetPasswordService.Generate(_user);
+        Assert.NotNull(actualRequest);
         var response = await PostRequestAsAnonymousAsync(Url, new ResetPasswordStep2Request()
         {
             VerficationToken = actualRequest.VerificationToken,
@@ -53,6 +54,7 @@ public class ChangeTest: BaseTest
     public async Task ShouldNotChangeIfIncorrectToken()
     {
         var actualRequest = await _resetPasswordService.Generate(_user);
+        Assert.NotNull(actualRequest);
         var response = await PostRequestAsAnonymousAsync(Url, new ResetPasswordStep2Request()
         {
             VerficationToken = actualRequest.VerificationToken + "a",

@@ -68,7 +68,7 @@ public class HasAccessToWorkspaceTest: BaseTest
     public async Task ShouldHasAccessIfUserIsMemberWithManagerRole()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        await CommitDbChanges();
+        await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,
@@ -87,7 +87,7 @@ public class HasAccessToWorkspaceTest: BaseTest
     public async Task ShouldHasAccessIfUserIsMemberWithManagerUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        await CommitDbChanges();
+        await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,

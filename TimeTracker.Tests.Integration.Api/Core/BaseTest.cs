@@ -46,8 +46,8 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         UserFactory = _factory.Services.GetRequiredService<IDataFactory<UserEntity>>();
         _queueDao = _factory.Services.GetRequiredService<IQueueDao>();
         _queueService = _factory.Services.GetRequiredService<IQueueService>();
-        SmtpClientServiceMock = _factory.Services.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock;
-        FirebaseClientService = _factory.Services.GetRequiredService<IFirebaseClientService>() as FirebaseClientServiceMock;
+        SmtpClientServiceMock = (_factory.Services.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock)!;
+        FirebaseClientService = (_factory.Services.GetRequiredService<IFirebaseClientService>() as FirebaseClientServiceMock)!;
         ServiceProvider = _factory.Services;
 
         _dbCleanUpService.CleanUp().Wait();

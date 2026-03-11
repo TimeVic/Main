@@ -28,7 +28,7 @@ public class StoredFileMapping: BaseGuidMappings<StoredFileEntity>
         Map(x => x.CreatedAt).DateTime();
         
         HasManyToMany(x => x.Tasks)
-            .Table("task_comment_stored_files")
+            .Table("task_stored_files")
             .ParentKeyColumn("stored_file_id")
             .ChildKeyColumn("task_id")
             .FetchType.Select()

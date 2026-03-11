@@ -122,15 +122,18 @@ public abstract class BaseTest: IDisposable
 
     #endregion
     
-    protected async Task CommitDbChanges()
+    protected async Task FlushDbChanges(bool isClearSession = false)
     { 
-        await DbSessionProvider.PerformCommitAsync();
-        DbSessionProvider.CurrentSession.Clear();
+        await DbSessionProvider.CurrentSession.FlushAsync();
+        if (isClearSession)
+        {
+            DbSessionProvider.CurrentSession.Clear();
+        }
     }
     
     public void Dispose()
     {
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
         Scope.Dispose();
         _serviceProvider.Dispose();
     }

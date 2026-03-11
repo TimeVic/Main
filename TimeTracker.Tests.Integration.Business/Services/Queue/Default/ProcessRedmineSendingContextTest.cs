@@ -80,7 +80,7 @@ public class ProcessRedmineSendingContextTest : BaseTest
         ).Result;
         settings.IsActive = true;
 
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
         _queueDao.CompleteAllPending().Wait();
         _redmineClient.Reset();
     }
@@ -95,13 +95,13 @@ public class ProcessRedmineSendingContextTest : BaseTest
         Assert.Null(_timeEntry.RedmineId);
 
         await _queueService.PushExternalClientAsync(testContext);
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
 
         var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(1, _redmineClient.SentTimeEntries.Count);
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.NotNull(_timeEntry.RedmineId);
     }
@@ -116,7 +116,7 @@ public class ProcessRedmineSendingContextTest : BaseTest
 
         var timeEntryWithAnotherUser = (await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user)).First();
         timeEntryWithAnotherUser.TaskId = _taskId;
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         var testContext = new SendSetTimeEntryIntegrationRequestContext()
         {

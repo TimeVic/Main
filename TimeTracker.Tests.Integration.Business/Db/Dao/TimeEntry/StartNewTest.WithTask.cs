@@ -35,6 +35,7 @@ public partial class StartNewTest: BaseTest
             projectId: project.Id,
             internalTask: task
         );
+        Assert.NotNull(activeEntry.Project);
         Assert.Equal(task.TaskList.Project.Id, activeEntry.Project.Id);
     }
 }

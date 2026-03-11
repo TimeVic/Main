@@ -78,6 +78,7 @@ public class AddTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualPayment = await response.GetJsonDataAsync<PaymentDto>();
+        Assert.NotNull(actualPayment.Project);
         Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(_client.Id, actualPayment.Client.Id);
         Assert.Equal(_project.Id, actualPayment.Project.Id);

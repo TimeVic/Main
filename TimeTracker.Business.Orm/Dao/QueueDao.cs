@@ -17,7 +17,7 @@ public class QueueDao: IQueueDao
     public QueueDao(IDbSessionProvider sessionProvider, ILogger<IQueueDao> logger)
     {
         _logger = logger;
-        _session = sessionProvider.CreateSession();
+        _session = sessionProvider.CreateSession(FlushMode.Always);
     }
 
     public async Task Push(
@@ -28,8 +28,6 @@ public class QueueDao: IQueueDao
         CancellationToken cancellationToken = default
     )
     {
-        using var transaction = _session.BeginTransaction();
-
         try
         {
             var contextType = context.GetType();
@@ -46,11 +44,9 @@ public class QueueDao: IQueueDao
                 UpdatedAt = DateTime.UtcNow
             };
             await _session.SaveAsync(queueItem, cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
         }
         catch (Exception e)
         {
-            await transaction.RollbackAsync(cancellationToken);
             _logger.LogError(e, e.Message);
         }
     }
