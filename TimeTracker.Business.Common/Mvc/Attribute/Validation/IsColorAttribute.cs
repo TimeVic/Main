@@ -27,7 +27,7 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
                         return ValidationResult.Success;
                     }
                 }
-                catch (Exception e) {}
+                catch (Exception) {}
             }
             return errorResult;
         }

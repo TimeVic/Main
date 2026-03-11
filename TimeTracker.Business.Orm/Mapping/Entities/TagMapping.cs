@@ -1,6 +1,7 @@
 using System.Drawing;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Extensions;
+using TimeTracker.Business.Orm.Hibernate.DataTypes;
 using TimeTracker.Business.Orm.Mapping.Common;
 
 namespace TimeTracker.Business.Orm.Mapping.Entities;
@@ -13,7 +14,7 @@ public class TagMapping: BaseGuidMappings<TagEntity>
         
         Map(x => x.Name);
         Map(x => x.Color)
-            .CustomType<Color>()
+            .CustomType<ColorType>()
             .Nullable();
         
         Map(x => x.CreatedAt).DateTime();

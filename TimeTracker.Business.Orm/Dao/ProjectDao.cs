@@ -85,9 +85,9 @@ public class ProjectDao: IProjectDao
             WorkspaceMembershipEntity workspaceMembershipAlias = null;
             UserEntity userAlias = null;
             query = query.Inner.JoinAlias(item => item.MembershipProjectAccess, () => projectAccessAlias)
-                .Inner.JoinAlias(() => projectAccessAlias.WorkspaceMembership, () => workspaceMembershipAlias)
-                .Inner.JoinAlias(() => workspaceMembershipAlias.User, () => userAlias)
-                .And(item => userAlias.Id == user.Id);
+                .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMembership, () => workspaceMembershipAlias)
+                .Inner.JoinAlias(() => workspaceMembershipAlias!.User, () => userAlias)
+                .And(item => userAlias!.Id == user.Id);
         }
 
         var projectIds = await query.ListAsync<Guid>();

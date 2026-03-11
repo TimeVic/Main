@@ -18,8 +18,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
         private readonly IMapper _mapper;
         private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
-        private readonly IProjectDao _projectDao;
-        private readonly IDbSessionProvider _sessionProvider;
         private readonly ISecurityManager _securityManager;
         private readonly ITagDao _tagDao;
 
@@ -27,8 +25,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
             IMapper mapper,
             IApiRequestService apiRequestService,
             IUserDao userDao,
-            IProjectDao projectDao,
-            IDbSessionProvider sessionProvider,
             ISecurityManager securityManager,
             ITagDao tagDao
         )
@@ -36,8 +32,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
             _mapper = mapper;
             _apiRequestService = apiRequestService;
             _userDao = userDao;
-            _projectDao = projectDao;
-            _sessionProvider = sessionProvider;
             _securityManager = securityManager;
             _tagDao = tagDao;
         }

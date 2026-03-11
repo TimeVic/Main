@@ -76,14 +76,14 @@ public partial class TimeEntryForm
     
     private async Task OnChangeDescription(string? value)
     {
-        _activeEntry.Description = value;
+        _activeEntry!.Description = value;
         await UpdateTimeEntry(_activeEntry);
         await Task.CompletedTask;
     }
     
     private async Task OnChangeProject(ProjectDto project)
     {
-        _activeEntry.Project = project;
+        _activeEntry!.Project = project;
         await UpdateTimeEntry(_activeEntry);
         await Task.CompletedTask;
     }

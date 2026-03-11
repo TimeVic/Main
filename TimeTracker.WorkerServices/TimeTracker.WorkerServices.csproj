@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>dotnet-TimeTracker.WorkerServices-6148644D-ADB6-4327-86BB-ABB0B65B04D1</UserSecretsId>
         <LangVersion>12</LangVersion>
+        <WarningsAsErrors>CS0168,CS8602,CS0169,CS1998</WarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>

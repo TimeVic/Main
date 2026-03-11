@@ -27,7 +27,7 @@ public class MarkAllAsReadEffect: Effect<MarkAllAsReadAction>
         try
         {
             dispatcher.Dispatch(new SetAllAsReadAction());
-            await _apiService.NotificationCenterMarkAllAsRead(_authState.Value.Workspace.Id);
+            await _apiService.NotificationCenterMarkAllAsRead(_authState.Value.Workspace!.Id);
             dispatcher.Dispatch(new LoadUnreadCountAction());
         }
         catch (Exception e)

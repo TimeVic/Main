@@ -37,7 +37,7 @@ public class LoadSummaryReportEffect: Effect<ReportFetchSummaryReportAction>
         {
             dispatcher.Dispatch(new ReportSetIsLoadingAction(true));
             var response = await _apiService.ReportsGetSummaryReportAsync(
-                _authState.Value.Workspace.Id,
+                _authState.Value.Workspace!.Id,
                 _reportsState.Value.SummaryReportFilter.StartDate,
                 _reportsState.Value.SummaryReportFilter.EndDate,
                 _reportsState.Value.SummaryReportFilter.ReportType

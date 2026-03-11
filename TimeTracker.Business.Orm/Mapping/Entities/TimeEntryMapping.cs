@@ -17,7 +17,9 @@ public class TimeEntryMapping: BaseGuidMappings<TimeEntryEntity>
         Map(x => x.StartTime).TimeOnly();
         Map(x => x.EndTime).TimeOnlyNullable();
         Map(x => x.TaskId).Nullable();
-        Map(x => x.ClickUpId).Nullable();
+        Map(x => x.ClickUpId)
+            .Column("clickup_id")
+            .Nullable();
         Map(x => x.RedmineId).Nullable();
         Map(x => x.JiraId).Nullable();
         Map(x => x.IsMarkedToDelete);

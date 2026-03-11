@@ -48,6 +48,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             }
             
             var task = await _taskDao.GetById(request.TaskId);
+            RecordNotFoundException.ThrowIfNull(task);
+            
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList))
                 throw new HasNoAccessException("This user has no permissions for provided task list");
             

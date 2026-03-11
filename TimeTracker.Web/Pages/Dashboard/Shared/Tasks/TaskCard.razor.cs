@@ -48,7 +48,7 @@ public partial class TaskCard
                 parts.Add(clientName);
             if (!string.IsNullOrEmpty(projectName))
                 parts.Add(projectName);
-            parts.Add(Task.TaskList.Name);
+            parts.Add(Task.TaskList!.Name);
             
             return string.Join(" > ", parts);
         }

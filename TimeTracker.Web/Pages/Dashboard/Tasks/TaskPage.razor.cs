@@ -51,7 +51,7 @@ public partial class TaskPage
         }
         _isLoading = true;
         
-        if (WorkspaceId != _authState.Value.Workspace.Id)
+        if (WorkspaceId != _authState.Value.Workspace!.Id)
         {
             _urlService.NavigateToChangeWorkspace(
                 WorkspaceId,

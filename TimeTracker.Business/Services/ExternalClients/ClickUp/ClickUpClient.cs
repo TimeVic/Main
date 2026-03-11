@@ -90,10 +90,13 @@ public partial class ClickUpClient: AExternalClientService, IClickUpClient
             var responseData = await HandleResponse<CreateTimeEntryResponseDto?>(uri, response, requestData);
             if (responseData == null || responseData.IsError)
             {
-                _logger.LogDebug(
-                    "ClickUp returned error: {error}",
-                    responseData.Error
-                );
+                if (responseData != null)
+                {
+                    _logger.LogDebug(
+                        "ClickUp returned error: {error}",
+                        responseData.Error
+                    );
+                }
                 return new SynchronizedTimeEntryDto { IsError = true };
             }
 
@@ -111,10 +114,13 @@ public partial class ClickUpClient: AExternalClientService, IClickUpClient
             var responseData = await HandleResponse<UpdateTimeEntryResponseDto?>(uri, response, requestData);
             if (responseData == null || responseData.IsError)
             {
-                _logger.LogDebug(
-                    "ClickUp returned error: {error}",
-                    responseData.Error
-                );
+                if (responseData != null)
+                {
+                    _logger.LogDebug(
+                        "ClickUp returned error: {error}",
+                        responseData.Error
+                    );
+                }
                 return new SynchronizedTimeEntryDto { IsError = true };
             }
 
@@ -153,6 +159,8 @@ public partial class ClickUpClient: AExternalClientService, IClickUpClient
     {
         var httpClient = _newHttpClient;
         var settings = workspace.GetClickUpSettings(user.Id);
+        ArgumentNullException.ThrowIfNull(settings);
+        
         httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
         
         var queryParams = new Dictionary<string, string>();

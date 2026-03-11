@@ -65,7 +65,7 @@ namespace TimeTracker.Web.Services
         {
             if (!string.IsNullOrEmpty(jwtToken))
             {
-                user.DefaultWorkspace.CurrentUserAccess = MembershipAccessType.Owner;
+                user.DefaultWorkspace!.CurrentUserAccess = MembershipAccessType.Owner;
                 _dispatcher.Dispatch(new LoginAction(accessToken, jwtToken, user, user.DefaultWorkspace));
                 _dispatcher.Dispatch(new PersistDataAction());
             }
@@ -98,7 +98,7 @@ namespace TimeTracker.Web.Services
                         await LogoutAsync();
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     _logger.LogDebug(@"CheckIsLoggedIn returned: false");
                 }

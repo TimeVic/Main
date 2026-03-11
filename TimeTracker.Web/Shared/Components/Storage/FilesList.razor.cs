@@ -126,7 +126,10 @@ public partial class FilesList: IDisposable
                 EntityId.Value,
                 EntityType.Value
             );
-            await InvokeAsync(() => ListUpdated.InvokeAsync(files.Items));
+            if (files != null)
+            {
+                await InvokeAsync(() => ListUpdated.InvokeAsync(files.Items));
+            }
         }
         catch (Exception e)
         {

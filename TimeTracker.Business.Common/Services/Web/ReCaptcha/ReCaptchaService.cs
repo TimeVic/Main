@@ -42,6 +42,10 @@ public class ReCaptchaService: IReCaptchaService
                 try
                 {
                     var responseModel = JsonConvert.DeserializeObject<ReCaptchaResponseModel>(responseDataString);
+                    if (responseModel == null)
+                    {
+                        return false;
+                    }
                     if (responseModel.IsSuccess)
                     {
                         return true;

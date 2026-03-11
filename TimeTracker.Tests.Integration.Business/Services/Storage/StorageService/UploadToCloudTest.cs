@@ -35,6 +35,7 @@ public class UploadToCloudTest: BaseTest
         await _fileStorage.PutFileAsync(_user, CreateFormFile(), StoredFileType.Attachment);
 
         var uploadedFile = await _fileStorage.UploadFirstPendingToCloud();
+        Assert.NotNull(uploadedFile);
         Assert.Null(uploadedFile.DataToUpload);
         Assert.Null(uploadedFile.UploadingError);
         Assert.Equal(StoredFileStatus.Uploaded, uploadedFile.Status);
@@ -49,6 +50,7 @@ public class UploadToCloudTest: BaseTest
         Assert.Null(actualFile.ThumbCloudFilePath);
         
         var uploadedFile = await _fileStorage.UploadFirstPendingToCloud();
+        Assert.NotNull(uploadedFile);
         Assert.Null(uploadedFile.DataToUpload);
         Assert.Null(uploadedFile.UploadingError);
         Assert.Equal(StoredFileStatus.Uploaded, uploadedFile.Status);
@@ -63,6 +65,7 @@ public class UploadToCloudTest: BaseTest
         Assert.NotEqual(Guid.Empty, actualFile.Id);
         
         var uploadedFile = await _fileStorage.UploadFirstPendingToCloud();
+        Assert.NotNull(uploadedFile);
         Assert.Null(uploadedFile.DataToUpload);
         Assert.Null(uploadedFile.UploadingError);
         Assert.Equal(StoredFileStatus.Uploaded, uploadedFile.Status);

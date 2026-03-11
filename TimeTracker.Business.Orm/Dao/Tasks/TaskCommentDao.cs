@@ -88,7 +88,7 @@ public class TaskCommentDao: ITaskCommentDao
         var query = _sessionProvider.CurrentSession.QueryOver<TaskCommentEntity>()
             .Inner.JoinAlias(item => item.Task, () => taskAlias)
             .Inner.JoinAlias(item => item.User, () => userAlias)
-            .Where(() => taskAlias.Id == task.Id)
+            .Where(() => taskAlias!.Id == task.Id)
             .Where(item => item.IsArchived == false);
 
         var offset = PaginationUtils.CalculateOffset(page);

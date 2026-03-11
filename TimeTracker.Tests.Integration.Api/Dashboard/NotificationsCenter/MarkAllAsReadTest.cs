@@ -61,7 +61,8 @@ public partial class MarkAllAsReadTest: BaseTest
         await DbSessionProvider.CurrentSession.RefreshAsync(_task);
         await _notificationCenterService.Push(NotificationActionType.Reminder, _task.User, _task);
         await _notificationCenterService.Push(NotificationActionType.Reminder, _task.User, _task);
-        
+
+        await FlushDbChanges();
         Assert.Equal(2, await _notificationCenterService.GetUnreadCount(_user, _workspace));
         
         // Act

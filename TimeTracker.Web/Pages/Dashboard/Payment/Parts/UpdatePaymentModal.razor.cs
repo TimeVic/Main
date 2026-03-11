@@ -35,7 +35,7 @@ public partial class UpdatePaymentModal
     {
         await base.OnInitializedAsync();
         model.Fill(Content.Payment);
-        model.WorkspaceId = AuthState.Value.Workspace.Id;
+        model.WorkspaceId = AuthState.Value.Workspace!.Id;
     }
 
     private async Task Submit()

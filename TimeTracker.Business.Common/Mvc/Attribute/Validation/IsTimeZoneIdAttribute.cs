@@ -23,8 +23,8 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
                     TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
                     return ValidationResult.Success;
                 }
-                catch (InvalidTimeZoneException e) {}
-                catch (TimeZoneNotFoundException e) {}
+                catch (InvalidTimeZoneException) {}
+                catch (TimeZoneNotFoundException) {}
             }
             return errorResult;
         }

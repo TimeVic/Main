@@ -38,7 +38,7 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
             var response = await _apiService.TimeEntrySetAsync(new SetRequest()
             {
                 Id = action.TimeEntry.Id,
-                WorkspaceId = _authState.Value.Workspace.Id,
+                WorkspaceId = _authState.Value.Workspace!.Id,
                 Description = action.TimeEntry.Description,
                 Date = action.TimeEntry.Date,
                 ProjectId = action.TimeEntry.Project?.Id,

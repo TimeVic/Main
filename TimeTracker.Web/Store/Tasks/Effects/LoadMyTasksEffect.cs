@@ -32,7 +32,7 @@ public class LoadOverdueTasksEffect: Effect<LoadOverdueTasksListAction>
         {
             dispatcher.Dispatch(new SetIsOverdueTasksListLoadingAction(true));
             var response = await _apiService.TasksGetOverdueListAsync(
-                _authState.Value.Workspace.Id
+                _authState.Value.Workspace!.Id
             );
             dispatcher.Dispatch(new SetOverdueTasksListItemsAction(response));
         }

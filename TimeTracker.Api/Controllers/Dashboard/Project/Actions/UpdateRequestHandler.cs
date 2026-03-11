@@ -44,6 +44,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             var user = await _userDao.GetById(userId);
 
             var project = await _projectDao.GetById(request.ProjectId, true);
+            RecordNotFoundException.ThrowIfNull(project);
+            
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
             {
                 throw new HasNoAccessException();

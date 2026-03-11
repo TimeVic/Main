@@ -18,8 +18,6 @@ public partial class TasksTable
     [Inject]
     public IState<TasksState> TasksState { get; set; }
     
-    private long? _taskListId;
-    
     [CascadingParameter(Name = "TaskListId")]
     public long? TaskListId
     {

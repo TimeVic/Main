@@ -13,8 +13,11 @@ namespace TimeTracker.Business.Extensions
                 {
                     var errorMessage = !string.IsNullOrEmpty(error.ErrorMessage)
                         ? error.ErrorMessage
-                        : error.Exception.Message;
-                    errors.Add(errorMessage);
+                        : error.Exception?.Message;
+                    if (errorMessage != null)
+                    {
+                        errors.Add(errorMessage);
+                    }
                 }
             }
             return errors;

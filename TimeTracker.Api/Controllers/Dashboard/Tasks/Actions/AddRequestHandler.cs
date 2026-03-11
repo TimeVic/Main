@@ -140,7 +140,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                             request.ExternalTaskId
                         );
                     }
-                    catch (Exception e) {}
+                    catch (Exception) {}
                     return await _clickUpClient.SetTimeEntryTaskAsync(
                         timeEntry,
                         taskList,
@@ -156,7 +156,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                         request.ExternalTaskId
                     );
                 }
-                catch (Exception e) {}
+                catch (Exception) {}
                 return await _clickUpClient.SetTimeEntryTaskAsync(
                     taskList,
                     user,

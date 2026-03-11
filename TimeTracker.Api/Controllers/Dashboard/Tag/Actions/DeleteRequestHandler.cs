@@ -47,6 +47,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
             var user = await _userDao.GetById(userId);
 
             var tag = await _tagDao.GetById(request.TagId);
+            RecordNotFoundException.ThrowIfNull(tag);
+            
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, tag.Workspace))
             {
                 throw new HasNoAccessException();

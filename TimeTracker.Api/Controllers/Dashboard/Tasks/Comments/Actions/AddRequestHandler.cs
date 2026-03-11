@@ -90,7 +90,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
             {
                 Action = NotificationActionType.AddEntity,
                 TaskCommentId = comment.Id,
-                ProducedUserId = comment.User.Id
+                ProducedUserId = comment.User!.Id
             });
             
             var receivers = new List<UserEntity>();

@@ -44,6 +44,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
             var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            RecordNotFoundException.ThrowIfNull(workspace);
+            
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();

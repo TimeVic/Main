@@ -20,7 +20,7 @@ namespace TimeTracker.Web.Services.Http
                 await GetAsync(ApiUrl.UserCheckIsLoggedIn, token);
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

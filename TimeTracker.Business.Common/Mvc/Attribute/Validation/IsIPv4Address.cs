@@ -15,6 +15,10 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
             if (value is string)
             {
                 var ipAddress = value.ToString();
+                if (ipAddress == null)
+                {
+                    return ValidationResult.Success;
+                }
                 var quads = ipAddress.Split('.');
 
                 // if we do not have 4 quads, return false

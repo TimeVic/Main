@@ -178,7 +178,7 @@ public class SecurityManager: ISecurityManager
             accessLevel == AccessLevel.Read
             || (
                 accessLevel == AccessLevel.Write
-                && taskComment.User.Id == user.Id
+                && taskComment.User!.Id == user.Id
             )
         )
         {

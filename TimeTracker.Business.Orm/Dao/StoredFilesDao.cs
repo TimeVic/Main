@@ -40,7 +40,7 @@ public class StoredFilesDao: IStoredFilesDao
             .Left.JoinAlias(item => item.Tasks, () => taskAlias);
         if (entityType == StorageEntityType.Task)
         {
-            query = query.Where(() => taskAlias.Id == entityId);
+            query = query.Where(() => taskAlias!.Id == entityId);
         }
         query = query.OrderBy(item => item.CreatedAt).Desc;
         return await query.ListAsync();

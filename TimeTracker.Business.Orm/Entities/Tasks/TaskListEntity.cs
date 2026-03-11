@@ -20,7 +20,7 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         
         public virtual void SetProject(ProjectEntity project)
         {
-            if (Project?.Id == project?.Id)
+            if (Project.Id == project.Id)
             {
                 return;
             }

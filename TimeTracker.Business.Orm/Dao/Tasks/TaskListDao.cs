@@ -40,7 +40,7 @@ public class TaskListDao: ITaskListDao
         ProjectEntity projectAlias = null;
         var query = _sessionProvider.CurrentSession.QueryOver<TaskListEntity>()
             .Inner.JoinAlias(item => item.Project, () => projectAlias)
-            .Where(() => projectAlias.Workspace.Id == workspace.Id)
+            .Where(() => projectAlias!.Workspace.Id == workspace.Id)
             .Where(taskList => taskList.IsArchived == false);
         
         var items = await query
