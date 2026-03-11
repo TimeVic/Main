@@ -2,14 +2,12 @@ using Autofac;
 using Microsoft.Extensions.Configuration;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dao.Workspace;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
-using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.ExternalClients.Redmine;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Services.Queue.Handlers;
@@ -51,14 +49,14 @@ public class ProcessRedmineSendingContextTest : BaseTest
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
         _taskListSeeder = Scope.Resolve<ITaskListSeeder>();
         _projectSeeder = Scope.Resolve<IProjectSeeder>();
-        _redmineClient = Scope.Resolve<IRedmineClient>() as RedmineClientMock;
+        _redmineClient = (Scope.Resolve<IRedmineClient>() as RedmineClientMock)!;
         _workspaceSettingsDao = Scope.Resolve<IWorkspaceSettingsDao>();
         _userDao = Scope.Resolve<IUserDao>();
 
         var configuration = Scope.Resolve<IConfiguration>();
-        _apiKey = configuration.GetValue<string>("Integration:Redmine:ApiKey");
+        _apiKey = configuration.GetValue<string>("Integration:Redmine:ApiKey")!;
         _userId = configuration.GetValue<long>("Integration:Redmine:UserId");
-        _taskId = configuration.GetValue<string>("Integration:Redmine:TaskId");
+        _taskId = configuration.GetValue<string>("Integration:Redmine:TaskId")!;
         _activityId = configuration.GetValue<long>("Integration:Redmine:ActivityId");
         _redmineUrl = configuration.GetValue<string>("Integration:Redmine:Url");
 
@@ -113,6 +111,7 @@ public class ProcessRedmineSendingContextTest : BaseTest
     {
         await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
         var settings = _workspace.GetRedmineSettings(_user.Id);
+        Assert.NotNull(settings);
         settings.IsActive = false;
 
         var timeEntryWithAnotherUser = (await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user)).First();

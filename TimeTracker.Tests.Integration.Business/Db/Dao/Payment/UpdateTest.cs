@@ -72,7 +72,9 @@ public class UpdateTest: BaseTest
             expectProject.Id,
             expectedPayment.Description
         );
-        
+
+        Assert.NotNull(actualPayment);
+        Assert.NotNull(actualPayment.Project);
         Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(expectedPayment.Amount, actualPayment.Amount);
         Assert.Equal(expectedPayment.Description, actualPayment.Description);
@@ -112,7 +114,8 @@ public class UpdateTest: BaseTest
             expectProject.Id,
             expectedPayment.Description
         );
-        
+
+        Assert.NotNull(actualPayment);
         Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Null(actualPayment.Project);
     }

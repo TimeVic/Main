@@ -45,6 +45,7 @@ public class GenerateTest: BaseTest
     {
         var newRequest = await _resetPasswordService.Generate(_user);
         
+        Assert.NotNull(newRequest);
         Assert.Equal(_user.Id, newRequest.User.Id);
         Assert.NotEmpty(newRequest.VerificationToken);
         Assert.True(newRequest.ExpirationTime > DateTime.UtcNow);

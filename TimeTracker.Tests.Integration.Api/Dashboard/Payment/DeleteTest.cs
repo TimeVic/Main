@@ -20,8 +20,6 @@ public class DeleteTest: BaseTest
     
     private readonly UserEntity _user;
     private readonly string _jwtToken;
-    private readonly ClientEntity _client;
-    private readonly ProjectEntity _project;
     private readonly IPaymentSeeder _paymentSeeder;
     private readonly PaymentEntity _payment;
     private readonly IPaymentDao _paymentDao;

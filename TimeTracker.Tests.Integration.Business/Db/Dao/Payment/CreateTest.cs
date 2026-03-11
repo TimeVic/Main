@@ -58,7 +58,9 @@ public class CreateTest: BaseTest
             expectProject.Id,
             expectPayment.Description
         );
-        
+
+        Assert.NotNull(actualPayment);
+        Assert.NotNull(actualPayment.Project);
         Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(expectPayment.Amount, actualPayment.Amount);
         Assert.Equal(expectPayment.Description, actualPayment.Description);

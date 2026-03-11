@@ -62,6 +62,7 @@ public class GenerateNewJwtTokenTest: BaseTest
             loginResponse.JwtToken
         );
         var accessToken = await _accessTokenDao.GetByToken(loginResponse.AccessToken);
+        Assert.NotNull(accessToken);
         accessToken.ExpirationTime = DateTime.UtcNow.AddSeconds(-1);
         await CommitDbChanges();
         

@@ -49,8 +49,10 @@ public class QueueDaoTest: BaseTest
         var actualItem2 = await _queueDao.GetTop(QueueChannel.Default);
         _queueDao.Flush();
         
+        Assert.NotNull(actualItem1);
         Assert.NotEqual(Guid.Empty, actualItem1.Id);
         Assert.Equal(QueueStatus.InProcess, actualItem1.Status);
+        Assert.NotNull(actualItem2);
         Assert.NotEqual(Guid.Empty, actualItem2.Id);
         
         Assert.True(actualItem2.CreatedAt > actualItem1.CreatedAt);

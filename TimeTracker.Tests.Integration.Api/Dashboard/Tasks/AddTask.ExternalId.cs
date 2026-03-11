@@ -104,6 +104,7 @@ public partial class AddTask
         Assert.Equal(expectedTask.Priority, actualData.Priority);
         
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.NotNull(actualTimeEntry.Task);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
 }

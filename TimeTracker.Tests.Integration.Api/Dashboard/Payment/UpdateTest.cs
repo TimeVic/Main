@@ -25,9 +25,7 @@ public class UpdateTest: BaseTest
     private readonly string _jwtToken;
     private readonly IClientDao _clientDao;
     private readonly WorkspaceEntity _workspace;
-    private readonly ClientEntity _client;
     private readonly IProjectDao _projectDao;
-    private readonly ProjectEntity _project;
     private readonly IPaymentSeeder _paymentSeeder;
     private readonly PaymentEntity _payment;
 
@@ -41,6 +39,9 @@ public class UpdateTest: BaseTest
 
         _payment = _paymentSeeder.CreateSeveralAsync(_user, 1).Result.First();
         DbSessionProvider.PerformCommitAsync().Wait();
+
+        Assert.NotNull(_payment);
+        Assert.NotNull(_payment.Project);
     }
 
     [Fact]
@@ -83,6 +84,8 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualPayment = await response.GetJsonDataAsync<PaymentDto>();
+        Assert.NotNull(actualPayment);
+        Assert.NotNull(actualPayment.Project);
         Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(expectedClient.Id, actualPayment.Client.Id);
         Assert.Equal(expectProject.Id, actualPayment.Project.Id);
