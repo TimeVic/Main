@@ -36,11 +36,12 @@ public class GenerateNewJwtTokenTest: BaseTest
     public async Task ShouldGenerate()
     {
         var expectedPassword = "some password";
-        var user = _userSeeder.CreateActivatedAsync(expectedPassword).Result;
+        var user = await _userSeeder.CreateActivatedAsync(expectedPassword);
         await FlushDbChanges();
         var loginResponse = await _authService.Login(user.Email, expectedPassword);
         
         // Act
+        await FlushDbChanges();
         var newAccessToken = await _authService.GenerateNewJwtToken(
             loginResponse.AccessToken,
             loginResponse.JwtToken
@@ -59,10 +60,11 @@ public class GenerateNewJwtTokenTest: BaseTest
         var user = _userSeeder.CreateActivatedAsync(expectedPassword).Result;
         await FlushDbChanges();
         var loginResponse = await _authService.Login(user.Email, expectedPassword);
-        loginResponse = await _authService.GenerateNewJwtToken(
-            loginResponse.AccessToken,
-            loginResponse.JwtToken
-        );
+        
+        await FlushDbChanges();
+        loginResponse = await _authService.GenerateNewJwtToken(loginResponse.AccessToken, loginResponse.JwtToken);
+        
+        await FlushDbChanges();
         var accessToken = await _accessTokenDao.GetByToken(loginResponse.AccessToken);
         Assert.NotNull(accessToken);
         accessToken.ExpirationTime = DateTime.UtcNow.AddSeconds(-1);
@@ -84,10 +86,14 @@ public class GenerateNewJwtTokenTest: BaseTest
         var user = _userSeeder.CreateActivatedAsync(expectedPassword).Result;
         await FlushDbChanges();
         var loginResponse = await _authService.Login(user.Email, expectedPassword);
+        
+        await FlushDbChanges();
         loginResponse = await _authService.GenerateNewJwtToken(
             loginResponse.AccessToken,
             loginResponse.JwtToken
         );
+        
+        await FlushDbChanges();
         var accessToken = await _accessTokenDao.GetByToken(loginResponse.AccessToken);
         Assert.NotNull(accessToken);
         accessToken.ExpirationTime = DateTime.UtcNow.AddSeconds(-1);

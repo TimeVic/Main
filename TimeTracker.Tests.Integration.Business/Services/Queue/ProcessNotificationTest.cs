@@ -41,7 +41,7 @@ public class ProcessNotificationTest: BaseTest
 
         await _queueService.PushNotificationAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
@@ -63,7 +63,7 @@ public class ProcessNotificationTest: BaseTest
 
         await _queueService.PushNotificationAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
@@ -92,7 +92,7 @@ public class ProcessNotificationTest: BaseTest
 
         await _queueService.PushNotificationAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);

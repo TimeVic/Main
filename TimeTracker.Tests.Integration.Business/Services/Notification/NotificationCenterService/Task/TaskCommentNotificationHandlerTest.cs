@@ -165,7 +165,7 @@ public partial class TaskCommentNotificationHandlerTest: BaseTest
             TaskCommentId = comment.Id,
             ProducedUserId = _user.Id
         });
-        await _queueService.ProcessAsync(QueueChannel.Default);
+        await QueueProcess(QueueChannel.Default);
         
         // Assert
         Assert.True(FirebaseClientService.SentMessages.Any());

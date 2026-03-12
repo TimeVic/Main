@@ -76,7 +76,7 @@ public class GenerateTest: BaseTest
     {
         var newRequest = await _resetPasswordService.Generate(_user);
         
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);

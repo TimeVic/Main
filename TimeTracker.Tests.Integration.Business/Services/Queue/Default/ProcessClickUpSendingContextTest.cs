@@ -93,7 +93,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
         await _queueService.PushExternalClientAsync(testContext);
         FlushDbChanges().Wait();
         
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(1, _clickUpClient.SentTimeEntries.Count);
 
@@ -122,7 +122,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
 
         await _queueService.PushExternalClientAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(0, _clickUpClient.SentTimeEntries.Count);
 
@@ -145,7 +145,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
 
         await _queueService.PushExternalClientAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(1, _clickUpClient.SentTimeEntries.Count);
 

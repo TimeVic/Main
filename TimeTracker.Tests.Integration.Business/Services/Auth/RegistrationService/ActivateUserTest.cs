@@ -39,6 +39,7 @@ public class ActivateUserTest: BaseTest
         var expectedEmail = _userFactory.Generate().Email;
         
         var user = await _registrationService.CreatePendingUser(expectedEmail);
+        await FlushDbChanges();
         var activatedUser = await _registrationService.ActivateUser(user.VerificationToken, expectedPassword);
         
         Assert.Null(activatedUser.VerificationToken);
@@ -57,7 +58,7 @@ public class ActivateUserTest: BaseTest
         Assert.True(actualDefaultWorkspace.IsDefault);
         
         
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
@@ -68,6 +69,7 @@ public class ActivateUserTest: BaseTest
     [Fact]
     public async Task ShouldThrowExceptionIfNotFound()
     {
+        await FlushDbChanges();
         await Assert.ThrowsAsync<RecordNotFoundException>(async () =>
         {
             await _registrationService.ActivateUser(SecurityUtil.GetRandomString(100), "fake password");
@@ -81,6 +83,7 @@ public class ActivateUserTest: BaseTest
         var expectedEmail = _userFactory.Generate().Email;
         
         var user = await _registrationService.CreatePendingUser(expectedEmail);
+        await FlushDbChanges();
         var activatedUser = await _registrationService.ActivateUser(user.VerificationToken, expectedPassword);
         await FlushDbChanges();
         

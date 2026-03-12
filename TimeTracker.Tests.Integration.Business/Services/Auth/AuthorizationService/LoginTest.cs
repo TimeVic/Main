@@ -35,6 +35,7 @@ public class LoginTest: BaseTest
         var expectedPassword = "some password";
         var user = _userSeeder.CreateActivatedAsync(expectedPassword).Result;
         
+        await FlushDbChanges();
         var loginResponse = await _authService.Login(user.Email, expectedPassword);
         
         Assert.True(_jwtService.IsValidJwt(loginResponse.JwtToken));
@@ -52,6 +53,7 @@ public class LoginTest: BaseTest
     [Fact]
     public async Task ShouldThrowExceptionIfNotFound()
     {
+        await FlushDbChanges();
         await Assert.ThrowsAsync<RecordNotFoundException>(async () =>
         {
             await _authService.Login("fake@email", "fake password");
@@ -61,7 +63,8 @@ public class LoginTest: BaseTest
     [Fact]
     public async Task ShouldThrowExceptionIfIncorrectPassword()
     {
-        var user = _userSeeder.CreateActivatedAsync().Result;
+        var user = await _userSeeder.CreateActivatedAsync();
+        await FlushDbChanges();
         await Assert.ThrowsAsync<UserNotAuthorizedException>(async () =>
         {
             await _authService.Login(user.Email, "fake 123 password");
