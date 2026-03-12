@@ -53,6 +53,7 @@ public class GenerateTest: BaseTest
     public async Task ShouldThrowExceptionIfPreviousWasNotExpired()
     {
         await _resetPasswordService.Generate(_user);
+        await FlushDbChanges();
         await Assert.ThrowsAsync<TooManyRequestsException>(async () =>
         {
             await _resetPasswordService.Generate(_user);
@@ -76,15 +77,12 @@ public class GenerateTest: BaseTest
     public async Task ShouldSendNotificationAfterGeneration()
     {
         var newRequest = await _resetPasswordService.Generate(_user);
+        Assert.NotNull(newRequest);
         
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
-        var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
-        Assert.NotNull(actualEmail);
-        Assert.NotNull(newRequest);
-        Assert.Contains(_user.Email, actualEmail.To);
-        Assert.Contains(newRequest.VerificationToken, actualEmail.Body);
+        Assert.Contains(SmtpClientServiceMock.SentMessages, item => item.To == _user.Email && item.Body.Contains(newRequest.VerificationToken));
     }
 }

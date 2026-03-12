@@ -41,6 +41,7 @@ public class LoginTest: BaseTest
         Assert.True(_jwtService.IsValidJwt(loginResponse.JwtToken));
         Assert.Equal(user.Id, _jwtService.GetUserId(loginResponse.JwtToken));
         
+        await FlushDbChanges();
         var newAccessToken = await _authService.GenerateNewJwtToken(
             loginResponse.AccessToken,
             loginResponse.JwtToken
