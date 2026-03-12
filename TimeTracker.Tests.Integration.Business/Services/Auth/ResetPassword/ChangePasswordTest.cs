@@ -40,6 +40,7 @@ public class ChangePasswordTest: BaseTest
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _queueDao.CompleteAllPending();
+        FlushDbChanges().Wait();
     }
 
     [Fact]
@@ -48,6 +49,8 @@ public class ChangePasswordTest: BaseTest
         var newPassword = "Some123NewPass";
         var newRequest = await _resetPasswordService.Generate(_user);
         Assert.NotNull(newRequest);
+
+        await FlushDbChanges();
         await _resetPasswordService.ChangePassword(newRequest.VerificationToken, newPassword);
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(_user);

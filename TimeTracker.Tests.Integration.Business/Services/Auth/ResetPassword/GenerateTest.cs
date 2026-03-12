@@ -35,6 +35,7 @@ public class GenerateTest: BaseTest
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _queueDao.CompleteAllPending();
+        FlushDbChanges().Wait();
     }
 
     [Fact]
