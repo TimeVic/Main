@@ -144,7 +144,9 @@ namespace TimeTracker.Business.Orm.Connection
             if (_isShowSql)
             {
                 var session = _sessionFactory.WithOptions()
-                    .Interceptor(new SqlQueryInterceptor());
+                    .Interceptor(
+                        new SqlQueryInterceptor(_logger)
+                    );
                 if (flushMode != null)
                     session = session.FlushMode(flushMode.Value);
                 return session.OpenSession();

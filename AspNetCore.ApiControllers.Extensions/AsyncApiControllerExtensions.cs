@@ -16,8 +16,7 @@ namespace AspNetCore.ApiControllers.Extensions
                 ControllerBase, 
                 IAsyncApiController, 
                 IHasDefaultSuccessActionResult,
-                IHasInvalidModelStateActionResult,
-                IShouldPerformCommit
+                IHasInvalidModelStateActionResult
             where TRequest : IRequest
             => RequestAsync(
                 apiController,
@@ -33,8 +32,7 @@ namespace AspNetCore.ApiControllers.Extensions
             where TApiController : 
                 ControllerBase,
                 IAsyncApiController, 
-                IHasInvalidModelStateActionResult,
-                IShouldPerformCommit
+                IHasInvalidModelStateActionResult
             where TRequest : IRequest
         {
             if (apiController == null)
@@ -57,8 +55,7 @@ namespace AspNetCore.ApiControllers.Extensions
                 ControllerBase, 
                 IAsyncApiController, 
                 IHasDefaultResponseSuccessActionResult,
-                IHasInvalidModelStateActionResult,
-                IShouldPerformCommit
+                IHasInvalidModelStateActionResult
             where TRequest : IRequest<TResponse>
             where TResponse : IResponse
             => RequestAsync(
@@ -75,8 +72,7 @@ namespace AspNetCore.ApiControllers.Extensions
             where TApiController : 
                 ControllerBase, 
                 IAsyncApiController, 
-                IHasInvalidModelStateActionResult,
-                IShouldPerformCommit
+                IHasInvalidModelStateActionResult
             where TRequest : IRequest<TResponse>
             where TResponse : IResponse
         {

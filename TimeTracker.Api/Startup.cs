@@ -71,7 +71,6 @@ public class Startup
         );
         
         app.UseMiddleware<CommitPerformerMiddleware>();
-
         app.UseAuthentication();
         app.UseAuthorization();
         
