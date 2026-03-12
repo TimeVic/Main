@@ -39,6 +39,9 @@
       <None Update="SQLFiles\Scripts\52_MigrateToUid.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="SQLFiles\Procedures\fn_sequence_get_next.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

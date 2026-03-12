@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using Domain.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Notification.Abstractions;
 using TimeTracker.Business.Clients.Smtp;
@@ -7,7 +8,7 @@ using TimeTracker.Business.Notifications.Core;
 
 namespace TimeTracker.Business.Notifications.Senders.Tasks
 {
-    public class TaskChangedNotificationSender : IAsyncNotification<TaskChangedNotificationContext>
+    public class TaskChangedNotificationSender : IAsyncQueueHandler<TaskChangedNotificationContext>
     {
         private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
@@ -23,7 +24,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
             _emailFactory = new EmailFactory();
         }
 
-        public Task SendAsync(
+        public Task HandleAsync(
             TaskChangedNotificationContext context, 
             CancellationToken cancellationToken = default
         )

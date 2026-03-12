@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
+using NHibernate.Linq;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Api.Utils;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dto.Tasks;
-using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
-using TimeTracker.Business.Services.Storage;
 
 namespace TimeTracker.Api.Profiles.Task;
 
@@ -19,6 +18,8 @@ public class TaskProfile : Profile
             .IgnoreAllAndConstructUsing((src, mapper) =>
             {
                 var taskList = mapper.Mapper.Map<TaskListDto>(src.TaskList);
+                var tags = mapper.Mapper.Map<ICollection<TagDto>>(src.Tags.ToArray());
+                var user = mapper.Mapper.Map<UserDto>(src.User);
                 return new TaskDto
                 {
                     Id = src.Id,
@@ -35,11 +36,13 @@ public class TaskProfile : Profile
                     IsArchived = src.IsArchived,
                     UpdatedAt = src.UpdatedAt,
                     CreatedAt = src.CreatedAt,
-                    TaskList = taskList
+                    TaskList = taskList,
+                    Tags = tags,
+                    User = user
                 };
             });
             
-        CreateMap<TaskEntity, TaskDto>()
+        CreateMap<TaskEntity, TaskFullDto>()
             .IgnoreAllAndConstructUsing((src, mapper) =>
             {
                 return MappingUtils.BuildWithBase<
@@ -64,7 +67,11 @@ public class TaskProfile : Profile
                 );
             });
         
-        CreateMap<UpdateRequest, TaskEntity>();
+        CreateMap<UpdateRequest, TaskEntity>()
+            .ForMember(
+                dto => dto.TaskId,
+                builder => builder.Ignore()
+            );
         CreateMap<GetListFilterRequest, GetTasksFilterDto>();
     }
 }

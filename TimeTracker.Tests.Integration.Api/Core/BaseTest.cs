@@ -23,6 +23,7 @@ namespace TimeTracker.Tests.Integration.Api.Core;
 public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposable
 {
     protected readonly ApiCustomWebApplicationFactory _factory;
+    protected IServiceScope ServiceScope;
     
     protected readonly IServiceProvider ServiceProvider;
     protected readonly HttpClient HttpClient;
@@ -40,22 +41,24 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         _factory = factory;
         HttpClient = _factory.CreateClient();
         
-        DbSessionProvider = _factory.Services.GetRequiredService<IDbSessionProvider>();
-        _dbCleanUpService = _factory.Services.GetRequiredService<IDbCleanUpService>();
-        UserSeeder = _factory.Services.GetRequiredService<IUserSeeder>();
-        UserFactory = _factory.Services.GetRequiredService<IDataFactory<UserEntity>>();
-        _queueDao = _factory.Services.GetRequiredService<IQueueDao>();
-        _queueService = _factory.Services.GetRequiredService<IQueueService>();
-        SmtpClientServiceMock = (_factory.Services.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock)!;
-        FirebaseClientService = (_factory.Services.GetRequiredService<IFirebaseClientService>() as FirebaseClientServiceMock)!;
-        ServiceProvider = _factory.Services;
+        ServiceScope = _factory.Services.CreateScope();
+        ServiceProvider = ServiceScope.ServiceProvider;
+        
+        DbSessionProvider = ServiceProvider.GetRequiredService<IDbSessionProvider>();
+        _dbCleanUpService = ServiceProvider.GetRequiredService<IDbCleanUpService>();
+        UserSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
+        UserFactory = ServiceProvider.GetRequiredService<IDataFactory<UserEntity>>();
+        _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
+        _queueService = ServiceProvider.GetRequiredService<IQueueService>();
+        SmtpClientServiceMock = (ServiceProvider.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock)!;
+        FirebaseClientService = (ServiceProvider.GetRequiredService<IFirebaseClientService>() as FirebaseClientServiceMock)!;
 
         _dbCleanUpService.CleanUp().Wait();
     }
-    
+
     public void Dispose()
     {
-        FlushDbChanges().Wait();
+        ServiceScope.Dispose();
         GC.SuppressFinalize(this);
     }
 

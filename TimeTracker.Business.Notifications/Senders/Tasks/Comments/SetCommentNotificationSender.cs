@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Domain.Abstractions;
+using Microsoft.Extensions.Configuration;
 using Notification.Abstractions;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Clients.Smtp.Core;
@@ -7,7 +8,7 @@ using TimeTracker.Business.Notifications.Core;
 
 namespace TimeTracker.Business.Notifications.Senders.Tasks.Comments
 {
-    public class SetCommentNotificationSender : IAsyncNotification<SetCommentNotificationContext>
+    public class SetCommentNotificationSender : IAsyncQueueHandler<SetCommentNotificationContext>
     {
         private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
@@ -23,7 +24,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks.Comments
             _emailFactory = new EmailFactory();
         }
 
-        public Task SendAsync(
+        public Task HandleAsync(
             SetCommentNotificationContext context, 
             CancellationToken cancellationToken = default
         )

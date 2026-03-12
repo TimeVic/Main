@@ -2,7 +2,7 @@ using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Extensions;
 using TimeTracker.Business.Orm.Mapping.Common;
-using TaskStatus = System.Threading.Tasks.TaskStatus;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Business.Orm.Mapping.Entities.Tasks;
 
@@ -42,7 +42,7 @@ public class TaskMapping: BaseGuidMappings<TaskEntity>
             .ParentKeyColumn("task_id")
             .ChildKeyColumn("tag_id")
             .FetchType.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.None();
         
         HasManyToMany(x => x.Attachments)
@@ -50,13 +50,13 @@ public class TaskMapping: BaseGuidMappings<TaskEntity>
             .ParentKeyColumn("task_id")
             .ChildKeyColumn("stored_file_id")
             .FetchType.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.None();
         
         HasMany(x => x.HistoryItems)
             .KeyColumn("task_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
     }

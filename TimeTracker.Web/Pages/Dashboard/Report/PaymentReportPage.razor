@@ -34,7 +34,7 @@
                 }
                 @foreach (var groupItem in _grouppedItems)
                 {
-                    var clientId = groupItem.Key ?? 0;
+                    var clientId = groupItem.Key ?? Guid.Empty;
                     var clientDataItem = groupItem.First();
                     var clientName = clientDataItem.ClientName;
                     var clientAmount = clientDataItem.PaidAmountByClient;

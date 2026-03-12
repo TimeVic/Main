@@ -53,7 +53,7 @@ public interface ITaskDao: IDomainService
         GetTasksFilterDto? filter = null
     );
 
-    Task UpdatePositions(WorkspaceEntity workspace, IDictionary<long, int> items);
+    Task UpdatePositions(WorkspaceEntity workspace, IDictionary<Guid, int> items);
 
     Task<ICollection<TaskEntity>> GetTasksToRemind();
 }

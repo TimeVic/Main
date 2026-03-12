@@ -133,8 +133,7 @@ public abstract class BaseTest: IDisposable
     
     public void Dispose()
     {
-        FlushDbChanges().Wait();
-        Scope.Dispose();
         _serviceProvider.Dispose();
+        Scope.Dispose();
     }
 }

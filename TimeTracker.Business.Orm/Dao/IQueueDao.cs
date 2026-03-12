@@ -21,7 +21,7 @@ public interface IQueueDao: IScopedDomainService, IDisposable
 
     Task<QueueEntity?> GetTop(QueueChannel? channel = null, CancellationToken cancellationToken = default);
 
-    System.Threading.Tasks.Task MarkAsProcessed(
+    Task MarkAsProcessed(
         QueueEntity item,
         string? error = null,
         CancellationToken cancellationToken = default

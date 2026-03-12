@@ -36,7 +36,7 @@ public class StorageController(ILifetimeScope scope) : MainApiControllerBase(sco
             .For<GetListResponse>()
             .With(request);
     
-    [HttpGet("file/{FileId:long}")]
+    [HttpGet("file/{FileId:Guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> GetFile([FromRoute] GetFileRequest request)

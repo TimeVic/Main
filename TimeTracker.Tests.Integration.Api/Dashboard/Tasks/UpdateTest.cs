@@ -9,6 +9,7 @@ using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -44,6 +45,7 @@ public partial class UpdateTest: BaseTest
     private readonly IUserSeeder _userSeeder;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly ITagSeeder _tagSeeder;
+    private readonly ITaskDao _taskDao;
 
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -55,6 +57,7 @@ public partial class UpdateTest: BaseTest
         _tagSeeder = ServiceProvider.GetRequiredService<ITagSeeder>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
+        _taskDao = ServiceProvider.GetRequiredService<ITaskDao>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
@@ -256,9 +259,13 @@ public partial class UpdateTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        await DbSessionProvider.CurrentSession.RefreshAsync(_task);
-        Assert.Equal(2, _task.HistoryItems.Count);
-        var historyItem = _task.HistoryItems.OrderBy(item => item.CreatedAt).Last();
+        await FlushDbChanges(true);
+        var task = await _taskDao.GetById(_task.Id);
+        Assert.NotNull(task);
+        var historyItems = task.HistoryItems.ToList();
+        Assert.Equal(2, historyItems.Count);
+        var historyItem = historyItems.OrderByDescending(item => item.CreatedAt).FirstOrDefault();
+        Assert.NotNull(historyItem);
         Assert.Equal(expectedTask.Title, historyItem.Title);
         Assert.Equal(expectedTask.Description, historyItem.Description);
         Assert.Equal(expectedTask.StartTime.ToString(), historyItem.StartTime.ToString());

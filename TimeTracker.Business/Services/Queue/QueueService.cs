@@ -76,6 +76,7 @@ public partial class QueueService: IQueueService
             {
                 await HandleQueueItem(queueItem, cancellationToken);
                 await _dbSessionProvider.PerformCommitAsync(false, cancellationToken);
+                processedCounter++;
             }
             catch (Exception e)
             {

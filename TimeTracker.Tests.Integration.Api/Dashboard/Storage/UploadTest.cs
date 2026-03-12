@@ -60,7 +60,7 @@ public class UploadTest: BaseTest
             data: new Dictionary<string, object>()
             {
                 { "WorkspaceId", _workspace.Id },
-                { "EntityId", _task.TaskId },
+                { "EntityId", _task.Id },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
@@ -81,7 +81,7 @@ public class UploadTest: BaseTest
             new Dictionary<string, object>()
             {
                 { "WorkspaceId", _workspace.Id },
-                { "EntityId", _task.TaskId },
+                { "EntityId", _task.Id },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
@@ -94,7 +94,7 @@ public class UploadTest: BaseTest
         Assert.NotEmpty(actualData.Url);
         Assert.NotEmpty(actualData.ThumbUrl);
 
-        await FlushDbChanges();
+        await FlushDbChanges(true);
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
 
@@ -116,7 +116,7 @@ public class UploadTest: BaseTest
             new Dictionary<string, object>()
             {
                 { "WorkspaceId", otherWorkspace.Id },
-                { "EntityId", task.TaskId },
+                { "EntityId", task.Id },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
@@ -139,7 +139,7 @@ public class UploadTest: BaseTest
             new Dictionary<string, object>()
             {
                 { "WorkspaceId", _workspace.Id },
-                { "EntityId", _task.TaskId },
+                { "EntityId", _task.Id },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
@@ -152,7 +152,7 @@ public class UploadTest: BaseTest
         Assert.NotEmpty(actualData.Url);
         Assert.NotEmpty(actualData.ThumbUrl);
 
-        await FlushDbChanges();
+        await FlushDbChanges(true);
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
         

@@ -1,8 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
-using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 {
@@ -11,6 +8,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         [Required]
         public Guid TaskListId { get; set; }
         
-        public IDictionary<long, int> Items { get; set; } = new Dictionary<long, int>();
+        public IDictionary<Guid, int> Items { get; set; } = new Dictionary<Guid, int>();
     }
 }

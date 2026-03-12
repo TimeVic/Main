@@ -68,6 +68,7 @@ public class ArchiveTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
+        await FlushDbChanges(true);
         var taskList = await DbSessionProvider.CurrentSession.GetAsync<TaskListEntity>(_taskList.Id);
         Assert.True(taskList.IsArchived);
     }

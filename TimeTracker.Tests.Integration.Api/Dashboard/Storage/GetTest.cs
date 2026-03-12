@@ -45,7 +45,8 @@ public class GetTest: BaseTest
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
         _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Wait();
-        _uploadedFile = _fileStorage.UploadFirstPendingToCloud().Result;
+        FlushDbChanges().Wait();
+        _uploadedFile = (_fileStorage.UploadFirstPendingToCloud().Result)!;
     }
 
     [Fact]
@@ -64,7 +65,7 @@ public class GetTest: BaseTest
             string.Format(Url, _uploadedFile.Id),
             _jwtToken
         );
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var fileContent = await response.Content.ReadAsStringAsync();
         Assert.NotEmpty(fileContent);

@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using Domain.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Notification.Abstractions;
 using TimeTracker.Business.Clients.Api;
@@ -8,7 +9,7 @@ using TimeTracker.Business.Notifications.Core;
 
 namespace TimeTracker.Business.Notifications.Senders.Tasks
 {
-    public class TaskReminderNotificationSender : IAsyncNotification<TaskReminderNotificationContext>
+    public class TaskReminderNotificationSender : IAsyncQueueHandler<TaskReminderNotificationContext>
     {
         private readonly ISmtpClientService _smtpClientService;
         private readonly IFirebaseClientService _firebaseClientService;
@@ -27,7 +28,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
             _emailFactory = new EmailFactory();
         }
 
-        public async Task SendAsync(
+        public async Task HandleAsync(
             TaskReminderNotificationContext context, 
             CancellationToken cancellationToken = default
         )

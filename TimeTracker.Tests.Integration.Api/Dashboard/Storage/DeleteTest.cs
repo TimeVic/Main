@@ -50,7 +50,8 @@ public class DeleteTest: BaseTest
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
         _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Wait();
-        _uploadedFile = _fileStorage.UploadFirstPendingToCloud().Result;
+        FlushDbChanges().Wait();
+        _uploadedFile = (_fileStorage.UploadFirstPendingToCloud().Result)!;
     }
 
     [Fact]
@@ -79,6 +80,7 @@ public class DeleteTest: BaseTest
         );
         response.EnsureSuccessStatusCode();
 
+        await FlushDbChanges(true);
         var fileContent = await DbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(_uploadedFile.Id);
         Assert.Null(fileContent);
     }

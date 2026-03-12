@@ -125,6 +125,7 @@ public partial class AddTask: BaseTest
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
         
+        await FlushDbChanges(true);
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
         Assert.NotNull(actualTimeEntry.Task);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
@@ -200,6 +201,7 @@ public partial class AddTask: BaseTest
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
         
+        await FlushDbChanges(true);
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
         Assert.NotNull(actualTimeEntry.Project);
         Assert.Equal(_taskList.Project.Id, actualTimeEntry.Project.Id);

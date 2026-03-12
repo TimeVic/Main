@@ -11,7 +11,7 @@ using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 {
-    public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, TaskDto>
+    public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, TaskFullDto>
     {
         private readonly IMapper _mapper;
         private readonly IUserDao _userDao;
@@ -34,7 +34,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _taskDao = taskDao;
         }
     
-        public async Task<TaskDto> ExecuteAsync(UpdateRequest request)
+        public async Task<TaskFullDto> ExecuteAsync(UpdateRequest request)
         {
             var user = await _userDao.GetById(request.UserId);
             if (user == null)
@@ -62,7 +62,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             var tags = task.Workspace.Tags.Where(
                 item => request.TagIds.Any(tagId => item.Id == tagId)
             );
-            await _taskDao.UpdateTaskAsync(
+            task = await _taskDao.UpdateTaskAsync(
                 task,
                 taskList: taskList,
                 user: user,

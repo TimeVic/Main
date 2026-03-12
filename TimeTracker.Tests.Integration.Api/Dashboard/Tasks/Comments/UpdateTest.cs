@@ -67,7 +67,7 @@ public class UpdateTest: BaseTest
         
         _fakeComment = _taskCommentFactory.Generate();
         _comment = _taskCommentSeeder.CreateAsync(_task, user: _user).Result;
-        _queueService.ProcessAsync(QueueChannel.Notifications).Wait();
+        QueueProcess(QueueChannel.Notifications).Wait();
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public class UpdateTest: BaseTest
         Assert.Equal(_fakeComment.Comment, actualEntity.Comment);
         Assert.Equal(_user.Id, actualEntity.User.Id);
         
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
@@ -104,7 +104,7 @@ public class UpdateTest: BaseTest
             SmtpClientServiceMock.SentMessages, 
             item => item.To == _user.Email
                 && item.Body.Contains("updated")
-                && item.Body.Contains($"{_task.TaskList.Project.Workspace.Id}/{_task.TaskId}")
+                && item.Body.Contains($"{_task.Id}")
         );
     }
     
@@ -150,7 +150,7 @@ public class UpdateTest: BaseTest
             Comment = _fakeComment.Comment,
             WatcherIds = new List<Guid>() { user2.Id, user3.Id }
         });
-        await _queueService.ProcessAsync(QueueChannel.Default);
+        await QueueProcess(QueueChannel.Default);
         
         // Assert
         response.EnsureSuccessStatusCode();
@@ -204,7 +204,7 @@ public class UpdateTest: BaseTest
         Assert.Contains(actualEntity.Watchers, item => item.Id == user2.Id);
         Assert.Contains(actualEntity.Watchers, item => item.Id == user3.Id);
         
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);

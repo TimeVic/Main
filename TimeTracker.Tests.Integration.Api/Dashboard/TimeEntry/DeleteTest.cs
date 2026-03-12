@@ -113,7 +113,7 @@ public class DeleteTest: BaseTest
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.True(_timeEntry.IsMarkedToDelete);
 
-        await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        await QueueProcess(QueueChannel.ExternalClient);
         Assert.False(
             await DbSessionProvider.CurrentSession.Query<TimeEntryEntity>()
                 .AnyAsync(item => item.Id == _timeEntry.Id)
@@ -151,7 +151,7 @@ public class DeleteTest: BaseTest
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.True(_timeEntry.IsMarkedToDelete);
 
-        await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(_clickUpClient.IsSent);
 
         Assert.False(
@@ -174,7 +174,7 @@ public class DeleteTest: BaseTest
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.True(_timeEntry.IsMarkedToDelete);
 
-        await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(_redmineClient.IsSent);
         
         Assert.False(

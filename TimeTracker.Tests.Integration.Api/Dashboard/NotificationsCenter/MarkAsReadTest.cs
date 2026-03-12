@@ -48,6 +48,7 @@ public partial class MarkAsReadTest: BaseTest
     public async Task NonAuthorizedCanNotDoIt()
     {
         await _notificationCenterService.Push(NotificationActionType.Reminder, _user, _task);
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_user, _task.Workspace);
         var notification = notifications.Items.First();
         
@@ -64,6 +65,8 @@ public partial class MarkAsReadTest: BaseTest
         // Arrange
         await _notificationCenterService.Push(NotificationActionType.Reminder, _user, _task);
         await _notificationCenterService.Push(NotificationActionType.Reminder, _user, _task);
+        
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_user, _task.Workspace);
         var notification = notifications.Items.First();
         

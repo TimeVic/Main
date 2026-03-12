@@ -7,7 +7,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
 {
     public class SetRequest : IRequest<TimeEntryDto>
     {
-        [IsPositive]
         public Guid? Id { get; set; }
 
         [Required]

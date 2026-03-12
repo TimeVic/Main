@@ -100,7 +100,7 @@ public class SetTest: BaseTest
         
         Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
 
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        var processedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
     
@@ -128,7 +128,7 @@ public class SetTest: BaseTest
             ProjectId = expectedProject.Id,
             Date = fakeEntry.Date,
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.NotNull(actualDto.Project);
@@ -141,7 +141,7 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.Date, actualDto.Date);
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
 
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        var processedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
     
@@ -179,7 +179,7 @@ public class SetTest: BaseTest
             ProjectId = expectedProject.Id,
             Date = fakeEntry.Date,
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.NotEqual(Guid.Empty, actualDto.Id);
