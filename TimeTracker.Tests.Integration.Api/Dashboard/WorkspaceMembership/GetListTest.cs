@@ -61,9 +61,9 @@ public class GetListTest: BaseTest
         
         Assert.All(actualDto.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Id);
             Assert.True(item.Access == MembershipAccessType.User || item.Access == MembershipAccessType.Owner);
-            Assert.True(item.User.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.User.Id);
         });
     }
     
@@ -110,8 +110,8 @@ public class GetListTest: BaseTest
             WorkspaceId = _workspace.Id,
             Page = 1
         });
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 
     private async Task CreateUsersAndAddMembers(int counter)

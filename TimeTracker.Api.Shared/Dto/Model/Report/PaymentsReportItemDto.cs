@@ -2,11 +2,11 @@
 
 public class PaymentsReportItemDto
 {
-    public long? ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
     
     public string? ProjectName { get; set; }
     
-    public long? ClientId { get; set; }
+    public Guid? ClientId { get; set; }
     
     public string? ClientName { get; set; }
     

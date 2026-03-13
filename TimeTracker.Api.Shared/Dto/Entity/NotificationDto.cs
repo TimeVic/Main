@@ -11,7 +11,7 @@ public class NotificationDto: BaseDto
     
     public virtual bool IsRead { get; set; } = false;
     
-    public virtual DateTime CreateTime { get; set; }
+    public virtual DateTime CreatedAt { get; set; }
     
     public virtual string? Comment { get; set; }
     

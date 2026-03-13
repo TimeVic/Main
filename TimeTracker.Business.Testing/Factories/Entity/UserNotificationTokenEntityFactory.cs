@@ -12,7 +12,7 @@ namespace TimeTracker.Business.Testing.Factories.Entity
         {
             _factory = new Faker<UserNotificationTokenEntity>()
                 .RuleFor(fake => fake.Token, fake => fake.Random.String2(100))
-                .RuleFor(fake => fake.CreateTime, fake => fake.Date.Past());
+                .RuleFor(fake => fake.CreatedAt, fake => fake.Date.Past());
         }
 
         public UserNotificationTokenEntity Generate()

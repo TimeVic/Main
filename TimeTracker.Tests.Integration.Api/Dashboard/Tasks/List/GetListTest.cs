@@ -70,7 +70,7 @@ public class GetListTest: BaseTest
         
         Assert.All(actualDto.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Id);
             Assert.NotEmpty(item.Name);
             Assert.NotNull(item.Project);
             Assert.Equal(_project.Id, item.Project.Id);

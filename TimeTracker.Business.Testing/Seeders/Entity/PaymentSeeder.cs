@@ -42,14 +42,12 @@ public class PaymentSeeder: IPaymentSeeder
     {
         var workspace = (await _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner)).First();
         var project = (await _projectSeeder.CreateSeveralAsync(workspace)).First();
-        await _sessionProvider.PerformCommitAsync();
         return await CreateSeveralAsync(workspace, user, project.Client, project, count);
     }
     
     public async Task<ICollection<PaymentEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1)
     {
         var project = (await _projectSeeder.CreateSeveralAsync(workspace)).First();
-        await _sessionProvider.PerformCommitAsync();
         return await CreateSeveralAsync(workspace, user, project.Client, project, count);
     }
 

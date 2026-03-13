@@ -9,8 +9,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
     public class AddRequest : IRequest<TaskListDto>
     {
         [Required]
-        [IsPositive(ErrorMessage = "Project is required")]
-        public long ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
         
         [Required]
         [StringLength(1024, MinimumLength = 1)]

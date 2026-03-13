@@ -9,8 +9,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker
     public class SetCompletionRequest : IRequest<GoalsTrackerCompletionMarkerDto>
     {
         [Required]
-        [IsPositive]
-        public long GoalsTrackerItemId { get; set; }
+        public Guid GoalsTrackerItemId { get; set; }
         
         [Required]
         [IsPositive]

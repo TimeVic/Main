@@ -49,7 +49,7 @@ public class CreateTest: BaseTest
         var expectedTag = _tagFactory.Generate();
         var actualTag = await _tagDao.CreateAsync(_workspace, expectedTag.Name, red);
         Assert.NotNull(actualTag);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         actualTag = await DbSessionProvider.CurrentSession.GetAsync<TagEntity>(actualTag.Id);
         Assert.Equal(expectedTag.Name, actualTag.Name);
@@ -63,7 +63,7 @@ public class CreateTest: BaseTest
         var expectedTag = _tagFactory.Generate();
         var actualTag = await _tagDao.CreateAsync(_workspace, expectedTag.Name, Color.Aquamarine);
         Assert.NotNull(actualTag);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         actualTag = await DbSessionProvider.CurrentSession.GetAsync<TagEntity>(actualTag.Id);
         Assert.Equal(expectedTag.Name, actualTag.Name);

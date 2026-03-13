@@ -12,7 +12,7 @@ namespace TimeTracker.Business.Orm.Dao;
 
 public interface ITimeEntryDao: IDomainService
 {
-    Task<TimeEntryEntity?> GetByIdAsync(long? id);
+    Task<TimeEntryEntity?> GetByIdAsync(Guid? id);
     
     Task<TimeEntryEntity> StartNewAsync(
         UserEntity user,
@@ -21,7 +21,7 @@ public interface ITimeEntryDao: IDomainService
         TimeSpan startTime,
         bool isBillable = false,
         string? description = null,
-        long? projectId = null,
+        Guid? projectId = null,
         decimal? hourlyRate = null,
         TaskEntity? internalTask = null
     );

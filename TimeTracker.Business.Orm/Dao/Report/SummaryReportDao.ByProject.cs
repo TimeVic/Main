@@ -31,7 +31,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     ";
     
     public async Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectForOwnerOrManagerAsync(
-        long workspaceId,
+        Guid workspaceId,
         DateTime startDate,
         DateTime endDate
     )
@@ -69,7 +69,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     public async Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectForOtherAsync(
         DateTime startDate,
         DateTime endDate,
-        long userId,
+        Guid userId,
         IEnumerable<ProjectEntity>? availableProjectsForUser = null
     )
     {

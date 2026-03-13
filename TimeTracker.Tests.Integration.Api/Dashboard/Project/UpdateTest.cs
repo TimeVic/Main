@@ -54,7 +54,7 @@ public class UpdateTest: BaseTest
     {
         var expectedClient = _clientSeeder.CreateSeveralAsync(_workspace).Result.First();
         var expectedProject = _projectFactory.Generate();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             ProjectId = _project.Id,
@@ -66,10 +66,11 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<ProjectDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(expectedProject.Name, actualProject.Name);
         Assert.Equal(expectedProject.DefaultHourlyRate, actualProject.DefaultHourlyRate);
         Assert.Equal(expectedProject.IsBillableByDefault, actualProject.IsBillableByDefault);
+        Assert.NotNull(actualProject.Client);
         Assert.Equal(expectedClient.Id, actualProject.Client.Id);
     }
     
@@ -78,17 +79,17 @@ public class UpdateTest: BaseTest
     {
         var expectedClient = _clientSeeder.CreateSeveralAsync(_workspace).Result.First();
         _project.SetClient(expectedClient);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             ProjectId = _project.Id,
             Name = _project.Name,
-            ClientId = 0
+            ClientId = Guid.Empty
         });
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<ProjectDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Null(actualProject.Client);
     }
     
@@ -96,7 +97,7 @@ public class UpdateTest: BaseTest
     public async Task ShouldNotSetClientFromOtherUser()
     {
         var otherClient = _clientSeeder.CreateSeveralAsync().Result.First();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
@@ -107,7 +108,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<ProjectDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Null(actualProject.Client);
     }
     
@@ -115,7 +116,7 @@ public class UpdateTest: BaseTest
     public async Task ShouldNotUpdateIfHasNoAccess()
     {
         var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAsync();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()
         {
@@ -123,7 +124,7 @@ public class UpdateTest: BaseTest
             Name = _project.Name
         });
         
-        var errorResponse = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.Type);
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
 }

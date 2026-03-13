@@ -17,7 +17,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
     public class SetJiraSettingsRequestHandler : IAsyncRequestHandler<SetJiraSettingsRequest, WorkspaceSettingsJiraDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IWorkspaceDao _workspaceDao;
         private readonly ISecurityManager _securityManager;
@@ -26,7 +26,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
 
         public SetJiraSettingsRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IWorkspaceDao workspaceDao,
             ISecurityManager securityManager,
@@ -35,7 +35,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _workspaceDao = workspaceDao;
             _securityManager = securityManager;
@@ -45,7 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
     
         public async Task<WorkspaceSettingsJiraDto> ExecuteAsync(SetJiraSettingsRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _workspaceDao.GetByIdAsync(request.WorkspaceId);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))

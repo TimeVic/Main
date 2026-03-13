@@ -73,14 +73,15 @@ public class CreateTest: BaseTest
             Name = expectedItem.Name,
             NumberOfTimes = expectedItem.NumberOfTimes
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         // Assert
         var actualItem = await response.GetJsonDataAsync<GoalsTrackerItemDto>();
-        Assert.True(actualItem.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualItem.Id);
         Assert.Equal(expectedItem.Name, actualItem.Name);
         Assert.Equal(expectedItem.NumberOfTimes, actualItem.NumberOfTimes);
 
+        await FlushDbChanges(true);
         var actualTracker = await DbSessionProvider.CurrentSession.GetAsync<GoalsTrackerEntity>(_tracker.Id);
         Assert.Single(actualTracker.Items);
         Assert.Contains(actualTracker.Items, item => item.Id == actualItem.Id);
@@ -95,15 +96,15 @@ public class CreateTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new CreateItemRequest()
         {
-            GoalsTrackerId = 999,
+            GoalsTrackerId = Guid.Empty,
             Name = expectedItem.Name,
             NumberOfTimes = expectedItem.NumberOfTimes
         });
         
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -124,7 +125,7 @@ public class CreateTest: BaseTest
         
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 }

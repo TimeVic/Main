@@ -21,7 +21,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
     public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, TaskCommentDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly ITaskCommentDao _taskCommentDao;
@@ -29,7 +29,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
 
         public UpdateRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             ITaskCommentDao taskCommentDao,
@@ -37,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _taskCommentDao = taskCommentDao;
@@ -46,7 +46,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
     
         public async Task<TaskCommentDto> ExecuteAsync(UpdateRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var taskComment = await _taskCommentDao.GetById(request.CommentId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, taskComment))
@@ -95,8 +95,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
                 {
                     ToAddress = receiver.Email,
                     Comment = comment.Comment,
-                    TaskId = comment.Task.TaskId,
-                    WorkspaceId = comment.Task.TaskList.Project.Workspace.Id,
+                    TaskId = comment.Task.Id,
                     IsUpdated = true,
                     OwnerName = comment.User.Name
                 });

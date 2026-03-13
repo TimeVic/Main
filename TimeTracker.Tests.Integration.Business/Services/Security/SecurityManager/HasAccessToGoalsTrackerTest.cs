@@ -77,7 +77,7 @@ public class HasAccessToGoalsTrackerTest: BaseTest
         var goalsTracker = await _goalsTrackerSeeder.CreateAsync(_owner, _ownWorkspace);
         
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        await CommitDbChanges();
+        await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,
@@ -98,7 +98,7 @@ public class HasAccessToGoalsTrackerTest: BaseTest
         var goalsTracker = await _goalsTrackerSeeder.CreateAsync(_owner, _ownWorkspace);
         
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        await CommitDbChanges();
+        await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,

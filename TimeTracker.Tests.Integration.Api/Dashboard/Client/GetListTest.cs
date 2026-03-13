@@ -48,14 +48,14 @@ public class GetListTest: BaseTest
             WorkspaceId = _defaultWorkspace.Id,
             Page = 1
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(expectedCounter, actualDto.TotalCount);
         
         Assert.All(actualDto.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Id);
             Assert.NotEmpty(item.Name);
         });
     }

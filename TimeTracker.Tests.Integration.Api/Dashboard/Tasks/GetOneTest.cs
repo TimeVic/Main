@@ -64,8 +64,7 @@ public class GetOneTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetOneRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId
+            TaskId = _task.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -77,12 +76,11 @@ public class GetOneTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetOneRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId
+            TaskId = _task.Id
         });
         response.EnsureSuccessStatusCode();
 
-        var actualDto = await response.GetJsonDataAsync<TaskDto>();
+        var actualDto = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.True(actualDto.TaskId > 0);
         Assert.NotEmpty(actualDto.Title);
         Assert.NotEmpty(actualDto.Description);
@@ -110,12 +108,11 @@ public class GetOneTest: BaseTest
         
         var response = await PostRequestAsync(Url, _otherToken, new GetOneRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId
+            TaskId = _task.Id
         });
         response.EnsureSuccessStatusCode();
 
-        var actualDto = await response.GetJsonDataAsync<TaskDto>();
+        var actualDto = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.True(actualDto.TaskId > 0);
     }
     
@@ -129,11 +126,10 @@ public class GetOneTest: BaseTest
         
         var response = await PostRequestAsync(Url, _otherToken, new GetOneRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId
+            TaskId = _task.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 }

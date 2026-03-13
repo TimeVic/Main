@@ -18,7 +18,7 @@ public class PaymentDao: IPaymentDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<PaymentEntity?> GetById(long? id)
+    public async Task<PaymentEntity?> GetById(Guid? id)
     {
         if (id == null)
             return null;
@@ -34,7 +34,7 @@ public class PaymentDao: IPaymentDao
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
-        long? projectId = null,
+        Guid? projectId = null,
         string? description = null
     )
     {
@@ -43,20 +43,19 @@ public class PaymentDao: IPaymentDao
             throw new DataInconsistencyException($"This workspace does not contain client: {client.Id}");
         }
 
-        var entity = new PaymentEntity()
+        var entity = new PaymentEntity
         {
             Workspace = workspace,
             User = user,
             Amount = amount,
             PaymentTime = paymentTime,
             Description = description,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            Client = client
         };
         client.AddPayment(entity);
-        var project = client.Projects
-            .AsQueryable()
-            .FirstOrDefault(item => item.Id == projectId);
+        var project = client.Projects.FirstOrDefault(item => item.Id == projectId);
         if (project != null)
         {
             project.AddPayment(entity);
@@ -67,11 +66,11 @@ public class PaymentDao: IPaymentDao
     }
     
     public async Task<PaymentEntity?> UpdatePaymentAsync(
-        long paymentId,
+        Guid paymentId,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
-        long? projectId,
+        Guid? projectId,
         string? description    
     )
     {
@@ -79,14 +78,12 @@ public class PaymentDao: IPaymentDao
             .FirstOrDefaultAsync(item => item.Id == paymentId);
         if (payment != null)
         {
-            payment.UpdateTime = DateTime.UtcNow;
+            payment.UpdatedAt = DateTime.UtcNow;
             payment.Client = client;
             payment.Amount = amount;
             payment.PaymentTime = paymentTime;
             payment.Description = description;
-            var project = payment.Client.Projects
-                .AsQueryable()
-                .FirstOrDefault(item => item.Id == projectId);
+            var project = payment.Client.Projects.FirstOrDefault(item => item.Id == projectId);
             if (project != null)
             {
                 project.AddPayment(payment);
@@ -110,8 +107,8 @@ public class PaymentDao: IPaymentDao
         WorkspaceEntity workspaceAlias = null;
         var query = _sessionProvider.CurrentSession.QueryOver<PaymentEntity>()
             .Inner.JoinAlias(item => item.Client, () => clientAlias)
-            .Inner.JoinAlias(item => clientAlias.Workspace, () => workspaceAlias)
-            .Where(item => workspaceAlias.Id == workspace.Id && item.User.Id == user.Id);
+            .Inner.JoinAlias(item => clientAlias!.Workspace, () => workspaceAlias)
+            .Where(item => workspaceAlias!.Id == workspace.Id && item.User.Id == user.Id);
         
         var items = await query
             .OrderBy(item => item.PaymentTime).Desc

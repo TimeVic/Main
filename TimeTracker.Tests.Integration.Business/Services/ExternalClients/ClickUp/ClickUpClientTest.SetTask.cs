@@ -21,7 +21,7 @@ public partial class SendNewTimeEntityTest : BaseTest
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
         var taskList = await _taskListSeeder.CreateAsync(project);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
     
         var actualTask = await _сlickUpClient.SetTimeEntryTaskAsync(
             taskList,
@@ -44,7 +44,7 @@ public partial class SendNewTimeEntityTest : BaseTest
             DateTime.UtcNow.TimeOfDay,
             true
         );
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
     
         var actualTask = await _сlickUpClient.SetTimeEntryTaskAsync(
             activeEntry,
@@ -53,6 +53,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         );
         Assert.NotNull(actualTask);
         Assert.Equal(_externalTaskIdForCreation, actualTask.ExternalTaskId);
+        Assert.NotNull(activeEntry.Task);
         Assert.Equal(activeEntry.Task.Id, actualTask.Id);
     }
     
@@ -68,7 +69,7 @@ public partial class SendNewTimeEntityTest : BaseTest
             DateTime.UtcNow.TimeOfDay,
             true
         );
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
 
         await Assert.ThrowsAsync<RecordNotFoundException>(async () =>
         {

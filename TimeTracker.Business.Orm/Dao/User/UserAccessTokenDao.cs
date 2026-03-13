@@ -28,7 +28,7 @@ public class UserAccessTokenDao: IUserAccessTokenDao
         {
             User = user,
             Token = SecurityUtil.GetRandomString(64),
-            CreateTime = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
             ExpirationTime = DateTime.UtcNow + _expirationTimeout
         };
         await _sessionProvider.CurrentSession.SaveAsync(accessToken);

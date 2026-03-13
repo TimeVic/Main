@@ -60,7 +60,7 @@ public class UploadTest: BaseTest
             data: new Dictionary<string, object>()
             {
                 { "WorkspaceId", _workspace.Id },
-                { "EntityId", _task.TaskId },
+                { "EntityId", _task.Id },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
@@ -81,7 +81,7 @@ public class UploadTest: BaseTest
             new Dictionary<string, object>()
             {
                 { "WorkspaceId", _workspace.Id },
-                { "EntityId", _task.TaskId },
+                { "EntityId", _task.Id },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
@@ -90,15 +90,16 @@ public class UploadTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<StoredFileDto>();
-        Assert.True(actualData.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualData.Id);
         Assert.NotEmpty(actualData.Url);
         Assert.NotEmpty(actualData.ThumbUrl);
 
-        await CommitDbChanges();
+        await FlushDbChanges(true);
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
 
         var actualUploadedFile = await _fileStorage.UploadFirstPendingToCloud();
+        Assert.NotNull(actualUploadedFile);
         Assert.Equal(actualData.Id, actualUploadedFile.Id);
         Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath);
     }
@@ -115,15 +116,15 @@ public class UploadTest: BaseTest
             new Dictionary<string, object>()
             {
                 { "WorkspaceId", otherWorkspace.Id },
-                { "EntityId", task.TaskId },
+                { "EntityId", task.Id },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
             CreateFormFile("image.jpg")
         );
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -138,7 +139,7 @@ public class UploadTest: BaseTest
             new Dictionary<string, object>()
             {
                 { "WorkspaceId", _workspace.Id },
-                { "EntityId", _task.TaskId },
+                { "EntityId", _task.Id },
                 { "EntityType", StorageEntityType.Task },
                 { "FileType", StoredFileType.Attachment },
             },
@@ -147,15 +148,16 @@ public class UploadTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualData = await response.GetJsonDataAsync<StoredFileDto>();
-        Assert.True(actualData.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualData.Id);
         Assert.NotEmpty(actualData.Url);
         Assert.NotEmpty(actualData.ThumbUrl);
 
-        await CommitDbChanges();
+        await FlushDbChanges(true);
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
         
         var actualUploadedFile = await _fileStorage.UploadFirstPendingToCloud();
+        Assert.NotNull(actualUploadedFile);
         Assert.Equal(actualData.Id, actualUploadedFile.Id);
         Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath);
     }

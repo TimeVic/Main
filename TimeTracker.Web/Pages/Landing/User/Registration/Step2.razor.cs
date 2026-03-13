@@ -31,7 +31,6 @@ public partial class Step2
     private IReCaptchaService _reCaptchaService { get; set; }
     
     private RegistrationStep2Request model = new();
-    private EditContext _editContext;
     private bool _isLoading;
     private EditForm _form;
     private bool _isValid = false;
@@ -58,6 +57,8 @@ public partial class Step2
         try
         {
             var registrationResponse = await _apiService.RegistrationStep2Async(model);
+            if (registrationResponse == null)
+                throw new Exception("Login error");
             _authorizationService.Login(
                 registrationResponse.AccessToken,
                 registrationResponse.JwtToken,

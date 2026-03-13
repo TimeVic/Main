@@ -10,7 +10,7 @@ public partial class SendNewTimeEntityTest : BaseTest
     {
         var task = await _taskSeeder.CreateAsync(user: _user);
         task.ExternalTaskId = _taskId;
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
@@ -21,9 +21,9 @@ public partial class SendNewTimeEntityTest : BaseTest
             true,
             internalTask: task
         );
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
         var actualResponse = await _client.SetTimeEntryAsync(activeEntry);

@@ -2,7 +2,7 @@
 
 public class TimeEntryCreationDto
 {
-    public long? Id { get; set; }
+    public Guid? Id { get; set; }
     
     public string? Description { get; set; }
     

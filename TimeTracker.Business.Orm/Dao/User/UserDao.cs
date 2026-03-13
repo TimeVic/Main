@@ -32,7 +32,7 @@ public class UserDao: IUserDao
             .FirstOrDefaultAsync();
     }
     
-    public async Task<UserEntity?> GetById(long id)
+    public async Task<UserEntity?> GetById(Guid id)
     {
         return await _sessionProvider.CurrentSession.Query<UserEntity>()
             .Where(item => item.Id == id)
@@ -53,17 +53,17 @@ public class UserDao: IUserDao
             Email = email.Trim().ToLower(),
             VerificationToken = SecurityUtil.GetRandomString(32),
             VerificationTime = null,
-            PasswordHash = new byte[] {},
-            PasswordSalt = new byte[] {},
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow,
+            PasswordHash = [],
+            PasswordSalt = [],
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
             Timezone = TimeZoneInfo.Utc.Id
         };
         await _sessionProvider.CurrentSession.SaveAsync(user);
         return user;
     }
     
-    public async Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, long workspaceId)
+    public async Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, Guid workspaceId)
     {
         var allWorkspaces = await GetUsersWorkspaces(user);
         return allWorkspaces.FirstOrDefault(item => item.Id == workspaceId);
@@ -78,6 +78,7 @@ public class UserDao: IUserDao
     public async Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user, MembershipAccessType? accessType = null)
     {
         var query = _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Fetch(item => item.Workspace)
             .Where(item => item.User.Id == user.Id);
         if (accessType != null)
         {

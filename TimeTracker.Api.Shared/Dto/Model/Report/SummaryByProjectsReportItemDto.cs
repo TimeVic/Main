@@ -2,7 +2,7 @@
 
 public class SummaryByProjectsReportItemDto
 {
-    public long? ProjectId { get; set; }
+    public Guid? ProjectId { get; set; }
     
     public string? ProjectName { get; set; }
 

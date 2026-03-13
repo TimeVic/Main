@@ -71,7 +71,7 @@ public class GetTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<GoalsTrackerDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(expectedDate.Year, actualProject.Year);
         Assert.Equal(expectedDate.Month, actualProject.Month);
         Assert.Empty(actualProject.Items);
@@ -87,17 +87,17 @@ public class GetTest: BaseTest
         existsTracker.Year = expectedDate.Year;
         existsTracker.Month = expectedDate.Month;
         await _goalsTrackerItemsSeeder.CreateSeveralAsync(existsTracker, 4);
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetRequest()
         {
             Date = expectedDate,
             WorkspaceId = _workspace.Id
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualProject = await response.GetJsonDataAsync<GoalsTrackerDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(expectedDate.Year, actualProject.Year);
         Assert.Equal(expectedDate.Month, actualProject.Month);
         Assert.Equal(4, actualProject.Items.Count);
@@ -114,8 +114,8 @@ public class GetTest: BaseTest
             WorkspaceId = (await _userDao.GetUsersWorkspaces(user2, MembershipAccessType.Owner)).First().Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -131,7 +131,7 @@ public class GetTest: BaseTest
         {
             await _goalsTrackerItemsDao.Archive(item);
         }
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetRequest()
         {
@@ -141,7 +141,7 @@ public class GetTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<GoalsTrackerDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(expectedDate.Year, actualProject.Year);
         Assert.Equal(expectedDate.Month, actualProject.Month);
         Assert.Equal(4, actualProject.Items.Count);

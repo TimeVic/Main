@@ -7,9 +7,9 @@ public class TaskCommentDto: BaseDto
 {   
     public string Comment { get; set; }
     
-    public DateTime UpdateTime { get; set; }
+    public DateTime CreatedAt { get; set; }
     
-    public DateTime CreateTime { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     
     public UserDto User { get; set; }
     

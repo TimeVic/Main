@@ -9,10 +9,12 @@ using TimeTracker.Business;
 using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Helpers;
+using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.ExternalClients.Jira;
 using TimeTracker.Business.Services.ExternalClients.Redmine;
+using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing;
 using TimeTracker.Business.Testing.Services;
 
@@ -27,6 +29,7 @@ public abstract class BaseTest: IDisposable
     
     private readonly IContainer _serviceProvider;
     protected readonly IQueueDao _queueDao;
+    private readonly IQueueService _queueService;
 
     protected bool IsFakeIntegrations = true;
     private readonly IDbCleanUpService _dbCleanUpService;
@@ -77,6 +80,7 @@ public abstract class BaseTest: IDisposable
         
         DbSessionProvider = Scope.Resolve<IDbSessionProvider>();
         _dbCleanUpService = Scope.Resolve<IDbCleanUpService>();
+        _queueService = Scope.Resolve<IQueueService>();
         _dbCleanUpService.CleanUp().Wait();
         
         SmtpClientServiceMock = (Scope.Resolve<ISmtpClientService>() as SmtpClientServiceMock)!;
@@ -122,16 +126,37 @@ public abstract class BaseTest: IDisposable
 
     #endregion
     
-    protected async Task CommitDbChanges()
+    protected async Task FlushDbChanges(bool isClearSession = false)
     { 
-        await DbSessionProvider.PerformCommitAsync();
-        DbSessionProvider.CurrentSession.Clear();
+        await DbSessionProvider.CurrentSession.FlushAsync();
+        if (isClearSession)
+        {
+            DbSessionProvider.CurrentSession.Clear();
+        }
+    }
+    
+    protected async Task RefreshEntity(object obj)
+    {
+        await DbSessionProvider.CurrentSession.RefreshAsync(obj);
+    }
+    
+    protected async Task FlushAndRefreshEntity(object obj, bool isClearSession = false)
+    {
+        await FlushDbChanges(isClearSession);
+        await DbSessionProvider.CurrentSession.RefreshAsync(obj);
+    }
+    
+    protected async Task<int> QueueProcess(QueueChannel channel)
+    {
+        await FlushDbChanges();
+        await _queueDao.Flush();
+        await _queueDao.UpdateProcessAtForPending();
+        return await _queueService.ProcessAsync(channel, isClearSessionForEachIteration: false);
     }
     
     public void Dispose()
     {
-        CommitDbChanges().Wait();
-        Scope.Dispose();
         _serviceProvider.Dispose();
+        Scope.Dispose();
     }
 }

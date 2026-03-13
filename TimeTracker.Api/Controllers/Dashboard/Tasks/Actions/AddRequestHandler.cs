@@ -19,10 +19,10 @@ using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 {
-    public class AddRequestHandler : IAsyncRequestHandler<AddRequest, TaskDto>
+    public class AddRequestHandler : IAsyncRequestHandler<AddRequest, TaskFullDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IDbSessionProvider _sessionProvider;
         private readonly ISecurityManager _securityManager;
@@ -34,7 +34,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 
         public AddRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IDbSessionProvider sessionProvider,
             ISecurityManager securityManager,
@@ -46,7 +46,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _sessionProvider = sessionProvider;
             _securityManager = securityManager;
@@ -57,9 +57,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _timeEntryDao = timeEntryDao;
         }
     
-        public async Task<TaskDto> ExecuteAsync(AddRequest request)
+        public async Task<TaskFullDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             RecordNotFoundException.ThrowIfNull(user);
             var taskList = await _taskListDao.GetById(request.TaskListId);
@@ -113,9 +113,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                     }
                 }
             }
-            await _sessionProvider.PerformCommitAsync();
-            
-            return _mapper.Map<TaskDto>(task);
+            return _mapper.Map<TaskFullDto>(task);
         }
 
         private async Task<TaskEntity> CreateFromExternalId(
@@ -142,7 +140,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                             request.ExternalTaskId
                         );
                     }
-                    catch (Exception e) {}
+                    catch (Exception) {}
                     return await _clickUpClient.SetTimeEntryTaskAsync(
                         timeEntry,
                         taskList,
@@ -158,7 +156,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                         request.ExternalTaskId
                     );
                 }
-                catch (Exception e) {}
+                catch (Exception) {}
                 return await _clickUpClient.SetTimeEntryTaskAsync(
                     taskList,
                     user,
@@ -169,7 +167,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             return null;
         }
 
-        private async Task<TimeEntryEntity> GetTimeEntry(long timeEntryId, UserEntity user)
+        private async Task<TimeEntryEntity> GetTimeEntry(Guid timeEntryId, UserEntity user)
         {
             var timeEntry = await _sessionProvider.CurrentSession
                 .GetAsync<TimeEntryEntity>(timeEntryId);

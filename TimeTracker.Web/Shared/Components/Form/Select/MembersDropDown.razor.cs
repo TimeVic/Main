@@ -9,7 +9,7 @@ namespace TimeTracker.Web.Shared.Components.Form.Select;
 public partial class MembersDropDown
 {
     [Parameter]
-    public long? UserId
+    public Guid? UserId
     {
         get => _userId;
         set
@@ -20,12 +20,12 @@ public partial class MembersDropDown
     }
     
     [Parameter]
-    public ICollection<long> AllowedIds { get; set; } = new List<long>();
+    public ICollection<Guid> AllowedIds { get; set; } = new List<Guid>();
 
     [Inject]
     public IState<WorkspaceMembershipsState> _state { get; set; }
     
-    private long? _userId;
+    private Guid? _userId;
     
     protected override void OnInitialized()
     {

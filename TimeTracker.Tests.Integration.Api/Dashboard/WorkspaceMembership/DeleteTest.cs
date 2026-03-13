@@ -4,6 +4,7 @@ using NHibernate.Linq;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -54,7 +55,7 @@ public class DeleteTest: BaseTest
             new () { Project = _projectDao.CreateAsync(_workspace, "test 2").Result },
             new () { Project = _projectDao.CreateAsync(_workspace, "test 3").Result },
         };
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
         _membership = _workspaceAccessService.ShareAccessAsync(
             _workspace,
             _otherUser,
@@ -96,7 +97,7 @@ public class DeleteTest: BaseTest
             MembershipId = _membership.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 }

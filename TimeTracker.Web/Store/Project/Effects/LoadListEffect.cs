@@ -40,7 +40,7 @@ public class LoadListEffect: Effect<LoadListAction>
             dispatcher.Dispatch(new SetProjectIsListLoading(true));
             var response = await _apiService.ProjectGetListAsync(new GetListRequest()
             {
-                WorkspaceId = _authState.Value.Workspace.Id
+                WorkspaceId = _authState.Value.Workspace!.Id
             });
             dispatcher.Dispatch(new SetListItemsAction(response));
         }

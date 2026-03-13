@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using Domain.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Notification.Abstractions;
 using TimeTracker.Business.Clients.Smtp;
@@ -7,7 +8,7 @@ using TimeTracker.Business.Notifications.Core;
 
 namespace TimeTracker.Business.Notifications.Senders.Tasks
 {
-    public class TaskChangedNotificationSender : IAsyncNotification<TaskChangedNotificationContext>
+    public class TaskChangedNotificationSender : IAsyncQueueHandler<TaskChangedNotificationContext>
     {
         private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
@@ -23,14 +24,14 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
             _emailFactory = new EmailFactory();
         }
 
-        public Task SendAsync(
+        public Task HandleAsync(
             TaskChangedNotificationContext context, 
             CancellationToken cancellationToken = default
         )
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("TaskChangedNotification.htm");
             emailBuilder.AddPlaceholder("userName", context.UserName);
-            emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl}/board/task/{context.WorkspaceId}/{context.TaskId}");
+            emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl}/board/task/{context.TaskId}");
             emailBuilder.AddPlaceholder("taskTitle", context.TaskTitle);
             emailBuilder.AddPlaceholder("changesBlock", BuildChangeSetBlock(context.ChangeSet));
             _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);

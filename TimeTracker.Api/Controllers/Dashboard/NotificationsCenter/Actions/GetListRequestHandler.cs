@@ -12,21 +12,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
 {
     public class GetListRequestHandler : IAsyncRequestHandler<GetListRequest, GetListResponse>
     {
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly INotificationCenterService _notificationCenterService;
         private readonly IMapper _mapper;
 
         public GetListRequestHandler(
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             INotificationCenterService notificationCenterService,
             IMapper mapper
         )
         {
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _notificationCenterService = notificationCenterService;
@@ -35,13 +35,13 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
 
             var listDto = await _notificationCenterService.GetList(user, workspace, request.Page);
             return new GetListResponse(
-                _mapper.Map<ICollection<NotificationDto>>(listDto.Items),
+                _mapper.Map<List<NotificationDto>>(listDto.Items),
                 listDto.TotalCount
             );
         }

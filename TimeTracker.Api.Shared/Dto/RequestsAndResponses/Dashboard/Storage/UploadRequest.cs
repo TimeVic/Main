@@ -8,12 +8,9 @@ using TimeTracker.Business.Common.Constants.Storage;
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
 
 public class UploadRequest: IRequest<StoredFileDto>
-{
+{   
     [Required]
-    public long WorkspaceId { get; set; }
-    
-    [Required]
-    public long EntityId { get; set; }
+    public Guid EntityId { get; set; }
         
     [Required]
     public StorageEntityType EntityType { get; set; }

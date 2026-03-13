@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -44,7 +45,8 @@ public class GetTest: BaseTest
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
         _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Wait();
-        _uploadedFile = _fileStorage.UploadFirstPendingToCloud().Result;
+        FlushDbChanges().Wait();
+        _uploadedFile = (_fileStorage.UploadFirstPendingToCloud().Result)!;
     }
 
     [Fact]
@@ -63,7 +65,7 @@ public class GetTest: BaseTest
             string.Format(Url, _uploadedFile.Id),
             _jwtToken
         );
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var fileContent = await response.Content.ReadAsStringAsync();
         Assert.NotEmpty(fileContent);
@@ -97,7 +99,7 @@ public class GetTest: BaseTest
             otherToken
         );
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 }

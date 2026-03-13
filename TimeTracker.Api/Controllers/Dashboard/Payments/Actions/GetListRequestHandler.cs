@@ -14,21 +14,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
     public class GetListRequestHandler : IAsyncRequestHandler<GetListRequest, GetListResponse>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IPaymentDao _paymentDao;
         private readonly ISecurityManager _securityManager;
 
         public GetListRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IPaymentDao paymentDao,
             ISecurityManager securityManager
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _paymentDao = paymentDao;
             _securityManager = securityManager;
@@ -36,7 +36,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (workspace == null)

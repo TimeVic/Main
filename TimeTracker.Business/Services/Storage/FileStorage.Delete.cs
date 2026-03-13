@@ -1,4 +1,5 @@
-﻿using TimeTracker.Business.Common.Constants;
+﻿using NHibernate.Linq;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Entities;
@@ -8,7 +9,7 @@ namespace TimeTracker.Business.Services.Storage;
 
 public partial class FileStorage: IFileStorage
 {
-    public async Task DeleteFile(UserEntity user, long fileId)
+    public async Task DeleteFile(UserEntity user, Guid fileId)
     {
         var file = await _dbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(fileId);
         if (file == null)

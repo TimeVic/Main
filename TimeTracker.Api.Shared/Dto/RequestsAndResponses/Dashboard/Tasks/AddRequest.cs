@@ -1,21 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Constants.Task;
-using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
 {
-    public class AddRequest : IRequest<TaskDto>
+    public class AddRequest : IRequest<TaskFullDto>
     {
-        [IsPositive]
-        public long? TimeEntryId { get; set; } 
+        public Guid? TimeEntryId { get; set; } 
         
         [Required]
-        [IsPositive(ErrorMessage = "Task list is required")]
-        public long TaskListId { get; set; }
+        public Guid TaskListId { get; set; }
         
         [StringLength(1024, MinimumLength = 1)]
         public string? Title { get; set; }

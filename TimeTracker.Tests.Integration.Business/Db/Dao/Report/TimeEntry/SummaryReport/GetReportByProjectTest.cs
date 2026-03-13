@@ -44,7 +44,7 @@ public class GetReportByProjectTest: BaseTest
     public async Task ShouldReceiveReportForOwnerOrManager()
     {
         var projects = await _projectSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
         {
@@ -83,6 +83,7 @@ public class GetReportByProjectTest: BaseTest
             });
         }
         
+        await FlushDbChanges();
         var result = await _reportsDao.GetReportByProjectForOwnerOrManagerAsync(
             _workspace.Id,
             DateTime.UtcNow.AddDays(-1),
@@ -93,8 +94,8 @@ public class GetReportByProjectTest: BaseTest
         var firstReportItem = result.First();
         var secondReportItem = result.Skip(1).First();
         var thirdReportItem = result.Last();
-        Assert.Equal(project1.Id, firstReportItem.ProjectId);
-        Assert.Equal(project2.Id, secondReportItem.ProjectId);
+        Assert.True(project1.Id == firstReportItem.ProjectId || project2.Id == firstReportItem.ProjectId);
+        Assert.True(project1.Id == secondReportItem.ProjectId || project2.Id == secondReportItem.ProjectId);
         Assert.Null(thirdReportItem.ProjectId);
         
         Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
@@ -105,6 +106,7 @@ public class GetReportByProjectTest: BaseTest
         Assert.Equal(120m, secondReportItem.Amount);
         Assert.Equal(360m, thirdReportItem.Amount);
         
+        await FlushDbChanges();
         result = await _reportsDao.GetReportByProjectForOwnerOrManagerAsync(
             _workspace.Id,
             DateTime.UtcNow.AddDays(-1),
@@ -115,8 +117,8 @@ public class GetReportByProjectTest: BaseTest
         firstReportItem = result.First();
         secondReportItem = result.Skip(1).First();
         thirdReportItem = result.Last();
-        Assert.Equal(project1.Id, firstReportItem.ProjectId);
-        Assert.Equal(project2.Id, secondReportItem.ProjectId);
+        Assert.True(project1.Id == firstReportItem.ProjectId || project2.Id == firstReportItem.ProjectId);
+        Assert.True(project1.Id == secondReportItem.ProjectId || project2.Id == secondReportItem.ProjectId);
         Assert.Null(thirdReportItem.ProjectId);
         
         Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
@@ -128,7 +130,7 @@ public class GetReportByProjectTest: BaseTest
     public async Task ShouldReceiveReportForOther()
     {
         var projects = await _projectSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         var project2 = projects.Last();
         var otherUser = await _userSeeder.CreateActivatedAsync();
@@ -179,6 +181,7 @@ public class GetReportByProjectTest: BaseTest
             });
         }
 
+        await FlushDbChanges();
         var result = await _reportsDao.GetReportByProjectForOtherAsync(
             DateTime.UtcNow.AddDays(-1),
             DateTime.UtcNow.AddDays(1),

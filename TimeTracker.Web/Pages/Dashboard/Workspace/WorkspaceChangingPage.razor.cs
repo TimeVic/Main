@@ -15,7 +15,7 @@ public partial class WorkspaceChangingPage
     public string? PageRoute { get; set; }
     
     [Parameter]
-    public long WorkspaceId { get; set; }
+    public Guid WorkspaceId { get; set; }
 
     [Inject]
     private WorkspaceInitializationService _workspaceInitializationService { get; set; }

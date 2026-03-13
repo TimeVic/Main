@@ -22,7 +22,7 @@ internal enum TaskListAction
 public partial class TasksListTree
 {
     [CascadingParameter(Name = "TaskListId")]
-    public long? TaskListId
+    public Guid? TaskListId
     {
         get => _taskListId;
         set
@@ -47,8 +47,8 @@ public partial class TasksListTree
     [Inject]
     public ModalDialogProviderService _modalDialogProviderService { get; set; }
 
-    private long _projectId = 0;
-    private long? _taskListId = null;
+    private Guid _projectId = Guid.Empty;
+    private Guid? _taskListId = null;
     private bool _isTaskListsMenuOpened = false;
     private bool _isTaskListMenuOpened = false;
     
@@ -66,7 +66,7 @@ public partial class TasksListTree
         }
     }
     
-    private IEnumerable<IGrouping<long, TaskListDto>> _groupedTasksList
+    private IEnumerable<IGrouping<Guid, TaskListDto>> _groupedTasksList
     {
         get
         {
@@ -122,7 +122,7 @@ public partial class TasksListTree
         );
     }
     
-    private void OnTasksListSelected(long? tasksListId)
+    private void OnTasksListSelected(Guid? tasksListId)
     {
         if (tasksListId.HasValue)
         {

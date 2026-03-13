@@ -41,11 +41,12 @@ public class ProcessNotificationTest: BaseTest
 
         await _queueService.PushNotificationAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(testContext.ToAddress, actualEmail.To);
     }
     
@@ -62,11 +63,12 @@ public class ProcessNotificationTest: BaseTest
 
         await _queueService.PushNotificationAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(testContext.ToAddress, actualEmail.To);
         Assert.Contains(expectedUser.VerificationToken, actualEmail.Body);
     }
@@ -84,18 +86,18 @@ public class ProcessNotificationTest: BaseTest
                 { "test", "test" }
             },
             TaskId = task.Id,
-            WorkspaceId = task.TaskList.Project.Workspace.Id,
             TaskTitle = "Task title",
             UserName = expectedUser.Name
         };
 
         await _queueService.PushNotificationAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(testContext.ToAddress, actualEmail.To);
     }
 }

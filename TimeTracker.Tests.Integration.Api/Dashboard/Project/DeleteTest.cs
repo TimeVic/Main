@@ -64,29 +64,29 @@ public class DeleteTest: BaseTest
     public async Task ShouldNotDeleteIfArchived()
     {
         _project.IsArchived = true;
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             ProjectId = _project.Id,
             Name = _project.Name,
-            ClientId = 0
+            ClientId = Guid.Empty
         });
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
     public async Task ShouldNotDeleteIfHasNoAccess()
     {
         var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAsync();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, otherJwtToken, new DeleteRequest()
         {
             ProjectId = _project.Id
         });
         
-        var errorResponse = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.Type);
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
 }

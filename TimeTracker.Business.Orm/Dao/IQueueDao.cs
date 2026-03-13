@@ -7,7 +7,7 @@ namespace TimeTracker.Business.Orm.Dao;
 public interface IQueueDao: IScopedDomainService, IDisposable
 {
     Task<QueueEntity?> GetById(
-        long id,
+        Guid id,
         CancellationToken cancellationToken = default
     );
 
@@ -21,7 +21,7 @@ public interface IQueueDao: IScopedDomainService, IDisposable
 
     Task<QueueEntity?> GetTop(QueueChannel? channel = null, CancellationToken cancellationToken = default);
 
-    System.Threading.Tasks.Task MarkAsProcessed(
+    Task MarkAsProcessed(
         QueueEntity item,
         string? error = null,
         CancellationToken cancellationToken = default
@@ -29,7 +29,9 @@ public interface IQueueDao: IScopedDomainService, IDisposable
 
     Task<int> CompleteAllPending(CancellationToken cancellationToken = default);
 
-    void Flush();
+    Task Flush();
 
     Task UpdateProcessAtForPending();
+    
+    void Clear();
 }

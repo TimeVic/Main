@@ -42,7 +42,10 @@ public partial class SetTest: BaseTest
         );
 
         expectedDto.Id = initialEntry.Id;
+        
+        await FlushDbChanges();
         var actualEntry = await _timeEntryDao.SetAsync(_user, expectWorkspace, expectedDto, expectProject);
+        Assert.NotNull(actualEntry.Project);
         Assert.Equal(task.TaskList.Project.Id, actualEntry.Project.Id);
     }
 }

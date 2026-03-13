@@ -19,7 +19,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
     public class StartRequestHandler : IAsyncRequestHandler<StartRequest, TimeEntryDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -31,7 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 
         public StartRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
@@ -43,7 +43,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
@@ -56,10 +56,10 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
     
         public async Task<TimeEntryDto> ExecuteAsync(StartRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
-            var task = await _taskDao.GetByWorkspaceTaskId(request.WorkspaceId, request.InternalTaskId ?? 0);
+            var task = await _taskDao.GetById(request.InternalTaskId ?? Guid.Empty);
             if (task != null)
             {
                 if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
@@ -99,8 +99,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 hourlyRate: request.HourlyRate,
                 internalTask: task
             );
-            await _sessionProvider.PerformCommitAsync();
-            
             return _mapper.Map<TimeEntryDto>(timeEntry);
         }
     }

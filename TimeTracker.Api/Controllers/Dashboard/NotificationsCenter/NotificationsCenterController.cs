@@ -1,5 +1,6 @@
 ﻿using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Extensions;
+using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
@@ -12,16 +13,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter;
 [ApiController]
 [Authorize]
 [Route("/dashboard/notifications-center")]
-public class NotificationsCenterController : MainApiControllerBase
+public class NotificationsCenterController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
-    public NotificationsCenterController(
-        IAsyncRequestBuilder asyncRequestBuilder, 
-        IDbSessionProvider commitPerformer,
-        ILogger<NotificationsCenterController> logger
-    ) : base(asyncRequestBuilder, commitPerformer, logger)
-    {
-    }
-
     [HttpPost("get-count")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

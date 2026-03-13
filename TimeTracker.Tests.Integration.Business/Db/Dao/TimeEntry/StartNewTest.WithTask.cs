@@ -24,7 +24,7 @@ public partial class StartNewTest: BaseTest
         var project = await _projectDao.CreateAsync(workspace, "test");
         project.DefaultHourlyRate = expectHourlyRate;
         project.IsBillableByDefault = true;
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
@@ -35,6 +35,7 @@ public partial class StartNewTest: BaseTest
             projectId: project.Id,
             internalTask: task
         );
+        Assert.NotNull(activeEntry.Project);
         Assert.Equal(task.TaskList.Project.Id, activeEntry.Project.Id);
     }
 }

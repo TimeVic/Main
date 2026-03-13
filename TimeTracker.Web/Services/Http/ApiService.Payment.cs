@@ -17,7 +17,7 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<PaymentDto?>(ApiUrl.PaymentUpdate, model);
         }
         
-        public async Task PaymentDeleteAsync(long paymentId)
+        public async Task PaymentDeleteAsync(Guid paymentId)
         {
             await PostAsync<object>(ApiUrl.PaymentDelete, new DeleteRequest()
             {

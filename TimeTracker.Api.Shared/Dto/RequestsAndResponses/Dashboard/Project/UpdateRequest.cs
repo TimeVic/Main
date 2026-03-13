@@ -9,11 +9,9 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
     public class UpdateRequest : IRequest<ProjectDto>
     {
         [Required]
-        [IsPositive]
-        public long ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
 
-        [IsPositive(AllowZero = true)]
-        public long ClientId { get; set; }
+        public Guid ClientId { get; set; }
         
         [Required]
         [StringLength(256, MinimumLength = 2)]
@@ -27,7 +25,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
         public void Fill(ProjectDto project)
         {
             ProjectId = project.Id;
-            ClientId = project.Client?.Id ?? 0;
+            ClientId = project.Client?.Id ?? Guid.Empty;
             Name = project.Name;
             IsBillableByDefault = project.IsBillableByDefault;
             DefaultHourlyRate = project.DefaultHourlyRate;

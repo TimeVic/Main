@@ -15,71 +15,37 @@ namespace AspNetCore.ApiControllers.Extensions
             where TApiController : 
                 ControllerBase, 
                 IAsyncApiController, 
-                IHasDefaultSuccessActionResult, 
-                IHasDefaultFailActionResult, 
-                IHasInvalidModelStateActionResult,
-                IShouldPerformCommit
+                IHasDefaultSuccessActionResult,
+                IHasInvalidModelStateActionResult
             where TRequest : IRequest
             => RequestAsync(
                 apiController,
                 request,
-                apiController.Success,
-                apiController.Fail
+                apiController.Success
             );
-
-        public static Task<IActionResult> RequestAsync<TApiController, TRequest>(
-            this TApiController apiController,
-            TRequest request,
-            Func<IActionResult> success)
-            where TApiController : 
-                ControllerBase, 
-                IAsyncApiController, 
-                IHasDefaultFailActionResult, 
-                IHasInvalidModelStateActionResult,
-                IShouldPerformCommit
-            where TRequest : IRequest
-            => RequestAsync(
-                apiController,
-                request,
-                success,
-                apiController.Fail);
 
         public static async Task<IActionResult> RequestAsync<TApiController, TRequest>(
             this TApiController apiController,
             TRequest request,
-            Func<IActionResult> success,
-            Func<Exception, IActionResult> fail
+            Func<IActionResult> success
         )
             where TApiController : 
                 ControllerBase,
                 IAsyncApiController, 
-                IHasInvalidModelStateActionResult,
-                IShouldPerformCommit
+                IHasInvalidModelStateActionResult
             where TRequest : IRequest
         {
-            try
-            {
-                if (apiController == null)
-                    throw new ArgumentNullException(nameof(apiController));
+            if (apiController == null)
+                throw new ArgumentNullException(nameof(apiController));
 
-                if (request == null)
-                    throw new ArgumentNullException(nameof(request));
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
 
-                if (!apiController.ModelState.IsValid)
-                    return apiController.InvalidModelState(apiController.ModelState);
+            if (!apiController.ModelState.IsValid)
+                return apiController.InvalidModelState(apiController.ModelState);
                 
-                await apiController.AsyncRequestBuilder.ExecuteAsync(request);
-                if (apiController.CommitPerformer != null)
-                {
-                    await apiController.CommitPerformer.PerformCommitAsync();
-                }
-                
-                return success();
-            }
-            catch (Exception exception)
-            {
-                return fail(exception);
-            }
+            await apiController.AsyncRequestBuilder.ExecuteAsync(request);
+            return success();
         }
         
         public static Task<IActionResult> RequestAsync<TApiController, TRequest, TResponse>(
@@ -88,48 +54,25 @@ namespace AspNetCore.ApiControllers.Extensions
             where TApiController : 
                 ControllerBase, 
                 IAsyncApiController, 
-                IHasDefaultResponseSuccessActionResult, 
-                IHasDefaultFailActionResult, 
-                IHasInvalidModelStateActionResult,
-                IShouldPerformCommit
+                IHasDefaultResponseSuccessActionResult,
+                IHasInvalidModelStateActionResult
             where TRequest : IRequest<TResponse>
             where TResponse : IResponse
             => RequestAsync(
                 apiController,
                 request,
-                apiController.ResponseSuccess<TResponse>(),
-                apiController.Fail);
-
-        public static Task<IActionResult> RequestAsync<TApiController, TRequest, TResponse>(
-            this TApiController apiController,
-            TRequest request,
-            Func<TResponse, IActionResult> success)
-            where TApiController : 
-                ControllerBase, 
-                IAsyncApiController, 
-                IHasDefaultFailActionResult, 
-                IHasInvalidModelStateActionResult,
-                IShouldPerformCommit
-            where TRequest : IRequest<TResponse>
-            where TResponse : IResponse
-            => RequestAsync(
-                apiController,
-                request,
-                success,
-                apiController.Fail
+                apiController.ResponseSuccess<TResponse>()
             );
 
         public static async Task<IActionResult> RequestAsync<TApiController, TRequest, TResponse>(
             this TApiController apiController,
             TRequest request,
-            Func<TResponse, IActionResult> success,
-            Func<Exception, IActionResult> fail
+            Func<TResponse, IActionResult> success
         )
             where TApiController : 
                 ControllerBase, 
                 IAsyncApiController, 
-                IHasInvalidModelStateActionResult,
-                IShouldPerformCommit
+                IHasInvalidModelStateActionResult
             where TRequest : IRequest<TResponse>
             where TResponse : IResponse
         {
@@ -142,25 +85,13 @@ namespace AspNetCore.ApiControllers.Extensions
             if (!apiController.ModelState.IsValid)
                 return apiController.InvalidModelState(apiController.ModelState);
 
-            try
+            var response = await apiController.AsyncRequestBuilder.ExecuteAsync<TRequest, TResponse>(request);
+            if (response is FileResponse or FileResult)
             {
-                var response = await apiController.AsyncRequestBuilder.ExecuteAsync<TRequest, TResponse>(request);
-                if (apiController.CommitPerformer != null)
-                {
-                    await apiController.CommitPerformer.PerformCommitAsync();
-                }
-
-                if (response is FileResponse or FileResult)
-                {
-                    return response as IActionResult;
-                }
-
-                return success(response);
+                return response as IActionResult;
             }
-            catch (Exception exception)
-            {
-                return fail(exception);
-            }
+
+            return success(response);
         }
     }
 }

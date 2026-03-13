@@ -11,6 +11,6 @@ public record struct SetListItemAction(PaymentDto Payment);
 
 public record struct SetIsListLoading(bool IsLoading);
 
-public record struct DeletePaymentAction(long PaymentId);
+public record struct DeletePaymentAction(Guid PaymentId);
 
-public record struct RemovePaymentListItemAction(long PaymentId);
+public record struct RemovePaymentListItemAction(Guid PaymentId);

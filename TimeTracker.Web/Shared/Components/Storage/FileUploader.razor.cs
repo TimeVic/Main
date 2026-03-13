@@ -17,7 +17,7 @@ public partial class FileUploader
     private const int MaxFiles = 3; 
     
     [Parameter]
-    public long EntityId { get; set; }
+    public Guid EntityId { get; set; }
     
     [Parameter]
     public StorageEntityType EntityType { get; set; }
@@ -77,7 +77,6 @@ public partial class FileUploader
                 foreach (var file in eventArguments.GetMultipleFiles(MaxFiles))
                 {
                     var uploadedFileDto = await ApiService.StorageUploadFileAsync(
-                        _authState.Value.Workspace!.Id,
                         EntityId,
                         EntityType,
                         FileType,

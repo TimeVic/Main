@@ -74,7 +74,7 @@
                             Label="Project"
                             FullWidth="true"
                             Disabled="!_state.Value.HasActiveEntry"
-                            Value="@(_activeEntry?.Project?.Id ?? 0)"
+                            Value="@(_activeEntry?.Project?.Id ?? Guid.Empty)"
                             SelectedItemChanged="OnChangeProject"
                             Class="mb-3 w-100"/>
                     }

@@ -61,7 +61,7 @@ public class AddTest: BaseTest
         
         _fakeComment = _taskCommentFactory.Generate();
 
-        _queueService.ProcessAsync(QueueChannel.Notifications).Wait();
+        QueueProcess(QueueChannel.Notifications).Wait();
     }
 
     [Fact]
@@ -69,8 +69,7 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             Comment = _fakeComment.Comment
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -81,18 +80,17 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             Comment = _fakeComment.Comment
         });
         response.EnsureSuccessStatusCode();
 
         var actualEntity = await response.GetJsonDataAsync<TaskCommentDto>();
-        Assert.True(actualEntity.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualEntity.Id);
         Assert.Equal(_fakeComment.Comment, actualEntity.Comment);
         Assert.Equal(_user.Id, actualEntity.User.Id);
         
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
@@ -100,7 +98,7 @@ public class AddTest: BaseTest
             SmtpClientServiceMock.SentMessages, 
             item => item.To == _user.Email
             && item.Body.Contains("added")
-            && item.Body.Contains($"{_task.TaskList.Project.Workspace.Id}/{_task.TaskId}")
+            && item.Body.Contains($"{_task.Id}")
         );
     }
     
@@ -141,12 +139,11 @@ public class AddTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             Comment = _fakeComment.Comment,
-            WatcherIds = new List<long>() { user2.Id, user3.Id }
+            WatcherIds = new List<Guid>() { user2.Id, user3.Id }
         });
-        await _queueService.ProcessAsync(QueueChannel.Default);
+        await QueueProcess(QueueChannel.Default);
         
         // Assert
         response.EnsureSuccessStatusCode();
@@ -188,20 +185,19 @@ public class AddTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             Comment = _fakeComment.Comment,
-            WatcherIds = new List<long>() { user2.Id, user3.Id }
+            WatcherIds = new List<Guid>() { user2.Id, user3.Id }
         });
         response.EnsureSuccessStatusCode();
 
         var actualEntity = await response.GetJsonDataAsync<TaskCommentDto>();
-        Assert.True(actualEntity.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualEntity.Id);
         Assert.Equal(2, actualEntity.Watchers.Count);
         Assert.Contains(actualEntity.Watchers, item => item.Id == user2.Id);
         Assert.Contains(actualEntity.Watchers, item => item.Id == user3.Id);
         
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
@@ -231,14 +227,13 @@ public class AddTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             Comment = _fakeComment.Comment,
-            WatcherIds = new List<long>() { user2.Id, user3.Id }
+            WatcherIds = new List<Guid>() { user2.Id, user3.Id }
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -259,14 +254,13 @@ public class AddTest: BaseTest
         );
         var response = await PostRequestAsync(Url, otherToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             Comment = _fakeComment.Comment
         });
         response.EnsureSuccessStatusCode();
 
         var actualEntity = await response.GetJsonDataAsync<TaskCommentDto>();
-        Assert.True(actualEntity.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualEntity.Id);
         Assert.Equal(_fakeComment.Comment, actualEntity.Comment);
         Assert.Equal(user2.Id, actualEntity.User.Id);
     }
@@ -276,27 +270,12 @@ public class AddTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
-            TaskId = 9999,
+            TaskId = Guid.Empty,
             Comment = _fakeComment.Comment
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
-    }
-    
-    [Fact]
-    public async Task ShouldNotAddIfIncorrectWorkspaceId()
-    {
-        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
-        {
-            WorkspaceId = 99999,
-            TaskId = _task.TaskId,
-            Comment = _fakeComment.Comment
-        });
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -306,12 +285,11 @@ public class AddTest: BaseTest
         var otherTask = await _taskSeeder.CreateAsync(user: user2);
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            WorkspaceId = otherWorkspace.Id,
-            TaskId = otherTask.TaskId,
+            TaskId = otherTask.Id,
             Comment = _fakeComment.Comment
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 }

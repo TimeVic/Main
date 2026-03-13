@@ -44,7 +44,6 @@ public partial class NotificationBgJobService: ITaskNotificationService
                 task
             );
         }
-        await _sessionProvider.PerformCommitAsync();
         return true;
     }
 }

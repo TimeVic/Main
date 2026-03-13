@@ -1,11 +1,12 @@
-﻿using Notification.Abstractions;
+﻿using Domain.Abstractions;
+using Notification.Abstractions;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Clients.Smtp.Core;
 using TimeTracker.Business.Notifications.Core;
 
 namespace TimeTracker.Business.Notifications.Senders.User
 {
-    public class EmailVerifiedNotificationSender : IAsyncNotification<EmailVerifiedNotificationItemContext>
+    public class EmailVerifiedNotificationSender : IAsyncQueueHandler<EmailVerifiedNotificationItemContext>
     {
         private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
@@ -16,7 +17,7 @@ namespace TimeTracker.Business.Notifications.Senders.User
             _emailFactory = new EmailFactory();
         }
 
-        public Task SendAsync(
+        public Task HandleAsync(
             EmailVerifiedNotificationItemContext context, 
             CancellationToken cancellationToken = default
         )

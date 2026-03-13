@@ -9,20 +9,18 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
     public class UpdateRequest : AddRequest
     {
         [Required]
-        [IsPositive]
-        public long TaskId { get; set; }
+        public Guid TaskId { get; set; }
         
         [Required]
-        [IsPositive]
-        public long UserId { get; set; }
+        public Guid UserId { get; set; }
 
-        public ICollection<long> TagIds { get; set; } = new List<long>();
+        public ICollection<Guid> TagIds { get; set; } = new List<Guid>();
         
         public DateTime? ReminderTime { get; set; }
         
         public void Fill(TaskDto dto)
         {
-            TaskId = dto.TaskId;
+            TaskId = dto.Id;
             TaskListId = dto.TaskList.Id;
             Title = dto.Title;
             Description = dto.Description;

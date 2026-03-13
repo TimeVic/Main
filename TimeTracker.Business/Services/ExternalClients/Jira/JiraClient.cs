@@ -92,10 +92,13 @@ public partial class JiraClient: AExternalClientService, IJiraClient
         var responseData = await HandleResponse<TimeEntryDto?>(uri, response, requestData);
         if (responseData == null || responseData.IsError)
         {
-            _logger.LogDebug(
-                "Jira returned error: {error}",
-                responseData.ErrorMessages
-            );
+            if (responseData != null)
+            {
+                _logger.LogDebug(
+                    "Jira returned error: {error}",
+                    responseData.ErrorMessages
+                );
+            }
             return new SynchronizedTimeEntryDto { IsError = true };
         }
 

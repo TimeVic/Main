@@ -7,7 +7,7 @@ namespace TimeTracker.Web.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<GetIntegrationSettingsResponse?> WorkspaceIntegrationSettingsGetAsync(long workspaceId)
+        public async Task<GetIntegrationSettingsResponse?> WorkspaceIntegrationSettingsGetAsync(Guid workspaceId)
         {
             return await PostAsync<GetIntegrationSettingsResponse?>(
                 ApiUrl.WorkspaceIntegrationSettingsGet,

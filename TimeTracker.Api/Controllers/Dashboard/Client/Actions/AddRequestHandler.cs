@@ -15,7 +15,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
     public class AddRequestHandler : IAsyncRequestHandler<AddRequest, ClientDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IClientDao _clientDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -23,7 +23,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
 
         public AddRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IClientDao clientDao,
             IDbSessionProvider sessionProvider,
@@ -31,7 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _clientDao = clientDao;
             _sessionProvider = sessionProvider;
@@ -40,7 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
     
         public async Task<ClientDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (workspace == null)
@@ -53,8 +53,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
             }
 
             var client = await _clientDao.CreateAsync(workspace, request.Name);
-            await _sessionProvider.PerformCommitAsync();
-            
             return _mapper.Map<ClientDto>(client);
         }
     }

@@ -36,7 +36,7 @@
             Label="Client"
             FullWidth="true"
             Value="@(model.ClientId)"
-            SelectedItemChanged="@(item => model.ClientId = item?.Id ?? 0)"/>
+            SelectedItemChanged="@(item => model.ClientId = item?.Id ?? Guid.Empty)"/>
 
         <ProjectsDropDown
             Label="Project"
@@ -44,7 +44,7 @@
             ClientId="@(model.ClientId)"
             Value="@model.ProjectId"
             ShowProjectsWithoutClients="false"
-            SelectedItemChanged="@(item => model.ProjectId = item?.Id ?? 0)"/>
+            SelectedItemChanged="@(item => model.ProjectId = item?.Id ?? Guid.Empty)"/>
 
         <FluentNumberField
             T="decimal"

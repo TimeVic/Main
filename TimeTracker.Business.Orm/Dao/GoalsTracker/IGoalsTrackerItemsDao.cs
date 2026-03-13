@@ -11,7 +11,7 @@ public interface IGoalsTrackerItemsDao: IDomainService
         int numberOfTimes = 0
     );
     
-    Task<GoalsTrackerItemEntity?> GetById(long trackerItemId);
+    Task<GoalsTrackerItemEntity?> GetById(Guid trackerItemId);
 
     Task<GoalsTrackerItemEntity> Update(
         GoalsTrackerItemEntity goalsTrackerItem,

@@ -1,5 +1,6 @@
 ﻿using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Extensions;
+using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
@@ -13,22 +14,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks;
 [ApiController]
 [Authorize]
 [Route("/dashboard/tasks")]
-public class TasksController : MainApiControllerBase
+public class TasksController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
-    public TasksController(
-        IAsyncRequestBuilder asyncRequestBuilder, 
-        IDbSessionProvider commitPerformer,
-        ILogger<TasksController> logger
-    ) : base(asyncRequestBuilder, commitPerformer, logger)
-    {
-    }
-
     [HttpPost("add")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> AddTask([FromBody] AddRequest request)
         => this.RequestAsync()
-            .For<TaskDto>()
+            .For<TaskFullDto>()
             .With(request);
     
     [HttpPost("update")]
@@ -36,7 +29,7 @@ public class TasksController : MainApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> UpdateTask([FromBody] UpdateRequest request)
         => this.RequestAsync()
-            .For<TaskDto>()
+            .For<TaskFullDto>()
             .With(request);
     
     [HttpPost("update-positions")]
@@ -74,6 +67,6 @@ public class TasksController : MainApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> GetOneTask([FromBody] GetOneRequest request)
         => this.RequestAsync()
-            .For<TaskDto>()
+            .For<TaskFullDto>()
             .With(request);
 }

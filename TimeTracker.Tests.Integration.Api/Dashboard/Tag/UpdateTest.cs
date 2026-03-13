@@ -57,7 +57,7 @@ public class UpdateTest: BaseTest
     public async Task ShouldUpdate()
     {
         var expectedTag = _tagFactory.Generate();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             TagId = _tag.Id,
@@ -67,7 +67,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<TagDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(expectedTag.Name, actualProject.Name);
         Assert.Equal(_expectedColor.ToHexString(), actualProject.Color);
     }
@@ -76,7 +76,7 @@ public class UpdateTest: BaseTest
     public async Task ShouldNotUpdateIfHasNoAccess()
     {
         var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAsync();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()
         {
@@ -84,7 +84,7 @@ public class UpdateTest: BaseTest
             Name = _tag.Name,
         });
         
-        var errorResponse = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.Type);
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
 }

@@ -24,7 +24,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
     public class GetListHandler : IAsyncRequestHandler<GetListRequest, GetListResponse>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly IFileStorage _fileStorage;
@@ -34,7 +34,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
 
         public GetListHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             IFileStorage fileStorage,
@@ -44,7 +44,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _fileStorage = fileStorage;
@@ -55,15 +55,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
 
             if (request.EntityType == StorageEntityType.Task)
             {
-                var task = await _taskDao.GetByWorkspaceTaskId(
-                    request.WorkspaceId,
-                    request.EntityId
-                );
+                var task = await _taskDao.GetById(request.EntityId);
                 if (task == null)
                 {
                     throw new RecordNotFoundException();

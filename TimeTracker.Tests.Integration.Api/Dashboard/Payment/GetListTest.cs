@@ -42,7 +42,7 @@ public class GetListTest: BaseTest
         _client = _clientDao.CreateAsync(_workspace, "Test new client").Result;
         _project = _projectDao.CreateAsync(_workspace, "Test new project").Result;
         _project.SetClient(_client);
-        DbSessionProvider.PerformCommitAsync().Wait();
+        FlushDbChanges().Wait();
     }
 
     [Fact]
@@ -74,7 +74,8 @@ public class GetListTest: BaseTest
         
         Assert.All(actualResponse.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotNull(item.Project);
+            Assert.NotEqual(Guid.Empty, item.Id);
             Assert.Equal(_client.Id, item.Client.Id);
             Assert.Equal(_project.Id, item.Project.Id);
             Assert.True(item.Amount > 0);
@@ -93,8 +94,8 @@ public class GetListTest: BaseTest
             WorkspaceId = _workspace.Id,
             Page = 1
         });
-        var errorResponse = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), errorResponse.Type);
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), errorResponse.ErrorCode);
     }
     
     [Fact]

@@ -44,7 +44,7 @@ public class GetReportByUserTest: BaseTest
     [Fact]
     public async Task ShouldReceiveReportForOwnerOrManager()
     {
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = await _projectSeederSeeder.CreateAsync(_workspace);
         var user1 = await _userSeeder.CreateActivatedAsync();
         for (int i = 0; i < 3; i++)
@@ -85,7 +85,7 @@ public class GetReportByUserTest: BaseTest
             });
         }
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var result = await _reportsDao.GetReportByUserForOwnerOrManagerAsync(
             _workspace.Id,
@@ -134,7 +134,7 @@ public class GetReportByUserTest: BaseTest
     public async Task ShouldReceiveReportForOther()
     {
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         var project2 = projects.Last();
         var user1 = await _userSeeder.CreateActivatedAsync();
@@ -186,7 +186,7 @@ public class GetReportByUserTest: BaseTest
             });
         }
 
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         var result = await _reportsDao.GetReportByUserForOtherAsync(
             DateTime.UtcNow.AddDays(-1),

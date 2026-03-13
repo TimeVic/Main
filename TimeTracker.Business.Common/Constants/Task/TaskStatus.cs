@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
-using TimeTracker.Business.Common.Exceptions.Api;
 
 namespace TimeTracker.Business.Common.Constants.Task;
 
-public enum TaskStatus
+public enum TaskStatus: short
 {
     [Description("Backlog")]
     Backlog = 1,

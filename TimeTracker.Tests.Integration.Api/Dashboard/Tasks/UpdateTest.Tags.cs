@@ -31,7 +31,7 @@ public partial class UpdateTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -45,7 +45,7 @@ public partial class UpdateTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Equal(expectedTask.Title, actualData.Title);
@@ -66,12 +66,12 @@ public partial class UpdateTest
         {
             _task.Tags.Add(tag);    
         }
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -85,7 +85,7 @@ public partial class UpdateTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Equal(expectedTask.Title, actualData.Title);

@@ -37,7 +37,6 @@ public partial class GetCountTest: BaseTest
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _task = _taskSeeder.CreateAsync(user: _user).Result;
-        DbSessionProvider.PerformCommitAsync().Wait();
     }
 
     [Fact]
@@ -56,10 +55,12 @@ public partial class GetCountTest: BaseTest
         // Arrange
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
-        await DbSessionProvider.CurrentSession.RefreshAsync(_task);
+        await FlushAndRefreshEntity(_task);
+        await FlushAndRefreshEntity(_workspace);
         await _notificationCenterService.Push(NotificationActionType.Reminder, _task.User, _task);
+        await FlushDbChanges();
         await _notificationCenterService.MarkAllAsRead(_task.User, _workspace);
         await _notificationCenterService.Push(NotificationActionType.Reminder, _task.User, _task);
         
@@ -86,9 +87,6 @@ public partial class GetCountTest: BaseTest
         
         await _userNotificationTokenDao.Set(otherUser, FirebaseClientServiceMock.SuccessToken);
         otherTask.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
-
-        await DbSessionProvider.CurrentSession.RefreshAsync(otherTask);
         await _notificationCenterService.Push(NotificationActionType.Reminder, otherTask.User, otherTask);
         
         // Act
@@ -98,7 +96,7 @@ public partial class GetCountTest: BaseTest
         });
         
         // Assert
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
         Assert.True(FirebaseClientService.SentMessages.Any());
         var actualResponse = await response.GetJsonDataAsync<GetCountResponse>();
         Assert.Equal(0, actualResponse.UnreadCount);

@@ -12,5 +12,9 @@ public interface IQueueService: IDomainService
 
     Task PushExternalClientAsync(IExternalServiceItemContext itemContext);
 
-    Task<int> ProcessAsync(QueueChannel channel, CancellationToken cancellationToken = default);
+    Task<int> ProcessAsync(
+        QueueChannel channel,
+        CancellationToken cancellationToken = default,
+        bool isClearSessionForEachIteration = true
+    );
 }

@@ -29,7 +29,7 @@ public class Step1Test: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        await _queueService.ProcessAsync(QueueChannel.Notifications);
+        await QueueProcess(QueueChannel.Notifications);
         Assert.True(SmtpClientServiceMock.IsEmailSent);
     }
     

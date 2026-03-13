@@ -55,7 +55,7 @@ public class Step2Test: BaseTest
         Assert.NotNull(responseData.User.DefaultWorkspace);
         Assert.True(responseData.User.DefaultWorkspace.IsDefault);
         
-        await _queueService.ProcessAsync(QueueChannel.Notifications);
+        await QueueProcess(QueueChannel.Notifications);
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         Assert.Contains(SmtpClientServiceMock.SentMessages, message =>
         {

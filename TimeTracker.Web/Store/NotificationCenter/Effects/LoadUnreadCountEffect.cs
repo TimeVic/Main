@@ -26,7 +26,7 @@ public class LoadUnreadCountEffect: Effect<LoadUnreadCountAction>
     {
         try
         {
-            var count = await _apiService.NotificationCenterGetUnreadCount(_authState.Value.Workspace.Id);
+            var count = await _apiService.NotificationCenterGetUnreadCount(_authState.Value.Workspace!.Id);
             dispatcher.Dispatch(new SetUnreadCountAction(count));
         }
         catch (Exception e)

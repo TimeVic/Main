@@ -32,7 +32,7 @@ namespace TimeTracker.Business.Services.Auth
             _audience = _configuration.GetValue<string>("App:Auth:Audience")!;
         }
 
-        public string BuildJwt(long userId)
+        public string BuildJwt(Guid userId)
         {
             var claims = new List<Claim>
             {
@@ -63,7 +63,7 @@ namespace TimeTracker.Business.Services.Auth
             return tokenHandler.WriteToken(tokenObject);
         }
 
-        public long GetUserId(string jwtString)
+        public Guid GetUserId(string jwtString)
         {
             jwtString = jwtString ?? throw new ArgumentNullException(nameof(jwtString));
             try
@@ -71,11 +71,11 @@ namespace TimeTracker.Business.Services.Auth
                 var jwt = new JwtSecurityToken(jwtString);
                 var userIdClaim = jwt.Claims.FirstOrDefault(c => c.Type == "nameid");
                 ArgumentNullException.ThrowIfNull(userIdClaim);
-                return long.Parse(userIdClaim.Value);
+                return Guid.Parse(userIdClaim.Value);
             }
             catch (Exception)
             {
-                return 0;
+                return Guid.Empty;
             }
         }
 

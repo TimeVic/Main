@@ -9,8 +9,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag
     public class UpdateRequest : IRequest<TagDto>
     {
         [Required]
-        [IsPositive]
-        public long TagId { get; set; }
+        public Guid TagId { get; set; }
 
         [Required]
         [StringLength(200, MinimumLength = 1)]

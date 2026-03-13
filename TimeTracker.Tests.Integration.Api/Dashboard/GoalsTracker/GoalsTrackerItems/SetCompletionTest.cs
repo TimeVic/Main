@@ -80,10 +80,11 @@ public class SetCompletionTest: BaseTest
 
         // Assert
         var actualMarker = await response.GetJsonDataAsync<GoalsTrackerCompletionMarkerDto>();
-        Assert.True(actualMarker.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMarker.Id);
         Assert.Equal(expectedDayOfMonth, actualMarker.DayOfMonth);
         Assert.True(actualMarker.IsChecked);
 
+        await FlushDbChanges(true);
         var actualItem = await DbSessionProvider.CurrentSession.GetAsync<GoalsTrackerItemEntity>(_trackerItem.Id);
         Assert.Single(actualItem.CompletionMarkers);
     }
@@ -106,10 +107,11 @@ public class SetCompletionTest: BaseTest
 
         // Assert
         var actualMarker = await response.GetJsonDataAsync<GoalsTrackerCompletionMarkerDto>();
-        Assert.True(actualMarker.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMarker.Id);
         Assert.Equal(expectedDayOfMonth, actualMarker.DayOfMonth);
         Assert.True(actualMarker.IsChecked);
 
+        await FlushDbChanges(true);
         var actualItem = await DbSessionProvider.CurrentSession.GetAsync<GoalsTrackerItemEntity>(_trackerItem.Id);
         Assert.Equal(2, actualItem.CompletionMarkers.Count);
     }
@@ -136,10 +138,11 @@ public class SetCompletionTest: BaseTest
         
         // Assert
         var actualMarker = await response.GetJsonDataAsync<GoalsTrackerCompletionMarkerDto>();
-        Assert.True(actualMarker.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMarker.Id);
         Assert.Equal(expectedDayOfMonth, actualMarker.DayOfMonth);
         Assert.False(actualMarker.IsChecked);
 
+        await FlushDbChanges(true);
         actualItem = await DbSessionProvider.CurrentSession.GetAsync<GoalsTrackerItemEntity>(_trackerItem.Id);
         Assert.Single(actualItem.CompletionMarkers);
         Assert.False(actualItem.CompletionMarkers.First().IsChecked);
@@ -151,15 +154,15 @@ public class SetCompletionTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new SetCompletionRequest()
         {
-            GoalsTrackerItemId = 9999,
+            GoalsTrackerItemId = Guid.Empty,
             DayOfMonth = 2,
             IsChecked = true
         });
         
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -181,8 +184,8 @@ public class SetCompletionTest: BaseTest
         
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -198,7 +201,7 @@ public class SetCompletionTest: BaseTest
         
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new DataValidationException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new DataValidationException().GetTypeName(), error.ErrorCode);
     }
 }

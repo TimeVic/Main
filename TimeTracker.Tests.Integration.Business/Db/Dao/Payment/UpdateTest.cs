@@ -52,7 +52,7 @@ public class UpdateTest: BaseTest
         var expectClient = await _clientDao.CreateAsync(_workspace, "Test2");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
         expectProject.SetClient(expectClient);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
 
         var actualPayment = await _paymentDao.CreateAsync(
             _workspace,
@@ -64,6 +64,7 @@ public class UpdateTest: BaseTest
             payment.Description
         );
         
+        await FlushDbChanges();
         actualPayment = await _paymentDao.UpdatePaymentAsync(
             actualPayment.Id,
             expectClient,
@@ -72,8 +73,10 @@ public class UpdateTest: BaseTest
             expectProject.Id,
             expectedPayment.Description
         );
-        
-        Assert.True(actualPayment.Id > 0);
+
+        Assert.NotNull(actualPayment);
+        Assert.NotNull(actualPayment.Project);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(expectedPayment.Amount, actualPayment.Amount);
         Assert.Equal(expectedPayment.Description, actualPayment.Description);
         Assert.Equal(expectedPayment.PaymentTime, actualPayment.PaymentTime);
@@ -92,7 +95,7 @@ public class UpdateTest: BaseTest
         var expectedPayment = _paymentFactory.Generate();
         var expectClient = await _clientDao.CreateAsync(_workspace, "Test2");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
 
         var actualPayment = await _paymentDao.CreateAsync(
             _workspace,
@@ -104,6 +107,7 @@ public class UpdateTest: BaseTest
             payment.Description
         );
         
+        await FlushDbChanges();
         actualPayment = await _paymentDao.UpdatePaymentAsync(
             actualPayment.Id,
             expectClient,
@@ -112,8 +116,9 @@ public class UpdateTest: BaseTest
             expectProject.Id,
             expectedPayment.Description
         );
-        
-        Assert.True(actualPayment.Id > 0);
+
+        Assert.NotNull(actualPayment);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Null(actualPayment.Project);
     }
 }

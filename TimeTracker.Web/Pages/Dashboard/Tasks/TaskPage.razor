@@ -20,8 +20,8 @@
     {
         <FluentProgressRing></FluentProgressRing>
     }
-    else
+    else if (TaskId != null)
     {
-        <UpdateTaskForm Task="_task"/>
+        <UpdateTaskForm TaskId="TaskId.Value"/>
     }
 </FluentStack>

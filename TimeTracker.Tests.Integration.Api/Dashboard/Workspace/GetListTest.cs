@@ -55,7 +55,7 @@ public class GetListTest: BaseTest
         
         Assert.All(actualDto.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Id);
             Assert.NotNull(item.Name);
         });
     }
@@ -66,7 +66,7 @@ public class GetListTest: BaseTest
         var otherUser = await _userSeeder.CreateActivatedAsync();
 
         var expectWorkspaces = await _workspaceSeeder.CreateSeveralAsync(otherUser, 2);
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var workspaceWithUserAccess = expectWorkspaces.First();
         await _workspaceAccessService.ShareAccessAsync(

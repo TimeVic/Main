@@ -15,7 +15,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
     public class AddRequestHandler : IAsyncRequestHandler<AddRequest, ProjectDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -23,7 +23,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
 
         public AddRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
@@ -31,7 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
@@ -40,7 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
     
         public async Task<ProjectDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
@@ -48,8 +48,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
                 throw new HasNoAccessException();
             }
             var project = await _projectDao.CreateAsync(workspace, request.Name);
-            await _sessionProvider.PerformCommitAsync();
-            
             return _mapper.Map<ProjectDto>(project);
         }
     }

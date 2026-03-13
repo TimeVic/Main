@@ -40,7 +40,7 @@ public class UrlService
         return uri.ToString();
     }
     
-    public void NavigateToChangeWorkspace(long workspaceId, string subUrl)
+    public void NavigateToChangeWorkspace(Guid workspaceId, string subUrl)
     {
         subUrl = subUrl.StartsWith("/") ? subUrl : $"/{subUrl}";
         _navigationManager.NavigateTo($"/board-change/{workspaceId}{subUrl}", replace: true);

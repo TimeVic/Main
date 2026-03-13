@@ -28,7 +28,7 @@ public partial class UpdateProjectModal
     private bool _isValid = false;
     private EditForm _form;
 
-    private long _projectId
+    private Guid _projectId
     {
         get => model.ProjectId;
         set => model.ProjectId = value;

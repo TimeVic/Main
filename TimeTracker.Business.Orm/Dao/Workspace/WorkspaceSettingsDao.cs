@@ -27,13 +27,15 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
         var clickUpSettings = workspace.GetClickUpSettings(user);
         if (clickUpSettings == null)
         {
-            clickUpSettings = new WorkspaceSettingsClickUpEntity();
-            clickUpSettings.User = user;
-            clickUpSettings.Workspace = workspace;
+            clickUpSettings = new WorkspaceSettingsClickUpEntity
+            {
+                User = user,
+                Workspace = workspace
+            };
             workspace.SettingsClickUp.Add(clickUpSettings);
-            clickUpSettings.CreateTime = DateTime.UtcNow;
+            clickUpSettings.CreatedAt = DateTime.UtcNow;
         }
-        clickUpSettings.UpdateTime = DateTime.UtcNow;
+        clickUpSettings.UpdatedAt = DateTime.UtcNow;
         clickUpSettings.SecurityKey = securityKey;
         clickUpSettings.TeamId = teamId;
         clickUpSettings.IsCustomTaskIds = isCustomTaskIds;
@@ -55,13 +57,17 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
         var settings = workspace.GetRedmineSettings(user);
         if (settings == null)
         {
-            settings = new WorkspaceSettingsRedmineEntity();
-            settings.User = user;
-            settings.Workspace = workspace;
+            settings = new WorkspaceSettingsRedmineEntity
+            {
+                User = user,
+                Workspace = workspace,
+                Url = string.Empty,
+                ApiKey = string.Empty
+            };
             workspace.SettingsRedmine.Add(settings);
-            settings.CreateTime = DateTime.UtcNow;
+            settings.CreatedAt = DateTime.UtcNow;
         }
-        settings.UpdateTime = DateTime.UtcNow;
+        settings.UpdatedAt = DateTime.UtcNow;
         settings.ApiKey = apiKey ?? "";
         settings.RedmineUserId = redmineUserId ?? 0;
         settings.Url = redmineUrl ?? "";
@@ -83,13 +89,15 @@ public class WorkspaceSettingsDao: IWorkspaceSettingsDao
         var settings = workspace.GetJiraSettings(user);
         if (settings == null)
         {
-            settings = new WorkspaceSettingsJiraEntity();
-            settings.User = user;
-            settings.Workspace = workspace;
+            settings = new WorkspaceSettingsJiraEntity
+            {
+                User = user,
+                Workspace = workspace
+            };
             workspace.SettingsJira.Add(settings);
-            settings.CreateTime = DateTime.UtcNow;
+            settings.CreatedAt = DateTime.UtcNow;
         }
-        settings.UpdateTime = DateTime.UtcNow;
+        settings.UpdatedAt = DateTime.UtcNow;
         settings.Url = url?.ToLower().RemoveTrailingSlash();
         settings.ApiKey = apiKey;
         settings.UserName = userName;

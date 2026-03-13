@@ -36,7 +36,7 @@ public partial class AddTask
         });
         response.EnsureSuccessStatusCode();
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var actualData = await response.GetJsonDataAsync<TaskDto>();
         Assert.True(actualData.TaskId > 0);
@@ -44,7 +44,9 @@ public partial class AddTask
         Assert.NotEmpty(actualData.Title);
         Assert.Equal(_clickUpTaskId, actualData.ExternalTaskId);
 
+        await FlushDbChanges(true);
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.NotNull(actualTimeEntry.Task);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
     
@@ -60,7 +62,7 @@ public partial class AddTask
         });
         response.EnsureSuccessStatusCode();
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var actualData = await response.GetJsonDataAsync<TaskDto>();
         Assert.True(actualData.TaskId > 0);
@@ -68,7 +70,9 @@ public partial class AddTask
         Assert.NotEmpty(actualData.Title);
         Assert.Equal(_jiraTaskId, actualData.ExternalTaskId);
 
+        await FlushDbChanges(true);
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.NotNull(actualTimeEntry.Task);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
     
@@ -90,7 +94,7 @@ public partial class AddTask
         });
         response.EnsureSuccessStatusCode();
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var actualData = await response.GetJsonDataAsync<TaskDto>();
         Assert.True(actualData.TaskId > 0);
@@ -103,7 +107,9 @@ public partial class AddTask
         Assert.Equal(expectedTask.EndTime?.ToString("g"), actualData.EndTime?.ToUniversalTime().ToString("g"));
         Assert.Equal(expectedTask.Priority, actualData.Priority);
         
+        await FlushDbChanges(true);
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.NotNull(actualTimeEntry.Task);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
 }

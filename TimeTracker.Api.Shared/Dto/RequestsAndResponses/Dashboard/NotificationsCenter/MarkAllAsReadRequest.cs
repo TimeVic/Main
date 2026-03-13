@@ -7,7 +7,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notification
     public class MarkAllAsReadRequest : IRequest
     {
         [Required]
-        [IsPositive]
-        public long WorkspaceId { get; set; }
+        public Guid WorkspaceId { get; set; }
     }
 }

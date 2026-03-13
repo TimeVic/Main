@@ -1,124 +1,35 @@
-using Domain.Abstractions;
-using NHibernate.Mapping.Attributes;
-using NHibernate.Type;
+using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
-using TimeTracker.Business.Orm.Hibernate.DataTypes;
 
 namespace TimeTracker.Business.Orm.Entities
 {
-    [Class(Table = "time_entries")]
-    public class TimeEntryEntity : IEntity
+    public class TimeEntryEntity : AEntity
     {
-        [Id(Name = "Id", Generator = "native")]
-        [Column(Name = "id", SqlType = "bigint", NotNull = true)]
-        public virtual long Id { get; set; }
-
-        [Property(NotNull = false)]
-        [Column(Name = "description", Length = 1000, NotNull = false)]
         public virtual string? Description { get; set; }
-
-        [Property(NotNull = false)]
-        [Column(Name = "hourly_rate", NotNull = false)]
         public virtual decimal? HourlyRate { get; set; }
-
-        [Property(NotNull = false)]
-        [Column(Name = "is_billable", NotNull = false)]
         public virtual bool IsBillable { get; set; }
-
-        [Property(NotNull = true, TypeType = typeof(DateOnlyCustomType))]
-        [Column(Name = "date", SqlType = "date", NotNull = true)]
         public virtual DateOnly Date { get; set; }
-
-        [Property(NotNull = true, TypeType = typeof(TimeOnlyCustomType))]
-        [Column(Name = "start_time", SqlType = "time", NotNull = true)]
         public virtual TimeSpan StartTime { get; set; }
-
-        [Property(NotNull = false, TypeType = typeof(TimeOnlyCustomType))]
-        [Column(Name = "end_time", SqlType = "time", NotNull = false)]
         public virtual TimeSpan? EndTime { get; set; }
-
-        [Obsolete("This property moved to TaskEntity")]
-        [Property(NotNull = false)]
-        [Column(Name = "task_id", Length = 512, NotNull = false)]
         public virtual string? TaskId { get; set; }
-
-        [Property(NotNull = false)]
-        [Column(Name = "clickup_id", NotNull = false)]
         public virtual string? ClickUpId { get; set; }
-
-        [Property(NotNull = false)]
-        [Column(Name = "redmine_id", NotNull = false)]
         public virtual string? RedmineId { get; set; }
-        
-        [Property(NotNull = false)]
-        [Column(Name = "jira_id", NotNull = false)]
         public virtual long? JiraId { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "is_marked_to_delete", NotNull = true)]
         public virtual bool IsMarkedToDelete { get; set; }
-
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
-        public virtual DateTime CreateTime { get; set; }
-
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "update_time", SqlType = "datetime", NotNull = true)]
-        public virtual DateTime UpdateTime { get; set; }
-
-        [ManyToOne(
-            ClassType = typeof(WorkspaceEntity),
-            Column = "workspace_id",
-            Lazy = Laziness.False,
-            Fetch = FetchMode.Join,
-            Cascade = "none"
-        )]
+        
+        #region Relationships
         public virtual WorkspaceEntity Workspace { get; set; }
-
-        [ManyToOne(
-            ClassType = typeof(ProjectEntity),
-            Column = "project_id",
-            Lazy = Laziness.Proxy,
-            Fetch = FetchMode.Join,
-            Cascade = "none"
-        )]
+        
         public virtual ProjectEntity? Project { get; set; }
 
-        [ManyToOne(
-            ClassType = typeof(UserEntity),
-            Column = "user_id",
-            Lazy = Laziness.Proxy,
-            Fetch = FetchMode.Join,
-            Cascade = "none"
-        )]
         public virtual UserEntity User { get; set; }
 
-        [ManyToOne(
-            ClassType = typeof(TaskEntity),
-            Column = "internal_task_id",
-            Lazy = Laziness.Proxy,
-            Fetch = FetchMode.Join,
-            Cascade = "none"
-        )]
         public virtual TaskEntity? Task { get; set; }
-
-        [Set(
-            Table = "time_entry_tags",
-            Lazy = CollectionLazy.True,
-            Cascade = "none",
-            BatchSize = 20
-        )]
-        [Key(
-            Column = "time_entry_id"
-        )]
-        [ManyToMany(
-            Unique = true,
-            ClassType = typeof(TagEntity),
-            Column = "tag_id"
-        )]
+        
         public virtual ICollection<TagEntity> Tags { get; set; } = new List<TagEntity>();
+        #endregion
         
         #region Calculated
 
@@ -126,8 +37,6 @@ namespace TimeTracker.Business.Orm.Entities
             || !string.IsNullOrEmpty(ClickUpId);
 
         public virtual bool IsActive => EndTime == null;
-
-        public virtual bool IsNew => Id == 0;
 
         public virtual TimeSpan Duration => EndTime != null ? EndTime.Value - StartTime : TimeSpan.Zero;
 

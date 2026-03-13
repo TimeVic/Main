@@ -37,6 +37,7 @@ public class SetTest: BaseTest
         await _userNotificationTokenDao.Set(user, expectedToken.Token);
         
         // Assert
+        await FlushDbChanges();
         actualToken = await _userNotificationTokenDao.GetByToken(expectedToken.Token);
         Assert.NotNull(actualToken);
         Assert.Equal(expectedToken.Token, actualToken.Token);
@@ -51,6 +52,7 @@ public class SetTest: BaseTest
         var expectedToken = _notificationTokenFactory.Generate();
 
         await _userNotificationTokenDao.Set(user2, expectedToken.Token);
+        await FlushDbChanges();
         var actualToken = await _userNotificationTokenDao.GetByToken(expectedToken.Token);
         Assert.NotNull(actualToken);
         Assert.Equal(expectedToken.Token, actualToken.Token);
@@ -60,6 +62,7 @@ public class SetTest: BaseTest
         await _userNotificationTokenDao.Set(user, expectedToken.Token);
         
         // Assert
+        await FlushDbChanges();
         actualToken = await _userNotificationTokenDao.GetByToken(expectedToken.Token);
         Assert.NotNull(actualToken);
         Assert.Equal(expectedToken.Token, actualToken.Token);

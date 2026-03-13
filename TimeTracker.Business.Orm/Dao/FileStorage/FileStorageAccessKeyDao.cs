@@ -24,8 +24,8 @@ public class FileStorageAccessKeyDao: IFileStorageAccessKeyDao
             User = user,
             AccessKey = SecurityUtil.GeneratePassword(12),
             SecretKey = SecurityUtil.GeneratePassword(32),
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
             ExpirationTime = expirationTime
         };
         await _sessionProvider.CurrentSession.SaveAsync(entity);

@@ -39,7 +39,7 @@ public class NotificationDao : INotificationDao
             .UpdateAsync(item => new
             {
                 IsRead = true,
-                UpdateTime = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow
             });
     }
     
@@ -60,18 +60,18 @@ public class NotificationDao : INotificationDao
         
         var query = _sessionProvider.CurrentSession.QueryOver<NotificationEntity>()
             .Left.JoinAlias(item => item.Task, () => taskAlias)
-            .Left.JoinAlias(item => taskAlias.TaskList, () => taskListAlias)
-            .Left.JoinAlias(item => taskAlias.User, () => taskUserAlias)
+            .Left.JoinAlias(item => taskAlias!.TaskList, () => taskListAlias)
+            .Left.JoinAlias(item => taskAlias!.User, () => taskUserAlias)
             .Left.JoinAlias(item => item.TaskComment, () => taskCommentAlias)
             .Inner.JoinAlias(item => item.PerformedUser, () => performedUserAlias)
             .Inner.JoinAlias(item => item.ReceiverUser, () => receivedUserAlias)
             .Inner.JoinAlias(item => item.Workspace, () => workspaceAlias)
             .Where(item => item.ReceiverUser == user)
-            .Where(item => workspaceAlias.Id == workspace.Id);
+            .Where(item => workspaceAlias!.Id == workspace.Id);
 
         var offset = PaginationUtils.CalculateOffset(page);
         var items = await query
-            .OrderBy(item => item.CreateTime).Desc()
+            .OrderBy(item => item.CreatedAt).Desc()
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
             .ListAsync();

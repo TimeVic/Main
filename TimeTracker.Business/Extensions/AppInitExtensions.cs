@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using TimeTracker.Business.Helpers;
+using TimeTracker.Business.Mvc.Filters;
 
 namespace TimeTracker.Business.Extensions
 {
@@ -19,7 +20,10 @@ namespace TimeTracker.Business.Extensions
     {
         public static void InitControllers(this IServiceCollection services, Assembly assembly)
         {
-            services.AddControllers()
+            services.AddControllers(options =>
+                {
+                    options.Filters.Add<ExceptionHandlerActionFilter>();
+                })
                 // We should provide correct assembly for the tests
                 .AddApplicationPart(assembly)
                 .ConfigureApiBehaviorOptions(options =>

@@ -16,7 +16,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
     public class DeleteRequestHandler : IAsyncRequestHandler<DeleteRequest>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly IWorkspaceAccessService _workspaceAccessService;
@@ -24,7 +24,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
 
         public DeleteRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             IWorkspaceAccessService workspaceAccessService,
@@ -32,7 +32,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _workspaceAccessService = workspaceAccessService;
@@ -41,7 +41,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var membership = await _workspaceDao.GetMembershipAsync(request.MembershipId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, membership.Workspace))

@@ -58,14 +58,13 @@ public class DbCleanUpService: IDbCleanUpService
             "clients",
             "workspaces",
             "users",
+            "sequences",
         };
 
         foreach (var table in tables)
         {
             await _sessionProvider.CurrentSession.CreateSQLQuery($"delete from {table} where 1=1;").ExecuteUpdateAsync();    
         }
-
-        await _sessionProvider.PerformCommitAsync();
         _sessionProvider.CurrentSession.Clear();
     }
 }

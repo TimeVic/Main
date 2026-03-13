@@ -1,11 +1,12 @@
-﻿using Notification.Abstractions;
+﻿using Domain.Abstractions;
+using Notification.Abstractions;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Clients.Smtp.Core;
 using TimeTracker.Business.Notifications.Core;
 
 namespace TimeTracker.Business.Notifications.Senders.User
 {
-    public class ResetPasswordNotificationSender : IAsyncNotification<ResetPasswordNotificationContext>
+    public class ResetPasswordNotificationSender : IAsyncQueueHandler<ResetPasswordNotificationContext>
     {
         private readonly ISmtpClientService _smtpClientService;
         private readonly EmailFactory _emailFactory;
@@ -16,7 +17,7 @@ namespace TimeTracker.Business.Notifications.Senders.User
             _emailFactory = new EmailFactory();
         }
 
-        public Task SendAsync(
+        public Task HandleAsync(
             ResetPasswordNotificationContext context, 
             CancellationToken cancellationToken = default
         )

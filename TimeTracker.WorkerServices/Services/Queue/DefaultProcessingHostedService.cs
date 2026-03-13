@@ -20,14 +20,19 @@ namespace TimeTracker.WorkerServices.Services.Queue
 
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
         {
-            LogDebug($"Worker started at: {DateTime.Now}");
+            Log($"Worker started at: {DateTime.Now}");
             while (!cancellationToken.IsCancellationRequested)
             {
-                await _queueService.ProcessAsync(QueueChannel.Default, cancellationToken);
-                await DbSessionProvider.PerformCommitAsync(cancellationToken);
+                await _queueService.ProcessAsync(
+                    QueueChannel.Default,
+                    cancellationToken
+                );
+                await DbSessionProvider.PerformCommitAsync(true, cancellationToken);
                 DbSessionProvider.CurrentSession.Clear();
                 await Task.Delay(1000, cancellationToken);
             }
         }
+        
+        protected override string GetCrontabExpression() => "* * * * *";
     }
 }

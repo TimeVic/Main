@@ -24,7 +24,7 @@ public partial class StartTest
         
         var fakeTimeEntry = _timeEntryFactory.Generate();
         var project = await _projectDao.CreateAsync(_defaultWorkspace, "Test project");
-        await CommitDbChanges();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
@@ -33,12 +33,12 @@ public partial class StartTest
             IsBillable = fakeTimeEntry.IsBillable,
             Date = DateOnly.FromDateTime(DateTime.UtcNow),
             StartTime = TimeSpan.FromSeconds(1),
-            InternalTaskId = task.TaskId
+            InternalTaskId = task.Id
         });
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.NotNull(actualDto.Task);
         Assert.True(actualDto.Task.TaskId > 0);
     }

@@ -8,8 +8,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client
     public class AddRequest : IRequest<ClientDto>
     {
         [Required]
-        [IsPositive]
-        public long WorkspaceId { get; set; }
+        public Guid WorkspaceId { get; set; }
         
         [Required]
         [StringLength(256, MinimumLength = 2)]

@@ -57,8 +57,7 @@ public class GetListTest: BaseTest
             Url,
             new GetListRequest()
             {
-                WorkspaceId = _workspace.Id,
-                EntityId = task.TaskId,
+                EntityId = task.Id,
                 EntityType = StorageEntityType.Task
             }
         );
@@ -79,8 +78,7 @@ public class GetListTest: BaseTest
             _jwtToken,
             new GetListRequest()
             {
-                WorkspaceId = _workspace.Id,
-                EntityId = task.TaskId,
+                EntityId = task.Id,
                 EntityType = StorageEntityType.Task
             }
         );
@@ -105,14 +103,13 @@ public class GetListTest: BaseTest
             jwtToken2,
             new GetListRequest()
             {
-                WorkspaceId = _workspace.Id,
-                EntityId = task.TaskId,
+                EntityId = task.Id,
                 EntityType = StorageEntityType.Task
             }
         );
         
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 }

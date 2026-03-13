@@ -39,6 +39,7 @@ public class ActivateUserTest: BaseTest
         var expectedEmail = _userFactory.Generate().Email;
         
         var user = await _registrationService.CreatePendingUser(expectedEmail);
+        await FlushDbChanges();
         var activatedUser = await _registrationService.ActivateUser(user.VerificationToken, expectedPassword);
         
         Assert.Null(activatedUser.VerificationToken);
@@ -57,16 +58,18 @@ public class ActivateUserTest: BaseTest
         Assert.True(actualDefaultWorkspace.IsDefault);
         
         
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(user.Email, actualEmail.To);
     }
     
     [Fact]
     public async Task ShouldThrowExceptionIfNotFound()
     {
+        await FlushDbChanges();
         await Assert.ThrowsAsync<RecordNotFoundException>(async () =>
         {
             await _registrationService.ActivateUser(SecurityUtil.GetRandomString(100), "fake password");
@@ -80,8 +83,9 @@ public class ActivateUserTest: BaseTest
         var expectedEmail = _userFactory.Generate().Email;
         
         var user = await _registrationService.CreatePendingUser(expectedEmail);
+        await FlushDbChanges();
         var activatedUser = await _registrationService.ActivateUser(user.VerificationToken, expectedPassword);
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         Assert.Equal(1, activatedUser.CreatedWorkspaces.Count);
         var workspaces = await _userDao.GetUsersWorkspaces(user);
@@ -92,7 +96,7 @@ public class ActivateUserTest: BaseTest
         });
         Assert.All(workspaces, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Id);
         });
     }
 }

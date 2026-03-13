@@ -10,5 +10,5 @@ public interface IStoredFilesDao: IDomainService
 
     Task MarkAsUploadedAllPending();
 
-    Task<ICollection<StoredFileEntity>> GetListByEntity(long entityId, StorageEntityType entityType);
+    Task<ICollection<StoredFileEntity>> GetListByEntity(Guid entityId, StorageEntityType entityType);
 }

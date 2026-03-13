@@ -76,7 +76,7 @@ namespace TimeTracker.Migrations
         private static void UpdateDatabase(IServiceProvider serviceProvider)
         {
             // Instantiate the runner
-            var runner = (IMigrationRunner)serviceProvider.GetService(typeof(IMigrationRunner));
+            var runner = (IMigrationRunner)serviceProvider.GetService(typeof(IMigrationRunner))!;
             // Execute the migrations
             runner.MigrateUp();
             runner.Up(new ApplyProceduresMigration());

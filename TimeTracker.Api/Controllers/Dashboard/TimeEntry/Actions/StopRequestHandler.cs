@@ -15,19 +15,19 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 {
     public class StopRequestHandler : IAsyncRequestHandler<StopRequest>
     {
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ITimeEntryService _timeEntryService;
         private readonly ISecurityManager _securityManager;
 
         public StopRequestHandler(
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ITimeEntryService timeEntryService,
             ISecurityManager securityManager
         )
         {
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _timeEntryService = timeEntryService;
             _securityManager = securityManager;
@@ -35,7 +35,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
     
         public async Task ExecuteAsync(StopRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))

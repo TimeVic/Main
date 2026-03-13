@@ -106,7 +106,6 @@ public class GetForCalendarTest: BaseTest
             task.EndTime = expectedEndTime.AddDays(-1);
         }
 
-        
         var response = await PostRequestAsync(Url, _jwtToken, new GetForCalendarRequest()
         {
             WorkspaceId = _workspace.Id,

@@ -56,7 +56,7 @@ public class RefreshTokenTest: BaseTest
         });
         
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        var responseData = await response.GetJsonErrorAsync();
-        Assert.Equal(new UserNotAuthorizedException().GetTypeName(), responseData.Type);
+        var responseData = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new UserNotAuthorizedException().GetTypeName(), responseData.ErrorCode);
     }
 }

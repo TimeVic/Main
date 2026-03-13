@@ -38,13 +38,12 @@ public partial class TaskCommentsBlock
         {
             _page++;
         }
-        var response = await ApiService.TaskCommentsGetListAsync(
-            AuthState.Value.Workspace.Id,
-            Task.TaskId,
-            _page
-        );
-        _comments = _comments.Concat(response.Items);
-        _isHasMore = response.IsHasMore;
+        var response = await ApiService.TaskCommentsGetListAsync(Task.Id, _page);
+        if (response != null)
+        {
+            _comments = _comments.Concat(response.Items);
+            _isHasMore = response.IsHasMore;
+        }
         _isLoading = false;
     }
 

@@ -34,7 +34,7 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<GetFilteredListResponse>(ApiUrl.TimeEntryGetFilteredList, model);
         }
         
-        public async Task TimeEntryDeleteAsync(long id)
+        public async Task TimeEntryDeleteAsync(Guid id)
         {
             await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryDelete, new DeleteRequest()
             {

@@ -27,11 +27,11 @@
                         ImageSize="50px">
                     </FluentPersona>
 
-                    @if (!_isNewComment)
+                    @if (!_isNewComment && Comment.UpdatedAt != null)
                     {
                         <div class="pt-3">
                             <b>@_userName</b>
-                            @Comment.UpdateTime.TimeAgo(DateTimeKind.Local)
+                            @Comment.UpdatedAt?.TimeAgo(DateTimeKind.Local)
                         </div>
                     }
                 </FluentStack>

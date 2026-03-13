@@ -22,11 +22,11 @@ public class ApiCustomWebApplicationFactory: WebApplicationFactory<TestStartup>
     {
         var builder = Host.CreateDefaultBuilder()
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-            .UseSerilog()
+            .UseSerilog(Log.Logger)
             .ConfigureWebHostDefaults(builder =>
             {
                 builder.UseStartup<TestStartup>()
-                    .UseContentRoot(AssemblyUtils.GetAssemblyPath(typeof(ApiAssemblyMarker).Assembly))
+                    .UseContentRoot(AssemblyUtils.GetAssemblyPath())
                     .ConfigureTestServices(services => 
                     {
                         services.AddHttpContextAccessor();

@@ -49,7 +49,7 @@ public class AuthorizationService: IAuthorizationService
     public async Task<AuthResultDto> Login(UserEntity user)
     {
         var accessToken = await _accessTokenDao.CreateNew(user);
-        return await GenerateNewJwtToken(accessToken.Token);
+        return await GenerateNewJwtToken(accessToken);
     }
     
     public async Task<AuthResultDto> GenerateNewJwtToken(string accessTokenString, string? previousJwtToken = null)
@@ -65,7 +65,11 @@ public class AuthorizationService: IAuthorizationService
         {
             throw new UserNotAuthorizedException();
         }
-
+        return await GenerateNewJwtToken(accessToken);
+    }
+    
+    public async Task<AuthResultDto> GenerateNewJwtToken(UserAccessTokenEntity accessToken)
+    {
         if (accessToken.IsExpired)
         {
             await _accessTokenDao.Delete(accessToken);
@@ -76,7 +80,7 @@ public class AuthorizationService: IAuthorizationService
         var jwtTokenEntity = new UserJwtTokenEntity()
         {
             Token = jwtToken,
-            CreateTime = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
             ExpirationTime = JwtHelper.GetExpiryTimestamp(jwtToken),
             AccessToken = accessToken
         };

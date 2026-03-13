@@ -19,11 +19,11 @@ namespace TimeTracker.WorkerServices.Services
 
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
         {
-            LogDebug($"Image uploading worker started at: {DateTime.Now}");
+            Log($"Image uploading worker started at: {DateTime.Now}");
             while (!cancellationToken.IsCancellationRequested)
             {
                 await _fileStorage.UploadFirstPendingToCloud(cancellationToken);
-                await DbSessionProvider.PerformCommitAsync(cancellationToken);
+                await DbSessionProvider.PerformCommitAsync(true, cancellationToken);
                 DbSessionProvider.CurrentSession.Clear();
                 await Task.Delay(500, cancellationToken);
             }

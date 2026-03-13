@@ -1,5 +1,6 @@
 ﻿using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
@@ -177,7 +178,7 @@ public class SecurityManager: ISecurityManager
             accessLevel == AccessLevel.Read
             || (
                 accessLevel == AccessLevel.Write
-                && taskComment.User.Id == user.Id
+                && taskComment.User!.Id == user.Id
             )
         )
         {

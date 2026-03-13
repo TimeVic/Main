@@ -3,7 +3,7 @@ using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 public class GetTasksFilterDto
 {
-    public long? AssignedUserId { get; set; }
+    public Guid? AssignedUserId { get; set; }
     
     public string? SearchString { get; set; }
     

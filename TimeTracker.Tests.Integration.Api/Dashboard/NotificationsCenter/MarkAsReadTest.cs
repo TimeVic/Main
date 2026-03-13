@@ -41,13 +41,14 @@ public partial class MarkAsReadTest: BaseTest
 
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         _task.ReminderTime = DateTime.UtcNow;
-        DbSessionProvider.PerformCommitAsync().Wait();
+        FlushDbChanges().Wait();
     }
 
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
         await _notificationCenterService.Push(NotificationActionType.Reminder, _user, _task);
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_user, _task.Workspace);
         var notification = notifications.Items.First();
         
@@ -64,6 +65,8 @@ public partial class MarkAsReadTest: BaseTest
         // Arrange
         await _notificationCenterService.Push(NotificationActionType.Reminder, _user, _task);
         await _notificationCenterService.Push(NotificationActionType.Reminder, _user, _task);
+        
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_user, _task.Workspace);
         var notification = notifications.Items.First();
         
@@ -90,12 +93,12 @@ public partial class MarkAsReadTest: BaseTest
         
         await _userNotificationTokenDao.Set(otherUser, FirebaseClientServiceMock.SuccessToken);
         otherTask.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(otherTask);
         await _notificationCenterService.Push(NotificationActionType.Reminder, otherTask.User, otherTask);
         await _notificationCenterService.Push(NotificationActionType.Reminder, otherTask.User, otherTask);
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         await DbSessionProvider.CurrentSession.RefreshAsync(otherTask);
         Assert.Equal(2, await _notificationCenterService.GetUnreadCount(otherUser, otherTask.Workspace));
@@ -110,7 +113,7 @@ public partial class MarkAsReadTest: BaseTest
         });
         
         // Assert
-        var errorResponse = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.Type);
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
 }

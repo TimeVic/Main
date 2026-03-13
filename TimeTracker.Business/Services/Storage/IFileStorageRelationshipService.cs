@@ -7,8 +7,7 @@ namespace TimeTracker.Business.Services.Storage;
 public interface IFileStorageRelationshipService: IDomainService
 {
     Task<IEntity> GetFileRelationship(
-        long workspaceId,
-        long entityId,
+        Guid entityId,
         StorageEntityType entityType
     );
 

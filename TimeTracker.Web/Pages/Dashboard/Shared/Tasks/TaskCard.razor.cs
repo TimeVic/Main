@@ -3,12 +3,9 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Task;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.UI;
-using TimeTracker.Web.Store.Dashboard;
 using TimeTracker.Web.Store.Tasks;
 using TimeTracker.Web.Store.TasksList;
-using SetListItemAction = TimeTracker.Web.Store.Tasks.SetListItemAction;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
@@ -51,7 +48,7 @@ public partial class TaskCard
                 parts.Add(clientName);
             if (!string.IsNullOrEmpty(projectName))
                 parts.Add(projectName);
-            parts.Add(Task.TaskList.Name);
+            parts.Add(Task.TaskList!.Name);
             
             return string.Join(" > ", parts);
         }

@@ -92,6 +92,7 @@ public class SetRedmineSettingsTest: BaseTest
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
         var actualSettings = _workspace.GetRedmineSettings(_user.Id);
+        Assert.NotNull(actualSettings);
         Assert.True(actualSettings.IsActive);
     }
 }

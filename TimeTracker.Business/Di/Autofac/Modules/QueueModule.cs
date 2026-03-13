@@ -12,6 +12,11 @@ namespace TimeTracker.Business.Di.Autofac.Modules
                 .RegisterAssemblyTypes(typeof(BusinessAssemblyMarker).Assembly)
                 .AsClosedTypesOf(typeof(IAsyncQueueHandler<>))
                 .InstancePerDependency();
+            
+            builder
+                .RegisterAssemblyTypes(typeof(BusinessNotificationsAssemblyMarker).Assembly)
+                .AsClosedTypesOf(typeof(IAsyncQueueHandler<>))
+                .InstancePerDependency();
         }
     }
 }

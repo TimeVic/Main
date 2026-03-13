@@ -26,15 +26,15 @@ public class TagDao: ITagDao
             Name = name,
             Color = color,
             Workspace = workspace,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
         workspace.Tags.Add(tag);
         await _sessionProvider.CurrentSession.SaveAsync(tag);
         return tag;
     }
     
-    public async Task<TagEntity?> GetById(long? id)
+    public async Task<TagEntity?> GetById(Guid? id)
     {
         if (id == null)
             return null;

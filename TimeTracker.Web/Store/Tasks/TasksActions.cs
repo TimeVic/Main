@@ -12,8 +12,6 @@ public record struct SetListItemsAction(GetListResponse Response);
 
 public record struct SetListItemAction(TaskDto Task);
 
-public record struct SetAttachmentsAction(long TaskId, ICollection<StoredFileDto> Attachments);
-
 public record struct SetListFilterAction(GetListFilterRequest Filter);
 
 public record struct SetIsListLoading(bool IsLoading);

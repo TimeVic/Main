@@ -52,12 +52,12 @@ public class SetTest: BaseTest
             expectIntegration.IsCustomTaskIds
         );
         actualIntegration.IsActive = true;
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(actualIntegration);
         await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
 
-        Assert.True(actualIntegration.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualIntegration.Id);
         Assert.Equal(_workspace.Id, actualIntegration.Workspace.Id);
         Assert.Equal(expectIntegration.SecurityKey, actualIntegration.SecurityKey);
         Assert.Equal(expectIntegration.TeamId, actualIntegration.TeamId);
@@ -89,7 +89,7 @@ public class SetTest: BaseTest
             expectIntegrationTemplate.TeamId,
             expectIntegrationTemplate.IsCustomTaskIds
         );
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         Assert.Equal(expectIntegration.Id, actualIntegration.Id);
         Assert.Equal(_workspace.Id, actualIntegration.Workspace.Id);

@@ -1,118 +1,34 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
+using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 
 namespace TimeTracker.Business.Orm.Entities.Workspaces
 {
-    [Class(Table = "workspaces")]
-    public class WorkspaceEntity: IEntity
-    {
-        [Id(Name = "Id", Generator = "native")]
-        [Column(Name = "id", SqlType = "bigint", NotNull = true)]
-        public virtual long Id { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "name", Length = 200, NotNull = true)]
-        public virtual string Name { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "is_default", NotNull = true)]
+    public class WorkspaceEntity: AEntity
+    {   
+        public virtual required string Name { get; set; }
         public virtual bool IsDefault { get; set; }
-        
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
-        public virtual DateTime CreateTime { get; set; }
-        
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "update_time", SqlType = "datetime", NotNull = true)]
-        public virtual DateTime UpdateTime { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(UserEntity), 
-            Column = "created_user_id", 
-            Lazy = Laziness.False,
-            Cascade = "none"
-        )]
-        public virtual UserEntity CreatedUser { get; set; }
-        
-        [Bag(
-            Inverse = true,
-            Lazy = CollectionLazy.Extra,
-            Cascade = "none"
-        )]
-        [Key(Column = "workspace_id")]
-        [OneToMany(ClassType = typeof(ClientEntity))]
+
+        #region Relationships
+
+        public virtual required UserEntity CreatedUser { get; set; }
         public virtual ICollection<ClientEntity> Clients { get; set; } = new List<ClientEntity>();
-        
-        [Bag(
-            Inverse = true,
-            Lazy = CollectionLazy.True,
-            Cascade = "none"
-        )]
-        [Key(Column = "workspace_id")]
-        [OneToMany(ClassType = typeof(ProjectEntity))]
         public virtual ICollection<ProjectEntity> Projects { get; set; } = new List<ProjectEntity>();
-        
-        [Bag(
-            Inverse = true,
-            Lazy = CollectionLazy.True,
-            Cascade = "none"
-        )]
-        [Key(Column = "workspace_id")]
-        [OneToMany(ClassType = typeof(TimeEntryEntity))]
         public virtual ICollection<TimeEntryEntity> TimeEntries { get; set; } = new List<TimeEntryEntity>();
-        
-        [Bag(
-            Inverse = true,
-            Lazy = CollectionLazy.True,
-            Cascade = "none"
-        )]
-        [Key(Column = "workspace_id")]
-        [OneToMany(ClassType = typeof(WorkspaceSettingsClickUpEntity))]
         public virtual ICollection<WorkspaceSettingsClickUpEntity> SettingsClickUp { get; set; } = new List<WorkspaceSettingsClickUpEntity>();
-        
-        [Bag(
-            Inverse = true,
-            Lazy = CollectionLazy.True,
-            Cascade = "none"
-        )]
-        [Key(Column = "workspace_id")]
-        [OneToMany(ClassType = typeof(WorkspaceSettingsRedmineEntity))]
         public virtual ICollection<WorkspaceSettingsRedmineEntity> SettingsRedmine { get; set; } = new List<WorkspaceSettingsRedmineEntity>();
-        
-        [Bag(
-            Inverse = true,
-            Lazy = CollectionLazy.True,
-            Cascade = "none"
-        )]
-        [Key(Column = "workspace_id")]
-        [OneToMany(ClassType = typeof(WorkspaceSettingsJiraEntity))]
         public virtual ICollection<WorkspaceSettingsJiraEntity> SettingsJira { get; set; } = new List<WorkspaceSettingsJiraEntity>();
-
-        
-        [Bag(
-            Inverse = true,
-            Lazy = CollectionLazy.True,
-            Cascade = "save-update"
-        )]
-        [Key(Column = "workspace_id")]
-        [OneToMany(ClassType = typeof(WorkspaceMembershipEntity))]
         public virtual ICollection<WorkspaceMembershipEntity> Memberships { get; set; } = new List<WorkspaceMembershipEntity>();
-
-        [Bag(
-            Inverse = true,
-            Lazy = CollectionLazy.True,
-            Cascade = "none"
-        )]
-        [Key(Column = "workspace_id")]
-        [OneToMany(ClassType = typeof(TagEntity))]
         public virtual ICollection<TagEntity> Tags { get; set; } = new List<TagEntity>();
+
+        #endregion
         
         #region Integration - ClickUp
         
-        public virtual WorkspaceSettingsClickUpEntity? GetClickUpSettings(long userId)
+        public virtual WorkspaceSettingsClickUpEntity? GetClickUpSettings(Guid userId)
         {
             return SettingsClickUp.FirstOrDefault(
                 item => item.User.Id == userId
@@ -124,7 +40,7 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
             return GetClickUpSettings(user.Id);
         }
         
-        public virtual WorkspaceSettingsJiraEntity? GetJiraSettings(long userId)
+        public virtual WorkspaceSettingsJiraEntity? GetJiraSettings(Guid userId)
         {
             return SettingsJira.FirstOrDefault(
                 item => item.User.Id == userId
@@ -136,12 +52,12 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
             return GetJiraSettings(user.Id);
         }
         
-        public virtual bool IsIntegrationClickUpActive(long userId)
+        public virtual bool IsIntegrationClickUpActive(Guid userId)
         {
             return GetClickUpSettings(userId)?.IsActive ?? false;
         }
         
-        public virtual bool IsIntegrationJiraActive(long userId)
+        public virtual bool IsIntegrationJiraActive(Guid userId)
         {
             return GetJiraSettings(userId)?.IsActive ?? false;
         }
@@ -150,7 +66,7 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
         
         #region Integration - Redmine
         
-        public virtual WorkspaceSettingsRedmineEntity? GetRedmineSettings(long userId)
+        public virtual WorkspaceSettingsRedmineEntity? GetRedmineSettings(Guid userId)
         {
             return SettingsRedmine.FirstOrDefault(
                 item => item.User.Id == userId
@@ -162,7 +78,7 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
             return GetRedmineSettings(user.Id);
         }
         
-        public virtual bool IsIntegrationRedmineActive(long userId)
+        public virtual bool IsIntegrationRedmineActive(Guid userId)
         {
             return GetRedmineSettings(userId)?.IsActive ?? false;
         }

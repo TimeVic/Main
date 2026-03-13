@@ -34,15 +34,16 @@ public class CreatePendingUserTest: BaseTest
         var expectedEmail = _userFactory.Generate().Email;
         
         var user = await _authService.CreatePendingUser(expectedEmail);
-        Assert.True(user.Id > 0);
+        Assert.NotEqual(Guid.Empty, user.Id);
         Assert.False(user.IsActivated);
         Assert.Equal(expectedEmail.ToLower(), user.Email);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(user.Email, actualEmail.To);
     }
     
@@ -52,15 +53,16 @@ public class CreatePendingUserTest: BaseTest
         var expectedEmail = _userFactory.Generate().Email;
         
         var user = await _authService.CreatePendingUser(expectedEmail);
-        await _queueService.ProcessAsync(QueueChannel.Notifications);
+        await QueueProcess(QueueChannel.Notifications);
         SmtpClientServiceMock.Reset();
 
         await _authService.CreatePendingUser(expectedEmail);
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
+        Assert.NotNull(actualEmail);
         Assert.Contains(user.Email, actualEmail.To);
     }
     
@@ -70,6 +72,7 @@ public class CreatePendingUserTest: BaseTest
         var expectedEmail = _userFactory.Generate().Email;
         
         var actualUser = await _authService.CreatePendingUser(expectedEmail);
+        await FlushDbChanges();
         await _authService.ActivateUser(actualUser.VerificationToken, "some password");
 
         await Assert.ThrowsAsync<RecordIsExistsException>(async () =>

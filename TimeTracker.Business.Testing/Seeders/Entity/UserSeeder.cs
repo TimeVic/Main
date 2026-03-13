@@ -58,8 +58,8 @@ public class UserSeeder: IUserSeeder
     public async Task<UserEntity> CreateActivatedAsync(string password = "test password")
     {
         var user = await CreatePendingAsync();
+        await _dbSessionProvider.CurrentSession.FlushAsync();
         user = await _registrationService.ActivateUser(user.VerificationToken, password);
-        await _dbSessionProvider.PerformCommitAsync();
         return user;
     }
     
@@ -94,8 +94,8 @@ public class UserSeeder: IUserSeeder
     )
     {
         var user = await CreatePendingAsync();
+        await _dbSessionProvider.CurrentSession.FlushAsync();
         user = await _registrationService.ActivateUser(user.VerificationToken, "Test password");
-        await _dbSessionProvider.PerformCommitAsync();
         await _workspaceAccessService.ShareAccessAsync(workspace, user, access, projects);
         return user;
     }

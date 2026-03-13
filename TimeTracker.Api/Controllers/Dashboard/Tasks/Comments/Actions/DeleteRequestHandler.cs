@@ -17,7 +17,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
     public class DeleteRequestHandler : IAsyncRequestHandler<DeleteRequest>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ITaskDao _taskDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -26,7 +26,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
 
         public DeleteRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ITaskDao taskDao,
             IDbSessionProvider sessionProvider,
@@ -35,7 +35,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _taskDao = taskDao;
             _sessionProvider = sessionProvider;
@@ -45,7 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var taskComment = await _taskCommentDao.GetById(request.CommentId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, taskComment))

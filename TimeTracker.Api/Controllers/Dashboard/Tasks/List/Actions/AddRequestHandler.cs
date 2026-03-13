@@ -17,7 +17,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
     public class AddRequestHandler : IAsyncRequestHandler<AddRequest, TaskListDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -27,7 +27,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
 
         public AddRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
@@ -37,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
@@ -48,7 +48,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
     
         public async Task<TaskListDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var project = await _projectDao.GetById(request.ProjectId, true);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
@@ -56,8 +56,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
                 throw new HasNoAccessException();
             }
             var taskList = await _taskListDao.CreateTaskListAsync(project, request.Name);
-            await _sessionProvider.PerformCommitAsync();
-            
             return _mapper.Map<TaskListDto>(taskList);
         }
     }

@@ -105,10 +105,13 @@ public partial class RedmineClient: AExternalClientService, IRedmineClient
         var responseData = await HandleResponse<SetTimeEntryResponseDto?>(url, httpResponse, requestData);
         if (responseData == null || !responseData.IsSuccess)
         {
-            _logger.LogDebug(
-                "Redmine returned error: {error}",
-                string.Join(",", responseData.Errors)
-            );
+            if (responseData != null)
+            {
+                _logger.LogDebug(
+                    "Redmine returned error: {error}",
+                    string.Join(",", responseData.Errors)
+                );
+            }
             return new SynchronizedTimeEntryDto() { IsError = true };
         }
         return new SynchronizedTimeEntryDto()
@@ -148,7 +151,7 @@ public partial class RedmineClient: AExternalClientService, IRedmineClient
         var httpClient = _newHttpClient;
         var settings = workspace.GetRedmineSettings(user.Id);
 
-        httpClient.DefaultRequestHeaders.Add("X-Redmine-API-Key", settings.ApiKey);
+        httpClient.DefaultRequestHeaders.Add("X-Redmine-API-Key", settings!.ApiKey);
 
         var url = string.Format(GetIssuesUrl, settings.Url);
         var urlParams = new Dictionary<string, string>();
@@ -162,7 +165,7 @@ public partial class RedmineClient: AExternalClientService, IRedmineClient
         }
         catch (Exception e)
         {
-            _logger.LogTrace("Redmine. Settings validation failed");
+            _logger.LogTrace($"Redmine. Settings validation failed: {e.Message}");
         }
 
         return false;

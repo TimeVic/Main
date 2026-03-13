@@ -15,7 +15,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
     public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, PaymentDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IDbSessionProvider _sessionProvider;
         private readonly IPaymentDao _paymentDao;
@@ -24,7 +24,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
 
         public UpdateRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IDbSessionProvider sessionProvider,
             IPaymentDao paymentDao,
@@ -33,7 +33,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _sessionProvider = sessionProvider;
             _paymentDao = paymentDao;
@@ -43,7 +43,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
     
         public async Task<PaymentDto> ExecuteAsync(UpdateRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var payment = await _paymentDao.GetById(request.PaymentId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, payment))
@@ -68,7 +68,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
                 request.ProjectId,
                 request.Description
             );
-            await _sessionProvider.PerformCommitAsync();
             return _mapper.Map<PaymentDto>(payment);
         }
     }

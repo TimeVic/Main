@@ -52,13 +52,14 @@ public class SendReminderNotificationTest: BaseTest
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
         _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges(true);
 
         // Act
         await _notificationBgJobService.SendReminderNotification();
         
         // Assert
         Assert.True(FirebaseClientService.SentMessages.Any());
+        await FlushDbChanges(true);
         Assert.Equal(1, await _notificationCenterService.GetUnreadCount(_user, _task.Workspace));
     }
     
@@ -69,7 +70,7 @@ public class SendReminderNotificationTest: BaseTest
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
         _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(+1);
-        await CommitDbChanges();
+        await FlushDbChanges(true);
 
         // Act
         await _notificationBgJobService.SendReminderNotification();
@@ -86,7 +87,7 @@ public class SendReminderNotificationTest: BaseTest
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
         _task.ReminderTime = null;
-        await CommitDbChanges();
+        await FlushDbChanges(true);
 
         // Act
         await _notificationBgJobService.SendReminderNotification();
@@ -103,16 +104,19 @@ public class SendReminderNotificationTest: BaseTest
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
         _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges(true);
 
         // Act
         await _notificationBgJobService.SendReminderNotification();
+        await FlushDbChanges(true);
         await _notificationCenterService.MarkAllAsRead(_user, _task.Workspace);
         
+        await FlushDbChanges(true);
         await _notificationBgJobService.SendReminderNotification();
         
         // Assert
         Assert.Single(FirebaseClientService.SentMessages);
+        await FlushDbChanges(true);
         Assert.Equal(0, await _notificationCenterService.GetUnreadCount(_user, _task.Workspace));
     }
 }

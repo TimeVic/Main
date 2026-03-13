@@ -31,6 +31,7 @@ public class QueueDaoTest: BaseTest
         };
 
         await _queueDao.Push(testContext, QueueChannel.Default);
+        await _queueDao.Flush();
     }
     
     [Fact]
@@ -44,16 +45,18 @@ public class QueueDaoTest: BaseTest
 
         await _queueDao.Push(testContext, QueueChannel.Default);
         await _queueDao.Push(testContext, QueueChannel.Default);
+        await _queueDao.Flush();
         
         var actualItem1 = await _queueDao.GetTop(QueueChannel.Default);
         var actualItem2 = await _queueDao.GetTop(QueueChannel.Default);
-        _queueDao.Flush();
         
-        Assert.True(actualItem1.Id > 0);
+        Assert.NotNull(actualItem1);
+        Assert.NotEqual(Guid.Empty, actualItem1.Id);
         Assert.Equal(QueueStatus.InProcess, actualItem1.Status);
-        Assert.True(actualItem2.Id > 0);
+        Assert.NotNull(actualItem2);
+        Assert.NotEqual(Guid.Empty, actualItem2.Id);
         
-        Assert.True(actualItem2.CreateTime > actualItem1.CreateTime);
+        Assert.True(actualItem2.CreatedAt > actualItem1.CreatedAt);
     }
     
     [Fact]
@@ -67,7 +70,7 @@ public class QueueDaoTest: BaseTest
 
         await _queueDao.Push(testContext, QueueChannel.Default);
         await _queueDao.Push(testContext, QueueChannel.Default);
-        _queueDao.Flush();
+        await _queueDao.Flush();
         
         var actualItem1 = await _queueDao.GetTop(QueueChannel.Default);
         var actualItem2 = await _queueDao.GetTop(QueueChannel.Default);
@@ -86,10 +89,12 @@ public class QueueDaoTest: BaseTest
         };
 
         await _queueDao.Push(testContext, QueueChannel.Default);
+        await _queueDao.Flush();
         var actualItem = await _queueDao.GetTop(QueueChannel.Default);
         await _queueDao.MarkAsProcessed(actualItem);
         
         actualItem = await _queueDao.GetById(actualItem.Id);
+        Assert.NotNull(actualItem);
         Assert.Equal(QueueStatus.Success, actualItem.Status);
     }
     
@@ -104,10 +109,12 @@ public class QueueDaoTest: BaseTest
         };
 
         await _queueDao.Push(testContext, QueueChannel.Default);
+        await _queueDao.Flush();
         var actualItem = await _queueDao.GetTop(QueueChannel.Default);
         await _queueDao.MarkAsProcessed(actualItem, expectedError);
         
         actualItem = await _queueDao.GetById(actualItem.Id);
+        Assert.NotNull(actualItem);
         Assert.Equal(QueueStatus.Fail, actualItem.Status);
         Assert.Equal(expectedError, actualItem.Error);
     }
@@ -123,6 +130,7 @@ public class QueueDaoTest: BaseTest
         };
 
         await _queueDao.Push(testContext, QueueChannel.Default);
+        await _queueDao.Flush();
         var actualItem = await _queueDao.GetTop(QueueChannel.Default);
         await _queueDao.MarkAsProcessed(actualItem);
 

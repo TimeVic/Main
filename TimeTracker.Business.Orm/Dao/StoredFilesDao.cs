@@ -21,7 +21,7 @@ public class StoredFilesDao: IStoredFilesDao
     {
         var storedFile = await _sessionProvider.CurrentSession.Query<StoredFileEntity>()
             .Where(item => item.Status == StoredFileStatus.Pending)
-            .OrderBy(item => item.CreateTime)
+            .OrderBy(item => item.CreatedAt)
             .FirstOrDefaultAsync();
         if (storedFile == null)
         {
@@ -32,7 +32,7 @@ public class StoredFilesDao: IStoredFilesDao
         return storedFile;
     }
     
-    public async Task<ICollection<StoredFileEntity>> GetListByEntity(long entityId, StorageEntityType entityType)
+    public async Task<ICollection<StoredFileEntity>> GetListByEntity(Guid entityId, StorageEntityType entityType)
     {
         TaskEntity taskAlias = null;
         UserEntity userAlias = null;
@@ -40,9 +40,9 @@ public class StoredFilesDao: IStoredFilesDao
             .Left.JoinAlias(item => item.Tasks, () => taskAlias);
         if (entityType == StorageEntityType.Task)
         {
-            query = query.Where(() => taskAlias.Id == entityId);
+            query = query.Where(() => taskAlias!.Id == entityId);
         }
-        query = query.OrderBy(item => item.CreateTime).Desc;
+        query = query.OrderBy(item => item.CreatedAt).Desc;
         return await query.ListAsync();
     }
     

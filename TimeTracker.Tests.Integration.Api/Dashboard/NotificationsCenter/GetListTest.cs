@@ -37,7 +37,7 @@ public partial class GetListTest: BaseTest
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _task = _taskSeeder.CreateAsync(user: _user).Result;
-        DbSessionProvider.PerformCommitAsync().Wait();
+        FlushDbChanges().Wait();
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public partial class GetListTest: BaseTest
         // Arrange
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_task);
         await _notificationCenterService.Push(NotificationActionType.Reminder, _task.User, _task);
@@ -70,14 +70,15 @@ public partial class GetListTest: BaseTest
         });
         
         // Assert
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
+        
         Assert.True(FirebaseClientService.SentMessages.Any());
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(2, actualResponse.TotalCount);
         Assert.Equal(2, actualResponse.Items.Count());
         Assert.All(actualResponse.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Id);
             Assert.Equal(NotificationActionType.Reminder, item.Type);
             Assert.NotNull(item.Task);
             Assert.NotNull(item.Task.TaskList);
@@ -94,7 +95,7 @@ public partial class GetListTest: BaseTest
         
         await _userNotificationTokenDao.Set(otherUser, FirebaseClientServiceMock.SuccessToken);
         otherTask.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(otherTask);
         await _notificationCenterService.Push(NotificationActionType.Reminder, otherTask.User, otherTask);

@@ -8,8 +8,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
     public class StopRequest : IRequest
     {
         [Required]
-        [IsPositive]
-        public long WorkspaceId { get; set; }
+        public Guid WorkspaceId { get; set; }
         
         [IsCorrectTimeEntryTime]
         public TimeSpan EndTime { get; set; }

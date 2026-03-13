@@ -16,8 +16,6 @@ public class FileStorageGoogleClient: IFileStorageGoogleClient
 
     private const string CredentialsFilepath = "../../../../.credentials/google.json";
     
-    private readonly Bucket _bucket;
-    private readonly string? _projectId;
     private readonly GoogleCredential _credentials;
     
     private readonly string? _bucketName;

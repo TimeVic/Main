@@ -1,5 +1,6 @@
 ﻿using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Extensions;
+using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
@@ -13,16 +14,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace;
 [ApiController]
 [Authorize]
 [Route("/dashboard/[controller]")]
-public class WorkspaceController : MainApiControllerBase
+public class WorkspaceController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
-    public WorkspaceController(
-        IAsyncRequestBuilder asyncRequestBuilder, 
-        IDbSessionProvider commitPerformer,
-        ILogger<WorkspaceController> logger
-    ) : base(asyncRequestBuilder, commitPerformer, logger)
-    {
-    }
-
     [HttpPost("list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

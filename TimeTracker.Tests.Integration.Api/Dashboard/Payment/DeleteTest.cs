@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
@@ -19,8 +20,6 @@ public class DeleteTest: BaseTest
     
     private readonly UserEntity _user;
     private readonly string _jwtToken;
-    private readonly ClientEntity _client;
-    private readonly ProjectEntity _project;
     private readonly IPaymentSeeder _paymentSeeder;
     private readonly PaymentEntity _payment;
     private readonly IPaymentDao _paymentDao;
@@ -66,8 +65,8 @@ public class DeleteTest: BaseTest
         {
             PaymentId = _payment.Id
         });
-        var errorResponse = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.Type);
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
         
         var payment = await _paymentDao.GetById(_payment.Id);
         Assert.NotNull(payment);

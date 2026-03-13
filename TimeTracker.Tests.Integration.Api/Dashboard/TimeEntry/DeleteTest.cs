@@ -82,9 +82,11 @@ public class DeleteTest: BaseTest
             true
         ).Result;
         clickUpSettings.IsActive = true;
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
         
         _queueDao.CompleteAllPending().Wait();
+        Assert.NotNull(_clickUpClient);
+        Assert.NotNull(_redmineClient);
         _clickUpClient.Reset();
         _redmineClient.Reset();
     }
@@ -111,7 +113,7 @@ public class DeleteTest: BaseTest
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.True(_timeEntry.IsMarkedToDelete);
 
-        await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        await QueueProcess(QueueChannel.ExternalClient);
         Assert.False(
             await DbSessionProvider.CurrentSession.Query<TimeEntryEntity>()
                 .AnyAsync(item => item.Id == _timeEntry.Id)
@@ -122,7 +124,7 @@ public class DeleteTest: BaseTest
     public async Task ShouldDeleteOldEntry()
     {
         var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user)).First();
-        await CommitDbChanges();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new DeleteRequest()
         {
             TimeEntryId = expectedEntry.Id
@@ -149,7 +151,7 @@ public class DeleteTest: BaseTest
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.True(_timeEntry.IsMarkedToDelete);
 
-        await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(_clickUpClient.IsSent);
 
         Assert.False(
@@ -172,7 +174,7 @@ public class DeleteTest: BaseTest
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.True(_timeEntry.IsMarkedToDelete);
 
-        await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(_redmineClient.IsSent);
         
         Assert.False(

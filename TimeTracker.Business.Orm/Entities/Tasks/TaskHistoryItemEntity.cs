@@ -2,106 +2,36 @@ using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
 using TimeTracker.Business.Common.Constants.Task;
+using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Business.Orm.Entities.Tasks
 {
-    [Class(Table = "task_history_items")]
-    public class TaskHistoryItemEntity: IEntity
-    {
-        [Id(Name = "Id", Generator = "native")]
-        [Column(Name = "id", SqlType = "bigint", NotNull = true)]
-        public virtual long Id { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "status", SqlType = "int", NotNull = true)]
+    public class TaskHistoryItemEntity: AEntity
+    {   
         public virtual TaskStatus Status { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "priority", SqlType = "int", NotNull = true)]
         public virtual TaskPriority Priority { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "title", Length = 1024, NotNull = true)]
-        public virtual string Title { get; set; }
-        
-        [Property(NotNull = false)]
-        [Column(Name = "description", Length = 10000, NotNull = false)]
+        public virtual required string Title { get; set; }
         public virtual string? Description { get; set; }
-        
-        [Property(NotNull = false)]
-        [Column(Name = "tags", Length = 1024, NotNull = false)]
         public virtual string? Tags { get; set; }
-        
-        [Property(NotNull = false)]
-        [Column(Name = "attachments", Length = 10000, NotNull = false)]
         public virtual string? Attachments { get; set; }
-        
-        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "start_time", SqlType = "datetime", NotNull = false)]
         public virtual DateTime? StartTime { get; set; }
-        
-        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "end_time", SqlType = "datetime", NotNull = false)]
         public virtual DateTime? EndTime { get; set; }
-
-        [Property(NotNull = true)]
-        [Column(Name = "is_archived", NotNull = true)]
         public virtual bool IsArchived { get; set; }
-        
-        [Property(NotNull = false)]
-        [Column(Name = "external_task_id", Length = 512, NotNull = false)]
         public virtual string? ExternalTaskId { get; set; }
-
-        [Property(NotNull = true)]
-        [Column(Name = "is_notified", NotNull = true)]
         public virtual bool IsNotified { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "is_new_task", NotNull = true)]
         public virtual bool IsNewTask { get; set; }
-        
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
-        public virtual DateTime CreateTime { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(TaskEntity), 
-            Column = "task_id", 
-            Lazy = Laziness.Proxy,
-            Fetch = FetchMode.Join,
-            Cascade = "none"
-        )]
-        public virtual TaskEntity Task { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(UserEntity), 
-            Column = "user_id", 
-            Lazy = Laziness.Proxy,
-            Fetch = FetchMode.Join,
-            Cascade = "none"
-        )]
-        public virtual UserEntity User { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(UserEntity), 
-            Column = "assignee_user_id", 
-            Lazy = Laziness.Proxy,
-            Fetch = FetchMode.Join,
-            Cascade = "none"
-        )]
-        public virtual UserEntity AssigneeUser { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(TaskListEntity), 
-            Column = "task_list_id", 
-            Lazy = Laziness.Proxy,
-            Fetch = FetchMode.Join,
-            Cascade = "none"
-        )]
-        public virtual TaskListEntity TaskList { get; set; }
+
+        #region Relationships
+
+        public virtual required TaskEntity Task { get; set; }
+        public virtual required UserEntity User { get; set; }
+        public virtual required UserEntity AssigneeUser { get; set; }
+        public virtual required TaskListEntity TaskList { get; set; }
+
+        #endregion
 
         #region Calculated
 

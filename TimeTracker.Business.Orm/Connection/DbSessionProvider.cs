@@ -12,29 +12,20 @@ namespace TimeTracker.Business.Orm.Connection
         private readonly IDbConnectionFactory _dbConnectionFactory;
         private readonly ILogger<IDbConnectionFactory> _logger;
         private readonly IConfiguration _configuration;
+        private IsolationLevel? _transactionalModeIsolationLevel;
 
         private ISession? _session { get; set; }
         
         private ISessionFactory _sessionFactory { get; set; }
 
         private bool _isShowSql { get; }
+
+        public ISessionFactory SessionFactory => _sessionFactory;
         
         public ISession CurrentSession {
             get {
-                if (_session is not {IsOpen: true})
-                {
-                    _session = CreateSession();
-                }
-
-                lock (_session)
-                {
-                    if (_transaction is not {IsActive: true})
-                    {
-                        _transaction = _session.BeginTransaction(
-                            IsolationLevel.ReadCommitted    
-                        );
-                    }    
-                }
+                OpenCurrentSession();
+                ArgumentNullException.ThrowIfNull(_session);
                 return _session;
             }
         }
@@ -59,49 +50,117 @@ namespace TimeTracker.Business.Orm.Connection
             //Dispose();
         }
 
-        public async Task PerformCommitAsync(CancellationToken cancellationToken = default)
+        public void SetTransactional(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            if (_transaction != null && _transaction.IsActive && _session.IsOpen)
+            _transactionalModeIsolationLevel = isolationLevel;
+        }
+        
+        public async Task UnsetTransactional()
+        {
+            if (_transactionalModeIsolationLevel != null)
             {
-                try
+                if (_transaction is { IsActive: true })
                 {
-                    await _transaction.CommitAsync(cancellationToken);
+                    try
+                    {
+                        await _transaction.CommitAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e.Message, e);
+                        await _transaction.RollbackAsync();
+                        throw e;
+                    }    
                 }
-                catch (Exception e)
-                {
-                    _logger.LogError(e.Message, e);
-                    await _transaction.RollbackAsync(cancellationToken);
-                    throw e;
-                }
-                await _session.FlushAsync(cancellationToken);
+                _transactionalModeIsolationLevel = null;
+                _transaction?.Dispose();
             }
-            _transaction?.Dispose();
-            _transaction = null;
+        }
+        
+        public ITransaction BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
+        {
+            OpenCurrentSession();
+            return CurrentSession.BeginTransaction(isolationLevel);
+        }
+        
+        public async Task PerformCommitAsync(bool isCloseConnection = true, CancellationToken cancellationToken = default)
+        {
+            if (_session is null)
+                return;
+                
+            if (_session is { IsOpen: true })
+            {
+                if (_transaction is { IsActive: true })
+                {
+                    try
+                    {
+                        await _transaction.CommitAsync(cancellationToken).WaitAsync(cancellationToken);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e.Message, e);
+                        await _transaction.RollbackAsync(cancellationToken).WaitAsync(cancellationToken);
+                        throw e;
+                    }    
+                }
+                else
+                {
+                    await _session.FlushAsync(cancellationToken);
+                }
+            }
+            if (isCloseConnection)
+            {
+                _transaction?.Dispose();
+                if (_session.IsOpen)
+                {
+                    _session?.Close();
+                }
+                _transactionalModeIsolationLevel = null;
+            }
         }
 
-        public ISession CreateSession()
+        public Task RollbackCommitAsync(CancellationToken cancellationToken = default)
+        {
+            CloseCurrentSession();
+            return Task.CompletedTask;
+        }
+        
+        public void OpenCurrentSession()
+        {
+            if (_session is not {IsOpen: true})
+            {
+                _session = CreateSession();
+            }
+
+            if (_transactionalModeIsolationLevel != null && _transaction is not {IsActive: true})
+            {
+                _transaction?.Dispose();
+                _transaction = _session.BeginTransaction(_transactionalModeIsolationLevel.Value);
+            }
+        }
+        
+        public ISession CreateSession(FlushMode? flushMode = null)
         {
             if (_isShowSql)
             {
-                return _sessionFactory.WithOptions()
-                    .Interceptor(new SqlQueryInterceptor())
-                    .OpenSession();
+                var session = _sessionFactory.WithOptions()
+                    .Interceptor(
+                        new SqlQueryInterceptor(_logger)
+                    );
+                if (flushMode != null)
+                    session = session.FlushMode(flushMode.Value);
+                return session.OpenSession();
             }
             return _sessionFactory.OpenSession();
         }
         
         public void CloseCurrentSession()
         {
-            if (_session != null)
-            {
-                if (_session.IsOpen)
-                {
-                    _session.Flush();
-                    _session.Close();    
-                }
-                _session.Dispose();
-                _session = null;
-            }
+            if (_session is null || _session is not {IsOpen: true})
+                return;
+            _transaction?.Dispose();
+            _session?.Close();
+            _transactionalModeIsolationLevel = null;
         }
         
         #region IDisposable implementation

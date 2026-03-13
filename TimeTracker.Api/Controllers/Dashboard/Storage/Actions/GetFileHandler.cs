@@ -18,7 +18,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
     public class GetFileHandler : IAsyncRequestHandler<GetFileRequest, FileResponse>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly IFileStorage _fileStorage;
@@ -26,7 +26,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
 
         public GetFileHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             IFileStorage fileStorage,
@@ -34,7 +34,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _fileStorage = fileStorage;
@@ -43,7 +43,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
     
         public async Task<FileResponse> ExecuteAsync(GetFileRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
 
             var (file, fileStream) = await _fileStorage.GetFileStream(user, request.FileId);

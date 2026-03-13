@@ -25,7 +25,7 @@ public class CreatePendingUserTest: BaseTest
         var fakeUser = _userFactory.Generate();
         
         var user = await _userDao.CreatePendingUser(fakeUser.Email);
-        Assert.True(user.Id > 0);
+        Assert.NotEqual(Guid.Empty, user.Id);
         Assert.NotEmpty(user.VerificationToken);
         Assert.NotEmpty(user.Email);
         Assert.Equal(TimeZoneInfo.Utc.Id, user.Timezone);

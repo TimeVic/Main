@@ -26,8 +26,8 @@ public class GoalsTrackerDao: IGoalsTrackerDao
                 User = user,
                 Year = date.Year,
                 Month = date.Month,
-                CreateTime = DateTime.UtcNow,
-                UpdateTime = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
             await _sessionProvider.CurrentSession.SaveAsync(tracker);
         }
@@ -35,7 +35,7 @@ public class GoalsTrackerDao: IGoalsTrackerDao
         return tracker;
     }
     
-    public async Task<GoalsTrackerEntity?> GetById(long id)
+    public async Task<GoalsTrackerEntity?> GetById(Guid id)
     {
         return await _sessionProvider.CurrentSession.Query<GoalsTrackerEntity>()
             .Where(item => item.Id == id)

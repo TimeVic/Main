@@ -9,6 +9,7 @@ using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -44,6 +45,7 @@ public partial class UpdateTest: BaseTest
     private readonly IUserSeeder _userSeeder;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly ITagSeeder _tagSeeder;
+    private readonly ITaskDao _taskDao;
 
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -55,6 +57,7 @@ public partial class UpdateTest: BaseTest
         _tagSeeder = ServiceProvider.GetRequiredService<ITagSeeder>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
+        _taskDao = ServiceProvider.GetRequiredService<ITaskDao>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
@@ -69,7 +72,7 @@ public partial class UpdateTest: BaseTest
         var task = _taskFactory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
-            TaskId = task.TaskId,
+            TaskId = task.Id,
             Title = task.Title,
             Description = task.Description,
             StartTime = task.StartTime,
@@ -84,7 +87,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -122,7 +125,7 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = otherTaskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
@@ -133,8 +136,8 @@ public partial class UpdateTest: BaseTest
             UserId = _user.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -145,7 +148,7 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _taskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
@@ -156,8 +159,8 @@ public partial class UpdateTest: BaseTest
             UserId = user2.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -181,7 +184,7 @@ public partial class UpdateTest: BaseTest
         var newTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = task2.TaskId,
+            TaskId = task2.Id,
             TaskListId = _taskList.Id,
             Title = newTask.Title,
             Description = newTask.Description,
@@ -192,8 +195,8 @@ public partial class UpdateTest: BaseTest
             UserId = user2.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
         Assert.Contains("for task", error.Message);
     }
     
@@ -229,8 +232,8 @@ public partial class UpdateTest: BaseTest
             UserId = user2.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
         Assert.Contains("for provided task list", error.Message);
     }
     
@@ -242,7 +245,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -256,9 +259,13 @@ public partial class UpdateTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        await DbSessionProvider.CurrentSession.RefreshAsync(_task);
-        Assert.Equal(2, _task.HistoryItems.Count);
-        var historyItem = _task.HistoryItems.OrderBy(item => item.CreateTime).Last();
+        await FlushDbChanges(true);
+        var task = await _taskDao.GetById(_task.Id);
+        Assert.NotNull(task);
+        var historyItems = task.HistoryItems.ToList();
+        Assert.Equal(2, historyItems.Count);
+        var historyItem = historyItems.OrderByDescending(item => item.CreatedAt).FirstOrDefault();
+        Assert.NotNull(historyItem);
         Assert.Equal(expectedTask.Title, historyItem.Title);
         Assert.Equal(expectedTask.Description, historyItem.Description);
         Assert.Equal(expectedTask.StartTime.ToString(), historyItem.StartTime.ToString());
@@ -275,7 +282,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -289,7 +296,7 @@ public partial class UpdateTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Null(actualData.StartTime);
@@ -302,7 +309,7 @@ public partial class UpdateTest: BaseTest
         var expectedTask = _taskFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            TaskId = _task.TaskId,
+            TaskId = _task.Id,
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
@@ -315,7 +322,7 @@ public partial class UpdateTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.Equal(_task.TaskId, actualData.TaskId);
         Assert.Equal(_otherTaskList.Id, actualData.TaskList.Id);
         Assert.Null(actualData.ReminderTime);

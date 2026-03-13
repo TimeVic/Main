@@ -7,7 +7,7 @@
 
     <TaskListsDropDown
         Clearable="false"
-        Value="@(_selectedTaskList?.Id ?? 0)"
+        Value="@(_selectedTaskList?.Id ?? Guid.Empty)"
         Disabled="@(!_tasksListState.Value.List.Any())"
         SelectedItemChanged="@((taskList) => OnSelectedTasksList(taskList))"/>
     

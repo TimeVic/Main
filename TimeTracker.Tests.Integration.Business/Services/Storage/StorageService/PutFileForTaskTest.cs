@@ -32,7 +32,7 @@ public class PutFileForTaskTest: BaseTest
     public async Task ShouldPutFile()
     {
         var actualFile = await _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment);
-        Assert.True(actualFile.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualFile.Id);
         Assert.NotEmpty(actualFile.MimeType);
         Assert.NotEmpty(actualFile.CloudFilePath);
         Assert.NotNull(actualFile.Extension);
@@ -40,7 +40,7 @@ public class PutFileForTaskTest: BaseTest
         Assert.True(actualFile.Size > 0);
         Assert.Equal(StoredFileType.Attachment, actualFile.Type);
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Contains(actualTask.Attachments, item => item.Id == actualFile.Id);
     }

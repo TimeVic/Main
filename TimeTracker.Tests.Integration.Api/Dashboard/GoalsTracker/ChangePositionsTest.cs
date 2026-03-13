@@ -76,14 +76,14 @@ public class ChangePositionsTest: BaseTest
         var goal3 = goals.Skip(2).First();
         var goal4 = goals.Skip(3).First();
         
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new ChangePositionsRequest()
         {
             Date = expectedDate,
             WorkspaceId = _workspace.Id,
-            Positions = new Dictionary<long, int>()
+            Positions = new Dictionary<Guid, int>()
             {
                 { goal1.Id, 6 },
                 { goal2.Id, 2 },
@@ -95,6 +95,7 @@ public class ChangePositionsTest: BaseTest
         // Assert
         response.EnsureSuccessStatusCode();
 
+        await FlushDbChanges(true);
         await DbSessionProvider.CurrentSession.RefreshAsync(existsTracker);
         Assert.Equal(6, existsTracker.Items.First(item => item.Id == goal1.Id).Position);
         Assert.Equal(2, existsTracker.Items.First(item => item.Id == goal2.Id).Position);
@@ -112,7 +113,7 @@ public class ChangePositionsTest: BaseTest
             WorkspaceId = (await _userDao.GetUsersWorkspaces(user2, MembershipAccessType.Owner)).First().Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);
     }
 }

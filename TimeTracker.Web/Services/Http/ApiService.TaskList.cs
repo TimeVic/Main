@@ -23,7 +23,7 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<GetListResponse?>(ApiUrl.TaskListList, model);
         }
         
-        public async Task TaskListArchiveAsync(long taskListId)
+        public async Task TaskListArchiveAsync(Guid taskListId)
         {
             await PostAsync<TaskListDto>(ApiUrl.TaskListArchive, new ArchiveTaskListRequest()
             {

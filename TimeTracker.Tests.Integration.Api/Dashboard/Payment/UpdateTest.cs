@@ -25,9 +25,7 @@ public class UpdateTest: BaseTest
     private readonly string _jwtToken;
     private readonly IClientDao _clientDao;
     private readonly WorkspaceEntity _workspace;
-    private readonly ClientEntity _client;
     private readonly IProjectDao _projectDao;
-    private readonly ProjectEntity _project;
     private readonly IPaymentSeeder _paymentSeeder;
     private readonly PaymentEntity _payment;
 
@@ -40,7 +38,10 @@ public class UpdateTest: BaseTest
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _payment = _paymentSeeder.CreateSeveralAsync(_user, 1).Result.First();
-        DbSessionProvider.PerformCommitAsync().Wait();
+        FlushDbChanges().Wait();
+
+        Assert.NotNull(_payment);
+        Assert.NotNull(_payment.Project);
     }
 
     [Fact]
@@ -55,7 +56,7 @@ public class UpdateTest: BaseTest
             Amount = expectPayment.Amount,
             Description = expectPayment.Description,
             PaymentTime = expectPayment.PaymentTime,
-            ProjectId = _payment.Project.Id,
+            ProjectId = _payment.Project!.Id,
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -67,7 +68,7 @@ public class UpdateTest: BaseTest
         var expectedClient = await _clientDao.CreateAsync(_workspace, "Test new client");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test new project");
         expectProject.SetClient(expectedClient);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
@@ -83,7 +84,9 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualPayment = await response.GetJsonDataAsync<PaymentDto>();
-        Assert.True(actualPayment.Id > 0);
+        Assert.NotNull(actualPayment);
+        Assert.NotNull(actualPayment.Project);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(expectedClient.Id, actualPayment.Client.Id);
         Assert.Equal(expectProject.Id, actualPayment.Project.Id);
         Assert.Equal(expectPayment.Amount, actualPayment.Amount);
@@ -105,9 +108,9 @@ public class UpdateTest: BaseTest
             Amount = expectPayment.Amount,
             Description = expectPayment.Description,
             PaymentTime = expectPayment.PaymentTime,
-            ProjectId = _payment.Project.Id
+            ProjectId = _payment.Project!.Id
         });
-        var errorResponse = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.Type);
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
 }

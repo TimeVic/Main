@@ -42,19 +42,19 @@ public class RemoveAccessTest: BaseTest
         var expectedAccess = MembershipAccessType.User;
         var expectedUser = await _userSeeder.CreateActivatedAsync();
         var expectedProject1 = await _projectDao.CreateAsync(_workspace, "Test 1");
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
 
         var actualMembership = await _workspaceAccessService.ShareAccessAsync(_workspace, expectedUser, expectedAccess,
             new List<ProjectAccessModel>()
             {
                 new () { Project = expectedProject1 }
             });
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         Assert.Equal(_workspace.Id, actualMembership.Workspace.Id);
 
         var isRemoved = await _workspaceAccessService.RemoveAccessAsync(actualMembership.Id);
         Assert.True(isRemoved);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
         Assert.DoesNotContain(_workspace.Memberships, item => item.User.Id == expectedUser.Id);

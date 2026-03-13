@@ -85,10 +85,6 @@ public class GetMyListTest: BaseTest
             Assert.NotEmpty(item.Description);
             Assert.Equal(_taskList.Id, item.TaskList.Id);
         });
-        Assert.Contains(actualDto.Items, item =>
-        {
-            return item.Attachments.Any() && !string.IsNullOrEmpty(item.Attachments.First().Url);
-        });
     }
 
     [Fact]

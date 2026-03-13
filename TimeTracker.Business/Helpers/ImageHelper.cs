@@ -35,7 +35,7 @@ public static class ImageHelper
             using var stream = new MemoryStream(imageBytes);
             await Image.LoadAsync(stream);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return false;
         }

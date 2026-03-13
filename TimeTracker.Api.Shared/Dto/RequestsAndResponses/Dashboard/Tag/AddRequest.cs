@@ -9,12 +9,11 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag
     public class AddRequest : IRequest<TagDto>
     {
         [Required]
-        [IsPositive]
-        public long WorkspaceId { get; set; }
+        public Guid WorkspaceId { get; set; }
         
         [Required]
         [StringLength(256, MinimumLength = 2)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
         
         [IsColor]
         public string? Color { get; set; }

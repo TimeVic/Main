@@ -1,21 +1,17 @@
 ﻿using Api.Requests.Abstractions;
 using AutoMapper;
-using Persistence.Transactions.Behaviors;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
-using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 {
-    public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, TaskDto>
+    public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, TaskFullDto>
     {
         private readonly IMapper _mapper;
         private readonly IUserDao _userDao;
@@ -38,7 +34,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             _taskDao = taskDao;
         }
     
-        public async Task<TaskDto> ExecuteAsync(UpdateRequest request)
+        public async Task<TaskFullDto> ExecuteAsync(UpdateRequest request)
         {
             var user = await _userDao.GetById(request.UserId);
             if (user == null)
@@ -51,10 +47,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                 throw new ValidationException("Incorrect TaskListId");
             }
             
-            var task = await _taskDao.GetByWorkspaceTaskId(
-                taskList.Project.Workspace.Id,
-                request.TaskId
-            );
+            var task = await _taskDao.GetById(request.TaskId);
+            RecordNotFoundException.ThrowIfNull(task);
+            
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList))
                 throw new HasNoAccessException("This user has no permissions for provided task list");
             
@@ -67,7 +62,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             var tags = task.Workspace.Tags.Where(
                 item => request.TagIds.Any(tagId => item.Id == tagId)
             );
-            await _taskDao.UpdateTaskAsync(
+            task = await _taskDao.UpdateTaskAsync(
                 task,
                 taskList: taskList,
                 user: user,
@@ -81,7 +76,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                 tags: tags,
                 reminderTime: request.ReminderTime
             );
-            return _mapper.Map<TaskDto>(task);
+            return _mapper.Map<TaskFullDto>(task);
         }
     }
 }

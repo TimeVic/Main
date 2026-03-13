@@ -8,10 +8,6 @@ namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.Jira;
 public class IsCorrectTaskIdTest : BaseTest
 {
     private readonly IJiraClient _client;
-    private readonly string _securityKey;
-
-    private readonly string _teamId;
-    private readonly string _taskId;
 
     public IsCorrectTaskIdTest() : base(false)
     {

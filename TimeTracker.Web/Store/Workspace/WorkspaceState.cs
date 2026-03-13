@@ -28,7 +28,7 @@ public record WorkspaceState
     
     public WorkspaceDto? ItemToAdd
     {
-        get => List.FirstOrDefault(item => item.Id == 0);
+        get => List.FirstOrDefault(item => item.Id == Guid.Empty);
     }
     
     public int TotalCount { get; set; }

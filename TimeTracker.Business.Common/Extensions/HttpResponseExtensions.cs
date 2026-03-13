@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using TimeTracker.Business.Common.Dto;
 using TimeTracker.Business.Common.Helpers;
 
 namespace TimeTracker.Business.Common.Extensions
@@ -19,6 +20,30 @@ namespace TimeTracker.Business.Common.Extensions
         public static async Task<string> GetDataAsStringAsync(this HttpResponseMessage response)
         {
             return await response.Content.ReadAsStringAsync();
+        }
+        
+        public static async Task EnsureSuccessStatusCodeWithoutError(this HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseModel = await response.GetJsonResponseAsync<object>();
+                throw new HttpRequestException($"Http request response returned an error: {responseModel.ErrorCode} - {responseModel.Message}");
+            }
+        }
+        
+        public static async Task<JsonCommonResponse<T>> GetJsonResponseAsync<T>(this HttpResponseMessage response)
+        {
+            return (await response.GetJsonDataAsync<JsonCommonResponse<T>>())!;
+        }
+        
+        public static async Task<T> GetJsonResponseDataAsync<T>(this HttpResponseMessage response)
+        {
+            var jsonResponse = await response.GetJsonResponseAsync<T>();
+            if (jsonResponse == null)
+            {
+                throw new Exception("Model was not parsed");
+            }
+            return jsonResponse.Data;
         }
     }
 }

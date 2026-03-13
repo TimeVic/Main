@@ -6,7 +6,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
     public class UpdateRequest : AddRequest
     {
         [Required]
-        [IsPositive]
-        public long TaskListId { get; set; }
+        public Guid TaskListId { get; set; }
     }
 }

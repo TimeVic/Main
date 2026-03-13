@@ -65,7 +65,7 @@ public class AddTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualProject = await response.GetJsonDataAsync<TaskListDto>();
-        Assert.True(actualProject.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualProject.Id);
         Assert.Equal(taskList.Name, actualProject.Name);
     }
     
@@ -81,7 +81,7 @@ public class AddTest: BaseTest
             ProjectId = otherProject.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 }

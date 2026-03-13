@@ -32,8 +32,7 @@ public class FileStorageRelationshipService: IFileStorageRelationshipService
     }
     
     public async Task<IEntity> GetFileRelationship(
-        long workspaceId,
-        long entityId,
+        Guid entityId,
         StorageEntityType entityType
     )
     {
@@ -44,7 +43,7 @@ public class FileStorageRelationshipService: IFileStorageRelationshipService
         }
         if (entityType == StorageEntityType.Task)
         {
-            entity = await _taskDao.GetByWorkspaceTaskId(workspaceId, entityId);
+            entity = await _taskDao.GetById(entityId);
         }
         if (entityType == StorageEntityType.TaskComment)
         {

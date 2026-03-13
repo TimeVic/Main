@@ -59,6 +59,7 @@ public class GetUsersHourlyRateForProjectTest: BaseTest
     [Fact]
     public async Task ShouldReturnHourlyRateForOwner()
     {
+        await FlushDbChanges();
         var actualRate = await _projectService.GetUsersHourlyRateForProject(_user, _project);
         Assert.Equal(_project.DefaultHourlyRate, actualRate);
     }

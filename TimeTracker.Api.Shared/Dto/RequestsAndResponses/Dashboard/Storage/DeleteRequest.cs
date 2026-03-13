@@ -11,6 +11,5 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
 public class DeleteRequest: IRequest
 {
     [Required]
-    [IsPositive]
-    public long Id { get; set; }
+    public Guid Id { get; set; }
 }

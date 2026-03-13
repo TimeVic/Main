@@ -33,6 +33,7 @@ namespace TimeTracker.Business.Helpers
                 .AddJsonFile("appsettings.Debug.json", true, true)
 #endif
                 .AddJsonFile($"appsettings.{HostingEnvironment}.json", true)
+                .AddJsonFile($"appsettings.Testing.json", optional: true)
                 .AddJsonFile($"appsettings.Local.json", optional: true)
                 .AddEnvironmentVariables();
         }

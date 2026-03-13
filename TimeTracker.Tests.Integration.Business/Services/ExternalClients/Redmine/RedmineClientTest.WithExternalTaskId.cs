@@ -20,7 +20,7 @@ public partial class RedmineClientTest
     {
         var task = await _taskSeeder.CreateAsync(user: _user);
         task.ExternalTaskId = _taskId;
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var expectedDescription = "Test description";
         var date = DateTime.UtcNow.Date.ToDateOnly();
@@ -33,12 +33,13 @@ public partial class RedmineClientTest
             description: expectedDescription,
             internalTask: task
         );
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
         var actualResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
+        Assert.NotNull(actualResponse);
         Assert.NotEmpty(actualResponse.Id);
         Assert.Equal(expectedDescription, actualResponse.Comment);
 

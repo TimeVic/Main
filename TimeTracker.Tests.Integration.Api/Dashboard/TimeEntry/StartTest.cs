@@ -65,7 +65,7 @@ public partial class StartTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Null(actualDto.Description);
         Assert.True(actualDto.StartTime < DateTime.UtcNow.TimeOfDay);
         Assert.True(actualDto.Date > DateOnly.MinValue);
@@ -105,7 +105,7 @@ public partial class StartTest: BaseTest
     {
         var fakeTimeEntry = _timeEntryFactory.Generate();
         var project = await _projectDao.CreateAsync(_defaultWorkspace, "Test project");
-        await CommitDbChanges();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
@@ -118,8 +118,9 @@ public partial class StartTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Equal(fakeTimeEntry.Description, actualDto.Description);
+        Assert.NotNull(actualDto.Project);
         Assert.Equal(project.Id, actualDto.Project.Id);
         Assert.Equal(fakeTimeEntry.IsBillable, actualDto.IsBillable);
         Assert.Null(actualDto.EndTime);
@@ -138,7 +139,7 @@ public partial class StartTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Equal(expectedStartTime, actualDto.StartTime);
     }
     

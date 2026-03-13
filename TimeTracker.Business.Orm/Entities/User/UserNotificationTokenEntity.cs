@@ -1,30 +1,15 @@
-using Domain.Abstractions;
-using NHibernate.Mapping.Attributes;
-using NHibernate.Type;
+using TimeTracker.Business.Orm.Core;
 
 namespace TimeTracker.Business.Orm.Entities.User
 {
-    [Class(Table = "user_notification_tokens")]
-    public class UserNotificationTokenEntity: IEntity
-    {
-        [Id(Name = "Id", Generator = "native")]
-        [Column(Name = "id", SqlType = "bigint", NotNull = true)]
-        public virtual long Id { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "token", Length = 200, NotNull = true)]
-        public virtual string Token { get; set; }
-        
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
-        public virtual DateTime CreateTime { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(UserEntity), 
-            Column = "user_id", 
-            Lazy = Laziness.False,
-            Cascade = "none"
-        )]
-        public virtual UserEntity User { get; set; }
+    public class UserNotificationTokenEntity: AEntity
+    {   
+        public virtual required string Token { get; set; }
+
+        #region Relationships
+
+        public virtual required UserEntity User { get; set; }
+
+        #endregion
     }
 }

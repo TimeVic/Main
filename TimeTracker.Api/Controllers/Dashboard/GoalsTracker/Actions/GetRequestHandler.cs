@@ -16,7 +16,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
     public class GetRequestHandler : IAsyncRequestHandler<GetRequest, GoalsTrackerDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IClientDao _clientDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -25,7 +25,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
 
         public GetRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IClientDao clientDao,
             IDbSessionProvider sessionProvider,
@@ -34,7 +34,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _clientDao = clientDao;
             _sessionProvider = sessionProvider;
@@ -44,7 +44,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
     
         public async Task<GoalsTrackerDto> ExecuteAsync(GetRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (workspace == null)
@@ -56,7 +56,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
                 throw new HasNoAccessException();
             }
             var goalsTracker = await _goalsTrackerDao.CheckAndCreate(user, workspace, request.Date);
-            await _sessionProvider.PerformCommitAsync();
             return _mapper.Map<GoalsTrackerDto>(goalsTracker);
         }
     }

@@ -13,7 +13,7 @@ public interface ITagDao: IDomainService
         Color? color = null
     );
 
-    Task<TagEntity?> GetById(long? id);
+    Task<TagEntity?> GetById(Guid? id);
 
     Task<ICollection<TagEntity>> GetList(WorkspaceEntity workspace);
 

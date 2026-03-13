@@ -9,11 +9,7 @@ namespace TimeTracker.Tests.Integration.Business.Services.ExternalClients.Redmin
 public class IsCorrectTaskIdTest : BaseTest
 {
     private readonly IRedmineClient _redmineClient;
-    private readonly string _securityKey;
-
-    private readonly string _teamId;
-    private readonly string _taskId;
-
+    
     public IsCorrectTaskIdTest() : base(false)
     {
         _redmineClient = Scope.Resolve<IRedmineClient>();

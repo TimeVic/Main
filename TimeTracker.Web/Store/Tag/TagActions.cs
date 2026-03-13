@@ -11,6 +11,6 @@ public record struct DeleteItemAction(TagDto Tag);
 
 public record struct SetListItemAction(TagDto Tag);
 
-public record struct DeleteListItemAction(long TagId);
+public record struct DeleteListItemAction(Guid TagId);
 
 public record struct SetIsListLoading(bool IsLoading);

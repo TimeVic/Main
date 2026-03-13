@@ -29,7 +29,7 @@ public class PutFileTest: BaseTest
     public async Task ShouldPutFile()
     {
         var actualFile = await _fileStorage.PutFileAsync(_user, CreateFormFile(), StoredFileType.Attachment);
-        Assert.True(actualFile.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualFile.Id);
         Assert.NotEmpty(actualFile.MimeType);
         Assert.NotEmpty(actualFile.CloudFilePath);
         Assert.NotNull(actualFile.Extension);
@@ -45,7 +45,7 @@ public class PutFileTest: BaseTest
     {
         var formFile = CreateFormFile("images/image.jpg");
         var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
-        Assert.True(actualFile.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualFile.Id);
     }
     
     [Fact]
@@ -53,7 +53,7 @@ public class PutFileTest: BaseTest
     {
         var formFile = CreateFormFile("sample-30mb.pdf");
         var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
-        Assert.True(actualFile.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualFile.Id);
     }
     
     [Fact]

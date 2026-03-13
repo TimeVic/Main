@@ -70,9 +70,7 @@ public partial class TaskCommentNotificationHandlerTest: BaseTest
         await _userNotificationTokenDao.Set(watcher1, FirebaseClientServiceMock.SuccessToken2);
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        await CommitDbChanges();
-
-        await DbSessionProvider.CurrentSession.RefreshAsync(comment);
+        await FlushAndRefreshEntity(comment);
         
         // Act
         await _notificationCenterService.Push(NotificationActionType.AddEntity, _user, comment);
@@ -80,6 +78,7 @@ public partial class TaskCommentNotificationHandlerTest: BaseTest
         // Assert
         Assert.True(FirebaseClientService.SentMessages.Any());
 
+        await FlushDbChanges();
         var actualListDto = await _notificationCenterService.GetList(watcher1, _task.Workspace);
         Assert.Equal(1, actualListDto.TotalCount);
         Assert.Contains(actualListDto.Items, item =>
@@ -113,8 +112,7 @@ public partial class TaskCommentNotificationHandlerTest: BaseTest
         await _userNotificationTokenDao.Set(watcher1, FirebaseClientServiceMock.SuccessToken2);
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        await CommitDbChanges();
-
+        await FlushDbChanges(true);
         await DbSessionProvider.CurrentSession.RefreshAsync(comment);
         
         // Act
@@ -123,6 +121,7 @@ public partial class TaskCommentNotificationHandlerTest: BaseTest
         // Assert
         Assert.True(FirebaseClientService.SentMessages.Any());
 
+        await FlushDbChanges();
         var actualListDto = await _notificationCenterService.GetList(watcher1, _task.Workspace);
         Assert.Equal(1, actualListDto.TotalCount);
         Assert.Contains(actualListDto.Items, item =>
@@ -154,7 +153,7 @@ public partial class TaskCommentNotificationHandlerTest: BaseTest
         await _userNotificationTokenDao.Set(watcher1, FirebaseClientServiceMock.SuccessToken2);
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(comment);
         
@@ -165,7 +164,7 @@ public partial class TaskCommentNotificationHandlerTest: BaseTest
             TaskCommentId = comment.Id,
             ProducedUserId = _user.Id
         });
-        await _queueService.ProcessAsync(QueueChannel.Default);
+        await QueueProcess(QueueChannel.Default);
         
         // Assert
         Assert.True(FirebaseClientService.SentMessages.Any());

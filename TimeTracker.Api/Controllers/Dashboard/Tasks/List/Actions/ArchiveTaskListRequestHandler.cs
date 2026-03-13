@@ -16,7 +16,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
     public class ArchiveTaskListRequestHandler : IAsyncRequestHandler<ArchiveTaskListRequest>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -26,7 +26,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
 
         public ArchiveTaskListRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
@@ -36,7 +36,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
@@ -47,7 +47,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
     
         public async Task ExecuteAsync(ArchiveTaskListRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var taskList = await _taskListDao.GetById(request.TaskListId);
             if (taskList == null)

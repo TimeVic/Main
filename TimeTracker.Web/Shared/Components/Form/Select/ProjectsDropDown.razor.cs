@@ -11,7 +11,7 @@ public partial class ProjectsDropDown
     public bool ShowProjectsWithoutClients { get; set; } = true;
     
     [Parameter]
-    public long? ClientId
+    public Guid? ClientId
     {
         get => _clientId;
         set
@@ -28,7 +28,7 @@ public partial class ProjectsDropDown
     [Inject]
     public IState<ProjectState> _state { get; set; }
     
-    private long? _clientId;
+    private Guid? _clientId;
 
     protected override void OnInitialized()
     {
@@ -45,7 +45,7 @@ public partial class ProjectsDropDown
     private void UpdateList()
     {
         _list = _state.Value.List;
-        if (_clientId == 0 && ShowProjectsWithoutClients)
+        if (_clientId == Guid.Empty && ShowProjectsWithoutClients)
         {
             _list = _list.Where(item => item.Client == null).ToList();
             return;

@@ -60,8 +60,9 @@ public class DeleteTest: BaseTest
         });
         
         // Assert
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
+        await FlushDbChanges(true);
         var actualItem = await DbSessionProvider.CurrentSession.GetAsync<GoalsTrackerItemEntity>(_trackerItem.Id);
         Assert.True(actualItem.IsArchived);
     }
@@ -72,13 +73,13 @@ public class DeleteTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new DeleteItemRequest()
         {
-            Id = 9999
+            Id = Guid.Empty
         });
         
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -97,7 +98,7 @@ public class DeleteTest: BaseTest
         
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 }

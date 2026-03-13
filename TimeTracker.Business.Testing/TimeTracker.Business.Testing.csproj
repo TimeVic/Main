@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <LangVersion>12</LangVersion>
         <TargetFramework>net10.0</TargetFramework>
+        <WarningsAsErrors>CS0168,CS8602,CS0169,CS1998</WarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,6 +21,14 @@
 
     <ItemGroup>
       <Folder Include="Core\" />
+      <Folder Include="Factories\Entity\FileStorage\" />
+      <Folder Include="Seeders\Entity\FileStorage\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Seeders\Entity\FileStorage\FileStorageBucketSeeder.cs" />
+      <Compile Remove="Seeders\Entity\FileStorage\IFileStorageBucketSeeder.cs" />
+      <Compile Remove="Factories\Entity\FileStorage\FileStorageBucketEntityFactory.cs" />
     </ItemGroup>
 
 </Project>

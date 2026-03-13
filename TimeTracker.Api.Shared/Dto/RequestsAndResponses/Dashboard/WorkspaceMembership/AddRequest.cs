@@ -8,8 +8,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMem
     public class AddRequest : IRequest<WorkspaceMembershipDto>
     {
         [Required]
-        [IsPositive]
-        public long WorkspaceId { get; set; }
+        public Guid WorkspaceId { get; set; }
         
         [Required]
         [EmailAddress]

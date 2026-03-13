@@ -11,7 +11,6 @@ namespace TimeTracker.Tests.Integration.Business.Db.Dao.Tasks.TaskHistoryItem;
 public class GetBatchToNotifyTest: BaseTest
 {
     private readonly IUserSeeder _userSeeder;
-    private readonly IProjectSeeder _projectSeeder;
     private readonly ITaskHistoryItemDao _taskHistoryItemDao;
     private readonly ITaskSeeder _taskSeeder;
     
@@ -34,6 +33,8 @@ public class GetBatchToNotifyTest: BaseTest
     {
         var task = await _taskSeeder.CreateAsync();
         await _taskHistoryItemDao.Create(task, _user);
+        
+        await FlushDbChanges();
         var actualHistoryItems = await _taskHistoryItemDao.GetBatchToNotify(0);
         Assert.Single(actualHistoryItems);
         
@@ -48,6 +49,7 @@ public class GetBatchToNotifyTest: BaseTest
         await _taskHistoryItemDao.Create(task, _user);
         await _taskHistoryItemDao.Create(task, _user);
         
+        await FlushDbChanges();
         var actualHistoryItems = await _taskHistoryItemDao.GetBatchToNotify(0);
         Assert.Single(actualHistoryItems);
         
@@ -63,6 +65,7 @@ public class GetBatchToNotifyTest: BaseTest
         var task2 = await _taskSeeder.CreateAsync();
         await _taskHistoryItemDao.Create(task2, _user);
         
+        await FlushDbChanges();
         var actualHistoryItems = await _taskHistoryItemDao.GetBatchToNotify(0);
         Assert.Equal(2, actualHistoryItems.Count);
         Assert.Contains(actualHistoryItems, item => item.Task.Id == task1.Id || item.Task.Id == task2.Id);
@@ -74,12 +77,13 @@ public class GetBatchToNotifyTest: BaseTest
         var expetedTimeOut = 30;
         var task1 = await _taskSeeder.CreateAsync();
         var firstItem = await _taskHistoryItemDao.Create(task1, _user);
-        firstItem.CreateTime = firstItem.CreateTime.AddSeconds(-expetedTimeOut);
+        firstItem.CreatedAt = firstItem.CreatedAt.AddSeconds(-expetedTimeOut);
         
         var secondItem = await _taskHistoryItemDao.Create(task1, _user);
-        secondItem.CreateTime = DateTime.UtcNow;
-        await CommitDbChanges();
+        secondItem.CreatedAt = DateTime.UtcNow;
+        await FlushDbChanges();
         
+        await FlushDbChanges();
         var actualHistoryItems = await _taskHistoryItemDao.GetBatchToNotify(30);
         Assert.Equal(1, actualHistoryItems.Count);
         Assert.All(actualHistoryItems, item =>
@@ -87,6 +91,7 @@ public class GetBatchToNotifyTest: BaseTest
             Assert.Equal(firstItem.Id, item.Id);
         });
         
+        await FlushDbChanges();
         actualHistoryItems = await _taskHistoryItemDao.GetBatchToNotify(0);
         Assert.Equal(1, actualHistoryItems.Count);
         Assert.All(actualHistoryItems, item =>

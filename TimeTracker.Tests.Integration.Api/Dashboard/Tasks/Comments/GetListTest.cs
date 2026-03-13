@@ -64,8 +64,7 @@ public class GetListTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
         {
             Page = 1,
-            TaskId = _task.TaskId,
-            WorkspaceId = _workspace.Id
+            TaskId = _task.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -76,8 +75,7 @@ public class GetListTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
             Page = 1,
-            TaskId = _task.TaskId,
-            WorkspaceId = _workspace.Id
+            TaskId = _task.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -86,9 +84,9 @@ public class GetListTest: BaseTest
         Assert.Equal(4, actualResponse.TotalCount);
         foreach (var currentItem in actualResponse.Items)
         {
-            Assert.True(currentItem.Id > 0);
+            Assert.NotEqual(Guid.Empty, currentItem.Id);
             Assert.NotEmpty(currentItem.Comment);
-            Assert.True(currentItem.CreateTime.ToUniversalTime() <= DateTime.UtcNow);
+            Assert.True(currentItem.CreatedAt.ToUniversalTime() <= DateTime.UtcNow);
             Assert.Equal(_task.TaskId, currentItem.Task.TaskId);
         }
     }
@@ -102,8 +100,7 @@ public class GetListTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
             Page = 1,
-            TaskId = _task.TaskId,
-            WorkspaceId = _workspace.Id
+            TaskId = _task.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -124,11 +121,10 @@ public class GetListTest: BaseTest
         var response = await PostRequestAsync(Url, otherToken, new GetListRequest()
         {
             Page = 1,
-            TaskId = _task.TaskId,
-            WorkspaceId = _workspace.Id
+            TaskId = _task.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 }

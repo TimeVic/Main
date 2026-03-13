@@ -79,8 +79,9 @@ public class ProcessJiraSendingContextTest: BaseTest
         ).Result;
         settings.IsActive = true;
 
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
         _queueDao.CompleteAllPending().Wait();
+        Assert.NotNull(_jiraClient);
         _jiraClient.Reset();
     }
 
@@ -94,13 +95,13 @@ public class ProcessJiraSendingContextTest: BaseTest
         Assert.Null(_timeEntry.JiraId);
 
         await _queueService.PushExternalClientAsync(testContext);
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
         
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(1, _jiraClient.SentTimeEntries.Count);
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.NotNull(_timeEntry.JiraId);
     }
@@ -110,11 +111,12 @@ public class ProcessJiraSendingContextTest: BaseTest
     {
         await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
         var settings = _workspace.GetJiraSettings(_user.Id); 
+        Assert.NotNull(settings);
         settings.IsActive = false;
         
         var timeEntryWithAnotherUser = (await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user)).First();
         timeEntryWithAnotherUser.TaskId = _taskId;
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var testContext = new SendSetTimeEntryIntegrationRequestContext()
         {
@@ -124,11 +126,11 @@ public class ProcessJiraSendingContextTest: BaseTest
 
         await _queueService.PushExternalClientAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(0, _jiraClient.SentTimeEntries.Count);
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(timeEntryWithAnotherUser);
         Assert.Null(timeEntryWithAnotherUser.JiraId);
     }
@@ -137,7 +139,7 @@ public class ProcessJiraSendingContextTest: BaseTest
     public async Task ShouldFillTimeEntryFromTaskDetails()
     {
         _timeEntry.Description = "";
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var testContext = new SendSetTimeEntryIntegrationRequestContext()
         {
@@ -147,11 +149,11 @@ public class ProcessJiraSendingContextTest: BaseTest
 
         await _queueService.PushExternalClientAsync(testContext);
 
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(actualProcessedCounter == 1);
         Assert.Equal(1, _jiraClient.SentTimeEntries.Count);
 
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(_timeEntry);
         Assert.NotNull(_timeEntry.JiraId);
         Assert.NotEmpty(_timeEntry.Description);

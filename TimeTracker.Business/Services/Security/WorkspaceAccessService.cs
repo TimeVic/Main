@@ -1,4 +1,5 @@
-﻿using NHibernate.Linq;
+﻿using NHibernate;
+using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
@@ -37,11 +38,11 @@ public class WorkspaceAccessService: IWorkspaceAccessService
             {
                 User = user,
                 Workspace = workspace,
-                CreateTime = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow
             };
             workspace.Memberships.Add(membership);
         }
-        membership.UpdateTime = DateTime.UtcNow;
+        membership.UpdatedAt = DateTime.UtcNow;
         membership.Access = access;
 
         projectsAccess ??= new List<ProjectAccessModel>();
@@ -54,8 +55,8 @@ public class WorkspaceAccessService: IWorkspaceAccessService
                 {
                     Project = projectAccess.Project,
                     HourlyRate = projectAccess.HourlyRate,
-                    CreateTime = DateTime.UtcNow,
-                    UpdateTime = DateTime.UtcNow,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
                     WorkspaceMembership = membership
                 };
                 membership.ProjectAccesses.Add(accessEntity);
@@ -65,7 +66,7 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         return membership;
     }
 
-    public async Task<bool> RemoveAccessAsync(long membershipId)
+    public async Task<bool> RemoveAccessAsync(Guid membershipId)
     {
         await _sessionProvider.CurrentSession.Query<WorkspaceMembershipProjectAccessEntity>()
             .Where(item => item.WorkspaceMembership.Id == membershipId)
@@ -82,18 +83,18 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         ProjectEntity? project = null
     )
     {
-        var member = await GetMembershipAsync(user, workspace);
+        var member = GetMembershipAsync(user, workspace);
         return member?.Access;
     }
     
     public async Task<MembershipAccessType?> GetAccessTypeAsync(UserEntity user, ProjectEntity project)
     {
-        var member = await GetMembershipAsync(user, project.Workspace);
+        var member = GetMembershipAsync(user, project.Workspace);
         if (member == null)
         {
             return null;
         }
-        if (member.Access == MembershipAccessType.Manager || member.Access == MembershipAccessType.Owner)
+        if (member.Access is MembershipAccessType.Manager or MembershipAccessType.Owner)
         {
             return member.Access;
         }
@@ -108,13 +109,11 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         return null;
     }
     
-    public Task<WorkspaceMembershipEntity?> GetMembershipAsync(
+    public WorkspaceMembershipEntity? GetMembershipAsync(
         UserEntity user, 
         WorkspaceEntity workspace
     )
     {
-        return Task.FromResult(
-            workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id)   
-        );
+        return workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id);
     }
 }

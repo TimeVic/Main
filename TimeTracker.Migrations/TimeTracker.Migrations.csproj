@@ -6,22 +6,21 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>12</LangVersion>
+        <WarningsAsErrors>CS0168,CS8602,CS0169,CS1998</WarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentMigrator" Version="7.2.0" />
-      <PackageReference Include="FluentMigrator.Extensions.Postgres" Version="7.2.0" />
-      <PackageReference Include="FluentMigrator.Runner" Version="7.2.0" />
-      <PackageReference Include="FluentMigrator.Runner.Postgres" Version="7.2.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.1" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.1" />
+      <PackageReference Include="FluentMigrator" Version="8.0.1" />
+      <PackageReference Include="FluentMigrator.Extensions.Postgres" Version="8.0.1" />
+      <PackageReference Include="FluentMigrator.Runner" Version="8.0.1" />
+      <PackageReference Include="FluentMigrator.Runner.Postgres" Version="8.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.3" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.3" />
       <PackageReference Include="Npgsql" Version="10.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="appsettings.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+      <Content Include="..\Shared\appsettings.json" Link="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
       <None Update="SQLFiles\Scripts\init.sql">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
@@ -35,6 +34,12 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="SQLFiles\Procedures\fn_queue_get_top.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SQLFiles\Scripts\52_MigrateToUid.sql">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="SQLFiles\Procedures\fn_sequence_get_next.sql">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>

@@ -11,6 +11,5 @@ public class GetListRequest: IRequest<GetListResponse>
     public int Page { get; set; }
     
     [Required]
-    [IsPositive]
-    public long WorkspaceId { get; set; }
+    public Guid WorkspaceId { get; set; }
 }

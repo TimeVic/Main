@@ -51,7 +51,7 @@ public class PaymentReportTest: BaseTest
     public async Task ShouldReceivePaymentReport()
     {
         var projects = await _projectDao.CreateSeveralAsync(_defaultWorkspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         await _timeEntryDao.SetAsync(_user, _defaultWorkspace, new TimeEntryCreationDto()
         {
@@ -86,8 +86,8 @@ public class PaymentReportTest: BaseTest
         Assert.All(actualDto.Items, item =>
         {
             Assert.True(item.Amount > 0);
-            Assert.True(item.ClientId > 0);
-            Assert.True(item.ProjectId > 0);
+            Assert.NotEqual(Guid.Empty, item.ClientId);
+            Assert.NotEqual(Guid.Empty, item.ProjectId);
             Assert.True(item.TotalDuration > TimeSpan.MinValue);
             Assert.True(item.PaidAmountByClient > 0);
             Assert.True(item.PaidAmountByProject > 0);

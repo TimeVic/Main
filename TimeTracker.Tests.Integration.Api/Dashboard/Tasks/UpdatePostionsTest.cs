@@ -73,12 +73,12 @@ public class UpdatePositionsTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new UpdatePositionsRequest()
         {
             TaskListId = _taskList.Id,
-            Items = new Dictionary<long, int>()
+            Items = new Dictionary<Guid, int>()
             {
-                { _task.TaskId, 1 },
-                { task2.TaskId, 2 },
-                { task3.TaskId, 3 },
-                { task4.TaskId, 4 },
+                { _task.Id, 1 },
+                { task2.Id, 2 },
+                { task3.Id, 3 },
+                { task4.Id, 4 },
             }
         });
         response.EnsureSuccessStatusCode();
@@ -107,10 +107,10 @@ public class UpdatePositionsTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new UpdatePositionsRequest()
         {
             TaskListId = _otherTaskList.Id,
-            Items = new Dictionary<long, int>()
+            Items = new Dictionary<Guid, int>()
             {
-                { _task.TaskId, 1 },
-                { task2.TaskId, 2 },
+                { _task.Id, 1 },
+                { task2.Id, 2 },
             }
         });
         response.EnsureSuccessStatusCode();

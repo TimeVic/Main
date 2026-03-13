@@ -42,7 +42,7 @@ public class AddTest: BaseTest
         _client = _clientDao.CreateAsync(_workspace, "Test adding").Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
         _project.SetClient(_client);
-        DbSessionProvider.PerformCommitAsync().Wait();
+        FlushDbChanges().Wait();
     }
 
     [Fact]
@@ -78,7 +78,8 @@ public class AddTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualPayment = await response.GetJsonDataAsync<PaymentDto>();
-        Assert.True(actualPayment.Id > 0);
+        Assert.NotNull(actualPayment.Project);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(_client.Id, actualPayment.Client.Id);
         Assert.Equal(_project.Id, actualPayment.Project.Id);
         Assert.Equal(payment.Amount, actualPayment.Amount);
@@ -107,7 +108,7 @@ public class AddTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualPayment = await response.GetJsonDataAsync<PaymentDto>();
-        Assert.True(actualPayment.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
     }
     
     [Fact]
@@ -131,7 +132,7 @@ public class AddTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualPayment = await response.GetJsonDataAsync<PaymentDto>();
-        Assert.True(actualPayment.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
     }
     
     [Fact]
@@ -149,7 +150,7 @@ public class AddTest: BaseTest
             PaymentTime = payment.PaymentTime
         });
         
-        var responseData = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), responseData.Type);
+        var responseData = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), responseData.ErrorCode);
     }
 }

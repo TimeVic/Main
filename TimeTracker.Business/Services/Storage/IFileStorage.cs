@@ -23,9 +23,9 @@ public interface IFileStorage: IDomainService
         CancellationToken cancellationToken = default
     ) where TEntity : IEntity;
 
-    Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, long fileId);
+    Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, Guid fileId);
 
-    Task DeleteFile(UserEntity user, long fileId);
+    Task DeleteFile(UserEntity user, Guid fileId);
 
     Task<StoredFileEntity?> UploadFirstPendingToCloud(CancellationToken cancellationToken = default);
 }

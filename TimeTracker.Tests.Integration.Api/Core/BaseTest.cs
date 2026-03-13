@@ -8,8 +8,11 @@ using Microsoft.Net.Http.Headers;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Clients.Smtp;
+using TimeTracker.Business.Orm.Constants;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Business.Testing.Services;
@@ -20,6 +23,7 @@ namespace TimeTracker.Tests.Integration.Api.Core;
 public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposable
 {
     protected readonly ApiCustomWebApplicationFactory _factory;
+    protected IServiceScope ServiceScope;
     
     protected readonly IServiceProvider ServiceProvider;
     protected readonly HttpClient HttpClient;
@@ -29,39 +33,67 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     protected readonly SmtpClientServiceMock SmtpClientServiceMock;
     private readonly IDbCleanUpService _dbCleanUpService;
     protected readonly FirebaseClientServiceMock FirebaseClientService;
+    protected readonly IQueueDao _queueDao;
+    private readonly IQueueService _queueService;
 
     public BaseTest(ApiCustomWebApplicationFactory factory)
     {
         _factory = factory;
         HttpClient = _factory.CreateClient();
         
-        DbSessionProvider = _factory.Services.GetRequiredService<IDbSessionProvider>();
-        _dbCleanUpService = _factory.Services.GetRequiredService<IDbCleanUpService>();
-        UserSeeder = _factory.Services.GetRequiredService<IUserSeeder>();
-        UserFactory = _factory.Services.GetRequiredService<IDataFactory<UserEntity>>();
-        SmtpClientServiceMock = _factory.Services.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock;
-        FirebaseClientService = _factory.Services.GetRequiredService<IFirebaseClientService>() as FirebaseClientServiceMock;
-        ServiceProvider = _factory.Services;
+        ServiceScope = _factory.Services.CreateScope();
+        ServiceProvider = ServiceScope.ServiceProvider;
+        
+        DbSessionProvider = ServiceProvider.GetRequiredService<IDbSessionProvider>();
+        _dbCleanUpService = ServiceProvider.GetRequiredService<IDbCleanUpService>();
+        UserSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
+        UserFactory = ServiceProvider.GetRequiredService<IDataFactory<UserEntity>>();
+        _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
+        _queueService = ServiceProvider.GetRequiredService<IQueueService>();
+        SmtpClientServiceMock = (ServiceProvider.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock)!;
+        FirebaseClientService = (ServiceProvider.GetRequiredService<IFirebaseClientService>() as FirebaseClientServiceMock)!;
 
         _dbCleanUpService.CleanUp().Wait();
     }
-    
+
     public void Dispose()
     {
-        CommitDbChanges().Wait();
+        ServiceScope.Dispose();
         GC.SuppressFinalize(this);
     }
 
-    protected async Task CommitDbChanges()
+    protected async Task FlushDbChanges(bool isClearSession = false)
     { 
-        await DbSessionProvider.PerformCommitAsync();
-        DbSessionProvider.CurrentSession.Clear();
+        await DbSessionProvider.CurrentSession.FlushAsync();
+        if (isClearSession)
+        {
+            DbSessionProvider.CurrentSession.Clear();
+        }
+    }
+    
+    protected async Task RefreshEntity(object obj)
+    {
+        await DbSessionProvider.CurrentSession.RefreshAsync(obj);
+    }
+    
+    protected async Task FlushAndRefreshEntity(object obj, bool isClearSession = false)
+    {
+        await FlushDbChanges(isClearSession);
+        await DbSessionProvider.CurrentSession.RefreshAsync(obj);
+    }
+    
+    protected async Task<int> QueueProcess(QueueChannel channel)
+    {
+        await FlushDbChanges();
+        await _queueDao.Flush();
+        await _queueDao.UpdateProcessAtForPending();
+        return await _queueService.ProcessAsync(channel, isClearSessionForEachIteration: false);
     }
     
     #region Http
     public async Task<HttpResponseMessage> PostRequestAsAnonymousAsync(string url, object data = null)
     {
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         var requestData = JsonContent.Create(data ?? new { });
         return await HttpClient.PostAsync(url, requestData);
@@ -69,7 +101,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         
     public async Task<HttpResponseMessage> PostRequestAsync(string url, string jwtToken,  object data = null)
     {
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
         var requestData = JsonContent.Create(data ?? new {});
@@ -83,14 +115,14 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     {
         urlParams ??= new Dictionary<string, string>();
         var uri = new Uri(QueryHelpers.AddQueryString(url, urlParams), UriKind.Relative);
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         return await HttpClient.GetAsync(uri);
     }
         
     public async Task<HttpResponseMessage> GetRequestAsync(string url, string jwtToken, Dictionary<string, string>? urlParams = null)
     {
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         urlParams ??= new Dictionary<string, string>();
         HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
@@ -108,7 +140,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         IFormFile file = null
     )
     {
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         if (!string.IsNullOrEmpty(token))
         {

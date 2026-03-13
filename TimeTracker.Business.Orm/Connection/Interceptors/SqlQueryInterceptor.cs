@@ -1,14 +1,32 @@
-﻿using NHibernate;
+﻿using Microsoft.Extensions.Logging;
+using NHibernate;
 using NHibernate.SqlCommand;
-using Serilog;
+using ILogger = Serilog.ILogger;
 
 namespace TimeTracker.Business.Orm.Connection.Interceptors
 {
     public class SqlQueryInterceptor : EmptyInterceptor
     {
+        private readonly ILogger<object> _logger;
+
+        public SqlQueryInterceptor(ILogger<object> logger)
+        {
+            _logger = logger;
+        }
+
+        private readonly string[] Exclusions = [
+            "SELECT",
+            "EXEC"
+        ];
+        
         public override SqlString OnPrepareStatement(SqlString sql)
         {
-            Log.Debug($"NHibernate: {sql}");
+            var trimmedSql = sql.Trim();
+            var isShouldBeLogged = !Exclusions.Any(item => trimmedSql.StartsWithCaseInsensitive(item));
+            if (isShouldBeLogged)
+            {
+                _logger.LogDebug($"NHibernate: {sql}");
+            }
             return base.OnPrepareStatement(sql);
         }
     }

@@ -1,5 +1,11 @@
-﻿using NCrontab;
+﻿using Autofac;
+using NCrontab;
 using Persistence.Transactions.Behaviors;
+using Serilog.Extensions.Autofac.DependencyInjection;
+using TimeTracker.Business;
+using TimeTracker.Business.Helpers;
+using TimeTracker.Business.Logging;
+using TimeTracker.Business.Orm.Dao;
 
 namespace TimeTracker.WorkerServices.Core;
 
@@ -9,88 +15,133 @@ public abstract class ABackgroundService: BackgroundService
     private readonly CrontabSchedule _crontabScheduler;
 
     protected string ServiceName = "BackgroundService";
+    protected readonly IQueueDao QueueDao;
     
     private DateTime _nextTickTime;
-    protected readonly IServiceScope JobScope;
+    protected ILifetimeScope DiScope { get; set; }
     protected IServiceProvider ServiceProvider { get; set; }
     protected readonly IDbSessionProvider DbSessionProvider;
-    
+    private CancellationToken _cancellationToken;
+
     private bool _isShouldRunWork
     {
         get => DateTime.UtcNow > _nextTickTime;
     }
 
+    protected virtual bool IsEnableLogging { get; set; } = true;
+    
     public ABackgroundService(
         ILogger<ABackgroundService> logger,
         IServiceScopeFactory serviceScopeFactory
     )
     {
         _logger = logger;
-        JobScope = serviceScopeFactory.CreateScope();
-        ServiceProvider = JobScope.ServiceProvider;
+        
+        var builder = new ContainerBuilder();
+        builder.RegisterAssemblyModules(
+            typeof(BusinessAssemblyMarker).Assembly
+        );
+        
+        var configuration = ApplicationHelper.BuildConfiguration();
+        builder.RegisterInstance(configuration)
+            .As<IConfiguration>()
+            .SingleInstance();
+        
+        // Logger
+        var serilogConfiguration = LoggerInitializer.GetSerilogBuilder(false);        
+        builder.RegisterSerilog(serilogConfiguration);
+        
+        var diContainer = builder.Build();
+        DiScope = diContainer.BeginLifetimeScope();
+        
+        _logger = DiScope.Resolve<ILogger<ABackgroundService>>();
+        QueueDao = DiScope.Resolve<IQueueDao>();
+        try
+        {
+            DbSessionProvider = DiScope.Resolve<IDbSessionProvider>();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message, e);
+            throw;
+        }
+        
         DbSessionProvider = ServiceProvider.GetService<IDbSessionProvider>();
         _crontabScheduler = CrontabSchedule.Parse(
             GetCrontabExpression()
         );
         UpdateNextTickTime();
+        ServiceName = this.GetType().Name;
     }
     
-    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        LogDebug("Processing Hosted Service is starting.");
-
-        cancellationToken.Register(() =>
+        _cancellationToken = stoppingToken;
+        Log("Processing Hosted Service is starting.");
+        
+        stoppingToken.Register(() =>
         {
-            LogDebug($"Processing Hosted Service is stopping because cancelled.");
+            Log($"Processing Hosted Service is stopping because cancelled.");
         });
 
-        Task.Run(async () =>
+        await Task.Run(async () =>
         {
-            while (!cancellationToken.IsCancellationRequested)
+            while (!_cancellationToken.IsCancellationRequested)
             {
                 if (_isShouldRunWork)
                 {
                     var startTime = DateTime.UtcNow;
                     try
                     {
-                        await DoWorkAsync(cancellationToken);
+                        await DoWorkAsync(_cancellationToken);
+                        await QueueDao.Flush();
+                        await DbSessionProvider.PerformCommitAsync(true, stoppingToken);
                     }
                     catch (Exception e)
                     {
+                        QueueDao.Clear();
                         _logger.LogError(e, e.Message);
+                    }
+                    finally
+                    {
+                        DbSessionProvider.CloseCurrentSession();
                     }
 
                     var difference = DateTime.UtcNow - startTime;
-                    LogDebug("Duration of work: " + difference.ToString("g"));
+                    if (IsEnableLogging)
+                    {
+                        Log("Duration of work: " + difference.ToString("g"));
+                    }
                     UpdateNextTickTime();
                 }
 
                 Thread.Sleep(1000);
             }
-        }, cancellationToken);
+        }, _cancellationToken);
     }
 
     public override async Task StopAsync(CancellationToken stoppingToken)
     {
-        LogDebug($"Processing Hosted Service is stopping.");
+        Log($"Processing Hosted Service is stopping.");
         await base.StopAsync(stoppingToken);
     }
 
     private void UpdateNextTickTime()
     {
         _nextTickTime = _crontabScheduler.GetNextOccurrence(DateTime.UtcNow, DateTime.MaxValue);
-        LogDebug($"Next work scheduled at: {_nextTickTime}");
+        Log($"Next work scheduled at: {_nextTickTime}");
     }
 
-    protected void LogDebug(string message)
+    protected void Log(string message)
     {
-        _logger.LogDebug($"{ServiceName}: {message}");
+        _logger.LogInformation($"{ServiceName}: {message}");
     }
 
     public override void Dispose()
     {
+        DbSessionProvider.Dispose();
+        DiScope.Dispose();
         base.Dispose();
-        JobScope.Dispose();
     }
     
     protected virtual string GetCrontabExpression() => "* * * * *";

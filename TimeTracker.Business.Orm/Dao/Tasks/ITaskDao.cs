@@ -40,10 +40,10 @@ public interface ITaskDao: IDomainService
         bool isAddHistoryItem = true
     );
     
-    Task<TaskEntity?> GetById(long taskListId);
+    Task<TaskEntity?> GetById(Guid taskId);
 
     Task<TaskEntity?> GetByWorkspaceTaskId(
-        long workspaceId,
+        Guid workspaceId,
         long workspaceTaskId
     );
     
@@ -53,7 +53,7 @@ public interface ITaskDao: IDomainService
         GetTasksFilterDto? filter = null
     );
 
-    Task UpdatePositions(WorkspaceEntity workspace, IDictionary<long, int> items);
+    Task UpdatePositions(WorkspaceEntity workspace, IDictionary<Guid, int> items);
 
     Task<ICollection<TaskEntity>> GetTasksToRemind();
 }

@@ -88,6 +88,7 @@ public class SetJiraSettingsTest: BaseTest
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
         var actualSettings = _workspace.GetJiraSettings(_user.Id);
+        Assert.NotNull(actualSettings);
         Assert.True(actualSettings.IsActive);
     }
 }

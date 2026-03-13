@@ -1,4 +1,5 @@
 ﻿using NHibernate.Criterion;
+using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
@@ -19,9 +20,11 @@ public class TaskCommentDao: ITaskCommentDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<TaskCommentEntity?> GetById(long taskCommentId)
+    public async Task<TaskCommentEntity?> GetById(Guid taskCommentId)
     {
-        return await _sessionProvider.CurrentSession.GetAsync<TaskCommentEntity>(taskCommentId);
+        return await _sessionProvider.CurrentSession.Query<TaskCommentEntity>()
+            .Where(item => item.Id == taskCommentId)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<TaskCommentEntity> AddAsync(
@@ -36,8 +39,8 @@ public class TaskCommentDao: ITaskCommentDao
             Task = task,
             User = user,
             Comment = comment,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
         if (watchers != null)
         {
@@ -58,7 +61,7 @@ public class TaskCommentDao: ITaskCommentDao
     )
     {
         taskComment.Comment = comment;
-        taskComment.UpdateTime = DateTime.UtcNow;
+        taskComment.UpdatedAt = DateTime.UtcNow;
         taskComment.Watchers.Clear();
         if (watchers != null)
         {
@@ -88,12 +91,12 @@ public class TaskCommentDao: ITaskCommentDao
         var query = _sessionProvider.CurrentSession.QueryOver<TaskCommentEntity>()
             .Inner.JoinAlias(item => item.Task, () => taskAlias)
             .Inner.JoinAlias(item => item.User, () => userAlias)
-            .Where(() => taskAlias.Id == task.Id)
+            .Where(() => taskAlias!.Id == task.Id)
             .Where(item => item.IsArchived == false);
 
         var offset = PaginationUtils.CalculateOffset(page);
         var items = await query
-            .OrderBy(item => item.CreateTime).Desc()
+            .OrderBy(item => item.CreatedAt).Desc()
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
             .ListAsync<TaskCommentEntity>();

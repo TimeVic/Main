@@ -14,21 +14,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 {
     public class DeleteRequestHandler : IAsyncRequestHandler<DeleteRequest>
     {
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ITimeEntryDao _timeEntryDao;
         private readonly ISecurityManager _securityManager;
         private readonly ITimeEntryService _timeEntryService;
 
         public DeleteRequestHandler(
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ITimeEntryDao timeEntryDao,
             ISecurityManager securityManager,
             ITimeEntryService timeEntryService
         )
         {
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _timeEntryDao = timeEntryDao;
             _securityManager = securityManager;
@@ -37,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var timeEntry = await _timeEntryDao.GetByIdAsync(request.TimeEntryId);
             if (timeEntry == null)

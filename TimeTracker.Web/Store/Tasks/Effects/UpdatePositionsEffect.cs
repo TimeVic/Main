@@ -32,12 +32,12 @@ public class UpdatePositionsEffect: Effect<UpdatePositionsAction>
         try
         {
             var taskListId = action.Tasks.Select(x => x.TaskList.Id).FirstOrDefault();
-            if (taskListId == 0)
+            if (taskListId == Guid.Empty)
             {
                 _logger.LogError("Task List Id can not be null");
             }
 
-            var items = action.Tasks.ToDictionary(x => x.TaskId, x => x.PositionIndex);
+            var items = action.Tasks.ToDictionary(x => x.Id, x => x.PositionIndex);
             await _apiService.TasksUpdatePositionsAsync(new UpdatePositionsRequest()
             {
                 TaskListId = taskListId,

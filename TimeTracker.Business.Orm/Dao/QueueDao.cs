@@ -17,7 +17,7 @@ public class QueueDao: IQueueDao
     public QueueDao(IDbSessionProvider sessionProvider, ILogger<IQueueDao> logger)
     {
         _logger = logger;
-        _session = sessionProvider.CreateSession();
+        _session = sessionProvider.CreateSession(FlushMode.Manual);
     }
 
     public async Task Push(
@@ -28,8 +28,6 @@ public class QueueDao: IQueueDao
         CancellationToken cancellationToken = default
     )
     {
-        using var transaction = _session.BeginTransaction();
-
         try
         {
             var contextType = context.GetType();
@@ -42,28 +40,26 @@ public class QueueDao: IQueueDao
                 ContextType = typeString,
                 ContextData = JsonHelper.SerializeToString(context),
                 ProcessAt = processAt ?? DateTime.UtcNow,
-                CreateTime = DateTime.UtcNow,
-                UpdateTime = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
             await _session.SaveAsync(queueItem, cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
         }
         catch (Exception e)
         {
-            await transaction.RollbackAsync(cancellationToken);
             _logger.LogError(e, e.Message);
         }
     }
     
     public async Task<QueueEntity?> GetById(
-        long id,
+        Guid id,
         CancellationToken cancellationToken = default
     )
     {
         var query = _session.Query<QueueEntity>()
             .Where(item => item.Id == id);
         return await query
-            .OrderBy(item => item.CreateTime)
+            .OrderBy(item => item.CreatedAt)
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
     
@@ -77,12 +73,11 @@ public class QueueDao: IQueueDao
             var result = await _session.CreateSQLQuery(@"SELECT * FROM fn_queue_get_top(:channel)")
                 .AddEntity(typeof(QueueEntity))
                 .SetParameter("channel", channel ?? QueueChannel.Default)
-                .SetFlushMode(FlushMode.Always)
                 .SetResultTransformer(new RootEntityResultTransformer())
-                .ListAsync<QueueEntity>();
+                .ListAsync<QueueEntity>(cancellationToken);
             var entity = result?.FirstOrDefault();
             if (entity != null)
-                await _session.RefreshAsync(entity);
+                await _session.RefreshAsync(entity, cancellationToken);
             return entity;
         }
         catch (Exception e)
@@ -118,9 +113,9 @@ public class QueueDao: IQueueDao
     public async Task<int> CompleteAllPending(CancellationToken cancellationToken = default)
     {
         return await _session.Query<QueueEntity>()
-            .UpdateAsync(item => new {
-                Status = QueueStatus.Success
-            }, cancellationToken: cancellationToken);
+            .UpdateBuilder()
+            .Set(x => x.Status, QueueStatus.Success)
+            .UpdateAsync(cancellationToken);
     }
     
     public async Task UpdateProcessAtForPending()
@@ -128,19 +123,27 @@ public class QueueDao: IQueueDao
         await _session.Query<QueueEntity>()
             .Where(x => x.Status == QueueStatus.Pending)
             .UpdateBuilder()
-            .Set(x => x.ProcessAt, DateTime.UtcNow)
+            .Set(x => x.ProcessAt, DateTime.UtcNow.AddSeconds(-1))
             .UpdateAsync();
 
     }
     
-    public void Dispose()
+    public void Clear()
     {
-        Flush();
-        _session.Dispose();
+        _session.Clear();
     }
     
-    public void Flush()
+    public void Dispose()
     {
-        _session.Flush();
+        Flush().Wait();
+        if (_session.IsOpen)
+        {
+            _session.Dispose();
+        }
+    }
+    
+    public async Task Flush()
+    {
+        await _session.FlushAsync();
     }
 }

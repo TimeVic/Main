@@ -97,17 +97,17 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
-        Assert.True(actualMembership.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMembership.Id);
         Assert.NotNull(actualMembership.User);
         Assert.Equal(expectAccess, actualMembership.Access);
-        Assert.True(actualMembership.User.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMembership.User.Id);
         Assert.Equal(3, actualMembership.ProjectAccesses.Count);
         
         Assert.All(actualMembership.ProjectAccesses, item =>
         {
             Assert.Null(item.HourlyRate);
             Assert.NotNull(item.Project);
-            Assert.True(item.Project.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Project.Id);
         });
     }
     
@@ -134,10 +134,10 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
-        Assert.True(actualMembership.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMembership.Id);
         Assert.NotNull(actualMembership.User);
         Assert.Equal(expectAccess, actualMembership.Access);
-        Assert.True(actualMembership.User.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMembership.User.Id);
         Assert.Equal(3, actualMembership.ProjectAccesses.Count);
         Assert.All(actualMembership.ProjectAccesses, item =>
         {
@@ -151,7 +151,7 @@ public class UpdateTest: BaseTest
     {
         var expectAccess = MembershipAccessType.User;
     
-        await CommitDbChanges();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             MembershipId = _membership.Id,
@@ -168,15 +168,15 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
     
         var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
-        Assert.True(actualMembership.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMembership.Id);
         Assert.NotNull(actualMembership.User);
         Assert.Equal(expectAccess, actualMembership.Access);
-        Assert.True(actualMembership.User.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMembership.User.Id);
         Assert.Equal(3, actualMembership.ProjectAccesses.Count);
         Assert.All(actualMembership.ProjectAccesses, item =>
         {
             Assert.NotEmpty(item.Project.Name);
-            Assert.True(item.Project.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.Project.Id);
         });
     }
     
@@ -189,8 +189,8 @@ public class UpdateTest: BaseTest
             Access = MembershipAccessType.User,
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 
     [Fact]
@@ -198,7 +198,7 @@ public class UpdateTest: BaseTest
     {
         var anotherProject = await _projectDao.CreateAsync(_otherWorkspace, "other 1");
         var anotherProject2 = await _projectDao.CreateAsync(_otherWorkspace, "other 1");
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var expectAccess = MembershipAccessType.User;
         
@@ -244,7 +244,7 @@ public class UpdateTest: BaseTest
         response.EnsureSuccessStatusCode();
     
         var actualMembership = await response.GetJsonDataAsync<WorkspaceMembershipDto>();
-        Assert.True(actualMembership.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualMembership.Id);
         Assert.Equal(_otherUser.Id, actualMembership.User.Id);
     }
     

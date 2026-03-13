@@ -1,11 +1,8 @@
 using Autofac;
-using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
-using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
-using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
@@ -38,6 +35,7 @@ public class GenerateTest: BaseTest
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _queueDao.CompleteAllPending();
+        FlushDbChanges().Wait();
     }
 
     [Fact]
@@ -45,6 +43,7 @@ public class GenerateTest: BaseTest
     {
         var newRequest = await _resetPasswordService.Generate(_user);
         
+        Assert.NotNull(newRequest);
         Assert.Equal(_user.Id, newRequest.User.Id);
         Assert.NotEmpty(newRequest.VerificationToken);
         Assert.True(newRequest.ExpirationTime > DateTime.UtcNow);
@@ -54,6 +53,7 @@ public class GenerateTest: BaseTest
     public async Task ShouldThrowExceptionIfPreviousWasNotExpired()
     {
         await _resetPasswordService.Generate(_user);
+        await FlushDbChanges();
         await Assert.ThrowsAsync<TooManyRequestsException>(async () =>
         {
             await _resetPasswordService.Generate(_user);
@@ -64,10 +64,12 @@ public class GenerateTest: BaseTest
     public async Task ShouldGenerateNewIfPreviousExpired()
     {
         var previousRequest = await _resetPasswordService.Generate(_user);
+        Assert.NotNull(previousRequest);
         previousRequest.ExpirationTime = DateTime.UtcNow.AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
         
         var actualRequest = await _resetPasswordService.Generate(_user);
+        Assert.NotNull(actualRequest);
         Assert.NotEqual(actualRequest.Id, previousRequest.Id);
     }
     
@@ -75,13 +77,12 @@ public class GenerateTest: BaseTest
     public async Task ShouldSendNotificationAfterGeneration()
     {
         var newRequest = await _resetPasswordService.Generate(_user);
+        Assert.NotNull(newRequest);
         
-        var actualProcessedCounter = await _queueService.ProcessAsync(QueueChannel.Notifications);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
         Assert.True(SmtpClientServiceMock.IsEmailSent);
-        var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
-        Assert.Contains(_user.Email, actualEmail.To);
-        Assert.Contains(newRequest.VerificationToken, actualEmail.Body);
+        Assert.Contains(SmtpClientServiceMock.SentMessages, item => item.To == _user.Email && item.Body.Contains(newRequest.VerificationToken));
     }
 }

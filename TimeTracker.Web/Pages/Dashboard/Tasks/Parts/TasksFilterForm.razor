@@ -16,7 +16,7 @@
     
     <MembersDropDown
         Clearable="true"
-        UserId="@(Filter.AssignedUserId ?? 0)"
+        UserId="@(Filter.AssignedUserId ?? Guid.Empty)"
         SelectedItemChanged="OnChangeAssignedUser"/>
 
     <FluentCheckbox

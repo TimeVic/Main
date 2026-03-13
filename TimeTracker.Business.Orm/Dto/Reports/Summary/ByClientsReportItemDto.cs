@@ -2,7 +2,7 @@
 
 public class ByClientsReportItemDto
 {
-    public long? ClientId { get; set; }
+    public Guid? ClientId { get; set; }
     
     public string? ClientName { get; set; }
     

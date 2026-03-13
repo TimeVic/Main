@@ -15,7 +15,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
     public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, TagDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -24,7 +24,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
 
         public UpdateRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
@@ -33,7 +33,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
@@ -43,10 +43,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
     
         public async Task<TagDto> ExecuteAsync(UpdateRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
 
             var tag = await _tagDao.GetById(request.TagId);
+            RecordNotFoundException.ThrowIfNull(tag);
+            
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, tag.Workspace))
             {
                 throw new HasNoAccessException();

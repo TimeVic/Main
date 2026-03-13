@@ -10,8 +10,7 @@ namespace TimeTracker.Web.Services.Http
     public partial class ApiService
     {
         public async Task<StoredFileDto?> StorageUploadFileAsync(
-            long workspaceId,
-            long entityId,
+            Guid entityId,
             StorageEntityType entityType,
             StoredFileType fileType,
             IBrowserFile file
@@ -23,14 +22,13 @@ namespace TimeTracker.Web.Services.Http
                 {
                     { "EntityId", entityId },
                     { "EntityType", entityType },
-                    { "FileType", fileType },
-                    { "WorkspaceId", workspaceId }
+                    { "FileType", fileType }
                 },
                 file
             );
         }
         
-        public async Task StorageDeleteFileAsync(long fileId)
+        public async Task StorageDeleteFileAsync(Guid fileId)
         {
             await PostAsync<object>(
                 ApiUrl.StorageDelete,
@@ -42,8 +40,7 @@ namespace TimeTracker.Web.Services.Http
         }
         
         public async Task<GetListResponse?> StorageGetListAsync(
-            long workspaceId,
-            long entityId,
+            Guid entityId,
             StorageEntityType entityType
         )
         {
@@ -51,7 +48,6 @@ namespace TimeTracker.Web.Services.Http
                 ApiUrl.StorageList,
                 new GetListRequest()
                 {
-                    WorkspaceId = workspaceId, 
                     EntityId = entityId,
                     EntityType = entityType
                 }

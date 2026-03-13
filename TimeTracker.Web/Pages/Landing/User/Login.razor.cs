@@ -52,6 +52,10 @@ public partial class Login
         try
         {
             var loginResponse = await _apiService.LoginAsync(model);
+            if (loginResponse == null)
+            {
+                throw new Exception("Login error");
+            }
             if (!string.IsNullOrEmpty(loginResponse.JwtToken))
             {
                 _authorizationService.Login(loginResponse.AccessToken, loginResponse.JwtToken, loginResponse.User);

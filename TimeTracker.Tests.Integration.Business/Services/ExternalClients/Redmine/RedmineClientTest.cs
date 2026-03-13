@@ -93,12 +93,13 @@ public partial class RedmineClientTest : BaseTest
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
         activeEntry.Task.ExternalTaskId = _taskId;
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
         var actualResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
+        Assert.NotNull(actualResponse);
         Assert.NotEmpty(actualResponse.Id);
         Assert.Equal(expectedDescription, actualResponse.Comment);
 
@@ -120,9 +121,9 @@ public partial class RedmineClientTest : BaseTest
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
         activeEntry.Task.ExternalTaskId = "fake";
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
         var actualResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
@@ -143,16 +144,17 @@ public partial class RedmineClientTest : BaseTest
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
         activeEntry.Task.ExternalTaskId = _taskId;
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
         var creatingResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
+        Assert.NotNull(creatingResponse);
         Assert.False(creatingResponse.IsError);
         activeEntry.RedmineId = creatingResponse.Id;
         await DbSessionProvider.CurrentSession.SaveAsync(activeEntry);
-        await CommitDbChanges();
+        await FlushDbChanges();
     
         activeEntry = await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
@@ -162,6 +164,7 @@ public partial class RedmineClientTest : BaseTest
             Description = "Test"
         });
         var actualResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);
+        Assert.NotNull(actualResponse);
         Assert.False(actualResponse.IsError);
         
         var isDeleted = await _redmineClient.DeleteTimeEntryAsync(activeEntry);

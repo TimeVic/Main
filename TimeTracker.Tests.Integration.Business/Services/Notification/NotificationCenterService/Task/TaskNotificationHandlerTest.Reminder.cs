@@ -15,7 +15,7 @@ public partial class TaskNotificationHandlerTest: BaseTest
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
         _task.RemindedTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges(true);
         await DbSessionProvider.CurrentSession.RefreshAsync(_task);
 
         // Act
@@ -24,6 +24,7 @@ public partial class TaskNotificationHandlerTest: BaseTest
         // Assert
         Assert.True(FirebaseClientService.SentMessages.Any());
 
+        await FlushDbChanges();
         var actualListDto = await _notificationCenterService.GetList(_user, _task.Workspace);
         Assert.Equal(1, actualListDto.TotalCount);
         Assert.Contains(actualListDto.Items, item =>
@@ -43,7 +44,7 @@ public partial class TaskNotificationHandlerTest: BaseTest
         await _userNotificationTokenDao.Set(_user, FirebaseClientServiceMock.SuccessToken);
         _task.ReminderTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
         _task.RemindedTime = DateTime.UtcNow.Add(GlobalConstants.TaskReminderTimeout).AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(_task);
 
         // Act
@@ -53,7 +54,7 @@ public partial class TaskNotificationHandlerTest: BaseTest
             TaskId = _task.Id,
             ProducedUserId = _task.User.Id
         });
-        await _queueService.ProcessAsync(QueueChannel.Default);
+        await QueueProcess(QueueChannel.Default);
         
         // Assert
         Assert.True(FirebaseClientService.SentMessages.Any());

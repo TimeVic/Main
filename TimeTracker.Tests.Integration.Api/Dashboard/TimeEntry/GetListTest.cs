@@ -60,7 +60,7 @@ public class GetListTest: BaseTest
         
         Assert.All(actualDto.List.Items, item =>
         {
-            Assert.True(item.Id > 0);
+            Assert.NotEqual(Guid.Empty, item.User.Id);
             Assert.NotNull(item.Project);
             Assert.NotEmpty(item.Description);
             Assert.True(item.StartTime > TimeSpan.MinValue);
@@ -95,6 +95,8 @@ public class GetListTest: BaseTest
         Assert.Equal(expectedCounter + 1, actualDto.List.TotalCount);
 
         var activeEntry = await _timeEntryDao.GetActiveEntryAsync(_defaultWorkspace, _user);
+        Assert.NotNull(actualDto.ActiveTimeEntry);
+        Assert.NotNull(activeEntry);
         Assert.Equal(activeEntry.Id, actualDto.ActiveTimeEntry.Id);
     }
     
@@ -119,6 +121,6 @@ public class GetListTest: BaseTest
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.NotNull(actualDto.ActiveTimeEntry);
-        Assert.True(actualDto.ActiveTimeEntry.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualDto.ActiveTimeEntry.Id);
     }
 }

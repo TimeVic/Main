@@ -6,11 +6,6 @@ namespace TimeTracker.Business.Extensions
 {
     public static class ObjectExtensions
     {
-        public static string GetTypeName(this Object value)
-        {
-            return value.GetType().Name;
-        }
-        
         public static bool EqualsToTypeName(this Object value, string typeName)
         {
             return value.GetType().Name.ToLower().Equals(typeName?.ToLower());

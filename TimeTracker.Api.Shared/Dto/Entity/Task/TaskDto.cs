@@ -6,6 +6,8 @@ namespace TimeTracker.Api.Shared.Dto.Entity.Task;
 
 public class TaskDto : IResponse
 {
+    public Guid Id { get; set; }
+    
     public int PositionIndex { get; set; }
     
     public long TaskId { get; set; }
@@ -28,18 +30,16 @@ public class TaskDto : IResponse
     
     public bool IsArchived { get; set; }
     
-    public DateTime UpdateTime { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     
-    public DateTime CreateTime { get; set; }
-    
+    public DateTime CreatedAt { get; set; }
+
     public TaskListDto TaskList { get; set; }
     
-    public UserDto User { get; set; }
-
-    public ICollection<StoredFileDto> Attachments { get; set; } = new List<StoredFileDto>();
-    
     public ICollection<TagDto> Tags { get; set; } = new List<TagDto>();
-
+    
+    public UserDto User { get; set; }
+    
     #region Calculated
 
     public string FormattedId

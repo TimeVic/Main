@@ -40,6 +40,7 @@ public class ChangePasswordTest: BaseTest
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _queueDao.CompleteAllPending();
+        FlushDbChanges().Wait();
     }
 
     [Fact]
@@ -47,8 +48,11 @@ public class ChangePasswordTest: BaseTest
     {
         var newPassword = "Some123NewPass";
         var newRequest = await _resetPasswordService.Generate(_user);
+        Assert.NotNull(newRequest);
+
+        await FlushDbChanges();
         await _resetPasswordService.ChangePassword(newRequest.VerificationToken, newPassword);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(_user);
         await DbSessionProvider.CurrentSession.RefreshAsync(newRequest);
         
@@ -60,8 +64,9 @@ public class ChangePasswordTest: BaseTest
     public async Task ShouldThrowExceptionIfExpired()
     {
         var previousRequest = await _resetPasswordService.Generate(_user);
+        Assert.NotNull(previousRequest);
         previousRequest.ExpirationTime = DateTime.UtcNow.AddMinutes(-1);
-        await CommitDbChanges();
+        await FlushDbChanges();
         await Assert.ThrowsAsync<RecordExpiredException>(async () =>
         {
             await _resetPasswordService.ChangePassword(previousRequest.VerificationToken, "Some123NewPass");

@@ -40,9 +40,11 @@ public class GetFileForTaskTest: BaseTest
     public async Task ShouldGetFile()
     {
         var actualFile = await _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment);
+        
+        await FlushDbChanges();
         await _fileStorage.UploadFirstPendingToCloud();
 
-        await CommitDbChanges();
+        await FlushDbChanges(true);
         var (expectedFile, fileStream) = await _fileStorage.GetFileStream(_user, actualFile.Id);
 
         Assert.True(fileStream.Length > 0);

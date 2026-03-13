@@ -49,7 +49,7 @@ public class ResetTest: BaseTest
             Email = _user.Email,
             ReCaptcha = "captcha"
         });
-        var responseData = await response.GetJsonErrorAsync();
-        Assert.Equal(new TooManyRequestsException().GetTypeName(), responseData.Type);
+        var responseData = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new TooManyRequestsException().GetTypeName(), responseData.ErrorCode);
     }
 }

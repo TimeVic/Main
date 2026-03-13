@@ -33,9 +33,11 @@ public class LoadPaymentReportEffect: Effect<ReportFetchPaymentsReportAction>
         {
             dispatcher.Dispatch(new ReportSetIsLoadingAction(true));
             var response = await _apiService.ReportsGetPaymentsReportAsync(
-                _authState.Value.Workspace.Id,
+                _authState.Value.Workspace!.Id,
                 _reportState.Value.PaymentReportFilter.EndDate
             );
+            if (response == null)
+                throw new Exception("Report loading error");
             dispatcher.Dispatch(new ReportSetPaymentReportItemsAction(response.Items));
         }
         catch (Exception e)

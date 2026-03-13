@@ -8,7 +8,7 @@
                 Label="Client"
                 Clearable="true"
                 FullWidth="true"
-                Value="@(_state.Value.Filter.ClientId ?? 0)"
+                Value="@(_state.Value.Filter.ClientId ?? Guid.Empty)"
                 SelectedItemChanged="OnChangeClient"/>
         </FluentGridItem>
         <FluentGridItem lg="3" md="6" xs="12">
@@ -16,8 +16,8 @@
                 Label="Project"
                 Clearable="true"
                 FullWidth="true"
-                Value="@(_state.Value.Filter.ProjectId ?? 0)"
-                ClientId="@(_state.Value.Filter.ClientId ?? 0)"
+                Value="@(_state.Value.Filter.ProjectId ?? Guid.Empty)"
+                ClientId="@(_state.Value.Filter.ClientId ?? Guid.Empty)"
                 SelectedItemChanged="OnChangeProject"/>
         </FluentGridItem>
         <FluentGridItem lg="3" md="6" xs="12">
@@ -43,7 +43,7 @@
                 Label="Member"
                 FullWidth="true"
                 Clearable="true"
-                UserId="@(_state.Value.Filter.UserId ?? 0)"
+                UserId="@(_state.Value.Filter.UserId ?? Guid.Empty)"
                 SelectedItemChanged="OnChangeMember"/>
         </FluentGridItem>
         <FluentGridItem lg="6" md="6" xs="12">

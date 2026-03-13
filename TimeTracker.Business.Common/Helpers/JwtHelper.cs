@@ -20,6 +20,8 @@ public static class JwtHelper
  
             var parts = accessToken.Split('.');
             var payload = JsonHelper.DeserializeObject<JwtTokenModel>(Base64UrlEncoder.Decode(parts[1]));
+            if (payload == null)
+                throw new NullReferenceException(nameof(payload));
             var dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(payload.exp);
             return dateTimeOffset.UtcDateTime;
         }

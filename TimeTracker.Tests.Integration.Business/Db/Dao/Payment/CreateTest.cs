@@ -47,7 +47,7 @@ public class CreateTest: BaseTest
         var expectClient = await _clientDao.CreateAsync(_workspace, "Test");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
         expectProject.SetClient(expectClient);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
 
         var actualPayment = await _paymentDao.CreateAsync(
             _workspace,
@@ -58,8 +58,10 @@ public class CreateTest: BaseTest
             expectProject.Id,
             expectPayment.Description
         );
-        
-        Assert.True(actualPayment.Id > 0);
+
+        Assert.NotNull(actualPayment);
+        Assert.NotNull(actualPayment.Project);
+        Assert.NotEqual(Guid.Empty, actualPayment.Id);
         Assert.Equal(expectPayment.Amount, actualPayment.Amount);
         Assert.Equal(expectPayment.Description, actualPayment.Description);
         Assert.Equal(expectPayment.PaymentTime, actualPayment.PaymentTime);
@@ -73,7 +75,7 @@ public class CreateTest: BaseTest
         var expectPayment = _paymentFactory.Generate(); 
         var expectClient = await _clientDao.CreateAsync(_workspace, "Test");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
        
         var actualPayment = await _paymentDao.CreateAsync(
             _workspace,

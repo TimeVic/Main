@@ -16,7 +16,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
     public class UpdateRequestHandler : IAsyncRequestHandler<UpdateItemRequest, GoalsTrackerItemDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IClientDao _clientDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -26,7 +26,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
 
         public UpdateRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IClientDao clientDao,
             IDbSessionProvider sessionProvider,
@@ -36,7 +36,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _clientDao = clientDao;
             _sessionProvider = sessionProvider;
@@ -47,7 +47,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
     
         public async Task<GoalsTrackerItemDto> ExecuteAsync(UpdateItemRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var goalsTrackerItem = await _goalsTrackerItemsDao.GetById(request.GoalsTrackerItemId);
             await _securityManager.CheckAccess(AccessLevel.Write, user, goalsTrackerItem?.Tracker);

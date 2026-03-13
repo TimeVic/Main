@@ -94,7 +94,7 @@ public partial class AddTask: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
@@ -120,12 +120,14 @@ public partial class AddTask: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
         
+        await FlushDbChanges(true);
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.NotNull(actualTimeEntry.Task);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
     }
     
@@ -146,8 +148,8 @@ public partial class AddTask: BaseTest
             EndTime = task.EndTime,
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.GetJsonErrorAsync();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.Type);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
     
     [Fact]
@@ -166,8 +168,9 @@ public partial class AddTask: BaseTest
         });
         response.EnsureSuccessStatusCode();
         
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         var actualTask = await _taskDao.GetByWorkspaceTaskId(_workspace.Id, actualData.TaskId);
+        Assert.NotNull(actualTask);
         Assert.Single(actualTask.HistoryItems);
         var historyItem = actualTask.HistoryItems.First();
         Assert.Equal(task.Title, historyItem.Title);
@@ -193,12 +196,14 @@ public partial class AddTask: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        var actualData = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.True(actualData.TaskId > 0);
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.Equal(task.Title, actualData.Title);
         
+        await FlushDbChanges(true);
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
+        Assert.NotNull(actualTimeEntry.Project);
         Assert.Equal(_taskList.Project.Id, actualTimeEntry.Project.Id);
     }
 }

@@ -86,7 +86,7 @@ public partial class FileStorage: IFileStorage
             Size = fileData.Length,
             DataToUpload = fileData,
             Status = StoredFileStatus.Pending,
-            CreateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
 
         await _dbSessionProvider.CurrentSession.SaveAsync(storedFile, cancellationToken);

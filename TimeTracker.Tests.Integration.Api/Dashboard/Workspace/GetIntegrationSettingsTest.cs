@@ -129,7 +129,7 @@ public class GetIntegrationSettingsTest: BaseTest
     public async Task ShouldNotReceiveForOtherUser()
     {
         var (otherJwt, otherUser, workspace) = await _userSeeder.CreateAuthorizedAndShareAsync(_workspace);
-        await CommitDbChanges();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, otherJwt, new GetIntegrationSettingsRequest()
         {
             WorkspaceId = _workspace.Id

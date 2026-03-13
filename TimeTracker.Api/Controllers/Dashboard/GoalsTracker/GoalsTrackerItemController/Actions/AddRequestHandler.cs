@@ -16,7 +16,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
     public class CreateRequestHandler : IAsyncRequestHandler<CreateItemRequest, GoalsTrackerItemDto>
     {
         private readonly IMapper _mapper;
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IClientDao _clientDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -26,7 +26,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
 
         public CreateRequestHandler(
             IMapper mapper,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             IClientDao clientDao,
             IDbSessionProvider sessionProvider,
@@ -36,7 +36,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
         )
         {
             _mapper = mapper;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _clientDao = clientDao;
             _sessionProvider = sessionProvider;
@@ -47,7 +47,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
     
         public async Task<GoalsTrackerItemDto> ExecuteAsync(CreateItemRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
             var goalsTracker = await _goalsTrackerDao.GetById(request.GoalsTrackerId);
             if (goalsTracker == null)
@@ -60,7 +60,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
             }
 
             var trackerItem = await _goalsTrackerItemsDao.Create(goalsTracker, request.Name, request.NumberOfTimes);
-            await _sessionProvider.PerformCommitAsync();
             return _mapper.Map<GoalsTrackerItemDto>(trackerItem);
         }
     }

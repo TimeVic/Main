@@ -72,7 +72,7 @@ public class SetTest: BaseTest
     {
         var fakeEntry = _timeEntryFactory.Generate();
         var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
-        await CommitDbChanges();
+        await FlushDbChanges();
 
         var startTime = TimeSpan.FromSeconds(1);
         var endTime = TimeSpan.FromHours(1);
@@ -89,7 +89,8 @@ public class SetTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.NotNull(actualDto.Project);
+        Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Equal(endTime, actualDto.EndTime);
         Assert.Equal(startTime, actualDto.StartTime);
         Assert.Equal(fakeEntry.Description, actualDto.Description);
@@ -99,7 +100,7 @@ public class SetTest: BaseTest
         
         Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
 
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        var processedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
     
@@ -127,10 +128,11 @@ public class SetTest: BaseTest
             ProjectId = expectedProject.Id,
             Date = fakeEntry.Date,
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.NotNull(actualDto.Project);
+        Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Null(actualDto.EndTime);
         Assert.Equal(fakeEntry.StartTime, actualDto.StartTime);
         Assert.Equal(fakeEntry.Description, actualDto.Description);
@@ -139,7 +141,7 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.Date, actualDto.Date);
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
 
-        var processedCounter = await _queueService.ProcessAsync(QueueChannel.ExternalClient);
+        var processedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(processedCounter > 0);
     }
     
@@ -177,11 +179,12 @@ public class SetTest: BaseTest
             ProjectId = expectedProject.Id,
             Date = fakeEntry.Date,
         });
-        response.EnsureSuccessStatusCode();
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.True(actualDto.Id > 0);
+        Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Null(actualDto.EndTime);
+        Assert.NotNull(actualDto.Project);
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
     }
     

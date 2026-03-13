@@ -1,63 +1,21 @@
-using Domain.Abstractions;
-using NHibernate.Mapping.Attributes;
-using NHibernate.Type;
+using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Orm.Entities.Workspaces
 {
-    [Class(Table = "workspace_setting_jiras")]
-    public class WorkspaceSettingsJiraEntity: IEntity
+    public class WorkspaceSettingsJiraEntity: AEntity
     {
-        [Id(Name = "Id", Generator = "native")]
-        [Column(Name = "id", SqlType = "bigint", NotNull = true)]
-        public virtual long Id { get; set; }
-        
-        [Property(NotNull = false)]
-        [Column(Name = "api_key", Length = 512, NotNull = false)]
         public virtual string? ApiKey { get; set; }
-        
-        [Property(NotNull = false)]
-        [Column(Name = "user_name", Length = 512, NotNull = false)]
         public virtual string? UserName { get; set; }
-        
-        [Property(NotNull = false)]
-        [Column(Name = "url", Length = 512, NotNull = false)]
         public virtual string? Url { get; set; }
-        
-        [Property(NotNull = true)]
-        [Column(Name = "is_fill_time_entry_with_task_details", NotNull = true)]
         public virtual bool IsFillTimeEntryWithTaskDetails { get; set; } = true;
-        
-        [Property(NotNull = true)]
-        [Column(Name = "is_active", NotNull = true)]
         public virtual bool IsActive { get; set; }
-        
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "create_time", SqlType = "datetime", NotNull = true)]
-        public virtual DateTime CreateTime { get; set; }
-        
-        [Property(NotNull = true, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "update_time", SqlType = "datetime", NotNull = true)]
-        public virtual DateTime UpdateTime { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(WorkspaceEntity), 
-            Lazy = Laziness.False,
-            Fetch = FetchMode.Join,
-            Column = "workspace_id", 
-            Cascade = "none",
-            Unique = true
-        )]
-        public virtual WorkspaceEntity Workspace { get; set; }
-        
-        [ManyToOne(
-            ClassType = typeof(UserEntity), 
-            Lazy = Laziness.False,
-            Fetch = FetchMode.Join,
-            Column = "user_id", 
-            Cascade = "none",
-            Unique = true
-        )]
-        public virtual UserEntity User { get; set; }
+
+        #region Relationships
+
+        public virtual required WorkspaceEntity Workspace { get; set; }
+        public virtual required UserEntity User { get; set; }
+
+        #endregion
     }
 }

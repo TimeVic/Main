@@ -16,7 +16,7 @@ public partial class PaymentReportPage
         get => _state.Value.PaymentReportFilter;
     }
 
-    private IEnumerable<IGrouping<long?, PaymentsReportItemDto>> _grouppedItems
+    private IEnumerable<IGrouping<Guid?, PaymentsReportItemDto>> _grouppedItems
     {
         get => _state.Value.PaymentReportItems.GroupBy(item => item.ClientId);
     }
@@ -27,19 +27,19 @@ public partial class PaymentReportPage
         Dispatcher.Dispatch(new ReportFetchPaymentsReportAction());
     }
     
-    private TimeSpan GetTotalDuration(long clientId)
+    private TimeSpan GetTotalDuration(Guid clientId)
     {
         var totalTicks = _state.Value.PaymentReportItems.Where(item => item.ClientId == clientId)
             .Sum(item => item.TotalDuration.Ticks);
         return new TimeSpan(totalTicks);
     }
     
-    private decimal GetClientTotalAmount(long clientId)
+    private decimal GetClientTotalAmount(Guid clientId)
     {
         return _state.Value.PaymentReportItems.Where(item => item.ClientId == clientId).Sum(item => item.Amount);
     }
     
-    private decimal GetClientUnpaidAmount(long clientId)
+    private decimal GetClientUnpaidAmount(Guid clientId)
     {
         var paidAmount = _state.Value.PaymentReportItems.FirstOrDefault(item => item.ClientId == clientId)?.PaidAmountByClient ?? 0;
         return paidAmount - GetClientTotalAmount(clientId);

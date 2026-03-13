@@ -14,7 +14,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
 {
     public class DeleteRequestHandler : IAsyncRequestHandler<DeleteRequest>
     {
-        private readonly IRequestService _requestService;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
@@ -24,20 +24,20 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             IDbSessionProvider sessionProvider,
             IProjectDao projectDao,
             ISecurityManager securityManager,
-            IRequestService requestService,
+            IApiRequestService apiRequestService,
             IUserDao userDao
         )
         {
             _sessionProvider = sessionProvider;
             _projectDao = projectDao;
             _securityManager = securityManager;
-            _requestService = requestService;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
         }
 
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _requestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetUserIdFromJwt();
             var user = await _userDao.GetById(userId);
 
             var project = await _projectDao.GetById(request.ProjectId, true);

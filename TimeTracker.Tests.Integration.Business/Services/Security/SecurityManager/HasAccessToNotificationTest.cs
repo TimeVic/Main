@@ -44,7 +44,7 @@ public class HasAccessToNotificationTest: BaseTest
         _ownWorkspace = _userDao.GetUsersWorkspaces(_owner, MembershipAccessType.Owner).Result.First();
         _task = _taskSeeder.CreateAsync(user: _owner).Result;
         _task.ReminderTime = DateTime.UtcNow;
-        CommitDbChanges().Wait();
+        FlushDbChanges().Wait();
     }
 
     [Theory]
@@ -53,6 +53,7 @@ public class HasAccessToNotificationTest: BaseTest
     public async Task ShouldHasFullAccessIfOwner(AccessLevel accessLevel)
     {
         await _notificationCenterService.Push(NotificationActionType.Reminder, _owner, _task);
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_owner, _task.Workspace);
         var notification = notifications.Items.First();
         
@@ -68,6 +69,7 @@ public class HasAccessToNotificationTest: BaseTest
     public async Task ShouldNoAccessIfUserIsNotMemberOfWorkspace(AccessLevel accessLevel)
     {
         await _notificationCenterService.Push(NotificationActionType.Reminder, _owner, _task);
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_owner, _task.Workspace);
         var notification = notifications.Items.First();
         
@@ -80,11 +82,12 @@ public class HasAccessToNotificationTest: BaseTest
     public async Task ShouldHasNoAccessIfUserIsMemberWithManagerRole()
     {
         await _notificationCenterService.Push(NotificationActionType.Reminder, _owner, _task);
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_owner, _task.Workspace);
         var notification = notifications.Items.First();
         
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        await CommitDbChanges();
+        await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,
@@ -103,11 +106,12 @@ public class HasAccessToNotificationTest: BaseTest
     public async Task ShouldHasNoAccessIfUserIsMemberWithManagerUser()
     {
         await _notificationCenterService.Push(NotificationActionType.Reminder, _owner, _task);
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_owner, _task.Workspace);
         var notification = notifications.Items.First();
         
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        await CommitDbChanges();
+        await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,

@@ -27,15 +27,15 @@ public class ProjectDao: IProjectDao
         {
             Name = name,
             Workspace = workspace,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
         workspace.Projects.Add(project);
         await _sessionProvider.CurrentSession.SaveAsync(project);
         return project;
     }
 
-    public async Task<ProjectEntity?> GetById(long? projectId, bool isOnlyActive = true)
+    public async Task<ProjectEntity?> GetById(Guid? projectId, bool isOnlyActive = true)
     {
         if (projectId == null)
             return null;
@@ -85,12 +85,12 @@ public class ProjectDao: IProjectDao
             WorkspaceMembershipEntity workspaceMembershipAlias = null;
             UserEntity userAlias = null;
             query = query.Inner.JoinAlias(item => item.MembershipProjectAccess, () => projectAccessAlias)
-                .Inner.JoinAlias(() => projectAccessAlias.WorkspaceMembership, () => workspaceMembershipAlias)
-                .Inner.JoinAlias(() => workspaceMembershipAlias.User, () => userAlias)
-                .And(item => userAlias.Id == user.Id);
+                .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMembership, () => workspaceMembershipAlias)
+                .Inner.JoinAlias(() => workspaceMembershipAlias!.User, () => userAlias)
+                .And(item => userAlias!.Id == user.Id);
         }
 
-        var projectIds = await query.ListAsync<long>();
+        var projectIds = await query.ListAsync<Guid>();
         var projects = await _sessionProvider.CurrentSession.Query<ProjectEntity>()
             .Where(item => projectIds.Contains(item.Id))
             .OrderByDescending(item => item.Name)

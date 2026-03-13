@@ -19,7 +19,7 @@ public class WorkspaceDao: IWorkspaceDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<WorkspaceEntity?> GetByIdAsync(long id)
+    public async Task<WorkspaceEntity?> GetByIdAsync(Guid id)
     {
         return await _sessionProvider.CurrentSession.Query<WorkspaceEntity>()
             .FirstOrDefaultAsync(item => item.Id == id);
@@ -32,8 +32,8 @@ public class WorkspaceDao: IWorkspaceDao
             Name = name,
             CreatedUser = user,
             IsDefault = isDefault,
-            CreateTime = DateTime.UtcNow,
-            UpdateTime = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
         user.CreatedWorkspaces.Add(workspace);
         await _sessionProvider.CurrentSession.SaveAsync(workspace);
@@ -43,7 +43,7 @@ public class WorkspaceDao: IWorkspaceDao
     public async Task<WorkspaceEntity> UpdateWorkspaceAsync(WorkspaceEntity workspace, string name)
     {
         workspace.Name = name;
-        workspace.UpdateTime = DateTime.UtcNow;
+        workspace.UpdatedAt = DateTime.UtcNow;
         await _sessionProvider.CurrentSession.SaveAsync(workspace);
         return workspace;
     }
@@ -73,7 +73,7 @@ public class WorkspaceDao: IWorkspaceDao
         );
     }
     
-    public async Task<WorkspaceMembershipEntity> GetMembershipAsync(long id)
+    public async Task<WorkspaceMembershipEntity> GetMembershipAsync(Guid id)
     {
         return await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
             .Where(item => item.Id == id)

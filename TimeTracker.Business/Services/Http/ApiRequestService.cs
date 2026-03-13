@@ -4,12 +4,12 @@ using TimeTracker.Business.Services.Auth;
 
 namespace TimeTracker.Business.Services.Http;
 
-public class RequestService: IRequestService
+public class ApiRequestService: IApiRequestService
 {
     private readonly IHttpContextAccessor _httpContext;
     private readonly IJwtAuthService _jwtAuthService;
 
-    public RequestService(
+    public ApiRequestService(
         IHttpContextAccessor httpContext,
         IJwtAuthService jwtAuthService
     )
@@ -23,8 +23,13 @@ public class RequestService: IRequestService
         return _httpContext.HttpContext?.Request.GetApiToken();
     }
 
-    public long GetUserIdFromJwt()
+    public Guid GetUserIdFromJwt()
     {
         return _jwtAuthService.GetUserId(GetApiToken());
+    }
+    
+    public string? GetRequestUrl()
+    {
+        return _httpContext?.HttpContext?.Request.Path.Value?.ToLower();
     }
 }
