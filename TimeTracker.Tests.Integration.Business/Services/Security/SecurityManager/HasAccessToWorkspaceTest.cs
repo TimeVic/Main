@@ -76,6 +76,7 @@ public class HasAccessToWorkspaceTest: BaseTest
             MembershipAccessType.Manager
         );
 
+        await FlushDbChanges();
         var hasAccess = await _securityManager.HasAccess(AccessLevel.Read, otherUser, _ownWorkspace);
         Assert.True(hasAccess);
         
@@ -95,6 +96,7 @@ public class HasAccessToWorkspaceTest: BaseTest
             MembershipAccessType.User
         );
 
+        await FlushDbChanges();
         var hasAccess = await _securityManager.HasAccess(AccessLevel.Read, otherUser, _ownWorkspace);
         Assert.True(hasAccess);
         

@@ -51,7 +51,7 @@ public class PaymentReportTest: BaseTest
     public async Task ShouldReceivePaymentReport()
     {
         var projects = await _projectDao.CreateSeveralAsync(_defaultWorkspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         await _timeEntryDao.SetAsync(_user, _defaultWorkspace, new TimeEntryCreationDto()
         {

@@ -33,21 +33,21 @@ public class ProjectMapping: BaseGuidMappings<ProjectEntity>
         HasMany(x => x.Payments)
             .KeyColumn("project_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
         
         HasMany(x => x.MembershipProjectAccess)
             .KeyColumn("project_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
         
         HasMany(x => x.TaskLists)
             .KeyColumn("project_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
     }

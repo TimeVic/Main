@@ -69,7 +69,7 @@ public class ShareAccessTest: BaseTest
         var expectedUser = await _userSeeder.CreateActivatedAsync();
         var expectedProject1 = await _projectDao.CreateAsync(_workspace, "Test 1");
         var project2 = await _projectDao.CreateAsync(_workspace, "Test 2");
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
 
         await _workspaceAccessService.ShareAccessAsync(_workspace, expectedUser, expectedAccess,
             new List<ProjectAccessModel>()
@@ -80,7 +80,7 @@ public class ShareAccessTest: BaseTest
                     HourlyRate = expectedHourlyRate2
                 }
             });
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var actualMembership = await _workspaceAccessService.ShareAccessAsync(_workspace, expectedUser, expectedAccess,
             new List<ProjectAccessModel>()
@@ -91,7 +91,7 @@ public class ShareAccessTest: BaseTest
                     HourlyRate = expectedHourlyRate1
                 }
             });
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         
         Assert.Equal(expectedAccess, actualMembership.Access);

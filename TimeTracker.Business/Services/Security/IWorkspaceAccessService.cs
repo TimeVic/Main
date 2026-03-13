@@ -31,7 +31,7 @@ public interface IWorkspaceAccessService: IDomainService
         ProjectEntity project
     );
 
-    Task<WorkspaceMembershipEntity?> GetMembershipAsync(
+    WorkspaceMembershipEntity? GetMembershipAsync(
         UserEntity user,
         WorkspaceEntity workspace
     );

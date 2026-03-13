@@ -34,6 +34,7 @@ public class UploadToCloudTest: BaseTest
     {
         await _fileStorage.PutFileAsync(_user, CreateFormFile(), StoredFileType.Attachment);
 
+        await FlushDbChanges(true);
         var uploadedFile = await _fileStorage.UploadFirstPendingToCloud();
         Assert.NotNull(uploadedFile);
         Assert.Null(uploadedFile.DataToUpload);
@@ -46,9 +47,9 @@ public class UploadToCloudTest: BaseTest
     {
         var formFile = CreateFormFile("images/image.jpg");
         var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
-        await FlushDbChanges();
         Assert.Null(actualFile.ThumbCloudFilePath);
         
+        await FlushDbChanges(true);
         var uploadedFile = await _fileStorage.UploadFirstPendingToCloud();
         Assert.NotNull(uploadedFile);
         Assert.Null(uploadedFile.DataToUpload);
@@ -64,6 +65,7 @@ public class UploadToCloudTest: BaseTest
         var actualFile = await _fileStorage.PutFileAsync(_user, formFile, StoredFileType.Attachment);
         Assert.NotEqual(Guid.Empty, actualFile.Id);
         
+        await FlushDbChanges();
         var uploadedFile = await _fileStorage.UploadFirstPendingToCloud();
         Assert.NotNull(uploadedFile);
         Assert.Null(uploadedFile.DataToUpload);
@@ -74,6 +76,7 @@ public class UploadToCloudTest: BaseTest
     [Fact]
     public async Task ShouldNotUploadIfPendingNotFound()
     {
+        await FlushDbChanges();
         var uploadedFile = await _fileStorage.UploadFirstPendingToCloud();
         Assert.Null(uploadedFile);
     }

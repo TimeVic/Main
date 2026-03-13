@@ -23,13 +23,7 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         public virtual int PositionIndex { get; set; }
         
         #region Reminder
-        
-        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "reminder_time", SqlType = "datetime", NotNull = false)]
         public virtual DateTime? ReminderTime { get; set; }
-        
-        [Property(NotNull = false, TypeType = typeof(UtcDateTimeType))]
-        [Column(Name = "reminded_time", SqlType = "datetime", NotNull = false)]
         public virtual DateTime? RemindedTime { get; set; }
         
         #endregion

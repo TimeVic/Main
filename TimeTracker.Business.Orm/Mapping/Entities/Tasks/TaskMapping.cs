@@ -19,6 +19,8 @@ public class TaskMapping: BaseGuidMappings<TaskEntity>
         Map(x => x.Description);
         Map(x => x.StartTime).DateTimeNullable();
         Map(x => x.EndTime).DateTimeNullable();
+        Map(x => x.RemindedTime).DateTimeNullable();
+        Map(x => x.ReminderTime).DateTimeNullable();
         Map(x => x.IsArchived);
         Map(x => x.ExternalTaskId);
         Map(x => x.PositionIndex);

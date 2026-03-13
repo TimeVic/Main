@@ -31,6 +31,7 @@ public class QueueDaoTest: BaseTest
         };
 
         await _queueDao.Push(testContext, QueueChannel.Default);
+        await _queueDao.Flush();
     }
     
     [Fact]
@@ -44,7 +45,7 @@ public class QueueDaoTest: BaseTest
 
         await _queueDao.Push(testContext, QueueChannel.Default);
         await _queueDao.Push(testContext, QueueChannel.Default);
-        _queueDao.Flush();
+        await _queueDao.Flush();
         
         var actualItem1 = await _queueDao.GetTop(QueueChannel.Default);
         var actualItem2 = await _queueDao.GetTop(QueueChannel.Default);
@@ -69,7 +70,7 @@ public class QueueDaoTest: BaseTest
 
         await _queueDao.Push(testContext, QueueChannel.Default);
         await _queueDao.Push(testContext, QueueChannel.Default);
-        _queueDao.Flush();
+        await _queueDao.Flush();
         
         var actualItem1 = await _queueDao.GetTop(QueueChannel.Default);
         var actualItem2 = await _queueDao.GetTop(QueueChannel.Default);
@@ -88,7 +89,7 @@ public class QueueDaoTest: BaseTest
         };
 
         await _queueDao.Push(testContext, QueueChannel.Default);
-        _queueDao.Flush();
+        await _queueDao.Flush();
         var actualItem = await _queueDao.GetTop(QueueChannel.Default);
         await _queueDao.MarkAsProcessed(actualItem);
         
@@ -108,7 +109,7 @@ public class QueueDaoTest: BaseTest
         };
 
         await _queueDao.Push(testContext, QueueChannel.Default);
-        _queueDao.Flush();
+        await _queueDao.Flush();
         var actualItem = await _queueDao.GetTop(QueueChannel.Default);
         await _queueDao.MarkAsProcessed(actualItem, expectedError);
         
@@ -129,7 +130,7 @@ public class QueueDaoTest: BaseTest
         };
 
         await _queueDao.Push(testContext, QueueChannel.Default);
-        _queueDao.Flush();
+        await _queueDao.Flush();
         var actualItem = await _queueDao.GetTop(QueueChannel.Default);
         await _queueDao.MarkAsProcessed(actualItem);
 

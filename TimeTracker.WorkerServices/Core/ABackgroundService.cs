@@ -94,7 +94,7 @@ public abstract class ABackgroundService: BackgroundService
                     try
                     {
                         await DoWorkAsync(_cancellationToken);
-                        QueueDao.Flush();
+                        await QueueDao.Flush();
                         await DbSessionProvider.PerformCommitAsync(true, stoppingToken);
                     }
                     catch (Exception e)

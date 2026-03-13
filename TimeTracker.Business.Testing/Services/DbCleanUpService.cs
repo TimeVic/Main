@@ -58,6 +58,7 @@ public class DbCleanUpService: IDbCleanUpService
             "clients",
             "workspaces",
             "users",
+            "sequences",
         };
 
         foreach (var table in tables)

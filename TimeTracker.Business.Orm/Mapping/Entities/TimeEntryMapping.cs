@@ -56,7 +56,7 @@ public class TimeEntryMapping: BaseGuidMappings<TimeEntryEntity>
             .ParentKeyColumn("time_entry_id")
             .ChildKeyColumn("tag_id")
             .FetchType.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.None();
     }
 }

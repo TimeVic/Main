@@ -53,6 +53,7 @@ public class HasAccessToNotificationTest: BaseTest
     public async Task ShouldHasFullAccessIfOwner(AccessLevel accessLevel)
     {
         await _notificationCenterService.Push(NotificationActionType.Reminder, _owner, _task);
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_owner, _task.Workspace);
         var notification = notifications.Items.First();
         
@@ -68,6 +69,7 @@ public class HasAccessToNotificationTest: BaseTest
     public async Task ShouldNoAccessIfUserIsNotMemberOfWorkspace(AccessLevel accessLevel)
     {
         await _notificationCenterService.Push(NotificationActionType.Reminder, _owner, _task);
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_owner, _task.Workspace);
         var notification = notifications.Items.First();
         
@@ -80,6 +82,7 @@ public class HasAccessToNotificationTest: BaseTest
     public async Task ShouldHasNoAccessIfUserIsMemberWithManagerRole()
     {
         await _notificationCenterService.Push(NotificationActionType.Reminder, _owner, _task);
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_owner, _task.Workspace);
         var notification = notifications.Items.First();
         
@@ -103,6 +106,7 @@ public class HasAccessToNotificationTest: BaseTest
     public async Task ShouldHasNoAccessIfUserIsMemberWithManagerUser()
     {
         await _notificationCenterService.Push(NotificationActionType.Reminder, _owner, _task);
+        await FlushDbChanges();
         var notifications = await _notificationCenterService.GetList(_owner, _task.Workspace);
         var notification = notifications.Items.First();
         

@@ -32,7 +32,7 @@ public class WorkspaceMembershipMapping: BaseGuidMappings<WorkspaceMembershipEnt
         HasMany(x => x.ProjectAccesses)
             .KeyColumn("workspace_membership_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.AllDeleteOrphan()
             .Inverse();
     }

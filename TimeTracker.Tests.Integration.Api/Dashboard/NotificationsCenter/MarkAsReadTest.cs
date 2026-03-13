@@ -41,7 +41,7 @@ public partial class MarkAsReadTest: BaseTest
 
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         _task.ReminderTime = DateTime.UtcNow;
-        DbSessionProvider.PerformCommitAsync().Wait();
+        FlushDbChanges().Wait();
     }
 
     [Fact]

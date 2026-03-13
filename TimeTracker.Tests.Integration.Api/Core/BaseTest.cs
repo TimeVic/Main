@@ -85,7 +85,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     protected async Task<int> QueueProcess(QueueChannel channel)
     {
         await FlushDbChanges();
-        _queueDao.Flush();
+        await _queueDao.Flush();
         await _queueDao.UpdateProcessAtForPending();
         return await _queueService.ProcessAsync(channel, isClearSessionForEachIteration: false);
     }

@@ -32,7 +32,7 @@ public class TaskCommentMapping: BaseGuidMappings<TaskCommentEntity>
             .ParentKeyColumn("comment_id")
             .ChildKeyColumn("user_id")
             .FetchType.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.None();
         
         HasManyToMany(x => x.Attachments)
@@ -40,7 +40,7 @@ public class TaskCommentMapping: BaseGuidMappings<TaskCommentEntity>
             .ParentKeyColumn("comment_id")
             .ChildKeyColumn("stored_file_id")
             .FetchType.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.None();
     }
 }

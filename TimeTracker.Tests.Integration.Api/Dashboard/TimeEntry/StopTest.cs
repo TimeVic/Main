@@ -87,7 +87,7 @@ public class StopTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
-        Assert.Null(actualDto);
+        Assert.Equal(Guid.Empty, actualDto.Id);
         
         var processedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(processedCounter == 0);

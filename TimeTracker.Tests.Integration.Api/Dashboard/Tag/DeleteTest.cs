@@ -64,7 +64,7 @@ public class DeleteTest: BaseTest
         var timeEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 1);
         var timeEntry = timeEntries.First();
         timeEntry.Tags.Add(_tag);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, _jwtToken, new DeleteRequest()
         {
@@ -77,7 +77,7 @@ public class DeleteTest: BaseTest
     public async Task ShouldNotDeleteIfHasNoAccess()
     {
         var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAsync();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, otherJwtToken, new DeleteRequest()
         {

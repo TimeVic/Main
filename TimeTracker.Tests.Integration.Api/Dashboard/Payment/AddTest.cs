@@ -42,7 +42,7 @@ public class AddTest: BaseTest
         _client = _clientDao.CreateAsync(_workspace, "Test adding").Result;
         _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
         _project.SetClient(_client);
-        DbSessionProvider.PerformCommitAsync().Wait();
+        FlushDbChanges().Wait();
     }
 
     [Fact]

@@ -23,28 +23,28 @@ public class UserMapping: BaseGuidMappings<UserEntity>
         HasMany(x => x.CreatedWorkspaces)
             .KeyColumn("created_user_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
         
         HasMany(x => x.TimeEntries)
             .KeyColumn("user_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
         
         HasMany(x => x.WorkspaceMemberships)
             .KeyColumn("user_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
         
         HasMany(x => x.NotificationTokens)
             .KeyColumn("user_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
     }

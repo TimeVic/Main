@@ -64,7 +64,7 @@ public class DeleteTest: BaseTest
     public async Task ShouldNotDeleteIfArchived()
     {
         _project.IsArchived = true;
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             ProjectId = _project.Id,
@@ -79,7 +79,7 @@ public class DeleteTest: BaseTest
     public async Task ShouldNotDeleteIfHasNoAccess()
     {
         var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAsync();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, otherJwtToken, new DeleteRequest()
         {

@@ -19,10 +19,7 @@ public class ProjectService: IProjectService
         {
             return null;
         }
-        var membership = await _workspaceAccessService.GetMembershipAsync(
-            user, 
-            project.Workspace
-        );
+        var membership = _workspaceAccessService.GetMembershipAsync(user, project.Workspace);
         var projectAccessItem = membership?.ProjectAccesses.FirstOrDefault(
             item => item.Project.Id == project.Id
         );

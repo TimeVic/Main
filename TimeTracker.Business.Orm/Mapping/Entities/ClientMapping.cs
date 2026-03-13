@@ -23,14 +23,14 @@ public class ClientMapping: BaseGuidMappings<ClientEntity>
         HasMany(x => x.Projects)
             .KeyColumn("client_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
         
         HasMany(x => x.Payments)
             .KeyColumn("client_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
     }

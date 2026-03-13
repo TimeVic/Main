@@ -29,7 +29,7 @@ public interface IQueueDao: IScopedDomainService, IDisposable
 
     Task<int> CompleteAllPending(CancellationToken cancellationToken = default);
 
-    void Flush();
+    Task Flush();
 
     Task UpdateProcessAtForPending();
     

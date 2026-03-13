@@ -32,7 +32,7 @@ public class StoredFileMapping: BaseGuidMappings<StoredFileEntity>
             .ParentKeyColumn("stored_file_id")
             .ChildKeyColumn("task_id")
             .FetchType.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.None();
         
         HasManyToMany(x => x.TaskComments)
@@ -40,7 +40,7 @@ public class StoredFileMapping: BaseGuidMappings<StoredFileEntity>
             .ParentKeyColumn("stored_file_id")
             .ChildKeyColumn("comment_id")
             .FetchType.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.None();
     }
 }

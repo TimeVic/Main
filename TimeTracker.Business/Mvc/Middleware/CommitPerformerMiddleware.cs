@@ -27,7 +27,7 @@ public class CommitPerformerMiddleware : ActionFilterAttribute
 
             await _next(context);
 
-            queueDao.Flush();
+            await queueDao.Flush();
             await dbSessionProvider.PerformCommitAsync();
         }
         catch (Exception)

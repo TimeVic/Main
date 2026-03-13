@@ -38,7 +38,7 @@ public class UpdateTest: BaseTest
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _payment = _paymentSeeder.CreateSeveralAsync(_user, 1).Result.First();
-        DbSessionProvider.PerformCommitAsync().Wait();
+        FlushDbChanges().Wait();
 
         Assert.NotNull(_payment);
         Assert.NotNull(_payment.Project);
@@ -68,7 +68,7 @@ public class UpdateTest: BaseTest
         var expectedClient = await _clientDao.CreateAsync(_workspace, "Test new client");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test new project");
         expectProject.SetClient(expectedClient);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {

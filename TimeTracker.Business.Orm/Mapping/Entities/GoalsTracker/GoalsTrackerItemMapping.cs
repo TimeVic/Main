@@ -26,7 +26,7 @@ public class GoalsTrackerItemMapping: BaseGuidMappings<GoalsTrackerItemEntity>
         HasMany(x => x.CompletionMarkers)
             .KeyColumn("goals_tracker_item_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
     }

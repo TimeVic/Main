@@ -40,12 +40,13 @@ public class DeleteTest: BaseTest
     public async Task ShouldDeleteForTask()
     {
         var file = await _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment);
+        await FlushDbChanges();
         await _fileStorage.UploadFirstPendingToCloud();
 
-        await FlushDbChanges();
+        await FlushDbChanges(true);
         await _fileStorage.DeleteFile(_user, file.Id);
-        await FlushDbChanges();
-
+        
+        await FlushDbChanges(true);
         var actualFile = await DbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(file.Id);
         Assert.Null(actualFile);
     }
@@ -53,9 +54,10 @@ public class DeleteTest: BaseTest
     [Fact]
     public async Task ShouldNotDeleteIfNashNoAccess()
     {
-        var task2 = _taskSeeder.CreateAsync().Result;
+        var task2 = await _taskSeeder.CreateAsync();
         var file = await _fileStorage.PutFileAsync(task2, CreateFormFile(), StoredFileType.Attachment);
 
+        await FlushDbChanges(true);
         await Assert.ThrowsAsync<HasNoAccessException>(async () =>
         {
             await _fileStorage.DeleteFile(_user, file.Id);
@@ -66,8 +68,7 @@ public class DeleteTest: BaseTest
     public async Task ShouldNotDeleteIfPendingStatus()
     {
         var file = await _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment);
-        await FlushDbChanges();
-
+        await FlushDbChanges(true);
         await Assert.ThrowsAsync<RecordCanNotBeModifiedException>(async () =>
         {
             await _fileStorage.DeleteFile(_user, file.Id);

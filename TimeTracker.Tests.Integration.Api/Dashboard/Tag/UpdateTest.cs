@@ -57,7 +57,7 @@ public class UpdateTest: BaseTest
     public async Task ShouldUpdate()
     {
         var expectedTag = _tagFactory.Generate();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             TagId = _tag.Id,
@@ -76,7 +76,7 @@ public class UpdateTest: BaseTest
     public async Task ShouldNotUpdateIfHasNoAccess()
     {
         var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAsync();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()
         {

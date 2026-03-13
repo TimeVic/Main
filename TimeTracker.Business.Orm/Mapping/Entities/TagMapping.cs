@@ -31,7 +31,7 @@ public class TagMapping: BaseGuidMappings<TagEntity>
             .ParentKeyColumn("tag_id")
             .ChildKeyColumn("task_id")
             .FetchType.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.None();
         
         HasManyToMany(x => x.TimeEntries)
@@ -39,7 +39,7 @@ public class TagMapping: BaseGuidMappings<TagEntity>
             .ParentKeyColumn("tag_id")
             .ChildKeyColumn("time_entry_id")
             .FetchType.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.None();
     }
 }

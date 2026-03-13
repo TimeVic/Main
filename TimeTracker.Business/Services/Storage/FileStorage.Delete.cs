@@ -1,4 +1,5 @@
-﻿using TimeTracker.Business.Common.Constants;
+﻿using NHibernate.Linq;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Entities;

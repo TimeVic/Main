@@ -17,7 +17,7 @@ public class QueueDao: IQueueDao
     public QueueDao(IDbSessionProvider sessionProvider, ILogger<IQueueDao> logger)
     {
         _logger = logger;
-        _session = sessionProvider.CreateSession(FlushMode.Always);
+        _session = sessionProvider.CreateSession(FlushMode.Manual);
     }
 
     public async Task Push(
@@ -73,7 +73,6 @@ public class QueueDao: IQueueDao
             var result = await _session.CreateSQLQuery(@"SELECT * FROM fn_queue_get_top(:channel)")
                 .AddEntity(typeof(QueueEntity))
                 .SetParameter("channel", channel ?? QueueChannel.Default)
-                .SetFlushMode(FlushMode.Always)
                 .SetResultTransformer(new RootEntityResultTransformer())
                 .ListAsync<QueueEntity>(cancellationToken);
             var entity = result?.FirstOrDefault();
@@ -114,9 +113,9 @@ public class QueueDao: IQueueDao
     public async Task<int> CompleteAllPending(CancellationToken cancellationToken = default)
     {
         return await _session.Query<QueueEntity>()
-            .UpdateAsync(item => new {
-                Status = QueueStatus.Success
-            }, cancellationToken: cancellationToken);
+            .UpdateBuilder()
+            .Set(x => x.Status, QueueStatus.Success)
+            .UpdateAsync(cancellationToken);
     }
     
     public async Task UpdateProcessAtForPending()
@@ -124,7 +123,7 @@ public class QueueDao: IQueueDao
         await _session.Query<QueueEntity>()
             .Where(x => x.Status == QueueStatus.Pending)
             .UpdateBuilder()
-            .Set(x => x.ProcessAt, DateTime.UtcNow)
+            .Set(x => x.ProcessAt, DateTime.UtcNow.AddSeconds(-1))
             .UpdateAsync();
 
     }
@@ -136,15 +135,15 @@ public class QueueDao: IQueueDao
     
     public void Dispose()
     {
-        Flush();
+        Flush().Wait();
         if (_session.IsOpen)
         {
             _session.Dispose();
         }
     }
     
-    public void Flush()
+    public async Task Flush()
     {
-        _session.Flush();
+        await _session.FlushAsync();
     }
 }

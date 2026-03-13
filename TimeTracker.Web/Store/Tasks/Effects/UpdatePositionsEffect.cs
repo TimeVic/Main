@@ -37,7 +37,7 @@ public class UpdatePositionsEffect: Effect<UpdatePositionsAction>
                 _logger.LogError("Task List Id can not be null");
             }
 
-            var items = action.Tasks.ToDictionary(x => x.TaskId, x => x.PositionIndex);
+            var items = action.Tasks.ToDictionary(x => x.Id, x => x.PositionIndex);
             await _apiService.TasksUpdatePositionsAsync(new UpdatePositionsRequest()
             {
                 TaskListId = taskListId,

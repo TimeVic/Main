@@ -37,7 +37,6 @@ public partial class GetCountTest: BaseTest
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _task = _taskSeeder.CreateAsync(user: _user).Result;
-        DbSessionProvider.PerformCommitAsync().Wait();
     }
 
     [Fact]

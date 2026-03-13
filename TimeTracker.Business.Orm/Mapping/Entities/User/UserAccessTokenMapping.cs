@@ -23,7 +23,7 @@ public class UserAccessTokenMapping: BaseGuidMappings<UserAccessTokenEntity>
         HasMany(x => x.JwtTokens)
             .KeyColumn("access_token_id")
             .Fetch.Select()
-            .ExtraLazyLoad()
+            .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
     }

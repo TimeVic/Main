@@ -54,7 +54,7 @@ public class UpdateTest: BaseTest
     {
         var expectedClient = _clientSeeder.CreateSeveralAsync(_workspace).Result.First();
         var expectedProject = _projectFactory.Generate();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             ProjectId = _project.Id,
@@ -79,7 +79,7 @@ public class UpdateTest: BaseTest
     {
         var expectedClient = _clientSeeder.CreateSeveralAsync(_workspace).Result.First();
         _project.SetClient(expectedClient);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
             ProjectId = _project.Id,
@@ -97,7 +97,7 @@ public class UpdateTest: BaseTest
     public async Task ShouldNotSetClientFromOtherUser()
     {
         var otherClient = _clientSeeder.CreateSeveralAsync().Result.First();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
@@ -116,7 +116,7 @@ public class UpdateTest: BaseTest
     public async Task ShouldNotUpdateIfHasNoAccess()
     {
         var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAsync();
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()
         {
