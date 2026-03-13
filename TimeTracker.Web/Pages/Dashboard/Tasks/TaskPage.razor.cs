@@ -39,7 +39,7 @@ public partial class TaskPage
     private IState<AuthState> _authState { get; set; }
     
     private Guid? _taskId = Guid.Empty;
-    private TaskDto? _task;
+    private TaskFullDto? _task;
     private bool _isLoading = false;
 
     private async Task LoadTask()
@@ -55,14 +55,14 @@ public partial class TaskPage
         {
             _urlService.NavigateToChangeWorkspace(
                 WorkspaceId,
-                string.Format(SiteUrl.Dashboard_Task, WorkspaceId, TaskId)
+                string.Format(SiteUrl.Dashboard_Task, TaskId)
             );
             return;
         }
         
         try
         {
-            _task = await ApiService.TasksGetAsync(_taskId.Value);
+            _task = await ApiService.TasksGetOneAsync(_taskId.Value);
             if (_task == null)
             {
                 NavigateToTasksPage();    
