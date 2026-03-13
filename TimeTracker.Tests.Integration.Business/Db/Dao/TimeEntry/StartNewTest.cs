@@ -117,7 +117,7 @@ public partial class StartNewTest: BaseTest
         var project = await _projectDao.CreateAsync(workspace, "test");
         project.DefaultHourlyRate = expectHourlyRate;
         project.IsBillableByDefault = true;
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,

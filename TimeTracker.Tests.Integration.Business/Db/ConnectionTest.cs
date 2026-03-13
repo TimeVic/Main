@@ -18,7 +18,7 @@ public class ConnectionTest: BaseTest
     [Fact]
     public void TestDbConnection()
     {
-        DbSessionProvider.PerformCommitAsync().Wait();
+        FlushDbChanges().Wait();
     }
     
     [Fact]

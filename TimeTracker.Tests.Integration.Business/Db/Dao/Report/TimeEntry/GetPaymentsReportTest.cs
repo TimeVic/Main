@@ -40,7 +40,7 @@ public class GetPaymentsReportTest: BaseTest
     public async Task ShouldReceiveSimpleReport()
     {
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
         {
@@ -126,7 +126,7 @@ public class GetPaymentsReportTest: BaseTest
     public async Task ShouldReceiveSimpleReportWithCalculatedPayments()
     {
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
         {

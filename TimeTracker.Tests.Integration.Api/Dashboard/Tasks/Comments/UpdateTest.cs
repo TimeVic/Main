@@ -141,6 +141,7 @@ public class UpdateTest: BaseTest
                 }
             }
         );
+        await FlushDbChanges();
         await _notificationCenterService.MarkAllAsRead(_user, _task.Workspace);
         
         // Act
@@ -150,6 +151,7 @@ public class UpdateTest: BaseTest
             Comment = _fakeComment.Comment,
             WatcherIds = new List<Guid>() { user2.Id, user3.Id }
         });
+        await FlushDbChanges(true);
         await QueueProcess(QueueChannel.Default);
         
         // Assert

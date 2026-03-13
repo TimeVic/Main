@@ -45,7 +45,7 @@ public class GetReportByWeeksTest: BaseTest
     public async Task ShouldReceiveReportForOwnerOrManager()
     {
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
         {
@@ -126,7 +126,7 @@ public class GetReportByWeeksTest: BaseTest
     public async Task ShouldReceiveReportForOther()
     {
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         var project2 = projects.Last();
         var otherUser = await _userSeeder.CreateActivatedAsync();
@@ -201,7 +201,7 @@ public class GetReportByWeeksTest: BaseTest
     public async Task ShouldReceiveCorrectWeekNumber()
     {
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {

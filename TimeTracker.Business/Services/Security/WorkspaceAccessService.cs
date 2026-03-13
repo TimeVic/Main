@@ -89,7 +89,6 @@ public class WorkspaceAccessService: IWorkspaceAccessService
     
     public async Task<MembershipAccessType?> GetAccessTypeAsync(UserEntity user, ProjectEntity project)
     {
-        await NHibernateUtil.InitializeAsync(project.Workspace);
         var member = GetMembershipAsync(user, project.Workspace);
         if (member == null)
         {

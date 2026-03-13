@@ -52,7 +52,7 @@ public class UpdateTest: BaseTest
         var expectClient = await _clientDao.CreateAsync(_workspace, "Test2");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
         expectProject.SetClient(expectClient);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
 
         var actualPayment = await _paymentDao.CreateAsync(
             _workspace,
@@ -95,7 +95,7 @@ public class UpdateTest: BaseTest
         var expectedPayment = _paymentFactory.Generate();
         var expectClient = await _clientDao.CreateAsync(_workspace, "Test2");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
 
         var actualPayment = await _paymentDao.CreateAsync(
             _workspace,

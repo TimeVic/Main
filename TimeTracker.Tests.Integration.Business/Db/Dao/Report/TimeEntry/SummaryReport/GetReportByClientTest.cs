@@ -43,7 +43,7 @@ public class GetReportByClientTest: BaseTest
     [Fact]
     public async Task ShouldReceiveReportForOwnerOrManager()
     {
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = await _projectSeederSeeder.CreateAsync(_workspace);
         var client1 = project1.Client;
         for (int i = 0; i < 3; i++)
@@ -131,7 +131,7 @@ public class GetReportByClientTest: BaseTest
     [Fact]
     public async Task ShouldReceiveReportForOther()
     {
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = await _projectSeederSeeder.CreateAsync(_workspace);
         var project2 = await _projectSeederSeeder.CreateAsync(_workspace);
         var otherUser = await _userSeeder.CreateActivatedAsync();

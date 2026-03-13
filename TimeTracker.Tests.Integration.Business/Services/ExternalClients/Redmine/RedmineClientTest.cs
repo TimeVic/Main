@@ -93,7 +93,7 @@ public partial class RedmineClientTest : BaseTest
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
         activeEntry.Task.ExternalTaskId = _taskId;
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
@@ -121,7 +121,7 @@ public partial class RedmineClientTest : BaseTest
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
         activeEntry.Task.ExternalTaskId = "fake";
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
@@ -144,7 +144,7 @@ public partial class RedmineClientTest : BaseTest
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
         activeEntry.Task.ExternalTaskId = _taskId;
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);

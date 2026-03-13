@@ -4,6 +4,7 @@ using NHibernate;
 using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Exceptions.Common;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -19,16 +20,22 @@ public class NotificationCenterPushRequestHandler : IAsyncQueueHandler<Notificat
     private readonly IDbSessionProvider _sessionProvider;
     private readonly ILogger<NotificationCenterPushRequestHandler> _logger;
     private readonly INotificationCenterService _notificationCenterService;
+    private readonly ITaskCommentDao _taskCommentDao;
+    private readonly ITaskDao _taskDao;
 
     public NotificationCenterPushRequestHandler(
         IDbSessionProvider sessionProvider,
         ILogger<NotificationCenterPushRequestHandler> logger,
-        INotificationCenterService notificationCenterService
+        INotificationCenterService notificationCenterService,
+        ITaskCommentDao taskCommentDao,
+        ITaskDao taskDao
     )
     {
         _sessionProvider = sessionProvider;
         _logger = logger;
         _notificationCenterService = notificationCenterService;
+        _taskCommentDao = taskCommentDao;
+        _taskDao = taskDao;
     }
 
     public async Task HandleAsync(
@@ -45,11 +52,11 @@ public class NotificationCenterPushRequestHandler : IAsyncQueueHandler<Notificat
         IEntity entity = null;
         if (commandContext.TaskId.HasValue)
         {
-            entity = await _sessionProvider.CurrentSession.GetAsync<TaskEntity>(commandContext.TaskId, cancellationToken);
+            entity = (await _taskDao.GetById(taskId: commandContext.TaskId.Value))!;
         }
         else if (commandContext.TaskCommentId.HasValue)
         {
-            entity = await _sessionProvider.CurrentSession.GetAsync<TaskCommentEntity>(commandContext.TaskCommentId, cancellationToken);
+            entity = (await _taskCommentDao.GetById(taskCommentId: commandContext.TaskCommentId.Value))!;
         }
 
         if (entity != null)

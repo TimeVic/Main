@@ -44,7 +44,7 @@ public class GetReportByMothsTest: BaseTest
     public async Task ShouldReceiveReportForOwnerOrManager()
     {
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
         {
@@ -134,7 +134,7 @@ public class GetReportByMothsTest: BaseTest
     public async Task ShouldReceiveReportForOther()
     {
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
-        await DbSessionProvider.PerformCommitAsync();
+        await FlushDbChanges();
         var project1 = projects.First();
         var project2 = projects.Last();
         var otherUser = await _userSeeder.CreateActivatedAsync();

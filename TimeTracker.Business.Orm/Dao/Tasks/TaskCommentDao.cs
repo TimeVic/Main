@@ -1,4 +1,5 @@
 ﻿using NHibernate.Criterion;
+using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
@@ -21,7 +22,9 @@ public class TaskCommentDao: ITaskCommentDao
 
     public async Task<TaskCommentEntity?> GetById(Guid taskCommentId)
     {
-        return await _sessionProvider.CurrentSession.GetAsync<TaskCommentEntity>(taskCommentId);
+        return await _sessionProvider.CurrentSession.Query<TaskCommentEntity>()
+            .Where(item => item.Id == taskCommentId)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<TaskCommentEntity> AddAsync(
