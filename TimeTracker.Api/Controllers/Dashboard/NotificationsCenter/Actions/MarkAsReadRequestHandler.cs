@@ -40,8 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
     
         public async Task ExecuteAsync(MarkAsReadRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var notification = await _sessionProvider.CurrentSession.GetAsync<NotificationEntity>(request.NotificationId);
             await _securityManager.CheckAccess(AccessLevel.Read, user, notification);
             await _notificationCenterService.MarkAsRead(notification);

@@ -35,8 +35,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
     
         public async Task<WorkspaceDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var workspace = await _workspaceDao.CreateWorkspaceAsync(user, request.Name);
             await _workspaceAccessService.ShareAccessAsync(workspace, user, MembershipAccessType.Owner);
             var response = _mapper.Map<WorkspaceDto>(workspace);

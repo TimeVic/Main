@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.Http;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Exceptions;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Api.Auth;
 using TimeTracker.Business.Common.Helpers;
@@ -67,7 +68,7 @@ public class AuthorizationService: IAuthorizationService
             return _loggedInUserId;
         if (_scope.TryResolve(out IApiRequestService? apiRequestService))
         {
-            var userGuid = apiRequestService.GetUserIdFromJwt();
+            var userGuid = apiRequestService.GetCurrentUserId();
             if (userGuid != Guid.Empty)
             {
                 _loggedInUserId = userGuid;
@@ -110,7 +111,11 @@ public class AuthorizationService: IAuthorizationService
             )
         )
         {
-            throw new UserNotAuthorizedException();
+            throw DomainException.UserNotAuthorizedException;
+        }
+        if (accessToken.ExpirationTime < DateTime.UtcNow)
+        {
+            throw new IncorrectAccessTokenException("Invalid Token");
         }
         return await GenerateNewJwtToken(accessToken);
     }

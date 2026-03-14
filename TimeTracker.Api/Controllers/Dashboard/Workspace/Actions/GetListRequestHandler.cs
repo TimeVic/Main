@@ -32,8 +32,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
     
         public async Task<PaginatedListDto<WorkspaceDto>> ExecuteAsync(GetListRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var allWorkspaces = await _userDao.GetUsersWorkspaces(user);
             var responseList = _mapper.Map<ICollection<WorkspaceDto>>(allWorkspaces);
             foreach (var workspaceDto in responseList)

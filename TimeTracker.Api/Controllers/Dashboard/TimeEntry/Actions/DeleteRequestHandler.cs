@@ -37,8 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var timeEntry = await _timeEntryDao.GetByIdAsync(request.TimeEntryId);
             if (timeEntry == null)
             {

@@ -40,7 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
     
         public async Task<ClientDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
+            var userId = _apiRequestService.GetCurrentUserId();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (workspace == null)

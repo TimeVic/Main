@@ -28,4 +28,6 @@ public static class DomainException
     public static UserNotAuthorizedException UserNotAuthorizedException { get; } = new();
     
     public static IncorrectFileException IncorrectFileException { get; } = new();
+    
+    public static UserNotFoundException UserNotFoundException { get; } = new();
 }

@@ -45,8 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var taskComment = await _taskCommentDao.GetById(request.CommentId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, taskComment))
             {

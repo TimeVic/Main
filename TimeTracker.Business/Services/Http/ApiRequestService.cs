@@ -1,35 +1,47 @@
 ﻿using Microsoft.AspNetCore.Http;
-using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Common.Exceptions;
+using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Auth;
 
 namespace TimeTracker.Business.Services.Http;
 
-public class ApiRequestService: IApiRequestService
+public class ApiRequestService: BaseApiRequestService, IApiRequestService
 {
-    private readonly IHttpContextAccessor _httpContext;
-    private readonly IJwtAuthService _jwtAuthService;
+    private readonly IUserDao _userDao;
 
     public ApiRequestService(
         IHttpContextAccessor httpContext,
-        IJwtAuthService jwtAuthService
-    )
+        IJwtAuthService jwtAuthService,
+        IUserDao userDao,
+        IHttpTokenResolverService httpTokenResolverService
+    ): base(httpContext, jwtAuthService, httpTokenResolverService)
     {
-        _httpContext = httpContext;
-        _jwtAuthService = jwtAuthService;
-    }
-
-    public string GetApiToken()
-    {
-        return _httpContext.HttpContext?.Request.GetApiToken();
-    }
-
-    public Guid GetUserIdFromJwt()
-    {
-        return _jwtAuthService.GetUserId(GetApiToken());
+        _userDao = userDao;
     }
     
-    public string? GetRequestUrl()
+    public async Task<UserEntity> GetCurrentUser()
     {
-        return _httpContext?.HttpContext?.Request.Path.Value?.ToLower();
+        var guid = GetCurrentUserId();
+        var user = await _userDao.GetById(guid);
+        if (user == null || user.DeletedAt != null)
+        {
+            throw DomainException.UserNotFoundException;
+        }
+        return user;
+    }
+    
+    public async Task<UserEntity?> GetCurrentUserOrNull()
+    {
+        var guid = GetUserGuidFromJwt();
+        if (guid == null)
+            return null;
+
+        var user = await _userDao.GetById(guid.Value);
+        if (user == null || user.DeletedAt != null)
+        {
+            return null;
+        }
+        return user;
     }
 }

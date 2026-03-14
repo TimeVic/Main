@@ -1,11 +1,12 @@
 ﻿using Domain.Abstractions;
+using Domain.Abstractions.Api;
+using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Services.Http;
 
-public interface IApiRequestService: IDomainService
+public interface IApiRequestService: IBaseApiRequestService
 {
-    string GetApiToken();
-    Guid GetUserIdFromJwt();
-    
-    string? GetRequestUrl();
+    Task<UserEntity> GetCurrentUser();
+
+    Task<UserEntity?> GetCurrentUserOrNull();
 }

@@ -47,8 +47,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
     
         public async Task ExecuteAsync(ArchiveTaskListRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var taskList = await _taskListDao.GetById(request.TaskListId);
             if (taskList == null)
             {

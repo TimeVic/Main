@@ -48,8 +48,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
     
         public async Task<TaskListDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var project = await _projectDao.GetById(request.ProjectId, true);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
             {

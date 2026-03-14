@@ -5,7 +5,7 @@ using TimeTracker.Api.WebSocket.Constants;
 using TimeTracker.Api.WebSocket.Core;
 using IAuthorizationService = TimeTracker.Business.Services.Auth.IAuthorizationService;
 
-namespace TimeTracker.Api.WebSocket.Hubs.PingHub;
+namespace TimeTracker.Api.WebSocket.Hubs;
 
 public class PingHub : BaseHub
 {

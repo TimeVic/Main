@@ -25,38 +25,25 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
     {
         private readonly IMapper _mapper;
         private readonly IApiRequestService _apiRequestService;
-        private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
-        private readonly IFileStorage _fileStorage;
-        private readonly IFileStorageRelationshipService _fileStorageRelationshipService;
-        private readonly IDbSessionProvider _sessionProvider;
         private readonly ITaskDao _taskDao;
 
         public GetListHandler(
             IMapper mapper,
             IApiRequestService apiRequestService,
-            IUserDao userDao,
             ISecurityManager securityManager,
-            IFileStorage fileStorage,
-            IFileStorageRelationshipService fileStorageRelationshipService,
-            IDbSessionProvider sessionProvider,
             ITaskDao taskDao
         )
         {
             _mapper = mapper;
             _apiRequestService = apiRequestService;
-            _userDao = userDao;
             _securityManager = securityManager;
-            _fileStorage = fileStorage;
-            _fileStorageRelationshipService = fileStorageRelationshipService;
-            _sessionProvider = sessionProvider;
             _taskDao = taskDao;
         }
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
 
             if (request.EntityType == StorageEntityType.Task)
             {

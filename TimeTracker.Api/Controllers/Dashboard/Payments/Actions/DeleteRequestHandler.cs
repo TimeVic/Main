@@ -37,8 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Payments.Actions
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var payment = await _paymentDao.GetById(request.PaymentId);
             if (
                 payment == null 

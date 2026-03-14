@@ -18,6 +18,11 @@ public class DbCleanUpService: IDbCleanUpService
     {
         var tables = new List<string>()
         {
+            "messaging.messages",
+            "messaging.connections",
+            "messaging.channel_members",
+            "messaging.channels",
+            
             "notifications",
             "payments",
             "queues",

@@ -41,8 +41,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
     
         public async Task<PaymentReportResponse> ExecuteAsync(PaymentReportRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             RecordNotFoundException.ThrowIfNull(workspace);
             
