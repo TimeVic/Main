@@ -1,10 +1,13 @@
-﻿using Persistence.Transactions.Behaviors;
+﻿using Autofac;
+using Microsoft.AspNetCore.Http;
+using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Api.Auth;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Dto.Auth;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Services.Http;
 
 namespace TimeTracker.Business.Services.Auth;
 
@@ -16,12 +19,23 @@ public class AuthorizationService: IAuthorizationService
     private readonly IUserAccessTokenDao _accessTokenDao;
     private readonly IDbSessionProvider _sessionProvider;
 
+    #region Scoped
+
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ILifetimeScope _scope;
+    private UserEntity? _loggedInUser;
+    private Guid? _loggedInUserId;
+
+    #endregion
+
     public AuthorizationService(
         IUserDao userDao,
         IJwtAuthService jwtAuthService,
         IPasswordService passwordService,
         IUserAccessTokenDao accessTokenDao,
-        IDbSessionProvider sessionProvider
+        IDbSessionProvider sessionProvider,
+        IHttpContextAccessor httpContextAccessor,
+        ILifetimeScope scope
     )
     {
         _userDao = userDao;
@@ -29,8 +43,41 @@ public class AuthorizationService: IAuthorizationService
         _passwordService = passwordService;
         _accessTokenDao = accessTokenDao;
         _sessionProvider = sessionProvider;
+        _httpContextAccessor = httpContextAccessor;
+        _scope = scope;
     }
 
+    #region Get Authenticated User
+
+    public async Task<UserEntity?> GetCurrentLoggedInUser()
+    {
+        var userGuid = GetCurrentLoggedInUserUid();
+        if (!userGuid.HasValue)
+            return null;
+        if (userGuid != null)
+        {
+            _loggedInUser = await _userDao.GetById(userGuid.Value);
+        }
+        return _loggedInUser;
+    }
+    
+    public Guid? GetCurrentLoggedInUserUid()
+    {
+        if (_loggedInUserId is not null)
+            return _loggedInUserId;
+        if (_scope.TryResolve(out IApiRequestService? apiRequestService))
+        {
+            var userGuid = apiRequestService.GetUserIdFromJwt();
+            if (userGuid != Guid.Empty)
+            {
+                _loggedInUserId = userGuid;
+            }    
+        }
+        return _loggedInUserId;
+    }
+    
+    #endregion
+    
     public async Task<AuthResultDto> Login(string email, string password)
     {
         var user = await _userDao.GetByEmail(email);

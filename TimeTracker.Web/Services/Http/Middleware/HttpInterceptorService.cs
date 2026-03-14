@@ -3,10 +3,8 @@ using System.Net.Http.Headers;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Web.Constants;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http.Auth;
 using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common;
 using Toolbelt.Blazor;
 
 namespace TimeTracker.Web.Services.Http.Middleware;

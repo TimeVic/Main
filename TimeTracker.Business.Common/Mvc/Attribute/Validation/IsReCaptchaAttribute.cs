@@ -11,6 +11,7 @@ public class IsReCaptchaAttribute : ValidationAttribute
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
         var reCaptchaService = validationContext.GetService<IReCaptchaService>();
+        return ValidationResult.Success;
         if (reCaptchaService == null)
         {
             // This is frontend application

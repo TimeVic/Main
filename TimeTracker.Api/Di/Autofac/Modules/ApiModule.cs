@@ -7,11 +7,6 @@ namespace TimeTracker.Api.Di.Autofac.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            // builder
-            //     .RegisterType<RequestService>()
-            //     .As<IRequestService>()
-            //     .InstancePerLifetimeScope();
-            
             builder
                 .RegisterType<HttpContextAccessor>()
                 .As<IHttpContextAccessor>()

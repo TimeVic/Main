@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 using TimeTracker.Api.Di.Autofac.Modules;
 using TimeTracker.Api.Middleware;
+using TimeTracker.Api.WebSocket.Hubs.PingHub;
 using TimeTracker.Business;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Mvc.Middleware;
@@ -38,6 +39,10 @@ public class Startup
         
         // Disable X-Frame headers
         services.AddAntiforgery(o => o.SuppressXFrameOptionsHeader = true);
+        services.AddSignalR(options =>
+        {
+            options.EnableDetailedErrors = true;
+        });
     }
 
     public virtual void ConfigureContainer(ContainerBuilder containerBuilder)
@@ -74,6 +79,11 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
         
-        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            
+            endpoints.MapHub<PingHub>("/websocket/ping");
+        });
     }
 }

@@ -14,4 +14,8 @@ public interface IAuthorizationService: IDomainService
     Task<AuthResultDto> GenerateNewJwtToken(string accessTokenString, string previousJwtToken);
 
     Task<AuthResultDto> GenerateNewJwtToken(UserAccessTokenEntity? accessToken);
+
+    Task<UserEntity?> GetCurrentLoggedInUser();
+
+    Guid? GetCurrentLoggedInUserUid();
 }

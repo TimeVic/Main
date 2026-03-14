@@ -1,6 +1,11 @@
 ﻿@inherits BaseLayout
 <FluentLayout Style="min-height: calc(100% - 40px)">
     <FluentHeader>
+        
+        <FluentButton OnClick="ConnecToWs">Connect</FluentButton>
+        <FluentButton OnClick="Send">Send</FluentButton>
+        <FluentButton OnClick="Disconnect">Disconnect</FluentButton>
+        
         TimeVic
         @if (CommonState.Value.IsInitialized)
         {
