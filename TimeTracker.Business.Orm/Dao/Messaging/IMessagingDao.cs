@@ -25,6 +25,11 @@ public interface IMessagingDao: IScopedDomainService
         UserEntity sender,
         UserEntity receiver
     );
-
     Task<MessagingChannelEntity?> GetChannelBy(Guid id);
+
+    Task<MessagingChannelEntity> CreateChannel(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string slug
+    );
 }

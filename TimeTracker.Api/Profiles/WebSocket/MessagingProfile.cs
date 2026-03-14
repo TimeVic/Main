@@ -15,7 +15,7 @@ public class MessagingProfile : Profile
             {
                 Id = e.Id,
                 Type = e.Type,
-                Name = e.Name,
+                Slug = e.Slug,
                 Workspace = mapper.Mapper.Map<WorkspaceDto>(e.Workspace),
                 CreatedBy = mapper.Mapper.Map<UserDto>(e.CreatedBy)
             });

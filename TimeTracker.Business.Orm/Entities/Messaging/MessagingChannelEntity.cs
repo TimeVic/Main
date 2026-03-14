@@ -8,7 +8,7 @@ namespace TimeTracker.Business.Orm.Entities.Messaging
     public class MessagingChannelEntity: AEntity
     {
         public virtual MessagingChannelType Type { get; set; }
-        public virtual string Name { get; set; } = string.Empty;
+        public virtual string Slug { get; set; } = string.Empty;
         
         #region Relationships
 

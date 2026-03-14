@@ -11,5 +11,5 @@ public class HubMethodName
     public static string LoadChannelsResponse = "LoadChannelsResponse";
     public static string LoadMessagesResponse = "LoadMessagesResponse";
     public static string LoadCountersResponse = "LoadCountersResponse";
-    public static string ChannelCreatedResponse = "ChannelCreatedResponse";
+    public static string ChannelCreated = "ChannelCreated";
 }

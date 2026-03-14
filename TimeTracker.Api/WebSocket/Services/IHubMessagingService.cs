@@ -14,4 +14,11 @@ public interface IHubMessagingService: IScopedDomainService
         UserEntity? receiver = null,
         MessagingChannelEntity? channel = null
     );
+
+    Task<MessagingChannelEntity> CreateChannel(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string slug,
+        List<UserEntity> members
+    );
 }

@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
+using TimeTracker.Api.Shared.Dto.Entity.Messaging;
 using TimeTracker.Api.WebSocket.Constants;
 using TimeTracker.Api.WebSocket.Services.Mappers;
 using TimeTracker.Business.Common.Exceptions.Common;
@@ -75,5 +76,29 @@ public class HubMessagingService: IHubMessagingService
         var recipientsToIncreaseCounters = recipients.Where(item => item.Id != sender.Id).ToList();
         await _hubMessageCountService.IncreaseForUsers(messageChannel, recipientsToIncreaseCounters);
         return message;
+    }
+    
+    public async Task<MessagingChannelEntity> CreateChannel(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string slug,
+        List<UserEntity> members
+    )
+    {
+        var channel = await _messagingDao.CreateChannel(workspace, user, slug);
+        
+        var recipients = new List<UserEntity>()
+        {
+            user
+        };
+        recipients = recipients.Concat(members).ToList();
+        var hubRecipientConnections = await _messagingDao.GetConnectionsByUsers(recipients);
+        foreach (var hubConnections in hubRecipientConnections)
+        {
+            var channelDto = _mapper.Map<MessagingChannelDto>(channel);
+            await _context.Clients.Client(hubConnections.ConnectionId).SendAsync(HubMethodName.ChannelCreated, channelDto);
+        }
+
+        return channel;
     }
 }
