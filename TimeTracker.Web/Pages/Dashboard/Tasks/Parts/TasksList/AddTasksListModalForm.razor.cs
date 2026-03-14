@@ -56,13 +56,9 @@ public partial class AddTasksListModalForm
                 ToastService.ShowInfo("Task list has been added");
                 OnCloseModal();
                 
-                var navigateToProject = ProjectState.Value.List.First(
-                    item => item.Id == model.ProjectId
-                );
                 NavigationManager.NavigateTo(
                     string.Format(
                         SiteUrl.Dashboard_Tasks,
-                        navigateToProject?.Id.ToString(),
                         taskList.Id
                     )    
                 );

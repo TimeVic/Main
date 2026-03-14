@@ -38,7 +38,7 @@ public partial class UpdateTaskForm
     private UpdateRequest _model = new();
     private bool _isLoading = false;
     private EditForm? _form;
-    public TaskFullDto _task { get; set; }
+    public TaskFullDto _task { get; set; } = new();
     
     private string _tabLabelAttachments
     {
@@ -66,14 +66,15 @@ public partial class UpdateTaskForm
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
         _task = await ApiService.TasksGetOneAsync(TaskId);
+        Debug.Log(_task);
         if (_task != null)
         {
             _model.Fill(_task);
             return;
         }
         _logger.LogError("Task with id {TaskId} not found", TaskId);
+        await base.OnInitializedAsync();
     }
 
     private void SubmitForm()

@@ -35,7 +35,7 @@ public partial class NavMenu
     {
         var selectedTasksList = _tasksListState.Value.List
             .FirstOrDefault(item => item?.Project.Id == project.Id);
-        return string.Format(SiteUrl.Dashboard_Tasks, project.Id.ToString(), selectedTasksList?.Id.ToString() ?? string.Empty);
+        return string.Format(SiteUrl.Dashboard_Tasks, selectedTasksList?.Id.ToString() ?? string.Empty);
     }
 
     private IEnumerable<ProjectDto> GetClientProjects(ClientDto? client = null)
