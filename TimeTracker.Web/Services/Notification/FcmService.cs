@@ -3,7 +3,7 @@ using Microsoft.JSInterop;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 
-namespace TimeTracker.Web.Services.Messaging;
+namespace TimeTracker.Web.Services.Notification;
 
 public class FcmService
 {

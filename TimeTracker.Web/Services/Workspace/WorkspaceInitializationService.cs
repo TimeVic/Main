@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
-using TimeTracker.Web.Services.Messaging;
+using TimeTracker.Web.Services.Notification;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common;
 using TimeTracker.Web.Store.Workspace;

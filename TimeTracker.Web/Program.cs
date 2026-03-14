@@ -15,9 +15,10 @@ using Plk.Blazor.DragDrop;
 using TimeTracker.Web.Services.Http.Auth;
 using TimeTracker.Web.Services.Http.Client;
 using TimeTracker.Web.Services.Http.Middleware;
-using TimeTracker.Web.Services.Messaging;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using Microsoft.FluentUI.AspNetCore.Components;
+using TimeTracker.Web.Services.Messaging;
+using TimeTracker.Web.Services.Notification;
 using ToastService = TimeTracker.Web.Services.UI.ToastService;
 
 var currentAssembly = typeof(Program).Assembly;    
@@ -44,9 +45,10 @@ var webHttp = new HttpClient()
 var configurationFile = "Debug";
 #if IS_RELEASE_BUILD
     configurationFile = "Release";
-#endif
-#if IS_DEVELOPMENT_BUILD
+#elif IS_DEVELOPMENT_BUILD
     configurationFile = "Development";
+#elif IS_LOCAL_BUILD
+    configurationFile = "Local";
 #endif
 Console.WriteLine($"Application loaded with {configurationFile} configuration");
 using var response = await webHttp.GetAsync($"appsettings.{configurationFile}.json");
@@ -86,6 +88,7 @@ builder.Services.AddScoped<MarkdownService>();
 builder.Services.AddScoped<WorkspaceInitializationService>();
 builder.Services.AddScoped<ToastService>();
 builder.Services.AddScoped<FcmService>();
+builder.Services.AddScoped<MessagingWebSocketClientService>();
 
 // Drag and drop
 builder.Services.AddBlazorDragDrop();

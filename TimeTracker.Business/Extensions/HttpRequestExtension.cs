@@ -22,6 +22,11 @@ namespace TimeTracker.Business.Extensions
                     authToken = authToken.Substring(7);
                 }
             }
+            // Web Socket Access Token
+            if (request.Query.ContainsKey("access_token"))
+            {
+                authToken = request.Query["access_token"]!;
+            }
             return authToken;
         }
         
