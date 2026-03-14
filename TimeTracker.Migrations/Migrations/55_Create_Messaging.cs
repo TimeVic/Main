@@ -13,14 +13,14 @@ namespace TimeTracker.Migrations.Migrations
             Create.Table("channels").InSchema("messaging")
                 .WithColumn("id").AsGuid().PrimaryKey().Unique().NotNullable().WithDefault(SystemMethods.NewGuid)
                 .WithColumn("workspace_id").AsGuid().NotNullable()
-                .WithColumn("type").AsString(256).NotNullable()
+                .WithColumn("type").AsInt16().NotNullable()
                 .WithColumn("name").AsString(256).NotNullable()
                 .WithColumn("created_by_id").AsGuid().NotNullable()
                 .WithColumn("created_at").AsDateTime().NotNullable()
                 .WithColumn("updated_at").AsDateTime().Nullable();
             
             Create.Table("messaging_channel_type").InSchema("enum")
-                .WithColumn("id").AsInt64().PrimaryKey()
+                .WithColumn("id").AsInt16().PrimaryKey()
                 .WithColumn("name").AsString(200).Unique();
 
             Insert.IntoTable("messaging_channel_type").InSchema("enum")
@@ -29,7 +29,7 @@ namespace TimeTracker.Migrations.Migrations
             
             Create.Table("messages").InSchema("messaging")
                 .WithColumn("id").AsGuid().PrimaryKey().Unique().NotNullable().WithDefault(SystemMethods.NewGuid)
-                .WithColumn("channel_id").AsGuid().NotNullable().WithDefaultValue(1)
+                .WithColumn("channel_id").AsGuid().NotNullable()
                 .WithColumn("text").AsString(110000).NotNullable()
                 .WithColumn("created_by_id").AsGuid().NotNullable()
                 .WithColumn("created_at").AsDateTime().NotNullable()
@@ -67,6 +67,15 @@ namespace TimeTracker.Migrations.Migrations
                 .ForeignColumn("created_by_id")
                 .ToTable("users")
                 .PrimaryColumn("id");
+            
+            Create.Index().OnTable("channels").InSchema("messaging").OnColumn("workspace_id");
+            Create.Index().OnTable("channels").InSchema("messaging").OnColumn("created_by_id");
+            
+            Create.Index().OnTable("messages").InSchema("messaging").OnColumn("channel_id");
+            Create.Index().OnTable("messages").InSchema("messaging").OnColumn("created_by_id");
+            
+            Create.Index().OnTable("channel_members").InSchema("messaging").OnColumn("channel_id");
+            Create.Index().OnTable("channel_members").InSchema("messaging").OnColumn("member_id");
             
             base.Up();
         }
