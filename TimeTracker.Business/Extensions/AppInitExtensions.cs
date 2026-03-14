@@ -104,6 +104,10 @@ namespace TimeTracker.Business.Extensions
                         
                         OnMessageReceived = (context) => {
                             var token = context.Request.GetApiToken();
+                            if (token == null)
+                            {
+                                return Task.CompletedTask;
+                            }
                             if (string.IsNullOrWhiteSpace(token)) {
                                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                                 context.Fail(

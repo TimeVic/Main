@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
@@ -89,6 +90,27 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         await _queueDao.UpdateProcessAtForPending();
         return await _queueService.ProcessAsync(channel, isClearSessionForEachIteration: false);
     }
+    
+    #region WebSocket
+    
+    protected HubConnection CreateWebSocketConnection(string url, string? jwtToken = null)
+    {
+        FlushDbChanges().Wait();
+        return new HubConnectionBuilder()
+            .WithUrl(
+                $"http://localhost/websocket/{url}",
+                options =>
+                {
+                    options.CloseTimeout = TimeSpan.FromMinutes(1);
+                    options.HttpMessageHandlerFactory = _ => _factory.Server.CreateHandler();
+                    if (!string.IsNullOrEmpty(jwtToken))
+                        options.Headers.Add("Authorization", $"Bearer {jwtToken}");
+                }
+            )
+            .Build();
+    }
+    
+    #endregion
     
     #region Http
     public async Task<HttpResponseMessage> PostRequestAsAnonymousAsync(string url, object data = null)
