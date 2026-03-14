@@ -48,8 +48,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
     
         public async Task<TaskListDto> ExecuteAsync(UpdateRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var project = await _projectDao.GetById(request.ProjectId, true);
             var taskList = await _taskListDao.GetById(request.TaskListId);
             if (taskList == null || project == null)

@@ -15,6 +15,7 @@ namespace TimeTracker.Business.Services.Auth
         private readonly string _issuer;
         private readonly string _audience;
         private readonly SymmetricSecurityKey _key;
+        private readonly int _lifeTime;
 
         public JwtAuthService(
             IConfiguration configuration,
@@ -30,21 +31,27 @@ namespace TimeTracker.Business.Services.Auth
             );
             _issuer = _configuration.GetValue<string>("App:Auth:Issuer")!;
             _audience = _configuration.GetValue<string>("App:Auth:Audience")!;
+            _lifeTime = _configuration.GetValue<int>("App:Auth:JwtLifetime")!;
         }
 
-        public string BuildJwt(Guid userId)
+        public string BuildJwt(
+            Guid userId,
+            Guid? accessTokenId = null,
+            DateTime? expirationTime = null,
+            DateTime? notBeforeTime = null    
+        )
         {
+            var now = DateTime.UtcNow;
+            expirationTime ??= now.Add(TimeSpan.FromMinutes(_lifeTime));
+            notBeforeTime ??= now;
             var claims = new List<Claim>
             {
                 new(ClaimsIdentity.DefaultNameClaimType, "user"),
                 new(ClaimsIdentity.DefaultRoleClaimType, "user"),
-                new(ClaimTypes.NameIdentifier, userId.ToString())
+                new(ClaimTypes.NameIdentifier, userId.ToString()),
+                
+                new(ClaimTypes.Authentication, accessTokenId?.ToString() ?? string.Empty)
             };
-
-            var now = DateTime.UtcNow;
-            var expirationTime = now.Add(TimeSpan.FromMinutes(
-                _configuration.GetValue<int>("App:Auth:JwtLifetime")
-            ));
             var signingCredentials = new SigningCredentials(
                 _key,
                 SecurityAlgorithms.HmacSha256
@@ -53,7 +60,7 @@ namespace TimeTracker.Business.Services.Auth
             {
                 Issuer = _issuer,
                 Audience = _audience,
-                NotBefore = now,
+                NotBefore = notBeforeTime,
                 Subject = new ClaimsIdentity(claims),
                 Expires = expirationTime,
                 SigningCredentials = signingCredentials
@@ -79,7 +86,7 @@ namespace TimeTracker.Business.Services.Auth
             }
         }
 
-        public bool IsValidJwt(string token)
+        public bool IsValidJwt(string token, bool isValidateLifeTime = true)
         {
             token = token ?? throw new ArgumentNullException(nameof(token));
             var parameters = new TokenValidationParameters()
@@ -87,7 +94,7 @@ namespace TimeTracker.Business.Services.Auth
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = true,
                 ValidateAudience = true,
-                ValidateLifetime = true,
+                ValidateLifetime = isValidateLifeTime,
                 ValidIssuer = _issuer,
                 ValidAudience = _audience,
                 IssuerSigningKey = _key
@@ -108,6 +115,80 @@ namespace TimeTracker.Business.Services.Auth
             }
 
             return true;
+        }
+        
+        public bool IsJwt(string token)
+        {
+            var jwtHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                var jwt = jwtHandler.ReadJwtToken(token);
+                return jwt != null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        
+        public Guid? GetAccessTokenId(string jwtString)
+        {
+            return GetClaimValue<Guid>(ClaimTypes.Authentication, jwtString);
+        }
+        
+        public bool IsTokenExpired(string token, TimeSpan? delayBefore = null)
+        {
+            var expirationTime = GetTokenExpirationTime(token);
+            if (delayBefore != null)
+            {
+                expirationTime = expirationTime.Add(-delayBefore.Value);
+            }
+            return expirationTime < DateTime.UtcNow;
+        }
+        
+        public DateTime GetTokenExpirationTime(string token)
+        {
+            var jwtHandler = new JwtSecurityTokenHandler();
+            if (!jwtHandler.CanReadToken(token))
+                throw new ArgumentException("Invalid JWT token");
+
+            var jwtToken = jwtHandler.ReadJwtToken(token);
+            return jwtToken.ValidTo;
+        }
+        
+        private T? GetClaimValue<T>(string claimType, string jwtString)
+        {
+            jwtString = jwtString ?? throw new ArgumentNullException(nameof(jwtString));
+            try
+            {   
+                var jwt = new JwtSecurityToken(jwtString);
+                var value = jwt.Claims.FirstOrDefault(c => c.Type == claimType)?.Value;
+                if (value == null)
+                    return default;
+                if (typeof(T) == typeof(Guid))
+                {
+                    if (Guid.TryParse(value, out var guidValue))
+                    {
+                        return (T)Convert.ChangeType(guidValue, typeof(T));
+                    }
+                }
+                if (typeof(T) == typeof(bool))
+                {
+                    if (bool.TryParse(value, out var decimalValue))
+                    {
+                        return (T)Convert.ChangeType(decimalValue, typeof(T));
+                    }
+                }
+                if (typeof(T) == typeof(string))
+                {
+                    return (T)Convert.ChangeType(value, typeof(T));
+                }
+                return default;
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
     }
 }

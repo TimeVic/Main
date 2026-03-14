@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 using TimeTracker.Api.Di.Autofac.Modules;
 using TimeTracker.Api.Middleware;
-using TimeTracker.Api.WebSocket.Hubs.PingHub;
+using TimeTracker.Api.WebSocket.Hubs;
 using TimeTracker.Business;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Mvc.Middleware;

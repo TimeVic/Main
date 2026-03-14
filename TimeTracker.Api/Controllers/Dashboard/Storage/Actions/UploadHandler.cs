@@ -45,8 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
                 throw new IncorrectFileException("File was not provided");
             }
             
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
 
             var entity = await _fileStorageRelationshipService.GetFileRelationship(
                 request.EntityId,

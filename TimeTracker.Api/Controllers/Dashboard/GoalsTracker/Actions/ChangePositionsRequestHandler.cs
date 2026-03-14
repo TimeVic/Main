@@ -31,8 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
     
         public async Task ExecuteAsync(ChangePositionsRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (workspace == null)
             {

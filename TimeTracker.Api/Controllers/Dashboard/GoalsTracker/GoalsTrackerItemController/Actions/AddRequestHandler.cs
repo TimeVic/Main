@@ -47,8 +47,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
     
         public async Task<GoalsTrackerItemDto> ExecuteAsync(CreateItemRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var goalsTracker = await _goalsTrackerDao.GetById(request.GoalsTrackerId);
             if (goalsTracker == null)
             {

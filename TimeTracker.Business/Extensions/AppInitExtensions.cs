@@ -13,6 +13,7 @@ using Newtonsoft.Json.Serialization;
 using Serilog;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Mvc.Filters;
+using TimeTracker.Business.Services.Http;
 
 namespace TimeTracker.Business.Extensions
 {
@@ -103,23 +104,18 @@ namespace TimeTracker.Business.Extensions
                     options.Events = new JwtBearerEvents { 
                         
                         OnMessageReceived = (context) => {
-                            var token = context.Request.GetApiToken();
-                            if (token == null)
+                            var tokenResolver = context.HttpContext.RequestServices.GetService<IHttpTokenResolverService>();
+                            if (tokenResolver == null)
                             {
+                                Log.Logger.Error($"IHttpTokenResolverService service can not be resolved");
                                 return Task.CompletedTask;
                             }
-                            if (string.IsNullOrWhiteSpace(token)) {
-                                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                                context.Fail(
-                                    "The 'access_token' query string parameter was defined, " +
-                                    "but a value to represent the token was not included."
-                                );
-                    
-                                return Task.CompletedTask;
+
+                            var token = tokenResolver.GetApiToken();
+                            if (!string.IsNullOrEmpty(token))
+                            {
+                                context.Token = token;
                             }
-                    
-                            context.Token = token;
-                    
                             return Task.CompletedTask;
                         }
                     };

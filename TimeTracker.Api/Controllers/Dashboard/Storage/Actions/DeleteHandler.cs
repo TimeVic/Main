@@ -31,8 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             RecordNotFoundException.ThrowIfNull(user);
             await _fileStorage.DeleteFile(user, request.Id);
         }

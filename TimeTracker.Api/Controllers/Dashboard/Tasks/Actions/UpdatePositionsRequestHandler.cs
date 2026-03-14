@@ -40,8 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     
         public async Task ExecuteAsync(UpdatePositionsRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             
             var taskList = await _taskListDao.GetById(request.TaskListId);
             RecordNotFoundException.ThrowIfNull(taskList);

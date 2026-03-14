@@ -41,8 +41,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var membership = await _workspaceDao.GetMembershipAsync(request.MembershipId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, membership.Workspace))
             {

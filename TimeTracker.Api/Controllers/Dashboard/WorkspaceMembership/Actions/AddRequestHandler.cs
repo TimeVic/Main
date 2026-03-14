@@ -40,8 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
     
         public async Task<WorkspaceMembershipDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var currentUser = await _userDao.GetById(userId);
+            var currentUser = await _apiRequestService.GetCurrentUser();
             var workspace = await _userDao.GetUsersWorkspace(currentUser, request.WorkspaceId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, currentUser, workspace))
             {

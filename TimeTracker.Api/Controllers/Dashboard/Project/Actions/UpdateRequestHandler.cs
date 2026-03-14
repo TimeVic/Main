@@ -40,8 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
     
         public async Task<ProjectDto> ExecuteAsync(UpdateRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
 
             var project = await _projectDao.GetById(request.ProjectId, true);
             RecordNotFoundException.ThrowIfNull(project);

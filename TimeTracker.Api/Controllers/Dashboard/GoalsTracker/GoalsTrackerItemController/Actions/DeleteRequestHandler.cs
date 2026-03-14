@@ -35,8 +35,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
     
         public async Task ExecuteAsync(DeleteItemRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             var goalsTrackerItem = await _goalsTrackerItemsDao.GetById(request.Id);
             await _securityManager.CheckAccess(AccessLevel.Write, user, goalsTrackerItem?.Tracker);
             await _goalsTrackerItemsDao.Archive(goalsTrackerItem);

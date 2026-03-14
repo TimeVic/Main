@@ -59,8 +59,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     
         public async Task<TaskFullDto> ExecuteAsync(AddRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
             RecordNotFoundException.ThrowIfNull(user);
             var taskList = await _taskListDao.GetById(request.TaskListId);
             RecordNotFoundException.ThrowIfNull(taskList);

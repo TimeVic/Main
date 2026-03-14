@@ -43,8 +43,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
     
         public async Task ExecuteAsync(DeleteRequest request)
         {
-            var userId = _apiRequestService.GetUserIdFromJwt();
-            var user = await _userDao.GetById(userId);
+            var user = await _apiRequestService.GetCurrentUser();
 
             var tag = await _tagDao.GetById(request.TagId);
             RecordNotFoundException.ThrowIfNull(tag);

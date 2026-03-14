@@ -4,32 +4,7 @@ using Microsoft.AspNetCore.Http;
 namespace TimeTracker.Business.Extensions
 {
     public static class HttpRequestExtension
-    {
-        public const string ApiTokenKey = "api_token";
-        
-        public static string? GetApiToken(this HttpRequest request)
-        {
-            string authToken = null;
-            if (request.Query.ContainsKey(ApiTokenKey))
-            {
-                authToken = request.Query[ApiTokenKey];
-            }
-            if (string.IsNullOrEmpty(authToken) && request.Headers.ContainsKey("Authorization"))
-            {
-                authToken = request.Headers["Authorization"].FirstOrDefault();
-                if (!string.IsNullOrEmpty(authToken) && authToken.StartsWith("Bearer "))
-                {
-                    authToken = authToken.Substring(7);
-                }
-            }
-            // Web Socket Access Token
-            if (request.Query.ContainsKey("access_token"))
-            {
-                authToken = request.Query["access_token"]!;
-            }
-            return authToken;
-        }
-        
+    {   
         public static async Task<string> ReadBodyAsync(this HttpRequest request)
         {
             var result = "";
