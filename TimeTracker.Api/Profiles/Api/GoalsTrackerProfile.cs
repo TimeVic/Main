@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.GoalsTracker;
 
-namespace TimeTracker.Api.Profiles;
+namespace TimeTracker.Api.Profiles.Api;
 
 public class GoalsTrackerProfile : Profile
 {

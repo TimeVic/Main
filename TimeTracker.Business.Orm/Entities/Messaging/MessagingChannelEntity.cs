@@ -8,14 +8,15 @@ namespace TimeTracker.Business.Orm.Entities.Messaging
     public class MessagingChannelEntity: AEntity
     {
         public virtual MessagingChannelType Type { get; set; }
-        public virtual required string Name { get; set; }
-
+        public virtual string Name { get; set; } = string.Empty;
+        
         #region Relationships
 
+        public virtual UserEntity? User { get; set; }
         public virtual required WorkspaceEntity Workspace { get; set; }
         public virtual required UserEntity CreatedBy { get; set; }
-        public virtual required List<MessagingMessageEntity> Messages { get; set; } = new();
-        public virtual required ISet<MessagingChannelMemberEntity> Members { get; set; } = new HashSet<MessagingChannelMemberEntity>();
+        public virtual ICollection<MessagingMessageEntity> Messages { get; set; } = new List<MessagingMessageEntity>();
+        public virtual ISet<MessagingChannelMemberEntity> Members { get; set; } = new HashSet<MessagingChannelMemberEntity>();
         
         #endregion
     }

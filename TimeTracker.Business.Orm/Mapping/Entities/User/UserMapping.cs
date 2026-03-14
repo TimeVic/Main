@@ -47,5 +47,13 @@ public class UserMapping: BaseGuidMappings<UserEntity>
             .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
+        
+        HasMany(x => x.MessageCounters)
+            .KeyColumn("user_id")
+            .LazyLoad()
+            .Inverse()
+            .Fetch.Select()
+            .Cascade.SaveUpdate()
+            .AsSet();
     }
 }

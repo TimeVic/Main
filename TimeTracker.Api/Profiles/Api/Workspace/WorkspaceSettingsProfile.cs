@@ -2,7 +2,7 @@
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
-namespace TimeTracker.Api.Profiles.Workspace;
+namespace TimeTracker.Api.Profiles.Api.Workspace;
 
 public class WorkspaceSettingsProfile : Profile
 {

@@ -22,7 +22,6 @@ public class AuthorizationService: IAuthorizationService
 
     #region Scoped
 
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILifetimeScope _scope;
     private UserEntity? _loggedInUser;
     private Guid? _loggedInUserId;
@@ -35,7 +34,6 @@ public class AuthorizationService: IAuthorizationService
         IPasswordService passwordService,
         IUserAccessTokenDao accessTokenDao,
         IDbSessionProvider sessionProvider,
-        IHttpContextAccessor httpContextAccessor,
         ILifetimeScope scope
     )
     {
@@ -44,7 +42,6 @@ public class AuthorizationService: IAuthorizationService
         _passwordService = passwordService;
         _accessTokenDao = accessTokenDao;
         _sessionProvider = sessionProvider;
-        _httpContextAccessor = httpContextAccessor;
         _scope = scope;
     }
 
@@ -52,7 +49,7 @@ public class AuthorizationService: IAuthorizationService
 
     public async Task<UserEntity?> GetCurrentLoggedInUser()
     {
-        var userGuid = GetCurrentLoggedInUserUid();
+        var userGuid = GetCurrentLoggedInUserId();
         if (!userGuid.HasValue)
             return null;
         if (userGuid != null)
@@ -62,7 +59,7 @@ public class AuthorizationService: IAuthorizationService
         return _loggedInUser;
     }
     
-    public Guid? GetCurrentLoggedInUserUid()
+    public Guid? GetCurrentLoggedInUserId()
     {
         if (_loggedInUserId is not null)
             return _loggedInUserId;

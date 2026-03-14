@@ -9,7 +9,7 @@ namespace TimeTracker.Business.Orm.Dao;
 
 public interface IWorkspaceDao: IDomainService
 {
-    Task<WorkspaceEntity?> GetByIdAsync(Guid id);
+    Task<WorkspaceEntity?> GetById(Guid id);
     
     Task<WorkspaceEntity> CreateWorkspaceAsync(UserEntity user, string name, bool isDefault = false);
 

@@ -4,7 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities.Notifications;
 
-namespace TimeTracker.Api.Profiles;
+namespace TimeTracker.Api.Profiles.Api;
 
 public class NotificationProfile : Profile
 {

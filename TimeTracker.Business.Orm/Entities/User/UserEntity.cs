@@ -1,4 +1,5 @@
 using TimeTracker.Business.Orm.Core;
+using TimeTracker.Business.Orm.Entities.Messaging;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
@@ -20,6 +21,7 @@ namespace TimeTracker.Business.Orm.Entities.User
         public virtual ICollection<TimeEntryEntity> TimeEntries { get; set; } = new List<TimeEntryEntity>();
         public virtual ICollection<WorkspaceMembershipEntity> WorkspaceMemberships { get; set; } = new List<WorkspaceMembershipEntity>();
         public virtual ICollection<UserNotificationTokenEntity> NotificationTokens { get; set; } = new List<UserNotificationTokenEntity>();
+        public virtual ISet<MessagingCounterEntity> MessageCounters { get; set; } = new HashSet<MessagingCounterEntity>();
 
         #endregion
         

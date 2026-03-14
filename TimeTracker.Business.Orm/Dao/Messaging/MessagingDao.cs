@@ -6,7 +6,7 @@ using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Orm.Dao.Messaging;
 
-public class MessagingDao: BaseDao, IMessagingDao
+public partial class MessagingDao: BaseDao, IMessagingDao
 {
     public MessagingDao(ILifetimeScope scope) : base(scope)
     {
@@ -39,5 +39,18 @@ public class MessagingDao: BaseDao, IMessagingDao
         return await Session.Query<MessagingConnectionEntity>()
             .Where(c => c.ConnectionId == connectionId && c.User == user)
             .FirstOrDefaultAsync();
+    }
+    
+    public async Task<IList<MessagingConnectionEntity>> GetConnectionsByUsers(IList<UserEntity> users)
+    {
+        var userIds = users.Select(u => u.Id).ToList();
+        if (!userIds.Any())
+        {
+            return [];
+        }
+        return await Session.Query<MessagingConnectionEntity>()
+            .Fetch(item => item.User)
+            .Where(item => userIds.Contains(item.User.Id))
+            .ToListAsync();
     }
 }

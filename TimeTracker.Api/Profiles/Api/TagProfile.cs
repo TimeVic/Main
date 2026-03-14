@@ -5,7 +5,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
 
-namespace TimeTracker.Api.Profiles;
+namespace TimeTracker.Api.Profiles.Api;
 
 public class TagProfile : Profile
 {

@@ -19,7 +19,7 @@ public class WorkspaceDao: IWorkspaceDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<WorkspaceEntity?> GetByIdAsync(Guid id)
+    public async Task<WorkspaceEntity?> GetById(Guid id)
     {
         return await _sessionProvider.CurrentSession.Query<WorkspaceEntity>()
             .FirstOrDefaultAsync(item => item.Id == id);
