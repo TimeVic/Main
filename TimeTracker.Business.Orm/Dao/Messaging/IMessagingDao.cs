@@ -32,4 +32,6 @@ public interface IMessagingDao: IScopedDomainService
         UserEntity user,
         string slug
     );
+
+    Task<List<MessagingChannelEntity>> GetChannelsList(WorkspaceEntity workspace, UserEntity user);
 }

@@ -12,6 +12,7 @@ public class MessagingChannelMemberMapping: BaseGuidMappings<MessagingChannelMem
         Table("channel_members");
         Schema("messaging");
         
+        Map(x => x.DeactivatedAt).DateTimeNullable();
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         

@@ -59,7 +59,7 @@ public class HubMessagingService: IHubMessagingService
         else if (channel != null)
         {
             messageChannel = channel;
-            recipients = recipients.Concat(channel.Members.Select(item => item.Member)).ToList();
+            recipients = recipients.Concat(channel.ActiveMembers.Select(item => item.Member)).ToList();
         }
         else
         {

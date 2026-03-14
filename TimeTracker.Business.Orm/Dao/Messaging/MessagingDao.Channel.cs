@@ -69,11 +69,7 @@ public partial class MessagingDao
             Workspace = workspace,
             Slug = slug,
             CreatedBy = user,
-            CreatedAt = DateTime.UtcNow,
-            Members = new HashSet<MessagingChannelMemberEntity>()
-            {
-                
-            }
+            CreatedAt = DateTime.UtcNow
         };
         channel.Members = new  HashSet<MessagingChannelMemberEntity>()
         {
@@ -93,5 +89,16 @@ public partial class MessagingDao
             .Where(item => item.Id == id)
             .FirstOrDefaultAsync();
         return channel;
+    }
+    
+    public async Task<List<MessagingChannelEntity>> GetChannelsList(WorkspaceEntity workspace, UserEntity user)
+    {
+        return await Session.Query<MessagingChannelEntity>()
+            .FetchMany(item => item.Members)
+            .ThenFetch(item => item.Member)
+            .Where(item => item.Workspace == workspace)
+            .Where(item => item.Members.Any(m => m.Member == user && m.DeactivatedAt == null))
+            .Take(200)
+            .ToListAsync();
     }
 }

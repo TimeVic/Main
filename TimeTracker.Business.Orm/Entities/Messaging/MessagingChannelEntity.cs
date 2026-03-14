@@ -19,5 +19,11 @@ namespace TimeTracker.Business.Orm.Entities.Messaging
         public virtual ISet<MessagingChannelMemberEntity> Members { get; set; } = new HashSet<MessagingChannelMemberEntity>();
         
         #endregion
+
+        #region Calculated
+
+        public virtual ISet<MessagingChannelMemberEntity> ActiveMembers => Members.Where(item => item.DeactivatedAt == null).ToHashSet();
+
+        #endregion
     }
 }
