@@ -7,7 +7,7 @@ namespace TimeTracker.Business.Extensions
     {
         public const string ApiTokenKey = "api_token";
         
-        public static string GetApiToken(this HttpRequest request)
+        public static string? GetApiToken(this HttpRequest request)
         {
             string authToken = null;
             if (request.Query.ContainsKey(ApiTokenKey))

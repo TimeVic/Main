@@ -18,7 +18,7 @@ public class PingHub : BaseHub
         await ExecuteInScopeAsync(async sp =>
         {
             // Call the broadcastMessage method to update clients.
-            await Clients.Caller.SendAsync(HubAction.PongResponse, "Pong");
+            await Clients.Caller.SendAsync(HubMethodName.PongResponse, "Pong");
         });
     }
     
@@ -27,7 +27,7 @@ public class PingHub : BaseHub
         await ExecuteInScopeAsync(async sp =>
         {
             // Call the broadcastMessage method to update clients.
-            await Clients.Caller.SendAsync(HubAction.PongResponse, $"Pong: {message}");
+            await Clients.Caller.SendAsync(HubMethodName.PongResponse, $"Pong: {message}");
         });
     }
     
@@ -41,7 +41,7 @@ public class PingHub : BaseHub
         
             ArgumentNullException.ThrowIfNull(user);
             // Call the broadcastMessage method to update clients.
-            await Clients.Caller.SendAsync(HubAction.PongResponse, $"Pong {user.Email}");
+            await Clients.Caller.SendAsync(HubMethodName.PongResponse, $"Pong {user.Email}");
         });
     }
 }
