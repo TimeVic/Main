@@ -6,6 +6,7 @@ using TimeTracker.Business.Orm.Dao.Messaging;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Auth;
+using TimeTracker.Business.Services.Http;
 
 namespace TimeTracker.Api.WebSocket.Core;
 
@@ -45,11 +46,11 @@ public class BaseHub: Hub
         }
     }
     
-    private async Task<UserEntity> GetCurrentUser(IServiceProvider serviceProvider)
+    protected async Task<UserEntity> GetCurrentUser(IServiceProvider serviceProvider)
     {
         var authorizationService = serviceProvider.GetRequiredService<IAuthorizationService>();
         var systemUserDao = serviceProvider.GetRequiredService<IUserDao>();
-        var loggedUserUid = authorizationService.GetCurrentLoggedInUserUid();
+        var loggedUserUid = authorizationService.GetCurrentLoggedInUserId();
         if (loggedUserUid != null)
         {
             return (await systemUserDao.GetById(loggedUserUid.Value))!;
@@ -59,20 +60,31 @@ public class BaseHub: Hub
 
     public override async Task OnConnectedAsync()
     {
-        await ExecuteInScopeAsync(async sp =>
+        await ExecuteInScopeAsync(async serviceProvider =>
         {
-            var messagingDao = sp.GetRequiredService<IMessagingDao>();
-            var currentUser = await GetCurrentUser(sp);
+            var apiRequestService = serviceProvider.GetRequiredService<IApiRequestService>();
+            if (!apiRequestService.IsAuthorized())
+            {
+                return;
+            }
+            
+            var messagingDao = serviceProvider.GetRequiredService<IMessagingDao>();
+            var currentUser = await GetCurrentUser(serviceProvider);
             await messagingDao.SetConnection(currentUser, Context.ConnectionId);
         });
     }
     
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        await ExecuteInScopeAsync(async sp =>
+        await ExecuteInScopeAsync(async serviceProvider =>
         {
-            var messagingDao = sp.GetRequiredService<IMessagingDao>();
-            var currentUser = await GetCurrentUser(sp);
+            var apiRequestService = serviceProvider.GetRequiredService<IApiRequestService>();
+            if (!apiRequestService.IsAuthorized())
+            {
+                return;
+            }
+            var messagingDao = serviceProvider.GetRequiredService<IMessagingDao>();
+            var currentUser = await GetCurrentUser(serviceProvider);
             await messagingDao.DeleteConnection(currentUser, Context.ConnectionId);
         });
     }

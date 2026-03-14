@@ -17,6 +17,11 @@ namespace TimeTracker.Business.Common.Constants
         /// <summary>
         /// Page size
         /// </summary>
+        public const int DefaultListPageSize = 20;
+        
+        /// <summary>
+        /// Page size
+        /// </summary>
         public const int ListPageSize = 30;
 
         /// <summary>

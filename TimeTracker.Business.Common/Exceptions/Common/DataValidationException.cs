@@ -1,4 +1,5 @@
-﻿using Domain.Abstractions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Domain.Abstractions;
 using TimeTracker.Business.Common.Resources;
 
 namespace TimeTracker.Business.Common.Exceptions.Common
@@ -12,5 +13,25 @@ namespace TimeTracker.Business.Common.Exceptions.Common
         public DataValidationException(string message) : base(message)
         {
         }
+        
+        public static void ThrowIfNull(params object?[] arguments)
+        {
+            foreach (var argument in arguments)
+            {
+                ThrowIfNull(argument);
+            }
+        }
+    
+        public static void ThrowIfNull([NotNull] object? argument, string? message = null)
+        {
+            if (argument is null)
+            {
+                Throw(message);
+            }
+        }
+    
+        [DoesNotReturn]
+        internal static void Throw(string? message) =>
+            throw new DataValidationException(message);
     }
 }

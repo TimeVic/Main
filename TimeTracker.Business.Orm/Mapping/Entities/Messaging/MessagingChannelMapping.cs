@@ -13,10 +13,16 @@ public class MessagingChannelMapping: BaseGuidMappings<MessagingChannelEntity>
         Schema("messaging");
         
         Map(x => x.Type).Enum<MessagingChannelType>();
-        Map(x => x.Name);
+        Map(x => x.Slug).Unique().Not.Nullable();
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
-        
+
+
+        References(x => x.User)
+            .Fetch.Select()
+            .LazyLoad()
+            .Nullable()
+            .Cascade.SaveUpdate();
         References(x => x.Workspace)
             .Fetch.Select()
             .LazyLoad()

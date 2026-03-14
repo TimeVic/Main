@@ -1,5 +1,6 @@
 ﻿using Api.Requests.Abstractions;
 using Autofac;
+using Domain.Abstractions;
 
 namespace TimeTracker.Api.Di.Autofac.Modules
 {
@@ -21,6 +22,18 @@ namespace TimeTracker.Api.Di.Autofac.Modules
                 .RegisterAssemblyTypes(typeof(ApiAssemblyMarker).Assembly)
                 .AsClosedTypesOf(typeof(IAsyncRequestHandler<,>))
                 .InstancePerDependency();
+            
+            builder
+                .RegisterAssemblyTypes(typeof(ApiAssemblyMarker).Assembly)
+                .AssignableTo<IDomainService>()
+                .AsImplementedInterfaces()
+                .InstancePerDependency();
+            
+            builder
+                .RegisterAssemblyTypes(typeof(ApiAssemblyMarker).Assembly)
+                .AssignableTo<IScopedDomainService>()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
             
             builder
                 .RegisterType<ScopedAsyncRequestHandlerFactory>()

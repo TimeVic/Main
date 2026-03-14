@@ -46,7 +46,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
         public async Task<WorkspaceSettingsJiraDto> ExecuteAsync(SetJiraSettingsRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _workspaceDao.GetByIdAsync(request.WorkspaceId);
+            var workspace = await _workspaceDao.GetById(request.WorkspaceId);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();

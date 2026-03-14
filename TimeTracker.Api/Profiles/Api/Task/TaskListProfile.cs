@@ -1,0 +1,13 @@
+﻿using AutoMapper;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Business.Orm.Entities.Tasks;
+
+namespace TimeTracker.Api.Profiles.Api.Task;
+
+public class TaskListProfile : Profile
+{
+    public TaskListProfile()
+    {
+        CreateMap<TaskListEntity, TaskListDto>();
+    }
+}

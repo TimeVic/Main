@@ -1,0 +1,20 @@
+﻿using AspNetCore.ApiControllers.Extensions;
+using Autofac;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Message;
+using TimeTracker.Business.Mvc.Controllers;
+
+namespace TimeTracker.Api.Controllers.Massaging.Message;
+
+[ApiController]
+[Authorize]
+[Route("/messaging/[controller]")]
+public class MessageController(ILifetimeScope scope) : MainApiControllerBase(scope)
+{
+    [HttpPost("[action]")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Send([FromBody] SendRequest request)
+        => this.RequestAsync(request);
+}

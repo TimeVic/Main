@@ -17,5 +17,5 @@ public interface IAuthorizationService: IDomainService
 
     Task<UserEntity?> GetCurrentLoggedInUser();
 
-    Guid? GetCurrentLoggedInUserUid();
+    Guid? GetCurrentLoggedInUserId();
 }

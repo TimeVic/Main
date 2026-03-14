@@ -83,6 +83,7 @@ public class Startup
         {
             endpoints.MapControllers();
             
+            endpoints.MapHub<MessagingHub>("/websocket/messaging");
             endpoints.MapHub<PingHub>("/websocket/ping");
         });
     }
