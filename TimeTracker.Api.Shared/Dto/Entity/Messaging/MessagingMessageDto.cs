@@ -13,5 +13,5 @@ public class MessagingMessageDto: BaseDto
     
     public required MessagingChannelDto Channel { get; set; }
     
-    public UserDto? CreatedBy { get; set; }
+    public required UserDto CreatedBy { get; set; }
 }

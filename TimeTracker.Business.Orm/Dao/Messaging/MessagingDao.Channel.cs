@@ -41,6 +41,23 @@ public partial class MessagingDao
             CreatedBy = sender,
             CreatedAt = DateTime.UtcNow
         };
+        channel.Members = new  HashSet<MessagingChannelMemberEntity>()
+        {
+            new()
+            {
+                Member = sender,
+                Channel = channel
+            }
+        };
+        if (sender != receiver)
+        {
+            channel.Members.Add(new MessagingChannelMemberEntity()
+            {
+                Member = receiver,
+                Channel = channel
+            });
+        }
+
         await Session.SaveAsync(channel);
         return (channel, true);
     }

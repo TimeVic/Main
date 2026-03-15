@@ -6,6 +6,7 @@ using TimeTracker.Api.Shared.Dto.Entity.Messaging;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Channel;
 using TimeTracker.Business.Common.Constants.Messaging;
 using TimeTracker.Business.Common.Extensions;
+using TimeTracker.Business.Orm.Dao.Messaging;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -25,16 +26,14 @@ public class InitTest: BaseTest
     private readonly IDataFactory<ProjectEntity> _projectFactory;
     private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
-    private string _receiverJwtToken;
-    private UserEntity _receiver;
-    private WorkspaceEntity _receiverWorkspace;
+    private readonly IMessagingDao _messagingDao;
 
     public InitTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _projectFactory = ServiceProvider.GetRequiredService<IDataFactory<ProjectEntity>>();
+        _messagingDao = ServiceProvider.GetRequiredService<IMessagingDao>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
-        (_receiverJwtToken, _receiver, _receiverWorkspace) = UserSeeder.CreateAuthorizedAndShareAsync(_workspace).Result;
     }
 
     [Fact]
@@ -51,6 +50,8 @@ public class InitTest: BaseTest
     public async Task ShouldCreate()
     {
         // Arrange
+        var (receiverJwtToken, receiver, receiverWorkspace) = await UserSeeder.CreateAuthorizedAndShareAsync(_workspace);
+        
         var connection = CreateWebSocketConnection(Hub, _jwtToken);
         MessagingChannelDto? createdEntity = null;
         connection.On<MessagingChannelDto>(HubMethodName.ChannelCreated, msg =>
@@ -67,11 +68,54 @@ public class InitTest: BaseTest
         await response.EnsureSuccessStatusCodeWithoutError();
 
         // Assert
+        await FlushDbChanges(true);
         Thread.Sleep(50);
         Assert.NotNull(createdEntity);
         Assert.NotNull(createdEntity.CreatedBy);
         Assert.NotEqual(Guid.Empty, createdEntity.Id);
         Assert.Equal(MessagingChannelType.Direct, createdEntity.Type);
         Assert.Equal(_user.Id, createdEntity.CreatedBy.Id);
+
+        var actualChannel = await _messagingDao.GetChannelBy(createdEntity.Id);
+        Assert.NotNull(actualChannel);
+        Assert.Equal(2, actualChannel.Members.Count);
+        Assert.Contains(actualChannel.Members, item => item.Member.Id == _user.Id);
+        Assert.Contains(actualChannel.Members, item => item.Member.Id == receiver.Id);
+    }
+    
+    [Fact]
+    public async Task ShouldCreateWithMineChannel()
+    {
+        // Arrange
+        var receiver = await UserSeeder.CreateActivatedAsync();
+        
+        var connection = CreateWebSocketConnection(Hub, _jwtToken);
+        MessagingChannelDto? createdEntity = null;
+        connection.On<MessagingChannelDto>(HubMethodName.ChannelCreated, msg =>
+        {
+            createdEntity = msg;
+        });
+        await connection.StartAsync();
+        
+        // Act
+        var response = await PostRequestAsync(Url, _jwtToken, new InitRequest()
+        {
+            WorkspaceId = _workspace.Id
+        });
+        await response.EnsureSuccessStatusCodeWithoutError();
+
+        // Assert
+        await FlushDbChanges(true);
+        Thread.Sleep(50);
+        Assert.NotNull(createdEntity);
+        Assert.NotNull(createdEntity.CreatedBy);
+        Assert.NotEqual(Guid.Empty, createdEntity.Id);
+        Assert.Equal(MessagingChannelType.Direct, createdEntity.Type);
+        Assert.Equal(_user.Id, createdEntity.CreatedBy.Id);
+
+        var actualChannel = await _messagingDao.GetChannelBy(createdEntity.Id);
+        Assert.NotNull(actualChannel);
+        Assert.Single(actualChannel.Members);
+        Assert.Contains(actualChannel.Members, item => item.Member.Id == _user.Id);
     }
 }

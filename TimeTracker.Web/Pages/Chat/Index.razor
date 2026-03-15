@@ -5,33 +5,10 @@
 
 @using BlazorApp.Models
 @using TimeTracker.Web.Pages.Chat.Parts
+@using TimeTracker.Web.Pages.Chat.Parts.Messages
 
 <aside class="w-full border-b border-slate-200 bg-white lg:w-80 lg:border-b-0 lg:border-r">
-    <div class="border-b border-slate-200 p-4">
-        <div class="flex items-center justify-between gap-3">
-            <div>
-                <p class="text-xs uppercase tracking-[0.3em] text-cyan-600">Blazor Chat</p>
-                <h1 class="mt-1 text-xl font-semibold text-slate-900">Messages</h1>
-            </div>
-            <div class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700">
-                Online demo
-            </div>
-        </div>
-        <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
-            <label class="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-500">Workspace</label>
-            <InputSelect 
-                TValue="string" 
-                @bind-Value="activeUserId" 
-                class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none"
-            >
-                @foreach (var user in users)
-                {
-                    <option value="@user.Id">@user.Name</option>
-                }
-            </InputSelect>
-        </div>
-    </div>
-
+    <WorkspaceMenuBlock></WorkspaceMenuBlock>
     <ChannelsBlock></ChannelsBlock>
 </aside>
 
@@ -65,37 +42,7 @@
         </div>
     </div>
 
-    <div class="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-5 sm:px-6">
-        @if (VisibleMessages.Any())
-        {
-            @foreach (var message in VisibleMessages)
-            {
-                var sender = GetUserById(message.SenderId);
-                var isMine = message.SenderId == activeUserId;
-                <div class="@($"flex {(isMine ? "justify-end" : "justify-start")}")">
-                    <div class="@($"max-w-xl rounded-3xl border px-4 py-3 shadow-sm {(isMine ? "border-cyan-200 bg-cyan-50" : "border-slate-200 bg-white")}")">
-                        <div class="mb-1 flex items-center gap-2 text-xs">
-                            <span class="@($"font-semibold {(isMine ? "text-cyan-700" : "text-slate-700")}")">@sender.Name</span>
-                            <span class="text-slate-500">@message.SentAt.ToString("HH:mm")</span>
-                        </div>
-                        <p class="text-sm leading-6 text-slate-900">@message.Text</p>
-                    </div>
-                </div>
-            }
-        }
-        else
-        {
-            <div class="flex h-full min-h-[20rem] items-center justify-center">
-                <div class="max-w-md rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm">
-                    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
-                        <i class="fa-regular fa-comments text-2xl"></i>
-                    </div>
-                    <h3 class="mt-4 text-lg font-semibold text-slate-900">No messages yet</h3>
-                    <p class="mt-2 text-sm text-slate-500">Start the conversation with a first message in this chat.</p>
-                </div>
-            </div>
-        }
-    </div>
+    <MessagesListBlock></MessagesListBlock>
 
     <div class="border-t border-slate-200 bg-white px-4 py-4 sm:px-6">
         <div class="mb-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">

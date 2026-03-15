@@ -1,0 +1,31 @@
+@using TimeTracker.Api.Shared.Dto.Entity
+@inherits BaseReactiveComponent
+
+@if (AuthState.Value.Workspace != null)
+{
+    <div class="border-b border-slate-200 p-4">
+        <div class="flex items-center justify-between gap-3">
+            <div>
+                <p class="text-xs uppercase tracking-[0.3em] text-cyan-600">Blazor Chat</p>
+                <h1 class="mt-1 text-xl font-semibold text-slate-900">Messages</h1>
+            </div>
+            <div class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-700">
+                Online demo
+            </div>
+        </div>
+        <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+            <label class="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-500">Workspace</label>
+            <InputSelect 
+                TValue="Guid" 
+                @bind-Value="AuthState.Value.Workspace!.Id"
+                @ValueChanged="((workspaceId) => OnWorkspaceChanged(workspaceId))"
+                class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none"
+            >
+                @foreach (var workspace in WorkspaceState.Value.List)
+                {
+                    <option value="@workspace.Id">@workspace.Name</option>
+                }
+            </InputSelect>
+        </div>
+    </div>    
+}
