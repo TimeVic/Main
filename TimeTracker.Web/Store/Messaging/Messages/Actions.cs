@@ -8,3 +8,5 @@ public record struct RefreshListAction();
 public record struct LoadListAction(bool IsRefresh = true);
 public record struct SetListAction(GetListResponse Response);
 public record struct SetIsListLoadingAction(bool IsLoading);
+public record struct SetIsMessageSending(bool IsSending);
+public record struct SendMessageAction(string Text);

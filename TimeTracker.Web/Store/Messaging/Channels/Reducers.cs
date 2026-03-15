@@ -20,8 +20,7 @@ public class Reducers
     {
         return state with
         {
-            SelectedId = action.Channel?.Id,
-            List = new List<MessagingChannelDto>()
+            SelectedId = action.Channel?.Id
         };
     }
     

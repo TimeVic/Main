@@ -9,6 +9,7 @@ public class LoadListEffect: Effect<LoadListAction>
 {
     private readonly IState<AuthState> _authState;
     private readonly IState<ChannelsState> _channelsState;
+    private readonly IState<MessagesState> _messagesState;
     private readonly ApiService _apiService;
     private readonly ILogger<LoadListEffect> _logger;
 
@@ -16,12 +17,14 @@ public class LoadListEffect: Effect<LoadListAction>
         ApiService apiService,
         IState<AuthState> authState,
         IState<ChannelsState> channelsState,
+        IState<MessagesState> messagesState,
         ILogger<LoadListEffect> logger
     )
     {
         _apiService = apiService;
         _authState = authState;
         _channelsState = channelsState;
+        _messagesState = messagesState;
         _logger = logger;
     }
 
@@ -42,7 +45,10 @@ public class LoadListEffect: Effect<LoadListAction>
                     dispatcher.Dispatch(new RefreshListAction());
                     return;
                 }
-                var response = await _apiService.MessagingMessageGetListAsync(_channelsState.Value.SelectedChannel!.Id);
+                var response = await _apiService.MessagingMessageGetListAsync(
+                    _channelsState.Value.SelectedChannel!.Id,
+                    _messagesState.Value.Page
+                );
                 dispatcher.Dispatch(new SetListAction(response!));
             }
         }
