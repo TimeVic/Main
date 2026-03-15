@@ -1,8 +1,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Persistence.Transactions.Behaviors;
+using TimeTracker.Api.Shared.Constants.Messaging;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
-using TimeTracker.Api.WebSocket.Constants;
 using TimeTracker.Business.Orm.Dao.Messaging;
 using TimeTracker.Business.Orm.Entities.Messaging;
 using TimeTracker.Business.Orm.Entities.User;

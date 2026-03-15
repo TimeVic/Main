@@ -1,7 +1,7 @@
 using Autofac;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using TimeTracker.Api.WebSocket.Constants;
+using TimeTracker.Api.Shared.Constants.Messaging;
 using TimeTracker.Api.WebSocket.Core;
 using IAuthorizationService = TimeTracker.Business.Services.Auth.IAuthorizationService;
 

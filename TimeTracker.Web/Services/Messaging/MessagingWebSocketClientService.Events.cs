@@ -1,0 +1,36 @@
+using Microsoft.AspNetCore.SignalR.Client;
+using TimeTracker.Api.Shared.Constants.Messaging;
+using TimeTracker.Api.Shared.Dto.Entity.Messaging;
+using TimeTracker.Business.Extensions;
+using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Services.Http.Auth;
+
+namespace TimeTracker.Web.Services.Messaging;
+
+public partial class MessagingWebSocketClientService
+{
+    public Action<MessagingChannelDto> OnChannelCreated { get; set; }
+    public Action<MessagingMessageDto> OnMessageCreated { get; set; }
+    public Action<MessagingMessageCountDto> OnCounterUpdated { get; set; }
+    
+    private void InitEvents()
+    {
+        _hubConnection?.On<MessagingChannelDto>(HubMethodName.ChannelCreated, (entity) =>
+        {
+            _logger.LogDebug($"WebSocket event: {HubMethodName.ChannelCreated}: {entity.Id}");
+            OnChannelCreated.Invoke(entity);
+        });
+        
+        _hubConnection?.On<MessagingMessageDto>(HubMethodName.MessageCreated, (entity) =>
+        {
+            _logger.LogDebug($"WebSocket event: {HubMethodName.MessageCreated}: {entity.Id}");
+            OnMessageCreated.Invoke(entity);
+        });
+        
+        _hubConnection?.On<MessagingMessageCountDto>(HubMethodName.MessageCounterUpdated, (entity) =>
+        {
+            _logger.LogDebug($"WebSocket event: {HubMethodName.MessageCounterUpdated}: {entity.Channel.Id}");
+            OnCounterUpdated.Invoke(entity);
+        });
+    }
+}

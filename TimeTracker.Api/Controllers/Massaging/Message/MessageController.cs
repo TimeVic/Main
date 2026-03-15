@@ -17,4 +17,12 @@ public class MessageController(ILifetimeScope scope) : MainApiControllerBase(sco
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Send([FromBody] SendRequest request)
         => this.RequestAsync(request);
+    
+    [HttpPost("get-list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> GetList([FromBody] GetListRequest request)
+        => this.RequestAsync()
+            .For<GetListResponse>()
+            .With(request);
 }

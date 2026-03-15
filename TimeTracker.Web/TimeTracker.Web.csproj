@@ -90,7 +90,6 @@
       <Content Remove="Ignore\Members\MembersPage.razor" />
       <Content Remove="Ignore\Integrations\Parts\**" />
       <Content Remove="Ignore\Integrations\IntegrationsPage.razor" />
-      <Content Remove="Ignore\Dashboard\Index.razor" />
     </ItemGroup>
 
     <ItemGroup>
@@ -104,12 +103,10 @@
       <Folder Include="Ignore\GoalsTracker\Parts\" />
       <Folder Include="Ignore\Integrations\" />
       <Folder Include="Ignore\Members\" />
+      <Folder Include="Pages\Chat\Parts\" />
       <Folder Include="Store\Dashboard\Effects\" />
       <Folder Include="wwwroot\img\logo\black" />
       <Folder Remove="node_modules" />
-    </ItemGroup>
-
-    <ItemGroup>
     </ItemGroup>
 
     <ItemGroup>
@@ -244,50 +241,6 @@
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\ClickUpSettingsForm.razor" />
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\JiraSettingsForm.razor" />
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\RedmineSettingsForm.razor" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.min.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.rtl.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.rtl.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.rtl.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-grid.rtl.min.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.min.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.rtl.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.rtl.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.rtl.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-reboot.rtl.min.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-utilities.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-utilities.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-utilities.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-utilities.min.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-utilities.rtl.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-utilities.rtl.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-utilities.rtl.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap-utilities.rtl.min.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.min.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.rtl.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.rtl.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.rtl.min.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\css\bootstrap.rtl.min.css.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.bundle.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.bundle.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.bundle.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.bundle.min.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.esm.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.esm.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.esm.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.esm.min.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.js.map" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.min.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.min.js.map" />
     </ItemGroup>
 
     <ItemGroup>
@@ -297,6 +250,22 @@
       <None Include="wwwroot\lib\.gitignore" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <TailwindToolsDir Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(USERPROFILE)\.tailwind\</TailwindToolsDir>
+        <TailwindToolsDir Condition="!$([MSBuild]::IsOSPlatform('Windows'))">$(HOME)/.tailwind/</TailwindToolsDir>
+
+        <TailwindExePath Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(TailwindToolsDir)tailwindcss-windows-x64.exe</TailwindExePath>
+        <TailwindExePath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(TailwindToolsDir)tailwindcss-macos-x64</TailwindExePath>
+        <TailwindExePath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(TailwindToolsDir)tailwindcss-linux-x64</TailwindExePath>
+
+        <TailwindDownloadUrl Condition="$([MSBuild]::IsOSPlatform('Windows'))">https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-windows-x64.exe</TailwindDownloadUrl>
+        <TailwindDownloadUrl Condition="$([MSBuild]::IsOSPlatform('OSX'))">https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-macos-x64</TailwindDownloadUrl>
+        <TailwindDownloadUrl Condition="$([MSBuild]::IsOSPlatform('Linux'))">https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-linux-x64</TailwindDownloadUrl>
+
+        <TailwindInputCss>$(ProjectDir)wwwroot\app.css</TailwindInputCss>
+        <TailwindOutputCss>$(ProjectDir)wwwroot\app.min.css</TailwindOutputCss>
+    </PropertyGroup>
+    
     <Target Name="CompileLess" BeforeTargets="Build;PrepareForPublish">
         <!-- Compile .less → .css -->
         <Exec Command="npm install" />
@@ -313,5 +282,21 @@
         <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc styles/app.less wwwroot/app.css" />
         <Copy SourceFiles="@(BootstrapFiles)"
               DestinationFolder="wwwroot/lib/bootstrap/%(RecursiveDir)" />
+    </Target>
+
+    <Target Name="TailwindCssBuild" BeforeTargets="Build;PrepareForPublish">
+        <Message Text="Checking for Tailwind CLI for your OS..."/>
+        <MakeDir Directories="$(TailwindToolsDir)" />
+
+        <DownloadFile Condition="!Exists($(TailwindExePath))"
+                      SourceUrl="$(TailwindDownloadUrl)"
+                      DestinationFolder="$(TailwindToolsDir)"
+                      DestinationFileName="$([System.IO.Path]::GetFileName($(TailwindExePath)))" />
+
+        <Exec Condition="!$([MSBuild]::IsOSPlatform('Windows'))"
+              Command="chmod +x $(TailwindExePath)" />
+
+        <Message Text="Building Tailwind CSS..." />
+        <Exec Command="$(TailwindExePath) -i $(TailwindInputCss) -o $(TailwindOutputCss) --minify" />
     </Target>
 </Project>

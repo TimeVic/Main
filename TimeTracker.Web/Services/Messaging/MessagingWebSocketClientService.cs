@@ -5,7 +5,7 @@ using TimeTracker.Web.Services.Http.Auth;
 
 namespace TimeTracker.Web.Services.Messaging;
 
-public class MessagingWebSocketClientService: IDisposable
+public partial class MessagingWebSocketClientService: IDisposable
 {
     private readonly ILogger<MessagingWebSocketClientService> _logger;
     private readonly IConfiguration _configuration;
@@ -43,12 +43,7 @@ public class MessagingWebSocketClientService: IDisposable
             .WithAutomaticReconnect()
             .Build();
 
-        
-        _hubConnection.On<string>("PongResponse", (msg) =>
-        {
-            _logger.LogDebug($"PongResponse: {msg}");
-        });
-
+        InitEvents();
         
 // Хуки на изменение состояния соединения (опционально)
         // hubConnection.Reconnecting += error =>
