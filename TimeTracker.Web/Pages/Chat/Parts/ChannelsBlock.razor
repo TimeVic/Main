@@ -4,6 +4,7 @@
 @{
     var commonChannels = ChannelsState.Value.List.Where(item => item.Type == MessagingChannelType.Common);
     var directChannels = ChannelsState.Value.List.Where(item => item.Type == MessagingChannelType.Direct);
+    var selectedChannel = ChannelsState.Value.SelectedChannel;
 }
 
 <div class="p-4">
@@ -14,7 +15,7 @@
     <div class="space-y-2">
         @foreach (var channel in commonChannels)
         {
-            <button class="@GetNavButtonClass(true)" @onclick="@(() => SelectChannel(channel.Id))">
+            <button class="@GetNavButtonClass(channel.Id == selectedChannel?.Id)" @onclick="@(() => SelectChannel(channel))">
                 <span class="flex min-w-0 items-center gap-3">
                     <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-100 text-cyan-700">
                         <i class="fa-solid fa-hashtag"></i>
@@ -38,7 +39,7 @@
     <div class="space-y-2">
         @foreach (var channel in directChannels)
         {
-            <button class="@GetNavButtonClass(false)" @onclick="@(() => SelectDirectChannel(channel.Id))">
+            <button class="@GetNavButtonClass(channel.Id == selectedChannel?.Id)" @onclick="@(() => SelectChannel(channel))">
                 <span class="flex min-w-0 items-center gap-3">
                     <span class="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-violet-700">
                         @channel.User!.Initials
