@@ -1,9 +1,9 @@
 using System.Net;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
+using TimeTracker.Api.Shared.Constants.Messaging;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Channel;
-using TimeTracker.Api.WebSocket.Constants;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;

@@ -1,7 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
+using TimeTracker.Api.Shared.Constants.Messaging;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
-using TimeTracker.Api.WebSocket.Constants;
 using TimeTracker.Api.WebSocket.Services.Mappers;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao.Messaging;

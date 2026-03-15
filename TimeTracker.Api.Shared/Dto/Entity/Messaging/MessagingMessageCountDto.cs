@@ -4,5 +4,5 @@ public class MessagingMessageCountDto
 {
     public required long Counter { get; set; }
     
-    public MessagingChannelDto? Channel { get; set; }
+    public required MessagingChannelDto Channel { get; set; }
 }

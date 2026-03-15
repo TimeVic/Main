@@ -1,24 +1,21 @@
 using System.Net;
-using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
-using TimeTracker.Api.Shared.Dto.Entity.Messaging;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Channel;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Message;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao.Messaging;
 using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Orm.Entities.Messaging;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Api.Core;
 
-namespace TimeTracker.Tests.Integration.Api.Api.Messaging.Channel;
+namespace TimeTracker.Tests.Integration.Api.Api.Messaging.Message;
 
 public class GetListTest: BaseTest
 {
     private const string Hub = "messaging";
-    private readonly string Url = "/messaging/channel/get-list";
+    private readonly string Url = "/messaging/message/get-list";
     
     private readonly IQueueService _queueService;
     private readonly UserEntity _user;
@@ -42,9 +39,10 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
+        var channel = await _messagingDao.CreateChannel(_workspace, _user, "test");
         var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id
+            ChannelId = channel.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -53,18 +51,19 @@ public class GetListTest: BaseTest
     public async Task ShouldGet()
     {
         // Arrange
-        var expected1 = await _messagingDao.CreateChannel(_workspace, _user, "test");
-        var expected2 = await _messagingDao.CreateChannel(_workspace, _user, "test2");
-        var noExpected = await _messagingDao.CreateChannel(_workspace, _user, "test3");
-        foreach (var member in noExpected.Members)
-        {
-            member.DeactivatedAt = DateTime.UtcNow;
-        }
+        var channel = await _messagingDao.CreateChannel(_workspace, _user, "test2");
+        await _messagingDao.CreateMessage(channel, _user, "test1");
+        await _messagingDao.CreateMessage(channel, _user, "test2");
+        await _messagingDao.CreateMessage(channel, _user, "test3");
+        
+        var channelNotExpected = await _messagingDao.CreateChannel(_workspace, _user, "test");
+        await _messagingDao.CreateMessage(channelNotExpected, _user, "test1");
         
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id
+            Page = 1,
+            ChannelId = channel.Id
         });
         await response.EnsureSuccessStatusCodeWithoutError();
 
@@ -72,8 +71,7 @@ public class GetListTest: BaseTest
         var responseData = await response.GetJsonDataAsync<GetListResponse>();
         
         Assert.NotEmpty(responseData.Items);
-        Assert.Equal(2, responseData.Items.Count);
-        Assert.Contains(responseData.Items, item => item.Id == expected1.Id);
-        Assert.Contains(responseData.Items, item => item.Id == expected2.Id);
+        Assert.Equal(3, responseData.Items.Count);
+        Assert.Contains(responseData.Items, item => item.Channel.Id == channel.Id);
     }
 }

@@ -1,4 +1,4 @@
-namespace TimeTracker.Api.WebSocket.Constants;
+namespace TimeTracker.Api.Shared.Constants.Messaging;
 
 public class HubMethodName
 {

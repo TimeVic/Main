@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Message;
-using TimeTracker.Api.WebSocket.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Entities;
@@ -14,6 +13,7 @@ using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Api.Core;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
+using TimeTracker.Api.Shared.Constants.Messaging;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Messaging.Message;
 

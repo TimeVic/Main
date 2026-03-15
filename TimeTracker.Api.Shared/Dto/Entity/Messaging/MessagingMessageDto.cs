@@ -11,7 +11,7 @@ public class MessagingMessageDto: BaseDto
     
     public HubMessageDirectionEnum Direction { get; set; }
     
-    public MessagingChannelDto? Channel { get; set; }
+    public required MessagingChannelDto Channel { get; set; }
     
     public UserDto? CreatedBy { get; set; }
 }

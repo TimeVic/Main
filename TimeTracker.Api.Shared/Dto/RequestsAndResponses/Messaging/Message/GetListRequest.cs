@@ -1,0 +1,16 @@
+﻿using System.ComponentModel.DataAnnotations;
+using Api.Requests.Abstractions;
+using TimeTracker.Business.Common.Mvc.Attribute.Validation;
+
+namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Message
+{
+    public class GetListRequest : IRequest<GetListResponse>
+    {
+        [Required]
+        public Guid ChannelId { get; set; }
+        
+        [Required]
+        [IsPositive]
+        public int Page { get; set; }
+    }
+}

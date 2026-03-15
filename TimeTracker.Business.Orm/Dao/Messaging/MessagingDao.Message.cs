@@ -25,19 +25,15 @@ public partial class MessagingDao
     
     public async Task<ListDto<MessagingMessageEntity>> GetMessagesList(MessagingChannelEntity channel, int page, int pageSize = GlobalConstants.DefaultListPageSize)
     {
-        MessagingChannelEntity? channelAlias = null;
-        UserEntity? senderAlias = null, customerAlias = null;
-        var query = Session.QueryOver<MessagingMessageEntity>()
-            .Inner.JoinAlias(item => item.Channel, () => channelAlias)
-            .Inner.JoinAlias(item => item.CreatedBy, () => senderAlias)
+        var query = Session.Query<MessagingMessageEntity>()
+            .Fetch(item => item.Channel)
+            .Fetch(item => item.CreatedBy)
             .Where(item => item.Channel == channel);
         
         var messages = await query
-            .Clone()
-            .OrderBy(item => item.CreatedAt).Desc
-            .ListAsync();
-        var count = await query.Clone()
-            .RowCountAsync();
+            .OrderByDescending(item => item.CreatedAt)
+            .ToListAsync();
+        var count = await query.CountAsync();
         return new ListDto<MessagingMessageEntity>(messages, count);
     }
 }
