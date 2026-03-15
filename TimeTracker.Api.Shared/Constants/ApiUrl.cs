@@ -145,4 +145,15 @@ public class ApiUrl
     public const string NotificationCenterMarkAsRead = "dashboard/notifications-center/mark-as-read";
     
     #endregion
+    
+    #region Messaging
+    
+    public const string MessagingChannelInit = "messaging/channel/init";
+    public const string MessagingChannelCreate = "messaging/channel/create";
+    public const string MessagingChannelGetList = "messaging/channel/get-list";
+    
+    public const string MessagingMessageSend = "messaging/message/send";
+    public const string MessagingMessageGetList = "messaging/message/get-list";
+    
+    #endregion
 }

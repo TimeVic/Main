@@ -18,6 +18,12 @@ public class ChannelController(ILifetimeScope scope) : MainApiControllerBase(sco
     public Task<IActionResult> Create([FromBody] CreateRequest request)
         => this.RequestAsync(request);
     
+    [HttpPost("[action]")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Init([FromBody] InitRequest request)
+        => this.RequestAsync(request);
+    
     [HttpPost("get-list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

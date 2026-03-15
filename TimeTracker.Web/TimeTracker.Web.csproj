@@ -103,7 +103,6 @@
       <Folder Include="Ignore\GoalsTracker\Parts\" />
       <Folder Include="Ignore\Integrations\" />
       <Folder Include="Ignore\Members\" />
-      <Folder Include="Pages\Chat\Parts\" />
       <Folder Include="Store\Dashboard\Effects\" />
       <Folder Include="wwwroot\img\logo\black" />
       <Folder Remove="node_modules" />

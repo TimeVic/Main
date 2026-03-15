@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TimeTracker.Web.Core.Extensions;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Services.Workspace;
@@ -10,7 +9,7 @@ using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common;
 using TimeTracker.Web.Store.TimeEntry;
 
-namespace TimeTracker.Web.Pages.Dashboard.Shared;
+namespace TimeTracker.Web.Shared;
 
 public partial class InitializationContainer
 {

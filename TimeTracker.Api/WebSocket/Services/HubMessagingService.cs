@@ -49,7 +49,7 @@ public class HubMessagingService: IHubMessagingService
         MessagingChannelEntity messageChannel;
         if (receiver != null)
         {
-            messageChannel = await _messagingDao.GetOrCreateDirectChannel(
+            (messageChannel, _) = await _messagingDao.GetOrCreateDirectChannel(
                 workspace,
                 sender,
                 receiver
@@ -100,5 +100,24 @@ public class HubMessagingService: IHubMessagingService
         }
 
         return channel;
+    }
+    
+    public async Task InitChannels(WorkspaceEntity workspace, UserEntity user)
+    {
+        var workspaceMembers = workspace.Memberships.Select(item => item.User).ToList();
+        foreach (var workspaceMember in workspaceMembers)
+        {
+            var (channel, isCreated) = await _messagingDao.GetOrCreateDirectChannel(workspace, user, workspaceMember);
+            if (!isCreated)
+            {
+                continue;
+            }
+            var hubRecipientConnections = await _messagingDao.GetConnectionsByUsers([user]);
+            foreach (var hubConnections in hubRecipientConnections)
+            {
+                var channelDto = _mapper.Map<MessagingChannelDto>(channel);
+                await _context.Clients.Client(hubConnections.ConnectionId).SendAsync(HubMethodName.ChannelCreated, channelDto);
+            }
+        }
     }
 }

@@ -14,7 +14,6 @@ public class WorkspaceInitializationService
 {
     private readonly IDispatcher _dispatcher;
     private readonly NavigationManager _navigationManager;
-    private readonly FcmService _fcmService;
     private readonly IState<AuthState> _authState;
 
     public WorkspaceInitializationService(
@@ -26,7 +25,6 @@ public class WorkspaceInitializationService
     {
         _dispatcher = dispatcher;
         _navigationManager = navigationManager;
-        _fcmService = fcmService;
         _authState = authState;
     }
 

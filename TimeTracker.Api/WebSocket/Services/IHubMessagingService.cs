@@ -21,4 +21,6 @@ public interface IHubMessagingService: IScopedDomainService
         string slug,
         List<UserEntity> members
     );
+
+    Task InitChannels(WorkspaceEntity workspace, UserEntity user);
 }

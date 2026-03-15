@@ -11,4 +11,5 @@ public class MessagingChannelDto: BaseDto
     
     public virtual required WorkspaceDto Workspace { get; set; }
     public virtual required UserDto CreatedBy { get; set; }
+    public virtual required UserDto? User { get; set; }
 }
