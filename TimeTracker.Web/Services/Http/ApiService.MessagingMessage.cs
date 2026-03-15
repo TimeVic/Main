@@ -21,9 +21,13 @@ namespace TimeTracker.Web.Services.Http
             );
         }
         
-        public async Task<GetListResponse?> MessagingMessageGetListAsync(Guid channelId)
+        public async Task<GetListResponse?> MessagingMessageGetListAsync(Guid channelId, int page)
         {
-            return await PostAsync<GetListResponse>(ApiUrl.MessagingMessageGetList, new GetListRequest() { ChannelId = channelId });
+            return await PostAsync<GetListResponse>(ApiUrl.MessagingMessageGetList, new GetListRequest()
+            {
+                ChannelId = channelId,
+                Page = page
+            });
         }
     }
 }

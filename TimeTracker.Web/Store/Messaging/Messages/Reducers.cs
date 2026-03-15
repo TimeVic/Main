@@ -20,10 +20,20 @@ public class Reducers
     }
     
     [ReducerMethod]
+    public static MessagesState Reducer(MessagesState state, SetIsMessageSending action)
+    {
+        return state with
+        {
+            IsMessageSending = action.IsSending
+        };
+    }
+    
+    [ReducerMethod]
     public static MessagesState Reducer(MessagesState state, RefreshListAction action)
     {
         return state with
         {
+            TotalCount = 0,
             List = new List<MessagingMessageDto>()
         };
     }
@@ -33,6 +43,7 @@ public class Reducers
     {
         return state with
         {
+            TotalCount = action.Response.TotalCount,
             List = state.List.Concat(action.Response.Items).ToList()
         };
     }

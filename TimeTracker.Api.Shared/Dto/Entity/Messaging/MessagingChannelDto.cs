@@ -8,7 +8,17 @@ public class MessagingChannelDto: BaseDto
 {
     public virtual MessagingChannelType Type { get; set; }
     public virtual required string Slug { get; set; }
-    
+
+    public virtual string Name
+    {
+        get
+        {
+            if (Type == MessagingChannelType.Common)
+                return $"#{Slug}";
+            return User!.UserName!;
+        }
+    }
+
     public virtual required WorkspaceDto Workspace { get; set; }
     public virtual required UserDto CreatedBy { get; set; }
     public virtual required UserDto? User { get; set; }

@@ -1,6 +1,6 @@
 @inherits BaseReactiveComponent
 
-<div class="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-4 py-5 sm:px-6">
+<div class="flex-1 space-y-4 overflow-y-auto flex-grow bg-slate-50 px-4 py-5 sm:px-6">
     @if (State.Value.List.Any())
     {
         @foreach (var message in State.Value.List)
