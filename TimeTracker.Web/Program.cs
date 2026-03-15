@@ -20,6 +20,7 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Web.Services.Messaging;
 using TimeTracker.Web.Services.Notification;
 using ToastService = TimeTracker.Web.Services.UI.ToastService;
+using LumexUI.Extensions;
 
 var currentAssembly = typeof(Program).Assembly;    
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -95,6 +96,9 @@ builder.Services.AddBlazorDragDrop();
 
 // Fluent UI
 builder.Services.AddFluentUIComponents();
+
+// Lumex UI
+builder.Services.AddLumexServices();
 
 // Store
 builder.Services.AddFluxor(

@@ -29,6 +29,7 @@
         <PackageReference Include="blazor-dragdrop" Version="2.6.1" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
         <PackageReference Include="Fluxor.Blazor.Web" Version="6.9.0" />
+        <PackageReference Include="LumexUI" Version="2.3.2" />
         <PackageReference Include="Majorsoft.Blazor.WebAssembly.Logging.Console" Version="1.5.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.5" PrivateAssets="all" />
@@ -261,41 +262,25 @@
         <TailwindDownloadUrl Condition="$([MSBuild]::IsOSPlatform('OSX'))">https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-macos-x64</TailwindDownloadUrl>
         <TailwindDownloadUrl Condition="$([MSBuild]::IsOSPlatform('Linux'))">https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-linux-x64</TailwindDownloadUrl>
 
-        <TailwindInputCss>$(ProjectDir)wwwroot\app.css</TailwindInputCss>
+        <TailwindInputCss>$(ProjectDir)styles\app.css</TailwindInputCss>
         <TailwindOutputCss>$(ProjectDir)wwwroot\app.min.css</TailwindOutputCss>
     </PropertyGroup>
-    
-    <Target Name="CompileLess" BeforeTargets="Build;PrepareForPublish">
-        <!-- Compile .less → .css -->
-        <Exec Command="npm install" />
-        
-        <ItemGroup>
-            <LessFiles 
-                Include="**\*.less"
-                Exclude="node_modules\**\*.less;wwwroot\**\*.less;styles\**\*.less;Ignore\**\*.less"
-            />
-            <BootstrapFiles Include="$(ProjectDir)node_modules/bootstrap/dist/**/*.*" />
-        </ItemGroup>
-        
-        <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
-        <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc styles/app.less wwwroot/app.css" />
-        <Copy SourceFiles="@(BootstrapFiles)"
-              DestinationFolder="wwwroot/lib/bootstrap/%(RecursiveDir)" />
-    </Target>
 
+    <Target Name="Npm" AfterTargets="Build" Condition="!Exists('node_modules')">
+        <Message Text="Running npm ci..." Importance="high" />
+        <Exec Command="npm ci" />
+    </Target>
+    
     <Target Name="TailwindCssBuild" BeforeTargets="Build;PrepareForPublish">
         <Message Text="Checking for Tailwind CLI for your OS..."/>
         <MakeDir Directories="$(TailwindToolsDir)" />
-
-        <DownloadFile Condition="!Exists($(TailwindExePath))"
-                      SourceUrl="$(TailwindDownloadUrl)"
-                      DestinationFolder="$(TailwindToolsDir)"
-                      DestinationFileName="$([System.IO.Path]::GetFileName($(TailwindExePath)))" />
-
-        <Exec Condition="!$([MSBuild]::IsOSPlatform('Windows'))"
-              Command="chmod +x $(TailwindExePath)" />
-
+        
         <Message Text="Building Tailwind CSS..." />
-        <Exec Command="$(TailwindExePath) -i $(TailwindInputCss) -o $(TailwindOutputCss) --minify" />
+        <Exec Command="npx @tailwindcss/cli -i $(TailwindInputCss) -o $(TailwindOutputCss)" />
     </Target>
+
+    <ItemGroup>
+        <Content Remove="package.json" />
+        <Content Remove="package-lock.json" />
+    </ItemGroup>
 </Project>
