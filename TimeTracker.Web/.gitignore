@@ -1,6 +1,7 @@
 package-lock.json
 node_modules
 wwwroot/app.css
+wwwroot/app.min.css
 wwwroot/lib/**/*
 Shared/**/*.razor.css
 Pages/**/*.razor.css
