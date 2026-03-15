@@ -1,0 +1,11 @@
+﻿using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Channel;
+
+namespace TimeTracker.Web.Store.Messaging.Channels;
+
+public record struct RefreshListAction();
+public record struct LoadListAction(bool IsRefresh = true);
+public record struct SetListAction(GetListResponse Response);
+
+public record struct SetUnreadCountAction(int Count);
+
+public record struct SetIsListLoadingAction(bool IsLoading);

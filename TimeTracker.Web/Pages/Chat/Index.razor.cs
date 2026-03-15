@@ -1,13 +1,20 @@
 using BlazorApp.Models;
+using Microsoft.AspNetCore.Components;
+using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.Messaging;
 
 namespace TimeTracker.Web.Pages.Chat;
 
 public partial class Index
 {
+    [Inject] 
+    private MessagingWebSocketClientService _webSocketClientService { get; set; }
+    
     protected override async Task OnInitializedAsync()
     {
         // IsRedirectIfNotLoggedIn = false;
         await base.OnInitializedAsync();
+        await _webSocketClientService.Connect();
     }
     
     private readonly List<ChatUserModel> users = new()
@@ -139,12 +146,5 @@ public partial class Index
             .FirstOrDefault();
 
         return preview?.Text ?? "Start a new conversation";
-    }
-
-    private string GetNavButtonClass(bool isActive)
-    {
-        return isActive
-            ? "flex w-full items-center justify-between rounded-2xl border border-cyan-200 bg-cyan-50 px-3 py-3 text-left transition"
-            : "flex w-full items-center justify-between rounded-2xl border border-transparent bg-white px-3 py-3 text-left transition hover:border-slate-200 hover:bg-slate-50";
     }
 }

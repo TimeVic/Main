@@ -25,7 +25,7 @@ public partial class MessagingWebSocketClientService: IDisposable
         _configuration = configuration;
         _refreshJwtTokenService = refreshJwtTokenService;
         _apiUrl = (configuration.GetValue<string>("ApiUrl")!).EnsureTrailingSlash()!;
-        _hubUrl = $"{_apiUrl}websocket/ping";
+        _hubUrl = $"{_apiUrl}websocket/messaging";
     }
 
     public async Task Connect()

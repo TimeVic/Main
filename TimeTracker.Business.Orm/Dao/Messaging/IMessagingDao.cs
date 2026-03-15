@@ -20,7 +20,7 @@ public interface IMessagingDao: IScopedDomainService
     Task<IList<MessagingCounterEntity>> GetMessageCounters(UserEntity user);
     Task<MessagingCounterEntity> IncreaseForUser(MessagingChannelEntity channel, UserEntity user);
     Task<IList<MessagingConnectionEntity>> GetConnectionsByUsers(IList<UserEntity> users);
-    Task<MessagingChannelEntity> GetOrCreateDirectChannel(
+    Task<(MessagingChannelEntity channel, bool isCreated)> GetOrCreateDirectChannel(
         WorkspaceEntity workspace,
         UserEntity sender,
         UserEntity receiver

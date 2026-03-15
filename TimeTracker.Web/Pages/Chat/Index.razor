@@ -4,6 +4,7 @@
 @layout TimeTracker.Web.Pages.Chat.Shared.Layout
 
 @using BlazorApp.Models
+@using TimeTracker.Web.Pages.Chat.Parts
 
 <aside class="w-full border-b border-slate-200 bg-white lg:w-80 lg:border-b-0 lg:border-r">
     <div class="border-b border-slate-200 p-4">
@@ -17,8 +18,12 @@
             </div>
         </div>
         <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
-            <label class="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-500">You are</label>
-            <InputSelect TValue="string" @bind-Value="activeUserId" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none">
+            <label class="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-500">Workspace</label>
+            <InputSelect 
+                TValue="string" 
+                @bind-Value="activeUserId" 
+                class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none"
+            >
                 @foreach (var user in users)
                 {
                     <option value="@user.Id">@user.Name</option>
@@ -27,62 +32,7 @@
         </div>
     </div>
 
-    <div class="p-4">
-        <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700">
-            <i class="fa-solid fa-user-group text-cyan-600"></i>
-            <span>Channels</span>
-        </div>
-        <div class="space-y-2">
-            @foreach (var channel in channels)
-            {
-                var isActive = selectedView == "channel" && selectedChannelId == channel.Id;
-                <button class="@GetNavButtonClass(isActive)" @onclick="@(() => SelectChannel(channel.Id))">
-                    <span class="flex min-w-0 items-center gap-3">
-                        <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-100 text-cyan-700">
-                            <i class="fa-solid fa-hashtag"></i>
-                        </span>
-                        <span class="min-w-0 text-left">
-                            <span class="block truncate font-medium text-slate-900">@channel.Name</span>
-                            <span class="block truncate text-xs text-slate-500">@channel.Description</span>
-                        </span>
-                    </span>
-                    <span class="text-xs text-slate-500">@channel.MemberIds.Count</span>
-                </button>
-            }
-        </div>
-    </div>
-
-    <div class="border-t border-slate-200 p-4">
-        <div class="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700">
-            <i class="fa-regular fa-message text-violet-600"></i>
-            <span>Direct messages</span>
-        </div>
-        <div class="space-y-2">
-            @foreach (var contact in DirectMessageContacts)
-            {
-                var isActive = selectedView == "direct" && selectedDirectUserId == contact.Id;
-                <button class="@GetNavButtonClass(isActive)" @onclick="@(() => SelectDirect(contact.Id))">
-                    <span class="flex min-w-0 items-center gap-3">
-                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-violet-700">
-                            @GetInitials(contact.Name)
-                        </span>
-                        <span class="min-w-0 text-left">
-                            <span class="block truncate font-medium text-slate-900">@contact.Name</span>
-                            <span class="block truncate text-xs text-slate-500">@GetDirectPreview(contact.Id)</span>
-                        </span>
-                    </span>
-                    @if (contact.IsOnline)
-                    {
-                        <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
-                    }
-                    else
-                    {
-                        <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-                    }
-                </button>
-            }
-        </div>
-    </div>
+    <ChannelsBlock></ChannelsBlock>
 </aside>
 
 <main class="flex min-h-[70vh] flex-1 flex-col bg-slate-50">

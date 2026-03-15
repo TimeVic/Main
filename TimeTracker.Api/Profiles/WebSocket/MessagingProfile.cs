@@ -17,7 +17,8 @@ public class MessagingProfile : Profile
                 Type = e.Type,
                 Slug = e.Slug,
                 Workspace = mapper.Mapper.Map<WorkspaceDto>(e.Workspace),
-                CreatedBy = mapper.Mapper.Map<UserDto>(e.CreatedBy)
+                CreatedBy = mapper.Mapper.Map<UserDto>(e.CreatedBy),
+                User = mapper.Mapper.Map<UserDto>(e.User),
             });
         CreateMap<MessagingMessageEntity, MessagingMessageDto>()
             .IgnoreAllAndConstructUsing((e, mapper) => new MessagingMessageDto

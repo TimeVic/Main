@@ -13,7 +13,7 @@ namespace TimeTracker.Business.Orm.Dao.Messaging;
 
 public partial class MessagingDao
 {
-    public async Task<MessagingChannelEntity> GetOrCreateDirectChannel(
+    public async Task<(MessagingChannelEntity channel, bool isCreated)> GetOrCreateDirectChannel(
         WorkspaceEntity workspace,
         UserEntity sender,
         UserEntity receiver
@@ -29,7 +29,7 @@ public partial class MessagingDao
             .FirstOrDefaultAsync();
         if (channel is not null)
         {
-            return channel;
+            return (channel, false);
         }
 
         channel = new MessagingChannelEntity
@@ -42,7 +42,7 @@ public partial class MessagingDao
             CreatedAt = DateTime.UtcNow
         };
         await Session.SaveAsync(channel);
-        return channel;
+        return (channel, true);
     }
     
     public async Task<MessagingChannelEntity> CreateChannel(
