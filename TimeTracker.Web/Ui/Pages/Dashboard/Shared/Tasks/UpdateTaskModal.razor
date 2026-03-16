@@ -1,0 +1,50 @@
+﻿@using TimeTracker.Api.Shared.Dto.Entity.Task
+@using TimeTracker.Business.Extensions
+
+@implements IDialogContentComponent<UpdateTaskModal.Parameters>
+@inherits BaseReactiveComponent
+
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Vertical">
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Start">
+            <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())"/>
+            <FluentLabel Typo="Typography.PaneHeader">
+                @Content.Task.Title.TruncateAndAddDots(50)
+            </FluentLabel>
+        </FluentStack>
+        <FluentStack 
+            Orientation="Orientation.Horizontal" 
+            HorizontalAlignment="HorizontalAlignment.SpaceBetween"
+            VerticalAlignment="VerticalAlignment.Center"
+        >
+            <TaskIdBadge IsLink="false" InternalTask="@Content.Task"/>
+            <FluentSpacer/>
+            <TimeEntryForm
+                InternalTask="@Content.Task"
+                IsShort="@true"/>
+            <FluentSpacer/>
+        </FluentStack>
+    </FluentStack>
+</FluentDialogHeader>
+
+<FluentDialogBody>
+    <UpdateTaskForm TaskId="@Content.Task.Id"/>
+</FluentDialogBody>
+
+@code {
+    public class Parameters
+    {
+        public required TaskDto Task { get; set; }
+    }
+    
+    [Parameter]
+    public required Parameters Content { get; set; }
+    
+    [CascadingParameter] 
+    public required FluentDialog MudDialog { get; set; }
+    
+    private void OnCloseModal()
+    {
+        MudDialog.CloseAsync();
+    }
+}

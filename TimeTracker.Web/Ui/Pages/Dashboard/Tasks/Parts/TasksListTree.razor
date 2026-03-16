@@ -1,0 +1,49 @@
+﻿@inherits BaseReactiveComponent
+
+<FluentToolbar Class="w-100">
+
+    <TaskListsDropDown
+        Clearable="false"
+        Value="@(_selectedTaskList?.Id ?? Guid.Empty)"
+        Disabled="@(!_tasksListState.Value.List.Any())"
+        SelectedItemChanged="@((taskList) => OnSelectedTasksList(taskList))"/>
+    
+    <FluentButton
+        Appearance="Appearance.Accent"
+        Disabled="@(_selectedTaskList is null)"
+        @onclick="@(ShowAddTaskModal)">
+        Add task
+    </FluentButton>
+
+    @if (_selectedTaskList is not null)
+    {
+        <FluentButton
+            Id="taskListMenuAnchor"
+            IconStart="@(new Icons.Regular.Size24.Navigation())"
+            Appearance="Appearance.Lightweight"
+            @onclick="@(() => _isTaskListMenuOpened = !_isTaskListMenuOpened)"/>
+
+        <FluentMenu Anchor="taskListMenuAnchor" @bind-Open="_isTaskListMenuOpened" VerticalThreshold="170">
+            <FluentMenuItem
+                OnClick="@(ShowAddTaskListModal)">
+                Add new task list
+            </FluentMenuItem>
+            <FluentMenuItem
+                Disabled="@(_selectedTaskList is null)"
+                OnClick="@(ShowUpdateTaskListModal)">
+                Update current task list
+            </FluentMenuItem>
+            <FluentMenuItem OnClick="@(OnDeleteTaskList)">
+                Delete current task list
+            </FluentMenuItem>
+        </FluentMenu>
+    }
+    else
+    {
+        <FluentButton
+            Appearance="Appearance.Accent"
+            @onclick="@(ShowAddTaskListModal)">
+            Add tasks list
+        </FluentButton>
+    }
+</FluentToolbar>

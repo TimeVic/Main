@@ -1,0 +1,53 @@
+﻿@page "/board/overdue-tasks"
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+<FluentStack Class="w-100">
+    @if (_isLoading)
+    {
+        <FluentStack VerticalAlignment="VerticalAlignment.Center">
+            <FluentProgressRing/>
+        </FluentStack>
+    }
+    else
+    {
+        if (_overdueTasks.Any())
+        {
+            <FluentLabel Typo="Typography.H3">Overdue</FluentLabel>
+            <FluentDivider/>
+            foreach (var task in _overdueTasks)
+            {
+                <TaskCard Task="@task"></TaskCard>
+            }
+
+            <FluentSpacer/>
+        }
+
+        foreach (var item in _groupedTasks)
+        {
+            <FluentLabel Typo="Typography.H3">@item.Key?.ToString("MMM dd yyyy - dddd")</FluentLabel>
+            <FluentDivider/>
+            foreach (var task in item)
+            {
+                <TaskCard
+                    Task="@task"
+                    IsShowTaskList="true">
+                </TaskCard>
+            }
+
+            <FluentStack HorizontalAlignment="HorizontalAlignment.Start">
+                <FluentButton
+                    IconStart="@(new Icons.Regular.Size32.Add())"
+                    Appearance="Appearance.Neutral"
+                    OnClick="@(() => OnAddTask(item.Key))">
+                    To list
+                </FluentButton>
+            </FluentStack>
+            <FluentSpacer/>
+            <FluentSpacer/>
+        }
+    }
+</FluentStack>

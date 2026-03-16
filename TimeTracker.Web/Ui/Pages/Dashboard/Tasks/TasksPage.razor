@@ -1,0 +1,34 @@
+﻿@page "/board/tasks/{TaskListId:guid}"
+@page "/board/tasks"
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.LayoutParts
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared
+
+@inherits BaseComponent
+@layout Layout
+
+<BodyLayout Title="Tasks">
+    <CascadingValue Name="TaskListId" Value="@TaskListId">
+        <FluentStack Orientation="Orientation.Vertical">
+            <TasksListTree/>
+
+            <FluentLabel
+                Class="mt-2 mb-2"
+                Typo="Typography.H3">
+                @_selectedTaskList?.Name
+            </FluentLabel>
+
+            <FluentDivider
+                Class="mb-2 w-100"
+                Orientation="Orientation.Horizontal"/>
+
+            @if (_selectedTaskList != null)
+            {
+                <TasksFilterForm/>
+
+                <FluentStack Orientation="Orientation.Horizontal">
+                    <TasksTable/>
+                </FluentStack>
+            }
+        </FluentStack>
+    </CascadingValue>
+</BodyLayout>

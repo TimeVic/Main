@@ -1,6 +1,6 @@
 ﻿using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Web.Pages.Dashboard.Project.Parts.List;
+using TimeTracker.Web.Ui.Pages.Dashboard.Project.Parts.List;
 
 namespace TimeTracker.Web.Services.UI;
 

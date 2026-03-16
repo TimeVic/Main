@@ -51,9 +51,6 @@
       <Content Update="wwwroot\appsettings.Development.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
-      <Content Include="Pages\Dashboard\Report\TimeEntry\Parts\FilterForm.razor.less">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      </Content>
       <Content Update="Shared\Components\Storage\FileUploader.razor.less">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       </Content>
@@ -76,12 +73,6 @@
       <Content Remove="Pages\Dashboard\Members\**" />
       <Content Remove="Pages\Dashboard\Shared\NotificationCenter\**" />
       <Content Remove="Pages\Dashboard\Tag\**" />
-      <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.css.map" />
-      <Content Include="Pages\Dashboard\Shared\TimeEntry\TimeEntryList.razor.less" />
-      <Content Include="Pages\Dashboard\Tasks\Parts\TasksTable.razor.less" />
-      <Content Include="Shared\Components\Form\MarkdownEdit.razor.less" />
-      <Content Include="Shared\Components\Storage\FileUploader.razor.css.map" />
-      <Content Include="Shared\Components\Storage\FileUploader.razor.less" />
       <Content Remove="Ignore\GoalsTracker\Parts\AddGoalModalForm.razor" />
       <Content Remove="Ignore\GoalsTracker\Parts\ChangePositionModal.razor" />
       <Content Remove="Ignore\GoalsTracker\Parts\GoalsTrackerTable.razor" />
@@ -91,6 +82,13 @@
       <Content Remove="Ignore\Members\MembersPage.razor" />
       <Content Remove="Ignore\Integrations\Parts\**" />
       <Content Remove="Ignore\Integrations\IntegrationsPage.razor" />
+      <Content Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\Parts\ReminderCard.razor" />
+      <Content Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\**" />
+      <Content Remove="Ui\Pages\Dashboard\Tag\Parts\TagsList.razor" />
+      <Content Remove="Ui\Pages\Dashboard\Tag\Parts\AddTagModal.razor" />
+      <Content Remove="Ui\Pages\Dashboard\Tag\**" />
+      <Content Remove="Ui\Shared\Components\Form\TimeInput.razor" />
+      <Content Remove="Ui\Shared\Components\Form\YesNoDropDown.razor" />
     </ItemGroup>
 
     <ItemGroup>
@@ -105,6 +103,8 @@
       <Folder Include="Ignore\Integrations\" />
       <Folder Include="Ignore\Members\" />
       <Folder Include="Store\Dashboard\Effects\" />
+      <Folder Include="Ui\" />
+      <Folder Include="wwwroot\css\" />
       <Folder Include="wwwroot\img\logo\black" />
       <Folder Remove="node_modules" />
     </ItemGroup>
@@ -135,6 +135,13 @@
     <Compile Remove="Ignore\Members\MembersPage.razor.cs" />
     <Compile Remove="Ignore\Integrations\Parts\**" />
     <Compile Remove="Ignore\Integrations\IntegrationsPage.razor.cs" />
+    <Compile Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\Parts\ReminderCard.razor.cs" />
+    <Compile Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\**" />
+    <Compile Remove="Ui\Pages\Dashboard\Tag\Parts\TagsList.razor.cs" />
+    <Compile Remove="Ui\Pages\Dashboard\Tag\Parts\AddTagModal.razor.cs" />
+    <Compile Remove="Ui\Pages\Dashboard\Tag\**" />
+    <Compile Remove="Ui\Shared\Components\Form\TimeInput.razor.cs" />
+    <Compile Remove="Ui\Shared\Components\Form\YesNoDropDown.razor.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -147,6 +154,8 @@
       <EmbeddedResource Remove="Pages\Dashboard\Tag\**" />
       <EmbeddedResource Remove="Ignore\Members\Parts\**" />
       <EmbeddedResource Remove="Ignore\Integrations\Parts\**" />
+      <EmbeddedResource Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\**" />
+      <EmbeddedResource Remove="Ui\Pages\Dashboard\Tag\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -241,6 +250,28 @@
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\ClickUpSettingsForm.razor" />
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\JiraSettingsForm.razor" />
       <_ContentIncludedByDefault Remove="Ignore\Integrations\Parts\RedmineSettingsForm.razor" />
+      <_ContentIncludedByDefault Remove="Shared\BaseLayout.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Dialogs\ConfirmationDialog.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\ClientsDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\EnumDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\MembersDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\MultipleUsersDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\ProjectsDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\TagsDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\Select\TaskListsDropDown.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\TextField\DateTimeEditField.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Form\TextField\TimeEditField.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\Storage\FileViewModal.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Components\TagsBadgesList.razor" />
+      <_ContentIncludedByDefault Remove="Shared\InitializationContainer.razor" />
+      <_ContentIncludedByDefault Remove="Shared\MainHeader.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\NotificationBadgeButton.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\NotificationCenterModal.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\Parts\ReminderCard.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Tag\Parts\AddTagModal.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Tag\Parts\TagsList.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Tag\Parts\UpdateTagModal.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Tag\TagsListPage.razor" />
     </ItemGroup>
 
     <ItemGroup>
@@ -248,27 +279,29 @@
       <None Remove="Ignore\Members\Parts\**" />
       <None Remove="Ignore\Integrations\Parts\**" />
       <None Include="wwwroot\lib\.gitignore" />
+      <None Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\**" />
+      <None Remove="Ui\Pages\Dashboard\Tag\**" />
     </ItemGroup>
 
     <PropertyGroup>
-        <TailwindToolsDir Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(USERPROFILE)\.tailwind\</TailwindToolsDir>
-        <TailwindToolsDir Condition="!$([MSBuild]::IsOSPlatform('Windows'))">$(HOME)/.tailwind/</TailwindToolsDir>
-
-        <TailwindExePath Condition="$([MSBuild]::IsOSPlatform('Windows'))">$(TailwindToolsDir)tailwindcss-windows-x64.exe</TailwindExePath>
-        <TailwindExePath Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(TailwindToolsDir)tailwindcss-macos-x64</TailwindExePath>
-        <TailwindExePath Condition="$([MSBuild]::IsOSPlatform('Linux'))">$(TailwindToolsDir)tailwindcss-linux-x64</TailwindExePath>
-
-        <TailwindDownloadUrl Condition="$([MSBuild]::IsOSPlatform('Windows'))">https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-windows-x64.exe</TailwindDownloadUrl>
-        <TailwindDownloadUrl Condition="$([MSBuild]::IsOSPlatform('OSX'))">https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-macos-x64</TailwindDownloadUrl>
-        <TailwindDownloadUrl Condition="$([MSBuild]::IsOSPlatform('Linux'))">https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-linux-x64</TailwindDownloadUrl>
-
         <TailwindInputCss>$(ProjectDir)styles\app.css</TailwindInputCss>
-        <TailwindOutputCss>$(ProjectDir)wwwroot\app.min.css</TailwindOutputCss>
+        <TailwindOutputCss>$(ProjectDir)wwwroot\css\app.min.css</TailwindOutputCss>
     </PropertyGroup>
 
     <Target Name="Npm" AfterTargets="Build" Condition="!Exists('node_modules')">
         <Message Text="Running npm ci..." Importance="high" />
         <Exec Command="npm ci" />
+    </Target>
+
+    <Target Name="CompileLess" BeforeTargets="Build;PrepareForPublish">
+        <ItemGroup>
+            <LessFiles
+                Include="Ui\**\*.less"
+                Exclude="node_modules\**\*.less;wwwroot\**\*.less;styles\**\*.less;Ignore\**\*.less"
+            />
+        </ItemGroup>
+
+        <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
     </Target>
     
     <Target Name="TailwindCssBuild" BeforeTargets="Build;PrepareForPublish">
