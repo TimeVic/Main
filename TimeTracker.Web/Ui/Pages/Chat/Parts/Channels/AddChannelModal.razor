@@ -1,0 +1,37 @@
+@using LumexUI
+@using LumexUI.Common
+@using LumexUI.Shared.Icons
+@inherits BaseReactiveComponent
+
+<LumexModal>
+    <LumexModalTrigger 
+        Variant="@Variant.Light" 
+        Color="ThemeColor.Info"
+        Size="Size.Small">Create Channel</LumexModalTrigger>
+    <LumexModalContent>
+        <LumexModalHeader Class="flex-col gap-3">
+            Create channel
+        </LumexModalHeader>
+        <LumexModalBody>
+            <LumexTextbox 
+                Required="@true"
+                Type="@InputType.Text"
+                Label="Name"
+                Placeholder="e.g. my-channel"
+                Class="w-100" />
+            <p>
+                Channels are where conversations happen around a topic. Use a name that is easy to find and understand.
+            </p>
+        </LumexModalBody>
+        <LumexModalFooter>
+            <LumexButton 
+                FullWidth="@true"
+                Color="@ThemeColor.Primary"
+                Radius="@Radius.Full"
+                command="close"
+                commandfor="@context">
+                Create
+            </LumexButton>
+        </LumexModalFooter>
+    </LumexModalContent>
+</LumexModal>
