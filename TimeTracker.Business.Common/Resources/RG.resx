@@ -30,6 +30,9 @@
     <data name="Error_FieldMayContainOnlyTimeZoneId" xml:space="preserve">
         <value>Field "{0}" may contain only time zone ID!</value>
     </data>
+    <data name="Error_FieldMayContainOnlySlugSymbols" xml:space="preserve">
+        <value>Field "{0}" may contain only lowercase letters, digits and the "-" symbol.</value>
+    </data>
     <data name="Error_FieldMayContainOnlyColor" xml:space="preserve">
         <value>Field "{0}" may contain only color HEX</value>
     </data>
