@@ -1,0 +1,12 @@
+namespace TimeTracker.Web.Ui.Pages.Chat.Models;
+
+public class ChatChannelModel
+{
+    public string Id { get; set; } = string.Empty;
+
+    public string Name { get; set; } = string.Empty;
+
+    public string Description { get; set; } = string.Empty;
+
+    public List<string> MemberIds { get; set; } = new();
+}

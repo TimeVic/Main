@@ -1,0 +1,33 @@
+﻿@inherits TimeTracker.Web.Ui.Shared.BaseLayout
+
+<FluentMainLayout NavMenuTitle="TimeVic" Style="min-height: calc(100% - 40px)">
+    <Header>
+        <FluentNavLink Href="/">
+            TimeVic
+        </FluentNavLink>
+        <FluentSpacer/>
+        <MainHeader/>
+    </Header>
+    <Body>
+        <FluentBodyContent>
+            @Body
+        </FluentBodyContent>
+        @if (!IsShowReCaptcha)
+        {
+            <style>
+                    .grecaptcha-badge {
+                        visibility: hidden;
+                    }
+                </style>
+        }
+    </Body>
+</FluentMainLayout>
+<FluentFooter>
+    Copyright&nbsp;©&nbsp;@DateTime.Now.Year&nbsp;<a href="https://georgyshira.info/" target="_blank">Georgy Shira</a>&nbsp;Apache License Version 2.0
+</FluentFooter>
+
+<FluentToastProvider />
+<FluentDialogProvider />
+<FluentTooltipProvider />
+<FluentMessageBarProvider />
+<FluentMenuProvider />

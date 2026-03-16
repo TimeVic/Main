@@ -1,0 +1,42 @@
+﻿@using TimeTracker.Business.Common.Constants
+
+@inherits BaseComponent
+
+<MudDialog Style="min-width: 400px; min-height: 100px;">
+    <DialogContent>
+        @if (_isLoading && !_list.Any())
+        {
+            <MudStack>
+                <MudProgressLinear Color="Color.Info" Indeterminate="true"/>
+            </MudStack>
+        }
+        else
+        {
+            <MudStack Row="false" Spacing="1">
+                @foreach (var notification in _list)
+                {
+                    if (notification.Type == NotificationActionType.Reminder)
+                    {
+                        <ReminderCard Notification="@notification"/>
+                    }
+                }
+            </MudStack>
+        }
+        @if (_isHasMore)
+        {
+            <MudStack Row="true" Justify="Justify.Center" Class="mt-4 mb-3">
+                <MudIconButton
+                    Size="Size.Medium"
+                    Icon="@Icons.Material.Filled.Downloading"
+                    Color="Color.Default"
+                    OnClick="@LoadMore"
+                    Disabled="@(_isLoading)"/>
+            </MudStack>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Success" OnClick="@OnClickReadAll">Read All</MudButton>
+        <MudSpacer/>
+        <MudButton OnClick="@OnCloseModal">Close</MudButton>
+    </DialogActions>
+</MudDialog>
