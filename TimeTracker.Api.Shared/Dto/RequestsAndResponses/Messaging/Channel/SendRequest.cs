@@ -11,6 +11,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Channel
         
         [Required]
         [IsSlug]
+        [Display(Name = "Name")]
         public required string Slug { get; set; }
 
         public ICollection<Guid> MemberIds { get; set; } = new List<Guid>();

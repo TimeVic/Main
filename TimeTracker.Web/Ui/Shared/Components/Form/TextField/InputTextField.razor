@@ -1,0 +1,49 @@
+@inherits InputBase<string>
+@using LumexUI
+@using LumexUI.Common
+
+<LumexTextbox
+    @bind-Value="CurrentValue"
+    Class="@Class"
+    Placeholder="@Placeholder"
+    Type="@Type"
+    Label="@Label"
+    Invalid="@HasError"
+    Required="@Required"
+    ErrorMessage="@FirstError"
+/>
+
+@code {
+    [Parameter]
+    public bool Required { get; set; }
+    
+    [Parameter]
+    public InputType Type { get; set; } = InputType.Text;
+    
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+    
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+    
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+    
+    private bool HasError =>
+        EditContext.GetValidationMessages(FieldIdentifier).Any();
+
+    private string FirstError =>
+        EditContext.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? "";
+    
+    
+    protected override bool TryParseValueFromString(
+        string? value,
+        out string result,
+        out string? validationErrorMessage
+    )
+    {
+        result = value ?? string.Empty;
+        validationErrorMessage = null;
+        return true;
+    }
+}

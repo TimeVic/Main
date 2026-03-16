@@ -18,7 +18,10 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
             {
                 return ValidationResult.Success;
             }
-            var errorResult = new ValidationResult(string.Format(RG.Error_FieldMayContainOnlyTimeZoneId, validationContext?.DisplayName));
+            var errorResult = new ValidationResult(
+                string.Format(RG.Error_FieldMayContainOnlySlugSymbols, validationContext?.DisplayName),
+                [validationContext!.MemberName!]
+            );
             if (value is string slug)
             {
                 if (_slugRegex.IsMatch(slug))
@@ -26,6 +29,7 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
                     return ValidationResult.Success;
                 }
             }
+            Console.WriteLine(errorResult.ErrorMessage);
             return errorResult;
         }
     }

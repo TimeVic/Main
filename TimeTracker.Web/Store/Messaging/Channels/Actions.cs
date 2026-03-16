@@ -3,6 +3,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Channel;
 
 namespace TimeTracker.Web.Store.Messaging.Channels;
 
+public record struct CreateChannelAction(string Slug);
 public record struct AddChannelAction(MessagingChannelDto Channel);
 public record struct SetSelectedAction(MessagingChannelDto? Channel);
 public record struct RefreshListAction();
