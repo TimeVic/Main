@@ -45,6 +45,11 @@ public class LoadListEffect: Effect<LoadListAction>
                     dispatcher.Dispatch(new RefreshListAction());
                     return;
                 }
+                if (_messagesState.Value.Page <= 1)
+                {
+                    dispatcher.Dispatch(new RefreshListAction());
+                }
+
                 var response = await _apiService.MessagingMessageGetListAsync(
                     _channelsState.Value.SelectedChannel!.Id,
                     _messagesState.Value.Page
