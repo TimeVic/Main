@@ -1,4 +1,5 @@
-﻿@inherits TimeTracker.Web.Ui.Shared.BaseLayout
+﻿@using LumexUI
+@inherits TimeTracker.Web.Ui.Shared.BaseLayout
 
 
 
@@ -79,8 +80,4 @@
     </FluentFooter>
 </FluentLayout>
 
-<FluentToastProvider />
-<FluentDialogProvider />
-<FluentMenuProvider />
-<FluentTooltipProvider />
-<FluentMessageBarProvider />
+<LumexToastProvider RichColors="@true" Id="tv-toaster-rich-colors-id" />

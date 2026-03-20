@@ -1,4 +1,5 @@
-﻿@inherits TimeTracker.Web.Ui.Shared.BaseLayout
+﻿@using LumexUI
+@inherits TimeTracker.Web.Ui.Shared.BaseLayout
 
 <PageTitle>TimeVic — Time tracking for small teams</PageTitle>
 <div class="min-h-screen bg-white text-slate-900">
@@ -17,3 +18,4 @@
         }
     </style>
 }
+<LumexToastProvider RichColors="@true" Id="tv-toaster-rich-colors-id" />
