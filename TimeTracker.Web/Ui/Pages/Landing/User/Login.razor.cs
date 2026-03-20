@@ -71,4 +71,9 @@ public partial class Login
         StateHasChanged();
         await UpdateReCaptchaAsync();
     }
+
+    private void ForgotPassword()
+    {
+        NavigationManager.NavigateTo(SiteUrl.ForgotPassword);
+    }
 }

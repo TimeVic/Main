@@ -1,10 +1,6 @@
 ﻿@using TimeTracker.Web.Ui.Shared
 <Fluxor.Blazor.Web.StoreInitializer/>
 
-<MudBlazor.MudThemeProvider IsDarkMode="false"/>
-<MudBlazor.MudDialogProvider/>
-<MudBlazor.MudSnackbarProvider/>
-
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(BaseLayout)"/>

@@ -1,4 +1,39 @@
 ﻿@inherits TimeTracker.Web.Ui.Shared.BaseLayout
+
+
+
+<div class="flex h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r p-4 space-y-2">
+        <a class="block px-3 py-2 rounded hover:bg-gray-100">Главная</a>
+        <a class="block px-3 py-2 rounded hover:bg-gray-100">Профиль</a>
+        <a class="block px-3 py-2 rounded hover:bg-gray-100">Настройки</a>
+    </aside>
+
+    <div class="flex-1 flex flex-col">
+
+        <!-- Header -->
+        <header class="h-16 border-b bg-white px-6 flex items-center justify-between">
+            <span class="font-semibold">Dashboard</span>
+            <div class="flex items-center gap-4">
+                <span>Heorhii</span>
+                <img class="h-8 w-8 rounded-full" src="https://via.placeholder.com/32">
+            </div>
+        </header>
+
+        <!-- Main -->
+        <main class="flex-1 p-6 overflow-y-auto bg-gray-50">
+            <div class="rounded-lg border bg-white p-6 shadow">
+                Контент здесь
+            </div>
+        </main>
+    </div>
+
+</div>
+
+
+
 <FluentLayout Style="min-height: calc(100% - 40px)">
     <FluentHeader>
         TimeVic
