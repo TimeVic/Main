@@ -9,6 +9,8 @@
     Type="@Type"
     Label="@Label"
     Invalid="@HasError"
+    Disabled="Disabled"
+    FullWidth="FullWidth"
     Required="@Required"
     ErrorMessage="@FirstError"
 />
@@ -16,6 +18,12 @@
 @code {
     [Parameter]
     public bool Required { get; set; }
+    
+    [Parameter]
+    public bool Disabled { get; set; }
+    
+    [Parameter]
+    public bool FullWidth { get; set; }
     
     [Parameter]
     public InputType Type { get; set; } = InputType.Text;
@@ -29,11 +37,10 @@
     [Parameter]
     public string Class { get; set; } = string.Empty;
     
-    private bool HasError =>
-        EditContext.GetValidationMessages(FieldIdentifier).Any();
+    private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
 
     private string FirstError =>
-        EditContext.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? "";
+        EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
     
     
     protected override bool TryParseValueFromString(
