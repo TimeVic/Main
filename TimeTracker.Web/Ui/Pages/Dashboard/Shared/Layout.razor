@@ -6,10 +6,12 @@
 <div class="min-h-screen bg-white text-slate-800">
     @if (CommonState.Value.IsInitialized)
     {
-        <MainHeader></MainHeader>
-        <MainMenu></MainMenu>
         <InitializationContainer>
-            @Body
+            <MainHeader></MainHeader>
+            <MainMenu></MainMenu>
+            <main class="px-4 py-6 sm:px-6 lg:px-8">
+                @Body
+            </main>
         </InitializationContainer>
     }
     @if (!IsShowReCaptcha)

@@ -1,0 +1,85 @@
+@using LumexUI.Common
+@using TimeTracker.Web.Ui.Pages.Dashboard.Tasks.Parts.TasksList
+@inherits BaseReactiveComponent
+
+<aside>
+    <AddTasksListModalForm IsOpened="_isTaskModalOpened"></AddTasksListModalForm>
+    
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div class="flex items-center justify-between gap-3">
+            <div>
+                <p class="text-sm font-semibold text-slate-900">Task lists</p>
+                <p class="text-xs text-slate-500">Choose a project and open the list you want to work from.</p>
+            </div>
+            <CustomButton
+                IconOnly="true"
+                Color="ThemeColor.Info"
+                Variant="Variant.Outlined"
+                OnClick="@(() => _isTaskModalOpened = true)">
+                <StartContent>
+                    <i class="fa-solid fa-plus"></i>
+                </StartContent>
+            </CustomButton>
+            @* <button type="button" @onclick="AddTaskList" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition hover:border-blue-500 hover:text-blue-600"> *@
+            @*     <i class="fa-solid fa-plus"></i> *@
+            @* </button> *@
+        </div>
+
+        <div class="mt-4 space-y-3">
+            <div>
+                <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Project</label>
+                <ProjectsDropDown
+                    Value="_projectId"
+                    FullWidth="true"
+                    SelectedItemChanged="OnSelectedProject">
+                </ProjectsDropDown>
+                @* <p class="mt-1 text-xs text-slate-500">Grouped by client; projects without a client appear under “No client”.</p> *@
+            </div>
+
+            <div class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
+                <InputTextField
+                    @bind-Value="_taskListSearch"
+                    Placeholder="Search task lists..."
+                    FullWidth="true"
+                    Size="Size.Small"
+                    Clearable="true"
+                    Variant="InputVariant.Underlined"
+                    Color="ThemeColor.Default">
+                    <StartContent>
+                        <i class="fa-solid fa-magnifying-glass text-xs text-slate-400"></i>
+                    </StartContent>
+                </InputTextField>
+            </div>
+
+            <div class="max-h-[60vh] space-y-2 overflow-auto pr-1">
+                @foreach (var taskList in _filteredTaskLists)
+                {
+                    <button type="button" @onclick="@(() => OnTasksListSelected(taskList.Id))" class="@GetTaskListClass(taskList)">
+                        <span>
+                            <span class="block font-medium text-slate-800">@taskList.Name</span>
+                            <span class="text-xs text-slate-500">
+                                @* @taskList.Tasks.Count task@(taskList.Tasks.Count == 1 ? string.Empty : "s") *@
+                                4 tasks
+                            </span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                    </button>
+                }
+
+                @if (!_filteredTaskLists.Any())
+                {
+                    <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+                        @if (!string.IsNullOrWhiteSpace(_taskListSearch))
+                        {
+                            <text>No task lists match “@_taskListSearch”.</text>
+                        }
+                        else
+                        {
+                            <text>List is empty</text>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</aside>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Web.Core.Components;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select.Core;
 
@@ -74,9 +75,10 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent where T : BaseD
         _selectedId = null;
     }
     
-    protected void OnValueChanged(T? client)
+    protected void OnValueChanged(T? item)
     {
-        if (_selectedItem?.Id != client?.Id)
+        _selectedId = item?.Id.ToString();
+        if (_selectedItem != item)
         {
             UpdateSelectedItem();
             SelectedItemChanged.InvokeAsync(_selectedItem);
