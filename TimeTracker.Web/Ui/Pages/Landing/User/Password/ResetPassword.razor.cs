@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
@@ -29,11 +30,13 @@ public partial class ResetPassword
     private bool _isLoading;
     private EditForm _form;
     private bool _isValid = false;
+    private bool _isSent = false;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         _isLoading = false;
+        _isSent = false;
         await UpdateReCaptchaAsync();
     }
 
@@ -56,6 +59,11 @@ public partial class ResetPassword
             {
                 _toastService.ShowInfo("Email has been sent");
                 model.Email = string.Empty;
+                _isSent = true;
+            }
+            else
+            {
+                ToastService.ShowError("Incorrect email or password");
             }
         }
         catch (Exception)

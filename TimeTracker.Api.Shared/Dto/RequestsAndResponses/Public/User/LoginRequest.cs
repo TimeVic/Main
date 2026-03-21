@@ -17,5 +17,8 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
         [Required]
         [IsReCaptcha]
         public string ReCaptcha { get; set; } = string.Empty;
+        
+        // TODO: Implement
+        public bool IsRememberMe { get; set; }
     }
 }

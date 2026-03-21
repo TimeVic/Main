@@ -32,10 +32,12 @@ public partial class ChangePassword
     private bool _isLoading;
     private EditForm _form;
     private bool _isValid = false;
+    private bool _isCompleted = false;
 
     protected override async Task OnInitializedAsync()
     {
         _isLoading = false;
+        _isCompleted = false;
         model.VerficationToken = Token;
         await UpdateReCaptchaAsync();
     }
@@ -57,6 +59,7 @@ public partial class ChangePassword
             var isSuccess = await _apiService.ResetPasswordStep2(model);
             if (isSuccess)
             {
+                _isCompleted = true;
                 _toastService.ShowInfo("Your password has been changed");
                 NavigationManager.NavigateTo("/");
             }

@@ -1,3 +1,4 @@
+using Autofac;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Services.Queue;
@@ -9,12 +10,9 @@ namespace TimeTracker.WorkerServices.Services.Queue
     {
         private readonly IQueueService _queueService;
 
-        public DefaultProcessingHostedService(
-            ILogger<ABackgroundService> logger,
-            IServiceScopeFactory serviceScopeFactory
-        ) : base(logger, serviceScopeFactory)
+        public DefaultProcessingHostedService() : base()
         {
-            _queueService = ServiceProvider.GetService<IQueueService>();
+            _queueService = DiScope.Resolve<IQueueService>();
             ServiceName = "DefaultProcessingHostedService";
         }
 

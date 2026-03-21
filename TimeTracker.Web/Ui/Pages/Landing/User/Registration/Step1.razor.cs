@@ -21,11 +21,13 @@ public partial class Step1
     private bool _isLoading;
     private EditForm _form;
     private bool _isValid = false;
+    private bool _isSent = false;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         _isLoading = false;
+        _isSent = false;
         await UpdateReCaptchaAsync();
     }
 
@@ -46,6 +48,7 @@ public partial class Step1
             var isOk = await _apiService.RegistrationStep1Async(model);
             if (isOk)
             {
+                _isSent = true;
                 ToastService.ShowInfo("Registration email is sent");
                 model.Email = string.Empty;
             }

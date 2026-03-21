@@ -1,43 +1,60 @@
 ﻿@page "/registration/step1"
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Web.Ui.Pages.Landing.User.Registration.Shared
 @using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.Layout
+@using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<FluentStack HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
-    <FluentCard Style="width: 300px" Class="mt-5 mb-5">
-        <EditForm
+<PageTitle>TimeVic - Registration</PageTitle>
+
+<ComponentLayout>
+    <ChildContent>
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">Registration</p>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-900">"Create account"</h2>
+                <p class="mt-2 text-sm text-slate-500">"Step 1 of 2 — start with your email address."</p>
+            </div>
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-sm">
+                <i class="@($"fa-solid fa-user-plus text-lg")"></i>
+            </div>
+        </div>
+        
+        <EditForm 
             Model="model"
             @ref="_form"
-            novalidate>
+            class="mt-6 space-y-4">
             <DataAnnotationsValidator />
-
-            <FluentLabel Typo="Typography.H2" Class="mb-3">Registration</FluentLabel>
-
-            <FluentStack Orientation="Orientation.Vertical" Class="mb-3">
-                <FluentLabel>Email</FluentLabel>
-                <FluentTextField
-                    style="width: 100%;"
-                    Disabled="_isLoading"
-                    ValueExpression="() => model.Email"
-                    ValueChanged="value => model.Email = value"
-                    InputMode="InputMode.Email"
-                    Placeholder="Enter your email">
-                    <FluentIcon Value="@(new Icons.Regular.Size16.Edit())" Slot="start" Color="Color.Neutral"/>
-                </FluentTextField>
-            </FluentStack>
+            
+            <div class="space-y-2">
+                <InputTextField 
+                    @bind-Value="@model.Email"
+                    Label="Email"
+                    Type="InputType.Email" 
+                    Placeholder="your@email.com" />
+            </div>
+            @* <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600"> *@
+            @*     @statusMessage *@
+            @* </div> *@
+            
+            <LumexButton
+                Color="@ThemeColor.Warning"
+                Class="w-full gap-2 rounded-2xl bg-emerald-600 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                OnClick="@Submit">
+                Send verification email
+            </LumexButton>
         </EditForm>
-        <div Class="d-flex justify-space-between">
-            <FluentButton
-                OnClick="Submit"
-                Appearance="@Appearance.Accent">
-                Submit
-            </FluentButton>
-            <FluentSpacer></FluentSpacer>
-            <FluentAnchor
-                Href="/login">
-                Login
-            </FluentAnchor>
-        </div>
-    </FluentCard>
-</FluentStack>
+
+        @if (_isSent)
+        {
+            <div class="mt-6 rounded-3xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+                <p class="font-semibold">Verification email sent</p>
+                <p class="mt-2 text-emerald-700">We've sent you an email. Please follow the link inside to continue your registration.</p>
+            </div>
+        }
+
+    </ChildContent>
+</ComponentLayout>
