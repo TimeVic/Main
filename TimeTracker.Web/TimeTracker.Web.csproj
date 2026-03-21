@@ -334,7 +334,7 @@
 
     <Target Name="Npm" AfterTargets="Build" Condition="!Exists('node_modules')">
         <Message Text="Running npm ci..." Importance="high" />
-        <Exec Command="npm ci" />
+        <Exec Command="npm i" />
     </Target>
 
     <Target Name="CompileLess" BeforeTargets="Build;PrepareForPublish">
