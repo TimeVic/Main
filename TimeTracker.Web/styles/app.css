@@ -1,4 +1,4 @@
 @import "tailwindcss";
 
-@import "./lumexui/theme"; /* theme */
-@source "./lumexui/*.cs"; /* styles */
+@import "../bin/lumexui/theme"; /* theme */
+@source "../bin/lumexui/*.cs"; /* styles */
