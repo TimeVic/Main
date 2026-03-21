@@ -332,6 +332,12 @@
         <TailwindOutputCss>$(ProjectDir)wwwroot\css\app.min.css</TailwindOutputCss>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Remove="styles/lumexui/**/*.*" />
+        <Compile Remove="styles/lumexui/**/*.*" />
+        <Content Remove="styles/lumexui/**/*.*" />
+    </ItemGroup>
+
     <Target Name="Npm" BeforeTargets="Build" Condition="!Exists('node_modules')">
         <Message Text="Running npm ci..." Importance="high" />
         <Exec Command="npm install" />
@@ -347,11 +353,25 @@
 
         <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
     </Target>
+
+    <Target Name="CopyLumexUi" BeforeTargets="Build">
+        <ItemGroup>
+            <Lumex Include="bin/lumexui/**/*.*" />
+        </ItemGroup>
+        <Message Text="Copying LumexUI theme files..." />
+
+        <Copy
+            SourceFiles="@(Lumex)"
+            DestinationFolder="styles/lumexui"
+            SkipUnchangedFiles="true" />
+
+        <Message Text="Copied @(LumexCopied)" Importance="high" />
+    </Target>
     
-    <Target Name="TailwindCssBuild" BeforeTargets="Build;PrepareForPublish">
+    <Target Name="TailwindCssBuild" AfterTargets="CopyLumexUi">
         <Message Text="Checking for Tailwind CLI for your OS..."/>
         <MakeDir Directories="$(TailwindToolsDir)" />
-        
+
         <Message Text="Building Tailwind CSS..." />
         <Exec Command="npx @tailwindcss/cli -i $(TailwindInputCss) -o $(TailwindOutputCss)" />
     </Target>
