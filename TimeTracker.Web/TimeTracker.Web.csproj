@@ -355,9 +355,4 @@
         <Message Text="Building Tailwind CSS..." />
         <Exec Command="npx @tailwindcss/cli -i $(TailwindInputCss) -o $(TailwindOutputCss)" />
     </Target>
-
-    <ItemGroup>
-        <Content Remove="package.json" />
-        <Content Remove="package-lock.json" />
-    </ItemGroup>
 </Project>
