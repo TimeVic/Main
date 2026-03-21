@@ -26,9 +26,9 @@ RUN echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json
 
 RUN ["dotnet", "restore", "--verbosity=q"]
 
-RUN ["dotnet", "build", "--verbosity=q TimeTracker.Api/TimeTracker.Api.csproj"]
-RUN ["dotnet", "build", "--verbosity=q TimeTracker.Migrations/TimeTracker.Migrations.csproj"]
-RUN ["dotnet", "build", "--verbosity=q TimeTracker.WorkerServices/TimeTracker.WorkerServices.csproj"]
+RUN ["dotnet", "build", "--verbosity=q", "TimeTracker.Api/TimeTracker.Api.csproj", "--no-restore"]
+RUN ["dotnet", "build", "--verbosity=q", "TimeTracker.Migrations/TimeTracker.Migrations.csproj", "--no-restore"]
+RUN ["dotnet", "build", "--verbosity=q", "TimeTracker.WorkerServices/TimeTracker.WorkerServices.csproj", "--no-restore"]
 
 COPY ./devops/publish_native/common/boot.sh /usr/local/bin/php_boot
 
