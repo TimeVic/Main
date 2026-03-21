@@ -89,7 +89,6 @@
       <Content Remove="Ui\Pages\Dashboard\Tag\**" />
       <Content Remove="Ui\Shared\Components\Form\TimeInput.razor" />
       <Content Remove="Ui\Shared\Components\Form\YesNoDropDown.razor" />
-      <Content Remove="styles\lumexui\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -143,7 +142,6 @@
     <Compile Remove="Ui\Pages\Dashboard\Tag\**" />
     <Compile Remove="Ui\Shared\Components\Form\TimeInput.razor.cs" />
     <Compile Remove="Ui\Shared\Components\Form\YesNoDropDown.razor.cs" />
-    <Compile Remove="styles\lumexui\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -158,7 +156,6 @@
       <EmbeddedResource Remove="Ignore\Integrations\Parts\**" />
       <EmbeddedResource Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\**" />
       <EmbeddedResource Remove="Ui\Pages\Dashboard\Tag\**" />
-      <EmbeddedResource Remove="styles\lumexui\**" />
     </ItemGroup>
 
     <ItemGroup>
