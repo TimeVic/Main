@@ -328,7 +328,6 @@
       <None Include="wwwroot\lib\.gitignore" />
       <None Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\**" />
       <None Remove="Ui\Pages\Dashboard\Tag\**" />
-      <None Remove="styles\lumexui\**" />
     </ItemGroup>
 
     <PropertyGroup>
