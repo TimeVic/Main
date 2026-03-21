@@ -43,12 +43,9 @@
                                     @workspace.Name
                                 </LumexDropdownItem>
                             }
-                            <LumexDropdownItem>New file</LumexDropdownItem>
-                            <LumexDropdownItem>Edit file</LumexDropdownItem>
-                            <LumexDropdownItem>Share file</LumexDropdownItem>
-                            <LumexDropdownItem Color="@ThemeColor.Danger" Class="text-danger">
-                                Delete file
-                            </LumexDropdownItem>
+                            @* <LumexDropdownItem Color="@ThemeColor.Danger" Class="text-danger"> *@
+                            @*     Delete file *@
+                            @* </LumexDropdownItem> *@
                         </LumexDropdownMenu>
                     </LumexDropdown>
                     
@@ -60,7 +57,10 @@
                     @* } *@
 
                     <div class="relative">
-                        <button type="button" @onclick="ToggleProfileMenu" class="flex h-[42px] w-[42px] items-center justify-center rounded-full border border-slate-200 bg-gradient-to-br from-blue-600 to-indigo-600 text-xs font-semibold uppercase tracking-wide text-white shadow-sm transition hover:scale-[1.02] hover:shadow-md" title="Open profile menu">
+                        <button type="button" 
+                                class="flex h-[42px] w-[42px] items-center justify-center rounded-full border border-slate-200 bg-gradient-to-br from-blue-600 to-indigo-600 text-xs font-semibold uppercase tracking-wide text-white shadow-sm transition hover:scale-[1.02] hover:shadow-md" 
+                                title="Open profile menu"
+                                >
                             @AuthState.Value.User.Initials
                         </button>
 

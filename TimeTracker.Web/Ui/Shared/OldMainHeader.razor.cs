@@ -9,7 +9,7 @@ using TimeTracker.Web.Store.Ui;
 
 namespace TimeTracker.Web.Ui.Shared;
 
-public partial class MainHeader
+public partial class OldMainHeader
 {
     [Inject]
     private NavigationManager NavigationManager { get; set; }
