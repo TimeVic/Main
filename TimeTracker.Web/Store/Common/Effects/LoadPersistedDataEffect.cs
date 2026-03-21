@@ -27,6 +27,7 @@ public class LoadPersistedDataAEffect: AEffectPersistData<LoadPersistedDataActio
     {
         if (_state.Value.IsInitialized)
         {
+            Debug.Log("App is already initialized, skip loading persisted data");
             return;
         }
 
