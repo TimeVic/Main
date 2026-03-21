@@ -332,12 +332,6 @@
         <TailwindOutputCss>$(ProjectDir)wwwroot\css\app.min.css</TailwindOutputCss>
     </PropertyGroup>
 
-    <ItemGroup>
-        <None Remove="styles/lumexui/**/*.*" />
-        <Compile Remove="styles/lumexui/**/*.*" />
-        <Content Remove="styles/lumexui/**/*.*" />
-    </ItemGroup>
-
     <Target Name="Npm" BeforeTargets="Build" Condition="!Exists('node_modules')">
         <Message Text="Running npm ci..." Importance="high" />
         <Exec Command="npm install" />
@@ -353,24 +347,8 @@
 
         <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
     </Target>
-
-<!--    <Target Name="CopyLumexUi" BeforeTargets="Build">-->
-<!--        <ItemGroup Condition="Exists('bin/lumexui')">-->
-<!--            <Lumex Include="bin/lumexui/**/*.*" />-->
-<!--        </ItemGroup>-->
-<!--        <Message Text="Copying LumexUI theme files..." />-->
-
-<!--        <Copy-->
-<!--            SourceFiles="@(Lumex)"-->
-<!--            DestinationFolder="styles/lumexui"-->
-<!--            SkipUnchangedFiles="true"-->
-<!--            Condition="@(Lumex) != ''"-->
-<!--        />-->
-
-<!--        <Message Text="Copied @(Lumex)" Importance="high" />-->
-<!--    </Target>-->
-<!--    -->
-    <Target Name="Build" AfterTargets="CopyLumexUi" Condition="Exists('bin/lumexui')">
+    
+    <Target Name="TailwindCssBuild" AfterTargets="Build;PrepareForPublish" Condition="Exists('bin/lumexui')">
         <Message Text="Checking for Tailwind CLI for your OS..."/>
         <MakeDir Directories="$(TailwindToolsDir)" />
 
