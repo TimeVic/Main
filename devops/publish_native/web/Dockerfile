@@ -18,9 +18,10 @@ RUN apt update
 RUN apt install -y apt-transport-https wget ca-certificates curl
 
 # Install Node.js
-RUN apt-get install -y nodejs npm
-RUN node -v
-RUN npm -v
+RUN apt-get update && apt-get install -y curl
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt-get install -y nodejs
+RUN node -v && npm -v
 
 RUN npm install
 RUN echo "{}" > appsettings.Local.json

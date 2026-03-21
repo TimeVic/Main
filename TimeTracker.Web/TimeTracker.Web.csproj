@@ -332,7 +332,7 @@
         <TailwindOutputCss>$(ProjectDir)wwwroot\css\app.min.css</TailwindOutputCss>
     </PropertyGroup>
 
-    <Target Name="Npm" BeforeTargets="Build">
+    <Target Name="Npm" BeforeTargets="Build" Condition="!Exists('node_modules')">
         <Message Text="Running npm ci..." Importance="high" />
         <Exec Command="npm cache clean --force" />
         <Exec Command="npm install" />

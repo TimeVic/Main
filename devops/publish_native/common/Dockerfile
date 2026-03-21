@@ -17,11 +17,6 @@ EXPOSE 80
 RUN apt update
 RUN apt install -y apt-transport-https wget ca-certificates curl
 
-# Install Node.js
-RUN apt-get install -y nodejs npm
-RUN node -v
-RUN npm -v
-
 RUN echo "{}" > appsettings.Local.json
 RUN echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json
 RUN echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json
@@ -30,7 +25,10 @@ RUN echo "{}" > TimeTracker.Migrations/appsettings.Local.json
 RUN echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json
 
 RUN ["dotnet", "restore", "--verbosity=q"]
-RUN ["dotnet", "build", "--verbosity=q"]
+
+RUN ["dotnet", "build", "--verbosity=q TimeTracker.Api/TimeTracker.Api.csproj"]
+RUN ["dotnet", "build", "--verbosity=q TimeTracker.Migrations/TimeTracker.Migrations.csproj"]
+RUN ["dotnet", "build", "--verbosity=q TimeTracker.WorkerServices/TimeTracker.WorkerServices.csproj"]
 
 COPY ./devops/publish_native/common/boot.sh /usr/local/bin/php_boot
 

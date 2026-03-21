@@ -61,15 +61,15 @@ public partial class TimeEntryForm
         }
     }
 
-    private void ToggleTimeEntry(bool isStarted)
+    private void ToggleTimeEntry()
     {
-        if (isStarted)
+        if (_hasActiveEntry)
         {
-            Dispatcher.Dispatch(new StartTimeEntryAction(InternalTask: InternalTask));
+            Dispatcher.Dispatch(new StopActiveTimeEntryAction());
         }
         else
         {
-            Dispatcher.Dispatch(new StopActiveTimeEntryAction());
+            Dispatcher.Dispatch(new StartTimeEntryAction(InternalTask: InternalTask));
         }
     }
     
