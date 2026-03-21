@@ -19,7 +19,6 @@ public abstract class ABackgroundService: BackgroundService
     
     private DateTime _nextTickTime;
     protected ILifetimeScope DiScope { get; set; }
-    protected IServiceProvider ServiceProvider { get; set; }
     protected readonly IDbSessionProvider DbSessionProvider;
     private CancellationToken _cancellationToken;
 
@@ -30,13 +29,8 @@ public abstract class ABackgroundService: BackgroundService
 
     protected virtual bool IsEnableLogging { get; set; } = true;
     
-    public ABackgroundService(
-        ILogger<ABackgroundService> logger,
-        IServiceScopeFactory serviceScopeFactory
-    )
-    {
-        _logger = logger;
-        
+    public ABackgroundService()
+    {   
         var builder = new ContainerBuilder();
         builder.RegisterAssemblyModules(
             typeof(BusinessAssemblyMarker).Assembly
@@ -66,7 +60,7 @@ public abstract class ABackgroundService: BackgroundService
             throw;
         }
         
-        DbSessionProvider = ServiceProvider.GetService<IDbSessionProvider>();
+        DbSessionProvider = DiScope.Resolve<IDbSessionProvider>();
         _crontabScheduler = CrontabSchedule.Parse(
             GetCrontabExpression()
         );

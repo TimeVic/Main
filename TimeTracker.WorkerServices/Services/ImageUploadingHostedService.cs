@@ -1,3 +1,4 @@
+using Autofac;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Services.Storage;
 using TimeTracker.WorkerServices.Core;
@@ -8,12 +9,9 @@ namespace TimeTracker.WorkerServices.Services
     {
         private readonly IFileStorage _fileStorage;
 
-        public ImageUploadingHostedService(
-            ILogger<ImageUploadingHostedService> logger,
-            IServiceScopeFactory serviceScopeFactory
-        ) : base(logger, serviceScopeFactory)
+        public ImageUploadingHostedService() : base()
         {
-            _fileStorage = ServiceProvider.GetService<IFileStorage>();
+            _fileStorage = DiScope.Resolve<IFileStorage>();
             ServiceName = "ImageUploadingHostedService";
         }
 

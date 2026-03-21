@@ -1,3 +1,4 @@
+using Autofac;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Services.Notification;
 using TimeTracker.Business.Services.Queue;
@@ -9,12 +10,9 @@ namespace TimeTracker.WorkerServices.Services.Tasks
     {
         private readonly ITaskNotificationService _taskNotificationService;
 
-        public TaskNotificationHostedService(
-            ILogger<ABackgroundService> logger,
-            IServiceScopeFactory serviceScopeFactory
-        ) : base(logger, serviceScopeFactory)
+        public TaskNotificationHostedService() : base()
         {
-            _taskNotificationService = ServiceProvider.GetService<ITaskNotificationService>();
+            _taskNotificationService = DiScope.Resolve<ITaskNotificationService>();
             ServiceName = "TaskNotificationHostedService";
         }
 
