@@ -348,7 +348,7 @@
         <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
     </Target>
     
-    <Target Name="Build" AfterTargets="Build" Condition="Exists('bin/lumexui')">
+    <Target Name="TailwindCssBuild" AfterTargets="Build;PrepareForPublish" Condition="Exists('bin/lumexui')">
         <Message Text="Checking for Tailwind CLI for your OS..."/>
         <MakeDir Directories="$(TailwindToolsDir)" />
 
