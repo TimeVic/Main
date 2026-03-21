@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Microsoft.Extensions.Logging;
 using TimeTracker.Business.Common.Extensions;
-using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;

@@ -33,7 +33,7 @@ public class BaseComponent: ComponentBase
     [Inject]
     protected ModalDialogProviderService ModalDialogService { get; set; }
     
-    private List<Action> _actionsToRunAfterRender = new List<Action>();
+    private readonly List<Action> _actionsToRunAfterRender = [];
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         // run all the actions (.NET code) **once** after rendering

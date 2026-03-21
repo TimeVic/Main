@@ -2,6 +2,7 @@
 @using LumexUI
 @using LumexUI.Common
 @using LumexUI.Shared.Icons
+@using TimeTracker.Web.Ui.Shared.Components.Form
 @using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.Layout
 
 @inherits BaseReactiveComponent
@@ -62,7 +63,7 @@
                         @bind-Value="@model.Email"
                         Label="Email"
                         Type="InputType.Email"
-                        Placeholder="name@company.com"/>
+                        Placeholder="my@email.com"/>
                 </div>
 
                 <div class="space-y-2">
@@ -84,15 +85,16 @@
                     <span>Remember this demo session</span>
                 </label>
 
-                <LumexButton
+                <CustomButton
                     Color="@ThemeColor.Primary"
                     Class="font-semibold w-full"
+                    IsLoading="_isLoading"
                     OnClick="@Submit">
                     <StartContent>
                         <UserIcon></UserIcon>
                     </StartContent>
                     <ChildContent>Sign in and open workspace</ChildContent>
-                </LumexButton>
+                </CustomButton>
                 <div class="text-center text-sm text-slate-600">
                     <span>No account yet?</span>
                     <a href="@SiteUrl.Registration_Step1" class="ml-2 font-semibold text-blue-600 transition hover:text-blue-700 hover:underline">Create one</a>

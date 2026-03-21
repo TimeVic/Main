@@ -6,6 +6,7 @@ using TimeTracker.Business;
 using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Logging;
 using TimeTracker.Business.Orm.Dao;
+using Microsoft.Extensions.Logging;
 
 namespace TimeTracker.WorkerServices.Core;
 

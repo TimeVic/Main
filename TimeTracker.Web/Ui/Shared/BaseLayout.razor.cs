@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Store.Auth;
@@ -52,6 +53,7 @@ public partial class BaseLayout
     {
         await base.OnInitializedAsync();
 
+        Debug.Log("BaseLayout OnInitializedAsync");
         CommonState.StateChanged += async (sender, args) =>
         {
             if (CommonState.Value.IsInitialized)
