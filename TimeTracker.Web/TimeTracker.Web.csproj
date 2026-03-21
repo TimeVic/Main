@@ -89,6 +89,7 @@
       <Content Remove="Ui\Pages\Dashboard\Tag\**" />
       <Content Remove="Ui\Shared\Components\Form\TimeInput.razor" />
       <Content Remove="Ui\Shared\Components\Form\YesNoDropDown.razor" />
+      <Content Remove="styles\lumexui\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -142,6 +143,7 @@
     <Compile Remove="Ui\Pages\Dashboard\Tag\**" />
     <Compile Remove="Ui\Shared\Components\Form\TimeInput.razor.cs" />
     <Compile Remove="Ui\Shared\Components\Form\YesNoDropDown.razor.cs" />
+    <Compile Remove="styles\lumexui\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -156,6 +158,7 @@
       <EmbeddedResource Remove="Ignore\Integrations\Parts\**" />
       <EmbeddedResource Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\**" />
       <EmbeddedResource Remove="Ui\Pages\Dashboard\Tag\**" />
+      <EmbeddedResource Remove="styles\lumexui\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -325,12 +328,19 @@
       <None Include="wwwroot\lib\.gitignore" />
       <None Remove="Ui\Pages\Dashboard\Shared\NotificationCenter\**" />
       <None Remove="Ui\Pages\Dashboard\Tag\**" />
+      <None Remove="styles\lumexui\**" />
     </ItemGroup>
 
     <PropertyGroup>
         <TailwindInputCss>$(ProjectDir)styles\app.css</TailwindInputCss>
         <TailwindOutputCss>$(ProjectDir)wwwroot\css\app.min.css</TailwindOutputCss>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="styles/lumexui/**/*.*" />
+        <Compile Remove="styles/lumexui/**/*.*" />
+        <Content Remove="styles/lumexui/**/*.*" />
+    </ItemGroup>
 
     <Target Name="Npm" BeforeTargets="Build" Condition="!Exists('node_modules')">
         <Message Text="Running npm ci..." Importance="high" />
@@ -347,11 +357,25 @@
 
         <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
     </Target>
+
+    <Target Name="CopyLumexUi" BeforeTargets="Build">
+        <ItemGroup>
+            <Lumex Include="bin/lumexui/**/*.*" />
+        </ItemGroup>
+        <Message Text="Copying LumexUI theme files..." />
+
+        <Copy
+            SourceFiles="@(Lumex)"
+            DestinationFolder="styles/lumexui"
+            SkipUnchangedFiles="true" />
+
+        <Message Text="Copied @(LumexCopied)" Importance="high" />
+    </Target>
     
-    <Target Name="TailwindCssBuild" BeforeTargets="Build;PrepareForPublish">
+    <Target Name="TailwindCssBuild" AfterTargets="CopyLumexUi">
         <Message Text="Checking for Tailwind CLI for your OS..."/>
         <MakeDir Directories="$(TailwindToolsDir)" />
-        
+
         <Message Text="Building Tailwind CSS..." />
         <Exec Command="npx @tailwindcss/cli -i $(TailwindInputCss) -o $(TailwindOutputCss)" />
     </Target>
