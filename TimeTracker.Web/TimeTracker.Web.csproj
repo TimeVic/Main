@@ -354,21 +354,23 @@
         <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
     </Target>
 
-    <Target Name="CopyLumexUi" BeforeTargets="Build">
-        <ItemGroup>
-            <Lumex Include="bin/lumexui/**/*.*" />
-        </ItemGroup>
-        <Message Text="Copying LumexUI theme files..." />
+<!--    <Target Name="CopyLumexUi" BeforeTargets="Build">-->
+<!--        <ItemGroup Condition="Exists('bin/lumexui')">-->
+<!--            <Lumex Include="bin/lumexui/**/*.*" />-->
+<!--        </ItemGroup>-->
+<!--        <Message Text="Copying LumexUI theme files..." />-->
 
-        <Copy
-            SourceFiles="@(Lumex)"
-            DestinationFolder="styles/lumexui"
-            SkipUnchangedFiles="true" />
+<!--        <Copy-->
+<!--            SourceFiles="@(Lumex)"-->
+<!--            DestinationFolder="styles/lumexui"-->
+<!--            SkipUnchangedFiles="true"-->
+<!--            Condition="@(Lumex) != ''"-->
+<!--        />-->
 
-        <Message Text="Copied @(LumexCopied)" Importance="high" />
-    </Target>
-    
-    <Target Name="TailwindCssBuild" AfterTargets="CopyLumexUi">
+<!--        <Message Text="Copied @(Lumex)" Importance="high" />-->
+<!--    </Target>-->
+<!--    -->
+    <Target Name="Build" AfterTargets="CopyLumexUi" Condition="Exists('bin/lumexui')">
         <Message Text="Checking for Tailwind CLI for your OS..."/>
         <MakeDir Directories="$(TailwindToolsDir)" />
 
