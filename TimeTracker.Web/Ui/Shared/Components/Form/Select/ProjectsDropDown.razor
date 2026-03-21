@@ -1,33 +1,49 @@
 ﻿@inherits TimeTracker.Web.Ui.Shared.Components.Form.Select.Core.BaseSingleSelect<ProjectDto>
 
+@using LumexUI
+@using LumexUI.Common
+@using LumexUI.Shared.Icons
 @using TimeTracker.Api.Shared.Dto.Entity
 
-<div class="justify-content-start w-select @Class @(FullWidth ? "w-100" : "")">
-    <FluentSelect
-        TOption="ProjectDto?"
-        Label="@Label"
-        Class="@SelectClass"
-        Placeholder="@_placeholder"
-        Disabled="@(!_list.Any() || Disabled)"
-        Required="Required"
-        Items="@_list.ToList()"
-        @bind-Value="@_selectedId"
-        OptionValue="@(dto => dto?.Id.ToString())"
-        SelectedOptionChanged="OnValueChanged">
-        <OptionTemplate>
-            @context?.Name
-            @if (context?.Client != null)
+<div class="w-select @Class">
+    <LumexDropdown>
+        <LumexDropdownTrigger>
+            <LumexButton 
+                FullWidth="true"
+                Color="ThemeColor.Info" 
+                Variant="Variant.Outlined"
+            >
+                @if (_selectedItem is null)
+                {
+                    @_placeholder
+                }
+                else
+                {
+                    @_selectedItem?.Name
+                }
+            </LumexButton>
+        </LumexDropdownTrigger>
+        <LumexDropdownMenu
+            Color="ThemeColor.Info" 
+            Variant="MenuVariant.Outlined">
+            @foreach (var project in _list)
             {
-            <text>(@context?.Client?.Name)</text>
+                <LumexDropdownItem OnClick="@(() => OnValueChanged(project))">
+                    @project?.Name
+                    @if (project?.Client != null)
+                    {
+                        <text>(@project?.Client?.Name)</text>
+                    }
+                </LumexDropdownItem>
             }
-        </OptionTemplate>
-    </FluentSelect>
-
+        </LumexDropdownMenu>
+    </LumexDropdown>
     @if (Clearable)
     {
-        <FluentButton
-            Class="w-select-clear-btn"
-            IconStart="@(new Icons.Filled.Size16.Dismiss())"
-            OnClick="OnClear"/>
+        <CustomButton 
+            OnClick="OnClear"
+            IconOnly="true">
+            <XIcon/>
+        </CustomButton>
     }
 </div>

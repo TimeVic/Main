@@ -1,7 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.FluentUI.AspNetCore.Components;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Store.Project;
@@ -10,17 +10,12 @@ using LoadListAction = TimeTracker.Web.Store.TasksList.LoadListAction;
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Tasks.Parts.TasksList;
 
 public partial class AddTasksListModalForm
-{
-    public class Parameters
-    {
-        public Guid? ProjectId { get; set; }
-    }
-    
+{   
     [Parameter]
-    public required Parameters Content { get; set; }
-    
-    [CascadingParameter] 
-    FluentDialog MudDialog { get; set; }
+    public required ProjectDto? Project { get; set; }
+
+    [Parameter]
+    public required bool IsOpened { get; set; } = false;
     
     [Inject]
     public ILogger<AddTasksListModalForm> _logger { get; set; }
@@ -36,7 +31,7 @@ public partial class AddTasksListModalForm
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.ProjectId = Content.ProjectId ?? Guid.Empty;
+        model.ProjectId = Project?.Id ?? Guid.Empty;
     }
 
     private async Task Submit()
@@ -54,7 +49,8 @@ public partial class AddTasksListModalForm
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
                 ToastService.ShowInfo("Task list has been added");
-                OnCloseModal();
+                IsOpened = false;
+                model = new AddRequest();
                 
                 NavigationManager.NavigateTo(
                     string.Format(
@@ -74,10 +70,5 @@ public partial class AddTasksListModalForm
             _isLoading = false;
         }
         StateHasChanged();
-    }
-    
-    private void OnCloseModal()
-    {
-        MudDialog.CloseAsync();
     }
 }

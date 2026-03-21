@@ -2,6 +2,7 @@
 @page "/board/tasks"
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.LayoutParts
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared
+@using TimeTracker.Web.Ui.Pages.Dashboard.Tasks.Components
 
 @inherits BaseComponent
 @layout Layout
@@ -9,25 +10,13 @@
 <BodyLayout Title="Tasks">
     <CascadingValue Name="TaskListId" Value="@TaskListId">
         <FluentStack Orientation="Orientation.Vertical">
-            <TasksListTree/>
-
-            <FluentLabel
-                Class="mt-2 mb-2"
-                Typo="Typography.H3">
-                @_selectedTaskList?.Name
-            </FluentLabel>
-
-            <FluentDivider
-                Class="mb-2 w-100"
-                Orientation="Orientation.Horizontal"/>
+            <section class="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+                <TasksListBlock></TasksListBlock>
+            </section>
 
             @if (_selectedTaskList != null)
             {
-                <TasksFilterForm/>
-
-                <FluentStack Orientation="Orientation.Horizontal">
-                    <TasksTable/>
-                </FluentStack>
+                
             }
         </FluentStack>
     </CascadingValue>

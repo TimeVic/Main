@@ -1,52 +1,50 @@
-﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
+﻿@using LumexUI
+@using LumexUI.Common
+@using LumexUI.Shared.Icons
 
 @inherits BaseReactiveComponent
-@implements IDialogContentComponent<AddTasksListModalForm.Parameters>
 
-<FluentDialogHeader ShowDismiss="true">
-    <FluentStack VerticalAlignment="VerticalAlignment.Center">
-        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
-        <FluentLabel Typo="Typography.PaneHeader">
+<LumexModal Open="IsOpened">
+    <LumexModalContent>
+        <LumexModalHeader Class="flex-col gap-3">
+            <div class="size-10 flex items-center justify-center bg-default-100 rounded-full">
+                <PlusIcon Size="20" />
+            </div>
             Add task list
-        </FluentLabel>
-    </FluentStack>
-</FluentDialogHeader>
+        </LumexModalHeader>
+        <LumexModalBody>
+            <EditForm
+                Context="form"
+                @ref="_form"
+                Model="@model"
+                novalidate>
+                <DataAnnotationsValidator/>
+                <FluentValidationSummary/>
 
-@* Footer *@
-<FluentDialogFooter>
-    <FluentButton 
-        Appearance="Appearance.Accent"
-        Disabled="@_isLoading"
-        OnClick="@Submit">Add</FluentButton>
-    <FluentButton 
-        Appearance="Appearance.Neutral"
-        OnClick="@OnCloseModal">Cancel</FluentButton>
-</FluentDialogFooter>
+                <div class="mb-2">
+                    <ProjectsDropDown
+                        FullWidth="true"
+                        Label="Project"
+                        Value="@(model.ProjectId)"
+                        SelectedItemChanged="@(item => model.ProjectId = item?.Id ?? Guid.Empty)"/>
+                </div>
 
-@* Body *@
-<FluentDialogBody>
-    <EditForm
-        @ref="_form"
-        Model="@model"
-        novalidate>
-        <DataAnnotationsValidator />
-        <FluentValidationSummary />
-
-        <div class="mb-2">
-            <ProjectsDropDown
-                FullWidth="true"
-                Label="Project"
-                Value="@(model.ProjectId)"
-                SelectedItemChanged="@(item => model.ProjectId = item?.Id ?? Guid.Empty)"
-                Placeholder="Task title"/>
-        </div>
-
-        <div>
-            <FluentTextField
-                Class="w-100"
-                Label="Name"
-                @bind-Value="model.Name"
-                Placeholder="Enter list name"/>
-        </div>
-    </EditForm>
-</FluentDialogBody>
+                <div>
+                    <InputTextField
+                        Class="w-100"
+                        Label="Name"
+                        @bind-Value="model.Name"
+                        Placeholder="Enter list name"/>
+                </div>
+            </EditForm>
+        </LumexModalBody>
+        <LumexModalFooter>
+            <CustomButton
+                FullWidth="@true"
+                Color="@ThemeColor.Primary"
+                Radius="@Radius.Full">
+                Add
+            </CustomButton>
+        </LumexModalFooter>
+    </LumexModalContent>
+</LumexModal>

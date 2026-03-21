@@ -104,13 +104,13 @@ public partial class ModalDialogProviderService
         
         if (taskList == null)
         {
-            await _dialogService.ShowDialogAsync<AddTasksListModalForm>(
-                new AddTasksListModalForm.Parameters
-                {
-                    ProjectId = projectId
-                },
-                parameters
-            );
+            // await _dialogService.ShowDialogAsync<AddTasksListModalForm>(
+            //     new AddTasksListModalForm.Parameters
+            //     {
+            //         ProjectId = projectId
+            //     },
+            //     parameters
+            // );
         }
         else
         {
