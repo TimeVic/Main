@@ -1,0 +1,35 @@
+@using System.Linq
+@using Microsoft.AspNetCore.Components
+
+@if (TotalPages > 1)
+{
+    <div class="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        @if (!string.IsNullOrWhiteSpace(SummaryText))
+        {
+            <p class="text-sm text-slate-500">@SummaryText</p>
+        }
+        <div class="flex flex-wrap items-center gap-2">
+            <button type="button" @onclick="GoToPreviousPageAsync" disabled="@(CurrentPage <= 1)" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50">
+                <i class="fa-solid fa-chevron-left"></i>
+                Previous
+            </button>
+
+            <div class="flex flex-wrap items-center gap-2">
+                @foreach (var pageNumber in VisiblePages)
+                {
+                    var isActive = pageNumber == CurrentPage;
+                    <button type="button" @onclick="@(() => SetPageAsync(pageNumber))" class="@(isActive
+                        ? "inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-slate-900 px-3 text-sm font-semibold text-white shadow-sm"
+                        : "inline-flex h-10 min-w-10 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-900")">
+                        @pageNumber
+                    </button>
+                }
+            </div>
+
+            <button type="button" @onclick="GoToNextPageAsync" disabled="@(CurrentPage >= TotalPages)" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50">
+                Next
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+}

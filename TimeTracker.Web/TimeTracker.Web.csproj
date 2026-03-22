@@ -104,6 +104,7 @@
       <Folder Include="Ignore\Members\" />
       <Folder Include="Store\Dashboard\Effects\" />
       <Folder Include="Ui\" />
+      <Folder Include="Ui\Pages\Dashboard\Shared\TimeEntry\List\" />
       <Folder Include="wwwroot\css\" />
       <Folder Include="wwwroot\img\logo\black" />
       <Folder Remove="node_modules" />
