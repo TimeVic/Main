@@ -2,6 +2,7 @@
 @using LumexUI.Common
 @using Microsoft.FluentUI.AspNetCore.Components.Extensions
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TaskPriority = TimeTracker.Business.Common.Constants.Task.TaskPriority;
@@ -32,6 +33,7 @@
             <EnumDropDown
                 Label="Status"
                 TItem="TaskStatus"
+                SelectType="DropDownType.DropDown"
                 AllowClear="false"
                 Size="Size.Small"
                 Value="context.Status"

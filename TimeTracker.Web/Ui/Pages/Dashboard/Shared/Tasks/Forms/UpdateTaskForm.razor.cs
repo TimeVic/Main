@@ -43,30 +43,32 @@ public partial class UpdateTaskForm: IDisposable
     private UpdateRequest _model = new();
     private bool _isLoading = false;
     private EditForm? _form;
+    private EditContext? _editContext;
     public TaskFullDto _task { get; set; } = new();
     
     protected override async Task OnInitializedAsync()
     {
-        _form?.EditContext?.OnFieldChanged += OnFormFieldChanged;
-        
+        _editContext = new EditContext(_model);
+
+        _isLoading = true;
         _task = await ApiService.TasksGetOneAsync(TaskId);
         if (_task != null)
         {
             _model.Fill(_task);
-            return;
         }
-        _logger.LogError("Task with id {TaskId} not found", TaskId);
         await base.OnInitializedAsync();
+        _editContext.OnFieldChanged += OnFormFieldChanged;
+        _isLoading = false;
     }
 
     public void Dispose()
     {
-        _form?.EditContext?.OnFieldChanged -= OnFormFieldChanged;
+        _editContext?.OnFieldChanged -= OnFormFieldChanged;
     }
     
     private void OnFormFieldChanged(object? sender, FieldChangedEventArgs e)
     {
-        Debug.Log($"Field changed: {e.FieldIdentifier.FieldName}");
+        SubmitForm();
     }
 
     private void SubmitForm()
@@ -83,6 +85,7 @@ public partial class UpdateTaskForm: IDisposable
         if (membership == null)
             return;
         _model.UserId = membership.Id;
+        SubmitForm();
     }
 
     private void OnStatusChanged(TaskStatus? status)
@@ -90,6 +93,7 @@ public partial class UpdateTaskForm: IDisposable
         if (status == null)
             return;
         _model.Status = status.Value;
+        SubmitForm();
     }
 
     private void OnPriorityChanged(TaskPriority? priority)
@@ -97,5 +101,6 @@ public partial class UpdateTaskForm: IDisposable
         if (priority == null)
             return;
         _model.Priority = priority.Value;
+        SubmitForm();
     }
 }

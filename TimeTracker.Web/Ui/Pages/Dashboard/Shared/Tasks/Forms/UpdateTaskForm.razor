@@ -1,13 +1,20 @@
+@using LumexUI
 @using LumexUI.Common
 @using TimeTracker.Business.Common.Constants.Task
+@using TimeTracker.Web.Constants.Ui
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 @inherits BaseReactiveComponent
 
-<EditForm
-    Context="form"
+@if (_isLoading)
+{
+    <LumexSpinner Size="@Size.Large" />
+}
+else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
+{
+    <EditForm
     @ref="_form"
-    Model="@_model"
+    EditContext="_editContext"
     novalidate>
     <DataAnnotationsValidator/>
 
@@ -18,7 +25,7 @@
             <div>
                 <MembersDropDown 
                     Label="Assigned"
-                    Value="_model.UserId"
+                    UserId="_model.UserId"
                     SelectedItemChanged="OnAssignedChanged"
                     AllowedIds="_allowedUserIds"
                 />
@@ -42,7 +49,7 @@
         </div>
     </div>
 
-    <div class="rounded-2xl border border-slate-200 p-4">
+    <div class="rounded-2xl border border-slate-200 p-4 mt-3">
         <div class="grid gap-4 md:grid-cols-3">
             <div>
                 <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Project</label>
@@ -52,7 +59,7 @@
                 <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Task list</label>
                 <div class="flex h-[42px] items-center rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700">@_task.TaskList.Name</div>
             </div>
-            @if (!string.IsNullOrWhiteSpace(_task.ExternalTaskId))
+            @if (!string.IsNullOrWhiteSpace(_task?.ExternalTaskId))
             {
                 <div>
                     <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">External task ID</label>
@@ -62,7 +69,7 @@
         </div>
     </div>
 
-    <div class="rounded-2xl border border-slate-200 p-4">
+    <div class="rounded-2xl border border-slate-200 p-4 mt-3">
         <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Description</label>
         <InputTextArea @bind-Value="_model.Description" class="min-h-[180px] w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" />
         <p class="mt-2 text-sm text-slate-500">Supports Markdown</p>
@@ -76,4 +83,5 @@
     @*     <InputTextArea @bind-Value="taskComment" class="mt-4 min-h-[100px] w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" placeholder="Your comment..." /> *@
     @* </div> *@
     
-</EditForm>
+</EditForm>    
+}

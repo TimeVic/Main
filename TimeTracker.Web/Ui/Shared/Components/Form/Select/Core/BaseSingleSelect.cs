@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Common;
+using TimeTracker.Web.Constants.Ui;
 using TimeTracker.Web.Core.Components;
 using TimeTracker.Web.Core.Helpers;
 
@@ -7,6 +8,9 @@ namespace TimeTracker.Web.Ui.Shared.Components.Form.Select.Core;
 
 public abstract class BaseSingleSelect<T>: BaseReactiveComponent where T : BaseDto
 {
+    [Parameter]
+    public DropDownType Type { get; set; } = DropDownType.Select; 
+    
     [Parameter]
     public string? Label { get; set; }
     
