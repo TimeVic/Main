@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using LumexUI;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
@@ -25,6 +26,9 @@ public partial class EnumDropDown<TItem>
     
     [Parameter]
     public string Class { get; set; }
+    
+    [Parameter]
+    public LumexUI.Common.Size Size { get; set; }
     
     [Parameter]
     public string Style { get; set; }
@@ -71,11 +75,11 @@ public partial class EnumDropDown<TItem>
             .ToList();
     }
     
-    private void OnItemSelected(string? itemValue)
+    private void OnItemSelected(TItem? itemValue)
     {
-        if (!string.IsNullOrEmpty(itemValue))
+        if (itemValue != null)
         {
-            _value = Enum.Parse<TItem>(itemValue);
+            _value = itemValue;
         }
         else
         {

@@ -1,33 +1,37 @@
-﻿@using TimeTracker.Web.Core.Helpers
+﻿@using LumexUI
+@using LumexUI.Common
+@using Microsoft.FluentUI.AspNetCore.Components.Extensions
+@using TimeTracker.Web.Core.Helpers
 
 @typeparam TItem where TItem: struct, IConvertible
 
-<div class="justify-content-start w-select @Class @(FullWidth ? "w-100" : "")">
-    <FluentSelect
-        TOption="TItem?"
-        Label="@Label"
-        Class="@SelectClass"
-        Placeholder="@_placeholder"
-        Items="@_list.ToList()"
-        SelectedOption="@_value"
-        Disabled="@Disabled"
-        OptionValue="@(dto => dto?.ToString())"
-        OptionSelected="@(value => value!.Value.Equals(_value))"
-        ValueChanged="OnItemSelected">
-        <OptionTemplate>
-            @if (context is null)
+<div class="@Class @(FullWidth ? "w-100" : "")">
+    <LumexDropdown Size="Size">
+        <LumexDropdownTrigger>
+            <LumexButton 
+                FullWidth="true"
+                Color="ThemeColor.Info" 
+                Variant="Variant.Outlined"
+            >
+                @if (_value is null)
+                {
+                    @_placeholder
+                }
+                else
+                {
+                    @_value?.GetDescription()
+                }
+            </LumexButton>
+        </LumexDropdownTrigger>
+        <LumexDropdownMenu
+            Color="ThemeColor.Info" 
+            Variant="MenuVariant.Outlined">
+            @foreach (var item in _list)
             {
-                return;
+                <LumexDropdownItem OnClick="@(() => OnItemSelected(item))">
+                    @(EnumHelpers.GetDisplayName(typeof(TItem), item))
+                </LumexDropdownItem>
             }
-            @(EnumHelpers.GetDisplayName(typeof(TItem), context))
-        </OptionTemplate>
-    </FluentSelect>
-
-    @if (Clearable)
-    {
-        <FluentButton
-            Class="w-select-clear-btn"
-            IconStart="@(new Icons.Filled.Size16.Dismiss())"
-            OnClick="OnClear"/>
-    }
+        </LumexDropdownMenu>
+    </LumexDropdown>
 </div>

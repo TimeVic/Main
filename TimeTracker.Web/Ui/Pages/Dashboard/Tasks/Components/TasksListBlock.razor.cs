@@ -68,6 +68,11 @@ public partial class TasksListBlock: IDisposable
     {
         if (taskListId.HasValue)
         {
+            var selectedProject = _tasksListState.Value.List.FirstOrDefault(item => item.Project.Id == taskListId)?.Project;
+            if (selectedProject != null)
+            {
+                _selectedProject = selectedProject;
+            }
             Dispatcher.Dispatch(new SetSelectedAction(taskListId));
             Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());    
         }
