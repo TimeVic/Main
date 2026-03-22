@@ -1,7 +1,9 @@
 ﻿using Fluxor;
+using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Store.Project;
@@ -17,6 +19,12 @@ public partial class AddTasksListModalForm
     [Parameter]
     public required bool IsOpened { get; set; } = false;
     
+    [Parameter]
+    public virtual EventCallback<bool> IsOpenedChanged { get; set; }
+    
+    [Parameter]
+    public virtual EventCallback<TaskListDto?> OnAdded { get; set; }
+    
     [Inject]
     public ILogger<AddTasksListModalForm> _logger { get; set; }
     
@@ -27,11 +35,11 @@ public partial class AddTasksListModalForm
     private bool _isLoading = false;
     private EditForm _form;
     private bool _isValid = false;
+    private LumexModal modal;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.ProjectId = Project?.Id ?? Guid.Empty;
     }
 
     private async Task Submit()
@@ -44,6 +52,7 @@ public partial class AddTasksListModalForm
         _isLoading = true;
         try
         {
+            model.ProjectId = Project?.Id ?? Guid.Empty;
             var taskList = await ApiService.TaskListAddAsync(model);
             if (taskList != null)
             {
@@ -51,13 +60,8 @@ public partial class AddTasksListModalForm
                 ToastService.ShowInfo("Task list has been added");
                 IsOpened = false;
                 model = new AddRequest();
-                
-                NavigationManager.NavigateTo(
-                    string.Format(
-                        SiteUrl.Dashboard_Tasks,
-                        taskList.Id
-                    )    
-                );
+                await OnAdded.InvokeAsync(taskList);
+                await modal.CloseAsync();
             }
         }
         catch (Exception e)
@@ -70,5 +74,11 @@ public partial class AddTasksListModalForm
             _isLoading = false;
         }
         StateHasChanged();
+    }
+
+    private void OnCloseModal()
+    {
+        IsOpenedChanged.InvokeAsync(false);
+        IsOpened = false;
     }
 }

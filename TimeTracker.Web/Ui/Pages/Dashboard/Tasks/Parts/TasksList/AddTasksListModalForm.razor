@@ -4,7 +4,7 @@
 
 @inherits BaseReactiveComponent
 
-<LumexModal Open="IsOpened">
+<LumexModal Open="IsOpened" OnClose="@OnCloseModal" @ref="modal">
     <LumexModalContent>
         <LumexModalHeader Class="flex-col gap-3">
             <div class="size-10 flex items-center justify-center bg-default-100 rounded-full">
@@ -19,15 +19,6 @@
                 Model="@model"
                 novalidate>
                 <DataAnnotationsValidator/>
-                <FluentValidationSummary/>
-
-                <div class="mb-2">
-                    <ProjectsDropDown
-                        FullWidth="true"
-                        Label="Project"
-                        Value="@(model.ProjectId)"
-                        SelectedItemChanged="@(item => model.ProjectId = item?.Id ?? Guid.Empty)"/>
-                </div>
 
                 <div>
                     <InputTextField
@@ -41,6 +32,7 @@
         <LumexModalFooter>
             <CustomButton
                 FullWidth="@true"
+                OnClick="@Submit"
                 Color="@ThemeColor.Primary"
                 Radius="@Radius.Full">
                 Add
