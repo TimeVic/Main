@@ -39,47 +39,25 @@ public partial class TasksBlock: IDisposable
     private Guid? _taskListId = null;
     private TaskListDto? _taskList = null;
     private readonly Subject<ICollection<TaskDto>> _tasksSubject = new();
-    private ICollection<TaskDto> _tasks = new List<TaskDto>();
-    private ICollection<TaskDto> _selectedTasks = new List<TaskDto>();
-    private bool _isLoading = true;
+    private bool _isShowAddTaskModal = false;
     
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        TasksState.StateChanged += OnTaskStateChanged;
-
-        _tasksSubject
-            .Select(items =>
-            {
-                return items
-                    // .Where(item => Statuses.Contains(item.Status))
-                    .OrderByDescending(item => item.UpdatedAt)
-                    .ToArray();
-            })
-            .Subscribe(results =>
-            {
-                _tasks = results;
-                StateHasChanged();
-            });
-        
-        ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Tasks.SetIsListLoading>(this, action =>
-        {
-            _isLoading = action.IsLoading;
-            StateHasChanged();
-        });
+        _tasksListState.StateChanged += OnTasksListStateChanged;        
     }
-    
+
+    private void OnTasksListStateChanged(object? sender, EventArgs e)
+    {
+        OnTasksListSelected(_tasksListState.Value.SelectedTaskList?.Id);
+    }
+
     public void Dispose()
     {
-        TasksState.StateChanged -= OnTaskStateChanged;
+        _tasksListState.StateChanged -= OnTasksListStateChanged;
         ActionSubscriber.UnsubscribeFromAllActions(this);
         _tasksSubject.Dispose();
-    }
-    
-    private void OnTaskStateChanged(object? sender, EventArgs e)
-    {
-        _tasksSubject.OnNext(TasksState.Value.List);
     }
     
     private void OnTasksListSelected(Guid? taskListId)
@@ -117,15 +95,5 @@ public partial class TasksBlock: IDisposable
         //     }
         //     _selectedTasks.Clear();    
         // }
-    }
-
-    private Task OnStatusChanged(TaskDto? task, TaskStatus? status)
-    {
-        return Task.CompletedTask;
-    }
-
-    private Task OnStartNewTimeEntryForTask(TaskDto? task)
-    {
-        return Task.CompletedTask;
     }
 }

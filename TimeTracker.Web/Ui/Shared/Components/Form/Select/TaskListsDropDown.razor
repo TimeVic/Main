@@ -1,49 +1,120 @@
-﻿@using TimeTracker.Api.Shared.Dto.Entity.Task
+﻿@using LumexUI
+@using LumexUI.Common
+@using LumexUI.Shared.Icons
+@using TimeTracker.Api.Shared.Dto.Entity.Task
 
 @inherits TimeTracker.Web.Ui.Shared.Components.Form.Select.Core.BaseSingleSelect<TaskListDto>
 
-<div class="justify-content-start w-select @Class @(FullWidth ? "w-100" : "")">
-    <FluentSelect
-        TOption="TaskListDto"
+<div class="@Class @(FullWidth ? "w-100" : "")">
+    
+    <LumexSelect 
+        TValue="TaskListDto"
         Label="@Label"
-        Class="@SelectClass"
-        Multiple="false"
-        Autofocus="false"
-        Disabled="@Disabled"
-        Required="Required"
         Placeholder="@_placeholder"
-        SelectedOption="_selectedItem"
-        Appearance="Appearance.Outline"
-        OptionText="@(item => item.Name)"
-        @bind-Value="@_selectedId"
-        OptionValue="@(dto => dto?.Id.ToString())"
-        SelectedOptionChanged="OnValueChanged"
-        Height="400px">
-
-        @foreach (var listGroup in _groupedList)
-        {
-            var project = listGroup.First().Project;
-            <FluentLabel Typo="Typography.H3" Class="mt-2 mb-1">
-                @project.Name
-            </FluentLabel>
-            <FluentDivider Orientation="Orientation.Horizontal"/>
-            foreach (var taskList in listGroup)
+        LabelPlacement="@LabelPlacement.Outside"
+        ValueChanged="dto => OnValueChanged(dto)"
+        Value="_selectedItem"
+        Classes="@(new() { Base = "max-w-xs", Trigger = "h-12" } )">
+        <ChildContent>
+            @foreach (var character in _list)
             {
-                <FluentOption
-                    Value="@taskList.Id.ToString()"
-                    Selected="@(taskList.Id.ToString() == _selectedId)"
-                    OnSelect="@(() => OnValueChanged(taskList))">
-                    @taskList.Name
-                </FluentOption>
+                <LumexSelectItem @key="@character" Value="@character">
+                    <div class="flex gap-2 items-center">
+                        <div class="flex flex-col">
+                            <span class="text-small">@character.Name</span>
+                        </div>
+                    </div>
+                </LumexSelectItem>
             }
-        }
-    </FluentSelect>
-
-    @if (Clearable)
-    {
-        <FluentButton
-            Class="w-select-clear-btn"
-            IconStart="@(new Icons.Filled.Size16.Dismiss())"
-            OnClick="OnClear"/>
-    }
+        </ChildContent>
+        <ValueContent>
+            <div class="flex items-center gap-2">
+                <div class="flex flex-col">
+                    <span>@context?.Name</span>
+                </div>
+            </div>
+        </ValueContent>
+    </LumexSelect>
+    
+    @* <LumexDropdown> *@
+    @*     <LumexDropdownTrigger> *@
+    @*         <LumexButton  *@
+    @*             FullWidth="true" *@
+    @*             Color="ThemeColor.Info"  *@
+    @*             Variant="Variant.Outlined" *@
+    @*         > *@
+    @*             @if (_selectedItem is null) *@
+    @*             { *@
+    @*                 @_placeholder *@
+    @*             } *@
+    @*             else *@
+    @*             { *@
+    @*                 @_selectedItem?.Name *@
+    @*             } *@
+    @*         </LumexButton> *@
+    @*     </LumexDropdownTrigger> *@
+    @*     <LumexDropdownMenu *@
+    @*         Color="ThemeColor.Info" *@
+    @*         Variant="MenuVariant.Outlined"> *@
+    @*          *@
+    @*         @foreach (var item in _list) *@
+    @*         { *@
+    @*             <LumexDropdownItem OnClick="@(() => OnValueChanged(item))"> *@
+    @*                 @item?.Name *@
+    @*             </LumexDropdownItem> *@
+    @*         } *@
+    @*     </LumexDropdownMenu> *@
+    @* </LumexDropdown> *@
+    @* @if (Clearable) *@
+    @* { *@
+    @*     <CustomButton  *@
+    @*         OnClick="OnClear" *@
+    @*         IconOnly="true"> *@
+    @*         <XIcon/> *@
+    @*     </CustomButton> *@
+    @* } *@
+    @* *@
+    @* <FluentSelect *@
+    @*     TOption="TaskListDto" *@
+    @*     Label="@Label" *@
+    @*     Class="@SelectClass" *@
+    @*     Multiple="false" *@
+    @*     Autofocus="false" *@
+    @*     Disabled="@Disabled" *@
+    @*     Required="Required" *@
+    @*     Placeholder="@_placeholder" *@
+    @*     SelectedOption="_selectedItem" *@
+    @*     Appearance="Appearance.Outline" *@
+    @*     OptionText="@(item => item.Name)" *@
+    @*     @bind-Value="@_selectedId" *@
+    @*     OptionValue="@(dto => dto?.Id.ToString())" *@
+    @*     SelectedOptionChanged="OnValueChanged" *@
+    @*     Height="400px"> *@
+    @* *@
+    @*     @foreach (var listGroup in _groupedList) *@
+    @*     { *@
+    @*         var project = listGroup.First().Project; *@
+    @*         <FluentLabel Typo="Typography.H3" Class="mt-2 mb-1"> *@
+    @*             @project.Name *@
+    @*         </FluentLabel> *@
+    @*         <FluentDivider Orientation="Orientation.Horizontal"/> *@
+    @*         foreach (var taskList in listGroup) *@
+    @*         { *@
+    @*             <FluentOption *@
+    @*                 Value="@taskList.Id.ToString()" *@
+    @*                 Selected="@(taskList.Id.ToString() == _selectedId)" *@
+    @*                 OnSelect="@(() => OnValueChanged(taskList))"> *@
+    @*                 @taskList.Name *@
+    @*             </FluentOption> *@
+    @*         } *@
+    @*     } *@
+    @* </FluentSelect> *@
+    @* *@
+    @* @if (Clearable) *@
+    @* { *@
+    @*     <FluentButton *@
+    @*         Class="w-select-clear-btn" *@
+    @*         IconStart="@(new Icons.Filled.Size16.Dismiss())" *@
+    @*         OnClick="OnClear"/> *@
+    @* } *@
 </div>

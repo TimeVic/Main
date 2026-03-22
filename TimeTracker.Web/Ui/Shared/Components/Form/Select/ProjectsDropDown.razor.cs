@@ -41,14 +41,12 @@ public partial class ProjectsDropDown: IDisposable
 
     private void UpdateList(object? sender, EventArgs e)
     {
-        Debug.Log("ProjectsDropDown initialized", _list);
         UpdateList();
     }
     
     private void UpdateList()
     {
         _list = _state.Value.List.ToList();
-        Debug.Log("ProjectsDropDown updated", _list);
         if (_clientId == Guid.Empty && ShowProjectsWithoutClients)
         {
             _list = _list.Where(item => item.Client == null).ToList();

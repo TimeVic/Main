@@ -53,7 +53,6 @@ public partial class BaseLayout
     {
         await base.OnInitializedAsync();
 
-        Debug.Log("BaseLayout OnInitializedAsync");
         CommonState.StateChanged += async (sender, args) =>
         {
             if (CommonState.Value.IsInitialized)
