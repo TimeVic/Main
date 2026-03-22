@@ -1,5 +1,14 @@
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
 @using TimeTracker.Web.Ui.Shared.Components.List
 @inherits BaseReactiveComponent
+
+@if (_timeEntryToEdit != null)
+{
+    <EditTimeEntryModal
+        Entry="_timeEntryToEdit"
+        OnClose="OnCloseEditTimeEntryModal"
+    />
+}
 
 <section class="space-y-6">
     @* <div class="grid gap-4 md:grid-cols-3"> *@
@@ -52,7 +61,10 @@
                         <div class="divide-y divide-slate-100">
                             @foreach (var entry in groupedItem)
                             {
-                                <MyTimeEntryCard Entry="@entry" />
+                                <MyTimeEntryCard 
+                                    Entry="@entry"
+                                    OnEdit="OnEditTimeEntry"
+                                />
                             }
                         </div>
                     </div>

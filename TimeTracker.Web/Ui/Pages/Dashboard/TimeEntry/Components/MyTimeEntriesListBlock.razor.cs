@@ -16,11 +16,22 @@ public partial class MyTimeEntriesListBlock
     
     private IEnumerable<IGrouping<DateOnly, TimeEntryDto>> _groupedList => _state.Value.ListToShow.GroupBy(item => item.Date);
     private bool _isLoading => _state.Value.IsListLoading;
+    private TimeEntryDto? _timeEntryToEdit { get; set; }
     
     private void OnPaginated(int selectedPageIndex)
     {
         var selectedPage = selectedPageIndex + 1;
         Dispatcher.Dispatch(new SetSelectedPageAction(selectedPage));
         Dispatcher.Dispatch(new LoadListAction());
+    }
+
+    private void OnEditTimeEntry(TimeEntryDto entry)
+    {
+        _timeEntryToEdit = entry;
+    }
+
+    private void OnCloseEditTimeEntryModal()
+    {
+        _timeEntryToEdit = null;
     }
 }
