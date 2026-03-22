@@ -67,7 +67,6 @@ public partial class UpdateTaskForm
     protected override async Task OnInitializedAsync()
     {
         _task = await ApiService.TasksGetOneAsync(TaskId);
-        Debug.Log(_task);
         if (_task != null)
         {
             _model.Fill(_task);
@@ -79,7 +78,6 @@ public partial class UpdateTaskForm
 
     private void SubmitForm()
     {
-        Debug.Log("SubmitForm");
         if (!_form!.EditContext!.Validate())
         {
             return;

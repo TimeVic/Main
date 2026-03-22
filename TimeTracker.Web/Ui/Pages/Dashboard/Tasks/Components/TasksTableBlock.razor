@@ -1,0 +1,90 @@
+@using LumexUI
+@using LumexUI.Common
+@using Microsoft.FluentUI.AspNetCore.Components.Extensions
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks
+@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+@using TaskPriority = TimeTracker.Business.Common.Constants.Task.TaskPriority;
+
+@inherits BaseReactiveComponent
+
+<LumexDataGrid
+    Class="min-w-full divide-y divide-slate-200"
+    Data="@_tasks.AsQueryable()"
+    Loading="_isLoading">
+    <LumexUI.PropertyColumn Title="Task" Property="@(p => p.Title)">
+        <Content>
+            <div class="font-medium text-slate-900">@context.Title</div>
+            <div class="mt-1 max-w-xl text-slate-500">@context.Description?.TruncateAndAddDots(100)</div>
+        </Content>
+    </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn Title="Status" Property="@(p => p.Status)">
+        <Content>
+            <EnumDropDown
+                Label="Status"
+                TItem="TaskStatus"
+                AllowClear="false"
+                Size="Size.Small"
+                Value="context.Status"
+                ValueChanged="@(status => OnStatusChanged(context, status))"
+                Name="Status"/>
+        </Content>
+    </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn Property="@(p => p.Priority)">
+        <Content>
+            @{
+                <LumexChip
+                    Size="@Size.Small"
+                    Variant="@ChipVariant.Dot"
+                    Color="ThemeColor.Primary">
+                    @context.Priority.GetDescription()
+                </LumexChip>
+            }
+        </Content>
+    </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn Title="Assigned" Property="@(p => p.User.UserName)"/>
+    <LumexUI.PropertyColumn Title="Actions" Property="@(p => p.User.Id)">
+        <Content>
+            @if (TimeEntryState.Value.ActiveEntry?.Task?.Id == context.Id)
+            {
+                <CustomButton
+                    Variant="Variant.Outlined"
+                    Color="ThemeColor.Default"
+                    IconOnly="true"
+                    Size="Size.Small"
+                    Disabled="_isDisabledButtons"
+                    OnClick="@(() => StopTimeEntry())">
+                    <StartContent>
+                        <i class="fa-solid fa-stop text-xs"></i>
+                    </StartContent>
+                </CustomButton>
+            }
+            else
+            {
+                <CustomButton
+                    Variant="Variant.Outlined"
+                    Color="ThemeColor.Info"
+                    IconOnly="true"
+                    Size="Size.Small"
+                    Disabled="_isDisabledButtons"
+                    OnClick="@(() => StartTimeEntry(context))">
+                    <StartContent>
+                        <i class="fa-solid fa-play text-xs"></i>
+                    </StartContent>
+                </CustomButton>
+            }
+            <CustomButton
+                Variant="Variant.Outlined"
+                Color="ThemeColor.Info"
+                IconOnly="true"
+                Class="ml-1"
+                Size="Size.Small"
+                Disabled="_isDisabledButtons"
+                OnClick="@(() => OnEditTask(context))">
+                <ChildContent>
+                    <i class="fa-solid fa-pencil text-xs"></i>
+                </ChildContent>
+            </CustomButton>
+        </Content>
+    </LumexUI.PropertyColumn>
+</LumexDataGrid>
