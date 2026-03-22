@@ -31,10 +31,10 @@
     public bool Disabled { get; set; }
     
     [Parameter]
-    public InputVariant Variant { get; set; }
-    
+    public InputVariant Variant { get; set; } = InputVariant.Outlined;
+
     [Parameter]
-    public ThemeColor Color { get; set; }
+    public ThemeColor Color { get; set; } = ThemeColor.Default;
     
     [Parameter]
     public bool FullWidth { get; set; }

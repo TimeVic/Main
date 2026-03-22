@@ -38,7 +38,7 @@ public partial class TasksListBlock: IDisposable
     private Guid? _taskListId = null;
     private bool _isTaskListsMenuOpened = false;
     private bool _isTaskListMenuOpened = false;
-    private bool _isTaskModalOpened = false;
+    private bool _isAddTaskListModalOpened = false;
     
     public TaskListDto? _selectedTaskList
     {

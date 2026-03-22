@@ -13,8 +13,7 @@
         Placeholder="@_placeholder"
         LabelPlacement="@LabelPlacement.Outside"
         ValueChanged="dto => OnValueChanged(dto)"
-        Value="_selectedItem"
-        Classes="@(new() { Base = "max-w-xs", Trigger = "h-12" } )">
+        Value="_selectedItem">
         <ChildContent>
             @foreach (var character in _list)
             {

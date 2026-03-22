@@ -1,0 +1,38 @@
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms
+
+@inherits BaseReactiveComponent
+
+<LumexModal 
+    Open="IsOpened" 
+    OnClose="@OnCloseModal"
+    Size="ModalSize.Large"
+    OpenChanged="@OnOpenChanged"
+    @ref="modal">
+    <LumexModalContent>
+        <LumexModalHeader Class="flex items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </div>
+                <div>
+                    <h3 class="truncate text-lg font-semibold text-slate-900">@Task.Title.TruncateAndAddDots(100)</h3>
+                    <p class="mt-1 text-sm text-slate-500">@Task.TaskList.Project.Name · @Task.TaskList.Name</p>
+                </div>
+            </div>
+        </LumexModalHeader>
+        <LumexModalBody>
+            <TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms.UpdateTaskForm TaskId="Task.Id"/>
+        </LumexModalBody>
+        <LumexModalFooter>
+            <LumexButton
+                 Color="@ThemeColor.Default"
+                 command="close"
+                 commandfor="@context">
+                Continue
+            </LumexButton>
+        </LumexModalFooter>
+    </LumexModalContent>
+</LumexModal>

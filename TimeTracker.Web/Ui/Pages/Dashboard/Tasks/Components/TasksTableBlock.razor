@@ -8,6 +8,15 @@
 
 @inherits BaseReactiveComponent
 
+@if (_taskToUpdate != null)
+{
+    <TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals.UpdateTaskModal
+        IsOpened="true"
+        Task="_taskToUpdate"
+        OnClose="@(() => _taskToUpdate = null)"
+    />
+}
+
 <LumexDataGrid
     Class="min-w-full divide-y divide-slate-200"
     Data="@_tasks.AsQueryable()"
