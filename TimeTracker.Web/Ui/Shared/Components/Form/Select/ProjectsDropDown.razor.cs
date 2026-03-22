@@ -5,7 +5,7 @@ using TimeTracker.Web.Store.Project;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
-public partial class ProjectsDropDown
+public partial class ProjectsDropDown: IDisposable
 {   
     [Parameter]
     public bool ShowProjectsWithoutClients { get; set; } = true;
@@ -35,16 +35,20 @@ public partial class ProjectsDropDown
         base.OnInitialized();
         Placeholder = "Select project";
 
-        _state.StateChanged += (sender, args) =>
-        {
-            UpdateList();
-        };
+        _state.StateChanged += UpdateList;
         UpdateList();
     }
 
+    private void UpdateList(object? sender, EventArgs e)
+    {
+        Debug.Log("ProjectsDropDown initialized", _list);
+        UpdateList();
+    }
+    
     private void UpdateList()
     {
-        _list = _state.Value.List;
+        _list = _state.Value.List.ToList();
+        Debug.Log("ProjectsDropDown updated", _list);
         if (_clientId == Guid.Empty && ShowProjectsWithoutClients)
         {
             _list = _list.Where(item => item.Client == null).ToList();
@@ -62,5 +66,10 @@ public partial class ProjectsDropDown
         _selectedItem = _list.FirstOrDefault(
             item => item.Id.ToString() == _selectedId
         );
+    }
+
+    public void Dispose()
+    {
+        _state.StateChanged -= UpdateList;
     }
 }

@@ -34,7 +34,7 @@ public partial class TasksListBlock: IDisposable
     public NavigationManager NavigationManager { get; set; }
     
     private string? _taskListSearch = null;
-    private Guid _projectId = Guid.Empty;
+    private ProjectDto? _selectedProject = null;
     private Guid? _taskListId = null;
     private bool _isTaskListsMenuOpened = false;
     private bool _isTaskListMenuOpened = false;
@@ -48,7 +48,7 @@ public partial class TasksListBlock: IDisposable
     public IEnumerable<TaskListDto> _filteredTaskLists
     {
         get => _tasksListState.Value.List
-            .Where(item => item.Project.Id == _projectId)
+            .Where(item => item.Project == _selectedProject)
             .Where(item => string.IsNullOrWhiteSpace(_taskListSearch) || item.Name.Contains(_taskListSearch));
     }
 
@@ -68,6 +68,11 @@ public partial class TasksListBlock: IDisposable
     {
         if (taskListId.HasValue)
         {
+            var selectedProject = _tasksListState.Value.List.FirstOrDefault(item => item.Project.Id == taskListId)?.Project;
+            if (selectedProject != null)
+            {
+                _selectedProject = selectedProject;
+            }
             Dispatcher.Dispatch(new SetSelectedAction(taskListId));
             Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());    
         }
@@ -77,7 +82,7 @@ public partial class TasksListBlock: IDisposable
     {
         if (project is null)
             return;
-        _projectId = project.Id;
+        _selectedProject = project;
         _taskListId = null;
     }
     
@@ -91,9 +96,15 @@ public partial class TasksListBlock: IDisposable
     
     private void SetDefaultProject(object? sender, EventArgs e)
     {
-        if (_projectId  == Guid.Empty)
+        if (_selectedProject == null)
         {
-            _projectId = _projectState.Value.List.FirstOrDefault()?.Id ?? Guid.Empty;
+            _selectedProject = _projectState.Value.List.FirstOrDefault();
         }
+    }
+
+    private Task OnTasksListAdded(TaskListDto arg)
+    {
+        OnTasksListSelected(arg.Id);
+        return Task.CompletedTask;
     }
 }

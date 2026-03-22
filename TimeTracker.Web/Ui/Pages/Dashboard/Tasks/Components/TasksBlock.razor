@@ -1,0 +1,167 @@
+@using LumexUI
+@using LumexUI.Common
+@using Microsoft.FluentUI.AspNetCore.Components.Extensions
+@using TimeTracker.Business.Extensions
+@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+@using TaskPriority = TimeTracker.Business.Common.Constants.Task.TaskPriority;
+
+@inherits BaseReactiveComponent
+
+<section class="space-y-6">
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="text-sm font-semibold text-slate-900">Tasks in progress</p>
+                <p class="text-sm text-slate-500">Selected list: @_taskList?.Name</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">@_taskList?.Project.Name</span>
+                
+                <CustomButton
+                    Variant="Variant.Outlined"
+                    Color="ThemeColor.Info"
+                    OnClick="@OnAddTask"
+                >
+                    <StartContent>
+                        <i class="fa-solid fa-plus"></i>
+                    </StartContent>
+                    <ChildContent>Add task</ChildContent>
+                </CustomButton>
+            </div>
+        </div>
+
+        <div class="mt-5 flex flex-col gap-5">
+            <LumexDataGrid 
+                Data="@_tasks.AsQueryable()" 
+                Loading="_isLoading"
+            >
+                <LumexUI.PropertyColumn Title="Task" Property="@(p => p.Title)">
+                    <Content>
+                        <div class="font-medium text-slate-900">@context.Title</div>
+                        <div class="mt-1 max-w-xl text-slate-500">@context.Description?.TruncateAndAddDots(100)</div>
+                    </Content>
+                </LumexUI.PropertyColumn>
+                <LumexUI.PropertyColumn Title="Status" Property="@(p => p.Status)">
+                    <Content>
+                        <EnumDropDown
+                            Label="Status"
+                            TItem="TaskStatus"
+                            AllowClear="false"
+                            Size="Size.Small"
+                            Value="context.Status"
+                            ValueChanged="@(status => OnStatusChanged(context, status))"
+                            Name="Status"/>
+                    </Content>
+                </LumexUI.PropertyColumn>
+                <LumexUI.PropertyColumn Property="@(p => p.Priority)">
+                    <Content>
+                        @{
+                            <LumexChip 
+                                Size="@Size.Small"
+                                Variant="@ChipVariant.Dot"
+                                Color="ThemeColor.Primary">
+                                @context.Priority.GetDescription()
+                            </LumexChip>
+                        }
+                    </Content>
+                </LumexUI.PropertyColumn>
+                <LumexUI.PropertyColumn Title="Assigned" Property="@(p => p.User.UserName)"/>
+                <LumexUI.PropertyColumn Title="Actions" Property="@(p => p.User.Id)">
+                    <Content>
+                        <CustomButton
+                            Variant="Variant.Outlined"
+                            Color="ThemeColor.Info"
+                            IconOnly="true"
+                            Size="Size.Small"
+                            OnClick="@(() => OnStartNewTimeEntryForTask(context))">
+                            <StartContent>
+                                <i class="fa-solid fa-play text-xs"></i>
+                            </StartContent>
+                        </CustomButton>
+                        <CustomButton
+                            Variant="Variant.Outlined"
+                            Color="ThemeColor.Info"
+                            IconOnly="true"
+                            Size="Size.Small"
+                            OnClick="@(() => OnEditTask(context))">
+                            <ChildContent>
+                                <i class="fa-solid fa-pencil text-xs"></i>
+                            </ChildContent>
+                        </CustomButton>
+                    </Content>
+                </LumexUI.PropertyColumn>
+            </LumexDataGrid>
+            
+            @* <table class="min-w-full divide-y divide-slate-200"> *@
+            @*     <thead> *@
+            @*     <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500"> *@
+            @*         <th class="pb-3 pr-4">Task</th> *@
+            @*         <th class="pb-3 pr-4">Status</th> *@
+            @*         <th class="pb-3 pr-4">Priority</th> *@
+            @*         <th class="pb-3 pr-4">Estimate</th> *@
+            @*         <th class="pb-3 pr-4">Assigned</th> *@
+            @*         <th class="pb-3 text-right">Actions</th> *@
+            @*     </tr> *@
+            @*     </thead> *@
+            @*     <tbody class="divide-y divide-slate-100 text-sm"> *@
+            @*     @if (_tasks.Any()) *@
+            @*     { *@
+            @*         @foreach (var task in _tasks) *@
+            @*         { *@
+            @*             <tr class="align-top"> *@
+            @*                 <td class="py-4 pr-4"> *@
+            @*                     <div class="font-medium text-slate-900">@task.Title</div> *@
+            @*                     <div class="mt-1 max-w-xl text-slate-500">@task.Description</div> *@
+            @*                 </td> *@
+            @*                 <td class="py-4 pr-4"> *@
+            @*                     <EnumDropDown *@
+            @*                         Label="Status" *@
+            @*                         TItem="TaskStatus" *@
+            @*                         AllowClear="false" *@
+            @*                         Value="task.Status" *@
+            @*                         ValueChanged="@(status => OnStatusChanged(task, status))" *@
+            @*                         Name="Status"/> *@
+            @*                 </td> *@
+            @*                 <td class="py-4 pr-4"> *@
+            @*                     <span class="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">@task.Priority</span> *@
+            @*                 </td> *@
+            @*                 <td class="py-4 pr-4 text-slate-600">task Estimate</td> *@
+            @*                 <td class="py-4 pr-4 text-slate-600">@task.User.UserName</td> *@
+            @*                 <td class="py-4 text-right"> *@
+            @*                     <div class="flex items-center justify-end gap-2"> *@
+            @*                         <CustomButton *@
+            @*                             Variant="Variant.Outlined" *@
+            @*                             Color="ThemeColor.Info" *@
+            @*                             IconOnly="true" *@
+            @*                             Size="Size.Small" *@
+            @*                             OnClick="@(() => OnStartNewTimeEntryForTask(task))"> *@
+            @*                             <StartContent> *@
+            @*                                 <i class="fa-solid fa-play text-xs"></i> *@
+            @*                             </StartContent> *@
+            @*                         </CustomButton> *@
+            @*                         <CustomButton *@
+            @*                             Variant="Variant.Outlined" *@
+            @*                             Color="ThemeColor.Info" *@
+            @*                             IconOnly="true" *@
+            @*                             Size="Size.Small" *@
+            @*                             OnClick="@(() => OnEditTask(task))"> *@
+            @*                             <ChildContent> *@
+            @*                                 View / edit *@
+            @*                             </ChildContent> *@
+            @*                         </CustomButton> *@
+            @*                     </div> *@
+            @*                 </td> *@
+            @*             </tr> *@
+            @*         } *@
+            @*     } *@
+            @*     else *@
+            @*     { *@
+            @*         <tr> *@
+            @*             <td colspan="6" class="py-8 text-center text-sm text-slate-500">This task list is empty. Add a task to get started.</td> *@
+            @*         </tr> *@
+            @*     } *@
+            @*     </tbody> *@
+            @* </table> *@
+        </div>
+    </div>
+</section>

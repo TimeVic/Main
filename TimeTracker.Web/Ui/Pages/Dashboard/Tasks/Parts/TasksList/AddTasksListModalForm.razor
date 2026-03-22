@@ -4,11 +4,11 @@
 
 @inherits BaseReactiveComponent
 
-<LumexModal Open="IsOpened">
+<LumexModal Open="IsOpened" OnClose="@OnCloseModal" @ref="modal">
     <LumexModalContent>
         <LumexModalHeader Class="flex-col gap-3">
             <div class="size-10 flex items-center justify-center bg-default-100 rounded-full">
-                <PlusIcon Size="20" />
+                <i class="fa-solid fa-plus text-xl"></i>
             </div>
             Add task list
         </LumexModalHeader>
@@ -19,16 +19,12 @@
                 Model="@model"
                 novalidate>
                 <DataAnnotationsValidator/>
-                <FluentValidationSummary/>
 
-                <div class="mb-2">
-                    <ProjectsDropDown
-                        FullWidth="true"
-                        Label="Project"
-                        Value="@(model.ProjectId)"
-                        SelectedItemChanged="@(item => model.ProjectId = item?.Id ?? Guid.Empty)"/>
+                <div class="mt-3 rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3 mb-3">
+                    <p class="text-xs font-medium uppercase tracking-[0.18em] text-blue-600">Project</p>
+                    <p class="mt-1 text-sm font-semibold text-slate-900">@Project?.Name</p>
                 </div>
-
+                
                 <div>
                     <InputTextField
                         Class="w-100"
@@ -41,6 +37,7 @@
         <LumexModalFooter>
             <CustomButton
                 FullWidth="@true"
+                OnClick="@Submit"
                 Color="@ThemeColor.Primary"
                 Radius="@Radius.Full">
                 Add
