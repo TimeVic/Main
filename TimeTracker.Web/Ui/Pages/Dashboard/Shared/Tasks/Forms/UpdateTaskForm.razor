@@ -1,3 +1,87 @@
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Business.Common.Constants.Task
+@using TimeTracker.Web.Constants.Ui
+@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+
 @inherits BaseReactiveComponent
 
+@if (_isLoading)
+{
+    <LumexSpinner Size="@Size.Large" />
+}
+else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
+{
+    <EditForm
+    @ref="_form"
+    EditContext="_editContext"
+    novalidate>
+    <DataAnnotationsValidator/>
 
+    <div class="rounded-2xl border border-slate-200 p-4">
+        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Task title</label>
+        <InputTextField FullWidth="true" @bind-Value="_model.Title"/>
+        <div class="mt-4 grid gap-4 md:grid-cols-3">
+            <div>
+                <MembersDropDown 
+                    Label="Assigned"
+                    UserId="_model.UserId"
+                    SelectedItemChanged="OnAssignedChanged"
+                    AllowedIds="_allowedUserIds"
+                />
+            </div>
+            <div>
+                <EnumDropDown
+                    TItem="TaskStatus"
+                    Label="Status"
+                    Value="_model.Status"
+                    ValueChanged="OnStatusChanged"
+                />
+            </div>
+            <div>
+                <EnumDropDown
+                    TItem="TaskPriority"
+                    Label="Priority"
+                    Value="_model.Priority"
+                    ValueChanged="OnPriorityChanged"
+                />
+            </div>
+        </div>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 p-4 mt-3">
+        <div class="grid gap-4 md:grid-cols-3">
+            <div>
+                <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Project</label>
+                <div class="flex h-[42px] items-center rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700">@_task.TaskList.Project.Name</div>
+            </div>
+            <div>
+                <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Task list</label>
+                <div class="flex h-[42px] items-center rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700">@_task.TaskList.Name</div>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(_task?.ExternalTaskId))
+            {
+                <div>
+                    <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">External task ID</label>
+                    <div class="flex h-[42px] items-center rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700">@_task.ExternalTaskId</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 p-4 mt-3">
+        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Description</label>
+        <InputTextArea @bind-Value="_model.Description" class="min-h-[180px] w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" />
+        <p class="mt-2 text-sm text-slate-500">Supports Markdown</p>
+    </div>
+
+    @* <div class="rounded-2xl border border-slate-200 p-4"> *@
+    @*     <div class="flex items-center gap-6 border-b border-slate-200 pb-3 text-sm"> *@
+    @*         <button type="button" class="font-semibold text-slate-900">Comments</button> *@
+    @*         <button type="button" class="text-slate-500">Attachments</button> *@
+    @*     </div> *@
+    @*     <InputTextArea @bind-Value="taskComment" class="mt-4 min-h-[100px] w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" placeholder="Your comment..." /> *@
+    @* </div> *@
+    
+</EditForm>    
+}

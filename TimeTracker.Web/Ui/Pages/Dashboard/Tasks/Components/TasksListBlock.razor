@@ -1,4 +1,5 @@
 @using LumexUI.Common
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Web.Ui.Pages.Dashboard.Tasks.Parts.TasksList
 @inherits BaseReactiveComponent
 
@@ -6,7 +7,7 @@
     <AddTasksListModalForm 
         Project="_selectedProject"
         OnAdded="@OnTasksListAdded"
-        @bind-IsOpened="_isTaskModalOpened"/>
+        @bind-IsOpened="_isAddTaskListModalOpened"/>
     
     <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
         <div class="flex items-center justify-between gap-3">
@@ -19,7 +20,7 @@
                 Color="ThemeColor.Info"
                 Variant="Variant.Outlined"
                 Disabled="@(_selectedProject == null)"
-                OnClick="@(() => _isTaskModalOpened = true)">
+                OnClick="@(() => _isAddTaskListModalOpened = true)">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>
                 </StartContent>

@@ -1,0 +1,72 @@
+@using TimeTracker.Web.Ui.Shared.Components.List
+@inherits BaseReactiveComponent
+
+<section class="space-y-6">
+    @* <div class="grid gap-4 md:grid-cols-3"> *@
+    @*     <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"> *@
+    @*         <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">My entries</p> *@
+    @*         <p class="mt-2 text-2xl font-semibold text-slate-900">@CurrentUserTimeEntries.Count()</p> *@
+    @*         <p class="mt-1 text-sm text-slate-500">All entries logged by @currentUserEmail</p> *@
+    @*     </div> *@
+    @*     <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"> *@
+    @*         <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Task-linked</p> *@
+    @*         <p class="mt-2 text-2xl font-semibold text-slate-900">@CurrentUserTaskEntryCount</p> *@
+    @*         <p class="mt-1 text-sm text-slate-500">Entries attached to a specific task</p> *@
+    @*     </div> *@
+    @*     <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"> *@
+    @*         <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Latest log</p> *@
+    @*         <p class="mt-2 text-2xl font-semibold text-slate-900">@LatestUserEntryLoggedAt</p> *@
+    @*         <p class="mt-1 text-sm text-slate-500">Most recent visible time entry</p> *@
+    @*     </div> *@
+    @* </div> *@
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="text-sm font-semibold text-slate-900">My time entries</p>
+                <p class="text-sm text-slate-500">Compact rows grouped by day with daily totals and page-based navigation.</p>
+            </div>
+            @* <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">@CurrentUserTimeEntries.Count() entries</span> *@
+        </div>
+
+        <div class="mt-5 space-y-4">
+            @if (_groupedList.Any())
+            {
+                foreach (var groupedItem in _groupedList)
+                {
+                    var totalDuration = TimeSpan.FromTicks(
+                        groupedItem.Sum(item => item.Duration.Ticks)
+                    );
+                    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                        <div class="flex flex-col gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">@groupedItem.Key.ToLongDateString()</p>
+                                <p class="text-xs text-slate-500">@groupedItem.Count() entries · Edit or delete rows inline</p>
+                            </div>
+                            <div class="text-left sm:text-right">
+                                <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Total time</p>
+                                <p class="text-sm font-semibold text-slate-900">@_timeParsingService.TimeSpanToTimeString(totalDuration,  true)</p>
+                            </div>
+                        </div>
+            
+                        <div class="divide-y divide-slate-100">
+                            @foreach (var entry in groupedItem)
+                            {
+                                <MyTimeEntryCard Entry="@entry" />
+                            }
+                        </div>
+                    </div>
+                }
+                <TPaginator
+                    CurrentPage="1"
+                    TotalPages="50" />
+            }
+            else
+            {
+                <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                    No time entries found for this user yet.
+                </div>
+            }
+        </div>
+    </div>
+</section>

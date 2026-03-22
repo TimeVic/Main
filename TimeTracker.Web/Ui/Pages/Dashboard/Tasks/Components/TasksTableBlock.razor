@@ -2,11 +2,21 @@
 @using LumexUI.Common
 @using Microsoft.FluentUI.AspNetCore.Components.Extensions
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TaskPriority = TimeTracker.Business.Common.Constants.Task.TaskPriority;
 
 @inherits BaseReactiveComponent
+
+@if (_taskToUpdate != null)
+{
+    <TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals.UpdateTaskModal
+        IsOpened="true"
+        Task="_taskToUpdate"
+        OnClose="@(() => _taskToUpdate = null)"
+    />
+}
 
 <LumexDataGrid
     Class="min-w-full divide-y divide-slate-200"
@@ -23,6 +33,7 @@
             <EnumDropDown
                 Label="Status"
                 TItem="TaskStatus"
+                SelectType="DropDownType.DropDown"
                 AllowClear="false"
                 Size="Size.Small"
                 Value="context.Status"

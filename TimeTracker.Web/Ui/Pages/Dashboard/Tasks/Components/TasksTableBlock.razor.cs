@@ -37,8 +37,8 @@ public partial class TasksTableBlock: IDisposable
     private ICollection<TaskDto> _tasks = new List<TaskDto>();
     private ICollection<TaskDto> _selectedTasks = new List<TaskDto>();
     private bool _isLoading = true;
-    private bool _isShowAddTaskModal = false;
     private bool _isDisabledButtons => TimeEntryState.Value.IsTimeEntryProcessing;
+    private TaskDto? _taskToUpdate = null;
     
     protected override void OnInitialized()
     {
@@ -81,6 +81,7 @@ public partial class TasksTableBlock: IDisposable
     
     private async Task OnEditTask(TaskDto? task)
     {
+        _taskToUpdate = task;
     }
     
     private Task OnStartNewTimeEntryForTask(TaskDto? task)

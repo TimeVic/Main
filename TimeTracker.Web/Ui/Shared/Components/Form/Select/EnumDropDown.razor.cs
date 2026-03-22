@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using LumexUI;
+using TimeTracker.Web.Constants.Ui;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
 public partial class EnumDropDown<TItem>
 {
+    [Parameter]
+    public DropDownType SelectType { get; set; } = DropDownType.Select;
+    
     [Parameter]
     public TItem? Value
     {
