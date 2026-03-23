@@ -43,7 +43,6 @@ public class TimeEntryService : ITimeEntryService
             endTime,
             stopDate
         );
-        await _dbSessionProvider.PerformCommitAsync();
         foreach (var timeEntry in timeEntries)
         {
             await _queueService.PushExternalClientAsync(new SendSetTimeEntryIntegrationRequestContext(timeEntry.Id));
@@ -60,7 +59,6 @@ public class TimeEntryService : ITimeEntryService
     )
     {
         var timeEntry = await _timeEntryDao.SetAsync(user, workspace, timeEntryDto, project);
-        await _dbSessionProvider.PerformCommitAsync();
         await _queueService.PushExternalClientAsync(new SendSetTimeEntryIntegrationRequestContext(timeEntry.Id));
         return timeEntry;
     }
@@ -69,7 +67,6 @@ public class TimeEntryService : ITimeEntryService
     {
         timeEntry.IsMarkedToDelete = true;
         await _dbSessionProvider.CurrentSession.SaveAsync(timeEntry);
-        await _dbSessionProvider.PerformCommitAsync();
         await _queueService.PushExternalClientAsync(new SendDeleteTimeEntryIntegrationRequestContext());
     }
 }
