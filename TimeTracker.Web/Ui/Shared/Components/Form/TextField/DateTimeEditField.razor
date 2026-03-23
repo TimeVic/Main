@@ -1,14 +1,19 @@
-﻿@using TimeTracker.Business.Common.Services.Format
+﻿@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Business.Common.Services.Format
 @using TimeTracker.Business.Extensions
+@using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation
 
 <div Class="@Class">
     <FluentLabel>@Label</FluentLabel>
     <FluentStack Orientation="Orientation.Horizontal">
-        <FluentDatePicker
-            DisabledDateFunc="DisabledDateFunc"
+        <LumexDatebox 
+            TValue="DateTime?"
+            Size="Size.Small"
             Placeholder="@Placeholder"
             Value="@_value"
-            ValueChanged="@(OnDateChanged)"/>
+            ValueChanged="OnDateChanged"
+            Label="@Label"/>
         <TimeEditField
             Value="@_timeValue"
             ValueChanged="@(OnTimeChanged)"/>

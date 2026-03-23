@@ -26,7 +26,8 @@
     Color="Color"
     Size="Size"
     Clearable="Clearable"
-    ErrorMessage="@FirstError">
+    ErrorMessage="@FirstError"
+    step="@Step">
     <StartContent>@StartContent</StartContent>
     <EndContent>@EndContent</EndContent>
 </LumexNumbox>
@@ -70,7 +71,10 @@
     
     [Parameter]
     public RenderFragment? EndContent { get; set; }
-
+    
+    [Parameter]
+    public string? Step { get; set; }
+    
     public TItem? _numericValue { get; set; }
     
     private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;

@@ -53,23 +53,41 @@
                     }
                 </div>
 
-                @* <div class="rounded-2xl border border-slate-200 p-5"> *@
-                @*     <div class="grid gap-4 sm:grid-cols-3"> *@
-                @*         <div> *@
-                @*             <label class="mb-2 block text-sm font-medium text-slate-700">Date</label> *@
-                @*             <InputText @bind-Value="entryDate" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" /> *@
-                @*         </div> *@
-                @*         <div> *@
-                @*             <label class="mb-2 block text-sm font-medium text-slate-700">Start</label> *@
-                @*             <InputText @bind-Value="entryStartTime" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" /> *@
-                @*         </div> *@
-                @*         <div> *@
-                @*             <label class="mb-2 block text-sm font-medium text-slate-700">End</label> *@
-                @*             <InputText @bind-Value="entryEndTime" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" /> *@
-                @*         </div> *@
-                @*     </div> *@
-                @*     <p class="mt-2 text-sm text-slate-700">Duration: <span class="font-semibold text-slate-900">@EntryDurationDisplay</span></p> *@
-                @* </div> *@
+                <div class="rounded-2xl border border-slate-200 p-5">
+                    <div class="grid gap-4 sm:grid-cols-3">
+                        <div>
+                            <LumexDatebox 
+                                TValue="DateTime?"
+                                Size="Size.Small"
+                                Required="true"
+                                Value="@_model.Date.ToDateTime(TimeOnly.MinValue)"
+                                ValueChanged="OnDateChanged"
+                                Label="Date"/>
+                        </div>
+                        <div>
+                            <TimeEditField
+                                Label="Start"
+                                Value="@_model.StartTime"
+                                ValueChanged="@OnChangeStartTime"
+                                FullWidth="true"
+                            />
+                        </div>
+                        <div>
+                            <TimeEditField
+                                Label="End"
+                                Value="@_model.EndTime"
+                                ValueChanged="@OnChangeEndTime"
+                                FullWidth="true"
+                            />
+                        </div>
+                    </div>
+                    <p class="mt-2 text-sm text-slate-700">
+                        Duration: 
+                        <span class="font-semibold text-slate-900">
+                            @_timeParsingService.TimeSpanToTimeString(_model.Duration, true)
+                        </span>
+                    </p>
+                </div>
 
                 <div class="rounded-2xl border border-slate-200 p-5">
                     <label class="mb-2 block text-sm font-medium text-slate-700">Description</label>
@@ -90,6 +108,7 @@
                             <InputNumericField 
                                 TItem="decimal"
                                 Size="Size.Small"
+                                Step="00.01"
                                 Variant="InputVariant.Underlined"
                                 @bind-Value="_model.HourlyRate"/>
                         </div>

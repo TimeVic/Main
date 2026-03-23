@@ -113,5 +113,11 @@ public class TimeParsingServiceTest: BaseTest
             "12:11:10", 
             _timeParsingService.TimeSpanToTimeString(timeSpanFromTime, true)
         );
+        
+        timeSpanFromTime = DateTime.Parse("2020-04-30T23:59:59.999Z").ToUniversalTime().AddDays(-2).TimeOfDay;
+        Assert.Equal(
+            "23:59", 
+            _timeParsingService.TimeSpanToTimeString(timeSpanFromTime)
+        );
     }
 }
