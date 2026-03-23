@@ -33,6 +33,7 @@ public class SetTest: BaseTest
     private readonly IQueueService _queueService;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IUserSeeder _userSeeder;
+    private readonly IClientSeeder _clientSeeder;
 
     public SetTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -44,6 +45,7 @@ public class SetTest: BaseTest
         _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
+        _clientSeeder = ServiceProvider.GetRequiredService<IClientSeeder>();
         
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
@@ -108,6 +110,9 @@ public class SetTest: BaseTest
     {
         var fakeEntry = _timeEntryFactory.Generate();
         var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
+        var client = await _clientSeeder.Create(_defaultWorkspace);
+        expectedProject.Client = client;
+        
         var timeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,

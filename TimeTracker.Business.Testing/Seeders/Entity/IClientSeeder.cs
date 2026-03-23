@@ -12,4 +12,6 @@ public interface IClientSeeder: IDomainService
     Task<ICollection<ClientEntity>> CreateSeveralAsync(UserEntity user, int count = 1);
     
     Task<ICollection<ClientEntity>> CreateSeveralAsync(int count = 1);
+
+    Task<ClientEntity> Create(WorkspaceEntity workspace);
 }

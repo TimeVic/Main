@@ -52,4 +52,9 @@ public class ClientSeeder: IClientSeeder
         var user = await _userSeeder.CreateActivatedAsync();
         return await CreateSeveralAsync(user);
     }
+    
+    public async Task<ClientEntity> Create(WorkspaceEntity workspace)
+    {
+        return (await CreateSeveralAsync(workspace, 1)).First();
+    }
 }
