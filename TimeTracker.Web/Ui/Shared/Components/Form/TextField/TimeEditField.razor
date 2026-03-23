@@ -1,17 +1,22 @@
-﻿@using TimeTracker.Business.Common.Services.Format
+﻿@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Business.Common.Services.Format
 
-<FluentTextField
-    style="width: 100%;"
-    Class="@Class"
-    Disabled="Disabled"
+<LumexTextbox
     Value="@_editValue"
-    Label="@Label"
     ValueChanged="@OnChangeValue"
-    InputMode="InputMode.Email"
-    Maxlength="10"
-    Placeholder="12:00">
-    <FluentIcon Value="@(new Icons.Regular.Size20.Clock())" Slot="end" Color="Color.Neutral"/>
-</FluentTextField>
+    Class="@Class"
+    Placeholder="@Placeholder"
+    Type="InputType.Text"
+    Label="@Label"
+    Disabled="Disabled"
+    Required="true"
+    Variant="InputVariant.Outlined"
+    Color="ThemeColor.Default"
+    Size="Size.Small"
+    FullWidth="@FullWidth"
+    Clearable="@Clearable">
+</LumexTextbox>
 
 @code
 {
@@ -27,6 +32,12 @@
     [Parameter] 
     public Boolean Disabled { get; set; } = false;
 
+    [Parameter] 
+    public Boolean FullWidth { get; set; } = false;
+    
+    [Parameter] 
+    public Boolean Clearable { get; set; } = false;
+    
     [Inject]
     public ITimeParsingService _timeParsingService { get; set; }
     

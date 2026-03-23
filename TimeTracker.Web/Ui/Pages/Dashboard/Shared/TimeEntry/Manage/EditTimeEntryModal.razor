@@ -1,0 +1,168 @@
+@using LumexUI
+@using LumexUI.Common
+@using LumexUI.Shared.Icons
+@using Markdig.Extensions.TaskLists
+
+@inherits BaseReactiveComponent
+
+<LumexModal 
+    Open="true" 
+    OnClose="@OnCloseModal"
+    Size="ModalSize.Large"
+    @ref="modal">
+    <LumexModalContent>
+        <LumexModalHeader Class="flex items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </div>
+                <h3 class="text-2xl font-medium text-slate-900">Time entry details</h3>
+            </div>
+        </LumexModalHeader>
+        <LumexModalBody>
+            <EditForm
+                Context="form"
+                @ref="_form"
+                EditContext="_editContext"
+                novalidate>
+                <DataAnnotationsValidator/>
+
+                <div class="grid gap-4 px-6 pb-6">
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Project</label>
+                    @if (Entry.Task == null)
+                    {
+                        <div class="flex items-center gap-2">
+                            
+                            <ProjectsDropDown
+                                Value="_model.Project?.Id ?? Guid.Empty"
+                                SelectedItemChanged="@OnProjectSelected"
+                            />
+                            <button type="button" @onclick="ClearProject" class="inline-flex h-[42px] w-[42px] items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-blue-600 transition hover:bg-slate-100">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+                            <div class="font-medium text-slate-900">@Entry.Task.TaskList.Project.Name</div>
+                            <div class="mt-1 text-slate-500">Attached task: @Entry.Task.TaskId</div>
+                            <p class="mt-2 text-xs text-slate-500">This entry is attached to a task, so the project follows that task automatically.</p>
+                        </div>
+                    }
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 p-5">
+                    <div class="grid gap-4 sm:grid-cols-3">
+                        <div>
+                            <LumexDatebox 
+                                TValue="DateTime?"
+                                Size="Size.Small"
+                                Required="true"
+                                Value="@_model.Date.ToDateTime(TimeOnly.MinValue)"
+                                ValueChanged="OnDateChanged"
+                                Label="Date"/>
+                        </div>
+                        <div>
+                            <TimeEditField
+                                Label="Start"
+                                Value="@_model.StartTime"
+                                ValueChanged="@OnChangeStartTime"
+                                FullWidth="true"
+                            />
+                        </div>
+                        <div>
+                            <TimeEditField
+                                Label="End"
+                                Value="@_model.EndTime"
+                                ValueChanged="@OnChangeEndTime"
+                                FullWidth="true"
+                            />
+                        </div>
+                    </div>
+                    <p class="mt-2 text-sm text-slate-700">
+                        Duration: 
+                        <span class="font-semibold text-slate-900">
+                            @_timeParsingService.TimeSpanToTimeString(_model.Duration, true)
+                        </span>
+                    </p>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 p-5">
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Description</label>
+                    <InputTextArea @bind-Value="_model.Description" 
+                        class="min-h-[150px] w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" 
+                    />
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 p-5">
+                    <label class="mb-3 block text-sm font-medium text-slate-700">Pricing</label>
+                    <div class="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+                        <label class="inline-flex items-center gap-3 text-sm text-slate-700">
+                            <InputCheckbox @bind-Value="_model.IsBillable" />
+                            Billable
+                        </label>
+                        <div>
+                            <label class="mb-2 block text-sm font-medium text-slate-700">Hourly Rate</label>
+                            <InputNumericField 
+                                TItem="decimal"
+                                Size="Size.Small"
+                                Step="00.01"
+                                Variant="InputVariant.Underlined"
+                                @bind-Value="_model.HourlyRate"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+                @* <div> *@
+                @*     $1$ <label class="mb-2 block text-sm font-medium text-slate-700">Task list</label> #1# *@
+                @*     $1$ <InputSelect @bind-Value="newTaskTaskListId" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"> #1# *@
+                @*     $1$     @foreach (var list in CurrentProjectTaskLists) #1# *@
+                @*     $1$     { #1# *@
+                @*     $1$         <option value="@list.Id">@list.Name</option> #1# *@
+                @*     $1$     } #1# *@
+                @*     $1$ </InputSelect> #1# *@
+                @*     <p class="mt-2 text-xs text-slate-500">Task will be added to: <span class="font-semibold text-slate-700">@TaskList.Name</span></p> *@
+                @* </div> *@
+                @* *@
+                @* <div class="mt-1"> *@
+                @*     <InputTextField *@
+                @*         FullWidth="true" *@
+                @*         Label="Title" *@
+                @*         Placeholder="Task title" *@
+                @*         Variant="InputVariant.Outlined" *@
+                @*         @bind-Value="model.Title"/> *@
+                @* </div> *@
+                @* *@
+                @* <div class="space-y-2 mt-3"> *@
+                @*     <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4"> *@
+                @*         <InputTextField *@
+                @*             Class="lg:max-w-sm" *@
+                @*             Label="External Task ID" *@
+                @*             Placeholder="For example: JIRA-154 or RM-982" *@
+                @*             Variant="InputVariant.Outlined" *@
+                @*             @bind-Value="model.ExternalTaskId"/> *@
+                @*         <p class="text-xs leading-5 text-slate-500 lg:flex-1">Use this when the task already exists in an external service like Jira, ClickUp, or Redmine.</p> *@
+                @*     </div> *@
+                @* </div> *@
+                @* *@
+                @* <div class="rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-900 mt-3"> *@
+                @*     <div class="font-semibold">Title or External Task ID is required.</div> *@
+                @*     <p class="mt-1 text-blue-800">You can fill both fields, but at least one of them must be entered.</p> *@
+                @* </div> *@
+            </EditForm>
+        </LumexModalBody>
+        <LumexModalFooter>
+            @* <CustomButton *@
+            @*     FullWidth="@true" *@
+            @*     OnClick="@Submit" *@
+            @*     Disabled="_isLoading" *@
+            @*     Color="@ThemeColor.Primary" *@
+            @*     Radius="@Radius.Full"> *@
+            @*     Add *@
+            @* </CustomButton> *@
+        </LumexModalFooter>
+    </LumexModalContent>
+</LumexModal>

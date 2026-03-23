@@ -1,0 +1,142 @@
+@inherits InputBase<TItem?>
+@using System.ComponentModel
+@using System.Globalization
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Business.Common.Helpers.Numeric
+@using System.ComponentModel;
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.Components.Forms;
+
+
+@typeparam TItem where TItem : struct
+
+<LumexNumbox
+    TValue="TItem?"
+    Value="_numericValue"
+    ValueChanged="OnChangedValue"
+    Class="@Class"
+    Placeholder="@Placeholder"
+    Label="@Label"
+    Invalid="@HasError"
+    Disabled="Disabled"
+    FullWidth="FullWidth"
+    Required="@Required"
+    Variant="Variant"
+    Color="Color"
+    Size="Size"
+    Clearable="Clearable"
+    ErrorMessage="@FirstError"
+    step="@Step">
+    <StartContent>@StartContent</StartContent>
+    <EndContent>@EndContent</EndContent>
+</LumexNumbox>
+
+@code {
+    [Parameter]
+    public bool Required { get; set; }
+    
+    [Parameter]
+    public bool Disabled { get; set; }
+    
+    [Parameter]
+    public InputVariant Variant { get; set; } = InputVariant.Outlined;
+
+    [Parameter]
+    public ThemeColor Color { get; set; } = ThemeColor.Default;
+    
+    [Parameter]
+    public bool FullWidth { get; set; }
+    
+    [Parameter]
+    public InputType Type { get; set; } = InputType.Text;
+    
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+    
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+    
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+    
+    [Parameter]
+    public Size Size { get; set; } = Size.Medium;
+
+    [Parameter]
+    public bool Clearable { get; set; } = false;
+    
+    [Parameter]
+    public RenderFragment? StartContent { get; set; }
+    
+    [Parameter]
+    public RenderFragment? EndContent { get; set; }
+    
+    [Parameter]
+    public string? Step { get; set; }
+    
+    public TItem? _numericValue { get; set; }
+    
+    private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
+
+    private string FirstError =>
+        EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
+
+    
+    protected override void OnParametersSet()
+    {
+        _numericValue = CurrentValue != null ? CurrentValue : default;
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+    
+    private Task OnChangedValue(TItem? newVal)
+    {
+        CurrentValue = newVal;
+        return Task.CompletedTask;
+    }
+
+    protected override bool TryParseValueFromString(
+        string? value,
+        out TItem? result,
+        out string? validationErrorMessage)
+    {
+        if (TryParse(value, out result))
+        {
+            validationErrorMessage = null;
+            return true;
+        }
+
+        validationErrorMessage = "Invalid number format";
+        return false;
+    }
+    
+    private static bool TryParse(string? input, out TItem? value)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                value = null;
+                return true; 
+            }
+
+            var targetType = Nullable.GetUnderlyingType(typeof(TItem)) ?? typeof(TItem);
+            var converter = TypeDescriptor.GetConverter(targetType);
+
+            var converted = converter.ConvertFromString(input);
+
+            value = (TItem?)converted;
+            return true;
+        }
+        catch
+        {
+            value = default;
+            return false;
+        }
+    }
+
+}
