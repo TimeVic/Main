@@ -14,17 +14,20 @@ public partial class MyTimeEntryCard
     
     [Parameter]
     public EventCallback<TimeEntryDto> OnDelete { get; set; }
-
+    
+    [Parameter]
+    public EventCallback<TimeEntryDto> OnClone { get; set; }
+    
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
     
     private string GetProjectLabel()
     {
-        return string.IsNullOrWhiteSpace(Entry.Project?.Name) ? "No project" : Entry.Project?.Name ?? string.Empty;
+        return string.IsNullOrWhiteSpace(Entry.Project?.Name) ? "No project" : Entry.Project?.Name ?? "No project";
     }
 
     private string GetTaskLabel()
     {
-        return Entry.Task?.TaskId != null ? "No task" : Entry.Task?.TaskId.ToString() ?? string.Empty;
+        return Entry.Task != null ? Entry.Task!.FormattedId : "No task";
     }
 }

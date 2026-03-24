@@ -1,4 +1,5 @@
-﻿using Api.Requests.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 
@@ -6,6 +7,7 @@ namespace TimeTracker.Api.Shared.Dto.Entity;
 
 public class TimeEntryDto: BaseDto
 {   
+    [MaxLength(500)]
     public string? Description { get; set; }
     
     public decimal? HourlyRate { get; set; }

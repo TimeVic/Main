@@ -1,4 +1,5 @@
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
+@using TimeTracker.Web.Ui.Shared.Components.Dialogs
 @using TimeTracker.Web.Ui.Shared.Components.List
 @inherits BaseReactiveComponent
 
@@ -6,7 +7,16 @@
 {
     <EditTimeEntryModal
         Entry="_timeEntryToEdit"
-        OnClose="OnCloseEditTimeEntryModal"
+        OnClose="@OnCloseEditTimeEntryModal"
+    />
+}
+
+@if (_timeEntryToDelete != null)
+{
+    <ConfirmationModal
+        DialogVariant="ConfirmationModal.ConfirmationVariant.Delete"
+        OnConfirm="@OnConfirmDeleteTimeEntry"
+        OnCancel="@(() => _timeEntryToDelete = null)"
     />
 }
 
@@ -64,14 +74,17 @@
                                 <MyTimeEntryCard 
                                     Entry="@entry"
                                     OnEdit="OnEditTimeEntry"
+                                    OnClone="OnCloneTimeEntry"
+                                    OnDelete="(entry) => _timeEntryToDelete = entry"
                                 />
                             }
                         </div>
                     </div>
                 }
                 <TPaginator
-                    CurrentPage="1"
-                    TotalPages="50" />
+                    CurrentPage="@_state.Value.SelectedPage"
+                    CurrentPageChanged="OnPageChanged"
+                    TotalPages="@_state.Value.TotalPages" />
             }
             else
             {

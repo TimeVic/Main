@@ -27,93 +27,109 @@
                 novalidate>
                 <DataAnnotationsValidator/>
 
-                <div class="grid gap-4 px-6 pb-6">
-                <div>
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Project</label>
-                    @if (Entry.Task == null)
-                    {
-                        <div class="flex items-center gap-2">
+                <div class="grid gap-4">
+
+                    <LumexCard>
+                        <LumexCardBody>
+                            @if (Entry.Task == null)
+                            {
+                                <div class="flex items-center gap-2">
                             
-                            <ProjectsDropDown
-                                Value="_model.Project?.Id ?? Guid.Empty"
-                                SelectedItemChanged="@OnProjectSelected"
-                            />
-                            <button type="button" @onclick="ClearProject" class="inline-flex h-[42px] w-[42px] items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-blue-600 transition hover:bg-slate-100">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                            <div class="font-medium text-slate-900">@Entry.Task.TaskList.Project.Name</div>
-                            <div class="mt-1 text-slate-500">Attached task: @Entry.Task.TaskId</div>
-                            <p class="mt-2 text-xs text-slate-500">This entry is attached to a task, so the project follows that task automatically.</p>
-                        </div>
-                    }
-                </div>
+                                    <ProjectsDropDown
+                                        Value="_model.Project?.Id ?? Guid.Empty"
+                                        SelectedItemChanged="@OnProjectSelected"
+                                    />
+                                    <button type="button" @onclick="ClearProject" class="inline-flex h-[42px] w-[42px] items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-blue-600 transition hover:bg-slate-100">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="font-medium text-slate-900">@Entry.Task.TaskList.Project.Name</div>
+                                <div class="mt-1 text-slate-500">Attached task: @Entry.Task.TaskId</div>
+                                <p class="mt-2 text-xs text-slate-500">This entry is attached to a task, so the project follows that task automatically.</p>
+                            }
+                        </LumexCardBody>
+                    </LumexCard>
+                    <LumexCard>
+                        <LumexCardBody>
+                            <div class="grid gap-4 sm:grid-cols-3">
+                                <div>
+                                    <LumexDatebox 
+                                        TValue="DateTime?"
+                                        Size="Size.Small"
+                                        Required="true"
+                                        Value="@_model.Date.ToDateTime(TimeOnly.MinValue)"
+                                        ValueChanged="OnDateChanged"
+                                        Label="Date"/>
+                                </div>
+                                <div>
+                                    <TimeEditField
+                                        Label="Start"
+                                        Value="@_model.StartTime"
+                                        ValueChanged="@OnChangeStartTime"
+                                        FullWidth="true"
+                                    />
+                                </div>
+                                <div>
+                                    <TimeEditField
+                                        Label="End"
+                                        Value="@_model.EndTime"
+                                        ValueChanged="@OnChangeEndTime"
+                                        FullWidth="true"
+                                    />
+                                </div>
+                            </div>
+                            <p class="mt-2 text-sm text-slate-700">
+                                Duration: 
+                                <span class="font-semibold text-slate-900">
+                                    @_timeParsingService.TimeSpanToTimeString(_model.Duration, true)
+                                </span>
+                            </p>
+                        </LumexCardBody>
+                    </LumexCard>
 
-                <div class="rounded-2xl border border-slate-200 p-5">
-                    <div class="grid gap-4 sm:grid-cols-3">
-                        <div>
-                            <LumexDatebox 
-                                TValue="DateTime?"
-                                Size="Size.Small"
-                                Required="true"
-                                Value="@_model.Date.ToDateTime(TimeOnly.MinValue)"
-                                ValueChanged="OnDateChanged"
-                                Label="Date"/>
-                        </div>
-                        <div>
-                            <TimeEditField
-                                Label="Start"
-                                Value="@_model.StartTime"
-                                ValueChanged="@OnChangeStartTime"
-                                FullWidth="true"
-                            />
-                        </div>
-                        <div>
-                            <TimeEditField
-                                Label="End"
-                                Value="@_model.EndTime"
-                                ValueChanged="@OnChangeEndTime"
-                                FullWidth="true"
-                            />
-                        </div>
-                    </div>
-                    <p class="mt-2 text-sm text-slate-700">
-                        Duration: 
-                        <span class="font-semibold text-slate-900">
-                            @_timeParsingService.TimeSpanToTimeString(_model.Duration, true)
-                        </span>
-                    </p>
-                </div>
-
-                <div class="rounded-2xl border border-slate-200 p-5">
-                    <label class="mb-2 block text-sm font-medium text-slate-700">Description</label>
-                    <InputTextArea @bind-Value="_model.Description" 
-                        class="min-h-[150px] w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" 
-                    />
-                </div>
-
-                <div class="rounded-2xl border border-slate-200 p-5">
-                    <label class="mb-3 block text-sm font-medium text-slate-700">Pricing</label>
-                    <div class="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
-                        <label class="inline-flex items-center gap-3 text-sm text-slate-700">
-                            <InputCheckbox @bind-Value="_model.IsBillable" />
-                            Billable
-                        </label>
-                        <div>
-                            <label class="mb-2 block text-sm font-medium text-slate-700">Hourly Rate</label>
-                            <InputNumericField 
-                                TItem="decimal"
-                                Size="Size.Small"
-                                Step="00.01"
-                                Variant="InputVariant.Underlined"
-                                @bind-Value="_model.HourlyRate"/>
-                        </div>
-                    </div>
-                </div>
+                <LumexTabs>
+                    <LumexTab Title="Description">
+                        <LumexCard>
+                            <LumexCardBody>
+                                <label class="mb-2 block text-sm font-medium text-slate-700">Description</label>
+                                <InputTextArea
+                                    Value="@_model.Description"
+                                    ValueChanged="@OnDescriptionChanged"
+                                    ValueExpression="() => _model.Description"
+                                    AdditionalAttributes="@(new Dictionary<string, object>
+                                                          {
+                                                              ["maxlength"] = 500,
+                                                              ["class"] = "min-h-[150px] w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none",
+                                                          })" 
+                                />
+                            </LumexCardBody>
+                        </LumexCard>
+                    </LumexTab>
+                    <LumexTab Title="Pricing">
+                        <LumexCard>
+                            <LumexCardBody>
+                                <div class="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+                                    <label class="inline-flex items-center gap-3 text-sm text-slate-700">
+                                        <InputCheckbox @bind-Value="_model.IsBillable" />
+                                        Billable
+                                    </label>
+                                    <div>
+                                        <label class="mb-2 block text-sm font-medium text-slate-700">Hourly Rate</label>
+                                        <InputNumericField 
+                                            TItem="decimal"
+                                            Size="Size.Small"
+                                            Step="00.01"
+                                            Variant="InputVariant.Underlined"
+                                            @bind-Value="_model.HourlyRate"/>
+                                    </div>
+                                </div>
+                            </LumexCardBody>
+                        </LumexCard>
+                    </LumexTab>
+                </LumexTabs>
             </div>
                 
                 @* <div> *@

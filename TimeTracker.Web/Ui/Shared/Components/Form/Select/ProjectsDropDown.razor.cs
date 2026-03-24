@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Project;
 
@@ -20,7 +21,6 @@ public partial class ProjectsDropDown: IDisposable
             {
                 _clientId = value;
                 UpdateList();
-                UpdateSelectedItem();
             }
         }
     }
@@ -29,7 +29,7 @@ public partial class ProjectsDropDown: IDisposable
     public IState<ProjectState> _state { get; set; }
     
     private Guid? _clientId;
-
+    
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -47,12 +47,13 @@ public partial class ProjectsDropDown: IDisposable
     private void UpdateList()
     {
         _list = _state.Value.List.ToList();
+        UpdateSelectedItem();
         if (_clientId == Guid.Empty && ShowProjectsWithoutClients)
         {
             _list = _list.Where(item => item.Client == null).ToList();
             return;
         }
-        if (!_clientId.HasValue)
+        if (!_clientId.HasValue || _clientId.Value == Guid.Empty)
         {
             return;
         }

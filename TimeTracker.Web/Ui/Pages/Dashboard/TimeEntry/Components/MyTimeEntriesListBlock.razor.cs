@@ -17,6 +17,7 @@ public partial class MyTimeEntriesListBlock
     private IEnumerable<IGrouping<DateOnly, TimeEntryDto>> _groupedList => _state.Value.ListToShow.GroupBy(item => item.Date);
     private bool _isLoading => _state.Value.IsListLoading;
     private TimeEntryDto? _timeEntryToEdit { get; set; }
+    private TimeEntryDto? _timeEntryToDelete { get; set; }
     
     private void OnPaginated(int selectedPageIndex)
     {
@@ -33,5 +34,34 @@ public partial class MyTimeEntriesListBlock
     private void OnCloseEditTimeEntryModal()
     {
         _timeEntryToEdit = null;
+    }
+
+    private void OnCloneTimeEntry(TimeEntryDto timeEntry)
+    {
+        Dispatcher.Dispatch(  
+            new StartTimeEntryAction(  
+                IsBillable: timeEntry.IsBillable,  
+                Project: timeEntry.Project,  
+                Description: timeEntry.Description,
+                HourlyRate: timeEntry.HourlyRate,  
+                InternalTask: timeEntry.Task  
+            )  
+        );
+    }
+
+    private Task OnConfirmDeleteTimeEntry()
+    {
+        if (_timeEntryToDelete != null)
+        {
+            Dispatcher.Dispatch(new DeleteTimeEntryAction(_timeEntryToDelete.Id));
+            _timeEntryToDelete = null;
+        }
+        return Task.CompletedTask;
+    }
+
+    private void OnPageChanged(int selectedPage)
+    {
+        Dispatcher.Dispatch(new SetSelectedPageAction(selectedPage));
+        Dispatcher.Dispatch(new LoadListAction());
     }
 }
