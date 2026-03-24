@@ -62,6 +62,7 @@
                                         Required="true"
                                         Value="@_model.Date.ToDateTime(TimeOnly.MinValue)"
                                         ValueChanged="OnDateChanged"
+                                        Disabled="_isActiveTimeEntry"
                                         Label="Date"/>
                                 </div>
                                 <div>
@@ -69,6 +70,7 @@
                                         Label="Start"
                                         Value="@_model.StartTime"
                                         ValueChanged="@OnChangeStartTime"
+                                        Disabled="_isActiveTimeEntry"
                                         FullWidth="true"
                                     />
                                 </div>
@@ -77,6 +79,7 @@
                                         Label="End"
                                         Value="@_model.EndTime"
                                         ValueChanged="@OnChangeEndTime"
+                                        Disabled="_isActiveTimeEntry"
                                         FullWidth="true"
                                     />
                                 </div>
@@ -113,8 +116,11 @@
                             <LumexCardBody>
                                 <div class="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
                                     <label class="inline-flex items-center gap-3 text-sm text-slate-700">
-                                        <InputCheckbox @bind-Value="_model.IsBillable" />
-                                        Billable
+                                        <LumexCheckbox
+                                            Value="@_model.IsBillable"
+                                            ValueChanged="OnChangeBillable">
+                                            Billable
+                                        </LumexCheckbox>
                                     </label>
                                     <div>
                                         <label class="mb-2 block text-sm font-medium text-slate-700">Hourly Rate</label>
@@ -123,7 +129,9 @@
                                             Size="Size.Small"
                                             Step="00.01"
                                             Variant="InputVariant.Underlined"
-                                            @bind-Value="_model.HourlyRate"/>
+                                            Value="@_model.HourlyRate"
+                                            ValueExpression="() => _model.HourlyRate"
+                                            ValueChanged="OnChangeBillableAmount"/>
                                     </div>
                                 </div>
                             </LumexCardBody>

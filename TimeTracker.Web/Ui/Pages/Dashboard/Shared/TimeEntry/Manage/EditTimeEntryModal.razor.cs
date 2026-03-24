@@ -1,3 +1,4 @@
+using Fluxor;
 using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -18,11 +19,15 @@ public partial class EditTimeEntryModal: IDisposable
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
     
+    [Inject] 
+    private IState<TimeEntryState> _state { get; set; }
+    
     private TimeEntryDto _model = new();
     private EditForm _form;
     private LumexModal modal;
     private EditContext _editContext;
-
+    private bool _isActiveTimeEntry => _state.Value.ActiveEntry != null && _state.Value.ActiveEntry.Id == Entry.Id;
+    
     protected override async Task OnInitializedAsync()
     {
         _editContext = new EditContext(_model);
@@ -95,6 +100,18 @@ public partial class EditTimeEntryModal: IDisposable
     private async Task OnDescriptionChanged(string description)
     {
         _model.Description = description;
+        await UpdateTimeEntry();
+    }
+
+    private async Task OnChangeBillable(bool isBillable)
+    {
+        _model.IsBillable = isBillable;
+        await UpdateTimeEntry();
+    }
+
+    private async Task OnChangeBillableAmount(decimal? hourlyRate)
+    {
+        _model.HourlyRate = hourlyRate;
         await UpdateTimeEntry();
     }
 }
