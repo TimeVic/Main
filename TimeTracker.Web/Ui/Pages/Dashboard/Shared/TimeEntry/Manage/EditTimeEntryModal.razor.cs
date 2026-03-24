@@ -91,4 +91,10 @@ public partial class EditTimeEntryModal: IDisposable
         _model.Date = DateOnly.FromDateTime(date.Value.Date);
         await UpdateTimeEntry();
     }
+
+    private async Task OnDescriptionChanged(string description)
+    {
+        _model.Description = description;
+        await UpdateTimeEntry();
+    }
 }

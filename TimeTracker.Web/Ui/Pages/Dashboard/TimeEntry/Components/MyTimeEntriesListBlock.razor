@@ -82,8 +82,9 @@
                     </div>
                 }
                 <TPaginator
-                    CurrentPage="1"
-                    TotalPages="50" />
+                    CurrentPage="@_state.Value.SelectedPage"
+                    CurrentPageChanged="OnPageChanged"
+                    TotalPages="@_state.Value.TotalPages" />
             }
             else
             {

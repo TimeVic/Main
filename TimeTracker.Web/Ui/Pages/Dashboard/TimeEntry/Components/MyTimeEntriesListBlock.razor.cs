@@ -51,7 +51,17 @@ public partial class MyTimeEntriesListBlock
 
     private Task OnConfirmDeleteTimeEntry()
     {
-        _timeEntryToDelete = null;
+        if (_timeEntryToDelete != null)
+        {
+            Dispatcher.Dispatch(new DeleteTimeEntryAction(_timeEntryToDelete.Id));
+            _timeEntryToDelete = null;
+        }
         return Task.CompletedTask;
+    }
+
+    private void OnPageChanged(int selectedPage)
+    {
+        Dispatcher.Dispatch(new SetSelectedPageAction(selectedPage));
+        Dispatcher.Dispatch(new LoadListAction());
     }
 }

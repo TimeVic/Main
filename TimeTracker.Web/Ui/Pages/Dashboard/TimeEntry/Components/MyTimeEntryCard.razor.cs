@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
-using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.TimeEntry.Components;
 
@@ -29,6 +28,6 @@ public partial class MyTimeEntryCard
 
     private string GetTaskLabel()
     {
-        return Entry.Task?.TaskId != null ? "No task" : Entry.Task?.TaskId.ToString() ?? "No task";
+        return Entry.Task != null ? Entry.Task!.FormattedId : "No task";
     }
 }
