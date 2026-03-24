@@ -29,6 +29,7 @@ public partial class TimeEntryForm
     [Inject] 
     private ModalDialogProviderService _modalDialogProviderService { get; set; }
 
+    private bool _isEditModalOpened = false;
     private bool _isDetailsOpened = false;
     
     private TimeEntryDto? _activeEntry
