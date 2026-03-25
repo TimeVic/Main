@@ -124,8 +124,13 @@ public partial class TasksListTree
     {
         if (tasksListId.HasValue)
         {
-            Dispatcher.Dispatch(new SetSelectedAction(tasksListId));
-            Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());    
+            var taskList = _tasksListState.Value.List.FirstOrDefault(item => item.Id == tasksListId);
+            if (taskList != null)
+            {
+                Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.SetSelectedAction(taskList.Id));
+                Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.SetSelectedAction(taskList.Project));
+                Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
+            }    
         }
     }
 }

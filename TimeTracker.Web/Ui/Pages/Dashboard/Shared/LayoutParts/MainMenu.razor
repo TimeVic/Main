@@ -17,6 +17,7 @@
                         Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
                         Variant="@(IsMenuItemSelected(item) ? Variant.Solid : Variant.Outlined)"
                         IconOnly="@(string.IsNullOrEmpty(item.Name))"
+                        Disabled="item.IsDisabled"
                         OnClick="@(() => OnMenuItemSelected(item.Url))">
                         <StartContent>
                             <span class="flex items-center gap-2">

@@ -9,4 +9,6 @@ public record struct SetListItemsAction(GetListResponse Response);
 
 public record struct SetListItemAction(ProjectDto Project);
 
+public record struct SetSelectedAction(ProjectDto Project);
+
 public record struct SetProjectIsListLoading(bool IsLoading);
