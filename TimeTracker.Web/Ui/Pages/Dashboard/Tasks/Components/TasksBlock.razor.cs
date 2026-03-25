@@ -12,18 +12,7 @@ using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Tasks.Components;
 
 public partial class TasksBlock: IDisposable
-{
-    [CascadingParameter(Name = "TaskListId")]
-    public Guid? TaskListId
-    {
-        get => _taskListId;
-        set
-        {
-            _taskListId = value;
-            OnTasksListSelected(_taskListId);
-        }
-    }
-    
+{   
     [Inject]
     public IActionSubscriber ActionSubscriber { get; set; }
     
@@ -36,38 +25,19 @@ public partial class TasksBlock: IDisposable
     [Inject]
     public IState<TasksState> TasksState { get; set; }
     
-    private Guid? _taskListId = null;
-    private TaskListDto? _taskList = null;
+    private TaskListDto? _taskList => _tasksListState.Value.SelectedTaskList;
     private readonly Subject<ICollection<TaskDto>> _tasksSubject = new();
     private bool _isShowAddTaskModal = false;
     
     protected override void OnInitialized()
     {
-        base.OnInitialized();
-
-        _tasksListState.StateChanged += OnTasksListStateChanged;        
-    }
-
-    private void OnTasksListStateChanged(object? sender, EventArgs e)
-    {
-        OnTasksListSelected(_tasksListState.Value.SelectedTaskList?.Id);
+        base.OnInitialized();        
     }
 
     public void Dispose()
     {
-        _tasksListState.StateChanged -= OnTasksListStateChanged;
         ActionSubscriber.UnsubscribeFromAllActions(this);
         _tasksSubject.Dispose();
-    }
-    
-    private void OnTasksListSelected(Guid? taskListId)
-    {
-        if (taskListId == null)
-            _taskList = null;
-        else
-        {
-            _taskList = _tasksListState.Value.List.FirstOrDefault(item => item.Id == taskListId);
-        }
     }
     
     private async Task OnAddTask()
