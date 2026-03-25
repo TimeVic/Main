@@ -40,6 +40,7 @@ public class UpdateTaskEffect: Effect<UpdateTaskAction>
             {
                 dispatcher.Dispatch(new SetOverdueTasksListItemAction(response));
                 dispatcher.Dispatch(new SetListItemAction(response));
+                _toastService.ShowInfo($"Task {response.FormattedId} updated.");
             }
         }
         catch (Exception e)

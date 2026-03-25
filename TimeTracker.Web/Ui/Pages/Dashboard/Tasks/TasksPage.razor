@@ -7,13 +7,9 @@
 @inherits BaseComponent
 @layout Layout
 
-<BodyLayout Title="Tasks">
-    <CascadingValue Name="TaskListId" Value="@TaskListId">
-        <FluentStack Orientation="Orientation.Vertical">
-            <section class="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-                <TasksListBlock></TasksListBlock>
-                <TasksBlock></TasksBlock>
-            </section>
-        </FluentStack>
-    </CascadingValue>
-</BodyLayout>
+<CascadingValue Name="TaskListId" Value="@TaskListId">
+    <section class="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+        <TasksListBlock></TasksListBlock>
+        <TasksBlock></TasksBlock>
+    </section>
+</CascadingValue>

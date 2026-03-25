@@ -1,4 +1,5 @@
-﻿using Microsoft.FluentUI.AspNetCore.Components;
+﻿using LumexUI.Common;
+using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components.Extensions;
 using TimeTracker.Business.Common.Constants.Task;
 
@@ -6,18 +7,18 @@ namespace TimeTracker.Web.Core.Extensions.Enums;
 
 public static class TaskPriorityExtensions
 {
-    public static (string backroundColor, string textColor) GetColors(this TaskPriority status)
+    public static ThemeColor GetThemeColor(this TaskPriority status)
     {
         switch (status)
         {
             case TaskPriority.Low:
-                return (Color.Neutral.GetDescription()!, "#fff");
+                return ThemeColor.Secondary;
             case TaskPriority.Medium:
-                return (Color.Accent.GetDescription()!, "#fff");
+                return ThemeColor.Primary;
             case TaskPriority.High:
-                return ("#f2c811", "#000");
+                return ThemeColor.Warning;
             case TaskPriority.Urgent:
-                return ("#bc1948", "#fff");
+                return ThemeColor.Danger;
         }
 
         throw new Exception($"BadgeStyle not found for TaskPriority: {status}");
