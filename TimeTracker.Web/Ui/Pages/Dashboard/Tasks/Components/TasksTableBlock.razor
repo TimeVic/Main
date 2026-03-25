@@ -55,7 +55,7 @@
             }
         </Content>
     </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Title="Assigned" Property="@(p => p.User.UserName)"/>
+    <LumexUI.PropertyColumn Title="Assigned" Property="@(p => p.User.Name)"/>
     <LumexUI.PropertyColumn Title="Actions" Property="@(p => p.User.Id)">
         <Content>
             @if (TimeEntryState.Value.ActiveEntry?.Task?.Id == context.Id)

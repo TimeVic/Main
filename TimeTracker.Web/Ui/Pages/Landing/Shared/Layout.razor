@@ -1,13 +1,12 @@
 ﻿@using LumexUI
+@using TimeTracker.Web.Ui.Shared.Components.Layout
 @inherits TimeTracker.Web.Ui.Shared.BaseLayout
 
 <PageTitle>TimeVic — Time tracking for small teams</PageTitle>
-<div class="min-h-screen bg-white text-slate-900">
+<div class="min-h-screen flex flex-col bg-white text-slate-900">
     <MainHeader />
     @Body
-    <div>
-        Copyright&nbsp;©&nbsp;@DateTime.Now.Year&nbsp;<a href="https://georgyshira.info/" target="_blank">Georgy Shira</a>&nbsp;Apache License Version 2.0
-    </div>
+    <LayoutFooterBlock/>
 </div>
 
 @if (!IsShowReCaptcha)
