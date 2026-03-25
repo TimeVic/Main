@@ -19,6 +19,7 @@ public partial class MainMenu
         new MenuItemModel("Time Entries", "fa-regular fa-clock", SiteUrl.Dashboard_TimeEntry),
         new MenuItemModel("Tasks", "fa-regular fa-square-check", SiteUrl.Dashboard_Tasks_Main),
         new MenuItemModel("Payments", "fa-regular fa-credit-card", SiteUrl.Dashboard_Payments),
+        new MenuItemModel("", "fa-solid fa-sliders", SiteUrl.Dashboard_Workspace_Settings),
     };
 
     protected override void OnInitialized()

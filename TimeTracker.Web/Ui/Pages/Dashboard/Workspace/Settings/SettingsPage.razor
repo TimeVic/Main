@@ -1,0 +1,49 @@
+@page "/board/workspace/settings"
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
+@using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components
+@using Layout = TimeTracker.Web.Ui.Pages.Dashboard.Shared.Layout
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+<LumexTabs 
+    Size="Size.Large" 
+    Variant="TabVariant.Outlined"
+>
+    <LumexTab>
+        <TitleContent>
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Settings</span>
+            </div>
+        </TitleContent>
+        <ChildContent>
+            <SettingsBlock></SettingsBlock>
+        </ChildContent>
+    </LumexTab>
+    <LumexTab>
+        <TitleContent>
+            <div class="flex items-center space-x-2">
+                <i class="fa-regular fa-building"></i>
+                <span>Clients</span>
+            </div>
+        </TitleContent>
+        <ChildContent>
+            <ClientsBlock></ClientsBlock>
+        </ChildContent>
+    </LumexTab>
+    <LumexTab>
+        <TitleContent>
+            <div class="flex items-center space-x-2">
+                <i class="fa-regular fa-folder-open"></i>
+                <span>Projects</span>
+            </div>
+        </TitleContent>
+        <ChildContent>
+            <ProjectsBlock></ProjectsBlock>
+        </ChildContent>
+    </LumexTab>
+</LumexTabs>
