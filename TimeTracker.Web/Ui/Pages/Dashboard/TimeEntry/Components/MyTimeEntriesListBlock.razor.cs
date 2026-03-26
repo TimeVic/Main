@@ -1,6 +1,7 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Web.Store.TimeEntry;
 
@@ -18,6 +19,7 @@ public partial class MyTimeEntriesListBlock
     private bool _isLoading => _state.Value.IsListLoading;
     private TimeEntryDto? _timeEntryToEdit { get; set; }
     private TimeEntryDto? _timeEntryToDelete { get; set; }
+    private TaskDto? _taskToEdit { get; set; }
     
     private void OnPaginated(int selectedPageIndex)
     {
