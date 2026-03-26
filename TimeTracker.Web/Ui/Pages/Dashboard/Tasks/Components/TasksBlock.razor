@@ -3,6 +3,7 @@
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
+@using TimeTracker.Web.Ui.Shared.Components.Dialogs
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TaskPriority = TimeTracker.Business.Common.Constants.Task.TaskPriority;
 
@@ -13,6 +14,15 @@
     @if (_taskList != null)
     {
         <AddTaskModal @bind-IsOpened="_isShowAddTaskModal" TaskList="@_taskList"></AddTaskModal>
+    }
+    @if (_isShowDeleteTaskListConfirmation)
+    {
+        <ConfirmationModal 
+            Title="Delete task list"
+            Subtitle="Are you sure you want to delete this task list?"
+            OnClose="() => _isShowDeleteTaskListConfirmation = false"
+            OnConfirm="OnDeleteTaskList"
+        />
     }
     
     <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
@@ -33,24 +43,30 @@
                     </StartContent>
                     <ChildContent>Add task</ChildContent>
                 </CustomButton>
-                @* <LumexDropdown> *@
-                @*     <LumexDropdownTrigger> *@
-                @*         <LumexButton  *@
-                @*             IconOnly="true"  *@
-                @*             Size="Size.Small"  *@
-                @*             Variant="@Variant.Outlined"> *@
-                @*             <i class="fa-solid fa-ellipsis-h"></i> *@
-                @*         </LumexButton> *@
-                @*     </LumexDropdownTrigger> *@
-                @*     <LumexDropdownMenu> *@
-                @*         <LumexDropdownItem>New file</LumexDropdownItem> *@
-                @*         <LumexDropdownItem>Edit file</LumexDropdownItem> *@
-                @*         <LumexDropdownItem>Share file</LumexDropdownItem> *@
-                @*         <LumexDropdownItem Color="@ThemeColor.Danger" Class="text-danger"> *@
-                @*             Delete file *@
-                @*         </LumexDropdownItem> *@
-                @*     </LumexDropdownMenu> *@
-                @* </LumexDropdown> *@
+                <LumexDropdown>
+                    <LumexDropdownTrigger>
+                        <LumexButton
+                            IconOnly="true"
+                            Size="Size.Small"
+                            Variant="@Variant.Outlined">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </LumexButton>
+                    </LumexDropdownTrigger>
+                    <LumexDropdownMenu>
+                        <LumexDropdownItem 
+                            Disabled="true"
+                            OnClick="@OnEditTaskList">
+                            Edit task list
+                        </LumexDropdownItem>
+                        <LumexDropdownItem 
+                            OnClick="() => _isShowDeleteTaskListConfirmation = true"
+                            Disabled="_taskList == null"
+                            Color="@ThemeColor.Danger" 
+                            Class="text-danger">
+                            Delete task list
+                        </LumexDropdownItem>
+                    </LumexDropdownMenu>
+                </LumexDropdown>
             </div>
         </div>
 
