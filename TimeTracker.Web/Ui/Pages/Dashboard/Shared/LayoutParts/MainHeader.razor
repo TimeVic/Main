@@ -1,5 +1,6 @@
 @using LumexUI
 @using LumexUI.Common
+@using LumexUI.Shared.Icons
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry
 @inherits BaseReactiveComponent
 
@@ -43,46 +44,45 @@
                                     @workspace.Name
                                 </LumexDropdownItem>
                             }
-                            @* <LumexDropdownItem Color="@ThemeColor.Danger" Class="text-danger"> *@
-                            @*     Delete file *@
-                            @* </LumexDropdownItem> *@
                         </LumexDropdownMenu>
                     </LumexDropdown>
                     
-                    @* @if (ShowWorkspaceSettingsButton && OnWorkspaceSettings.HasDelegate) *@
-                    @* { *@
-                    @*     <button type="button" title="Workspace settings" @onclick="OnWorkspaceSettings" class="inline-flex h-[42px] w-[42px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"> *@
-                    @*         <i class="fa-solid fa-sliders"></i> *@
-                    @*     </button> *@
-                    @* } *@
-
-                    <div class="relative">
-                        <button type="button" 
-                                class="flex h-[42px] w-[42px] items-center justify-center rounded-full border border-slate-200 bg-gradient-to-br from-blue-600 to-indigo-600 text-xs font-semibold uppercase tracking-wide text-white shadow-sm transition hover:scale-[1.02] hover:shadow-md" 
-                                title="Open profile menu"
-                                >
-                            @AuthState.Value.User.Initials
-                        </button>
-
-                        @* @if (isProfileMenuOpen) *@
-                        @* { *@
-                        @*     <div class="absolute right-0 top-14 z-30 w-64 rounded-3xl border border-slate-200 bg-white p-4 shadow-xl"> *@
-                        @*         <div class="flex items-center gap-3"> *@
-                        @*             <div class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold uppercase tracking-wide text-white"> *@
-                        @*                 @UserInitials *@
-                        @*             </div> *@
-                        @*             <div class="min-w-0"> *@
-                        @*                 <p class="truncate text-sm font-semibold text-slate-900">@AuthStateStore.UserName</p> *@
-                        @*                 <p class="truncate text-xs text-slate-500">@AuthStateStore.UserEmail</p> *@
-                        @*             </div> *@
-                        @*         </div> *@
-                        @*         <button type="button" @onclick="Logout" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-sm font-semibold text-rose-700 transition hover:border-rose-300 hover:bg-rose-100"> *@
-                        @*             <i class="fa-solid fa-right-from-bracket"></i> *@
-                        @*             <span>Log out</span> *@
-                        @*         </button> *@
-                        @*     </div> *@
-                        @* } *@
-                    </div>
+                    <LumexDropdown 
+                        ShowArrow="@true"
+                        Radius="@Radius.Small">
+                            <LumexDropdownTrigger>
+                                <LumexAvatar
+                                    Name="@AuthState.Value.User.Initials"
+                                    Src="https://images.unsplash.com/broken"/>
+                            </LumexDropdownTrigger>
+                            <LumexDropdownMenu Class="p-3">
+                                <LumexDropdownItem 
+                                    Disabled="@true"
+                                    Class="h-14 gap-2 opacity-100">
+                                        <div class="flex items-center gap-2">
+                                            <LumexAvatar Size="@Size.Small"
+                                                         Name="@AuthState.Value.User.Initials"
+                                                         Src="https://i.pravatar.cc/150?img=2" />
+                                            <div class="inline-flex flex-col items-start">
+                                                <span class="text-small text-default-600">@AuthState.Value.User.Name</span>
+                                                <span class="text-tiny text-default-500">@AuthState.Value.User.Email</span>
+                                            </div>
+                                        </div>
+                                </LumexDropdownItem>
+                                <LumexDropdownItem ShowDivider="@true" Disabled="true">
+                                    Settings
+                                </LumexDropdownItem>
+                                <LumexDropdownItem Disabled="true">Help & Support</LumexDropdownItem>
+                                <LumexDropdownItem OnClick="@OnClickLogout">
+                                    <ChildContent>
+                                        Log Out
+                                    </ChildContent>
+                                    <EndContent>
+                                        <LogoutIcon Size="16" />
+                                    </EndContent>
+                                </LumexDropdownItem>
+                        </LumexDropdownMenu>
+                    </LumexDropdown>
                 </div>
             </div>
         </div>
