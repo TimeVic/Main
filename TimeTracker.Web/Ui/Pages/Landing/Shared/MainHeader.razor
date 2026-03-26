@@ -1,16 +1,13 @@
+@using TimeTracker.Web.Ui.Shared.Components.Layout
 @inherits BaseReactiveComponent
 
 <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <a href="/" class="flex items-center gap-3">
-            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm">
-                <i class="fa-regular fa-clock text-lg"></i>
-            </div>
-            <div>
-                <p class="text-[11px] font-semibold uppercase tracking-[0.32em] text-blue-600">Time tracking platform</p>
-                <p class="text-lg font-semibold text-slate-900">TimeVic</p>
-            </div>
-        </a>
+        
+        <AppLogoBlock
+            Eyebrow="Time tracking platform"
+        />
+        
         <nav class="hidden items-center gap-6 md:flex">
             <a href="/#features" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Features</a>
             <a href="/#benefits" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Benefits</a>

@@ -2,23 +2,16 @@
 @using LumexUI.Common
 @using LumexUI.Shared.Icons
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry
+@using TimeTracker.Web.Ui.Shared.Components.Layout
 @inherits BaseReactiveComponent
 
 <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
     <div class="px-4 py-4 sm:px-6 lg:px-8">
         <div class="flex flex-col gap-4 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(220px,260px)] md:items-center md:gap-6">
             <div class="min-w-0">
-                <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
-                        <i class="fa-regular fa-clock text-lg"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">Time workspace</p>
-                        <h1 class="text-2xl font-semibold text-slate-900">
-                            <NavLink href="/">TimeVic</NavLink>
-                        </h1>
-                    </div>
-                </div>
+                <AppLogoBlock
+                    Eyebrow="Time workspace"
+                />
                 <p class="mt-2 max-w-xl text-sm text-slate-500">
                     Track time in the workspace and use the task-list panel when you want to browse a specific project.
                 </p>
