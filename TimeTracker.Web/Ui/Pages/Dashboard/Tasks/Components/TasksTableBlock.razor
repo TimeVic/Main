@@ -1,6 +1,5 @@
 @using LumexUI
 @using LumexUI.Common
-@using Microsoft.FluentUI.AspNetCore.Components.Extensions
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Core.Extensions.Enums
@@ -38,7 +37,7 @@
                     Size="@Size.Small"
                     Variant="@ChipVariant.Dot"
                     Color="@context.Status.GetThemeColor()">
-                    @context.Status.GetDescription()
+                    @context.Status.GetDisplayName()
                 </LumexChip>
             }
         </Content>
@@ -50,7 +49,7 @@
                     Size="@Size.Small"
                     Variant="@ChipVariant.Dot"
                     Color="@context.Priority.GetThemeColor()">
-                    @context.Priority.GetDescription()
+                    @context.Priority.GetDisplayName()
                 </LumexChip>
             }
         </Content>

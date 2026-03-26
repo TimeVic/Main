@@ -13,8 +13,8 @@
     }
 }
 
-<FluentDataGrid TGridItem="SummaryByMonthsReportItemDto" Items="@Items.AsQueryable()">
-    <PropertyColumn Title="Month" Property="@(p => GetName(p.Month, p.Year))" Sortable="false"/>
-    <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/>
-    <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/>
-</FluentDataGrid>
+@* <FluentDataGrid TGridItem="SummaryByMonthsReportItemDto" Items="@Items.AsQueryable()"> *@
+@*     <PropertyColumn Title="Month" Property="@(p => GetName(p.Month, p.Year))" Sortable="false"/> *@
+@*     <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/> *@
+@*     <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/> *@
+@* </FluentDataGrid> *@

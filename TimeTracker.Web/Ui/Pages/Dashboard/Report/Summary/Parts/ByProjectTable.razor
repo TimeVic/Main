@@ -10,8 +10,8 @@
     public ICollection<SummaryByProjectsReportItemDto> Items { get; set; } = new List<SummaryByProjectsReportItemDto>();
 }
 
-<FluentDataGrid TGridItem="SummaryByProjectsReportItemDto" Items="@Items.AsQueryable()">
-    <PropertyColumn Title="Project" Property="@(p => p.ProjectName ?? "- No project -")" Sortable="false"/>
-    <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/>
-    <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/>
-</FluentDataGrid>
+@* <FluentDataGrid TGridItem="SummaryByProjectsReportItemDto" Items="@Items.AsQueryable()"> *@
+@*     <PropertyColumn Title="Project" Property="@(p => p.ProjectName ?? "- No project -")" Sortable="false"/> *@
+@*     <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/> *@
+@*     <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/> *@
+@* </FluentDataGrid> *@

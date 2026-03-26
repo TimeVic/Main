@@ -9,12 +9,12 @@
 
 }
 
-<FluentDataGrid TGridItem="SummaryByWeeksReportItemDto" Items="@Items.AsQueryable()">
-    <TemplateColumn Title="Week" Sortable="false">
-        @context.WeekStartDate.ToShortDateString()
-        -
-        @context.WeekEndDate.ToShortDateString()
-    </TemplateColumn>
-    <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/>
-    <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/>
-</FluentDataGrid>
+@* <FluentDataGrid TGridItem="SummaryByWeeksReportItemDto" Items="@Items.AsQueryable()"> *@
+@*     <TemplateColumn Title="Week" Sortable="false"> *@
+@*         @context.WeekStartDate.ToShortDateString() *@
+@*         - *@
+@*         @context.WeekEndDate.ToShortDateString() *@
+@*     </TemplateColumn> *@
+@*     <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/> *@
+@*     <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/> *@
+@* </FluentDataGrid> *@

@@ -7,8 +7,8 @@
     public ICollection<SummaryByDaysReportItemDto> Items { get; set; } = new List<SummaryByDaysReportItemDto>();
 }
 
-<FluentDataGrid TGridItem="SummaryByDaysReportItemDto" Items="@Items.AsQueryable()">
-    <PropertyColumn Title="Date" Property="@(p => p.Date.ToShortDateString())" Sortable="false"/>
-    <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/>
-    <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/>
-</FluentDataGrid>
+@* <FluentDataGrid TGridItem="SummaryByDaysReportItemDto" Items="@Items.AsQueryable()"> *@
+@*     <PropertyColumn Title="Date" Property="@(p => p.Date.ToShortDateString())" Sortable="false"/> *@
+@*     <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/> *@
+@*     <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/> *@
+@* </FluentDataGrid> *@

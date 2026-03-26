@@ -1,6 +1,5 @@
 ﻿@using LumexUI
 @using LumexUI.Common
-@using Microsoft.FluentUI.AspNetCore.Components.Extensions
 @using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Core.Helpers
 
@@ -21,7 +20,7 @@
                     }
                     else
                     {
-                        @_value?.GetDescription()
+                        @(EnumHelpers.GetDisplayName(typeof(TItem), _value))
                     }
                 </LumexButton>
             </LumexDropdownTrigger>
@@ -50,7 +49,7 @@
                 @foreach (var character in _list)
                 {
                     <LumexSelectItem @key="@character" Value="@character">
-                        @character?.GetDescription()
+                        @(EnumHelpers.GetDisplayName(typeof(TItem), character))
                     </LumexSelectItem>
                 }
             </ChildContent>

@@ -1,7 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
 using TimeTracker.Business.Extensions;
@@ -27,9 +26,6 @@ public partial class EditCommentForm
     [Inject]
     public MarkdownService _markdownService { get; set; }
     
-    [Inject] 
-    private ModalDialogProviderService _dialogService { get; set; }
-    
     public IEnumerable<long> WatcherIds { get; set; } = new List<long>();
     
     private AddRequest model = new();
@@ -37,7 +33,6 @@ public partial class EditCommentForm
     private bool _isEditMode = false;
     private EditForm? _form;
     private bool _isValid = false;
-    private FluentTextArea? _commentField;
     private bool _isNewComment => Comment.Id == Guid.Empty;
 
     private string _userName => _isNewComment ? AuthState.Value.User.Name : Comment.User.Name;
@@ -128,31 +123,31 @@ public partial class EditCommentForm
 
     private async Task OnClickDelete()
     {
-        var isOk = await _dialogService.ShowDeleteConfirmationDialog(
-            "Are you sure you want to remove this comment?"
-        );
-        if (!isOk.HasValue || !isOk.Value)
-        {
-            return;
-        }
-        await InvokeAsync(async () =>
-        {
-            _isLoading = true;
-            try
-            {
-                await ApiService.TaskCommentDeleteAsync(Comment.Id);
-                await OnDeleted.InvokeAsync(Comment);
-                ResetForm();
-            }
-            catch (Exception e)
-            {
-                ToastService.ShowError(e.Message);
-            }
-            finally
-            {
-                _isLoading = false;
-            }
-            StateHasChanged();    
-        });
+        // var isOk = await _dialogService.ShowDeleteConfirmationDialog(
+        //     "Are you sure you want to remove this comment?"
+        // );
+        // if (!isOk.HasValue || !isOk.Value)
+        // {
+        //     return;
+        // }
+        // await InvokeAsync(async () =>
+        // {
+        //     _isLoading = true;
+        //     try
+        //     {
+        //         await ApiService.TaskCommentDeleteAsync(Comment.Id);
+        //         await OnDeleted.InvokeAsync(Comment);
+        //         ResetForm();
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         ToastService.ShowError(e.Message);
+        //     }
+        //     finally
+        //     {
+        //         _isLoading = false;
+        //     }
+        //     StateHasChanged();    
+        // });
     }
 }

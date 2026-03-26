@@ -4,101 +4,101 @@
 
 @inherits BaseReactiveComponent
 
-<FluentCard
-    Class="w-comment-edit-form pb-2 mb-2"
-    MinimalStyle="true">
-    
-    <EditForm
-        @ref="_form"
-        Model="model">
-
-        <FluentStack Orientation="Orientation.Vertical">
-
-            @if (!_isNewComment)
-            {
-                <FluentStack Orientation="Orientation.Horizontal">
-                    <FluentPersona
-                        Initials="@_userName.FirstChar().ToUpper()"
-                        StatusSize="PresenceBadgeSize.Small"
-                        StatusTitle="@_userName"
-                        Image="@(new Icons.Regular.Size48.Person().ToDataUri(size: "25px", color: "white"))"
-                        ImageSize="50px">
-                    </FluentPersona>
-
-                    @if (!_isNewComment && Comment.UpdatedAt != null)
-                    {
-                        <div class="pt-3">
-                            <b>@_userName</b>
-                            @Comment.UpdatedAt?.TimeAgo(DateTimeKind.Local)
-                        </div>
-                    }
-                </FluentStack>
-            }
-
-            @if (_isEditMode || _isNewComment)
-            {
-                <div class="w-100" @onclick="OnFocusOnEditField">
-                    <FluentTextArea
-                        @ref="_commentField"
-                        @bind-Value="@model.Comment"
-                        Class="w-100"
-                        Resize="TextAreaResize.Vertical"
-                        Rows="@(_commentLinesCount)"
-                        Placeholder="Your comment..."/>
-                </div>
-            }
-            else
-            {
-                <div class="w-view w-100">
-                    @CommentHtml
-                </div>
-            }
-
-            @if (_isEditMode)
-            {
-                <MultipleUsersDropDown
-                    Class="w-100"
-                    Project="@Comment.Task.TaskList.Project"
-                    Placeholder="Select watchers"
-                    @bind-Value="@model.WatcherIds"/>
-            }
-
-            <FluentStack
-                Orientation="Orientation.Horizontal">
-                @if (_isEditMode)
-                {
-                    <FluentButton
-                        Appearance="Appearance.Accent"
-                        Disabled="@_isLoading"
-                        OnClick="@Submit">
-                        Save
-                    </FluentButton>
-
-                    <FluentButton
-                        Appearance="Appearance.Neutral"
-                        Disabled="@_isLoading"
-                        OnClick="@ResetForm">
-                        Cancel
-                    </FluentButton>
-                }
-                else if (!_isNewComment && _canEdit)
-                {
-                    <a
-                        href="#"
-                        @onclick:preventDefault="true"
-                        @onclick="OnClickEdit">
-                        <b>Edit</b>
-                    </a>
-                    <div class="fw-bold ml-1 mr-1"> - </div>
-                    <a
-                        href="#"
-                        @onclick:preventDefault="true"
-                        @onclick="OnClickDelete">
-                        <b>Delete</b>
-                    </a>
-                }
-            </FluentStack>
-        </FluentStack>
-    </EditForm>
-    
-</FluentCard>
+@* <FluentCard *@
+@*     Class="w-comment-edit-form pb-2 mb-2" *@
+@*     MinimalStyle="true"> *@
+@*      *@
+@*     <EditForm *@
+@*         @ref="_form" *@
+@*         Model="model"> *@
+@* *@
+@*         <FluentStack Orientation="Orientation.Vertical"> *@
+@* *@
+@*             @if (!_isNewComment) *@
+@*             { *@
+@*                 <FluentStack Orientation="Orientation.Horizontal"> *@
+@*                     <FluentPersona *@
+@*                         Initials="@_userName.FirstChar().ToUpper()" *@
+@*                         StatusSize="PresenceBadgeSize.Small" *@
+@*                         StatusTitle="@_userName" *@
+@*                         Image="@(new Icons.Regular.Size48.Person().ToDataUri(size: "25px", color: "white"))" *@
+@*                         ImageSize="50px"> *@
+@*                     </FluentPersona> *@
+@* *@
+@*                     @if (!_isNewComment && Comment.UpdatedAt != null) *@
+@*                     { *@
+@*                         <div class="pt-3"> *@
+@*                             <b>@_userName</b> *@
+@*                             @Comment.UpdatedAt?.TimeAgo(DateTimeKind.Local) *@
+@*                         </div> *@
+@*                     } *@
+@*                 </FluentStack> *@
+@*             } *@
+@* *@
+@*             @if (_isEditMode || _isNewComment) *@
+@*             { *@
+@*                 <div class="w-100" @onclick="OnFocusOnEditField"> *@
+@*                     <FluentTextArea *@
+@*                         @ref="_commentField" *@
+@*                         @bind-Value="@model.Comment" *@
+@*                         Class="w-100" *@
+@*                         Resize="TextAreaResize.Vertical" *@
+@*                         Rows="@(_commentLinesCount)" *@
+@*                         Placeholder="Your comment..."/> *@
+@*                 </div> *@
+@*             } *@
+@*             else *@
+@*             { *@
+@*                 <div class="w-view w-100"> *@
+@*                     @CommentHtml *@
+@*                 </div> *@
+@*             } *@
+@* *@
+@*             @if (_isEditMode) *@
+@*             { *@
+@*                 <MultipleUsersDropDown *@
+@*                     Class="w-100" *@
+@*                     Project="@Comment.Task.TaskList.Project" *@
+@*                     Placeholder="Select watchers" *@
+@*                     @bind-Value="@model.WatcherIds"/> *@
+@*             } *@
+@* *@
+@*             <FluentStack *@
+@*                 Orientation="Orientation.Horizontal"> *@
+@*                 @if (_isEditMode) *@
+@*                 { *@
+@*                     <FluentButton *@
+@*                         Appearance="Appearance.Accent" *@
+@*                         Disabled="@_isLoading" *@
+@*                         OnClick="@Submit"> *@
+@*                         Save *@
+@*                     </FluentButton> *@
+@* *@
+@*                     <FluentButton *@
+@*                         Appearance="Appearance.Neutral" *@
+@*                         Disabled="@_isLoading" *@
+@*                         OnClick="@ResetForm"> *@
+@*                         Cancel *@
+@*                     </FluentButton> *@
+@*                 } *@
+@*                 else if (!_isNewComment && _canEdit) *@
+@*                 { *@
+@*                     <a *@
+@*                         href="#" *@
+@*                         @onclick:preventDefault="true" *@
+@*                         @onclick="OnClickEdit"> *@
+@*                         <b>Edit</b> *@
+@*                     </a> *@
+@*                     <div class="fw-bold ml-1 mr-1"> - </div> *@
+@*                     <a *@
+@*                         href="#" *@
+@*                         @onclick:preventDefault="true" *@
+@*                         @onclick="OnClickDelete"> *@
+@*                         <b>Delete</b> *@
+@*                     </a> *@
+@*                 } *@
+@*             </FluentStack> *@
+@*         </FluentStack> *@
+@*     </EditForm> *@
+@*      *@
+@* </FluentCard> *@

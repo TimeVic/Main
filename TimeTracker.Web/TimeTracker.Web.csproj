@@ -26,7 +26,6 @@
     
     <ItemGroup>
         <PackageReference Include="Blazor-ApexCharts" Version="6.1.0" />
-        <PackageReference Include="blazor-dragdrop" Version="2.6.1" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
         <PackageReference Include="Fluxor.Blazor.Web" Version="6.9.0" />
         <PackageReference Include="LumexUI" Version="2.3.4" />
@@ -36,8 +35,6 @@
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.5" />
         <PackageReference Include="Microsoft.DotNet.HotReload.WebAssembly.Browser" Version="10.0.201" />
-        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.14.0" />
-        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.14.0" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.16.0" />
         <PackageReference Include="System.Net.Http.Json" Version="10.0.5" />
         <PackageReference Include="System.Reactive.Linq" Version="6.1.0" />
@@ -318,6 +315,21 @@
       <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.js.map" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.min.js" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\js\bootstrap.min.js.map" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Tasks\Parts\TasksList\AddTasksListModalForm.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Tasks\Parts\TasksList\UpdateTasksListModalForm.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Tasks\Parts\TasksFilterForm.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Tasks\Parts\TasksListTree.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Client\ClientPage.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Client\Parts\List\AddClientModal.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Client\Parts\List\ClientsList.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Payment\Parts\List\PaymentsList.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Payment\Parts\AddPaymentModal.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Payment\Parts\UpdatePaymentModal.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Payment\PaymentPage.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Project\IndexPage.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Project\Parts\List\AddProjectModal.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Project\Parts\List\ProjectsList.razor" />
+      <_ContentIncludedByDefault Remove="Ui\Pages\Dashboard\Project\Parts\List\UpdateProjectModal.razor" />
     </ItemGroup>
 
     <ItemGroup>

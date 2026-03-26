@@ -11,12 +11,10 @@ using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Services.Workspace;
-using Plk.Blazor.DragDrop;
 using TimeTracker.Web.Services.Http.Auth;
 using TimeTracker.Web.Services.Http.Client;
 using TimeTracker.Web.Services.Http.Middleware;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
-using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Web.Services.Messaging;
 using TimeTracker.Web.Services.Notification;
 using ToastService = TimeTracker.Web.Services.UI.ToastService;
@@ -82,7 +80,6 @@ builder.Services.AddScoped<IReCaptchaService, ReCaptchaService>();
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<ITimeParsingService, TimeParsingService>();
 builder.Services.AddScoped<ISecurityManager, SecurityManager>();
-builder.Services.AddScoped<ModalDialogProviderService>();
 builder.Services.AddScoped<UiHelperService>();
 builder.Services.AddScoped<UrlService>();
 builder.Services.AddScoped<MarkdownService>();
@@ -90,12 +87,6 @@ builder.Services.AddScoped<WorkspaceInitializationService>();
 builder.Services.AddScoped<ToastService>();
 builder.Services.AddScoped<FcmService>();
 builder.Services.AddScoped<MessagingWebSocketClientService>();
-
-// Drag and drop
-builder.Services.AddBlazorDragDrop();
-
-// Fluent UI
-builder.Services.AddFluentUIComponents();
 
 // Lumex UI
 builder.Services.AddLumexServices();

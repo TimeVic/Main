@@ -4,28 +4,28 @@
 
 @inherits BaseReactiveComponent
 
-<FluentAutocomplete
-    TOption="TagDto"
-    AutoComplete="off"
-    Multiple="true"
-    Label="@Label"
-    Class="@Class"
-    Disabled="@Disabled"
-    Placeholder="@Placeholder"
-    MaxAutoHeight="200px"
-    Items="@_list.ToArray()"
-    OptionValue="@(dto => dto?.Id.ToString())"
-    OptionText="@(item => item.Name)"
-    OptionSelected="@(dto => _selectedIds.Contains(dto.Id))"
-    SelectedOptions="@_selectedItems"
-    SelectedOptionsChanged="@(OnValueChanged)">
-    <OptionTemplate>
-        <FluentStack Orientation="Orientation.Horizontal">
-            @if (context.Color != null)
-            {
-            <FluentIcon Value="@(new Icons.Filled.Size20.Tag())" CustomColor="@context.Color" Color="Color.Custom"/>
-            }
-            @context.Name
-        </FluentStack>
-    </OptionTemplate>
-</FluentAutocomplete>
+@* <FluentAutocomplete *@
+@*     TOption="TagDto" *@
+@*     AutoComplete="off" *@
+@*     Multiple="true" *@
+@*     Label="@Label" *@
+@*     Class="@Class" *@
+@*     Disabled="@Disabled" *@
+@*     Placeholder="@Placeholder" *@
+@*     MaxAutoHeight="200px" *@
+@*     Items="@_list.ToArray()" *@
+@*     OptionValue="@(dto => dto?.Id.ToString())" *@
+@*     OptionText="@(item => item.Name)" *@
+@*     OptionSelected="@(dto => _selectedIds.Contains(dto.Id))" *@
+@*     SelectedOptions="@_selectedItems" *@
+@*     SelectedOptionsChanged="@(OnValueChanged)"> *@
+@*     <OptionTemplate> *@
+@*         <FluentStack Orientation="Orientation.Horizontal"> *@
+@*             @if (context.Color != null) *@
+@*             { *@
+@*             <FluentIcon Value="@(new Icons.Filled.Size20.Tag())" CustomColor="@context.Color" Color="Color.Custom"/> *@
+@*             } *@
+@*             @context.Name *@
+@*         </FluentStack> *@
+@*     </OptionTemplate> *@
+@* </FluentAutocomplete> *@
