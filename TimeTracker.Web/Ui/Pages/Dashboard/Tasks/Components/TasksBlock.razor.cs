@@ -28,6 +28,7 @@ public partial class TasksBlock: IDisposable
     private TaskListDto? _taskList => _tasksListState.Value.SelectedTaskList;
     private readonly Subject<ICollection<TaskDto>> _tasksSubject = new();
     private bool _isShowAddTaskModal = false;
+    private bool _isShowDeleteTaskListConfirmation = false;
     
     protected override void OnInitialized()
     {
@@ -42,11 +43,12 @@ public partial class TasksBlock: IDisposable
     
     private async Task OnAddTask()
     {
-        
+        await Task.CompletedTask;
     }
     
     private async Task OnEditTask(TaskDto? task)
     {
+        await Task.CompletedTask;
     }
     
     private async Task ArchiveTasks()
@@ -65,5 +67,16 @@ public partial class TasksBlock: IDisposable
         //     }
         //     _selectedTasks.Clear();    
         // }
+    }
+
+    private Task OnEditTaskList()
+    {
+        return Task.CompletedTask;
+    }
+    
+    private Task OnDeleteTaskList()
+    {
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.ArchiveTaskListAction(_taskList!));
+        return Task.CompletedTask;
     }
 }

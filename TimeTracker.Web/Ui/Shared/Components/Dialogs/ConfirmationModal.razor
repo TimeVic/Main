@@ -9,6 +9,7 @@
 <LumexModal 
     Open="true" 
     Size="ModalSize.Small"
+    OnClose="@OnClose"
     @ref="modal">
     <LumexModalContent>
         <LumexModalHeader Class="flex items-center gap-3">
@@ -90,6 +91,9 @@
     
     [Parameter]
     public EventCallback OnCancel { get; set; }
+    
+    [Parameter]
+    public EventCallback OnClose { get; set; }
     
     LumexModal modal;
     

@@ -37,19 +37,15 @@ public class ArchiveEffect: Effect<ArchiveTaskListAction>
         {
             await _apiService.TaskListArchiveAsync(action.TaskList.Id);
             dispatcher.Dispatch(new RemoveListItemsAction(action.TaskList.Id));
-            var navigateToProject = _projectState.Value.List.First(
-                item => item.Id == action.TaskList.Project.Id
+            
+            var selectedTaskList = _taskListState.Value.List.FirstOrDefault(
+                x => x.Id != action.TaskList.Id && x.Project.Id == action.TaskList.Project.Id
             );
-            var firstTaskList = _taskListState.Value.List.FirstOrDefault(
-                item => item.Project.Id == action.TaskList.Project.Id
-            );
-            _navigationManager.NavigateTo(
-                string.Format(
-                    SiteUrl.Dashboard_Tasks,
-                    navigateToProject?.Id.ToString() ?? "0",
-                    firstTaskList?.Id.ToString() ?? string.Empty
-                )    
-            );
+            if (selectedTaskList != null)
+            {
+                dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.SetSelectedAction(selectedTaskList.Id));
+            }
+            dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
         }
         catch (Exception e)
         {
