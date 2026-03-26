@@ -59,11 +59,20 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                 <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Task list</label>
                 <div class="flex h-[42px] items-center rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700">@_task.TaskList.Name</div>
             </div>
-            @if (!string.IsNullOrWhiteSpace(_task?.ExternalTaskId))
+            @if (!string.IsNullOrWhiteSpace(_task?.FormattedId))
             {
                 <div>
-                    <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">External task ID</label>
-                    <div class="flex h-[42px] items-center rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700">@_task.ExternalTaskId</div>
+                    <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">
+                        @if (!string.IsNullOrWhiteSpace(_task?.ExternalTaskId))
+                        {
+                            <text>External task ID</text>
+                        }
+                        else
+                        {
+                            <text>Task ID</text>
+                        }
+                    </label>
+                    <div class="flex h-[42px] items-center rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm text-slate-700">@_task?.FormattedId</div>
                 </div>
             }
         </div>

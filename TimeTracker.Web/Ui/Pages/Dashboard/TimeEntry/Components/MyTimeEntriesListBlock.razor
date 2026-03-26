@@ -1,3 +1,4 @@
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
 @using TimeTracker.Web.Ui.Shared.Components.Dialogs
 @using TimeTracker.Web.Ui.Shared.Components.List
@@ -10,13 +11,20 @@
         OnClose="@OnCloseEditTimeEntryModal"
     />
 }
-
 @if (_timeEntryToDelete != null)
 {
     <ConfirmationModal
         DialogVariant="ConfirmationModal.ConfirmationVariant.Delete"
         OnConfirm="@OnConfirmDeleteTimeEntry"
         OnCancel="@(() => _timeEntryToDelete = null)"
+    />
+}
+@if (_taskToEdit != null)
+{
+    <UpdateTaskModal
+        IsOpened="true"
+        Task="_taskToEdit"
+        OnClose="@(() => _taskToEdit = null)"
     />
 }
 
@@ -75,6 +83,7 @@
                                     Entry="@entry"
                                     OnEdit="OnEditTimeEntry"
                                     OnClone="OnCloneTimeEntry"
+                                    OnOpenTask="(entry) => _taskToEdit = entry.Task"
                                     OnDelete="(entry) => _timeEntryToDelete = entry"
                                 />
                             }

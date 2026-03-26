@@ -22,6 +22,7 @@
     Class="min-w-full divide-y divide-slate-200"
     Data="@_tasks.AsQueryable()"
     Loading="_isLoading">
+    <LumexUI.PropertyColumn Title="#" Property="@(p => p.FormattedId)"/>
     <LumexUI.PropertyColumn Title="Task" Property="@(p => p.Title)">
         <Content>
             <div class="font-medium text-slate-900">@context.Title</div>

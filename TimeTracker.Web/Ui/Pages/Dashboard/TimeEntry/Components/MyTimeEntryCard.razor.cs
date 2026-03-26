@@ -18,6 +18,9 @@ public partial class MyTimeEntryCard
     [Parameter]
     public EventCallback<TimeEntryDto> OnClone { get; set; }
     
+    [Parameter]
+    public EventCallback<TimeEntryDto> OnOpenTask { get; set; }
+    
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
     
