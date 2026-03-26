@@ -26,9 +26,6 @@ public partial class TimeEntryForm
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
     
-    [Inject] 
-    private ModalDialogProviderService _modalDialogProviderService { get; set; }
-
     private bool _isEditModalOpened = false;
     private bool _isDetailsOpened = false;
     
@@ -96,12 +93,12 @@ public partial class TimeEntryForm
     
     private async Task ShowAddTaskModal(Guid timEntryId)
     {
-        await _modalDialogProviderService.ShowAddTaskModal(timEntryId);
+        // await _modalDialogProviderService.ShowAddTaskModal(timEntryId);
     }
     
     private async Task ShowTimeEntriesModal()
     {
-        await _modalDialogProviderService.ShowTimeEntriesModal();
+        // await _modalDialogProviderService.ShowTimeEntriesModal();
     }
     
     private string GetDescriptionLabel(TimeEntryDto? timeEntry)

@@ -5,9 +5,17 @@ namespace TimeTracker.Web.Store.Project;
 
 public class ProjectReducers
 {
-
     [ReducerMethod]
-    public static ProjectState SetProjectListItemsActionReducer(ProjectState state, SetListItemsAction action)
+    public static ProjectState ProjectActionReducer(ProjectState state, SetSelectedAction action)
+    {
+        return state with
+        {
+            Selected = action.Project
+        };
+    }
+    
+    [ReducerMethod]
+    public static ProjectState ProjectActionReducer(ProjectState state, SetListItemsAction action)
     {
         return state with
         {
@@ -20,7 +28,7 @@ public class ProjectReducers
     }
 
     [ReducerMethod]
-    public static ProjectState SetProjectIsListLoadingReducer(ProjectState state, SetProjectIsListLoading action)
+    public static ProjectState ProjectActionReducer(ProjectState state, SetProjectIsListLoading action)
     {
         return state with
         {
@@ -29,7 +37,7 @@ public class ProjectReducers
     }
     
     [ReducerMethod]
-    public static ProjectState SetListItemActionReducer(ProjectState state, SetListItemAction action)
+    public static ProjectState ProjectActionReducer(ProjectState state, SetListItemAction action)
     {
         var list = state.List.Select(item =>
         {

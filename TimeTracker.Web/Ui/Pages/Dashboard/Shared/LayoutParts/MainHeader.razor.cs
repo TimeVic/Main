@@ -27,4 +27,15 @@ public partial class MainHeader
         }
         _workspaceInitialization.ChangeWorkspace(workspace);
     }
+
+    private void ToggleProfileMenu()
+    {
+        
+    }
+
+    private Task OnClickLogout()
+    {
+        Dispatcher.Dispatch(new LogoutAction());
+        return Task.CompletedTask;
+    }
 }

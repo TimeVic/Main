@@ -42,9 +42,6 @@ public partial class FilesList: IDisposable
     public ToastService _toastService { get; set; }
     
     [Inject]
-    protected ModalDialogProviderService _dialogProvider { get; set; }
-    
-    [Inject]
     protected IState<AuthState> _authState { get; set; }
     
     private System.Timers.Timer _timer;
@@ -79,25 +76,25 @@ public partial class FilesList: IDisposable
 
     private async Task OnCLickDelete(StoredFileDto file)
     {
-        var isOk = await _dialogProvider.ShowDeleteConfirmationDialog(
-            "Are you sure you want to delete this file?"
-        );
-        if (!isOk.HasValue || !isOk.Value)
-        {
-            return;
-        }
-        
-        try
-        {
-            await _apiService.StorageDeleteFileAsync(file.Id);
-            var newList = Files.Where(item => item.Id != file.Id).ToList();
-            await InvokeAsync(() => ListUpdated.InvokeAsync(newList));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, e.Message);
-            _toastService.ShowError(e.Message);
-        }
+        // var isOk = await _dialogProvider.ShowDeleteConfirmationDialog(
+        //     "Are you sure you want to delete this file?"
+        // );
+        // if (!isOk.HasValue || !isOk.Value)
+        // {
+        //     return;
+        // }
+        //
+        // try
+        // {
+        //     await _apiService.StorageDeleteFileAsync(file.Id);
+        //     var newList = Files.Where(item => item.Id != file.Id).ToList();
+        //     await InvokeAsync(() => ListUpdated.InvokeAsync(newList));
+        // }
+        // catch (Exception e)
+        // {
+        //     _logger.LogError(e, e.Message);
+        //     _toastService.ShowError(e.Message);
+        // }
     }
 
     private string GetFullUrl(string url)
@@ -115,7 +112,7 @@ public partial class FilesList: IDisposable
     
     private async Task OnClickView(StoredFileDto storedFile)
     {
-        await _dialogProvider.ShowFileView(storedFile);
+        // await _dialogProvider.ShowFileView(storedFile);
     }
     
     private async Task ReloadList()

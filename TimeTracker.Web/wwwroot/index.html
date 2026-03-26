@@ -25,16 +25,9 @@
 </head>
 <body class="w-full bg-gray-100">
     <div id="app" class="w-full h-full">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%"/>
-            <circle r="40%" cx="50%" cy="50%"/>
-        </svg>
-        <div class="loading-progress-text"></div>
-    </div>
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
+        <div class="fixed inset-0 flex items-center justify-center bg-white/70 backdrop-blur z-50">
+            <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent"></div>
+        </div>
     </div>
     <script src="_content/LumexUI/js/LumexUI.js" type="module"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LerVNUhAAAAAKZSPljJNpjJhR6PIraWTUbzBHHS"></script>

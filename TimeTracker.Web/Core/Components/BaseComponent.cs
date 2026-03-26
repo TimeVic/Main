@@ -30,9 +30,6 @@ public class BaseComponent: ComponentBase
     [Inject] 
     protected ToastService ToastService { get; set; }
     
-    [Inject]
-    protected ModalDialogProviderService ModalDialogService { get; set; }
-    
     private readonly List<Action> _actionsToRunAfterRender = [];
     protected override Task OnAfterRenderAsync(bool firstRender)
     {

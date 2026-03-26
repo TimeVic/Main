@@ -24,9 +24,6 @@ public partial class TaskCard
     [Inject]
     public IState<TasksListState> TasksListState { get; set; }
     
-    [Inject]
-    public ModalDialogProviderService ModalDialogProviderService { get; set; }
-    
     private ICollection<TaskStatus> _statuses = new List<TaskStatus>()
     {
         TaskStatus.Backlog,
@@ -56,7 +53,6 @@ public partial class TaskCard
 
     private void OnClickTask()
     {
-        InvokeAsync(async () => await ModalDialogProviderService.ShowEditTaskModal(Task));
     }
     
     private async Task OnSelectTaskPriority(TaskPriority priority)

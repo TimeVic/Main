@@ -30,9 +30,6 @@ public class BaseReactiveComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     [Inject] 
     protected ToastService ToastService { get; set; }
     
-    [Inject]
-    protected ModalDialogProviderService ModalDialogService { get; set; }
-    
     private List<Action> _actionsToRunAfterRender = new List<Action>();
     protected override Task OnAfterRenderAsync(bool firstRender)
     {

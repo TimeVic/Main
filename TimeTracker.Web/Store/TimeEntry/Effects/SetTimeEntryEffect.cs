@@ -13,18 +13,21 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
     private readonly IState<ProjectState> _projectState;
     private readonly ApiService _apiService;
     private readonly ILogger<SetTimeEntryEffect> _logger;
+    private readonly ToastService _toastService;
 
     public SetTimeEntryEffect(
         ApiService apiService,
         IState<AuthState> authState,
         IState<ProjectState> projectState,
-        ILogger<SetTimeEntryEffect> logger
+        ILogger<SetTimeEntryEffect> logger,
+        ToastService toastService
     )
     {
         _apiService = apiService;
         _authState = authState;
         _projectState = projectState;
         _logger = logger;
+        _toastService = toastService;
     }
 
     public override async Task HandleAsync(SaveTimeEntryAction action, IDispatcher dispatcher)
@@ -50,6 +53,7 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
                     : action.TimeEntry.IsBillable
             });
             dispatcher.Dispatch(new UpdateTimeEntryAction(response));
+            _toastService.ShowInfo($"Time entry updated.");
         }
         catch (Exception e)
         {

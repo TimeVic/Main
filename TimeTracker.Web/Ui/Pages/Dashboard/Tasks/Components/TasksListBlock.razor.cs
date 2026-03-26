@@ -33,13 +33,13 @@ public partial class TasksListBlock: IDisposable
     [Inject]
     public NavigationManager NavigationManager { get; set; }
     
-    private string? _taskListSearch = null;
-    private ProjectDto? _selectedProject = null;
     private Guid? _taskListId = null;
+    private string? _taskListSearch = null;
     private bool _isTaskListsMenuOpened = false;
     private bool _isTaskListMenuOpened = false;
     private bool _isAddTaskListModalOpened = false;
-    
+    private ProjectDto? _selectedProject => _projectState.Value.Selected;
+
     public TaskListDto? _selectedTaskList
     {
         get => _tasksListState.Value.SelectedTaskList;
@@ -48,20 +48,22 @@ public partial class TasksListBlock: IDisposable
     public IEnumerable<TaskListDto> _filteredTaskLists
     {
         get => _tasksListState.Value.List
-            .Where(item => item.Project == _selectedProject)
+            .Where(item => item.Project == _projectState.Value.Selected)
             .Where(item => string.IsNullOrWhiteSpace(_taskListSearch) || item.Name.Contains(_taskListSearch));
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        _projectState.StateChanged += SetDefaultProject;
+        _tasksListState.StateChanged += SetDefaultTaskList;
+        SetDefaultTaskList();
         Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.LoadListAction());
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
     }
 
     public void Dispose()
     {
-        _projectState.StateChanged -= SetDefaultProject;
+        _projectState.StateChanged -= SetDefaultTaskList;
     }
     
     private void OnTasksListSelected(Guid? taskListId)
@@ -71,9 +73,9 @@ public partial class TasksListBlock: IDisposable
             var selectedProject = _tasksListState.Value.List.FirstOrDefault(item => item.Project.Id == taskListId)?.Project;
             if (selectedProject != null)
             {
-                _selectedProject = selectedProject;
+                Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.SetSelectedAction(selectedProject));
             }
-            Dispatcher.Dispatch(new SetSelectedAction(taskListId));
+            Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.SetSelectedAction(taskListId));
             Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());    
         }
     }
@@ -82,8 +84,7 @@ public partial class TasksListBlock: IDisposable
     {
         if (project is null)
             return;
-        _selectedProject = project;
-        _taskListId = null;
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.SetSelectedAction(project));
     }
     
     private string GetTaskListClass(TaskListDto? taskList)
@@ -94,14 +95,25 @@ public partial class TasksListBlock: IDisposable
             : "flex w-full items-center justify-between rounded-2xl border border-slate-200 px-3 py-3 text-left transition hover:border-slate-300 hover:bg-slate-50";
     }
     
-    private void SetDefaultProject(object? sender, EventArgs e)
+    private void SetDefaultTaskList(object? sender, EventArgs e)
     {
-        if (_selectedProject == null)
-        {
-            _selectedProject = _projectState.Value.List.FirstOrDefault();
-        }
+        SetDefaultTaskList();
     }
 
+    private void SetDefaultTaskList()
+    {
+        if (_tasksListState.Value.SelectedTaskList == null)
+        {
+            var selectedTaskList = _tasksListState.Value.List.FirstOrDefault();
+            if (selectedTaskList != null)
+            {
+                Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.SetSelectedAction(selectedTaskList.Project));
+                Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.SetSelectedAction(selectedTaskList.Id));
+                Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
+            }
+        }
+    }
+    
     private Task OnTasksListAdded(TaskListDto arg)
     {
         OnTasksListSelected(arg.Id);

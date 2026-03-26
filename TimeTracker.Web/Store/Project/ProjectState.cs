@@ -6,6 +6,8 @@ namespace TimeTracker.Web.Store.Project;
 [FeatureState]
 public record ProjectState
 {
+    public ProjectDto? Selected { get; set; }
+    
     public ICollection<ProjectDto> List { get; set; } = new List<ProjectDto>();
     
     public int TotalCount { get; set; }

@@ -1,8 +1,8 @@
 @using LumexUI
 @using LumexUI.Common
-@using Microsoft.FluentUI.AspNetCore.Components.Extensions
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Constants.Ui
+@using TimeTracker.Web.Core.Extensions.Enums
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TaskPriority = TimeTracker.Business.Common.Constants.Task.TaskPriority;
@@ -28,17 +28,18 @@
             <div class="mt-1 max-w-xl text-slate-500">@context.Description?.TruncateAndAddDots(100)</div>
         </Content>
     </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Title="Status" Property="@(p => p.Status)">
+    <LumexUI.PropertyColumn 
+        Title="Status"
+        Property="@(p => p.Status)">
         <Content>
-            <EnumDropDown
-                Label="Status"
-                TItem="TaskStatus"
-                SelectType="DropDownType.DropDown"
-                AllowClear="false"
-                Size="Size.Small"
-                Value="context.Status"
-                ValueChanged="@(status => OnStatusChanged(context, status))"
-                Name="Status"/>
+            @{
+                <LumexChip
+                    Size="@Size.Small"
+                    Variant="@ChipVariant.Dot"
+                    Color="@context.Status.GetThemeColor()">
+                    @context.Status.GetDisplayName()
+                </LumexChip>
+            }
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn Property="@(p => p.Priority)">
@@ -47,13 +48,13 @@
                 <LumexChip
                     Size="@Size.Small"
                     Variant="@ChipVariant.Dot"
-                    Color="ThemeColor.Primary">
-                    @context.Priority.GetDescription()
+                    Color="@context.Priority.GetThemeColor()">
+                    @context.Priority.GetDisplayName()
                 </LumexChip>
             }
         </Content>
     </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Title="Assigned" Property="@(p => p.User.UserName)"/>
+    <LumexUI.PropertyColumn Title="Assigned" Property="@(p => p.User.Name)"/>
     <LumexUI.PropertyColumn Title="Actions" Property="@(p => p.User.Id)">
         <Content>
             @if (TimeEntryState.Value.ActiveEntry?.Task?.Id == context.Id)

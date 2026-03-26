@@ -9,23 +9,23 @@
     }
     @if (IsLink)
     {
-        <FluentAnchor href="@($"/board/task/{AuthState.Value.Workspace!.Id}/{InternalTask.TaskId}")" target="_blank">
-            <FluentBadge
-                Class="@($"{Class} d-flex align-items-center")"
-                Style="@(IsClickable ? "cursor: pointer" : string.Empty)"
-                Appearance="Appearance.Accent">
-                @taskId
-            </FluentBadge>
-        </FluentAnchor>
+        @* <FluentAnchor href="@($"/board/task/{AuthState.Value.Workspace!.Id}/{InternalTask.TaskId}")" target="_blank"> *@
+        @*     <FluentBadge *@
+        @*         Class="@($"{Class} d-flex align-items-center")" *@
+        @*         Style="@(IsClickable ? "cursor: pointer" : string.Empty)" *@
+        @*         Appearance="Appearance.Accent"> *@
+        @*         @taskId *@
+        @*     </FluentBadge> *@
+        @* </FluentAnchor> *@
     }
     else
     {
-        <FluentBadge
-            Class="@($"{Class} d-flex align-items-center")"
-            Style="@(IsClickable ? "cursor: pointer" : string.Empty)"
-            OnClick="OnClick"
-            Appearance="Appearance.Accent">
-            @taskId
-        </FluentBadge>
+        @* <FluentBadge *@
+        @*     Class="@($"{Class} d-flex align-items-center")" *@
+        @*     Style="@(IsClickable ? "cursor: pointer" : string.Empty)" *@
+        @*     OnClick="OnClick" *@
+        @*     Appearance="Appearance.Accent"> *@
+        @*     @taskId *@
+        @* </FluentBadge> *@
     }
 </div>

@@ -1,6 +1,4 @@
-﻿using Microsoft.FluentUI.AspNetCore.Components;
-
-namespace TimeTracker.Web.Services.UI;
+﻿namespace TimeTracker.Web.Services.UI;
 
 public class ToastService
 {

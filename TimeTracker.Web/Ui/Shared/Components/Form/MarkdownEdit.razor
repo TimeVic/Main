@@ -3,59 +3,59 @@
 
 <div class="@($"{Class} w-markdown-editor w-100")">
 
-    @if (string.IsNullOrEmpty(Label))
-    {
-        <FluentLabel>@Label</FluentLabel>
-    }
-    @if (_isShowEditBox)
-    {
-        <div @onclick="OnEditTextClicked" class="w-100">
-            <FluentTextArea
-                T="string"
-                Placeholder="@Placeholder"
-                Value="@_editValue"
-                Immediate="true" 
-                ImmediateDelay="0" 
-                ValueChanged="@OnChangeValue"
-                Class="w-100"
-                Rows="@_textAreaRows"/>
-            <p class="w-support mt-2">
-                Supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a>
-            </p>
-
-        </div>
-        if (_isActionButtonsEnabled)
-        {
-            <FluentStack
-                Class="mt-2 w-100"
-                Orientation="Orientation.Horizontal">
-
-                <FluentButton
-                    Class="mr-3"
-                    OnClick="@OnClickCancel">
-                    Cancel
-                </FluentButton>
-                
-                <FluentButton
-                    IconEnd="@(new Icons.Regular.Size24.Save())"
-                    Class="mr-3"
-                    Appearance="Appearance.Accent"
-                    OnClick="@OnClickSave">
-                    Save
-                </FluentButton>
-            </FluentStack>
-        }
-    }
-    else
-    {
-        <FluentCard
-            Class="w-view p-2"
-            Style="width: calc(100% - 2px)"
-            MinimalStyle="true"
-            @onclick="@OnClickView">
-            @MarkdownHtml
-        </FluentCard>
-    }
+    @* @if (string.IsNullOrEmpty(Label)) *@
+    @* { *@
+    @*     <FluentLabel>@Label</FluentLabel> *@
+    @* } *@
+    @* @if (_isShowEditBox) *@
+    @* { *@
+    @*     <div @onclick="OnEditTextClicked" class="w-100"> *@
+    @*         <FluentTextArea *@
+    @*             T="string" *@
+    @*             Placeholder="@Placeholder" *@
+    @*             Value="@_editValue" *@
+    @*             Immediate="true"  *@
+    @*             ImmediateDelay="0"  *@
+    @*             ValueChanged="@OnChangeValue" *@
+    @*             Class="w-100" *@
+    @*             Rows="@_textAreaRows"/> *@
+    @*         <p class="w-support mt-2"> *@
+    @*             Supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a> *@
+    @*         </p> *@
+    @* *@
+    @*     </div> *@
+    @*     if (_isActionButtonsEnabled) *@
+    @*     { *@
+    @*         <FluentStack *@
+    @*             Class="mt-2 w-100" *@
+    @*             Orientation="Orientation.Horizontal"> *@
+    @* *@
+    @*             <FluentButton *@
+    @*                 Class="mr-3" *@
+    @*                 OnClick="@OnClickCancel"> *@
+    @*                 Cancel *@
+    @*             </FluentButton> *@
+    @*              *@
+    @*             <FluentButton *@
+    @*                 IconEnd="@(new Icons.Regular.Size24.Save())" *@
+    @*                 Class="mr-3" *@
+    @*                 Appearance="Appearance.Accent" *@
+    @*                 OnClick="@OnClickSave"> *@
+    @*                 Save *@
+    @*             </FluentButton> *@
+    @*         </FluentStack> *@
+    @*     } *@
+    @* } *@
+    @* else *@
+    @* { *@
+    @*     <FluentCard *@
+    @*         Class="w-view p-2" *@
+    @*         Style="width: calc(100% - 2px)" *@
+    @*         MinimalStyle="true" *@
+    @*         @onclick="@OnClickView"> *@
+    @*         @MarkdownHtml *@
+    @*     </FluentCard> *@
+    @* } *@
 </div>
 
 @code

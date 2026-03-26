@@ -3,6 +3,7 @@ using System.Reactive.Subjects;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Web.Store.Project;
 using TimeTracker.Web.Store.Tasks;
 using TimeTracker.Web.Store.TasksList;
@@ -82,16 +83,6 @@ public partial class TasksTableBlock: IDisposable
     private async Task OnEditTask(TaskDto? task)
     {
         _taskToUpdate = task;
-    }
-    
-    private Task OnStartNewTimeEntryForTask(TaskDto? task)
-    {
-        return Task.CompletedTask;
-    }
-    
-    private Task OnStatusChanged(TaskDto? task, TaskStatus? status)
-    {
-        return Task.CompletedTask;
     }
     
     private void StopTimeEntry()

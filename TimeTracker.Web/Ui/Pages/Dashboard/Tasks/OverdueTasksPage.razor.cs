@@ -10,9 +10,6 @@ public partial class OverdueTasksPage
 {
     [Inject]
     public IState<TasksState> TasksState { get; set; }
-
-    [Inject]
-    public ModalDialogProviderService ModalDialogProviderService { get; set; }
     
     private ICollection<TaskDto> _tasks = new List<TaskDto>();
     private bool _isLoading = false;
@@ -48,6 +45,7 @@ public partial class OverdueTasksPage
     
     private Task OnAddTask(DateTime? endTime = null)
     {
-        return ModalDialogProviderService.ShowAddTaskModal(endTime: endTime);
+        // return ModalDialogProviderService.ShowAddTaskModal(endTime: endTime);
+        return Task.CompletedTask;
     }
 }
