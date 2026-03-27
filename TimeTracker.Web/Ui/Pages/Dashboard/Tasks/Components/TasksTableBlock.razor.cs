@@ -1,6 +1,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Fluxor;
+using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
@@ -96,5 +97,24 @@ public partial class TasksTableBlock: IDisposable
     private void StartTimeEntry(TaskDto task)
     {
         Dispatcher.Dispatch(new StartTimeEntryAction(InternalTask: task));
+    }
+
+    private void OnRowClickHandler(DataGridRowClickEventArgs<TaskDto> args)
+    {
+        _taskToUpdate = args.Item;
+    }
+
+    private Task OnArchiveTask(TaskDto task)
+    {
+        var updateModel = new UpdateRequest();
+        updateModel.Fill(task);
+        updateModel.IsArchived = true;
+        Dispatcher.Dispatch(new UpdateTaskAction(updateModel, true));
+        return Task.CompletedTask;
+    }
+
+    private string GetTaskTitleClass(TaskDto context)
+    {
+        return context.IsArchived ? "line-through" : "";
     }
 }
