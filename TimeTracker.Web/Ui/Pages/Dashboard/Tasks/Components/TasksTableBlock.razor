@@ -1,9 +1,8 @@
 @using LumexUI
 @using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity.Task
 @using TimeTracker.Business.Extensions
-@using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Core.Extensions.Enums
-@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TaskPriority = TimeTracker.Business.Common.Constants.Task.TaskPriority;
 
@@ -19,19 +18,25 @@
 }
 
 <LumexDataGrid
+    T="TaskDto"
     Class="min-w-full divide-y divide-slate-200"
     Data="@_tasks.AsQueryable()"
+    Hoverable="true"
+    OnRowClick="@OnRowClickHandler"
     Loading="_isLoading">
     <LumexUI.PropertyColumn Title="#" Property="@(p => p.FormattedId)"/>
-    <LumexUI.PropertyColumn Title="Task" Property="@(p => p.Title)">
+    <LumexUI.PropertyColumn Title="Task" Property="@(p => p.Title)" Sortable="@true">
         <Content>
-            <div class="font-medium text-slate-900">@context.Title</div>
+            <div class="font-medium text-slate-900 @GetTaskTitleClass(context)">
+                @context.Title
+            </div>
             <div class="mt-1 max-w-xl text-slate-500">@context.Description?.TruncateAndAddDots(100)</div>
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn 
         Title="Status"
-        Property="@(p => p.Status)">
+        Property="@(p => p.Status)"
+        Sortable="@true">
         <Content>
             @{
                 <LumexChip
@@ -43,7 +48,9 @@
             }
         </Content>
     </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Property="@(p => p.Priority)">
+    <LumexUI.PropertyColumn 
+        Property="@(p => p.Priority)"
+        Sortable="@true">
         <Content>
             @{
                 <LumexChip
@@ -55,49 +62,63 @@
             }
         </Content>
     </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Title="Assigned" Property="@(p => p.User.Name)"/>
-    <LumexUI.PropertyColumn Title="Actions" Property="@(p => p.User.Id)">
+    <LumexUI.PropertyColumn 
+        Title="Assigned" 
+        Property="@(p => p.User.Name)"
+        Sortable="@true"/>
+    <LumexUI.PropertyColumn
+        Title="Actions"
+        Property="@(p => p.User.Id)">
         <Content>
-            @if (TimeEntryState.Value.ActiveEntry?.Task?.Id == context.Id)
-            {
-                <CustomButton
-                    Variant="Variant.Outlined"
-                    Color="ThemeColor.Default"
-                    IconOnly="true"
-                    Size="Size.Small"
-                    Disabled="_isDisabledButtons"
-                    OnClick="@(() => StopTimeEntry())">
-                    <StartContent>
-                        <i class="fa-solid fa-stop text-xs"></i>
-                    </StartContent>
-                </CustomButton>
-            }
-            else
-            {
-                <CustomButton
-                    Variant="Variant.Outlined"
-                    Color="ThemeColor.Info"
-                    IconOnly="true"
-                    Size="Size.Small"
-                    Disabled="_isDisabledButtons"
-                    OnClick="@(() => StartTimeEntry(context))">
-                    <StartContent>
-                        <i class="fa-solid fa-play text-xs"></i>
-                    </StartContent>
-                </CustomButton>
-            }
-            <CustomButton
-                Variant="Variant.Outlined"
-                Color="ThemeColor.Info"
-                IconOnly="true"
-                Class="ml-1"
-                Size="Size.Small"
-                Disabled="_isDisabledButtons"
-                OnClick="@(() => OnEditTask(context))">
-                <ChildContent>
-                    <i class="fa-solid fa-pencil text-xs"></i>
-                </ChildContent>
-            </CustomButton>
+            <div @onclick:stopPropagation="true">
+                @if (TimeEntryState.Value.ActiveEntry?.Task?.Id == context.Id)
+                {
+                    <CustomButton
+                        Variant="Variant.Outlined"
+                        Color="ThemeColor.Default"
+                        IconOnly="true"
+                        Size="Size.Small"
+                        Disabled="_isDisabledButtons"
+                        OnClick="@(() => StopTimeEntry())">
+                        <StartContent>
+                            <i class="fa-solid fa-stop text-xs"></i>
+                        </StartContent>
+                    </CustomButton>
+                }
+                else
+                {
+                    <CustomButton
+                        Variant="Variant.Outlined"
+                        Color="ThemeColor.Info"
+                        IconOnly="true"
+                        Size="Size.Small"
+                        Disabled="_isDisabledButtons"
+                        OnClick="@(() => StartTimeEntry(context))">
+                        <StartContent>
+                            <i class="fa-solid fa-play text-xs"></i>
+                        </StartContent>
+                    </CustomButton>
+                }
+                <LumexDropdown>
+                    <LumexDropdownTrigger>
+                        <LumexButton
+                            Class="ml-1"
+                            IconOnly="true"
+                            Size="Size.Small"
+                            Disabled="_isDisabledButtons"
+                            Variant="@Variant.Outlined">
+                            <i class="fa-solid fa-ellipsis-h"></i>
+                        </LumexButton>
+                    </LumexDropdownTrigger>
+                    <LumexDropdownMenu>
+                        <LumexDropdownItem
+                            Color="@ThemeColor.Warning"
+                            OnClick="@(() => OnArchiveTask(context))">
+                            Archive this task
+                        </LumexDropdownItem>
+                    </LumexDropdownMenu>
+                </LumexDropdown>
+            </div>
         </Content>
     </LumexUI.PropertyColumn>
 </LumexDataGrid>
