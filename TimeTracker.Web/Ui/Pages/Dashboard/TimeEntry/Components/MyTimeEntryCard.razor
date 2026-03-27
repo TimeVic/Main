@@ -7,16 +7,44 @@
             <p class="truncate text-sm font-semibold text-slate-900">@GetProjectLabel()</p>
             @if (!string.IsNullOrEmpty(GetTaskLabel()))
             {
-                <span 
-                    class="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-[11px] font-semibold text-blue-700 cursor-pointer"
+                <LumexChip
+                    Class="cursor-pointer"
                     @onclick="@(() => OnOpenTask.InvokeAsync(Entry))"
-                >
+                    Size="Size.Small"
+                    Variant="@ChipVariant.Outlined"
+                    Color="@ThemeColor.Primary">
                     @GetTaskLabel()
-                </span>
+                </LumexChip>
             }
             @if (Entry.IsBillable)
             {
-                <span class="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700">Billable</span>
+                <LumexChip
+                    @onclick="@(() => OnOpenTask.InvokeAsync(Entry))"
+                    Variant="@ChipVariant.Outlined"
+                    Size="Size.Small"
+                    Color="@ThemeColor.Info">
+                    Billable
+                </LumexChip>
+            }
+            @if (Entry.IsSynced)
+            {
+                <LumexPopover>
+                    <LumexPopoverTrigger>
+                        <LumexChip
+                            Size="Size.Small"
+                            Variant="@ChipVariant.Outlined"
+                            Color="@ThemeColor.Success">
+                            <StartContent>
+                                <CircleCheckFilledIcon Size="16" />
+                            </StartContent>
+                            <ChildContent>Synced</ChildContent>
+                        </LumexChip>
+                    </LumexPopoverTrigger>
+                    <LumexPopoverContent>
+                        The Time Entry was synchronized with an external service such as Jira or Redmine.
+                    </LumexPopoverContent>
+                </LumexPopover>
+                
             }
         </div>
         @if (!string.IsNullOrWhiteSpace(Entry.Description))
