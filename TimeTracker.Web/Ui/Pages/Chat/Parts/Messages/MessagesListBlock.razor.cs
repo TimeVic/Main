@@ -37,7 +37,18 @@ public partial class MessagesListBlock: IDisposable
     
     private readonly Subject<ICollection<MessagingMessageDto>> _messagesSubject = new();
     private ICollection<MessagingMessageDto> _messages = new List<MessagingMessageDto>();
-    
+    private bool _isNeedsScrollToBottom;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);        
+        if (_isNeedsScrollToBottom)
+        {
+            _isNeedsScrollToBottom = false;
+            await UiHelperService.ScrollToBottom("tv-chat-container");
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         _webSocketClientService.OnMessageCreated += OnMessageCreated;
@@ -60,7 +71,7 @@ public partial class MessagesListBlock: IDisposable
                 {
                     if (listState.Page == 1)
                     {
-                        await UiHelperService.ScrollToBottom("tv-chat-container");
+                        _isNeedsScrollToBottom = true;
                     }
                 }
             });
@@ -81,6 +92,10 @@ public partial class MessagesListBlock: IDisposable
                 _messagesSubject.OnNext(listState.List);    
             }
             StateHasChanged();
+            if (!await UiHelperService.HasScroll("tv-chat-container"))
+            {
+                LoadList();
+            }
         });
         ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Messaging.Channels.SetSelectedAction>(this, async (action) =>
         {
@@ -90,6 +105,7 @@ public partial class MessagesListBlock: IDisposable
             {
                 _messagesSubject.OnNext(listState.List);    
             }
+            _isNeedsScrollToBottom = true;
             StateHasChanged();
         });
         ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Messaging.Messages.AddMessageAction>(this, async (action) =>

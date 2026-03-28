@@ -37,6 +37,11 @@ public class UiHelperService
         await _js.InvokeVoidAsync("scrollHelper.scrollToBottom", elementId);
     }
     
+    public async Task<bool> HasScroll(string elementId)
+    {
+        return await _js.InvokeAsync<bool>("scrollHelper.hasScroll", elementId);
+    }
+    
     /**
      * Usage:
      * 
