@@ -2,39 +2,52 @@
 
 @inherits BaseReactiveComponent
 
-<FluentToolbar class="mb-2 w-100" Orientation="Orientation.Horizontal">
-    <FluentGrid Class="w-100">
-        <FluentGridItem lg="3" md="6" sm="12">
-            <EnumDropDown
-                Label="Group by"
-                FullWidth="true"
-                TItem="SummaryReportType"
-                Value="@_filterState.ReportType"
-                ValueChanged="OnChangeReportType"/>
-        </FluentGridItem>
-        <FluentGridItem lg="3" md="6" sm="12">
-            <EnumDropDown
-                Label="Period"
-                FullWidth="true"
-                TItem="SummaryReportPeriodType"
-                Value="@_filterState.PeriodType"
-                ValueChanged="OnChangePeriodType"/>
-        </FluentGridItem>
-        <FluentGridItem lg="3" md="6" sm="12">
-            <FluentDatePicker
-                Label="Date start"
-                Class="w-100"
-                Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-                Value="@_filterState.StartDate"
-                ValueChanged="@OnChangeDateStart"/>
-        </FluentGridItem>
-        <FluentGridItem lg="3" md="6" sm="12">
-            <FluentDatePicker
-                Label="Date end"
-                Class="w-100"
-                Disabled="_filterState.PeriodType != SummaryReportPeriodType.Custom"
-                Value="@_filterState.EndDate"
-                ValueChanged="@OnChangeDateEnd"/>
-        </FluentGridItem>
-    </FluentGrid>
-</FluentToolbar>
+<LumexCard>
+    <LumexCardHeader>
+        <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Filter</p>
+            <h2 class="mt-2 text-xl font-semibold text-slate-900">Summary report parameters</h2>
+            <p class="mt-1 text-sm text-slate-500">Change grouping and period to rebuild both the chart and grouped table.</p>
+        </div>
+    </LumexCardHeader>
+    <LumexCardBody>
+        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div>
+                <EnumDropDown
+                    Label="Group by"
+                    TItem="SummaryReportType"
+                    Value="@_filterState.ReportType"
+                    ValueChanged="OnChangeReportType"/>
+            </div>
+
+            <div>
+                <EnumDropDown
+                    Label="Period"
+                    TItem="SummaryReportPeriodType"
+                    Value="@_filterState.PeriodType"
+                    ValueChanged="OnChangePeriodType"/>
+            </div>
+
+            @if (_filterState.PeriodType == SummaryReportPeriodType.Custom)
+            {
+                <div>
+                    <LumexDatebox 
+                        TValue="DateTime?"
+                        Required="true"
+                        Value="@_filterState.StartDate"
+                        ValueChanged="@OnChangeDateStart"
+                        Label="Date from"/>
+                </div>
+
+                <div>
+                    <LumexDatebox 
+                        TValue="DateTime?"
+                        Required="true"
+                        Value="@_filterState.EndDate"
+                        ValueChanged="@OnChangeDateEnd"
+                        Label="Date from"/>
+                </div>
+            }
+        </div>
+    </LumexCardBody>
+</LumexCard>

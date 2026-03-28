@@ -1,6 +1,7 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
 @using System.Globalization
+@using LumexUI.Common
 
 @code {
 
@@ -9,12 +10,22 @@
 
 }
 
-@* <FluentDataGrid TGridItem="SummaryByWeeksReportItemDto" Items="@Items.AsQueryable()"> *@
-@*     <TemplateColumn Title="Week" Sortable="false"> *@
-@*         @context.WeekStartDate.ToShortDateString() *@
-@*         - *@
-@*         @context.WeekEndDate.ToShortDateString() *@
-@*     </TemplateColumn> *@
-@*     <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/> *@
-@*     <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/> *@
-@* </FluentDataGrid> *@
+<LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
+    <PropertyColumn Title="Week" Property="@(p => p.WeekStartDate)">
+        <Content>
+            @context.WeekStartDate.ToShortDateString()
+            -
+            @context.WeekEndDate.ToShortDateString()
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="Duration" Property="@(p => p.Duration)">
+        <Content>
+            @context.Duration.ToReadableShortString()
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="Amount" Property="@(p => p.Amount)">
+        <Content>
+            @context.Amount.ToMoneyFormat()
+        </Content>
+    </PropertyColumn>
+</LumexDataGrid>

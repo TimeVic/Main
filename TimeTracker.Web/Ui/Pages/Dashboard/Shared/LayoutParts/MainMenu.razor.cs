@@ -17,7 +17,7 @@ public partial class MainMenu
     private List<MenuItemModel> _navItems = new()
     {
         new MenuItemModel("Time Entries", "fa-regular fa-clock", SiteUrl.Dashboard_TimeEntry),
-        new MenuItemModel("Summary", "fa-regular fa-bar-chart", SiteUrl.Dashboard_Reports_Summary, true),
+        new MenuItemModel("Summary", "fa-regular fa-bar-chart", SiteUrl.Dashboard_Reports_Summary),
         new MenuItemModel("Tasks", "fa-regular fa-square-check", SiteUrl.Dashboard_Tasks_Main),
         new MenuItemModel("Payments", "fa-regular fa-credit-card", SiteUrl.Dashboard_Payments, true),
         new MenuItemModel("", "fa-solid fa-sliders", SiteUrl.Dashboard_Workspace_Settings, true),

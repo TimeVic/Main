@@ -20,7 +20,7 @@ public record ReportsState
 
     public SummaryReportFilterState SummaryReportFilter { get; set; } = new(
         SummaryReportType.GroupByProject,
-        SummaryReportPeriodType.Today,
+        SummaryReportPeriodType.ThisWeek,
         DateTime.Now,
         DateTime.Now
     );

@@ -1,6 +1,7 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
 @using Fluxor
+@using LumexUI.Common
 @using TimeTracker.Web.Store.Client
 @using TimeTracker.Web.Store.Project
 
@@ -10,8 +11,20 @@
     public ICollection<SummaryByProjectsReportItemDto> Items { get; set; } = new List<SummaryByProjectsReportItemDto>();
 }
 
-@* <FluentDataGrid TGridItem="SummaryByProjectsReportItemDto" Items="@Items.AsQueryable()"> *@
-@*     <PropertyColumn Title="Project" Property="@(p => p.ProjectName ?? "- No project -")" Sortable="false"/> *@
-@*     <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/> *@
-@*     <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/> *@
-@* </FluentDataGrid> *@
+<LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
+    <PropertyColumn Title="Project" Property="@(p => p.ProjectName)">
+        <Content>
+            @(context.ProjectName ?? "- No project -")
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="Duration" Property="@(p => p.Duration)">
+        <Content>
+            @context.Duration.ToReadableShortString()
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="Amount" Property="@(p => p.Amount)">
+        <Content>
+            @context.Amount.ToMoneyFormat()
+        </Content>
+    </PropertyColumn>
+</LumexDataGrid>
