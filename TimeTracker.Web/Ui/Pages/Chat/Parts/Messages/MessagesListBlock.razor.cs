@@ -9,7 +9,9 @@ using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Messaging;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Messaging.Channels;
 using TimeTracker.Web.Store.Messaging.Messages;
+using LoadListAction = TimeTracker.Web.Store.Messaging.Messages.LoadListAction;
 
 namespace TimeTracker.Web.Ui.Pages.Chat.Parts.Messages;
 
@@ -17,6 +19,9 @@ public partial class MessagesListBlock: IDisposable
 {
     [Inject]
     protected IState<MessagesState> State { get; set; }
+    
+    [Inject]
+    protected IState<ChannelsState> ChannelsState { get; set; }
     
     [Inject]
     protected IState<AuthState> AuthState { get; set; }
@@ -43,22 +48,20 @@ public partial class MessagesListBlock: IDisposable
             .Select(items =>
             {
                 return items
-                    .OrderByDescending(item => item.CreatedAt)
+                    .OrderBy(item => item.CreatedAt)
                     .ToArray();
             })
             .Subscribe(async results =>
             {
                 _messages = results;
                 StateHasChanged();
-                if (State.Value.Page == 1)
+                var listState = GetListState();
+                if (listState != null)
                 {
-                    await UiHelperService.ScrollToBottom("tv-chat-container");
-                }
-
-                Debug.Log(State.Value.IsListFullListLoaded, State.Value.Page);
-                if (State.Value.Page <= 3 && !State.Value.IsListFullListLoaded)
-                {
-                    Dispatcher.Dispatch(new LoadListAction(false));
+                    if (listState.Page == 1)
+                    {
+                        await UiHelperService.ScrollToBottom("tv-chat-container");
+                    }
                 }
             });
         
@@ -72,20 +75,39 @@ public partial class MessagesListBlock: IDisposable
         
         ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Messaging.Messages.SetListAction>(this, async (action) =>
         {
-            _messagesSubject.OnNext(State.Value.List);
+            var listState = GetListState();
+            if (listState != null)
+            {
+                _messagesSubject.OnNext(listState.List);    
+            }
+            StateHasChanged();
+        });
+        ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Messaging.Channels.SetSelectedAction>(this, async (action) =>
+        {
+            LoadList(true);
+            var listState = GetListState();
+            if (listState != null)
+            {
+                _messagesSubject.OnNext(listState.List);    
+            }
             StateHasChanged();
         });
         ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Messaging.Messages.AddMessageAction>(this, async (action) =>
         {
-            _messagesSubject.OnNext(State.Value.List);
+            var listState = GetListState();
+            if (listState != null)
+            {
+                _messagesSubject.OnNext(listState.List);    
+            }
             StateHasChanged();
+            await UiHelperService.ScrollToBottom("tv-chat-container");
         });
     }
     
     [JSInvokable]
     public Task OnScrollTopReached()
     {
-        Dispatcher.Dispatch(new LoadListAction(false));
+        LoadList();
         return Task.CompletedTask;
     }
     
@@ -96,8 +118,40 @@ public partial class MessagesListBlock: IDisposable
         _messagesSubject.Dispose();
     }
     
+    private void LoadList(bool isRefresh = false)
+    {
+        Dispatcher.Dispatch(new LoadListAction(ChannelsState.Value.SelectedChannel!, false));
+    }
+    
     private void OnMessageCreated(MessagingMessageDto message)
     {
+        Debug.Log("Message created", message.Id);
         Dispatcher.Dispatch(new AddMessageAction(message));
+    }
+    
+    private string GetMessageDayLabel(DateTime sentAt)
+    {
+        var messageDay = sentAt.Date;
+
+        if (messageDay == DateTime.Today)
+        {
+            return "Today";
+        }
+
+        if (messageDay == DateTime.Today.AddDays(-1))
+        {
+            return "Yesterday";
+        }
+        return sentAt.ToString("dd MMM yyyy");
+    }
+    
+    private MessagesListState? GetListState()
+    {
+        var channel = ChannelsState.Value.SelectedChannel;
+        if (channel == null)
+        {
+            return null;
+        }
+        return State.Value.GetListState(channel);
     }
 }

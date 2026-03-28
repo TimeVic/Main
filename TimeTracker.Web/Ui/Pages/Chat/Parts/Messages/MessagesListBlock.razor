@@ -1,18 +1,36 @@
 @using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity.Messaging
 @inherits BaseReactiveComponent
 
 <div id="tv-chat-container" class="flex-1 space-y-4 overflow-y-auto flex-grow bg-slate-50 px-4 py-5 sm:px-6">
     @if (State.Value.IsListLoading)
     {
         <div class="flex justify-center">
-            <LumexSpinner Variant="@SpinnerVariant.DotsFade" Label="Dots Fade" />
+            <LumexSpinner Variant="@SpinnerVariant.DotsFade" />
         </div>
     }
-    @if (State.Value.List.Any())
+    @if (_messages.Any())
     {
-        @foreach (var message in _messages.AsQueryable())
+        DateTime? previousMessageDay = null;
+        foreach (var message in _messages.AsQueryable())
         {
             var isMine = message.CreatedBy.Id == AuthState.Value.User.Id;
+            var messageDay = message.CreatedAt.Date;
+            var isShouldShowDaySeparator = previousMessageDay != messageDay;
+            previousMessageDay = messageDay;
+            
+            if (isShouldShowDaySeparator)
+            {
+                <div class="relative py-2">
+                    <div class="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-slate-200"></div>
+                    <div class="relative flex justify-center">
+                        <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-500 shadow-sm">
+                            @GetMessageDayLabel(message.CreatedAt)
+                        </span>
+                    </div>
+                </div>
+            }
+            
             <div class="@($"flex {(isMine ? "justify-end" : "justify-start")}")">
                 <div class="@($"max-w-xl rounded-3xl border px-4 py-3 shadow-sm {(isMine ? "border-cyan-200 bg-cyan-50" : "border-slate-200 bg-white")}")">
                     <div class="mb-1 flex items-center gap-2 text-xs">
