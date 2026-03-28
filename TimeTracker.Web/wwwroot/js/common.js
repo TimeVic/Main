@@ -41,3 +41,24 @@ window.openFile = function(data) {
 window.isTextSelected = function () {
     return window.getSelection().toString().length > 0;
 };
+
+window.scrollHelper = {
+
+    scrollToBottom: function (elementId) {
+        const el = document.getElementById(elementId);
+        if (el) {
+            el.scrollTop = el.scrollHeight;
+        }
+    },
+
+    onScrollTopReached: function (elementId, dotNetObjRef) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+
+        el.addEventListener("scroll", () => {
+            if (el.scrollTop === 0) {
+                dotNetObjRef.invokeMethodAsync("OnScrollTopReached");
+            }
+        });
+    }
+};

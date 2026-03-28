@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Store.Messaging.Messages;
 
@@ -33,6 +34,7 @@ public class Reducers
     {
         return state with
         {
+            Page = 1,
             TotalCount = 0,
             List = new List<MessagingMessageDto>()
         };
@@ -43,6 +45,7 @@ public class Reducers
     {
         return state with
         {
+            Page = ++state.Page,
             TotalCount = action.Response.TotalCount,
             List = state.List.Concat(action.Response.Items).ToList()
         };

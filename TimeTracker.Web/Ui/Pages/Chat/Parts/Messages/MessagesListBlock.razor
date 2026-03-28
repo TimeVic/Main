@@ -1,9 +1,16 @@
+@using LumexUI.Common
 @inherits BaseReactiveComponent
 
-<div class="flex-1 space-y-4 overflow-y-auto flex-grow bg-slate-50 px-4 py-5 sm:px-6">
+<div id="tv-chat-container" class="flex-1 space-y-4 overflow-y-auto flex-grow bg-slate-50 px-4 py-5 sm:px-6">
+    @if (State.Value.IsListLoading)
+    {
+        <div class="flex justify-center">
+            <LumexSpinner Variant="@SpinnerVariant.DotsFade" Label="Dots Fade" />
+        </div>
+    }
     @if (State.Value.List.Any())
     {
-        @foreach (var message in State.Value.List)
+        @foreach (var message in _messages.AsQueryable())
         {
             var isMine = message.CreatedBy.Id == AuthState.Value.User.Id;
             <div class="@($"flex {(isMine ? "justify-end" : "justify-start")}")">
@@ -17,7 +24,7 @@
             </div>
         }
     }
-    else
+    else if (!State.Value.IsListLoading)
     {
         <div class="flex h-full min-h-[20rem] items-center justify-center">
             <div class="max-w-md rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm">

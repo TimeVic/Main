@@ -74,4 +74,30 @@ public class GetListTest: BaseTest
         Assert.Equal(3, responseData.Items.Count);
         Assert.Contains(responseData.Items, item => item.Channel.Id == channel.Id);
     }
+    
+    [Fact]
+    public async Task ShouldGetSecondPage()
+    {
+        // Arrange
+        var channel = await _messagingDao.CreateChannel(_workspace, _user, "test2");
+        for (int i = 0; i < 15; i++)
+        {
+            await _messagingDao.CreateMessage(channel, _user, $"test{i}");    
+        }
+        
+        // Act
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            Page = 2,
+            ChannelId = channel.Id
+        });
+        await response.EnsureSuccessStatusCodeWithoutError();
+
+        // Assert
+        var responseData = await response.GetJsonDataAsync<GetListResponse>();
+        
+        Assert.NotEmpty(responseData.Items);
+        Assert.Equal(5, responseData.Items.Count);
+        Assert.Contains(responseData.Items, item => item.Channel.Id == channel.Id);
+    }
 }

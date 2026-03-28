@@ -37,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Massaging.Message.Actions
             DataValidationException.ThrowIfNull(channel);
             await _securityManager.CheckAccess(AccessLevel.Write, currentUser, channel);
 
-            var listResponse = await _messagingDao.GetMessagesList(channel, request.Page);
+            var listResponse = await _messagingDao.GetMessagesList(channel, request.Page, pageSize: 10);
             return new GetListResponse(
                 _mapper.Map<ICollection<MessagingMessageDto>>(listResponse.Items),
                 listResponse.TotalCount

@@ -31,4 +31,24 @@ public class UiHelperService
     {
         return await _js.InvokeAsync<bool>("isTextSelected");
     }
+    
+    public async Task ScrollToBottom(string elementId)
+    {
+        await _js.InvokeVoidAsync("scrollHelper.scrollToBottom", elementId);
+    }
+    
+    /**
+     * Usage:
+     * 
+         [JSInvokable]
+         public Task OnScrollTopReached()
+         {
+           Console.WriteLine("User scrolled to TOP!");
+           return Task.CompletedTask;
+         }
+     */
+    public async Task OnScrollTopReached<TValue>(string elementId, DotNetObjectReference<TValue> component) where TValue : class
+    {
+        await _js.InvokeVoidAsync("scrollHelper.onScrollTopReached", elementId, component);
+    }
 }
