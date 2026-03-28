@@ -1,6 +1,7 @@
 ﻿@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
 @using Fluxor
+@using LumexUI.Common
 @using TimeTracker.Web.Store.Client
 @using TimeTracker.Web.Store.Project
 
@@ -11,8 +12,16 @@
 
 }
 
-@* <FluentDataGrid TGridItem="SummaryByUsersReportItemDto" Items="@Items.AsQueryable()"> *@
-@*     <PropertyColumn Title="User" Property="@(p => p.Name)" Sortable="false"/> *@
-@*     <PropertyColumn Title="Duration" Property="@(p => p.Duration.ToReadableShortString())" Sortable="false"/> *@
-@*     <PropertyColumn Title="Amount" Property="@(p => p.Amount.ToMoneyFormat())" Sortable="false"/> *@
-@* </FluentDataGrid> *@
+<LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
+    <PropertyColumn Title="User" Property="@(p => p.Name)"/>
+    <PropertyColumn Title="Duration" Property="@(p => p.Duration)">
+        <Content>
+            @context.Duration.ToReadableShortString()
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="Amount" Property="@(p => p.Amount)">
+        <Content>
+            @context.Amount.ToMoneyFormat()
+        </Content>
+    </PropertyColumn>
+</LumexDataGrid>

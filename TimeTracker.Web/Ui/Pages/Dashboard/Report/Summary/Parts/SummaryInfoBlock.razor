@@ -2,19 +2,24 @@
 
 @inherits BaseReactiveComponent
 
-<div class="d-flex justify-content-between">
-    <FluentLabel Typo="Typography.Body">
-        Total Duration: 
-    </FluentLabel>
-    <FluentLabel Typo="Typography.Subject" Class="ml-2">
-        <b> @_totalDuration.ToReadableShortString()</b>
-    </FluentLabel>
-</div>
-<div class="d-flex justify-content-between">
-    <FluentLabel Typo="Typography.Body">
-        Total Amount: 
-    </FluentLabel>
-    <FluentLabel Typo="Typography.Subject" Class="ml-2">
-        <b> @_totalAmount.ToMoneyFormat()</b>
-    </FluentLabel>
-</div>
+<section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4 mt-6">
+    <LumexCard>
+        <LumexCardHeader>
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Duration</p>
+        </LumexCardHeader>
+        <LumexCardBody>
+            <p class="text-2xl font-semibold text-slate-900">@_totalDuration.ToReadableShortString()</p>
+            <p class="mt-1 text-sm text-slate-500">Worked during the selected period</p>
+        </LumexCardBody>
+    </LumexCard>
+    
+    <LumexCard>
+        <LumexCardHeader>
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Amount</p>
+        </LumexCardHeader>
+        <LumexCardBody>
+            <p class="text-2xl font-semibold text-slate-900">@_totalAmount.ToMoneyFormat()</p>
+            <p class="mt-1 text-sm text-slate-500">Billable value of filtered entries</p>
+        </LumexCardBody>
+    </LumexCard>
+</section>
