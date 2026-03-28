@@ -49,14 +49,21 @@ public class LoadListEffect: Effect<LoadListAction>
                 }
                 if (_messagesState.Value.Page < 1)
                 {
+                    page = 1;
                     dispatcher.Dispatch(new RefreshListAction());
                 }
-                
-                var response = await _apiService.MessagingMessageGetListAsync(
-                    _channelsState.Value.SelectedChannel!.Id,
-                    page
-                );
-                dispatcher.Dispatch(new SetListAction(response!));
+
+                if (!_messagesState.Value.IsListFullListLoaded)
+                {
+                    var response = await _apiService.MessagingMessageGetListAsync(
+                        _channelsState.Value.SelectedChannel!.Id,
+                        page
+                    );
+                    dispatcher.Dispatch(new SetListAction(response!));
+                    
+                    page++;
+                    dispatcher.Dispatch(new SetPageAction(page));
+                }
             }
         }
         catch (Exception e)

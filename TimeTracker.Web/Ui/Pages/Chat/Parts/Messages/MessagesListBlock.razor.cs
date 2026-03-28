@@ -54,6 +54,12 @@ public partial class MessagesListBlock: IDisposable
                 {
                     await UiHelperService.ScrollToBottom("tv-chat-container");
                 }
+
+                Debug.Log(State.Value.IsListFullListLoaded, State.Value.Page);
+                if (State.Value.Page <= 3 && !State.Value.IsListFullListLoaded)
+                {
+                    Dispatcher.Dispatch(new LoadListAction(false));
+                }
             });
         
         RunAfterRendered(async () =>
@@ -65,6 +71,11 @@ public partial class MessagesListBlock: IDisposable
         });
         
         ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Messaging.Messages.SetListAction>(this, async (action) =>
+        {
+            _messagesSubject.OnNext(State.Value.List);
+            StateHasChanged();
+        });
+        ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Messaging.Messages.AddMessageAction>(this, async (action) =>
         {
             _messagesSubject.OnNext(State.Value.List);
             StateHasChanged();

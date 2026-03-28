@@ -21,6 +21,15 @@ public class Reducers
     }
     
     [ReducerMethod]
+    public static MessagesState Reducer(MessagesState state, SetPageAction action)
+    {
+        return state with
+        {
+            Page = action.Page
+        };
+    }
+    
+    [ReducerMethod]
     public static MessagesState Reducer(MessagesState state, SetIsMessageSending action)
     {
         return state with
@@ -36,6 +45,7 @@ public class Reducers
         {
             Page = 1,
             TotalCount = 0,
+            IsListFullListLoaded = false,
             List = new List<MessagingMessageDto>()
         };
     }
@@ -45,9 +55,9 @@ public class Reducers
     {
         return state with
         {
-            Page = ++state.Page,
             TotalCount = action.Response.TotalCount,
-            List = state.List.Concat(action.Response.Items).ToList()
+            List = state.List.Concat(action.Response.Items).ToList(),
+            IsListFullListLoaded = !action.Response.IsHasMore
         };
     }
     

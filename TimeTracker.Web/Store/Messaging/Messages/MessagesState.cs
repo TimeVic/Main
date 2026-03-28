@@ -12,6 +12,8 @@ public record MessagesState
     
     public bool IsListLoading { get; set; } = false;
     
+    public bool IsListFullListLoaded { get; set; } = false;
+    
     public long TotalCount { get; set; } = 0;
     
     public ICollection<MessagingMessageDto> List { get; set; } = new List<MessagingMessageDto>();

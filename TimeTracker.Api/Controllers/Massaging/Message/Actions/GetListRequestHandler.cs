@@ -12,6 +12,8 @@ namespace TimeTracker.Api.Controllers.Massaging.Message.Actions
 {
     public class GetListRequestHandler : IAsyncRequestHandler<GetListRequest, GetListResponse>
     {
+        private readonly int _pageSize = 10;
+        
         private readonly IMapper _mapper;
         private readonly IApiRequestService _apiRequestService;
         private readonly ISecurityManager _securityManager;
@@ -37,10 +39,11 @@ namespace TimeTracker.Api.Controllers.Massaging.Message.Actions
             DataValidationException.ThrowIfNull(channel);
             await _securityManager.CheckAccess(AccessLevel.Write, currentUser, channel);
 
-            var listResponse = await _messagingDao.GetMessagesList(channel, request.Page, pageSize: 10);
+            var listResponse = await _messagingDao.GetMessagesList(channel, request.Page, pageSize: _pageSize);
             return new GetListResponse(
                 _mapper.Map<ICollection<MessagingMessageDto>>(listResponse.Items),
-                listResponse.TotalCount
+                listResponse.TotalCount,
+                _pageSize
             );
         }
     }

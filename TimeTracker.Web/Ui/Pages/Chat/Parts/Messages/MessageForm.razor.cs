@@ -1,5 +1,6 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using TimeTracker.Web.Store.Messaging.Channels;
 using TimeTracker.Web.Store.Messaging.Messages;
 
@@ -21,8 +22,11 @@ public partial class MessageForm
 
     private void SendMessage()
     {
-        Dispatcher.Dispatch(new SendMessageAction(_messageText));
-        _messageText = string.Empty;
+        if (!string.IsNullOrWhiteSpace(_messageText))
+        {
+            Dispatcher.Dispatch(new SendMessageAction(_messageText));
+            _messageText = string.Empty;
+        }
     }
 
     private void SeedReply()
@@ -33,5 +37,14 @@ public partial class MessageForm
     private void OnMessageChanged(ChangeEventArgs obj)
     {
         _messageText = obj.Value?.ToString() ?? string.Empty;
+    }
+
+    private async Task OnKeyDown(KeyboardEventArgs arg)
+    {
+        if (arg.Key == "Enter")
+        {
+            SendMessage();
+        }
+        await Task.CompletedTask;
     }
 }
