@@ -1,0 +1,41 @@
+@using LumexUI
+@using LumexUI.Common
+
+@inherits BaseReactiveComponent
+
+<LumexModal Open="IsOpened" OnClose="@OnCloseModal" @ref="modal">
+    <LumexModalContent>
+        <LumexModalHeader Class="flex items-center gap-3">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">New workspace</p>
+                <h2 class="mt-2 text-xl font-semibold text-slate-900">Add workspace</h2>
+                <p class="mt-1 text-sm text-slate-500">After creation the app will switch to it automatically.</p>
+            </div>
+        </LumexModalHeader>
+        <LumexModalBody>
+            <EditForm
+                Context="form"
+                @ref="_form"
+                Model="@model"
+                novalidate>
+                <DataAnnotationsValidator/>
+                
+                <div>
+                    <InputTextField
+                        Class="w-100"
+                        Label="Workspace name"
+                        @bind-Value="model.Name"/>
+                </div>
+            </EditForm>
+        </LumexModalBody>
+        <LumexModalFooter>
+            <CustomButton
+                FullWidth="@true"
+                OnClick="@Submit"
+                Color="@ThemeColor.Primary"
+                Radius="@Radius.Full">
+                Add
+            </CustomButton>
+        </LumexModalFooter>
+    </LumexModalContent>
+</LumexModal>

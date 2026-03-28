@@ -18,7 +18,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
         private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IClientDao _clientDao;
-        private readonly IDbSessionProvider _sessionProvider;
         private readonly ISecurityManager _securityManager;
 
         public AddRequestHandler(
@@ -26,7 +25,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
             IApiRequestService apiRequestService,
             IUserDao userDao,
             IClientDao clientDao,
-            IDbSessionProvider sessionProvider,
             ISecurityManager securityManager
         )
         {
@@ -34,7 +32,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
             _apiRequestService = apiRequestService;
             _userDao = userDao;
             _clientDao = clientDao;
-            _sessionProvider = sessionProvider;
             _securityManager = securityManager;
         }
     

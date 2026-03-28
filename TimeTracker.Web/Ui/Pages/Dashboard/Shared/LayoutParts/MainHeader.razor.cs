@@ -18,6 +18,8 @@ public partial class MainHeader
     [Inject]
     public WorkspaceInitializationService _workspaceInitialization { get; set; }
     
+    private bool _isShowAddWorkspaceModal = false;
+    
     private void OnSelectWorkspace(WorkspaceDto? workspace)
     {
         if (workspace == null)
