@@ -5,6 +5,7 @@ namespace TimeTracker.Web.Store.Messaging.Messages;
 
 public record struct AddMessageAction(MessagingMessageDto Message);
 public record struct RefreshListAction();
+public record struct SetPageAction(int Page);
 public record struct LoadListAction(bool IsRefresh = true);
 public record struct SetListAction(GetListResponse Response);
 public record struct SetIsListLoadingAction(bool IsLoading);

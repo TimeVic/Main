@@ -3,7 +3,7 @@
 @using LumexUI.Shared.Icons
 @inherits BaseReactiveComponent
 
-<LumexModal>
+<LumexModal @ref="modal">
     <LumexModalTrigger 
         Variant="@Variant.Light" 
         Color="ThemeColor.Info"

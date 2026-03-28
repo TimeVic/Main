@@ -32,12 +32,12 @@ public partial class MessagingDao
             .Where(item => item.Channel == channel);
         
         var offset = PaginationUtils.CalculateOffset(page, pageSize);
+        var count = await query.CountAsync();
         var messages = await query
             .OrderByDescending(item => item.CreatedAt)
             .Skip(offset)
             .Take(pageSize)
             .ToListAsync();
-        var count = await query.CountAsync();
         return new ListDto<MessagingMessageEntity>(messages, count);
     }
 }

@@ -1,4 +1,5 @@
 using Fluxor;
+using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Channel;
@@ -11,6 +12,8 @@ public partial class AddChannelModal
 {
     [Inject]
     protected IState<AuthState> AuthState { get; set; }
+    
+    private LumexModal modal;
     
     private CreateRequest model = new()
     {
@@ -33,6 +36,7 @@ public partial class AddChannelModal
             return;
         }
 
-        Dispatcher.Dispatch(new CreateChannelAction(model.Slug));  
+        Dispatcher.Dispatch(new CreateChannelAction(model.Slug));
+        modal.CloseAsync();
     }
 }

@@ -100,4 +100,31 @@ public class GetListTest: BaseTest
         Assert.Equal(5, responseData.Items.Count);
         Assert.Contains(responseData.Items, item => item.Channel.Id == channel.Id);
     }
+    
+    [Fact]
+    public async Task ShouldGetWithCorrectState()
+    {
+        // Arrange
+        var channel = await _messagingDao.CreateChannel(_workspace, _user, "test2");
+        for (int i = 0; i < 15; i++)
+        {
+            await _messagingDao.CreateMessage(channel, _user, $"test{i}");    
+        }
+        
+        // Act
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            Page = 1,
+            ChannelId = channel.Id
+        });
+        await response.EnsureSuccessStatusCodeWithoutError();
+
+        // Assert
+        var responseData = await response.GetJsonDataAsync<GetListResponse>();
+        
+        Assert.NotEmpty(responseData.Items);
+        Assert.Equal(10, responseData.Items.Count);
+        Assert.True(responseData.IsHasMore);
+        Assert.Contains(responseData.Items, item => item.Channel.Id == channel.Id);
+    }
 }

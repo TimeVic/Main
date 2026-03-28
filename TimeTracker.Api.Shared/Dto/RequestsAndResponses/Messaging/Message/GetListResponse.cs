@@ -6,8 +6,9 @@ public class GetListResponse: PaginatedListDto<MessagingMessageDto>
 {
     public GetListResponse(
         ICollection<MessagingMessageDto> responseList,
-        int totalItems
-    ) : base(responseList, totalItems)
+        int totalItems,
+        int pageSize
+    ) : base(responseList, totalItems, pageSize)
     {
     }
 }
