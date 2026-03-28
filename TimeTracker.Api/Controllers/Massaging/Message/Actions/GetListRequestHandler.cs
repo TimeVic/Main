@@ -12,7 +12,7 @@ namespace TimeTracker.Api.Controllers.Massaging.Message.Actions
 {
     public class GetListRequestHandler : IAsyncRequestHandler<GetListRequest, GetListResponse>
     {
-        private readonly int _pageSize = 10;
+        private readonly int _pageSize = 50;
         
         private readonly IMapper _mapper;
         private readonly IApiRequestService _apiRequestService;

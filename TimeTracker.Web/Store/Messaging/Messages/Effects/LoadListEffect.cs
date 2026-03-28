@@ -36,33 +36,34 @@ public class LoadListEffect: Effect<LoadListAction>
             dispatcher.Dispatch(new SetIsListLoadingAction(true));
             if (action.IsRefresh)
             {
-                dispatcher.Dispatch(new RefreshListAction());
+                dispatcher.Dispatch(new RefreshListAction(action.Channel));
             }
 
-            var page = _messagesState.Value.Page;
+            var listState = _messagesState.Value.GetListState(action.Channel);
+            var page = listState?.Page ?? 1;
             if (_authState.Value.Workspace != null)
             {
                 if (_channelsState.Value.SelectedChannel == null)
                 {
-                    dispatcher.Dispatch(new RefreshListAction());
+                    dispatcher.Dispatch(new RefreshListAction(action.Channel));
                     return;
                 }
-                if (_messagesState.Value.Page < 1)
+                if (page < 1)
                 {
                     page = 1;
-                    dispatcher.Dispatch(new RefreshListAction());
+                    dispatcher.Dispatch(new RefreshListAction(action.Channel));
                 }
 
-                if (!_messagesState.Value.IsListFullListLoaded)
+                if (listState is not { IsListFullListLoaded: true })
                 {
                     var response = await _apiService.MessagingMessageGetListAsync(
                         _channelsState.Value.SelectedChannel!.Id,
                         page
                     );
-                    dispatcher.Dispatch(new SetListAction(response!));
+                    dispatcher.Dispatch(new SetListAction(action.Channel, response!));
                     
                     page++;
-                    dispatcher.Dispatch(new SetPageAction(page));
+                    dispatcher.Dispatch(new SetPageAction(action.Channel, page));
                 }
             }
         }

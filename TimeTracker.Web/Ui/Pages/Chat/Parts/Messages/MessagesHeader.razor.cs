@@ -16,4 +16,6 @@ public partial class MessagesHeader
     
     [Inject]
     protected IState<AuthState> AuthState { get; set; }
+    
+    private MessagesListState? ListState => MessagesState.Value.GetListState(ChannelsState.Value.SelectedChannel!);
 }
