@@ -28,12 +28,12 @@
             Variant="MenuVariant.Outlined">
             @foreach (var project in _list)
             {
-                <LumexDropdownItem OnClick="@(() => OnValueChanged(project))">
-                    @project?.Name
-                    @if (project?.Client != null)
-                    {
-                        <text>(@project?.Client?.Name)</text>
-                    }
+                <LumexDropdownItem 
+                    Description="@project?.Client?.Name"
+                    OnClick="@(() => OnValueChanged(project))">
+                    <ChildContent>
+                        @project?.Name
+                    </ChildContent>
                 </LumexDropdownItem>
             }
         </LumexDropdownMenu>
