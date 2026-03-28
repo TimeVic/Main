@@ -1,6 +1,7 @@
 using Autofac;
 using NHibernate.Linq;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dao.Common;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities.Messaging;
@@ -30,8 +31,11 @@ public partial class MessagingDao
             .Fetch(item => item.CreatedBy)
             .Where(item => item.Channel == channel);
         
+        var offset = PaginationUtils.CalculateOffset(page, pageSize);
         var messages = await query
             .OrderByDescending(item => item.CreatedAt)
+            .Skip(offset)
+            .Take(pageSize)
             .ToListAsync();
         var count = await query.CountAsync();
         return new ListDto<MessagingMessageEntity>(messages, count);

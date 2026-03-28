@@ -30,7 +30,7 @@ public class BaseReactiveComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     [Inject] 
     protected ToastService ToastService { get; set; }
     
-    private List<Action> _actionsToRunAfterRender = new List<Action>();
+    private List<Action> _actionsToRunAfterRender = [];
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         // run all the actions (.NET code) **once** after rendering

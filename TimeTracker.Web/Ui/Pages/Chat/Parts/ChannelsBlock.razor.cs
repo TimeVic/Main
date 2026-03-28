@@ -42,6 +42,6 @@ public partial class ChannelsBlock: IDisposable
     private void SelectChannel(MessagingChannelDto? channel)
     {
         Dispatcher.Dispatch(new SetSelectedAction(channel));
-        Dispatcher.Dispatch(new Store.Messaging.Messages.LoadListAction());
+        Dispatcher.Dispatch(new Store.Messaging.Messages.LoadListAction(true));
     }
 }

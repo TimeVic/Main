@@ -1,4 +1,5 @@
 ﻿using Fluxor;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Messaging.Channels;
@@ -38,6 +39,7 @@ public class LoadListEffect: Effect<LoadListAction>
                 dispatcher.Dispatch(new RefreshListAction());
             }
 
+            var page = _messagesState.Value.Page;
             if (_authState.Value.Workspace != null)
             {
                 if (_channelsState.Value.SelectedChannel == null)
@@ -45,14 +47,14 @@ public class LoadListEffect: Effect<LoadListAction>
                     dispatcher.Dispatch(new RefreshListAction());
                     return;
                 }
-                if (_messagesState.Value.Page <= 1)
+                if (_messagesState.Value.Page < 1)
                 {
                     dispatcher.Dispatch(new RefreshListAction());
                 }
-
+                
                 var response = await _apiService.MessagingMessageGetListAsync(
                     _channelsState.Value.SelectedChannel!.Id,
-                    _messagesState.Value.Page
+                    page
                 );
                 dispatcher.Dispatch(new SetListAction(response!));
             }
