@@ -2,26 +2,47 @@
 @using LumexUI
 @using LumexUI.Common
 @using TimeTracker.Web.Core.Helpers
+@using TimeTracker.Web.Services.UI.Modal
+@using TimeTracker.Web.Ui.Shared.Components.Dialogs
 
-<LumexTextbox
-    @bind-Value="CurrentValue"
-    Class="@Class"
-    Placeholder="@Placeholder"
-    Type="@Type"
-    Label="@Label"
-    Invalid="@HasError"
-    Disabled="Disabled"
-    FullWidth="FullWidth"
-    Required="@Required"
-    Variant="Variant"
-    Color="Color"
-    Size="Size"
-    Clearable="Clearable"
-    ErrorMessage="@FirstError">
+@if (IsShowEmojiButton && _isShowEmojiModal)
+{
+    <EmojiPickerModal />
+}
+
+<div class="flex items-center gap-2">
+    <LumexTextbox
+        @bind-Value="CurrentValue"
+        Class="@Class"
+        Placeholder="@Placeholder"
+        Type="@Type"
+        Label="@Label"
+        Invalid="@HasError"
+        Disabled="Disabled"
+        FullWidth="FullWidth"
+        Required="@Required"
+        Variant="Variant"
+        Color="Color"
+        Size="Size"
+        Clearable="Clearable"
+        ErrorMessage="@FirstError">
     
-    <StartContent>@StartContent</StartContent>
-    <EndContent>@EndContent</EndContent>
-</LumexTextbox>
+        <StartContent>@StartContent</StartContent>
+        <EndContent>@EndContent</EndContent>
+    </LumexTextbox>
+    
+    @if (IsShowEmojiButton)
+    {
+        <LumexButton
+            OnClick="@(() => OnShowEmojiModal())"
+            Color="ThemeColor.Primary"
+            IconOnly="true"
+            Size="Size.Small"
+            Variant="LumexUI.Common.Variant.Outlined">
+            <StartContent>😊</StartContent>
+        </LumexButton>    
+    }
+</div>
 
 @code {
     [Parameter]
@@ -58,16 +79,23 @@
     public bool Clearable { get; set; } = false;
     
     [Parameter]
+    public bool IsShowEmojiButton { get; set; } = false;
+    
+    [Parameter]
     public RenderFragment? StartContent { get; set; }
     
     [Parameter]
     public RenderFragment? EndContent { get; set; }
     
+    [Inject]
+    public ModalDialogService ModalDialogService { get; set; }
+    
     private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
 
     private string FirstError =>
         EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
-    
+
+    public bool _isShowEmojiModal { get; set; } = false;
     
     protected override bool TryParseValueFromString(
         string? value,
@@ -79,4 +107,19 @@
         validationErrorMessage = null;
         return true;
     }
+
+    private async Task OnShowEmojiModal()
+    {
+        
+        var result = await ModalDialogService.ShowAsync<EmojiPickerModal>(
+            new ModalParameters
+            {
+            });
+
+        if (result is bool ok && ok)
+        {
+            Console.WriteLine("Удалено!");
+        }
+    }
+
 }
