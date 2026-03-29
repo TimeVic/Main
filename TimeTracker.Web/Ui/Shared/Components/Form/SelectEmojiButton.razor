@@ -1,0 +1,47 @@
+@using LumexUI.Common
+
+<CustomPopup>
+    <TriggerContent Context="toggle">
+        <LumexButton
+            OnClick="toggle"
+            Color="ThemeColor.Primary"
+            IconOnly="true"
+            Size="Size.Small"
+            Variant="Variant.Outlined">
+            <StartContent>😊</StartContent>
+        </LumexButton>
+    </TriggerContent>
+    <ChildContent>
+        <LumexCard 
+            Shadow="Shadow.Small"
+            Class="absolute left-0 mt-2 w-auto inline-block min-w-max">
+            <LumexCardHeader Class="justify-between pb-0">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-face-smile mr-1.5 text-primary"></i>
+                    <p class="text-small text-foreground-500">Choose an emoji</p>
+                </div>
+                <LumexButton 
+                    IconOnly="@true"
+                    Size="@Size.Small"
+                    Radius="@Radius.Full"
+                    OnClick="@(() => _isShowPopup = false)"
+                    Variant="@Variant.Light">
+                    <XIcon Size="20" />
+                </LumexButton>
+            </LumexCardHeader>
+            <LumexCardBody 
+                Class="grid grid-cols-8 gap-1 text-xl select-none overflow-y-scroll h-[250px]"
+            >
+                @foreach (var emoji in EmojiOptions)
+                {
+                    <button
+                        type="button"
+                        class="text-2xl leading-none p-1 rounded-md hover:bg-gray-100 transition-colors w-8 h-8 flex items-center justify-center cursor-pointer"
+                        @onclick="() => OnSelectEmoji(emoji)">
+                        @emoji.Symbol
+                    </button>
+                }
+            </LumexCardBody>
+        </LumexCard>
+    </ChildContent>
+</CustomPopup>

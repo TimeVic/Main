@@ -69,3 +69,42 @@ window.scrollHelper = {
         return el.scrollHeight > el.clientHeight;
     }
 };
+
+window.popupHelper = {
+    portalAppend: function (element) {
+        document.getElementById("tv-portal-root").appendChild(element);
+    },
+
+    portalRemove: function (element) {
+        if (element && element.remove) element.remove();
+    },
+
+    addOutsideClick: function (dotnetRef, popupId) {
+        function handler(e) {
+            const popup = document.getElementById(popupId);
+            if (!popup) return;
+
+            if (!popup.contains(e.target)) {
+                dotnetRef.invokeMethodAsync("Hide");
+                document.removeEventListener("click", handler);
+            }
+        }
+
+        setTimeout(() => document.addEventListener("click", handler), 10);
+    },
+
+    addEscapeClose: function (dotnetRef) {
+        function handler(e) {
+            if (e.key === "Escape") {
+                dotnetRef.invokeMethodAsync("Hide");
+                document.removeEventListener("keydown", handler);
+            }
+        }
+
+        document.addEventListener("keydown", handler);
+    },
+
+    getRect: function (element) {
+        return element.getBoundingClientRect();
+    }
+};

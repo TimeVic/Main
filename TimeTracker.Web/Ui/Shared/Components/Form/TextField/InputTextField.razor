@@ -1,14 +1,6 @@
 @inherits InputBase<string>
-@using LumexUI
 @using LumexUI.Common
-@using TimeTracker.Web.Core.Helpers
 @using TimeTracker.Web.Services.UI.Modal
-@using TimeTracker.Web.Ui.Shared.Components.Dialogs
-
-@if (IsShowEmojiButton && _isShowEmojiModal)
-{
-    <EmojiPickerModal />
-}
 
 <div class="flex items-center gap-2">
     <LumexTextbox
@@ -33,14 +25,7 @@
     
     @if (IsShowEmojiButton)
     {
-        <LumexButton
-            OnClick="@(() => OnShowEmojiModal())"
-            Color="ThemeColor.Primary"
-            IconOnly="true"
-            Size="Size.Small"
-            Variant="LumexUI.Common.Variant.Outlined">
-            <StartContent>😊</StartContent>
-        </LumexButton>    
+        <SelectEmojiButton OnSelected="emoji => CurrentValue += emoji.Symbol" />
     }
 </div>
 
@@ -107,19 +92,4 @@
         validationErrorMessage = null;
         return true;
     }
-
-    private async Task OnShowEmojiModal()
-    {
-        
-        var result = await ModalDialogService.ShowAsync<EmojiPickerModal>(
-            new ModalParameters
-            {
-            });
-
-        if (result is bool ok && ok)
-        {
-            Console.WriteLine("Удалено!");
-        }
-    }
-
 }

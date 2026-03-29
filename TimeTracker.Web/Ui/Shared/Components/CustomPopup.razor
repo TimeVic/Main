@@ -1,0 +1,91 @@
+@inject IJSRuntime JS
+
+<div class="inline-block" @ref="_triggerRef">
+    @if (TriggerContent is not null)
+    {
+        @TriggerContent(Toggle)
+    }
+    else
+    {
+        <button @onclick="Toggle">
+            Toggle Popup
+        </button>
+    }
+</div>
+
+@if (_visible)
+{
+    <div @ref="_popupRef"
+         id="@_popupId"
+         class="absolute z-[99999]"
+         style="left:@_leftPx; top:@_topPx; position:absolute;">
+        @ChildContent
+    </div>
+}
+
+@code {
+    private ElementReference _popupRef;
+    private ElementReference _triggerRef;
+
+    private string _popupId = "pp_" + Guid.NewGuid().ToString("N");
+    private bool _visible;
+
+    private double _leftPx;
+    private double _topPx;
+
+    [Parameter]
+    public RenderFragment<Func<Task>>? TriggerContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// Смещение popup от кнопки
+    [Parameter]
+    public int OffsetY { get; set; } = 6;
+
+    public async Task Show()
+    {
+        _visible = true;
+        StateHasChanged();
+
+        await Task.Delay(5);
+
+        // Получаем позицию триггера
+        var rect = await JS.InvokeAsync<DomRect>("popupHelper.getRect", _triggerRef);
+
+        _leftPx = rect.Left;
+        _topPx = rect.Bottom + OffsetY;
+
+        // Переносим popup в body
+        await JS.InvokeVoidAsync("popupHelper.portalAppend", _popupRef);
+
+        // Регистрация событий
+        await JS.InvokeVoidAsync("popupHelper.addOutsideClick",
+            DotNetObjectReference.Create(this), _popupId);
+
+        await JS.InvokeVoidAsync("popupHelper.addEscapeClose",
+            DotNetObjectReference.Create(this));
+    }
+
+    [JSInvokable]
+    public async Task Hide()
+    {
+        await JS.InvokeVoidAsync("popupHelper.portalRemove", _popupRef);
+        _visible = false;
+        StateHasChanged();
+    }
+    
+    private async Task Toggle()
+    {
+        if (_visible)
+            await Hide();
+        else
+            await Show();
+    }
+
+    public class DomRect
+    {
+        public double Left { get; set; }
+        public double Bottom { get; set; }
+    }
+}
