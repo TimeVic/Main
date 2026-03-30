@@ -3,7 +3,7 @@
 
 @inherits BaseReactiveComponent
 
-<LumexModal Open="IsOpened" OnClose="@OnCloseModal" @ref="modal">
+<LumexModal Open="IsOpened" OnClose="@OnCloseModal" Size="ModalSize.Small" @ref="modal">
     <LumexModalContent>
         <LumexModalHeader Class="flex items-center gap-3">
             <div>
@@ -24,6 +24,7 @@
                     <InputTextField
                         Class="w-100"
                         Label="Workspace name"
+                        IsShowEmojiButton="true"
                         @bind-Value="model.Name"/>
                 </div>
             </EditForm>

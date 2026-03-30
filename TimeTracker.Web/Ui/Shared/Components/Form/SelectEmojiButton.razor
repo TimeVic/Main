@@ -1,0 +1,30 @@
+@using LumexUI.Common
+@using TimeTracker.Web.Constants.Ui
+@using TimeTracker.Web.Ui.Shared.Components.Dialogs
+
+@inherits BaseComponent
+
+<LumexButton
+    OnClick="SelectEmoji"
+    Color="ThemeColor.Primary"
+    IconOnly="true"
+    Size="Size.Small"
+    Variant="Variant.Outlined">
+    <StartContent>😊</StartContent>
+</LumexButton>
+
+@* <CustomPopup2> *@
+@*     <ChildContent> *@
+@*         <div class="grid grid-cols-8 gap-1 text-xl select-none overflow-y-scroll h-[250px]"> *@
+@*             @foreach (var emoji in EmojiList.List) *@
+@*             { *@
+@*                 <button *@
+@*                     type="button" *@
+@*                     class="text-2xl leading-none p-1 rounded-md hover:bg-gray-100 transition-colors w-8 h-8 flex items-center justify-center cursor-pointer" *@
+@*                     @onclick="() => OnSelectEmoji(emoji)"> *@
+@*                     @emoji.Symbol *@
+@*                 </button> *@
+@*             }     *@
+@*         </div> *@
+@*     </ChildContent> *@
+@* </CustomPopup2> *@

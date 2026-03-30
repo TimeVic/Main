@@ -1,27 +1,33 @@
 @inherits InputBase<string>
-@using LumexUI
 @using LumexUI.Common
-@using TimeTracker.Web.Core.Helpers
+@using TimeTracker.Web.Services.UI.Modal
 
-<LumexTextbox
-    @bind-Value="CurrentValue"
-    Class="@Class"
-    Placeholder="@Placeholder"
-    Type="@Type"
-    Label="@Label"
-    Invalid="@HasError"
-    Disabled="Disabled"
-    FullWidth="FullWidth"
-    Required="@Required"
-    Variant="Variant"
-    Color="Color"
-    Size="Size"
-    Clearable="Clearable"
-    ErrorMessage="@FirstError">
+<div class="flex items-center gap-2">
+    <LumexTextbox
+        @bind-Value="CurrentValue"
+        Class="@Class"
+        Placeholder="@Placeholder"
+        Type="@Type"
+        Label="@Label"
+        Invalid="@HasError"
+        Disabled="Disabled"
+        FullWidth="FullWidth"
+        Required="@Required"
+        Variant="Variant"
+        Color="Color"
+        Size="Size"
+        Clearable="Clearable"
+        ErrorMessage="@FirstError">
     
-    <StartContent>@StartContent</StartContent>
-    <EndContent>@EndContent</EndContent>
-</LumexTextbox>
+        <StartContent>@StartContent</StartContent>
+        <EndContent>@EndContent</EndContent>
+    </LumexTextbox>
+    
+    @if (IsShowEmojiButton)
+    {
+        <SelectEmojiButton OnSelected="emoji => CurrentValue += emoji.Symbol" />
+    }
+</div>
 
 @code {
     [Parameter]
@@ -58,16 +64,23 @@
     public bool Clearable { get; set; } = false;
     
     [Parameter]
+    public bool IsShowEmojiButton { get; set; } = false;
+    
+    [Parameter]
     public RenderFragment? StartContent { get; set; }
     
     [Parameter]
     public RenderFragment? EndContent { get; set; }
     
+    [Inject]
+    public ModalDialogService ModalDialogService { get; set; }
+    
     private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
 
     private string FirstError =>
         EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
-    
+
+    public bool _isShowEmojiModal { get; set; } = false;
     
     protected override bool TryParseValueFromString(
         string? value,
