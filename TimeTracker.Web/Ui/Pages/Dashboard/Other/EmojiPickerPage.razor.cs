@@ -1,24 +1,9 @@
-using LumexUI;
-using Microsoft.AspNetCore.Components;
 using TimeTracker.Web.Constants.Ui;
-using TimeTracker.Web.Services.UI.Modal;
 
-namespace TimeTracker.Web.Ui.Shared.Components.Dialogs;
+namespace TimeTracker.Web.Ui.Pages.Dashboard.Other;
 
-public partial class EmojiPickerModal: IModalComponent
+public partial class EmojiPickerPage
 {
-    [Parameter]
-    public EventCallback OnConfirm { get; set; }
-    
-    [Parameter]
-    public EventCallback<string> OnEmojiSelected { get; set; }
-    
-    [Parameter]
-    public EventCallback OnClose { get; set; }
-    
-    [Parameter]
-    public ModalInstance ModalInstance { get; set; }
-    
     private IEnumerable<string> Categories => new[] { "All" }
         .Concat(EmojiList.List.Select(option => option.Category).Distinct(StringComparer.Ordinal).OrderBy(category => category, StringComparer.Ordinal));
 
@@ -50,22 +35,13 @@ public partial class EmojiPickerModal: IModalComponent
     {
         searchText = string.Empty;
         activeCategory = "All";
-        await modal.CloseAsync();
-        await OnClose.InvokeAsync();
     }
 
     private async Task SelectEmojiAsync(string emoji)
     {
         await CloseAsync();
-        await OnEmojiSelected.InvokeAsync(emoji);
     }
     
     private string searchText = string.Empty;
     private string activeCategory = "All";
-    LumexModal modal;
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-    }
 }

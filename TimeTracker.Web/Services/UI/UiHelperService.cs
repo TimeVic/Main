@@ -27,6 +27,11 @@ public class UiHelperService
         });
     }
     
+    public async Task OpenInNewTab(string url)
+    {
+        await _js.InvokeVoidAsync("openInNewTab", url);
+    }
+    
     public async Task<bool> IsTextSelected()
     {
         return await _js.InvokeAsync<bool>("isTextSelected");

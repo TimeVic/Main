@@ -2,6 +2,7 @@
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.LayoutParts
 @using TimeTracker.Web.Ui.Shared
 @using TimeTracker.Web.Ui.Shared.Components.Dialogs
+@using TimeTracker.Web.Ui.Shared.Components.Helper.Portal
 @using TimeTracker.Web.Ui.Shared.Components.Layout
 @inherits TimeTracker.Web.Ui.Shared.BaseLayout
 
@@ -12,9 +13,6 @@
             <MainHeader></MainHeader>
             <MainMenu></MainMenu>
             <main class="px-4 py-6 sm:px-6 lg:px-8">
-                
-                <SelectEmojiButton></SelectEmojiButton>
-                
                 @Body
             </main>
         </InitializationContainer>
@@ -32,3 +30,4 @@
 </div>
 <LumexToastProvider RichColors="@true" Id="tv-toaster-rich-colors-id" />
 <BaseModalDialogRenderBlock/>
+<PortalHostComponent/>

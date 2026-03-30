@@ -1,0 +1,33 @@
+@using Microsoft.AspNetCore.Components
+@implements IDisposable
+
+@if (PopupPortalStore.Content is not null)
+{
+    <div class="fixed inset-0 z-[2147483646]" @onclick="Close"></div>
+
+    <div class="fixed z-[2147483647]" [isolation:isolate] style="@PopupPortalStore.PanelStyle" @onclick:stopPropagation>
+        @PopupPortalStore.Content
+    </div>
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        PopupPortalStore.OnChange += HandlePortalChange;
+    }
+
+    private void HandlePortalChange()
+    {
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void Close()
+    {
+        PopupPortalStore.Close();
+    }
+
+    public void Dispose()
+    {
+        PopupPortalStore.OnChange -= HandlePortalChange;
+    }
+}
