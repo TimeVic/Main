@@ -32,6 +32,11 @@ public class UiHelperService
         await _js.InvokeVoidAsync("openInNewTab", url);
     }
     
+    public async Task<bool> CopyToClipboard(string text)
+    {
+        return await _js.InvokeAsync<bool>("copyToClipboard", text);
+    }
+    
     public async Task<bool> IsTextSelected()
     {
         return await _js.InvokeAsync<bool>("isTextSelected");

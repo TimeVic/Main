@@ -47,6 +47,17 @@ window.openInNewTab = function (url) {
     window.open(url, "_blank");
 }
 
+
+window.copyToClipboard = async (text) => {
+    try {
+        await navigator.clipboard.writeText(text);
+        return true;
+    } catch (err) {
+        return false;
+    }
+};
+
+
 window.scrollHelper = {
 
     scrollToBottom: function (elementId) {

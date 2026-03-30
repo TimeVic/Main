@@ -1,9 +1,17 @@
+using Microsoft.AspNetCore.Components;
 using TimeTracker.Web.Constants.Ui;
+using TimeTracker.Web.Services.UI;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Other;
 
 public partial class EmojiPickerPage
 {
+    [Inject]
+    public UiHelperService _helperService { get; set; }
+
+    [Inject]
+    public ToastService _toastService { get; set; }
+    
     private IEnumerable<string> Categories => new[] { "All" }
         .Concat(EmojiList.List.Select(option => option.Category).Distinct(StringComparer.Ordinal).OrderBy(category => category, StringComparer.Ordinal));
 
@@ -31,15 +39,12 @@ public partial class EmojiPickerPage
         return haystack.Contains(query, StringComparison.OrdinalIgnoreCase);
     }
 
-    private async Task CloseAsync()
-    {
-        searchText = string.Empty;
-        activeCategory = "All";
-    }
-
     private async Task SelectEmojiAsync(string emoji)
     {
-        await CloseAsync();
+        if (await _helperService.CopyToClipboard(emoji))
+        {
+            _toastService.ShowSuccess("Emoji copied to clipboard!");
+        }
     }
     
     private string searchText = string.Empty;
