@@ -21,13 +21,9 @@ namespace TimeTracker.Web.Services.Http
             });
         }
         
-        public async Task<WorkspaceDto?> WorkspaceUpdateAsync(Guid id, string name)
+        public async Task<WorkspaceDto?> WorkspaceUpdateAsync(UpdateRequest model)
         {
-            return await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceUpdate, new UpdateRequest()
-            {
-                WorkspaceId = id,
-                Name = name
-            });
+            return await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceUpdate, model);
         }
     }
 }

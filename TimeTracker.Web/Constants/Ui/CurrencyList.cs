@@ -9,7 +9,7 @@ public class CurrencyList
         public string DisplayLabel => $"{Code} ({Symbol})";
     }
     
-    private List<CurrencyModel> currencyOptions = new()
+    public static List<CurrencyModel> List = new()
     {
         new() { Code = "AED", Symbol = "د.إ" },
         new() { Code = "AFN", Symbol = "؋" },

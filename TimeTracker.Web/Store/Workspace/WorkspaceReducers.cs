@@ -7,7 +7,7 @@ public class ClientReducers
 {
 
     [ReducerMethod]
-    public static WorkspaceState SetListItemsActionReducer(WorkspaceState state, SetListItemsAction action)
+    public static WorkspaceState Reducer(WorkspaceState state, SetListItemsAction action)
     {
         return state with
         {
@@ -16,9 +16,9 @@ public class ClientReducers
             IsLoaded = true
         };
     }
-
+    
     [ReducerMethod]
-    public static WorkspaceState SetIsListLoadingReducer(WorkspaceState state, SetIsListLoading action)
+    public static WorkspaceState Reducer(WorkspaceState state, SetIsListLoading action)
     {
         return state with
         {
@@ -27,7 +27,7 @@ public class ClientReducers
     }
     
     [ReducerMethod]
-    public static WorkspaceState SetListItemActionReducer(WorkspaceState state, SetListItemAction action)
+    public static WorkspaceState Reducer(WorkspaceState state, SetListItemAction action)
     {
         var list = state.List.Select(item =>
         {

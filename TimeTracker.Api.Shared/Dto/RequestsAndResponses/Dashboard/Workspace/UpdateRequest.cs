@@ -10,10 +10,20 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
         [Required]
         public Guid WorkspaceId { get; set; }
 
+        [Required]
+        [StringLength(3, MinimumLength = 3)]
+        public string CurrencyCode { get; set; }
+        
+        [Required]
+        [StringLength(30, MinimumLength = 3)]
+        public string TimeZone { get; set; }
+        
         public void Fill(WorkspaceDto workspace)
         {
             WorkspaceId = workspace.Id;
             Name = workspace.Name;
+            CurrencyCode = workspace.CurrencyCode;
+            TimeZone = workspace.TimeZone;
         }
     }
 }

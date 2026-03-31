@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
+using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Workspace;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts;
 
@@ -26,8 +28,13 @@ public partial class UpdateWorkspaceForm
         await base.OnInitializedAsync();
     }
 
-    private Task OnSave()
+    private async Task OnSave()
     {
-        throw new NotImplementedException();
+        Debug.Log(_form.EditContext!.Validate());
+        if (!_form.EditContext!.Validate())
+        {
+            return;
+        }
+        Dispatcher.Dispatch(new UpdateWorkspaceAction(model));
     }
 }
