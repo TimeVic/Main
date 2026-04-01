@@ -1,0 +1,29 @@
+﻿@inherits TimeTracker.Web.Ui.Shared.Components.Form.Select.Core.BaseSingleSelect<TimeTracker.Api.Shared.Dto.Entity.List.CurrencyDto>
+
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity.List
+
+<div class="@Class">
+    
+    <LumexSelect
+        TValue="CurrencyDto"
+        Label="@Label"
+        Placeholder="@_placeholder"
+        LabelPlacement="@LabelPlacement.Outside"
+        ValueChanged="@OnValueChanged"
+        Value="@_selectedItem">
+        <ChildContent>
+            @foreach (var item in _list)
+            {
+                <LumexSelectItem 
+                    @key="@item" 
+                    Value="@item" 
+                    TextValue="@(item.Code + " (" + item.Symbol + ")")"
+                    TValue="CurrencyDto">
+                    <text>@item?.Code (@item?.Symbol)</text>
+                </LumexSelectItem>
+            }
+        </ChildContent>
+    </LumexSelect>
+</div>

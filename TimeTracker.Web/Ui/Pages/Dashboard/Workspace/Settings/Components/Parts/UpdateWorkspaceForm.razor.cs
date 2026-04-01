@@ -15,7 +15,10 @@ public partial class UpdateWorkspaceForm
     [Inject]
     public IState<AuthState> _authState { get; set; }
     
-    private WorkspaceDto? _workspace => _authState.Value.Workspace;
+    [Inject]
+    public IState<WorkspaceState> _workspaceState { get; set; }
+    
+    private WorkspaceDto? _workspace;
     private IReadOnlyCollection<TimeZoneInfo> _timeZones;
     
     private UpdateRequest model = new();
@@ -24,14 +27,16 @@ public partial class UpdateWorkspaceForm
     protected override async Task OnInitializedAsync()
     {
         _timeZones = TimeZoneInfo.GetSystemTimeZones();
-        if (_workspace != null)
-            model.Fill(_workspace);
         await base.OnInitializedAsync();
+        
+        _workspace = _workspaceState.Value.List.First(
+            x => x.Id == _authState.Value.Workspace!.Id
+        );
+        model.Fill(_workspace);
     }
 
     private async Task OnSave()
     {
-        Debug.Log(_form.EditContext!.Validate());
         if (!_form.EditContext!.Validate())
         {
             return;

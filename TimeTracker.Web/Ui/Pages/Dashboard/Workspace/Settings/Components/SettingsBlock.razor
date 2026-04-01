@@ -34,7 +34,10 @@
     
     <LumexCard>
         <LumexCardBody>
-            <UpdateWorkspaceForm></UpdateWorkspaceForm>
+            @if (_workspaceState.Value.List.Any())
+            {
+                <UpdateWorkspaceForm></UpdateWorkspaceForm>
+            }
         </LumexCardBody>
     </LumexCard>
 </section>

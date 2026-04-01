@@ -1,4 +1,5 @@
-﻿using Api.Requests.Abstractions;
+﻿using System.Diagnostics;
+using Api.Requests.Abstractions;
 using Domain.Abstractions;
 
 namespace TimeTracker.Api.Shared.Dto.Entity.Common;
