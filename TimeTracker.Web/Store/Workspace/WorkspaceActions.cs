@@ -1,5 +1,7 @@
 ﻿using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
+using TimeTracker.Business.Common.Dto;
 
 namespace TimeTracker.Web.Store.Workspace;
 
@@ -11,4 +13,8 @@ public record struct SetListItemAction(WorkspaceDto Workspace);
 
 public record struct SetIsListLoading(bool IsLoading);
 
-public record struct UpdateWorkspaceAction(WorkspaceDto Workspace);
+#region Effects
+
+public record struct UpdateWorkspaceAction(UpdateRequest Model);
+
+#endregion

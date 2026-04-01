@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Net;
+using Newtonsoft.Json;
 using TimeTracker.Business.Common.Dto;
 using TimeTracker.Business.Common.Helpers;
 
@@ -8,6 +9,8 @@ namespace TimeTracker.Business.Common.Extensions
     {
         public static async Task<T> GetJsonDataAsync<T>(this HttpResponseMessage response)
         {
+            if (response.StatusCode == HttpStatusCode.NotFound)
+                throw new Exception($"Got response: {HttpStatusCode.NotFound}");
             var stringData = await response.GetDataAsStringAsync();
             return JsonHelper.DeserializeObject<T>(stringData, DateTimeZoneHandling.Local)!;
         }

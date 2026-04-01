@@ -1,6 +1,3 @@
-using Domain.Abstractions;
-using NHibernate.Mapping.Attributes;
-using NHibernate.Type;
 using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
@@ -12,8 +9,12 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
         public virtual required string Name { get; set; }
         public virtual bool IsDefault { get; set; }
 
+        public virtual required string TimeZone { get; set; }
+        public virtual string? Description { get; set; }
+        
         #region Relationships
 
+        public virtual required CurrencyEntity Currency { get; set; }
         public virtual required UserEntity CreatedUser { get; set; }
         public virtual ICollection<ClientEntity> Clients { get; set; } = new List<ClientEntity>();
         public virtual ICollection<ProjectEntity> Projects { get; set; } = new List<ProjectEntity>();

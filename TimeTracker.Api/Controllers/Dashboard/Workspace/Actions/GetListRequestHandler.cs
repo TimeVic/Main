@@ -3,6 +3,7 @@ using AutoMapper;
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
+using TimeTracker.Business.Common.Dto;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Http;

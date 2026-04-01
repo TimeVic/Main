@@ -10,6 +10,11 @@ public class WorkspaceDto: BaseDto
     
     public bool IsDefault { get; set; }
     
+    // TODO: Implement workspace description
+    public string Description { get; set; }
+    public string CurrencyCode { get; set; }
+    public string TimeZone { get; set; }
+    
     public MembershipAccessType? CurrentUserAccess { get; set; }
 
     public bool IsFullAccess

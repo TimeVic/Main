@@ -2,7 +2,7 @@
 using Api.Requests.Abstractions;
 using TimeTracker.Business.Common.Constants;
 
-namespace TimeTracker.Api.Shared.Dto
+namespace TimeTracker.Business.Common.Dto
 {
     public class PaginatedListDto<TItem> : IResponse
     {

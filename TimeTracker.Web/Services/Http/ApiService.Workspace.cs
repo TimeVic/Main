@@ -2,6 +2,7 @@
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
+using TimeTracker.Business.Common.Dto;
 using TimeTracker.Web.Core.Exceptions;
 
 namespace TimeTracker.Web.Services.Http
@@ -21,13 +22,9 @@ namespace TimeTracker.Web.Services.Http
             });
         }
         
-        public async Task<WorkspaceDto?> WorkspaceUpdateAsync(Guid id, string name)
+        public async Task<WorkspaceDto?> WorkspaceUpdateAsync(UpdateRequest model)
         {
-            return await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceUpdate, new UpdateRequest()
-            {
-                WorkspaceId = id,
-                Name = name
-            });
+            return await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceUpdate, model);
         }
     }
 }
