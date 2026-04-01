@@ -1,6 +1,7 @@
 ﻿using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
+using TimeTracker.Business.Common.Dto;
 
 namespace TimeTracker.Web.Store.Workspace;
 

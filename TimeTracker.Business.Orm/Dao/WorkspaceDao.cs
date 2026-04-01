@@ -1,7 +1,8 @@
-﻿using NHibernate.Linq;
-using Persistence.Transactions.Behaviors;
+﻿using Autofac;
+using NHibernate.Linq;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Orm.Dao.Common;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
@@ -10,18 +11,21 @@ using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao;
 
-public class WorkspaceDao: IWorkspaceDao
+public class WorkspaceDao: BaseDao, IWorkspaceDao
 {
-    private readonly IDbSessionProvider _sessionProvider;
+    private readonly ICurrencyDao _currencyDao;
 
-    public WorkspaceDao(IDbSessionProvider sessionProvider)
+    public WorkspaceDao(
+        ILifetimeScope scope,
+        ICurrencyDao currencyDao
+    ): base(scope)
     {
-        _sessionProvider = sessionProvider;
+        _currencyDao = currencyDao;
     }
 
     public async Task<WorkspaceEntity?> GetById(Guid id)
     {
-        return await _sessionProvider.CurrentSession.Query<WorkspaceEntity>()
+        return await Session.Query<WorkspaceEntity>()
             .FirstOrDefaultAsync(item => item.Id == id);
     }
     
@@ -31,12 +35,14 @@ public class WorkspaceDao: IWorkspaceDao
         {
             Name = name,
             CreatedUser = user,
+            Currency = await _currencyDao.GetDefault(),
+            TimeZone = GlobalConstants.DefaultTimeZone,
             IsDefault = isDefault,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
         user.CreatedWorkspaces.Add(workspace);
-        await _sessionProvider.CurrentSession.SaveAsync(workspace);
+        await Session.SaveAsync(workspace);
         return workspace;
     }
     
@@ -44,13 +50,13 @@ public class WorkspaceDao: IWorkspaceDao
     {
         workspace.Name = name;
         workspace.UpdatedAt = DateTime.UtcNow;
-        await _sessionProvider.CurrentSession.SaveAsync(workspace);
+        await Session.SaveAsync(workspace);
         return workspace;
     }
     
     public async Task<bool> HasActiveTimeEntriesAsync(WorkspaceEntity workspace)
     {
-        return await _sessionProvider.CurrentSession.Query<TimeEntryEntity>()
+        return await Session.Query<TimeEntryEntity>()
             .Where(item => item.Workspace.Id == workspace.Id)
             .Where(item => item.EndTime == null)
             .AnyAsync();
@@ -58,7 +64,7 @@ public class WorkspaceDao: IWorkspaceDao
     
     public async Task<ListDto<WorkspaceMembershipEntity>> GetMembershipsAsync(WorkspaceEntity workspace, int page)
     {
-        var query = _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+        var query = Session.Query<WorkspaceMembershipEntity>()
             .Where(item => item.Workspace.Id == workspace.Id);
         
         var offset = PaginationUtils.CalculateOffset(page);
@@ -75,7 +81,7 @@ public class WorkspaceDao: IWorkspaceDao
     
     public async Task<WorkspaceMembershipEntity> GetMembershipAsync(Guid id)
     {
-        return await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+        return await Session.Query<WorkspaceMembershipEntity>()
             .Where(item => item.Id == id)
             .FirstOrDefaultAsync();
     }

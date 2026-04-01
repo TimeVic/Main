@@ -2,6 +2,7 @@
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
+using TimeTracker.Business.Common.Dto;
 using TimeTracker.Web.Core.Exceptions;
 
 namespace TimeTracker.Web.Services.Http

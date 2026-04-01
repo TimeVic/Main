@@ -15,6 +15,16 @@ namespace TimeTracker.Business.Common.Constants
         }
         
         /// <summary>
+        /// Default currency code
+        /// </summary>
+        public const string DefaultCurrencyCode = "USD";
+        
+        /// <summary>
+        /// Default Time Zone
+        /// </summary>
+        public const string DefaultTimeZone = "UTC";
+        
+        /// <summary>
         /// Page size
         /// </summary>
         public const int DefaultListPageSize = 20;

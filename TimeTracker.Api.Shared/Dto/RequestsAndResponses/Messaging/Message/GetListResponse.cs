@@ -1,4 +1,5 @@
 ﻿using TimeTracker.Api.Shared.Dto.Entity.Messaging;
+using TimeTracker.Business.Common.Dto;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Message;
 

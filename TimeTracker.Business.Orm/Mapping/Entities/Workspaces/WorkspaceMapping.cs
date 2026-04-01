@@ -11,12 +11,18 @@ public class WorkspaceMapping: BaseGuidMappings<WorkspaceEntity>
         Table("workspaces");
         
         Map(x => x.Name);
+        Map(x => x.Description);
+        Map(x => x.TimeZone);
         Map(x => x.IsDefault);
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         
+        References(x => x.Currency)
+            .Fetch.Select()
+            .LazyLoad()
+            .Cascade.SaveUpdate();
+        
         References(x => x.CreatedUser)
-            .Column("created_user_id")
             .Fetch.Select()
             .LazyLoad()
             .Cascade.SaveUpdate();
