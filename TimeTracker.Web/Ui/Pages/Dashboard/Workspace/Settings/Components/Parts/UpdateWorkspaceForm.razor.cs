@@ -2,6 +2,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.List;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Auth;
@@ -36,5 +37,11 @@ public partial class UpdateWorkspaceForm
             return;
         }
         Dispatcher.Dispatch(new UpdateWorkspaceAction(model));
+    }
+
+    private Task OnSelectedCurrency(CurrencyDto arg)
+    {
+        model.CurrencyId = arg.Id;
+        return Task.CompletedTask;
     }
 }

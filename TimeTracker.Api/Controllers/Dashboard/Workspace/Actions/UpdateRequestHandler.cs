@@ -18,6 +18,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
         private readonly IUserDao _userDao;
         private readonly IWorkspaceDao _workspaceDao;
         private readonly ISecurityManager _securityManager;
+        private readonly ICurrencyDao _currencyDao;
         private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public UpdateRequestHandler(
@@ -26,6 +27,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             IUserDao userDao,
             IWorkspaceDao workspaceDao,
             ISecurityManager securityManager,
+            ICurrencyDao currencyDao,
             IWorkspaceAccessService workspaceAccessService
         )
         {
@@ -34,6 +36,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             _userDao = userDao;
             _workspaceDao = workspaceDao;
             _securityManager = securityManager;
+            _currencyDao = currencyDao;
             _workspaceAccessService = workspaceAccessService;
         }
     
@@ -41,11 +44,19 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var workspace = await _workspaceDao.GetById(request.WorkspaceId);
+            var currency = await _currencyDao.GetBy(request.CurrencyId);
+            RecordNotFoundException.ThrowIfNull(currency);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
             {
                 throw new HasNoAccessException();
             }
-            workspace = await _workspaceDao.UpdateWorkspaceAsync(workspace, request.Name);
+            workspace = await _workspaceDao.UpdateWorkspaceAsync(
+                workspace,
+                request.Name,
+                currency,
+                request.TimeZone,
+                request.Description
+            );
             var response = _mapper.Map<WorkspaceDto>(workspace);
             response.CurrentUserAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
             return response;

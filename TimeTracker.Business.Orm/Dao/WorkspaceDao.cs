@@ -46,9 +46,18 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
         return workspace;
     }
     
-    public async Task<WorkspaceEntity> UpdateWorkspaceAsync(WorkspaceEntity workspace, string name)
+    public async Task<WorkspaceEntity> UpdateWorkspaceAsync(
+        WorkspaceEntity workspace,
+        string name,
+        CurrencyEntity currency,
+        string timeZone,
+        string? description
+    )
     {
         workspace.Name = name;
+        workspace.Currency = currency;
+        workspace.TimeZone = timeZone;
+        workspace.Description = description;
         workspace.UpdatedAt = DateTime.UtcNow;
         await Session.SaveAsync(workspace);
         return workspace;

@@ -11,18 +11,18 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
         public Guid WorkspaceId { get; set; }
 
         [Required]
-        [StringLength(3, MinimumLength = 3)]
-        public string CurrencyCode { get; set; }
-        
+        public Guid CurrencyId { get; set; }
+
         [Required]
         [StringLength(30, MinimumLength = 3)]
-        public string TimeZone { get; set; }
+        [IsTimeZone]
+        public string TimeZone { get; set; } = "UTC";
         
         public void Fill(WorkspaceDto workspace)
         {
             WorkspaceId = workspace.Id;
             Name = workspace.Name;
-            CurrencyCode = workspace.CurrencyCode;
+            CurrencyId = workspace.Currency.Id;
             TimeZone = workspace.TimeZone;
         }
     }

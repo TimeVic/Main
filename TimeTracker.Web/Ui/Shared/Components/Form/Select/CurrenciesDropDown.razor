@@ -1,0 +1,49 @@
+﻿@inherits TimeTracker.Web.Ui.Shared.Components.Form.Select.Core.BaseSingleSelect<TimeTracker.Api.Shared.Dto.Entity.List.CurrencyDto>
+
+@using LumexUI
+@using LumexUI.Common
+@using LumexUI.Shared.Icons
+@using TimeTracker.Api.Shared.Dto.Entity
+
+<div class="@Class">
+    <LumexDropdown>
+        <LumexDropdownTrigger>
+            <LumexButton 
+                FullWidth="true"
+                Color="ThemeColor.Info" 
+                Variant="Variant.Outlined"
+            >
+                @if (_selectedItem is null)
+                {
+                    @_placeholder
+                }
+                else
+                {
+                    <text>@_selectedItem?.Code (@_selectedItem?.Code)</text>
+                }
+            </LumexButton>
+        </LumexDropdownTrigger>
+        <LumexDropdownMenu
+            Color="ThemeColor.Info" 
+            Variant="MenuVariant.Outlined">
+            @foreach (var project in _list)
+            {
+                <LumexDropdownItem 
+                    Description="@_selectedItem?.Symbol"
+                    OnClick="@(() => OnValueChanged(project))">
+                    <ChildContent>
+                        @project?.Code
+                    </ChildContent>
+                </LumexDropdownItem>
+            }
+        </LumexDropdownMenu>
+    </LumexDropdown>
+    @if (Clearable)
+    {
+        <CustomButton 
+            OnClick="OnClear"
+            IconOnly="true">
+            <XIcon/>
+        </CustomButton>
+    }
+</div>
