@@ -11,7 +11,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.List;
 
 [ApiController]
 [Authorize]
-[Route("/dashboard/workspace/list")]
+[Route("/dashboard/list/[controller]")]
 public class CurrencyController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
     [HttpPost("list")]

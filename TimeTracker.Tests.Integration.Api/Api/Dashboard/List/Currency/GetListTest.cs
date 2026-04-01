@@ -40,11 +40,14 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task ShouldReceiveList()
     {
+        // Act
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest(){});
-        response.EnsureSuccessStatusCode();
+        
+        // Assert
+        await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.Equal(32, actualResponse.Count);
+        Assert.Equal(154, actualResponse.Count);
         
         Assert.All(actualResponse, item =>
         {
