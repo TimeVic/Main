@@ -74,6 +74,12 @@ public class ApiUrl
     
     #endregion
     
+    #region List
+    
+    public const string ListCurrencyList = "dashboard/list/currency/list";
+    
+    #endregion
+    
     #region Workspace Integrations
     
     public const string WorkspaceIntegrationSettingsGet = "dashboard/workspace/settings/integrations/get";

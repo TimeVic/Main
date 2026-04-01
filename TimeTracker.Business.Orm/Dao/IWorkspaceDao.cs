@@ -19,5 +19,11 @@ public interface IWorkspaceDao: IDomainService
 
     Task<WorkspaceMembershipEntity> GetMembershipAsync(Guid id);
 
-    Task<WorkspaceEntity> UpdateWorkspaceAsync(WorkspaceEntity workspace, string name);
+    Task<WorkspaceEntity> UpdateWorkspaceAsync(
+        WorkspaceEntity workspace,
+        string name,
+        CurrencyEntity currency,
+        string timeZone,
+        string? description
+    );
 }

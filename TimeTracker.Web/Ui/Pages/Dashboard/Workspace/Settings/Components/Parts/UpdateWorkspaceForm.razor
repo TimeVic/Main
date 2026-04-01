@@ -32,19 +32,7 @@
                 }
             </LumexSelect>
             
-            <LumexSelect 
-                TValue="string"
-                Label="Currency"
-                Required="true"
-                @bind-Value="model.CurrencyCode"
-                Class="max-w-xs">
-                @foreach (var item in CurrencyList.List)
-                {
-                    <LumexSelectItem @key="@item.Code" Value="@item.Code">
-                        @item.DisplayLabel
-                    </LumexSelectItem>
-                }
-            </LumexSelect>
+            <CurrenciesDropDown @Value="model.CurrencyId" SelectedItemChanged="OnSelectedCurrency" />
         </div>
         <div>
             <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Description</label>
