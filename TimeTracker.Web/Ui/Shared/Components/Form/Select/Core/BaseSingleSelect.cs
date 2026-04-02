@@ -39,7 +39,7 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent where T : BaseD
     }
 
     [Parameter]
-    public string Placeholder { get; set; } = "Select client";
+    public string Placeholder { get; set; } = "Select item";
     
     [Parameter]
     public string Class { get; set; }

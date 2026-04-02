@@ -31,6 +31,8 @@ namespace TimeTracker.Business.Orm.Entities.User
 
         public virtual string Name => string.IsNullOrEmpty(UserName) ? Email : UserName;
         
+        public virtual WorkspaceEntity DefaultWorkspace => CreatedWorkspaces.First(item => item.IsDefault);
+        
         #endregion
         
     }

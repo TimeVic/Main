@@ -22,8 +22,7 @@
                 TValue="string"
                 Label="Time zone"
                 Required="true"
-                @bind-Value="model.TimeZone"
-                Class="max-w-xs">
+                @bind-Value="model.TimeZone">
                 @foreach (var timeZone in _timeZones)
                 {
                     <LumexSelectItem @key="@timeZone.Id" Value="@timeZone.Id">
@@ -32,7 +31,10 @@
                 }
             </LumexSelect>
             
-            <CurrenciesDropDown @Value="model.CurrencyId" SelectedItemChanged="OnSelectedCurrency" />
+            <CurrenciesSelect 
+                Label="Currency"
+                Value="@model.CurrencyId"
+                SelectedItemChanged="@OnSelectedCurrency" />
         </div>
         <div>
             <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Description</label>

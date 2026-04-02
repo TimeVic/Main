@@ -6,7 +6,7 @@ using TimeTracker.Web.Store.List.Currency;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
-public partial class CurrenciesDropDown: IDisposable
+public partial class CurrenciesSelect: IDisposable
 {   
     [Parameter]
     public bool ShowProjectsWithoutClients { get; set; } = true;
@@ -17,7 +17,7 @@ public partial class CurrenciesDropDown: IDisposable
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Placeholder = "Select project";
+        Placeholder = "Select currency";
         Dispatcher.Dispatch(new LoadListAction());
         _state.StateChanged += UpdateList;
         UpdateList();
@@ -39,6 +39,7 @@ public partial class CurrenciesDropDown: IDisposable
         _selectedItem = _list.FirstOrDefault(
             item => item.Id.ToString() == _selectedId
         );
+        StateHasChanged();
     }
 
     public void Dispose()

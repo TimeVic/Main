@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.List;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Workspace;
 
@@ -15,7 +14,10 @@ public partial class UpdateWorkspaceForm
     [Inject]
     public IState<AuthState> _authState { get; set; }
     
-    private WorkspaceDto? _workspace => _authState.Value.Workspace;
+    [Inject]
+    public IState<WorkspaceState> _workspaceState { get; set; }
+    
+    private WorkspaceDto? _workspace;
     private IReadOnlyCollection<TimeZoneInfo> _timeZones;
     
     private UpdateRequest model = new();
@@ -24,14 +26,15 @@ public partial class UpdateWorkspaceForm
     protected override async Task OnInitializedAsync()
     {
         _timeZones = TimeZoneInfo.GetSystemTimeZones();
-        if (_workspace != null)
-            model.Fill(_workspace);
+        _workspace = _workspaceState.Value.List.First(
+            x => x.Id == _authState.Value.Workspace!.Id
+        );
+        model.Fill(_workspace);
         await base.OnInitializedAsync();
     }
 
     private async Task OnSave()
     {
-        Debug.Log(_form.EditContext!.Validate());
         if (!_form.EditContext!.Validate())
         {
             return;

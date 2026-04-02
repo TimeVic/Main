@@ -23,6 +23,14 @@ public class ClientController(ILifetimeScope scope) : MainApiControllerBase(scop
             .For<ClientDto>()
             .With(request);
     
+    [HttpPost("update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Update([FromBody] UpdateRequest request)
+        => this.RequestAsync()
+            .For<ClientDto>()
+            .With(request);
+    
     [HttpPost("list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

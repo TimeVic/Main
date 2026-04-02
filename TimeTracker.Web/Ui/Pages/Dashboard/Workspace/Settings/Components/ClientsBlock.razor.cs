@@ -10,8 +10,12 @@ public partial class ClientsBlock
     [Inject] 
     private IState<ClientState> _state { get; set; }
 
-    private Task OnDelete(ClientDto context)
+    private Task OnSave(ClientDto context)
     {
+        if (!string.IsNullOrEmpty(context.Name))
+        {
+            Dispatcher.Dispatch(new UpdateAction(context));
+        }
         return Task.CompletedTask;
     }
 }
