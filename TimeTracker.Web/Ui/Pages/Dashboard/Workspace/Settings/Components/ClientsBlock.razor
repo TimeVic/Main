@@ -1,40 +1,46 @@
-@using LumexUI
 @using LumexUI.Common
-@using TimeTracker.Api.Shared.Dto.Entity
-@using TimeTracker.Business.Common.Constants
-@using TimeTracker.Web.Ui.Pages.Dashboard.Shared
-@using Orientation = LumexUI.Common.Orientation
+@using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
 
 @inherits BaseReactiveComponent
 
-<LumexCard Shadow="Shadow.Small" Radius="Radius.Medium">
-    <LumexCardHeader>Clients</LumexCardHeader>
-    <LumexCardBody>
-        <div>
-            <InputTextField></InputTextField>
-        </div>
-    </LumexCardBody>
-</LumexCard>
-
-<LumexDataGrid 
-    Data="@_state.Value.List.AsQueryable()" 
-    Radius="@Radius.Medium"
-    Class="mt-3"
->
-    <LumexUI.PropertyColumn Title="Name" Property="@(p => p.Name)" />
-    <LumexUI.PropertyColumn Title="Actions" Property="@(p => p.Id)">
-        <Content>
-            <CustomButton
-                Class="inline-flex rounded-full"
-                OnClick="@(() => OnDelete(context))"
-                Size="Size.Small"
-                Color="ThemeColor.Danger"
-                Variant="Variant.Light"
-                IconOnly="true">
-                <ChildContent>
-                    <i class="fa-regular fa-trash-can"></i>
-                </ChildContent>
-            </CustomButton>
-        </Content>
-    </LumexUI.PropertyColumn>
-</LumexDataGrid>
+<section class="space-y-6">
+    <LumexCard>
+        <LumexCardBody>
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">Clients</p>
+                    <h2 class="mt-2 text-lg font-semibold text-slate-900">Client directory</h2>
+                    <p class="mt-1 text-sm text-slate-600">Clients are presented as a clean list with quick icon actions.</p>
+                </div>
+                <AddClientForm/>
+            </div>
+        </LumexCardBody>
+    </LumexCard>
+    
+    <LumexDataGrid
+        Data="@_state.Value.List.AsQueryable()"
+        Radius="@Radius.Medium"
+        Class="mt-3">
+        <LumexUI.EditColumn
+            Title="Name"
+            Property="@(p => p.Name)"/>
+        <LumexUI.PropertyColumn
+            Title="Actions"
+            Property="@(p => p.Id)">
+            <Content>
+                <CustomButton
+                    Class="inline-flex rounded-full"
+                    OnClick="@(() => OnSave(context))"
+                    Size="Size.Small"
+                    Color="ThemeColor.Success"
+                    Variant="Variant.Light"
+                    Disabled="true"
+                    IconOnly="true">
+                    <ChildContent>
+                        <i class="fa-regular fa-floppy-o"></i>
+                    </ChildContent>
+                </CustomButton>
+            </Content>
+        </LumexUI.PropertyColumn>
+    </LumexDataGrid>
+</section>

@@ -10,7 +10,7 @@ public partial class ClientsBlock
     [Inject] 
     private IState<ClientState> _state { get; set; }
 
-    private Task OnDelete(ClientDto context)
+    private Task OnSave(ClientDto context)
     {
         return Task.CompletedTask;
     }

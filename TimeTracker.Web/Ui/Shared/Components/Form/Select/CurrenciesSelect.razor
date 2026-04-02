@@ -6,14 +6,15 @@
 
 <div class="@Class">
     
-    <LumexSelect
-        TValue="CurrencyDto"
-        Label="@Label"
-        Placeholder="@_placeholder"
-        LabelPlacement="@LabelPlacement.Outside"
-        ValueChanged="@OnValueChanged"
-        Value="@_selectedItem">
-        <ChildContent>
+    @if (_selectedItem != null)
+    {
+        <LumexSelect
+            TValue="CurrencyDto"
+            Label="@Label"
+            Placeholder="@_placeholder"
+            LabelPlacement="@LabelPlacement.Inside"
+            ValueChanged="@OnValueChanged"
+            Value="@_selectedItem">
             @foreach (var item in _list)
             {
                 <LumexSelectItem 
@@ -24,6 +25,6 @@
                     <text>@item?.Code (@item?.Symbol)</text>
                 </LumexSelectItem>
             }
-        </ChildContent>
-    </LumexSelect>
+        </LumexSelect>    
+    }
 </div>

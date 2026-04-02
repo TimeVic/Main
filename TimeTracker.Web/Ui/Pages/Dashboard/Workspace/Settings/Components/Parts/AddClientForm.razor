@@ -1,0 +1,32 @@
+@using LumexUI.Common
+@inherits BaseReactiveComponent
+
+<EditForm
+    Context="form"
+    @ref="_form"
+    Model="@model"
+    novalidate>
+    <DataAnnotationsValidator/>
+                
+    <div class="flex w-full flex-col gap-3 sm:flex-row lg:w-auto">
+        <InputTextField
+            Class="w-100"
+            Label="Workspace name"
+            IsShowEmojiButton="true"
+            @bind-Value="model.Name"/>
+        
+        <CustomButton
+            FullWidth="@true"
+            Size="Size.Large"
+            OnClick="@Submit"
+            Color="@ThemeColor.Primary"
+            Radius="@Radius.Full">
+            <StartContent>
+                <i class="fa-solid fa-plus"></i>
+            </StartContent>
+            <ChildContent>
+                Add client
+            </ChildContent>
+        </CustomButton>          
+    </div>
+</EditForm>
