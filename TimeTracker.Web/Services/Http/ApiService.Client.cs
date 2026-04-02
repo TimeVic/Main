@@ -12,6 +12,11 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<ClientDto?>(ApiUrl.ClientAdd, model);
         }
         
+        public async Task<ClientDto> ClientUpdateAsync(UpdateRequest model)
+        {
+            return (await PostAsync<ClientDto>(ApiUrl.ClientUpdate, model))!;
+        }
+        
         public async Task<GetListResponse?> ClientGetListAsync(GetListRequest model)
         {
             return await PostAsync<GetListResponse?>(ApiUrl.ClientList, model);

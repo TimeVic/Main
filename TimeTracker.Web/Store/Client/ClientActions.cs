@@ -9,4 +9,6 @@ public record struct SetListItemsAction(GetListResponse Response);
 
 public record struct SetListItemAction(ClientDto Client);
 
+public record struct UpdateAction(ClientDto Client);
+
 public record struct SetIsListLoading(bool IsLoading);

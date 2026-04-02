@@ -36,6 +36,7 @@ public class ApiUrl
     #region Client
     
     public const string ClientAdd = "dashboard/client/add";
+    public const string ClientUpdate = "dashboard/client/update";
     public const string ClientList = "dashboard/client/list";
     
     #endregion

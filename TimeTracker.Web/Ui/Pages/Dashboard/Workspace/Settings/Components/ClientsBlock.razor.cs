@@ -12,6 +12,10 @@ public partial class ClientsBlock
 
     private Task OnSave(ClientDto context)
     {
+        if (!string.IsNullOrEmpty(context.Name))
+        {
+            Dispatcher.Dispatch(new UpdateAction(context));
+        }
         return Task.CompletedTask;
     }
 }
