@@ -13,6 +13,7 @@
     Placeholder="@Placeholder"
     Label="@Label"
     Invalid="@HasError"
+    LabelPlacement="LabelPlacement"
     Disabled="Disabled"
     FullWidth="FullWidth"
     Required="@Required"
@@ -59,6 +60,9 @@
 
     [Parameter]
     public bool Clearable { get; set; } = false;
+    
+    [Parameter]
+    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Inside;
     
     [Parameter]
     public RenderFragment? StartContent { get; set; }

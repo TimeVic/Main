@@ -28,8 +28,8 @@
         <PackageReference Include="Blazor-ApexCharts" Version="6.1.0" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
         <PackageReference Include="Fluxor.Blazor.Web" Version="6.9.0" />
-        <PackageReference Include="LumexUI" Version="2.3.4" />
-        <PackageReference Include="Majorsoft.Blazor.WebAssembly.Logging.Console" Version="1.5.0" />
+        <PackageReference Include="LumexUI" Version="2.3.5" />
+        <PackageReference Include="Majorsoft.Blazor.WebAssembly.Logging.Console" Version="1.6.1" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.5" PrivateAssets="all" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.5" />

@@ -3,6 +3,8 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 
 namespace TimeTracker.Web.Store.Project;
 
+public record struct UpdateAction(UpdateRequest Request);
+
 public record struct LoadListAction(bool IsReload = false);
 
 public record struct SetListItemsAction(GetListResponse Response);
