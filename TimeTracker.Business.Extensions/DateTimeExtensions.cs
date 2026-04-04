@@ -207,6 +207,17 @@ namespace TimeTracker.Business.Extensions
             // Return the week of our adjusted day
             return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
+
+        public static DateTime WithDate(this DateTime source, DateTime date)
+        {
+            var updated = date.Date.Add(source.TimeOfDay);
+            return DateTime.SpecifyKind(updated, source.Kind);
+        }
+
+        public static DateTime? WithDate(this DateTime? source, DateTime date)
+        {
+            return source.HasValue ? source.Value.WithDate(date) : null;
+        }
         
         /**
          * This method is used to get the date in the current time zone. It is necessary to

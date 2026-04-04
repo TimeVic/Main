@@ -12,6 +12,10 @@ public interface ITimeParsingService: IDomainService
 
     string TimeSpanToTimeString(TimeSpan timeSpan, bool isAddSecond = false);
 
+    string DateTimeToTimeString(DateTime dateTime, bool isAddSecond = false);
+
+    string DateTimeToTimeString(DateTime? dateTime, bool isAddSecond = false);
+
     string TimeOnlyToStringString(TimeOnly time);
 
     TimeOnly ParseTimeOnly(string timeString);

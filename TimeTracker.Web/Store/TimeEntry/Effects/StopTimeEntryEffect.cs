@@ -31,8 +31,7 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
             await _apiService.TimeEntryStopAsync(new StopRequest()
             {
                 WorkspaceId = _authState.Value.Workspace!.Id,
-                EndTime = DateTime.Now.TimeOfDay,
-                EndDate = DateTime.Now.ToDateAndRemoveTimeZone()
+                EndTime = DateTime.Now
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(null));
             dispatcher.Dispatch(new SetSelectedPageAction(1));

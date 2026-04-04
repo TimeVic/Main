@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage;
@@ -72,7 +73,7 @@ public partial class EditTimeEntryModal: IDisposable
         await UpdateTimeEntry();
     }
 
-    private async Task OnChangeStartTime(TimeSpan? startTime)
+    private async Task OnChangeStartTime(DateTime? startTime)
     {
         if (startTime != null)
         {
@@ -81,7 +82,7 @@ public partial class EditTimeEntryModal: IDisposable
         }
     }
 
-    private async Task OnChangeEndTime(TimeSpan? endTime)
+    private async Task OnChangeEndTime(DateTime? endTime)
     {
         if (endTime != null)
         {
@@ -92,8 +93,19 @@ public partial class EditTimeEntryModal: IDisposable
 
     private async Task OnDateChanged(DateTime? date)
     {
-        ArgumentNullException.ThrowIfNull(date);
-        _model.Date = DateOnly.FromDateTime(date.Value.Date);
+        if (!date.HasValue)
+        {
+            return;
+        }
+
+        _model.StartTime = _model.StartTime.WithDate(date.Value);
+        _model.EndTime = _model.EndTime.WithDate(date.Value);
+
+        if (_model.EndTime.HasValue)
+        {
+            _model.EndTime = _model.EndTime.Value < _model.StartTime ? _model.StartTime : _model.EndTime;
+        }
+
         await UpdateTimeEntry();
     }
 
