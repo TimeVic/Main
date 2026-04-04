@@ -51,7 +51,6 @@ public class GetFilteredListTest: BaseTest
         var expectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, 6, expectedProject)).First();
         expectedEntry.Description = "Fake desCript223ion 123";
         expectedEntry.IsBillable = true;
-        expectedEntry.Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-5);
         
         Assert.NotNull(expectedProject.Client);
         var response = await PostRequestAsync(Url, _jwtToken, new GetFilteredListRequest()

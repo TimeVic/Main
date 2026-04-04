@@ -51,9 +51,8 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(user1, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.ToDateOnly().AddDays(-1),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddDays(-1).AddHours(10),
+                EndTime = DateTime.UtcNow.AddDays(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -65,9 +64,8 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(user2, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.ToDateOnly(),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = DateTime.UtcNow.AddHours(1),
+                EndTime = DateTime.UtcNow.AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -77,9 +75,8 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.ToDateOnly().AddDays(1),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
+                StartTime = DateTime.UtcNow.AddDays(1).AddHours(5),
+                EndTime = DateTime.UtcNow.AddDays(1).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -101,9 +98,9 @@ public class GetReportByUserTest: BaseTest
         Assert.Equal(user1.Id, secondReportItem.UserId);
         Assert.Equal(user2.Id, thirdReportItem.UserId);
         
-        Assert.Equal(TimeSpan.FromHours(24), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(15), secondReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), thirdReportItem.Duration);
+        AssertDurationHours(24, firstReportItem.Duration);
+        AssertDurationHours(15, secondReportItem.Duration);
+        AssertDurationHours(12, thirdReportItem.Duration);
         
         Assert.Equal(360m, firstReportItem.Amount);
         Assert.Equal(180m, secondReportItem.Amount);
@@ -123,9 +120,9 @@ public class GetReportByUserTest: BaseTest
         Assert.Equal(user1.Id, secondReportItem.UserId);
         Assert.Equal(user2.Id, thirdReportItem.UserId);
         
-        Assert.Equal(TimeSpan.FromHours(24), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(15), secondReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), thirdReportItem.Duration);
+        AssertDurationHours(24, firstReportItem.Duration);
+        AssertDurationHours(15, secondReportItem.Duration);
+        AssertDurationHours(12, thirdReportItem.Duration);
         
         Assert.NotEmpty(firstReportItem.Email);
     }
@@ -153,9 +150,8 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(user1, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.ToDateOnly().AddDays(-1),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddDays(-1).AddHours(10),
+                EndTime = DateTime.UtcNow.AddDays(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -166,9 +162,8 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(user2, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.ToDateOnly(),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = DateTime.UtcNow.AddHours(1),
+                EndTime = DateTime.UtcNow.AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -178,9 +173,8 @@ public class GetReportByUserTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.ToDateOnly().AddDays(1),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
+                StartTime = DateTime.UtcNow.AddDays(1).AddHours(5),
+                EndTime = DateTime.UtcNow.AddDays(1).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -202,10 +196,18 @@ public class GetReportByUserTest: BaseTest
         Assert.Equal(user1.Id, firstReportItem.UserId);
         Assert.Equal(user2.Id, secondReportItem.UserId);
         
-        Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
+        AssertDurationHours(15, firstReportItem.Duration);
+        AssertDurationHours(12, secondReportItem.Duration);
         
         Assert.Equal(180, firstReportItem.Amount);
         Assert.Equal(0, secondReportItem.Amount);
+    }
+
+    private static void AssertDurationHours(double expectedHours, TimeSpan actualDuration)
+    {
+        Assert.Equal(
+            (int)TimeSpan.FromHours(expectedHours).TotalSeconds,
+            (int)Math.Round(actualDuration.TotalSeconds)
+        );
     }
 }

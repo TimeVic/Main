@@ -54,7 +54,7 @@ public partial class RedmineClient: AExternalClientService, IRedmineClient
                 TaskId = timeEntry.ExternalTaskId,
                 UserId = settings.RedmineUserId,
                 Comments = timeEntry.Description ?? "",
-                SpentOnDate = timeEntry.Date,
+                SpentOnDate = DateOnly.FromDateTime(timeEntry.StartTime),
                 ActivityId = settings.ActivityId
             }
         });

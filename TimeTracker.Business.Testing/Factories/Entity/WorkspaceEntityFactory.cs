@@ -13,6 +13,7 @@ namespace TimeTracker.Business.Testing.Factories.Entity
             _factory = new Faker<WorkspaceEntity>()
                 .RuleFor(fake => fake.Name, fake => fake.Random.String2(100))
                 .RuleFor(fake => fake.CreatedAt, fake => fake.Date.Past())
+                .RuleFor(fake => fake.TimeZone, fake => "UTC")
                 .RuleFor(fake => fake.UpdatedAt, fake => fake.Date.Past());
         }
 

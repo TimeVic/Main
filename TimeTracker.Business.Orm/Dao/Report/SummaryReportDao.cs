@@ -27,8 +27,8 @@ public partial class SummaryReportDao: ISummaryReportDao
     {
         return await _sessionProvider.CurrentSession.CreateSQLQuery(query)
             .SetParameter("workspaceId", workspaceId)
-            .SetParameter("startDate", startDate.StartOfDay())
-            .SetParameter("endDate", endDate.EndOfDay())
+            .SetParameter("startDate", startDate.Date)
+            .SetParameter("endDate", endDate.Date)
             .SetResultTransformer(Transformers.AliasToBean<T>())
             .ListAsync<T>();
     }

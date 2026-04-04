@@ -45,9 +45,8 @@ public class ForOwnerTest: BaseTest
         {
             _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-32),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddDays(32).AddHours(10),
+                EndTime = DateTime.UtcNow.AddHours(15).AddDays(10),
                 IsBillable = true,
                 HourlyRate = 12
             }, _project).Wait();

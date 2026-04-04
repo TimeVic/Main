@@ -1,10 +1,4 @@
-﻿using NHibernate;
-using NHibernate.Transform;
-using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Common.Constants;
-using TimeTracker.Business.Common.Constants.Reports;
-using TimeTracker.Business.Extensions;
-using TimeTracker.Business.Orm.Dto.Reports.Summary;
+﻿using TimeTracker.Business.Orm.Dto.Reports.Summary;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Orm.Dao.Report;
@@ -27,7 +21,9 @@ public partial class SummaryReportDao: ISummaryReportDao
             ) as AmountOriginal
         from time_entries te 
         inner join users u on u.id = te.user_id
-        where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
+        where te.workspace_id = :workspaceId
+          and cast(te.start_time as date) >= cast(:startDate as date)
+          and cast(te.start_time as date) <= cast(:endDate as date)
         group by te.user_id, u.user_name, u.email
     ";
     
@@ -64,7 +60,9 @@ public partial class SummaryReportDao: ISummaryReportDao
             ) as AmountOriginal
         from time_entries te 
         inner join users u on u.id = te.user_id
-        where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
+        where te.project_id in (:projectIds)
+          and cast(te.start_time as date) >= cast(:startDate as date)
+          and cast(te.start_time as date) <= cast(:endDate as date)
         group by te.user_id, u.user_name, u.email
     ";
     

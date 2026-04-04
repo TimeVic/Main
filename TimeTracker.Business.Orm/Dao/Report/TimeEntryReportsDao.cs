@@ -53,7 +53,7 @@ public class TimeEntryReportsDao: ITimeEntryReportsDao
         where te.workspace_id = :workspaceId 
             and te.user_id = :userId 
             and te.is_billable = true
-            and te.date <= :endDate
+            and te.start_time <= :endDate
         group by p.id, c.id
     ";
 

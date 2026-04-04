@@ -50,9 +50,8 @@ public class GetReportByMothsTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddMonths(-1),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddMonths(-1).AddHours(10),
+                EndTime = DateTime.UtcNow.AddMonths(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -63,9 +62,8 @@ public class GetReportByMothsTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddMonths(-2),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = DateTime.UtcNow.AddMonths(-2).AddHours(1),
+                EndTime = DateTime.UtcNow.AddMonths(-2).AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -75,9 +73,8 @@ public class GetReportByMothsTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddMonths(-3),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
+                StartTime = DateTime.UtcNow.AddMonths(-3).AddHours(5),
+                EndTime = DateTime.UtcNow.AddMonths(-3).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -102,9 +99,9 @@ public class GetReportByMothsTest: BaseTest
         Assert.Equal(DateTime.UtcNow.AddMonths(-2).Year, secondReportItem.Year);
         Assert.Equal(DateTime.UtcNow.AddMonths(-3).Year, thirdReportItem.Year);
         
-        Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(24), thirdReportItem.Duration);
+        AssertDurationHours(15, firstReportItem.Duration);
+        AssertDurationHours(12, secondReportItem.Duration);
+        AssertDurationHours(24, thirdReportItem.Duration);
         
         Assert.Equal(180m, firstReportItem.Amount);
         Assert.Equal(120m, secondReportItem.Amount);
@@ -125,9 +122,9 @@ public class GetReportByMothsTest: BaseTest
         Assert.Equal(DateTime.UtcNow.AddMonths(-2).Month, secondReportItem.Month);
         Assert.Equal(DateTime.UtcNow.AddMonths(-3).Month, thirdReportItem.Month);
         
-        Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(24), thirdReportItem.Duration);
+        AssertDurationHours(15, firstReportItem.Duration);
+        AssertDurationHours(12, secondReportItem.Duration);
+        AssertDurationHours(24, thirdReportItem.Duration);
     }
     
     [Fact]
@@ -153,9 +150,8 @@ public class GetReportByMothsTest: BaseTest
         {
             await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddMonths(-1),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddMonths(-1).AddHours(10),
+                EndTime = DateTime.UtcNow.AddMonths(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -165,9 +161,8 @@ public class GetReportByMothsTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddMonths(-2),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = DateTime.UtcNow.AddMonths(-2).AddHours(1),
+                EndTime = DateTime.UtcNow.AddMonths(-2).AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -177,9 +172,8 @@ public class GetReportByMothsTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddMonths(-3),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
+                StartTime = DateTime.UtcNow.AddMonths(-3).AddHours(5),
+                EndTime = DateTime.UtcNow.AddMonths(-3).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -199,9 +193,17 @@ public class GetReportByMothsTest: BaseTest
 
         Assert.Equal(DateTime.UtcNow.AddMonths(-2).Month, firstReportItem.Month);
         Assert.Equal(DateTime.UtcNow.AddMonths(-2).Year, firstReportItem.Year);
-        Assert.Equal(TimeSpan.FromHours(12), firstReportItem.Duration);
+        AssertDurationHours(12, firstReportItem.Duration);
         
         Assert.Equal(0, firstReportItem.Amount);
         Assert.Equal(180, secondReportItem.Amount);
+    }
+
+    private static void AssertDurationHours(double expectedHours, TimeSpan actualDuration)
+    {
+        Assert.Equal(
+            (int)TimeSpan.FromHours(expectedHours).TotalSeconds,
+            (int)Math.Round(actualDuration.TotalSeconds)
+        );
     }
 }

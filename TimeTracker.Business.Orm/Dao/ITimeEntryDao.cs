@@ -17,8 +17,7 @@ public interface ITimeEntryDao: IDomainService
     Task<TimeEntryEntity> StartNewAsync(
         UserEntity user,
         WorkspaceEntity workspace,
-        DateOnly date,
-        TimeSpan startTime,
+        DateTime startTime,
         bool isBillable = false,
         string? description = null,
         Guid? projectId = null,
@@ -29,8 +28,7 @@ public interface ITimeEntryDao: IDomainService
     Task<ICollection<TimeEntryEntity>> StopActiveAsync(
         WorkspaceEntity workspace,
         UserEntity user,
-        TimeSpan endTime,
-        DateOnly endDate
+        DateTime endTime
     );
 
     Task<TimeEntryEntity> SetAsync(
@@ -50,10 +48,5 @@ public interface ITimeEntryDao: IDomainService
         FilterDataDto? filter = null,
         UserEntity? user = null,
         MembershipAccessType accessType = MembershipAccessType.Owner
-    );
-    
-    Task<TimeEntryEntity?> GetActiveEntryForPastDay(
-        ISession? session = null,
-        CancellationToken cancellationToken = default
     );
 }

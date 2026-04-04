@@ -14,11 +14,9 @@ public class TimeEntryDto: BaseDto
     
     public bool IsBillable { get; set; }
     
-    public DateOnly Date { get; set; }
+    public DateTime StartTime { get; set; }
     
-    public TimeSpan StartTime { get; set; }
-    
-    public TimeSpan? EndTime { get; set; }
+    public DateTime? EndTime { get; set; }
 
     public bool IsSynced { get; set; }
     
@@ -40,7 +38,6 @@ public class TimeEntryDto: BaseDto
         EndTime = fromEntry.EndTime;
         StartTime = fromEntry.StartTime;
         HourlyRate = fromEntry.HourlyRate;
-        Date = fromEntry.Date;
         IsBillable = fromEntry.IsBillable;
         Task = fromEntry.Task;
         IsSynced = fromEntry.IsSynced;

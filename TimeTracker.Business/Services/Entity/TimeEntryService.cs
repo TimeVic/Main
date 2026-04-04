@@ -33,15 +33,13 @@ public class TimeEntryService : ITimeEntryService
     public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(
         WorkspaceEntity workspace,
         UserEntity user,
-        TimeSpan endTime,
-        DateOnly stopDate
+        DateTime endTime
     )
     {
         var timeEntries = await _timeEntryDao.StopActiveAsync(
             workspace,
             user,
-            endTime,
-            stopDate
+            endTime
         );
         foreach (var timeEntry in timeEntries)
         {

@@ -40,8 +40,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date.ToDateOnly(),
-            DateTime.UtcNow.TimeOfDay,
+            DateTime.UtcNow,
             true
         );
         await FlushDbChanges();
@@ -65,8 +64,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date.ToDateOnly(),
-            DateTime.UtcNow.TimeOfDay,
+            DateTime.UtcNow,
             true
         );
         await FlushDbChanges();

@@ -82,19 +82,17 @@ public partial class RedmineClientTest : BaseTest
     public async Task ShouldSendNewTimeEntry()
     {
         var expectedDescription = "Test description";
-        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateOnly.FromDateTime(DateTime.UtcNow),
-            TimeSpan.FromMinutes(1),
+            DateTime.UtcNow.AddMinutes(1),
             true,
             description: expectedDescription
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
         activeEntry.Task.ExternalTaskId = _taskId;
         await FlushDbChanges();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.AddMinutes(2));
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
@@ -111,18 +109,16 @@ public partial class RedmineClientTest : BaseTest
     // [Fact]
     public async Task ShouldReceiveErrorIfTaskNotFound()
     {
-        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            date,
-            TimeSpan.FromMinutes(1),
+            DateTime.UtcNow.AddMinutes(1),
             true
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
         activeEntry.Task.ExternalTaskId = "fake";
         await FlushDbChanges();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.AddMinutes(2));
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
@@ -134,18 +130,17 @@ public partial class RedmineClientTest : BaseTest
     // [Fact]
     public async Task ShouldUpdateExistsTimeEntry()
     {
-        var date = DateTime.UtcNow.ToDateOnly();
+        var startTime = DateTime.UtcNow;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            date,
-            TimeSpan.FromMinutes(1),
+            startTime,
             true
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: _taskList);
         activeEntry.Task.ExternalTaskId = _taskId;
         await FlushDbChanges();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, startTime.AddMinutes(2));
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
@@ -159,8 +154,8 @@ public partial class RedmineClientTest : BaseTest
         activeEntry = await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
             Id = activeEntry.Id,
-            StartTime = DateTime.UtcNow.TimeOfDay,
-            EndTime = DateTime.UtcNow.AddMilliseconds(5).TimeOfDay,
+            StartTime = DateTime.UtcNow,
+            EndTime = DateTime.UtcNow.AddMilliseconds(5),
             Description = "Test"
         });
         var actualResponse = await _redmineClient.SetTimeEntryAsync(activeEntry);

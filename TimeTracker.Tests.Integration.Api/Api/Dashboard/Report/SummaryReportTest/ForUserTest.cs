@@ -67,9 +67,8 @@ public class ForUserTest: BaseTest
         {
             _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-32),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddHours(10),
+                EndTime = DateTime.UtcNow.AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, _project).Wait();
@@ -80,9 +79,8 @@ public class ForUserTest: BaseTest
         {
             _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
-                StartTime = TimeSpan.FromHours(12),
-                EndTime = TimeSpan.FromHours(13),
+                StartTime = DateTime.UtcNow.AddDays(-1).AddHours(12),
+                EndTime = DateTime.UtcNow.AddDays(-1).AddHours(13),
                 IsBillable = true,
                 HourlyRate = 11
             }, _project2).Wait();

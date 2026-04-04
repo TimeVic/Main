@@ -27,7 +27,9 @@ public partial class SummaryReportDao: ISummaryReportDao
         from time_entries te 
         left join projects p on p.id = te.project_id
         left join clients c on c.id = p.client_id 
-        where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
+        where te.workspace_id = :workspaceId
+          and cast(te.start_time as date) >= cast(:startDate as date)
+          and cast(te.start_time as date) <= cast(:endDate as date)
         group by c.id, c.name
     ";
     
@@ -64,7 +66,9 @@ public partial class SummaryReportDao: ISummaryReportDao
         from time_entries te 
         inner join projects p on p.id = te.project_id
         inner join clients c on c.id = p.client_id 
-        where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
+        where te.project_id in (:projectIds)
+          and cast(te.start_time as date) >= cast(:startDate as date)
+          and cast(te.start_time as date) <= cast(:endDate as date)
         group by c.id, c.name
     ";
     

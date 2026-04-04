@@ -45,15 +45,15 @@ public class GetReportByDayForOwnerTest: BaseTest
     [Fact]
     public async Task ShouldReceiveReportForOwnerOrManager()
     {
+        var baseDay = DateTime.UtcNow.Date;
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
         var project1 = projects.First();
         for (int i = 0; i < 3; i++)
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateTime.UtcNow.ToDateOnly().AddDays(-1),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = baseDay.AddDays(-1).AddHours(10),
+                EndTime = baseDay.AddDays(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -64,9 +64,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = baseDay.AddHours(1),
+                EndTime = baseDay.AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -76,9 +75,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(1),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
+                StartTime = baseDay.AddDays(1).AddHours(5),
+                EndTime = baseDay.AddDays(1).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -88,8 +86,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         
         var result = await _reportsDao.GetReportByDayForOwnerOrManagerAsync(
             _workspace.Id,
-            DateTime.UtcNow.AddDays(-1),
-            DateTime.UtcNow.AddDays(1)
+            baseDay.AddDays(-1),
+            baseDay.AddDays(1)
         );
         Assert.Equal(3, result.Count);
         
@@ -97,6 +95,9 @@ public class GetReportByDayForOwnerTest: BaseTest
         var secondReportItem = result.Skip(1).First();
         var thirdReportItem = result.Last();
         Assert.True(firstReportItem.Date > secondReportItem.Date);
+        Assert.Equal(baseDay.AddDays(1).Date, firstReportItem.Date.Date);
+        Assert.Equal(baseDay.Date, secondReportItem.Date.Date);
+        Assert.Equal(baseDay.AddDays(-1).Date, thirdReportItem.Date.Date);
         
         Assert.Equal(TimeSpan.FromHours(24), firstReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
@@ -107,8 +108,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         
         result = await _reportsDao.GetReportByDayForOwnerOrManagerAsync(
             _workspace.Id,
-            DateTime.UtcNow.AddDays(-1),
-            DateTime.UtcNow.AddDays(1)
+            baseDay.AddDays(-1),
+            baseDay.AddDays(1)
         );
         Assert.Equal(3, result.Count);
         
@@ -116,6 +117,9 @@ public class GetReportByDayForOwnerTest: BaseTest
         secondReportItem = result.Skip(1).First();
         thirdReportItem = result.Last();
         Assert.True(firstReportItem.Date > secondReportItem.Date);
+        Assert.Equal(baseDay.AddDays(1).Date, firstReportItem.Date.Date);
+        Assert.Equal(baseDay.Date, secondReportItem.Date.Date);
+        Assert.Equal(baseDay.AddDays(-1).Date, thirdReportItem.Date.Date);
         
         Assert.Equal(TimeSpan.FromHours(24), firstReportItem.Duration);
         Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
@@ -146,9 +150,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         {
             await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddDays(-1).AddHours(10),
+                EndTime = DateTime.UtcNow.AddDays(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -158,9 +161,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = DateTime.UtcNow.AddHours(1),
+                EndTime = DateTime.UtcNow.AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -170,9 +172,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(1),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
+                StartTime = DateTime.UtcNow.AddDays(1).AddHours(5),
+                EndTime = DateTime.UtcNow.AddDays(1).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });

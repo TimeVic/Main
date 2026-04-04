@@ -130,8 +130,7 @@ public partial class SetTest: BaseTest
         var initialEntry = await _timeEntryDao.StartNewAsync(
             _user,
             initialWorkspace,
-            DateTime.Now.ToDateOnly(), 
-            TimeSpan.FromSeconds(1),
+            DateTime.UtcNow,
             fakeTimeEntry.IsBillable,
             fakeTimeEntry.Description,
             initialProject.Id
@@ -160,11 +159,12 @@ public partial class SetTest: BaseTest
     public async Task ShouldThrowExceptionIfEndTimeLess()
     {
         var fakeTimeEntry = _timeEntryFactory.Generate();
+        var baseDateTime = DateTime.UtcNow;
         var expectedDto = new TimeEntryCreationDto()
         {
             Description = fakeTimeEntry.Description,
-            StartTime = TimeSpan.FromMinutes(120),
-            EndTime = TimeSpan.FromMinutes(119),
+            StartTime = baseDateTime.AddMinutes(120),
+            EndTime = baseDateTime.AddMinutes(119),
             HourlyRate = fakeTimeEntry.HourlyRate,
             IsBillable = fakeTimeEntry.IsBillable
         };

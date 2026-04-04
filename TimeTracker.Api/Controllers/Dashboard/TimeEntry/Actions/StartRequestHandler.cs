@@ -90,7 +90,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             var timeEntry = await _timeEntryDao.StartNewAsync(
                 user,
                 workspace,
-                request.Date,
                 request.StartTime,
                 isBillable: isBillable,
                 description: request.Description,

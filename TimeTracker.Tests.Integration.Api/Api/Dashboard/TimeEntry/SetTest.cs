@@ -58,8 +58,7 @@ public class SetTest: BaseTest
         var timeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,
-            DateOnly.FromDateTime(DateTime.UtcNow), 
-            TimeSpan.FromSeconds(1)
+            DateTime.UtcNow.AddSeconds(1)
         );
         var response = await PostRequestAsAnonymousAsync(Url, new SetRequest()
         {
@@ -75,8 +74,8 @@ public class SetTest: BaseTest
         var expectedProject = await _projectDao.CreateAsync(_defaultWorkspace, "Test");
         await FlushDbChanges();
 
-        var startTime = TimeSpan.FromSeconds(1);
-        var endTime = TimeSpan.FromHours(1);
+        var startTime = DateTime.UtcNow.AddSeconds(1);
+        var endTime = DateTime.UtcNow.AddHours(1);
         var response = await PostRequestAsync(Url, _jwtToken, new SetRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
@@ -115,9 +114,8 @@ public class SetTest: BaseTest
         
         var timeEntry = await _timeEntryDao.StartNewAsync(
             _user,
-            _defaultWorkspace,
-            DateOnly.FromDateTime(DateTime.UtcNow), 
-            TimeSpan.FromSeconds(1)
+            _defaultWorkspace, 
+            DateTime.UtcNow.AddSeconds(1)
         );
 
         var response = await PostRequestAsync(Url, _jwtToken, new SetRequest()
@@ -129,8 +127,7 @@ public class SetTest: BaseTest
             StartTime = fakeEntry.StartTime,
             HourlyRate = fakeEntry.HourlyRate,
             IsBillable = fakeEntry.IsBillable,
-            ProjectId = expectedProject.Id,
-            Date = fakeEntry.Date,
+            ProjectId = expectedProject.Id
         });
         await response.EnsureSuccessStatusCodeWithoutError();
 
@@ -142,7 +139,6 @@ public class SetTest: BaseTest
         Assert.Equal(fakeEntry.Description, actualDto.Description);
         Assert.Equal(fakeEntry.IsBillable, actualDto.IsBillable);
         Assert.Equal(fakeEntry.HourlyRate, actualDto.HourlyRate);
-        Assert.Equal(fakeEntry.Date, actualDto.Date);
         Assert.Equal(expectedProject.Id, actualDto.Project.Id);
 
         var processedCounter = await QueueProcess(QueueChannel.ExternalClient);
@@ -163,14 +159,13 @@ public class SetTest: BaseTest
         );
         var timeEntry = await _timeEntryDao.StartNewAsync(
             otherUser,
-            _defaultWorkspace,
-            DateOnly.FromDateTime(DateTime.UtcNow), 
-            TimeSpan.FromSeconds(1)
+            _defaultWorkspace, 
+            DateTime.UtcNow.AddSeconds(1)
         );
         
         var fakeEntry = _timeEntryFactory.Generate();
         
-        var startTime = TimeSpan.FromSeconds(1);
+        var startTime = DateTime.UtcNow.AddSeconds(1);
         var response = await PostRequestAsync(Url, jwtToken, new SetRequest()
         {
             Id = timeEntry.Id,
@@ -180,8 +175,7 @@ public class SetTest: BaseTest
             StartTime = startTime,
             HourlyRate = fakeEntry.HourlyRate,
             IsBillable = fakeEntry.IsBillable,
-            ProjectId = expectedProject.Id,
-            Date = fakeEntry.Date,
+            ProjectId = expectedProject.Id
         });
         await response.EnsureSuccessStatusCodeWithoutError();
 
@@ -206,8 +200,7 @@ public class SetTest: BaseTest
             WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromSeconds(1),
+            StartTime = DateTime.UtcNow.AddSeconds(1),
             
             IsBillable = true,
             HourlyRate = null

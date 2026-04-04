@@ -54,7 +54,7 @@ public class GetListTest: BaseTest
         {
             Assert.NotEqual(Guid.Empty, item.Id);
             Assert.True(item.CreatedAt > DateTime.MinValue);
-            Assert.True(item.EndTime > TimeSpan.MinValue);
+            Assert.True(item.EndTime > DateTime.MinValue);
             Assert.NotNull(item.Project);
         });
     }
@@ -192,17 +192,17 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task ShouldFilterByDateFrom()
     {
-        var dateFrom = DateTime.UtcNow.ToDateOnly().AddDays(-5);
+        var dateFrom = DateTime.UtcNow.AddDays(-5).Date;
         
         var expectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
         foreach (var entry in expectedEntries)
         {
-            entry.Date = DateTime.UtcNow.ToDateOnly().AddDays(-5);
+            entry.StartTime = DateTime.UtcNow.AddDays(-5);
         }
         var notExpectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 2);
         foreach (var entry in notExpectedEntries)
         {
-            entry.Date = DateTime.UtcNow.ToDateOnly().AddDays(-6);
+            entry.StartTime = DateTime.UtcNow.AddDays(-6);
         }
         
         await FlushDbChanges();
@@ -211,36 +211,36 @@ public class GetListTest: BaseTest
             1,
             filter: new FilterDataDto()
             {
-                DateFrom = dateFrom.ToDateTime(TimeOnly.MinValue)
+                DateFrom = dateFrom
             }
         );
         
         Assert.Equal(3, actualList.TotalCount);
         Assert.All(actualList.Items, item =>
         {
-            Assert.True(item.Date >= dateFrom);
+            Assert.True(item.StartTime.Date >= dateFrom);
         });
     }
     
     [Fact]
     public async Task ShouldFilterByDateTo()
     {
-        var dateTo = DateTime.UtcNow.ToDateOnly();
+        var dateTo = DateTime.UtcNow.Date;
         
         var expectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
         foreach (var entry in expectedEntries)
         {
-            entry.Date = DateTime.UtcNow.ToDateOnly().AddDays(-1);
+            entry.StartTime = DateTime.UtcNow.AddDays(-1);
         }
         expectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 3);
         foreach (var entry in expectedEntries)
         {
-            entry.Date = DateTime.UtcNow.ToDateOnly();
+            entry.StartTime = DateTime.UtcNow;
         }
         var notExpectedEntries = await _timeEntrySeeder.CreateSeveralAsync(_workspace, _user, 2);
         foreach (var entry in notExpectedEntries)
         {
-            entry.Date = DateTime.UtcNow.ToDateOnly().AddDays(1);
+            entry.StartTime = DateTime.UtcNow.AddDays(1);
         }
         
         await FlushDbChanges();
@@ -249,14 +249,14 @@ public class GetListTest: BaseTest
             1,
             filter: new FilterDataDto()
             {
-                DateTo = dateTo.ToDateTime(TimeOnly.MinValue)
+                DateTo = dateTo
             }
         );
         
         Assert.Equal(6, actualList.TotalCount);
         Assert.All(actualList.Items, item =>
         {
-            Assert.True(item.Date <= dateTo);
+            Assert.True(item.StartTime.Date <= dateTo);
         });
     }
     

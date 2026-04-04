@@ -13,19 +13,26 @@ public partial class SummaryReportDao: ISummaryReportDao
 {
     private const string SqlQuerySummaryByMonthForOwner = @"
         select
-            cast(extract(month from te.date) AS int) as Month,
-            cast(extract(year from te.date) AS int) as Year,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
+            cast(extract(month from x.day) AS int) as Month,
+            cast(extract(year from x.day) AS int) as Year,
+            sum(extract(epoch from x.duration)) as DurationAsEpoch,
             sum(
 	            round(
-	                te.hourly_rate / 60 / 60 -- Price per second 
-	                *
-	                extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                (extract(epoch from x.duration) / 3600.0)
+	                * te.hourly_rate,
 	                2
 	            )
             ) as AmountOriginal
-        from time_entries te 
-        where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
+        from time_entries te
+        join workspaces w on w.id = te.workspace_id
+        cross join lateral fn_split_time_entry_by_day(
+            te.start_time,
+            te.end_time,
+            w.time_zone
+        ) as x
+        where te.workspace_id = :workspaceId
+          and x.day >= cast(:startDate as date)
+          and x.day <= cast(:endDate as date)
         group by year, month
         order by year desc, month desc
     ";
@@ -46,22 +53,30 @@ public partial class SummaryReportDao: ISummaryReportDao
     
     private const string SqlQuerySummaryByMonthForOther = @"
         select
-            cast(extract(month from te.date) AS int) as Month,
-            cast(extract(year from te.date) AS int) as Year,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
+            cast(extract(month from x.day) AS int) as Month,
+            cast(extract(year from x.day) AS int) as Year,
+            sum(extract(epoch from x.duration)) as DurationAsEpoch,
             sum(
                 case when te.user_id = :userId
                     then round(
-	                    te.hourly_rate / 60 / 60 -- Price per second 
-	                    *
-	                    extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                    (extract(epoch from x.duration) / 3600.0)
+	                    * te.hourly_rate,
 	                    2
 	                )
                     else 0
                 end
             ) as AmountOriginal
-        from time_entries te 
-        where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
+        from time_entries te
+        join projects p on p.id = te.project_id
+        join workspaces w on w.id = p.workspace_id
+        cross join lateral fn_split_time_entry_by_day(
+            te.start_time,
+            te.end_time,
+            w.time_zone
+        ) as x
+        where te.project_id in (:projectIds)
+          and x.day >= cast(:startDate as date)
+          and x.day <= cast(:endDate as date)
         group by year, month
         order by year, month
     ";

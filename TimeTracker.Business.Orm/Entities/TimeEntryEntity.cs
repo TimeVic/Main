@@ -5,14 +5,14 @@ using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Entities
 {
-    public class TimeEntryEntity : AEntity
+    public class 
+        TimeEntryEntity : AEntity
     {
         public virtual string? Description { get; set; }
         public virtual decimal? HourlyRate { get; set; }
         public virtual bool IsBillable { get; set; }
-        public virtual DateOnly Date { get; set; }
-        public virtual TimeSpan StartTime { get; set; }
-        public virtual TimeSpan? EndTime { get; set; }
+        public virtual DateTime StartTime { get; set; }
+        public virtual DateTime? EndTime { get; set; }
         public virtual string? TaskId { get; set; }
         public virtual string? ClickUpId { get; set; }
         public virtual string? RedmineId { get; set; }

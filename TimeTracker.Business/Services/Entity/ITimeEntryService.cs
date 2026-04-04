@@ -11,8 +11,7 @@ public interface ITimeEntryService: IDomainService
     Task<ICollection<TimeEntryEntity>> StopActiveAsync(
         WorkspaceEntity workspace,
         UserEntity user,
-        TimeSpan endTime,
-        DateOnly stopDate
+        DateTime endTime
     );
 
     Task<TimeEntryEntity> SetAsync(
@@ -22,5 +21,5 @@ public interface ITimeEntryService: IDomainService
         ProjectEntity? project = null
     );
 
-    System.Threading.Tasks.Task DeleteAsync(TimeEntryEntity timeEntry);
+    Task DeleteAsync(TimeEntryEntity timeEntry);
 }
