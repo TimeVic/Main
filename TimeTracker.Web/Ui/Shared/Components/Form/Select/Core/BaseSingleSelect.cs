@@ -74,9 +74,7 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent where T : BaseD
 
     protected void OnClear()
     {
-        if (string.IsNullOrEmpty(_selectedId))
-            return;
-        _selectedId = null;
+        OnValueChanged(null);
     }
     
     protected void OnValueChanged(T? item)
@@ -85,6 +83,7 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent where T : BaseD
         if (_selectedItem != item)
         {
             UpdateSelectedItem();
+            Debug.Log(11111, _selectedItem);
             SelectedItemChanged.InvokeAsync(_selectedItem);
         }
     }

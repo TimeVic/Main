@@ -13,4 +13,6 @@ public record struct SetListItemAction(ProjectDto Project);
 
 public record struct SetSelectedAction(ProjectDto Project);
 
+public record struct SetIsSavingAction(bool IsSaving);
+
 public record struct SetProjectIsListLoading(bool IsLoading);

@@ -25,7 +25,7 @@ public class UpdateEffect: Effect<UpdateAction>
     {
         try
         {
-            dispatcher.Dispatch(new SetProjectIsListLoading(true));
+            dispatcher.Dispatch(new SetIsSavingAction(true));
             var response = await _apiService.ProjectUpdateAsync(action.Request);
             if (response != null)
             {
@@ -40,7 +40,7 @@ public class UpdateEffect: Effect<UpdateAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetProjectIsListLoading(false));
+            dispatcher.Dispatch(new SetIsSavingAction(false));
         }
     }
 }

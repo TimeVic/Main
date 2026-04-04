@@ -24,6 +24,7 @@ public partial class ClientsDropDown
     private void UpdateList()
     {
         _list = _state.Value.List;
+        UpdateSelectedItem();
     }
     
     protected override void UpdateSelectedItem()

@@ -3,6 +3,14 @@
 
 @inherits BaseReactiveComponent
 
+@if (_projectToUpdate != null)
+{
+    <UpdateProjectModal 
+        Project="_projectToUpdate"
+        IsOpened="_projectToUpdate != null" 
+        IsOpenedChanged="isOpened => { _projectToUpdate = isOpened ? _projectToUpdate : null; }"/>
+}
+
 <section class="space-y-6">
     <LumexCard>
         <LumexCardBody>
@@ -26,49 +34,27 @@
             Property="@(p => p.Name)"/>
         <LumexUI.PropertyColumn
             Title="Billable by default"
-            Property="@(p => p.IsBillableByDefault)">
-            <Content>
-                <LumexCheckbox @bind-Checked="context.IsBillableByDefault"/>
-            </Content>
-        </LumexUI.PropertyColumn>
+            Property="@(p => p.IsBillableByDefault)"/>
         <LumexUI.PropertyColumn
             Title="Default hourly rate"
-            Property="@(p => p.DefaultHourlyRate)">
-            <Content>
-                <InputNumericField
-                    TItem="decimal"
-                    Step="00.01"
-                    Label=""
-                    LabelPlacement="LabelPlacement.Outside"
-                    Disabled="@(!context.IsBillableByDefault)"
-                    Value="context.DefaultHourlyRate"
-                    ValueExpression="() => context.DefaultHourlyRate"
-                    ValueChanged="@(value => context.DefaultHourlyRate = value ?? 0)"/>
-            </Content>
-        </LumexUI.PropertyColumn>
+            Property="@(p => p.DefaultHourlyRate)"/>
         <LumexUI.PropertyColumn
             Title="Client"
             Sortable="true"
-            Property="@(p => p.Client != null ? p.Client.Name : string.Empty)">
-            <Content>
-                <ClientsDropDown
-                    Value="@(context.Client?.Id ?? Guid.Empty)"
-                    SelectedItemChanged="@(client => context.Client = client)"/>
-            </Content>
-        </LumexUI.PropertyColumn>
+            Property="@(p => p.Client != null ? p.Client.Name : string.Empty)"/>
         <LumexUI.PropertyColumn
             Title="Actions"
             Property="@(p => p.Id)">
             <Content>
                 <CustomButton
                     Class="inline-flex rounded-full"
-                    OnClick="@(() => OnSave(context))"
+                    OnClick="@(() => OnEdit(context))"
                     Size="Size.Small"
-                    Color="ThemeColor.Success"
+                    Color="ThemeColor.Primary"
                     Variant="Variant.Light"
                     IconOnly="true">
                     <ChildContent>
-                        <i class="fa-regular fa-floppy-disk"></i>
+                        <i class="fa-regular fa-pen-to-square"></i>
                     </ChildContent>
                 </CustomButton>
             </Content>

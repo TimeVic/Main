@@ -11,14 +11,11 @@ public partial class ProjectsBlock
     [Inject] 
     private IState<ProjectState> _state { get; set; }
 
-    private Task OnSave(ProjectDto context)
+    private ProjectDto? _projectToUpdate { get; set; }
+    
+    private Task OnEdit(ProjectDto context)
     {
-        if (!string.IsNullOrEmpty(context.Name))
-        {
-            var updateRequest = new UpdateRequest() { Name = "" };
-            updateRequest.Fill(context);
-            Dispatcher.Dispatch(new UpdateAction(updateRequest));
-        }
+        _projectToUpdate = context;
         return Task.CompletedTask;
     }
 }
