@@ -1,7 +1,63 @@
-@using TimeTracker.Api.Shared.Dto.Entity
-@using TimeTracker.Business.Common.Constants
-@using TimeTracker.Web.Ui.Pages.Dashboard.Shared
+@using LumexUI.Common
+@using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
 
 @inherits BaseReactiveComponent
 
-Projects
+@if (_projectToUpdate != null)
+{
+    <UpdateProjectModal 
+        Project="_projectToUpdate"
+        IsOpened="_projectToUpdate != null" 
+        IsOpenedChanged="isOpened => { _projectToUpdate = isOpened ? _projectToUpdate : null; }"/>
+}
+
+<section class="space-y-6">
+    <LumexCard>
+        <LumexCardBody>
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">Projects</p>
+                    <h2 class="mt-2 text-lg font-semibold text-slate-900">Workspace projects</h2>
+                    <p class="mt-1 text-sm text-slate-600">Projects keep their assigned client visible, but existing client links stay read-only here.</p>
+                </div>
+                <AddProjectForm/>
+            </div>
+        </LumexCardBody>
+    </LumexCard>
+    
+    <LumexDataGrid
+        Data="@_state.Value.List.AsQueryable()"
+        Radius="@Radius.Medium"
+        Class="mt-3">
+        <LumexUI.EditColumn
+            Title="Name"
+            Property="@(p => p.Name)"/>
+        <LumexUI.PropertyColumn
+            Title="Billable by default"
+            Property="@(p => p.IsBillableByDefault)"/>
+        <LumexUI.PropertyColumn
+            Title="Default hourly rate"
+            Property="@(p => p.DefaultHourlyRate)"/>
+        <LumexUI.PropertyColumn
+            Title="Client"
+            Sortable="true"
+            Property="@(p => p.Client != null ? p.Client.Name : string.Empty)"/>
+        <LumexUI.PropertyColumn
+            Title="Actions"
+            Property="@(p => p.Id)">
+            <Content>
+                <CustomButton
+                    Class="inline-flex rounded-full"
+                    OnClick="@(() => OnEdit(context))"
+                    Size="Size.Small"
+                    Color="ThemeColor.Primary"
+                    Variant="Variant.Light"
+                    IconOnly="true">
+                    <ChildContent>
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </ChildContent>
+                </CustomButton>
+            </Content>
+        </LumexUI.PropertyColumn>
+    </LumexDataGrid>
+</section>

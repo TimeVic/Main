@@ -1,0 +1,90 @@
+@using LumexUI
+@using LumexUI.Common
+@using LumexUI.Shared.Icons
+
+@inherits BaseReactiveComponent
+
+<LumexModal
+    Open="IsOpened"
+    OnClose="@OnCloseModal"
+    Size="ModalSize.Large"
+    @ref="modal">
+    <LumexModalContent>
+        <LumexModalHeader Class="flex items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </div>
+                <div>
+                    <h2 class="mt-2 text-xl font-semibold text-slate-900">Edit "@model.Name"</h2>
+                    <p class="mt-1 text-sm text-slate-600">Update the project name and reassign it to another client if needed.</p>
+                </div>
+            </div>
+        </LumexModalHeader>
+        <LumexModalBody>
+            <EditForm
+                Context="form"
+                @ref="_form"
+                Model="@model"
+                novalidate>
+                <DataAnnotationsValidator/>
+
+                <div class="space-y-5">
+                    <div class="mt-1">
+                        <InputTextField
+                            FullWidth="true"
+                            Label="Project"
+                            Placeholder="Project name"
+                            Variant="InputVariant.Outlined"
+                            @bind-Value="model.Name"/>
+                    </div>
+
+                    <div class="mt-1">
+                        <ClientsDropDown
+                            Value="@model.ClientId"
+                            Clearable="true"
+                            SelectedItemChanged="OnClientChanged"/>
+                    </div>
+
+                    <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">Bill hourly by default</p>
+                                <p class="mt-1 text-xs text-slate-500">Use the project hourly rate automatically for new time entries.</p>
+                            </div>
+                            <label class="inline-flex cursor-pointer items-center gap-3 rounded-2xl px-3 py-2">
+                                <LumexSwitch @bind-Value="model.IsBillableByDefault"/>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    @if (model.IsBillableByDefault)
+                    {
+                        <div>
+                            <InputNumericField 
+                                TItem="decimal"
+                                Label="Hourly rate"
+                                Size="Size.Small"
+                                Step="00.01"
+                                Variant="InputVariant.Outlined"
+                                Value="@model.DefaultHourlyRate"
+                                ValueExpression="() => model.DefaultHourlyRate"
+                                ValueChanged="OnChangeDefaultHourlyRate"/>
+                            <p class="mt-1 text-xs text-slate-500">Saved in @AuthState.Value.Workspace!.Currency.Code and applied when billable by default is enabled.</p>
+                        </div>    
+                    }
+                </div>
+            </EditForm>
+        </LumexModalBody>
+        <LumexModalFooter>
+            <CustomButton
+                FullWidth="@true"
+                OnClick="@Submit"
+                IsLoading="_state.Value.IsSaving"
+                Color="@ThemeColor.Primary"
+                Radius="@Radius.Full">
+                Update
+            </CustomButton>
+        </LumexModalFooter>
+    </LumexModalContent>
+</LumexModal>
