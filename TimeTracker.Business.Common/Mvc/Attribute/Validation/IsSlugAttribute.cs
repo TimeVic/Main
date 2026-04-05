@@ -18,9 +18,10 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
             {
                 return ValidationResult.Success;
             }
+            var memberNames = validationContext?.MemberName != null ? new[] { validationContext.MemberName } : null;
             var errorResult = new ValidationResult(
                 string.Format(RG.Error_FieldMayContainOnlySlugSymbols, validationContext?.DisplayName),
-                [validationContext!.MemberName!]
+                memberNames
             );
             if (value is string slug)
             {

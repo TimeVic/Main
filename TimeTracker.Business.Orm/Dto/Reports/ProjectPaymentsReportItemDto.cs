@@ -40,7 +40,7 @@ public class ProjectPaymentsReportItemDto
     public TimeSpan TotalDuration
     {
         get => TimeSpan.FromSeconds(
-            Convert.ToDouble(TotalDurationAsEpoch)    
+            Math.Round(Convert.ToDouble(TotalDurationAsEpoch))    
         );
     }
 }

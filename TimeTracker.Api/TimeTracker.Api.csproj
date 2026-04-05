@@ -35,8 +35,4 @@
       <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.9" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="WebSocket\Constants\" />
-    </ItemGroup>
-
 </Project>

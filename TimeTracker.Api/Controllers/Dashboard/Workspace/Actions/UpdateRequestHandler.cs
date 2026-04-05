@@ -6,6 +6,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -44,11 +45,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var workspace = await _workspaceDao.GetById(request.WorkspaceId);
-            var currency = await _currencyDao.GetBy(request.CurrencyId);
-            RecordNotFoundException.ThrowIfNull(currency);
+            RecordNotFoundException.ThrowIfNull(workspace);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
             {
                 throw new HasNoAccessException();
+            }
+            
+            CurrencyEntity? currency = null;
+            if (request.CurrencyId != Guid.Empty)
+            {
+                currency = await _currencyDao.GetBy(request.CurrencyId);
+                RecordNotFoundException.ThrowIfNull(currency);
+            }
+            else
+            {
+                currency = workspace.Currency;
             }
             workspace = await _workspaceDao.UpdateWorkspaceAsync(
                 workspace,
