@@ -1,5 +1,4 @@
 ﻿using Domain.Abstractions;
-using NHibernate;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
@@ -48,5 +47,11 @@ public interface ITimeEntryDao: IDomainService
         FilterDataDto? filter = null,
         UserEntity? user = null,
         MembershipAccessType accessType = MembershipAccessType.Owner
+    );
+
+    Task<ListDto<TimeEntryEntity>> GetListGroupedByDayAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        int page
     );
 }

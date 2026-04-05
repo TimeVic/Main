@@ -25,6 +25,34 @@ namespace TimeTracker.Business.Orm.Dao;
 public class TimeEntryDao: BaseDao, ITimeEntryDao
 {
     private const int MaxCreatedItemsIfStopped = 10;
+    private const string SqlQueryGetListGroupedByDayIds = @"
+        with filtered as (
+            select te.id, te.start_time, cast(te.start_time as date) as day_key
+            from time_entries te
+            where te.workspace_id = :workspaceId
+              and te.user_id = :userId
+              and te.is_marked_to_delete = false
+        ),
+        ordered_days as (
+            select
+                d.day_key,
+                dense_rank() over (order by d.day_key desc) as day_rank
+            from (
+                select distinct day_key
+                from filtered
+            ) d
+        ),
+        page_days as (
+            select day_key
+            from ordered_days
+            where day_rank > :dayOffset
+              and day_rank <= (:dayOffset + :dayPageSize)
+        )
+        select f.id as id
+        from filtered f
+        join page_days pd on pd.day_key = f.day_key
+        order by f.start_time desc
+    ";
     
     private readonly ILogger<TimeEntryDao> _logger;
     private readonly IProjectDao _projectDao;
@@ -139,6 +167,52 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             items,
             await query.RowCountAsync()
         );
+    }
+
+    public async Task<ListDto<TimeEntryEntity>> GetListGroupedByDayAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        int page
+    )
+    {
+        var dayOffset = PaginationUtils.CalculateOffset(page);
+        var totalCount = await Session.Query<TimeEntryEntity>()
+            .Where(item => item.Workspace.Id == workspace.Id)
+            .Where(item => item.User.Id == user.Id)
+            .Where(item => item.IsMarkedToDelete == false)
+            .CountAsync();
+
+        if (totalCount == 0)
+        {
+            return new ListDto<TimeEntryEntity>(new List<TimeEntryEntity>(), 0);
+        }
+
+        var pageItemIds = await Session.CreateSQLQuery(SqlQueryGetListGroupedByDayIds)
+            .AddScalar("id", NHibernateUtil.Guid)
+            .SetParameter("workspaceId", workspace.Id)
+            .SetParameter("userId", user.Id)
+            .SetParameter("dayOffset", dayOffset)
+            .SetParameter("dayPageSize", GlobalConstants.ListPageSize)
+            .ListAsync<Guid>();
+
+        if (!pageItemIds.Any())
+        {
+            return new ListDto<TimeEntryEntity>(new List<TimeEntryEntity>(), totalCount);
+        }
+
+        var items = await Session.Query<TimeEntryEntity>()
+            .Where(item => pageItemIds.Contains(item.Id))
+            .Fetch(item => item.User)
+            .Fetch(item => item.Project)
+            .ThenFetch(project => project!.Client)
+            .Fetch(item => item.Task)
+            .ToListAsync();
+
+        items = items
+            .OrderByDescending(item => item.StartTime)
+            .ToList();
+
+        return new ListDto<TimeEntryEntity>(items, totalCount);
     }
     
     public async Task<TimeEntryEntity> StartNewAsync(

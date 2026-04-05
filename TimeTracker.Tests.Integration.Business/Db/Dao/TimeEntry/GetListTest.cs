@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Autofac;
+using NHibernate;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
@@ -85,6 +86,128 @@ public class GetListTest: BaseTest
         var actualFirst = actualList.Items.First();
         var actualLast = actualList.Items.Last();
         Assert.True(actualFirst.StartTime > actualLast.StartTime);
+    }
+
+    [Fact]
+    public async Task GetListGroupedByDayShouldNotSplitSingleDayBetweenPages()
+    {
+        var project = await _projectSeeder.CreateAsync(_workspace);
+        var baseDay = DateTime.UtcNow.Date;
+        var boundaryDay = baseDay.AddDays(-(GlobalConstants.ListPageSize - 1));
+
+        for (var i = 0; i < GlobalConstants.ListPageSize + 5; i++)
+        {
+            var startTime = baseDay.AddDays(-i).AddHours(10);
+            await _timeEntryDao.SetAsync(
+                _user,
+                _workspace,
+                new TimeEntryCreationDto()
+                {
+                    StartTime = startTime,
+                    EndTime = startTime.AddHours(1),
+                    IsBillable = true,
+                    HourlyRate = 10
+                },
+                project
+            );
+        }
+
+        for (var i = 0; i < 3; i++)
+        {
+            var startTime = boundaryDay.AddHours(12 + i);
+            await _timeEntryDao.SetAsync(
+                _user,
+                _workspace,
+                new TimeEntryCreationDto()
+                {
+                    StartTime = startTime,
+                    EndTime = startTime.AddMinutes(30),
+                    IsBillable = true,
+                    HourlyRate = 12
+                },
+                project
+            );
+        }
+
+        await FlushDbChanges();
+        var firstPage = await _timeEntryDao.GetListGroupedByDayAsync(_workspace, _user, 1);
+        var secondPage = await _timeEntryDao.GetListGroupedByDayAsync(_workspace, _user, 2);
+
+        var boundaryItemsOnFirstPage = firstPage.Items
+            .Where(item => item.StartTime.Date == boundaryDay)
+            .ToList();
+        var boundaryItemsOnSecondPage = secondPage.Items
+            .Where(item => item.StartTime.Date == boundaryDay)
+            .ToList();
+
+        Assert.True(boundaryItemsOnFirstPage.Count >= 4);
+        Assert.Empty(boundaryItemsOnSecondPage);
+    }
+
+    [Fact]
+    public async Task GetListGroupedByDayShouldReturnAllItemsForSingleDay()
+    {
+        var project = await _projectSeeder.CreateAsync(_workspace);
+        var day = DateTime.UtcNow.Date.AddDays(-10);
+        var expectedCount = GlobalConstants.ListPageSize + 7;
+
+        for (var i = 0; i < expectedCount; i++)
+        {
+            var startTime = day.AddMinutes(i);
+            await _timeEntryDao.SetAsync(
+                _user,
+                _workspace,
+                new TimeEntryCreationDto
+                {
+                    StartTime = startTime,
+                    EndTime = startTime.AddMinutes(15),
+                    IsBillable = true,
+                    HourlyRate = 15
+                },
+                project
+            );
+        }
+
+        await FlushDbChanges();
+        var firstPage = await _timeEntryDao.GetListGroupedByDayAsync(_workspace, _user, 1);
+        var secondPage = await _timeEntryDao.GetListGroupedByDayAsync(_workspace, _user, 2);
+
+        Assert.Equal(expectedCount, firstPage.Items.Count);
+        Assert.All(firstPage.Items, item => Assert.Equal(day, item.StartTime.Date));
+        Assert.Empty(secondPage.Items);
+    }
+
+    [Fact]
+    public async Task GetListGroupedByDayShouldLoadNavigationProperties()
+    {
+        var project = await _projectSeeder.CreateAsync(_workspace);
+        await _timeEntryDao.SetAsync(
+            _user,
+            _workspace,
+            new TimeEntryCreationDto
+            {
+                StartTime = DateTime.UtcNow.AddHours(-2),
+                EndTime = DateTime.UtcNow.AddHours(-1),
+                IsBillable = true,
+                HourlyRate = 10
+            },
+            project
+        );
+
+        await FlushDbChanges();
+        var page = await _timeEntryDao.GetListGroupedByDayAsync(_workspace, _user, 1);
+
+        Assert.NotEmpty(page.Items);
+        Assert.All(page.Items, item =>
+        {
+            Assert.True(NHibernateUtil.IsInitialized(item.User));
+            Assert.True(NHibernateUtil.IsInitialized(item.Project));
+            if (item.Project != null)
+            {
+                Assert.True(NHibernateUtil.IsInitialized(item.Project.Client));
+            }
+            Assert.True(NHibernateUtil.IsInitialized(item.Task));
+        });
     }
     
     [Fact]
@@ -249,7 +372,7 @@ public class GetListTest: BaseTest
             1,
             filter: new FilterDataDto()
             {
-                DateTo = dateTo
+                DateTo = dateTo.EndOfDay()
             }
         );
         
