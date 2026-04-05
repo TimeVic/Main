@@ -54,7 +54,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             {
                 List = new PaginatedListDto<TimeEntryDto>(
                     _mapper.Map<ICollection<TimeEntryDto>>(listDto.Items),
-                    listDto.TotalCount
+                    listDto.TotalCount,
+                    GlobalConstants.TimeEntryGroupedByDayPageSize
                 ),
                 ActiveTimeEntry = _mapper.Map<TimeEntryDto>(activeTimeEntry)
             };

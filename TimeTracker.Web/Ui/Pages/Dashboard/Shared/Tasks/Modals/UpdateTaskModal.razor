@@ -13,13 +13,13 @@
     @ref="modal">
     <LumexModalContent>
         <LumexModalHeader Class="flex items-center gap-3">
-            <div class="flex items-center gap-3">
+            <div class="flex min-w-0 items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                     <i class="fa-regular fa-pen-to-square"></i>
                 </div>
-                <div>
-                    <h3 class="truncate text-lg font-semibold text-slate-900">@Task.Title.TruncateAndAddDots(100)</h3>
-                    <p class="mt-1 text-sm text-slate-500">@Task.TaskList.Project.Name · @Task.TaskList.Name</p>
+                <div class="min-w-0">
+                    <h3 class="truncate text-lg font-semibold text-slate-900">@Task.Title</h3>
+                    <p class="mt-1 truncate text-sm text-slate-500">@Task.TaskList.Project.Name · @Task.TaskList.Name</p>
                 </div>
             </div>
         </LumexModalHeader>
