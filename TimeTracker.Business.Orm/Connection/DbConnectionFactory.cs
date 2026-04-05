@@ -119,24 +119,24 @@ namespace TimeTracker.Business.Orm.Connection
                     
                     // config.AddResource($"{_dbNamespace}.hibernate.hbm.xml", currentAssembly);
 
-                    try
-                    {
-                        // Find and try generate mapping file with native mapping configuration
-                        // Import all entities and queries
-                        var serializedHibernateConfigStream = HbmSerializer.Default.Serialize(currentAssembly);
-                        using var serializedHibernateConfigStreamReader = new StreamReader(serializedHibernateConfigStream);
-                        var hibernateConfigXml = serializedHibernateConfigStreamReader.ReadToEnd();
-                        // hibernateConfiguration.AddXmlString(hibernateConfigXml);
-                        config.AddXmlString(hibernateConfigXml);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Logger.Information($"Default NHibernate mapping information: {e.Message}");
-                    }
+                    // try
+                    // {
+                    //     // Find and try generate mapping file with native mapping configuration
+                    //     // Import all entities and queries
+                    //     // var serializedHibernateConfigStream = HbmSerializer.Default.Serialize(currentAssembly);
+                    //     // using var serializedHibernateConfigStreamReader = new StreamReader(serializedHibernateConfigStream);
+                    //     // var hibernateConfigXml = serializedHibernateConfigStreamReader.ReadToEnd();
+                    //     // // hibernateConfiguration.AddXmlString(hibernateConfigXml);
+                    //     // config.AddXmlString(hibernateConfigXml);
+                    // }
+                    // catch (Exception e)
+                    // {
+                    //     Log.Logger.Information($"Default NHibernate mapping information: {e.Message}");
+                    // }
 
                     // Import all mapping files
                     var classes = currentAssembly!.GetManifestResourceNames()
-                        .Where(resourceName => resourceName.StartsWith($"{_dbNamespace}.Queries"));
+                        .Where(resourceName => resourceName.StartsWith($"{_dbNamespace}.Hibernate.Queries"));
                     foreach (var resourceName in classes)
                     {
                         var filePath = IoUtils.GetResourcePath(currentAssembly, resourceName);

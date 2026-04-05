@@ -1,31 +1,30 @@
-﻿using NHibernate;
+﻿using Autofac;
+using NHibernate;
 using NHibernate.Transform;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Dao.Common;
 using TimeTracker.Business.Orm.Dto.Reports.Summary;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Orm.Dao.Report;
 
-public partial class SummaryReportDao: ISummaryReportDao
+public partial class SummaryReportDao: BaseDao, ISummaryReportDao
 {
-    private readonly IDbSessionProvider _sessionProvider;
-
-    public SummaryReportDao(IDbSessionProvider sessionProvider)
+    public SummaryReportDao(ILifetimeScope scope): base(scope)
     {
-        _sessionProvider = sessionProvider;
     }
 
     private async Task<ICollection<T>> GetReportForOwnerOrManagerAsync<T>(
-        string query,
+        string queryPath,
         Guid workspaceId,
         DateTime startDate,
         DateTime endDate
     )
     {
-        return await _sessionProvider.CurrentSession.CreateSQLQuery(query)
+        return await Session.CreateSQLQuery(ReadSqlQuery(queryPath))
             .SetParameter("workspaceId", workspaceId)
             .SetParameter("startDate", startDate.Date)
             .SetParameter("endDate", endDate.Date)
@@ -34,7 +33,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     }
     
     public async Task<ICollection<T>> GetReportForOtherAsync<T>(
-        string query,
+        string queryPath,
         DateTime startDate,
         DateTime endDate,
         Guid userId,
@@ -50,7 +49,7 @@ public partial class SummaryReportDao: ISummaryReportDao
         {
             return new List<T>();
         }
-        return await _sessionProvider.CurrentSession.CreateSQLQuery(query)
+        return await Session.CreateSQLQuery(ReadSqlQuery(queryPath))
             .SetParameterList(
                 "projectIds",
                 availableProjectsForUser.Select(item => item.Id).ToArray()
