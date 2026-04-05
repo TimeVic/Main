@@ -1,8 +1,10 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Testing.Seeders.Entity;
@@ -20,12 +22,14 @@ public class GetListTest: BaseTest
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IUserSeeder _userSeeder;
+    private readonly IProjectSeeder _projectSeeder;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
@@ -117,5 +121,73 @@ public class GetListTest: BaseTest
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.NotNull(actualDto.ActiveTimeEntry);
         Assert.NotEqual(Guid.Empty, actualDto.ActiveTimeEntry.Id);
+    }
+
+    [Fact]
+    public async Task ShouldNotSplitSingleDayBetweenPages()
+    {
+        var project = await _projectSeeder.CreateAsync(_defaultWorkspace);
+        var baseDay = DateTime.UtcNow.Date;
+        var boundaryDay = baseDay.AddDays(-(GlobalConstants.ListPageSize - 1));
+
+        for (var i = 0; i < GlobalConstants.ListPageSize + 5; i++)
+        {
+            var startTime = baseDay.AddDays(-i).AddHours(10);
+            await _timeEntryDao.SetAsync(
+                _user,
+                _defaultWorkspace,
+                new TimeEntryCreationDto
+                {
+                    StartTime = startTime,
+                    EndTime = startTime.AddHours(1),
+                    IsBillable = true,
+                    HourlyRate = 10
+                },
+                project
+            );
+        }
+
+        for (var i = 0; i < 3; i++)
+        {
+            var startTime = boundaryDay.AddHours(12 + i);
+            await _timeEntryDao.SetAsync(
+                _user,
+                _defaultWorkspace,
+                new TimeEntryCreationDto
+                {
+                    StartTime = startTime,
+                    EndTime = startTime.AddMinutes(30),
+                    IsBillable = true,
+                    HourlyRate = 12
+                },
+                project
+            );
+        }
+
+        var firstPageResponse = await PostRequestAsync(Url, _jwtToken, new GetListRequest
+        {
+            WorkspaceId = _defaultWorkspace.Id,
+            Page = 1
+        });
+        firstPageResponse.EnsureSuccessStatusCode();
+        var firstPage = await firstPageResponse.GetJsonDataAsync<GetListResponse>();
+
+        var secondPageResponse = await PostRequestAsync(Url, _jwtToken, new GetListRequest
+        {
+            WorkspaceId = _defaultWorkspace.Id,
+            Page = 2
+        });
+        secondPageResponse.EnsureSuccessStatusCode();
+        var secondPage = await secondPageResponse.GetJsonDataAsync<GetListResponse>();
+
+        var boundaryItemsOnFirstPage = firstPage.List.Items
+            .Where(item => item.StartTime.Date == boundaryDay)
+            .ToList();
+        var boundaryItemsOnSecondPage = secondPage.List.Items
+            .Where(item => item.StartTime.Date == boundaryDay)
+            .ToList();
+
+        Assert.True(boundaryItemsOnFirstPage.Count >= 4);
+        Assert.Empty(boundaryItemsOnSecondPage);
     }
 }

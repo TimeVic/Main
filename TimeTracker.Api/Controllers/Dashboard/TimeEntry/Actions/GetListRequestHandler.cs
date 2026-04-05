@@ -1,7 +1,5 @@
 ﻿using Api.Requests.Abstractions;
 using AutoMapper;
-using Persistence.Transactions.Behaviors;
-using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Constants;
@@ -9,7 +7,6 @@ using TimeTracker.Business.Common.Dto;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
-using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -42,15 +39,16 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            if (workspace == null)
+            {
+                throw new HasNoAccessException();
+            }
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();
             }
 
-            var listDto = await _timeEntryDao.GetListAsync(workspace, request.Page, new FilterDataDto()
-            {
-                MemberId = user.Id
-            });
+            var listDto = await _timeEntryDao.GetListGroupedByDayAsync(workspace, user, request.Page);
             var activeTimeEntry = await _timeEntryDao.GetActiveEntryAsync(workspace, user);
             return new GetListResponse
             {
