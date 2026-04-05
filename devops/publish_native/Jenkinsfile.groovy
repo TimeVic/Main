@@ -292,7 +292,7 @@ node('web-node') {
 //             rm ${imageWebTmpName}
 //         '''
 //     }   
-}
+    }
 }
 
 def resolveBranchName() {
