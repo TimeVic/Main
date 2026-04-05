@@ -28,13 +28,41 @@
 
     <ItemGroup>
       <Folder Include="Dao\FileStorage\" />
-      <Folder Include="Hibernate\Queries\" />
+      <Folder Include="Queries\Hibernate\" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Queries\Sql\TimeEntry\GetListGroupedByDayIds.sql" />
       <None Remove="Hibernate\hibernate.hbm.xml" />
       <EmbeddedResource Include="Hibernate\hibernate.hbm.xml" />
       <None Remove="Queries\Test\TestNamedQuery.hbm.xml" />
+      <None Remove="Queries\TimeEntry\GetListGroupedByDayIds.sql" />
+      <None Remove="Queries\Sql\Report\ProjectPayments.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\ProjectPayments.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByClientForOther.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByClientForOther.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByClientForOwner.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByClientForOwner.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByDayForOthers.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByDayForOthers.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByDayForOwner.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByDayForOwner.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByMonthForOther.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByMonthForOther.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByMonthForOwner.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByMonthForOwner.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByProjectForOther.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByProjectForOther.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByProjectForOwner.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByProjectForOwner.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByUserForOther.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByUserForOther.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByUserForOwner.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByUserForOwner.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByWeekForOther.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByWeekForOther.sql" />
+      <None Remove="Queries\Sql\Report\SummaryByWeekForOwner.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SummaryByWeekForOwner.sql" />
     </ItemGroup>
 
     <ItemGroup>

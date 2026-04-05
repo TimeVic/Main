@@ -5,28 +5,6 @@ namespace TimeTracker.Business.Orm.Dao.Report;
 
 public partial class SummaryReportDao: ISummaryReportDao
 {
-    private const string SqlQuerySummaryByUserForOwner = @"
-        select
-            te.user_id as UserId,
-            u.user_name as UserName,
-            u.email as Email,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
-            sum(
-	            round(
-	                te.hourly_rate / 60 / 60 -- Price per second 
-	                *
-	                extract(epoch from te.end_time - te.start_time), -- Total seconds
-	                2
-	            )
-            ) as AmountOriginal
-        from time_entries te 
-        inner join users u on u.id = te.user_id
-        where te.workspace_id = :workspaceId
-          and cast(te.start_time as date) >= cast(:startDate as date)
-          and cast(te.start_time as date) <= cast(:endDate as date)
-        group by te.user_id, u.user_name, u.email
-    ";
-    
     public async Task<ICollection<ByUsersReportItemDto>> GetReportByUserForOwnerOrManagerAsync(
         Guid workspaceId,
         DateTime startDate,
@@ -34,37 +12,12 @@ public partial class SummaryReportDao: ISummaryReportDao
     )
     {
         return await GetReportForOwnerOrManagerAsync<ByUsersReportItemDto>(
-            SqlQuerySummaryByUserForOwner,
+            "Report.SummaryByUserForOwner",
             workspaceId,
             startDate,
             endDate
         );
     }
-    
-    private const string SqlQuerySummaryByUserForOther = @"
-        select
-            te.user_id as UserId,
-            u.user_name as UserName,
-            u.email as Email,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
-            sum(
-                case when te.user_id = :userId
-                    then round(
-	                    te.hourly_rate / 60 / 60 -- Price per second 
-	                    *
-	                    extract(epoch from te.end_time - te.start_time), -- Total seconds
-	                    2
-	                )
-                    else 0
-                end
-            ) as AmountOriginal
-        from time_entries te 
-        inner join users u on u.id = te.user_id
-        where te.project_id in (:projectIds)
-          and cast(te.start_time as date) >= cast(:startDate as date)
-          and cast(te.start_time as date) <= cast(:endDate as date)
-        group by te.user_id, u.user_name, u.email
-    ";
     
     public async Task<ICollection<ByUsersReportItemDto>> GetReportByUserForOtherAsync(
         DateTime startDate,
@@ -74,7 +27,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     )
     {
         return await GetReportForOtherAsync<ByUsersReportItemDto>(
-            SqlQuerySummaryByUserForOther,
+            "Report.SummaryByUserForOther",
             startDate,
             endDate,
             userId,
