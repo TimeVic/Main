@@ -71,7 +71,6 @@ node('build-node') {
         checkout scm
     }
 
-
     stage('Resolve trigger context') {
         currentBranchName = resolveBranchName()
         def isAutoBuildForPush = isAutoTriggeredPushBuild()
