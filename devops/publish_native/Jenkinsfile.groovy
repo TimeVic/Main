@@ -318,4 +318,3 @@ def isAutoTriggeredPushBuild() {
             || causeName.contains('SCMTrigger'))
     }
 }
-
