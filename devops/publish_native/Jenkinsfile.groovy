@@ -35,7 +35,7 @@ def gitCredentials="gitea-jenkins-ssh-key"
 
 properties([
     pipelineTriggers([
-        giteaPush()
+        githubPush()
     ]),
     parameters([
         // https://plugins.jenkins.io/git-parameter/
