@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Autofac;
 using NHibernate;
 using TimeTracker.Business.Common.Constants;
@@ -6,10 +5,8 @@ using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
-using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
-using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
@@ -92,10 +89,11 @@ public class GetListTest: BaseTest
     public async Task GetListGroupedByDayShouldNotSplitSingleDayBetweenPages()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
+        var daysInPage = 3;
         var baseDay = DateTime.UtcNow.Date;
-        var boundaryDay = baseDay.AddDays(-(GlobalConstants.ListPageSize - 1));
+        var boundaryDay = baseDay.AddDays(-(daysInPage - 1));
 
-        for (var i = 0; i < GlobalConstants.ListPageSize + 5; i++)
+        for (var i = 0; i < daysInPage + 2; i++)
         {
             var startTime = baseDay.AddDays(-i).AddHours(10);
             await _timeEntryDao.SetAsync(
@@ -208,6 +206,50 @@ public class GetListTest: BaseTest
             }
             Assert.True(NHibernateUtil.IsInitialized(item.Task));
         });
+    }
+
+    [Fact]
+    public async Task GetListGroupedByDayShouldReturnDistinctDaysAsTotalCount()
+    {
+        var project = await _projectSeeder.CreateAsync(_workspace);
+        var baseDay = DateTime.UtcNow.Date;
+
+        for (var i = 0; i < 5; i++)
+        {
+            var startTime = baseDay.AddDays(-i).AddHours(9);
+            await _timeEntryDao.SetAsync(
+                _user,
+                _workspace,
+                new TimeEntryCreationDto
+                {
+                    StartTime = startTime,
+                    EndTime = startTime.AddHours(1),
+                    IsBillable = true,
+                    HourlyRate = 10
+                },
+                project
+            );
+
+            await _timeEntryDao.SetAsync(
+                _user,
+                _workspace,
+                new TimeEntryCreationDto
+                {
+                    StartTime = startTime.AddHours(2),
+                    EndTime = startTime.AddHours(3),
+                    IsBillable = true,
+                    HourlyRate = 10
+                },
+                project
+            );
+        }
+
+        await FlushDbChanges();
+        var firstPage = await _timeEntryDao.GetListGroupedByDayAsync(_workspace, _user, 1);
+        var secondPage = await _timeEntryDao.GetListGroupedByDayAsync(_workspace, _user, 2);
+
+        Assert.Equal(5, firstPage.TotalCount);
+        Assert.Equal(5, secondPage.TotalCount);
     }
     
     [Fact]

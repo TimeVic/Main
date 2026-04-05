@@ -175,11 +175,14 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         int page
     )
     {
-        var dayOffset = PaginationUtils.CalculateOffset(page);
+        var daysInPage = GlobalConstants.TimeEntryGroupedByDayPageSize;
+        var dayOffset = PaginationUtils.CalculateOffset(page, daysInPage);
         var totalCount = await Session.Query<TimeEntryEntity>()
             .Where(item => item.Workspace.Id == workspace.Id)
             .Where(item => item.User.Id == user.Id)
             .Where(item => item.IsMarkedToDelete == false)
+            .Select(item => item.StartTime.Date)
+            .Distinct()
             .CountAsync();
 
         if (totalCount == 0)
@@ -192,7 +195,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .SetParameter("workspaceId", workspace.Id)
             .SetParameter("userId", user.Id)
             .SetParameter("dayOffset", dayOffset)
-            .SetParameter("dayPageSize", GlobalConstants.ListPageSize)
+            .SetParameter("dayPageSize", daysInPage)
             .ListAsync<Guid>();
 
         if (!pageItemIds.Any())

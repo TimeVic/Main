@@ -58,7 +58,7 @@ public class GetListTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.Equal(expectedCounter, actualDto.List.TotalCount);
+        Assert.Equal(1, actualDto.List.TotalCount);
         
         Assert.All(actualDto.List.Items, item =>
         {
@@ -92,7 +92,7 @@ public class GetListTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.Equal(expectedCounter + 1, actualDto.List.TotalCount);
+        Assert.Equal(1, actualDto.List.TotalCount);
 
         var activeEntry = await _timeEntryDao.GetActiveEntryAsync(_defaultWorkspace, _user);
         Assert.NotNull(actualDto.ActiveTimeEntry);
@@ -127,10 +127,11 @@ public class GetListTest: BaseTest
     public async Task ShouldNotSplitSingleDayBetweenPages()
     {
         var project = await _projectSeeder.CreateAsync(_defaultWorkspace);
+        var daysInPage = GlobalConstants.TimeEntryGroupedByDayPageSize;
         var baseDay = DateTime.UtcNow.Date;
-        var boundaryDay = baseDay.AddDays(-(GlobalConstants.ListPageSize - 1));
+        var boundaryDay = baseDay.AddDays(-(daysInPage - 1));
 
-        for (var i = 0; i < GlobalConstants.ListPageSize + 5; i++)
+        for (var i = 0; i < daysInPage + 2; i++)
         {
             var startTime = baseDay.AddDays(-i).AddHours(10);
             await _timeEntryDao.SetAsync(
