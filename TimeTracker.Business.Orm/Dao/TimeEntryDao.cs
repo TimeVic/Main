@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic.CompilerServices;
 using NHibernate;
 using NHibernate.Criterion;
@@ -92,11 +93,11 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             }
             if (filter.DateFrom.HasValue)
             {
-                query = query.And(item => item.StartTime >= filter.DateFrom.Value.StartOfDay());
+                query = query.And(item => item.StartTime >= filter.DateFrom.Value);
             }
             if (filter.DateTo.HasValue)
             {
-                query = query.And(item => item.StartTime <= filter.DateTo.Value.EndOfDay());
+                query = query.And(item => item.StartTime <= filter.DateTo.Value);
             }
         }
 
@@ -290,9 +291,18 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         timeEntry.HourlyRate = timeEntryDto.HourlyRate;
         timeEntry.IsBillable = timeEntryDto.IsBillable;
         timeEntry.StartTime = timeEntryDto.StartTime;
+        
+        // According same day
         if (timeEntry.IsNew || !timeEntry.IsActive)
         {
-            timeEntry.EndTime = timeEntryDto.EndTime;    
+            if (timeEntryDto.EndTime.HasValue)
+            {
+                if (timeEntryDto.EndTime.Value - timeEntryDto.StartTime > TimeSpan.FromDays(1))
+                {
+                    throw new DataInconsistentException("EndTime can not be more than 1 day from StartTime");
+                }
+                timeEntry.EndTime = timeEntryDto.EndTime;
+            }
         }
 
         await Session.SaveAsync(timeEntry);

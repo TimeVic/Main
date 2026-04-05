@@ -55,7 +55,7 @@ public partial class StartTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            StartTime = DateTime.UtcNow.AddSeconds(1)
+            StartTime = DateTime.UtcNow
         });
         response.EnsureSuccessStatusCode();
 

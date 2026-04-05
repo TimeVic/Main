@@ -15,7 +15,7 @@ public class ByUsersReportItemDto
     public TimeSpan Duration
     {
         get => TimeSpan.FromSeconds(
-            Convert.ToDouble(DurationAsEpoch)
+            Math.Round(Convert.ToDouble(DurationAsEpoch))
         );
     }
     

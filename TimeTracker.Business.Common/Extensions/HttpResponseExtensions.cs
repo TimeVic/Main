@@ -12,7 +12,7 @@ namespace TimeTracker.Business.Common.Extensions
             if (response.StatusCode == HttpStatusCode.NotFound)
                 throw new Exception($"Got response: {HttpStatusCode.NotFound}");
             var stringData = await response.GetDataAsStringAsync();
-            return JsonHelper.DeserializeObject<T>(stringData, DateTimeZoneHandling.Local)!;
+            return JsonHelper.DeserializeObject<T>(stringData, DateTimeZoneHandling.Utc)!;
         }
         
         public static async Task<object?> GetJsonDataAsync(this HttpResponseMessage response)

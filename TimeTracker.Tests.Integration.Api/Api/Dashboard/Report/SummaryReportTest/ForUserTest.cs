@@ -67,8 +67,8 @@ public class ForUserTest: BaseTest
         {
             _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddHours(10),
-                EndTime = DateTime.UtcNow.AddHours(15),
+                StartTime = DateTime.UtcNow.StartOfDay().AddDays(-32).AddHours(10),
+                EndTime = DateTime.UtcNow.StartOfDay().AddDays(-32).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, _project).Wait();
@@ -79,8 +79,8 @@ public class ForUserTest: BaseTest
         {
             _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddDays(-1).AddHours(12),
-                EndTime = DateTime.UtcNow.AddDays(-1).AddHours(13),
+                StartTime = DateTime.UtcNow.StartOfDay().AddDays(-1).AddHours(12),
+                EndTime = DateTime.UtcNow.StartOfDay().AddDays(-1).AddHours(13),
                 IsBillable = true,
                 HourlyRate = 11
             }, _project2).Wait();
@@ -104,7 +104,7 @@ public class ForUserTest: BaseTest
         {
             WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
-            EndTime = DateTime.UtcNow,
+            EndTime = DateTime.UtcNow.AddDays(-2),
             Type = SummaryReportType.GroupByDay
         });
         await response.GetJsonDataAsync();
