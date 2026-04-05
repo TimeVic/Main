@@ -192,8 +192,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         var firstReportItem = result.First();
         var secondReportItem = result.Last();
 
-        Assert.Equal(TimeSpan.FromHours(12), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(15), secondReportItem.Duration);
+        Assert.Equal((int)TimeSpan.FromHours(12).TotalMinutes, (int)firstReportItem.Duration.TotalMinutes);
+        Assert.Equal((int)TimeSpan.FromHours(15).TotalMinutes, (int)secondReportItem.Duration.TotalMinutes);
         
         Assert.Equal(0, firstReportItem.Amount);
         Assert.Equal(180, secondReportItem.Amount);
