@@ -313,8 +313,8 @@ def isAutoTriggeredPushBuild() {
 
     return currentBuild.rawBuild.getCauses().any { cause ->
         def causeName = cause.class.simpleName
-        return causeName?.contains('GitHubPush')
-            || causeName?.contains('Gitea')
-            || causeName?.contains('SCMTrigger')
+        return causeName != null && (causeName.contains('GitHubPush')
+            || causeName.contains('Gitea')
+            || causeName.contains('SCMTrigger'))
     }
 }
