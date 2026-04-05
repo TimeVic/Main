@@ -37,6 +37,7 @@ public partial class MessagesListBlock: IDisposable
     
     private readonly Subject<ICollection<MessagingMessageDto>> _messagesSubject = new();
     private ICollection<MessagingMessageDto> _messages = new List<MessagingMessageDto>();
+    private IEnumerable<MessagingMessageDto> _sortedMessages => _messages.OrderBy(item => item.CreatedAt).AsQueryable();
     private bool _isNeedsScrollToBottom;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -64,7 +65,12 @@ public partial class MessagesListBlock: IDisposable
             })
             .Subscribe(async results =>
             {
-                _messages = results;
+                foreach (var messagingMessageDto in results)
+                {
+                    if (_messages.Contains(messagingMessageDto))    
+                        continue;
+                    _messages.Add(messagingMessageDto);
+                }
                 StateHasChanged();
                 var listState = GetListState();
                 if (listState != null)
@@ -103,6 +109,7 @@ public partial class MessagesListBlock: IDisposable
             var listState = GetListState();
             if (listState != null)
             {
+                _messages.Clear();
                 _messagesSubject.OnNext(listState.List);    
             }
             _isNeedsScrollToBottom = true;
@@ -143,22 +150,6 @@ public partial class MessagesListBlock: IDisposable
     {
         Debug.Log("Message created", message.Id);
         Dispatcher.Dispatch(new AddMessageAction(message));
-    }
-    
-    private string GetMessageDayLabel(DateTime sentAt)
-    {
-        var messageDay = sentAt.Date;
-
-        if (messageDay == DateTime.Today)
-        {
-            return "Today";
-        }
-
-        if (messageDay == DateTime.Today.AddDays(-1))
-        {
-            return "Yesterday";
-        }
-        return sentAt.ToString("dd MMM yyyy");
     }
     
     private MessagesListState? GetListState()

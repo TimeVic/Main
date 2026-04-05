@@ -249,7 +249,7 @@ public class GetListTest: BaseTest
             1,
             filter: new FilterDataDto()
             {
-                DateTo = dateTo
+                DateTo = dateTo.EndOfDay()
             }
         );
         

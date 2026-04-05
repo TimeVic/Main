@@ -1,0 +1,31 @@
+
+@inherits BaseReactiveComponent
+
+@{
+    var isMine = Message.CreatedBy.Id == AuthState.Value.User.Id;
+    var messageDay = Message.CreatedAt.Date;
+    var isShouldShowDaySeparator = PreviousMessageDay != messageDay;
+    PreviousMessageDay = messageDay;    
+}
+            
+@if (isShouldShowDaySeparator)
+{
+    <div class="relative py-2">
+        <div class="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-slate-200"></div>
+        <div class="relative flex justify-center">
+            <span class="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-500 shadow-sm">
+                @GetMessageDayLabel(Message.CreatedAt)
+            </span>
+        </div>
+    </div>
+}
+            
+<div class="@($"flex {(isMine ? "justify-end" : "justify-start")}")">
+    <div class="@($"max-w-xl rounded-3xl border px-4 py-3 shadow-sm {(isMine ? "border-cyan-200 bg-cyan-50" : "border-slate-200 bg-white")}")">
+        <div class="mb-1 flex items-center gap-2 text-xs">
+            <span class="@($"font-semibold {(isMine ? "text-cyan-700" : "text-slate-700")}")">@Message.CreatedBy.Name</span>
+            <span class="text-slate-500">@GetFormattedDate(Message.CreatedAt)</span>
+        </div>
+        <p class="text-sm leading-6 text-slate-900">@Message.Text</p>
+    </div>
+</div>
