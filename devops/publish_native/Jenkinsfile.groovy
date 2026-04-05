@@ -35,7 +35,7 @@ def gitCredentials="gitea-jenkins-ssh-key"
 
 properties([
     pipelineTriggers([
-        githubPush()
+        giteaPush()
     ]),
     parameters([
         // https://plugins.jenkins.io/git-parameter/
@@ -314,8 +314,8 @@ def isAutoTriggeredPushBuild() {
 
     return currentBuild.rawBuild.getCauses().any { cause ->
         def causeName = cause.class.simpleName
-        return causeName.contains('GitHubPush')
-            || causeName.contains('Gitea')
-            || causeName.contains('SCMTrigger')
+        return causeName?.contains('GitHubPush')
+            || causeName?.contains('Gitea')
+            || causeName?.contains('SCMTrigger')
     }
 }
