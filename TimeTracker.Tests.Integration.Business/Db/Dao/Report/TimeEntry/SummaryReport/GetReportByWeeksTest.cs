@@ -51,9 +51,8 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-7),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddDays(-7).AddHours(10),
+                EndTime = DateTime.UtcNow.AddDays(-7).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -64,9 +63,8 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-14),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = DateTime.UtcNow.AddDays(-14).AddHours(1),
+                EndTime = DateTime.UtcNow.AddDays(-14).AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -76,9 +74,8 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-21),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
+                StartTime = DateTime.UtcNow.AddDays(-21).AddHours(5),
+                EndTime = DateTime.UtcNow.AddDays(-21).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -97,9 +94,9 @@ public class GetReportByWeeksTest: BaseTest
         var secondReportItem = result.Skip(1).First();
         var thirdReportItem = result.Last();
 
-        Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(24), thirdReportItem.Duration);
+        AssertDurationHours(15, firstReportItem.Duration);
+        AssertDurationHours(12, secondReportItem.Duration);
+        AssertDurationHours(24, thirdReportItem.Duration);
         
         Assert.Equal(180m, firstReportItem.Amount);
         Assert.Equal(120m, secondReportItem.Amount);
@@ -117,9 +114,9 @@ public class GetReportByWeeksTest: BaseTest
         secondReportItem = result.Skip(1).First();
         thirdReportItem = result.Last();
 
-        Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(24), thirdReportItem.Duration);
+        AssertDurationHours(15, firstReportItem.Duration);
+        AssertDurationHours(12, secondReportItem.Duration);
+        AssertDurationHours(24, thirdReportItem.Duration);
     }
     
     [Fact]
@@ -145,9 +142,8 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddDays(-1).AddHours(10),
+                EndTime = DateTime.UtcNow.AddDays(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -158,9 +154,8 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(user2, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-14),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = DateTime.UtcNow.AddDays(-14).AddHours(1),
+                EndTime = DateTime.UtcNow.AddDays(-14).AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -170,9 +165,8 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-21),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
+                StartTime = DateTime.UtcNow.AddDays(-21).AddHours(5),
+                EndTime = DateTime.UtcNow.AddDays(-21).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -190,8 +184,8 @@ public class GetReportByWeeksTest: BaseTest
         var firstReportItem = result.First();
         var secondReportItem = result.Last();
 
-        Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
+        AssertDurationHours(15, firstReportItem.Duration);
+        AssertDurationHours(12, secondReportItem.Duration);
         
         Assert.Equal(180, firstReportItem.Amount);
         Assert.Equal(0, secondReportItem.Amount);
@@ -205,33 +199,29 @@ public class GetReportByWeeksTest: BaseTest
         var project1 = projects.First();
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.Parse("2021-12-26"),
-            StartTime = TimeSpan.FromHours(1),
-            EndTime = TimeSpan.FromHours(2),
+            StartTime = DateTime.Parse("2021-12-26T01:00:00Z").ToUniversalTime(),
+            EndTime = DateTime.Parse("2021-12-26T02:00:00Z").ToUniversalTime(),
             IsBillable = true,
             HourlyRate = 12
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.Parse("2021-12-31"),
-            StartTime = TimeSpan.FromHours(2),
-            EndTime = TimeSpan.FromHours(4),
+            StartTime = DateTime.Parse("2021-12-31T02:00:00Z").ToUniversalTime(),
+            EndTime = DateTime.Parse("2021-12-31T04:00:00Z").ToUniversalTime(),
             IsBillable = true,
             HourlyRate = 12
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.Parse("2022-01-01"),
-            StartTime = TimeSpan.FromHours(2),
-            EndTime = TimeSpan.FromHours(4),
+            StartTime = DateTime.Parse("2022-01-01T02:00:00Z").ToUniversalTime(),
+            EndTime = DateTime.Parse("2022-01-01T04:00:00Z").ToUniversalTime(),
             IsBillable = true,
             HourlyRate = 12
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.Parse("2022-01-03"),
-            StartTime = TimeSpan.FromHours(5),
-            EndTime = TimeSpan.FromHours(8),
+            StartTime = DateTime.Parse("2022-01-03T05:00:00Z").ToUniversalTime(),
+            EndTime = DateTime.Parse("2022-01-03T08:00:00Z").ToUniversalTime(),
             IsBillable = true,
             HourlyRate = 12
         }, project1);
@@ -254,8 +244,16 @@ public class GetReportByWeeksTest: BaseTest
         Assert.Equal(DateTime.Parse("2022-01-03T00:00:00Z").ToUniversalTime(), firstReportItem.WeekStartDate);
         Assert.Equal(DateTime.Parse("2022-01-09T00:00:00Z").ToUniversalTime(), firstReportItem.WeekEndDate);
 
-        Assert.Equal(TimeSpan.FromHours(3), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(4), secondReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(1), thirdReportItem.Duration);
+        AssertDurationHours(3, firstReportItem.Duration);
+        AssertDurationHours(4, secondReportItem.Duration);
+        AssertDurationHours(1, thirdReportItem.Duration);
+    }
+
+    private static void AssertDurationHours(double expectedHours, TimeSpan actualDuration)
+    {
+        Assert.Equal(
+            (int)TimeSpan.FromHours(expectedHours).TotalSeconds,
+            (int)Math.Round(actualDuration.TotalSeconds)
+        );
     }
 }

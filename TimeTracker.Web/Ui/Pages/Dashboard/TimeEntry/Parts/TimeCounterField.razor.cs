@@ -10,19 +10,19 @@ public partial class TimeCounterField: IDisposable
     public bool IsActive { get; set; } = true;
 
     [Parameter]
-    public TimeSpan? Value
+    public DateTime? Value
     {
         get => _startTime;
         set
         {
-            _startTime = value ?? DateTime.Now.TimeOfDay;
+            _startTime = value ?? DateTime.Now;
         }
     }
 
     [Parameter]
     public string Class { get; set; }
 
-    private TimeSpan? _startTime;
+    private DateTime? _startTime;
     private TimeSpan _currentDuration = TimeSpan.MinValue;
     private System.Timers.Timer _timer;
 
@@ -55,7 +55,7 @@ public partial class TimeCounterField: IDisposable
     {
         if (_startTime != null)
         {
-            _currentDuration = (DateTime.Now.TimeOfDay - _startTime.Value);
+            _currentDuration = (DateTime.Now - _startTime.Value);
         }
         StateHasChanged();
     }

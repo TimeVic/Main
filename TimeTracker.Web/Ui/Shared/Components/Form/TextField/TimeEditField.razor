@@ -1,6 +1,7 @@
 ﻿@using LumexUI
 @using LumexUI.Common
 @using TimeTracker.Business.Common.Services.Format
+@using TimeTracker.Business.Extensions
 
 <LumexTextbox
     Value="@_editValue"
@@ -42,11 +43,12 @@
     public ITimeParsingService _timeParsingService { get; set; }
     
     [Parameter]
-    public TimeSpan? Value
+    public DateTime? Value
     {
         set
         {
-            _value = value;
+            _originalTime = value;
+            _value = value?.TimeOfDay;
             if (_value != null)
             {
                 _editValue = _timeParsingService.TimeSpanToTimeString(_value.Value);
@@ -62,11 +64,12 @@
     public int RowsMin { get; set; } = 6;
 
     [Parameter]
-    public EventCallback<TimeSpan?> ValueChanged { get; set; }
+    public EventCallback<DateTime?> ValueChanged { get; set; }
 
     [Parameter]
     public EventCallback<string> Changed { get; set; }
 
+    private DateTime? _originalTime;
     private TimeSpan? _value;
     private string _editValue;
 
@@ -79,6 +82,6 @@
         _editValue = value != null ? _timeParsingService.FormatTime(value) : string.Empty;
         _value = value != null ? _timeParsingService.ParseTimeSpan(value) : null;
         StateHasChanged();
-        ValueChanged.InvokeAsync(_value);
+        ValueChanged.InvokeAsync(_originalTime?.StartOfDay().Add(_value ?? TimeSpan.Zero));
     }
 }

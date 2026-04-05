@@ -20,8 +20,7 @@ public partial class StartTest
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             IsBillable = fakeTimeEntry.IsBillable,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromSeconds(1),
+            StartTime = DateTime.UtcNow.AddSeconds(1),
             InternalTaskId = task.Id
         });
         response.EnsureSuccessStatusCode();

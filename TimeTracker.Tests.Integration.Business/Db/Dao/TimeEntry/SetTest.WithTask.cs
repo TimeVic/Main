@@ -33,8 +33,7 @@ public partial class SetTest: BaseTest
         var initialEntry = await _timeEntryDao.StartNewAsync(
             _user,
             expectWorkspace,
-            DateTime.Now.ToDateOnly(), 
-            TimeSpan.FromSeconds(1),
+            DateTime.UtcNow,
             fakeTimeEntry.IsBillable,
             fakeTimeEntry.Description,
             expectProject.Id,

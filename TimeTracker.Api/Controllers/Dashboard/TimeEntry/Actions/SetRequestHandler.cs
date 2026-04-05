@@ -82,8 +82,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                     StartTime = request.StartTime,
                     EndTime = request.EndTime,
                     HourlyRate = request.HourlyRate,
-                    IsBillable = request.IsBillable,
-                    Date = request.Date
+                    IsBillable = request.IsBillable
                 },
                 userProjects.Items.FirstOrDefault(item => item.Id == request.ProjectId)
             );

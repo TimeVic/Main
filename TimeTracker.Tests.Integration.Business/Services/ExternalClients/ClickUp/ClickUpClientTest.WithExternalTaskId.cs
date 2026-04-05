@@ -22,17 +22,16 @@ public partial class SendNewTimeEntityTest : BaseTest
         task.ExternalTaskId = _externalTaskId;
         await FlushDbChanges();
         
-        var date = DateTime.UtcNow.Date.ToDateOnly();
+        var startTime = DateTime.UtcNow;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date.ToDateOnly(),
-            DateTime.UtcNow.TimeOfDay,
+            startTime,
             true,
             internalTask: task
         );
         await FlushDbChanges();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, startTime.AddMinutes(1));
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     

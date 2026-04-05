@@ -15,7 +15,7 @@ public partial class MyTimeEntriesListBlock
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
     
-    private IEnumerable<IGrouping<DateOnly, TimeEntryDto>> _groupedList => _state.Value.ListToShow.GroupBy(item => item.Date);
+    private IEnumerable<IGrouping<DateTime, TimeEntryDto>> _groupedList => _state.Value.ListToShow.GroupBy(item => item.StartTime.Date);
     private bool _isLoading => _state.Value.IsListLoading;
     private TimeEntryDto? _timeEntryToEdit { get; set; }
     private TimeEntryDto? _timeEntryToDelete { get; set; }

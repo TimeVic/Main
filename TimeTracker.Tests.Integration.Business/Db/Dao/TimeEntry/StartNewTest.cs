@@ -46,14 +46,11 @@ public partial class StartNewTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             workspace,
-            DateOnly.FromDateTime(DateTime.UtcNow),
-            DateTime.UtcNow.TimeOfDay
+            DateTime.UtcNow
         );
-        Assert.Equal(DateOnly.FromDateTime(DateTime.UtcNow), activeEntry.Date);
         Assert.Null(activeEntry.EndTime);
 
         await FlushDbChanges();
-        Assert.Equal(DateOnly.FromDateTime(DateTime.UtcNow), activeEntry.Date);
         Assert.Null(activeEntry.EndTime);
     }
     
@@ -64,8 +61,7 @@ public partial class StartNewTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             workspace1,
-            DateOnly.FromDateTime(DateTime.UtcNow),
-            DateTime.UtcNow.TimeOfDay
+            DateTime.UtcNow
         );
         Assert.Null(activeEntry.EndTime);
 
@@ -75,8 +71,7 @@ public partial class StartNewTest: BaseTest
             await _timeEntryDao.StartNewAsync(
                 _user,
                 workspace1,
-                DateOnly.FromDateTime(DateTime.UtcNow),
-                DateTime.UtcNow.TimeOfDay
+                DateTime.UtcNow
             );
         });
     }
@@ -89,8 +84,7 @@ public partial class StartNewTest: BaseTest
         var activeEntryFor1 = await _timeEntryDao.StartNewAsync(
             _user,
             workspace1,
-            DateOnly.FromDateTime(DateTime.UtcNow),
-            DateTime.UtcNow.TimeOfDay
+            DateTime.UtcNow
         );
         
         var workspace2 = await _workspaceDao.CreateWorkspaceAsync(_user, "Test 2");
@@ -98,8 +92,7 @@ public partial class StartNewTest: BaseTest
         var activeEntryFor2 = await _timeEntryDao.StartNewAsync(
             _user,
             workspace2,
-            DateOnly.FromDateTime(DateTime.UtcNow),
-            DateTime.UtcNow.TimeOfDay
+            DateTime.UtcNow
         );
         
         await FlushDbChanges();
@@ -122,8 +115,7 @@ public partial class StartNewTest: BaseTest
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             workspace,
-            DateOnly.FromDateTime(DateTime.UtcNow),
-            DateTime.UtcNow.TimeOfDay,
+            DateTime.UtcNow,
             isBillable: true,
             projectId: project.Id
         );

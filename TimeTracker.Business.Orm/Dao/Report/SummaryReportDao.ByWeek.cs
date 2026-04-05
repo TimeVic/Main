@@ -1,10 +1,4 @@
-﻿using NHibernate;
-using NHibernate.Transform;
-using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Common.Constants;
-using TimeTracker.Business.Common.Constants.Reports;
-using TimeTracker.Business.Extensions;
-using TimeTracker.Business.Orm.Dto.Reports.Summary;
+﻿using TimeTracker.Business.Orm.Dto.Reports.Summary;
 using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Orm.Dao.Report;
@@ -13,19 +7,26 @@ public partial class SummaryReportDao: ISummaryReportDao
 {
     private const string SqlQuerySummaryByWeekForOwner = @"
         select
-            cast(date_trunc('week', te.date) as timestamp) as WeekStartDate,
-            cast(date_trunc('week', te.date) + '6 days' as timestamp) as WeekEndDate,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
+            cast(date_trunc('week', x.day) as timestamp) as WeekStartDate,
+            cast(date_trunc('week', x.day) + interval '6 days' as timestamp) as WeekEndDate,
+            sum(extract(epoch from x.duration)) as DurationAsEpoch,
             sum(
 	            round(
-	                te.hourly_rate / 60 / 60 -- Price per second 
-	                *
-	                extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                (extract(epoch from x.duration) / 3600.0)
+	                * te.hourly_rate,
 	                2
 	            )
             ) as AmountOriginal
-        from time_entries te 
-        where te.workspace_id = :workspaceId and te.date >= :startDate and te.date <= :endDate
+        from time_entries te
+        join workspaces w on w.id = te.workspace_id
+        cross join lateral fn_split_time_entry_by_day(
+            te.start_time,
+            te.end_time,
+            w.time_zone
+        ) as x
+        where te.workspace_id = :workspaceId
+          and x.day >= cast(:startDate as date)
+          and x.day <= cast(:endDate as date)
         group by WeekStartDate, WeekEndDate
         order by WeekStartDate desc
     ";
@@ -46,22 +47,30 @@ public partial class SummaryReportDao: ISummaryReportDao
     
     private const string SqlQuerySummaryByWeekForOther = @"
         select
-            cast(date_trunc('week', te.date) as timestamp) as WeekStartDate,
-            cast(date_trunc('week', te.date) + '6 days' as timestamp) as WeekEndDate,
-            sum(extract(epoch from te.end_time - te.start_time)) as DurationAsEpoch,
+            cast(date_trunc('week', x.day) as timestamp) as WeekStartDate,
+            cast(date_trunc('week', x.day) + interval '6 days' as timestamp) as WeekEndDate,
+            sum(extract(epoch from x.duration)) as DurationAsEpoch,
             sum(
                 case when te.user_id = :userId
                     then round(
-	                    te.hourly_rate / 60 / 60 -- Price per second 
-	                    *
-	                    extract(epoch from te.end_time - te.start_time), -- Total seconds
+	                    (extract(epoch from x.duration) / 3600.0)
+	                    * te.hourly_rate,
 	                    2
 	                )
                     else 0
                 end
             ) as AmountOriginal
-        from time_entries te 
-        where te.project_id in (:projectIds) and te.date >= :startDate and te.date <= :endDate
+        from time_entries te
+        join projects p on p.id = te.project_id
+        join workspaces w on w.id = p.workspace_id
+        cross join lateral fn_split_time_entry_by_day(
+            te.start_time,
+            te.end_time,
+            w.time_zone
+        ) as x
+        where te.project_id in (:projectIds)
+          and x.day >= cast(:startDate as date)
+          and x.day <= cast(:endDate as date)
         group by WeekStartDate, WeekEndDate
         order by WeekStartDate desc
     ";

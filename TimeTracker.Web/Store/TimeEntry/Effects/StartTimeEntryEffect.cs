@@ -42,8 +42,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 await _apiService.TimeEntryStopAsync(new StopRequest()
                 {
                     WorkspaceId = _authState.Value.Workspace!.Id,
-                    EndTime = DateTime.Now.TimeOfDay,
-                    EndDate = DateTime.Now.ToDateAndRemoveTimeZone()
+                    EndTime = DateTime.Now
                 });
                 isWasStopped = true;
             }
@@ -58,8 +57,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
             {
                 WorkspaceId = _authState.Value.Workspace!.Id,
-                Date = DateTime.Now.ToDateAndRemoveTimeZone(),
-                StartTime = DateTime.Now.TimeOfDay,
+                StartTime = DateTime.Now,
                 IsBillable = project != null ? project.IsBillableByDefault : action.IsBillable,
                 ProjectId = action.Project?.Id,
                 Description = action.Description,

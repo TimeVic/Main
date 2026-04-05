@@ -10,9 +10,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         [Required]
         public Guid WorkspaceId { get; set; }
         
-        [IsCorrectTimeEntryTime]
-        public TimeSpan EndTime { get; set; }
-        
-        public DateOnly EndDate { get; set; }
+        public DateTime EndTime { get; set; }
     }
 }

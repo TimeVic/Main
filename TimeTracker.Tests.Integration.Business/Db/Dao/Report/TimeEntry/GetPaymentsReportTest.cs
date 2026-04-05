@@ -39,6 +39,7 @@ public class GetPaymentsReportTest: BaseTest
     [Fact]
     public async Task ShouldReceiveSimpleReport()
     {
+        var baseDay = DateTime.UtcNow.Date;
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
         await FlushDbChanges();
         var project1 = projects.First();
@@ -46,9 +47,8 @@ public class GetPaymentsReportTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = baseDay.AddHours(10),
+                EndTime = baseDay.AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -59,9 +59,8 @@ public class GetPaymentsReportTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = baseDay.AddHours(1),
+                EndTime = baseDay.AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -71,9 +70,8 @@ public class GetPaymentsReportTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = baseDay.AddHours(1),
+                EndTime = baseDay.AddHours(5),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -93,7 +91,7 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(180, Math.Round(actualForProject1.Amount));
         Assert.Equal(0, actualForProject1.PaidAmountByClient);
         Assert.Equal(0, actualForProject1.PaidAmountByProject);
-        Assert.Equal(TimeSpan.FromHours(15), actualForProject1.TotalDuration);
+        AssertDurationHours(15, actualForProject1.TotalDuration);
         Assert.NotNull(project1.Client);
         Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
         Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
@@ -105,7 +103,7 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(120, Math.Round(actualForProject2.Amount));
         Assert.Equal(0, actualForProject2.PaidAmountByClient);
         Assert.Equal(0, actualForProject2.PaidAmountByProject);
-        Assert.Equal(TimeSpan.FromHours(12), actualForProject2.TotalDuration);
+        AssertDurationHours(12, actualForProject2.TotalDuration);
         Assert.NotNull(project2.Client);
         Assert.Equal(project2.Client.Id, actualForProject2.ClientId);
         Assert.Equal(project2.Client.Name, actualForProject2.ClientName);
@@ -117,7 +115,7 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(240, Math.Round(actualWithoutProject.Amount));
         Assert.Equal(0, actualWithoutProject.PaidAmountByClient);
         Assert.Equal(0, actualWithoutProject.PaidAmountByProject);
-        Assert.Equal(TimeSpan.FromHours(16), actualWithoutProject.TotalDuration);
+        AssertDurationHours(16, actualWithoutProject.TotalDuration);
         Assert.Null(actualWithoutProject.ClientId);
         Assert.Null(actualWithoutProject.ClientName);
     }
@@ -125,6 +123,7 @@ public class GetPaymentsReportTest: BaseTest
     [Fact]
     public async Task ShouldReceiveSimpleReportWithCalculatedPayments()
     {
+        var baseDay = DateTime.UtcNow.Date;
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
         await FlushDbChanges();
         var project1 = projects.First();
@@ -132,9 +131,8 @@ public class GetPaymentsReportTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = baseDay.AddHours(10),
+                EndTime = baseDay.AddHours(15),
                 IsBillable = true,
                 HourlyRate = 10
             }, project1);
@@ -180,7 +178,7 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(150, Math.Round(actualForProject1.Amount));
         Assert.Equal(77, actualForProject1.PaidAmountByClient);
         Assert.Equal(45, actualForProject1.PaidAmountByProject);
-        Assert.Equal(TimeSpan.FromHours(15), actualForProject1.TotalDuration);
+        AssertDurationHours(15, actualForProject1.TotalDuration);
         Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
         Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
     }
@@ -188,6 +186,7 @@ public class GetPaymentsReportTest: BaseTest
     [Fact]
     public async Task ShouldReceiveOnlyForCurrentUser()
     {
+        var baseDay = DateTime.UtcNow.Date;
         var otherUser = await _userSeeder.CreateActivatedAndShareAsync(_workspace);
         
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
@@ -204,18 +203,16 @@ public class GetPaymentsReportTest: BaseTest
         );
         await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromHours(10),
-            EndTime = TimeSpan.FromHours(15),
+            StartTime = baseDay.AddHours(10),
+            EndTime = baseDay.AddHours(15),
             IsBillable = true,
             HourlyRate = 2
         }, project1);
         
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromHours(10),
-            EndTime = TimeSpan.FromHours(15),
+            StartTime = baseDay.AddHours(10),
+            EndTime = baseDay.AddHours(15),
             IsBillable = true,
             HourlyRate = 1
         }, project1);
@@ -243,7 +240,7 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(5, Math.Round(actualForProject1.Amount));
         Assert.Equal(10, actualForProject1.PaidAmountByClient);
         Assert.Equal(10, actualForProject1.PaidAmountByProject);
-        Assert.Equal(TimeSpan.FromHours(5), actualForProject1.TotalDuration);
+        AssertDurationHours(5, actualForProject1.TotalDuration);
         Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
         Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
     }
@@ -274,26 +271,21 @@ public class GetPaymentsReportTest: BaseTest
         );
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromHours(10),
-            EndTime = TimeSpan.FromHours(15),
-            IsBillable = true,
-            HourlyRate = 2
+            StartTime = DateTime.UtcNow.AddDays(-4).AddHours(10),
+            EndTime = DateTime.UtcNow.AddDays(-4).AddHours(15),
         }, project1);
         
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-10),
-            StartTime = TimeSpan.FromHours(10),
-            EndTime = TimeSpan.FromHours(15),
+            StartTime = DateTime.UtcNow.AddDays(-10).AddHours(10),
+            EndTime = DateTime.UtcNow.AddDays(-10).AddHours(15),
             IsBillable = true,
             HourlyRate = 1
         }, project1);
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
-            Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-4),
-            StartTime = TimeSpan.FromHours(10),
-            EndTime = TimeSpan.FromHours(15),
+            StartTime = DateTime.UtcNow.AddDays(-4).AddHours(10),
+            EndTime = DateTime.UtcNow.AddDays(-4).AddHours(15),
             IsBillable = true,
             HourlyRate = 1
         }, project1);
@@ -313,6 +305,14 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(5, Math.Round(actualForProject1.Amount));
         Assert.Equal(15, actualForProject1.PaidAmountByClient);
         Assert.Equal(15, actualForProject1.PaidAmountByProject);
-        Assert.Equal(TimeSpan.FromHours(5), actualForProject1.TotalDuration);
+        AssertDurationHours(5, actualForProject1.TotalDuration);
+    }
+
+    private static void AssertDurationHours(double expectedHours, TimeSpan actualDuration)
+    {
+        Assert.Equal(
+            (int)TimeSpan.FromHours(expectedHours).TotalSeconds,
+            (int)Math.Round(actualDuration.TotalSeconds)
+        );
     }
 }

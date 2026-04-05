@@ -2,11 +2,14 @@
 import com.shared.jenkins.docker.DockerHelper
 import com.shared.jenkins.docker.DockerContainer
 
-def environmentKey = params.ENVIRONMENT?.toLowerCase()
+def effectiveEnvironment = params.ENVIRONMENT ?: 'Development'
+def environmentKey = effectiveEnvironment.toLowerCase()
 def containerSharedDir = "/mnt/local_share/docker_images/timevic"
 def imageName = "latest"
 def imageWebTmpName = "${containerSharedDir}/${environmentKey}_web_latest"
 def imageCommonTmpName = "${containerSharedDir}/${environmentKey}_common_latest"
+def currentBranchName = ''
+def shouldRunDeployment = true
 
 def dockerHelper = new DockerHelper(this)
 public Map<String, String> envVariables = new HashMap<String, String>()
@@ -31,6 +34,9 @@ def repositoryUrl = scm.userRemoteConfigs[0].url;
 def gitCredentials="gitea-jenkins-ssh-key"
 
 properties([
+    pipelineTriggers([
+        githubPush()
+    ]),
     parameters([
         // https://plugins.jenkins.io/git-parameter/
         gitParameter (name: 'GIT_TAG', type: 'PT_TAG', sortMode: 'DESCENDING_SMART', selectedValue: 'NONE', defaultValue: 'main'),
@@ -44,7 +50,7 @@ node('build-node') {
 
     stage('Show deployment parameters') {
         echo "Repository: ${repositoryUrl}"
-        echo "Environment: ${params.ENVIRONMENT}"
+        echo "Requested environment: ${params.ENVIRONMENT}"
         echo "Tag: ${params.GIT_TAG}"
     }
 
@@ -65,6 +71,39 @@ node('build-node') {
         checkout scm
     }
 
+    stage('Resolve trigger context') {
+        currentBranchName = resolveBranchName()
+        def isAutoBuildForPush = isAutoTriggeredPushBuild()
+
+        if (isAutoBuildForPush && currentBranchName != 'main') {
+            shouldRunDeployment = false
+            currentBuild.result = 'NOT_BUILT'
+            echo "Skipping auto deployment for branch '${currentBranchName}'. Only 'main' is deployed automatically."
+        }
+
+        if (isAutoBuildForPush && currentBranchName == 'main') {
+            effectiveEnvironment = 'Development'
+        }
+
+        environmentKey = effectiveEnvironment.toLowerCase()
+        imageWebTmpName = "${containerSharedDir}/${environmentKey}_web_latest"
+        imageCommonTmpName = "${containerSharedDir}/${environmentKey}_common_latest"
+        mainContainer.name = "timevic-main-${environmentKey}"
+        migrationContainer.name = "timevic-main-${environmentKey}"
+        webAppContainer.name = "timevic-web-${environmentKey}"
+
+        echo "Branch: ${currentBranchName}"
+        echo "Auto-triggered push build: ${isAutoBuildForPush}"
+        echo "Effective environment: ${effectiveEnvironment}"
+    }
+
+    if (!shouldRunDeployment) {
+        stage('Skip deployment') {
+            echo "Deployment pipeline skipped."
+        }
+        return
+    }
+
     stage('Set environment vars') {
         // Redis
         envVariables.put('Redis__Server', '10.10.0.2:6379')
@@ -72,11 +111,11 @@ node('build-node') {
         envVariables.put('Serilog__IsSendEmailIfError', 'false')
         envVariables.put('Serilog__MinimumLevel__Default', 'Debug')
         
-        mainContainer.buildVariables.put('ENVIRONMENT', params.ENVIRONMENT)
-        envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
+        mainContainer.buildVariables.put('ENVIRONMENT', effectiveEnvironment)
+        envVariables.put('ASPNETCORE_ENVIRONMENT', effectiveEnvironment)
         
-        webAppContainer.buildVariables.put('ENVIRONMENT', params.ENVIRONMENT)
-        webAppContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', params.ENVIRONMENT)
+        webAppContainer.buildVariables.put('ENVIRONMENT', effectiveEnvironment)
+        webAppContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', effectiveEnvironment)
 
         // GrayLog
         envVariables.put('App__Logging__GrayLog__Host', '192.168.88.30')
@@ -84,13 +123,13 @@ node('build-node') {
 
         def dbName = ''
         def dbPort = ''
-        if (params.ENVIRONMENT == 'Production')
+        if (effectiveEnvironment == 'Production')
         {
             envVariables.put('App__FrontendUrl', 'https://timevic.com')
             dbName = 'timevic'
             dbPort = '5434'
         }
-        else if (params.ENVIRONMENT == 'Development')
+        else if (effectiveEnvironment == 'Development')
         {
             envVariables.put('App__FrontendUrl', 'https://dev.timevic.com')
             dbName = 'timevic_dev'
@@ -184,6 +223,7 @@ node('build-node') {
     }
 }
 
+if (shouldRunDeployment) {
 node('web-node') {
 
     stage('Load container') {
@@ -211,11 +251,11 @@ node('web-node') {
 
     stage('Run common API') {
         mainContainer.tagName = "timevic-api-${environmentKey}";
-         if (params.ENVIRONMENT == 'Production')
+         if (effectiveEnvironment == 'Production')
         {
             mainContainer.port = '6200:80';
         }
-        else if (params.ENVIRONMENT == 'Development')
+        else if (effectiveEnvironment == 'Development')
         {
             mainContainer.port = '8215:80';
         }
@@ -235,11 +275,11 @@ node('web-node') {
     }
 
     stage('Run web app') {
-        if (params.ENVIRONMENT == 'Production')
+        if (effectiveEnvironment == 'Production')
         {
             webAppContainer.port = '6201:80';
         }
-        else if (params.ENVIRONMENT == 'Development')
+        else if (effectiveEnvironment == 'Development')
         {
             webAppContainer.port = '8216:80';
         }
@@ -252,4 +292,29 @@ node('web-node') {
 //             rm ${imageWebTmpName}
 //         '''
 //     }   
+}
+}
+
+def resolveBranchName() {
+    def rawBranchName = env.BRANCH_NAME ?: env.GIT_BRANCH
+    if (!rawBranchName?.trim()) {
+        rawBranchName = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
+    }
+
+    return rawBranchName
+        .replaceFirst(/^origin\//, '')
+        .replaceFirst(/^refs\/heads\//, '')
+}
+
+def isAutoTriggeredPushBuild() {
+    if (currentBuild.rawBuild.getCause(hudson.model.Cause$UserIdCause) != null) {
+        return false
+    }
+
+    return currentBuild.rawBuild.getCauses().any { cause ->
+        def causeName = cause.class.simpleName
+        return causeName.contains('GitHubPush')
+            || causeName.contains('Gitea')
+            || causeName.contains('SCMTrigger')
+    }
 }

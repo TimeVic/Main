@@ -61,9 +61,8 @@ public class GetListTest: BaseTest
             Assert.NotEqual(Guid.Empty, item.User.Id);
             Assert.NotNull(item.Project);
             Assert.NotEmpty(item.Description);
-            Assert.True(item.StartTime > TimeSpan.MinValue);
-            Assert.True(item.EndTime > TimeSpan.MinValue);
-            Assert.True(item.Date > DateOnly.MinValue);
+            Assert.True(item.StartTime > DateTime.MinValue);
+            Assert.True(item.EndTime > DateTime.MinValue);
         });
     }
     
@@ -75,8 +74,7 @@ public class GetListTest: BaseTest
         await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,
-            DateOnly.FromDateTime(DateTime.UtcNow), 
-            TimeSpan.FromSeconds(1)
+            DateTime.UtcNow.AddSeconds(1)
         );
      
         var otherUser = await _userSeeder.CreateActivatedAndShareAsync(_defaultWorkspace);
@@ -106,8 +104,7 @@ public class GetListTest: BaseTest
         await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,
-            DateOnly.FromDateTime(DateTime.UtcNow), 
-            TimeSpan.FromSeconds(1)
+            DateTime.UtcNow.AddSeconds(1)
         );
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()

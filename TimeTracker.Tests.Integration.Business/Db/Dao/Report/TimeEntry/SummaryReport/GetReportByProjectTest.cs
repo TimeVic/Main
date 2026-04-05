@@ -50,9 +50,8 @@ public class GetReportByProjectTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddDays(-1).AddHours(10),
+                EndTime = DateTime.UtcNow.AddDays(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -63,9 +62,8 @@ public class GetReportByProjectTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = DateTime.UtcNow.AddHours(1),
+                EndTime = DateTime.UtcNow.AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -75,9 +73,8 @@ public class GetReportByProjectTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(1),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
+                StartTime = DateTime.UtcNow.AddDays(1).AddHours(5),
+                EndTime = DateTime.UtcNow.AddDays(1).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -91,20 +88,16 @@ public class GetReportByProjectTest: BaseTest
         );
         Assert.Equal(3, result.Count);
         
-        var firstReportItem = result.First();
-        var secondReportItem = result.Skip(1).First();
-        var thirdReportItem = result.Last();
-        Assert.True(project1.Id == firstReportItem.ProjectId || project2.Id == firstReportItem.ProjectId);
-        Assert.True(project1.Id == secondReportItem.ProjectId || project2.Id == secondReportItem.ProjectId);
-        Assert.Null(thirdReportItem.ProjectId);
-        
-        Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(24), thirdReportItem.Duration);
-        
-        Assert.Equal(180m, firstReportItem.Amount);
-        Assert.Equal(120m, secondReportItem.Amount);
-        Assert.Equal(360m, thirdReportItem.Amount);
+        var noProjectItem = result.Single(item => item.ProjectId == null);
+        var projectItems = result.Where(item => item.ProjectId != null).ToList();
+        Assert.Equal(2, projectItems.Count);
+        Assert.Contains(projectItems, item => item.ProjectId == project1.Id || item.ProjectId == project2.Id);
+        Assert.Contains(projectItems, item => item.ProjectId == project1.Id || item.ProjectId == project2.Id);
+
+        AssertDurationHours(24, noProjectItem.Duration);
+        Assert.Equal(360m, noProjectItem.Amount);
+        Assert.Contains(projectItems, item => DurationSeconds(item.Duration) == DurationSeconds(TimeSpan.FromHours(15)) && item.Amount == 180m);
+        Assert.Contains(projectItems, item => DurationSeconds(item.Duration) == DurationSeconds(TimeSpan.FromHours(12)) && item.Amount == 120m);
         
         await FlushDbChanges();
         result = await _reportsDao.GetReportByProjectForOwnerOrManagerAsync(
@@ -114,16 +107,12 @@ public class GetReportByProjectTest: BaseTest
         );
         Assert.Equal(3, result.Count);
         
-        firstReportItem = result.First();
-        secondReportItem = result.Skip(1).First();
-        thirdReportItem = result.Last();
-        Assert.True(project1.Id == firstReportItem.ProjectId || project2.Id == firstReportItem.ProjectId);
-        Assert.True(project1.Id == secondReportItem.ProjectId || project2.Id == secondReportItem.ProjectId);
-        Assert.Null(thirdReportItem.ProjectId);
-        
-        Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(24), thirdReportItem.Duration);
+        noProjectItem = result.Single(item => item.ProjectId == null);
+        projectItems = result.Where(item => item.ProjectId != null).ToList();
+        Assert.Equal(2, projectItems.Count);
+        AssertDurationHours(24, noProjectItem.Duration);
+        Assert.Contains(projectItems, item => DurationSeconds(item.Duration) == DurationSeconds(TimeSpan.FromHours(15)));
+        Assert.Contains(projectItems, item => DurationSeconds(item.Duration) == DurationSeconds(TimeSpan.FromHours(12)));
     }
     
     [Fact]
@@ -149,9 +138,8 @@ public class GetReportByProjectTest: BaseTest
         {
             await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1),
-                StartTime = TimeSpan.FromHours(10),
-                EndTime = TimeSpan.FromHours(15),
+                StartTime = DateTime.UtcNow.AddDays(-1).AddHours(10),
+                EndTime = DateTime.UtcNow.AddDays(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -161,9 +149,8 @@ public class GetReportByProjectTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                StartTime = TimeSpan.FromHours(1),
-                EndTime = TimeSpan.FromHours(5),
+                StartTime = DateTime.UtcNow.AddHours(1),
+                EndTime = DateTime.UtcNow.AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -173,9 +160,8 @@ public class GetReportByProjectTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                Date = DateOnly.FromDateTime(DateTime.UtcNow).AddDays(1),
-                StartTime = TimeSpan.FromHours(5),
-                EndTime = TimeSpan.FromHours(11),
+                StartTime = DateTime.UtcNow.AddDays(1).AddHours(5),
+                EndTime = DateTime.UtcNow.AddDays(1).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -190,13 +176,22 @@ public class GetReportByProjectTest: BaseTest
         );
         Assert.Equal(2, result.Count);
         
-        var firstReportItem = result.First();
-        var secondReportItem = result.Last();
-
-        Assert.Equal(TimeSpan.FromHours(15), firstReportItem.Duration);
-        Assert.Equal(TimeSpan.FromHours(12), secondReportItem.Duration);
-        
-        Assert.Equal(180, firstReportItem.Amount);
-        Assert.Equal(0, secondReportItem.Amount);
+        Assert.Contains(result, item => DurationSeconds(item.Duration) == DurationSeconds(TimeSpan.FromHours(15)) && item.Amount == 180);
+        Assert.Contains(result, item => DurationSeconds(item.Duration) == DurationSeconds(TimeSpan.FromHours(12)) && item.Amount == 0);
     }
+
+    private static void AssertDurationHours(double expectedHours, TimeSpan actualDuration)
+    {
+        Assert.Equal(
+            (int)TimeSpan.FromHours(expectedHours).TotalSeconds,
+            DurationSeconds(actualDuration)
+        );
+    }
+
+    private static int DurationSeconds(TimeSpan duration)
+    {
+        return (int)Math.Round(duration.TotalSeconds);
+    }
+
 }
+

@@ -44,8 +44,7 @@ public partial class StartTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromSeconds(1)
+            StartTime = DateTime.UtcNow.AddSeconds(1)
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -56,16 +55,14 @@ public partial class StartTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromSeconds(1)
+            StartTime = DateTime.UtcNow.AddSeconds(1)
         });
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Null(actualDto.Description);
-        Assert.True(actualDto.StartTime < DateTime.UtcNow.TimeOfDay);
-        Assert.True(actualDto.Date > DateOnly.MinValue);
+        Assert.True(actualDto.StartTime < DateTime.UtcNow);
         Assert.Null(actualDto.EndTime);
         Assert.Null(actualDto.Project);
         Assert.Null(actualDto.HourlyRate);
@@ -74,19 +71,16 @@ public partial class StartTest: BaseTest
     [Fact]
     public async Task ShouldNotStart2ItemsIfRequestIsAsync()
     {
-        var date = DateOnly.FromDateTime(DateTime.UtcNow);
         await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            Date = date,
-            StartTime = TimeSpan.FromSeconds(1)
+            StartTime = DateTime.UtcNow.AddSeconds(1)
         });
-        await _timeEntryDao.StopActiveAsync(_defaultWorkspace, _user, TimeSpan.FromHours(1), date);
+        await _timeEntryDao.StopActiveAsync(_defaultWorkspace, _user, DateTime.UtcNow.AddHours(1));
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromSeconds(1)
+            StartTime = DateTime.UtcNow.AddSeconds(1)
         });
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
@@ -109,8 +103,7 @@ public partial class StartTest: BaseTest
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             IsBillable = fakeTimeEntry.IsBillable,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromSeconds(1)
+            StartTime = DateTime.UtcNow.AddSeconds(1)
         });
         response.EnsureSuccessStatusCode();
 
@@ -126,11 +119,10 @@ public partial class StartTest: BaseTest
     [Fact]
     public async Task StartTimeShouldBeSameAsLocal()
     {
-        var expectedStartTime = TimeSpan.FromMinutes(13);
+        var expectedStartTime = DateTime.UtcNow.AddMinutes(13);
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
             WorkspaceId = _defaultWorkspace.Id,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
             StartTime = expectedStartTime
         });
         response.EnsureSuccessStatusCode();
@@ -155,8 +147,7 @@ public partial class StartTest: BaseTest
             WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromSeconds(1),
+            StartTime = DateTime.UtcNow.AddSeconds(1),
             
             IsBillable = null,
             HourlyRate = null
@@ -182,8 +173,7 @@ public partial class StartTest: BaseTest
             WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
-            Date = DateOnly.FromDateTime(DateTime.UtcNow),
-            StartTime = TimeSpan.FromSeconds(1),
+            StartTime = DateTime.UtcNow.AddSeconds(1),
             
             IsBillable = true,
             HourlyRate = null

@@ -39,12 +39,11 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task ShouldStopActive()
     {
-        var startTime = DateTimeOffset.UtcNow.TimeOfDay;
+        var startTime = DateTime.UtcNow;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.ToDateOnly(), 
-            DateTimeOffset.UtcNow.TimeOfDay
+            startTime
         );
         Assert.Null(activeEntry.EndTime);
         
@@ -52,8 +51,7 @@ public class StopActiveTest: BaseTest
         await _timeEntryDao.StopActiveAsync(
             _workspace,
             _user,
-            startTime + TimeSpan.FromMinutes(1),
-            DateOnly.FromDateTime(DateTime.UtcNow)
+            startTime.AddMinutes(1)
         );
         await FlushDbChanges();
     
@@ -63,12 +61,11 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task ShouldThrowExceptionIfEndTimeLessThanStartTimeForOneDay()
     {
-        var startTime = DateTimeOffset.UtcNow.TimeOfDay;
+        var startTime = DateTime.UtcNow;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateOnly.FromDateTime(DateTime.UtcNow), 
-            DateTimeOffset.UtcNow.TimeOfDay
+            startTime
         );
         Assert.Null(activeEntry.EndTime);
 
@@ -78,8 +75,7 @@ public class StopActiveTest: BaseTest
             await _timeEntryDao.StopActiveAsync(
                 _workspace,
                 _user,
-                startTime + TimeSpan.FromSeconds(-1),
-                DateOnly.FromDateTime(DateTime.UtcNow)
+                startTime.AddSeconds(-1)
             );
         });
     }
@@ -87,12 +83,11 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task ShouldThrowExceptionIfEndDateLessThanStartDate()
     {
-        var startTime = DateTimeOffset.UtcNow.TimeOfDay;
+        var startTime = DateTime.UtcNow;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateOnly.FromDateTime(DateTime.UtcNow), 
-            DateTimeOffset.UtcNow.TimeOfDay
+            startTime
         );
         Assert.Null(activeEntry.EndTime);
 
@@ -102,8 +97,7 @@ public class StopActiveTest: BaseTest
             await _timeEntryDao.StopActiveAsync(
                 _workspace,
                 _user,
-                startTime + TimeSpan.FromSeconds(5),
-                DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1)
+                startTime.AddDays(-1)
             );
         });
     }
@@ -111,14 +105,13 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task ShouldStopActiveOnlyForCurrentUser()
     {
-        var date = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startTime = DateTime.UtcNow.TimeOfDay;
+        var startTime = DateTime.UtcNow;
 
-        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
+        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, startTime);
     
         var otherUser = await _userSeeder.CreateActivatedAsync();
         await _workspaceAccessService.ShareAccessAsync(_workspace, otherUser, MembershipAccessType.User);
-        var otherActiveEntry = await _timeEntryDao.StartNewAsync(otherUser, _workspace, date, startTime);
+        var otherActiveEntry = await _timeEntryDao.StartNewAsync(otherUser, _workspace, startTime);
     
         await FlushDbChanges();
         var activeEntries = await _timeEntryDao.GetActiveEntriesAsync(_workspace);
@@ -128,8 +121,7 @@ public class StopActiveTest: BaseTest
         await _timeEntryDao.StopActiveAsync(
             _workspace, 
             _user,
-            startTime + TimeSpan.FromSeconds(1),
-            date
+            startTime.AddSeconds(1)
         );
         await FlushDbChanges();
     
@@ -145,12 +137,11 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task ShouldThrowExceptionIfEndTimeMoreThanOneDay()
     {
-        var startTime = DateTimeOffset.UtcNow.TimeOfDay;
+        var startTime = DateTime.UtcNow;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateOnly.FromDateTime(DateTime.UtcNow), 
-            DateTimeOffset.UtcNow.TimeOfDay
+            startTime
         );
         Assert.Null(activeEntry.EndTime);
 
@@ -160,8 +151,7 @@ public class StopActiveTest: BaseTest
             await _timeEntryDao.StopActiveAsync(
                 _workspace,
                 _user,
-                TimeSpan.FromHours(24),
-                DateOnly.FromDateTime(DateTime.UtcNow)
+                startTime.AddHours(24)
             );
         });
     }
@@ -169,10 +159,9 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task ShouldNotStopForOtherWorkspace()
     {
-        var date = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startTime = DateTime.UtcNow.TimeOfDay;
+        var startTime = DateTime.UtcNow;
         
-        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
+        var activeEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, startTime);
         Assert.Null(activeEntry.EndTime);
         
         var workspace2 = await _workspaceDao.CreateWorkspaceAsync(_user, "Test 2");
@@ -182,8 +171,7 @@ public class StopActiveTest: BaseTest
         await _timeEntryDao.StopActiveAsync(
             workspace2,
             _user,
-            startTime + TimeSpan.FromSeconds(1),
-            date
+            startTime.AddSeconds(1)
         );
         await FlushDbChanges();
         var stoppedEntry = await _timeEntryDao.GetActiveEntryAsync(workspace2, _user);
@@ -193,16 +181,14 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task EndTimeShouldBeMoreThanStartTime()
     {
-        var date = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startTime = DateTime.UtcNow.TimeOfDay;
+        var startTime = DateTime.UtcNow;
         
-        var startedEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
+        var startedEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, startTime);
         await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(
             _workspace,
             _user,
-            startTime + TimeSpan.FromSeconds(1),
-            date
+            startTime.AddSeconds(1)
         );
         await FlushDbChanges();
         
@@ -212,17 +198,15 @@ public class StopActiveTest: BaseTest
     [Fact]
     public async Task IfEndTimeMoreThanOneDayActiveEntryShouldBeFinishedAndNewEntriesShouldBeCreated()
     {
-        var date = DateOnly.FromDateTime(DateTime.UtcNow);
-        var startTime = DateTime.UtcNow.TimeOfDay;
-        var endTime = startTime;
+        var startTime = DateTime.UtcNow;
+        var endTime = startTime.AddDays(3);
         
-        var startedEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
+        var startedEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, startTime);
         await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(
             _workspace,
             _user,
-            endTime,
-            date.AddDays(3)
+            endTime
         );
 
         await FlushDbChanges();
@@ -230,33 +214,30 @@ public class StopActiveTest: BaseTest
         Assert.Equal(4, actualList.TotalCount);
 
         var lastItem = actualList.Items.First();
-        Assert.Equal(date.AddDays(3), lastItem.Date);
         var endTimeOfFirstItem = endTime;
-        Assert.Equal(endTimeOfFirstItem.Days, lastItem.EndTime.Value.Days);
-        Assert.Equal(endTimeOfFirstItem.Minutes, lastItem.EndTime.Value.Minutes);
-        Assert.Equal(endTimeOfFirstItem.Seconds, lastItem.EndTime.Value.Seconds);
+        Assert.Equal(endTimeOfFirstItem.Day, lastItem.EndTime.Value.Day);
+        Assert.Equal(endTimeOfFirstItem.Minute, lastItem.EndTime.Value.Minute);
+        Assert.Equal(endTimeOfFirstItem.Second, lastItem.EndTime.Value.Second);
         
         var closedEntry = actualList.Items.Last();
-        Assert.Equal(date, closedEntry.Date);
-        Assert.Equal(GlobalConstants.EndOfDay.Hours, closedEntry.EndTime.Value.Hours);
-        Assert.Equal(GlobalConstants.EndOfDay.Minutes, closedEntry.EndTime.Value.Minutes);
-        Assert.Equal(GlobalConstants.EndOfDay.Seconds, closedEntry.EndTime.Value.Seconds);
+        var endOfDayTime = GlobalConstants.EndOfDay;
+        Assert.Equal(endOfDayTime.Hours, closedEntry.EndTime.Value.Hour);
+        Assert.Equal(endOfDayTime.Minutes, closedEntry.EndTime.Value.Minute);
+        Assert.Equal(endOfDayTime.Seconds, closedEntry.EndTime.Value.Second);
     }
     
     [Fact]
     public async Task ShouldNotCreateTooManyItems()
     {
-        var date = DateTime.UtcNow.ToDateOnly();
-        var startTime = DateTime.UtcNow.TimeOfDay;
-        var endTime = startTime;
+        var startTime = DateTime.UtcNow;
+        var endTime = startTime.AddDays(100);
         
-        var startedEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, date, startTime);
+        var startedEntry = await _timeEntryDao.StartNewAsync(_user, _workspace, startTime);
         await FlushDbChanges();
         await _timeEntryDao.StopActiveAsync(
             _workspace,
             _user,
-            endTime,
-            date.AddDays(100)
+            endTime
         );
         await FlushDbChanges();
         

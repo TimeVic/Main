@@ -81,19 +81,17 @@ public partial class SendNewTimeEntityTest : BaseTest
         
         var fakeTimeEntry = _timeEntryFactory.Generate();
         
-        var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date.ToDateOnly(),
-            DateTime.UtcNow.TimeOfDay,
+            DateTime.UtcNow,
             true,
             description: fakeTimeEntry.Description
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: taskList);
         activeEntry.Task.ExternalTaskId = _taskId;
         await FlushDbChanges();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow);
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
@@ -113,18 +111,16 @@ public partial class SendNewTimeEntityTest : BaseTest
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
         var taskList = await _taskListSeeder.CreateAsync(project);
-        var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            date,
-            TimeSpan.FromMinutes(1),
+            DateTime.UtcNow.AddMinutes(1),
             true
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: taskList);
         activeEntry.Task.ExternalTaskId = "fake";
         await FlushDbChanges();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.AddMinutes(2));
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
 
@@ -140,18 +136,16 @@ public partial class SendNewTimeEntityTest : BaseTest
         var taskList = await _taskListSeeder.CreateAsync(project);
         var fakeTimeEntry = _timeEntryFactory.Generate();
         
-        var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            date,
-            DateTime.UtcNow.TimeOfDay,
+            DateTime.UtcNow,
             true
         );
         activeEntry.Task = await _taskSeeder.CreateAsync(taskList: taskList);
         activeEntry.Task.ExternalTaskId = _taskId;
         await FlushDbChanges();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.TimeOfDay, date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow);
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
@@ -165,8 +159,8 @@ public partial class SendNewTimeEntityTest : BaseTest
         activeEntry = await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
         {
             Id = activeEntry.Id,
-            StartTime = DateTime.UtcNow.TimeOfDay,
-            EndTime = DateTime.UtcNow.AddMilliseconds(5).TimeOfDay,
+            StartTime = DateTime.UtcNow,
+            EndTime = DateTime.UtcNow.AddMilliseconds(5),
             Description = fakeTimeEntry.Description,
         });
         var actualResponse = await _client.SetTimeEntryAsync(activeEntry);
@@ -181,12 +175,10 @@ public partial class SendNewTimeEntityTest : BaseTest
     // [Fact]
     public async Task ShouldGetTaskDetails()
     {
-        var date = DateTime.UtcNow.Date.ToDateOnly();
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            date,
-            TimeSpan.FromMinutes(1),
+            DateTime.UtcNow.AddMinutes(1),
             true
         );
         activeEntry.TaskId = _taskId;
@@ -194,7 +186,7 @@ public partial class SendNewTimeEntityTest : BaseTest
         // Description should be empty
         activeEntry.Description = "";
         await FlushDbChanges();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, DateTime.UtcNow.AddMinutes(2));
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     

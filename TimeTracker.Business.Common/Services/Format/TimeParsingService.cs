@@ -67,6 +67,19 @@ public class TimeParsingService: ITimeParsingService
                 isAddSecond ? $":{Math.Abs(timeSpan.Seconds):00}" : ""
             );
     }
+
+    public string DateTimeToTimeString(DateTime dateTime, bool isAddSecond = false)
+    {
+        return $"{Math.Abs(dateTime.Hour):0}:{Math.Abs(dateTime.Minute):00}"
+            + (
+                isAddSecond ? $":{Math.Abs(dateTime.Second):00}" : ""
+            );
+    }
+
+    public string DateTimeToTimeString(DateTime? dateTime, bool isAddSecond = false)
+    {
+        return dateTime.HasValue ? DateTimeToTimeString(dateTime.Value, isAddSecond) : string.Empty;
+    }
     
     public string TimeOnlyToStringString(TimeOnly time)
     {

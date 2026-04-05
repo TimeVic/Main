@@ -42,6 +42,9 @@
       <None Update="SQLFiles\Procedures\fn_sequence_get_next.sql">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="SQLFiles\Procedures\fn_split_time_entry_by_day.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

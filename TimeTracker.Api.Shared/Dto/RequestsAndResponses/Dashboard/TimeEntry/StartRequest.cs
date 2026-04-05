@@ -20,18 +20,9 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         public bool? IsBillable { get; set; }
         
         [IsPositive]
-        public decimal? HourlyRate { get; set; } 
-        
-        /**
-         * Date of time entry
-         * !Important. Should be represented in UTC timezone
-         */
-        [Required]
-        [IsFutureOrNowDate]
-        public DateOnly Date { get; set; }
+        public decimal? HourlyRate { get; set; }
         
         [Required]
-        [IsCorrectTimeEntryTime]
-        public TimeSpan StartTime { get; set; }
+        public DateTime StartTime { get; set; }
     }
 }

@@ -13,9 +13,8 @@ public class TimeEntryMapping: BaseGuidMappings<TimeEntryEntity>
         Map(x => x.Description).Nullable();
         Map(x => x.HourlyRate).DecimalNullable();
         Map(x => x.IsBillable);
-        Map(x => x.Date).DateOnly();
-        Map(x => x.StartTime).TimeOnly();
-        Map(x => x.EndTime).TimeOnlyNullable();
+        Map(x => x.StartTime).DateTime();
+        Map(x => x.EndTime).DateTimeNullable();
         Map(x => x.TaskId).Nullable();
         Map(x => x.ClickUpId)
             .Column("clickup_id")

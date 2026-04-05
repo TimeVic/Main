@@ -23,18 +23,17 @@ public partial class RedmineClientTest
         await FlushDbChanges();
         
         var expectedDescription = "Test description";
-        var date = DateTime.UtcNow.Date.ToDateOnly();
+        var startTime = DateTime.UtcNow;
         var activeEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _workspace,
-            DateTime.UtcNow.Date.ToDateOnly(),
-            TimeSpan.FromMinutes(1),
+            startTime,
             true,
             description: expectedDescription,
             internalTask: task
         );
         await FlushDbChanges();
-        await _timeEntryDao.StopActiveAsync(_workspace, _user, TimeSpan.FromMinutes(2), date);
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, startTime.AddMinutes(2));
         await FlushDbChanges();
         await DbSessionProvider.CurrentSession.RefreshAsync(activeEntry);
     
