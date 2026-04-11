@@ -22,6 +22,7 @@ public class TimeEntryMapping: BaseGuidMappings<TimeEntryEntity>
         Map(x => x.RedmineId).Nullable();
         Map(x => x.JiraId).Nullable();
         Map(x => x.IsMarkedToDelete);
+        Map(x => x.TimeZone);
         
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();

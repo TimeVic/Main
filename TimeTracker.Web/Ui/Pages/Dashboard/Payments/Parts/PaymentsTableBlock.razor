@@ -1,0 +1,52 @@
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Api.Shared.Dto.Entity.Task
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Core.Extensions.Enums
+@inherits BaseReactiveComponent
+
+<LumexDataGrid
+    T="PaymentDto"
+    Class="min-w-full divide-y divide-slate-200"
+    Data="@_state.Value.List.AsQueryable()"
+    Hoverable="true"
+    OnRowClick="@OnRowClickHandler"
+    Loading="_isLoading">
+    <LumexUI.PropertyColumn Title="#" Property="@(p => p.PaymentTime.ToShortDateString())"/>
+    <LumexUI.PropertyColumn Title="Client" Property="@(p => p.Client)">
+        <Content>
+            <div class="font-medium text-slate-900">
+                @context.Client
+            </div>
+            @if (context.Project != null)
+            {
+                <div class="mt-1 max-w-xl text-slate-500">@context.Project?.Name</div>    
+            }
+        </Content>
+    </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn 
+        Title="Description"
+        Property="@(p => p.Description)"
+        Sortable="@true">
+        <Content>
+            @context.Description
+        </Content>
+    </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn
+        Title="Actions"
+        Property="@(p => p.Id)">
+        <Content>
+            <div @onclick:stopPropagation="true">
+                <CustomButton
+                    Variant="Variant.Outlined"
+                    Color="ThemeColor.Default"
+                    IconOnly="true"
+                    Size="Size.Small">
+                    <StartContent>
+                        <i class="fa-solid fa-stop text-xs"></i>
+                    </StartContent>
+                </CustomButton>
+            </div>
+        </Content>
+    </LumexUI.PropertyColumn>
+</LumexDataGrid>

@@ -129,6 +129,7 @@ public class GetReportByDayForOwnerTest: BaseTest
     [Fact]
     public async Task ShouldReceiveReportForOther()
     {
+        var baseDay = DateTime.UtcNow.Date;
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
         await FlushDbChanges();
         var project1 = projects.First();
@@ -150,8 +151,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         {
             await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddDays(-1).AddHours(10),
-                EndTime = DateTime.UtcNow.AddDays(-1).AddHours(15),
+                StartTime = baseDay.AddDays(-1).AddHours(10),
+                EndTime = baseDay.AddDays(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -161,8 +162,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddHours(1),
-                EndTime = DateTime.UtcNow.AddHours(5),
+                StartTime = baseDay.AddHours(1),
+                EndTime = baseDay.AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -172,8 +173,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddDays(1).AddHours(5),
-                EndTime = DateTime.UtcNow.AddDays(1).AddHours(11),
+                StartTime = baseDay.AddDays(1).AddHours(5),
+                EndTime = baseDay.AddDays(1).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -182,8 +183,8 @@ public class GetReportByDayForOwnerTest: BaseTest
         await FlushDbChanges();
 
         var result = await _reportsDao.GetReportByDayForOtherAsync(
-            DateTime.UtcNow.AddDays(-1),
-            DateTime.UtcNow.AddDays(1),
+            baseDay.AddDays(-1),
+            baseDay.AddDays(1),
             otherUser.Id,
             new List<ProjectEntity> { project1, project2 }
         );

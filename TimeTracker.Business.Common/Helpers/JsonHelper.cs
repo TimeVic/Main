@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace TimeTracker.Business.Common.Helpers;
 
@@ -24,19 +25,48 @@ public static class JsonHelper
         return null;
     }
     
-    public static T? DeserializeObject<T>(string value, DateTimeZoneHandling? dateTimeZoneHandling = null)
+    public static T? DeserializeObject<T>(
+        string value,
+        DateTimeZoneHandling? dateTimeZoneHandling = null,
+        List<JsonConverter>? converters = null,
+        IContractResolver? contractResolver = null
+    )
     {
-        return JsonConvert.DeserializeObject<T>(value, new JsonSerializerSettings()
+        var settings = new JsonSerializerSettings()
         {
             DateTimeZoneHandling = dateTimeZoneHandling ?? DateTimeZoneHandling.Utc
-        });
+        };
+        if (converters != null)
+        {
+            settings.Converters = converters;
+        }
+        if (contractResolver != null)
+        {
+            settings.ContractResolver = contractResolver;
+        }
+        return JsonConvert.DeserializeObject<T>(value, settings);
     }
     
-    public static object? DeserializeObject(string value, Type type, DateTimeZoneHandling? dateTimeZoneHandling = null)
+    public static object? DeserializeObject(
+        string value,
+        Type type,
+        DateTimeZoneHandling? dateTimeZoneHandling = null,
+        List<JsonConverter>? converters = null,
+        IContractResolver? contractResolver = null
+    )
     {
-        return JsonConvert.DeserializeObject(value, type, new JsonSerializerSettings()
+        var settings = new JsonSerializerSettings()
         {
             DateTimeZoneHandling = dateTimeZoneHandling ?? DateTimeZoneHandling.Utc
-        });
+        };
+        if (converters != null)
+        {
+            settings.Converters = converters;
+        }
+        if (contractResolver != null)
+        {
+            settings.ContractResolver = contractResolver;
+        }
+        return JsonConvert.DeserializeObject(value, type, settings);
     }
 }

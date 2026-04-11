@@ -217,6 +217,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             Workspace = workspace,
             User = user,
             Task = internalTask,
+            TimeZone = workspace.TimeZone,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -261,25 +262,62 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
                 throw new DataInconsistencyException("End time can not be less than Start time");
             }
 
-            if (activeTimeEntry.StartTime.Date == endTime.Date)
+            // Resolve the timezone for local day-boundary calculations.
+            // StartTime/EndTime are stored in UTC; we need to split at midnight in the entry's local timezone.
+            TimeZoneInfo timeZoneInfo;
+            try
             {
+                timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(
+                    !string.IsNullOrEmpty(activeTimeEntry.TimeZone) ? activeTimeEntry.TimeZone : "UTC"
+                );
+            }
+            catch (Exception)
+            {
+                timeZoneInfo = TimeZoneInfo.Utc;
+            }
+
+            // Convert UTC timestamps to local time for day-boundary comparison.
+            var startTimeLocal = TimeZoneInfo.ConvertTimeFromUtc(
+                DateTime.SpecifyKind(activeTimeEntry.StartTime, DateTimeKind.Utc),
+                timeZoneInfo
+            );
+            var endTimeLocal = TimeZoneInfo.ConvertTimeFromUtc(
+                DateTime.SpecifyKind(endTime, DateTimeKind.Utc),
+                timeZoneInfo
+            );
+
+            if (startTimeLocal.Date == endTimeLocal.Date)
+            {
+                // Same local day — no splitting needed.
                 activeTimeEntry.EndTime = endTime;
                 await Session.SaveAsync(activeTimeEntry);
                 continue;
             }
 
-            activeTimeEntry.EndTime = activeTimeEntry.StartTime.EndOfDay();
+            // Multi-day: split at local midnight boundaries.
+            // First entry ends at the last moment of its local day (23:59:59.9999999 local → UTC).
+            var endOfStartDayLocal = startTimeLocal.Date.AddDays(1).AddTicks(-1);
+            activeTimeEntry.EndTime = TimeZoneInfo.ConvertTimeToUtc(
+                DateTime.SpecifyKind(endOfStartDayLocal, DateTimeKind.Unspecified),
+                timeZoneInfo
+            );
             await Session.FlushAsync();
 
-            var copyStartTime = activeTimeEntry.StartTime.StartOfDay().AddDays(1);
+            // Subsequent entries start at the beginning of each local day (00:00:00 local → UTC).
+            var copyStartLocal = startTimeLocal.Date.AddDays(1);
             var createdItemsCount = 0;
 
-            while (copyStartTime.Date <= endTime.Date && createdItemsCount < MaxCreatedItemsIfStopped)
+            while (copyStartLocal.Date <= endTimeLocal.Date && createdItemsCount < MaxCreatedItemsIfStopped)
             {
+                var copyStartUtc = TimeZoneInfo.ConvertTimeToUtc(
+                    DateTime.SpecifyKind(copyStartLocal, DateTimeKind.Unspecified),
+                    timeZoneInfo
+                );
+
                 var newTimeEntry = await StartNewAsync(
                     user,
                     workspace,
-                    copyStartTime,
+                    copyStartUtc,
                     isBillable: activeTimeEntry.IsBillable,
                     description: activeTimeEntry.Description,
                     projectId: activeTimeEntry.Project?.Id,
@@ -287,11 +325,20 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
                     internalTask: activeTimeEntry.Task
                 );
 
-                newTimeEntry.EndTime = copyStartTime.Date == endTime.Date
-                    ? endTime
-                    : copyStartTime.EndOfDay();
+                if (copyStartLocal.Date == endTimeLocal.Date)
+                {
+                    newTimeEntry.EndTime = endTime;
+                }
+                else
+                {
+                    var endOfThisDayLocal = copyStartLocal.Date.AddDays(1).AddTicks(-1);
+                    newTimeEntry.EndTime = TimeZoneInfo.ConvertTimeToUtc(
+                        DateTime.SpecifyKind(endOfThisDayLocal, DateTimeKind.Unspecified),
+                        timeZoneInfo
+                    );
+                }
 
-                copyStartTime = copyStartTime.AddDays(1);
+                copyStartLocal = copyStartLocal.AddDays(1);
                 createdItemsCount++;
             }
         }
@@ -325,6 +372,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             {
                 Workspace = workspace,
                 User = user,
+                TimeZone = workspace.TimeZone,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };

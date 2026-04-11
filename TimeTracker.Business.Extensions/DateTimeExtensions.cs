@@ -244,5 +244,44 @@ namespace TimeTracker.Business.Extensions
         {
             return DateOnly.FromDateTime(d);
         }
+        
+        #region TimeZone
+        
+        public static DateTime? ToTimeZone(this DateTime? time, string timeZone)
+        {
+            if (time == null)
+                return null;
+            return time.ToTimeZone(timeZone);
+        }
+
+        public static DateTime ToTimeZone(this DateTime time, string timeZone)
+        {
+            if (time.Kind != DateTimeKind.Utc)
+            {
+                time = time.ToUniversalTime();
+            }
+            // Resolve the timezone for local day-boundary calculations.
+            // StartTime/EndTime are stored in UTC; we need to split at midnight in the entry's local timezone.
+            TimeZoneInfo timeZoneInfo;
+            try
+            {
+                timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(
+                    !string.IsNullOrEmpty(timeZone) ? timeZone : "UTC"
+                );
+            }
+            catch (Exception)
+            {
+                timeZoneInfo = TimeZoneInfo.Utc;
+            }
+
+            // Convert UTC timestamps to local time for day-boundary comparison.
+            var startTimeLocal = TimeZoneInfo.ConvertTimeFromUtc(
+                DateTime.SpecifyKind(time, DateTimeKind.Utc),
+                timeZoneInfo
+            );
+            return startTimeLocal;
+        }
+        
+        #endregion
     }
 }

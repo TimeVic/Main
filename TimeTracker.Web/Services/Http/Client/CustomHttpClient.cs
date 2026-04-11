@@ -1,12 +1,10 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Components.Forms;
+﻿using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Helpers;
-using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Core.Converters.Json;
+using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.Http.Dto;
-using TimeTracker.Web.Services.Http.Middleware;
 
 namespace TimeTracker.Web.Services.Http.Client;
 
@@ -16,15 +14,18 @@ public class CustomHttpClient
     private readonly int _maxFileSizeInMb;
     
     private readonly HttpClient _httpClient;
+    private readonly UserTimeZoneProviderService _timeZoneProviderService;
     private readonly ILogger<CustomHttpClient> _logger;
 
     public CustomHttpClient(
         HttpClient httpClient,
         IConfiguration configuration,
+        UserTimeZoneProviderService timeZoneProviderService,
         ILogger<CustomHttpClient> logger
     )
     {
         _httpClient = httpClient;
+        _timeZoneProviderService = timeZoneProviderService;
         _logger = logger;
 
         _apiUrl = configuration.GetValue<string>("ApiUrl")!;
@@ -126,7 +127,11 @@ public class CustomHttpClient
         {
             return JsonHelper.DeserializeObject<T>(
                 responseString,
-                DateTimeZoneHandling.Local
+                DateTimeZoneHandling.Local,
+                converters: [
+                    new UserTimeZoneDateConverter(_timeZoneProviderService.GetTimeZone())
+                ],
+                contractResolver: new UserTimeZoneDateConverter.ContractResolver()
             );
         }
         catch (Exception e)

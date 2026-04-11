@@ -9,6 +9,8 @@ public record struct SetListItemsAction(GetListResponse Response);
 
 public record struct SetListItemAction(PaymentDto Payment);
 
+public record struct UpdateAction(UpdateRequest Request);
+
 public record struct SetIsListLoading(bool IsLoading);
 
 public record struct DeletePaymentAction(Guid PaymentId);
