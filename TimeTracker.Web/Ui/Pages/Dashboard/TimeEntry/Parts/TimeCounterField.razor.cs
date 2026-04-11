@@ -1,6 +1,8 @@
 ﻿using System.Timers;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Business.Common.Services.Format;
+using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Services.DateTimes;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.TimeEntry.Parts;
 
@@ -10,19 +12,22 @@ public partial class TimeCounterField: IDisposable
     public bool IsActive { get; set; } = true;
 
     [Parameter]
-    public DateTime? Value
+    public DateTimeOffset? Value
     {
         get => _startTime;
         set
         {
-            _startTime = value ?? DateTime.Now;
+            _startTime = value ?? _dateTimeProviderService.GetCurrentTime();
         }
     }
 
     [Parameter]
     public string Class { get; set; }
 
-    private DateTime? _startTime;
+    [Inject]
+    public UserDateTimeProviderService _dateTimeProviderService { get; set; }
+    
+    private DateTimeOffset? _startTime;
     private TimeSpan _currentDuration = TimeSpan.MinValue;
     private System.Timers.Timer _timer;
 
@@ -55,11 +60,11 @@ public partial class TimeCounterField: IDisposable
     {
         if (_startTime != null)
         {
-            _currentDuration = (DateTime.Now - _startTime.Value);
+            _currentDuration = (_dateTimeProviderService.GetCurrentTime() - _startTime.Value);
         }
         StateHasChanged();
     }
-
+    
     public void Dispose()
     {
         _timer.Dispose();

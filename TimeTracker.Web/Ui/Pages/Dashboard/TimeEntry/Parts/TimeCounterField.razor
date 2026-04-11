@@ -1,6 +1,8 @@
 ﻿@using System.Runtime.InteropServices.JavaScript
 @using LumexUI.Common
 
+@inherits BaseReactiveComponent
+
 <div class="w-time-counter @Class">
     <div class="flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 sm:justify-self-center">
         <span class="text-center font-mono text-lg font-semibold text-slate-900">@_durationString</span>

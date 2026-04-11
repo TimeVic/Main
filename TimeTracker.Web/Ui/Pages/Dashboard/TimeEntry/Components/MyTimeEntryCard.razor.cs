@@ -7,6 +7,9 @@ namespace TimeTracker.Web.Ui.Pages.Dashboard.TimeEntry.Components;
 public partial class MyTimeEntryCard
 {
     [Parameter]
+    public string CurrentTimeZone { get; set; }
+    
+    [Parameter]
     public TimeEntryDto Entry { get; set; } = new();
     
     [Parameter]

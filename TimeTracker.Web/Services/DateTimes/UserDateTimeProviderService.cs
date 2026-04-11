@@ -1,15 +1,16 @@
 using Fluxor;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Services.DateTimes;
 
-public class UserTimeZoneProviderService: IDisposable
+public class UserDateTimeProviderService: IDisposable
 {
     private readonly IState<AuthState> _authState;
     private TimeZoneInfo _userTimeZone;
 
-    public UserTimeZoneProviderService(
+    public UserDateTimeProviderService(
         IState<AuthState> authState
     )
     {
@@ -20,6 +21,15 @@ public class UserTimeZoneProviderService: IDisposable
         _authState.StateChanged += OnAuthStateChanged;
     }
 
+    /// <summary>
+    /// Returns the current moment in the user's workspace timezone as a DateTimeOffset.
+    /// The offset (e.g. +05:00) is preserved so Kind is never Unspecified.
+    /// </summary>
+    public DateTimeOffset GetCurrentTime()
+    {
+        return DateTime.UtcNow.ToDateTimeOffset(_userTimeZone.Id);
+    }
+    
     public TimeZoneInfo GetTimeZone()
     {
         return _userTimeZone;

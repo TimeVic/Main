@@ -23,6 +23,7 @@ public class TimeEntryProfile : Profile
                     HourlyRate = src.HourlyRate,
                     IsBillable = src.IsBillable,
                     IsSynced = src.IsSynced,
+                    CreatedAt = src.CreatedAt,
                     Project = project,
                     User = user,
                     Task = task,

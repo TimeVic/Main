@@ -246,40 +246,65 @@ namespace TimeTracker.Business.Extensions
         }
         
         #region TimeZone
-        
-        public static DateTime? ToTimeZone(this DateTime? time, string timeZone)
-        {
-            if (time == null)
-                return null;
-            return time.Value.ToTimeZone(timeZone);
-        }
 
-        public static DateTime ToTimeZone(this DateTime time, string timeZone)
+        private static TimeZoneInfo ResolveTimeZoneInfo(string? timeZone)
         {
-            if (time.Kind != DateTimeKind.Utc)
-            {
-                time = time.ToUniversalTime();
-            }
-            // Resolve the timezone for local day-boundary calculations.
-            // StartTime/EndTime are stored in UTC; we need to split at midnight in the entry's local timezone.
-            TimeZoneInfo timeZoneInfo;
+            if (string.IsNullOrEmpty(timeZone))
+                return TimeZoneInfo.Utc;
             try
             {
-                timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(
-                    !string.IsNullOrEmpty(timeZone) ? timeZone : "UTC"
-                );
+                return TimeZoneInfo.FindSystemTimeZoneById(timeZone);
             }
             catch (Exception)
             {
-                timeZoneInfo = TimeZoneInfo.Utc;
+                return TimeZoneInfo.Utc;
             }
+        }
+        
+        public static DateTime? ToTimeZone(this DateTime? time, string timeZone)
+        {
+            return time?.ToTimeZone(timeZone);
+        }
 
-            // Convert UTC timestamps to local time for day-boundary comparison.
-            var startTimeLocal = TimeZoneInfo.ConvertTimeFromUtc(
+        /// <summary>
+        /// Converts a UTC DateTime to the specified timezone.
+        /// NOTE: The returned DateTime has Kind=Unspecified — this is a .NET limitation.
+        /// DateTime cannot carry timezone info beyond Utc/Local/Unspecified.
+        /// Use ToDateTimeOffset() when you need the offset (+05:00) preserved.
+        /// </summary>
+        public static DateTime ToTimeZone(this DateTime time, string timeZone)
+        {
+            if (time.Kind != DateTimeKind.Utc)
+                time = time.ToUniversalTime();
+
+            var tz = ResolveTimeZoneInfo(timeZone);
+            return TimeZoneInfo.ConvertTimeFromUtc(
                 DateTime.SpecifyKind(time, DateTimeKind.Utc),
-                timeZoneInfo
+                tz
             );
-            return startTimeLocal;
+            // Kind will be Unspecified (or Local if tz == system local) — by .NET design.
+        }
+
+        /// <summary>
+        /// Converts a UTC DateTime to a DateTimeOffset in the specified timezone.
+        /// The offset (+05:00 etc.) is preserved and visible.
+        /// </summary>
+        public static DateTimeOffset ToDateTimeOffset(this DateTime time, string timeZone)
+        {
+            if (time.Kind != DateTimeKind.Utc)
+                time = time.ToUniversalTime();
+
+            var tz = ResolveTimeZoneInfo(timeZone);
+            var converted = TimeZoneInfo.ConvertTimeFromUtc(
+                DateTime.SpecifyKind(time, DateTimeKind.Utc),
+                tz
+            );
+            return new DateTimeOffset(converted, tz.GetUtcOffset(converted));
+        }
+
+        public static DateTimeOffset? ToDateTimeOffset(this DateTime? time, string timeZone)
+        {
+            return time?.ToDateTimeOffset(timeZone);
         }
         
         #endregion

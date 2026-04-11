@@ -80,6 +80,7 @@
                             @foreach (var entry in groupedItem)
                             {
                                 <MyTimeEntryCard 
+                                    CurrentTimeZone="@(AuthState.Value.Workspace?.TimeZone ?? TimeZoneInfo.Local.Id)"
                                     Entry="@entry"
                                     OnEdit="OnEditTimeEntry"
                                     OnClone="OnCloneTimeEntry"

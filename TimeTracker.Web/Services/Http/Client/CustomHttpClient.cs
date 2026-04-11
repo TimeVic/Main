@@ -14,18 +14,18 @@ public class CustomHttpClient
     private readonly int _maxFileSizeInMb;
     
     private readonly HttpClient _httpClient;
-    private readonly UserTimeZoneProviderService _timeZoneProviderService;
+    private readonly UserDateTimeProviderService _dateTimeProviderService;
     private readonly ILogger<CustomHttpClient> _logger;
 
     public CustomHttpClient(
         HttpClient httpClient,
         IConfiguration configuration,
-        UserTimeZoneProviderService timeZoneProviderService,
+        UserDateTimeProviderService dateTimeProviderService,
         ILogger<CustomHttpClient> logger
     )
     {
         _httpClient = httpClient;
-        _timeZoneProviderService = timeZoneProviderService;
+        _dateTimeProviderService = dateTimeProviderService;
         _logger = logger;
 
         _apiUrl = configuration.GetValue<string>("ApiUrl")!;
@@ -129,7 +129,7 @@ public class CustomHttpClient
                 responseString,
                 DateTimeZoneHandling.Local,
                 converters: [
-                    new UserTimeZoneDateConverter(_timeZoneProviderService.GetTimeZone())
+                    new UserTimeZoneDateConverter(_dateTimeProviderService.GetTimeZone())
                 ],
                 contractResolver: new UserTimeZoneDateConverter.ContractResolver()
             );

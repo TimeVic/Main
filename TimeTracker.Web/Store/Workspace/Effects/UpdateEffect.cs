@@ -2,6 +2,7 @@
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Common;
 
 namespace TimeTracker.Web.Store.Workspace.Effects;
 
@@ -35,7 +36,8 @@ public class UpdateEffect: Effect<UpdateWorkspaceAction>
             if (response != null)
             {
                 dispatcher.Dispatch(new SetListItemAction(response));
-                dispatcher.Dispatch(new TimeTracker.Web.Store.Auth.SetWorkspaceAction(response));
+                dispatcher.Dispatch(new SetWorkspaceAction(response));
+                dispatcher.Dispatch(new PersistDataAction());
                 _toastService.ShowInfo($"Workspace updated.");
             }
         }
