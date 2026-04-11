@@ -13,40 +13,39 @@ public class TimeEntryDto: BaseDto
     public string? Description { get; set; }
     
     public decimal? HourlyRate { get; set; }
-    
     public bool IsBillable { get; set; }
-
     public bool IsSynced { get; set; }
-    
+    public DateTime CreatedAt { get; set; }
     public ProjectDto? Project { get; set; }
-    
     public UserDto User { get; set; }
-    
     public TaskDto? Task { get; set; }
     
     #region Time
+
+    public string TimeZone { get; set; }
 
     [NonConvertibleDateTime]
     public DateTime StartTime
     {
         get;
-        set => field = value.ToTimeZone(TimeZone);
+        set;
     }
 
     [NonConvertibleDateTime]
     public DateTime? EndTime
     {
         get;
-        set => field = value.ToTimeZone(TimeZone);
+        set;
     }
-
-    public string TimeZone { get; set; }
     
     #endregion
     
     public bool IsActive => EndTime == null;
     
     public TimeSpan Duration => EndTime == null ? TimeSpan.Zero : EndTime.Value - StartTime;
+    
+    public DateTimeOffset StartTimeOffset => StartTime.ToDateTimeOffset(TimeZone);
+    public DateTimeOffset? EndTimeTimeOffset => EndTime.ToDateTimeOffset(TimeZone);
     
     public void UpdateFrom(TimeEntryDto fromEntry)
     {

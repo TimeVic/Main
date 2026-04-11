@@ -2,6 +2,7 @@
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Project;
@@ -13,6 +14,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
     private readonly IState<AuthState> _authState;
     private readonly IState<TimeEntryState> _timeEntryState;
     private readonly IState<ProjectState> _projectState;
+    private readonly UserDateTimeProviderService _dateTimeProviderService;
     private readonly ApiService _apiService;
     private readonly ILogger<StartTimeEntryEffect> _logger;
 
@@ -21,6 +23,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
         IState<AuthState> authState,
         IState<TimeEntryState> timeEntryState,
         IState<ProjectState> projectState,
+        UserDateTimeProviderService dateTimeProviderService,
         ILogger<StartTimeEntryEffect> logger
     )
     {
@@ -28,6 +31,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
         _authState = authState;
         _timeEntryState = timeEntryState;
         _projectState = projectState;
+        _dateTimeProviderService = dateTimeProviderService;
         _logger = logger;
     }
 
@@ -42,7 +46,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 await _apiService.TimeEntryStopAsync(new StopRequest()
                 {
                     WorkspaceId = _authState.Value.Workspace!.Id,
-                    EndTime = DateTime.Now
+                    EndTime = DateTime.UtcNow
                 });
                 isWasStopped = true;
             }
@@ -57,7 +61,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
             {
                 WorkspaceId = _authState.Value.Workspace!.Id,
-                StartTime = DateTime.Now,
+                StartTime = DateTime.UtcNow,
                 IsBillable = project != null ? project.IsBillableByDefault : action.IsBillable,
                 ProjectId = action.Project?.Id,
                 Description = action.Description,

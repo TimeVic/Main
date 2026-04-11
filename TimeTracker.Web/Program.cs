@@ -90,7 +90,7 @@ builder.Services.AddScoped<ToastService>();
 builder.Services.AddScoped<FcmService>();
 builder.Services.AddScoped<MessagingWebSocketClientService>();
 builder.Services.AddScoped<ModalDialogService>();
-builder.Services.AddScoped<UserTimeZoneProviderService>();
+builder.Services.AddScoped<UserDateTimeProviderService>();
 
 // Lumex UI
 builder.Services.AddLumexServices();

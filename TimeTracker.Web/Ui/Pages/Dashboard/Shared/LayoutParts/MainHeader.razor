@@ -1,6 +1,7 @@
 @using LumexUI
 @using LumexUI.Common
 @using LumexUI.Shared.Icons
+@using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry
 @using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Components
 @using TimeTracker.Web.Ui.Shared.Components.Layout
@@ -81,7 +82,12 @@
                                     </div>
                                 </div>
                             </LumexDropdownItem>
-                            <LumexDropdownItem ShowDivider="@true" Disabled="true">
+                            <LumexDropdownItem
+                                ShowDivider="@true"
+                                Disabled="true">
+                                @_currentTime.ToString("yyyy-MM-dd HH:mm:ss zzz");
+                            </LumexDropdownItem>
+                            <LumexDropdownItem Disabled="true">
                                 Settings
                             </LumexDropdownItem>
                             <LumexDropdownItem Disabled="true">Help & Support</LumexDropdownItem>
