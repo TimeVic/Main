@@ -251,7 +251,7 @@ namespace TimeTracker.Business.Extensions
         {
             if (time == null)
                 return null;
-            return time.ToTimeZone(timeZone);
+            return time.Value.ToTimeZone(timeZone);
         }
 
         public static DateTime ToTimeZone(this DateTime time, string timeZone)

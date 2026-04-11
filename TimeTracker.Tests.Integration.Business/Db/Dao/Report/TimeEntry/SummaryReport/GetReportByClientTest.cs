@@ -89,22 +89,20 @@ public class GetReportByClientTest: BaseTest
         );
         Assert.Equal(3, result.Count);
         
-        var firstReportItem = result.First();
-        var secondReportItem = result.Skip(1).First();
-        var thirdReportItem = result.Last();
         Assert.NotNull(client1);
         Assert.NotNull(client2);
-        Assert.Equal(client1.Id, firstReportItem.ClientId);
-        Assert.Equal(client2.Id, secondReportItem.ClientId);
-        Assert.Null(thirdReportItem.ClientId);
+
+        var client1Item = result.Single(item => item.ClientId == client1.Id);
+        var client2Item = result.Single(item => item.ClientId == client2.Id);
+        var noClientItem = result.Single(item => item.ClientId == null);
+
+        AssertDurationHours(15, client1Item.Duration);
+        AssertDurationHours(12, client2Item.Duration);
+        AssertDurationHours(24, noClientItem.Duration);
         
-        AssertDurationHours(15, firstReportItem.Duration);
-        AssertDurationHours(12, secondReportItem.Duration);
-        AssertDurationHours(24, thirdReportItem.Duration);
-        
-        Assert.Equal(180m, firstReportItem.Amount);
-        Assert.Equal(120m, secondReportItem.Amount);
-        Assert.Equal(360m, thirdReportItem.Amount);
+        Assert.Equal(180m, client1Item.Amount);
+        Assert.Equal(120m, client2Item.Amount);
+        Assert.Equal(360m, noClientItem.Amount);
         
         result = await _reportsDao.GetReportByClientForOwnerOrManagerAsync(
             _workspace.Id,
@@ -113,16 +111,17 @@ public class GetReportByClientTest: BaseTest
         );
         Assert.Equal(3, result.Count);
         
-        firstReportItem = result.First();
-        secondReportItem = result.Skip(1).First();
-        thirdReportItem = result.Last();
-        Assert.Equal(client1.Id, firstReportItem.ClientId);
-        Assert.Equal(client2.Id, secondReportItem.ClientId);
-        Assert.Null(thirdReportItem.ClientId);
+        client1Item = result.Single(item => item.ClientId == client1.Id);
+        client2Item = result.Single(item => item.ClientId == client2.Id);
+        noClientItem = result.Single(item => item.ClientId == null);
+
+        AssertDurationHours(15, client1Item.Duration);
+        AssertDurationHours(12, client2Item.Duration);
+        AssertDurationHours(24, noClientItem.Duration);
         
-        AssertDurationHours(15, firstReportItem.Duration);
-        AssertDurationHours(12, secondReportItem.Duration);
-        AssertDurationHours(24, thirdReportItem.Duration);
+        Assert.Equal(180m, client1Item.Amount);
+        Assert.Equal(120m, client2Item.Amount);
+        Assert.Equal(360m, noClientItem.Amount);
     }
     
     [Fact]
@@ -188,19 +187,21 @@ public class GetReportByClientTest: BaseTest
         );
         Assert.Equal(2, result.Count);
         
-        var firstReportItem = result.First();
-        var secondReportItem = result.Last();
-
-        Assert.Equal(180, firstReportItem.Amount);
-        Assert.Equal(0, secondReportItem.Amount);
-        
         Assert.NotNull(client1);
         Assert.NotNull(client2);
-        Assert.Equal(client2.Id, secondReportItem.ClientId);
-        Assert.Equal(client1.Id, firstReportItem.ClientId);
-        
-        AssertDurationHours(15, firstReportItem.Duration);
-        AssertDurationHours(12, secondReportItem.Duration);
+
+        // The "for other" SQL returns all entries in accessible projects (not just otherUser's),
+        // but Amount is computed only for otherUser's billable hours.
+        var client1Item = result.Single(item => item.ClientId == client1.Id);
+        var client2Item = result.Single(item => item.ClientId == client2.Id);
+
+        // client1: 3 x 5h by otherUser → Duration=15h, Amount=3*5*12=180
+        AssertDurationHours(15, client1Item.Duration);
+        Assert.Equal(180, client1Item.Amount);
+
+        // client2: 3 x 4h by _user (not otherUser) → Duration=12h, Amount=0
+        AssertDurationHours(12, client2Item.Duration);
+        Assert.Equal(0, client2Item.Amount);
     }
 
     private static void AssertDurationHours(double expectedHours, TimeSpan actualDuration)

@@ -82,7 +82,7 @@ public class AddTest: BaseTest
         Assert.Equal(_project.Id, actualPayment.Project.Id);
         Assert.Equal(payment.Amount, actualPayment.Amount);
         Assert.Equal(payment.Description, actualPayment.Description);
-        Assert.Equal(expectedPaymentTime, actualPayment.PaymentTime);
+        Assert.Equal(expectedPaymentTime.ToUniversalTime(), actualPayment.PaymentTime);
     }
     
     [Fact]

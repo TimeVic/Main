@@ -91,20 +91,17 @@ public class GetReportByUserTest: BaseTest
         );
         Assert.Equal(3, result.Count);
         
-        var firstReportItem = result.First();
-        var secondReportItem = result.Skip(1).First();
-        var thirdReportItem = result.Last();
-        Assert.Equal(_user.Id, firstReportItem.UserId);
-        Assert.Equal(user1.Id, secondReportItem.UserId);
-        Assert.Equal(user2.Id, thirdReportItem.UserId);
+        var mainUserItem = result.Single(item => item.UserId == _user.Id);
+        var user1Item = result.Single(item => item.UserId == user1.Id);
+        var user2Item = result.Single(item => item.UserId == user2.Id);
+
+        AssertDurationHours(24, mainUserItem.Duration);
+        AssertDurationHours(15, user1Item.Duration);
+        AssertDurationHours(12, user2Item.Duration);
         
-        AssertDurationHours(24, firstReportItem.Duration);
-        AssertDurationHours(15, secondReportItem.Duration);
-        AssertDurationHours(12, thirdReportItem.Duration);
-        
-        Assert.Equal(360m, firstReportItem.Amount);
-        Assert.Equal(180m, secondReportItem.Amount);
-        Assert.Equal(120m, thirdReportItem.Amount);
+        Assert.Equal(360m, mainUserItem.Amount);
+        Assert.Equal(180m, user1Item.Amount);
+        Assert.Equal(120m, user2Item.Amount);
         
         result = await _reportsDao.GetReportByUserForOwnerOrManagerAsync(
             _workspace.Id,
@@ -113,18 +110,15 @@ public class GetReportByUserTest: BaseTest
         );
         Assert.Equal(3, result.Count);
         
-        firstReportItem = result.First();
-        secondReportItem = result.Skip(1).First();
-        thirdReportItem = result.Last();
-        Assert.Equal(_user.Id, firstReportItem.UserId);
-        Assert.Equal(user1.Id, secondReportItem.UserId);
-        Assert.Equal(user2.Id, thirdReportItem.UserId);
+        mainUserItem = result.Single(item => item.UserId == _user.Id);
+        user1Item = result.Single(item => item.UserId == user1.Id);
+        user2Item = result.Single(item => item.UserId == user2.Id);
+
+        AssertDurationHours(24, mainUserItem.Duration);
+        AssertDurationHours(15, user1Item.Duration);
+        AssertDurationHours(12, user2Item.Duration);
         
-        AssertDurationHours(24, firstReportItem.Duration);
-        AssertDurationHours(15, secondReportItem.Duration);
-        AssertDurationHours(12, thirdReportItem.Duration);
-        
-        Assert.NotEmpty(firstReportItem.Email);
+        Assert.NotEmpty(mainUserItem.Email);
     }
     
     [Fact]
@@ -190,17 +184,14 @@ public class GetReportByUserTest: BaseTest
         );
         Assert.Equal(2, result.Count);
         
-        var firstReportItem = result.First();
-        var secondReportItem = result.Last();
+        var user1Item = result.Single(item => item.UserId == user1.Id);
+        var user2Item = result.Single(item => item.UserId == user2.Id);
 
-        Assert.Equal(user1.Id, firstReportItem.UserId);
-        Assert.Equal(user2.Id, secondReportItem.UserId);
+        AssertDurationHours(15, user1Item.Duration);
+        AssertDurationHours(12, user2Item.Duration);
         
-        AssertDurationHours(15, firstReportItem.Duration);
-        AssertDurationHours(12, secondReportItem.Duration);
-        
-        Assert.Equal(180, firstReportItem.Amount);
-        Assert.Equal(0, secondReportItem.Amount);
+        Assert.Equal(180, user1Item.Amount);
+        Assert.Equal(0, user2Item.Amount);
     }
 
     private static void AssertDurationHours(double expectedHours, TimeSpan actualDuration)
