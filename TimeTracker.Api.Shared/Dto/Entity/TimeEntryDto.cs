@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Common.Attributes;
 using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Business.Extensions;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
 
@@ -13,10 +15,6 @@ public class TimeEntryDto: BaseDto
     public decimal? HourlyRate { get; set; }
     
     public bool IsBillable { get; set; }
-    
-    public DateTime StartTime { get; set; }
-    
-    public DateTime? EndTime { get; set; }
 
     public bool IsSynced { get; set; }
     
@@ -25,6 +23,26 @@ public class TimeEntryDto: BaseDto
     public UserDto User { get; set; }
     
     public TaskDto? Task { get; set; }
+    
+    #region Time
+
+    [NonConvertibleDateTime]
+    public DateTime StartTime
+    {
+        get;
+        set => field = value.ToTimeZone(TimeZone);
+    }
+
+    [NonConvertibleDateTime]
+    public DateTime? EndTime
+    {
+        get;
+        set => field = value.ToTimeZone(TimeZone);
+    }
+
+    public string TimeZone { get; set; }
+    
+    #endregion
     
     public bool IsActive => EndTime == null;
     

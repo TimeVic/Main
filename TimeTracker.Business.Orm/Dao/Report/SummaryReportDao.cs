@@ -26,8 +26,8 @@ public partial class SummaryReportDao: BaseDao, ISummaryReportDao
     {
         return await Session.CreateSQLQuery(ReadSqlQuery(queryPath))
             .SetParameter("workspaceId", workspaceId)
-            .SetParameter("startDate", startDate.Date)
-            .SetParameter("endDate", endDate.Date)
+            .SetParameter("startDate", startDate)
+            .SetParameter("endDate", endDate)
             .SetResultTransformer(Transformers.AliasToBean<T>())
             .ListAsync<T>();
     }

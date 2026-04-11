@@ -14,7 +14,7 @@ from time_entries te
          cross join lateral fn_split_time_entry_by_day(
         te.start_time,
             te.end_time,
-            w.time_zone
+        w.time_zone
         ) as x
 where te.workspace_id = :workspaceId
   and x.day >= cast(:startDate as date)

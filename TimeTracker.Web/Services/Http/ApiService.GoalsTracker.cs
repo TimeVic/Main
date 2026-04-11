@@ -1,7 +1,6 @@
 ﻿using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker;
-using TimeTracker.Web.Core.Exceptions;
 
 namespace TimeTracker.Web.Services.Http
 {

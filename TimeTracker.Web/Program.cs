@@ -19,6 +19,7 @@ using TimeTracker.Web.Services.Messaging;
 using TimeTracker.Web.Services.Notification;
 using ToastService = TimeTracker.Web.Services.UI.ToastService;
 using LumexUI.Extensions;
+using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.UI.Modal;
 
 var currentAssembly = typeof(Program).Assembly;    
@@ -89,6 +90,7 @@ builder.Services.AddScoped<ToastService>();
 builder.Services.AddScoped<FcmService>();
 builder.Services.AddScoped<MessagingWebSocketClientService>();
 builder.Services.AddScoped<ModalDialogService>();
+builder.Services.AddScoped<UserTimeZoneProviderService>();
 
 // Lumex UI
 builder.Services.AddLumexServices();
