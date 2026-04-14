@@ -12,9 +12,22 @@ public partial class PaymentsTableBlock
     public IState<PaymentState> _state { get; set; }
 
     private bool _isLoading => _state.Value.IsListLoading;
+    
+    private PaymentDto? _paymentToDelete;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Dispatcher.Dispatch(new LoadPaymentListAction(true));
+    }
 
     private Task OnRowClickHandler(DataGridRowClickEventArgs<PaymentDto> arg)
     {
         throw new NotImplementedException();
+    }
+
+    private void OnDeletePayment()
+    {
+        Dispatcher.Dispatch(new DeletePaymentAction(_paymentToDelete!.Id));
     }
 }

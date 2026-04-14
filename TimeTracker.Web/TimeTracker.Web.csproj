@@ -101,7 +101,6 @@
       <Folder Include="Ignore\Members\" />
       <Folder Include="Store\Dashboard\Effects\" />
       <Folder Include="Ui\" />
-      <Folder Include="Ui\Pages\Dashboard\Payments\Parts\Modals\" />
       <Folder Include="Ui\Pages\Dashboard\Shared\Modals\" />
       <Folder Include="Ui\Pages\Dashboard\Shared\TimeEntry\List\" />
       <Folder Include="wwwroot\css\" />

@@ -49,7 +49,7 @@ public class CustomHttpClient
         {
             data ??= new { };
             request.Content = new StringContent(
-                JsonHelper.SerializeToString(data, DateTimeZoneHandling.RoundtripKind), 
+                JsonHelper.SerializeToString(data, DateTimeZoneHandling.Utc), 
                 System.Text.Encoding.UTF8, 
                 "application/json"
             );

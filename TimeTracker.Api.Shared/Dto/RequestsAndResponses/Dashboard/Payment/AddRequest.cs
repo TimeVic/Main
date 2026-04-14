@@ -16,7 +16,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment
         public Guid ProjectId { get; set; }
         
         [Required]
-        public DateTime PaymentTime { get; set; } = DateTime.Now;
+        public DateTime PaymentTime { get; set; }
     
         [StringLength(512)]
         public string? Description { get; set; }

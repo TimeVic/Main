@@ -8,4 +8,6 @@ public partial class PaymentsPage
 {
     [Inject]
     public IState<PaymentState> _state { get; set; }
+
+    private bool _isShowAddPaymentModal = false;
 }

@@ -15,4 +15,6 @@ public record struct SetIsListLoading(bool IsLoading);
 
 public record struct DeletePaymentAction(Guid PaymentId);
 
+public record struct AddPaymentAction(AddRequest Request);
+
 public record struct RemovePaymentListItemAction(Guid PaymentId);
