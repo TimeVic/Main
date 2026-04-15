@@ -1,0 +1,23 @@
+@using Fluxor
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Store.Auth
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<span class="amount-display @Class">
+    <span>@FormattedAmount</span>
+</span>
+
+@code {
+    [Inject]
+    public IState<AuthState> AuthState { get; set; }
+
+    [Parameter]
+    public decimal Amount { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    private string FormattedAmount => AuthState.Value.Workspace != null
+        ? $"{Amount.ToMoneyFormat()} {AuthState.Value.Workspace.Currency.Symbol}"
+        : Amount.ToMoneyFormat();
+}

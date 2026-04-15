@@ -1,4 +1,5 @@
 ﻿@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Ui.Shared.Components
 
 @inherits BaseReactiveComponent
 
@@ -18,7 +19,9 @@
             <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Amount</p>
         </LumexCardHeader>
         <LumexCardBody>
-            <p class="text-2xl font-semibold text-slate-900">@_totalAmount.ToMoneyFormat()</p>
+            <p class="text-2xl font-semibold text-slate-900">
+                <AmountDisplay Amount="@_totalAmount"/>
+            </p>
             <p class="mt-1 text-sm text-slate-500">Billable value of filtered entries</p>
         </LumexCardBody>
     </LumexCard>
