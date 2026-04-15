@@ -4,6 +4,7 @@
 @using LumexUI.Common
 @using TimeTracker.Web.Store.Client
 @using TimeTracker.Web.Store.Project
+@using TimeTracker.Web.Ui.Shared.Components
 
 @code {
 
@@ -21,7 +22,7 @@
     </PropertyColumn>
     <PropertyColumn Title="Amount" Property="@(p => p.Amount)">
         <Content>
-            @context.Amount.ToMoneyFormat()
+            <AmountDisplay Amount="@context.Amount"/>
         </Content>
     </PropertyColumn>
 </LumexDataGrid>
