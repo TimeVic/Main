@@ -1,0 +1,46 @@
+@typeparam TValue
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Linq.Expressions
+
+@if (CurrentEditContext != null && For != null)
+{
+    @foreach (var message in CurrentEditContext.GetValidationMessages(_fieldIdentifier))
+    {
+        <p class="mt-2 flex items-start gap-2 text-sm text-red-600">
+            <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+            <span>@message</span>
+        </p>
+    }
+}
+
+@code {
+    [CascadingParameter] 
+    private EditContext? CurrentEditContext { get; set; }
+
+    [Parameter] 
+    public Expression<Func<TValue>> For { get; set; } = default!;
+
+    private FieldIdentifier _fieldIdentifier;
+
+    protected override void OnParametersSet()
+    {
+        if (CurrentEditContext != null && For != null)
+        {
+            _fieldIdentifier = FieldIdentifier.Create(For);
+            CurrentEditContext.OnValidationStateChanged += HandleValidationStateChanged;
+        }
+    }
+
+    private void HandleValidationStateChanged(object? sender, ValidationStateChangedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        if (CurrentEditContext != null)
+        {
+            CurrentEditContext.OnValidationStateChanged -= HandleValidationStateChanged;
+        }
+    }
+}

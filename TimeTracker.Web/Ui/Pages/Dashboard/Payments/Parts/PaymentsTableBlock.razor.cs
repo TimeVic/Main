@@ -18,7 +18,6 @@ public partial class PaymentsTableBlock
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        Dispatcher.Dispatch(new LoadPaymentListAction(true));
     }
 
     private Task OnRowClickHandler(DataGridRowClickEventArgs<PaymentDto> arg)

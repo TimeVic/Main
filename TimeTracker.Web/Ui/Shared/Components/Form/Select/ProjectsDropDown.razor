@@ -10,9 +10,10 @@
         <LumexDropdownTrigger>
             <LumexButton 
                 FullWidth="true"
-                Color="ThemeColor.Info" 
+                Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)" 
                 Variant="Variant.Outlined"
                 Disabled="Disabled"
+                Class="@SelectClass"
             >
                 @if (_selectedItem is null)
                 {

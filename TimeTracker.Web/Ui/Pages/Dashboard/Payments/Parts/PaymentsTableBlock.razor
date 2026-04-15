@@ -21,7 +21,7 @@
     <LumexUI.PropertyColumn Title="Client" Property="@(p => p.Client)">
         <Content>
             <div class="font-medium text-slate-900">
-                @context.Client
+                @context.Client?.Name
             </div>
             @if (context.Project != null)
             {

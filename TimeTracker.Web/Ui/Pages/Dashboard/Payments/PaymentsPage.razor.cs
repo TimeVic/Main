@@ -8,6 +8,15 @@ public partial class PaymentsPage
 {
     [Inject]
     public IState<PaymentState> _state { get; set; }
+    
+    [Inject]
+    public IDispatcher _dispatcher { get; set; }
 
     private bool _isShowAddPaymentModal = false;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _dispatcher.Dispatch(new LoadPaymentListAction(true));
+    }
 }

@@ -1,6 +1,7 @@
 ﻿@using LumexUI
 @using LumexUI.Common
 @using LumexUI.Shared.Icons
+@using TimeTracker.Web.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
@@ -24,6 +25,7 @@
                     <div>
                         <ClientsDropDown 
                             Value="model.ClientId" 
+                            ValueExpression="() => model.ClientId"
                             SelectedItemChanged="OnChangeClient"/>
                     </div>
                     <div>
@@ -31,6 +33,7 @@
                             Label="Project"
                             ClientId="model.ClientId" 
                             Value="model.ProjectId"
+                            ValueExpression="() => model.ProjectId"
                             SelectedItemChanged="OnProjectSelected"
                             Disabled="@(model.ClientId == Guid.Empty)"/>
                     </div>
@@ -41,6 +44,7 @@
                             Value="@model.PaymentTime"
                             ValueExpression="() => model.PaymentTime"
                             Label="Payment Date"/>
+                        <CustomValidationMessage For="@(() => model.PaymentTime)"/>
                     </div>
                     <div>
                         <InputNumericField
@@ -49,6 +53,7 @@
                             Required="true"
                             @bind-Value="@model.Amount"
                             Label="Amount"/>
+                        <CustomValidationMessage For="@(() => model.Amount)" />
                     </div>
                     <div class="md:col-span-2">
                         <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Description</label>
@@ -58,6 +63,8 @@
                             placeholder="Optional payment note"/>
                     </div>
                 </div>
+                
+                <CustomValidationSummary />
             </EditForm>
         </LumexModalBody>
         <LumexModalFooter>

@@ -12,7 +12,8 @@
         Placeholder="@_placeholder"
         LabelPlacement="@LabelPlacement.Outside"
         ValueChanged="dto => OnValueChanged(dto)"
-        Value="_selectedItem">
+        Value="_selectedItem"
+        Invalid="@IsInvalid">
         <ChildContent>
             @foreach (var character in _list)
             {
