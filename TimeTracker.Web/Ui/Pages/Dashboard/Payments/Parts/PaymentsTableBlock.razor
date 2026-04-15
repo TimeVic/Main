@@ -1,5 +1,6 @@
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Web.Ui.Shared.Components
 @using TimeTracker.Web.Ui.Shared.Components.Dialogs
 @inherits BaseReactiveComponent
 
@@ -27,6 +28,14 @@
             {
                 <div class="mt-1 max-w-xl text-slate-500">@context.Project?.Name</div>    
             }
+        </Content>
+    </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn 
+        Title="Amoun"
+        Property="@(p => p.Amount)"
+        Sortable="@true">
+        <Content>
+            <AmountDisplay Amount="@context.Amount"></AmountDisplay>
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn 
