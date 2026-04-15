@@ -10,6 +10,6 @@ public class GetListRequest: IRequest<GetListResponse>
     [IsPositive]
     public int Page { get; set; }
     
-    [Required]
+    [RequiredNonEmpty]
     public Guid WorkspaceId { get; set; }
 }

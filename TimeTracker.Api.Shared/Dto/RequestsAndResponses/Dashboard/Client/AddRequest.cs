@@ -7,10 +7,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client
 {
     public class AddRequest : IRequest<ClientDto>
     {
-        [Required]
+        [RequiredNonEmpty]
         public Guid WorkspaceId { get; set; }
         
-        [Required]
+        [RequiredNonEmpty]
         [StringLength(256, MinimumLength = 2)]
         public string Name { get; set; }
     }
