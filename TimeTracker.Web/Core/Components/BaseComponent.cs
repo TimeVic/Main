@@ -1,6 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
@@ -29,6 +30,9 @@ public class BaseComponent: ComponentBase
     
     [Inject] 
     protected ToastService ToastService { get; set; }
+    
+    [Inject]
+    public UserDateTimeProviderService UserDateTimeProvider { get; set; }
     
     private readonly List<Action> _actionsToRunAfterRender = [];
     protected override Task OnAfterRenderAsync(bool firstRender)

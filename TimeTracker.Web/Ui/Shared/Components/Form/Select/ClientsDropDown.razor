@@ -13,9 +13,11 @@
     <LumexDropdown>
         <LumexDropdownTrigger>
             <LumexButton
+                Disabled="Disabled"
                 FullWidth="true"
-                Color="ThemeColor.Info"
-                Variant="Variant.Outlined">
+                Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)"
+                Variant="Variant.Outlined"
+                Class="@SelectClass">
                 @if (_selectedItem is null)
                 {
                     @_placeholder

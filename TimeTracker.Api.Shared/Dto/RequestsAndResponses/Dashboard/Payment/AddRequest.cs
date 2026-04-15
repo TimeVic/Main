@@ -7,16 +7,19 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Payment
 {
     public class AddRequest : IRequest<PaymentDto>
     {
-        [Required]
+        [RequiredNonEmpty]
         public Guid WorkspaceId { get; set; }
         
-        [Required]
+        [Display(Name = "Client")]
+        [RequiredNonEmpty]
         public Guid ClientId { get; set; }
         
+        [Display(Name = "Project")]
         public Guid ProjectId { get; set; }
         
         [Required]
-        public DateTime PaymentTime { get; set; } = DateTime.Now;
+        [Display(Name = "Payment Time")]
+        public DateTime PaymentTime { get; set; }
     
         [StringLength(512)]
         public string? Description { get; set; }

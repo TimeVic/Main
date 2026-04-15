@@ -1,4 +1,4 @@
-@inherits InputBase<TItem>
+@inherits InputBase<TItem?>
 @using System.ComponentModel
 @using LumexUI.Common
 
@@ -6,7 +6,7 @@
 @typeparam TItem where TItem : struct
 
 <LumexNumbox
-    TValue="TItem"
+    TValue="TItem?"
     Value="_numericValue"
     ValueChanged="OnChangedValue"
     Class="@Class"
@@ -73,7 +73,7 @@
     [Parameter]
     public string? Step { get; set; }
     
-    public TItem _numericValue { get; set; }
+    public TItem? _numericValue { get; set; }
     
     private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
 
@@ -83,7 +83,7 @@
     
     protected override void OnParametersSet()
     {
-        _numericValue = CurrentValue;
+        _numericValue = CurrentValue != null ? CurrentValue : default;
     }
     
     protected override async Task OnInitializedAsync()
@@ -91,7 +91,7 @@
         await base.OnInitializedAsync();
     }
     
-    private Task OnChangedValue(TItem newVal)
+    private Task OnChangedValue(TItem? newVal)
     {
         CurrentValue = newVal;
         return Task.CompletedTask;
@@ -99,7 +99,7 @@
 
     protected override bool TryParseValueFromString(
         string? value,
-        out TItem result,
+        out TItem? result,
         out string? validationErrorMessage)
     {
         if (TryParse(value, out result))
@@ -112,13 +112,13 @@
         return false;
     }
     
-    private static bool TryParse(string? input, out TItem value)
+    private static bool TryParse(string? input, out TItem? value)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                value = default;
+                value = null;
                 return true; 
             }
 
@@ -127,7 +127,7 @@
 
             var converted = converter.ConvertFromString(input);
 
-            value = (TItem)converted;
+            value = (TItem?)converted;
             return true;
         }
         catch

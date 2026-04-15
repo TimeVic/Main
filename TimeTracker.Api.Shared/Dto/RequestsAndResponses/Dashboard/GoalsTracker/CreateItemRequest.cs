@@ -8,13 +8,13 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker
 {
     public class CreateItemRequest : IRequest<GoalsTrackerItemDto>
     {
-        [Required]
+        [RequiredNonEmpty]
         public Guid GoalsTrackerId { get; set; }
 
         [IsPositive]
         public int NumberOfTimes { get; set; } = 1;
 
-        [Required]
+        [RequiredNonEmpty]
         [StringLength(256, MinimumLength = 1)]
         public string Name { get; set; } = string.Empty;
     }

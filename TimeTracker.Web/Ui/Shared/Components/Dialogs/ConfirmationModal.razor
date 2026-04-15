@@ -129,13 +129,13 @@
 
     private async Task OnCancelClicked()
     {
-        await modal.CloseAsync();
         await OnCancel.InvokeAsync();
+        await modal.CloseAsync();
     }
 
     private async Task OnConfirmClicked()
     {
-        await modal.CloseAsync();
         await OnConfirm.InvokeAsync();
+        await modal.CloseAsync();
     }
 }

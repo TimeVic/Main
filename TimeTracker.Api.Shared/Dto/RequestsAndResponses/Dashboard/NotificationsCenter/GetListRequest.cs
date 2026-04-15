@@ -6,7 +6,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notification
 {
     public class GetListRequest : IRequest<GetListResponse>
     {
-        [Required]
+        [RequiredNonEmpty]
         public Guid WorkspaceId { get; set; }
 
         [Required]

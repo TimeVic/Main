@@ -47,61 +47,63 @@
     @*     </div> *@
     @* </div> *@
 
-    <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-                <p class="text-sm font-semibold text-slate-900">My time entries</p>
-                <p class="text-sm text-slate-500">Compact rows grouped by day with daily totals and page-based navigation.</p>
+    <LumexCard>
+        <LumexCardBody>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm font-semibold text-slate-900">My time entries</p>
+                    <p class="text-sm text-slate-500">Compact rows grouped by day with daily totals and page-based navigation.</p>
+                </div>
+                @* <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">@CurrentUserTimeEntries.Count() entries</span> *@
             </div>
-            @* <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">@CurrentUserTimeEntries.Count() entries</span> *@
-        </div>
 
-        <div class="mt-5 space-y-4">
-            @if (_groupedList.Any())
-            {
-                foreach (var groupedItem in _groupedList)
+            <div class="mt-5 space-y-4">
+                @if (_groupedList.Any())
                 {
-                    var totalDuration = TimeSpan.FromTicks(
-                        groupedItem.Sum(item => item.Duration.Ticks)
-                    );
-                    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                        <div class="flex flex-col gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
-                                <p class="text-sm font-semibold text-slate-900">@groupedItem.Key.ToLongDateString()</p>
-                                <p class="text-xs text-slate-500">@groupedItem.Count() entries · Edit or delete rows inline</p>
+                    foreach (var groupedItem in _groupedList)
+                    {
+                        var totalDuration = TimeSpan.FromTicks(
+                            groupedItem.Sum(item => item.Duration.Ticks)
+                        );
+                        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                            <div class="flex flex-col gap-2 border-b border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-900">@groupedItem.Key.ToLongDateString()</p>
+                                    <p class="text-xs text-slate-500">@groupedItem.Count() entries · Edit or delete rows inline</p>
+                                </div>
+                                <div class="text-left sm:text-right">
+                                    <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Total time</p>
+                                    <p class="text-sm font-semibold text-slate-900">@_timeParsingService.TimeSpanToTimeString(totalDuration,  true)</p>
+                                </div>
                             </div>
-                            <div class="text-left sm:text-right">
-                                <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Total time</p>
-                                <p class="text-sm font-semibold text-slate-900">@_timeParsingService.TimeSpanToTimeString(totalDuration,  true)</p>
+                
+                            <div class="divide-y divide-slate-100">
+                                @foreach (var entry in groupedItem)
+                                {
+                                    <MyTimeEntryCard 
+                                        CurrentTimeZone="@(AuthState.Value.Workspace?.TimeZone ?? TimeZoneInfo.Local.Id)"
+                                        Entry="@entry"
+                                        OnEdit="OnEditTimeEntry"
+                                        OnClone="OnCloneTimeEntry"
+                                        OnOpenTask="(entry) => _taskToEdit = entry.Task"
+                                        OnDelete="(entry) => _timeEntryToDelete = entry"
+                                    />
+                                }
                             </div>
                         </div>
-            
-                        <div class="divide-y divide-slate-100">
-                            @foreach (var entry in groupedItem)
-                            {
-                                <MyTimeEntryCard 
-                                    CurrentTimeZone="@(AuthState.Value.Workspace?.TimeZone ?? TimeZoneInfo.Local.Id)"
-                                    Entry="@entry"
-                                    OnEdit="OnEditTimeEntry"
-                                    OnClone="OnCloneTimeEntry"
-                                    OnOpenTask="(entry) => _taskToEdit = entry.Task"
-                                    OnDelete="(entry) => _timeEntryToDelete = entry"
-                                />
-                            }
-                        </div>
+                    }
+                    <TPaginator
+                        CurrentPage="@_state.Value.SelectedPage"
+                        CurrentPageChanged="OnPageChanged"
+                        TotalPages="@_state.Value.TotalPages" />
+                }
+                else
+                {
+                    <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                        No time entries found for this user yet.
                     </div>
                 }
-                <TPaginator
-                    CurrentPage="@_state.Value.SelectedPage"
-                    CurrentPageChanged="OnPageChanged"
-                    TotalPages="@_state.Value.TotalPages" />
-            }
-            else
-            {
-                <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-                    No time entries found for this user yet.
-                </div>
-            }
-        </div>
-    </div>
+            </div>
+        </LumexCardBody>
+    </LumexCard>
 </section>

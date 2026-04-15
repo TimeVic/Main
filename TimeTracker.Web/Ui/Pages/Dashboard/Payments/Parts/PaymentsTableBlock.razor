@@ -1,9 +1,14 @@
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity
-@using TimeTracker.Api.Shared.Dto.Entity.Task
-@using TimeTracker.Business.Extensions
-@using TimeTracker.Web.Core.Extensions.Enums
+@using TimeTracker.Web.Ui.Shared.Components.Dialogs
 @inherits BaseReactiveComponent
+
+@if (_paymentToDelete != null)
+{
+    <ConfirmationModal
+        OnClose="@(() => _paymentToDelete = null)"
+        OnConfirm="OnDeletePayment"/>
+}
 
 <LumexDataGrid
     T="PaymentDto"
@@ -16,7 +21,7 @@
     <LumexUI.PropertyColumn Title="Client" Property="@(p => p.Client)">
         <Content>
             <div class="font-medium text-slate-900">
-                @context.Client
+                @context.Client?.Name
             </div>
             @if (context.Project != null)
             {
@@ -39,11 +44,12 @@
             <div @onclick:stopPropagation="true">
                 <CustomButton
                     Variant="Variant.Outlined"
-                    Color="ThemeColor.Default"
+                    Color="ThemeColor.Danger"
+                    OnClick="() => _paymentToDelete = context"
                     IconOnly="true"
                     Size="Size.Small">
                     <StartContent>
-                        <i class="fa-solid fa-stop text-xs"></i>
+                        <i class="fa-regular fa-trash-can"></i>
                     </StartContent>
                 </CustomButton>
             </div>

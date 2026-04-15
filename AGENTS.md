@@ -128,3 +128,8 @@ dotnet test ./TimeTracker.Tests.Unit.Business
 
 `appsettings.json` → `appsettings.{ASPNETCORE_ENVIRONMENT}.json` → `appsettings.Local.json` (gitignored for local secrets). DB connection key is `ConnectionStrings:DefaultConnection`. Set `Hibernate:IsShowSql: true` to log SQL queries.
 
+## Additional requirenments
+
+ - Write all comments and notes in English
+ - Comments like " @* Added: Invalid *@" non needed(with simple action description)
+

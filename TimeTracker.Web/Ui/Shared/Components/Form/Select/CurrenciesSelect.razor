@@ -14,7 +14,8 @@
             Placeholder="@_placeholder"
             LabelPlacement="@LabelPlacement.Inside"
             ValueChanged="@OnValueChanged"
-            Value="@_selectedItem">
+            Value="@_selectedItem"
+            Invalid="@IsInvalid">
             @foreach (var item in _list)
             {
                 <LumexSelectItem 

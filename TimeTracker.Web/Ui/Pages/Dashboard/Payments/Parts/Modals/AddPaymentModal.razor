@@ -1,0 +1,80 @@
+﻿@using LumexUI
+@using LumexUI.Common
+@using LumexUI.Shared.Icons
+@using TimeTracker.Web.Ui.Shared.Components.Form.Validation
+
+@inherits BaseReactiveComponent
+
+<LumexModal Open="IsOpened" OnClose="@OnCloseModal" @ref="modal">
+    <LumexModalContent>
+        <LumexModalHeader Class="flex items-center gap-3">
+            <div class="size-10 flex items-center justify-center bg-default-100 rounded-full">
+                <i class="fa-solid fa-plus text-xl"></i>
+            </div>
+            Add payment list
+        </LumexModalHeader>
+        <LumexModalBody>
+            <EditForm
+                Context="form"
+                @ref="_form"
+                Model="@model"
+                novalidate>
+                <DataAnnotationsValidator/>
+
+                <div class="grid gap-4 md:grid-cols-2">
+                    <div>
+                        <ClientsDropDown 
+                            Value="model.ClientId" 
+                            ValueExpression="() => model.ClientId"
+                            SelectedItemChanged="OnChangeClient"/>
+                    </div>
+                    <div>
+                        <ProjectsDropDown 
+                            Label="Project"
+                            ClientId="model.ClientId" 
+                            Value="model.ProjectId"
+                            ValueExpression="() => model.ProjectId"
+                            SelectedItemChanged="OnProjectSelected"
+                            Disabled="@(model.ClientId == Guid.Empty)"/>
+                    </div>
+                    <div>
+                        <InputDateTimeField
+                            Size="Size.Small"
+                            Required="true"
+                            Value="@model.PaymentTime"
+                            ValueExpression="() => model.PaymentTime"
+                            Label="Payment Date"/>
+                        <CustomValidationMessage For="@(() => model.PaymentTime)"/>
+                    </div>
+                    <div>
+                        <InputNumericField
+                            TItem="decimal"
+                            Size="Size.Small"
+                            Required="true"
+                            @bind-Value="@model.Amount"
+                            Label="Amount"/>
+                        <CustomValidationMessage For="@(() => model.Amount)" />
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Description</label>
+                        <InputTextArea 
+                            @bind-Value="model.Description" 
+                            class="min-h-[120px] w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" 
+                            placeholder="Optional payment note"/>
+                    </div>
+                </div>
+                
+                <CustomValidationSummary />
+            </EditForm>
+        </LumexModalBody>
+        <LumexModalFooter>
+            <CustomButton
+                FullWidth="@true"
+                OnClick="@Submit"
+                Color="@ThemeColor.Primary"
+                Radius="@Radius.Full">
+                Add
+            </CustomButton>
+        </LumexModalFooter>
+    </LumexModalContent>
+</LumexModal>

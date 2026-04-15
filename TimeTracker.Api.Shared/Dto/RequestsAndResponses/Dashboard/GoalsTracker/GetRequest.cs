@@ -7,7 +7,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker
 
 public class GetRequest : IRequest<GoalsTrackerDto>
 {
-    [Required]
+    [RequiredNonEmpty]
     public Guid WorkspaceId { get; set; }
     
     [Required]

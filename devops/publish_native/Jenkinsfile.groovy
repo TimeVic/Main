@@ -123,17 +123,20 @@ node('build-node') {
 
         def dbName = ''
         def dbPort = ''
+        def dbHost = ''
         if (effectiveEnvironment == 'Production')
         {
             envVariables.put('App__FrontendUrl', 'https://timevic.com')
             dbName = 'timevic'
-            dbPort = '5434'
+            dbPort = '5432'
+            dbHost = '192.168.88.41'
         }
         else if (effectiveEnvironment == 'Development')
         {
             envVariables.put('App__FrontendUrl', 'https://dev.timevic.com')
             dbName = 'timevic_dev'
             dbPort = '5432'
+            dbHost = '192.168.88.42'
         }
 
         // Common
@@ -152,7 +155,7 @@ node('build-node') {
         ]) {
             envVariables.put(
                 'ConnectionStrings__DefaultConnection',
-                "User ID=${USER_NAME};Password=${PASSWORD};Host=192.168.88.31;Port=${dbPort};Database=${dbName};Pooling=true;"
+                "User ID=${USER_NAME};Password=${PASSWORD};Host=${dbHost};Port=${dbPort};Database=${dbName};Pooling=true;"
             )
         }
         withCredentials([string(credentialsId: "timevic_${environmentKey}_user_jwt", variable: 'AUTH_SECRET')]) {

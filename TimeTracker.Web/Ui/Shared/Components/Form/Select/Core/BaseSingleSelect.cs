@@ -3,11 +3,16 @@ using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Web.Constants.Ui;
 using TimeTracker.Web.Core.Components;
 using TimeTracker.Web.Core.Helpers;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Linq.Expressions;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select.Core;
 
-public abstract class BaseSingleSelect<T>: BaseReactiveComponent where T : BaseDto
+public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable where T : BaseDto
 {
+    [CascadingParameter]
+    protected EditContext? CurrentEditContext { get; set; }
+    
     [Parameter]
     public DropDownType Type { get; set; } = DropDownType.Select; 
     
@@ -34,10 +39,18 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent where T : BaseD
             {
                 _selectedId = value.ToString();
                 UpdateSelectedItem();
+                // Notify EditContext that the field has changed
+                if (CurrentEditContext != null && FieldIdentifier.Model != null)
+                {
+                    CurrentEditContext.NotifyFieldChanged(FieldIdentifier);
+                }
             }
         }
     }
 
+    [Parameter]
+    public Expression<Func<Guid>>? ValueExpression { get; set; }
+    
     [Parameter]
     public string Placeholder { get; set; } = "Select item";
     
@@ -60,16 +73,45 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent where T : BaseD
     protected ICollection<T> _list = new List<T>();
     protected string? _selectedId = null;
     protected string? _placeholder => _selectedItem is null ? Placeholder : null;
+    
+    protected FieldIdentifier FieldIdentifier;
+    
+    protected bool IsInvalid => CurrentEditContext != null 
+                                 && FieldIdentifier.Model != null 
+                                 && CurrentEditContext.GetValidationMessages(FieldIdentifier).Any();
 
     protected string SelectClass
     {
         get
         {
+            var classList = new List<string>();
             if (FullWidth && Clearable)
-                return "w-select-w-100";
-            if (FullWidth)
-                return "w-100";
-            return "";        }
+                classList.Add("w-select-w-100");
+            else if (FullWidth)
+                classList.Add("w-100");
+            
+            if (IsInvalid)
+            {
+                classList.Add("invalid");
+            }
+            
+            return string.Join(" ", classList);
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (CurrentEditContext != null && ValueExpression != null)
+        {
+            FieldIdentifier = FieldIdentifier.Create(ValueExpression);
+            CurrentEditContext.OnValidationStateChanged += HandleValidationStateChanged;
+        }
+    }
+
+    private void HandleValidationStateChanged(object? sender, ValidationStateChangedEventArgs e)
+    {
+        StateHasChanged();
     }
 
     protected void OnClear()
@@ -83,10 +125,23 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent where T : BaseD
         if (_selectedItem != item)
         {
             UpdateSelectedItem();
-            Debug.Log(11111, _selectedItem);
             SelectedItemChanged.InvokeAsync(_selectedItem);
+            
+            // Notify EditContext that the field has changed
+            if (CurrentEditContext != null && FieldIdentifier.Model != null)
+            {
+                CurrentEditContext.NotifyFieldChanged(FieldIdentifier);
+            }
         }
     }
     
     protected abstract void UpdateSelectedItem();
+
+    public void Dispose()
+    {
+        if (CurrentEditContext != null)
+        {
+            CurrentEditContext.OnValidationStateChanged -= HandleValidationStateChanged;
+        }
+    }
 }
