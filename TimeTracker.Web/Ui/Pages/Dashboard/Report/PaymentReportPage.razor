@@ -1,95 +1,90 @@
-﻿@page "/board/report/payments"
-@using TimeTracker.Api.Shared.Dto.Model.Report
+@page "/board/report/payments"
+@using LumexUI.Common
 @using TimeTracker.Business.Extensions
-@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.LayoutParts
-@using TimeTracker.Web.Ui.Pages.Dashboard.Shared
+@using TimeTracker.Web.Ui.Shared.Components
+@using Layout = TimeTracker.Web.Ui.Pages.Dashboard.Shared.Layout
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-@* <BodyLayout Title="Payments report"> *@
-@*     <FluentToolbar class="mb-2 w-100" Orientation="Orientation.Horizontal"> *@
-@*         <FluentDatePicker *@
-@*             Label="Date start" *@
-@*             Value="@_filterState.EndDate" *@
-@*             ValueChanged="@OnChangeDateEnd"/> *@
-@*     </FluentToolbar> *@
-@* *@
-@*     @if (_state.Value.IsLoading) *@
-@*     { *@
-@*         <FluentProgressRing/> *@
-@*     } *@
-@*     else *@
-@*     { *@
-@*         <FluentCard> *@
-@*             <FluentStack Orientation="Orientation.Vertical"> *@
-@*                 @if (!_grouppedItems.Any()) *@
-@*                 { *@
-@*                     <FluentLabel *@
-@*                         Typo="Typography.H2" *@
-@*                         class="mt-4"> *@
-@*                         The report is empty *@
-@*                     </FluentLabel> *@
-@*                 } *@
-@*                 @foreach (var groupItem in _grouppedItems) *@
-@*                 { *@
-@*                     var clientId = groupItem.Key ?? Guid.Empty; *@
-@*                     var clientDataItem = groupItem.First(); *@
-@*                     var clientName = clientDataItem.ClientName; *@
-@*                     var clientAmount = clientDataItem.PaidAmountByClient; *@
-@*                     var unpaidAmount = GetClientUnpaidAmount(clientId); *@
-@*                     var totalAmount = GetClientTotalAmount(clientId); *@
-@*                     var totalDuration = GetTotalDuration(clientId); *@
-@* *@
-@*                     <FluentLabel Typo="Typography.H2"> *@
-@*                         @if (string.IsNullOrEmpty(clientName)) *@
-@*                         { *@
-@*                             clientName = "Other projects"; *@
-@*                         } *@
-@*                         @clientName *@
-@*                     </FluentLabel> *@
-@* *@
-@*                     <FluentDataGrid *@
-@*                         TGridItem="PaymentsReportItemDto" *@
-@*                         Class="w-100" *@
-@*                         Items="@groupItem.AsQueryable()"> *@
-@*                         <TemplateColumn Title="Project" Sortable="false"> *@
-@*                             @(string.IsNullOrEmpty(context.ProjectName) ? "-- No project name --" : context.ProjectName) *@
-@*                         </TemplateColumn> *@
-@*                         <TemplateColumn Title="TotalDuration" Sortable="false"> *@
-@*                             @context.TotalDuration.ToReadableShortString() *@
-@*                         </TemplateColumn> *@
-@*                         <TemplateColumn Title="Amount" Sortable="false"> *@
-@*                             @context.Amount.ToString("0.00") *@
-@*                         </TemplateColumn> *@
-@*                         <TemplateColumn Title="Paid" Sortable="false"> *@
-@*                             @context.PaidAmountByProject.ToString("0.00") *@
-@*                         </TemplateColumn> *@
-@*                     </FluentDataGrid> *@
-@* *@
-@*                     <FluentCard Class="mt-2"> *@
-@*                         <FluentGrid> *@
-@*                             <FluentGridItem> *@
-@*                                 Unpaid: *@
-@*                                 <b> *@
-@*                                     @((unpaidAmount > 0) ? "+" : string.Empty)@unpaidAmount.ToString("0.00") *@
-@*                                 </b> *@
-@*                             </FluentGridItem> *@
-@*                             <FluentGridItem> *@
-@*                                 Total: <b>@totalDuration.ToReadableShortString()</b> *@
-@*                             </FluentGridItem> *@
-@*                             <FluentGridItem> *@
-@*                                 Total: <b>@totalAmount.ToString("0.00")</b> *@
-@*                             </FluentGridItem> *@
-@*                             <FluentGridItem> *@
-@*                                 Total: <b>@clientAmount.ToString("0.00")</b> *@
-@*                             </FluentGridItem> *@
-@*                         </FluentGrid> *@
-@*                     </FluentCard> *@
-@* *@
-@*                     <hr/> *@
-@*                 } *@
-@*             </FluentStack> *@
-@*         </FluentCard> *@
-@*     } *@
-@* </BodyLayout> *@
+<LumexCard Class="mt-6 overflow-x-auto pb-2">
+    <LumexCardHeader>
+        <div class="flex flex-col gap-3">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Payments</p>
+                <h2 class="mt-2 text-xl font-semibold text-slate-900">Payments summary report</h2>
+            </div>
+            <div>
+                <LumexDatebox
+                    TValue="DateTime?"
+                    Value="@_filterState.EndDate"
+                    ValueChanged="@OnChangeDateEnd"
+                    Label="Date end"/>
+            </div>
+        </div>
+    </LumexCardHeader>
+    <LumexCardBody>
+        @if (_state.Value.IsLoading)
+        {
+            <div class="flex justify-center py-6">
+                <LumexSpinner Variant="@SpinnerVariant.DotsFade"/>
+            </div>
+        }
+        else if (!_grouppedItems.Any())
+        {
+            <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+                <text>Report is empty</text>
+            </div>
+        }
+        else
+        {
+            foreach (var groupItem in _grouppedItems)
+            {
+                var clientId = groupItem.Key ?? Guid.Empty;
+                var clientDataItem = groupItem.First();
+                var clientName = string.IsNullOrEmpty(clientDataItem.ClientName) ? "Other projects" : clientDataItem.ClientName;
+                var clientAmount = clientDataItem.PaidAmountByClient;
+                var unpaidAmount = GetClientUnpaidAmount(clientId);
+                var totalAmount = GetClientTotalAmount(clientId);
+                var totalDuration = GetTotalDuration(clientId);
+
+                <div class="mb-6">
+                    <h3 class="mb-3 text-base font-semibold text-slate-900">@clientName</h3>
+
+                    <LumexDataGrid 
+                        Loading="_state.Value.IsLoading"
+                        Data="@groupItem.AsQueryable()" 
+                        Shadow="Shadow.None">
+                        <PropertyColumn Title="Project" Property="@(p => p.ProjectName)">
+                            <Content>
+                                @(string.IsNullOrEmpty(context.ProjectName) ? "-- No project name --" : context.ProjectName)
+                            </Content>
+                        </PropertyColumn>
+                        <PropertyColumn Title="Duration" Property="@(p => p.TotalDuration)">
+                            <Content>
+                                @context.TotalDuration.ToReadableShortString()
+                            </Content>
+                        </PropertyColumn>
+                        <PropertyColumn Title="Amount" Property="@(p => p.Amount)">
+                            <Content>
+                                <AmountDisplay Amount="@context.Amount"/>
+                            </Content>
+                        </PropertyColumn>
+                        <PropertyColumn Title="Paid" Property="@(p => p.PaidAmountByProject)">
+                            <Content>
+                                <AmountDisplay Amount="@context.PaidAmountByProject"/>
+                            </Content>
+                        </PropertyColumn>
+                    </LumexDataGrid>
+
+                    <div class="mt-2 flex gap-6 rounded-lg bg-slate-50 px-4 py-3 text-sm text-slate-700">
+                        <span>Unpaid: <b>@((unpaidAmount > 0) ? "+" : string.Empty) <AmountDisplay Amount="@unpaidAmount"/></b></span>
+                        <span>Duration: <b>@totalDuration.ToReadableShortString()</b></span>
+                        <span>Total amount: <b><AmountDisplay Amount="@totalAmount"/></b></span>
+                        <span>Paid: <b><AmountDisplay Amount="@clientAmount"/></b></span>
+                    </div>
+                </div>
+            }
+        }
+    </LumexCardBody>
+</LumexCard>
