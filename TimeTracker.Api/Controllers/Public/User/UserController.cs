@@ -27,6 +27,20 @@ public class UserController : MainApiControllerBase
             .For<LoginResponseDto>()
             .With(request);
     
+    [HttpPost("login/magic")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> LoginMagic([FromBody] LoginMagicRequest request)
+        => this.RequestAsync(request);
+
+    [HttpPost("login/magic/verify")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> VerifyMagicToken([FromBody] VerifyMagicTokenRequest request)
+        => this.RequestAsync()
+            .For<LoginResponseDto>()
+            .With(request);
+
     [HttpPost("refresh-token")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
