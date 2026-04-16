@@ -34,7 +34,7 @@
                 <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Project</label>
                 <ProjectsDropDown
                     Value="@(_selectedProject?.Id ?? Guid.Empty)"
-                    FullWidth="true"
+                    FullWidth="false"
                     SelectedItemChanged="OnSelectedProject">
                 </ProjectsDropDown>
                 @* <p class="mt-1 text-xs text-slate-500">Grouped by client; projects without a client appear under “No client”.</p> *@
