@@ -8,7 +8,7 @@ namespace TimeTracker.Business.Services.Auth;
 public interface IAuthorizationService: IDomainService
 {
     Task<AuthResultDto> Login(string email, string password);
-    
+
     Task<AuthResultDto> Login(UserEntity user);
 
     Task<AuthResultDto> GenerateNewJwtToken(string accessTokenString, string previousJwtToken);
@@ -18,4 +18,8 @@ public interface IAuthorizationService: IDomainService
     Task<UserEntity?> GetCurrentLoggedInUser();
 
     Guid? GetCurrentLoggedInUserId();
+
+    Task<UserMagicTokenEntity> GenerateMagicToken(string email);
+
+    Task<AuthResultDto> LoginByMagicToken(string token);
 }

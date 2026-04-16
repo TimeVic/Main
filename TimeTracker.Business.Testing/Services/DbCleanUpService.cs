@@ -54,6 +54,7 @@ public class DbCleanUpService: IDbCleanUpService
             "goals_tracker_notes",
             "goals_trackers",
             
+            "user_magic_tokens",
             "workspace_setting_jiras",
             "stored_files",
             "tags",

@@ -9,6 +9,7 @@ using TimeTracker.Business.Dto.Auth;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Http;
+using TimeTracker.Business.Common.Exceptions.Common;
 
 namespace TimeTracker.Business.Services.Auth;
 
@@ -18,6 +19,7 @@ public class AuthorizationService: IAuthorizationService
     private readonly IJwtAuthService _jwtAuthService;
     private readonly IPasswordService _passwordService;
     private readonly IUserAccessTokenDao _accessTokenDao;
+    private readonly IUserMagicTokenDao _magicTokenDao;
     private readonly IDbSessionProvider _sessionProvider;
 
     #region Scoped
@@ -33,6 +35,7 @@ public class AuthorizationService: IAuthorizationService
         IJwtAuthService jwtAuthService,
         IPasswordService passwordService,
         IUserAccessTokenDao accessTokenDao,
+        IUserMagicTokenDao magicTokenDao,
         IDbSessionProvider sessionProvider,
         ILifetimeScope scope
     )
@@ -41,6 +44,7 @@ public class AuthorizationService: IAuthorizationService
         _jwtAuthService = jwtAuthService;
         _passwordService = passwordService;
         _accessTokenDao = accessTokenDao;
+        _magicTokenDao = magicTokenDao;
         _sessionProvider = sessionProvider;
         _scope = scope;
     }
@@ -141,5 +145,26 @@ public class AuthorizationService: IAuthorizationService
             accessToken.Token,
             accessToken.User
         );
+    }
+
+    public async Task<UserMagicTokenEntity> GenerateMagicToken(string email)
+    {
+        var user = await _userDao.GetByEmail(email);
+        if (user is not { IsActivated: true })
+        {
+            throw new RecordNotFoundException();
+        }
+        return await _magicTokenDao.GenerateNew(user);
+    }
+
+    public async Task<AuthResultDto> LoginByMagicToken(string token)
+    {
+        var magicToken = await _magicTokenDao.GetByToken(token);
+        if (magicToken == null || magicToken.IsExpired)
+        {
+            throw new RecordNotFoundException();
+        }
+        await _sessionProvider.CurrentSession.DeleteAsync(magicToken);
+        return await Login(magicToken.User);
     }
 }
