@@ -62,6 +62,7 @@
                     <InputTextField
                         @bind-Value="@model.Email"
                         Label="Email"
+                        FullWidth="true"
                         Type="InputType.Email"
                         Placeholder="my@email.com"/>
                 </div>
@@ -70,6 +71,7 @@
                     <InputTextField
                         @bind-Value="@model.Password"
                         Label="Password"
+                        FullWidth="true"
                         Type="InputType.Password"
                         Placeholder="Enter password"/>
                 </div>
@@ -82,7 +84,7 @@
 
                 <label class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
                     <InputCheckbox @bind-Value="@model.IsRememberMe"/>
-                    <span>Remember this demo session</span>
+                    <span>Remember this session</span>
                 </label>
 
                 <CustomButton
