@@ -12,6 +12,25 @@ namespace TimeTracker.Web.Services.Http
         {
             return await PostAsync<LoginResponseDto?>(ApiUrl.Login, model);
         }
+
+        public async Task<bool> LoginMagicAsync(LoginMagicRequest model)
+        {
+            try
+            {
+                await PostAsync<object>(ApiUrl.LoginMagic, model);
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to login with magic link: {error}", e.Message);
+            }
+            return false;
+        }
+
+        public async Task<LoginResponseDto?> VerifyMagicTokenAsync(VerifyMagicTokenRequest model)
+        {
+            return await PostAsync<LoginResponseDto?>(ApiUrl.LoginMagicVerify, model);
+        }
         
         public async Task<bool> CheckIsLoggedInAsync(string token)
         {

@@ -3,6 +3,7 @@
 @using LumexUI.Common
 @using TimeTracker.Web.Ui.Pages.Landing.User.Registration.Shared
 @using TimeTracker.Web.Ui.Shared.Components.Form
+@using TimeTracker.Web.Ui.Shared.Components.Form.Validation
 @using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.Layout
 
 @inherits BaseReactiveComponent
@@ -23,12 +24,13 @@
             </div>
         </div>
         
-        <EditForm 
+        <EditForm
             Model="model"
             @ref="_form"
             class="mt-6 space-y-4">
             <DataAnnotationsValidator />
-            
+            <CustomValidationSummary/>
+
             <div class="space-y-2">
                 <InputTextField 
                     @bind-Value="@model.Email"

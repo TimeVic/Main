@@ -1,0 +1,50 @@
+@page "/login/magic/{token}"
+@using LumexUI
+@using LumexUI.Common
+@using LumexUI.Shared.Icons
+@using TimeTracker.Web.Ui.Pages.Landing.User.Password.Shared
+@using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.Layout
+
+@inherits BaseComponent
+@layout Layout
+
+<PageTitle>TimeVic - Magic link sign-in</PageTitle>
+
+<ComponentLayout>
+    <ChildContent>
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">Auth</p>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-900">Magic link sign-in</h2>
+                <p class="mt-2 text-sm text-slate-500">Verifying your one-time login link…</p>
+            </div>
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm">
+                <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+            </div>
+        </div>
+
+        <div class="mt-6">
+            @if (_isLoading)
+            {
+                <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                    <i class="fa-solid fa-circle-notch fa-spin text-blue-500"></i>
+                    <span>Signing you in, please wait…</span>
+                </div>
+            }
+            else if (_isError)
+            {
+                <div class="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-900">
+                    <p class="font-semibold">Invalid or expired link</p>
+                    <p class="mt-1 text-red-700">This magic link is no longer valid. Please request a new one.</p>
+                    <div class="mt-4">
+                        <a href="@SiteUrl.Login"
+                           class="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            <span>Back to sign-in</span>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </ChildContent>
+</ComponentLayout>

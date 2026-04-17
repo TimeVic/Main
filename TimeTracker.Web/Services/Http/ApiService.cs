@@ -10,14 +10,17 @@ namespace TimeTracker.Web.Services.Http
     {
         private readonly CustomHttpClient _httpClient;
         private readonly HttpInterceptorService _httpInterceptorService;
+        private readonly ILogger<ApiService> _logger;
 
         public ApiService(
             CustomHttpClient httpClient,
-            HttpInterceptorService httpInterceptorService
+            HttpInterceptorService httpInterceptorService,
+            ILogger<ApiService> logger
         )
         {
             _httpClient = httpClient;
             _httpInterceptorService = httpInterceptorService;
+            _logger = logger;
             _httpInterceptorService.Register();
         }
         
