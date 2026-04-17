@@ -1,7 +1,7 @@
-@using LumexUI
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity.Task
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Core.Extensions.Enums
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TaskPriority = TimeTracker.Business.Common.Constants.Task.TaskPriority;
@@ -17,108 +17,178 @@
     />
 }
 
-<LumexDataGrid
-    T="TaskDto"
-    Class="min-w-full divide-y divide-slate-200"
-    Data="@_tasks.AsQueryable()"
-    Hoverable="true"
-    OnRowClick="@OnRowClickHandler"
-    Loading="_isLoading">
-    <LumexUI.PropertyColumn Title="#" Property="@(p => p.FormattedId)"/>
-    <LumexUI.PropertyColumn Title="Task" Property="@(p => p.Title)" Sortable="@true">
-        <Content>
-            <div class="font-medium text-slate-900 @GetTaskTitleClass(context)">
-                @context.Title
-            </div>
-            <div class="mt-1 max-w-xl text-slate-500">@context.Description?.TruncateAndAddDots(100)</div>
-        </Content>
-    </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn 
-        Title="Status"
-        Property="@(p => p.Status)"
-        Sortable="@true">
-        <Content>
-            @{
-                <LumexChip
-                    Size="@Size.Small"
-                    Variant="@ChipVariant.Dot"
-                    Color="@context.Status.GetThemeColor()">
-                    @context.Status.GetDisplayName()
-                </LumexChip>
+@if (_localTasks.Any())
+{
+    <div class="flex justify-start px-4 py-3 border-b border-slate-200">
+        <CustomButton 
+            OnClick="@SelectAllTasks" 
+            Variant="Variant.Light"
+            Size="Size.Small"
+            Color="ThemeColor.Info">
+            <StartContent>
+                <i class="fa-regular fa-square-check"></i>    
+            </StartContent>
+            <ChildContent>Select visible</ChildContent>
+        </CustomButton>
+    </div>
+}
+
+<div class="overflow-x-auto overflow-y-auto" style="max-height: 70vh;">
+    <table class="min-w-full border-separate border-spacing-0">
+        <thead class="bg-slate-50/80 sticky top-0 z-10">
+            <tr class="text-left text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                <th class="w-14 px-4 py-3"></th>
+                <th class="min-w-[360px] px-2 py-3">Issue</th>
+                <th class="px-2 py-3 text-center">Status</th>
+                <th class="px-2 py-3 text-center">Priority</th>
+                <th class="px-2 py-3">Assignee</th>
+                <th class="px-4 py-3 text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="text-sm">
+            @if (IsLoading)
+            {
+                <TasksTableSkeletonBlock/>
             }
-        </Content>
-    </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn 
-        Property="@(p => p.Priority)"
-        Sortable="@true">
-        <Content>
-            @{
-                <LumexChip
-                    Size="@Size.Small"
-                    Variant="@ChipVariant.Dot"
-                    Color="@context.Priority.GetThemeColor()">
-                    @context.Priority.GetDisplayName()
-                </LumexChip>
+            else if (_localTasks.Any())
+            {
+                <Virtualize Items="_localTasks" ItemSize="60" SpacerElement="tr" OverscanCount="5" Context="task">
+                    @if (IsDropTarget(task))
+                    {
+                        <tr class="pointer-events-none">
+                            <td colspan="6" class="p-0">
+                                <div class="h-0.5 bg-blue-500 rounded-full mx-2 shadow-sm shadow-blue-300"></div>
+                            </td>
+                        </tr>
+                    }
+                    <tr class="@GetTaskBoardRowClass(task.Id) @GetDragRowClass(task) transition-colors"
+                        draggable="true"
+                        @ondragstart="@(() => OnDragStart(task))"
+                        @ondragover:preventDefault="true"
+                        @ondragover="@(() => OnDragOver(task))"
+                        @ondrop="@(() => OnDrop(task))"
+                        @ondragend="@OnDragEnd">
+                        <td class="border-t border-slate-200 px-4 py-3 align-top">
+                            <div class="flex flex-col items-center gap-2">
+                                <LumexCheckbox
+                                    Value="IsTaskBoardSelected(task.Id)"
+                                    ValueChanged="@(() => ToggleTaskBoardSelection(task.Id))"/>
+                            </div>
+                        </td>
+                        <td class="border-t border-slate-200 px-2 py-3 align-top">
+                            <div class="flex gap-3">
+                                <div class="min-w-0 space-y-2">
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        <span class="rounded-md bg-slate-100 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-600">@task.FormattedId</span>
+                                        <button type="button" @onclick="@(() => OpenTaskEditor(task))" class="text-left font-semibold cursor-pointer text-slate-900 transition group-hover:text-blue-700 hover:text-blue-700 @GetTaskTitleClass(task)">
+                                            @task.Title
+                                        </button>
+                                    </div>
+                                    @if (!string.IsNullOrWhiteSpace(task.Description))
+                                    {
+                                        <p class="max-w-2xl text-sm text-slate-500">@task.Description</p>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(task.ExternalTaskId))
+                                    {
+                                        <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                                            <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1">
+                                                <i class="fa-solid fa-link"></i>
+                                                Synced
+                                            </span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </td>
+                        <td class="border-t border-slate-200 px-2 py-3 align-top">
+                            <EnumDropDown
+                                TItem="TaskStatus"
+                                DropDownColor="@task.Status.GetThemeColor()"
+                                DropDownVariant="Variant.Light"
+                                SelectType="DropDownType.DropDown"
+                                Size="Size.Small"
+                                Value="@task.Status"
+                                ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
+                        </td>
+                        <td class="border-t border-slate-200 px-2 py-3 align-top">
+                            <EnumDropDown
+                                TItem="TaskPriority"
+                                DropDownColor="@task.Priority.GetThemeColor()"
+                                DropDownVariant="Variant.Light"
+                                SelectType="DropDownType.DropDown"
+                                Size="Size.Small"
+                                Value="@task.Priority"
+                                ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
+                        </td>
+                        <td class="border-t border-slate-200 px-2 py-3 align-top">
+                            <div class="flex items-center gap-3">
+                                <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold uppercase text-white">@(task.User?.Initials ?? "?")</span>
+                                <div class="min-w-0">
+                                    <div class="truncate text-sm font-medium text-slate-800">@(task.User?.Name ?? "")</div>
+                                    <div class="truncate text-xs text-slate-500">@(task.User?.Email ?? "No assignee")</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="border-t border-slate-200 px-4 py-3 align-top text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                @if (TimeEntryState.Value.ActiveEntry?.Task?.Id == task.Id)
+                                {
+                                    <CustomButton
+                                        Variant="Variant.Outlined"
+                                        Color="ThemeColor.Default"
+                                        IconOnly="true"
+                                        Size="Size.Small"
+                                        Disabled="_isDisabledButtons"
+                                        OnClick="@(() => StopTimeEntry())">
+                                        <StartContent>
+                                            <i class="fa-solid fa-stop text-xs"></i>
+                                        </StartContent>
+                                    </CustomButton>
+                                }
+                                else
+                                {
+                                    <CustomButton
+                                        Variant="Variant.Outlined"
+                                        Color="ThemeColor.Info"
+                                        IconOnly="true"
+                                        Size="Size.Small"
+                                        Disabled="_isDisabledButtons"
+                                        OnClick="@(() => StartTimeEntry(task))">
+                                        <StartContent>
+                                            <i class="fa-solid fa-play text-xs"></i>
+                                        </StartContent>
+                                    </CustomButton>
+                                }
+                                <LumexDropdown>
+                                    <LumexDropdownTrigger>
+                                        <LumexButton
+                                            Class="ml-1"
+                                            IconOnly="true"
+                                            Size="Size.Small"
+                                            Disabled="_isDisabledButtons"
+                                            Variant="@Variant.Outlined">
+                                            <i class="fa-solid fa-ellipsis-h"></i>
+                                        </LumexButton>
+                                    </LumexDropdownTrigger>
+                                    <LumexDropdownMenu>
+                                        <LumexDropdownItem
+                                            Color="@ThemeColor.Warning"
+                                            OnClick="@(() => OnArchiveTask(task))">
+                                            Archive this task
+                                        </LumexDropdownItem>
+                                    </LumexDropdownMenu>
+                                </LumexDropdown>
+                            </div>
+                        </td>
+                    </tr>
+                </Virtualize>
             }
-        </Content>
-    </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn 
-        Title="Assigned" 
-        Property="@(p => p.User.Name)"
-        Sortable="@true"/>
-    <LumexUI.PropertyColumn
-        Title="Actions"
-        Property="@(p => p.User.Id)">
-        <Content>
-            <div @onclick:stopPropagation="true">
-                @if (TimeEntryState.Value.ActiveEntry?.Task?.Id == context.Id)
-                {
-                    <CustomButton
-                        Variant="Variant.Outlined"
-                        Color="ThemeColor.Default"
-                        IconOnly="true"
-                        Size="Size.Small"
-                        Disabled="_isDisabledButtons"
-                        OnClick="@(() => StopTimeEntry())">
-                        <StartContent>
-                            <i class="fa-solid fa-stop text-xs"></i>
-                        </StartContent>
-                    </CustomButton>
-                }
-                else
-                {
-                    <CustomButton
-                        Variant="Variant.Outlined"
-                        Color="ThemeColor.Info"
-                        IconOnly="true"
-                        Size="Size.Small"
-                        Disabled="_isDisabledButtons"
-                        OnClick="@(() => StartTimeEntry(context))">
-                        <StartContent>
-                            <i class="fa-solid fa-play text-xs"></i>
-                        </StartContent>
-                    </CustomButton>
-                }
-                <LumexDropdown>
-                    <LumexDropdownTrigger>
-                        <LumexButton
-                            Class="ml-1"
-                            IconOnly="true"
-                            Size="Size.Small"
-                            Disabled="_isDisabledButtons"
-                            Variant="@Variant.Outlined">
-                            <i class="fa-solid fa-ellipsis-h"></i>
-                        </LumexButton>
-                    </LumexDropdownTrigger>
-                    <LumexDropdownMenu>
-                        <LumexDropdownItem
-                            Color="@ThemeColor.Warning"
-                            OnClick="@(() => OnArchiveTask(context))">
-                            Archive this task
-                        </LumexDropdownItem>
-                    </LumexDropdownMenu>
-                </LumexDropdown>
-            </div>
-        </Content>
-    </LumexUI.PropertyColumn>
-</LumexDataGrid>
+            else
+            {
+                <tr>
+                    <td colspan="6" class="px-4 py-8 text-center text-sm text-slate-500">@EmptyMessage</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

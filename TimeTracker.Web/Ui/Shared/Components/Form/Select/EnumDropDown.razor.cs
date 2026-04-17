@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using LumexUI;
+using LumexUI.Common;
 using TimeTracker.Web.Constants.Ui;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
@@ -54,6 +55,16 @@ public partial class EnumDropDown<TItem>
 
     [Parameter]
     public bool FullWidth { get; set; } = false;
+
+    [Parameter] 
+    public Variant DropDownVariant { get; set; } = Variant.Outlined;
+    
+    [Parameter] 
+    public MenuVariant DropDownMenuVariant { get; set; } = MenuVariant.Outlined;
+    
+    [Parameter] 
+    public ThemeColor DropDownColor { get; set; } = ThemeColor.Info;
+    
     
     private List<TItem?> _list;
     private TItem? _value;

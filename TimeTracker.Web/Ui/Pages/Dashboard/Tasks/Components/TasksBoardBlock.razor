@@ -1,0 +1,28 @@
+@using TimeTracker.Api.Shared.Dto.Entity.Task
+@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+
+@inherits BaseReactiveComponent
+
+<div class="mt-5 flex flex-col gap-5">
+    <div class="rounded-2xl border border-slate-200">
+        <div class="border-b border-slate-200 px-4 py-4">
+            <p class="text-sm font-semibold text-slate-900">To do</p>
+            <p class="text-sm text-slate-500">All active tasks except items moved to backlog.</p>
+        </div>
+        <TasksTableBlock 
+            Tasks="@TodoTasks"
+            IsLoading="@TasksState.Value.IsListLoading" 
+            EmptyMessage="No todo tasks match the current filters." />
+    </div>
+
+    <div class="rounded-2xl border border-slate-200">
+        <div class="border-b border-slate-200 px-4 py-4">
+            <p class="text-sm font-semibold text-slate-900">Backlog</p>
+            <p class="text-sm text-slate-500">Tasks automatically land here when the status is set to Backlog.</p>
+        </div>
+        <TasksTableBlock 
+            Tasks="@BacklogTasks"
+            IsLoading="@TasksState.Value.IsListLoading" 
+            EmptyMessage="No backlog tasks match the current filters." />
+    </div>
+</div>

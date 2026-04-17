@@ -16,7 +16,7 @@
                     <CustomButton
                         Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
                         Variant="@(IsMenuItemSelected(item) ? Variant.Solid : Variant.Outlined)"
-                        Size="@Size.Small"
+                        Size="@Size.Medium"
                         IconOnly="@(string.IsNullOrEmpty(item.Name))"
                         Disabled="item.IsDisabled"
                         OnClick="@(() => OnMenuItemSelected(item.Url))">
