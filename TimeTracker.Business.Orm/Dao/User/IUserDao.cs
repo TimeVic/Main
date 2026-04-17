@@ -23,4 +23,6 @@ public interface IUserDao: IDomainService
     Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user, MembershipAccessType? accessType = null);
 
     Task<WorkspaceEntity> GetDefaultWorkspace(UserEntity user);
+
+    Task<UserEntity?> GetLastDemoUserAsync();
 }

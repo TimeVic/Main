@@ -19,6 +19,14 @@ public class UserController : MainApiControllerBase
     {
     }
 
+    [HttpGet("login/as-demo")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> LoginAsDemo()
+        => this.RequestAsync()
+            .For<LoginResponseDto>()
+            .With(new LoginAsDemoRequest());
+
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
