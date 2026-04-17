@@ -49,6 +49,8 @@
       <EmbeddedResource Include="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
       <None Remove="Templates\Emails\en\TaskChangedNotification.htm" />
       <EmbeddedResource Include="Templates\Emails\en\TaskChangedNotification.htm" />
+      <None Remove="Templates\Emails\en\MagicLoginNotification.htm" />
+      <EmbeddedResource Include="Templates\Emails\en\MagicLoginNotification.htm" />
     </ItemGroup>
 
     <ItemGroup>

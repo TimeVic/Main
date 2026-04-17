@@ -24,9 +24,13 @@ public partial class Login
     private IAuthorizationService _authorizationService { get; set; }
     
     private LoginRequest model = new();
-    
+    private LoginMagicRequest _magicModel = new();
+
     private bool _isLoading;
+    private bool _magicIsLoading;
+    private bool _magicIsSent;
     private EditForm _form;
+    private EditForm _magicForm;
     private bool _isValid = false;
 
     protected override async Task OnInitializedAsync()
@@ -38,7 +42,9 @@ public partial class Login
 
     private async Task UpdateReCaptchaAsync()
     {
-        model.ReCaptcha = await _reCaptchaService.GetReCaptchaTokenAsync();
+        var token = await _reCaptchaService.GetReCaptchaTokenAsync();
+        model.ReCaptcha = token;
+        _magicModel.ReCaptcha = token;
     }
     
     private async Task Submit()
@@ -76,5 +82,34 @@ public partial class Login
     private void ForgotPassword()
     {
         NavigationManager.NavigateTo(SiteUrl.ForgotPassword);
+    }
+
+    private async Task SubmitMagic()
+    {
+        if (!_magicForm.EditContext!.Validate())
+        {
+            return;
+        }
+        _magicIsLoading = true;
+        _magicIsSent = false;
+        try
+        {
+            var isOk = await _apiService.LoginMagicAsync(_magicModel);
+            if (isOk)
+            {
+                _magicIsSent = true;
+                _magicModel.Email = string.Empty;
+            }
+        }
+        catch (Exception)
+        {
+            ToastService.ShowError("Failed to send magic link");
+        }
+        finally
+        {
+            _magicIsLoading = false;
+        }
+        StateHasChanged();
+        await UpdateReCaptchaAsync();
     }
 }
