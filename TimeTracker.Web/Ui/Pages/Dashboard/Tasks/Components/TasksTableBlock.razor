@@ -46,7 +46,11 @@
             </tr>
         </thead>
         <tbody class="text-sm">
-            @if (_localTasks.Any())
+            @if (IsLoading)
+            {
+                <TasksTableSkeletonBlock/>
+            }
+            else if (_localTasks.Any())
             {
                 <Virtualize Items="_localTasks" ItemSize="60" SpacerElement="tr" OverscanCount="5" Context="task">
                     @if (IsDropTarget(task))

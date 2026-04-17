@@ -17,6 +17,9 @@ public partial class TasksTableBlock
     [Parameter]
     public string EmptyMessage { get; set; } = "No tasks found.";
 
+    [Parameter]
+    public bool IsLoading { get; set; }
+
     [Inject]
     public IState<TimeEntryState> TimeEntryState { get; set; }
 
