@@ -1,10 +1,8 @@
 using Fluxor;
-using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Task;
-using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Store.Tasks;
 using TimeTracker.Web.Store.TimeEntry;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
@@ -22,11 +20,101 @@ public partial class TasksTableBlock
     [Inject]
     public IState<TimeEntryState> TimeEntryState { get; set; }
 
-    private readonly HashSet<Guid> _selectedTaskIds = new();
+    private readonly HashSet<Guid> _selectedTaskIds = [];
     private bool _isDisabledButtons => TimeEntryState.Value.IsTimeEntryProcessing;
     private TaskDto? _taskToUpdate = null;
 
     private static readonly IReadOnlyList<TaskStatus> taskStatusOptions = Enum.GetValues<TaskStatus>();
+
+    // Drag-and-drop state
+    private List<TaskDto> _localTasks = [];
+    private TaskDto? _draggingTask = null;
+    private Guid _dragOverTaskId = Guid.Empty;
+    private bool _isDragging = false;
+    private bool _dragRenderPending = false;
+
+    // ondragover fires hundreds of times per second — block re-renders unless something actually changed
+    protected override bool ShouldRender()
+    {
+        if (_isDragging && !_dragRenderPending)
+            return false;
+        _dragRenderPending = false;
+        return true;
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!_isDragging)
+            _localTasks = Tasks.OrderBy(t => t.PositionIndex).ToList();
+    }
+
+    private void OnDragStart(TaskDto task)
+    {
+        _isDragging = true;
+        _draggingTask = task;
+        _dragRenderPending = true;
+    }
+
+    private void OnDragOver(TaskDto task)
+    {
+        if (_draggingTask == null || _draggingTask.Id == task.Id || _dragOverTaskId == task.Id)
+            return;
+        _dragOverTaskId = task.Id;
+        _dragRenderPending = true;
+    }
+
+    private void OnDrop(TaskDto targetTask)
+    {
+        _isDragging = false;
+        _dragRenderPending = true;
+
+        if (_draggingTask == null || _draggingTask.Id == targetTask.Id)
+        {
+            ResetDragState();
+            return;
+        }
+
+        var fromIndex = _localTasks.IndexOf(_draggingTask);
+        var toIndex = _localTasks.IndexOf(targetTask);
+
+        if (fromIndex < 0 || toIndex < 0)
+        {
+            ResetDragState();
+            return;
+        }
+
+        _localTasks.RemoveAt(fromIndex);
+        _localTasks.Insert(toIndex, _draggingTask);
+
+        for (var i = 0; i < _localTasks.Count; i++)
+            _localTasks[i].PositionIndex = i;
+
+        ResetDragState();
+        Dispatcher.Dispatch(new UpdatePositionsAction(_localTasks));
+    }
+
+    private void OnDragEnd()
+    {
+        _isDragging = false;
+        _dragRenderPending = true;
+        ResetDragState();
+    }
+
+    private void ResetDragState()
+    {
+        _draggingTask = null;
+        _dragOverTaskId = Guid.Empty;
+    }
+
+    private string GetDragRowClass(TaskDto task)
+    {
+        if (_draggingTask?.Id == task.Id)
+            return "opacity-60 outline outline-2 outline-blue-400 outline-offset-[-2px] bg-blue-50/40";
+        return "";
+    }
+
+    private bool IsDropTarget(TaskDto task) =>
+        _isDragging && _dragOverTaskId == task.Id && _draggingTask?.Id != task.Id;
 
     private void OpenTaskEditor(TaskDto task)
     {
