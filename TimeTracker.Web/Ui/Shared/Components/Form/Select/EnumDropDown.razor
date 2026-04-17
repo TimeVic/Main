@@ -8,12 +8,13 @@
 <div class="@Class @(FullWidth ? "w-100" : "")">
     @if (SelectType == DropDownType.DropDown)
     {
-        <LumexDropdown Size="Size">
+        <LumexDropdown 
+            Size="Size">
             <LumexDropdownTrigger>
                 <LumexButton
                     FullWidth="true"
-                    Color="ThemeColor.Info"
-                    Variant="Variant.Outlined">
+                    Color="DropDownColor"
+                    Variant="DropDownVariant">
                     @if (_value is null)
                     {
                         @_placeholder
@@ -25,8 +26,8 @@
                 </LumexButton>
             </LumexDropdownTrigger>
             <LumexDropdownMenu
-                Color="ThemeColor.Info"
-                Variant="MenuVariant.Outlined">
+                Color="DropDownColor"
+                Variant="DropDownMenuVariant">
                 @foreach (var item in _list)
                 {
                     <LumexDropdownItem OnClick="@(() => OnItemSelected(item))">
@@ -43,6 +44,7 @@
             Label="@Label"
             Placeholder="@_placeholder"
             LabelPlacement="@LabelPlacement.Outside"
+            Color="DropDownColor"
             ValueChanged="dto => OnItemSelected(dto)"
             Value="_value">
             <ChildContent>
