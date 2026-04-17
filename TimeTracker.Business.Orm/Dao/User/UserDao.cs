@@ -1,7 +1,9 @@
-﻿using NHibernate.Linq;
+﻿using Autofac;
+using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
+using TimeTracker.Business.Orm.Dao.Common;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
@@ -9,39 +11,36 @@ using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao.User;
 
-public class UserDao: IUserDao
+public class UserDao: BaseDao, IUserDao
 {
-    private readonly IDbSessionProvider _sessionProvider;
-
-    public UserDao(IDbSessionProvider sessionProvider)
+    public UserDao(ILifetimeScope scope): base(scope)
     {
-        _sessionProvider = sessionProvider;
     }
 
     public async Task<UserEntity?> GetExistsByUserName(string userName)
     {
-        return await _sessionProvider.CurrentSession.Query<UserEntity>()
+        return await Session.Query<UserEntity>()
             .Where(item => item.UserName == userName.Trim().ToLower())
             .FirstOrDefaultAsync();
     }
     
     public async Task<UserEntity?> GetByEmail(string email)
     {
-        return await _sessionProvider.CurrentSession.Query<UserEntity>()
+        return await Session.Query<UserEntity>()
             .Where(item => item.Email == email.Trim().ToLower())
             .FirstOrDefaultAsync();
     }
     
     public async Task<UserEntity?> GetById(Guid id)
     {
-        return await _sessionProvider.CurrentSession.Query<UserEntity>()
+        return await Session.Query<UserEntity>()
             .Where(item => item.Id == id)
             .FirstOrDefaultAsync();
     }
     
     public async Task<UserEntity?> GetByVerificationToken(string token)
     {
-        return await _sessionProvider.CurrentSession.Query<UserEntity>()
+        return await Session.Query<UserEntity>()
             .Where(item => item.VerificationToken == token)
             .FirstOrDefaultAsync();
     }
@@ -59,7 +58,7 @@ public class UserDao: IUserDao
             UpdatedAt = DateTime.UtcNow,
             Timezone = TimeZoneInfo.Utc.Id
         };
-        await _sessionProvider.CurrentSession.SaveAsync(user);
+        await Session.SaveAsync(user);
         return user;
     }
     
@@ -77,7 +76,7 @@ public class UserDao: IUserDao
     
     public async Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user, MembershipAccessType? accessType = null)
     {
-        var query = _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+        var query = Session.Query<WorkspaceMembershipEntity>()
             .Fetch(item => item.Workspace)
             .Where(item => item.User.Id == user.Id);
         if (accessType != null)
@@ -87,5 +86,13 @@ public class UserDao: IUserDao
 
         return await query.Select(item => item.Workspace)
             .ToListAsync();;
+    }
+
+    public async Task<UserEntity?> GetLastDemoUserAsync()
+    {
+        return await Session.Query<UserEntity>()
+            .Where(item => item.Email.StartsWith("demo+") && item.Email.EndsWith("@timevic.com"))
+            .OrderByDescending(item => item.CreatedAt)
+            .FirstOrDefaultAsync();
     }
 }
