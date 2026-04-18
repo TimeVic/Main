@@ -1,0 +1,4 @@
+interface:
+  display_name: "TimeVic Testing"
+  short_description: "Write and run TimeVic tests effectively"
+  default_prompt: "Use $timevic-testing to add or update tests for this TimeVic change."

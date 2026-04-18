@@ -1,0 +1,4 @@
+interface:
+  display_name: "TimeVic Backend"
+  short_description: "Implement TimeVic API and business logic"
+  default_prompt: "Use $timevic-backend to implement a TimeVic backend change."
