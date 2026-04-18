@@ -5,7 +5,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMem
 
 public class MembershipProjectAccessRequest
 {
-    [Required]
+    [RequiredNonEmpty]
     public Guid ProjectId { get; set; }
 
     [IsPositive(AllowZero = true)]

@@ -1,0 +1,89 @@
+@using LumexUI.Common
+@using TimeTracker.Business.Common.Constants
+
+@inherits BaseReactiveComponent
+
+<LumexModal
+    Open="IsOpened"
+    OnClose="@OnCloseModal"
+    Size="ModalSize.Large">
+    <LumexModalContent>
+        <LumexModalHeader Class="flex items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </div>
+                <div>
+                    <h2 class="mt-2 text-xl font-semibold text-slate-900">Edit "@Membership.User.Name"</h2>
+                    <p class="mt-1 text-sm text-slate-600">Change access level and configure per-project access for this member.</p>
+                </div>
+            </div>
+        </LumexModalHeader>
+        <LumexModalBody>
+            <EditForm
+                Context="form"
+                @ref="_form"
+                Model="@_model"
+                novalidate>
+                <DataAnnotationsValidator/>
+
+                <div class="space-y-5">
+                    <EnumDropDown
+                        TItem="MembershipAccessType"
+                        Label="Access level"
+                        AllowedValues="_allowedAccessLevels"
+                        Value="@_model.Access"
+                        ValueChanged="@(v => _model.Access = v ?? MembershipAccessType.User)"/>
+
+                    @if (_model.ProjectsAccess.Any())
+                    {
+                        <div>
+                            <p class="mb-2 text-sm font-semibold text-slate-700">Project access</p>
+                            <div class="grid gap-3 sm:grid-cols-2">
+                                @foreach (var item in _model.ProjectsAccess)
+                                {
+                                    var projectName = GetProjectName(item.ProjectId);
+                                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
+                                        <p class="text-sm font-semibold text-slate-900">@projectName</p>
+                                        <div class="rounded-xl border border-slate-200 bg-white/60 p-3 flex items-center justify-between gap-4">
+                                            <div>
+                                                <p class="text-xs font-medium text-slate-700">Has access</p>
+                                            </div>
+                                            <LumexSwitch
+                                                Value="@item.HasAccess"
+                                                Disabled="@(_model.Access == MembershipAccessType.Manager)"
+                                                ValueChanged="@(v => item.HasAccess = v)"/>
+                                        </div>
+                                        <InputNumericNullableField
+                                            TItem="decimal"
+                                            Label="Hourly rate"
+                                            Size="Size.Small"
+                                            Step="00.01"
+                                            Variant="InputVariant.Outlined"
+                                            Value="@item.HourlyRate"
+                                            ValueExpression="() => item.HourlyRate"
+                                            ValueChanged="@(v => item.HourlyRate = v)"/>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </EditForm>
+        </LumexModalBody>
+        <LumexModalFooter>
+            <CustomButton
+                FullWidth="@true"
+                OnClick="@Submit"
+                IsLoading="_isLoading"
+                Color="@ThemeColor.Primary"
+                Radius="@Radius.Full">
+                Save
+            </CustomButton>
+        </LumexModalFooter>
+    </LumexModalContent>
+</LumexModal>
+
+
+
+

@@ -2,6 +2,7 @@
 @using LumexUI
 @using LumexUI.Common
 @using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components
+@using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
 @using Layout = TimeTracker.Web.Ui.Pages.Dashboard.Shared.Layout
 
 @inherits BaseReactiveComponent
@@ -44,6 +45,17 @@
         </TitleContent>
         <ChildContent>
             <ProjectsBlock></ProjectsBlock>
+        </ChildContent>
+    </LumexTab>
+    <LumexTab>
+        <TitleContent>
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-users"></i>
+                <span>Members</span>
+            </div>
+        </TitleContent>
+        <ChildContent>
+            <MembershipsBlock></MembershipsBlock>
         </ChildContent>
     </LumexTab>
 </LumexTabs>
