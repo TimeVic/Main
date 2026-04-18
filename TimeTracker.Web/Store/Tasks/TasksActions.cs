@@ -27,7 +27,8 @@ public record struct SetIsOverdueTasksListLoadingAction(bool IsLoading);
 
 public record struct UpdateTaskAction(
     UpdateRequest UpdateRequest,
-    bool IsUpdateState = true
+    bool IsUpdateState = true,
+    bool IsShowToast = true
 );
 
 public record struct UpdatePositionsAction(
