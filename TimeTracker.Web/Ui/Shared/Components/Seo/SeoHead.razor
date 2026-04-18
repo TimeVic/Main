@@ -1,0 +1,42 @@
+@using Microsoft.AspNetCore.Components
+
+<PageTitle>@Title</PageTitle>
+
+<HeadContent>
+    @if (!string.IsNullOrWhiteSpace(Description))
+    {
+        <meta name="description" content="@Description" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Keywords))
+    {
+        <meta name="keywords" content="@Keywords" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Robots))
+    {
+        <meta name="robots" content="@Robots" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(CanonicalUrl))
+    {
+        <link rel="canonical" href="@CanonicalUrl" />
+    }
+</HeadContent>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? Description { get; set; }
+
+    [Parameter]
+    public string? Keywords { get; set; }
+
+    [Parameter]
+    public string? Robots { get; set; }
+
+    [Parameter]
+    public string? CanonicalUrl { get; set; }
+}

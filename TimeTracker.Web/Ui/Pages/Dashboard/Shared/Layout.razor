@@ -6,6 +6,10 @@
 @using TimeTracker.Web.Ui.Shared.Components.Layout
 @inherits TimeTracker.Web.Ui.Shared.BaseLayout
 
+<SeoHead
+    Title="TimeVic Workspace"
+    Robots="@SiteMetadata.NoIndexRobots" />
+
 <div class="min-h-screen flex flex-col bg-white text-slate-800">
     @if (CommonState.Value.IsInitialized)
     {

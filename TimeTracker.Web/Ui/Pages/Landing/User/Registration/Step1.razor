@@ -9,7 +9,12 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<PageTitle>TimeVic - Registration</PageTitle>
+<SeoHead
+    Title="@SiteMetadata.RegistrationTitle"
+    Description="@SiteMetadata.RegistrationDescription"
+    Keywords="@SiteMetadata.RegistrationKeywords"
+    Robots="@SiteMetadata.IndexRobots"
+    CanonicalUrl="@SiteMetadata.ToAbsoluteUrl(SiteUrl.Registration_Step1)" />
 
 <ComponentLayout>
     <ChildContent>
