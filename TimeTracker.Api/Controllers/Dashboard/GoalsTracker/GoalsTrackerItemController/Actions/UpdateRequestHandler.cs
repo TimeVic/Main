@@ -50,7 +50,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
             var user = await _apiRequestService.GetCurrentUser();
             var goalsTrackerItem = await _goalsTrackerItemsDao.GetById(request.GoalsTrackerItemId);
             await _securityManager.CheckAccess(AccessLevel.Write, user, goalsTrackerItem?.Tracker);
-            var trackerItem = await _goalsTrackerItemsDao.Update(goalsTrackerItem, request.Name, request.NumberOfTimes);
+            var trackerItem = await _goalsTrackerItemsDao.Update(goalsTrackerItem!, request.Name, request.NumberOfTimes);
             return _mapper.Map<GoalsTrackerItemDto>(trackerItem);
         }
     }

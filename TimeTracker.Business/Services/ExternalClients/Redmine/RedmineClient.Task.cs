@@ -7,7 +7,7 @@ namespace TimeTracker.Business.Services.ExternalClients.Redmine;
 
 public partial class RedmineClient
 {
-    protected override Task<TaskEntity?> CreateOrUpdateTimeEntryTaskAsync(
+    protected override Task<TaskEntity> CreateOrUpdateTimeEntryTaskAsync(
         TimeEntryEntity timeEntry,
         TaskListEntity taskListEntity,
         string externalTaskId

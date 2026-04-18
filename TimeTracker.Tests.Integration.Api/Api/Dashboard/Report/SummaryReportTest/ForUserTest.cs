@@ -31,7 +31,7 @@ public class ForUserTest: BaseTest
     private readonly IPaymentDao _paymentDao;
     private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
-    private readonly ClientEntity _client;
+    private readonly ClientEntity _client = null!;
     private UserEntity _otherUser;
     private string _otherJwtToken;
     private readonly IWorkspaceAccessService _workspaceAccessService;
@@ -51,7 +51,7 @@ public class ForUserTest: BaseTest
         (_otherJwtToken, _otherUser, _otherWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectSeeder.CreateAsync(_workspace).Result;
         _project2 = _projectSeeder.CreateAsync(_workspace).Result;
-        _client = _project.Client;
+        _client = _project.Client!;
 
         _workspaceAccessService.ShareAccessAsync(
             _workspace,

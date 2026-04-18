@@ -6,7 +6,7 @@ namespace TimeTracker.Business.Notifications.Senders.TimeEntry
 {
     public class TimeEntryAutoStoppedNotificationItemContext : INotificationItemContext
     {
-        public string ToAddress { get; set; }
+        public string ToAddress { get; set; } = string.Empty;
 
         public TimeEntryAutoStoppedNotificationItemContext() {}
 

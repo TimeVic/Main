@@ -37,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
-            await _notificationCenterService.MarkAllAsRead(user, workspace);
+            await _notificationCenterService.MarkAllAsRead(user, workspace!);
         }
     }
 }

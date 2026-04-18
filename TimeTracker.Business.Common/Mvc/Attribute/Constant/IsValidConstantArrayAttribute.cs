@@ -10,14 +10,11 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Constant
 
         public IsValidConstantArrayAttribute(Type ClassType)
         {
-            ValidationInstance = Activator.CreateInstance(ClassType) as IValidationAttribute;
-            if (ValidationInstance == null)
-            {
-                throw new Exception($"{ValidationInstance} should implement IValidationAttribute interface");
-            }
+            ValidationInstance = Activator.CreateInstance(ClassType) as IValidationAttribute
+                ?? throw new Exception($"{ClassType.Name} should implement IValidationAttribute interface");
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value is string[] arrayToValidate)
             {

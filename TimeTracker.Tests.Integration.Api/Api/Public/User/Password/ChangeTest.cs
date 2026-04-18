@@ -15,7 +15,6 @@ public class ChangeTest: BaseTest
     private readonly IJwtAuthService _jwtService;
     private readonly IResetPasswordService _resetPasswordService;
     private readonly UserEntity _user;
-    private readonly string _expectedPassword;
     private readonly IPasswordService _passwordService;
 
     public ChangeTest(ApiCustomWebApplicationFactory factory) : base(factory)
@@ -24,7 +23,6 @@ public class ChangeTest: BaseTest
         _resetPasswordService = ServiceProvider.GetRequiredService<IResetPasswordService>();
         _passwordService = ServiceProvider.GetRequiredService<IPasswordService>();
 
-        _expectedPassword = "somePass123";
         _user = UserSeeder.CreateActivatedAsync().Result;
     }
 

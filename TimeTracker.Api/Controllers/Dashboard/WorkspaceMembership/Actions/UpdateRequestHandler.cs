@@ -45,7 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
             var userId = _apiRequestService.GetCurrentUserId();
             var user = await _userDao.GetById(userId);
             var membership = await _workspaceDao.GetMembershipAsync(request.MembershipId);
-            if (!await _securityManager.HasAccess(AccessLevel.Write, user, membership.Workspace))
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user!, membership.Workspace))
             {
                 throw new HasNoAccessException();
             }
@@ -78,7 +78,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
                             );
                             return new ProjectAccessModel()
                             {
-                                Project = providedAccess != null ? item : null,
+                                Project = providedAccess != null ? item : null!,
                                 HourlyRate = providedAccess?.HourlyRate
                             };
                         }

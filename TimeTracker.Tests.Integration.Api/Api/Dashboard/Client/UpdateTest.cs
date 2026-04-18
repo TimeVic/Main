@@ -25,7 +25,7 @@ public class UpdateTest: BaseTest
     private readonly IUserDao _userDao;
     private readonly IClientSeeder _clientSeeder;
     private readonly ClientEntity _client;
-    private readonly IDataFactory<ClientEntity> _factory;
+    private new readonly IDataFactory<ClientEntity> _factory;
 
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {

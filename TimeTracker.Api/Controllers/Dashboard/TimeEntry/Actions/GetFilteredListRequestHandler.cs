@@ -49,9 +49,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new HasNoAccessException();
             }
 
-            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace!);
             var listDto = await _timeEntryDao.GetListAsync(
-                workspace, 
+                workspace!, 
                 request.Page, 
                 filter: new FilterDataDto
                 {

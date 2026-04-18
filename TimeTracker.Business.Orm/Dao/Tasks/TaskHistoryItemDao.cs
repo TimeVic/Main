@@ -70,10 +70,10 @@ public class TaskHistoryItemDao: ITaskHistoryItemDao
             .SetParameter("endTime", endTime)
             .ListAsync<Guid>();
 
-        UserEntity assigneeUserAlias = null;
-        UserEntity userAlias = null;
-        TaskEntity taskAlias = null;
-        TaskListEntity taskListAlias = null;
+        UserEntity assigneeUserAlias = null!;
+        UserEntity userAlias = null!;
+        TaskEntity taskAlias = null!;
+        TaskListEntity taskListAlias = null!;
         var historyItemsToNotify = await _dbSessionProvider
             .CurrentSession
             .QueryOver<TaskHistoryItemEntity>()

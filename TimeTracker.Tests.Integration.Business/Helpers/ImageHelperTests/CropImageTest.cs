@@ -14,7 +14,7 @@ public class CropImageTest: BaseTest
     public async Task ShouldCropImage()
     {
         var imagePath = Path.Combine(
-            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)!,
             "stubs",
             "images",
             "image.jpg"

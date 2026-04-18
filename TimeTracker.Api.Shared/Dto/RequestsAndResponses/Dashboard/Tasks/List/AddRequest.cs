@@ -13,6 +13,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
         
         [Required]
         [StringLength(1024, MinimumLength = 1)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

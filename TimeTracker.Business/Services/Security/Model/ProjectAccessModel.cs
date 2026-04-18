@@ -4,7 +4,7 @@ namespace TimeTracker.Business.Services.Security.Model;
 
 public class ProjectAccessModel
 {
-    public ProjectEntity Project { get; set; }
+    public ProjectEntity Project { get; set; } = null!;
 
     public decimal? HourlyRate { get; set; } = null;
 }

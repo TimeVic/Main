@@ -45,7 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
                 throw new HasNoAccessException();
             }
             var tag = await _tagDao.CreateAsync(
-                workspace, 
+                workspace!, 
                 request.Name,
                 request.Color != null ? ColorTranslator.FromHtml(request.Color) : null
             );

@@ -57,18 +57,18 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
             {
                 throw new HasNoAccessException();
             }
-            var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+            var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, workspace!);
             if (accessType is MembershipAccessType.Manager or MembershipAccessType.Owner)
             {
                 return await GetReportForOwnerOrManagerAsync(
-                    workspace,
+                    workspace!,
                     request.StartTime,
                     request.EndTime,
                     request.Type
                 );
             }
             var availableProjects = await _projectDao.GetAvailableForUserListAsync(
-                workspace,
+                workspace!,
                 user,
                 accessType
             );

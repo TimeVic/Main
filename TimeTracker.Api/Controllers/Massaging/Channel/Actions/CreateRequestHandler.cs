@@ -38,8 +38,6 @@ namespace TimeTracker.Api.Controllers.Massaging.Channel.Actions
     
         public async Task ExecuteAsync(CreateRequest request)
         {
-            UserEntity? receiver = null;
-            MessagingChannelEntity? channel = null;
 
             if (request.MemberIds.Count > 50)
                 throw new DataValidationException("Too many members");

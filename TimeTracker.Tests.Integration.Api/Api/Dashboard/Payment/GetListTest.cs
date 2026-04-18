@@ -18,7 +18,7 @@ public class GetListTest: BaseTest
     private readonly string Url = "/dashboard/payment/list";
     
     private readonly UserEntity _user;
-    private readonly IDataFactory<PaymentEntity> _factory;
+    private new readonly IDataFactory<PaymentEntity> _factory;
     private readonly string _jwtToken;
     private readonly IClientDao _clientDao;
     private readonly WorkspaceEntity _workspace;
@@ -77,7 +77,7 @@ public class GetListTest: BaseTest
             Assert.Equal(_client.Id, item.Client.Id);
             Assert.Equal(_project.Id, item.Project.Id);
             Assert.True(item.Amount > 0);
-            Assert.NotEmpty(item.Description);
+            Assert.NotEmpty(item.Description!);
             Assert.True(item.PaymentTime > DateTime.MinValue);
         });
     }

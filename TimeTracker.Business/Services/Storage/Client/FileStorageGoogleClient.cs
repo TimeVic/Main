@@ -40,7 +40,7 @@ public class FileStorageGoogleClient: IFileStorageGoogleClient
             FileAccess.Read
         );
         
-        _credentials = GoogleCredential.FromStream(credentialsStream);
+        _credentials = CredentialFactory.FromStream<ServiceAccountCredential>(credentialsStream).ToGoogleCredential();
         if (_credentials == null)
             throw new ArgumentNullException(nameof(_credentials));
         _bucketName = configuration.GetValue<string>("Google:Storage:BucketName");

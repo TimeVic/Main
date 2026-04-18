@@ -14,7 +14,7 @@ public class DateOnlyCustomType : IUserType
     public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
     {
         var obj = rs[names[0]];
-        if (obj == DBNull.Value) return null;
+        if (obj == DBNull.Value) return null!;
         if (obj is DateTime dt) return DateOnly.FromDateTime(dt);
         if (obj is DateOnly d) return d;
         throw new InvalidCastException($"Unexpected type {obj.GetType()} for DateOnlyUserType");

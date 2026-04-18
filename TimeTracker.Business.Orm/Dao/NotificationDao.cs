@@ -49,14 +49,13 @@ public class NotificationDao : INotificationDao
         int page
     )
     {        
-        TaskEntity taskAlias = null;
-        TaskListEntity taskListAlias = null;
-        UserEntity taskUserAlias = null;
-        TaskCommentEntity taskCommentAlias = null;
-        WorkspaceEntity workspaceAlias = null;
-        UserEntity performedUserAlias = null;
-        UserEntity receivedUserAlias = null;
-        UserEntity userAlias = null;
+        TaskEntity taskAlias = null!;
+        TaskListEntity taskListAlias = null!;
+        UserEntity taskUserAlias = null!;
+        TaskCommentEntity taskCommentAlias = null!;
+        WorkspaceEntity workspaceAlias = null!;
+        UserEntity performedUserAlias = null!;
+        UserEntity receivedUserAlias = null!;
         
         var query = _sessionProvider.CurrentSession.QueryOver<NotificationEntity>()
             .Left.JoinAlias(item => item.Task, () => taskAlias)

@@ -26,10 +26,10 @@ public partial class SendNewTimeEntityTest : BaseTest
     private readonly IClickUpClient _сlickUpClient;
     private readonly IWorkspaceSettingsDao _workspaceSettingsDao;
     
-    private readonly string _securityKey;
-    private readonly string _teamId;
-    private readonly string _externalTaskId;
-    private readonly string _externalTaskIdForCreation;
+    private readonly string _securityKey = string.Empty;
+    private readonly string _teamId = string.Empty;
+    private readonly string _externalTaskId = string.Empty;
+    private readonly string _externalTaskIdForCreation = string.Empty;
     
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IUserDao _userDao;
@@ -53,10 +53,10 @@ public partial class SendNewTimeEntityTest : BaseTest
         _userDao = Scope.Resolve<IUserDao>();
 
         var configuration = Scope.Resolve<IConfiguration>();
-        _securityKey = configuration.GetValue<string>("Integration:ClickUp:SecurityKey");
-        _teamId = configuration.GetValue<string>("Integration:ClickUp:TeamId");
-        _externalTaskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
-        _externalTaskIdForCreation = configuration.GetValue<string>("Integration:ClickUp:TaskIdForCreation");
+        _securityKey = configuration.GetValue<string>("Integration:ClickUp:SecurityKey")!;
+        _teamId = configuration.GetValue<string>("Integration:ClickUp:TeamId")!;
+        _externalTaskId = configuration.GetValue<string>("Integration:ClickUp:TaskId")!;
+        _externalTaskIdForCreation = configuration.GetValue<string>("Integration:ClickUp:TaskIdForCreation")!;
 
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
@@ -200,7 +200,7 @@ public partial class SendNewTimeEntityTest : BaseTest
             activeEntry,
             _externalTaskId
         );
-        Assert.NotEmpty(getTaskResponse.Value.Name);
+        Assert.NotEmpty(getTaskResponse.Value.Name!);
     }
     
     [Fact]

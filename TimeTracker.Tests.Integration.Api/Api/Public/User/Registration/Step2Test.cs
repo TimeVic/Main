@@ -19,7 +19,7 @@ public class Step2Test: BaseTest
     private readonly IQueueService _queueService;
     private readonly IRegistrationService _registrationService;
     private readonly IJwtAuthService _jwtService;
-    private readonly IQueueDao _queueDao;
+    private new readonly IQueueDao _queueDao;
     private readonly IUserAccessTokenDao _accessTokenDao;
 
     public Step2Test(ApiCustomWebApplicationFactory factory) : base(factory)
@@ -41,7 +41,7 @@ public class Step2Test: BaseTest
         
         var response = await PostRequestAsAnonymousAsync(Url, new RegistrationStep2Request()
         {
-            Token = user.VerificationToken,
+            Token = user.VerificationToken!,
             Password = SecurityUtil.GeneratePassword(12),
             ReCaptcha = "aaa"
         });
@@ -74,7 +74,7 @@ public class Step2Test: BaseTest
         
         var response = await PostRequestAsAnonymousAsync(Url, new RegistrationStep2Request()
         {
-            Token = user.VerificationToken,
+            Token = user.VerificationToken!,
             Password = SecurityUtil.GeneratePassword(3),
             ReCaptcha = "aaa"
         });

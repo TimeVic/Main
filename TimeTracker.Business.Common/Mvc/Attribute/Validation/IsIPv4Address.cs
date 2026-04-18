@@ -6,7 +6,7 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
     [AttributeUsage(AttributeTargets.Property)]
     public class IsIPv4Address : ValidationAttribute
     {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value == null)
             {

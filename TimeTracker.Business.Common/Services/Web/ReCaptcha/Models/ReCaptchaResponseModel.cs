@@ -8,11 +8,11 @@ public class ReCaptchaResponseModel
     public bool IsSuccess { get; set; }
         
     [JsonProperty(PropertyName = "challenge_ts")]
-    public string ChallengeTime { get; set; }
+    public string ChallengeTime { get; set; } = string.Empty;
         
     [JsonProperty(PropertyName = "hostname")]
-    public string Hostname { get; set; }
+    public string Hostname { get; set; } = string.Empty;
         
     [JsonProperty(PropertyName = "error-codes")]
-    public ICollection<string> ErrorCodes { get; set; }
+    public ICollection<string> ErrorCodes { get; set; } = Array.Empty<string>();
 }

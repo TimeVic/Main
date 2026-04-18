@@ -57,7 +57,7 @@ public class GetListTest: BaseTest
         {
             Assert.NotEqual(Guid.Empty, item.Id);
             Assert.NotEmpty(item.Name);
-            Assert.NotEmpty(item.Color);
+            Assert.NotEmpty(item.Color!);
         });
     }
 }

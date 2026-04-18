@@ -86,8 +86,8 @@ public class TaskCommentDao: ITaskCommentDao
         int page
     )
     {
-        TaskListEntity taskAlias = null;
-        UserEntity userAlias = null;
+        TaskListEntity taskAlias = null!;
+        UserEntity userAlias = null!;
         var query = _sessionProvider.CurrentSession.QueryOver<TaskCommentEntity>()
             .Inner.JoinAlias(item => item.Task, () => taskAlias)
             .Inner.JoinAlias(item => item.User, () => userAlias)

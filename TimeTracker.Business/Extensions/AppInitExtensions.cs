@@ -44,7 +44,7 @@ namespace TimeTracker.Business.Extensions
                                 var errorMessage = !string.IsNullOrEmpty(error.ErrorMessage)
                                     ? error.ErrorMessage
                                     : error.Exception?.Message;
-                                Log.Logger.Error(errorMessage);
+                                Log.Logger.Error(errorMessage!);
                             }
                         }
                         return new BadRequestObjectResult(context.ModelState);

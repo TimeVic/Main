@@ -11,6 +11,6 @@ namespace TimeTracker.Business.Notifications.Senders
             ToAddress = toAddress;
         }
 
-        public string ToAddress { get; set; }
+        public string ToAddress { get; set; } = string.Empty;
     }
 }

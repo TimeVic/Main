@@ -220,13 +220,13 @@ public class StopActiveTest: BaseTest
 
         var lastItem = actualList.Items.First();
         var endTimeOfFirstItem = endTime;
-        Assert.Equal(endTimeOfFirstItem.Day, lastItem.EndTime.Value.Day);
+        Assert.Equal(endTimeOfFirstItem.Day, lastItem.EndTime!.Value.Day);
         Assert.Equal(endTimeOfFirstItem.Minute, lastItem.EndTime.Value.Minute);
         Assert.Equal(endTimeOfFirstItem.Second, lastItem.EndTime.Value.Second);
         
         var closedEntry = actualList.Items.Last();
         var endOfDayTime = GlobalConstants.EndOfDay;
-        Assert.Equal(endOfDayTime.Hours, closedEntry.EndTime.Value.Hour);
+        Assert.Equal(endOfDayTime.Hours, closedEntry.EndTime!.Value.Hour);
         Assert.Equal(endOfDayTime.Minutes, closedEntry.EndTime.Value.Minute);
         Assert.Equal(endOfDayTime.Seconds, closedEntry.EndTime.Value.Second);
     }

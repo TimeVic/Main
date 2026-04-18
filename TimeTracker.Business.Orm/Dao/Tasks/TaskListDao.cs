@@ -37,7 +37,7 @@ public class TaskListDao: ITaskListDao
 
     public async Task<ListDto<TaskListEntity>> GetList(WorkspaceEntity workspace)
     {
-        ProjectEntity projectAlias = null;
+        ProjectEntity projectAlias = null!;
         var query = _sessionProvider.CurrentSession.QueryOver<TaskListEntity>()
             .Inner.JoinAlias(item => item.Project, () => projectAlias)
             .Where(() => projectAlias!.Workspace.Id == workspace.Id)

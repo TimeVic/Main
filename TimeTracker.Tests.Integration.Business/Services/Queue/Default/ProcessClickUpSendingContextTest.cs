@@ -25,9 +25,9 @@ public class ProcessClickUpSendingContextTest: BaseTest
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly TimeEntryEntity _timeEntry;
     private readonly ClickUpClientMock _clickUpClient;
-    private readonly string _securityKey;
-    private readonly string _teamId;
-    private readonly string _taskId;
+    private readonly string _securityKey = string.Empty;
+    private readonly string _teamId = string.Empty;
+    private readonly string _taskId = string.Empty;
     private readonly IWorkspaceSettingsDao _workspaceSettingsDao;
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
@@ -44,7 +44,7 @@ public class ProcessClickUpSendingContextTest: BaseTest
         _queueService = Scope.Resolve<IQueueService>();
         _timeEntrySeeder = Scope.Resolve<ITimeEntrySeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
-        _clickUpClient = Scope.Resolve<IClickUpClient>() as ClickUpClientMock;
+        _clickUpClient = (Scope.Resolve<IClickUpClient>() as ClickUpClientMock)!;
         _workspaceSettingsDao = Scope.Resolve<IWorkspaceSettingsDao>();
         _userDao = Scope.Resolve<IUserDao>();
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
@@ -52,9 +52,9 @@ public class ProcessClickUpSendingContextTest: BaseTest
         _projectSeeder = Scope.Resolve<IProjectSeeder>();
         
         var configuration = Scope.Resolve<IConfiguration>();
-        _securityKey = configuration.GetValue<string>("Integration:ClickUp:SecurityKey");
-        _teamId = configuration.GetValue<string>("Integration:ClickUp:TeamId");
-        _taskId = configuration.GetValue<string>("Integration:ClickUp:TaskId");
+        _securityKey = configuration.GetValue<string>("Integration:ClickUp:SecurityKey")!;
+        _teamId = configuration.GetValue<string>("Integration:ClickUp:TeamId")!;
+        _taskId = configuration.GetValue<string>("Integration:ClickUp:TaskId")!;
         
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();

@@ -5,7 +5,7 @@ namespace TimeTracker.Api.Shared.Dto.Entity;
 
 public class ProjectDto : BaseDto
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     
     public bool IsBillableByDefault { get; set; }
     

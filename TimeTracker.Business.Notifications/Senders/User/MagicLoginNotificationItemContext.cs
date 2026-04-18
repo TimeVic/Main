@@ -5,10 +5,10 @@ namespace TimeTracker.Business.Notifications.Senders.User;
 
 public class MagicLoginNotificationItemContext : INotificationItemContext
 {
-    public string ToAddress { get; set; }
-    public string FrontendUrl { get; set; }
-    public string Token { get; set; }
-    public string LoginUrl { get; set; }
+    public string ToAddress { get; set; } = string.Empty;
+    public string FrontendUrl { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
+    public string LoginUrl { get; set; } = string.Empty;
 
     public MagicLoginNotificationItemContext() {}
 

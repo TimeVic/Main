@@ -28,7 +28,7 @@ public class TagProfile : Profile
             .ForMember(
                 dto => dto.Color,
                 builder => builder.MapFrom(
-                    entity => ColorTranslator.FromHtml(entity.Color)
+                    entity => ColorTranslator.FromHtml(entity.Color!)
                 )
             );
     }

@@ -38,7 +38,7 @@ public partial class RedmineClient: AExternalClientService, IRedmineClient
 
     public override bool IsCorrectTaskId(TimeEntryEntity timeEntry)
     {
-        return TaskRegex.IsMatch(timeEntry.TaskId);
+        return TaskRegex.IsMatch(timeEntry.TaskId!);
     }
 
     protected override async Task<SynchronizedTimeEntryDto?> SendTimeEntryAsync(TimeEntryEntity timeEntry)
@@ -51,7 +51,7 @@ public partial class RedmineClient: AExternalClientService, IRedmineClient
             TimeEntryRequest = new TimeEntryRequestDto()
             {
                 Duration = timeEntry.Duration,
-                TaskId = timeEntry.ExternalTaskId,
+                TaskId = timeEntry.ExternalTaskId!,
                 UserId = settings.RedmineUserId,
                 Comments = timeEntry.Description ?? "",
                 SpentOnDate = DateOnly.FromDateTime(timeEntry.StartTime),
@@ -154,7 +154,7 @@ public partial class RedmineClient: AExternalClientService, IRedmineClient
         httpClient.DefaultRequestHeaders.Add("X-Redmine-API-Key", settings!.ApiKey);
 
         var url = string.Format(GetIssuesUrl, settings.Url);
-        var urlParams = new Dictionary<string, string>();
+        var urlParams = new Dictionary<string, string?>();
         urlParams.Add("offset", "0");
         urlParams.Add("limit", "1");
         var uri = new Uri(QueryHelpers.AddQueryString(url, urlParams), UriKind.Absolute);

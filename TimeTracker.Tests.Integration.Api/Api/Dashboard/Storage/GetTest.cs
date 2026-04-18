@@ -68,7 +68,7 @@ public class GetTest: BaseTest
     {
         var response = await GetRequestAsync(
             string.Format(Url, _uploadedFile.Id),
-            null,
+            null!,
             new Dictionary<string, string>()
             {
                 { "api_token", _jwtToken }

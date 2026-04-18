@@ -8,7 +8,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 
 public class GetListResponse: IResponse
 {
-    public PaginatedListDto<TimeEntryDto> List { get; set; }
+    public PaginatedListDto<TimeEntryDto> List { get; set; } = null!;
     
     public TimeEntryDto? ActiveTimeEntry { get; set; }
 }

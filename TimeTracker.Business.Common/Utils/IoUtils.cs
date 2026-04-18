@@ -9,12 +9,12 @@ namespace TimeTracker.Business.Common.Utils
             
             List<string> resourceNames = new List<string>(assembly.GetManifestResourceNames());
             resourcePath = resourcePath.Replace(@"/", ".");
-            resourcePath = resourceNames.FirstOrDefault(r => r.Contains(resourcePath));
+            var resolvedResourcePath = resourceNames.FirstOrDefault(r => r.Contains(resourcePath));
 
-            if (resourcePath == null)
+            if (resolvedResourcePath == null)
                 throw new FileNotFoundException("Resource not found");
 
-            return resourcePath;
+            return resolvedResourcePath;
         }
 
         public static string GetResourcePath(string resourcePath)
@@ -27,16 +27,24 @@ namespace TimeTracker.Business.Common.Utils
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             var resourcePath = GetResourcePath(filePath);
-            return assembly.GetManifestResourceStream(resourcePath);
+            return assembly.GetManifestResourceStream(resourcePath)
+                   ?? throw new FileNotFoundException("Resource not found");
         }
 
         public static string GetResourceAsString(Assembly assembly, string filePath)
         {
             var resourcePath = GetResourcePath(filePath);
             using (var stream = assembly.GetManifestResourceStream(resourcePath))
-            using (StreamReader reader = new StreamReader(stream))
             {
-                return reader.ReadToEnd();
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Resource not found");
+                }
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
             }
         }
 

@@ -10,12 +10,12 @@ public class TaskFullDto : TaskDto
 
     #region Calculated
 
-    public string FormattedId
+    public new string FormattedId
     {
         get => string.IsNullOrEmpty(ExternalTaskId) ? $"#{TaskId}" : ExternalTaskId;
     }
 
-    public DateTime? CalculatedStartTime
+    public new DateTime? CalculatedStartTime
     {
         get
         {
@@ -28,7 +28,7 @@ public class TaskFullDto : TaskDto
         }
     }
     
-    public DateTime? CalculatedEndTime
+    public new DateTime? CalculatedEndTime
     {
         get
         {
@@ -40,7 +40,7 @@ public class TaskFullDto : TaskDto
         }
     }
     
-    public DateTime? DueTime
+    public new DateTime? DueTime
     {
         get
         {

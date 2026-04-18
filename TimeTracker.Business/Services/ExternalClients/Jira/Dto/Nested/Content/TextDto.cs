@@ -9,5 +9,5 @@ public class TextDto
     public string Type { get; set; } = "text";
     
     [JsonProperty("text")]
-    public string Text { get; set; }
+    public string Text { get; set; } = string.Empty;
 }

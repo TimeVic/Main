@@ -4,7 +4,7 @@ namespace TimeTracker.Api.Shared.Dto.Model.WorkspaceMembership;
 
 public class MembershipProjectAccessDto
 {
-    public ProjectDto Project { get; set; }
+    public ProjectDto Project { get; set; } = null!;
 
     public decimal? HourlyRate { get; set; } = null;
 }

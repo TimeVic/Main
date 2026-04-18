@@ -18,7 +18,7 @@ public class GetListTest: BaseTest
     private readonly string Url = "/dashboard/list/currency/list";
     
     private readonly UserEntity _user;
-    private readonly IDataFactory<PaymentEntity> _factory;
+    private new readonly IDataFactory<PaymentEntity> _factory;
     private readonly string _jwtToken;
     private readonly WorkspaceEntity _workspace;
     private readonly IPaymentSeeder _paymentSeeder;

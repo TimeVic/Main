@@ -12,6 +12,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client
         
         [RequiredNonEmpty]
         [StringLength(256, MinimumLength = 2)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

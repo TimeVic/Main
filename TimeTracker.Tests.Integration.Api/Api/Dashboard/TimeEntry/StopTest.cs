@@ -21,7 +21,7 @@ public class StopTest: BaseTest
     private readonly WorkspaceEntity _defaultWorkspace;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IWorkspaceDao _workspaceDao;
-    private readonly IQueueDao _queueDao;
+    private new readonly IQueueDao _queueDao;
     private readonly IQueueService _queueService;
 
     public StopTest(ApiCustomWebApplicationFactory factory) : base(factory)

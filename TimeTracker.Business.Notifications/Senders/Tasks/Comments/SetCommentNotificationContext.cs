@@ -4,13 +4,13 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks.Comments
 {
     public class SetCommentNotificationContext : INotificationItemContext
     {
-        public string ToAddress { get; set; }
+        public string ToAddress { get; set; } = string.Empty;
         
         public Guid TaskId { get; set; }
         
-        public string OwnerName { get; set; }
+        public string OwnerName { get; set; } = string.Empty;
         
-        public string Comment { get; set; }
+        public string Comment { get; set; } = string.Empty;
         
         public bool IsUpdated { get; set; }
         

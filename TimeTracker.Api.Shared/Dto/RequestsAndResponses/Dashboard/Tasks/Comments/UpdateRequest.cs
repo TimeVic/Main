@@ -11,7 +11,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Commen
         
         [Required]
         [StringLength(10000, MinimumLength = 1)]
-        public string Comment { get; set; }
+        public string Comment { get; set; } = string.Empty;
         
         public IEnumerable<Guid>? WatcherIds { get; set; }
 

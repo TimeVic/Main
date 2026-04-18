@@ -66,15 +66,15 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
                 foreach (var watcherId in request.WatcherIds)
                 {
                     var watchUser = await _userDao.GetById(watcherId);
-                    if (!await _securityManager.HasAccess(AccessLevel.Read, watchUser, task))
+                    if (!await _securityManager.HasAccess(AccessLevel.Read, watchUser!, task))
                     {
                         throw new HasNoAccessException();
                     }
-                    watchers.Add(watchUser);
+                    watchers.Add(watchUser!);
                 }
             }
             var taskComment = await _taskCommentDao.AddAsync(
-                task,
+                task!,
                 user,
                 request.Comment,
                 watchers

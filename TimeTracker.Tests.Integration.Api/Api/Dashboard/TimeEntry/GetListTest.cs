@@ -64,7 +64,7 @@ public class GetListTest: BaseTest
         {
             Assert.NotEqual(Guid.Empty, item.User.Id);
             Assert.NotNull(item.Project);
-            Assert.NotEmpty(item.Description);
+            Assert.NotEmpty(item.Description!);
             Assert.True(item.StartTime > DateTime.MinValue);
             Assert.True(item.EndTime > DateTime.MinValue);
         });

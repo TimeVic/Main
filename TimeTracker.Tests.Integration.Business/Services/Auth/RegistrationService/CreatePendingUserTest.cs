@@ -16,7 +16,7 @@ public class CreatePendingUserTest: BaseTest
     private readonly IRegistrationService _authService;
     private readonly IDataFactory<UserEntity> _userFactory;
     private readonly IQueueService _queueService;
-    private readonly IQueueDao _queueDao;
+    private new readonly IQueueDao _queueDao;
 
     public CreatePendingUserTest(): base()
     {
@@ -73,7 +73,7 @@ public class CreatePendingUserTest: BaseTest
         
         var actualUser = await _authService.CreatePendingUser(expectedEmail);
         await FlushDbChanges();
-        await _authService.ActivateUser(actualUser.VerificationToken, "some password");
+        await _authService.ActivateUser(actualUser.VerificationToken!, "some password");
 
         await Assert.ThrowsAsync<RecordIsExistsException>(async () =>
         {

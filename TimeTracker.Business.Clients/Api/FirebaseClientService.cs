@@ -31,12 +31,13 @@ public class FirebaseClientService: IFirebaseClientService
                 FileMode.Open,
                 FileAccess.Read
             );
-            _credentials = GoogleCredential.FromStream(credentialsStream);
+            _credentials = CredentialFactory.FromStream<ServiceAccountCredential>(credentialsStream).ToGoogleCredential();
         }
         else
         {
-            var jsonConfiguration = _configuration.GetValue<string>("Google:Firebase:Credentials");
-            _credentials = GoogleCredential.FromJson(jsonConfiguration);
+            var jsonConfiguration = _configuration.GetValue<string>("Google:Firebase:Credentials")
+                                    ?? throw new FileNotFoundException("Firebase credentials configuration not found");
+            _credentials = CredentialFactory.FromJson<ServiceAccountCredential>(jsonConfiguration).ToGoogleCredential();
         }
         
         if (_credentials == null)
@@ -90,7 +91,7 @@ public class FirebaseClientService: IFirebaseClientService
             {
                 Tokens = new List<string>() { token }
             };
-            var response = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
+            var response = await FirebaseMessaging.DefaultInstance.SendEachForMulticastAsync(message);
             return response.SuccessCount > 0;
         }
         catch (Exception e)

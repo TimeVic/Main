@@ -17,12 +17,12 @@ public class TimeEntryDto: BaseDto
     public bool IsSynced { get; set; }
     public DateTime CreatedAt { get; set; }
     public ProjectDto? Project { get; set; }
-    public UserDto User { get; set; }
+    public UserDto User { get; set; } = null!;
     public TaskDto? Task { get; set; }
     
     #region Time
 
-    public string TimeZone { get; set; }
+    public string TimeZone { get; set; } = string.Empty;
 
     [NonConvertibleDateTime]
     public DateTime StartTime

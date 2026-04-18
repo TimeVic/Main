@@ -72,7 +72,7 @@ public partial class JiraClient: AExternalClientService, IJiraClient
         var uri = BuildChangeTimeEntryUri(
             timeEntry.Workspace,
             timeEntry.User,
-            timeEntry.ExternalTaskId,
+            timeEntry.ExternalTaskId!,
             timeEntry.JiraId
         );;
         _logger.LogDebug(
@@ -102,7 +102,7 @@ public partial class JiraClient: AExternalClientService, IJiraClient
             return new SynchronizedTimeEntryDto { IsError = true };
         }
 
-        var jiraTask = await GetTaskAsync(timeEntry, timeEntry.ExternalTaskId);
+        var jiraTask = await GetTaskAsync(timeEntry, timeEntry.ExternalTaskId!);
         return new SynchronizedTimeEntryDto()
         {
             Id = responseData.Id.ToString(),
@@ -120,7 +120,7 @@ public partial class JiraClient: AExternalClientService, IJiraClient
         var uri = BuildChangeTimeEntryUri(
             timeEntry.Workspace,
             timeEntry.User,
-            timeEntry.ExternalTaskId,
+            timeEntry.ExternalTaskId!,
             timeEntry.JiraId
         );
         _logger.LogDebug("Jira. Send request to: {Uri}", uri);
@@ -178,7 +178,7 @@ public partial class JiraClient: AExternalClientService, IJiraClient
         if (settings == null)
             throw new NullReferenceException("Jira settings not found");
         var httpClient = new HttpClient();
-        httpClient.AddBasicAuthCredentials(settings.UserName, settings.ApiKey);
+        httpClient.AddBasicAuthCredentials(settings.UserName!, settings.ApiKey!);
         return httpClient;
     }
 

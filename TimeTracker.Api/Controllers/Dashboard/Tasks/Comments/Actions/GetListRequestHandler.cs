@@ -47,7 +47,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
                 throw new HasNoAccessException();
             }
 
-            var list = await _taskCommentDao.GetList(task, request.Page);
+            var list = await _taskCommentDao.GetList(task!, request.Page);
             return new GetListResponse(
                 _mapper.Map<ICollection<TaskCommentDto>>(list.Items),
                 list.TotalCount

@@ -49,7 +49,7 @@ public class NotificationCenterPushRequestHandler : IAsyncQueueHandler<Notificat
             throw new DataValidationException("ProducedUser can not be null");
         }
 
-        IEntity entity = null;
+        IEntity entity = null!;
         if (commandContext.TaskId.HasValue)
         {
             entity = (await _taskDao.GetById(taskId: commandContext.TaskId.Value))!;

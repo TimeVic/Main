@@ -14,7 +14,7 @@ public static class JsonHelper
         });
     }
     
-    public static byte[] SerializeToBytes(object data)
+    public static byte[]? SerializeToBytes(object data)
     {
         var jsonString = SerializeToString(data);
         if (!string.IsNullOrEmpty(jsonString))

@@ -94,7 +94,7 @@ public class UploadTest: BaseTest
         var actualUploadedFile = await _fileStorage.UploadFirstPendingToCloud();
         Assert.NotNull(actualUploadedFile);
         Assert.Equal(actualData.Id, actualUploadedFile.Id);
-        Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath);
+        Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath!);
     }
     
     [Fact]
@@ -152,6 +152,6 @@ public class UploadTest: BaseTest
         var actualUploadedFile = await _fileStorage.UploadFirstPendingToCloud();
         Assert.NotNull(actualUploadedFile);
         Assert.Equal(actualData.Id, actualUploadedFile.Id);
-        Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath);
+        Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath!);
     }
 }

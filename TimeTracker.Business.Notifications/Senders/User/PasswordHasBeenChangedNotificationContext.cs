@@ -6,7 +6,7 @@ namespace TimeTracker.Business.Notifications.Senders.User
 {
     public class PasswordHasBeenChangedNotificationContext : INotificationItemContext
     {
-        public string ToAddress { get; set; }
+        public string ToAddress { get; set; } = string.Empty;
         
         public PasswordHasBeenChangedNotificationContext() {}
     }

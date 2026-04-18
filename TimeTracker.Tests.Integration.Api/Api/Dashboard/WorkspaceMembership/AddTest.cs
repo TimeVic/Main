@@ -30,7 +30,7 @@ public class AddTest: BaseTest
     private string _otherJwtToken;
     private UserEntity _otherUser;
     private WorkspaceEntity _otherWorkspace;
-    private readonly IQueueDao _queueDao;
+    private new readonly IQueueDao _queueDao;
 
     public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {

@@ -52,14 +52,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             }
             var settings = await _workspaceSettingsDao.SetRedmineAsync(
                 user,
-                workspace,
+                workspace!,
                 request.Url,
                 request.ApiKey,
                 request.RedmineUserId,
                 request.ActivityId
             );
 
-            settings.IsActive = await _redmineClient.IsValidClientSettings(workspace, user);
+            settings.IsActive = await _redmineClient.IsValidClientSettings(workspace!, user);
             return _mapper.Map<WorkspaceSettingsRedmineDto>(settings);
         }
     }

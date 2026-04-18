@@ -53,14 +53,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
             }
             else
             {
-                var userAccessLevel = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+                var userAccessLevel = await _workspaceAccessService.GetAccessTypeAsync(user, workspace!);
                 if (userAccessLevel != null)
                 {
                     throw new RecordIsExistsException("This membership already added");
                 }    
             }
             var workspaceMembership = await _workspaceAccessService.ShareAccessAsync(
-                workspace,
+                workspace!,
                 user,
                 MembershipAccessType.User
             );

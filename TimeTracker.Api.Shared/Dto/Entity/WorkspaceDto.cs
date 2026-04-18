@@ -7,11 +7,11 @@ namespace TimeTracker.Api.Shared.Dto.Entity;
 
 public class WorkspaceDto: BaseDto
 {   
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public bool IsDefault { get; set; }
     public string? Description { get; set; }
-    public CurrencyDto Currency { get; set; }
-    public string TimeZone { get; set; }
+    public CurrencyDto Currency { get; set; } = null!;
+    public string TimeZone { get; set; } = string.Empty;
     
     public MembershipAccessType? CurrentUserAccess { get; set; }
 

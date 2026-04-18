@@ -5,7 +5,7 @@ namespace TimeTracker.Api.Shared.Dto.Entity;
 
 public class ClientDto: BaseDto
 {   
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     
 #if IS_WEB_APP
     #region Select list methods

@@ -9,7 +9,7 @@ namespace TimeTracker.Business.Extensions
             return Encoding.Default.GetString(bytes);
         }
 
-        public static string ToHexString(this byte[] hex, bool ToUpper = false)
+        public static string? ToHexString(this byte[]? hex, bool ToUpper = false)
         {
             if (hex == null)
             {

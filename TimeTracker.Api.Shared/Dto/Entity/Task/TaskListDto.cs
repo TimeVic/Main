@@ -5,9 +5,9 @@ namespace TimeTracker.Api.Shared.Dto.Entity.Task;
 
 public class TaskListDto: BaseDto
 {   
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     
-    public ProjectDto Project { get; set; }
+    public ProjectDto Project { get; set; } = null!;
     
 #if IS_WEB_APP
     #region Select list methods

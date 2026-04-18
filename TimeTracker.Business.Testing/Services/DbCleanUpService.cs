@@ -35,6 +35,7 @@ public class DbCleanUpService: IDbCleanUpService
             "task_stored_files",
             "task_tags",
             "time_entry_tags",
+            "user_magic_tokens",
             "user_jwt_tokens",
             "user_access_tokens",
             "user_notification_tokens",
@@ -54,7 +55,6 @@ public class DbCleanUpService: IDbCleanUpService
             "goals_tracker_notes",
             "goals_trackers",
             
-            "user_magic_tokens",
             "workspace_setting_jiras",
             "stored_files",
             "tags",

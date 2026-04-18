@@ -13,7 +13,7 @@ public class PaymentDto: BaseDto
     
     public ProjectDto? Project { get; set; }
     
-    public ClientDto Client { get; set; }
+    public ClientDto Client { get; set; } = null!;
     
 #if IS_WEB_APP
     #region Select list methods

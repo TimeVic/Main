@@ -8,7 +8,7 @@ public class BaseUnitTest
     {
         var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
         stubsPath = Path.GetDirectoryName(stubsPath);
-        stubsPath = Path.Combine(stubsPath, "stubs", subDir);
+        stubsPath = Path.Combine(stubsPath!, "stubs", subDir!);
         var filePath = Path.Combine(stubsPath, name);
         var stubFileBytes = await File.ReadAllBytesAsync(filePath);
         return Encoding.UTF8.GetString(stubFileBytes);

@@ -8,10 +8,10 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
     {   
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
         
         [Required]
         [IsReCaptcha]
-        public string ReCaptcha { get; set; }
+        public string ReCaptcha { get; set; } = string.Empty;
     }
 }

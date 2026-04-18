@@ -29,9 +29,9 @@ public partial class RedmineClientTest : BaseTest
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IUserDao _userDao;
     
-    private readonly string _apiKey;
+    private readonly string _apiKey = string.Empty;
     private readonly long _userId;
-    private readonly string _taskId;
+    private readonly string _taskId = string.Empty;
     private readonly string? _redmineUrl;
     private readonly long _activityId;
     private readonly ITaskSeeder _taskSeeder;
@@ -54,9 +54,9 @@ public partial class RedmineClientTest : BaseTest
         _taskListSeeder = Scope.Resolve<ITaskListSeeder>();
 
         var configuration = Scope.Resolve<IConfiguration>();
-        _apiKey = configuration.GetValue<string>("Integration:Redmine:ApiKey");
+        _apiKey = configuration.GetValue<string>("Integration:Redmine:ApiKey")!;
         _userId = configuration.GetValue<long>("Integration:Redmine:UserId");
-        _taskId = configuration.GetValue<string>("Integration:Redmine:TaskId");
+        _taskId = configuration.GetValue<string>("Integration:Redmine:TaskId")!;
         _activityId = configuration.GetValue<long>("Integration:Redmine:ActivityId");
         _redmineUrl = configuration.GetValue<string>("Integration:Redmine:Url");
 

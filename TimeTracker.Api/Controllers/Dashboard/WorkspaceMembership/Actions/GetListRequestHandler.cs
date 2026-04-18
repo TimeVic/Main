@@ -39,13 +39,13 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMembership.Actions
         {
             var userId = _apiRequestService.GetCurrentUserId();
             var user = await _userDao.GetById(userId);
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
-            if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
+            var workspace = await _userDao.GetUsersWorkspace(user!, request.WorkspaceId);
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user!, workspace))
             {
                 throw new HasNoAccessException();
             }
 
-            var listDto = await _workspaceDao.GetMembershipsAsync(workspace, request.Page);
+            var listDto = await _workspaceDao.GetMembershipsAsync(workspace!, request.Page);
             return new GetListResponse(
                 _mapper.Map<ICollection<WorkspaceMembershipDto>>(listDto.Items),
                 listDto.TotalCount

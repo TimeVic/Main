@@ -13,11 +13,11 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
         [Required]
         [StringLength(200)]
         [IsUrl]
-        public virtual string Url { get; set; }
+        public virtual string Url { get; set; } = string.Empty;
     
         [Required]
         [StringLength(100)]
-        public virtual string ApiKey { get; set; }
+        public virtual string ApiKey { get; set; } = string.Empty;
     
         [Required]
         [IsPositive]

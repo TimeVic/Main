@@ -36,8 +36,8 @@ public class ProcessJiraSendingContextTest: BaseTest
     private readonly TaskListEntity _taskList;
     private readonly TaskEntity _task;
 
-    private readonly string _apiToken;
-    private readonly string _userName;
+    private readonly string _apiToken = string.Empty;
+    private readonly string _userName = string.Empty;
     private readonly string _taskId;
     private readonly string? _url;
 
@@ -46,7 +46,7 @@ public class ProcessJiraSendingContextTest: BaseTest
         _queueService = Scope.Resolve<IQueueService>();
         _timeEntrySeeder = Scope.Resolve<ITimeEntrySeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
-        _jiraClient = Scope.Resolve<IJiraClient>() as JiraClientMock;
+        _jiraClient = (Scope.Resolve<IJiraClient>() as JiraClientMock)!;
         _workspaceSettingsDao = Scope.Resolve<IWorkspaceSettingsDao>();
         _userDao = Scope.Resolve<IUserDao>();
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
@@ -54,8 +54,8 @@ public class ProcessJiraSendingContextTest: BaseTest
         _projectSeeder = Scope.Resolve<IProjectSeeder>();
         
         var configuration = Scope.Resolve<IConfiguration>();
-        _apiToken = configuration.GetValue<string>("Integration:Jira:ApiToken");
-        _userName = configuration.GetValue<string>("Integration:Jira:UserName");
+        _apiToken = configuration.GetValue<string>("Integration:Jira:ApiToken")!;
+        _userName = configuration.GetValue<string>("Integration:Jira:UserName")!;
         // _taskId = configuration.GetValue<string>("Integration:Jira:TaskId");
         _taskId = "SP-2315";
         _url = configuration.GetValue<string>("Integration:Jira:Url");
