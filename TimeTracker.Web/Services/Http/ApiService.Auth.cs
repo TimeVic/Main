@@ -13,6 +13,11 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<LoginResponseDto?>(ApiUrl.Login, model);
         }
 
+        public async Task<LoginResponseDto?> LoginAsDemoAsync()
+        {
+            return await GetAsync<LoginResponseDto?>(ApiUrl.LoginAsDemo);
+        }
+
         public async Task<bool> LoginMagicAsync(LoginMagicRequest model)
         {
             try

@@ -9,6 +9,7 @@ public static class SiteUrl
     public static readonly string Registration_Step2 = "/registration/step2";
         
     public static readonly string Login = "/login";
+    public static readonly string LoginAsDemo = "/login/as-demo";
     public static readonly string LoginMagicVerify = "/login/magic/{0}";
     public static readonly string ForgotPassword = "/user/password-reset";
         
