@@ -11,7 +11,7 @@ namespace TimeTracker.Business.Extensions
             return System.Text.UTF8Encoding.Default.GetBytes(str);
         }
 
-        public static byte[] ToHexBytes(this string hex)
+        public static byte[]? ToHexBytes(this string? hex)
         {
             if (hex == null)
             {
@@ -87,7 +87,7 @@ namespace TimeTracker.Business.Extensions
             return $"{amount.ToString("0.#####")} mBTC";
         }
 
-        public static string Truncate(this string value, int maxLength)
+        public static string? Truncate(this string? value, int maxLength)
         {
             if (string.IsNullOrEmpty(value))
             {
