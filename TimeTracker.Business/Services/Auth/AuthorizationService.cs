@@ -121,8 +121,10 @@ public class AuthorizationService: IAuthorizationService
         return await GenerateNewJwtToken(accessToken);
     }
     
-    public async Task<AuthResultDto> GenerateNewJwtToken(UserAccessTokenEntity accessToken)
+    public async Task<AuthResultDto> GenerateNewJwtToken(UserAccessTokenEntity? accessToken)
     {
+        ArgumentNullException.ThrowIfNull(accessToken);
+
         if (accessToken.IsExpired)
         {
             await _accessTokenDao.Delete(accessToken);

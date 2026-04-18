@@ -25,7 +25,7 @@ namespace TimeTracker.Business.Extensions
         
         public static string GetDisplayName(this Type genericEnumType, object enumValue)  
         {
-            var memberInfo = genericEnumType.GetMember(enumValue.ToString());
+            var memberInfo = genericEnumType.GetMember(enumValue.ToString() ?? string.Empty);
             if (memberInfo.Any())
             {
                 var attribs = memberInfo[0].GetCustomAttributes(
@@ -42,10 +42,10 @@ namespace TimeTracker.Business.Extensions
                 );
                 if (attribs.Any())
                 {
-                    return ((DisplayAttribute)attribs.ElementAt(0)).GetName();
+                    return ((DisplayAttribute)attribs.ElementAt(0)).GetName() ?? enumValue.ToString() ?? string.Empty;
                 }
             }
-            return enumValue.ToString();
+            return enumValue.ToString() ?? string.Empty;
         }
     }
 }

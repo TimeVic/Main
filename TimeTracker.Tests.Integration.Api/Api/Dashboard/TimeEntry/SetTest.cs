@@ -29,7 +29,7 @@ public class SetTest: BaseTest
     private readonly IProjectDao _projectDao;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IWorkspaceDao _workspaceDao;
-    private readonly IQueueDao _queueDao;
+    private new readonly IQueueDao _queueDao;
     private readonly IQueueService _queueService;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IUserSeeder _userSeeder;

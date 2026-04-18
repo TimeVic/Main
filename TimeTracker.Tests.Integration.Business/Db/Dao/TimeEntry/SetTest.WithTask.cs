@@ -22,7 +22,7 @@ public partial class SetTest: BaseTest
         var expectedDto = new TimeEntryCreationDto()
         {
             Description = fakeTimeEntry.Description,
-            EndTime = fakeTimeEntry.EndTime.Value,
+            EndTime = fakeTimeEntry.EndTime!.Value,
             StartTime = fakeTimeEntry.StartTime,
             HourlyRate = fakeTimeEntry.HourlyRate,
             IsBillable = fakeTimeEntry.IsBillable

@@ -16,7 +16,7 @@ public class TaskDto : IResponse
     
     public TaskPriority Priority { get; set; }
     
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
     
     public string? Description { get; set; }
     
@@ -34,11 +34,11 @@ public class TaskDto : IResponse
     
     public DateTime CreatedAt { get; set; }
 
-    public TaskListDto TaskList { get; set; }
+    public TaskListDto TaskList { get; set; } = null!;
     
     public ICollection<TagDto> Tags { get; set; } = new List<TagDto>();
     
-    public UserDto User { get; set; }
+    public UserDto User { get; set; } = null!;
     
     #region Calculated
 

@@ -13,7 +13,7 @@ public abstract class BaseDto: IResponse, IHasId
         if (obj is IHasId other)
         {
             var thisIsTransient = Id == Guid.Empty;
-            var otherIsTransient = Id == Guid.Empty;
+            var otherIsTransient = other.Id == Guid.Empty;
         
             if (thisIsTransient && otherIsTransient)
                 return ReferenceEquals(this, other);
@@ -36,5 +36,10 @@ public abstract class BaseDto: IResponse, IHasId
     public override string ToString()
     {
         return Id.ToString();
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
     }
 }

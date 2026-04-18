@@ -7,23 +7,23 @@ namespace TimeTracker.Business.Clients.Smtp
         public string SendEmail(
             string to,
             EmailBuilder emailBuilder,
-            string bcc
+            string? bcc
         );
 
         public string SendEmail(
             string to,
             string subject,
             string body,
-            string bcc
+            string? bcc
         );
 
         public string SendEmail(
-            string from,
+            string? from,
             string to,
             string subject,
             string body,
-            string cc,
-            string bcc
+            string? cc,
+            string? bcc
         );
     }
 }

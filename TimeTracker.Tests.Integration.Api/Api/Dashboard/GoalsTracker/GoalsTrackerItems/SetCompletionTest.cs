@@ -23,7 +23,7 @@ public class SetCompletionTest: BaseTest
     
     private readonly IQueueService _queueService;
     private readonly UserEntity _user;
-    private readonly IDataFactory<GoalsTrackerItemEntity> _factory;
+    private new readonly IDataFactory<GoalsTrackerItemEntity> _factory;
     private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
     private readonly IUserDao _userDao;

@@ -8,8 +8,9 @@ namespace TimeTracker.Business.Common.Constants
             {
 #if DEBUG
                 return true;
-#endif
+#else
                 return false;
+#endif
             }
 
         }

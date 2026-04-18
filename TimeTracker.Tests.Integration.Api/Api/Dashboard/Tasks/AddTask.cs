@@ -98,8 +98,8 @@ public partial class AddTask: BaseTest
         Assert.Equal(task.Status, actualData.Status);
         Assert.Equal(task.Priority, actualData.Priority);
         Assert.Equal(task.IsArchived, actualData.IsArchived);
-        Assert.Equal(task.EndTime.Value.ToLongTimeString(), actualData.EndTime.Value.ToUniversalTime().ToLongTimeString());
-        Assert.Equal(task.StartTime.Value.ToLongTimeString(), actualData.StartTime.Value.ToUniversalTime().ToLongTimeString());
+        Assert.Equal(task.EndTime!.Value.ToLongTimeString(), actualData.EndTime!.Value.ToUniversalTime().ToLongTimeString());
+        Assert.Equal(task.StartTime!.Value.ToLongTimeString(), actualData.StartTime!.Value.ToUniversalTime().ToLongTimeString());
     }
     
     [Fact]

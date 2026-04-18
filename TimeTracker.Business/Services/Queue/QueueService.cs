@@ -71,7 +71,7 @@ public partial class QueueService: IQueueService
                 break;
             }
 
-            string error = null;
+            string error = null!;
             try
             {
                 await HandleQueueItem(queueItem, cancellationToken);

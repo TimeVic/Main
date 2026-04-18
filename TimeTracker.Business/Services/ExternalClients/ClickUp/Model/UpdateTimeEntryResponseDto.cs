@@ -6,7 +6,7 @@ namespace TimeTracker.Business.Services.ExternalClients.ClickUp.Model;
 public class UpdateTimeEntryResponseDto
 {
     [JsonProperty(PropertyName = "data")]
-    public ICollection<TimeEntryDto> Data { get; set; }
+    public ICollection<TimeEntryDto> Data { get; set; } = null!;
     
     [JsonProperty(PropertyName = "err")]
     public string? Error { get; set; }

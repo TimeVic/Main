@@ -59,7 +59,7 @@ public class UserSeeder: IUserSeeder
     {
         var user = await CreatePendingAsync();
         await _dbSessionProvider.CurrentSession.FlushAsync();
-        user = await _registrationService.ActivateUser(user.VerificationToken, password);
+        user = await _registrationService.ActivateUser(user.VerificationToken!, password);
         return user;
     }
     
@@ -95,7 +95,7 @@ public class UserSeeder: IUserSeeder
     {
         var user = await CreatePendingAsync();
         await _dbSessionProvider.CurrentSession.FlushAsync();
-        user = await _registrationService.ActivateUser(user.VerificationToken, "Test password");
+        user = await _registrationService.ActivateUser(user.VerificationToken!, "Test password");
         await _workspaceAccessService.ShareAccessAsync(workspace, user, access, projects);
         return user;
     }

@@ -108,10 +108,10 @@ public class SendSetTimeEntryIntegrationRequestHandler: IAsyncQueueHandler<SendS
         {
             _logger.LogDebug(e.Message);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             await transaction.RollbackAsync(cancellationToken);
-            throw e;
+            throw;
         }
     }
 }

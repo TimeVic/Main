@@ -6,10 +6,10 @@ namespace TimeTracker.Business.Notifications.Senders.User
 {
     public class EmailVerificationNotificationItemContext : INotificationItemContext
     {
-        public string ToAddress { get; set; }
-        public string FrontendUrl { get; set; }
-        public string VerificationToken { get; set; }
-        public string VerificationUrl { get; set; }
+        public string ToAddress { get; set; } = string.Empty;
+        public string FrontendUrl { get; set; } = string.Empty;
+        public string VerificationToken { get; set; } = string.Empty;
+        public string VerificationUrl { get; set; } = string.Empty;
 
         public EmailVerificationNotificationItemContext() {}
 

@@ -20,7 +20,7 @@ public class AddTest: BaseTest
     private readonly string Url = "/dashboard/payment/add";
     
     private readonly UserEntity _user;
-    private readonly IDataFactory<PaymentEntity> _factory;
+    private new readonly IDataFactory<PaymentEntity> _factory;
     private readonly string _jwtToken;
     private readonly IClientDao _clientDao;
     private readonly WorkspaceEntity _workspace;

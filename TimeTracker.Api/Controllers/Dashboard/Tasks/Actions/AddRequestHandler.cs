@@ -68,7 +68,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                 throw new HasNoAccessException();
             }
 
-            TaskEntity task = null;
+            TaskEntity task = null!;
             if (!string.IsNullOrEmpty(request.ExternalTaskId))
             {
                 task = await CreateFromExternalId(request, taskList, user);
@@ -121,7 +121,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             UserEntity user
         )
         {
-            if (_clickUpClient.IsCorrectTaskId(request.ExternalTaskId))
+            if (_clickUpClient.IsCorrectTaskId(request.ExternalTaskId!))
             {
                 if (request.TimeEntryId != null)
                 {
@@ -136,14 +136,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                         return await _jiraClient.SetTimeEntryTaskAsync(
                             timeEntry,
                             taskList,
-                            request.ExternalTaskId
+                            request.ExternalTaskId!
                         );
                     }
                     catch (Exception) {}
                     return await _clickUpClient.SetTimeEntryTaskAsync(
                         timeEntry,
                         taskList,
-                        request.ExternalTaskId
+                        request.ExternalTaskId!
                     );
                 }
 
@@ -152,18 +152,18 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                     return await _jiraClient.SetTimeEntryTaskAsync(
                         taskList,
                         user,
-                        request.ExternalTaskId
+                        request.ExternalTaskId!
                     );
                 }
                 catch (Exception) {}
                 return await _clickUpClient.SetTimeEntryTaskAsync(
                     taskList,
                     user,
-                    request.ExternalTaskId
+                    request.ExternalTaskId!
                 );
             }
 
-            return null;
+            return null!;
         }
 
         private async Task<TimeEntryEntity> GetTimeEntry(Guid timeEntryId, UserEntity user)

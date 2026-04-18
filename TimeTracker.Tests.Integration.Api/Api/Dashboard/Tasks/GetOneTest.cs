@@ -80,7 +80,7 @@ public class GetOneTest: BaseTest
         var actualDto = await response.GetJsonDataAsync<TaskFullDto>();
         Assert.True(actualDto.TaskId > 0);
         Assert.NotEmpty(actualDto.Title);
-        Assert.NotEmpty(actualDto.Description);
+        Assert.NotEmpty(actualDto.Description!);
         Assert.NotNull(actualDto.TaskList?.Project?.Client);
         Assert.Equal(_taskList.Id, actualDto.TaskList.Id);
         

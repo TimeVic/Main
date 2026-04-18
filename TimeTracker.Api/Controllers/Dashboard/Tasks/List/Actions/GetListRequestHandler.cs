@@ -45,7 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
                 throw new HasNoAccessException();
             }
 
-            var taskLists = await _taskListDao.GetList(workspace);
+            var taskLists = await _taskListDao.GetList(workspace!);
             return new GetListResponse(
                 _mapper.Map<ICollection<TaskListDto>>(taskLists.Items),
                 taskLists.TotalCount

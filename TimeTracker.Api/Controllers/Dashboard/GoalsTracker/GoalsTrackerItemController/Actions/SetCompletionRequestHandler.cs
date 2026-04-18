@@ -42,7 +42,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
             var goalsTrackerItem = await _goalsTrackerItemsDao.GetById(request.GoalsTrackerItemId);
             await _securityManager.CheckAccess(AccessLevel.Write, user, goalsTrackerItem?.Tracker);
             var completionMarker = await _goalsTrackerItemsDao.SetCompletion(
-                goalsTrackerItem,
+                goalsTrackerItem!,
                 request.DayOfMonth,
                 request.IsChecked
             );

@@ -54,7 +54,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
             {
                 throw new HasNoAccessException();
             }
-            var taskList = await _taskListDao.CreateTaskListAsync(project, request.Name);
+            var taskList = await _taskListDao.CreateTaskListAsync(project!, request.Name);
             return _mapper.Map<TaskListDto>(taskList);
         }
     }

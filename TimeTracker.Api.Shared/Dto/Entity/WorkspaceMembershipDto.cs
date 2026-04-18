@@ -9,7 +9,7 @@ public class WorkspaceMembershipDto: BaseDto
 {   
     public MembershipAccessType Access { get; set; }
     
-    public UserDto User { get; set; }
+    public UserDto User { get; set; } = null!;
 
     public ICollection<WorkspaceMembershipProjectAccessDto> ProjectAccesses { get; set; } = new List<WorkspaceMembershipProjectAccessDto>();
 }

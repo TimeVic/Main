@@ -2,7 +2,7 @@
 
 public class SynchronizedTimeEntryDto
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
     
     public string? Comment { get; set; }
     

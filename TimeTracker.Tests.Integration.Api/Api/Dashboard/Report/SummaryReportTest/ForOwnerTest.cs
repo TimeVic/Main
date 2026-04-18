@@ -28,7 +28,7 @@ public class ForOwnerTest: BaseTest
     private readonly IPaymentDao _paymentDao;
     private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
-    private readonly ClientEntity _client;
+    private readonly ClientEntity _client = null!;
 
     public ForOwnerTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -40,7 +40,7 @@ public class ForOwnerTest: BaseTest
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         
         _project = _projectSeeder.CreateAsync(_workspace).Result;
-        _client = _project.Client;
+        _client = _project.Client!;
         for (int i = 0; i < 3; i++)
         {
             _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()

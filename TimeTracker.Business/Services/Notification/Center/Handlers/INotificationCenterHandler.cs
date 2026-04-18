@@ -6,9 +6,9 @@ namespace TimeTracker.Business.Services.Notification.Center.Handlers;
 
 public interface INotificationCenterHandler<T>: IDomainService where T: IEntity
 {
-    Task Handle<T>(
+    Task Handle<TEntity>(
         NotificationActionType action,
         UserEntity performedUser,
-        T entity
+        TEntity entity
     );
 }

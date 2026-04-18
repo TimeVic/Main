@@ -38,7 +38,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
             var user = await _apiRequestService.GetCurrentUser();
             var goalsTrackerItem = await _goalsTrackerItemsDao.GetById(request.Id);
             await _securityManager.CheckAccess(AccessLevel.Write, user, goalsTrackerItem?.Tracker);
-            await _goalsTrackerItemsDao.Archive(goalsTrackerItem);
+            await _goalsTrackerItemsDao.Archive(goalsTrackerItem!);
         }
     }
 }

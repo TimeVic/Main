@@ -19,5 +19,5 @@ public class UploadRequest: IRequest<StoredFileDto>
     public StoredFileType FileType { get; set; }
         
     [Required]
-    public IFormFile File { get; set; }
+    public IFormFile File { get; set; } = null!;
 }

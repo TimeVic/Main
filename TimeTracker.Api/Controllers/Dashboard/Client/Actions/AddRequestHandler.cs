@@ -39,12 +39,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
         {
             var userId = _apiRequestService.GetCurrentUserId();
             var user = await _userDao.GetById(userId);
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user!, request.WorkspaceId);
             if (workspace == null)
             {
                 throw new RecordNotFoundException("Workspace not found");
             }
-            if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user!, workspace))
             {
                 throw new HasNoAccessException();
             }

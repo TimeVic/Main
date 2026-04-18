@@ -12,6 +12,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMem
         
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
     }
 }

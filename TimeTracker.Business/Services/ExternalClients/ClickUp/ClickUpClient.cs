@@ -26,7 +26,7 @@ public partial class ClickUpClient: AExternalClientService, IClickUpClient
     
     private const string BaseUrl = "https://api.clickup.com/api/v2";
     
-    private static HttpClient _newHttpClient => new();
+    private new static HttpClient _newHttpClient => new();
 
     public ClickUpClient(
         ILogger<ClickUpClient> logger,
@@ -69,12 +69,12 @@ public partial class ClickUpClient: AExternalClientService, IClickUpClient
             Start = startTime.ToUnixTime(),
             End = endTime.ToUnixTime(),
             Description = timeEntry.Description,
-            TaskId = CleanUpTaskId(timeEntry.ExternalTaskId, settings.IsCustomTaskIds)
+            TaskId = CleanUpTaskId(timeEntry.ExternalTaskId!, settings.IsCustomTaskIds)
         });
         httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
         
         var uri = BuildSetTimeEntryUri(
-            settings.TeamId,
+            settings.TeamId!,
             settings.IsCustomTaskIds,
             timeEntry.ClickUpId
         );
@@ -100,7 +100,7 @@ public partial class ClickUpClient: AExternalClientService, IClickUpClient
                 return new SynchronizedTimeEntryDto { IsError = true };
             }
 
-            var clickUpTask = await GetTaskAsync(timeEntry, timeEntry.ExternalTaskId);
+            var clickUpTask = await GetTaskAsync(timeEntry, timeEntry.ExternalTaskId!);
             return new SynchronizedTimeEntryDto()
             {
                 Id = responseData.Data?.Id ?? "",
@@ -124,7 +124,7 @@ public partial class ClickUpClient: AExternalClientService, IClickUpClient
                 return new SynchronizedTimeEntryDto { IsError = true };
             }
 
-            var clickUpTask = await GetTaskAsync(timeEntry, timeEntry.ExternalTaskId);
+            var clickUpTask = await GetTaskAsync(timeEntry, timeEntry.ExternalTaskId!);
             var responseEntry = responseData.Data.FirstOrDefault();
             return new SynchronizedTimeEntryDto()
             {
@@ -163,9 +163,9 @@ public partial class ClickUpClient: AExternalClientService, IClickUpClient
         
         httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
         
-        var queryParams = new Dictionary<string, string>();
+        var queryParams = new Dictionary<string, string?>();
         queryParams.Add("custom_task_ids", settings.IsCustomTaskIds.ToString().ToLower());
-        queryParams.Add("team_id", settings.TeamId);
+        queryParams.Add("team_id", settings.TeamId!);
 
         var url = BaseUrl + $"/team/{settings.TeamId}/time_entries";
         var uri = new Uri(QueryHelpers.AddQueryString(url, queryParams), UriKind.Absolute);

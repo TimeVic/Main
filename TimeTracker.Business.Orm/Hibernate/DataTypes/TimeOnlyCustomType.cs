@@ -41,7 +41,7 @@ public class TimeOnlyCustomType : IUserType
     public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
     {
         var obj = rs[names[0]];
-        if (obj == DBNull.Value) return null;
+        if (obj == DBNull.Value) return null!;
         if (obj is TimeSpan ts) return ts;
         if (obj is DateTime dt) return dt.TimeOfDay;
         if (obj is TimeOnly to) return to.ToTimeSpan();

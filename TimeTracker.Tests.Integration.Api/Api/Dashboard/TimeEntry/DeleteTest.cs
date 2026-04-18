@@ -30,7 +30,7 @@ public class DeleteTest: BaseTest
     private readonly IQueueService _queueService;
     private readonly ClickUpClientMock _clickUpClient;
     private readonly RedmineClientMock _redmineClient;
-    private readonly IQueueDao _queueDao;
+    private new readonly IQueueDao _queueDao;
     private readonly IWorkspaceSettingsDao _workspaceSettingsDao;
     private readonly string? _redmineApiKey;
     private readonly long _redmineUserId;
@@ -45,8 +45,8 @@ public class DeleteTest: BaseTest
     {
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
-        _clickUpClient = ServiceProvider.GetRequiredService<IClickUpClient>() as ClickUpClientMock;
-        _redmineClient = ServiceProvider.GetRequiredService<IRedmineClient>() as RedmineClientMock;
+        _clickUpClient = (ServiceProvider.GetRequiredService<IClickUpClient>() as ClickUpClientMock)!;
+        _redmineClient = (ServiceProvider.GetRequiredService<IRedmineClient>() as RedmineClientMock)!;
         _workspaceSettingsDao = ServiceProvider.GetRequiredService<IWorkspaceSettingsDao>();
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();

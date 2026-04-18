@@ -584,7 +584,7 @@ public static class MimeTypeHelper
             extension = "." + extension;
         }
 
-        string mime;
+        string? mime;
         return Mappings.TryGetValue(extension.Trim().ToLower(), out mime) ? mime : "application/octet-stream";
     }
     

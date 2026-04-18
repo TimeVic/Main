@@ -8,14 +8,14 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
     {   
         [Required]
         [StringLength(1024, MinimumLength = 100)]
-        public string VerficationToken { get; set; }
+        public string VerficationToken { get; set; } = string.Empty;
         
         [Required]
         [StringLength(256, MinimumLength = 6)]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
         
         [Required]
         [IsReCaptcha]
-        public string ReCaptcha { get; set; }
+        public string ReCaptcha { get; set; } = string.Empty;
     }
 }

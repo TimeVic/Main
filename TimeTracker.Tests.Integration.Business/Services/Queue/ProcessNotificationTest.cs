@@ -58,7 +58,7 @@ public class ProcessNotificationTest: BaseTest
         var testContext = new RegistrationNotificationItemContext(
             fakeUser.Email,
             "http://fron.url",
-            expectedUser.VerificationToken
+            expectedUser.VerificationToken!
         );
 
         await _queueService.PushNotificationAsync(testContext);
@@ -70,7 +70,7 @@ public class ProcessNotificationTest: BaseTest
         var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
         Assert.NotNull(actualEmail);
         Assert.Contains(testContext.ToAddress, actualEmail.To);
-        Assert.Contains(expectedUser.VerificationToken, actualEmail.Body);
+        Assert.Contains(expectedUser.VerificationToken!, actualEmail.Body);
     }
     
     [Fact]

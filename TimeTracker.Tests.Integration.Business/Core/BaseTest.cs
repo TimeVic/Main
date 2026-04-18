@@ -100,7 +100,7 @@ public abstract class BaseTest: IDisposable
             
         var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
         stubsPath = Path.GetDirectoryName(stubsPath);
-        stubsPath = Path.Combine(stubsPath, "stubs");
+        stubsPath = Path.Combine(stubsPath!, "stubs");
             
         if (fileBytes != null)
         {

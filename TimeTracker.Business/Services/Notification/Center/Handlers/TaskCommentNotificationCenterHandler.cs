@@ -35,7 +35,7 @@ public class TaskCommentNotificationCenterHandler: INotificationCenterHandler<Ta
         {
             var receivers = new List<UserEntity>()
             {
-                comment.User
+                comment.User!
             };
             receivers = receivers.Concat(comment.Watchers)
                 .Where(item => item.Id != performedUser.Id)

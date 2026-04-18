@@ -7,7 +7,7 @@ namespace TimeTracker.Business.Common.Dto
     public class PaginatedListDto<TItem> : IResponse
     {
         [JsonPropertyName("items")]
-        public ICollection<TItem> Items { get; set; }
+        public ICollection<TItem> Items { get; set; } = Array.Empty<TItem>();
 
         [JsonPropertyName("totalPages")]
         public int TotalPages { get; set; }

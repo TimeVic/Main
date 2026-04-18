@@ -23,12 +23,12 @@ namespace TimeTracker.Business.Clients.Smtp
         )
         {
             _smtpSettings = new SmtpSettings(configuration);
-            _defaultFromAddress = new MailAddress(_smtpSettings.EmailFrom, _smtpSettings.UserNameFrom);
+            _defaultFromAddress = new MailAddress(_smtpSettings.EmailFrom ?? string.Empty, _smtpSettings.UserNameFrom);
             _credentials = new NetworkCredential(_smtpSettings.UserName, _smtpSettings.Password);
             _logger = logger;
         }
 
-        private void ParseEmails(MailAddressCollection collection, string emails)
+        private void ParseEmails(MailAddressCollection collection, string? emails)
         {
             if (string.IsNullOrWhiteSpace(emails))
                 return;
@@ -44,7 +44,7 @@ namespace TimeTracker.Business.Clients.Smtp
         public string SendEmail(
             string to,
             EmailBuilder emailBuilder,
-            string bcc
+            string? bcc
         )
         {
             try
@@ -64,7 +64,7 @@ namespace TimeTracker.Business.Clients.Smtp
             string to,
             string subject,
             string body,
-            string bcc
+            string? bcc
         )
         {
             return SendEmail(null, to, subject, body, null, bcc);
@@ -72,12 +72,12 @@ namespace TimeTracker.Business.Clients.Smtp
 
         // returns "" on success, or text of SMTP exceptions etc
         public string SendEmail(
-            string from,
+            string? from,
             string to,
             string subject,
             string body,
-            string cc,
-            string bcc
+            string? cc,
+            string? bcc
         )
         {
             _logger.LogDebug($"Send email to {to} from {from} with subject {subject.MySubstring(0, 15)}");

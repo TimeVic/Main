@@ -55,7 +55,7 @@ public partial class JiraClient
         var task = await _taskDao.AddTaskAsync(
             taskList,
             user,
-            externalTask.Fields.Summary,
+            externalTask.Fields.Summary!,
             MarkdownHelper.ToMarkdown(externalTask.RenderedFields.DescriptionHtml ?? "")
         );
         task.ExternalTaskId = externalTaskId;

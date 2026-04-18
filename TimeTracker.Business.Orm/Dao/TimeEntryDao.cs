@@ -54,9 +54,9 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         MembershipAccessType accessType = MembershipAccessType.Owner
     )
     {
-        ProjectEntity rootProjectAlias = null;
-        ClientEntity rootClientAlias = null;
-        UserEntity rootUserAlias = null;
+        ProjectEntity rootProjectAlias = null!;
+        ClientEntity rootClientAlias = null!;
+        UserEntity rootUserAlias = null!;
         var query = Session.QueryOver<TimeEntryEntity>()
             .Inner.JoinAlias(item => item.User, () => rootUserAlias)
             .Left.JoinAlias(item => item.Project, () => rootProjectAlias)
@@ -108,10 +108,9 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         )
         {
             // Is not owner
-            ProjectEntity projectAlias = null;
-            WorkspaceMembershipProjectAccessEntity projectAccessAlias = null;
-            WorkspaceMembershipEntity workspaceMembershipAlias = null;
-            UserEntity userAlias = null;
+            ProjectEntity projectAlias = null!;
+            WorkspaceMembershipProjectAccessEntity projectAccessAlias = null!;
+            WorkspaceMembershipEntity workspaceMembershipAlias = null!;
             var allowedIdsSubQuery = QueryOver.Of<TimeEntryEntity>()
                 .Inner.JoinAlias(item => item.Project, () => projectAlias)
                 .Inner.JoinAlias(item => projectAlias!.MembershipProjectAccess, () => projectAccessAlias)

@@ -8,7 +8,7 @@ public class ObjectUtils
     public static string GetDisplayName(object enumValue)  
     {  
         var genericEnumType = enumValue.GetType();
-        var memberInfo = genericEnumType.GetMember(enumValue.ToString());
+        var memberInfo = genericEnumType.GetMember(enumValue.ToString() ?? string.Empty);
         if (memberInfo.Any())
         {
             var attribs = memberInfo[0].GetCustomAttributes(
@@ -25,9 +25,9 @@ public class ObjectUtils
             );
             if (attribs.Any())
             {
-                return ((DisplayAttribute)attribs.ElementAt(0)).GetName();
+                return ((DisplayAttribute)attribs.ElementAt(0)).GetName() ?? enumValue.ToString() ?? string.Empty;
             }
         }
-        return enumValue.ToString();
+        return enumValue.ToString() ?? string.Empty;
     }
 }

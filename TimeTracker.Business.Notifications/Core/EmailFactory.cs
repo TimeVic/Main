@@ -20,19 +20,17 @@ namespace TimeTracker.Business.Notifications.Core
 
         public EmailTemplateModel GetEmailTemplate(string templateName)
         {
-            EmailTemplateModel res;
             if (_cachedTemplates.ContainsKey(templateName))
             {
-                // from Cache
-                _cachedTemplates.TryGetValue(templateName, out res);
+                if (_cachedTemplates.TryGetValue(templateName, out var cachedTemplate))
+                {
+                    return cachedTemplate;
+                }
             }
-            else
-            {
-                // from File
-                res = LoadEmailTemplate(templateName);
-                // if some other thread inserted the value, it will ignore our value and return what other thread has inserted
-                _cachedTemplates.GetOrAdd(templateName, res);
-            }
+
+            var res = LoadEmailTemplate(templateName);
+            // if some other thread inserted the value, it will ignore our value and return what other thread has inserted
+            _cachedTemplates.GetOrAdd(templateName, res);
             return res;
         }
 

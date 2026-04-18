@@ -10,7 +10,7 @@ public class SetTimeEntryDto
     public DocumentDto Comment { get; set; } = new();
     
     [JsonProperty("started")]
-    public string Started { get; set; }
+    public string Started { get; set; } = string.Empty;
 
     [JsonProperty("timeSpentSeconds")]
     public long TimeSpentSeconds { get; set; }

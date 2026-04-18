@@ -15,15 +15,15 @@ public class StoredFileDto: BaseDto
     
     public string? MimeType { get; set; }
     
-    public string OriginalFileName { get; set; }
+    public string OriginalFileName { get; set; } = string.Empty;
     
     public string? Title { get; set; }
     
     public string? Description { get; set; }
     
-    public string Url { get; set; }
+    public string Url { get; set; } = string.Empty;
     
-    public string ThumbUrl { get; set; }
+    public string ThumbUrl { get; set; } = string.Empty;
     
     public string Name => string.IsNullOrEmpty(Title) ? OriginalFileName : Title;
 }

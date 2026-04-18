@@ -55,7 +55,7 @@ public class UploadToCloudTest: BaseTest
         Assert.Null(uploadedFile.DataToUpload);
         Assert.Null(uploadedFile.UploadingError);
         Assert.Equal(StoredFileStatus.Uploaded, uploadedFile.Status);
-        Assert.NotEmpty(uploadedFile.ThumbCloudFilePath);
+        Assert.NotEmpty(uploadedFile.ThumbCloudFilePath!);
     }
     
     [Fact]

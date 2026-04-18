@@ -18,7 +18,7 @@ public class ActivateUserTest: BaseTest
     private readonly IRegistrationService _registrationService;
     private readonly IDataFactory<UserEntity> _userFactory;
     private readonly IQueueService _queueService;
-    private readonly IQueueDao _queueDao;
+    private new readonly IQueueDao _queueDao;
     private readonly IUserDao _userDao;
 
     public ActivateUserTest(): base()
@@ -40,7 +40,7 @@ public class ActivateUserTest: BaseTest
         
         var user = await _registrationService.CreatePendingUser(expectedEmail);
         await FlushDbChanges();
-        var activatedUser = await _registrationService.ActivateUser(user.VerificationToken, expectedPassword);
+        var activatedUser = await _registrationService.ActivateUser(user.VerificationToken!, expectedPassword);
         
         Assert.Null(activatedUser.VerificationToken);
         Assert.NotNull(activatedUser.VerificationTime);
@@ -84,7 +84,7 @@ public class ActivateUserTest: BaseTest
         
         var user = await _registrationService.CreatePendingUser(expectedEmail);
         await FlushDbChanges();
-        var activatedUser = await _registrationService.ActivateUser(user.VerificationToken, expectedPassword);
+        var activatedUser = await _registrationService.ActivateUser(user.VerificationToken!, expectedPassword);
         await FlushDbChanges();
         
         Assert.Equal(1, activatedUser.CreatedWorkspaces.Count);
@@ -92,7 +92,7 @@ public class ActivateUserTest: BaseTest
         Assert.Contains(workspaces, item =>
         {
             var userName = StringUtils.GetUserNameFromEmail(user.Email);
-            return item.Name.ToLower().Contains(userName);
+            return item.Name.ToLower().Contains(userName!);
         });
         Assert.All(workspaces, item =>
         {

@@ -5,7 +5,7 @@ namespace TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 
 public class GoalsTrackerNoteDto : BaseDto
 {   
-    public string Text { get; set; }
+    public string Text { get; set; } = string.Empty;
     
 #if IS_WEB_APP
     #region Select list methods

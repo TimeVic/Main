@@ -9,6 +9,7 @@
 
         <LangVersion>14</LangVersion>
         <WarningsAsErrors>CS0168,CS8602,CS0169,CS1998</WarningsAsErrors>
+        <NoWarn>$(NoWarn);xUnit1012;xUnit1013;xUnit1026;xUnit1031;xUnit2002;xUnit2004;xUnit2013</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

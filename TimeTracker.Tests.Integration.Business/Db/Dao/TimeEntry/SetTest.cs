@@ -45,7 +45,7 @@ public partial class SetTest: BaseTest
         var expectedDto = new TimeEntryCreationDto()
         {
             Description = fakeTimeEntry.Description,
-            EndTime = fakeTimeEntry.EndTime.Value,
+            EndTime = fakeTimeEntry.EndTime!.Value,
             StartTime = fakeTimeEntry.StartTime,
             HourlyRate = fakeTimeEntry.HourlyRate,
             IsBillable = fakeTimeEntry.IsBillable
@@ -73,7 +73,7 @@ public partial class SetTest: BaseTest
         var initialDto = new TimeEntryCreationDto()
         {
             Description = fakeTimeEntry.Description,
-            EndTime = fakeTimeEntry.EndTime.Value,
+            EndTime = fakeTimeEntry.EndTime!.Value,
             StartTime = fakeTimeEntry.StartTime,
             HourlyRate = fakeTimeEntry.HourlyRate,
             IsBillable = fakeTimeEntry.IsBillable
@@ -89,7 +89,7 @@ public partial class SetTest: BaseTest
         {
             Id = initialEntry.Id,
             Description = fakeTimeEntry2.Description,
-            EndTime = fakeTimeEntry2.EndTime.Value,
+            EndTime = fakeTimeEntry2.EndTime!.Value,
             StartTime = fakeTimeEntry2.StartTime,
             HourlyRate = fakeTimeEntry2.HourlyRate,
             IsBillable = fakeTimeEntry2.IsBillable
@@ -117,7 +117,7 @@ public partial class SetTest: BaseTest
         var initialDto = new TimeEntryCreationDto()
         {
             Description = fakeTimeEntry.Description,
-            EndTime = fakeTimeEntry.EndTime.Value,
+            EndTime = fakeTimeEntry.EndTime!.Value,
             StartTime = fakeTimeEntry.StartTime,
             HourlyRate = fakeTimeEntry.HourlyRate,
             IsBillable = fakeTimeEntry.IsBillable
@@ -141,7 +141,7 @@ public partial class SetTest: BaseTest
         {
             Id = initialEntry.Id,
             Description = fakeTimeEntry2.Description,
-            EndTime = fakeTimeEntry2.EndTime.Value,
+            EndTime = fakeTimeEntry2.EndTime!.Value,
             StartTime = fakeTimeEntry2.StartTime,
             HourlyRate = fakeTimeEntry2.HourlyRate,
             IsBillable = fakeTimeEntry2.IsBillable

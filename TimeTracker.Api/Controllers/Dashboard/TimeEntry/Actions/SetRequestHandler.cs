@@ -64,8 +64,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new HasNoAccessException();
             }
 
-            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
-            var userProjects = await _projectDao.GetAvailableForUserListAsync(workspace, user, userAccess);
+            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace!);
+            var userProjects = await _projectDao.GetAvailableForUserListAsync(workspace!, user, userAccess);
             var project = userProjects.Items.FirstOrDefault(item => item.Id == request.ProjectId);
             if (request.IsBillable && !request.HourlyRate.HasValue)
             {

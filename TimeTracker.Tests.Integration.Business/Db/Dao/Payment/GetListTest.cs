@@ -58,7 +58,7 @@ public class GetListTest: BaseTest
         {
             Assert.NotEqual(Guid.Empty, item.Id);
             Assert.NotNull(item.Client);
-            Assert.NotEmpty(item.Description);
+            Assert.NotEmpty(item.Description!);
             Assert.True(item.Amount > 0);
             Assert.True(item.PaymentTime > DateTime.MinValue);
         });

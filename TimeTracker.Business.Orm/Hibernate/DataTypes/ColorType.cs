@@ -52,7 +52,7 @@ public class ColorType : IUserType
         var obj = NHibernateUtil.String.NullSafeGet(rs, names[0], session);
         if (obj == null)
         {
-            return null;
+            return null!;
         }
 
         return ColorTranslator.FromHtml((string) obj);

@@ -8,25 +8,25 @@ public class TimeEntryResponseDto: BaseResponseDto
     public long Id { get; set; }
     
     [JsonProperty(PropertyName = "project")]
-    public EntryDto Project { get; set; }
+    public EntryDto Project { get; set; } = null!;
     
     [JsonProperty(PropertyName = "issue")]
-    public EntryDto Issue { get; set; }
+    public EntryDto Issue { get; set; } = null!;
     
     [JsonProperty(PropertyName = "user")]
-    public EntryDto User { get; set; }
+    public EntryDto User { get; set; } = null!;
     
     [JsonProperty(PropertyName = "activity")]
-    public EntryDto Activity { get; set; }
+    public EntryDto Activity { get; set; } = null!;
     
     [JsonProperty(PropertyName = "hours")]
     public decimal Hours { get; set; }
     
     [JsonProperty(PropertyName = "comments")]
-    public string Comments { get; set; }
+    public string Comments { get; set; } = string.Empty;
     
     [JsonProperty(PropertyName = "spent_on")]
-    public string SpentOn { get; set; }
+    public string SpentOn { get; set; } = string.Empty;
     
     [JsonProperty(PropertyName = "created_on")]
     public DateTime CreatedOn { get; set; }

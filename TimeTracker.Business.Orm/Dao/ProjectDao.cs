@@ -81,9 +81,9 @@ public class ProjectDao: IProjectDao
         )
         {
             // Is not owner
-            WorkspaceMembershipProjectAccessEntity projectAccessAlias = null;
-            WorkspaceMembershipEntity workspaceMembershipAlias = null;
-            UserEntity userAlias = null;
+            WorkspaceMembershipProjectAccessEntity projectAccessAlias = null!;
+            WorkspaceMembershipEntity workspaceMembershipAlias = null!;
+            UserEntity userAlias = null!;
             query = query.Inner.JoinAlias(item => item.MembershipProjectAccess, () => projectAccessAlias)
                 .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMembership, () => workspaceMembershipAlias)
                 .Inner.JoinAlias(() => workspaceMembershipAlias!.User, () => userAlias)

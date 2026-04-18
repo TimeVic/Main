@@ -43,7 +43,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             }
 
             await _timeEntryService.StopActiveAsync(
-                workspace,
+                workspace!,
                 user,
                 request.EndTime
             );

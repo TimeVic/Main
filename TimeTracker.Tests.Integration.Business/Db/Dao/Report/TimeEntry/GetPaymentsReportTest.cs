@@ -93,7 +93,7 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(0, actualForProject1.PaidAmountByProject);
         AssertDurationHours(15, actualForProject1.TotalDuration);
         Assert.NotNull(project1.Client);
-        Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
+        Assert.Equal(project1.Client!.Id, actualForProject1.ClientId);
         Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
         
         var actualForProject2 = result.FirstOrDefault(item => item.ProjectId == project2.Id);
@@ -141,7 +141,7 @@ public class GetPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client,
+            project1.Client!,
             25,
             DateTime.UtcNow,
             project1.Id,
@@ -150,7 +150,7 @@ public class GetPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client,
+            project1.Client!,
             20,
             DateTime.UtcNow,
             project1.Id,
@@ -159,7 +159,7 @@ public class GetPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client,
+            project1.Client!,
             32,
             DateTime.UtcNow
         );
@@ -179,8 +179,9 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(77, actualForProject1.PaidAmountByClient);
         Assert.Equal(45, actualForProject1.PaidAmountByProject);
         AssertDurationHours(15, actualForProject1.TotalDuration);
-        Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
-        Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
+        var projectClient = project1.Client!;
+        Assert.Equal(projectClient.Id, actualForProject1.ClientId);
+        Assert.Equal(projectClient.Name, actualForProject1.ClientName);
     }
     
     [Fact]
@@ -195,7 +196,7 @@ public class GetPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             otherUser,
-            project1.Client,
+            project1.Client!,
             15,
             DateTime.UtcNow,
             project1.Id,
@@ -219,7 +220,7 @@ public class GetPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client,
+            project1.Client!,
             10,
             DateTime.UtcNow,
             project1.Id,
@@ -241,8 +242,9 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(10, actualForProject1.PaidAmountByClient);
         Assert.Equal(10, actualForProject1.PaidAmountByProject);
         AssertDurationHours(5, actualForProject1.TotalDuration);
-        Assert.Equal(project1.Client.Id, actualForProject1.ClientId);
-        Assert.Equal(project1.Client.Name, actualForProject1.ClientName);
+        var projectClient = project1.Client!;
+        Assert.Equal(projectClient.Id, actualForProject1.ClientId);
+        Assert.Equal(projectClient.Name, actualForProject1.ClientName);
     }
     
     [Fact]

@@ -23,7 +23,7 @@ public class ReCaptchaService: IReCaptchaService
     {
         _configuration = configuration;
         _logger = logger;
-        _secretKey = _configuration.GetValue<string>("ReCaptcha:Secret");
+        _secretKey = _configuration.GetValue<string>("ReCaptcha:Secret") ?? string.Empty;
     }
     
     public async Task<bool> ValidateAsync(string token)

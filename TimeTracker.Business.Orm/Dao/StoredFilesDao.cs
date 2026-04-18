@@ -34,8 +34,7 @@ public class StoredFilesDao: IStoredFilesDao
     
     public async Task<ICollection<StoredFileEntity>> GetListByEntity(Guid entityId, StorageEntityType entityType)
     {
-        TaskEntity taskAlias = null;
-        UserEntity userAlias = null;
+        TaskEntity taskAlias = null!;
         var query = _sessionProvider.CurrentSession.QueryOver<StoredFileEntity>()
             .Left.JoinAlias(item => item.Tasks, () => taskAlias);
         if (entityType == StorageEntityType.Task)

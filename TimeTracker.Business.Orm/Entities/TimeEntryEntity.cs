@@ -21,11 +21,11 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual string TimeZone { get; set; } = "UTC";
         
         #region Relationships
-        public virtual WorkspaceEntity Workspace { get; set; }
+        public virtual WorkspaceEntity Workspace { get; set; } = null!;
         
         public virtual ProjectEntity? Project { get; set; }
 
-        public virtual UserEntity User { get; set; }
+        public virtual UserEntity User { get; set; } = null!;
 
         public virtual TaskEntity? Task { get; set; }
         

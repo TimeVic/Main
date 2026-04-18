@@ -13,7 +13,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag
 
         [Required]
         [StringLength(200, MinimumLength = 1)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         
         [IsColor]
         public string? Color { get; set; }

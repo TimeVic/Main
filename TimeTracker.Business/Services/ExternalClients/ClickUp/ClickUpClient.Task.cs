@@ -45,7 +45,7 @@ public partial class ClickUpClient
         httpClient.DefaultRequestHeaders.Add(HeaderNames.Authorization, settings.SecurityKey);
 
         var uri = BuildGetTaskUri(
-            settings.TeamId,
+            settings.TeamId!,
             externalTaskId,
             settings.IsCustomTaskIds
         );
@@ -76,7 +76,7 @@ public partial class ClickUpClient
         var task = await _taskDao.AddTaskAsync(
             taskList,
             user,
-            externalTask.Value.Name,
+            externalTask.Value.Name!,
             externalTask.Value.Description
         );
         task.ExternalTaskId = externalTaskId;

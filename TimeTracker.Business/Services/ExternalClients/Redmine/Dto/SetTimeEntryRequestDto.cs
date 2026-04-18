@@ -5,5 +5,5 @@ namespace TimeTracker.Business.Services.ExternalClients.Redmine.Dto;
 public class SetTimeEntryRequestDto
 {
     [JsonProperty(PropertyName = "time_entry")]
-    public TimeEntryRequestDto TimeEntryRequest { get; set; }
+    public TimeEntryRequestDto TimeEntryRequest { get; set; } = null!;
 }

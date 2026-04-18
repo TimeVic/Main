@@ -113,7 +113,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     #endregion
     
     #region Http
-    public async Task<HttpResponseMessage> PostRequestAsAnonymousAsync(string url, object data = null)
+    public async Task<HttpResponseMessage> PostRequestAsAnonymousAsync(string url, object? data = null)
     {
         await FlushDbChanges();
 
@@ -121,7 +121,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         return await HttpClient.PostAsync(url, requestData);
     }
         
-    public async Task<HttpResponseMessage> PostRequestAsync(string url, string jwtToken,  object data = null)
+    public async Task<HttpResponseMessage> PostRequestAsync(string url, string jwtToken,  object? data = null)
     {
         await FlushDbChanges();
 
@@ -136,7 +136,8 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     )
     {
         urlParams ??= new Dictionary<string, string>();
-        var uri = new Uri(QueryHelpers.AddQueryString(url, urlParams), UriKind.Relative);
+        var queryParams = urlParams.ToDictionary(item => item.Key, item => (string?)item.Value);
+        var uri = new Uri(QueryHelpers.AddQueryString(url, queryParams), UriKind.Relative);
         await FlushDbChanges();
 
         return await HttpClient.GetAsync(uri);
@@ -151,15 +152,16 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         HttpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
         HttpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "text/json");
         
-        var uri = new Uri(QueryHelpers.AddQueryString(url, urlParams), UriKind.Relative);
+        var queryParams = urlParams.ToDictionary(item => item.Key, item => (string?)item.Value);
+        var uri = new Uri(QueryHelpers.AddQueryString(url, queryParams), UriKind.Relative);
         return await HttpClient.GetAsync(uri);
     }
     
     public async Task<HttpResponseMessage> PostMultipartFormDataRequestAsync(
         string url,
         string? token = null,
-        Dictionary<string, object> data = null,
-        IFormFile file = null
+        Dictionary<string, object>? data = null,
+        IFormFile? file = null
     )
     {
         await FlushDbChanges();
@@ -194,7 +196,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
             
         var stubsPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
         stubsPath = Path.GetDirectoryName(stubsPath);
-        stubsPath = Path.Combine(stubsPath, "stubs");
+        stubsPath = Path.Combine(stubsPath!, "stubs");
         if (fileBytes != null)
         {
             stream.Write(fileBytes);

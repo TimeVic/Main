@@ -7,7 +7,7 @@ public class NumericConvertor
     
     public static string ToString<T>(T value)
         where T : INumber<T>
-        => value.ToString();
+        => value.ToString() ?? string.Empty;
 
     public static T FromString<T>(string s)
         where T : INumber<T>
@@ -15,6 +15,10 @@ public class NumericConvertor
 
     public static bool TryFromString<T>(string s, out T result)
         where T : INumber<T>
-        => T.TryParse(s, null, out result);
+    {
+        var isParsed = T.TryParse(s, null, out var parsed);
+        result = parsed!;
+        return isParsed;
+    }
 
 }

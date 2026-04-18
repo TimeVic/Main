@@ -69,7 +69,7 @@ namespace TimeTracker.Business.Orm.Connection
                     {
                         _logger.LogError(e.Message, e);
                         await _transaction.RollbackAsync();
-                        throw e;
+                        throw;
                     }    
                 }
                 _transactionalModeIsolationLevel = null;
@@ -100,7 +100,7 @@ namespace TimeTracker.Business.Orm.Connection
                     {
                         _logger.LogError(e.Message, e);
                         await _transaction.RollbackAsync(cancellationToken).WaitAsync(cancellationToken);
-                        throw e;
+                        throw;
                     }    
                 }
                 else

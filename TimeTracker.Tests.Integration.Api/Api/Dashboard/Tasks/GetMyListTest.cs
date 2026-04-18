@@ -80,7 +80,7 @@ public class GetMyListTest: BaseTest
             Assert.True(item.TaskId > 0);
             Assert.NotEmpty(item.Title);
             Assert.NotNull(item.TaskList);
-            Assert.NotEmpty(item.Description);
+            Assert.NotEmpty(item.Description!);
             Assert.Equal(_taskList.Id, item.TaskList.Id);
         });
     }

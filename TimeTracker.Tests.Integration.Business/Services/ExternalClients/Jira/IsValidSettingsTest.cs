@@ -25,8 +25,8 @@ public class IsValidSettingsTest : BaseTest
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IUserDao _userDao;
 
-    private readonly string _apiToken;
-    private readonly string _userName;
+    private readonly string _apiToken = string.Empty;
+    private readonly string _userName = string.Empty;
     private readonly string? _url;
 
     public IsValidSettingsTest() : base(false)
@@ -40,8 +40,8 @@ public class IsValidSettingsTest : BaseTest
         _userDao = Scope.Resolve<IUserDao>();
 
         var configuration = Scope.Resolve<IConfiguration>();
-        _apiToken = configuration.GetValue<string>("Integration:Jira:ApiToken");
-        _userName = configuration.GetValue<string>("Integration:Jira:UserName");
+        _apiToken = configuration.GetValue<string>("Integration:Jira:ApiToken")!;
+        _userName = configuration.GetValue<string>("Integration:Jira:UserName")!;
         _url = configuration.GetValue<string>("Integration:Jira:Url");
 
         _user = _userSeeder.CreateActivatedAsync().Result;

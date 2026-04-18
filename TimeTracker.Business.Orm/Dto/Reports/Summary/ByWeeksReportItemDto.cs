@@ -6,9 +6,9 @@ public class ByWeeksReportItemDto
     
     public DateTime WeekEndDate { get; set; }
     
-    public object DurationAsEpoch { get; set; }
+    public object DurationAsEpoch { get; set; } = null!;
 
-    public object AmountOriginal { get; set; }
+    public object AmountOriginal { get; set; } = null!;
     
     public TimeSpan Duration
     {

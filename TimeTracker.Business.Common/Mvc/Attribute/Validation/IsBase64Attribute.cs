@@ -7,7 +7,7 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
     [AttributeUsage(AttributeTargets.Property)]
     public class IsBase64Attribute : ValidationAttribute
     {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value == null)
             {
@@ -15,7 +15,7 @@ namespace TimeTracker.Business.Common.Mvc.Attribute.Validation
             }
             if (value is string)
             {
-                var base64 = value.ToString();
+                var base64 = value.ToString() ?? string.Empty;
                 if (!Base64Utils.IsValidBase64(base64))
                 {
                     return new ValidationResult(String.Format(RG.Error_IncorrectBase64, validationContext.DisplayName));    

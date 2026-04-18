@@ -22,7 +22,7 @@ public class RegistrationService: IRegistrationService
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IPasswordService _passwordService;
-    private readonly string _frontendUrl;
+    private readonly string _frontendUrl = string.Empty;
 
     public RegistrationService(
         IUserDao userDao,
@@ -38,7 +38,7 @@ public class RegistrationService: IRegistrationService
         _workspaceDao = workspaceDao;
         _workspaceAccessService = workspaceAccessService;
         _passwordService = passwordService;
-        _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
+        _frontendUrl = configuration.GetValue<string>("App:FrontendUrl")!;
     }
 
     public async Task<UserEntity> CreatePendingUser(string email)
@@ -65,7 +65,7 @@ public class RegistrationService: IRegistrationService
         await _queueService.PushNotificationAsync(new RegistrationNotificationItemContext(
             user.Email,
             _frontendUrl,
-            user.VerificationToken
+            user.VerificationToken!
         ));
         return user;
     }

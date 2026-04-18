@@ -43,7 +43,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
                 throw new HasNoAccessException();
             }
 
-            var tags = await _tagDao.GetList(workspace);
+            var tags = await _tagDao.GetList(workspace!);
             return new GetListResponse(
                 _mapper.Map<ICollection<TagDto>>(tags),
                 tags.Count

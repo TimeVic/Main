@@ -59,15 +59,15 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
                 foreach (var watcherId in request.WatcherIds)
                 {
                     var watchUser = await _userDao.GetById(watcherId);
-                    if (!await _securityManager.HasAccess(AccessLevel.Read, watchUser, taskComment))
+                    if (!await _securityManager.HasAccess(AccessLevel.Read, watchUser!, taskComment))
                     {
                         throw new HasNoAccessException();
                     }
-                    watchers.Add(watchUser);
+                    watchers.Add(watchUser!);
                 }
             }
             taskComment = await _taskCommentDao.UpdateAsync(
-                taskComment,
+                taskComment!,
                 request.Comment,
                 watchers
             );
@@ -85,7 +85,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
             });
             
             var receivers = new List<UserEntity>();
-            receivers.Add(comment.User);
+            receivers.Add(comment.User!);
             receivers = receivers.Concat(comment.Watchers).ToList();
             receivers = receivers.DistinctBy(item => item.Email).ToList();
             foreach (var receiver in receivers)
@@ -94,9 +94,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
                 {
                     ToAddress = receiver.Email,
                     Comment = comment.Comment,
-                    TaskId = comment.Task.Id,
+                    TaskId = comment.Task!.Id,
                     IsUpdated = true,
-                    OwnerName = comment.User.Name
+                    OwnerName = comment.User!.Name
                 });
             }
         }

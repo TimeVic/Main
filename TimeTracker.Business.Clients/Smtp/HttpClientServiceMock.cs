@@ -15,24 +15,24 @@ public class SmtpClientServiceMock : ISmtpClientService
         SentMessages = new ();
     }
 
-    public string SendEmail(string to, EmailBuilder emailBuilder, string bcc)
+    public string SendEmail(string to, EmailBuilder emailBuilder, string? bcc)
     {
         emailBuilder.Build();
         return SendEmail("", to, emailBuilder.Subject, emailBuilder.Body, null, bcc);
     }
 
-    public string SendEmail(string to, string subject, string body, string bcc)
+    public string SendEmail(string to, string subject, string body, string? bcc)
     {
         return SendEmail("", to, subject, body, null, bcc);
     }
 
     public string SendEmail(
-        string from, 
+        string? from, 
         string to, 
         string subject, 
         string body, 
-        string cc, 
-        string bcc
+        string? cc, 
+        string? bcc
     )
     {
         SentMessages.Add(new FakeEmailModel(from, to, subject, body, cc, bcc));

@@ -29,7 +29,7 @@ public class LoginMagicRequestHandler : IAsyncRequestHandler<LoginMagicRequest>
         var magicToken = await _authorizationService.GenerateMagicToken(request.Email);
         await _queueService.PushNotificationAsync(new MagicLoginNotificationItemContext(
             toAddress: magicToken.User.Email,
-            frontendUrl: _frontendUrl,
+            frontendUrl: _frontendUrl!,
             token: magicToken.Token
         ));
     }

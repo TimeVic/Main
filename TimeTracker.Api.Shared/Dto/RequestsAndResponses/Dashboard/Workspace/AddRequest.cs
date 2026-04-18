@@ -9,7 +9,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
     {
         [Required]
         [StringLength(256, MinimumLength = 2)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         
         [StringLength(1024)]
         public string? Description { get; set; }

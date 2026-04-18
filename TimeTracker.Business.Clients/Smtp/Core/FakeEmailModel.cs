@@ -3,12 +3,12 @@
     public class FakeEmailModel
     {
         public FakeEmailModel(
-            string from,
+            string? from,
             string to,
             string subject,
             string body,
-            string cc,
-            string bcc
+            string? cc,
+            string? bcc
         )
         {
             From = from;
@@ -19,11 +19,11 @@
             Bcc = bcc;
         }
 
-        public string From { get; }
+        public string? From { get; }
         public string To { get; }
         public string Subject { get; }
         public string Body { get; }
-        public string Cc { get; }
-        public string Bcc { get; }
+        public string? Cc { get; }
+        public string? Bcc { get; }
     }
 }

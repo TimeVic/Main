@@ -2,7 +2,7 @@
 {
     public class ListDto<T>
     {
-        public virtual ICollection<T> Items { get; set; }
+        public virtual ICollection<T> Items { get; set; } = null!;
         
         public virtual int TotalCount { get; set; }
 

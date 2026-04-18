@@ -25,7 +25,7 @@ public class GetListTest: BaseTest
     
     private readonly TaskEntity _task;
     private readonly IFileStorage _fileStorage;
-    private readonly StoredFileEntity _uploadedFile;
+    private readonly StoredFileEntity _uploadedFile = null!;
     private readonly IStoredFilesDao _storedFilesDao;
     private WorkspaceEntity _workspace;
 
@@ -40,7 +40,7 @@ public class GetListTest: BaseTest
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
         _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Wait();
-        _uploadedFile = _fileStorage.UploadFirstPendingToCloud().Result;
+        _uploadedFile = _fileStorage.UploadFirstPendingToCloud().Result!;
     }
 
     [Fact]

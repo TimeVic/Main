@@ -32,6 +32,6 @@ namespace TimeTracker.Business.Common.Exceptions.Common
     
         [DoesNotReturn]
         internal static void Throw(string? message) =>
-            throw new DataValidationException(message);
+            throw new DataValidationException(message ?? RG.Error_DataValidationException);
     }
 }

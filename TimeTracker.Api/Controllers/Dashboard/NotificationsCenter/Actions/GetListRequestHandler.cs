@@ -38,7 +38,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
             var user = await _apiRequestService.GetCurrentUser();
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
 
-            var listDto = await _notificationCenterService.GetList(user, workspace, request.Page);
+            var listDto = await _notificationCenterService.GetList(user, workspace!, request.Page);
             return new GetListResponse(
                 _mapper.Map<List<NotificationDto>>(listDto.Items),
                 listDto.TotalCount

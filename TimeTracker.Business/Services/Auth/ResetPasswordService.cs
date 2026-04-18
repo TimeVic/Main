@@ -53,7 +53,7 @@ public class ResetPasswordService: IResetPasswordService
         await _queueService.PushNotificationAsync(new ResetPasswordNotificationContext()
         {
             FrontendUrl = _frontendUrl,
-            VerificationToken = actualRequest.VerificationToken,
+            VerificationToken = actualRequest.VerificationToken!,
             ToAddress = actualRequest.User.Email
         });
         return actualRequest;

@@ -4,8 +4,8 @@ namespace TimeTracker.Business.Common.Constants
 {
     public abstract class AConstant<T>: IValidationAttribute
     {
-        protected readonly string _Name;
-        protected readonly string _Value;
+        protected readonly string _Name = string.Empty;
+        protected readonly string _Value = string.Empty;
 
         public AConstant() { }
 
@@ -25,7 +25,7 @@ namespace TimeTracker.Business.Common.Constants
             return _Value;
         }
 
-        public override bool Equals(object Value)
+        public override bool Equals(object? Value)
         {
             var status = Value as AConstant<T>;
             return status?.GetValue().Equals(_Value) ?? false;

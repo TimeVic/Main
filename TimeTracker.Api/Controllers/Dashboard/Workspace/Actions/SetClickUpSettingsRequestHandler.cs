@@ -52,13 +52,13 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             }
             var settings = await _workspaceSettingsDao.SetClickUpAsync(
                 user,
-                workspace,
+                workspace!,
                 request.SecurityKey,
                 request.TeamId,
                 request.IsCustomTaskIds,
                 request.IsFillTimeEntryWithTaskDetails
             );
-            settings.IsActive = await _clickUpClient.IsValidClientSettings(workspace, user);
+            settings.IsActive = await _clickUpClient.IsValidClientSettings(workspace!, user);
             return _mapper.Map<WorkspaceSettingsClickUpDto>(settings);
         }
     }

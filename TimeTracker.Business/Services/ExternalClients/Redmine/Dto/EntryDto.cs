@@ -8,5 +8,5 @@ public class EntryDto
     public long Id { get; set; }
     
     [JsonProperty(PropertyName = "name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 }

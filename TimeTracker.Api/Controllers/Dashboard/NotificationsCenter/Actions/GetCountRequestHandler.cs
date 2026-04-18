@@ -35,7 +35,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
 
             return new GetCountResponse()
             {
-                UnreadCount = await _notificationCenterService.GetUnreadCount(user, workspace)
+                UnreadCount = await _notificationCenterService.GetUnreadCount(user, workspace!)
             };
         }
     }

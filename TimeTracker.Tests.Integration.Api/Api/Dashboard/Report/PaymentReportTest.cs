@@ -62,7 +62,7 @@ public class PaymentReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _defaultWorkspace, 
             _user, 
-            project1.Client,
+            project1.Client!,
             120,
             DateTime.UtcNow,
             project1.Id,
@@ -88,8 +88,8 @@ public class PaymentReportTest: BaseTest
             Assert.True(item.TotalDuration > TimeSpan.MinValue);
             Assert.True(item.PaidAmountByClient > 0);
             Assert.True(item.PaidAmountByProject > 0);
-            Assert.NotEmpty(item.ClientName);
-            Assert.NotEmpty(item.ProjectName);
+            Assert.NotEmpty(item.ClientName!);
+            Assert.NotEmpty(item.ProjectName!);
         });
     }
 }

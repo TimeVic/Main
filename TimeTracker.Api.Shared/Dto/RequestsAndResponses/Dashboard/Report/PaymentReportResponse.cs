@@ -7,5 +7,5 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 
 public class PaymentReportResponse: IResponse
 {
-    public ICollection<PaymentsReportItemDto> Items { get; set; }
+    public ICollection<PaymentsReportItemDto> Items { get; set; } = null!;
 }

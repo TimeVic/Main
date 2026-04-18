@@ -11,11 +11,11 @@ namespace TimeTracker.Business.Clients.Smtp.Core
         /// </summary>
         ///
 
-        private string _template = null;
-        private StringBuilder _message = null;
-        private Dictionary<int, KeyValuePair<string, string>> _matches = null;
+        private string _template = null!;
+        private StringBuilder _message = null!;
+        private Dictionary<int, KeyValuePair<string, string>> _matches = null!;
 
-        public string Text;
+        public string Text = string.Empty;
 
         public TemplatedTextBuilder(string templateString): this(templateString, 16384)
         {

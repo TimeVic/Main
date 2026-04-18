@@ -24,7 +24,7 @@ public class GetUsersHourlyRateForProjectTest: BaseTest
     private readonly IRegistrationService _registrationService;
     private readonly IDataFactory<UserEntity> _userFactory;
     private readonly IQueueService _queueService;
-    private readonly IQueueDao _queueDao;
+    private new readonly IQueueDao _queueDao;
     private readonly IUserDao _userDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IUserSeeder _userSeeder;

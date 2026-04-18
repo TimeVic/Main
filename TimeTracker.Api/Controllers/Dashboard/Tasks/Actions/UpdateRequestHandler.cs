@@ -66,7 +66,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                 task,
                 taskList: taskList,
                 user: user,
-                title: request.Title,
+                title: request.Title!,
                 description: request.Description,
                 startTime: request.StartTime,
                 endTime: request.EndTime,

@@ -13,7 +13,7 @@ record struct TestContext(
 
 public class QueueDaoTest: BaseTest
 {
-    private readonly IQueueDao _queueDao;
+    private new readonly IQueueDao _queueDao;
 
     public QueueDaoTest(): base()
     {
@@ -91,9 +91,9 @@ public class QueueDaoTest: BaseTest
         await _queueDao.Push(testContext, QueueChannel.Default);
         await _queueDao.Flush();
         var actualItem = await _queueDao.GetTop(QueueChannel.Default);
-        await _queueDao.MarkAsProcessed(actualItem);
+        await _queueDao.MarkAsProcessed(actualItem!);
         
-        actualItem = await _queueDao.GetById(actualItem.Id);
+        actualItem = await _queueDao.GetById(actualItem!.Id);
         Assert.NotNull(actualItem);
         Assert.Equal(QueueStatus.Success, actualItem.Status);
     }
@@ -111,9 +111,9 @@ public class QueueDaoTest: BaseTest
         await _queueDao.Push(testContext, QueueChannel.Default);
         await _queueDao.Flush();
         var actualItem = await _queueDao.GetTop(QueueChannel.Default);
-        await _queueDao.MarkAsProcessed(actualItem, expectedError);
+        await _queueDao.MarkAsProcessed(actualItem!, expectedError);
         
-        actualItem = await _queueDao.GetById(actualItem.Id);
+        actualItem = await _queueDao.GetById(actualItem!.Id);
         Assert.NotNull(actualItem);
         Assert.Equal(QueueStatus.Fail, actualItem.Status);
         Assert.Equal(expectedError, actualItem.Error);
@@ -122,7 +122,6 @@ public class QueueDaoTest: BaseTest
     [Fact]
     public async Task ShouldThrowExceptionIfTryingToCompleteItemWhichWasCompleted()
     {
-        var expectedError = "Some error";
         var testContext = new TestContext()
         {
             IsBoolean = true,
@@ -132,11 +131,11 @@ public class QueueDaoTest: BaseTest
         await _queueDao.Push(testContext, QueueChannel.Default);
         await _queueDao.Flush();
         var actualItem = await _queueDao.GetTop(QueueChannel.Default);
-        await _queueDao.MarkAsProcessed(actualItem);
+        await _queueDao.MarkAsProcessed(actualItem!);
 
         await Assert.ThrowsAsync<Exception>(async () =>
         {
-            await _queueDao.MarkAsProcessed(actualItem);
+            await _queueDao.MarkAsProcessed(actualItem!);
         });
     }
     

@@ -60,9 +60,9 @@ public class TaskDao: ITaskDao
         long workspaceTaskId
     )
     {
-        TaskListEntity taskListAlias = null;
-        ProjectEntity projectAlias = null;
-        WorkspaceEntity workspaceAlias = null;
+        TaskListEntity taskListAlias = null!;
+        ProjectEntity projectAlias = null!;
+        WorkspaceEntity workspaceAlias = null!;
         return await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
             .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
@@ -162,10 +162,10 @@ public class TaskDao: ITaskDao
             throw new ArgumentNullException($"{nameof(workspace)}, {nameof(taskList)}");
         }
         
-        TaskListEntity taskListAlias = null;
-        ProjectEntity projectAlias = null;
-        WorkspaceEntity workspaceAlias = null;
-        UserEntity userAlias = null;
+        TaskListEntity taskListAlias = null!;
+        ProjectEntity projectAlias = null!;
+        WorkspaceEntity workspaceAlias = null!;
+        UserEntity userAlias = null!;
         var query = _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
             .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
@@ -241,10 +241,10 @@ public class TaskDao: ITaskDao
     public async Task<ICollection<TaskEntity>> GetTasksToRemind()
     {
         var timeToRemind = DateTime.UtcNow + GlobalConstants.TaskReminderTimeout;
-        TaskListEntity taskListAlias = null;
-        ProjectEntity projectAlias = null;
-        WorkspaceEntity workspaceAlias = null;
-        UserEntity userAlias = null;
+        TaskListEntity taskListAlias = null!;
+        ProjectEntity projectAlias = null!;
+        WorkspaceEntity workspaceAlias = null!;
+        UserEntity userAlias = null!;
         return await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
             .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)

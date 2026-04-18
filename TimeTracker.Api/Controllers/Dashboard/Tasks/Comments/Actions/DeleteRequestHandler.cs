@@ -52,7 +52,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
                 throw new HasNoAccessException();
             }
 
-            await _taskCommentDao.DeleteAsync(taskComment);
+            await _taskCommentDao.DeleteAsync(taskComment!);
         }
     }
 }

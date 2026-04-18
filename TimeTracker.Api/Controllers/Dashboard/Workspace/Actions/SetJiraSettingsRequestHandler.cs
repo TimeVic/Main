@@ -53,13 +53,13 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             }
             var settings = await _workspaceSettingsDao.SetJiraAsync(
                 user,
-                workspace,
+                workspace!,
                 request.Url,
                 request.ApiKey,
                 request.UserName,
                 false
             );
-            settings.IsActive = await _jiraClient.IsValidClientSettings(workspace, user);
+            settings.IsActive = await _jiraClient.IsValidClientSettings(workspace!, user);
             return _mapper.Map<WorkspaceSettingsJiraDto>(settings);
         }
     }

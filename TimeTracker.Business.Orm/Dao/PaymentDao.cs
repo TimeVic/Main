@@ -90,7 +90,7 @@ public class PaymentDao: IPaymentDao
             }
             else
             {
-                payment.Project = null;
+                payment.Project = null!;
             }
         }
 
@@ -101,10 +101,8 @@ public class PaymentDao: IPaymentDao
     public async Task<ListDto<PaymentEntity>> GetListAsync(WorkspaceEntity workspace, UserEntity user, int page)
     {
         var offset = PaginationUtils.CalculateOffset(page);
-        
-        UserEntity userAlias = null;
-        ClientEntity clientAlias = null;
-        WorkspaceEntity workspaceAlias = null;
+        ClientEntity clientAlias = null!;
+        WorkspaceEntity workspaceAlias = null!;
         var query = _sessionProvider.CurrentSession.QueryOver<PaymentEntity>()
             .Inner.JoinAlias(item => item.Client, () => clientAlias)
             .Inner.JoinAlias(item => clientAlias!.Workspace, () => workspaceAlias)
