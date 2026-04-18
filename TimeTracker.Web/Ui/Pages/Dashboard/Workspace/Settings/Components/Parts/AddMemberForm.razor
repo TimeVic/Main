@@ -1,0 +1,32 @@
+@using LumexUI.Common
+@inherits BaseReactiveComponent
+
+<EditForm
+    Context="form"
+    @ref="_form"
+    Model="@_model"
+    novalidate>
+    <DataAnnotationsValidator/>
+    
+    <div class="flex w-full flex-col gap-3 sm:flex-row lg:w-auto">
+        <InputTextField
+            Class="w-100"
+            Label="Member email"
+            @bind-Value="_model.Email"/>
+        
+        <CustomButton
+            FullWidth="@true"
+            Size="Size.Large"
+            OnClick="@Submit"
+            Color="@ThemeColor.Primary"
+            Radius="@Radius.Full">
+            <StartContent>
+                <i class="fa-solid fa-user-plus"></i>
+            </StartContent>
+            <ChildContent>
+                Invite member
+            </ChildContent>
+        </CustomButton>
+    </div>
+</EditForm>
+
