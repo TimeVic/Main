@@ -32,12 +32,17 @@ public class UpdateEffect: Effect<UpdateMemberAction>
     {
         try
         {
-            // await _apiService.WorkspaceMembershipUpdateAsync(
-            //     action.MembershipId,
-            //     action.Access,
-            //     new List<MembershipProjectAccessRequest>()
-            //     // action.Projects?.Select(item => item.Id).ToArray()
-            // );
+            var request = new TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.UpdateRequest
+            {
+                Access = action.Access,
+                ProjectsAccess = action.Projects?
+                    .Select(p => new TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.MembershipProjectAccessRequest
+                    {
+                        ProjectId = p.Id,
+                        HasAccess = true
+                    }).ToList() ?? new List<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.MembershipProjectAccessRequest>()
+            };
+            await _apiService.WorkspaceMembershipUpdateAsync(request);
             dispatcher.Dispatch(new LoadListAction(true));
             _notificationService.ShowInfo("The member was updated");
         }

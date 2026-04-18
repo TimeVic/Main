@@ -4,6 +4,14 @@
 
 @inherits BaseReactiveComponent
 
+@if (_memberToUpdate != null)
+{
+    <UpdateMemberModal
+        Membership="_memberToUpdate"
+        IsOpened="_memberToUpdate != null"
+        IsOpenedChanged="isOpened => { _memberToUpdate = isOpened ? _memberToUpdate : null; }"/>
+}
+
 <section class="space-y-6">
     <LumexCard>
         <LumexCardBody>
@@ -37,17 +45,30 @@
             <Content>
                 @if (context.Access != MembershipAccessType.Owner)
                 {
-                    <CustomButton
-                        Class="inline-flex rounded-full"
-                        OnClick="@(() => OnDelete(context))"
-                        Size="Size.Small"
-                        Color="ThemeColor.Danger"
-                        Variant="Variant.Light"
-                        IconOnly="true">
-                        <ChildContent>
-                            <i class="fa-regular fa-trash-can"></i>
-                        </ChildContent>
-                    </CustomButton>
+                    <div class="flex gap-1">
+                        <CustomButton
+                            Class="inline-flex rounded-full"
+                            OnClick="@(() => OnEdit(context))"
+                            Size="Size.Small"
+                            Color="ThemeColor.Primary"
+                            Variant="Variant.Light"
+                            IconOnly="true">
+                            <ChildContent>
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </ChildContent>
+                        </CustomButton>
+                        <CustomButton
+                            Class="inline-flex rounded-full"
+                            OnClick="@(() => OnDelete(context))"
+                            Size="Size.Small"
+                            Color="ThemeColor.Danger"
+                            Variant="Variant.Light"
+                            IconOnly="true">
+                            <ChildContent>
+                                <i class="fa-regular fa-trash-can"></i>
+                            </ChildContent>
+                        </CustomButton>
+                    </div>
                 }
             </Content>
         </LumexUI.PropertyColumn>
