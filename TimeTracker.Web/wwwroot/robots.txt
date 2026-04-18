@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /board
+Disallow: /board/
+Disallow: /board-change
+Disallow: /board-change/
+Disallow: /chat
+Disallow: /debug
+Disallow: /login
+Disallow: /login/
+Disallow: /registration/verification/
+Disallow: /user/
+
+Sitemap: https://timevic.com/sitemap.xml
