@@ -16,8 +16,10 @@
             <EditForm
                 @ref="_form"
                 Context="formContext"
-                Model="model">
+                Model="model"
+                OnValidSubmit="OnSubmit">
                 <DataAnnotationsValidator />
+                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Submit</button>
             
                 <InputTextField 
                     @bind-Value="model.Slug"

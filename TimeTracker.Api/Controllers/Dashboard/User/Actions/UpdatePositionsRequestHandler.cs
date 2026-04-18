@@ -8,17 +8,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.User.Actions
     public class SetNotificationTokenRequestHandler : IAsyncRequestHandler<SetNotificationTokenRequest>
     {
         private readonly IApiRequestService _apiRequestService;
-        private readonly IUserDao _userDao;
         private readonly IUserNotificationTokenDao _userNotificationTokenDao;
 
         public SetNotificationTokenRequestHandler(
             IApiRequestService apiRequestService,
-            IUserDao userDao,
             IUserNotificationTokenDao userNotificationTokenDao
         )
         {
             _apiRequestService = apiRequestService;
-            _userDao = userDao;
             _userNotificationTokenDao = userNotificationTokenDao;
         }
     

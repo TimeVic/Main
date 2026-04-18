@@ -24,8 +24,10 @@
                 Context="form"
                 @ref="_form"
                 Model="@model"
+                OnValidSubmit="@Submit"
                 novalidate>
                 <DataAnnotationsValidator/>
+                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Submit</button>
 
                 <div>
                     @* <label class="mb-2 block text-sm font-medium text-slate-700">Task list</label> *@

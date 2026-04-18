@@ -17,8 +17,10 @@
                 Context="form"
                 @ref="_form"
                 Model="@model"
+                OnValidSubmit="@Submit"
                 novalidate>
                 <DataAnnotationsValidator/>
+                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Submit</button>
                 
                 <div>
                     <InputTextField
