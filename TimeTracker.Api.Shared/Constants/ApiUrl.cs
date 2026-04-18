@@ -4,6 +4,7 @@ public class ApiUrl
 {
     #region Public
     public const string Login = "user/login";
+    public const string LoginAsDemo = "user/login/as-demo";
     public const string LoginMagic = "user/login/magic";
     public const string LoginMagicVerify = "user/login/magic/verify";
     public const string RefreshToken = "user/refresh-token";
