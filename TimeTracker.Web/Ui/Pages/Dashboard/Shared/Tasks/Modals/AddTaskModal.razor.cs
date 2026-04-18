@@ -45,8 +45,6 @@ public partial class AddTaskModal
                 await OnCloseModal();
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
                 Dispatcher.Dispatch(new SetOverdueTasksListItemAction(responseDto));
-                Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.SetSelectedPageAction(1));
-                Dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction());
             }
         }
         catch (Exception e)

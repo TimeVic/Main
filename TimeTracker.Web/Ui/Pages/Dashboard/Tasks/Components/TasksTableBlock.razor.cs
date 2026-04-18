@@ -145,7 +145,7 @@ public partial class TasksTableBlock
 
     private void SelectAllTasks()
     {
-        if (_selectedTaskIds.Any())
+        if (_selectedTaskIds.Any() && _selectedTaskIds.Count == _localTasks.Count)
         {
             _selectedTaskIds.Clear();
             return;
@@ -166,6 +166,21 @@ public partial class TasksTableBlock
         updateModel.Fill(task);
         updateModel.IsArchived = true;
         Dispatcher.Dispatch(new UpdateTaskAction(updateModel, true));
+        return Task.CompletedTask;
+    }
+
+    private Task OnSetArchivedSelectedTasks(bool isArchived)
+    {
+        foreach (var id in _selectedTaskIds.ToList())
+        {
+            var task = _localTasks.FirstOrDefault(t => t.Id == id);
+            if (task == null) continue;
+            var updateModel = new UpdateRequest();
+            updateModel.Fill(task);
+            updateModel.IsArchived = isArchived;
+            Dispatcher.Dispatch(new UpdateTaskAction(updateModel, true));
+        }
+        _selectedTaskIds.Clear();
         return Task.CompletedTask;
     }
     
