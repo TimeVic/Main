@@ -48,10 +48,4 @@
       <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Reference Include="TimeTracker.Business.Extensions">
-        <HintPath>..\TimeTracker.Tests.Integration.Business\bin\Debug\net8.0\TimeTracker.Business.Extensions.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 </Project>
