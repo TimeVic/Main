@@ -1,4 +1,5 @@
 ﻿using Fluxor;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
@@ -32,15 +33,15 @@ public class UpdateEffect: Effect<UpdateMemberAction>
     {
         try
         {
-            var request = new TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.UpdateRequest
+            var request = new UpdateRequest
             {
                 Access = action.Access,
                 ProjectsAccess = action.Projects?
-                    .Select(p => new TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.MembershipProjectAccessRequest
+                    .Select(p => new MembershipProjectAccessRequest
                     {
                         ProjectId = p.Id,
                         HasAccess = true
-                    }).ToList() ?? new List<TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership.MembershipProjectAccessRequest>()
+                    }).ToList() ?? []
             };
             await _apiService.WorkspaceMembershipUpdateAsync(request);
             dispatcher.Dispatch(new LoadListAction(true));
