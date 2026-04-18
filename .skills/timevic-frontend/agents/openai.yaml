@@ -1,0 +1,4 @@
+interface:
+  display_name: "TimeVic Frontend"
+  short_description: "Build and maintain TimeVic UI features"
+  default_prompt: "Use $timevic-frontend to implement a TimeVic frontend change."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "TimeVic Content"
+  short_description: "Draft landing, FAQ, and public page copy"
+  default_prompt: "Use $timevic-content to draft content for a TimeVic public page."
