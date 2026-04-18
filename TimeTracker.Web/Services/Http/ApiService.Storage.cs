@@ -20,6 +20,7 @@ namespace TimeTracker.Web.Services.Http
                 ApiUrl.StorageUpload,
                 new Dictionary<string, object>()
                 {
+                    // TaskId, commentId, etc.
                     { "EntityId", entityId },
                     { "EntityType", entityType },
                     { "FileType", fileType }
