@@ -63,7 +63,7 @@ public partial class EnumDropDown<TItem>
     public MenuVariant DropDownMenuVariant { get; set; } = MenuVariant.Outlined;
     
     [Parameter] 
-    public ThemeColor DropDownColor { get; set; } = ThemeColor.Info;
+    public ThemeColor DropDownColor { get; set; } = ThemeColor.Default;
     
     
     private List<TItem?> _list;

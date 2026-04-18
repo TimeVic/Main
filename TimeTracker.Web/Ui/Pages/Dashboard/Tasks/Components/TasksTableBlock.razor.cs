@@ -162,10 +162,9 @@ public partial class TasksTableBlock
 
     private Task OnArchiveTask(TaskDto task)
     {
-        var updateModel = new UpdateRequest();
-        updateModel.Fill(task);
+        var updateModel = GetUpdateRequest(task);
         updateModel.IsArchived = true;
-        Dispatcher.Dispatch(new UpdateTaskAction(updateModel, true));
+        DispatchUpdate(updateModel);
         return Task.CompletedTask;
     }
 
@@ -175,10 +174,9 @@ public partial class TasksTableBlock
         {
             var task = _localTasks.FirstOrDefault(t => t.Id == id);
             if (task == null) continue;
-            var updateModel = new UpdateRequest();
-            updateModel.Fill(task);
+            var updateModel = GetUpdateRequest(task);
             updateModel.IsArchived = isArchived;
-            Dispatcher.Dispatch(new UpdateTaskAction(updateModel, true));
+            DispatchUpdate(updateModel);
         }
         _selectedTaskIds.Clear();
         return Task.CompletedTask;
@@ -188,10 +186,9 @@ public partial class TasksTableBlock
     {
         if (status != null)
         {
-            var updateModel = new UpdateRequest();
-            updateModel.Fill(task);
+            var updateModel = GetUpdateRequest(task);
             updateModel.Status = status.Value;
-            Dispatcher.Dispatch(new UpdateTaskAction(updateModel, true));
+            DispatchUpdate(updateModel);
         }
         return Task.CompletedTask;
     }
@@ -200,10 +197,9 @@ public partial class TasksTableBlock
     {
         if (priority != null)
         {
-            var updateModel = new UpdateRequest();
-            updateModel.Fill(task);
+            var updateModel = GetUpdateRequest(task);
             updateModel.Priority = priority.Value;
-            Dispatcher.Dispatch(new UpdateTaskAction(updateModel, true));
+            DispatchUpdate(updateModel);
         }
         return Task.CompletedTask;
     }
@@ -211,5 +207,17 @@ public partial class TasksTableBlock
     private string GetTaskTitleClass(TaskDto context)
     {
         return context.IsArchived ? "line-through" : "";
+    }
+
+    private UpdateRequest GetUpdateRequest(TaskDto task)
+    {
+        var updateModel = new UpdateRequest();
+        updateModel.Fill(task);
+        return updateModel;
+    }
+    
+    private void DispatchUpdate(UpdateRequest updateRequest)
+    {
+        Dispatcher.Dispatch(new UpdateTaskAction(updateRequest, true, false));
     }
 }
