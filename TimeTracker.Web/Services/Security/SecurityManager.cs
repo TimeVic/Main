@@ -1,8 +1,10 @@
 ﻿using Fluxor;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Permissions;
 using TimeTracker.Web.Store.Project;
 using TimeTracker.Web.Store.WorkspaceMemberships;
 
@@ -13,16 +15,24 @@ public class SecurityManager: ISecurityManager
     private readonly IState<WorkspaceMembershipsState> _workspaceMembershipsState;
     private readonly IState<AuthState> _authState;
     private readonly IState<ProjectState> _projectState;
+    private readonly IState<WorkspacePermissionsState> _workspacePermissionsState;
 
     public SecurityManager(
         IState<WorkspaceMembershipsState> workspaceMembershipsState,
         IState<AuthState> authState,
-        IState<ProjectState> projectState
+        IState<ProjectState> projectState,
+        IState<WorkspacePermissionsState> workspacePermissionsState
     )
     {
         _workspaceMembershipsState = workspaceMembershipsState;
         _authState = authState;
         _projectState = projectState;
+        _workspacePermissionsState = workspacePermissionsState;
+    }
+
+    public bool HasPermission(WorkspacePermission permission)
+    {
+        return _workspacePermissionsState.Value.Permissions.Contains(permission);
     }
 
     public ICollection<ProjectDto> GetSharedProjects(UserDto? user = null)

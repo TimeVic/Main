@@ -40,7 +40,7 @@ public partial class InitializationContainer
     [Inject]
     protected IState<CommonState> CommonState { get; set; }
     
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         TimeEntryState.StateChanged += async (sender, args) =>
         {
@@ -55,7 +55,7 @@ public partial class InitializationContainer
         if (!NavigationManager.GetPath().StartsWith("/board-change/"))
         {
             WorkspaceInitializationService.Init();
-            WorkspaceInitializationService.AfterInit();
+            await WorkspaceInitializationService.AfterInit();
         }
     }
 }

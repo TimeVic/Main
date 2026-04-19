@@ -1,11 +1,15 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Security;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
+using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.Notification;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Common;
+using TimeTracker.Web.Store.Permissions;
 using TimeTracker.Web.Store.Workspace;
 
 namespace TimeTracker.Web.Services.Workspace;
@@ -15,17 +19,23 @@ public class WorkspaceInitializationService
     private readonly IDispatcher _dispatcher;
     private readonly NavigationManager _navigationManager;
     private readonly IState<AuthState> _authState;
+    private readonly ApiService _apiService;
+    private readonly ILogger<WorkspaceInitializationService> _logger;
 
     public WorkspaceInitializationService(
         IDispatcher dispatcher,
         NavigationManager navigationManager,
         FcmService fcmService,
-        IState<AuthState> authState
+        IState<AuthState> authState,
+        ApiService apiService,
+        ILogger<WorkspaceInitializationService> logger
     )
     {
         _dispatcher = dispatcher;
         _navigationManager = navigationManager;
         _authState = authState;
+        _apiService = apiService;
+        _logger = logger;
     }
 
     public void Init(bool isReload = false)
@@ -33,9 +43,10 @@ public class WorkspaceInitializationService
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Workspace.LoadListAction(isReload));
     }
     
-    public void AfterInit(bool isReload = false)
+    public async Task AfterInit(bool isReload = false)
     {
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(false));
+        await LoadWorkspacePermissionsAsync();
         _dispatcher.Dispatch(new TimeTracker.Web.Store.WorkspaceMemberships.LoadListAction(isReload));
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadListAction(isReload));
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Client.LoadListAction(isReload));
@@ -49,6 +60,55 @@ public class WorkspaceInitializationService
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Tag.LoadListAction());
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(true));
         // Task.Run(() => _fcmService.SetNotificationToken());
+    }
+
+    private async Task LoadWorkspacePermissionsAsync()
+    {
+        var workspaceId = _authState.Value.Workspace?.Id;
+        if (workspaceId == null)
+        {
+            _dispatcher.Dispatch(new ClearWorkspacePermissionsAction());
+            return;
+        }
+
+        try
+        {
+            _dispatcher.Dispatch(new SetWorkspacePermissionsLoadingAction(true));
+            var response = await _apiService.GetWorkspacePermissionsAsync(workspaceId.Value);
+            if (response != null)
+            {
+                _dispatcher.Dispatch(new SetWorkspacePermissionsAction(response));
+            }
+            else
+            {
+                _dispatcher.Dispatch(
+                    new SetWorkspacePermissionsAction(
+                        new GetWorkspacePermissionsResponse
+                        {
+                            WorkspaceId = workspaceId.Value,
+                            Permissions = new List<WorkspacePermission>()
+                        }
+                    )
+                );
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            _dispatcher.Dispatch(
+                new SetWorkspacePermissionsAction(
+                    new GetWorkspacePermissionsResponse
+                    {
+                        WorkspaceId = workspaceId.Value,
+                        Permissions = new List<WorkspacePermission>()
+                    }
+                )
+            );
+        }
+        finally
+        {
+            _dispatcher.Dispatch(new SetWorkspacePermissionsLoadingAction(false));
+        }
     }
     
     public void ChangeWorkspace(WorkspaceDto workspace)

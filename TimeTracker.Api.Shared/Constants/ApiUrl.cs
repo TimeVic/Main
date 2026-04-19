@@ -77,6 +77,12 @@ public class ApiUrl
     public const string WorkspaceUpdate = "dashboard/workspace/update";
     
     #endregion
+
+    #region Security
+
+    public const string WorkspacePermissions = "dashboard/security/permissions/workspace";
+
+    #endregion
     
     #region List
     
