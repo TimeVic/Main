@@ -300,6 +300,7 @@ appsettings.Local.json
 .fake
 .ionide
 .vscode
+.githooks
 
 # Build directory
 build/*

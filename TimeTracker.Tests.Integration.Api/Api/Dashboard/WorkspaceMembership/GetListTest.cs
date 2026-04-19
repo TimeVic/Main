@@ -90,7 +90,7 @@ public class GetListTest: BaseTest
     }
     
     [Fact]
-    public async Task UserWithRoleUserShouldNotReceiveList()
+    public async Task UserWithRoleUserShouldReceiveList()
     {
         var (otherJwtToken, otherUser, workspace) = await UserSeeder.CreateAuthorizedAsync();
         var expectedMembership = await _workspaceAccessService.ShareAccessAsync(
@@ -107,8 +107,11 @@ public class GetListTest: BaseTest
             WorkspaceId = _workspace.Id,
             Page = 1
         });
-        var error = await response.GetJsonResponseAsync<object>();
-        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter + 2, actualDto.TotalCount);
+        Assert.Contains(actualDto.Items, item => item.Id == expectedMembership.Id);
     }
 
     private async Task CreateUsersAndAddMembers(int counter)

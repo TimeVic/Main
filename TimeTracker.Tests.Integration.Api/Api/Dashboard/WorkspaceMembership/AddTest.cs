@@ -117,6 +117,9 @@ public class AddTest: BaseTest
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
+        
+        var actualUser = await _userDao.GetByEmail(_newUserFake.Email);
+        Assert.Null(actualUser);
     }
     
     [Fact]

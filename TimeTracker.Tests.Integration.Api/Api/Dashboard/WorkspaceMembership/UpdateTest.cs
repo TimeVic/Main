@@ -184,11 +184,23 @@ public class UpdateTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtTokenOtherUser, new UpdateRequest()
         {
             MembershipId = _membership.Id,
-            Access = MembershipAccessType.User,
+            Access = MembershipAccessType.Manager,
+            ProjectsAccess = _projects.Select(item =>
+            {
+                return new MembershipProjectAccessRequest()
+                {
+                    ProjectId = item.Id,
+                    HasAccess = true
+                };
+            }).ToArray()
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
+        
+        await FlushAndRefreshEntity(_membership);
+        Assert.Equal(MembershipAccessType.User, _membership.Access);
+        Assert.Empty(_membership.ProjectAccesses);
     }
 
     [Fact]
