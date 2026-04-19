@@ -63,7 +63,7 @@
                             <span class="block font-medium text-slate-800">@taskList.Name</span>
                             <span class="text-xs text-slate-500">
                                 @* @taskList.Tasks.Count task@(taskList.Tasks.Count == 1 ? string.Empty : "s") *@
-                                4 tasks
+                                @_tasksListState.Value.List.Count tasks
                             </span>
                         </span>
                         <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>

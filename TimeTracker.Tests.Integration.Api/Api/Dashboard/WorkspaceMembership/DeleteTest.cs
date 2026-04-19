@@ -96,5 +96,10 @@ public class DeleteTest: BaseTest
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
+        
+        var isExists = await DbSessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+            .Where(item => item.Id == _membership.Id)
+            .AnyAsync();
+        Assert.True(isExists);
     }
 }

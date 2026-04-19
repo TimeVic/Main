@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Security;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Services.Http;
@@ -40,7 +41,7 @@ public class WorkspaceInitializationService
 
     public void Init(bool isReload = false)
     {
-        _dispatcher.Dispatch(new TimeTracker.Web.Store.Workspace.LoadListAction(isReload));
+        _dispatcher.Dispatch(new LoadListAction(isReload));
     }
     
     public async Task AfterInit(bool isReload = false)

@@ -13,7 +13,7 @@ public class ClientPermissionService : IClientPermissionService
         {
             [WorkspacePermission.ReadWorkspaceSettings] = AccessLevel.Read,
             [WorkspacePermission.UpdateWorkspaceSettings] = AccessLevel.Write,
-            [WorkspacePermission.ReadWorkspaceMembers] = AccessLevel.Write,
+            [WorkspacePermission.ReadWorkspaceMembers] = AccessLevel.Read,
             [WorkspacePermission.UpdateWorkspaceMembers] = AccessLevel.Write,
             [WorkspacePermission.CreateProject] = AccessLevel.Write,
             [WorkspacePermission.UpdateProject] = AccessLevel.Write,

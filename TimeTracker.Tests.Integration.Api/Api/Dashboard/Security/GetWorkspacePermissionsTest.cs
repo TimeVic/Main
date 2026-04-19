@@ -78,7 +78,7 @@ public class GetWorkspacePermissionsTest: BaseTest
     }
 
     [Fact]
-    public async Task UserShouldReceiveOnlyReadWorkspaceSettings()
+    public async Task UserShouldReceiveReadWorkspaceSettingsAndReadWorkspaceMembers()
     {
         var (otherJwtToken, _, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
@@ -93,8 +93,10 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
         Assert.Equal(_workspace.Id, actual.WorkspaceId);
-        Assert.Single(actual.Permissions);
+        Assert.Equal(2, actual.Permissions.Count);
         Assert.Contains(WorkspacePermission.ReadWorkspaceSettings, actual.Permissions);
+        Assert.Contains(WorkspacePermission.ReadWorkspaceMembers, actual.Permissions);
+        Assert.DoesNotContain(WorkspacePermission.UpdateWorkspaceMembers, actual.Permissions);
     }
 
     [Fact]
