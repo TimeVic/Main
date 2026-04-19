@@ -1,18 +1,25 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Services.Security;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.LayoutParts;
 
 public partial class MainMenu
 {
-    private record MenuItemModel(string Name, string Icon, string Url, string? GroupName = null, bool IsDisabled = false);
+    private record MenuItemModel(
+        string Name,
+        string Icon,
+        string Url,
+        string? GroupName = null,
+        WorkspacePermission? RequiredPermission = null
+    );
 
     [Inject]
-    public IState<AuthState> AuthState { get; set; }
+    public ISecurityManager SecurityManager { get; set; } = null!;
     
     private List<MenuItemModel> _navItems = new()
     {
@@ -21,7 +28,12 @@ public partial class MainMenu
         new MenuItemModel("Tasks", "fa-regular fa-square-check", SiteUrl.Dashboard_Tasks_Main),
         new MenuItemModel("Payments", "fa-regular fa-credit-card", SiteUrl.Dashboard_Payments, ""),
         new MenuItemModel("Payments report", "fa-regular fa-credit-card", SiteUrl.Dashboard_Reports_Payments, "Reports"),
-        new MenuItemModel("", "fa-solid fa-sliders", SiteUrl.Dashboard_Workspace_Settings),
+        new MenuItemModel(
+            "",
+            "fa-solid fa-sliders",
+            SiteUrl.Dashboard_Workspace_Settings,
+            RequiredPermission: WorkspacePermission.UpdateWorkspaceSettings
+        ),
     };
 
     protected override void OnInitialized()
@@ -32,6 +44,12 @@ public partial class MainMenu
 
     private void OnMenuItemSelected(string itemUrl)
     {
+        var item = _navItems.FirstOrDefault(i => i.Url == itemUrl);
+        if (item != null && IsMenuItemDisabled(item))
+        {
+            return;
+        }
+
         NavigationManager.NavigateTo(itemUrl);
     }
     
@@ -44,5 +62,11 @@ public partial class MainMenu
             return path.StartsWith(item.Url);
         }
         return item.Url == path;
+    }
+
+    private bool IsMenuItemDisabled(MenuItemModel item)
+    {
+        return item.RequiredPermission != null
+            && !SecurityManager.HasPermission(item.RequiredPermission.Value);
     }
 }

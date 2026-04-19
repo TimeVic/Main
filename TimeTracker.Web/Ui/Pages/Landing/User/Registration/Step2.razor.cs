@@ -11,11 +11,7 @@ namespace TimeTracker.Web.Ui.Pages.Landing.User.Registration;
 public partial class Step2
 {
     [Parameter]
-    public string? VerificationToken
-    {
-        get => model.Token;
-        set => model.Token = value;
-    }
+    public string? VerificationToken { get; set; }
     
     [Inject] 
     private ApiService _apiService { get; set; }
@@ -29,16 +25,20 @@ public partial class Step2
     [Inject] 
     private IReCaptchaService _reCaptchaService { get; set; }
     
-    private RegistrationStep2Request model = new();
+    private readonly RegistrationStep2Request model = new();
     private bool _isLoading;
-    private EditForm _form;
-    private bool _isValid = false;
+    private EditForm _form = default!;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         _isLoading = false;
         await UpdateReCaptchaAsync();
+    }
+
+    protected override void OnParametersSet()
+    {
+        model.Token = VerificationToken ?? string.Empty;
     }
 
     private async Task UpdateReCaptchaAsync()

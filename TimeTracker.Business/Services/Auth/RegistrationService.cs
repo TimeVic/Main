@@ -49,7 +49,19 @@ public class RegistrationService: IRegistrationService
             throw new RecordIsExistsException();
         }
         var user = existsUser ?? await _userDao.CreatePendingUser(email);
-        
+
+        await EnsureDefaultWorkspaceAsync(user);
+        await SendRegistrationNotificationAsync(user);
+        return user;
+    }
+
+    private async Task EnsureDefaultWorkspaceAsync(UserEntity user)
+    {
+        if (user.CreatedWorkspaces.Any(item => item.IsDefault))
+        {
+            return;
+        }
+
         var userName = StringUtils.GetUserNameFromEmail(user.Email);
         var workspaceName = string.Format(
             UserResources.DefaultWorkspaceName,
@@ -61,13 +73,15 @@ public class RegistrationService: IRegistrationService
             true
         );
         await _workspaceAccessService.ShareAccessAsync(workspace, user, MembershipAccessType.Owner);
-        
+    }
+
+    private async Task SendRegistrationNotificationAsync(UserEntity user)
+    {
         await _queueService.PushNotificationAsync(new RegistrationNotificationItemContext(
             user.Email,
             _frontendUrl,
             user.VerificationToken!
         ));
-        return user;
     }
     
     public async Task<UserEntity> ActivateUser(string verificationToken, string password)

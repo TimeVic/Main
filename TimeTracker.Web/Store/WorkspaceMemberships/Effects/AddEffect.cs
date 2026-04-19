@@ -32,14 +32,16 @@ public class AddEffect: Effect<AddNewMemberAction>
     {
         try
         {
+            dispatcher.Dispatch(new SetIsListLoading(true));
             await _apiService.WorkspaceMembershipAddAsync(_authState.Value.Workspace!.Id, action.Email);
             dispatcher.Dispatch(new LoadListAction(true));
             
-            _notificationService.ShowInfo("New member was added");
+            _notificationService.ShowInfo("Workspace invitation was sent");
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message, e);
+            _notificationService.ShowError("Member invitation error");
         }
         finally
         {

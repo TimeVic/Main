@@ -1,8 +1,10 @@
 ﻿@page "/registration/verification/{verificationToken}"
-
+@using LumexUI
 @using LumexUI.Common
 @using Microsoft.AspNetCore.Components
 @using TimeTracker.Web.Ui.Pages.Landing.User.Registration.Shared
+@using TimeTracker.Web.Ui.Shared.Components.Form
+@using TimeTracker.Web.Ui.Shared.Components.Form.Validation
 @using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.Layout
 
 @layout Layout
@@ -12,51 +14,53 @@
     Title="TimeVic - Registration Verification"
     Robots="@SiteMetadata.NoIndexRobots" />
 
-@* <ComponentLayout> *@
-@*     <ChildContent> *@
-@*          *@
-@*         <div class="flex items-start justify-between gap-4"> *@
-@*             <div> *@
-@*                 <p class="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">Registration</p> *@
-@*                 <h2 class="mt-2 text-2xl font-semibold text-slate-900">"Set your password"</h2> *@
-@*                 <p class="mt-2 text-sm text-slate-500">"Step 2 of 2 — complete account activation."</p> *@
-@*             </div> *@
-@*             <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-sm"> *@
-@*                 <i class="@($"fa-solid fa-lock text-lg")"></i> *@
-@*             </div> *@
-@*         </div> *@
-@*          *@
-@*         <FluentStack HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center"> *@
-@*             <FluentCard Style="width: 300px" Class="mt-5 mb-5"> *@
-@*                 <EditForm *@
-@*                     Model="model" *@
-@*                     @ref="_form" *@
-@*                     novalidate> *@
-@*                     <DataAnnotationsValidator /> *@
-@* *@
-@*                     <FluentLabel Typo="Typography.H2" Class="mb-3">Registration - Step 2</FluentLabel> *@
-@*              *@
-@*                     <FluentStack Orientation="Orientation.Vertical" Class="mb-3"> *@
-@*                         <FluentLabel>Enter your password to finish registration</FluentLabel> *@
-@*                         <FluentTextField *@
-@*                             TextFieldType="TextFieldType.Password" *@
-@*                             style="width: 100%;" *@
-@*                             Disabled="_isLoading" *@
-@*                             @bind-Value="@model.Password" *@
-@*                             InputMode="InputMode.Email"> *@
-@*                             <FluentIcon Value="@(new Icons.Regular.Size16.Edit())" Slot="start" Color="Color.Neutral"/> *@
-@*                         </FluentTextField> *@
-@*                     </FluentStack> *@
-@*                 </EditForm> *@
-@*                 <div Class="d-flex justify-space-between"> *@
-@*                     <FluentButton *@
-@*                         OnClick="Submit" *@
-@*                         Appearance="@Appearance.Accent"> *@
-@*                         Continue *@
-@*                     </FluentButton> *@
-@*                 </div> *@
-@*             </FluentCard> *@
-@*         </FluentStack> *@
-@* *@
-@*     </ChildContent> *@
-@* </ComponentLayout> *@
+<ComponentLayout>
+    <ChildContent>
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">Registration</p>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-900">Set your password</h2>
+                <p class="mt-2 text-sm text-slate-500">Complete account activation and open your workspace.</p>
+            </div>
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-sm">
+                <i class="fa-solid fa-lock text-lg"></i>
+            </div>
+        </div>
+
+        <EditForm
+            Model="model"
+            @ref="_form"
+            class="mt-6 space-y-4"
+            novalidate>
+            <DataAnnotationsValidator />
+            <CustomValidationSummary />
+
+            <div class="space-y-2">
+                <InputTextField
+                    @bind-Value="@model.Password"
+                    Label="Password"
+                    FullWidth="true"
+                    Type="InputType.Password"
+                    Placeholder="Create password" />
+            </div>
+
+            <CustomButton
+                Color="@ThemeColor.Primary"
+                Class="w-full gap-2 bg-emerald-600 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                IsLoading="_isLoading"
+                OnClick="@Submit">
+                <StartContent>
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </StartContent>
+                <ChildContent>
+                    Finish registration
+                </ChildContent>
+            </CustomButton>
+        </EditForm>
+
+        <div class="mt-6 rounded-3xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+            <p class="font-semibold">Workspace invitation</p>
+            <p class="mt-2 text-emerald-700">This link activates the account created from a workspace invitation or registration email.</p>
+        </div>
+    </ChildContent>
+</ComponentLayout>
