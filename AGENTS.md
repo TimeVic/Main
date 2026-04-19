@@ -58,6 +58,7 @@ Handlers implement `IAsyncRequestHandler<TRequest, TResponse>` and are auto-regi
 - Mappings live in `TimeTracker.Business.Orm/Mapping/Entities/`, extend `BaseGuidMappings<T>`.
 - **`SnakeCaseConvention`** automatically converts `PascalCase` → `snake_case` for table/column names; explicit overrides go in the mapping class.
 - **Transactions**: `CommitPerformerMiddleware` wraps each request in a transaction (commit on success, rollback on exception). Do not manually commit in handlers.
+- When adding or changing DAO list methods, check for potential N+1 queries caused by lazy-loaded relationships used by DTO mapping or response construction; use explicit eager fetching/projections for those relationships.
 - Run migrations: `dotnet run --project ./TimeTracker.Migrations`
 
 ---
@@ -132,4 +133,3 @@ dotnet test ./TimeTracker.Tests.Unit.Business
 
  - Write all comments and notes in English
  - Comments like " @* Added: Invalid *@" non needed(with simple action description)
-
