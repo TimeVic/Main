@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
@@ -7,6 +8,7 @@ using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Business.Testing.Seeders.Entity.Task;
@@ -94,5 +96,91 @@ public class GetListTest: BaseTest
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(expectedCounter, actualDto.TotalCount);
+    }
+
+    [Fact]
+    public async Task ShouldReceiveOnlyTaskListsFromSharedProjectsIfUserHasUserRole()
+    {
+        var projects = (await _projectSeeder.CreateSeveralAsync(_defaultWorkspace, 3)).ToList();
+        var sharedProject1 = projects.First();
+        var sharedProject2 = projects.Last();
+        var unavailableProject = projects.Skip(1).First();
+
+        var expectedTaskLists = new List<TaskListEntity>();
+        expectedTaskLists.AddRange(await _taskListSeeder.CreateSeveralAsync(sharedProject1, 2));
+        expectedTaskLists.AddRange(await _taskListSeeder.CreateSeveralAsync(sharedProject2, 3));
+        await _taskListSeeder.CreateSeveralAsync(unavailableProject, 4);
+
+        var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _defaultWorkspace,
+            MembershipAccessType.User,
+            new List<ProjectAccessModel>()
+            {
+                new () { Project = sharedProject1 },
+                new () { Project = sharedProject2 }
+            }
+        );
+        
+        var response = await PostRequestAsync(Url, otherJwtToken, new GetListRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedTaskLists.Count, actualDto.TotalCount);
+        Assert.Equal(
+            expectedTaskLists.Select(item => item.Id).OrderBy(item => item),
+            actualDto.Items.Select(item => item.Id).OrderBy(item => item)
+        );
+        Assert.All(actualDto.Items, item =>
+        {
+            Assert.NotEqual(unavailableProject.Id, item.Project.Id);
+        });
+    }
+
+    [Fact]
+    public async Task ShouldReceiveEmptyListIfUserHasNoSharedProjects()
+    {
+        await _taskListSeeder.CreateSeveralAsync(_project, 3);
+        var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _defaultWorkspace,
+            MembershipAccessType.User,
+            new List<ProjectAccessModel>()
+        );
+        
+        var response = await PostRequestAsync(Url, otherJwtToken, new GetListRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Empty(actualDto.Items);
+        Assert.Equal(0, actualDto.TotalCount);
+    }
+
+    [Fact]
+    public async Task ShouldReceiveAllTaskListsIfUserHasManagerRole()
+    {
+        var expectedCounter = 6;
+        await _taskListSeeder.CreateSeveralAsync(_project, expectedCounter);
+        var (managerJwtToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _defaultWorkspace,
+            MembershipAccessType.Manager
+        );
+        
+        var response = await PostRequestAsync(Url, managerJwtToken, new GetListRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(expectedCounter, actualDto.TotalCount);
+        Assert.All(actualDto.Items, item =>
+        {
+            Assert.Equal(_project.Id, item.Project.Id);
+        });
     }
 }

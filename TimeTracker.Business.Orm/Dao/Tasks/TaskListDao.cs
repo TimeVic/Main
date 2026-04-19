@@ -1,8 +1,13 @@
-﻿using Persistence.Transactions.Behaviors;
+﻿using NHibernate.Criterion;
+using NHibernate.Linq;
+using Persistence.Transactions.Behaviors;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao.Tasks;
@@ -50,6 +55,53 @@ public class TaskListDao: ITaskListDao
             items,
             await query.RowCountAsync()
         );
+    }
+
+    public async Task<ListDto<TaskListEntity>> GetAvailableForUserListAsync(
+        WorkspaceEntity workspace,
+        UserEntity? user = null,
+        MembershipAccessType? accessType = null
+    )
+    {
+        ProjectEntity projectAlias = null!;
+        var query = _sessionProvider.CurrentSession.QueryOver<TaskListEntity>()
+            .Select(
+                Projections.Group<TaskListEntity>(item => item.Id)
+            )
+            .Inner.JoinAlias(item => item.Project, () => projectAlias)
+            .Where(() => projectAlias!.Workspace.Id == workspace.Id)
+            .Where(() => !projectAlias!.IsArchived)
+            .Where(taskList => !taskList.IsArchived);
+
+        if (
+            user != null
+            && accessType != MembershipAccessType.Manager
+            && accessType != MembershipAccessType.Owner
+        )
+        {
+            WorkspaceMembershipProjectAccessEntity projectAccessAlias = null!;
+            WorkspaceMembershipEntity workspaceMembershipAlias = null!;
+            UserEntity userAlias = null!;
+            query = query.Inner.JoinAlias(() => projectAlias!.MembershipProjectAccess, () => projectAccessAlias)
+                .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMembership, () => workspaceMembershipAlias)
+                .Inner.JoinAlias(() => workspaceMembershipAlias!.User, () => userAlias)
+                .And(() => userAlias!.Id == user.Id);
+        }
+
+        var taskListIds = await query.ListAsync<Guid>();
+        if (!taskListIds.Any())
+        {
+            return new ListDto<TaskListEntity>(new List<TaskListEntity>(), 0);
+        }
+
+        var taskLists = await _sessionProvider.CurrentSession.Query<TaskListEntity>()
+            .Fetch(item => item.Project)
+            .ThenFetch(project => project.Client)
+            .Where(item => taskListIds.Contains(item.Id))
+            .OrderByDescending(item => item.Name)
+            .ToListAsync();
+
+        return new ListDto<TaskListEntity>(taskLists, taskLists.Count);
     }
     
     public async Task ArchiveTaskListAsync(TaskListEntity taskList)

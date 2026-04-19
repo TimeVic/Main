@@ -20,13 +20,15 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly ITaskListDao _taskListDao;
+        private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public GetListRequestHandler(
             IMapper mapper,
             IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
-            ITaskListDao taskListDao
+            ITaskListDao taskListDao,
+            IWorkspaceAccessService workspaceAccessService
         )
         {
             _mapper = mapper;
@@ -34,6 +36,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
             _userDao = userDao;
             _securityManager = securityManager;
             _taskListDao = taskListDao;
+            _workspaceAccessService = workspaceAccessService;
         }
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest listRequest)
@@ -45,7 +48,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
                 throw new HasNoAccessException();
             }
 
-            var taskLists = await _taskListDao.GetList(workspace!);
+            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace!);
+
+            var taskLists = await _taskListDao.GetAvailableForUserListAsync(workspace!, user, userAccess);
             return new GetListResponse(
                 _mapper.Map<ICollection<TaskListDto>>(taskLists.Items),
                 taskLists.TotalCount
