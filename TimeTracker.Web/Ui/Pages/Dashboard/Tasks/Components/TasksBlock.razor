@@ -14,6 +14,7 @@
     @if (_taskList != null)
     {
         <AddTaskModal @bind-IsOpened="_isShowAddTaskModal" TaskList="@_taskList"></AddTaskModal>
+        <UpdateTaskListModal @bind-IsOpened="_isShowUpdateTaskListModal" TaskList="@_taskList"></UpdateTaskListModal>
     }
     @if (_isShowDeleteTaskListConfirmation)
     {
@@ -54,7 +55,7 @@
                     </LumexDropdownTrigger>
                     <LumexDropdownMenu>
                         <LumexDropdownItem 
-                            Disabled="true"
+                            Disabled="_taskList == null"
                             OnClick="@OnEditTaskList">
                             Edit task list
                         </LumexDropdownItem>
