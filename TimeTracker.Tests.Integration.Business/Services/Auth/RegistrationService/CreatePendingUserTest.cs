@@ -1,7 +1,9 @@
 using Autofac;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Auth;
@@ -16,6 +18,7 @@ public class CreatePendingUserTest: BaseTest
     private readonly IRegistrationService _authService;
     private readonly IDataFactory<UserEntity> _userFactory;
     private readonly IQueueService _queueService;
+    private readonly IUserDao _userDao;
     private new readonly IQueueDao _queueDao;
 
     public CreatePendingUserTest(): base()
@@ -23,6 +26,7 @@ public class CreatePendingUserTest: BaseTest
         _authService = Scope.Resolve<IRegistrationService>();
         _userFactory = Scope.Resolve<IDataFactory<UserEntity>>();
         _queueService = Scope.Resolve<IQueueService>();
+        _userDao = Scope.Resolve<IUserDao>();
         _queueDao = Scope.Resolve<IQueueDao>();
 
         _queueDao.CompleteAllPending();
@@ -45,6 +49,21 @@ public class CreatePendingUserTest: BaseTest
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
         Assert.NotNull(actualEmail);
         Assert.Contains(user.Email, actualEmail.To);
+    }
+
+    [Fact]
+    public async Task ShouldNotCreateDuplicateDefaultWorkspaceWhenResendingNotification()
+    {
+        var expectedEmail = _userFactory.Generate().Email;
+
+        var user = await _authService.CreatePendingUser(expectedEmail);
+        await FlushDbChanges();
+
+        await _authService.CreatePendingUser(expectedEmail);
+        await FlushDbChanges();
+
+        var workspaces = await _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner);
+        Assert.Single(workspaces, item => item.IsDefault);
     }
     
     [Fact]

@@ -5,7 +5,9 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembers
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
+using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Security;
@@ -23,6 +25,7 @@ public class AddTest: BaseTest
     private readonly string _jwtToken;
     private readonly IDataFactory<UserEntity> _userFactory;
     private readonly IUserSeeder _userSeeder;
+    private readonly IUserDao _userDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     
     private readonly UserEntity _newUserFake;
@@ -36,6 +39,7 @@ public class AddTest: BaseTest
     {
         _userFactory = ServiceProvider.GetRequiredService<IDataFactory<UserEntity>>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
+        _userDao = ServiceProvider.GetRequiredService<IUserDao>();
         _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
@@ -74,6 +78,32 @@ public class AddTest: BaseTest
         Assert.NotNull(actualMembership.User);
         Assert.Equal(MembershipAccessType.User, actualMembership.Access);
         Assert.NotEqual(Guid.Empty, actualMembership.User.Id);
+    }
+
+    [Fact]
+    public async Task ShouldSendRegistrationInvitationToNewMember()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            Email = _newUserFake.Email,
+            WorkspaceId = _workspace.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var invitedUser = await _userDao.GetByEmail(_newUserFake.Email);
+        Assert.NotNull(invitedUser);
+        Assert.False(invitedUser.IsActivated);
+        Assert.NotEmpty(invitedUser.VerificationToken!);
+
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
+        Assert.True(actualProcessedCounter > 0);
+
+        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
+        Assert.NotNull(actualEmail);
+        Assert.Contains(invitedUser.Email, actualEmail.To);
+        Assert.Contains("/registration/verification/", actualEmail.Body);
+        Assert.Contains(invitedUser.VerificationToken!, actualEmail.Body);
     }
     
     [Fact]

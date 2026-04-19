@@ -1,0 +1,60 @@
+@page "/error/403"
+@using LumexUI.Common
+
+<main class="min-h-screen bg-slate-50">
+    <section class="flex min-h-screen items-center justify-center px-4 py-10">
+        <div class="w-full max-w-3xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div class="border-b border-slate-200 bg-slate-900 px-6 py-5 text-white sm:px-8">
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-200">Access denied</p>
+                <h1 class="mt-3 text-4xl font-semibold">403</h1>
+            </div>
+            <div class="space-y-6 px-6 py-8 sm:px-8">
+                <div>
+                    <h2 class="text-xl font-semibold text-slate-900">You do not have access to this page</h2>
+                    <p class="mt-2 max-w-2xl text-sm text-slate-600">
+                        The current workspace permissions do not allow this route.
+                    </p>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <CustomButton
+                        Color="ThemeColor.Primary"
+                        Variant="Variant.Solid"
+                        OnClick="@GoToDashboard">
+                        <StartContent>
+                            <i class="fa-regular fa-clock"></i>
+                        </StartContent>
+                        <ChildContent>
+                            Open dashboard
+                        </ChildContent>
+                    </CustomButton>
+                    <CustomButton
+                        Color="ThemeColor.Default"
+                        Variant="Variant.Outlined"
+                        OnClick="@GoToWorkspaces">
+                        <StartContent>
+                            <i class="fa-regular fa-building"></i>
+                        </StartContent>
+                        <ChildContent>
+                            Open workspaces
+                        </ChildContent>
+                    </CustomButton>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    private void GoToDashboard()
+    {
+        NavigationManager.NavigateTo(SiteUrl.Dashboard_TimeEntry);
+    }
+
+    private void GoToWorkspaces()
+    {
+        NavigationManager.NavigateTo(SiteUrl.Workspace_List);
+    }
+}

@@ -18,7 +18,7 @@
                         Variant="@(IsMenuItemSelected(item) ? Variant.Solid : Variant.Outlined)"
                         Size="@Size.Medium"
                         IconOnly="@(string.IsNullOrEmpty(item.Name))"
-                        Disabled="item.IsDisabled"
+                        Disabled="@IsMenuItemDisabled(item)"
                         OnClick="@(() => OnMenuItemSelected(item.Url))">
                         <StartContent>
                             <span class="flex items-center gap-2">
@@ -57,6 +57,7 @@
                                     <LumexDropdownItem
                                         Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
                                         Variant="@(IsMenuItemSelected(item) ? MenuVariant.Solid : MenuVariant.Outlined)"
+                                        Disabled="@IsMenuItemDisabled(item)"
                                         OnClick="@(() => OnMenuItemSelected(item.Url))">
                                         <StartContent>
                                             <span class="flex items-center gap-2">
@@ -81,6 +82,7 @@
                                     <LumexDropdownItem
                                         Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
                                         Variant="@(IsMenuItemSelected(item) ? MenuVariant.Solid : MenuVariant.Outlined)"
+                                        Disabled="@IsMenuItemDisabled(item)"
                                         OnClick="@(() => OnMenuItemSelected(item.Url))">
                                         <StartContent>
                                             <span class="flex items-center gap-2">

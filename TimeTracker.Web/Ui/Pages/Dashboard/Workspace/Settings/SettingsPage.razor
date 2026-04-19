@@ -1,6 +1,8 @@
 @page "/board/workspace/settings"
+@attribute [RequireWorkspacePermission(WorkspacePermission.UpdateWorkspaceSettings)]
 @using LumexUI
 @using LumexUI.Common
+@using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components
 @using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
 @using Layout = TimeTracker.Web.Ui.Pages.Dashboard.Shared.Layout

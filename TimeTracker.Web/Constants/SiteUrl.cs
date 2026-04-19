@@ -15,6 +15,7 @@ public static class SiteUrl
         
     public static readonly string Error500 = "/error/500";
     public static readonly string Error404 = "/error/404";
+    public static readonly string Error403 = "/error/403";
     #endregion
     
     public static readonly string DashboardBase = "/board";
