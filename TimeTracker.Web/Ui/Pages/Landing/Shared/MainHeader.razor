@@ -5,13 +5,13 @@
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         
         <AppLogoBlock
-            Eyebrow="Time tracking platform"
+            Eyebrow="Freelance income tracker"
         />
         
         <nav class="hidden items-center gap-6 md:flex">
             <a href="/#features" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Features</a>
-            <a href="/#benefits" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Benefits</a>
-            <a href="/#share" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Why teams share it</a>
+            <a href="/#benefits" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Client balances</a>
+            <a href="/#share" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Tasks and Jira</a>
             @if (AuthState.Value.IsLoggedIn)
             {
                 <a 
@@ -29,11 +29,11 @@
                     class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                 >
                     <i class="fa-solid fa-user-plus"></i>
-                    <span>Register</span>
+                    <span>Try it free</span>
                 </a>
                 <a href="@SiteUrl.Login" class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                    <span>Get started</span>
+                    <span>Start tracking income</span>
                 </a>
             }
         </nav>

@@ -7,17 +7,17 @@ public static class SiteMetadata
     public const string IndexRobots = "index, follow";
     public const string NoIndexRobots = "noindex, nofollow, noarchive";
 
-    public const string HomeTitle = "TimeVic — Time Tracking for Small Teams";
+    public const string HomeTitle = "TimeVic — Time and Income Tracker for Freelance Developers";
     public const string HomeDescription =
-        "TimeVic is a time tracking and task management workspace for small teams, freelancers, and agencies. Track hours, manage tasks, chat, organize clients, and review payments in one place.";
+        "TimeVic helps freelance developers track hours, calculate earnings, and see paid and unpaid balances across all clients and projects.";
     public const string HomeKeywords =
-        "time tracking software, team time tracker, project time tracking, timesheet app, task management, freelancer time tracking, agency time tracking, client billing software";
+        "freelance developer time tracker, income tracker, client billing tracker, paid unpaid work tracker, project time tracking, timesheet app, Jira time tracking";
 
-    public const string RegistrationTitle = "Create a TimeVic Account — Time Tracking Workspace";
+    public const string RegistrationTitle = "Create a TimeVic Account — Freelance Time and Income Tracker";
     public const string RegistrationDescription =
-        "Create a TimeVic account to start tracking work hours, organizing tasks, collaborating in team chat, and reviewing project payments in one workspace.";
+        "Create a TimeVic account to track hours, calculate earnings, review client balances, and record payments for freelance client work.";
     public const string RegistrationKeywords =
-        "create time tracker account, team timesheet software, sign up time tracking app, work hours tracker, project time management";
+        "create freelance time tracker account, income tracking app, client balance tracker, paid unpaid work tracker, project time tracking";
 
     public static string ToAbsoluteUrl(string relativePath)
     {
