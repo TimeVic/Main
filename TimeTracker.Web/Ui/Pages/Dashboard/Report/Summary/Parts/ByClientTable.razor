@@ -1,12 +1,31 @@
-﻿@using TimeTracker.Api.Shared.Dto.Model.Report
-@using TimeTracker.Business.Extensions
-@using System.Linq;
+@using Fluxor
 @using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Store.Report
 @using TimeTracker.Web.Ui.Shared.Components
+
+@inject IState<ReportsState> ReportsState
 
 @code {
     [Parameter]
     public ICollection<SummaryByClientsReportItemDto> Items { get; set; } = new List<SummaryByClientsReportItemDto>();
+
+    private decimal GetOutstanding(Guid? clientId, decimal earned)
+    {
+        var paid = ReportsState.Value.PaymentReportItems.FirstOrDefault(item => item.ClientId == clientId)?.PaidAmountByClient ?? 0;
+        return Math.Max(earned - paid, 0);
+    }
+
+    private static decimal GetEffectiveHourlyRate(decimal amount, TimeSpan duration)
+    {
+        if (duration.TotalHours <= 0)
+        {
+            return 0;
+        }
+
+        return Math.Round(amount / (decimal)duration.TotalHours, 2);
+    }
 }
 
 <LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
@@ -16,9 +35,24 @@
             @context.Duration.ToReadableShortString()
         </Content>
     </PropertyColumn>
-    <PropertyColumn Title="Amount" Property="@(p => p.Amount)">
+    <PropertyColumn Title="Earned" Property="@(p => p.Amount)">
         <Content>
             <AmountDisplay Amount="@context.Amount"/>
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="Outstanding" Property="@(p => p.Amount)">
+        <Content>
+            @{
+                var outstanding = GetOutstanding(context.ClientId, context.Amount);
+            }
+            <span class="font-semibold @(outstanding > 0 ? "text-red-700" : "text-slate-700")">
+                <AmountDisplay Amount="@outstanding"/>
+            </span>
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="Effective hourly rate" Property="@(p => p.Amount)">
+        <Content>
+            <AmountDisplay Amount="@GetEffectiveHourlyRate(context.Amount, context.Duration)"/>/h
         </Content>
     </PropertyColumn>
 </LumexDataGrid>

@@ -48,7 +48,9 @@ public partial class SummaryReportPage
     {
         await base.OnInitializedAsync();
         Dispatcher.Dispatch(new ReportResetSummaryReportFilterAction());
+        Dispatcher.Dispatch(new ReportSetPaymentReportFilterAction(new PaymentReportFilterState(_state.Value.SummaryReportFilter.EndDate)));
         Dispatcher.Dispatch(new ReportFetchSummaryReportAction());
+        Dispatcher.Dispatch(new ReportFetchPaymentsReportAction());
     }
     
     private string FormatterDuration(object durationObject)

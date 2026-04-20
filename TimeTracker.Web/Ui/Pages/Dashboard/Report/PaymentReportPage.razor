@@ -1,6 +1,7 @@
 @page "/board/report/payments"
 @using LumexUI.Common
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Ui.Pages.Dashboard.Report.Parts
 @using TimeTracker.Web.Ui.Shared.Components
 @using Layout = TimeTracker.Web.Ui.Pages.Dashboard.Shared.Layout
 
@@ -33,23 +34,36 @@
         else if (!_grouppedItems.Any())
         {
             <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-                <text>Report is empty</text>
+                <text>Start tracking time to see your earnings. Add your first client to track payments.</text>
             </div>
         }
         else
         {
+            <FinancialSummaryCards
+                TotalEarned="@_totalEarned"
+                TotalPaid="@_totalPaid"
+                OutstandingBalance="@_outstandingBalance"
+                Class="mb-6"
+                EarnedCaption="Billable work through the selected date"
+                PaidCaption="Client payments received"
+                OutstandingCaption="@(_outstandingBalance > 0 ? "Needs collection" : "No unpaid balance")"/>
+
             foreach (var groupItem in _grouppedItems)
             {
-                var clientId = groupItem.Key ?? Guid.Empty;
+                var clientId = groupItem.Key;
                 var clientDataItem = groupItem.First();
                 var clientName = string.IsNullOrEmpty(clientDataItem.ClientName) ? "Other projects" : clientDataItem.ClientName;
-                var clientAmount = clientDataItem.PaidAmountByClient;
-                var unpaidAmount = GetClientUnpaidAmount(clientId);
-                var totalAmount = GetClientTotalAmount(clientId);
-                var totalDuration = GetTotalDuration(clientId);
+                var receivedAmount = clientDataItem.PaidAmountByClient;
+                var outstandingAmount = GetClientOutstandingAmount(clientId);
+                var totalEarned = GetClientTotalAmount(clientId);
 
-                <div class="mb-6">
-                    <h3 class="mb-3 text-base font-semibold text-slate-900">@clientName</h3>
+                <div class="mb-6 space-y-3">
+                    <ClientPaymentSummaryCard
+                        ClientName="@clientName"
+                        Earned="@totalEarned"
+                        Paid="@receivedAmount"
+                        Outstanding="@outstandingAmount"
+                        ProjectCount="@groupItem.Count()"/>
 
                     <LumexDataGrid 
                         Loading="_state.Value.IsLoading"
@@ -65,24 +79,34 @@
                                 @context.TotalDuration.ToReadableShortString()
                             </Content>
                         </PropertyColumn>
-                        <PropertyColumn Title="Amount" Property="@(p => p.Amount)">
+                        <PropertyColumn Title="Earned" Property="@(p => p.Amount)">
                             <Content>
                                 <AmountDisplay Amount="@context.Amount"/>
                             </Content>
                         </PropertyColumn>
-                        <PropertyColumn Title="Paid" Property="@(p => p.PaidAmountByProject)">
+                        <PropertyColumn Title="Received" Property="@(p => p.PaidAmountByProject)">
                             <Content>
-                                <AmountDisplay Amount="@context.PaidAmountByProject"/>
+                                <span class="font-semibold text-emerald-700">
+                                    <AmountDisplay Amount="@context.PaidAmountByProject"/>
+                                </span>
+                            </Content>
+                        </PropertyColumn>
+                        <PropertyColumn Title="Outstanding" Property="@(p => p.Amount)">
+                            <Content>
+                                @{
+                                    var projectOutstanding = GetProjectOutstandingAmount(context);
+                                }
+                                <span class="font-semibold @(projectOutstanding > 0 ? "text-red-700" : "text-slate-700")">
+                                    <AmountDisplay Amount="@projectOutstanding"/>
+                                </span>
+                            </Content>
+                        </PropertyColumn>
+                        <PropertyColumn Title="Effective hourly rate" Property="@(p => p.Amount)">
+                            <Content>
+                                <AmountDisplay Amount="@GetEffectiveHourlyRate(context.Amount, context.TotalDuration)"/>/h
                             </Content>
                         </PropertyColumn>
                     </LumexDataGrid>
-
-                    <div class="mt-2 flex gap-6 rounded-lg bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                        <span>Unpaid: <b>@((unpaidAmount > 0) ? "+" : string.Empty) <AmountDisplay Amount="@unpaidAmount"/></b></span>
-                        <span>Duration: <b>@totalDuration.ToReadableShortString()</b></span>
-                        <span>Total amount: <b><AmountDisplay Amount="@totalAmount"/></b></span>
-                        <span>Paid: <b><AmountDisplay Amount="@clientAmount"/></b></span>
-                    </div>
                 </div>
             }
         }

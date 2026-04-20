@@ -31,11 +31,13 @@
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn 
-        Title="Amoun"
+        Title="Received"
         Property="@(p => p.Amount)"
         Sortable="@true">
         <Content>
-            <AmountDisplay Amount="@context.Amount"></AmountDisplay>
+            <span class="font-semibold text-emerald-700">
+                <AmountDisplay Amount="@context.Amount"></AmountDisplay>
+            </span>
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn 

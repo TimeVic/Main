@@ -17,29 +17,38 @@
         </LumexCardBody>
     </LumexCard>
     
-    <LumexDataGrid
-        Data="@_state.Value.List.AsQueryable()"
-        Radius="@Radius.Medium"
-        Class="mt-3">
-        <LumexUI.EditColumn
-            Title="Name"
-            Property="@(p => p.Name)"/>
-        <LumexUI.PropertyColumn
-            Title="Actions"
-            Property="@(p => p.Id)">
-            <Content>
-                <CustomButton
-                    Class="inline-flex rounded-full"
-                    OnClick="@(() => OnSave(context))"
-                    Size="Size.Small"
-                    Color="ThemeColor.Success"
-                    Variant="Variant.Light"
-                    IconOnly="true">
-                    <ChildContent>
-                        <i class="fa-regular fa-floppy-disk"></i>
-                    </ChildContent>
-                </CustomButton>
-            </Content>
-        </LumexUI.PropertyColumn>
-    </LumexDataGrid>
+    @if (_state.Value.List.Any())
+    {
+        <LumexDataGrid
+            Data="@_state.Value.List.AsQueryable()"
+            Radius="@Radius.Medium"
+            Class="mt-3">
+            <LumexUI.EditColumn
+                Title="Name"
+                Property="@(p => p.Name)"/>
+            <LumexUI.PropertyColumn
+                Title="Actions"
+                Property="@(p => p.Id)">
+                <Content>
+                    <CustomButton
+                        Class="inline-flex rounded-full"
+                        OnClick="@(() => OnSave(context))"
+                        Size="Size.Small"
+                        Color="ThemeColor.Success"
+                        Variant="Variant.Light"
+                        IconOnly="true">
+                        <ChildContent>
+                            <i class="fa-regular fa-floppy-disk"></i>
+                        </ChildContent>
+                    </CustomButton>
+                </Content>
+            </LumexUI.PropertyColumn>
+        </LumexDataGrid>
+    }
+    else
+    {
+        <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+            Add your first client to track payments.
+        </div>
+    }
 </section>

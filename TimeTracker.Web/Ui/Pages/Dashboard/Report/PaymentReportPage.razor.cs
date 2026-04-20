@@ -20,28 +20,49 @@ public partial class PaymentReportPage
         get => _state.Value.PaymentReportItems.GroupBy(item => item.ClientId);
     }
 
+    private decimal _totalEarned => _state.Value.PaymentReportItems.Sum(item => item.Amount);
+
+    private decimal _totalPaid => _grouppedItems.Sum(group => group.FirstOrDefault()?.PaidAmountByClient ?? 0);
+
+    private decimal _outstandingBalance => _grouppedItems.Sum(group => GetClientOutstandingAmount(group.Key));
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         Dispatcher.Dispatch(new ReportFetchPaymentsReportAction());
     }
     
-    private TimeSpan GetTotalDuration(Guid clientId)
+    private TimeSpan GetTotalDuration(Guid? clientId)
     {
         var totalTicks = _state.Value.PaymentReportItems.Where(item => item.ClientId == clientId)
             .Sum(item => item.TotalDuration.Ticks);
         return new TimeSpan(totalTicks);
     }
     
-    private decimal GetClientTotalAmount(Guid clientId)
+    private decimal GetClientTotalAmount(Guid? clientId)
     {
         return _state.Value.PaymentReportItems.Where(item => item.ClientId == clientId).Sum(item => item.Amount);
     }
     
-    private decimal GetClientUnpaidAmount(Guid clientId)
+    private decimal GetClientOutstandingAmount(Guid? clientId)
     {
         var paidAmount = _state.Value.PaymentReportItems.FirstOrDefault(item => item.ClientId == clientId)?.PaidAmountByClient ?? 0;
-        return paidAmount - GetClientTotalAmount(clientId);
+        return Math.Max(GetClientTotalAmount(clientId) - paidAmount, 0);
+    }
+
+    private static decimal GetProjectOutstandingAmount(PaymentsReportItemDto item)
+    {
+        return Math.Max(item.Amount - item.PaidAmountByProject, 0);
+    }
+
+    private static decimal GetEffectiveHourlyRate(decimal amount, TimeSpan duration)
+    {
+        if (duration.TotalHours <= 0)
+        {
+            return 0;
+        }
+
+        return Math.Round(amount / (decimal)duration.TotalHours, 2);
     }
 
     private void OnChangeDateEnd(DateTime? endDate)

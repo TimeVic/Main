@@ -109,4 +109,33 @@ public partial class TimeEntryForm
         }
         return "Description";
     }
+
+    private string GetTrackingContext()
+    {
+        if (_activeEntry == null)
+        {
+            return string.Empty;
+        }
+
+        var taskName = !string.IsNullOrWhiteSpace(_activeEntry.Task?.Title)
+            ? _activeEntry.Task.Title
+            : !string.IsNullOrWhiteSpace(_activeEntry.Description)
+                ? _activeEntry.Description
+                : "Time entry";
+        var projectName = _activeEntry.Project?.Name ?? _activeEntry.Task?.TaskList.Project.Name ?? "No project";
+        var clientName = _activeEntry.Project?.Client?.Name ?? _activeEntry.Task?.TaskList.Project.Client?.Name;
+        var clientPart = string.IsNullOrWhiteSpace(clientName) ? string.Empty : $"Client: {clientName}, ";
+        var ratePart = _activeEntry.HourlyRate.HasValue
+            ? $", Rate: {FormatMoney(_activeEntry.HourlyRate.Value)}/h"
+            : string.Empty;
+
+        return $"{taskName} ({clientPart}Project: {projectName}{ratePart})";
+    }
+
+    private string FormatMoney(decimal amount)
+    {
+        return AuthState.Value.Workspace != null
+            ? $"{amount.ToMoneyFormat()} {AuthState.Value.Workspace.Currency.Symbol}"
+            : amount.ToMoneyFormat();
+    }
 }
