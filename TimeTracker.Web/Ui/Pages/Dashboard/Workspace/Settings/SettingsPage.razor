@@ -1,10 +1,8 @@
 @page "/board/workspace/settings"
 @attribute [RequireWorkspacePermission(WorkspacePermission.UpdateWorkspaceSettings)]
-@using LumexUI
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components
-@using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
 @using Layout = TimeTracker.Web.Ui.Pages.Dashboard.Shared.Layout
 
 @inherits BaseReactiveComponent
@@ -58,6 +56,17 @@
         </TitleContent>
         <ChildContent>
             <MembershipsBlock></MembershipsBlock>
+        </ChildContent>
+    </LumexTab>
+    <LumexTab>
+        <TitleContent>
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-plug-circle-check"></i>
+                <span>Integrations</span>
+            </div>
+        </TitleContent>
+        <ChildContent>
+            <IntegrationsBlock></IntegrationsBlock>
         </ChildContent>
     </LumexTab>
 </LumexTabs>
