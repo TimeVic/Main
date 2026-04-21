@@ -17,6 +17,7 @@ from time_entries te
          inner join projects p on p.id = te.project_id
          inner join clients c on c.id = p.client_id
 where te.project_id in (:projectIds)
+  and te.end_time is not null
   and cast(te.start_time as date) >= cast(:startDate as date)
   and cast(te.start_time as date) <= cast(:endDate as date)
 group by c.id, c.name

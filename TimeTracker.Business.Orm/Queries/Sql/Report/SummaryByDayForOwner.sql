@@ -7,7 +7,11 @@ select
                     2
                 )
             ) as amountoriginal
-from time_entries te
+    from (
+        select *
+        from time_entries
+        where end_time is not null
+    ) te
     join workspaces w on w.id = te.workspace_id
     cross join lateral fn_split_time_entry_by_day(
     te.start_time,
