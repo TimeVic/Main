@@ -1,0 +1,129 @@
+@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Business.Common.Services.Format
+@using TimeTracker.Web.Ui.Shared.Components
+
+@inherits BaseReactiveComponent
+
+@inject ITimeParsingService TimeParsingService
+
+<LumexCard Class="mt-10 overflow-x-auto pb-2">
+    <LumexCardHeader>
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <SummarySectionHeader
+                Overline="Chart"
+                Title="@($"Summary by {PeriodLabel}")"
+                HelperText="Duration and earned value for each day in the selected period."/>
+            <div class="flex flex-wrap items-center gap-3 text-xs font-semibold">
+                <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-700">
+                    <span class="h-2.5 w-2.5 rounded-full bg-blue-600"></span>
+                    Duration
+                </span>
+                <span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-slate-700">
+                    <span class="h-2.5 w-2.5 rounded-full bg-slate-500"></span>
+                    Earned
+                </span>
+            </div>
+        </div>
+    </LumexCardHeader>
+    <LumexCardBody>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+            @if (Items.Any() && _trackedDaysCount > 0)
+            {
+                <span>@_trackedDaysLabel • <AmountDisplay Amount="@_totalEarned"/> earned</span>
+            }
+            else
+            {
+                <span>No significant activity in this period</span>
+            }
+        </div>
+
+        @if (Items.Any())
+        {
+            <div class="mt-6 overflow-x-auto pb-2">
+                <div class="flex h-64 min-w-max items-end gap-3 rounded-2xl border border-slate-100 bg-slate-50/70 px-4 py-4 md:h-72">
+                    @foreach (var item in Items.AsQueryable())
+                    {
+                        <div class="flex w-14 flex-col items-center gap-3">
+                            <div class="flex h-44 items-end gap-1.5 md:h-52">
+                                <div class="flex h-full w-4 items-end rounded-full bg-blue-100">
+                                    <div class="w-full rounded-full bg-blue-600" style="@GetDurationBarStyle(item)"></div>
+                                </div>
+                                <div class="flex h-full w-4 items-end rounded-full bg-slate-200">
+                                    <div class="w-full rounded-full bg-slate-500" style="@GetAmountBarStyle(item)"></div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-[11px] font-semibold text-slate-500">@item.Date.ToString("dd MMM")</div>
+                                <div class="mt-1 text-[11px] text-slate-400">@TimeParsingService.TimeSpanToTimeString(item.Duration, false)</div>
+                                <div class="text-[11px] text-slate-400">@item.Amount.ToString("0")</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="mt-6 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 py-10 text-center text-sm text-slate-500">
+                Start tracking time to see your earnings.
+            </div>
+        }
+    </LumexCardBody>
+</LumexCard>
+
+@code {
+    [Parameter]
+    public IEnumerable<SummaryByDaysReportItemDto> Items { get; set; } = new List<SummaryByDaysReportItemDto>();
+
+    [Parameter]
+    public string PeriodLabel { get; set; } = string.Empty;
+
+    private int _trackedDaysCount
+    {
+        get => Items.Count(item => item.Duration > TimeSpan.Zero || item.Amount > 0);
+    }
+
+    private decimal _totalEarned
+    {
+        get => Items.Sum(item => item.Amount);
+    }
+
+    private string _trackedDaysLabel
+    {
+        get => _trackedDaysCount == 1 ? "1 day tracked" : $"{_trackedDaysCount} days tracked";
+    }
+
+    private string GetDurationBarStyle(SummaryByDaysReportItemDto item)
+    {
+        var maxValue = Items.Any() ? Items.Max(chartItem => chartItem.DurationAsMillis) : 0;
+        if (maxValue <= 0 || item.DurationAsMillis <= 0)
+        {
+            return "height:0%;";
+        }
+
+        var height = item.DurationAsMillis / maxValue * 100d;
+        if (height < 8d)
+        {
+            height = 8d;
+        }
+
+        return $"height:{height:0.##}%;";
+    }
+
+    private string GetAmountBarStyle(SummaryByDaysReportItemDto item)
+    {
+        var maxValue = Items.Any() ? Items.Max(chartItem => chartItem.Amount) : 0;
+        if (maxValue <= 0 || item.Amount <= 0)
+        {
+            return "height:0%;";
+        }
+
+        var height = (double)(item.Amount / maxValue * 100m);
+        if (height < 8d)
+        {
+            height = 8d;
+        }
+
+        return $"height:{height:0.##}%;";
+    }
+}

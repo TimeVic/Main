@@ -1,0 +1,101 @@
+@using Fluxor
+@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Web.Constants
+@using TimeTracker.Web.Store.Report
+@using TimeTracker.Web.Ui.Shared.Components
+
+@inherits BaseReactiveComponent
+
+@inject IState<ReportsState> ReportsState
+
+<section class="mt-10 space-y-4">
+    <SummarySectionHeader
+        Title="Money overview"
+        HelperText="Cumulative financial state across all recorded work."/>
+
+    <p class="text-sm text-slate-500">
+        Outstanding balance = total earned - total received.
+    </p>
+
+    @if (!string.IsNullOrWhiteSpace(_moneyInsight))
+    {
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+            @_moneyInsight
+        </div>
+    }
+
+    <div class="grid gap-4 lg:grid-cols-3">
+        <SummaryMetricCard
+            Title="Total earned"
+            HelperText="Billable work recorded across all time"
+            Variant="neutral"
+            IconClass="fa-solid fa-chart-line">
+            <Value>
+                <AmountDisplay Amount="@_totalEarned"/>
+            </Value>
+        </SummaryMetricCard>
+
+        <SummaryMetricCard
+            Title="Total received"
+            HelperText="Client payments received"
+            Variant="success"
+            IconClass="fa-solid fa-check">
+            <Value>
+                <AmountDisplay Amount="@_totalReceived"/>
+            </Value>
+        </SummaryMetricCard>
+
+        <SummaryMetricCard
+            Title="Outstanding balance"
+            HelperText="Still unpaid by clients"
+            Variant="danger"
+            Emphasis="true"
+            IconClass="fa-solid fa-triangle-exclamation"
+            ActionText="View unpaid by client"
+            ActionHref="@SiteUrl.Dashboard_Reports_Payments">
+            <Value>
+                <AmountDisplay Amount="@_outstandingBalance"/>
+            </Value>
+        </SummaryMetricCard>
+    </div>
+</section>
+
+@code {
+    private IEnumerable<IGrouping<Guid?, PaymentsReportItemDto>> _paymentReportGroups
+    {
+        get => ReportsState.Value.PaymentReportItems.GroupBy(item => item.ClientId);
+    }
+
+    private decimal _totalEarned
+    {
+        get => ReportsState.Value.PaymentReportItems.Sum(item => item.Amount);
+    }
+
+    private decimal _totalReceived
+    {
+        get => _paymentReportGroups.Sum(group => group.FirstOrDefault()?.PaidAmountByClient ?? 0);
+    }
+
+    private decimal _outstandingBalance
+    {
+        get => _paymentReportGroups.Sum(group =>
+        {
+            var earned = group.Sum(item => item.Amount);
+            var paid = group.FirstOrDefault()?.PaidAmountByClient ?? 0;
+            return Math.Max(earned - paid, 0);
+        });
+    }
+
+    private string _moneyInsight
+    {
+        get
+        {
+            if (_totalEarned > 0 && _totalReceived <= 0)
+            {
+                return "Work recorded, but no payments received yet.";
+            }
+
+            return string.Empty;
+        }
+    }
+}

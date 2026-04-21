@@ -1,14 +1,21 @@
-﻿@using TimeTracker.Api.Shared.Dto.Model.Report
-@using TimeTracker.Business.Extensions
-@using System.Globalization
 @using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Ui.Shared.Components
 
 @code {
-
     [Parameter]
     public ICollection<SummaryByWeeksReportItemDto> Items { get; set; } = new List<SummaryByWeeksReportItemDto>();
 
+    private static decimal GetEffectiveHourlyRate(decimal amount, TimeSpan duration)
+    {
+        if (duration.TotalHours <= 0)
+        {
+            return 0;
+        }
+
+        return Math.Round(amount / (decimal)duration.TotalHours, 2);
+    }
 }
 
 <LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
@@ -24,9 +31,19 @@
             @context.Duration.ToReadableShortString()
         </Content>
     </PropertyColumn>
-    <PropertyColumn Title="Amount" Property="@(p => p.Amount)">
+    <PropertyColumn Title="Earned" Property="@(p => p.Amount)">
         <Content>
             <AmountDisplay Amount="@context.Amount"/>
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="Outstanding" Property="@(p => p.Amount)">
+        <Content>
+            <span class="text-slate-400">-</span>
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="Effective hourly rate" Property="@(p => p.Amount)">
+        <Content>
+            <AmountDisplay Amount="@GetEffectiveHourlyRate(context.Amount, context.Duration)"/>/h
         </Content>
     </PropertyColumn>
 </LumexDataGrid>

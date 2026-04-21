@@ -1,90 +1,46 @@
 @page "/board/report/payments"
 @using LumexUI.Common
-@using TimeTracker.Business.Extensions
-@using TimeTracker.Web.Ui.Shared.Components
+@using TimeTracker.Web.Ui.Pages.Dashboard.Report.Parts
 @using Layout = TimeTracker.Web.Ui.Pages.Dashboard.Shared.Layout
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<LumexCard Class="mt-6 overflow-x-auto pb-2">
-    <LumexCardHeader>
-        <div class="flex flex-col gap-3">
+<PaymentsSummaryHeader
+    EndDate="@_filterState.EndDate"
+    EndDateChanged="@OnChangeDateEnd"/>
+
+@if (_state.Value.IsLoading)
+{
+    <div class="mt-8 flex justify-center rounded-2xl border border-slate-200 bg-white py-10">
+        <LumexSpinner Variant="@SpinnerVariant.DotsFade"/>
+    </div>
+}
+else if (!_groupedItems.Any())
+{
+    <LumexCard Class="mt-8 border-dashed border-slate-200 bg-slate-50 shadow-none">
+        <LumexCardBody>
+            <p class="text-sm font-medium text-slate-700">Start tracking time to see your earnings.</p>
+            <p class="mt-1 text-sm text-slate-500">Add your first client to track payments.</p>
+        </LumexCardBody>
+    </LumexCard>
+}
+else
+{
+    <PaymentsOverviewCards Class="mt-8"/>
+
+    <section class="mt-10 space-y-5">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Payments</p>
-                <h2 class="mt-2 text-xl font-semibold text-slate-900">Payments summary report</h2>
-            </div>
-            <div>
-                <LumexDatebox
-                    TValue="DateTime?"
-                    Value="@_filterState.EndDate"
-                    ValueChanged="@OnChangeDateEnd"
-                    Label="Date end"/>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Clients</p>
+                <h2 class="mt-2 text-xl font-semibold text-slate-900">Client payment status</h2>
+                <p class="mt-1 text-sm text-slate-500">Clients with unpaid balances are sorted first.</p>
             </div>
         </div>
-    </LumexCardHeader>
-    <LumexCardBody>
-        @if (_state.Value.IsLoading)
-        {
-            <div class="flex justify-center py-6">
-                <LumexSpinner Variant="@SpinnerVariant.DotsFade"/>
-            </div>
-        }
-        else if (!_grouppedItems.Any())
-        {
-            <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-                <text>Report is empty</text>
-            </div>
-        }
-        else
-        {
-            foreach (var groupItem in _grouppedItems)
-            {
-                var clientId = groupItem.Key ?? Guid.Empty;
-                var clientDataItem = groupItem.First();
-                var clientName = string.IsNullOrEmpty(clientDataItem.ClientName) ? "Other projects" : clientDataItem.ClientName;
-                var clientAmount = clientDataItem.PaidAmountByClient;
-                var unpaidAmount = GetClientUnpaidAmount(clientId);
-                var totalAmount = GetClientTotalAmount(clientId);
-                var totalDuration = GetTotalDuration(clientId);
 
-                <div class="mb-6">
-                    <h3 class="mb-3 text-base font-semibold text-slate-900">@clientName</h3>
-
-                    <LumexDataGrid 
-                        Loading="_state.Value.IsLoading"
-                        Data="@groupItem.AsQueryable()" 
-                        Shadow="Shadow.None">
-                        <PropertyColumn Title="Project" Property="@(p => p.ProjectName)">
-                            <Content>
-                                @(string.IsNullOrEmpty(context.ProjectName) ? "-- No project name --" : context.ProjectName)
-                            </Content>
-                        </PropertyColumn>
-                        <PropertyColumn Title="Duration" Property="@(p => p.TotalDuration)">
-                            <Content>
-                                @context.TotalDuration.ToReadableShortString()
-                            </Content>
-                        </PropertyColumn>
-                        <PropertyColumn Title="Amount" Property="@(p => p.Amount)">
-                            <Content>
-                                <AmountDisplay Amount="@context.Amount"/>
-                            </Content>
-                        </PropertyColumn>
-                        <PropertyColumn Title="Paid" Property="@(p => p.PaidAmountByProject)">
-                            <Content>
-                                <AmountDisplay Amount="@context.PaidAmountByProject"/>
-                            </Content>
-                        </PropertyColumn>
-                    </LumexDataGrid>
-
-                    <div class="mt-2 flex gap-6 rounded-lg bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                        <span>Unpaid: <b>@((unpaidAmount > 0) ? "+" : string.Empty) <AmountDisplay Amount="@unpaidAmount"/></b></span>
-                        <span>Duration: <b>@totalDuration.ToReadableShortString()</b></span>
-                        <span>Total amount: <b><AmountDisplay Amount="@totalAmount"/></b></span>
-                        <span>Paid: <b><AmountDisplay Amount="@clientAmount"/></b></span>
-                    </div>
-                </div>
-            }
+        @foreach (var groupItem in _sortedGroupedItems)
+        {
+            <ClientPaymentsGroup Items="@groupItem"/>
         }
-    </LumexCardBody>
-</LumexCard>
+    </section>
+}

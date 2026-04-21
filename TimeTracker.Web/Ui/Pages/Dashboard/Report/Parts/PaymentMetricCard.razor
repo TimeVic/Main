@@ -1,0 +1,180 @@
+@inherits BaseReactiveComponent
+
+@if (Compact)
+{
+    <div class="@CompactClass">
+        <div class="flex items-start justify-between gap-3">
+            <p class="@TitleClass">@Title</p>
+            @if (!string.IsNullOrWhiteSpace(IconClass))
+            {
+                <span class="@CompactIconClass">
+                    <i class="@IconClass"></i>
+                </span>
+            }
+        </div>
+        <p class="@CompactValueClass">
+            @if (Value != null)
+            {
+                @Value
+            }
+            else
+            {
+                @ValueText
+            }
+        </p>
+        <p class="@HelperClass">@HelperText</p>
+    </div>
+}
+else
+{
+    <LumexCard Class="@CardClass">
+        <LumexCardBody Class="flex h-full flex-col">
+            <div class="flex items-start justify-between gap-3">
+                <p class="@TitleClass">@Title</p>
+                @if (!string.IsNullOrWhiteSpace(IconClass))
+                {
+                    <span class="@IconClassName">
+                        <i class="@IconClass"></i>
+                    </span>
+                }
+            </div>
+            <p class="@ValueClass">
+                @if (Value != null)
+                {
+                    @Value
+                }
+                else
+                {
+                    @ValueText
+                }
+            </p>
+            <p class="@HelperClass">@HelperText</p>
+        </LumexCardBody>
+    </LumexCard>
+}
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string HelperText { get; set; } = string.Empty;
+
+    [Parameter]
+    public string ValueText { get; set; } = "-";
+
+    [Parameter]
+    public RenderFragment? Value { get; set; }
+
+    [Parameter]
+    public string Variant { get; set; } = "neutral";
+
+    [Parameter]
+    public string IconClass { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Compact { get; set; }
+
+    private string CardClass
+    {
+        get
+        {
+            const string baseClass = "h-full min-h-[154px] border shadow-sm";
+            return Variant switch
+            {
+                "success" => $"{baseClass} border-emerald-100 bg-emerald-50/50",
+                "danger" => $"{baseClass} border-red-200 bg-red-100/80 shadow-md shadow-red-100/70",
+                _ => $"{baseClass} border-slate-200 bg-white"
+            };
+        }
+    }
+
+    private string CompactClass
+    {
+        get
+        {
+            const string baseClass = "h-full rounded-xl border px-3 py-2";
+            return Variant switch
+            {
+                "success" => $"{baseClass} border-emerald-100 bg-emerald-50/70",
+                "danger" => $"{baseClass} border-red-200 bg-red-50",
+                _ => $"{baseClass} border-slate-200 bg-slate-50"
+            };
+        }
+    }
+
+    private string TitleClass
+    {
+        get
+        {
+            return Variant switch
+            {
+                "success" => "text-xs font-semibold uppercase tracking-wide text-emerald-700",
+                "danger" => "text-xs font-semibold uppercase tracking-wide text-red-600",
+                _ => "text-xs font-semibold uppercase tracking-wide text-slate-500"
+            };
+        }
+    }
+
+    private string ValueClass
+    {
+        get
+        {
+            var sizeClass = Variant == "danger" ? "text-4xl" : "text-3xl";
+            var colorClass = Variant switch
+            {
+                "success" => "text-emerald-700",
+                "danger" => "text-red-700",
+                _ => "text-slate-900"
+            };
+            return $"mt-3 {sizeClass} font-semibold leading-tight tabular-nums {colorClass}";
+        }
+    }
+
+    private string CompactValueClass
+    {
+        get
+        {
+            var colorClass = Variant switch
+            {
+                "success" => "text-emerald-700",
+                "danger" => "text-red-700",
+                _ => "text-slate-900"
+            };
+            return $"mt-1 text-xl font-semibold leading-tight tabular-nums {colorClass}";
+        }
+    }
+
+    private string HelperClass
+    {
+        get => Variant == "danger"
+            ? "mt-2 text-sm font-medium text-red-700"
+            : "mt-2 text-sm text-slate-500";
+    }
+
+    private string IconClassName
+    {
+        get
+        {
+            return Variant switch
+            {
+                "success" => "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700",
+                "danger" => "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-200 text-red-700",
+                _ => "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500"
+            };
+        }
+    }
+
+    private string CompactIconClass
+    {
+        get
+        {
+            return Variant switch
+            {
+                "success" => "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700",
+                "danger" => "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-700",
+                _ => "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500"
+            };
+        }
+    }
+}

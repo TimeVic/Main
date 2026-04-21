@@ -7,7 +7,7 @@
     <div class="rounded-2xl border border-slate-200">
         <div class="border-b border-slate-200 px-4 py-4">
             <p class="text-sm font-semibold text-slate-900">To do</p>
-            <p class="text-sm text-slate-500">All active tasks except items moved to backlog.</p>
+            <p class="text-sm text-slate-500">Optional work items available for time tracking.</p>
         </div>
         <TasksTableBlock 
             Tasks="@TodoTasks"
@@ -18,7 +18,7 @@
     <div class="rounded-2xl border border-slate-200">
         <div class="border-b border-slate-200 px-4 py-4">
             <p class="text-sm font-semibold text-slate-900">Backlog</p>
-            <p class="text-sm text-slate-500">Tasks automatically land here when the status is set to Backlog.</p>
+            <p class="text-sm text-slate-500">Lower-priority items kept out of the main tracking flow.</p>
         </div>
         <TasksTableBlock 
             Tasks="@BacklogTasks"

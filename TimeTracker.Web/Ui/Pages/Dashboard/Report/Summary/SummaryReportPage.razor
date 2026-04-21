@@ -1,9 +1,6 @@
 ﻿@page "/board/report/summary"
-@using ApexCharts
-@using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Ui.Pages.Dashboard.Report.Summary.Parts
-@* @using Orientation = Microsoft.FluentUI.AspNetCore.Components.Orientation *@
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.LayoutParts
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared
 
@@ -16,115 +13,10 @@
 {
     var grouppedByString = @_state.Value.SummaryReportFilter.PeriodType.GetDisplayName();
 
-    <SummaryInfoBlock/>
-    
-    <LumexCard Class="mt-6 overflow-x-auto pb-2">
-        <LumexCardHeader>
-            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Chart</p>
-                    <h2 class="mt-2 text-xl font-semibold text-slate-900">Summary by @grouppedByString</h2>
-                    <p class="mt-1 text-sm text-slate-500">Blue bars show tracked duration and green bars show billable amount for each day in the selected period.</p>
-                </div>
-                <div class="flex flex-wrap items-center gap-3 text-xs font-semibold">
-                    <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-700"><span class="h-2.5 w-2.5 rounded-full bg-blue-600"></span>Duration</span>
-                    <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-emerald-700"><span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>Amount</span>
-                </div>
-            </div>
-        </LumexCardHeader>
-        <LumexCardBody>
-            @if (_byDateItems.Any())
-            {
-                <div class="mt-6 overflow-x-auto pb-2">
-                    <div class="flex h-80 min-w-max items-end gap-3 rounded-2xl border border-slate-100 bg-slate-50/70 px-4 py-4">
-                        @foreach (var item in _byDateItems.AsQueryable())
-                        {
-                            <div class="flex w-14 flex-col items-center gap-3">
-                                <div class="flex h-56 items-end gap-1.5">
-                                    <div class="flex h-full w-4 items-end rounded-full bg-blue-100">
-                                        <div class="w-full rounded-full bg-blue-600" style="@GetDurationBarStyle(item)"></div>
-                                    </div>
-                                    <div class="flex h-full w-4 items-end rounded-full bg-emerald-100">
-                                        <div class="w-full rounded-full bg-emerald-500" style="@GetAmountBarStyle(item)"></div>
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-[11px] font-semibold text-slate-500">@item.Date.ToString("dd MMM")</div>
-                                    <div class="mt-1 text-[11px] text-slate-400">@_timeParsingService.TimeSpanToTimeString(item.Duration, false)</div>
-                                    <div class="text-[11px] text-slate-400">@item.Amount.ToString("0")</div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-                @* <ApexChart *@
-                @*     TItem="SummaryByDaysReportItemDto"> *@
-                @* *@
-                @*     <ApexPointSeries *@
-                @*         TItem="SummaryByDaysReportItemDto" *@
-                @*         Items="_byDateItems" *@
-                @*         Name="Hours" *@
-                @*         SeriesType="@(_isShowChartWithLineSeries ? SeriesType.Line : SeriesType.Bar)" *@
-                @*         XValue="@(e => e.Date.ToShortDateString())" *@
-                @*         YValue="@(e => Math.Round((decimal)e.Duration.TotalHours, 2))"/> *@
-                @* *@
-                @*     <ApexPointSeries *@
-                @*         TItem="SummaryByDaysReportItemDto" *@
-                @*         Items="_byDateItems" *@
-                @*         Name="Amount" *@
-                @*         SeriesType="@(_isShowChartWithLineSeries ? SeriesType.Line : SeriesType.Bar)" *@
-                @*         XValue="@(e => e.Date.ToShortDateString())" *@
-                @*         YValue="@(e => Math.Round((decimal)e.Amount, 2))"/> *@
-                @* </ApexChart> *@
-            }
-            else
-            {
-                <div class="mt-6 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 py-10 text-center text-sm text-slate-500">
-                    No chart data is available for the selected filter combination.
-                </div>
-            }
-        </LumexCardBody>
-    </LumexCard>
-    
-    <LumexCard Class="mt-6">
-        <LumexCardHeader>
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Table</p>
-                    <h2 class="mt-2 text-xl font-semibold text-slate-900">Grouped summary</h2>
-                    <p class="mt-1 text-sm text-slate-500">The first column changes according to the selected grouping type.</p>
-                </div>
-                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">@grouppedByString</span>
-            </div>
-        </LumexCardHeader>
-        <LumexCardBody>
-            @if (_state.Value.SummaryReportData?.GroupedByDay != null)
-            {
-                <ByDateTable Items="@_state.Value.SummaryReportData.GroupedByDay"></ByDateTable>
-            }
-            else if (_state.Value.SummaryReportData?.GroupedByWeek != null)
-            {
-                <ByWeekTable Items="@_state.Value.SummaryReportData.GroupedByWeek"></ByWeekTable>
-            }
-            else if (_state.Value.SummaryReportData?.GroupedByClient != null)
-            {
-                <ByClientTable Items="@_state.Value.SummaryReportData.GroupedByClient"></ByClientTable>
-            }
-            else if (_state.Value.SummaryReportData?.GroupedByProject != null)
-            {
-                <ByProjectTable Items="@_state.Value.SummaryReportData.GroupedByProject"></ByProjectTable>
-            }
-            else if (_state.Value.SummaryReportData?.GroupedByMonth != null)
-            {
-                <ByMonthTable Items="@_state.Value.SummaryReportData.GroupedByMonth"></ByMonthTable>
-            }
-            else if (_state.Value.SummaryReportData?.GroupedByUser != null)
-            {
-                <ByUserTable Items="@_state.Value.SummaryReportData.GroupedByUser"></ByUserTable>
-            }
-        </LumexCardBody>
-    </LumexCard>
+    <MoneyOverviewSection/>
+    <PeriodAnalyticsSection/>
+    <SummaryChartSection Items="@_byDateItems" PeriodLabel="@grouppedByString"/>
+    <GroupedSummaryTableSection ReportData="@_state.Value.SummaryReportData" PeriodLabel="@grouppedByString"/>
 }
 else
 {
