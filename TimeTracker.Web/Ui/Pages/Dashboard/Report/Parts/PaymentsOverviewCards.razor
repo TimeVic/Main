@@ -1,0 +1,74 @@
+@using Fluxor
+@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Web.Store.Report
+@using TimeTracker.Web.Ui.Shared.Components
+
+@inherits BaseReactiveComponent
+
+@inject IState<ReportsState> ReportsState
+
+<section class="@Class">
+    <div class="grid gap-4 md:grid-cols-3">
+        <PaymentMetricCard
+            Title="Total earned"
+            HelperText="Billable value recorded across all included work"
+            Variant="neutral"
+            IconClass="fa-solid fa-chart-line">
+            <Value>
+                <AmountDisplay Amount="@_totalEarned"/>
+            </Value>
+        </PaymentMetricCard>
+
+        <PaymentMetricCard
+            Title="Total received"
+            HelperText="Payments collected from clients"
+            Variant="success"
+            IconClass="fa-solid fa-check">
+            <Value>
+                <AmountDisplay Amount="@_totalReceived"/>
+            </Value>
+        </PaymentMetricCard>
+
+        <PaymentMetricCard
+            Title="Outstanding balance"
+            HelperText="Still unpaid and requiring attention"
+            Variant="danger"
+            IconClass="fa-solid fa-triangle-exclamation">
+            <Value>
+                <AmountDisplay Amount="@_outstandingBalance"/>
+            </Value>
+        </PaymentMetricCard>
+    </div>
+
+    <p class="mt-3 text-sm text-slate-500">Outstanding = Total earned - total received.</p>
+</section>
+
+@code {
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+
+    private IEnumerable<IGrouping<Guid?, PaymentsReportItemDto>> _paymentReportGroups
+    {
+        get => ReportsState.Value.PaymentReportItems.GroupBy(item => item.ClientId);
+    }
+
+    private decimal _totalEarned
+    {
+        get => ReportsState.Value.PaymentReportItems.Sum(item => item.Amount);
+    }
+
+    private decimal _totalReceived
+    {
+        get => _paymentReportGroups.Sum(group => group.FirstOrDefault()?.PaidAmountByClient ?? 0);
+    }
+
+    private decimal _outstandingBalance
+    {
+        get => _paymentReportGroups.Sum(group =>
+        {
+            var earned = group.Sum(item => item.Amount);
+            var received = group.FirstOrDefault()?.PaidAmountByClient ?? 0;
+            return Math.Max(earned - received, 0);
+        });
+    }
+}

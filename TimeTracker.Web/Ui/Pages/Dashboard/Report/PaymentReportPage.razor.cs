@@ -15,9 +15,18 @@ public partial class PaymentReportPage
         get => _state.Value.PaymentReportFilter;
     }
 
-    private IEnumerable<IGrouping<Guid?, PaymentsReportItemDto>> _grouppedItems
+    private IEnumerable<IGrouping<Guid?, PaymentsReportItemDto>> _groupedItems
     {
         get => _state.Value.PaymentReportItems.GroupBy(item => item.ClientId);
+    }
+
+    private IEnumerable<IGrouping<Guid?, PaymentsReportItemDto>> _sortedGroupedItems
+    {
+        get => _groupedItems
+            .OrderBy(GetClientSortBucket)
+            .ThenByDescending(GetClientOutstandingAmount)
+            .ThenByDescending(GetClientTotalAmount)
+            .ThenBy(GetClientDisplayName);
     }
 
     protected override async Task OnInitializedAsync()
@@ -26,37 +35,44 @@ public partial class PaymentReportPage
         Dispatcher.Dispatch(new ReportFetchPaymentsReportAction());
     }
     
-    private TimeSpan GetTotalDuration(Guid? clientId)
+    private static decimal GetClientTotalAmount(IGrouping<Guid?, PaymentsReportItemDto> group)
     {
-        var totalTicks = _state.Value.PaymentReportItems.Where(item => item.ClientId == clientId)
-            .Sum(item => item.TotalDuration.Ticks);
-        return new TimeSpan(totalTicks);
-    }
-    
-    private decimal GetClientTotalAmount(Guid? clientId)
-    {
-        return _state.Value.PaymentReportItems.Where(item => item.ClientId == clientId).Sum(item => item.Amount);
-    }
-    
-    private decimal GetClientOutstandingAmount(Guid? clientId)
-    {
-        var paidAmount = _state.Value.PaymentReportItems.FirstOrDefault(item => item.ClientId == clientId)?.PaidAmountByClient ?? 0;
-        return Math.Max(GetClientTotalAmount(clientId) - paidAmount, 0);
+        return group.Sum(item => item.Amount);
     }
 
-    private static decimal GetProjectOutstandingAmount(PaymentsReportItemDto item)
+    private static decimal GetClientReceivedAmount(IGrouping<Guid?, PaymentsReportItemDto> group)
     {
-        return Math.Max(item.Amount - item.PaidAmountByProject, 0);
+        return group.FirstOrDefault()?.PaidAmountByClient ?? 0;
     }
 
-    private static decimal GetEffectiveHourlyRate(decimal amount, TimeSpan duration)
+    private static decimal GetClientOutstandingAmount(IGrouping<Guid?, PaymentsReportItemDto> group)
     {
-        if (duration.TotalHours <= 0)
+        return Math.Max(GetClientTotalAmount(group) - GetClientReceivedAmount(group), 0);
+    }
+
+    private static int GetClientSortBucket(IGrouping<Guid?, PaymentsReportItemDto> group)
+    {
+        var earned = GetClientTotalAmount(group);
+        var received = GetClientReceivedAmount(group);
+        var outstanding = GetClientOutstandingAmount(group);
+
+        if (outstanding > 0)
         {
             return 0;
         }
 
-        return Math.Round(amount / (decimal)duration.TotalHours, 2);
+        if (earned > 0 || received > 0)
+        {
+            return 1;
+        }
+
+        return 2;
+    }
+
+    private static string GetClientDisplayName(IGrouping<Guid?, PaymentsReportItemDto> group)
+    {
+        var clientName = group.FirstOrDefault()?.ClientName;
+        return string.IsNullOrWhiteSpace(clientName) ? "Other projects" : clientName;
     }
 
     private void OnChangeDateEnd(DateTime? endDate)

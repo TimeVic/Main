@@ -1,0 +1,33 @@
+@using LumexUI.Common
+
+@inherits BaseReactiveComponent
+
+<LumexCard Class="mt-6 border-slate-200 bg-slate-50/60 shadow-none">
+    <LumexCardBody>
+        <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Payments</p>
+                <h2 class="mt-2 text-xl font-semibold text-slate-900">Payments summary report</h2>
+                <p class="mt-1 text-sm text-slate-500">Review earned value, received payments, and balances still requiring follow-up.</p>
+            </div>
+
+            <div class="w-full lg:w-72">
+                <LumexDatebox
+                    TValue="DateTime?"
+                    Value="@EndDate"
+                    ValueChanged="@EndDateChanged"
+                    Variant="InputVariant.Outlined"
+                    LabelPlacement="LabelPlacement.Outside"
+                    Label="Date end"/>
+            </div>
+        </div>
+    </LumexCardBody>
+</LumexCard>
+
+@code {
+    [Parameter]
+    public DateTime? EndDate { get; set; }
+
+    [Parameter]
+    public EventCallback<DateTime?> EndDateChanged { get; set; }
+}
