@@ -11,7 +11,11 @@ select
                     else 0
                 end
             ) as AmountOriginal
-from time_entries te
+    from (
+        select *
+        from time_entries
+        where end_time is not null
+    ) te
     join projects p on p.id = te.project_id
     join workspaces w on w.id = p.workspace_id
     cross join lateral fn_split_time_entry_by_day(

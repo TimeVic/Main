@@ -14,6 +14,7 @@ from time_entries te
          left join projects p on p.id = te.project_id
          left join clients c on c.id = p.client_id
 where te.workspace_id = :workspaceId
+  and te.end_time is not null
   and cast(te.start_time as date) >= cast(:startDate as date)
   and cast(te.start_time as date) <= cast(:endDate as date)
 group by c.id, c.name
