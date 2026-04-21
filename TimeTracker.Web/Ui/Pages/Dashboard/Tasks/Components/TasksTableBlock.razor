@@ -114,8 +114,8 @@
                                     {
                                         <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">
                                             <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1">
-                                                <i class="fa-solid fa-link"></i>
-                                                Synced
+                                                <i class="fa-solid fa-tack"></i>
+                                                @task.FormattedId
                                             </span>
                                         </div>
                                     }
@@ -125,8 +125,8 @@
                         <td class="border-t border-slate-200 px-2 py-3 align-top">
                             <EnumDropDown
                                 TItem="TaskStatus"
-                                DropDownColor="ThemeColor.Default"
-                                DropDownVariant="Variant.Outlined"
+                                DropDownColor="@task.Status.GetThemeColor()"
+                                DropDownVariant="Variant.Solid"
                                 SelectType="DropDownType.DropDown"
                                 Size="Size.Small"
                                 Value="@task.Status"
@@ -135,8 +135,8 @@
                         <td class="border-t border-slate-200 px-2 py-3 align-top">
                             <EnumDropDown
                                 TItem="TaskPriority"
-                                DropDownColor="ThemeColor.Default"
-                                DropDownVariant="Variant.Outlined"
+                                DropDownColor="@task.Priority.GetThemeColor()"
+                                DropDownVariant="Variant.Solid"
                                 SelectType="DropDownType.DropDown"
                                 Size="Size.Small"
                                 Value="@task.Priority"

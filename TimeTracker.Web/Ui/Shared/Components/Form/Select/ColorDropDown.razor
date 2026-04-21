@@ -1,0 +1,162 @@
+@inherits InputBase<string?>
+
+@using LumexUI
+@using LumexUI.Common
+
+<div class="@Class">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="mb-1 block text-xs font-medium tracking-wide text-slate-500">@Label</label>
+    }
+    <div class="flex gap-1">
+        <LumexDropdown>
+            <LumexDropdownTrigger>
+                <LumexButton
+                    Disabled="Disabled"
+                    FullWidth="FullWidth"
+                    Color="@(HasError ? ThemeColor.Danger : ThemeColor.Info)"
+                    Variant="Variant.Outlined">
+                    @if (SelectedColor is null)
+                    {
+                        @Placeholder
+                    }
+                    else
+                    {
+                        <span class="inline-flex items-center gap-2">
+                            <span
+                                class="inline-block h-4 w-4 rounded border border-slate-200"
+                                style="@GetColorStyle(SelectedColor.Code)">
+                            </span>
+                            <span>@SelectedColor.Code</span>
+                        </span>
+                    }
+                </LumexButton>
+            </LumexDropdownTrigger>
+            <LumexDropdownMenu
+                Color="ThemeColor.Info"
+                Variant="MenuVariant.Outlined">
+                @foreach (var color in Colors)
+                {
+                    <LumexDropdownItem OnClick="@(() => OnColorSelected(color.Code))">
+                        <span class="inline-flex items-center gap-2">
+                            <span
+                                class="inline-block h-4 w-4 rounded border border-slate-200"
+                                style="@GetColorStyle(color.Code)">
+                            </span>
+                            <span class="font-mono text-xs">@color.Code</span>
+                        </span>
+                    </LumexDropdownItem>
+                }
+            </LumexDropdownMenu>
+        </LumexDropdown>
+
+        @if (Clearable)
+        {
+            <CustomButton
+                OnClick="OnClear"
+                Variant="Variant.Outlined"
+                Color="ThemeColor.Default"
+                Size="Size.Large"
+                FullWidth="false"
+                IconOnly="true">
+                <XIcon/>
+            </CustomButton>
+        }
+    </div>
+    @if (HasError)
+    {
+        <p class="mt-1 text-xs text-red-600">@FirstError</p>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public string Placeholder { get; set; } = "Select color";
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public bool Clearable { get; set; }
+
+    [Parameter]
+    public bool FullWidth { get; set; } = true;
+
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+
+    private static readonly IReadOnlyList<TagColorOption> Colors =
+    [
+        new("#EF4444"),
+        new("#F97316"),
+        new("#F59E0B"),
+        new("#EAB308"),
+        new("#84CC16"),
+        new("#22C55E"),
+        new("#10B981"),
+        new("#14B8A6"),
+        new("#06B6D4"),
+        new("#0EA5E9"),
+        new("#3B82F6"),
+        new("#6366F1"),
+        new("#8B5CF6"),
+        new("#A855F7"),
+        new("#D946EF"),
+        new("#EC4899"),
+        new("#F43F5E"),
+        new("#64748B"),
+        new("#475569"),
+        new("#334155"),
+        new("#1F2937"),
+        new("#111827"),
+        new("#7C3AED"),
+        new("#2563EB"),
+        new("#0891B2"),
+        new("#0F766E"),
+        new("#16A34A"),
+        new("#65A30D"),
+        new("#CA8A04"),
+        new("#D97706"),
+        new("#DC2626"),
+        new("#BE123C")
+    ];
+
+    private TagColorOption? SelectedColor =>
+        Colors.FirstOrDefault(color => color.Code.Equals(CurrentValue, StringComparison.OrdinalIgnoreCase));
+
+    private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
+
+    private string FirstError =>
+        EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
+
+    private void OnColorSelected(string color)
+    {
+        CurrentValue = color;
+    }
+
+    private void OnClear()
+    {
+        CurrentValue = null;
+    }
+
+    private static string GetColorStyle(string color)
+    {
+        return $"background-color: {color};";
+    }
+
+    protected override bool TryParseValueFromString(
+        string? value,
+        out string? result,
+        out string validationErrorMessage
+    )
+    {
+        result = value;
+        validationErrorMessage = string.Empty;
+        return true;
+    }
+
+    private sealed record TagColorOption(string Code);
+}

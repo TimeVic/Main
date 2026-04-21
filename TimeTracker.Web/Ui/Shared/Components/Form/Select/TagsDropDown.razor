@@ -1,31 +1,55 @@
-﻿@using TimeTracker.Api.Shared.Dto.Entity
-@using TimeTracker.Business.Common.Constants
-@using System.Collections.Generic
+﻿@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity
 
 @inherits BaseReactiveComponent
 
-@* <FluentAutocomplete *@
-@*     TOption="TagDto" *@
-@*     AutoComplete="off" *@
-@*     Multiple="true" *@
-@*     Label="@Label" *@
-@*     Class="@Class" *@
-@*     Disabled="@Disabled" *@
-@*     Placeholder="@Placeholder" *@
-@*     MaxAutoHeight="200px" *@
-@*     Items="@_list.ToArray()" *@
-@*     OptionValue="@(dto => dto?.Id.ToString())" *@
-@*     OptionText="@(item => item.Name)" *@
-@*     OptionSelected="@(dto => _selectedIds.Contains(dto.Id))" *@
-@*     SelectedOptions="@_selectedItems" *@
-@*     SelectedOptionsChanged="@(OnValueChanged)"> *@
-@*     <OptionTemplate> *@
-@*         <FluentStack Orientation="Orientation.Horizontal"> *@
-@*             @if (context.Color != null) *@
-@*             { *@
-@*             <FluentIcon Value="@(new Icons.Filled.Size20.Tag())" CustomColor="@context.Color" Color="Color.Custom"/> *@
-@*             } *@
-@*             @context.Name *@
-@*         </FluentStack> *@
-@*     </OptionTemplate> *@
-@* </FluentAutocomplete> *@
+<div class="@Class @(FullWidth ? "w-100" : "")">
+    <LumexSelect
+        TValue="TagDto"
+        Label="@Label"
+        Placeholder="@Placeholder"
+        LabelPlacement="@LabelPlacement.Outside"
+        Values="@_selectedItems"
+        ValuesChanged="OnValueChanged"
+        Disabled="@Disabled"
+        FullWidth="@FullWidth"
+        ListboxMaxHeight="256"
+        Classes="@_selectClasses">
+        <ChildContent>
+            @foreach (var tag in _list)
+            {
+                <LumexSelectItem @key="@tag.Id" Value="@tag" TextValue="@tag.Name">
+                    <div class="flex min-w-0 items-center gap-2">
+                        <span
+                            class="inline-block h-3 w-3 shrink-0 rounded border border-slate-200"
+                            style="@GetColorStyle(tag)">
+                        </span>
+                        <span class="truncate text-small">@tag.Name</span>
+                    </div>
+                </LumexSelectItem>
+            }
+        </ChildContent>
+        <ValueContent>
+            @if (context != null)
+            {
+                <LumexChip
+                    Class="max-w-full"
+                    Size="Size.Small"
+                    Radius="Radius.Small"
+                    Variant="ChipVariant.Flat"
+                    Color="ThemeColor.Default">
+                    <StartContent>
+                        <span
+                            class="inline-block h-3 w-3 shrink-0 rounded border border-slate-200"
+                            style="@GetColorStyle(context)">
+                        </span>
+                    </StartContent>
+                    <ChildContent>
+                        <span class="max-w-[10rem] truncate">@context.Name</span>
+                    </ChildContent>
+                </LumexChip>
+            }
+        </ValueContent>
+    </LumexSelect>
+</div>

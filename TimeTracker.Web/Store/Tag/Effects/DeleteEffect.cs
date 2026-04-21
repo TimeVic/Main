@@ -32,14 +32,20 @@ public class DeleteEffect: Effect<DeleteItemAction>
     {
         try
         {
+            dispatcher.Dispatch(new SetIsSavingAction(true));
             await _apiService.TagDeleteAsync(action.Tag.Id);
             dispatcher.Dispatch(new DeleteListItemAction(action.Tag.Id));
             
-            _notificationService.ShowInfo("Tag was updated");
+            _notificationService.ShowInfo("Tag was deleted");
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message, e);
+            _notificationService.ShowError("Tag deleting error");
+        }
+        finally
+        {
+            dispatcher.Dispatch(new SetIsSavingAction(false));
         }
     }
 }

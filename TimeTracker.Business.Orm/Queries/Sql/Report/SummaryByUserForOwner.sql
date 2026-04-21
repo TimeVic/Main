@@ -14,6 +14,7 @@ select
 from time_entries te
          inner join users u on u.id = te.user_id
 where te.workspace_id = :workspaceId
+  and te.end_time is not null
   and cast(te.start_time as date) >= cast(:startDate as date)
   and cast(te.start_time as date) <= cast(:endDate as date)
 group by te.user_id, u.user_name, u.email
