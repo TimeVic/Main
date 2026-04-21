@@ -3,6 +3,10 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 
 namespace TimeTracker.Web.Store.Tag;
 
+public record struct AddAction(AddRequest Request);
+
+public record struct UpdateAction(UpdateRequest Request);
+
 public record struct LoadListAction(bool IsReload = false);
 
 public record struct SetListItemsAction(GetListResponse Response);
@@ -14,3 +18,5 @@ public record struct SetListItemAction(TagDto Tag);
 public record struct DeleteListItemAction(Guid TagId);
 
 public record struct SetIsListLoading(bool IsLoading);
+
+public record struct SetIsSavingAction(bool IsSaving);
