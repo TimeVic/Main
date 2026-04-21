@@ -11,7 +11,7 @@ public class ReportReducers
     #region Payment
     
     [ReducerMethod]
-    public static ReportsState ReportSetPaymentReportFilterActionReducer(ReportsState state, ReportSetPaymentReportFilterAction action)
+    public static ReportsState Reducer(ReportsState state, ReportSetPaymentReportFilterAction action)
     {
         return state with
         {
@@ -20,7 +20,7 @@ public class ReportReducers
     }
     
     [ReducerMethod]
-    public static ReportsState ReportSetPaymentReportItemsActionReducer(ReportsState state, ReportSetPaymentReportItemsAction action)
+    public static ReportsState Reducer(ReportsState state, ReportSetPaymentReportItemsAction action)
     {
         return state with
         {
@@ -29,7 +29,7 @@ public class ReportReducers
     }
     
     [ReducerMethod]
-    public static ReportsState ReportSetPaymentReportItemsActionReducer(ReportsState state, ReportSetIsLoadingAction action)
+    public static ReportsState Reducer(ReportsState state, ReportSetIsLoadingAction action)
     {
         return state with
         {
@@ -42,7 +42,7 @@ public class ReportReducers
     #region Summary
     
     [ReducerMethod]
-    public static ReportsState ReportSetSummaryReportItemsActionReducer(ReportsState state, ReportSetSummaryReportItemsAction action)
+    public static ReportsState Reducer(ReportsState state, ReportSetSummaryReportItemsAction action)
     {
         return state with
         {
@@ -51,7 +51,7 @@ public class ReportReducers
     }
     
     [ReducerMethod]
-    public static ReportsState ReportSetSummaryReportFilterActionReducer(ReportsState state, ReportSetSummaryReportFilterAction action)
+    public static ReportsState Reducer(ReportsState state, ReportSetSummaryReportFilterAction action)
     {
         var startDate = action.FilterState.StartDate;
         var endDate = action.FilterState.EndDate;
@@ -74,7 +74,7 @@ public class ReportReducers
     }
     
     [ReducerMethod]
-    public static ReportsState ReportResetSummaryReportFilterActionReducer(ReportsState state, ReportResetSummaryReportFilterAction action)
+    public static ReportsState Reducer(ReportsState state, ReportResetSummaryReportFilterAction action)
     {
         return state with
         {

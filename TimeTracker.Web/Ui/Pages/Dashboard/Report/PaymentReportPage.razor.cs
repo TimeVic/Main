@@ -20,12 +20,6 @@ public partial class PaymentReportPage
         get => _state.Value.PaymentReportItems.GroupBy(item => item.ClientId);
     }
 
-    private decimal _totalEarned => _state.Value.PaymentReportItems.Sum(item => item.Amount);
-
-    private decimal _totalPaid => _grouppedItems.Sum(group => group.FirstOrDefault()?.PaidAmountByClient ?? 0);
-
-    private decimal _outstandingBalance => _grouppedItems.Sum(group => GetClientOutstandingAmount(group.Key));
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();

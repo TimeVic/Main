@@ -39,14 +39,10 @@
         }
         else
         {
-            <FinancialSummaryCards
-                TotalEarned="@_totalEarned"
-                TotalPaid="@_totalPaid"
-                OutstandingBalance="@_outstandingBalance"
+            <FinancialSummaryCardsBlock
                 Class="mb-6"
                 EarnedCaption="Billable work through the selected date"
-                PaidCaption="Client payments received"
-                OutstandingCaption="@(_outstandingBalance > 0 ? "Needs collection" : "No unpaid balance")"/>
+                PaidCaption="Client payments received"/>
 
             foreach (var groupItem in _grouppedItems)
             {

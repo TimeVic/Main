@@ -1,22 +1,14 @@
 ﻿@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Ui.Pages.Dashboard.Report.Parts
 @using TimeTracker.Web.Ui.Shared.Components
 
 @inherits BaseReactiveComponent
 
-<FinancialSummaryCards
-    TotalEarned="@_paymentReportEarned"
-    TotalPaid="@_totalPaid"
-    OutstandingBalance="@_outstandingBalance"
+<FinancialSummaryCardsBlock
     Class="mt-6"
     EarnedCaption="Billable work through the selected date"
     PaidCaption="Client payments received"
-    OutstandingCaption="@(_outstandingBalance > 0 ? "Still unpaid" : "No unpaid balance")"/>
-
-<div class="mt-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-    You earned <span class="font-semibold text-slate-900"><AmountDisplay Amount="@_paymentReportEarned"/></span>,
-    received <span class="font-semibold text-emerald-700"><AmountDisplay Amount="@_totalPaid"/></span>,
-    and have <span class="font-semibold @(_outstandingBalance > 0 ? "text-red-700" : "text-slate-900")"><AmountDisplay Amount="@_outstandingBalance"/></span> outstanding.
-</div>
+    OutstandingCaptionWhenPositive="Still unpaid"/>
 
 <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4 mt-4">
     <LumexCard>
