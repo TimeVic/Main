@@ -70,6 +70,7 @@ public partial class UpdateTaskForm: IDisposable
         {
             _model.Fill(_task);
         }
+        Dispatcher.Dispatch(new TimeTracker.Web.Store.Tag.LoadListAction());
         await base.OnInitializedAsync();
         _editContext.OnFieldChanged += OnFormFieldChanged;
         _isLoading = false;
@@ -139,6 +140,13 @@ public partial class UpdateTaskForm: IDisposable
             return;
         _model.Priority = priority.Value;
         SubmitForm();
+    }
+    
+    private Task OnTagsChanged(IEnumerable<Guid> tagIds)
+    {
+        _model.TagIds = tagIds.ToList();
+        SubmitForm();
+        return Task.CompletedTask;
     }
 
     [JSInvokable]

@@ -5,6 +5,14 @@ namespace TimeTracker.Web.Store.Tag;
 
 public class ProjectReducers
 {
+    [ReducerMethod]
+    public static TagState SetIsSavingActionReducer(TagState state, SetIsSavingAction action)
+    {
+        return state with
+        {
+            IsSaving = action.IsSaving
+        };
+    }
 
     [ReducerMethod]
     public static TagState SetListItemsActionReducer(TagState state, SetListItemsAction action)

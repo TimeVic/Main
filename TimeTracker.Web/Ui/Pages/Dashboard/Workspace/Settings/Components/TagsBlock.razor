@@ -1,0 +1,98 @@
+@using LumexUI.Common
+@using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
+@using TimeTracker.Web.Ui.Shared.Components.Dialogs
+
+@inherits BaseReactiveComponent
+
+@if (_tagToUpdate != null)
+{
+    <UpdateTagModal
+        Tag="_tagToUpdate"
+        IsOpened="_tagToUpdate != null"
+        IsOpenedChanged="isOpened => { _tagToUpdate = isOpened ? _tagToUpdate : null; }"/>
+}
+
+@if (_tagToDelete != null)
+{
+    <ConfirmationModal
+        Title="Delete tag"
+        Subtitle="@($"Are you sure you want to delete \"{_tagToDelete.Name}\"?")"
+        ConfirmText="Delete"
+        OnClose="@OnCloseDeleteConfirmation"
+        OnCancel="@OnCloseDeleteConfirmation"
+        OnConfirm="@OnConfirmDelete"/>
+}
+
+<section class="space-y-6">
+    <LumexCard>
+        <LumexCardBody>
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">Tags</p>
+                    <h2 class="mt-2 text-lg font-semibold text-slate-900">Workspace tags</h2>
+                    <p class="mt-1 text-sm text-slate-600">Tags keep time entries searchable and visually grouped by color.</p>
+                </div>
+                <AddTagForm/>
+            </div>
+        </LumexCardBody>
+    </LumexCard>
+
+    <LumexDataGrid
+        Data="@_state.Value.List.AsQueryable()"
+        Radius="@Radius.Medium"
+        Class="mt-3">
+        <LumexUI.EditColumn
+            Title="Name"
+            Property="@(p => p.Name)"/>
+        <LumexUI.PropertyColumn
+            Title="Color"
+            Property="@(p => p.Color ?? string.Empty)">
+            <Content>
+                <div class="inline-flex items-center gap-2">
+                    @if (!string.IsNullOrEmpty(context.Color))
+                    {
+                        <span
+                            class="inline-block h-4 w-4 rounded border border-slate-200"
+                            style="@GetColorStyle(context.Color)">
+                        </span>
+                        <span class="font-mono text-xs text-slate-600">@context.Color</span>
+                    }
+                    else
+                    {
+                        <span class="text-xs text-slate-400">No color</span>
+                    }
+                </div>
+            </Content>
+        </LumexUI.PropertyColumn>
+        <LumexUI.PropertyColumn
+            Title="Actions"
+            Property="@(p => p.Id)">
+            <Content>
+                <div class="inline-flex items-center gap-2">
+                    <CustomButton
+                        Class="inline-flex rounded-full"
+                        OnClick="@(() => OnEdit(context))"
+                        Size="Size.Small"
+                        Color="ThemeColor.Primary"
+                        Variant="Variant.Light"
+                        IconOnly="true">
+                        <ChildContent>
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </ChildContent>
+                    </CustomButton>
+                    <CustomButton
+                        Class="inline-flex rounded-full"
+                        OnClick="@(() => OnDeleteClicked(context))"
+                        Size="Size.Small"
+                        Color="ThemeColor.Danger"
+                        Variant="Variant.Light"
+                        IconOnly="true">
+                        <ChildContent>
+                            <i class="fa-regular fa-trash-can"></i>
+                        </ChildContent>
+                    </CustomButton>
+                </div>
+            </Content>
+        </LumexUI.PropertyColumn>
+    </LumexDataGrid>
+</section>
