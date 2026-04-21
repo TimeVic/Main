@@ -51,6 +51,7 @@ public partial class EditTimeEntryModal: IDisposable
     {
         if (_editContext.Validate())
         {
+            _model.EndTime = _model.EndTime == DateTime.MinValue ? null : _model.EndTime;
             Dispatcher.Dispatch(new SaveTimeEntryAction(_model, true));
         }
         await Task.CompletedTask;
