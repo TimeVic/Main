@@ -1,0 +1,238 @@
+@page "/faq"
+@using LumexUI.Common
+@using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.Layout
+
+@layout Layout
+
+<SeoHead
+    Title="@SiteMetadata.FaqTitle"
+    Description="@SiteMetadata.FaqDescription"
+    Keywords="@SiteMetadata.FaqKeywords"
+    Robots="@SiteMetadata.IndexRobots"
+    CanonicalUrl="@SiteMetadata.ToAbsoluteUrl(SiteUrl.Faq)" />
+
+<main class="bg-white text-slate-950">
+    <section class="border-b border-slate-200 bg-slate-50">
+        <div class="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:py-20">
+            <div class="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm">
+                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                <span>Built for freelance developers working with multiple clients</span>
+            </div>
+            <h1 class="mt-6 text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl">
+                Frequently Asked Questions
+            </h1>
+            <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+                Everything you need to know about tracking your time, income, and client payments with TimeVic
+            </p>
+        </div>
+    </section>
+
+    <section class="bg-white">
+        <div class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:py-16">
+            <div class="space-y-12">
+                <section aria-labelledby="faq-product-basics" class="scroll-mt-24">
+                    <div class="mb-5">
+                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">Section 1</p>
+                        <h2 id="faq-product-basics" class="mt-2 text-2xl font-semibold text-slate-950">Product Basics</h2>
+                    </div>
+
+                    <LumexAccordion
+                        Variant="@AccordionVariant.Splitted"
+                        SelectionMode="@SelectionMode.Multiple"
+                        ShowDividers="@false"
+                        ItemClasses="@FaqItemClasses">
+                        <LumexAccordionItem Id="product-what" Title="What is TimeVic?">
+                            <p>
+                                TimeVic is an income tracking tool built on top of time tracking.
+                                It helps you understand how much you earned, what's been paid, and who still owes you money.
+                            </p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="product-time-tracker" Title="Is TimeVic just a time tracker?">
+                            <p>No.</p>
+                            <p class="mt-3">
+                                TimeVic is not about tracking time &mdash; it's about understanding your income.
+                            </p>
+                            <p class="mt-3">Time tracking is just the input. Money insights are the output.</p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="product-for" Title="Who is TimeVic for?">
+                            <p>
+                                TimeVic is designed for freelance developers who work with multiple clients and want better control over their income.
+                            </p>
+                        </LumexAccordionItem>
+                    </LumexAccordion>
+                </section>
+
+                <section aria-labelledby="faq-money-payments" class="scroll-mt-24">
+                    <div class="mb-5">
+                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">Section 2</p>
+                        <h2 id="faq-money-payments" class="mt-2 text-2xl font-semibold text-slate-950">Money &amp; Payments</h2>
+                    </div>
+
+                    <LumexAccordion
+                        Variant="@AccordionVariant.Splitted"
+                        SelectionMode="@SelectionMode.Multiple"
+                        ShowDividers="@false"
+                        ItemClasses="@FaqItemClasses">
+                        <LumexAccordionItem Id="money-calculate" Title="How does TimeVic calculate earnings?">
+                            <p>
+                                You set an hourly rate for each project.
+                                TimeVic automatically converts tracked time into earned money.
+                            </p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="money-payments" Title="Can I track payments from clients?">
+                            <p>
+                                Yes.
+                                You can log payments and see how much was paid vs how much is still outstanding.
+                            </p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="money-owes" Title="Can I see who owes me money?">
+                            <p>
+                                Yes.
+                                TimeVic highlights unpaid work so you always know which clients still owe you.
+                            </p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="money-invoicing" Title="Does TimeVic replace invoicing tools?">
+                            <p>
+                                No.
+                                TimeVic focuses on tracking earnings and payments, not generating invoices.
+                            </p>
+                        </LumexAccordionItem>
+                    </LumexAccordion>
+                </section>
+
+                <section aria-labelledby="faq-features-usage" class="scroll-mt-24">
+                    <div class="mb-5">
+                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-violet-600">Section 3</p>
+                        <h2 id="faq-features-usage" class="mt-2 text-2xl font-semibold text-slate-950">Features &amp; Usage</h2>
+                    </div>
+
+                    <LumexAccordion
+                        Variant="@AccordionVariant.Splitted"
+                        SelectionMode="@SelectionMode.Multiple"
+                        ShowDividers="@false"
+                        ItemClasses="@FaqItemClasses">
+                        <LumexAccordionItem Id="usage-every-minute" Title="Do I need to track every minute?">
+                            <p>No.</p>
+                            <p class="mt-3">
+                                You can track as much or as little as you want.
+                                Even partial tracking gives useful insights.
+                            </p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="usage-multiple-clients" Title="Can I manage multiple clients?">
+                            <p>
+                                Yes.
+                                TimeVic is built for working with multiple clients, projects, and rates.
+                            </p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="usage-task-managers" Title="Does TimeVic replace Jira or task managers?">
+                            <p>No.</p>
+                            <p class="mt-3">
+                                Tasks in TimeVic are simple and optional.
+                                They exist only to support time tracking.
+                            </p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="usage-attach-time" Title="Can I attach time to tasks?">
+                            <p>
+                                Yes.
+                                You can link time entries to tasks if you want better structure.
+                            </p>
+                        </LumexAccordionItem>
+                    </LumexAccordion>
+                </section>
+
+                <section aria-labelledby="faq-pricing-access" class="scroll-mt-24">
+                    <div class="mb-5">
+                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-amber-600">Section 4</p>
+                        <h2 id="faq-pricing-access" class="mt-2 text-2xl font-semibold text-slate-950">Pricing &amp; Access</h2>
+                    </div>
+
+                    <LumexAccordion
+                        Variant="@AccordionVariant.Splitted"
+                        SelectionMode="@SelectionMode.Multiple"
+                        ShowDividers="@false"
+                        ItemClasses="@FaqItemClasses">
+                        <LumexAccordionItem Id="pricing-free" Title="Is TimeVic free?">
+                            <p>
+                                Yes.
+                                TimeVic is free to use.
+                            </p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="pricing-install" Title="Do I need to install anything?">
+                            <p>
+                                No.
+                                TimeVic works in your browser.
+                            </p>
+                        </LumexAccordionItem>
+                    </LumexAccordion>
+                </section>
+
+                <section aria-labelledby="faq-getting-started" class="scroll-mt-24">
+                    <div class="mb-5">
+                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Section 5</p>
+                        <h2 id="faq-getting-started" class="mt-2 text-2xl font-semibold text-slate-950">Getting Started</h2>
+                    </div>
+
+                    <LumexAccordion
+                        Variant="@AccordionVariant.Splitted"
+                        SelectionMode="@SelectionMode.Multiple"
+                        ShowDividers="@false"
+                        ItemClasses="@FaqItemClasses">
+                        <LumexAccordionItem Id="getting-started-how" Title="How do I start?">
+                            <ol class="list-decimal space-y-1 pl-5">
+                                <li>Add a client</li>
+                                <li>Create a project</li>
+                                <li>Set an hourly rate</li>
+                                <li>Track time</li>
+                            </ol>
+                            <p class="mt-3">You'll immediately see how much you've earned.</p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="getting-started-value" Title="How long does it take to see value?">
+                            <p>
+                                About 2 minutes.
+                                Once you track your first time entry, you'll see your earnings.
+                            </p>
+                        </LumexAccordionItem>
+                    </LumexAccordion>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-slate-950 text-white">
+        <div class="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:py-20">
+            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-blue-200">Income clarity</p>
+            <h2 class="mt-4 text-3xl font-semibold leading-tight sm:text-4xl">
+                Start tracking your income, not just time
+            </h2>
+            <p class="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300">
+                Know how much you earned &mdash; and who still owes you
+            </p>
+            <div class="mt-8">
+                <a href="@SiteUrl.Registration_Step1" class="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>Get Started Free</span>
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+
+@code {
+    private static readonly AccordionItemSlots FaqItemClasses = new()
+    {
+        Base = "border border-slate-200 bg-white shadow-sm",
+        Trigger = "py-5",
+        Title = "text-base font-semibold leading-6 text-slate-950 sm:text-lg",
+        Content = "pb-5 text-sm leading-7 text-slate-600 sm:text-base"
+    };
+}
