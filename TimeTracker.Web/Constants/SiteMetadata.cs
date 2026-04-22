@@ -13,6 +13,12 @@ public static class SiteMetadata
     public const string HomeKeywords =
         "freelance developer time tracker, income tracker, client billing tracker, paid unpaid work tracker, project time tracking, timesheet app, Jira time tracking";
 
+    public const string FaqTitle = "TimeVic FAQ - Income Tracking for Freelance Developers";
+    public const string FaqDescription =
+        "Answers about using TimeVic to track time, calculate earnings, record client payments, and see unpaid balances for freelance development work.";
+    public const string FaqKeywords =
+        "TimeVic FAQ, freelance developer income tracker, unpaid client balance tracker, payment tracking for freelancers, time tracking earnings";
+
     public const string RegistrationTitle = "Create a TimeVic Account — Freelance Time and Income Tracker";
     public const string RegistrationDescription =
         "Create a TimeVic account to track hours, calculate earnings, review client balances, and record payments for freelance client work.";
