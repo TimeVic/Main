@@ -29,7 +29,9 @@ public class LoadListEffect: Effect<LoadListAction>
     {
         try
         {
-            var isLoad = action.IsReload || !action.IsReload && !_state.Value.IsLoaded;
+            var isLoad = action.IsReload
+                         || !_state.Value.IsLoaded
+                         || _state.Value.LoadedProjectId != action.ProjectId;
             if (!isLoad)
             {
                 return;
@@ -38,9 +40,10 @@ public class LoadListEffect: Effect<LoadListAction>
             dispatcher.Dispatch(new SetIsListLoadingAction(true));
             var response = await _apiService.TaskListGetListAsync(new GetListRequest()
             {
-                WorkspaceId = _authState.Value.Workspace!.Id
+                WorkspaceId = _authState.Value.Workspace!.Id,
+                ProjectId = action.ProjectId
             });
-            dispatcher.Dispatch(new SetListItemsAction(response));
+            dispatcher.Dispatch(new SetListItemsAction(response, action.ProjectId));
         }
         catch (Exception e)
         {

@@ -30,14 +30,26 @@
                 <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Submit</button>
 
                 <div>
-                    @* <label class="mb-2 block text-sm font-medium text-slate-700">Task list</label> *@
-                    @* <InputSelect @bind-Value="newTaskTaskListId" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"> *@
-                    @*     @foreach (var list in CurrentProjectTaskLists) *@
-                    @*     { *@
-                    @*         <option value="@list.Id">@list.Name</option> *@
-                    @*     } *@
-                    @* </InputSelect> *@
-                    <p class="mt-2 text-xs text-slate-500">Task will be added to: <span class="font-semibold text-slate-700">@TaskList.Name</span></p>
+                    @if (TaskList != null || TaskListId.HasValue)
+                    {
+                        <p class="mt-2 text-xs text-slate-500">
+                            Task will be added to:
+                            <span class="font-semibold text-slate-700">@_selectedTaskList?.Name</span>
+                        </p>
+                    }
+                    else
+                    {
+                        <TaskListsDropDown
+                            Label="Task list"
+                            Variant="InputVariant.Outlined"
+                            LabelPlacement="LabelPlacement.Outside"
+                            ProjectId="@ProjectId"
+                            Value="@(_selectedTaskList?.Id ?? Guid.Empty)"
+                            Disabled="@_isLoading"
+                            Class="mb-3 w-full"
+                            FullWidth="true"
+                            SelectedItemChanged="@OnTaskListSelected"/>
+                    }
                 </div>
                 
                 <div class="mt-1">

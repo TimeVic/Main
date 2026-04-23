@@ -37,6 +37,9 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
             var project = _projectState.Value.List.FirstOrDefault(
                 item => item.Id == action.TimeEntry.Project?.Id
             );
+            var endTime = action.TimeEntry.EndTime == DateTime.MinValue
+                ? null
+                : action.TimeEntry.EndTime;
             
             var response = await _apiService.TimeEntrySetAsync(new SetRequest()
             {
@@ -44,7 +47,7 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
                 WorkspaceId = _authState.Value.Workspace!.Id,
                 Description = action.TimeEntry.Description,
                 ProjectId = action.TimeEntry.Project?.Id,
-                EndTime = action.TimeEntry.EndTime,
+                EndTime = endTime,
                 StartTime = action.TimeEntry.StartTime,
                 HourlyRate = action.TimeEntry.HourlyRate,
                 IsBillable = action.IsSetProjectDefaults && project != null 

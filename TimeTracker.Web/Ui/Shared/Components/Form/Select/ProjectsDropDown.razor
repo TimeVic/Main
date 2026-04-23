@@ -6,7 +6,9 @@
 @using TimeTracker.Api.Shared.Dto.Entity
 
 <div class="@Class">
-    <LumexDropdown>
+    <LumexDropdown
+        Open="@_isOpen"
+        OpenChanged="@OnOpenChanged">
         <LumexDropdownTrigger>
             <LumexButton 
                 FullWidth="true"
@@ -32,7 +34,7 @@
             {
                 <LumexDropdownItem 
                     Description="@project?.Client?.Name"
-                    OnClick="@(() => OnValueChanged(project))">
+                    OnClick="@(() => OnProjectSelected(project))">
                     <ChildContent>
                         @project?.Name
                     </ChildContent>

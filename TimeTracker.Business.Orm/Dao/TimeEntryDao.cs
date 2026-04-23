@@ -361,7 +361,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         {
             throw new DataInconsistentException("EndTime can not be less than StartTime");
         }
-
+        
         var timeEntry = await Session.Query<TimeEntryEntity>()
             .Where(entry => entry.Id == timeEntryDto.Id)
             .FirstOrDefaultAsync();
@@ -393,6 +393,10 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         // According same day
         if (timeEntry.IsNew || !timeEntry.IsActive)
         {
+            if (timeEntryDto.EndTime.HasValue && timeEntryDto.EndTime.Value == DateTime.MinValue)
+            {
+                timeEntryDto.EndTime = null;
+            }
             if (timeEntryDto.EndTime.HasValue)
             {
                 if (timeEntryDto.EndTime.Value - timeEntryDto.StartTime > TimeSpan.FromDays(1))
