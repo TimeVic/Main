@@ -8,5 +8,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List
     {
         [Required]
         public Guid WorkspaceId { get; set; }
+
+        public Guid? ProjectId { get; set; }
     }
 }

@@ -2,14 +2,11 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Business.Extensions;
-using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.TimeEntry;
-// using TimeTracker.Web.Pages.Dashboard.Shared.Tasks;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry;
 
-public partial class TimeEntryForm
+public partial class TimeEntryForm : IDisposable
 {
     [Parameter]
     public string Class { get; set; }
@@ -27,7 +24,8 @@ public partial class TimeEntryForm
     private IState<TimeEntryState> _state { get; set; }
     
     private bool _isEditModalOpened = false;
-    private bool _isDetailsOpened = false;
+    private bool _isAddTaskModalOpened = false;
+    private bool _isUpdateTaskModalOpened = false;
     
     private TimeEntryDto? _activeEntry
     {
@@ -59,6 +57,12 @@ public partial class TimeEntryForm
         }
     }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _state.StateChanged += OnTimeEntryStateChanged;
+    }
+
     private void ToggleTimeEntry()
     {
         if (_hasActiveEntry)
@@ -71,18 +75,40 @@ public partial class TimeEntryForm
         }
     }
     
-    private async Task OnChangeDescription(string? value)
+    private async Task OnChangeProject(ProjectDto? project)
     {
-        _activeEntry!.Description = value;
-        await UpdateTimeEntry(_activeEntry);
-        await Task.CompletedTask;
-    }
-    
-    private async Task OnChangeProject(ProjectDto project)
-    {
+        if (!_hasActiveEntry || _activeEntry == null || _activeEntry.Task != null || project == null)
+        {
+            return;
+        }
+
         _activeEntry!.Project = project;
         await UpdateTimeEntry(_activeEntry);
         await Task.CompletedTask;
+    }
+
+    private void OpenAddTaskModal()
+    {
+        if (!_hasActiveEntry || _activeEntry?.Project == null || _activeEntry.Task != null)
+        {
+            return;
+        }
+
+        _isAddTaskModalOpened = true;
+    }
+
+    private Task OnTaskAdded(TaskFullDto? task)
+    {
+        if (task == null || _activeEntry == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        _activeEntry.Task = task;
+        _activeEntry.Project = task.TaskList.Project;
+        Dispatcher.Dispatch(new UpdateTimeEntryAction(_activeEntry));
+        StateHasChanged();
+        return Task.CompletedTask;
     }
     
     private async Task UpdateTimeEntry(TimeEntryDto entry)
@@ -90,23 +116,14 @@ public partial class TimeEntryForm
         Dispatcher.Dispatch(new SaveTimeEntryAction(entry, true));
         await Task.CompletedTask;
     }
-    
-    private async Task ShowAddTaskModal(Guid timEntryId)
+
+    private void OnTimeEntryStateChanged(object? sender, EventArgs e)
     {
-        // await _modalDialogProviderService.ShowAddTaskModal(timEntryId);
+        InvokeAsync(StateHasChanged);
     }
-    
-    private async Task ShowTimeEntriesModal()
+
+    public void Dispose()
     {
-        // await _modalDialogProviderService.ShowTimeEntriesModal();
-    }
-    
-    private string GetDescriptionLabel(TimeEntryDto? timeEntry)
-    {
-        if (timeEntry?.Task != null)
-        {
-            return timeEntry.Task.Title.TruncateAndAddDots(20);
-        }
-        return "Description";
+        _state.StateChanged -= OnTimeEntryStateChanged;
     }
 }

@@ -19,7 +19,8 @@ public interface ITaskListDao: IDomainService
     Task<ListDto<TaskListEntity>> GetAvailableForUserListAsync(
         WorkspaceEntity workspace,
         UserEntity? user = null,
-        MembershipAccessType? accessType = null
+        MembershipAccessType? accessType = null,
+        Guid? projectId = null
     );
 
     Task ArchiveTaskListAsync(TaskListEntity taskList);

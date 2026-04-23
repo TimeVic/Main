@@ -29,6 +29,7 @@ public partial class ProjectsDropDown: IDisposable
     public IState<ProjectState> _state { get; set; }
     
     private Guid? _clientId;
+    private bool _isOpen;
     
     protected override void OnInitialized()
     {
@@ -67,8 +68,23 @@ public partial class ProjectsDropDown: IDisposable
         );
     }
 
-    public void Dispose()
+    private Task OnOpenChanged(bool isOpen)
+    {
+        _isOpen = isOpen;
+        return Task.CompletedTask;
+    }
+
+    private async Task OnProjectSelected(ProjectDto? project)
+    {
+        _isOpen = false;
+        await InvokeAsync(StateHasChanged);
+        await Task.Yield();
+        OnValueChanged(project);
+    }
+
+    public new void Dispose()
     {
         _state.StateChanged -= UpdateList;
+        base.Dispose();
     }
 }

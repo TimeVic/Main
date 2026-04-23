@@ -5,15 +5,18 @@
 
 @inherits TimeTracker.Web.Ui.Shared.Components.Form.Select.Core.BaseSingleSelect<TaskListDto>
 
-<div class="@Class @(FullWidth ? "w-100" : "")">
+<div class="@Class @(FullWidth ? "w-full" : "")">
     
     <LumexSelect 
         TValue="TaskListDto"
         Label="@Label"
         Placeholder="@_placeholder"
         LabelPlacement="@LabelPlacement.Outside"
+        Variant="@Variant"
         ValueChanged="dto => OnValueChanged(dto)"
         Value="_selectedItem"
+        Disabled="@Disabled"
+        FullWidth="@FullWidth"
         Invalid="@IsInvalid">
         <ChildContent>
             @foreach (var character in _list)

@@ -10,13 +10,21 @@ public class TasksListReducers
     [ReducerMethod]
     public static TasksListState SetProjectListItemsActionReducer(TasksListState state, SetListItemsAction action)
     {
+        var list = action.ProjectId.HasValue
+            ? state.List
+                .Where(item => item.Project.Id != action.ProjectId.Value)
+                .Concat(action.Response.Items)
+                .ToList()
+            : action.Response.Items;
+
         return state with
         {
-            List = action.Response.Items,
-            TotalCount = action.Response.TotalCount,
+            List = list,
+            TotalCount = list.Count,
             TotalPages = action.Response.TotalPages,
             HasMoreItems = action.Response.IsHasMore,
-            IsLoaded = true
+            IsLoaded = true,
+            LoadedProjectId = action.ProjectId
         };
     }
     

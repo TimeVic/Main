@@ -82,6 +82,33 @@ public class GetAvailableForUserListTest: BaseTest
     }
 
     [Fact]
+    public async Task ShouldReceiveOnlyTaskListsForRequestedProject()
+    {
+        var expectedProject = await _projectSeeder.CreateAsync(_workspace);
+        var otherProject = await _projectSeeder.CreateAsync(_workspace);
+        var expectedTaskLists = await _taskListSeeder.CreateSeveralAsync(expectedProject, 2);
+        await _taskListSeeder.CreateSeveralAsync(otherProject, 3);
+
+        await FlushDbChanges(isClearSession: true);
+        var actualList = await _taskListDao.GetAvailableForUserListAsync(
+            _workspace,
+            _owner,
+            MembershipAccessType.Owner,
+            expectedProject.Id
+        );
+
+        Assert.Equal(expectedTaskLists.Count, actualList.TotalCount);
+        Assert.Equal(
+            expectedTaskLists.Select(item => item.Id).OrderBy(item => item),
+            actualList.Items.Select(item => item.Id).OrderBy(item => item)
+        );
+        Assert.All(actualList.Items, item =>
+        {
+            Assert.Equal(expectedProject.Id, item.Project.Id);
+        });
+    }
+
+    [Fact]
     public async Task ShouldReceiveOnlyTaskListsFromSharedProjectsForWorkspaceUser()
     {
         var projects = (await _projectSeeder.CreateSeveralAsync(_workspace, 3)).ToList();
