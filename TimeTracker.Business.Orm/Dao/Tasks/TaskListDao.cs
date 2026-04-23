@@ -60,7 +60,8 @@ public class TaskListDao: ITaskListDao
     public async Task<ListDto<TaskListEntity>> GetAvailableForUserListAsync(
         WorkspaceEntity workspace,
         UserEntity? user = null,
-        MembershipAccessType? accessType = null
+        MembershipAccessType? accessType = null,
+        Guid? projectId = null
     )
     {
         ProjectEntity projectAlias = null!;
@@ -72,6 +73,11 @@ public class TaskListDao: ITaskListDao
             .Where(() => projectAlias!.Workspace.Id == workspace.Id)
             .Where(() => !projectAlias!.IsArchived)
             .Where(taskList => !taskList.IsArchived);
+
+        if (projectId.HasValue)
+        {
+            query = query.Where(() => projectAlias!.Id == projectId.Value);
+        }
 
         if (
             user != null
