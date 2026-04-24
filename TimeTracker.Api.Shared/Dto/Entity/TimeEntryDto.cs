@@ -40,7 +40,7 @@ public class TimeEntryDto: BaseDto
     
     #endregion
     
-    public bool IsActive => EndTime == null;
+    public bool IsActive => EndTime == null || EndTime == DateTime.MinValue;
     
     public TimeSpan Duration => EndTime == null ? TimeSpan.Zero : EndTime.Value - StartTime;
     

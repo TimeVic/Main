@@ -21,7 +21,7 @@ public record TasksListState
 
     public bool IsLoaded { get; set; } = false;
 
-    public Guid? LoadedProjectId { get; set; }
+    public Guid? SelectedProjectId { get; set; }
     
     public TaskListDto? SelectedTaskList => List.FirstOrDefault(item => item.Id == SelectedTaskListId);
 }

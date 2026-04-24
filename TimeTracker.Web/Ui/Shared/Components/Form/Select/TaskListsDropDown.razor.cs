@@ -6,7 +6,7 @@ using TimeTracker.Web.Store.TasksList;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
-public partial class TaskListsDropDown
+public partial class TaskListsDropDown: IDisposable
 { 
     [Parameter]
     public Guid? ProjectId
@@ -51,10 +51,7 @@ public partial class TaskListsDropDown
         Placeholder = "Select task list";
         _isInitialized = true;
 
-        _state.StateChanged += (sender, args) =>
-        {
-            UpdateList();
-        };
+        _state.StateChanged += OnStateChanged;
 
         LoadList();
         UpdateList();
@@ -64,6 +61,13 @@ public partial class TaskListsDropDown
     {
         if (!_isInitialized)
         {
+            return;
+        }
+
+        if (!ProjectId.HasValue)
+        {
+            _list = new List<TaskListDto>();
+            _selectedItem = null;
             return;
         }
 
@@ -84,11 +88,23 @@ public partial class TaskListsDropDown
 
         UpdateSelectedItem();
     }
+
+    private void OnStateChanged(object? sender, EventArgs e)
+    {
+        UpdateList();
+        InvokeAsync(StateHasChanged);
+    }
     
     protected override void UpdateSelectedItem()
     {
         _selectedItem = _list.FirstOrDefault(
             item => item.Id.ToString() == _selectedId
         );
+    }
+
+    public new void Dispose()
+    {
+        _state.StateChanged -= OnStateChanged;
+        base.Dispose();
     }
 }

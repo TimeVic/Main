@@ -15,7 +15,7 @@
         Variant="@Variant"
         ValueChanged="dto => OnValueChanged(dto)"
         Value="_selectedItem"
-        Disabled="@Disabled"
+        Disabled="@(Disabled || !ProjectId.HasValue)"
         FullWidth="@FullWidth"
         Invalid="@IsInvalid">
         <ChildContent>
