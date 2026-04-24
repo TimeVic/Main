@@ -4,7 +4,6 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Web.Services.Http;
-using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.TasksList;
 
 namespace TimeTracker.Web.Store.Tasks.Effects;
@@ -42,6 +41,18 @@ public class LoadListEffect: Effect<LoadListAction>
                     TaskListId = tasksListId.Value,
                     Filter = _state.Value.Filter
                 });
+                if (response == null)
+                {
+                    dispatcher.Dispatch(new SetListItemsAction(new GetListResponse(new List<TaskDto>(), 0)));
+                    return;
+                }
+
+                var selectedTaskList = _tasksListState.Value.SelectedTaskList;
+                if (selectedTaskList == null && response.Items.Any())
+                {
+                    dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.SetListItemAction(response.Items.First().TaskList));
+                }
+
                 dispatcher.Dispatch(new SetListItemsAction(response));
             }
             else

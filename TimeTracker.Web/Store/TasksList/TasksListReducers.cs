@@ -6,16 +6,13 @@ namespace TimeTracker.Web.Store.TasksList;
 
 public class TasksListReducers
 {
-
     [ReducerMethod]
     public static TasksListState SetProjectListItemsActionReducer(TasksListState state, SetListItemsAction action)
     {
-        var list = action.ProjectId.HasValue
-            ? state.List
-                .Where(item => item.Project.Id != action.ProjectId.Value)
-                .Concat(action.Response.Items)
-                .ToList()
-            : action.Response.Items;
+        var list = action.Response.Items.ToList();
+        var selectedTaskListId = list.Any(item => item.Id == state.SelectedTaskListId)
+            ? state.SelectedTaskListId
+            : null;
 
         return state with
         {
@@ -23,8 +20,9 @@ public class TasksListReducers
             TotalCount = list.Count,
             TotalPages = action.Response.TotalPages,
             HasMoreItems = action.Response.IsHasMore,
-            IsLoaded = true,
-            LoadedProjectId = action.ProjectId
+            IsLoaded = action.ProjectId.HasValue,
+            SelectedProjectId = action.ProjectId,
+            SelectedTaskListId = selectedTaskListId
         };
     }
     
@@ -40,6 +38,11 @@ public class TasksListReducers
 
             return item;
         }).ToList();
+        if (list.All(item => item.Id != action.TaskList.Id))
+        {
+            list.Insert(0, action.TaskList);
+        }
+
         return state with
         {
             List = list
@@ -52,7 +55,10 @@ public class TasksListReducers
         var list = state.List.Where(item => item.Id != action.TaskListId).ToList();
         return state with
         {
-            List = list
+            List = list,
+            SelectedTaskListId = state.SelectedTaskListId == action.TaskListId
+                ? null
+                : state.SelectedTaskListId
         };
     }
 

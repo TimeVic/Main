@@ -73,7 +73,11 @@
                 @if (!_filteredTaskLists.Any())
                 {
                     <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-                        @if (!string.IsNullOrWhiteSpace(_taskListSearch))
+                        @if (_selectedProject == null)
+                        {
+                            <text>Select a project to load task lists.</text>
+                        }
+                        else if (!string.IsNullOrWhiteSpace(_taskListSearch))
                         {
                             <text>No task lists match “@_taskListSearch”.</text>
                         }
