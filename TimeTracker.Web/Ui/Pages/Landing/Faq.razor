@@ -12,28 +12,73 @@
     CanonicalUrl="@SiteMetadata.ToAbsoluteUrl(SiteUrl.Faq)" />
 
 <main class="bg-white text-slate-950">
-    <section class="border-b border-slate-200 bg-slate-50">
-        <div class="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:py-20">
-            <div class="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm">
-                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                <span>Built for freelance developers working with multiple clients</span>
+    <section class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-blue-50 via-white to-emerald-50">
+        <div class="absolute inset-x-0 top-0 h-64 bg-[radial-gradient(circle_at_top_right,_rgba(16,185,129,0.12),_transparent_42%)]"></div>
+        <div class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:py-20">
+            <div class="relative text-center">
+                <div class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                    <span>For freelance developers working with multiple clients</span>
+                </div>
+                <h1 class="mx-auto mt-6 max-w-3xl text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl">
+                    Everything about tracking your income and client payments
+                </h1>
+                <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+                    Learn how TimeVic helps freelance developers track earnings, payments, and unpaid work.
+                </p>
+                <p class="mx-auto mt-4 max-w-2xl text-sm font-medium leading-6 text-slate-700 sm:text-base">
+                    Most tools track time. TimeVic helps you understand your income.
+                </p>
             </div>
-            <h1 class="mt-6 text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl">
-                Frequently Asked Questions
-            </h1>
-            <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
-                Everything you need to know about tracking your time, income, and client payments with TimeVic
-            </p>
+
+            <div class="relative mt-10 rounded-[2rem] border border-slate-200 bg-slate-950 p-6 text-white shadow-xl sm:p-8">
+                <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-200">Quick example</p>
+                        <h2 class="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
+                            Track the work. See the money immediately.
+                        </h2>
+                        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+                            You worked 30 hours. That earned $1,500. The client paid $500. TimeVic shows the remaining $1,000 instantly.
+                        </p>
+                    </div>
+
+                    <div class="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 sm:min-w-[280px]">
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                                <span class="text-sm text-slate-300">Tracked work</span>
+                                <span class="text-base font-semibold text-white">30 hours</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3">
+                                <span class="text-sm text-emerald-100">Earned</span>
+                                <span class="text-base font-semibold text-white">$1,500</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-4 rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-3">
+                                <span class="text-sm text-blue-100">Paid</span>
+                                <span class="text-base font-semibold text-white">$500</span>
+                            </div>
+                            <div class="flex items-center justify-between gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3">
+                                <span class="text-sm text-amber-100">Outstanding</span>
+                                <span class="text-base font-semibold text-white">$1,000</span>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-sm font-medium text-slate-200">TimeVic shows this instantly.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <section class="bg-white">
         <div class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:py-16">
-            <div class="space-y-12">
+            <div class="space-y-14">
                 <section aria-labelledby="faq-product-basics" class="scroll-mt-24">
                     <div class="mb-5">
                         <p class="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">Section 1</p>
                         <h2 id="faq-product-basics" class="mt-2 text-2xl font-semibold text-slate-950">Product Basics</h2>
+                        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+                            Start here if you want the short version of what TimeVic does and who it is built for.
+                        </p>
                     </div>
 
                     <LumexAccordion
@@ -41,74 +86,137 @@
                         SelectionMode="@SelectionMode.Multiple"
                         ShowDividers="@false"
                         ItemClasses="@FaqItemClasses">
-                        <LumexAccordionItem Id="product-what" Title="What is TimeVic?">
+                        <LumexAccordionItem Id="product-what" Title="What is TimeVic?" Expanded="true">
                             <p>
-                                TimeVic is an income tracking tool built on top of time tracking.
-                                It helps you understand how much you earned, what's been paid, and who still owes you money.
+                                TimeVic is an income tracking tool for freelance developers who bill clients by the hour.
+                            </p>
+                            <p class="mt-3">
+                                It turns tracked work into clear numbers: how much you earned, what was paid, and what is still unpaid.
+                            </p>
+                            <p class="mt-3">
+                                The goal is simple: financial clarity from client work.
                             </p>
                         </LumexAccordionItem>
 
-                        <LumexAccordionItem Id="product-time-tracker" Title="Is TimeVic just a time tracker?">
+                        <LumexAccordionItem Id="product-time-tracker" Title="Is TimeVic just a time tracker?" Expanded="true">
                             <p>No.</p>
                             <p class="mt-3">
-                                TimeVic is not about tracking time &mdash; it's about understanding your income.
+                                Time tracking is only the input.
                             </p>
-                            <p class="mt-3">Time tracking is just the input. Money insights are the output.</p>
+                            <p class="mt-3">
+                                The output is income visibility: earned money, paid money, and unpaid work.
+                            </p>
                         </LumexAccordionItem>
 
                         <LumexAccordionItem Id="product-for" Title="Who is TimeVic for?">
                             <p>
-                                TimeVic is designed for freelance developers who work with multiple clients and want better control over their income.
+                                TimeVic is for freelance developers who work with multiple clients, track hourly work, and need a clean view of payments and outstanding balances.
+                            </p>
+                            <p class="mt-3">
+                                If you need to know what each client owes you, this is the workflow it is built for.
+                            </p>
+                        </LumexAccordionItem>
+
+                        <LumexAccordionItem Id="product-spreadsheet" Title="Why not just use a time tracker and a spreadsheet?">
+                            <p>
+                                You can, but then you do the money work manually.
+                            </p>
+                            <p class="mt-3">
+                                You have to calculate earnings, log payments somewhere else, and reconcile what was paid vs what is still unpaid.
+                            </p>
+                            <p class="mt-3">
+                                TimeVic keeps that in one place, so your tracked work already connects to your money.
                             </p>
                         </LumexAccordionItem>
                     </LumexAccordion>
                 </section>
 
                 <section aria-labelledby="faq-money-payments" class="scroll-mt-24">
-                    <div class="mb-5">
-                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">Section 2</p>
-                        <h2 id="faq-money-payments" class="mt-2 text-2xl font-semibold text-slate-950">Money &amp; Payments</h2>
+                    <div class="rounded-[2rem] border border-emerald-200 bg-emerald-50/70 p-6 sm:p-8">
+                        <div class="mb-6">
+                            <div class="inline-flex items-center gap-3 rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm">
+                                <i class="fa-solid fa-wallet"></i>
+                                <span>Most important section</span>
+                            </div>
+                            <p class="mt-5 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">Section 2</p>
+                            <h2 id="faq-money-payments" class="mt-2 text-2xl font-semibold text-slate-950">Money &amp; Payments</h2>
+                            <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-700 sm:text-base">
+                                This is where TimeVic becomes more than a time tracker. It shows the money behind the hours.
+                            </p>
+                        </div>
+
+                        <LumexAccordion
+                            Variant="@AccordionVariant.Splitted"
+                            SelectionMode="@SelectionMode.Multiple"
+                            ShowDividers="@false"
+                            ItemClasses="@FaqItemClasses">
+                            <LumexAccordionItem Id="money-calculate" Title="How does TimeVic calculate earnings?">
+                                <p>
+                                    You set an hourly rate for the work you track.
+                                </p>
+                                <p class="mt-3">
+                                    TimeVic converts those hours into earned income automatically, so you can see the value of completed work without doing the math yourself.
+                                </p>
+                            </LumexAccordionItem>
+
+                            <LumexAccordionItem Id="money-payments" Title="Can I track payments from clients?">
+                                <p>
+                                    Yes.
+                                </p>
+                                <p class="mt-3">
+                                    You can record client payments and compare them directly against what you earned.
+                                </p>
+                                <p class="mt-3">
+                                    That gives you a clear split between paid work and unpaid work.
+                                </p>
+                            </LumexAccordionItem>
+
+                            <LumexAccordionItem Id="money-unpaid" Title="What happens if a client hasn’t paid yet?">
+                                <p>
+                                    TimeVic highlights the unpaid work and the outstanding balance.
+                                </p>
+                                <p class="mt-3">
+                                    You always know which client still owes you money and how much is still open.
+                                </p>
+                            </LumexAccordionItem>
+
+                            <LumexAccordionItem Id="money-paid-unpaid-client" Title="Can I see paid vs unpaid work per client?">
+                                <p>
+                                    Yes.
+                                </p>
+                                <p class="mt-3">
+                                    TimeVic helps you review earned, paid, and outstanding amounts for each client and project.
+                                </p>
+                            </LumexAccordionItem>
+
+                            <LumexAccordionItem Id="money-owes" Title="Can I see who owes me money?">
+                                <p>
+                                    Yes.
+                                </p>
+                                <p class="mt-3">
+                                    The platform makes unpaid balances visible, so you can see where follow-up is needed without digging through notes or spreadsheets.
+                                </p>
+                            </LumexAccordionItem>
+
+                            <LumexAccordionItem Id="money-invoicing" Title="Does TimeVic replace invoicing tools?">
+                                <p>
+                                    No.
+                                </p>
+                                <p class="mt-3">
+                                    TimeVic is focused on earnings, payments, and outstanding balances. It is not an invoicing system.
+                                </p>
+                            </LumexAccordionItem>
+                        </LumexAccordion>
                     </div>
-
-                    <LumexAccordion
-                        Variant="@AccordionVariant.Splitted"
-                        SelectionMode="@SelectionMode.Multiple"
-                        ShowDividers="@false"
-                        ItemClasses="@FaqItemClasses">
-                        <LumexAccordionItem Id="money-calculate" Title="How does TimeVic calculate earnings?">
-                            <p>
-                                You set an hourly rate for each project.
-                                TimeVic automatically converts tracked time into earned money.
-                            </p>
-                        </LumexAccordionItem>
-
-                        <LumexAccordionItem Id="money-payments" Title="Can I track payments from clients?">
-                            <p>
-                                Yes.
-                                You can log payments and see how much was paid vs how much is still outstanding.
-                            </p>
-                        </LumexAccordionItem>
-
-                        <LumexAccordionItem Id="money-owes" Title="Can I see who owes me money?">
-                            <p>
-                                Yes.
-                                TimeVic highlights unpaid work so you always know which clients still owe you.
-                            </p>
-                        </LumexAccordionItem>
-
-                        <LumexAccordionItem Id="money-invoicing" Title="Does TimeVic replace invoicing tools?">
-                            <p>
-                                No.
-                                TimeVic focuses on tracking earnings and payments, not generating invoices.
-                            </p>
-                        </LumexAccordionItem>
-                    </LumexAccordion>
                 </section>
 
                 <section aria-labelledby="faq-features-usage" class="scroll-mt-24">
                     <div class="mb-5">
                         <p class="text-xs font-semibold uppercase tracking-[0.24em] text-violet-600">Section 3</p>
                         <h2 id="faq-features-usage" class="mt-2 text-2xl font-semibold text-slate-950">Features &amp; Usage</h2>
+                        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+                            The product stays focused. Features support income tracking instead of turning into a project management suite.
+                        </p>
                     </div>
 
                     <LumexAccordion
@@ -120,29 +228,31 @@
                             <p>No.</p>
                             <p class="mt-3">
                                 You can track as much or as little as you want.
-                                Even partial tracking gives useful insights.
+                                Even partial tracking helps you understand your earnings better than disconnected notes.
                             </p>
                         </LumexAccordionItem>
 
                         <LumexAccordionItem Id="usage-multiple-clients" Title="Can I manage multiple clients?">
                             <p>
                                 Yes.
-                                TimeVic is built for working with multiple clients, projects, and rates.
+                                TimeVic is built for multiple clients, multiple projects, and different hourly rates.
                             </p>
                         </LumexAccordionItem>
 
                         <LumexAccordionItem Id="usage-task-managers" Title="Does TimeVic replace Jira or task managers?">
                             <p>No.</p>
                             <p class="mt-3">
-                                Tasks in TimeVic are simple and optional.
-                                They exist only to support time tracking.
+                                TimeVic is not a task manager.
+                            </p>
+                            <p class="mt-3">
+                                Tasks are simple, optional, and only exist to support time tracking.
                             </p>
                         </LumexAccordionItem>
 
                         <LumexAccordionItem Id="usage-attach-time" Title="Can I attach time to tasks?">
                             <p>
                                 Yes.
-                                You can link time entries to tasks if you want better structure.
+                                You can attach time entries to tasks when you want more context, but tasks stay secondary to work, money, and payments.
                             </p>
                         </LumexAccordionItem>
                     </LumexAccordion>
@@ -152,6 +262,9 @@
                     <div class="mb-5">
                         <p class="text-xs font-semibold uppercase tracking-[0.24em] text-amber-600">Section 4</p>
                         <h2 id="faq-pricing-access" class="mt-2 text-2xl font-semibold text-slate-950">Pricing &amp; Access</h2>
+                        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+                            Keep setup friction low so you can start tracking clients and money quickly.
+                        </p>
                     </div>
 
                     <LumexAccordion
@@ -179,6 +292,9 @@
                     <div class="mb-5">
                         <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Section 5</p>
                         <h2 id="faq-getting-started" class="mt-2 text-2xl font-semibold text-slate-950">Getting Started</h2>
+                        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+                            The first setup is short. Add the client, set the rate, and start tracking.
+                        </p>
                     </div>
 
                     <LumexAccordion
@@ -193,13 +309,15 @@
                                 <li>Set an hourly rate</li>
                                 <li>Track time</li>
                             </ol>
-                            <p class="mt-3">You'll immediately see how much you've earned.</p>
+                            <p class="mt-3">You will immediately see how much you earned from the tracked work.</p>
                         </LumexAccordionItem>
 
                         <LumexAccordionItem Id="getting-started-value" Title="How long does it take to see value?">
                             <p>
                                 About 2 minutes.
-                                Once you track your first time entry, you'll see your earnings.
+                            </p>
+                            <p class="mt-3">
+                                As soon as you add a client, set a rate, and track your first entry, you can see earned income and unpaid balance.
                             </p>
                         </LumexAccordionItem>
                     </LumexAccordion>
@@ -223,6 +341,9 @@
                     <span>Get Started Free</span>
                 </a>
             </div>
+            <p class="mx-auto mt-4 max-w-2xl text-sm leading-6 text-slate-400">
+                No setup complexity. Just add a client, set a rate, and track time.
+            </p>
         </div>
     </section>
 </main>
@@ -230,9 +351,10 @@
 @code {
     private static readonly AccordionItemSlots FaqItemClasses = new()
     {
-        Base = "border border-slate-200 bg-white shadow-sm",
-        Trigger = "py-5",
+        Base = "rounded-[1.5rem] border border-slate-200 bg-white shadow-sm transition-shadow duration-200 hover:shadow-md",
+        Trigger = "py-5 gap-4",
         Title = "text-base font-semibold leading-6 text-slate-950 sm:text-lg",
-        Content = "pb-5 text-sm leading-7 text-slate-600 sm:text-base"
+        Content = "pb-5 text-sm leading-7 text-slate-600 sm:text-base",
+        Indicator = "text-slate-400 transition-transform duration-200"
     };
 }
