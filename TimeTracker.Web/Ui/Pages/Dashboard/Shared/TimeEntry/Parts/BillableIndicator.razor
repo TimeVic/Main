@@ -1,0 +1,57 @@
+@using LumexUI
+@using LumexUI.Common
+
+@inherits BaseReactiveComponent
+
+@if (Entry?.IsBillable == true)
+{
+    <LumexPopover>
+        <LumexPopoverTrigger>
+            <CustomButton
+                Variant="Variant.Outlined"
+                Size="Size.Medium"
+                Radius="Radius.Full"
+                Color="ThemeColor.Info"
+                IconOnly="true">
+                <StartContent>
+                    <i class="fa-solid fa-coins text-sm"></i>
+                </StartContent>
+            </CustomButton>
+        </LumexPopoverTrigger>
+        <LumexPopoverContent>
+            <div class="min-w-[220px] space-y-2 p-3">
+                <div>
+                    <p class="text-sm font-semibold text-slate-900">Billable</p>
+                    <p class="text-xs text-slate-500">
+                        @(_isActive ? "Current value for the active time entry." : "Calculated value for this time entry.")
+                    </p>
+                </div>
+
+                @if (_hourlyRate.HasValue)
+                {
+                    <div class="space-y-1">
+                        <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">Amount</p>
+                        <div class="text-base font-semibold text-slate-900">
+                            @_currentAmountLabel
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between gap-3 text-xs text-slate-500">
+                        <span>Rate</span>
+                        <span class="font-medium text-slate-700">@_hourlyRateLabel/h</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+                        Hourly rate is not set for this time entry yet.
+                    </div>
+                }
+
+                <div class="flex items-center justify-between gap-3 text-xs text-slate-500">
+                    <span>Tracked</span>
+                    <span class="font-medium text-slate-700">@_durationLabel</span>
+                </div>
+            </div>
+        </LumexPopoverContent>
+    </LumexPopover>
+}

@@ -2,6 +2,7 @@
 @using LumexUI.Common
 @using LumexUI.Shared.Icons
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry
 @using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Components
 @using TimeTracker.Web.Ui.Shared.Components.Layout
 @inherits BaseReactiveComponent
@@ -10,94 +11,98 @@
     IsOpened="_isShowAddWorkspaceModal"
     IsOpenedChanged="@((isOpened) => _isShowAddWorkspaceModal = isOpened)"/>
 
-<header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
     <div class="px-4 py-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col gap-4 md:grid md:grid-cols-[minmax(0,1fr)_auto] md:items-center md:gap-6">
-            <div class="min-w-0">
-                <AppLogoBlock
-                    Eyebrow="Time workspace"
-                />
-                <p class="mt-2 max-w-xl text-sm text-slate-500">
-                    Track time in the workspace and use the task-list panel when you want to browse a specific project.
-                </p>
-            </div>
+        <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between xl:gap-6">
+                <div class="min-w-0">
+                    <AppLogoBlock
+                        Eyebrow="Time workspace"
+                    />
+                    <p class="mt-2 max-w-2xl text-sm text-slate-500">
+                        Keep the active timer in view while the rest of the workspace scrolls under it.
+                    </p>
+                </div>
 
-            <div class="min-w-0 md:min-w-[220px] md:max-w-[260px] md:justify-self-end">
-                <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Workspace</label>
-                <div class="flex items-center gap-2">
-                    @{
-                        var lastWorkspace = WorkspaceState.Value.List.LastOrDefault();
-                    }
-                    <LumexDropdown>
-                        <LumexDropdownTrigger>
-                            <LumexButton Variant="@Variant.Outlined">
-                                @AuthState.Value.Workspace?.Name
-                            </LumexButton>
-                        </LumexDropdownTrigger>
-                        <LumexDropdownMenu>
-                            @foreach (var workspace in WorkspaceState.Value.List)
-                            {
+                <div class="min-w-0 xl:min-w-[220px] xl:max-w-[260px] xl:shrink-0">
+                    <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Workspace</label>
+                    <div class="flex items-center gap-2">
+                        @{
+                            var lastWorkspace = WorkspaceState.Value.List.LastOrDefault();
+                        }
+                        <LumexDropdown>
+                            <LumexDropdownTrigger>
+                                <LumexButton Variant="@Variant.Outlined">
+                                    @AuthState.Value.Workspace?.Name
+                                </LumexButton>
+                            </LumexDropdownTrigger>
+                            <LumexDropdownMenu>
+                                @foreach (var workspace in WorkspaceState.Value.List)
+                                {
+                                    <LumexDropdownItem
+                                        ShowDivider="@(workspace == lastWorkspace)"
+                                        Description="@(workspace.Id == AuthState.Value.Workspace?.Id ? "Current workspace" : null)"
+                                        OnClick="@(() => OnSelectWorkspace(workspace))">
+                                        @workspace.Name
+                                    </LumexDropdownItem>
+                                }
                                 <LumexDropdownItem
-                                    ShowDivider="@(workspace == lastWorkspace)"
-                                    Description="@(workspace.Id == AuthState.Value.Workspace?.Id ? "Current workspace" : null)"
-                                    OnClick="@(() => OnSelectWorkspace(workspace))">
-                                    @workspace.Name
+                                    Color="ThemeColor.Info"
+                                    OnClick="@(() => _isShowAddWorkspaceModal = true)">
+                                    <StartContent>
+                                        <SquarePlusIcon Size="18" class="text-default-500 shrink-0"/>
+                                    </StartContent>
+                                    <ChildContent>New workspace</ChildContent>
                                 </LumexDropdownItem>
-                            }
-                            <LumexDropdownItem
-                                Color="ThemeColor.Info"
-                                OnClick="@(() => _isShowAddWorkspaceModal = true)">
-                                <StartContent>
-                                    <SquarePlusIcon Size="18" class="text-default-500 shrink-0"/>
-                                </StartContent>
-                                <ChildContent>New workspace</ChildContent>
-                            </LumexDropdownItem>
-                        </LumexDropdownMenu>
-                    </LumexDropdown>
+                            </LumexDropdownMenu>
+                        </LumexDropdown>
 
-                    <LumexDropdown
-                        ShowArrow="@true"
-                        Radius="@Radius.Small">
-                        <LumexDropdownTrigger>
-                            <LumexAvatar
-                                Name="@AuthState.Value.User.Initials"
-                                Src="https://images.unsplash.com/broken"/>
-                        </LumexDropdownTrigger>
-                        <LumexDropdownMenu Class="p-3">
-                            <LumexDropdownItem
-                                Disabled="@true"
-                                Class="h-14 gap-2 opacity-100">
-                                <div class="flex items-center gap-2">
-                                    <LumexAvatar Size="@Size.Small"
-                                                 Name="@AuthState.Value.User.Initials"
-                                                 Src="https://i.pravatar.cc/150?img=2"/>
-                                    <div class="inline-flex flex-col items-start">
-                                        <span class="text-small text-default-600">@AuthState.Value.User.Name</span>
-                                        <span class="text-tiny text-default-500">@AuthState.Value.User.Email</span>
+                        <LumexDropdown
+                            ShowArrow="@true"
+                            Radius="@Radius.Small">
+                            <LumexDropdownTrigger>
+                                <LumexAvatar
+                                    Name="@AuthState.Value.User.Initials"
+                                    Src="https://images.unsplash.com/broken"/>
+                            </LumexDropdownTrigger>
+                            <LumexDropdownMenu Class="p-3">
+                                <LumexDropdownItem
+                                    Disabled="@true"
+                                    Class="h-14 gap-2 opacity-100">
+                                    <div class="flex items-center gap-2">
+                                        <LumexAvatar Size="@Size.Small"
+                                                     Name="@AuthState.Value.User.Initials"
+                                                     Src="https://i.pravatar.cc/150?img=2"/>
+                                        <div class="inline-flex flex-col items-start">
+                                            <span class="text-small text-default-600">@AuthState.Value.User.Name</span>
+                                            <span class="text-tiny text-default-500">@AuthState.Value.User.Email</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </LumexDropdownItem>
-                            <LumexDropdownItem
-                                ShowDivider="@true"
-                                Disabled="true">
-                                @_currentTime.ToString("yyyy-MM-dd HH:mm:ss zzz");
-                            </LumexDropdownItem>
-                            <LumexDropdownItem Disabled="true">
-                                Settings
-                            </LumexDropdownItem>
-                            <LumexDropdownItem Disabled="true">Help & Support</LumexDropdownItem>
-                            <LumexDropdownItem OnClick="@OnClickLogout">
-                                <ChildContent>
-                                    Log Out
-                                </ChildContent>
-                                <EndContent>
-                                    <LogoutIcon Size="16"/>
-                                </EndContent>
-                            </LumexDropdownItem>
-                        </LumexDropdownMenu>
-                    </LumexDropdown>
+                                </LumexDropdownItem>
+                                <LumexDropdownItem
+                                    ShowDivider="@true"
+                                    Disabled="true">
+                                    @_currentTime.ToString("yyyy-MM-dd HH:mm:ss zzz");
+                                </LumexDropdownItem>
+                                <LumexDropdownItem Disabled="true">
+                                    Settings
+                                </LumexDropdownItem>
+                                <LumexDropdownItem Disabled="true">Help & Support</LumexDropdownItem>
+                                <LumexDropdownItem OnClick="@OnClickLogout">
+                                    <ChildContent>
+                                        Log Out
+                                    </ChildContent>
+                                    <EndContent>
+                                        <LogoutIcon Size="16"/>
+                                    </EndContent>
+                                </LumexDropdownItem>
+                            </LumexDropdownMenu>
+                        </LumexDropdown>
+                    </div>
                 </div>
             </div>
+
+            <TimeEntryForm />
         </div>
     </div>
 </header>
