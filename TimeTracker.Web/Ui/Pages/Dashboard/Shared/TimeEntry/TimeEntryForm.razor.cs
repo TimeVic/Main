@@ -74,6 +74,18 @@ public partial class TimeEntryForm : IDisposable
             Dispatcher.Dispatch(new StartTimeEntryAction(InternalTask: InternalTask));
         }
     }
+
+    private void OnDescriptionClick()
+    {
+        if (!_hasActiveEntry)
+            ToggleTimeEntry();
+    }
+
+    private void OnProjectAreaClick()
+    {
+        if (!_hasActiveEntry)
+            ToggleTimeEntry();
+    }
     
     private async Task OnChangeProject(ProjectDto? project)
     {
