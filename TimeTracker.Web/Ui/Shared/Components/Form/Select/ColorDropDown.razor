@@ -35,6 +35,15 @@
             <LumexDropdownMenu
                 Color="ThemeColor.Info"
                 Variant="MenuVariant.Outlined">
+                @if (Clearable && SelectedColor != null)
+                {
+                    <LumexDropdownItem OnClick="@OnClear" Class="text-slate-400">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                            None
+                        </span>
+                    </LumexDropdownItem>
+                }
                 @foreach (var color in Colors)
                 {
                     <LumexDropdownItem OnClick="@(() => OnColorSelected(color.Code))">
@@ -49,19 +58,6 @@
                 }
             </LumexDropdownMenu>
         </LumexDropdown>
-
-        @if (Clearable)
-        {
-            <CustomButton
-                OnClick="OnClear"
-                Variant="Variant.Outlined"
-                Color="ThemeColor.Default"
-                Size="Size.Large"
-                FullWidth="false"
-                IconOnly="true">
-                <XIcon/>
-            </CustomButton>
-        }
     </div>
     @if (HasError)
     {
