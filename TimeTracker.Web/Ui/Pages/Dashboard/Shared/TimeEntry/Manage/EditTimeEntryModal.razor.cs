@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Store.TimeEntry;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage;
@@ -23,11 +24,25 @@ public partial class EditTimeEntryModal: IDisposable
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
     
+    [Inject]
+    private UserDateTimeProviderService _dateTimeProviderService { get; set; }
+    
     private TimeEntryDto _model = new();
     private EditForm _form;
     private LumexModal modal;
     private EditContext _editContext;
+    private System.Timers.Timer? _timer;
     private bool _isActiveTimeEntry => _state.Value.ActiveEntry != null && _state.Value.ActiveEntry.Id == Entry.Id;
+    
+    private TimeSpan _displayDuration
+    {
+        get
+        {
+            if (_isActiveTimeEntry)
+                return _dateTimeProviderService.GetCurrentTime() - Entry.StartTimeOffset;
+            return _model.Duration;
+        }
+    }
     
     protected override async Task OnInitializedAsync()
     {
@@ -35,11 +50,19 @@ public partial class EditTimeEntryModal: IDisposable
         _model.UpdateFrom(Entry);
         await base.OnInitializedAsync();
         _editContext.OnFieldChanged += OnFormFieldChanged;
+        
+        if (_isActiveTimeEntry)
+        {
+            _timer = new System.Timers.Timer(300);
+            _timer.Elapsed += (_, _) => InvokeAsync(StateHasChanged);
+            _timer.Start();
+        }
     }
 
     public void Dispose()
     {
         _editContext?.OnFieldChanged -= OnFormFieldChanged;
+        _timer?.Dispose();
     }
     
     private void OnFormFieldChanged(object? sender, FieldChangedEventArgs e)
