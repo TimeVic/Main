@@ -5,7 +5,7 @@ using TimeTracker.Web.Services.Http;
 
 namespace TimeTracker.Web.Ui.Pages.Landing.User;
 
-public partial class LoginAsDemo
+public partial class LoginAsDemoPage
 {
     [Inject]
     private ApiService _apiService { get; set; } = default!;

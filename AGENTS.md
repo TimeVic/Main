@@ -133,3 +133,12 @@ dotnet test ./TimeTracker.Tests.Unit.Business
 
  - Write all comments and notes in English
  - Comments like " @* Added: Invalid *@" non needed(with simple action description)
+
+ ## Blazor requirenments
+  - Format of the page components: <SomeName>Page.razor(SomePage.razor)
+  - Format of the partial components: <SomeName>Block.razor(SomeBlock.razor)
+  - Format of the components which used as layout: <SomeName>Layout.razor(SomeLayout.razor)
+  - Format of the form component: <SomeName>Select.razor, <SomeName>Input.razor, etc.
+  - For each component create *.razor.cs file. Only if additional business logic needed.
+  - In case when page component is too big(more that 200 lines) create separate page component and partial component, create separated directory for this page component, create separated directory for this partial components.
+
