@@ -1,13 +1,18 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Http;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
 
-namespace TimeTracker.Web.Ui.Pages.Landing.User.Registration;
+namespace TimeTracker.Web.Ui.Pages.Landing.User.Password;
 
-public partial class Step1
+public partial class ChangePasswordPage
 {
+    [Parameter] 
+    public string Token { get; set; }
+    
     [Inject] 
     private ApiService _apiService { get; set; }
     
@@ -17,17 +22,23 @@ public partial class Step1
     [Inject] 
     private IReCaptchaService _reCaptchaService { get; set; }
     
-    private RegistrationStep1Request model = new();
+    [Inject] 
+    private IAuthorizationService _authorizationService { get; set; }
+    
+    [Inject] 
+    private ToastService _toastService { get; set; }
+    
+    private ResetPasswordStep2Request model = new();
     private bool _isLoading;
     private EditForm _form;
     private bool _isValid = false;
-    private bool _isSent = false;
+    private bool _isCompleted = false;
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
         _isLoading = false;
-        _isSent = false;
+        _isCompleted = false;
+        model.VerficationToken = Token;
         await UpdateReCaptchaAsync();
     }
 
@@ -45,17 +56,17 @@ public partial class Step1
         _isLoading = true;
         try
         {
-            var isOk = await _apiService.RegistrationStep1Async(model);
-            if (isOk)
+            var isSuccess = await _apiService.ResetPasswordStep2(model);
+            if (isSuccess)
             {
-                _isSent = true;
-                ToastService.ShowInfo("Registration email is sent");
-                model.Email = string.Empty;
+                _isCompleted = true;
+                _toastService.ShowInfo("Your password has been changed");
+                NavigationManager.NavigateTo("/");
             }
         }
         catch (Exception)
         {
-            ToastService.ShowError("Registration error");
+            ToastService.ShowError("Incorrect email or password");
         }
         finally
         {

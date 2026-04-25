@@ -9,7 +9,7 @@ using TimeTracker.Web.Services.Validation;
 
 namespace TimeTracker.Web.Ui.Pages.Landing.User;
 
-public partial class Login
+public partial class LoginPage
 {
     [Inject] 
     private ApiService _apiService { get; set; }

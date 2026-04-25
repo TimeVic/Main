@@ -1,6 +1,6 @@
 ﻿namespace TimeTracker.Web.Ui.Pages.Landing.Shared;
 
-public partial class Layout
+public partial class LandingLayout
 {
     protected override async Task OnInitializedAsync()
     {

@@ -4,7 +4,7 @@
 @using TimeTracker.Web.Ui.Pages.Landing.User.Registration.Shared
 @using TimeTracker.Web.Ui.Shared.Components.Form
 @using TimeTracker.Web.Ui.Shared.Components.Form.Validation
-@using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.Layout
+@using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.LandingLayout
 
 @inherits BaseReactiveComponent
 @layout Layout
@@ -16,7 +16,7 @@
     Robots="@SiteMetadata.IndexRobots"
     CanonicalUrl="@SiteMetadata.ToAbsoluteUrl(SiteUrl.Registration_Step1)" />
 
-<ComponentLayout>
+<RegistrationFormBlock>
     <ChildContent>
         <div class="flex items-start justify-between gap-4">
             <div>
@@ -66,4 +66,4 @@
         }
 
     </ChildContent>
-</ComponentLayout>
+</RegistrationFormBlock>

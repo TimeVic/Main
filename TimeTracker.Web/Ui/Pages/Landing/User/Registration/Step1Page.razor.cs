@@ -1,18 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
-using TimeTracker.Web.Constants;
-using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.Validation;
 
 namespace TimeTracker.Web.Ui.Pages.Landing.User.Registration;
 
-public partial class Step2
+public partial class Step1Page
 {
-    [Parameter]
-    public string? VerificationToken { get; set; }
-    
     [Inject] 
     private ApiService _apiService { get; set; }
     
@@ -20,25 +15,20 @@ public partial class Step2
     private NavigationManager _navigationManager { get; set; }
 
     [Inject] 
-    private IAuthorizationService _authorizationService { get; set; }
-    
-    [Inject] 
     private IReCaptchaService _reCaptchaService { get; set; }
     
-    private readonly RegistrationStep2Request model = new();
+    private RegistrationStep1Request model = new();
     private bool _isLoading;
-    private EditForm _form = default!;
+    private EditForm _form;
+    private bool _isValid = false;
+    private bool _isSent = false;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         _isLoading = false;
+        _isSent = false;
         await UpdateReCaptchaAsync();
-    }
-
-    protected override void OnParametersSet()
-    {
-        model.Token = VerificationToken ?? string.Empty;
     }
 
     private async Task UpdateReCaptchaAsync()
@@ -55,15 +45,13 @@ public partial class Step2
         _isLoading = true;
         try
         {
-            var registrationResponse = await _apiService.RegistrationStep2Async(model);
-            if (registrationResponse == null)
-                throw new Exception("Login error");
-            _authorizationService.Login(
-                registrationResponse.AccessToken,
-                registrationResponse.JwtToken,
-                registrationResponse.User
-            );
-            _navigationManager.NavigateTo(SiteUrl.DashboardBase);
+            var isOk = await _apiService.RegistrationStep1Async(model);
+            if (isOk)
+            {
+                _isSent = true;
+                ToastService.ShowInfo("Registration email is sent");
+                model.Email = string.Empty;
+            }
         }
         catch (Exception)
         {

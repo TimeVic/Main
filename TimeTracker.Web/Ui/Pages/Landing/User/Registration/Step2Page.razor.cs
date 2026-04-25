@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Web.Constants;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Http;
-using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
 
-namespace TimeTracker.Web.Ui.Pages.Landing.User.Password;
+namespace TimeTracker.Web.Ui.Pages.Landing.User.Registration;
 
-public partial class ChangePassword
+public partial class Step2Page
 {
-    [Parameter] 
-    public string Token { get; set; }
+    [Parameter]
+    public string? VerificationToken { get; set; }
     
     [Inject] 
     private ApiService _apiService { get; set; }
@@ -20,26 +20,25 @@ public partial class ChangePassword
     private NavigationManager _navigationManager { get; set; }
 
     [Inject] 
-    private IReCaptchaService _reCaptchaService { get; set; }
-    
-    [Inject] 
     private IAuthorizationService _authorizationService { get; set; }
     
     [Inject] 
-    private ToastService _toastService { get; set; }
+    private IReCaptchaService _reCaptchaService { get; set; }
     
-    private ResetPasswordStep2Request model = new();
+    private readonly RegistrationStep2Request model = new();
     private bool _isLoading;
-    private EditForm _form;
-    private bool _isValid = false;
-    private bool _isCompleted = false;
+    private EditForm _form = default!;
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
         _isLoading = false;
-        _isCompleted = false;
-        model.VerficationToken = Token;
         await UpdateReCaptchaAsync();
+    }
+
+    protected override void OnParametersSet()
+    {
+        model.Token = VerificationToken ?? string.Empty;
     }
 
     private async Task UpdateReCaptchaAsync()
@@ -56,17 +55,19 @@ public partial class ChangePassword
         _isLoading = true;
         try
         {
-            var isSuccess = await _apiService.ResetPasswordStep2(model);
-            if (isSuccess)
-            {
-                _isCompleted = true;
-                _toastService.ShowInfo("Your password has been changed");
-                NavigationManager.NavigateTo("/");
-            }
+            var registrationResponse = await _apiService.RegistrationStep2Async(model);
+            if (registrationResponse == null)
+                throw new Exception("Login error");
+            _authorizationService.Login(
+                registrationResponse.AccessToken,
+                registrationResponse.JwtToken,
+                registrationResponse.User
+            );
+            _navigationManager.NavigateTo(SiteUrl.DashboardBase);
         }
         catch (Exception)
         {
-            ToastService.ShowError("Incorrect email or password");
+            ToastService.ShowError("Registration error");
         }
         finally
         {

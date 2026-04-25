@@ -9,7 +9,7 @@ using TimeTracker.Web.Services.Validation;
 
 namespace TimeTracker.Web.Ui.Pages.Landing.User.Password;
 
-public partial class ResetPassword
+public partial class ResetPasswordPage
 {
     [Inject] 
     private ApiService _apiService { get; set; }

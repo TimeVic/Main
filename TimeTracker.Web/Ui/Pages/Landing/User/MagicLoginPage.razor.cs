@@ -6,7 +6,7 @@ using TimeTracker.Web.Services.Http;
 
 namespace TimeTracker.Web.Ui.Pages.Landing.User;
 
-public partial class MagicLogin
+public partial class MagicLoginPage
 {
     [Parameter]
     public string Token { get; set; }
