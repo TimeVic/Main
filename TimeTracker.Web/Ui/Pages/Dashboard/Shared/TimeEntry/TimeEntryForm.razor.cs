@@ -89,7 +89,7 @@ public partial class TimeEntryForm : IDisposable
     
     private async Task OnChangeProject(ProjectDto? project)
     {
-        if (!_hasActiveEntry || _activeEntry == null || _activeEntry.Task != null || project == null)
+        if (!_hasActiveEntry || _activeEntry == null || _activeEntry.Task != null)
         {
             return;
         }

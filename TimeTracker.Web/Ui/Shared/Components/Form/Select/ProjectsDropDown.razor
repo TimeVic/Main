@@ -30,6 +30,19 @@
         <LumexDropdownMenu
             Color="ThemeColor.Info" 
             Variant="MenuVariant.Outlined">
+            @if (Clearable && _selectedItem != null)
+            {
+                <LumexDropdownItem
+                    OnClick="@(() => OnProjectSelected(null))"
+                    Class="text-slate-400">
+                    <ChildContent>
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                            None
+                        </span>
+                    </ChildContent>
+                </LumexDropdownItem>
+            }
             @foreach (var project in _list)
             {
                 <LumexDropdownItem 
@@ -42,12 +55,4 @@
             }
         </LumexDropdownMenu>
     </LumexDropdown>
-    @if (Clearable)
-    {
-        <CustomButton 
-            OnClick="OnClear"
-            IconOnly="true">
-            <XIcon/>
-        </CustomButton>
-    }
 </div>

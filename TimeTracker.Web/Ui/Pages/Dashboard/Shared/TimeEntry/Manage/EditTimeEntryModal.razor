@@ -48,11 +48,9 @@
                             
                                     <ProjectsDropDown
                                         Value="_model.Project?.Id ?? Guid.Empty"
+                                        Clearable="true"
                                         SelectedItemChanged="@OnProjectSelected"
                                     />
-                                    <button type="button" @onclick="ClearProject" class="inline-flex h-[42px] w-[42px] items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-blue-600 transition hover:bg-slate-100">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
                                     @if (_model.Project != null)
                                     {
                                         <CustomButton

@@ -87,15 +87,9 @@ public partial class EditTimeEntryModal: IDisposable
         OnClose.InvokeAsync();
     }
 
-    private async Task OnProjectSelected(ProjectDto project)
+    private async Task OnProjectSelected(ProjectDto? project)
     {
         _model.Project = project;
-        await UpdateTimeEntry();
-    }
-
-    private async Task ClearProject()
-    {
-        _model.Project = null;
         await UpdateTimeEntry();
     }
 
