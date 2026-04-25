@@ -42,8 +42,9 @@
                     placeholder="What are you working on?"
                     value="@(_activeEntry?.Description ?? string.Empty)"
                     @onchange="@OnDescriptionChanged"
-                    disabled="@(!_hasActiveEntry)"
-                    class="w-full bg-transparent px-1 py-1 text-sm text-slate-700 placeholder-slate-400 focus:outline-none disabled:cursor-default disabled:opacity-40"/>
+                    @onclick="@OnDescriptionClick"
+                    readonly="@(!_hasActiveEntry)"
+                    class="w-full bg-transparent px-1 py-1 text-sm text-slate-700 placeholder-slate-400 focus:outline-none @(!_hasActiveEntry ? "cursor-pointer opacity-40" : "")"/>
             </div>
 
             @* Right-side controls *@
@@ -63,11 +64,14 @@
                 else
                 {
                     <div class="flex items-center gap-2">
-                        <div class="min-w-[180px]">
-                            <ProjectsDropDown
-                                Value="@(_activeEntry?.Project?.Id ?? Guid.Empty)"
-                                Disabled="@(!_hasActiveEntry)"
-                                SelectedItemChanged="@OnChangeProject"/>
+                        <div class="min-w-[180px] @(!_hasActiveEntry ? "cursor-pointer" : "")" @onclick="@OnProjectAreaClick">
+                            <div class="@(!_hasActiveEntry ? "pointer-events-none" : "")">
+                                <ProjectsDropDown
+                                    Value="@(_activeEntry?.Project?.Id ?? Guid.Empty)"
+                                    Disabled="@(!_hasActiveEntry)"
+                                    Clearable="true"
+                                    SelectedItemChanged="@OnChangeProject"/>
+                            </div>
                         </div>
                         @if (_activeEntry?.Project != null)
                         {

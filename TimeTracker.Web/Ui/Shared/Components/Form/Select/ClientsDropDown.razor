@@ -2,7 +2,6 @@
 
 @using LumexUI
 @using LumexUI.Common
-@using LumexUI.Shared.Icons
 @using TimeTracker.Api.Shared.Dto.Entity
 
 <div class="flex gap-1">
@@ -31,6 +30,15 @@
         <LumexDropdownMenu
             Color="ThemeColor.Info"
             Variant="MenuVariant.Outlined">
+            @if (Clearable && _selectedItem != null)
+            {
+                <LumexDropdownItem OnClick="@(() => OnValueChanged(null))" Class="text-slate-400">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-xmark text-xs"></i>
+                        None
+                    </span>
+                </LumexDropdownItem>
+            }
             @foreach (var project in _list)
             {
                 <LumexDropdownItem OnClick="@(() => OnValueChanged(project))">
@@ -39,16 +47,4 @@
             }
         </LumexDropdownMenu>
     </LumexDropdown>
-    @if (Clearable)
-    {
-        <CustomButton
-            OnClick="OnClear"
-            Variant="Variant.Outlined"
-            Color="ThemeColor.Default"
-            Size="Size.Large"
-            FullWidth="false"
-            IconOnly="true">
-            <XIcon/>
-        </CustomButton>
-    }
 </div>

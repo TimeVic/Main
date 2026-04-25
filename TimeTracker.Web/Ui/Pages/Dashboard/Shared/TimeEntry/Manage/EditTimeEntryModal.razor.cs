@@ -3,6 +3,7 @@ using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Services.DateTimes;
@@ -32,6 +33,7 @@ public partial class EditTimeEntryModal: IDisposable
     private LumexModal modal;
     private EditContext _editContext;
     private System.Timers.Timer? _timer;
+    private bool _isAddTaskModalOpened = false;
     private bool _isActiveTimeEntry => _state.Value.ActiveEntry != null && _state.Value.ActiveEntry.Id == Entry.Id;
     
     private TimeSpan _displayDuration
@@ -85,16 +87,29 @@ public partial class EditTimeEntryModal: IDisposable
         OnClose.InvokeAsync();
     }
 
-    private async Task OnProjectSelected(ProjectDto project)
+    private async Task OnProjectSelected(ProjectDto? project)
     {
         _model.Project = project;
         await UpdateTimeEntry();
     }
 
-    private async Task ClearProject()
+    private void OpenAddTaskModal()
     {
-        _model.Project = null;
-        await UpdateTimeEntry();
+        if (_model.Project == null || _model.Task != null)
+            return;
+        _isAddTaskModalOpened = true;
+    }
+
+    private Task OnTaskAdded(TaskFullDto? task)
+    {
+        if (task == null)
+            return Task.CompletedTask;
+
+        _model.Task = task;
+        _model.Project = task.TaskList.Project;
+        Dispatcher.Dispatch(new SaveTimeEntryAction(_model, true));
+        StateHasChanged();
+        return Task.CompletedTask;
     }
 
     private async Task OnChangeStartTime(DateTime? startTime)

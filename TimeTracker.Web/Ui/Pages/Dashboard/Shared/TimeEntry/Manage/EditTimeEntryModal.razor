@@ -2,8 +2,19 @@
 @using LumexUI.Common
 @using LumexUI.Shared.Icons
 @using Markdig.Extensions.TaskLists
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 
 @inherits BaseReactiveComponent
+
+@if (_isAddTaskModalOpened && _model.Project != null)
+{
+    <AddTaskModal
+        ProjectId="_model.Project.Id"
+        TimeEntryId="_model.Id"
+        IsOpened="_isAddTaskModalOpened"
+        IsOpenedChanged="@((isOpened) => _isAddTaskModalOpened = isOpened)"
+        OnAdded="@OnTaskAdded"/>
+}
 
 <LumexModal 
     Open="true" 
@@ -31,23 +42,36 @@
 
                     <LumexCard>
                         <LumexCardBody>
-                            @if (Entry.Task == null)
+                            @if (_model.Task == null)
                             {
                                 <div class="flex items-center gap-2">
                             
                                     <ProjectsDropDown
                                         Value="_model.Project?.Id ?? Guid.Empty"
+                                        Clearable="true"
                                         SelectedItemChanged="@OnProjectSelected"
                                     />
-                                    <button type="button" @onclick="ClearProject" class="inline-flex h-[42px] w-[42px] items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-blue-600 transition hover:bg-slate-100">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
+                                    @if (_model.Project != null)
+                                    {
+                                        <CustomButton
+                                            OnClick="@OpenAddTaskModal"
+                                            Variant="Variant.Outlined"
+                                            Size="Size.Medium"
+                                            Color="ThemeColor.Info">
+                                            <StartContent>
+                                                <i class="fa-solid fa-plus"></i>
+                                            </StartContent>
+                                            <ChildContent>
+                                                <span>Task</span>
+                                            </ChildContent>
+                                        </CustomButton>
+                                    }
                                 </div>
                             }
                             else
                             {
-                                <div class="font-medium text-slate-900">@Entry.Task.TaskList.Project.Name</div>
-                                <div class="mt-1 text-slate-500">Attached task: @Entry.Task.TaskId</div>
+                                <div class="font-medium text-slate-900">@_model.Task.TaskList.Project.Name</div>
+                                <div class="mt-1 text-slate-500">Attached task: @_model.Task.FormattedId</div>
                                 <p class="mt-2 text-xs text-slate-500">This entry is attached to a task, so the project follows that task automatically.</p>
                             }
                         </LumexCardBody>
@@ -141,54 +165,7 @@
                     </LumexTab>
                 </LumexTabs>
             </div>
-                
-                @* <div> *@
-                @*     $1$ <label class="mb-2 block text-sm font-medium text-slate-700">Task list</label> #1# *@
-                @*     $1$ <InputSelect @bind-Value="newTaskTaskListId" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"> #1# *@
-                @*     $1$     @foreach (var list in CurrentProjectTaskLists) #1# *@
-                @*     $1$     { #1# *@
-                @*     $1$         <option value="@list.Id">@list.Name</option> #1# *@
-                @*     $1$     } #1# *@
-                @*     $1$ </InputSelect> #1# *@
-                @*     <p class="mt-2 text-xs text-slate-500">Task will be added to: <span class="font-semibold text-slate-700">@TaskList.Name</span></p> *@
-                @* </div> *@
-                @* *@
-                @* <div class="mt-1"> *@
-                @*     <InputTextField *@
-                @*         FullWidth="true" *@
-                @*         Label="Title" *@
-                @*         Placeholder="Task title" *@
-                @*         Variant="InputVariant.Outlined" *@
-                @*         @bind-Value="model.Title"/> *@
-                @* </div> *@
-                @* *@
-                @* <div class="space-y-2 mt-3"> *@
-                @*     <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4"> *@
-                @*         <InputTextField *@
-                @*             Class="lg:max-w-sm" *@
-                @*             Label="External Task ID" *@
-                @*             Placeholder="For example: JIRA-154 or RM-982" *@
-                @*             Variant="InputVariant.Outlined" *@
-                @*             @bind-Value="model.ExternalTaskId"/> *@
-                @*         <p class="text-xs leading-5 text-slate-500 lg:flex-1">Use this when the task already exists in an external service like Jira, ClickUp, or Redmine.</p> *@
-                @*     </div> *@
-                @* </div> *@
-                @* *@
-                @* <div class="rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-900 mt-3"> *@
-                @*     <div class="font-semibold">Title or External Task ID is required.</div> *@
-                @*     <p class="mt-1 text-blue-800">You can fill both fields, but at least one of them must be entered.</p> *@
-                @* </div> *@
             </EditForm>
         </LumexModalBody>
-        <LumexModalFooter>
-            @* <CustomButton *@
-            @*     FullWidth="@true" *@
-            @*     OnClick="@Submit" *@
-            @*     Disabled="_isLoading" *@
-            @*     Color="@ThemeColor.Primary" *@
-            @*     Radius="@Radius.Full"> *@
-            @*     Add *@
-            @* </CustomButton> *@
-        </LumexModalFooter>
     </LumexModalContent>
 </LumexModal>
