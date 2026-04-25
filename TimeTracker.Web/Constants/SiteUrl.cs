@@ -4,6 +4,7 @@ public static class SiteUrl
 {
     #region Public
     public static readonly string Main = "/";
+    public static readonly string UseCases = "/use-cases";
     public static readonly string Faq = "/faq";
     
     public static readonly string Registration_Step1 = "/registration/step1";

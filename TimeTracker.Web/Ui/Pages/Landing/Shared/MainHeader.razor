@@ -9,9 +9,8 @@
         />
         
         <nav class="hidden items-center gap-6 md:flex">
-            <a href="/#features" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Features</a>
-            <a href="/#benefits" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Client balances</a>
-            <a href="/#share" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Tasks and Jira</a>
+            <a href="@SiteUrl.Main" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Home</a>
+            <a href="@SiteUrl.UseCases" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Use cases</a>
             <a href="@SiteUrl.Faq" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">FAQ</a>
             @if (AuthState.Value.IsLoggedIn)
             {
