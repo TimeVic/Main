@@ -89,7 +89,7 @@ public class GetListTest: BaseTest
     public async Task GetListGroupedByDayShouldNotSplitSingleDayBetweenPages()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
-        var daysInPage = 3;
+        var daysInPage = GlobalConstants.TimeEntryGroupedByDayPageSize;
         var baseDay = DateTime.UtcNow.Date;
         var boundaryDay = baseDay.AddDays(-(daysInPage - 1));
 
@@ -146,7 +146,7 @@ public class GetListTest: BaseTest
     public async Task GetListGroupedByDayShouldReturnAllItemsForSingleDay()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
-        var day = DateTime.UtcNow.Date.AddDays(-10);
+        var day = DateTime.UtcNow.Date.AddDays(-3);
         var expectedCount = GlobalConstants.ListPageSize + 7;
 
         for (var i = 0; i < expectedCount; i++)

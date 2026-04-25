@@ -38,7 +38,7 @@ namespace TimeTracker.Business.Common.Constants
         /// <summary>
         /// Page size for day-grouped time entry pagination
         /// </summary>
-        public const int TimeEntryGroupedByDayPageSize = 3;
+        public const int TimeEntryGroupedByDayPageSize = 7;
 
         /// <summary>
         /// The maximum number of users who will be given access
