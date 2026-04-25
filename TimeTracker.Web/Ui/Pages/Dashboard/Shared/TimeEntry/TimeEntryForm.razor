@@ -90,27 +90,29 @@
                 }
             </div>
 
-            <div class="flex items-center justify-center lg:px-4">
-                <TimeCounterField
-                    Value="@_activeEntry?.StartTimeOffset"
-                    IsActive="@_hasActiveEntry"/>
-            </div>
+            <div class="flex items-center gap-2 lg:contents">
+                <div class="flex flex-1 items-center justify-center lg:px-4">
+                    <TimeCounterField
+                        Value="@_activeEntry?.StartTimeOffset"
+                        IsActive="@_hasActiveEntry"/>
+                </div>
 
-            <div class="flex items-center justify-start lg:justify-end">
-                @if (_activeEntry != null)
-                {
-                    <CustomButton
-                        OnClick="@(() => _isEditModalOpened = true)"
-                        Variant="Variant.Outlined"
-                        Size="Size.Medium"
-                        Radius="Radius.Full"
-                        IconOnly="true"
-                        Color="ThemeColor.Default">
-                        <StartContent>
-                            <i class="fa-solid fa-pencil"></i>
-                        </StartContent>
-                    </CustomButton>
-                }
+                <div class="flex items-center justify-end">
+                    @if (_activeEntry != null)
+                    {
+                        <CustomButton
+                            OnClick="@(() => _isEditModalOpened = true)"
+                            Variant="Variant.Outlined"
+                            Size="Size.Medium"
+                            Radius="Radius.Full"
+                            IconOnly="true"
+                            Color="ThemeColor.Default">
+                            <StartContent>
+                                <i class="fa-solid fa-pencil"></i>
+                            </StartContent>
+                        </CustomButton>
+                    }
+                </div>
             </div>
         </div>
     </section>

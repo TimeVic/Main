@@ -54,7 +54,7 @@
                     </LumexCard>
                     <LumexCard>
                         <LumexCardBody>
-                            <div class="grid gap-4 sm:grid-cols-3">
+                            <div class="grid gap-4 @(_isActiveTimeEntry ? "sm:grid-cols-2" : "sm:grid-cols-3")">
                                 <div>
                                     <LumexDatebox 
                                         TValue="DateTime?"
@@ -74,20 +74,22 @@
                                         FullWidth="true"
                                     />
                                 </div>
-                                <div>
-                                    <TimeEditField
-                                        Label="End"
-                                        Value="@_model.EndTime"
-                                        ValueChanged="@OnChangeEndTime"
-                                        Disabled="_isActiveTimeEntry"
-                                        FullWidth="true"
-                                    />
-                                </div>
+                                @if (!_isActiveTimeEntry)
+                                {
+                                    <div>
+                                        <TimeEditField
+                                            Label="End"
+                                            Value="@_model.EndTime"
+                                            ValueChanged="@OnChangeEndTime"
+                                            FullWidth="true"
+                                        />
+                                    </div>
+                                }
                             </div>
                             <p class="mt-2 text-sm text-slate-700">
                                 Duration: 
                                 <span class="font-semibold text-slate-900">
-                                    @_timeParsingService.TimeSpanToTimeString(_model.Duration, true)
+                                    @_timeParsingService.TimeSpanToTimeString(_displayDuration, true)
                                 </span>
                             </p>
                         </LumexCardBody>
