@@ -1,114 +1,143 @@
 @using LumexUI.Common
 @using TimeTracker.Business.Extensions
 
-<div class="flex flex-col gap-3 border border-blue-100 bg-gradient-to-r from-white via-blue-50/60 to-indigo-50/60 px-4 py-3 transition-shadow duration-200 hover:shadow-lg hover:shadow-blue-100/80 lg:flex-row lg:items-center lg:justify-between">
-    <div class="min-w-0 flex-1">
-        <div class="flex flex-wrap items-center gap-2">
-            <p class="truncate text-sm font-semibold text-slate-900">@GetProjectLabel()</p>
-            @if (!string.IsNullOrEmpty(GetTaskLabel()))
-            {
-                <LumexChip
-                    Class="cursor-pointer"
-                    @onclick="@(() => OnOpenTask.InvokeAsync(Entry))"
-                    Size="Size.Small"
-                    Variant="@ChipVariant.Outlined"
-                    Color="@ThemeColor.Primary">
-                    @GetTaskLabel()
-                </LumexChip>
-            }
-            @if (Entry.IsBillable)
-            {
-                <LumexChip
-                    @onclick="@(() => OnOpenTask.InvokeAsync(Entry))"
-                    Variant="@ChipVariant.Outlined"
-                    Size="Size.Small"
-                    Color="@ThemeColor.Info">
-                    Billable
-                </LumexChip>
-            }
-            @if (Entry.IsSynced)
-            {
-                <LumexPopover Color="ThemeColor.Primary">
-                    <LumexPopoverTrigger>
-                        <LumexChip
-                            Size="Size.Small"
-                            Variant="@ChipVariant.Outlined"
-                            Color="@ThemeColor.Success">
-                            <StartContent>
-                                <CircleCheckFilledIcon Size="16" />
-                            </StartContent>
-                            <ChildContent>Synced</ChildContent>
-                        </LumexChip>
-                    </LumexPopoverTrigger>
-                    <LumexPopoverContent>
-                        The Time Entry was synchronized with an external service such as Jira or Redmine.
-                    </LumexPopoverContent>
-                </LumexPopover>
-                
-            }
-        </div>
-        @if (!string.IsNullOrWhiteSpace(Entry.Description))
+<div class="group flex cursor-pointer items-center gap-3 border border-transparent px-4 py-2.5 text-sm transition-colors hover:border-blue-200 hover:bg-blue-50"
+     @onclick="@(() => OnEdit.InvokeAsync(Entry))">
+
+    @* Description (or task title fallback) — takes all remaining space *@
+    <span class="min-w-0 flex-1 truncate @(string.IsNullOrWhiteSpace(Entry.Description) && Entry.Task == null ? "text-slate-300" : "text-slate-700")">
+        @GetDescriptionOrTaskTitle()
+    </span>
+
+    @* Project name — right-aligned, secondary text *@
+    <span class="hidden sm:block shrink-0 text-xs font-medium text-slate-500">
+        @GetProjectLabel()
+    </span>
+
+    @* Indicators *@
+    <div class="hidden md:flex shrink-0 items-center gap-1" @onclick:stopPropagation="true">
+        @if (Entry.Task != null)
         {
-            <p class="mt-1 truncate text-xs text-slate-600">@Entry.Description.TruncateAndAddDots(200)</p>
+            <button
+                type="button"
+                @onclick="@(() => OnOpenTask.InvokeAsync(Entry))"
+                class="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-medium text-blue-600 hover:bg-blue-100">
+                <i class="fa-regular fa-square-check"></i>
+                @Entry.Task.FormattedId
+            </button>
         }
-        <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
-            <span class="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 shadow-sm"><i class="fa-regular fa-user text-blue-600"></i>@Entry.User.Name</span>
-            <span class="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 shadow-sm">
-                <i class="fa-regular fa-hourglass-half text-indigo-600"></i>
-                @_timeParsingService.TimeSpanToTimeString(Entry.Duration, true)
-            </span>
-            @if (Entry.TimeZone != CurrentTimeZone)
-            {
-                <span class="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 shadow-sm">
-                    <i class="fa-solid fa-earth-africa text-indigo-600"></i>
-                    @Entry.TimeZone
-                </span>
-            }
-        </div>
+        @if (Entry.IsSynced)
+        {
+            <LumexPopover Color="ThemeColor.Primary">
+                <LumexPopoverTrigger>
+                    <span class="inline-flex cursor-pointer items-center rounded px-1.5 py-0.5 text-xs font-medium text-emerald-600 hover:bg-emerald-50">
+                        <i class="fa-solid fa-rotate"></i>
+                    </span>
+                </LumexPopoverTrigger>
+                <LumexPopoverContent>
+                    Synchronized with an external service (Jira / Redmine).
+                </LumexPopoverContent>
+            </LumexPopover>
+        }
+        @if (Entry.IsBillable)
+        {
+            <LumexPopover>
+                <LumexPopoverTrigger>
+                    <span class="inline-flex cursor-pointer items-center rounded px-1.5 py-0.5 text-xs font-semibold text-emerald-600 hover:bg-emerald-50">
+                        <i class="fa-solid fa-dollar-sign"></i>
+                    </span>
+                </LumexPopoverTrigger>
+                <LumexPopoverContent>
+                    <div class="min-w-[200px] space-y-2 p-3">
+                        <div>
+                            <p class="text-sm font-semibold text-slate-900">Billable</p>
+                            <p class="text-xs text-slate-500">Calculated value for this time entry.</p>
+                        </div>
+                        @if (Entry.HourlyRate.HasValue)
+                        {
+                            <div>
+                                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-400">Amount</p>
+                                <p class="text-base font-semibold text-slate-900">@GetBillableAmountLabel()</p>
+                            </div>
+                            <div class="flex justify-between text-xs text-slate-500">
+                                <span>Rate</span>
+                                <span class="font-medium text-slate-700">@GetHourlyRateLabel()/h</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="rounded border border-amber-200 bg-amber-50 px-2 py-1.5 text-xs text-amber-900">
+                                Hourly rate is not set.
+                            </div>
+                        }
+                        <div class="flex justify-between text-xs text-slate-500">
+                            <span>Tracked</span>
+                            <span class="font-medium text-slate-700">@_timeParsingService.TimeSpanToTimeString(Entry.Duration, true)</span>
+                        </div>
+                    </div>
+                </LumexPopoverContent>
+            </LumexPopover>
+        }
+        @if (Entry.TimeZone != CurrentTimeZone)
+        {
+            <LumexPopover>
+                <LumexPopoverTrigger>
+                    <span class="inline-flex cursor-pointer items-center rounded px-1.5 py-0.5 text-xs text-slate-400 hover:bg-slate-100">
+                        <i class="fa-solid fa-earth-africa"></i>
+                    </span>
+                </LumexPopoverTrigger>
+                <LumexPopoverContent>@Entry.TimeZone</LumexPopoverContent>
+            </LumexPopover>
+        }
     </div>
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div class="min-w-[210px] rounded-3xl border border-blue-200 bg-white px-4 py-3 text-center shadow-sm">
-            <p class="text-[10px] font-semibold uppercase tracking-wide text-blue-500">Time range</p>
-            <div class="mt-1 flex items-center justify-center gap-2 font-mono text-lg font-semibold text-slate-900">
-                <span>@_timeParsingService.DateTimeToTimeString(Entry.StartTimeOffset)</span>
-                <span class="text-blue-300">—</span>
-                <span>@_timeParsingService.DateTimeToTimeString(Entry.EndTimeTimeOffset)</span>
-            </div>
-        </div>
-        <div class="flex items-center gap-2 self-start sm:self-center">
-            <CustomButton
-                Class="inline-flex rounded-full"
-                OnClick="@(() => OnClone.InvokeAsync(Entry))"
-                Size="Size.Small"
-                Color="ThemeColor.Primary"
-                Variant="Variant.Light"
-                IconOnly="true">
-                <ChildContent>
-                    <i class="fa-regular fa-clone"></i>    
-                </ChildContent>
-            </CustomButton>
-            <CustomButton
-                Class="inline-flex rounded-full"
-                OnClick="@(() => OnEdit.InvokeAsync(Entry))"
-                Size="Size.Small"
-                Color="ThemeColor.Primary"
-                Variant="Variant.Light"
-                IconOnly="true">
-                <ChildContent>
-                    <i class="fa-regular fa-pen-to-square"></i>
-                </ChildContent>
-            </CustomButton>
-            <CustomButton
-                Class="inline-flex rounded-full"
-                OnClick="@(() => OnDelete.InvokeAsync(Entry))"
-                Size="Size.Small"
-                Color="ThemeColor.Danger"
-                Variant="Variant.Light"
-                IconOnly="true">
-                <ChildContent>
-                    <i class="fa-regular fa-trash-can"></i>
-                </ChildContent>
-            </CustomButton>
-        </div>
+
+    @* Time range *@
+    <div class="hidden sm:flex shrink-0 items-center gap-1 font-mono text-xs text-slate-400">
+        <span>@_timeParsingService.DateTimeToTimeString(Entry.StartTimeOffset)</span>
+        <span>-</span>
+        <span>@_timeParsingService.DateTimeToTimeString(Entry.EndTimeTimeOffset)</span>
+    </div>
+
+    @* Duration *@
+    <span class="w-16 shrink-0 text-right font-mono text-sm font-semibold text-slate-700">
+        @_timeParsingService.TimeSpanToTimeString(Entry.Duration, true)
+    </span>
+
+    @* Actions *@
+    <div class="shrink-0 flex items-center gap-1" @onclick:stopPropagation="true">
+        <CustomButton
+            OnClick="@(() => OnClone.InvokeAsync(Entry))"
+            Size="Size.Small"
+            Color="ThemeColor.Default"
+            Variant="Variant.Light"
+            IconOnly="true">
+            <ChildContent>
+                <i class="fa-regular fa-circle-play text-slate-400"></i>
+            </ChildContent>
+        </CustomButton>
+        <LumexDropdown>
+            <LumexDropdownTrigger>
+                <LumexButton
+                    IconOnly="true"
+                    Size="Size.Small"
+                    Variant="@Variant.Light">
+                    <i class="fa-solid fa-ellipsis-v text-slate-400"></i>
+                </LumexButton>
+            </LumexDropdownTrigger>
+            <LumexDropdownMenu>
+                <LumexDropdownItem OnClick="@(() => OnEdit.InvokeAsync(Entry))">
+                    <span class="flex items-center gap-2"><i class="fa-regular fa-pen-to-square w-4"></i> Edit</span>
+                </LumexDropdownItem>
+                <LumexDropdownItem OnClick="@(() => OnClone.InvokeAsync(Entry))">
+                    <span class="flex items-center gap-2"><i class="fa-regular fa-clone w-4"></i> Duplicate</span>
+                </LumexDropdownItem>
+                <LumexDropdownItem
+                    Color="@ThemeColor.Danger"
+                    Class="text-danger"
+                    OnClick="@(() => OnDelete.InvokeAsync(Entry))">
+                    <span class="flex items-center gap-2"><i class="fa-regular fa-trash-can w-4"></i> Delete</span>
+                </LumexDropdownItem>
+            </LumexDropdownMenu>
+        </LumexDropdown>
     </div>
 </div>

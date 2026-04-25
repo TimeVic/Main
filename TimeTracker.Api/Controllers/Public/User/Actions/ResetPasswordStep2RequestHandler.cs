@@ -1,7 +1,5 @@
 ﻿using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
-using TimeTracker.Business.Common.Exceptions.Api;
-using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Auth;
 
 namespace TimeTracker.Api.Controllers.Public.User.Actions
