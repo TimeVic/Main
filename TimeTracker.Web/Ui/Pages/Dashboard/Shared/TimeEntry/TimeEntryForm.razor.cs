@@ -87,6 +87,15 @@ public partial class TimeEntryForm : IDisposable
         await Task.CompletedTask;
     }
 
+    private async Task OnDescriptionChanged(ChangeEventArgs e)
+    {
+        if (_activeEntry == null)
+            return;
+
+        _activeEntry.Description = e.Value?.ToString();
+        await UpdateTimeEntry(_activeEntry);
+    }
+
     private void OpenAddTaskModal()
     {
         if (!_hasActiveEntry || _activeEntry?.Project == null || _activeEntry.Task != null)
