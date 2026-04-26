@@ -169,6 +169,9 @@ node('build-node') {
             cloudFlaireApiToken = PASSWORD;
             cloudFlaireZoneId = USER_NAME;
         }
+        if (!cloudFlaireApiToken?.trim() || !cloudFlaireZoneId?.trim()) {
+            error("Cloudflare credentials were not loaded: check timevic_cloudflaire_api_token")
+        }
         
         // withCredentials([string(credentialsId: "timevic_${environmentKey}_google__storage_project_id", variable: 'AUTH_SECRET')]) {
         //     envVariables.put('Google__Storage__ProjectId', AUTH_SECRET)
@@ -239,8 +242,8 @@ node('build-node') {
             sh '''
                 set -e
 
-                RESPONSE=$(curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/$cloudFlaireZoneId/purge_cache" \
-                -H "Authorization: Bearer $cloudFlaireApiToken" \
+                RESPONSE=$(curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${cloudFlaireZoneId}/purge_cache" \
+                -H "Authorization: Bearer ${cloudFlaireApiToken}" \
                 -H "Content-Type: application/json" \
                 --data '{"purge_everything":true}')
 
