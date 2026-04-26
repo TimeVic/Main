@@ -63,6 +63,21 @@ public abstract class AExternalClientService
         return await SendSettingsValidationRequest(workspace, user);
     }
 
+    public async Task<ExternalTaskInfoDto?> GetTaskInfoAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string externalTaskId
+    )
+    {
+        if (string.IsNullOrWhiteSpace(externalTaskId))
+        {
+            _logger.LogError("ExternalTaskId is empty");
+            return null;
+        }
+
+        return await GetTaskInfoInternalAsync(workspace, user, externalTaskId);
+    }
+
     protected async Task<T?> HandleResponse<T>(
         string uri,
         HttpResponseMessage httpResponse,
@@ -124,4 +139,13 @@ public abstract class AExternalClientService
         UserEntity user,
         string externalTaskId
     );
+
+    protected virtual Task<ExternalTaskInfoDto?> GetTaskInfoInternalAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string externalTaskId
+    )
+    {
+        return Task.FromResult<ExternalTaskInfoDto?>(null);
+    }
 }

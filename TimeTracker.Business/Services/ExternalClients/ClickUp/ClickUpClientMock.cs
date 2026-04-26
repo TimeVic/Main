@@ -47,6 +47,15 @@ public class ClickUpClientMock: IClickUpClient
         return null;
     }
 
+    public Task<ExternalTaskInfoDto?> GetTaskInfoAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string externalTaskId
+    )
+    {
+        return Task.FromResult<ExternalTaskInfoDto?>(null);
+    }
+
     public bool IsCorrectTaskId(TimeEntryEntity timeEntry)
     {
         return true;

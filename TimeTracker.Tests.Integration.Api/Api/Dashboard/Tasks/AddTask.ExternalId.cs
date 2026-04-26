@@ -69,11 +69,13 @@ public partial class AddTask
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.NotEmpty(actualData.Title);
         Assert.Equal(_jiraTaskId, actualData.ExternalTaskId);
+        Assert.Equal(TimeSpan.FromHours(1), actualData.OriginalEstimate);
 
         await FlushDbChanges(true);
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
         Assert.NotNull(actualTimeEntry.Task);
         Assert.Equal(actualData.TaskId, actualTimeEntry.Task.TaskId);
+        Assert.Equal(TimeSpan.FromHours(1), actualTimeEntry.Task.OriginalEstimate);
     }
     
     [Fact]
@@ -103,6 +105,7 @@ public partial class AddTask
         Assert.Equal(_jiraTaskId, actualData.ExternalTaskId);
 
         Assert.Equal(expectedTask.Status, actualData.Status);
+        Assert.Equal(TimeSpan.FromHours(1), actualData.OriginalEstimate);
         Assert.Equal(expectedTask.StartTime?.ToString("g"), actualData.StartTime?.ToUniversalTime().ToString("g"));
         Assert.Equal(expectedTask.EndTime?.ToString("g"), actualData.EndTime?.ToUniversalTime().ToString("g"));
         Assert.Equal(expectedTask.Priority, actualData.Priority);

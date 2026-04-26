@@ -1,5 +1,7 @@
-﻿using NHibernate.Criterion;
+﻿using NHibernate;
+using NHibernate.Criterion;
 using NHibernate.Linq;
+using NHibernate.Transform;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Task;
@@ -79,6 +81,7 @@ public class TaskDao: ITaskDao
         UserEntity user,
         string title,
         string? description = null,
+        TimeSpan? originalEstimate = null,
         DateTime? startTime = null,
         DateTime? endTime = null,
         TaskStatus status = TaskStatus.Backlog,
@@ -96,6 +99,7 @@ public class TaskDao: ITaskDao
             User = user,
             Title = title,
             Description = description,
+            OriginalEstimate = originalEstimate,
             Status = status,
             Priority = priority,
             IsArchived = isArchived,
@@ -115,6 +119,7 @@ public class TaskDao: ITaskDao
         UserEntity user,
         string title,
         string? description = null,
+        TimeSpan? originalEstimate = null,
         DateTime? startTime = null,
         DateTime? endTime = null,
         TaskStatus status = TaskStatus.Backlog,
@@ -129,6 +134,7 @@ public class TaskDao: ITaskDao
         task.User = user;
         task.Title = title;
         task.Description = description;
+        task.OriginalEstimate = originalEstimate;
         task.Status = status;
         task.Priority = priority;
         task.IsArchived = isArchived;
@@ -283,5 +289,34 @@ public class TaskDao: ITaskDao
             )
             .Take(100)
             .ListAsync<TaskEntity>();
+    }
+
+    public async Task<IDictionary<Guid, TimeSpan>> GetTrackedDurationByTaskIds(ICollection<Guid> taskIds)
+    {
+        if (!taskIds.Any())
+        {
+            return new Dictionary<Guid, TimeSpan>();
+        }
+
+        var items = await _sessionProvider.CurrentSession.CreateSQLQuery(@"
+                SELECT
+                    te.internal_task_id AS TaskId,
+                    COALESCE(SUM(EXTRACT(EPOCH FROM (te.end_time - te.start_time))), 0) AS TrackedSeconds
+                FROM time_entries te
+                WHERE te.internal_task_id IN (:taskIds)
+                    AND te.end_time IS NOT NULL
+                    AND te.is_marked_to_delete = false
+                GROUP BY te.internal_task_id
+            ")
+            .AddScalar("TaskId", NHibernateUtil.Guid)
+            .AddScalar("TrackedSeconds", NHibernateUtil.Double)
+            .SetParameterList("taskIds", taskIds)
+            .SetResultTransformer(Transformers.AliasToBean<TaskTrackedDurationItemDto>())
+            .ListAsync<TaskTrackedDurationItemDto>();
+
+        return items.ToDictionary(
+            item => item.TaskId,
+            item => TimeSpan.FromSeconds(item.TrackedSeconds)
+        );
     }
 }

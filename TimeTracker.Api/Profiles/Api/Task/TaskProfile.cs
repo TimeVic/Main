@@ -29,6 +29,7 @@ public class TaskProfile : Profile
                     Title = src.Title,
                     Description = src.Description,
                     ExternalTaskId = src.ExternalTaskId,
+                    OriginalEstimate = src.OriginalEstimate,
                     StartTime = src.StartTime,
                     EndTime = src.EndTime,
                     ReminderTime = src.ReminderTime,

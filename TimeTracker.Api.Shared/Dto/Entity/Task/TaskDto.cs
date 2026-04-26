@@ -21,6 +21,8 @@ public class TaskDto : IResponse
     public string? Description { get; set; }
     
     public string? ExternalTaskId { get; set; }
+
+    public TimeSpan? OriginalEstimate { get; set; }
     
     public DateTime? StartTime { get; set; }
     

@@ -32,6 +32,15 @@ public class RedmineClientMock: IRedmineClient
         return Task.FromResult(true);
     }
 
+    public Task<ExternalTaskInfoDto?> GetTaskInfoAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string externalTaskId
+    )
+    {
+        return Task.FromResult<ExternalTaskInfoDto?>(null);
+    }
+
     public Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry)
     {
         SentTimeEntries.Add(timeEntry);

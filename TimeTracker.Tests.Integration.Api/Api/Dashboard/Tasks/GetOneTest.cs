@@ -7,6 +7,7 @@ using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -70,6 +71,41 @@ public class GetOneTest: BaseTest
     public async Task ShouldReceiveList()
     {
         await _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment);
+        var now = DateTime.UtcNow;
+
+        _task.OriginalEstimate = TimeSpan.FromHours(5);
+        await DbSessionProvider.CurrentSession.SaveAsync(_task);
+
+        var firstEntry = await _timeEntryDao.SetAsync(
+            _user,
+            _workspace,
+            new TimeEntryCreationDto
+            {
+                Description = "Tracked entry 1",
+                StartTime = now.AddHours(-5),
+                EndTime = now.AddHours(-3),
+                IsBillable = false
+            },
+            _project
+        );
+        firstEntry.Task = _task;
+        await DbSessionProvider.CurrentSession.SaveAsync(firstEntry);
+
+        var secondEntry = await _timeEntryDao.SetAsync(
+            _user,
+            _workspace,
+            new TimeEntryCreationDto
+            {
+                Description = "Tracked entry 2",
+                StartTime = now.AddHours(-2),
+                EndTime = now.AddHours(-1),
+                IsBillable = false
+            },
+            _project
+        );
+        secondEntry.Task = _task;
+        await DbSessionProvider.CurrentSession.SaveAsync(secondEntry);
+        await FlushDbChanges(true);
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetOneRequest()
         {
@@ -83,6 +119,8 @@ public class GetOneTest: BaseTest
         Assert.NotEmpty(actualDto.Description!);
         Assert.NotNull(actualDto.TaskList?.Project?.Client);
         Assert.Equal(_taskList.Id, actualDto.TaskList.Id);
+        Assert.Equal(TimeSpan.FromHours(5), actualDto.OriginalEstimate);
+        Assert.Equal(TimeSpan.FromHours(3), actualDto.TrackedDuration);
         
         Assert.NotEmpty(actualDto.Attachments);
         Assert.NotEmpty(actualDto.Attachments.First().Url);

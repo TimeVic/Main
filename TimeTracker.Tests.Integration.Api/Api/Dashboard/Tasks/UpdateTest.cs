@@ -87,6 +87,7 @@ public partial class UpdateTest: BaseTest
             TaskListId = _otherTaskList.Id,
             Title = expectedTask.Title,
             Description = expectedTask.Description,
+            OriginalEstimate = expectedTask.OriginalEstimate,
             StartTime = expectedTask.StartTime,
             EndTime = expectedTask.EndTime,
             Status = expectedTask.Status,
@@ -107,6 +108,7 @@ public partial class UpdateTest: BaseTest
         Assert.Equal(expectedTask.Priority, actualData.Priority);
         Assert.Equal(expectedTask.IsArchived, actualData.IsArchived);
         Assert.Equal(expectedTask.ExternalTaskId, actualData.ExternalTaskId);
+        Assert.Equal(expectedTask.OriginalEstimate, actualData.OriginalEstimate);
         Assert.Equal(expectedTask.ReminderTime!.Value.ToShortTimeString(), actualData.ReminderTime!.Value.ToUniversalTime().ToShortTimeString());
         Assert.Equal(expectedTask.ReminderTime.Value.ToLongDateString(), actualData.ReminderTime.Value.ToUniversalTime().ToLongDateString());
     }
