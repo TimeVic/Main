@@ -29,7 +29,10 @@ public partial class TasksBoardBlock : IDisposable
         TasksState.StateChanged += OnTaskStateChanged;
 
         _tasksSubject
-            .Select(items => items.OrderByDescending(t => t.UpdatedAt).ToList())
+            .Select(items => items
+                .OrderBy(t => t.PositionIndex)
+                .ThenBy(t => t.CreatedAt)
+                .ToList())
             .Subscribe(results =>
             {
                 _tasks = results;

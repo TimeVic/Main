@@ -74,10 +74,15 @@ public partial class EditTimeEntryModal: IDisposable
 
     private async Task UpdateTimeEntry()
     {
+        await UpdateTimeEntry(false);
+    }
+
+    private async Task UpdateTimeEntry(bool isSetProjectDefaults)
+    {
         if (_editContext.Validate())
         {
             _model.EndTime = _model.EndTime == DateTime.MinValue ? null : _model.EndTime;
-            Dispatcher.Dispatch(new SaveTimeEntryAction(_model, true));
+            Dispatcher.Dispatch(new SaveTimeEntryAction(_model, isSetProjectDefaults));
         }
         await Task.CompletedTask;
     }
@@ -90,7 +95,7 @@ public partial class EditTimeEntryModal: IDisposable
     private async Task OnProjectSelected(ProjectDto? project)
     {
         _model.Project = project;
-        await UpdateTimeEntry();
+        await UpdateTimeEntry(true);
     }
 
     private void OpenAddTaskModal()

@@ -95,7 +95,7 @@ public partial class TimeEntryForm : IDisposable
         }
 
         _activeEntry!.Project = project;
-        await UpdateTimeEntry(_activeEntry);
+        await UpdateTimeEntry(_activeEntry, true);
         await Task.CompletedTask;
     }
 
@@ -132,9 +132,9 @@ public partial class TimeEntryForm : IDisposable
         return Task.CompletedTask;
     }
     
-    private async Task UpdateTimeEntry(TimeEntryDto entry)
+    private async Task UpdateTimeEntry(TimeEntryDto entry, bool isSetProjectDefaults = false)
     {
-        Dispatcher.Dispatch(new SaveTimeEntryAction(entry, true));
+        Dispatcher.Dispatch(new SaveTimeEntryAction(entry, isSetProjectDefaults));
         await Task.CompletedTask;
     }
 
