@@ -32,8 +32,6 @@ def webAppContainer = new DockerContainer(
 
 def repositoryUrl = scm.userRemoteConfigs[0].url;
 def gitCredentials="gitea-jenkins-ssh-key"
-def cloudFlaireApiToken=""
-def cloudFlaireZoneId=""
 
 properties([
     pipelineTriggers([
@@ -163,15 +161,6 @@ node('build-node') {
         withCredentials([string(credentialsId: "timevic_${environmentKey}_user_jwt", variable: 'AUTH_SECRET')]) {
             envVariables.put('App__Auth__SymmetricSecurityKey', AUTH_SECRET)
         }
-        withCredentials([
-                usernamePassword(credentialsId: "timevic_cloudflaire_api_token", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
-        ]) {
-            cloudFlaireApiToken = PASSWORD;
-            cloudFlaireZoneId = USER_NAME;
-        }
-        if (!cloudFlaireApiToken?.trim() || !cloudFlaireZoneId?.trim()) {
-            error("Cloudflare credentials were not loaded: check timevic_cloudflaire_api_token")
-        }
         
         // withCredentials([string(credentialsId: "timevic_${environmentKey}_google__storage_project_id", variable: 'AUTH_SECRET')]) {
         //     envVariables.put('Google__Storage__ProjectId', AUTH_SECRET)
@@ -239,18 +228,22 @@ node('build-node') {
     stage('Purge Cloudflare cache') {
         if (effectiveEnvironment == 'Production')
         {
-            sh '''
-                set -e
+            withCredentials([
+                usernamePassword(credentialsId: "timevic_cloudflaire_api_token", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
+            ]) {
+                sh '''
+                    set -e
 
-                RESPONSE=$(curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${cloudFlaireZoneId}/purge_cache" \
-                -H "Authorization: Bearer ${cloudFlaireApiToken}" \
-                -H "Content-Type: application/json" \
-                --data '{"purge_everything":true}')
+                    RESPONSE=$(curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/${USER_NAME}/purge_cache" \
+                    -H "Authorization: Bearer ${PASSWORD}" \
+                    -H "Content-Type: application/json" \
+                    --data '{"purge_everything":true}')
 
-                echo "$RESPONSE"
+                    echo "$RESPONSE"
 
-                echo "$RESPONSE" | grep -q '"success":true'
-            '''
+                    echo "$RESPONSE" | grep -q '"success":true'
+                '''
+            }
         }
 
     }
