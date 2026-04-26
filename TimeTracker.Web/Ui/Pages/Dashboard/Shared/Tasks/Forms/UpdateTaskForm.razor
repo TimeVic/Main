@@ -73,6 +73,15 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                 <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Description</label>
                 <InputTextArea @bind-Value="_model.Description" class="min-h-[180px] w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" />
                 <p class="mt-2 text-sm text-slate-500">Paste images or drag files into this form to attach them.</p>
+                <AttachmentsBlock
+                    Class="mt-4"
+                    ListClass="flex flex-wrap gap-3"
+                    PreviewItemClass="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition"
+                    EntityId="@TaskId"
+                    EntityType="@StorageEntityType.Task"
+                    Files="@TaskAttachments"
+                    FilesChanged="@OnAttachmentsChanged"
+                    UploadingFiles="@_uploadingAttachments" />
             </div>
             
             <div class="rounded-2xl border border-slate-200 p-4 mt-3">
@@ -133,13 +142,6 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                         ValueChanged="OnTagsChanged" />
                 </div>
             </div>
-
-            <AttachmentsBlock
-                EntityId="@TaskId"
-                EntityType="@StorageEntityType.Task"
-                Files="@TaskAttachments"
-                FilesChanged="@OnAttachmentsChanged"
-                UploadingFiles="@_uploadingAttachments" />
 
             @* <div class="rounded-2xl border border-slate-200 p-4"> *@
             @*     <div class="flex items-center gap-6 border-b border-slate-200 pb-3 text-sm"> *@

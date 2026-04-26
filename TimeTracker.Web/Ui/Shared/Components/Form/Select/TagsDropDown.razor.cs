@@ -43,9 +43,9 @@ public partial class TagsDropDown
     
     private static readonly SelectSlots _selectClasses = new()
     {
-        Trigger = "h-auto min-h-10 py-2 items-start",
-        InnerWrapper = "h-auto min-h-6 flex-wrap items-start gap-1.5",
-        Value = "flex flex-wrap items-center gap-1.5 whitespace-normal text-clip"
+        Trigger = "h-auto min-h-10 min-w-0 max-w-full py-2 items-start overflow-hidden",
+        InnerWrapper = "h-auto min-h-6 min-w-0 max-w-full flex-wrap items-start gap-1.5 overflow-hidden",
+        Value = "flex min-w-0 max-w-full flex-wrap items-center gap-1.5 overflow-hidden whitespace-normal text-clip"
     };
     
     private ICollection<TagDto> _selectedItems => _list

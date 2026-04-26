@@ -4,7 +4,7 @@
 
 @inherits BaseReactiveComponent
 
-<div class="@Class @(FullWidth ? "w-100" : "")">
+<div class="min-w-0 max-w-full @Class @(FullWidth ? "w-100" : "")">
     <LumexSelect
         TValue="TagDto"
         Label="@Label"
@@ -34,7 +34,7 @@
             @if (context != null)
             {
                 <LumexChip
-                    Class="max-w-full"
+                    Class="min-w-0 max-w-full"
                     Size="Size.Small"
                     Radius="Radius.Small"
                     Variant="ChipVariant.Flat"
@@ -46,7 +46,7 @@
                         </span>
                     </StartContent>
                     <ChildContent>
-                        <span class="max-w-[10rem] truncate">@context.Name</span>
+                        <span class="block max-w-[10rem] truncate">@context.Name</span>
                     </ChildContent>
                 </LumexChip>
             }

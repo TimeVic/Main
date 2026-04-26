@@ -39,6 +39,12 @@ public partial class AttachmentsBlock: IDisposable
     [Parameter]
     public string Class { get; set; } = "rounded-2xl border border-slate-200 p-4 mt-3";
 
+    [Parameter]
+    public string ListClass { get; set; } = "grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4";
+
+    [Parameter]
+    public string PreviewItemClass { get; set; } = "relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition";
+
     [Inject]
     public UrlService _urlService { get; set; }
 

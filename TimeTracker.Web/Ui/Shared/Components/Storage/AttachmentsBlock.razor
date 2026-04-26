@@ -12,10 +12,10 @@
         {
             <label class="mb-3 block text-xs font-medium uppercase tracking-wide text-slate-500">@Title</label>
         }
-        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+        <div class="@ListClass">
             @foreach (var attachment in UploadingFiles)
             {
-                <div class="relative flex aspect-square items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+                <div class="@PreviewItemClass">
                     <div class="absolute inset-0 flex items-center justify-center bg-white/75">
                         <LumexSpinner Size="@Size.Medium" />
                     </div>
@@ -33,7 +33,7 @@
             }
             @foreach (var attachment in Files)
             {
-                <div class="group relative aspect-square overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition hover:border-blue-400 hover:shadow-sm">
+                <div class="@PreviewItemClass group hover:border-blue-400 hover:shadow-sm">
                     <a
                         href="@GetAttachmentUrl(attachment)"
                         target="_blank"
