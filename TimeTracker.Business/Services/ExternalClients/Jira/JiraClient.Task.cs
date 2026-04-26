@@ -38,7 +38,30 @@ public partial class JiraClient
         string externalTaskId
     )
     {
-        var externalTask = await GetTaskAsync(taskList.Project.Workspace, user, externalTaskId);
+        var externalTask = await GetValidatedTaskAsync(taskList.Project.Workspace, user, externalTaskId);
+        return await CreateTaskAsync(taskList, user, externalTaskId, externalTask);
+    }
+
+    protected override async Task<TaskEntity> CreateOrUpdateTimeEntryTaskAsync(
+        TimeEntryEntity timeEntry,
+        TaskListEntity taskList,
+        string externalTaskId
+    )
+    {
+        var externalTask = await GetValidatedTaskAsync(taskList.Project.Workspace, timeEntry.User, externalTaskId);
+        var task = await CreateTaskAsync(taskList, timeEntry.User, externalTaskId, externalTask);
+        timeEntry.Task = task;
+        await _dbSessionProvider.CurrentSession.SaveAsync(timeEntry);
+        return task;
+    }
+
+    private async Task<GetTaskResponseDto> GetValidatedTaskAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string externalTaskId
+    )
+    {
+        var externalTask = await GetTaskAsync(workspace, user, externalTaskId);
         if (externalTask == null)
         {
             throw new RecordNotFoundException("Incorrect ExternalTaskId");
@@ -52,30 +75,26 @@ public partial class JiraClient
             throw new RecordNotFoundException("Incorrect ExternalTaskId");
         }
 
+        return externalTask;
+    }
+
+    private async Task<TaskEntity> CreateTaskAsync(
+        TaskListEntity taskList,
+        UserEntity user,
+        string externalTaskId,
+        GetTaskResponseDto externalTask
+    )
+    {
+        var taskInfo = BuildTaskInfo(externalTask);
         var task = await _taskDao.AddTaskAsync(
             taskList,
             user,
             externalTask.Fields.Summary!,
-            MarkdownHelper.ToMarkdown(externalTask.RenderedFields.DescriptionHtml ?? "")
+            MarkdownHelper.ToMarkdown(externalTask.RenderedFields.DescriptionHtml ?? ""),
+            originalEstimate: taskInfo.OriginalEstimate
         );
         task.ExternalTaskId = externalTaskId;
         await _dbSessionProvider.CurrentSession.SaveAsync(task);
-        return task;
-    }
-
-    protected override async Task<TaskEntity> CreateOrUpdateTimeEntryTaskAsync(
-        TimeEntryEntity timeEntry,
-        TaskListEntity taskList,
-        string externalTaskId
-    )
-    {
-        var task = await CreateOrUpdateTimeEntryTaskAsync(
-            taskList,
-            timeEntry.User,
-            externalTaskId
-        );
-        timeEntry.Task = task;
-        await _dbSessionProvider.CurrentSession.SaveAsync(timeEntry);
         return task;
     }
 }

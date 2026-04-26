@@ -82,6 +82,7 @@ public partial class AddTask: BaseTest
             TaskListId = _taskList.Id,
             Title = task.Title,
             Description = task.Description,
+            OriginalEstimate = task.OriginalEstimate,
             StartTime = task.StartTime,
             EndTime = task.EndTime,
             Status = task.Status,
@@ -98,6 +99,7 @@ public partial class AddTask: BaseTest
         Assert.Equal(task.Status, actualData.Status);
         Assert.Equal(task.Priority, actualData.Priority);
         Assert.Equal(task.IsArchived, actualData.IsArchived);
+        Assert.Equal(task.OriginalEstimate, actualData.OriginalEstimate);
         Assert.Equal(task.EndTime!.Value.ToLongTimeString(), actualData.EndTime!.Value.ToUniversalTime().ToLongTimeString());
         Assert.Equal(task.StartTime!.Value.ToLongTimeString(), actualData.StartTime!.Value.ToUniversalTime().ToLongTimeString());
     }

@@ -17,6 +17,7 @@ public interface ITaskDao: IDomainService
         UserEntity user,
         string title,
         string? description = null,
+        TimeSpan? originalEstimate = null,
         DateTime? startTime = null,
         DateTime? endTime = null,
         TaskStatus status = TaskStatus.Backlog,
@@ -30,6 +31,7 @@ public interface ITaskDao: IDomainService
         UserEntity user,
         string title,
         string? description = null,
+        TimeSpan? originalEstimate = null,
         DateTime? startTime = null,
         DateTime? endTime = null,
         TaskStatus status = TaskStatus.Backlog,
@@ -56,4 +58,6 @@ public interface ITaskDao: IDomainService
     Task UpdatePositions(WorkspaceEntity workspace, IDictionary<Guid, int> items);
 
     Task<ICollection<TaskEntity>> GetTasksToRemind();
+
+    Task<IDictionary<Guid, TimeSpan>> GetTrackedDurationByTaskIds(ICollection<Guid> taskIds);
 }

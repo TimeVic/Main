@@ -13,7 +13,6 @@ using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
-using TimeTracker.Business.Services.ExternalClients.ClickUp.Model;
 using TimeTracker.Business.Services.ExternalClients.Dto;
 using TimeTracker.Business.Services.ExternalClients.Jira.Dto;
 using SetTimeEntryDto = TimeTracker.Business.Services.ExternalClients.Jira.Dto.SetTimeEntryDto;
@@ -152,6 +151,21 @@ public partial class JiraClient: AExternalClientService, IJiraClient
         return false;
     }
 
+    protected override async Task<ExternalTaskInfoDto?> GetTaskInfoInternalAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string externalTaskId
+    )
+    {
+        var externalTask = await GetTaskAsync(workspace, user, externalTaskId);
+        if (externalTask == null || externalTask.IsError)
+        {
+            return null;
+        }
+
+        return BuildTaskInfo(externalTask);
+    }
+
     private string BuildChangeTimeEntryUri(WorkspaceEntity workspace, UserEntity user, string taskId, long? timeEntryId = null)
     {
         return BuildUrl(
@@ -200,5 +214,15 @@ public partial class JiraClient: AExternalClientService, IJiraClient
             throw new NullReferenceException("Jira settings not found");
         var uri = new UriBuilder($"{settings.Url}/{BaseUri}/{url}");
         return uri.ToString();
+    }
+
+    private ExternalTaskInfoDto BuildTaskInfo(GetTaskResponseDto externalTask)
+    {
+        return new ExternalTaskInfoDto
+        {
+            OriginalEstimate = externalTask.Fields.Timetracking?.OriginalEstimateSeconds is >= 0
+                ? TimeSpan.FromSeconds(externalTask.Fields.Timetracking.OriginalEstimateSeconds.Value)
+                : null
+        };
     }
 }

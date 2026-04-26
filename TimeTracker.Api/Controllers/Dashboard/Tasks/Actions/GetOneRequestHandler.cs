@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Http;
@@ -41,11 +42,18 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var task = await _taskDao.GetById(request.TaskId);
+            RecordNotFoundException.ThrowIfNull(task);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
             {
                 throw new HasNoAccessException();
             }
-            return _mapper.Map<TaskFullDto>(task);
+
+            var result = _mapper.Map<TaskFullDto>(task);
+            var trackedDurationMap = await _taskDao.GetTrackedDurationByTaskIds(new[] { task.Id });
+            result.TrackedDuration = trackedDurationMap.TryGetValue(task.Id, out var trackedDuration)
+                ? trackedDuration
+                : TimeSpan.Zero;
+            return result;
         }
     }
 }

@@ -46,6 +46,18 @@ public class JiraClientMock: IJiraClient
         return null;
     }
 
+    public Task<ExternalTaskInfoDto?> GetTaskInfoAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string externalTaskId
+    )
+    {
+        return Task.FromResult<ExternalTaskInfoDto?>(new ExternalTaskInfoDto
+        {
+            OriginalEstimate = TimeSpan.FromHours(1)
+        });
+    }
+
     public bool IsCorrectTaskId(TimeEntryEntity timeEntry)
     {
         return true;
@@ -83,7 +95,12 @@ public class JiraClientMock: IJiraClient
         string externalTaskId
     )
     {
-        var task = await _taskDao.AddTaskAsync(taskList, user, "Test task");
+        var task = await _taskDao.AddTaskAsync(
+            taskList,
+            user,
+            "Test task",
+            originalEstimate: TimeSpan.FromHours(1)
+        );
         task.ExternalTaskId = externalTaskId;
         return task;
     }

@@ -24,6 +24,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
             TaskListId = dto.TaskList.Id;
             Title = dto.Title;
             Description = dto.Description;
+            OriginalEstimate = dto.OriginalEstimate;
             StartTime = dto.StartTime;
             EndTime = dto.EndTime;
             Status = dto.Status;

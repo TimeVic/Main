@@ -13,6 +13,12 @@ public interface IRedmineClient: IDomainService
     Task<SynchronizedTimeEntryDto?> SetTimeEntryAsync(TimeEntryEntity timeEntry);
 
     Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry);
+
+    Task<ExternalTaskInfoDto?> GetTaskInfoAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string externalTaskId
+    );
     
     Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry);
 

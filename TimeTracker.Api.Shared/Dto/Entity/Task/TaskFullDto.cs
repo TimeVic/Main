@@ -8,6 +8,8 @@ public class TaskFullDto : TaskDto
 {
     public ICollection<StoredFileDto> Attachments { get; set; } = new List<StoredFileDto>();
 
+    public TimeSpan TrackedDuration { get; set; }
+
     #region Calculated
 
     public new string FormattedId

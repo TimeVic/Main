@@ -13,6 +13,12 @@ public interface IJiraClient
 
     Task<bool> IsFillTimeEntryDescriptionFromTaskTitle(TimeEntryEntity timeEntry);
 
+    Task<ExternalTaskInfoDto?> GetTaskInfoAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        string externalTaskId
+    );
+
     Task<GetTaskResponseDto?> GetTaskAsync(TimeEntryEntity timeEntry, string externalTaskId);
 
     bool IsCorrectTaskId(TimeEntryEntity timeEntry);

@@ -72,6 +72,7 @@ public class TaskSeeder: ITaskSeeder
             user,
             fakeEntry.Title,
             fakeEntry.Description,
+            originalEstimate: fakeEntry.OriginalEstimate,
             startTime: fakeEntry.StartTime,
             endTime: fakeEntry.EndTime,
             priority: fakeEntry.Priority,

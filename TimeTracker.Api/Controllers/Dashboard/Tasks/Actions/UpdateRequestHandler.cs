@@ -68,6 +68,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                 user: user,
                 title: request.Title!,
                 description: request.Description,
+                originalEstimate: request.OriginalEstimate ?? task.OriginalEstimate,
                 startTime: request.StartTime,
                 endTime: request.EndTime,
                 status: request.Status,

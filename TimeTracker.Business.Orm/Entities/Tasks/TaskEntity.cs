@@ -18,6 +18,7 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         public virtual string? Description { get; set; }
         public virtual DateTime? StartTime { get; set; }
         public virtual DateTime? EndTime { get; set; }
+        public virtual TimeSpan? OriginalEstimate { get; set; }
         public virtual bool IsArchived { get; set; }
         public virtual string? ExternalTaskId { get; set; }
         public virtual int PositionIndex { get; set; }

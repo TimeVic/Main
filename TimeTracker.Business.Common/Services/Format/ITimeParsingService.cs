@@ -8,6 +8,10 @@ public interface ITimeParsingService: IDomainService
 
     TimeSpan ParseTimeSpan(string timeString);
 
+    bool TryParseDuration(string? value, out TimeSpan? result);
+
+    string TimeSpanToDurationString(TimeSpan? timeSpan);
+
     TimeSpan GetTimeSpanFromDateTime(DateTime dateTime);
 
     string TimeSpanToTimeString(TimeSpan timeSpan, bool isAddSecond = false);
