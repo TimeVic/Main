@@ -112,6 +112,40 @@ public partial class UpdateTest: BaseTest
         Assert.Equal(expectedTask.ReminderTime!.Value.ToShortTimeString(), actualData.ReminderTime!.Value.ToUniversalTime().ToShortTimeString());
         Assert.Equal(expectedTask.ReminderTime.Value.ToLongDateString(), actualData.ReminderTime.Value.ToUniversalTime().ToLongDateString());
     }
+
+    [Fact]
+    public async Task ShouldKeepExternalSourceTypeOnUpdate()
+    {
+        _task.ExternalSourceType = ExternalSourceType.Jira;
+        _task.ExternalTaskId = "JIRA-123";
+        await DbSessionProvider.CurrentSession.SaveOrUpdateAsync(_task);
+        await FlushDbChanges(true);
+
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            TaskId = _task.Id,
+            TaskListId = _taskList.Id,
+            Title = $"{_task.Title} updated",
+            Description = _task.Description,
+            OriginalEstimate = TimeSpan.FromHours(6),
+            StartTime = _task.StartTime,
+            EndTime = _task.EndTime,
+            Status = _task.Status,
+            Priority = _task.Priority,
+            IsArchived = _task.IsArchived,
+            UserId = _user.Id,
+            ReminderTime = _task.ReminderTime
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<TaskDto>();
+        Assert.Equal(ExternalSourceType.Jira, actualData.ExternalSourceType);
+
+        await FlushDbChanges(true);
+        var actualTask = await _taskDao.GetById(_task.Id);
+        Assert.NotNull(actualTask);
+        Assert.Equal(ExternalSourceType.Jira, actualTask.ExternalSourceType);
+    }
     
     [Fact]
     public async Task ShouldNotSetTaskIdFromOtherWorkspace()

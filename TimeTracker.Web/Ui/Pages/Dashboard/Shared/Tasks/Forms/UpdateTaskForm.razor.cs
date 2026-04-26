@@ -5,6 +5,7 @@ using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Common.Constants.Task;
@@ -59,6 +60,10 @@ public partial class UpdateTaskForm: IDisposable
 
     private string _attachmentAcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
     private ICollection<StoredFileDto> TaskAttachments => _task?.Attachments ?? new List<StoredFileDto>();
+    private string EstimateInputLabel => _task.ExternalSourceType == ExternalSourceType.Jira ? "Original estimate" : "Planned time";
+    private string EstimateInputHint => _task.ExternalSourceType == ExternalSourceType.Jira
+        ? "Task was imported from Jira. 1d = 8h, 1w = 5d."
+        : "Supports Jira-like input. 1d = 8h, 1w = 5d.";
     
     protected override async Task OnInitializedAsync()
     {

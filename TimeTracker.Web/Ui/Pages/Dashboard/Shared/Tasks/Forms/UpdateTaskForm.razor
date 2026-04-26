@@ -88,9 +88,9 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                 <div class="space-y-4">
                     <div>
                         <DurationInput
-                            Label="Original estimate"
+                            Label="@EstimateInputLabel"
                             Placeholder="1h 30m, 2d, 1w, 01:30"
-                            Hint="Supports Jira-like input. 1d = 8h, 1w = 5d."
+                            Hint="@EstimateInputHint"
                             FullWidth="true"
                             Variant="InputVariant.Underlined"
                             @bind-Value="_model.OriginalEstimate"/>
@@ -98,7 +98,8 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
 
                     <TaskEstimateSummaryBlock
                         PlannedDuration="_model.OriginalEstimate"
-                        TrackedDuration="_task.TrackedDuration" />
+                        TrackedDuration="_task.TrackedDuration"
+                        ExternalSourceType="_task.ExternalSourceType" />
                 </div>
             </div>
 

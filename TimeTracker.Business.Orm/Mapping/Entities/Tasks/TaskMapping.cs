@@ -1,3 +1,4 @@
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Extensions;
@@ -20,6 +21,7 @@ public class TaskMapping: BaseGuidMappings<TaskEntity>
         Map(x => x.StartTime).DateTimeNullable();
         Map(x => x.EndTime).DateTimeNullable();
         Map(x => x.OriginalEstimate).Nullable();
+        Map(x => x.ExternalSourceType).Enum<ExternalSourceType>();
         Map(x => x.RemindedTime).DateTimeNullable();
         Map(x => x.ReminderTime).DateTimeNullable();
         Map(x => x.IsArchived);

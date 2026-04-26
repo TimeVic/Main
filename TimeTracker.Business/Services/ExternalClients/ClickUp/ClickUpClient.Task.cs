@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
@@ -77,7 +78,8 @@ public partial class ClickUpClient
             taskList,
             user,
             externalTask.Value.Name!,
-            externalTask.Value.Description
+            externalTask.Value.Description,
+            externalSourceType: ExternalSourceType.ClickUp
         );
         task.ExternalTaskId = externalTaskId;
         await _dbSessionProvider.CurrentSession.SaveAsync(task);

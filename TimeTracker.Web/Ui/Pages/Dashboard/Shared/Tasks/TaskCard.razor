@@ -72,13 +72,14 @@
         </FluentLabel>
 
         <FluentStack HorizontalAlignment="HorizontalAlignment.Center"> 
-            <TagsBadgesList Tags="@Task.Tags"/>
-
             <TaskEstimateSummaryBlock
                 Class="w-full mt-2"
                 IsCompact="true"
                 PlannedDuration="Task.OriginalEstimate"
-                TrackedDuration="Task.TrackedDuration" />
+                TrackedDuration="Task.TrackedDuration"
+                ExternalSourceType="Task.ExternalSourceType" />
+
+            <TagsBadgesList Tags="@Task.Tags"/>
             
             @if (IsShowTaskList)
             {

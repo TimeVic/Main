@@ -86,7 +86,8 @@ public class TaskDao: ITaskDao
         DateTime? endTime = null,
         TaskStatus status = TaskStatus.Backlog,
         TaskPriority priority = TaskPriority.Low,
-        bool isArchived = false
+        bool isArchived = false,
+        ExternalSourceType externalSourceType = ExternalSourceType.Manual
     )
     {
         var taskId = await _sequenceDao.GetNextValue(taskList.Project.Workspace);
@@ -100,6 +101,7 @@ public class TaskDao: ITaskDao
             Title = title,
             Description = description,
             OriginalEstimate = originalEstimate,
+            ExternalSourceType = externalSourceType,
             Status = status,
             Priority = priority,
             IsArchived = isArchived,

@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Orm.Entities;
@@ -91,7 +92,8 @@ public partial class JiraClient
             user,
             externalTask.Fields.Summary!,
             MarkdownHelper.ToMarkdown(externalTask.RenderedFields.DescriptionHtml ?? ""),
-            originalEstimate: taskInfo.OriginalEstimate
+            originalEstimate: taskInfo.OriginalEstimate,
+            externalSourceType: ExternalSourceType.Jira
         );
         task.ExternalTaskId = externalTaskId;
         await _dbSessionProvider.CurrentSession.SaveAsync(task);

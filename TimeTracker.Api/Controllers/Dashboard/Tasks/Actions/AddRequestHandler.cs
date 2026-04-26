@@ -128,49 +128,53 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             UserEntity user
         )
         {
-            if (_clickUpClient.IsCorrectTaskId(request.ExternalTaskId!))
-            {
-                if (request.TimeEntryId != null)
-                {
-                    var timeEntry = await GetTimeEntry(request.TimeEntryId.Value, user);
-                    if (!await _securityManager.HasAccess(AccessLevel.Write, user, timeEntry))
-                    {
-                        throw new HasNoAccessException("Has no access to TimeEntry");
-                    }
+            var externalTaskId = request.ExternalTaskId!;
+            var isJiraTaskId = _jiraClient.IsCorrectTaskId(externalTaskId);
+            var isClickUpTaskId = _clickUpClient.IsCorrectTaskId(externalTaskId);
 
-                    try
-                    {
-                        return await _jiraClient.SetTimeEntryTaskAsync(
-                            timeEntry,
-                            taskList,
-                            request.ExternalTaskId!
-                        );
-                    }
-                    catch (Exception) {}
-                    return await _clickUpClient.SetTimeEntryTaskAsync(
-                        timeEntry,
-                        taskList,
-                        request.ExternalTaskId!
-                    );
+            if (!isJiraTaskId && !isClickUpTaskId)
+            {
+                return null!;
+            }
+
+            if (request.TimeEntryId != null)
+            {
+                var timeEntry = await GetTimeEntry(request.TimeEntryId.Value, user);
+                if (!await _securityManager.HasAccess(AccessLevel.Write, user, timeEntry))
+                {
+                    throw new HasNoAccessException("Has no access to TimeEntry");
                 }
 
-                try
+                if (isJiraTaskId)
                 {
                     return await _jiraClient.SetTimeEntryTaskAsync(
+                        timeEntry,
                         taskList,
-                        user,
-                        request.ExternalTaskId!
+                        externalTaskId
                     );
                 }
-                catch (Exception) {}
+
                 return await _clickUpClient.SetTimeEntryTaskAsync(
+                    timeEntry,
                     taskList,
-                    user,
-                    request.ExternalTaskId!
+                    externalTaskId
                 );
             }
 
-            return null!;
+            if (isJiraTaskId)
+            {
+                return await _jiraClient.SetTimeEntryTaskAsync(
+                    taskList,
+                    user,
+                    externalTaskId
+                );
+            }
+
+            return await _clickUpClient.SetTimeEntryTaskAsync(
+                taskList,
+                user,
+                externalTaskId
+            );
         }
 
         private async Task<TimeEntryEntity> GetTimeEntry(Guid timeEntryId, UserEntity user)

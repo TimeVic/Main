@@ -1,4 +1,5 @@
 using Bogus;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
@@ -19,6 +20,7 @@ namespace TimeTracker.Business.Testing.Factories.Entity
                 .RuleFor(fake => fake.IsArchived, fake => false)
                 .RuleFor(fake => fake.Status, fake => TaskStatus.Backlog)
                 .RuleFor(fake => fake.Priority, fake => TaskPriority.Medium)
+                .RuleFor(fake => fake.ExternalSourceType, _ => ExternalSourceType.Manual)
                 .RuleFor(fake => fake.OriginalEstimate, fake => TimeSpan.FromMinutes(fake.Random.Int(30, 480)))
                 .RuleFor(fake => fake.StartTime, fake => fake.Date.Past().ToUniversalTime())
                 .RuleFor(fake => fake.EndTime, fake => fake.Date.Future().ToUniversalTime())

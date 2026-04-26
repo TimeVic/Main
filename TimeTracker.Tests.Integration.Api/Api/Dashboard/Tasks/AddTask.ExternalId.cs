@@ -1,5 +1,6 @@
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Entities;
 
@@ -22,6 +23,7 @@ public partial class AddTask
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.NotEmpty(actualData.Title);
         Assert.Equal(_clickUpTaskId, actualData.ExternalTaskId);
+        Assert.Equal(ExternalSourceType.ClickUp, actualData.ExternalSourceType);
     }
     
     [Fact]
@@ -43,6 +45,7 @@ public partial class AddTask
         Assert.Equal(_taskList.Id, actualData.TaskList.Id);
         Assert.NotEmpty(actualData.Title);
         Assert.Equal(_clickUpTaskId, actualData.ExternalTaskId);
+        Assert.Equal(ExternalSourceType.ClickUp, actualData.ExternalSourceType);
 
         await FlushDbChanges(true);
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
@@ -70,6 +73,7 @@ public partial class AddTask
         Assert.NotEmpty(actualData.Title);
         Assert.Equal(_jiraTaskId, actualData.ExternalTaskId);
         Assert.Equal(TimeSpan.FromHours(1), actualData.OriginalEstimate);
+        Assert.Equal(ExternalSourceType.Jira, actualData.ExternalSourceType);
 
         await FlushDbChanges(true);
         var actualTimeEntry = await DbSessionProvider.CurrentSession.GetAsync<TimeEntryEntity>(timeEntry.Id);
@@ -106,6 +110,7 @@ public partial class AddTask
 
         Assert.Equal(expectedTask.Status, actualData.Status);
         Assert.Equal(TimeSpan.FromHours(1), actualData.OriginalEstimate);
+        Assert.Equal(ExternalSourceType.Jira, actualData.ExternalSourceType);
         Assert.Equal(expectedTask.StartTime?.ToString("g"), actualData.StartTime?.ToUniversalTime().ToString("g"));
         Assert.Equal(expectedTask.EndTime?.ToString("g"), actualData.EndTime?.ToUniversalTime().ToString("g"));
         Assert.Equal(expectedTask.Priority, actualData.Priority);

@@ -1,4 +1,6 @@
-﻿using TimeTracker.Business.Orm.Dao.Tasks;
+﻿using System.Text.RegularExpressions;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -10,6 +12,8 @@ namespace TimeTracker.Business.Services.ExternalClients.Jira;
 
 public class JiraClientMock: IJiraClient
 {
+    private static readonly Regex TaskIdRegex = new(@"^(?=.{1,12}$)[A-Z][A-Z0-9]*-\d+$");
+
     public ICollection<TimeEntryEntity> SentTimeEntries = new List<TimeEntryEntity>();
     
     public bool IsSent => SentTimeEntries.Count > 0;
@@ -65,7 +69,7 @@ public class JiraClientMock: IJiraClient
     
     public bool IsCorrectTaskId(string externalTaskId)
     {
-        return true;
+        return TaskIdRegex.IsMatch(externalTaskId ?? "");
     }
 
     public Task<bool> DeleteTimeEntryAsync(TimeEntryEntity timeEntry)
@@ -99,7 +103,8 @@ public class JiraClientMock: IJiraClient
             taskList,
             user,
             "Test task",
-            originalEstimate: TimeSpan.FromHours(1)
+            originalEstimate: TimeSpan.FromHours(1),
+            externalSourceType: ExternalSourceType.Jira
         );
         task.ExternalTaskId = externalTaskId;
         return task;
