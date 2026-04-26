@@ -93,5 +93,33 @@ public class AddTaskAsyncTest: BaseTest
         );
         Assert.Equal(2, secondTask.TaskId);
     }
+
+    [Fact]
+    public async Task ShouldAssignSequentialPositionIndexWithinTaskList()
+    {
+        var firstTask = await _taskDao.AddTaskAsync(
+            _taskList1,
+            _user,
+            _taskFactory.Generate().Title
+        );
+        await FlushDbChanges();
+
+        var secondTask = await _taskDao.AddTaskAsync(
+            _taskList1,
+            _user,
+            _taskFactory.Generate().Title
+        );
+        await FlushDbChanges();
+
+        var thirdTask = await _taskDao.AddTaskAsync(
+            _taskList2,
+            _user,
+            _taskFactory.Generate().Title
+        );
+
+        Assert.Equal(0, firstTask.PositionIndex);
+        Assert.Equal(1, secondTask.PositionIndex);
+        Assert.Equal(0, thirdTask.PositionIndex);
+    }
 }
  

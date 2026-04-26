@@ -89,19 +89,18 @@ public class GetListTest: BaseTest
     }
 
     [Fact]
-    public async Task ShouldSortByPriority()
+    public async Task ShouldSortByPositionIndex()
     {
-        var expectedCounter = 6;
-        var urgentTasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
-        foreach (var task in urgentTasks)
-        {
-            task.Priority = TaskPriority.Urgent;
-        }
-        var mediumTasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
-        foreach (var task in mediumTasks)
-        {
-            task.Priority = TaskPriority.Medium;
-        }
+        var firstTask = await _taskSeeder.CreateAsync(_taskList, _user);
+        var secondTask = await _taskSeeder.CreateAsync(_taskList, _user);
+        var thirdTask = await _taskSeeder.CreateAsync(_taskList, _user);
+
+        firstTask.PositionIndex = 2;
+        secondTask.PositionIndex = 0;
+        thirdTask.PositionIndex = 1;
+        await DbSessionProvider.CurrentSession.SaveAsync(firstTask);
+        await DbSessionProvider.CurrentSession.SaveAsync(secondTask);
+        await DbSessionProvider.CurrentSession.SaveAsync(thirdTask);
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
@@ -110,16 +109,49 @@ public class GetListTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
-        Assert.Equal(12, actualDto.TotalCount);
-        
-        Assert.All(actualDto.Items.Take(6).ToList(), item =>
+        var items = actualDto.Items.ToList();
+        Assert.Equal(3, actualDto.TotalCount);
+        Assert.Equal(secondTask.Id, items[0].Id);
+        Assert.Equal(thirdTask.Id, items[1].Id);
+        Assert.Equal(firstTask.Id, items[2].Id);
+    }
+
+    [Fact]
+    public async Task ShouldKeepOrderAfterTaskUpdate()
+    {
+        var firstTask = await _taskSeeder.CreateAsync(_taskList, _user);
+        var secondTask = await _taskSeeder.CreateAsync(_taskList, _user);
+
+        firstTask.PositionIndex = 0;
+        secondTask.PositionIndex = 1;
+        await DbSessionProvider.CurrentSession.SaveAsync(firstTask);
+        await DbSessionProvider.CurrentSession.SaveAsync(secondTask);
+
+        var updateResponse = await PostRequestAsync(Url.Replace("get-list", "update"), _jwtToken, new UpdateRequest
         {
-            Assert.Equal(TaskPriority.Urgent, item.Priority);
+            TaskId = secondTask.Id,
+            TaskListId = _taskList.Id,
+            Title = secondTask.Title,
+            Description = "Updated description",
+            StartTime = secondTask.StartTime,
+            EndTime = secondTask.EndTime,
+            Status = secondTask.Status,
+            Priority = secondTask.Priority,
+            IsArchived = secondTask.IsArchived,
+            UserId = secondTask.User.Id
         });
-        Assert.All(actualDto.Items.Skip(6).Take(6).ToList(), item =>
+        updateResponse.EnsureSuccessStatusCode();
+
+        var listResponse = await PostRequestAsync(Url, _jwtToken, new GetListRequest
         {
-            Assert.Equal(TaskPriority.Medium, item.Priority);
+            TaskListId = _taskList.Id
         });
+        listResponse.EnsureSuccessStatusCode();
+
+        var actualDto = await listResponse.GetJsonDataAsync<GetListResponse>();
+        var items = actualDto.Items.ToList();
+        Assert.Equal(firstTask.Id, items[0].Id);
+        Assert.Equal(secondTask.Id, items[1].Id);
     }
     
     [Fact]

@@ -87,9 +87,11 @@ public class TaskDao: ITaskDao
     )
     {
         var taskId = await _sequenceDao.GetNextValue(taskList.Project.Workspace);
+        var nextPositionIndex = await GetNextPositionIndexAsync(taskList.Id);
         var task = new TaskEntity()
         {
             TaskId = taskId,
+            PositionIndex = nextPositionIndex,
             TaskList = taskList,
             User = user,
             Title = title,
@@ -216,16 +218,36 @@ public class TaskDao: ITaskDao
             }
         }
 
+        if (taskList != null)
+        {
+            query = query.OrderBy(item => item.IsArchived).Asc
+                .ThenBy(item => item.PositionIndex).Asc
+                .ThenBy(item => item.CreatedAt).Asc;
+        }
+        else
+        {
+            query = query.OrderBy(item => item.Priority).Asc
+                .ThenBy(item => item.IsArchived).Asc
+                .ThenBy(item => item.UpdatedAt).Desc;
+        }
+
         var items = await query
-            .OrderBy(item => item.Priority).Asc
-            .OrderBy(item => item.IsArchived).Asc
-            .ThenBy(item => item.UpdatedAt).Desc
             .Take(1000)
             .ListAsync<TaskEntity>();
         return new ListDto<TaskEntity>(
             items,
             await query.RowCountAsync()
         );
+    }
+
+    private async Task<int> GetNextPositionIndexAsync(Guid taskListId)
+    {
+        var maxPositionIndex = await _sessionProvider.CurrentSession.Query<TaskEntity>()
+            .Where(item => item.TaskList.Id == taskListId)
+            .Select(item => (int?)item.PositionIndex)
+            .MaxAsync();
+
+        return (maxPositionIndex ?? -1) + 1;
     }
     
     private void SetStartEndTime(TaskEntity task, DateTime? startTime, DateTime? endTime)

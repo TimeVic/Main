@@ -48,7 +48,10 @@ public partial class TasksTableBlock
     protected override void OnParametersSet()
     {
         if (!_isDragging)
-            _localTasks = Tasks.OrderBy(t => t.PositionIndex).ToList();
+            _localTasks = Tasks
+                .OrderBy(t => t.PositionIndex)
+                .ThenBy(t => t.CreatedAt)
+                .ToList();
     }
 
     private void OnDragStart(TaskDto task)
