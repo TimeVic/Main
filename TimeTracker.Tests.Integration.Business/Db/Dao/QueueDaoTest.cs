@@ -18,7 +18,6 @@ public class QueueDaoTest: BaseTest
     public QueueDaoTest(): base()
     {
         _queueDao = Scope.Resolve<IQueueDao>();
-        _queueDao.CompleteAllPending().Wait();
     }
 
     [Fact]
@@ -56,7 +55,7 @@ public class QueueDaoTest: BaseTest
         Assert.NotNull(actualItem2);
         Assert.NotEqual(Guid.Empty, actualItem2.Id);
         
-        Assert.True(actualItem2.CreatedAt > actualItem1.CreatedAt);
+        Assert.True(actualItem2.CreatedAt >= actualItem1.CreatedAt);
     }
     
     [Fact]

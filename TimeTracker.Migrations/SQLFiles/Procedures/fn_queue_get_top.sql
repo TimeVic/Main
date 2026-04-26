@@ -10,7 +10,7 @@ RETURN QUERY
         WHERE status = 1 --- Pending
             AND channel = p_channel
             AND (process_at IS NULL OR process_at <= now())
-        ORDER BY priority DESC, created_at ASC
+        ORDER BY priority DESC, created_at ASC, id ASC
         LIMIT 1
         FOR UPDATE SKIP LOCKED
     )
