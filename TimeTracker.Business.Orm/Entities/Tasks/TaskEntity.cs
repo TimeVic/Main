@@ -1,6 +1,7 @@
 using Domain.Abstractions;
 using NHibernate.Mapping.Attributes;
 using NHibernate.Type;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.User;
@@ -19,6 +20,7 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         public virtual DateTime? StartTime { get; set; }
         public virtual DateTime? EndTime { get; set; }
         public virtual TimeSpan? OriginalEstimate { get; set; }
+        public virtual ExternalSourceType ExternalSourceType { get; set; } = ExternalSourceType.Manual;
         public virtual bool IsArchived { get; set; }
         public virtual string? ExternalTaskId { get; set; }
         public virtual int PositionIndex { get; set; }

@@ -1,4 +1,5 @@
 using Autofac;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
@@ -120,6 +121,18 @@ public class AddTaskAsyncTest: BaseTest
         Assert.Equal(0, firstTask.PositionIndex);
         Assert.Equal(1, secondTask.PositionIndex);
         Assert.Equal(0, thirdTask.PositionIndex);
+    }
+
+    [Fact]
+    public async Task ShouldUseManualExternalSourceTypeByDefault()
+    {
+        var task = await _taskDao.AddTaskAsync(
+            _taskList1,
+            _user,
+            _taskFactory.Generate().Title
+        );
+
+        Assert.Equal(ExternalSourceType.Manual, task.ExternalSourceType);
     }
 }
  

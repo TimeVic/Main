@@ -25,7 +25,7 @@ public partial class JiraClient: AExternalClientService, IJiraClient
     private readonly ITaskDao _taskDao;
     private readonly IDbSessionProvider _dbSessionProvider;
 
-    private static readonly Regex TaskIdRegex = new(@"^[a-zA-Z0-9\-]{1,12}$");
+    private static readonly Regex TaskIdRegex = new(@"^(?=.{1,12}$)[A-Z][A-Z0-9]*-\d+$");
     
     private const string BaseUri = "rest/api/3";
     

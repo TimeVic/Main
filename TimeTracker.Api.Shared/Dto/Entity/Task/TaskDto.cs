@@ -1,4 +1,5 @@
 ﻿using Api.Requests.Abstractions;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Task;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
@@ -23,6 +24,8 @@ public class TaskDto : IResponse
     public string? ExternalTaskId { get; set; }
 
     public TimeSpan? OriginalEstimate { get; set; }
+
+    public ExternalSourceType ExternalSourceType { get; set; }
 
     public TimeSpan TrackedDuration { get; set; }
     

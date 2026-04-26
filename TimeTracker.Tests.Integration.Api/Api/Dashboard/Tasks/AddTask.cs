@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
@@ -100,6 +101,7 @@ public partial class AddTask: BaseTest
         Assert.Equal(task.Priority, actualData.Priority);
         Assert.Equal(task.IsArchived, actualData.IsArchived);
         Assert.Equal(task.OriginalEstimate, actualData.OriginalEstimate);
+        Assert.Equal(ExternalSourceType.Manual, actualData.ExternalSourceType);
         Assert.Equal(task.EndTime!.Value.ToLongTimeString(), actualData.EndTime!.Value.ToUniversalTime().ToLongTimeString());
         Assert.Equal(task.StartTime!.Value.ToLongTimeString(), actualData.StartTime!.Value.ToUniversalTime().ToLongTimeString());
     }

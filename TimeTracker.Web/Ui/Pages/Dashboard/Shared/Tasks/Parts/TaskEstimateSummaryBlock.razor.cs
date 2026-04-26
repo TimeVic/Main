@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Services.Format;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts;
@@ -18,7 +19,10 @@ public partial class TaskEstimateSummaryBlock
     public bool ShowProgress { get; set; } = true;
 
     [Parameter]
-    public string EmptyEstimateText { get; set; } = "Not set";
+    public ExternalSourceType ExternalSourceType { get; set; } = ExternalSourceType.Manual;
+
+    [Parameter]
+    public string EmptyEstimateText { get; set; } = "No estimate";
 
     [Parameter]
     public string Class { get; set; } = string.Empty;
@@ -26,53 +30,88 @@ public partial class TaskEstimateSummaryBlock
     [Inject]
     private ITimeParsingService TimeParsingService { get; set; } = null!;
 
-    private decimal ProgressPercent =>
-        PlannedDuration.HasValue && PlannedDuration.Value > TimeSpan.Zero
-            ? (decimal)TrackedDuration.TotalSeconds / (decimal)PlannedDuration.Value.TotalSeconds * 100m
-            : 0m;
+    private TaskEstimateAnalytics Analytics => new(PlannedDuration, TrackedDuration);
 
     private string PlannedDurationText =>
-        PlannedDuration.HasValue
+        Analytics.HasEstimate
             ? TimeParsingService.TimeSpanToDurationString(PlannedDuration)
             : EmptyEstimateText;
 
     private string TrackedDurationText => TimeParsingService.TimeSpanToDurationString(TrackedDuration);
 
-    private string StatusLabel
+    private string CompactSummaryText =>
+        Analytics.HasEstimate
+            ? $"{TrackedDurationText} / {PlannedDurationText} · {ProgressPercentText} · {StatusLabel}"
+            : $"No estimate · {TrackedDurationText} tracked";
+
+    private string ProgressPercentText => Analytics.HasEstimate ? $"{Analytics.RoundedProgressPercent}%" : "No estimate";
+
+    private string StatusLabel => Analytics.Status.ToLabel();
+
+    private string StatusTextClass => Analytics.Status.ToTextClass();
+
+    private string StatusBadgeClass => Analytics.Status.ToBadgeClass();
+
+    private string RemainingOrOverText
     {
         get
         {
-            if (!PlannedDuration.HasValue || PlannedDuration.Value <= TimeSpan.Zero)
+            if (!Analytics.HasEstimate)
             {
                 return "No estimate";
             }
 
-            return ProgressPercent switch
+            if (Analytics.IsOverEstimate)
             {
-                < 80m => "On track",
-                <= 100m => "Close to limit",
-                <= 130m => "Over estimate",
-                _ => "Strong overrun"
-            };
+                return $"{FormatDuration(Analytics.OverrunDuration)} over";
+            }
+
+            if (Analytics.RemainingDuration > TimeSpan.Zero)
+            {
+                return $"{FormatDuration(Analytics.RemainingDuration)} remaining";
+            }
+
+            return "On estimate";
         }
     }
 
-    private string StatusTextClass
+    private string RemainingOrOverTextClass =>
+        !Analytics.HasEstimate
+            ? "text-slate-500"
+            : Analytics.IsOverEstimate
+                ? "text-rose-700"
+                : "text-emerald-700";
+
+    private string DeltaText
     {
         get
         {
-            if (!PlannedDuration.HasValue || PlannedDuration.Value <= TimeSpan.Zero)
+            if (!Analytics.HasEstimate)
             {
-                return "text-slate-500";
+                return "No estimate";
             }
 
-            return ProgressPercent switch
+            if (!Analytics.HasDelta)
             {
-                < 80m => "text-emerald-700",
-                <= 100m => "text-amber-700",
-                <= 130m => "text-orange-700",
-                _ => "text-rose-700"
-            };
+                return "0m";
+            }
+
+            var sign = Analytics.IsOverEstimate ? "+" : "-";
+            return $"{sign}{FormatDuration(Analytics.AbsoluteDeltaDuration)}";
         }
     }
+
+    private string DeltaTextClass =>
+        !Analytics.HasEstimate || !Analytics.HasDelta
+            ? "text-slate-900"
+            : Analytics.IsOverEstimate
+                ? "text-rose-700"
+                : "text-emerald-700";
+
+    private string SectionDescription =>
+        ExternalSourceType == ExternalSourceType.Jira && Analytics.HasEstimate
+            ? "Original estimate came from Jira. Tracked time is compared against that value."
+            : "Tracked time is compared against the planned time set in TimeVic.";
+
+    private string FormatDuration(TimeSpan duration) => TimeParsingService.TimeSpanToDurationString(duration);
 }

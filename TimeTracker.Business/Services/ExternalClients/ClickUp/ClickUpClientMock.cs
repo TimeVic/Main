@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
@@ -93,7 +94,12 @@ public class ClickUpClientMock: IClickUpClient
         string externalTaskId
     )
     {
-        var task = await _taskDao.AddTaskAsync(taskList, user, "Test task");
+        var task = await _taskDao.AddTaskAsync(
+            taskList,
+            user,
+            "Test task",
+            externalSourceType: ExternalSourceType.ClickUp
+        );
         task.ExternalTaskId = externalTaskId;
         return task;
     }

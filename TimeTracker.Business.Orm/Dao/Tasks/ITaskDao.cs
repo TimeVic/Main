@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.Tasks;
@@ -22,7 +23,8 @@ public interface ITaskDao: IDomainService
         DateTime? endTime = null,
         TaskStatus status = TaskStatus.Backlog,
         TaskPriority priority = TaskPriority.Low,
-        bool isArchived = false
+        bool isArchived = false,
+        ExternalSourceType externalSourceType = ExternalSourceType.Manual
     );
 
     Task<TaskEntity> UpdateTaskAsync(
