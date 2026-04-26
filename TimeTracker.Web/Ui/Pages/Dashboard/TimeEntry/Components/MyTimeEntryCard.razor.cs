@@ -33,7 +33,7 @@ public partial class MyTimeEntryCard
     [Inject]
     private IState<AuthState> _authState { get; set; } = null!;
 
-    private string _currencySymbol => _authState.Value.Workspace?.Currency.Symbol ?? string.Empty;
+    private string? _currencySymbol => _authState.Value.Workspace?.Currency.Symbol;
 
     private string GetProjectLabel()
     {
@@ -57,7 +57,7 @@ public partial class MyTimeEntryCard
             return string.Empty;
 
         var amount = Math.Round((decimal)Entry.Duration.TotalHours * Entry.HourlyRate.Value, 2);
-        return $"{amount.ToMoneyFormat()} {_currencySymbol}".Trim();
+        return amount.ToMoneyFormat(_currencySymbol);
     }
 
     private string GetHourlyRateLabel()
@@ -65,6 +65,6 @@ public partial class MyTimeEntryCard
         if (!Entry.HourlyRate.HasValue)
             return string.Empty;
 
-        return $"{Entry.HourlyRate.Value.ToMoneyFormat()} {_currencySymbol}".Trim();
+        return Entry.HourlyRate.Value.ToMoneyFormat(_currencySymbol);
     }
 }

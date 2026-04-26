@@ -1,12 +1,14 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Globalization;
 
 namespace TimeTracker.Business.Extensions;
 
 public static class DecimalExtensions
 {
-    public static string ToMoneyFormat(this decimal decimalValue)  
+    public static string ToMoneyFormat(this decimal decimalValue, string? symbol = null)
     {
-        return decimalValue.ToString("0.00");
+        var formattedAmount = decimalValue.ToString("#,##0.00", CultureInfo.InvariantCulture);
+        return string.IsNullOrWhiteSpace(symbol)
+            ? formattedAmount
+            : $"{formattedAmount} {symbol}";
     }
 }

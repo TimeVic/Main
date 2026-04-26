@@ -17,7 +17,5 @@
     [Parameter]
     public string Class { get; set; }
 
-    private string FormattedAmount => AuthState.Value.Workspace != null
-        ? $"{Amount.ToMoneyFormat()} {AuthState.Value.Workspace.Currency.Symbol}"
-        : Amount.ToMoneyFormat();
+    private string FormattedAmount => Amount.ToMoneyFormat(AuthState.Value.Workspace?.Currency.Symbol);
 }

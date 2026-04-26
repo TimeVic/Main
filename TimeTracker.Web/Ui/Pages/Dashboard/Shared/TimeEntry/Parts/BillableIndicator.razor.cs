@@ -68,7 +68,7 @@ public partial class BillableIndicator: IDisposable
         }
     }
 
-    private string _currencySymbol => AuthState.Value.Workspace?.Currency.Symbol ?? string.Empty;
+    private string? _currencySymbol => AuthState.Value.Workspace?.Currency.Symbol;
 
     protected override void OnParametersSet()
     {
@@ -102,9 +102,9 @@ public partial class BillableIndicator: IDisposable
     {
         _currentTrackedDuration = _trackedDuration;
         _durationLabel = TimeParsingService.TimeSpanToTimeString(_currentTrackedDuration, true);
-        _currentAmountLabel = $"{_currentAmount.ToMoneyFormat()} {_currencySymbol}".Trim();
+        _currentAmountLabel = _currentAmount.ToMoneyFormat(_currencySymbol);
         _hourlyRateLabel = _hourlyRate.HasValue
-            ? $"{_hourlyRate.Value.ToMoneyFormat()} {_currencySymbol}".Trim()
+            ? _hourlyRate.Value.ToMoneyFormat(_currencySymbol)
             : string.Empty;
     }
 
