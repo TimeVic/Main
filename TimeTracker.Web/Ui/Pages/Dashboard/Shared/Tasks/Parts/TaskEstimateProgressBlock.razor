@@ -1,0 +1,17 @@
+@inherits BaseComponent
+
+<div class="@Class">
+    @if (ShowLabels)
+    {
+        <div class="flex items-center justify-between gap-3 text-xs">
+            <span class="font-medium @StatusTextClass">@StatusLabel</span>
+            <span class="font-semibold @PercentTextClass">@ProgressPercentText</span>
+        </div>
+    }
+    <div class="@($"{(ShowLabels ? "mt-2 " : string.Empty)}{HeightClass} overflow-hidden rounded-full bg-slate-100")">
+        <div
+            class="h-full rounded-full transition-all duration-300 @BarClass"
+            style="width: @ProgressWidthStyle">
+        </div>
+    </div>
+</div>

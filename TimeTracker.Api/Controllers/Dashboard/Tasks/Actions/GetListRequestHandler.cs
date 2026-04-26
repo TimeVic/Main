@@ -51,8 +51,17 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 
             var filter = _mapper.Map<GetTasksFilterDto>(request.Filter);
             var taskLists = await _taskDao.GetList(taskList: taskList, filter: filter);
+            var items = _mapper.Map<ICollection<TaskDto>>(taskLists.Items);
+            var trackedDurationMap = await _taskDao.GetTrackedDurationByTaskIds(taskLists.Items.Select(item => item.Id).ToList());
+            foreach (var item in items)
+            {
+                item.TrackedDuration = trackedDurationMap.TryGetValue(item.Id, out var trackedDuration)
+                    ? trackedDuration
+                    : TimeSpan.Zero;
+            }
+
             return new GetListResponse(
-                _mapper.Map<ICollection<TaskDto>>(taskLists.Items),
+                items,
                 taskLists.TotalCount
             );
         }
