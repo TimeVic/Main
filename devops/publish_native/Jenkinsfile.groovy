@@ -232,6 +232,25 @@ node('build-node') {
     stage('CleanUp Docker') {
         sh 'docker system prune -f'
     }
+
+    stage('Purge Cloudflare cache') {
+        if (effectiveEnvironment == 'Production')
+        {
+            sh '''
+                set -e
+
+                RESPONSE=$(curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/$cloudFlaireZoneId/purge_cache" \
+                -H "Authorization: Bearer $cloudFlaireApiToken" \
+                -H "Content-Type: application/json" \
+                --data '{"purge_everything":true}')
+
+                echo "$RESPONSE"
+
+                echo "$RESPONSE" | grep -q '"success":true'
+            '''
+        }
+
+    }
 }
 
 if (shouldRunDeployment) {
@@ -295,25 +314,6 @@ node('web-node') {
             webAppContainer.port = '8216:80';
         }
         dockerHelper.runContainer(webAppContainer)
-    }
-
-    stage('Run web app') {
-        if (effectiveEnvironment == 'Production')
-        {
-            sh '''
-                set -e
-
-                RESPONSE=$(curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/$cloudFlaireZoneId/purge_cache" \
-                -H "Authorization: Bearer $cloudFlaireApiToken" \
-                -H "Content-Type: application/json" \
-                --data '{"purge_everything":true}')
-
-                echo "$RESPONSE"
-
-                echo "$RESPONSE" | grep -q '"success":true'
-            '''
-        }
-
     }
     
 //     stage('CleanUp') {
