@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 using TimeTracker.Business.Common.Extensions;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Report;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
@@ -53,7 +54,7 @@ public class PaymentReportTest: BaseTest
         var project1 = projects.First();
         await _timeEntryDao.SetAsync(_user, _defaultWorkspace, new TimeEntryCreationDto()
         {
-            StartTime = DateTime.UtcNow.AddHours(10),
+            StartTime = DateTime.UtcNow.AddHours(-1),
             EndTime = DateTime.UtcNow.AddHours(15),
             IsBillable = true,
             HourlyRate = 10

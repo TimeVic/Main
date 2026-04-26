@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Extensions;
@@ -160,7 +161,7 @@ public class SetCompletionTest: BaseTest
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();
-        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);
+        Assert.Equal(HttpResponseStatus.Fail, error.Status);
     }
     
     [Fact]
