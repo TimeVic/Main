@@ -1,5 +1,6 @@
 ﻿@using TimeTracker.Web.Core.Extensions.Enums
 @using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
 @inherits BaseComponent
 
 <FluentCard
@@ -72,6 +73,12 @@
 
         <FluentStack HorizontalAlignment="HorizontalAlignment.Center"> 
             <TagsBadgesList Tags="@Task.Tags"/>
+
+            <TaskEstimateSummaryBlock
+                Class="w-full mt-2"
+                IsCompact="true"
+                PlannedDuration="Task.OriginalEstimate"
+                TrackedDuration="Task.TrackedDuration" />
             
             @if (IsShowTaskList)
             {

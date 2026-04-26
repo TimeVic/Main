@@ -23,6 +23,8 @@ public class TaskDto : IResponse
     public string? ExternalTaskId { get; set; }
 
     public TimeSpan? OriginalEstimate { get; set; }
+
+    public TimeSpan TrackedDuration { get; set; }
     
     public DateTime? StartTime { get; set; }
     

@@ -5,6 +5,7 @@ using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -86,6 +87,39 @@ public class GetListTest: BaseTest
             Assert.Equal(TaskPriority.Medium, item.Priority);
             Assert.Equal(_taskList.Id, item.TaskList.Id);
         });
+    }
+
+    [Fact]
+    public async Task ShouldReceiveTrackedDuration()
+    {
+        var now = DateTime.UtcNow;
+        var task = await _taskSeeder.CreateAsync(_taskList, _user);
+        var timeEntry = await _timeEntryDao.SetAsync(
+            _user,
+            _defaultWorkspace,
+            new TimeEntryCreationDto
+            {
+                Description = "Tracked task time",
+                StartTime = now.AddHours(-2),
+                EndTime = now.AddHours(-1),
+                IsBillable = false
+            },
+            _project
+        );
+        timeEntry.Task = task;
+        await DbSessionProvider.CurrentSession.SaveAsync(timeEntry);
+
+        await FlushDbChanges(true);
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            TaskListId = _taskList.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        var actualTask = actualDto.Items.Single(item => item.Id == task.Id);
+        Assert.Equal(TimeSpan.FromHours(1), actualTask.TrackedDuration);
     }
 
     [Fact]

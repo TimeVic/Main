@@ -114,7 +114,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
                     }
                 }
             }
-            return _mapper.Map<TaskFullDto>(task);
+            var result = _mapper.Map<TaskFullDto>(task);
+            var trackedDurationMap = await _taskDao.GetTrackedDurationByTaskIds(new[] { task.Id });
+            result.TrackedDuration = trackedDurationMap.TryGetValue(task.Id, out var trackedDuration)
+                ? trackedDuration
+                : TimeSpan.Zero;
+            return result;
         }
 
         private async Task<TaskEntity> CreateFromExternalId(

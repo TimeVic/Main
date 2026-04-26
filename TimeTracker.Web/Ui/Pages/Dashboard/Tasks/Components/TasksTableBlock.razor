@@ -3,6 +3,7 @@
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Core.Extensions.Enums
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TaskPriority = TimeTracker.Business.Common.Constants.Task.TaskPriority;
 
@@ -99,7 +100,7 @@
                         </td>
                         <td class="border-t border-slate-200 px-2 py-3 align-top">
                             <div class="flex gap-3">
-                                <div class="min-w-0 space-y-2">
+                                <div class="flex-1 min-w-0 space-y-2">
                                     <div class="flex flex-wrap items-center gap-2">
                                         <span class="rounded-md bg-slate-100 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-600">@task.FormattedId</span>
                                         <button type="button" @onclick="@(() => OpenTaskEditor(task))" class="text-left font-semibold cursor-pointer text-slate-900 transition group-hover:text-blue-700 hover:text-blue-700 @GetTaskTitleClass(task)">
@@ -110,6 +111,11 @@
                                     {
                                         <p class="max-w-2xl text-sm text-slate-500">@task.Description</p>
                                     }
+                                    <TaskEstimateSummaryBlock
+                                        Class="mt-2"
+                                        IsCompact="true"
+                                        PlannedDuration="task.OriginalEstimate"
+                                        TrackedDuration="task.TrackedDuration" />
                                     @if (!string.IsNullOrWhiteSpace(task.ExternalTaskId))
                                     {
                                         <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500">

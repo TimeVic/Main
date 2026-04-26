@@ -61,6 +61,15 @@
                         @bind-Value="model.Title"/>
                 </div>
 
+                <div class="mt-3">
+                    <DurationInput
+                        FullWidth="true"
+                        Label="Original estimate"
+                        Placeholder="1h 30m, 2d, 1w, 01:30"
+                        Hint="Optional. Jira-imported estimate still comes from backend."
+                        @bind-Value="model.OriginalEstimate" />
+                </div>
+
                 <div class="space-y-2 mt-3">
                     <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
                         <InputTextField
