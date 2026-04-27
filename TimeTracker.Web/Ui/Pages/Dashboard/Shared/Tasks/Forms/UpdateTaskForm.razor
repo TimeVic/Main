@@ -40,13 +40,17 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                 <div class="flex items-end gap-3">
                     <div class="flex-1 min-w-0">
                         <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Task title</label>
-                        <InputTextField FullWidth="true" @bind-Value="_model.Title"/>
+                        <InputTextField 
+                            FullWidth="true"
+                            Size="Size.Large"
+                            @bind-Value="_model.Title"/>
                     </div>
                     <div class="w-40 shrink-0">
                         <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@EstimateInputLabel</label>
                         <DurationInput
                             Placeholder="1h 30m"
                             FullWidth="true"
+                            Size="Size.Large"
                             @bind-Value="_model.OriginalEstimate"/>
                     </div>
                 </div>
