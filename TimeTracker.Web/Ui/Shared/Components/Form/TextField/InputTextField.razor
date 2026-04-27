@@ -15,6 +15,7 @@
         Required="@Required"
         Variant="Variant"
         Color="Color"
+        LabelPlacement="LabelPlacement"
         Size="Size"
         Clearable="Clearable"
         ErrorMessage="@FirstError">
@@ -72,6 +73,9 @@
     [Parameter]
     public RenderFragment? EndContent { get; set; }
     
+    [Parameter]
+    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
+    
     [Inject]
     public ModalDialogService ModalDialogService { get; set; }
     
@@ -81,7 +85,7 @@
         EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
 
     public bool _isShowEmojiModal { get; set; } = false;
-    
+
     protected override bool TryParseValueFromString(
         string? value,
         out string result,

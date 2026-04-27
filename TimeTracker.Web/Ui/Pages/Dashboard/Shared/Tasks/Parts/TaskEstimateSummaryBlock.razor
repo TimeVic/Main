@@ -29,26 +29,14 @@ else
             </span>
         </div>
 
-        <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <div class="mt-4 grid gap-3 sm:grid-cols-3">
             <div class="rounded-xl border border-slate-200 bg-white px-3 py-3">
                 <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">Planned</p>
                 <p class="mt-1 text-sm font-semibold text-slate-900">@PlannedDurationText</p>
             </div>
             <div class="rounded-xl border border-slate-200 bg-white px-3 py-3">
-                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">Tracked</p>
-                <p class="mt-1 text-sm font-semibold text-slate-900">@TrackedDurationText</p>
-            </div>
-            <div class="rounded-xl border border-slate-200 bg-white px-3 py-3">
                 <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">Remaining / Over by</p>
                 <p class="mt-1 text-sm font-semibold @RemainingOrOverTextClass">@RemainingOrOverText</p>
-            </div>
-            <div class="rounded-xl border border-slate-200 bg-white px-3 py-3">
-                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">Delta</p>
-                <p class="mt-1 text-sm font-semibold @DeltaTextClass">@DeltaText</p>
-            </div>
-            <div class="rounded-xl border border-slate-200 bg-white px-3 py-3">
-                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">Progress %</p>
-                <p class="mt-1 text-sm font-semibold text-slate-900">@ProgressPercentText</p>
             </div>
             <div class="rounded-xl border border-slate-200 bg-white px-3 py-3">
                 <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">Status</p>
@@ -59,7 +47,10 @@ else
         @if (ShowProgress)
         {
             <div class="mt-4">
-                <p class="text-xs text-slate-500">Progress bar shows tracked time as a share of planned time.</p>
+                <div class="flex items-center justify-between gap-3 text-xs">
+                    <span class="font-medium text-slate-600">@TrackedDurationText tracked</span>
+                    <span class="font-semibold @StatusTextClass">@ProgressPercentText</span>
+                </div>
                 <TaskEstimateProgressBlock
                     Class="mt-2"
                     ShowLabels="false"

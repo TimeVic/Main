@@ -37,8 +37,23 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
             <DataAnnotationsValidator/>
 
             <div class="rounded-2xl border border-slate-200 p-4">
-                <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Task title</label>
-                <InputTextField FullWidth="true" @bind-Value="_model.Title"/>
+                <div class="flex items-end gap-3">
+                    <div class="flex-1 min-w-0">
+                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Task title</label>
+                        <InputTextField 
+                            FullWidth="true"
+                            Size="Size.Large"
+                            @bind-Value="_model.Title"/>
+                    </div>
+                    <div class="w-40 shrink-0">
+                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@EstimateInputLabel</label>
+                        <DurationInput
+                            Placeholder="1h 30m"
+                            FullWidth="true"
+                            Size="Size.Large"
+                            @bind-Value="_model.OriginalEstimate"/>
+                    </div>
+                </div>
             </div>
 
             <div class="rounded-2xl border border-slate-200 p-4 mt-3">
@@ -85,22 +100,10 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
             </div>
             
             <div class="rounded-2xl border border-slate-200 p-4 mt-3">
-                <div class="space-y-4">
-                    <div>
-                        <DurationInput
-                            Label="@EstimateInputLabel"
-                            Placeholder="1h 30m, 2d, 1w, 01:30"
-                            Hint="@EstimateInputHint"
-                            FullWidth="true"
-                            Variant="InputVariant.Underlined"
-                            @bind-Value="_model.OriginalEstimate"/>
-                    </div>
-
-                    <TaskEstimateSummaryBlock
-                        PlannedDuration="_model.OriginalEstimate"
-                        TrackedDuration="_task.TrackedDuration"
-                        ExternalSourceType="_task.ExternalSourceType" />
-                </div>
+                <TaskEstimateSummaryBlock
+                    PlannedDuration="_model.OriginalEstimate"
+                    TrackedDuration="_task.TrackedDuration"
+                    ExternalSourceType="_task.ExternalSourceType" />
             </div>
 
             <div class="rounded-2xl border border-slate-200 p-4 mt-3">

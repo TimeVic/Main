@@ -239,8 +239,6 @@ node('build-node') {
                     -H "Content-Type: application/json" \
                     --data '{"purge_everything":true}')
 
-                    echo "$RESPONSE"
-
                     echo "$RESPONSE" | grep -q '"success":true'
                 '''
             }
