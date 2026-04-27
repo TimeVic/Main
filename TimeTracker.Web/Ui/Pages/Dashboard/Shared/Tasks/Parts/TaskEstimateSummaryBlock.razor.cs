@@ -82,32 +82,6 @@ public partial class TaskEstimateSummaryBlock
                 ? "text-rose-700"
                 : "text-emerald-700";
 
-    private string DeltaText
-    {
-        get
-        {
-            if (!Analytics.HasEstimate)
-            {
-                return "No estimate";
-            }
-
-            if (!Analytics.HasDelta)
-            {
-                return "0m";
-            }
-
-            var sign = Analytics.IsOverEstimate ? "+" : "-";
-            return $"{sign}{FormatDuration(Analytics.AbsoluteDeltaDuration)}";
-        }
-    }
-
-    private string DeltaTextClass =>
-        !Analytics.HasEstimate || !Analytics.HasDelta
-            ? "text-slate-900"
-            : Analytics.IsOverEstimate
-                ? "text-rose-700"
-                : "text-emerald-700";
-
     private string SectionDescription =>
         ExternalSourceType == ExternalSourceType.Jira && Analytics.HasEstimate
             ? "Original estimate came from Jira. Tracked time is compared against that value."
