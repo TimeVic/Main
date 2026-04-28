@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>14</LangVersion>
         <TargetFramework>net10.0</TargetFramework>
+        <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
         <WarningsAsErrors>CS0168,CS8602,CS0169,CS1998</WarningsAsErrors>
     </PropertyGroup>
 
@@ -90,6 +91,12 @@
     <ItemGroup>
       <ProjectReference Include="..\TimeTracker.Api.Shared\TimeTracker.Api.Shared.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <StaticWebAssetFingerprintPattern Include="JavaScript" Pattern="*.js" Expression="#[.{fingerprint}]!" />
+      <StaticWebAssetFingerprintPattern Include="Stylesheet" Pattern="*.css" Expression="#[.{fingerprint}]!" />
+      <StaticWebAssetFingerprintPattern Include="PngImage" Pattern="*.png" Expression="#[.{fingerprint}]!" />
     </ItemGroup>
 
     <ItemGroup>
@@ -367,5 +374,10 @@
 
         <Message Text="Building Tailwind CSS..." />
         <Exec Command="npx @tailwindcss/cli -i $(TailwindInputCss) -o $(TailwindOutputCss)" />
+    </Target>
+
+    <Target Name="FingerprintPublishedIndexAssets" AfterTargets="Publish"
+            Condition="Exists('$(PublishDir)wwwroot/index.html') And Exists('$(IntermediateOutputPath)staticwebassets.publish.endpoints.json')">
+        <Exec Command="node &quot;$(ProjectDir)Scripts/fingerprint-published-index.js&quot; &quot;$(IntermediateOutputPath)staticwebassets.publish.endpoints.json&quot; &quot;$(PublishDir)wwwroot/index.html&quot; &quot;$(IntermediateOutputPath)staticwebassets/htmlassetplaceholders/publish&quot;" />
     </Target>
 </Project>
