@@ -1,0 +1,116 @@
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
+@using TimeTracker.Web.Ui.Shared.Components.Dialogs
+@using TimeTracker.Web.Ui.Shared.Components.List
+
+@inherits BaseReactiveComponent
+
+@if (_timeEntryToEdit != null)
+{
+    <EditTimeEntryModal
+        Entry="_timeEntryToEdit"
+        OnClose="OnCloseEditModal"/>
+}
+
+@if (_timeEntryToDelete != null)
+{
+    <ConfirmationModal
+        DialogVariant="ConfirmationModal.ConfirmationVariant.Delete"
+        OnConfirm="OnConfirmDelete"
+        OnCancel="@(() => _timeEntryToDelete = null)"/>
+}
+
+<div class="mt-6">
+    <LumexDataGrid
+        TItem="TimeEntryDto"
+        Data="@_state.Value.FilteredList.AsQueryable()"
+        Loading="@_state.Value.IsListLoading"
+        Hoverable="true">
+
+        <LoadingContent>
+            <div class="flex justify-center py-6">
+                <LumexSpinner Variant="SpinnerVariant.DotsFade"/>
+            </div>
+        </LoadingContent>
+
+        <EmptyContent>
+            <div class="py-6 text-center text-sm text-slate-500">
+                No time entries found. Try adjusting the filter settings.
+            </div>
+        </EmptyContent>
+
+        <ChildContent>
+            <TemplateColumn Title="Date" TItem="TimeEntryDto">
+                <span class="whitespace-nowrap text-slate-600">
+                    @context.StartTimeOffset.ToString("MMM d, yyyy")
+                </span>
+            </TemplateColumn>
+
+            <TemplateColumn Title="User" TItem="TimeEntryDto">
+                <span class="font-medium text-slate-700">@context.User.Name</span>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Description" TItem="TimeEntryDto">
+                <span class="@(string.IsNullOrWhiteSpace(context.Description) && context.Task == null ? "italic text-slate-400" : "text-slate-700")">
+                    @GetDescriptionOrTask(context)
+                </span>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Project" TItem="TimeEntryDto">
+                <span class="text-slate-500">@(context.Project?.Name ?? "—")</span>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Billable" TItem="TimeEntryDto" Align="Align.Center">
+                @if (context.IsBillable)
+                {
+                    <span class="inline-flex items-center rounded px-1.5 py-0.5 text-xs font-semibold text-emerald-600">
+                        <i class="fa-solid fa-dollar-sign"></i>
+                    </span>
+                }
+                else
+                {
+                    <span class="text-slate-300">—</span>
+                }
+            </TemplateColumn>
+
+            <TemplateColumn Title="Duration" TItem="TimeEntryDto" Align="Align.End">
+                <span class="whitespace-nowrap font-mono font-semibold text-slate-700">
+                    @_timeParsingService.TimeSpanToTimeString(context.Duration, true)
+                </span>
+            </TemplateColumn>
+
+            <TemplateColumn Title="" TItem="TimeEntryDto" Align="Align.End">
+                <div class="flex items-center justify-end gap-1">
+                    <CustomButton
+                        Size="Size.Small"
+                        Color="ThemeColor.Default"
+                        Variant="Variant.Light"
+                        IconOnly="true"
+                        OnClick="@(() => _timeEntryToEdit = context)">
+                        <ChildContent>
+                            <i class="fa-regular fa-pen-to-square text-slate-400"></i>
+                        </ChildContent>
+                    </CustomButton>
+                    <CustomButton
+                        Size="Size.Small"
+                        Color="ThemeColor.Danger"
+                        Variant="Variant.Light"
+                        IconOnly="true"
+                        OnClick="@(() => _timeEntryToDelete = context)">
+                        <ChildContent>
+                            <i class="fa-regular fa-trash-can text-slate-400"></i>
+                        </ChildContent>
+                    </CustomButton>
+                </div>
+            </TemplateColumn>
+        </ChildContent>
+    </LumexDataGrid>
+
+    <div class="mt-4">
+        <TPaginator
+            CurrentPage="@_state.Value.FilteredSelectedPage"
+            CurrentPageChanged="OnPageChanged"
+            TotalPages="@_state.Value.FilteredTotalPages"/>
+    </div>
+</div>

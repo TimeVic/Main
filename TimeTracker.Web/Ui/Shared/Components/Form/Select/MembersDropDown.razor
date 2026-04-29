@@ -4,39 +4,81 @@
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Business.Common.Constants
+@using TimeTracker.Web.Constants.Ui
 
 <div class="@Class @(FullWidth ? "w-100" : "")">
-    <LumexSelect 
-        TValue="WorkspaceMembershipDto"
-        Label="@Label"
-        Placeholder="@_placeholder"
-        LabelPlacement="@LabelPlacement.Outside"
-        ValueChanged="dto => OnValueChanged(dto)"
-        Value="_selectedItem"
-        Invalid="@IsInvalid">
-        <ChildContent>
-            @if (Clearable && _selectedItem != null)
-            {
-                <LumexSelectItem Value="@((WorkspaceMembershipDto?)null)" TextValue="">
-                    <div class="flex items-center gap-2 text-slate-400">
-                        <i class="fa-solid fa-xmark text-xs"></i>
-                        <span>None</span>
+    @if (Type == DropDownType.DropDown)
+    {
+        <LumexDropdown
+            Open="@_isOpen"
+            OpenChanged="@OnOpenChanged">
+            <LumexDropdownTrigger>
+                <LumexButton
+                    FullWidth="true"
+                    Color="ThemeColor.Info"
+                    Variant="Variant.Outlined"
+                    Disabled="Disabled">
+                    @if (_selectedItem is null)
+                    {
+                        @_placeholder
+                    }
+                    else
+                    {
+                        @_selectedItem?.User.Name
+                    }
+                </LumexButton>
+            </LumexDropdownTrigger>
+            <LumexDropdownMenu
+                Color="ThemeColor.Info"
+                Variant="MenuVariant.Outlined">
+                @if (Clearable && _selectedItem != null)
+                {
+                    <LumexDropdownItem OnClick="@(() => OnMemberSelected(null))" Class="text-slate-400">
+                        <ChildContent>
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                                None
+                            </span>
+                        </ChildContent>
+                    </LumexDropdownItem>
+                }
+                @foreach (var member in _list)
+                {
+                    <LumexDropdownItem OnClick="@(() => OnMemberSelected(member))">
+                        <ChildContent>@member?.User.Name</ChildContent>
+                    </LumexDropdownItem>
+                }
+            </LumexDropdownMenu>
+        </LumexDropdown>
+    }
+    else
+    {
+        <LumexSelect 
+            TValue="WorkspaceMembershipDto"
+            Label="@Label"
+            Placeholder="@_placeholder"
+            Color="ThemeColor.Info"
+            Variant="InputVariant.Outlined"
+            LabelPlacement="@LabelPlacement.Outside"
+            Clearable="@Clearable"
+            ValueChanged="dto => OnValueChanged(dto)"
+            Value="_selectedItem"
+            Invalid="@IsInvalid">
+            <ChildContent>
+                @foreach (var character in _list)
+                {
+                    <LumexSelectItem @key="@character" Value="@character">
+                        @character?.User.Name
+                    </LumexSelectItem>
+                }
+            </ChildContent>
+            <ValueContent>
+                <div class="flex items-center gap-2">
+                    <div class="flex flex-col">
+                        <span>@context?.User.Name</span>
                     </div>
-                </LumexSelectItem>
-            }
-            @foreach (var character in _list)
-            {
-                <LumexSelectItem @key="@character" Value="@character">
-                    @character?.User.Name
-                </LumexSelectItem>
-            }
-        </ChildContent>
-        <ValueContent>
-            <div class="flex items-center gap-2">
-                <div class="flex flex-col">
-                    <span>@context?.User.Name</span>
                 </div>
-            </div>
-        </ValueContent>
-    </LumexSelect>
+            </ValueContent>
+        </LumexSelect>
+    }
 </div>

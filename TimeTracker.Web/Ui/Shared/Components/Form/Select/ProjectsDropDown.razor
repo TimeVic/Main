@@ -2,57 +2,86 @@
 
 @using LumexUI
 @using LumexUI.Common
-@using LumexUI.Shared.Icons
 @using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Web.Constants.Ui
 
 <div class="@Class">
-    <LumexDropdown
-        Open="@_isOpen"
-        OpenChanged="@OnOpenChanged">
-        <LumexDropdownTrigger>
-            <LumexButton 
-                FullWidth="true"
-                Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)" 
-                Variant="Variant.Outlined"
-                Disabled="Disabled"
-                Class="@SelectClass"
-            >
-                @if (_selectedItem is null)
+    @if (Type == DropDownType.DropDown)
+    {
+        <LumexDropdown
+            Open="@_isOpen"
+            OpenChanged="@OnOpenChanged">
+            <LumexDropdownTrigger>
+                <LumexButton 
+                    FullWidth="true"
+                    Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)" 
+                    Variant="LumexUI.Common.Variant.Outlined"
+                    Disabled="Disabled"
+                    Class="@SelectClass"
+                >
+                    @if (_selectedItem is null)
+                    {
+                        @_placeholder
+                    }
+                    else
+                    {
+                        @_selectedItem?.Name
+                    }
+                </LumexButton>
+            </LumexDropdownTrigger>
+            <LumexDropdownMenu
+                Color="ThemeColor.Info" 
+                Variant="MenuVariant.Outlined">
+                @if (Clearable && _selectedItem != null)
                 {
-                    @_placeholder
+                    <LumexDropdownItem
+                        OnClick="@(() => OnProjectSelected(null))"
+                        Class="text-slate-400">
+                        <ChildContent>
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                                None
+                            </span>
+                        </ChildContent>
+                    </LumexDropdownItem>
                 }
-                else
+                @foreach (var project in _list)
                 {
-                    @_selectedItem?.Name
+                    <LumexDropdownItem 
+                        Description="@project?.Client?.Name"
+                        OnClick="@(() => OnProjectSelected(project))">
+                        <ChildContent>
+                            @project?.Name
+                        </ChildContent>
+                    </LumexDropdownItem>
                 }
-            </LumexButton>
-        </LumexDropdownTrigger>
-        <LumexDropdownMenu
-            Color="ThemeColor.Info" 
-            Variant="MenuVariant.Outlined">
-            @if (Clearable && _selectedItem != null)
-            {
-                <LumexDropdownItem
-                    OnClick="@(() => OnProjectSelected(null))"
-                    Class="text-slate-400">
-                    <ChildContent>
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-xmark text-xs"></i>
-                            None
-                        </span>
-                    </ChildContent>
-                </LumexDropdownItem>
-            }
-            @foreach (var project in _list)
-            {
-                <LumexDropdownItem 
-                    Description="@project?.Client?.Name"
-                    OnClick="@(() => OnProjectSelected(project))">
-                    <ChildContent>
+            </LumexDropdownMenu>
+        </LumexDropdown>
+    }
+    else
+    {
+        <LumexSelect
+            TValue="ProjectDto"
+            Label="@Label"
+            Placeholder="@_placeholder"
+            LabelPlacement="LabelPlacement.Outside"
+            Variant="@Variant"
+            Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)"
+            Clearable="@Clearable"
+            ValueChanged="dto => OnValueChanged(dto)"
+            Value="_selectedItem"
+            Invalid="@IsInvalid">
+            <ChildContent>
+                @foreach (var project in _list)
+                {
+                    <LumexSelectItem @key="@project" Value="@project" Description="@project?.Client?.Name">
                         @project?.Name
-                    </ChildContent>
-                </LumexDropdownItem>
-            }
-        </LumexDropdownMenu>
-    </LumexDropdown>
+                    </LumexSelectItem>
+                }
+            </ChildContent>
+            <ValueContent>
+                <span>@context?.Name</span>
+            </ValueContent>
+        </LumexSelect>
+    }
 </div>

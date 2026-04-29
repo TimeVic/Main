@@ -1,0 +1,76 @@
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Web.Constants.Ui
+
+<div class="@Class @(FullWidth ? "w-100" : "")">
+    @if (SelectType == DropDownType.DropDown)
+    {
+        @if (!string.IsNullOrEmpty(Label))
+        {
+            <label class="block text-sm font-medium mb-1">@Label</label>
+        }
+        <LumexDropdown
+            Open="@_isOpen"
+            OpenChanged="@OnOpenChanged">
+            <LumexDropdownTrigger>
+                <LumexButton
+                    FullWidth="@FullWidth"
+                    Color="ThemeColor.Info"
+                    Variant="Variant.Outlined"
+                    Class="@(FullWidth ? "w-100" : "")">
+                    @if (Value.HasValue)
+                    {
+                        @(Value.Value ? "Yes" : "No")
+                    }
+                    else
+                    {
+                        @Placeholder
+                    }
+                </LumexButton>
+            </LumexDropdownTrigger>
+            <LumexDropdownMenu
+                Color="ThemeColor.Info"
+                Variant="MenuVariant.Outlined">
+                @if (Clearable && Value.HasValue)
+                {
+                    <LumexDropdownItem
+                        OnClick="@(() => OnItemSelected(null))"
+                        Class="text-slate-400">
+                        <ChildContent>
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                                None
+                            </span>
+                        </ChildContent>
+                    </LumexDropdownItem>
+                }
+                <LumexDropdownItem OnClick="@(() => OnItemSelected(true))">Yes</LumexDropdownItem>
+                <LumexDropdownItem OnClick="@(() => OnItemSelected(false))">No</LumexDropdownItem>
+            </LumexDropdownMenu>
+        </LumexDropdown>
+    }
+    else
+    {
+        <LumexSelect
+            TValue="bool?"
+            Label="@Label"
+            Placeholder="@Placeholder"
+            LabelPlacement="LabelPlacement.Outside"
+            Variant="InputVariant.Outlined"
+            Color="ThemeColor.Default"
+            Clearable="@Clearable"
+            ValueChanged="OnSelectValueChanged"
+            Value="Value">
+            <ChildContent>
+                <LumexSelectItem Value="@((bool?)true)" TextValue="Yes">Yes</LumexSelectItem>
+                <LumexSelectItem Value="@((bool?)false)" TextValue="No">No</LumexSelectItem>
+            </ChildContent>
+            <ValueContent>
+                @if (context.HasValue)
+                {
+                    <span>@(context.Value ? "Yes" : "No")</span>
+                }
+            </ValueContent>
+        </LumexSelect>
+    }
+</div>

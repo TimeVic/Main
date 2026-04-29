@@ -14,7 +14,7 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable wh
     protected EditContext? CurrentEditContext { get; set; }
     
     [Parameter]
-    public DropDownType Type { get; set; } = DropDownType.Select; 
+    public DropDownType Type { get; set; } = DropDownType.DropDown; 
     
     [Parameter]
     public string? Label { get; set; }
