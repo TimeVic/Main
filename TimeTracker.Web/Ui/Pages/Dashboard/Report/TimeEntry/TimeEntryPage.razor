@@ -1,14 +1,15 @@
-﻿@page "/board/report/time-entries"
-@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.LayoutParts
-@using TimeTracker.Web.Ui.Pages.Dashboard.Shared
+@page "/board/report/time-entries"
+@using TimeTracker.Web.Ui.Pages.Dashboard.Report.TimeEntry.Parts
+@using Layout = TimeTracker.Web.Ui.Pages.Dashboard.Shared.Layout
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<BodyLayout Title="Time entries">
-    <FilterForm/>
+<div>
+    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Report</p>
+    <h1 class="mt-2 text-2xl font-semibold text-slate-900">Time entries</h1>
+</div>
 
-    <TimeEntryList
-        Class="mt-4"
-        IsFilteredList="@true"/>
-</BodyLayout>
+<FilterForm/>
+
+<TimeEntryListBlock/>

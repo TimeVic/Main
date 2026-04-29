@@ -13,43 +13,43 @@ public partial class FilterForm
 
     private void OnChangeClient(ClientDto? client)
     {
-        _state.Value.Filter.ClientId = client?.Id;
-        UpdateFilterState();
+        UpdateFilter(_state.Value.Filter with { ClientId = client?.Id, ProjectId = null });
     }
 
     private void OnChangeProject(ProjectDto? project)
     {
-        _state.Value.Filter.ProjectId = project?.Id;
-        UpdateFilterState();
+        UpdateFilter(_state.Value.Filter with { ProjectId = project?.Id });
     }
 
     private void OnChangeSearch(string? search)
     {
-        _state.Value.Filter.Search = search;
-        UpdateFilterState();
+        UpdateFilter(_state.Value.Filter with { Search = search });
     }
-    
+
     private void OnChangeDateFrom(DateTime? from)
     {
-        _state.Value.Filter.DateFrom = from?.StartOfDay();
-        UpdateFilterState();
+        UpdateFilter(_state.Value.Filter with { DateFrom = from?.StartOfDay() });
     }
-    
+
     private void OnChangeDateTo(DateTime? to)
     {
-        _state.Value.Filter.DateTo = to?.EndOfDay();
-        UpdateFilterState();
+        UpdateFilter(_state.Value.Filter with { DateTo = to?.EndOfDay() });
     }
 
     private void OnChangeMember(WorkspaceMembershipDto? member)
     {
-        _state.Value.Filter.UserId = member?.User.Id;
-        UpdateFilterState();
+        UpdateFilter(_state.Value.Filter with { UserId = member?.User.Id });
     }
-    
-    private void UpdateFilterState()
+
+    private void OnChangeBillable(bool? isBillable)
     {
-        Dispatcher.Dispatch(new SetTimeEntryFilterAction(_state.Value.Filter));
+        UpdateFilter(_state.Value.Filter with { IsBillable = isBillable });
+    }
+
+    private void UpdateFilter(TimeEntryFilterState newFilter)
+    {
+        Dispatcher.Dispatch(new SetTimeEntryFilterAction(newFilter));
+        Dispatcher.Dispatch(new SetFilteredSelectedPageAction(1));
         Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction());
     }
 }

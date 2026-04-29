@@ -1,0 +1,125 @@
+@using LumexUI.Common
+@using TimeTracker.Business.Common.Services.Format
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
+@using TimeTracker.Web.Ui.Shared.Components.Dialogs
+@using TimeTracker.Web.Ui.Shared.Components.List
+
+@inherits BaseReactiveComponent
+
+@if (_timeEntryToEdit != null)
+{
+    <EditTimeEntryModal
+        Entry="_timeEntryToEdit"
+        OnClose="OnCloseEditModal"/>
+}
+
+@if (_timeEntryToDelete != null)
+{
+    <ConfirmationModal
+        DialogVariant="ConfirmationModal.ConfirmationVariant.Delete"
+        OnConfirm="OnConfirmDelete"
+        OnCancel="@(() => _timeEntryToDelete = null)"/>
+}
+
+@if (_state.Value.IsListLoading)
+{
+    <div class="mt-6 flex justify-center rounded-2xl border border-slate-200 bg-white py-10">
+        <LumexSpinner Variant="SpinnerVariant.DotsFade"/>
+    </div>
+}
+else if (!_state.Value.FilteredList.Any())
+{
+    <LumexCard Class="mt-6 border-dashed border-slate-200 bg-slate-50 shadow-none">
+        <LumexCardBody>
+            <p class="text-sm font-medium text-slate-700">No time entries found.</p>
+            <p class="mt-1 text-sm text-slate-500">Try adjusting the filter settings.</p>
+        </LumexCardBody>
+    </LumexCard>
+}
+else
+{
+    <div class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200 text-sm">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Date</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">User</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Description</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Project</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">Billable</th>
+                        <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Duration</th>
+                        <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 bg-white">
+                    @foreach (var entry in _state.Value.FilteredList)
+                    {
+                        <tr class="hover:bg-slate-50/80">
+                            <td class="whitespace-nowrap px-4 py-3 text-slate-600">
+                                @entry.StartTimeOffset.ToString("MMM d, yyyy")
+                            </td>
+                            <td class="whitespace-nowrap px-4 py-3 font-medium text-slate-700">
+                                @entry.User.Name
+                            </td>
+                            <td class="max-w-xs px-4 py-3">
+                                <span class="@(string.IsNullOrWhiteSpace(entry.Description) && entry.Task == null ? "italic text-slate-400" : "truncate text-slate-700")">
+                                    @GetDescriptionOrTask(entry)
+                                </span>
+                            </td>
+                            <td class="whitespace-nowrap px-4 py-3 text-slate-500">
+                                @(entry.Project?.Name ?? "—")
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                                @if (entry.IsBillable)
+                                {
+                                    <span class="inline-flex items-center rounded px-1.5 py-0.5 text-xs font-semibold text-emerald-600">
+                                        <i class="fa-solid fa-dollar-sign"></i>
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-slate-300">—</span>
+                                }
+                            </td>
+                            <td class="whitespace-nowrap px-4 py-3 text-right font-mono font-semibold text-slate-700">
+                                @_timeParsingService.TimeSpanToTimeString(entry.Duration, true)
+                            </td>
+                            <td class="whitespace-nowrap px-4 py-3 text-right">
+                                <div class="flex items-center justify-end gap-1">
+                                    <CustomButton
+                                        Size="Size.Small"
+                                        Color="ThemeColor.Default"
+                                        Variant="Variant.Light"
+                                        IconOnly="true"
+                                        OnClick="@(() => _timeEntryToEdit = entry)">
+                                        <ChildContent>
+                                            <i class="fa-regular fa-pen-to-square text-slate-400"></i>
+                                        </ChildContent>
+                                    </CustomButton>
+                                    <CustomButton
+                                        Size="Size.Small"
+                                        Color="ThemeColor.Danger"
+                                        Variant="Variant.Light"
+                                        IconOnly="true"
+                                        OnClick="@(() => _timeEntryToDelete = entry)">
+                                        <ChildContent>
+                                            <i class="fa-regular fa-trash-can text-slate-400"></i>
+                                        </ChildContent>
+                                    </CustomButton>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <TPaginator
+            CurrentPage="@_state.Value.FilteredSelectedPage"
+            CurrentPageChanged="OnPageChanged"
+            TotalPages="@_state.Value.FilteredTotalPages"/>
+    </div>
+}
