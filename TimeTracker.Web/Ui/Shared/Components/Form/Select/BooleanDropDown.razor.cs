@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Web.Constants.Ui;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
@@ -20,10 +21,29 @@ public partial class BooleanDropDown
     public string Class { get; set; } = string.Empty;
 
     [Parameter]
+    public bool Clearable { get; set; } = true;
+
+    [Parameter]
     public bool FullWidth { get; set; }
 
-    private void OnValueChanged(bool? value)
+    [Parameter]
+    public DropDownType SelectType { get; set; } = DropDownType.DropDown;
+
+    private bool _isOpen;
+
+    private Task OnOpenChanged(bool isOpen)
     {
-        InvokeAsync(async () => await ValueChanged.InvokeAsync(value));
+        _isOpen = isOpen;
+        return Task.CompletedTask;
     }
+
+    private async Task OnItemSelected(bool? value)
+    {
+        _isOpen = false;
+        await InvokeAsync(StateHasChanged);
+        await Task.Yield();
+        await ValueChanged.InvokeAsync(value);
+    }
+
+    private Task OnSelectValueChanged(bool? value) => ValueChanged.InvokeAsync(value);
 }

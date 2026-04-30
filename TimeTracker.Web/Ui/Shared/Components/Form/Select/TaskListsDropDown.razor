@@ -21,7 +21,7 @@
         <ChildContent>
             @if (Clearable && _selectedItem != null)
             {
-                <LumexSelectItem Value="@((TaskListDto?)null)" TextValue="">
+                <LumexSelectItem Value="@_clearSentinel" TextValue="">
                     <div class="flex items-center gap-2 text-slate-400">
                         <i class="fa-solid fa-xmark text-xs"></i>
                         <span class="text-small">None</span>

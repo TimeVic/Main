@@ -3,48 +3,86 @@
 @using LumexUI
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Web.Constants.Ui
 
-<div class="flex gap-1">
-    @if (!string.IsNullOrEmpty(Label))
+<div class="@Class">
+    @if (Type == DropDownType.DropDown)
     {
-        <label class="mb-1 block text-xs font-medium tracking-wide text-slate-500">@Label</label>
+        <LumexDropdown
+            Open="@_isOpen"
+            OpenChanged="@OnOpenChanged">
+            <LumexDropdownTrigger>
+                <LumexButton
+                    Disabled="Disabled"
+                    FullWidth="true"
+                    Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)"
+                    Variant="LumexUI.Common.Variant.Outlined"
+                    Class="@SelectClass">
+                    @if (_selectedItem is null)
+                    {
+                        @_placeholder
+                    }
+                    else
+                    {
+                        @_selectedItem?.Name
+                    }
+                </LumexButton>
+            </LumexDropdownTrigger>
+            <LumexDropdownMenu
+                Color="ThemeColor.Info"
+                Variant="MenuVariant.Outlined">
+                @if (Clearable && _selectedItem != null)
+                {
+                    <LumexDropdownItem OnClick="@(() => OnClientSelected(null))" Class="text-slate-400">
+                        <ChildContent>
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                                None
+                            </span>
+                        </ChildContent>
+                    </LumexDropdownItem>
+                }
+                @foreach (var client in _list)
+                {
+                    <LumexDropdownItem OnClick="@(() => OnClientSelected(client))">
+                        <ChildContent>@client?.Name</ChildContent>
+                    </LumexDropdownItem>
+                }
+            </LumexDropdownMenu>
+        </LumexDropdown>
     }
-    <LumexDropdown>
-        <LumexDropdownTrigger>
-            <LumexButton
-                Disabled="Disabled"
-                FullWidth="true"
-                Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)"
-                Variant="Variant.Outlined"
-                Class="@SelectClass">
-                @if (_selectedItem is null)
+    else
+    {
+        <LumexSelect
+            TValue="ClientDto"
+            Label="@Label"
+            Placeholder="@_placeholder"
+            LabelPlacement="LabelPlacement.Outside"
+            Variant="@Variant"
+            Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)"
+            ValueChanged="dto => OnValueChanged(dto)"
+            Value="_selectedItem"
+            Invalid="@IsInvalid">
+            <ChildContent>
+                @if (Clearable && _selectedItem != null)
                 {
-                    @_placeholder
+                    <LumexSelectItem Value="@_clearSentinel" TextValue="">
+                        <div class="flex items-center gap-2 text-slate-400">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                            <span class="text-small">None</span>
+                        </div>
+                    </LumexSelectItem>
                 }
-                else
+                @foreach (var client in _list)
                 {
-                    @_selectedItem?.Name
+                    <LumexSelectItem @key="@client" Value="@client">
+                        @client?.Name
+                    </LumexSelectItem>
                 }
-            </LumexButton>
-        </LumexDropdownTrigger>
-        <LumexDropdownMenu
-            Color="ThemeColor.Info"
-            Variant="MenuVariant.Outlined">
-            @if (Clearable && _selectedItem != null)
-            {
-                <LumexDropdownItem OnClick="@(() => OnValueChanged(null))" Class="text-slate-400">
-                    <span class="flex items-center gap-2">
-                        <i class="fa-solid fa-xmark text-xs"></i>
-                        None
-                    </span>
-                </LumexDropdownItem>
-            }
-            @foreach (var project in _list)
-            {
-                <LumexDropdownItem OnClick="@(() => OnValueChanged(project))">
-                    @project?.Name
-                </LumexDropdownItem>
-            }
-        </LumexDropdownMenu>
-    </LumexDropdown>
+            </ChildContent>
+            <ValueContent>
+                <span>@context?.Name</span>
+            </ValueContent>
+        </LumexSelect>
+    }
 </div>

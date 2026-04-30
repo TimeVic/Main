@@ -1,4 +1,5 @@
-@using LumexUI.Common
+﻿@using LumexUI.Common
+@using TimeTracker.Web.Constants.Ui
 
 @inherits BaseReactiveComponent
 
@@ -7,6 +8,7 @@
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <div>
                 <ClientsDropDown
+                    Type="DropDownType.Select"
                     Label="Client"
                     Clearable="true"
                     FullWidth="true"
@@ -15,6 +17,7 @@
             </div>
             <div>
                 <ProjectsDropDown
+                    Type="DropDownType.Select"
                     Label="Project"
                     Clearable="true"
                     FullWidth="true"
@@ -24,6 +27,7 @@
             </div>
             <div>
                 <MembersDropDown
+                    Type="DropDownType.Select"
                     Label="Member"
                     FullWidth="true"
                     Clearable="true"
@@ -32,8 +36,10 @@
             </div>
             <div>
                 <BooleanDropDown
+                    SelectType="DropDownType.Select"
                     Label="Billable"
                     FullWidth="true"
+                    Clearable="true"
                     Value="@_state.Value.Filter.IsBillable"
                     ValueChanged="OnChangeBillable"/>
             </div>
@@ -43,6 +49,7 @@
                     Label="Date from"
                     Value="@_state.Value.Filter.DateFrom"
                     ValueChanged="OnChangeDateFrom"
+                    Clearable="true"
                     Variant="InputVariant.Outlined"
                     LabelPlacement="LabelPlacement.Outside"
                     FullWidth="true"/>
@@ -53,6 +60,7 @@
                     Label="Date to"
                     Value="@_state.Value.Filter.DateTo"
                     ValueChanged="OnChangeDateTo"
+                    Clearable="true"
                     Variant="InputVariant.Outlined"
                     LabelPlacement="LabelPlacement.Outside"
                     FullWidth="true"/>
