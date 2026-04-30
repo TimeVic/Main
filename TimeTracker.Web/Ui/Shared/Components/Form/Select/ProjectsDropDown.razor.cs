@@ -1,13 +1,18 @@
 ﻿using Fluxor;
+using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Web.Constants.Ui;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Store.Project;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
 public partial class ProjectsDropDown: IDisposable
-{   
+{
+    [Parameter]
+    public InputVariant Variant { get; set; } = InputVariant.Outlined;
+
     [Parameter]
     public bool ShowProjectsWithoutClients { get; set; } = true;
     
@@ -48,17 +53,15 @@ public partial class ProjectsDropDown: IDisposable
     private void UpdateList()
     {
         _list = _state.Value.List.ToList();
-        UpdateSelectedItem();
         if (_clientId == Guid.Empty && ShowProjectsWithoutClients)
         {
             _list = _list.Where(item => item.Client == null).ToList();
-            return;
         }
-        if (!_clientId.HasValue || _clientId.Value == Guid.Empty)
+        else if (_clientId.HasValue && _clientId.Value != Guid.Empty)
         {
-            return;
+            _list = _list.Where(item => item.Client?.Id == _clientId).ToList();
         }
-        _list = _list.Where(item => item.Client?.Id == _clientId).ToList();
+        UpdateSelectedItem();
     }
     
     protected override void UpdateSelectedItem()

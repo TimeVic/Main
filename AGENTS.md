@@ -133,6 +133,7 @@ dotnet test ./TimeTracker.Tests.Unit.Business
 
  - Write all comments and notes in English
  - Comments like " @* Added: Invalid *@" non needed(with simple action description)
+ - Do not create GIT commits
 
  ## Blazor requirenments
   - Format of the page components: <SomeName>Page.razor(SomePage.razor)

@@ -1,56 +1,81 @@
-﻿@inherits BaseReactiveComponent
+﻿@using LumexUI.Common
+@using TimeTracker.Web.Constants.Ui
 
-<FluentToolbar Class="pa-4 w-100" Orientation="Orientation.Horizontal">
-    <FluentGrid Justify="JustifyContent.SpaceBetween" Class="w-100">
-        <FluentGridItem lg="3" md="6" xs="12">
-            <ClientsDropDown
-                Label="Client"
-                Clearable="true"
-                FullWidth="true"
-                Value="@(_state.Value.Filter.ClientId ?? Guid.Empty)"
-                SelectedItemChanged="OnChangeClient"/>
-        </FluentGridItem>
-        <FluentGridItem lg="3" md="6" xs="12">
-            <ProjectsDropDown
-                Label="Project"
-                Clearable="true"
-                FullWidth="true"
-                Value="@(_state.Value.Filter.ProjectId ?? Guid.Empty)"
-                ClientId="@(_state.Value.Filter.ClientId ?? Guid.Empty)"
-                SelectedItemChanged="OnChangeProject"/>
-        </FluentGridItem>
-        <FluentGridItem lg="3" md="6" xs="12">
-            <FluentDatePicker
-                Label="Date from"
-                Class="w-100"
-                Value="@_state.Value.Filter.DateFrom"
-                ValueChanged="OnChangeDateFrom"/>
-        </FluentGridItem>
-        <FluentGridItem lg="3" md="6" xs="12">
-            <FluentDatePicker
-                Label="Date to"
-                Class="w-100"
-                Value="@_state.Value.Filter.DateTo"
-                ValueChanged="OnChangeDateTo"/>
-        </FluentGridItem>
-    </FluentGrid>
-    <FluentGrid
-        Justify="JustifyContent.SpaceBetween"
-        Class="mt-2 w-100">
-        <FluentGridItem lg="6" md="6" xs="12">
-            <MembersDropDown
-                Label="Member"
-                FullWidth="true"
-                Clearable="true"
-                UserId="@(_state.Value.Filter.UserId ?? Guid.Empty)"
-                SelectedItemChanged="OnChangeMember"/>
-        </FluentGridItem>
-        <FluentGridItem lg="6" md="6" xs="12">
-            <FluentTextField
+@inherits BaseReactiveComponent
+
+<LumexCard Class="border-slate-200 bg-slate-50/50 shadow-none">
+    <LumexCardBody>
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div>
+                <ClientsDropDown
+                    Type="DropDownType.Select"
+                    Label="Client"
+                    Clearable="true"
+                    FullWidth="true"
+                    Value="@(_state.Value.Filter.ClientId ?? Guid.Empty)"
+                    SelectedItemChanged="OnChangeClient"/>
+            </div>
+            <div>
+                <ProjectsDropDown
+                    Type="DropDownType.Select"
+                    Label="Project"
+                    Clearable="true"
+                    FullWidth="true"
+                    Value="@(_state.Value.Filter.ProjectId ?? Guid.Empty)"
+                    ClientId="@_state.Value.Filter.ClientId"
+                    SelectedItemChanged="OnChangeProject"/>
+            </div>
+            <div>
+                <MembersDropDown
+                    Type="DropDownType.Select"
+                    Label="Member"
+                    FullWidth="true"
+                    Clearable="true"
+                    UserId="@_state.Value.Filter.UserId"
+                    SelectedItemChanged="OnChangeMember"/>
+            </div>
+            <div>
+                <BooleanDropDown
+                    SelectType="DropDownType.Select"
+                    Label="Billable"
+                    FullWidth="true"
+                    Clearable="true"
+                    Value="@_state.Value.Filter.IsBillable"
+                    ValueChanged="OnChangeBillable"/>
+            </div>
+            <div>
+                <LumexDatebox
+                    TValue="DateTime?"
+                    Label="Date from"
+                    Value="@_state.Value.Filter.DateFrom"
+                    ValueChanged="OnChangeDateFrom"
+                    Clearable="true"
+                    Variant="InputVariant.Outlined"
+                    LabelPlacement="LabelPlacement.Outside"
+                    FullWidth="true"/>
+            </div>
+            <div>
+                <LumexDatebox
+                    TValue="DateTime?"
+                    Label="Date to"
+                    Value="@_state.Value.Filter.DateTo"
+                    ValueChanged="OnChangeDateTo"
+                    Clearable="true"
+                    Variant="InputVariant.Outlined"
+                    LabelPlacement="LabelPlacement.Outside"
+                    FullWidth="true"/>
+            </div>
+        </div>
+        <div class="mt-4">
+            <LumexTextbox
+                TValue="string"
                 Label="Search"
-                Class="w-100"
+                Placeholder="Search by description..."
                 Value="@_state.Value.Filter.Search"
-                ValueChanged="OnChangeSearch"/>
-        </FluentGridItem>
-    </FluentGrid>
-</FluentToolbar>
+                ValueChanged="OnChangeSearch"
+                FullWidth="true"
+                LabelPlacement="LabelPlacement.Outside"
+                Variant="InputVariant.Outlined"/>
+        </div>
+    </LumexCardBody>
+</LumexCard>

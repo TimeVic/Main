@@ -76,6 +76,7 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                     </div>
                     <div>
                         <MembersDropDown
+                            Type="DropDownType.Select"
                             Label="Assigned"
                             UserId="_model.UserId"
                             SelectedItemChanged="OnAssignedChanged"
