@@ -27,7 +27,9 @@ public class TimeEntryController(ILifetimeScope scope) : MainApiControllerBase(s
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Stop([FromBody] StopRequest request)
-        => this.RequestAsync(request);
+        => this.RequestAsync()
+            .For<TimeEntryDto>()
+            .With(request);
     
     [HttpPost("set")]
     [ProducesResponseType(StatusCodes.Status200OK)]
