@@ -24,7 +24,7 @@ public partial class TimeEntryListBlock
         Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction());
     }
 
-    private async Task OnConfirmDelete()
+    private void OnConfirmDelete()
     {
         if (_timeEntryToDelete == null)
             return;
@@ -32,17 +32,8 @@ public partial class TimeEntryListBlock
         var entryId = _timeEntryToDelete.Id;
         _timeEntryToDelete = null;
 
-        try
-        {
-            await ApiService.TimeEntryDeleteAsync(entryId);
-            Dispatcher.Dispatch(new DeleteTimeEntryFromListAction(entryId));
-            Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction());
-            ToastService.ShowInfo("Time entry deleted!");
-        }
-        catch (Exception)
-        {
-            ToastService.ShowError("Failed to delete time entry.");
-        }
+        Dispatcher.Dispatch(new DeleteTimeEntryAction(entryId));
+        Dispatcher.Dispatch(new LoadTimeEntryFilteredListAction());
     }
 
     private void OnPageChanged(int page)
