@@ -59,6 +59,7 @@
             Variant="InputVariant.Outlined"
             Color="ThemeColor.Default"
             Clearable="@Clearable"
+            OnCleared="@(() => OnItemSelected(null))"
             ValueChanged="OnSelectValueChanged"
             Value="Value">
             <ChildContent>

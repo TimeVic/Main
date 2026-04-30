@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select.Core;
 
-public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable where T : BaseDto
+public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable where T : BaseDto, new()
 {
     [CascadingParameter]
     protected EditContext? CurrentEditContext { get; set; }
@@ -73,6 +73,7 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable wh
     protected ICollection<T> _list = new List<T>();
     protected string? _selectedId = null;
     protected string? _placeholder => _selectedItem is null ? Placeholder : null;
+    protected readonly T _clearSentinel = new T { Id = Guid.Empty };
     
     protected FieldIdentifier FieldIdentifier;
     
@@ -121,6 +122,8 @@ public abstract class BaseSingleSelect<T>: BaseReactiveComponent, IDisposable wh
     
     protected void OnValueChanged(T? item)
     {
+        if (item?.Id == Guid.Empty)
+            item = null;
         _selectedId = item?.Id.ToString();
         if (_selectedItem != item)
         {

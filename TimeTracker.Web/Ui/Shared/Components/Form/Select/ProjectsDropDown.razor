@@ -67,11 +67,19 @@
             LabelPlacement="LabelPlacement.Outside"
             Variant="@Variant"
             Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)"
-            Clearable="@Clearable"
             ValueChanged="dto => OnValueChanged(dto)"
             Value="_selectedItem"
             Invalid="@IsInvalid">
             <ChildContent>
+                @if (Clearable && _selectedItem != null)
+                {
+                    <LumexSelectItem Value="@_clearSentinel" TextValue="">
+                        <div class="flex items-center gap-2 text-slate-400">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                            <span class="text-small">None</span>
+                        </div>
+                    </LumexSelectItem>
+                }
                 @foreach (var project in _list)
                 {
                     <LumexSelectItem @key="@project" Value="@project" Description="@project?.Client?.Name">
