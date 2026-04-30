@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+static/issue-panel/node_modules/
+static/admin-page/node_modules/
+
+# Build output
+dist/
+static/issue-panel/build/
+static/admin-page/build/
+
+# Forge
+.forge/
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db

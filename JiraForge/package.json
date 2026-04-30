@@ -1,0 +1,21 @@
+{
+  "name": "timevic-jira-forge",
+  "version": "1.0.0",
+  "description": "TimeVic Jira Forge Plugin - track time from Jira issues",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "deploy": "forge deploy",
+    "build:all": "npm run build && cd static/issue-panel && npm run build && cd ../admin-page && npm run build",
+    "install:all": "npm install && cd static/issue-panel && npm install --legacy-peer-deps && cd ../admin-page && npm install --legacy-peer-deps"
+  },
+  "dependencies": {
+    "@forge/api": "^4.0.0",
+    "@forge/resolver": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,43 @@
+modules:
+  jira:issuePanel:
+    - key: timevic-issue-panel
+      title: TimeVic
+      resource: issue-panel-resource
+      resolver:
+        function: resolver
+
+  jira:adminPage:
+    - key: timevic-admin-page
+      title: TimeVic Settings
+      resource: admin-page-resource
+      resolver:
+        function: resolver
+
+  function:
+    - key: resolver
+      handler: index.handler
+
+resources:
+  - key: issue-panel-resource
+    path: static/issue-panel/build
+    tunnel:
+      port: 3000
+
+  - key: admin-page-resource
+    path: static/admin-page/build
+    tunnel:
+      port: 3001
+
+app:
+  id: ari:cloud:ecosystem::app/TO_BE_SET_AFTER_FORGE_REGISTER
+  runtime:
+    name: nodejs18.x
+
+permissions:
+  scopes:
+    - read:jira-work
+    - storage:app
+  external:
+    fetch:
+      backend:
+        - https://api.timevic.com
