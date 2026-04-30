@@ -14,9 +14,9 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryStart, model);
         }
         
-        public async Task TimeEntryStopAsync(StopRequest model)
+        public async Task<TimeEntryDto?> TimeEntryStopAsync(StopRequest model)
         {
-            await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryStop, model);
+            return await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryStop, model);
         }
         
         public async Task<TimeEntryDto?> TimeEntrySetAsync(SetRequest model)

@@ -8,6 +8,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.TimeEntry;
@@ -23,6 +24,7 @@ public class StopTest: BaseTest
     private readonly IWorkspaceDao _workspaceDao;
     private new readonly IQueueDao _queueDao;
     private readonly IQueueService _queueService;
+    private readonly ITaskSeeder _taskSeeder;
 
     public StopTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -30,6 +32,7 @@ public class StopTest: BaseTest
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
+        _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
@@ -63,6 +66,10 @@ public class StopTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
+        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        Assert.Equal(expectedEntry.Id, actualDto.Id);
+        Assert.NotNull(actualDto.EndTime);
+
         await DbSessionProvider.CurrentSession.RefreshAsync(_defaultWorkspace);
         Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
         
@@ -85,5 +92,31 @@ public class StopTest: BaseTest
         
         var processedCounter = await QueueProcess(QueueChannel.ExternalClient);
         Assert.True(processedCounter == 0);
+    }
+
+    [Fact]
+    public async Task ShouldReturnLinkedTaskWithTrackedDuration()
+    {
+        var task = await _taskSeeder.CreateAsync(user: _user);
+        var startTime = DateTime.UtcNow.AddHours(-2);
+        var expectedEntry = await _timeEntryDao.StartNewAsync(
+            _user,
+            _defaultWorkspace,
+            startTime,
+            internalTask: task
+        );
+        
+        var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id,
+            EndTime = startTime.AddHours(1)
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        Assert.Equal(expectedEntry.Id, actualDto.Id);
+        Assert.NotNull(actualDto.Task);
+        Assert.Equal(task.Id, actualDto.Task.Id);
+        Assert.Equal(TimeSpan.FromHours(1), actualDto.Task.TrackedDuration);
     }
 }

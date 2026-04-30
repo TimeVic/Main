@@ -6,6 +6,7 @@ using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 using TimeTracker.Web.Store.Project;
+using TimeTracker.Web.Store.Tasks;
 
 namespace TimeTracker.Web.Store.TimeEntry.Effects;
 
@@ -43,11 +44,16 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
             dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(true));
             if (_timeEntryState.Value.HasActiveEntry)
             {
-                await _apiService.TimeEntryStopAsync(new StopRequest()
+                var stoppedTimeEntry = await _apiService.TimeEntryStopAsync(new StopRequest()
                 {
                     WorkspaceId = _authState.Value.Workspace!.Id,
                     EndTime = DateTime.UtcNow
                 });
+                if (stoppedTimeEntry?.Task != null)
+                {
+                    dispatcher.Dispatch(new UpdateListItemsAction(new[] { stoppedTimeEntry.Task }));
+                }
+
                 isWasStopped = true;
             }
 
