@@ -96,7 +96,7 @@ public class AddTaskAsyncTest: BaseTest
     }
 
     [Fact]
-    public async Task ShouldAssignSequentialPositionIndexWithinTaskList()
+    public async Task ShouldAssignTopPositionIndexWithinTaskList()
     {
         var firstTask = await _taskDao.AddTaskAsync(
             _taskList1,
@@ -119,7 +119,7 @@ public class AddTaskAsyncTest: BaseTest
         );
 
         Assert.Equal(0, firstTask.PositionIndex);
-        Assert.Equal(1, secondTask.PositionIndex);
+        Assert.Equal(-1, secondTask.PositionIndex);
         Assert.Equal(0, thirdTask.PositionIndex);
     }
 
