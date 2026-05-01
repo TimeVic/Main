@@ -365,7 +365,13 @@
             />
         </ItemGroup>
 
-        <Exec Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css" />
+        <Message
+            Text="Compiling LESS: %(LessFiles.Identity) -> %(LessFiles.RelativeDir)%(Filename).css"
+            Importance="high" />
+        <Exec
+            Command="node $(ProjectDir)node_modules/less/bin/lessc %(LessFiles.Identity) %(LessFiles.RelativeDir)%(Filename).css"
+            StandardOutputImportance="high"
+            StandardErrorImportance="high" />
     </Target>
     
     <Target Name="TailwindCssBuild" AfterTargets="Build;PrepareForPublish" Condition="Exists('bin/lumexui')">
