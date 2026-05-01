@@ -91,11 +91,11 @@ public class TaskDao: ITaskDao
     )
     {
         var taskId = await _sequenceDao.GetNextValue(taskList.Project.Workspace);
-        var nextPositionIndex = await GetNextPositionIndexAsync(taskList.Id);
+        var topPositionIndex = await GetTopPositionIndexAsync(taskList.Id);
         var task = new TaskEntity()
         {
             TaskId = taskId,
-            PositionIndex = nextPositionIndex,
+            PositionIndex = topPositionIndex,
             TaskList = taskList,
             User = user,
             Title = title,
@@ -248,14 +248,14 @@ public class TaskDao: ITaskDao
         );
     }
 
-    private async Task<int> GetNextPositionIndexAsync(Guid taskListId)
+    private async Task<int> GetTopPositionIndexAsync(Guid taskListId)
     {
-        var maxPositionIndex = await _sessionProvider.CurrentSession.Query<TaskEntity>()
+        var minPositionIndex = await _sessionProvider.CurrentSession.Query<TaskEntity>()
             .Where(item => item.TaskList.Id == taskListId)
             .Select(item => (int?)item.PositionIndex)
-            .MaxAsync();
+            .MinAsync();
 
-        return (maxPositionIndex ?? -1) + 1;
+        return (minPositionIndex ?? 1) - 1;
     }
     
     private void SetStartEndTime(TaskEntity task, DateTime? startTime, DateTime? endTime)
