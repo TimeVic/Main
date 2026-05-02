@@ -12,6 +12,9 @@ public partial class ClientsDropDown
     [Parameter]
     public InputVariant Variant { get; set; } = InputVariant.Outlined;
 
+    [Parameter]
+    public Size Size { get; set; } = Size.Medium;
+    
     [Inject]
     public IState<ClientState> _state { get; set; }
 

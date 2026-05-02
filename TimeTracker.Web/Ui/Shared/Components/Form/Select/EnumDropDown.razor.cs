@@ -33,7 +33,7 @@ public partial class EnumDropDown<TItem>
     public string Class { get; set; }
     
     [Parameter]
-    public LumexUI.Common.Size Size { get; set; }
+    public Size Size { get; set; } = Size.Medium;
     
     [Parameter]
     public string Style { get; set; }
