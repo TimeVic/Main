@@ -44,6 +44,8 @@ public partial class BaseLayout
             var path = NavigationManager.GetPath();
             return path.Equals("/") 
                 || path.StartsWith(SiteUrl.Login)
+                || path.StartsWith(SiteUrl.LoginAsDemo)
+                || path.StartsWith(SiteUrl.Registration_Step1)
                 || path.StartsWith("/registration")
                 || path.StartsWith("/documentation");
         }
