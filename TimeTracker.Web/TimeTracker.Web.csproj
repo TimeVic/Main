@@ -352,19 +352,23 @@
         <TailwindOutputCss>$(ProjectDir)wwwroot\css\app.min.css</TailwindOutputCss>
     </PropertyGroup>
 
+    <ItemGroup>
+        <LessFiles
+            Include="Ui\**\*.less"
+            Exclude="node_modules\**\*.less;wwwroot\**\*.less;styles\**\*.less;Ignore\**\*.less"
+        />
+        <GeneratedLessCssFiles Include="@(LessFiles->'%(RelativeDir)%(Filename).css')" />
+        <None Remove="@(GeneratedLessCssFiles)" />
+        <Content Remove="@(GeneratedLessCssFiles)" />
+        <Content Include="@(GeneratedLessCssFiles)" Pack="false" CopyToPublishDirectory="Never" />
+    </ItemGroup>
+
     <Target Name="Npm" BeforeTargets="CompileLess;Build" Condition="!Exists('node_modules')">
         <Message Text="Running npm ci..." Importance="high" />
         <Exec Command="npm install" />
     </Target>
 
     <Target Name="CompileLess" BeforeTargets="ResolveScopedCssInputs;Build;PrepareForPublish">
-        <ItemGroup>
-            <LessFiles
-                Include="Ui\**\*.less"
-                Exclude="node_modules\**\*.less;wwwroot\**\*.less;styles\**\*.less;Ignore\**\*.less"
-            />
-        </ItemGroup>
-
         <Message
             Text="Compiling LESS: %(LessFiles.Identity) -> %(LessFiles.RelativeDir)%(Filename).css"
             Importance="high" />
