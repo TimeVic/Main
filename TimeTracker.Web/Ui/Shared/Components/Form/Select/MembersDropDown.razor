@@ -15,7 +15,7 @@
             <LumexDropdownTrigger>
                 <LumexButton
                     FullWidth="true"
-                    Color="ThemeColor.Info"
+                    Color="ThemeColor.Default"
                     Variant="Variant.Outlined"
                     Disabled="Disabled">
                     @if (_selectedItem is null)
@@ -29,7 +29,7 @@
                 </LumexButton>
             </LumexDropdownTrigger>
             <LumexDropdownMenu
-                Color="ThemeColor.Info"
+                Color="ThemeColor.Default"
                 Variant="MenuVariant.Outlined">
                 @if (Clearable && _selectedItem != null)
                 {
@@ -57,7 +57,7 @@
             TValue="WorkspaceMembershipDto"
             Label="@Label"
             Placeholder="@_placeholder"
-            Color="ThemeColor.Info"
+            Color="ThemeColor.Default"
             Variant="InputVariant.Outlined"
             LabelPlacement="@LabelPlacement.Outside"
             ValueChanged="dto => OnValueChanged(dto)"

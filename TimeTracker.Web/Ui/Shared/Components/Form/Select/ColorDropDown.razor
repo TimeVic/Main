@@ -14,7 +14,7 @@
                 <LumexButton
                     Disabled="Disabled"
                     FullWidth="FullWidth"
-                    Color="@(HasError ? ThemeColor.Danger : ThemeColor.Info)"
+                    Color="@(HasError ? ThemeColor.Danger : ThemeColor.Default)"
                     Variant="Variant.Outlined">
                     @if (SelectedColor is null)
                     {
@@ -33,7 +33,7 @@
                 </LumexButton>
             </LumexDropdownTrigger>
             <LumexDropdownMenu
-                Color="ThemeColor.Info"
+                Color="ThemeColor.Default"
                 Variant="MenuVariant.Outlined">
                 @if (Clearable && SelectedColor != null)
                 {

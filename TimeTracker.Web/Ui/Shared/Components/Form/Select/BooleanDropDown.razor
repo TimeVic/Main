@@ -15,7 +15,7 @@
             <LumexDropdownTrigger>
                 <LumexButton
                     FullWidth="@FullWidth"
-                    Color="ThemeColor.Info"
+                    Color="ThemeColor.Default"
                     Variant="Variant.Outlined"
                     Class="@(FullWidth ? "w-100" : "")">
                     @if (Value.HasValue)
@@ -29,7 +29,7 @@
                 </LumexButton>
             </LumexDropdownTrigger>
             <LumexDropdownMenu
-                Color="ThemeColor.Info"
+                Color="ThemeColor.Default"
                 Variant="MenuVariant.Outlined">
                 @if (Clearable && Value.HasValue)
                 {

@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using LumexUI;
+using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Store.Tag;
@@ -35,6 +36,9 @@ public partial class TagsDropDown
 
     [Parameter]
     public bool FullWidth { get; set; } = true;
+
+    [Parameter]
+    public InputVariant Variant { get; set; } = InputVariant.Outlined;
 
     [Inject]
     public IState<TagState> _state { get; set; }
