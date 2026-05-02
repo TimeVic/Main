@@ -183,6 +183,38 @@ public class GetPaymentsReportTest: BaseTest
         Assert.Equal(projectClient.Id, actualForProject1.ClientId);
         Assert.Equal(projectClient.Name, actualForProject1.ClientName);
     }
+
+    [Fact]
+    public async Task ShouldIncludeCurrentDayPaymentWithoutTimeEntries()
+    {
+        var project = (await _projectSeederSeeder.CreateSeveralAsync(_workspace, 1)).First();
+        var client = project.Client!;
+        var paymentTime = DateTime.UtcNow.Date.AddHours(12);
+        await _paymentDao.CreateAsync(
+            _workspace,
+            _user,
+            client,
+            125,
+            paymentTime
+        );
+
+        await FlushDbChanges();
+        var result = await _reportsDao.GetProjectPaymentsReport(
+            _workspace.Id,
+            _user.Id,
+            DateTime.UtcNow.Date
+        );
+
+        var actualForClient = result.FirstOrDefault(item => item.ClientId == client.Id);
+        Assert.NotNull(actualForClient);
+        Assert.Null(actualForClient.ProjectId);
+        Assert.Equal(client.Id, actualForClient.ClientId);
+        Assert.Equal(client.Name, actualForClient.ClientName);
+        Assert.Equal(0, actualForClient.Amount);
+        Assert.Equal(125, actualForClient.PaidAmountByClient);
+        Assert.Equal(0, actualForClient.PaidAmountByProject);
+        Assert.Equal(TimeSpan.Zero, actualForClient.TotalDuration);
+    }
     
     [Fact]
     public async Task ShouldReceiveOnlyForCurrentUser()
