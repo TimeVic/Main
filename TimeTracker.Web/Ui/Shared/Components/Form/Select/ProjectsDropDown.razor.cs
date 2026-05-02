@@ -14,6 +14,9 @@ public partial class ProjectsDropDown: IDisposable
     public InputVariant Variant { get; set; } = InputVariant.Outlined;
 
     [Parameter]
+    public Size Size { get; set; } = Size.Medium;
+    
+    [Parameter]
     public bool ShowProjectsWithoutClients { get; set; } = true;
     
     [Parameter]

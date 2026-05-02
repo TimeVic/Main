@@ -16,6 +16,7 @@
                     FullWidth="true"
                     Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Default)" 
                     Variant="LumexUI.Common.Variant.Outlined"
+                    Size="Size"
                     Disabled="Disabled"
                     Class="@SelectClass"
                 >
@@ -65,6 +66,7 @@
             Label="@Label"
             Placeholder="@_placeholder"
             LabelPlacement="LabelPlacement.Outside"
+            Size="Size"
             Variant="@Variant"
             Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Default)"
             ValueChanged="dto => OnValueChanged(dto)"
