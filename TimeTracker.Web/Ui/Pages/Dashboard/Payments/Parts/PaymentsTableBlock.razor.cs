@@ -14,6 +14,7 @@ public partial class PaymentsTableBlock
     private bool _isLoading => _state.Value.IsListLoading;
     
     private PaymentDto? _paymentToDelete;
+    private PaymentDto? _paymentToUpdate;
 
     protected override async Task OnInitializedAsync()
     {
@@ -22,7 +23,8 @@ public partial class PaymentsTableBlock
 
     private Task OnRowClickHandler(DataGridRowClickEventArgs<PaymentDto> arg)
     {
-        throw new NotImplementedException();
+        _paymentToUpdate = arg.Item;
+        return Task.CompletedTask;
     }
 
     private void OnDeletePayment()
