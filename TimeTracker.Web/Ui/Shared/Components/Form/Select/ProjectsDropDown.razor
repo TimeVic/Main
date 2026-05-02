@@ -14,7 +14,7 @@
             <LumexDropdownTrigger>
                 <LumexButton 
                     FullWidth="true"
-                    Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)" 
+                    Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Default)" 
                     Variant="LumexUI.Common.Variant.Outlined"
                     Disabled="Disabled"
                     Class="@SelectClass"
@@ -30,7 +30,7 @@
                 </LumexButton>
             </LumexDropdownTrigger>
             <LumexDropdownMenu
-                Color="ThemeColor.Info" 
+                Color="ThemeColor.Default" 
                 Variant="MenuVariant.Outlined">
                 @if (Clearable && _selectedItem != null)
                 {
@@ -66,7 +66,7 @@
             Placeholder="@_placeholder"
             LabelPlacement="LabelPlacement.Outside"
             Variant="@Variant"
-            Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Info)"
+            Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Default)"
             ValueChanged="dto => OnValueChanged(dto)"
             Value="_selectedItem"
             Invalid="@IsInvalid">

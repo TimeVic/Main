@@ -35,7 +35,7 @@ public partial class TaskListsDropDown: IDisposable
     public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
 
     [Parameter]
-    public InputVariant Variant { get; set; } = InputVariant.Flat;
+    public InputVariant Variant { get; set; } = InputVariant.Outlined;
     
     [Inject]
     public IState<TasksListState> _state { get; set; }
