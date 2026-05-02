@@ -1,8 +1,17 @@
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Web.Ui.Pages.Dashboard.Payments.Parts.Modals
 @using TimeTracker.Web.Ui.Shared.Components
 @using TimeTracker.Web.Ui.Shared.Components.Dialogs
 @inherits BaseReactiveComponent
+
+@if (_paymentToUpdate != null)
+{
+    <UpdatePaymentModal
+        Payment="_paymentToUpdate"
+        IsOpened="true"
+        IsOpenedChanged="isOpened => _paymentToUpdate = isOpened ? _paymentToUpdate : null"/>
+}
 
 @if (_paymentToDelete != null)
 {
