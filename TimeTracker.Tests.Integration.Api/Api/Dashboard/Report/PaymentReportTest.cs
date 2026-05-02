@@ -93,4 +93,37 @@ public class PaymentReportTest: BaseTest
             Assert.NotEmpty(item.ProjectName!);
         });
     }
+
+    [Fact]
+    public async Task ShouldIncludeCurrentDayPaymentWithoutTimeEntries()
+    {
+        var project = (await _projectDao.CreateSeveralAsync(_defaultWorkspace, 1)).First();
+        var client = project.Client!;
+        await _paymentDao.CreateAsync(
+            _defaultWorkspace,
+            _user,
+            client,
+            125,
+            DateTime.UtcNow.Date.AddHours(12)
+        );
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new PaymentReportRequest()
+        {
+            WorkspaceId = _defaultWorkspace.Id,
+            EndDate = DateTime.UtcNow.Date
+        });
+
+        response.EnsureSuccessStatusCode();
+        var actualDto = await response.GetJsonDataAsync<PaymentReportResponse>();
+        var actualForClient = actualDto.Items.FirstOrDefault(item => item.ClientId == client.Id);
+        Assert.NotNull(actualForClient);
+        Assert.Null(actualForClient.ProjectId);
+        Assert.Equal(client.Id, actualForClient.ClientId);
+        Assert.Equal(client.Name, actualForClient.ClientName);
+        Assert.Equal(0, actualForClient.Amount);
+        Assert.Equal(125, actualForClient.PaidAmountByClient);
+        Assert.Equal(0, actualForClient.PaidAmountByProject);
+        Assert.Equal(TimeSpan.Zero, actualForClient.TotalDuration);
+    }
 }
