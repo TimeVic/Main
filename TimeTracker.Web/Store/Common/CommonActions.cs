@@ -5,7 +5,7 @@ namespace TimeTracker.Web.Store.Common;
 
 public record struct LoadPersistedDataAction();
 
-public record struct PersistDataAction();
+public record struct PersistDataAction(bool RedirectToLoginAfterPersist = false);
 
 public record struct SetIsAppInitializedAction(bool IsInitialized);
 
