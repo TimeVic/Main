@@ -31,6 +31,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
     private readonly ITaskListDao _taskListDao;
     private readonly ITaskDao _taskDao;
     private readonly IDbSessionProvider _sessionProvider;
+    private readonly IPaymentDao _paymentDao;
     private readonly ICurrencyDao _currencyDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IPasswordService _passwordService;
@@ -45,6 +46,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         ITaskListDao taskListDao,
         ITaskDao taskDao,
         IDbSessionProvider sessionProvider,
+        IPaymentDao paymentDao,
         ICurrencyDao currencyDao,
         IWorkspaceAccessService workspaceAccessService,
         IPasswordService passwordService
@@ -59,6 +61,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         _taskListDao = taskListDao;
         _taskDao = taskDao;
         _sessionProvider = sessionProvider;
+        _paymentDao = paymentDao;
         _currencyDao = currencyDao;
         _workspaceAccessService = workspaceAccessService;
         _passwordService = passwordService;
@@ -169,6 +172,14 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         await _clientDao.CreateAsync(ws, "📦 Supply Chain Co");
         await _clientDao.CreateAsync(ws, "Idle Customer");
 
+        await SeedPaymentsAsync(ws, user, new[]
+        {
+            new DemoPaymentSeed(acmeClient, project1, 620, -21, "Bug fixing retainer"),
+            new DemoPaymentSeed(acmeClient, project3, 380, -10, "Maintenance milestone"),
+            new DemoPaymentSeed(northstarClient, project2, 540, -14, "Design system phase 1"),
+            new DemoPaymentSeed(brightAppsClient, project4, 450, -5, "Mobile release deposit"),
+            new DemoPaymentSeed(acmeClient, null, 250, -3, "General account credit")
+        });
         await SeedTimeEntriesAsync(ws, user, tasks);
     }
 
@@ -210,6 +221,15 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         tasks.Add(await _taskDao.AddTaskAsync(list5, user, "Stabilize smoke tests", priority: TaskPriority.High));
         tasks.Add(await _taskDao.AddTaskAsync(list5, user, "Add reporting screenshots", priority: TaskPriority.Medium));
 
+        await SeedPaymentsAsync(ws, user, new[]
+        {
+            new DemoPaymentSeed(mediaClient, project1, 780, -24, "Campaign kickoff payment"),
+            new DemoPaymentSeed(mediaClient, project1, 430, -7, "Launch copy approval"),
+            new DemoPaymentSeed(insightClient, project2, 690, -17, "Analytics dashboard milestone"),
+            new DemoPaymentSeed(topClient, project3, 900, -11, "Security audit advance"),
+            new DemoPaymentSeed(qualityClient, project4, 360, -4, "QA automation setup"),
+            new DemoPaymentSeed(topClient, null, 300, -2, "Client balance adjustment")
+        });
         await SeedTimeEntriesAsync(ws, user, tasks);
     }
 
@@ -225,6 +245,26 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         project.IsBillableByDefault = defaultHourlyRate.HasValue;
         project.SetClient(client);
         return project;
+    }
+
+    private async Task SeedPaymentsAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        IEnumerable<DemoPaymentSeed> payments
+    )
+    {
+        foreach (var payment in payments)
+        {
+            await _paymentDao.CreateAsync(
+                workspace,
+                user,
+                payment.Client,
+                payment.Amount,
+                DateTime.UtcNow.Date.AddDays(payment.DayOffset).AddHours(12),
+                payment.Project?.Id,
+                payment.Description
+            );
+        }
     }
 
     private async Task SeedTimeEntriesAsync(
@@ -266,4 +306,12 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
             index++;
         }
     }
+
+    private sealed record DemoPaymentSeed(
+        ClientEntity Client,
+        ProjectEntity? Project,
+        decimal Amount,
+        int DayOffset,
+        string Description
+    );
 }
