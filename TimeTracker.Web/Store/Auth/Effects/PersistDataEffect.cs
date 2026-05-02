@@ -8,7 +8,7 @@ public class LogoutEffect: AEffectPersistData<LogoutAction>
 {
     public override Task HandleAsync(LogoutAction pageAction, IDispatcher dispatcher)
     {
-        dispatcher.Dispatch(new PersistDataAction());
+        dispatcher.Dispatch(new PersistDataAction(RedirectToLoginAfterPersist: true));
         return Task.CompletedTask;
     }
 }

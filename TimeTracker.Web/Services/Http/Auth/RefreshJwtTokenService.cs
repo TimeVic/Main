@@ -19,8 +19,6 @@ public class RefreshJwtTokenService
     private readonly ILogger<RefreshJwtTokenService> _logger;
     private readonly IDispatcher _dispatcher;
 
-    private string _jwtToken;
-    
     private TaskCompletionSource<bool>? _lockReleased = null;
     
     public RefreshJwtTokenService(
@@ -39,13 +37,8 @@ public class RefreshJwtTokenService
     public async Task<string?> GetJwt()
     {
         await WaitUntilUnlockedAsync();
-        if (string.IsNullOrEmpty(_jwtToken))
-        {
-            var store = _serviceProvider.GetService<IState<AuthState>>();
-            _jwtToken = store?.Value.JwtToken.Trim() ?? string.Empty;
-        }
-
-        return _jwtToken;
+        var store = _serviceProvider.GetService<IState<AuthState>>();
+        return store?.Value.JwtToken?.Trim() ?? string.Empty;
     }
         
     public async Task<string?> GetAccessToken()
@@ -66,11 +59,11 @@ public class RefreshJwtTokenService
         var diff = jwtExpirationTime - DateTime.UtcNow;
         
         if (diff.TotalMinutes <= 2)
-            return await RequestNewToken();
+            return await RequestNewToken(jwtToken);
         return await GetJwt();
     }
 
-    private async Task<string> RequestNewToken()
+    private async Task<string> RequestNewToken(string jwtToken)
     {
         _logger.LogInformation("Try to re-new JWT token...");
         StartLock();
@@ -82,7 +75,7 @@ public class RefreshJwtTokenService
                 ApiUrl.RefreshToken,
                 new RefreshTokenRequest()
                 {
-                    JwtToken = _jwtToken,
+                    JwtToken = jwtToken,
                     AccessToken = await GetAccessToken() ?? string.Empty
                 },
                 HttpMethod.Post
@@ -93,8 +86,8 @@ public class RefreshJwtTokenService
                 throw new ServerException();
             }
             
-            _jwtToken = refreshResult.JwtToken;
             _dispatcher.Dispatch(new SetJwtAction(refreshResult.JwtToken));
+            return refreshResult.JwtToken;
         }
         catch (Exception e)
         {
@@ -106,7 +99,6 @@ public class RefreshJwtTokenService
             _dispatcher.Dispatch(new PersistDataAction());
             ReleaseLock();
         } 
-        return _jwtToken;
     }
 
     private void StartLock()

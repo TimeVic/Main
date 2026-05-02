@@ -32,7 +32,6 @@ namespace TimeTracker.Web.Services
         public async Task LogoutAsync()
         {
             _dispatcher.Dispatch(new LogoutAction());
-            _dispatcher.Dispatch(new PersistDataAction());
             await Task.CompletedTask;
         }
 
