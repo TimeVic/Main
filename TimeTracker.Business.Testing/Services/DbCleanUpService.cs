@@ -26,6 +26,7 @@ public class DbCleanUpService: IDbCleanUpService
             "messaging.channels",
             
             "notifications",
+            "client_payments",
             "member_payments",
             "queues",
             "task_comment_stored_files",
