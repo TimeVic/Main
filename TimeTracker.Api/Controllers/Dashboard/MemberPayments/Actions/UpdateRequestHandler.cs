@@ -21,6 +21,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
         private readonly IMemberPaymentDao _paymentDao;
         private readonly IClientDao _clientDao;
         private readonly ISecurityManager _securityManager;
+        private readonly IWorkspaceDao _workspaceDao;
+        private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public UpdateRequestHandler(
             IMapper mapper,
@@ -29,7 +31,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             IDbSessionProvider sessionProvider,
             IMemberPaymentDao paymentDao,
             IClientDao clientDao,
-            ISecurityManager securityManager
+            ISecurityManager securityManager,
+            IWorkspaceDao workspaceDao,
+            IWorkspaceAccessService workspaceAccessService
         )
         {
             _mapper = mapper;
@@ -39,6 +43,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             _paymentDao = paymentDao;
             _clientDao = clientDao;
             _securityManager = securityManager;
+            _workspaceDao = workspaceDao;
+            _workspaceAccessService = workspaceAccessService;
         }
     
         public async Task<MemberPaymentDto> ExecuteAsync(UpdateRequest request)
@@ -59,8 +65,25 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
                 throw new HasNoAccessException();
             }
 
+            var member = payment!.Member;
+            if (request.MemberId != Guid.Empty && request.MemberId != payment.Member.Id)
+            {
+                var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, payment.Member.Workspace);
+                if (accessType is not (MembershipAccessType.Owner or MembershipAccessType.Manager))
+                {
+                    throw new HasNoAccessException();
+                }
+
+                member = await _workspaceDao.GetMemberAsync(request.MemberId);
+                if (member == null || member.Workspace.Id != payment.Member.Workspace.Id)
+                {
+                    throw new HasNoAccessException();
+                }
+            }
+
             payment = await _paymentDao.UpdateMemberPaymentAsync(
                 request.MemberPaymentId,
+                member,
                 client,
                 request.Amount,
                 request.PaymentTime,

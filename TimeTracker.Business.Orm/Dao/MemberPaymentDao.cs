@@ -82,6 +82,7 @@ public class MemberPaymentDao: IMemberPaymentDao
     
     public async Task<MemberPaymentEntity?> UpdateMemberPaymentAsync(
         Guid paymentId,
+        WorkspaceMemberEntity member,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
@@ -94,6 +95,7 @@ public class MemberPaymentDao: IMemberPaymentDao
         if (payment != null)
         {
             payment.UpdatedAt = DateTime.UtcNow;
+            payment.Member = member;
             payment.Client = client;
             payment.Amount = amount;
             payment.PaymentTime = paymentTime;
@@ -116,17 +118,34 @@ public class MemberPaymentDao: IMemberPaymentDao
     public async Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceMemberEntity member, int page)
     {
         var offset = PaginationUtils.CalculateOffset(page);
-        var query = _sessionProvider.CurrentSession.QueryOver<MemberPaymentEntity>()
+        var query = _sessionProvider.CurrentSession.Query<MemberPaymentEntity>()
             .Where(item => item.Member.Id == member.Id);
         
-        var items = await query
-            .OrderBy(item => item.PaymentTime).Desc
+        var items = await BuildListQuery(query)
+            .OrderByDescending(item => item.PaymentTime)
             .Skip(offset)
             .Take(PaginationUtils.DefaultPageSize)
-            .ListAsync<MemberPaymentEntity>();
+            .ToListAsync();
         return new ListDto<MemberPaymentEntity>(
             items,
-            await query.RowCountAsync()
+            await query.CountAsync()
+        );
+    }
+
+    public async Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceEntity workspace, int page)
+    {
+        var offset = PaginationUtils.CalculateOffset(page);
+        var query = _sessionProvider.CurrentSession.Query<MemberPaymentEntity>()
+            .Where(item => item.Member.Workspace.Id == workspace.Id);
+
+        var items = await BuildListQuery(query)
+            .OrderByDescending(item => item.PaymentTime)
+            .Skip(offset)
+            .Take(PaginationUtils.DefaultPageSize)
+            .ToListAsync();
+        return new ListDto<MemberPaymentEntity>(
+            items,
+            await query.CountAsync()
         );
     }
 
@@ -147,5 +166,14 @@ public class MemberPaymentDao: IMemberPaymentDao
         }
 
         return member;
+    }
+
+    private static IQueryable<MemberPaymentEntity> BuildListQuery(IQueryable<MemberPaymentEntity> query)
+    {
+        return query
+            .Fetch(item => item.Client)
+            .Fetch(item => item.Project)
+            .Fetch(item => item.Member)
+            .ThenFetch(item => item.User);
     }
 }

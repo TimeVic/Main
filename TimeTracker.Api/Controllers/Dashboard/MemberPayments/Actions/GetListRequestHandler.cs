@@ -18,13 +18,15 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
         private readonly IUserDao _userDao;
         private readonly IMemberPaymentDao _paymentDao;
         private readonly ISecurityManager _securityManager;
+        private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public GetListRequestHandler(
             IMapper mapper,
             IApiRequestService apiRequestService,
             IUserDao userDao,
             IMemberPaymentDao paymentDao,
-            ISecurityManager securityManager
+            ISecurityManager securityManager,
+            IWorkspaceAccessService workspaceAccessService
         )
         {
             _mapper = mapper;
@@ -32,6 +34,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             _userDao = userDao;
             _paymentDao = paymentDao;
             _securityManager = securityManager;
+            _workspaceAccessService = workspaceAccessService;
         }
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
@@ -47,7 +50,11 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
                 throw new HasNoAccessException();
             }
 
-            var listDto = await _paymentDao.GetListAsync(workspace, user, request.Page);
+            var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+            var listDto = accessType is MembershipAccessType.Owner or MembershipAccessType.Manager
+                ? await _paymentDao.GetListAsync(workspace, request.Page)
+                : await _paymentDao.GetListAsync(workspace, user, request.Page);
+
             return new GetListResponse(
                 _mapper.Map<ICollection<MemberPaymentDto>>(listDto.Items),
                 listDto.TotalCount

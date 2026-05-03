@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
@@ -76,6 +77,7 @@ public class GetListTest: BaseTest
             Assert.NotEqual(Guid.Empty, item.Id);
             Assert.Equal(_client.Id, item.Client.Id);
             Assert.Equal(_project.Id, item.Project.Id);
+            Assert.Equal(_user.Id, item.Member.User.Id);
             Assert.True(item.Amount > 0);
             Assert.NotEmpty(item.Description!);
             Assert.True(item.PaymentTime > DateTime.MinValue);
@@ -99,16 +101,21 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task ShouldReceiveOnlyForCurrentUser()
     {
-        var (otherJwt, otherUser, otherWorkspace) = await _userSeeder.CreateAuthorizedAsync();
-        var otherClient = _clientDao.CreateAsync(otherWorkspace, "Test new client").Result;
-        var otherProject = _projectDao.CreateAsync(otherWorkspace, "Test new project").Result;
-        otherProject.SetClient(otherClient);
-        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, otherUser, otherClient, otherProject, 5);
+        var (userJwt, workspaceUser, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        var (_, otherUser, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        await FlushDbChanges();
+        await _paymentSeeder.CreateSeveralAsync(_workspace, otherUser, _client, _project, 5);
         
         var expectedTotal = 21;
-        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _client, _project, expectedTotal);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, workspaceUser, _client, _project, expectedTotal);
         
-        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        var response = await PostRequestAsync(Url, userJwt, new GetListRequest()
         {
             WorkspaceId = _workspace.Id,
             Page = 1
@@ -117,5 +124,28 @@ public class GetListTest: BaseTest
 
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(expectedTotal, actualResponse.TotalCount);
+        Assert.All(actualResponse.Items, item => Assert.Equal(workspaceUser.Id, item.Member.User.Id));
+    }
+
+    [Fact]
+    public async Task ManagerShouldReceivePaymentsForAllWorkspaceMembers()
+    {
+        var (managerJwt, managerUser, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.Manager
+        );
+        await FlushDbChanges();
+        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _client, _project, 3);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, managerUser, _client, _project, 4);
+
+        var response = await PostRequestAsync(Url, managerJwt, new GetListRequest()
+        {
+            WorkspaceId = _workspace.Id,
+            Page = 1
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(7, actualResponse.TotalCount);
     }
 }

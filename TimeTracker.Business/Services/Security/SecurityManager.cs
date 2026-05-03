@@ -163,8 +163,11 @@ public class SecurityManager: ISecurityManager
     private async Task<bool> HasAccessToMemberPayment(AccessLevel accessLevel, UserEntity user, MemberPaymentEntity payment)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, payment.Member.Workspace);
-        return accessType != null
-            && payment.Member.User.Id == user.Id;
+        return accessType is MembershipAccessType.Owner or MembershipAccessType.Manager
+            || (
+                accessType == MembershipAccessType.User
+                && payment.Member.User.Id == user.Id
+            );
     }
 
     private async Task<bool> HasAccessToClientPayment(AccessLevel accessLevel, UserEntity user, ClientPaymentEntity payment)

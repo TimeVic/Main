@@ -94,12 +94,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <StaticWebAssetFingerprintPattern Include="JavaScript" Pattern="*.js" Expression="#[.{fingerprint}]!" />
-      <StaticWebAssetFingerprintPattern Include="Stylesheet" Pattern="*.css" Expression="#[.{fingerprint}]!" />
-      <StaticWebAssetFingerprintPattern Include="PngImage" Pattern="*.png" Expression="#[.{fingerprint}]!" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Folder Include="Ignore\" />
       <Folder Include="Ignore\Dashboard\" />
       <Folder Include="Ignore\GoalsTracker\Parts\" />

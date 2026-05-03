@@ -45,12 +45,28 @@ public class HasAccessToMemberPaymentTest: BaseTest
     [Theory]
     [InlineData(AccessLevel.Read)]
     [InlineData(AccessLevel.Write)]
-    public async Task OnlyMemberPaymentOwnerHasAccess(AccessLevel accessLevel)
+    public async Task PaymentOwnerHasAccess(AccessLevel accessLevel)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(_owner, _ownWorkspace);
         Assert.Equal(MembershipAccessType.Owner, accessType);
         var payment = (await _paymentSeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
         var hasAccess = await _securityManager.HasAccess(accessLevel, _owner, payment);
+        Assert.True(hasAccess);
+    }
+
+    [Theory]
+    [InlineData(AccessLevel.Read)]
+    [InlineData(AccessLevel.Write)]
+    public async Task ManagerHasAccessToWorkspaceMemberPayment(AccessLevel accessLevel)
+    {
+        var manager = await _userSeeder.CreateActivatedAndShareAsync(
+            _ownWorkspace,
+            MembershipAccessType.Manager
+        );
+        var payment = (await _paymentSeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
+
+        var hasAccess = await _securityManager.HasAccess(accessLevel, manager, payment);
+
         Assert.True(hasAccess);
     }
 

@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
@@ -90,6 +91,72 @@ public class UpdateTest: BaseTest
         Assert.Equal(expectMemberPayment.Amount, actualMemberPayment.Amount);
         Assert.Equal(expectMemberPayment.Description, actualMemberPayment.Description);
         Assert.Equal(expectMemberPayment.PaymentTime, actualMemberPayment.PaymentTime.ToUniversalTime());
+    }
+
+    [Fact]
+    public async Task ManagerCanUpdatePaymentMember()
+    {
+        var (managerToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.Manager
+        );
+        var memberUser = await UserSeeder.CreateActivatedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        await FlushDbChanges();
+        var member = _workspace.Members.First(item => item.User.Id == memberUser.Id);
+        var expectMemberPayment = _factory.Generate();
+
+        var response = await PostRequestAsync(Url, managerToken, new UpdateRequest()
+        {
+            WorkspaceId = _workspace.Id,
+            MemberPaymentId = _payment.Id,
+            ClientId = _payment.Client.Id,
+            MemberId = member.Id,
+            Amount = expectMemberPayment.Amount,
+            Description = expectMemberPayment.Description,
+            PaymentTime = expectMemberPayment.PaymentTime,
+            ProjectId = _payment.Project!.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualMemberPayment = await response.GetJsonDataAsync<MemberPaymentDto>();
+        Assert.Equal(member.Id, actualMemberPayment.Member.Id);
+        Assert.Equal(memberUser.Id, actualMemberPayment.Member.User.Id);
+    }
+
+    [Fact]
+    public async Task UserCanNotUpdatePaymentMember()
+    {
+        var (userToken, user, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        await FlushDbChanges();
+        var payment = (await _paymentSeeder.CreateSeveralAsync(_workspace, user, 1)).First();
+        var memberUser = await UserSeeder.CreateActivatedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        await FlushDbChanges();
+        var member = _workspace.Members.First(item => item.User.Id == memberUser.Id);
+        var expectMemberPayment = _factory.Generate();
+
+        var response = await PostRequestAsync(Url, userToken, new UpdateRequest()
+        {
+            WorkspaceId = _workspace.Id,
+            MemberPaymentId = payment.Id,
+            ClientId = payment.Client.Id,
+            MemberId = member.Id,
+            Amount = expectMemberPayment.Amount,
+            Description = expectMemberPayment.Description,
+            PaymentTime = expectMemberPayment.PaymentTime,
+            ProjectId = payment.Project!.Id
+        });
+
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
     
     [Fact]
