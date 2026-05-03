@@ -9,17 +9,34 @@
 
 <section class="@Class">
     <div class="mb-4">
-        <h2 class="text-base font-semibold text-slate-700">Client Balances</h2>
-        <p class="mt-1 text-sm text-slate-500">Shows how much each client was billed, how much they paid, and their current balance.</p>
+        <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div>
+                <h2 class="text-base font-semibold text-slate-700">Client Balances</h2>
+                <p class="mt-1 text-sm text-slate-500">Shows how much each client was billed, how much they paid, and their current balance.</p>
+            </div>
+
+            <label class="inline-flex items-center gap-2 text-sm font-medium text-slate-600">
+                <input type="checkbox" class="h-4 w-4 rounded border-slate-300" @bind="_showSettledClients"/>
+                Show settled / zero-balance clients
+            </label>
+        </div>
     </div>
     @{
-        var items = ReportsState.Value.WorkspaceFinancialSummaryData?.ClientBalances ?? [];
+        var allItems = ReportsState.Value.WorkspaceFinancialSummaryData?.ClientBalances ?? [];
+        var items = (_showSettledClients ? allItems : allItems.Where(c => c.Outstanding != 0).ToList()).ToList();
     }
-    @if (items.Count == 0)
+    @if (allItems.Count == 0)
     {
         <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6">
             <p class="text-sm font-medium text-slate-700">No client balances yet</p>
             <p class="mt-1 text-sm text-slate-500">Billable work and client payments will appear here after they are recorded.</p>
+        </div>
+    }
+    else if (items.Count == 0)
+    {
+        <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6">
+            <p class="text-sm font-medium text-slate-700">No open client balances</p>
+            <p class="mt-1 text-sm text-slate-500">All clients are settled. Turn on settled clients to review zero-balance rows.</p>
         </div>
     }
     else
@@ -53,11 +70,11 @@
                                 else
                                 {
                                     <AmountDisplay Amount="@Math.Abs(item.Outstanding)"/>
-                                    <span>@(item.Outstanding > 0 ? "due" : "credit")</span>
+                                    <span title="@(item.Outstanding > 0 ? DueTooltip : CreditTooltip)">@(item.Outstanding > 0 ? "due" : "credit")</span>
                                 }
                             </td>
                             <td class="px-4 py-3">
-                                <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold @status.Class">@status.Text</span>
+                                <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold @status.Class" title="@status.Tooltip">@status.Text</span>
                             </td>
                         </tr>
                     }
@@ -81,6 +98,12 @@
     [Parameter]
     public string? Class { get; set; }
 
+    private const string DueTooltip = "Client earned is greater than payments received. This amount is currently due.";
+
+    private const string CreditTooltip = "Payments received are greater than client earned. This client has a credit balance.";
+
+    private bool _showSettledClients;
+
     private static string GetBalanceTextClass(decimal balance)
     {
         if (balance > 0) return "text-red-700";
@@ -88,10 +111,10 @@
         return "text-emerald-700";
     }
 
-    private static (string Text, string Class) GetClientStatus(decimal balance)
+    private static (string Text, string Class, string Tooltip) GetClientStatus(decimal balance)
     {
-        if (balance > 0) return ("Due", "bg-red-100 text-red-700");
-        if (balance < 0) return ("Credit", "bg-blue-100 text-blue-700");
-        return ("Settled", "bg-emerald-100 text-emerald-700");
+        if (balance > 0) return ("Due", "bg-red-100 text-red-700", DueTooltip);
+        if (balance < 0) return ("Credit", "bg-blue-100 text-blue-700", CreditTooltip);
+        return ("Settled", "bg-emerald-100 text-emerald-700", "Client earned equals payments received.");
     }
 }

@@ -7,6 +7,10 @@ public class WorkspaceFinancialSummaryReportResponse : IResponse
 {
     public bool IsTeamWorkspace { get; set; }
 
+    public bool HasMemberPayouts { get; set; }
+
+    public bool HasUsefulProjectProfitability { get; set; }
+
     public WorkspaceFinancialSummaryTotalsDto Totals { get; set; } = null!;
 
     public ICollection<WorkspaceFinancialClientBalanceDto> ClientBalances { get; set; } = new List<WorkspaceFinancialClientBalanceDto>();

@@ -70,6 +70,8 @@ public class WorkspaceFinancialSummaryRequestHandler
         return new WorkspaceFinancialSummaryReportResponse
         {
             IsTeamWorkspace = isTeamWorkspace,
+            HasMemberPayouts = isTeamWorkspace || memberBalances.Any(x => x.PaidOutAmount != 0),
+            HasUsefulProjectProfitability = isTeamWorkspace || projectProfitability.Any(x => x.EstimatedMargin != 0),
             Totals = totals,
             ClientBalances = MapClientBalances(clientBalances),
             MemberBalances = MapMemberBalances(memberBalances),

@@ -22,6 +22,21 @@ public partial class WorkspaceFinancialSummaryPage
     private bool _isAuthorized
         => SecurityManager.HasPermission(WorkspacePermission.ReadWorkspaceFinancialSummary);
 
+    private bool _showMemberPayouts
+        => _reportData?.HasMemberPayouts == true;
+
+    private int _unpaidClientCount
+        => _reportData?.ClientBalances.Count(x => x.Outstanding > 0) ?? 0;
+
+    private decimal _unpaidClientAmount
+        => _reportData?.ClientBalances.Where(x => x.Outstanding > 0).Sum(x => x.Outstanding) ?? 0;
+
+    private int _membersToPayCount
+        => _reportData?.MemberBalances.Count(x => x.Owed > 0) ?? 0;
+
+    private decimal _membersToPayAmount
+        => _reportData?.MemberBalances.Where(x => x.Owed > 0).Sum(x => x.Owed) ?? 0;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
