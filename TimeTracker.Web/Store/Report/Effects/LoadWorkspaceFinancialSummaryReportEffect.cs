@@ -29,12 +29,7 @@ public class LoadWorkspaceFinancialSummaryReportEffect : Effect<ReportFetchWorks
         try
         {
             dispatcher.Dispatch(new ReportSetIsLoadingAction(true));
-            var filter = _reportsState.Value.WorkspaceFinancialSummaryFilter;
-            var response = await _apiService.ReportsGetWorkspaceFinancialSummaryAsync(
-                _authState.Value.Workspace!.Id,
-                filter.StartDate,
-                filter.EndDate
-            );
+            var response = await _apiService.ReportsGetWorkspaceFinancialSummaryAsync(_authState.Value.Workspace!.Id);
             if (response == null)
                 throw new Exception("Workspace financial summary report loading error");
             dispatcher.Dispatch(new ReportSetWorkspaceFinancialSummaryAction(response));

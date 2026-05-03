@@ -8,13 +8,19 @@
 @inject IState<ReportsState> ReportsState
 
 <section class="@Class">
-    <h2 class="mb-4 text-base font-semibold text-slate-700">Member Cost &amp; Payouts</h2>
+    <div class="mb-4">
+        <h2 class="text-base font-semibold text-slate-700">Member Earnings &amp; Payouts</h2>
+        <p class="mt-1 text-sm text-slate-500">Shows what members earned by rate, what was paid out, and what is still owed.</p>
+    </div>
     @{
         var items = ReportsState.Value.WorkspaceFinancialSummaryData?.MemberBalances ?? [];
     }
     @if (items.Count == 0)
     {
-        <p class="text-sm text-slate-500">No member data for the selected period.</p>
+        <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6">
+            <p class="text-sm font-medium text-slate-700">No member earnings yet</p>
+            <p class="mt-1 text-sm text-slate-500">Member earnings and payouts will appear here after team work is recorded.</p>
+        </div>
     }
     else
     {
@@ -24,21 +30,34 @@
                     <tr>
                         <th class="px-4 py-3 text-left">Member</th>
                         <th class="px-4 py-3 text-right">Hours</th>
-                        <th class="px-4 py-3 text-right">Cost</th>
+                        <th class="px-4 py-3 text-right">Earned by Rate</th>
                         <th class="px-4 py-3 text-right">Paid Out</th>
-                        <th class="px-4 py-3 text-right">Owed</th>
+                        <th class="px-4 py-3 text-right">Balance</th>
+                        <th class="px-4 py-3 text-left">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @foreach (var item in items)
                     {
+                        var status = GetMemberStatus(item.Owed);
                         <tr class="hover:bg-slate-50/50">
                             <td class="px-4 py-3 font-medium text-slate-800">@item.User.Name</td>
                             <td class="px-4 py-3 text-right text-slate-600">@item.Duration.ToReadableShortString()</td>
                             <td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.Cost"/></td>
                             <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@item.PaidOut"/></td>
-                            <td class="px-4 py-3 text-right font-semibold @(item.Owed > 0 ? "text-red-700" : "text-slate-700")">
-                                <AmountDisplay Amount="@item.Owed"/>
+                            <td class="px-4 py-3 text-right font-semibold @GetBalanceTextClass(item.Owed)">
+                                @if (item.Owed == 0)
+                                {
+                                    <span>Settled</span>
+                                }
+                                else
+                                {
+                                    <AmountDisplay Amount="@Math.Abs(item.Owed)"/>
+                                    <span>@(item.Owed > 0 ? "owed" : "overpaid")</span>
+                                }
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold @status.Class">@status.Text</span>
                             </td>
                         </tr>
                     }
@@ -47,9 +66,10 @@
                         <td class="px-4 py-3 text-right">@items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()</td>
                         <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.Cost)"/></td>
                         <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@items.Sum(i => i.PaidOut)"/></td>
-                        <td class="px-4 py-3 text-right @(items.Sum(i => i.Owed) > 0 ? "text-red-700" : "text-slate-700")">
+                        <td class="px-4 py-3 text-right @GetBalanceTextClass(items.Sum(i => i.Owed))">
                             <AmountDisplay Amount="@items.Sum(i => i.Owed)"/>
                         </td>
+                        <td class="px-4 py-3"></td>
                     </tr>
                 </tbody>
             </table>
@@ -60,4 +80,18 @@
 @code {
     [Parameter]
     public string? Class { get; set; }
+
+    private static string GetBalanceTextClass(decimal balance)
+    {
+        if (balance > 0) return "text-red-700";
+        if (balance < 0) return "text-blue-700";
+        return "text-emerald-700";
+    }
+
+    private static (string Text, string Class) GetMemberStatus(decimal balance)
+    {
+        if (balance > 0) return ("Owed", "bg-red-100 text-red-700");
+        if (balance < 0) return ("Overpaid", "bg-blue-100 text-blue-700");
+        return ("Settled", "bg-emerald-100 text-emerald-700");
+    }
 }

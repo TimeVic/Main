@@ -33,6 +33,7 @@ public static class SiteUrl
     public static readonly string Dashboard_Tags = "/board/tag";
     public static readonly string Dashboard_MemberPayments = "/board/member-payments";
     public static readonly string Dashboard_ClientPayments = "/board/client-payments";
+    public static readonly string Dashboard_WorkspaceMoney = "/board/money";
     public static readonly string Dashboard_Members = "/board/members";
     public static readonly string Dashboard_Integrations = "/board/integrations";
     public static readonly string Dashboard_Workspace_Settings = "/board/workspace/settings";
@@ -41,7 +42,7 @@ public static class SiteUrl
     public static readonly string Dashboard_Reports_Summary = "/board/report/summary";
     public static readonly string Dashboard_Reports_MemberPayments = "/board/report/member-payments";
     public static readonly string Dashboard_Reports_TimeEntries = "/board/report/time-entries";
-    public static readonly string Dashboard_Reports_WorkspaceFinancialSummary = "/board/report/workspace-financial-summary";
+    public static readonly string Dashboard_Reports_WorkspaceFinancialSummary = Dashboard_WorkspaceMoney;
     
     public static readonly string Dashboard_Tasks_Default = "/board/tasks/0";
     public static readonly string Dashboard_Tasks_Main = "/board/tasks";

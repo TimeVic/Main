@@ -12,44 +12,26 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
     {
     }
 
-    public async Task<ICollection<FinancialClientBalanceItemDto>> GetClientBalancesAsync(
-        Guid workspaceId,
-        DateTime startDate,
-        DateTime endDate
-    )
+    public async Task<ICollection<FinancialClientBalanceItemDto>> GetClientBalancesAsync(Guid workspaceId)
     {
         return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialClientBalances"))
             .SetParameter("workspaceId", workspaceId)
-            .SetParameter("startDate", startDate.StartOfDay())
-            .SetParameter("endDate", endDate.EndOfDay())
             .SetResultTransformer(Transformers.AliasToBean<FinancialClientBalanceItemDto>())
             .ListAsync<FinancialClientBalanceItemDto>();
     }
 
-    public async Task<ICollection<FinancialMemberBalanceItemDto>> GetMemberBalancesAsync(
-        Guid workspaceId,
-        DateTime startDate,
-        DateTime endDate
-    )
+    public async Task<ICollection<FinancialMemberBalanceItemDto>> GetMemberBalancesAsync(Guid workspaceId)
     {
         return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialMemberBalances"))
             .SetParameter("workspaceId", workspaceId)
-            .SetParameter("startDate", startDate.StartOfDay())
-            .SetParameter("endDate", endDate.EndOfDay())
             .SetResultTransformer(Transformers.AliasToBean<FinancialMemberBalanceItemDto>())
             .ListAsync<FinancialMemberBalanceItemDto>();
     }
 
-    public async Task<ICollection<FinancialProjectProfitabilityItemDto>> GetProjectProfitabilityAsync(
-        Guid workspaceId,
-        DateTime startDate,
-        DateTime endDate
-    )
+    public async Task<ICollection<FinancialProjectProfitabilityItemDto>> GetProjectProfitabilityAsync(Guid workspaceId)
     {
         return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialProjectProfitability"))
             .SetParameter("workspaceId", workspaceId)
-            .SetParameter("startDate", startDate.StartOfDay())
-            .SetParameter("endDate", endDate.EndOfDay())
             .SetResultTransformer(Transformers.AliasToBean<FinancialProjectProfitabilityItemDto>())
             .ListAsync<FinancialProjectProfitabilityItemDto>();
     }

@@ -8,10 +8,4 @@ public class WorkspaceFinancialSummaryReportRequest : IRequest<WorkspaceFinancia
 {
     [Required]
     public Guid WorkspaceId { get; set; }
-
-    [Required]
-    public DateTime StartDate { get; set; }
-
-    [Required]
-    public DateTime EndDate { get; set; }
 }

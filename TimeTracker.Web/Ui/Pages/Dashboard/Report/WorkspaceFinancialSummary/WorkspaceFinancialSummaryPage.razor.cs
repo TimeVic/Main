@@ -27,7 +27,6 @@ public partial class WorkspaceFinancialSummaryPage
         await base.OnInitializedAsync();
         if (_isAuthorized)
         {
-            Dispatcher.Dispatch(new ReportResetWorkspaceFinancialSummaryFilterAction());
             Dispatcher.Dispatch(new ReportFetchWorkspaceFinancialSummaryAction());
         }
     }

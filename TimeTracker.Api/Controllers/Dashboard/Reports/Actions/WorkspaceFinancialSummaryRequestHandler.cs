@@ -58,21 +58,9 @@ public class WorkspaceFinancialSummaryRequestHandler
             throw new HasNoAccessException();
         }
 
-        var clientBalances = await _reportDao.GetClientBalancesAsync(
-            workspace.Id,
-            request.StartDate,
-            request.EndDate
-        );
-        var memberBalances = await _reportDao.GetMemberBalancesAsync(
-            workspace.Id,
-            request.StartDate,
-            request.EndDate
-        );
-        var projectProfitability = await _reportDao.GetProjectProfitabilityAsync(
-            workspace.Id,
-            request.StartDate,
-            request.EndDate
-        );
+        var clientBalances = await _reportDao.GetClientBalancesAsync(workspace.Id);
+        var memberBalances = await _reportDao.GetMemberBalancesAsync(workspace.Id);
+        var projectProfitability = await _reportDao.GetProjectProfitabilityAsync(workspace.Id);
 
         var membersPage = await _workspaceDao.GetMembersAsync(workspace, 1);
         var isTeamWorkspace = membersPage.TotalCount > 1;
@@ -103,10 +91,10 @@ public class WorkspaceFinancialSummaryRequestHandler
         {
             ClientEarned = clientEarned,
             ClientReceived = clientReceived,
-            ClientOutstanding = Math.Max(clientEarned - clientReceived, 0),
+            ClientOutstanding = clientEarned - clientReceived,
             TeamCost = teamCost,
             MemberPaidOut = memberPaidOut,
-            MemberOutstanding = Math.Max(teamCost - memberPaidOut, 0),
+            MemberOutstanding = teamCost - memberPaidOut,
             EstimatedMargin = clientEarned - teamCost,
             RealizedMargin = clientReceived - memberPaidOut
         };
