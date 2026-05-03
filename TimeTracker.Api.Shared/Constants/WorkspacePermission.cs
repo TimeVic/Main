@@ -9,5 +9,11 @@ public enum WorkspacePermission
     CreateProject,
     UpdateProject,
     CreateClient,
-    UpdateClient
+    UpdateClient,
+    ReadClientPayment,
+    CreateClientPayment,
+    UpdateClientPayment,
+    ReadMemberPayment,
+    CreateMemberPayment,
+    UpdateMemberPayment
 }
