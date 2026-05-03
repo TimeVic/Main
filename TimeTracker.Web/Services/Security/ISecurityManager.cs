@@ -9,5 +9,5 @@ public interface ISecurityManager
 
     ICollection<ProjectDto> GetSharedProjects(UserDto? user = null);
 
-    ICollection<WorkspaceMembershipDto> GetMembersWhichHaveAccessToProject(ProjectDto project);
+    ICollection<WorkspaceMemberDto> GetMembersWhichHaveAccessToProject(ProjectDto project);
 }

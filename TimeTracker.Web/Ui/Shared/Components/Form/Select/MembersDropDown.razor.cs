@@ -1,7 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Web.Store.WorkspaceMemberships;
+using TimeTracker.Web.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
@@ -22,7 +22,7 @@ public partial class MembersDropDown
     public ICollection<Guid> AllowedIds { get; set; } = new List<Guid>();
 
     [Inject]
-    public IState<WorkspaceMembershipsState> _state { get; set; }
+    public IState<WorkspaceMembersState> _state { get; set; }
     
     private Guid? _userId;
     private bool _isOpen;
@@ -69,7 +69,7 @@ public partial class MembersDropDown
         return Task.CompletedTask;
     }
 
-    private async Task OnMemberSelected(WorkspaceMembershipDto? member)
+    private async Task OnMemberSelected(WorkspaceMemberDto? member)
     {
         _isOpen = false;
         await InvokeAsync(StateHasChanged);

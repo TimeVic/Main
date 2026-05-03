@@ -34,7 +34,7 @@ public class UserMapping: BaseGuidMappings<UserEntity>
             .Cascade.SaveUpdate()
             .Inverse();
         
-        HasMany(x => x.WorkspaceMemberships)
+        HasMany(x => x.WorkspaceMembers)
             .KeyColumn("user_id")
             .Fetch.Select()
             .LazyLoad()

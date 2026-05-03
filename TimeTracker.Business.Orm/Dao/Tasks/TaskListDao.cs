@@ -85,12 +85,12 @@ public class TaskListDao: ITaskListDao
             && accessType != MembershipAccessType.Owner
         )
         {
-            WorkspaceMembershipProjectAccessEntity projectAccessAlias = null!;
-            WorkspaceMembershipEntity workspaceMembershipAlias = null!;
+            WorkspaceMemberProjectAccessEntity projectAccessAlias = null!;
+            WorkspaceMemberEntity workspaceMemberAlias = null!;
             UserEntity userAlias = null!;
-            query = query.Inner.JoinAlias(() => projectAlias!.MembershipProjectAccess, () => projectAccessAlias)
-                .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMembership, () => workspaceMembershipAlias)
-                .Inner.JoinAlias(() => workspaceMembershipAlias!.User, () => userAlias)
+            query = query.Inner.JoinAlias(() => projectAlias!.MemberProjectAccess, () => projectAccessAlias)
+                .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMember, () => workspaceMemberAlias)
+                .Inner.JoinAlias(() => workspaceMemberAlias!.User, () => userAlias)
                 .And(() => userAlias!.Id == user.Id);
         }
 

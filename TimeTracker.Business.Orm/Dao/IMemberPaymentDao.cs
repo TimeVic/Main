@@ -12,7 +12,7 @@ public interface IMemberPaymentDao: IDomainService
     Task<MemberPaymentEntity?> GetById(Guid? id);
     
     Task<MemberPaymentEntity> CreateAsync(
-        WorkspaceMembershipEntity member,
+        WorkspaceMemberEntity member,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
@@ -39,7 +39,7 @@ public interface IMemberPaymentDao: IDomainService
         string? description
     );
     
-    Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceMembershipEntity member, int page);
+    Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceMemberEntity member, int page);
     
     Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceEntity workspace, UserEntity user, int page);
 }

@@ -13,7 +13,7 @@ namespace TimeTracker.Business.Orm.Entities
 
         public virtual ProjectEntity? Project { get; set; }
         public virtual required ClientEntity Client { get; set; }
-        public virtual required WorkspaceMembershipEntity Member { get; set; }
+        public virtual required WorkspaceMemberEntity Member { get; set; }
 
         #endregion
     }

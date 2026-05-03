@@ -8,6 +8,6 @@ public class WorkspaceMemberProfile : Profile
 {
     public WorkspaceMemberProfile()
     {
-        CreateMap<WorkspaceMembershipEntity, WorkspaceMembershipDto>();
+        CreateMap<WorkspaceMemberEntity, WorkspaceMemberDto>();
     }
 }

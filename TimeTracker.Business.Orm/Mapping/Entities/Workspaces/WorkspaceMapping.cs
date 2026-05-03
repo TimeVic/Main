@@ -69,7 +69,7 @@ public class WorkspaceMapping: BaseGuidMappings<WorkspaceEntity>
             .Cascade.SaveUpdate()
             .Inverse();
         
-        HasMany(x => x.Memberships)
+        HasMany(x => x.Members)
             .KeyColumn("workspace_id")
             .Fetch.Select()
             .LazyLoad()

@@ -36,7 +36,7 @@ public partial class FilterForm
         UpdateFilter(_state.Value.Filter with { DateTo = to?.EndOfDay() });
     }
 
-    private void OnChangeMember(WorkspaceMembershipDto? member)
+    private void OnChangeMember(WorkspaceMemberDto? member)
     {
         UpdateFilter(_state.Value.Filter with { UserId = member?.User.Id });
     }

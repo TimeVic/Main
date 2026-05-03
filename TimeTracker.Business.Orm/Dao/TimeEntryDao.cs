@@ -109,15 +109,15 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         {
             // Is not owner
             ProjectEntity projectAlias = null!;
-            WorkspaceMembershipProjectAccessEntity projectAccessAlias = null!;
-            WorkspaceMembershipEntity workspaceMembershipAlias = null!;
+            WorkspaceMemberProjectAccessEntity projectAccessAlias = null!;
+            WorkspaceMemberEntity workspaceMemberAlias = null!;
             var allowedIdsSubQuery = QueryOver.Of<TimeEntryEntity>()
                 .Inner.JoinAlias(item => item.Project, () => projectAlias)
-                .Inner.JoinAlias(item => projectAlias!.MembershipProjectAccess, () => projectAccessAlias)
-                .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMembership, () => workspaceMembershipAlias)
+                .Inner.JoinAlias(item => projectAlias!.MemberProjectAccess, () => projectAccessAlias)
+                .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMember, () => workspaceMemberAlias)
                 .And(
-                    item => workspaceMembershipAlias!.User.Id == user.Id 
-                        && workspaceMembershipAlias.Workspace.Id == workspace.Id
+                    item => workspaceMemberAlias!.User.Id == user.Id 
+                        && workspaceMemberAlias.Workspace.Id == workspace.Id
                 )
                 .Select(
                     Projections.Distinct(

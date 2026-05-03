@@ -30,7 +30,7 @@ public class MemberPaymentDao: IMemberPaymentDao
     }
     
     public async Task<MemberPaymentEntity> CreateAsync(
-        WorkspaceMembershipEntity member,
+        WorkspaceMemberEntity member,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
@@ -113,7 +113,7 @@ public class MemberPaymentDao: IMemberPaymentDao
         return payment;
     }
     
-    public async Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceMembershipEntity member, int page)
+    public async Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceMemberEntity member, int page)
     {
         var offset = PaginationUtils.CalculateOffset(page);
         var query = _sessionProvider.CurrentSession.QueryOver<MemberPaymentEntity>()
@@ -136,9 +136,9 @@ public class MemberPaymentDao: IMemberPaymentDao
         return await GetListAsync(member, page);
     }
 
-    private async Task<WorkspaceMembershipEntity> GetMemberAsync(WorkspaceEntity workspace, UserEntity user)
+    private async Task<WorkspaceMemberEntity> GetMemberAsync(WorkspaceEntity workspace, UserEntity user)
     {
-        var member = await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
+        var member = await _sessionProvider.CurrentSession.Query<WorkspaceMemberEntity>()
             .Where(item => item.Workspace.Id == workspace.Id && item.User.Id == user.Id)
             .FirstOrDefaultAsync();
         if (member == null)

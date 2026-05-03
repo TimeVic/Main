@@ -122,7 +122,7 @@
       <Compile Remove="Services\UI\ModalDialogProviderService.GoalsTracker.cs" />
       <Compile Remove="Services\UI\ModalDialogProviderService.NotificationsCenter.cs" />
       <Compile Remove="Services\UI\ModalDialogProviderService.Tags.cs" />
-      <Compile Remove="Services\UI\ModalDialogProviderService.WorkspaceMembership.cs" />
+      <Compile Remove="Services\UI\ModalDialogProviderService.WorkspaceMember.cs" />
       <Compile Remove="Store\GoalsTracker\**" />
       <Compile Remove="Pages\Dashboard\Dashboard\**" />
       <Compile Remove="Pages\Dashboard\GoalsTracker\**" />

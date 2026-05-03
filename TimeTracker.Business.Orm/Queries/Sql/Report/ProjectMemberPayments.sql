@@ -28,7 +28,7 @@ report_rows as (
 
     select pm.project_id as ProjectId, pm.client_id as ClientId
     from member_payments pm
-             inner join workspace_memberships wm on wm.id = pm.member_id
+             inner join workspace_members wm on wm.id = pm.member_id
     where wm.user_id = :userId
       and wm.workspace_id = :workspaceId
       and pm.payment_time <= :endDate
@@ -44,7 +44,7 @@ select
     coalesce((
         select sum(pm.amount)
         from member_payments pm
-                 inner join workspace_memberships wm on wm.id = pm.member_id
+                 inner join workspace_members wm on wm.id = pm.member_id
         where pm.client_id = rr.ClientId
           and wm.user_id = :userId
           and wm.workspace_id = :workspaceId
@@ -54,7 +54,7 @@ select
     coalesce((
         select sum(pm.amount)
         from member_payments pm
-                 inner join workspace_memberships wm on wm.id = pm.member_id
+                 inner join workspace_members wm on wm.id = pm.member_id
         where pm.project_id = rr.ProjectId
           and wm.user_id = :userId
           and wm.workspace_id = :workspaceId

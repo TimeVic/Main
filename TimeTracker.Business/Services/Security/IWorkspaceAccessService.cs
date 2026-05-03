@@ -11,14 +11,14 @@ namespace TimeTracker.Business.Services.Security;
 
 public interface IWorkspaceAccessService: IDomainService
 {
-    public Task<WorkspaceMembershipEntity> ShareAccessAsync(
+    public Task<WorkspaceMemberEntity> ShareAccessAsync(
         WorkspaceEntity workspace,
         UserEntity user,
         MembershipAccessType access,
         ICollection<ProjectAccessModel>? projectsAccess = null
     );
 
-    Task<bool> RemoveAccessAsync(Guid membershipId);
+    Task<bool> RemoveAccessAsync(Guid memberId);
     
     Task<MembershipAccessType?> GetAccessTypeAsync(
         UserEntity user,
@@ -31,7 +31,7 @@ public interface IWorkspaceAccessService: IDomainService
         ProjectEntity project
     );
 
-    WorkspaceMembershipEntity? GetMembershipAsync(
+    WorkspaceMemberEntity? GetMemberAsync(
         UserEntity user,
         WorkspaceEntity workspace
     );

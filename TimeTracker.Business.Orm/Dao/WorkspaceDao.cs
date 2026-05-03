@@ -71,9 +71,9 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
             .AnyAsync();
     }
     
-    public async Task<ListDto<WorkspaceMembershipEntity>> GetMembershipsAsync(WorkspaceEntity workspace, int page)
+    public async Task<ListDto<WorkspaceMemberEntity>> GetMembersAsync(WorkspaceEntity workspace, int page)
     {
-        var query = Session.Query<WorkspaceMembershipEntity>()
+        var query = Session.Query<WorkspaceMemberEntity>()
             .Where(item => item.Workspace.Id == workspace.Id);
         
         var offset = PaginationUtils.CalculateOffset(page);
@@ -82,15 +82,15 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
             .Take(GlobalConstants.ListPageSize)
             .OrderByDescending(item => item.Id)
             .ToListAsync();
-        return new ListDto<WorkspaceMembershipEntity>(
+        return new ListDto<WorkspaceMemberEntity>(
             items,
             await query.CountAsync()
         );
     }
     
-    public async Task<WorkspaceMembershipEntity> GetMembershipAsync(Guid id)
+    public async Task<WorkspaceMemberEntity> GetMemberAsync(Guid id)
     {
-        return await Session.Query<WorkspaceMembershipEntity>()
+        return await Session.Query<WorkspaceMemberEntity>()
             .Where(item => item.Id == id)
             .FirstOrDefaultAsync();
     }

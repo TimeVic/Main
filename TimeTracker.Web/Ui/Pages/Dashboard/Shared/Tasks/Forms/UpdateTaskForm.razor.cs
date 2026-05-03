@@ -12,7 +12,7 @@ using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Store.Tasks;
-using TimeTracker.Web.Store.WorkspaceMemberships;
+using TimeTracker.Web.Store.WorkspaceMembers;
 using TimeTracker.Web.Ui.Shared.Components.Storage;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
@@ -30,7 +30,7 @@ public partial class UpdateTaskForm: IDisposable
     private ISecurityManager _securityManager { get; set; }
     
     [Inject]
-    private IState<WorkspaceMembershipsState> _workspaceMembershipsState { get; set; }
+    private IState<WorkspaceMembersState> _workspaceMembersState { get; set; }
     
     [Inject]
     public ILogger<UpdateTaskForm> _logger { get; set; }
@@ -123,11 +123,11 @@ public partial class UpdateTaskForm: IDisposable
         Dispatcher.Dispatch(new UpdateTaskAction(_model, IsUpdateState: true));
     }
 
-    private void OnAssignedChanged(WorkspaceMembershipDto? membership)
+    private void OnAssignedChanged(WorkspaceMemberDto? member)
     {
-        if (membership == null)
+        if (member == null)
             return;
-        _model.UserId = membership.Id;
+        _model.UserId = member.Id;
         SubmitForm();
     }
 

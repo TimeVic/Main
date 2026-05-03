@@ -1,14 +1,14 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using TimeTracker.Web.Store.WorkspaceMemberships;
+using TimeTracker.Web.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts;
 
 public partial class AddMemberForm
 {
     [Inject]
-    private IState<WorkspaceMembershipsState> _state { get; set; } = default!;
+    private IState<WorkspaceMembersState> _state { get; set; } = default!;
 
     private InviteModel _model = new();
     private EditForm _form = default!;

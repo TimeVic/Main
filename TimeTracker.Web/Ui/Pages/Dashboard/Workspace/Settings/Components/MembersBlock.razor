@@ -1,0 +1,76 @@
+@using LumexUI.Common
+@using TimeTracker.Business.Common.Constants
+@using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
+
+@inherits BaseReactiveComponent
+
+@if (_memberToUpdate != null)
+{
+    <UpdateMemberModal
+        Member="_memberToUpdate"
+        IsOpened="_memberToUpdate != null"
+        IsOpenedChanged="isOpened => { _memberToUpdate = isOpened ? _memberToUpdate : null; }"/>
+}
+
+<section class="space-y-6">
+    <LumexCard>
+        <LumexCardBody>
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">Members</p>
+                    <h2 class="mt-2 text-lg font-semibold text-slate-900">Workspace members</h2>
+                    <p class="mt-1 text-sm text-slate-600">Invite people by email. New users receive a verification link to set their password.</p>
+                </div>
+                <AddMemberForm/>
+            </div>
+        </LumexCardBody>
+    </LumexCard>
+
+    <LumexDataGrid
+        Data="@_state.Value.List.AsQueryable()"
+        Radius="@Radius.Medium"
+        Class="mt-3">
+        <LumexUI.PropertyColumn
+            Title="Name"
+            Property="@(p => p.User.Name)"/>
+        <LumexUI.PropertyColumn
+            Title="Email"
+            Property="@(p => p.User.Email)"/>
+        <LumexUI.PropertyColumn
+            Title="Access"
+            Property="@(p => p.Access.ToString())"/>
+        <LumexUI.PropertyColumn
+            Title="Actions"
+            Property="@(p => p.Id)">
+            <Content>
+                @if (context.Access != MembershipAccessType.Owner)
+                {
+                    <div class="flex gap-1">
+                        <CustomButton
+                            Class="inline-flex rounded-full"
+                            OnClick="@(() => OnEdit(context))"
+                            Size="Size.Small"
+                            Color="ThemeColor.Primary"
+                            Variant="Variant.Light"
+                            IconOnly="true">
+                            <ChildContent>
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </ChildContent>
+                        </CustomButton>
+                        <CustomButton
+                            Class="inline-flex rounded-full"
+                            OnClick="@(() => OnDelete(context))"
+                            Size="Size.Small"
+                            Color="ThemeColor.Danger"
+                            Variant="Variant.Light"
+                            IconOnly="true">
+                            <ChildContent>
+                                <i class="fa-regular fa-trash-can"></i>
+                            </ChildContent>
+                        </CustomButton>
+                    </div>
+                }
+            </Content>
+        </LumexUI.PropertyColumn>
+    </LumexDataGrid>
+</section>
