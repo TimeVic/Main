@@ -49,6 +49,15 @@
             </span>
         </Content>
     </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn
+        Title="Member"
+        Property="@(p => p.Member)">
+        <Content>
+            <div class="font-medium text-slate-900">
+                @context.Member?.User.Name
+            </div>
+        </Content>
+    </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn 
         Title="Description"
         Property="@(p => p.Description)"

@@ -68,4 +68,9 @@ public partial class AddMemberPaymentModal
     {
         model.ProjectId = project.Id;
     }
+
+    private void OnMemberSelected(WorkspaceMemberDto? member)
+    {
+        model.MemberId = member?.Id ?? Guid.Empty;
+    }
 }

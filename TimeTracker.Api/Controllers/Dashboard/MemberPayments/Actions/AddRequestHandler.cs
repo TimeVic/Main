@@ -1,7 +1,5 @@
-﻿using System.Globalization;
-using Api.Requests.Abstractions;
+﻿using Api.Requests.Abstractions;
 using AutoMapper;
-using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
 using TimeTracker.Business.Common.Constants;
@@ -18,28 +16,31 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
         private readonly IMapper _mapper;
         private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
-        private readonly IDbSessionProvider _sessionProvider;
         private readonly IMemberPaymentDao _paymentDao;
         private readonly IClientDao _clientDao;
         private readonly ISecurityManager _securityManager;
+        private readonly IWorkspaceDao _workspaceDao;
+        private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public AddRequestHandler(
             IMapper mapper,
             IApiRequestService apiRequestService,
             IUserDao userDao,
-            IDbSessionProvider sessionProvider,
             IMemberPaymentDao paymentDao,
             IClientDao clientDao,
-            ISecurityManager securityManager
+            ISecurityManager securityManager,
+            IWorkspaceDao workspaceDao,
+            IWorkspaceAccessService workspaceAccessService
         )
         {
             _mapper = mapper;
             _apiRequestService = apiRequestService;
             _userDao = userDao;
-            _sessionProvider = sessionProvider;
             _paymentDao = paymentDao;
             _clientDao = clientDao;
             _securityManager = securityManager;
+            _workspaceDao = workspaceDao;
+            _workspaceAccessService = workspaceAccessService;
         }
     
         public async Task<MemberPaymentDto> ExecuteAsync(AddRequest request)
@@ -56,9 +57,30 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
                 throw new HasNoAccessException();
             }
 
+            var currentMember = _workspaceAccessService.GetMemberAsync(user, workspace);
+            if (currentMember == null)
+            {
+                throw new HasNoAccessException();
+            }
+
+            var member = currentMember;
+            if (request.MemberId != Guid.Empty && request.MemberId != currentMember.Id)
+            {
+                var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+                if (accessType is not (MembershipAccessType.Owner or MembershipAccessType.Manager))
+                {
+                    throw new HasNoAccessException();
+                }
+
+                member = await _workspaceDao.GetMemberAsync(request.MemberId);
+                if (member == null || member.Workspace.Id != workspace.Id)
+                {
+                    throw new HasNoAccessException();
+                }
+            }
+
             var payment = await _paymentDao.CreateAsync(
-                workspace,
-                user,
+                member,
                 client,
                 request.Amount,
                 request.PaymentTime,

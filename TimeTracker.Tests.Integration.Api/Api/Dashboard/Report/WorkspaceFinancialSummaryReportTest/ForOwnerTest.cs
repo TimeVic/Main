@@ -17,9 +17,9 @@ using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Report.WorkspaceFinancialSummaryReportTest;
 
-public class OwnerAccessTest : BaseTest
+public class ForOwnerTest : BaseTest
 {
-    private readonly string _url = $"/dashboard/report/{ApiUrl.ReportWorkspaceFinancialSummary}";
+    private readonly string _url = $"/{ApiUrl.ReportWorkspaceFinancialSummary}";
 
     private readonly UserEntity _owner;
     private readonly string _ownerToken;
@@ -33,7 +33,7 @@ public class OwnerAccessTest : BaseTest
     private readonly ProjectEntity _project;
     private readonly ClientEntity _client;
 
-    public OwnerAccessTest(ApiCustomWebApplicationFactory factory) : base(factory)
+    public ForOwnerTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();

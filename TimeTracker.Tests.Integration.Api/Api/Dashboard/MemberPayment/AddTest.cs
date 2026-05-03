@@ -132,6 +132,64 @@ public class AddTest: BaseTest
         var actualMemberPayment = await response.GetJsonDataAsync<MemberPaymentDto>();
         Assert.NotEqual(Guid.Empty, actualMemberPayment.Id);
     }
+
+    [Fact]
+    public async Task UserWithRoleManagerCanAddPaymentForWorkspaceMember()
+    {
+        var (managerToken, managerUser, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.Manager
+        );
+        var memberUser = await _userSeeder.CreateActivatedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        var member = _workspace.Members.First(item => item.User.Id == memberUser.Id);
+        var payment = _factory.Generate();
+
+        var response = await PostRequestAsync(Url, managerToken, new AddRequest()
+        {
+            WorkspaceId = _workspace.Id,
+            ClientId = _client.Id,
+            MemberId = member.Id,
+            Amount = payment.Amount,
+            Description = payment.Description,
+            PaymentTime = payment.PaymentTime
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualMemberPayment = await response.GetJsonDataAsync<MemberPaymentDto>();
+        Assert.Equal(member.Id, actualMemberPayment.Member.Id);
+        Assert.Equal(memberUser.Id, actualMemberPayment.Member.User.Id);
+    }
+
+    [Fact]
+    public async Task UserWithRoleUserCanNotAddPaymentForAnotherWorkspaceMember()
+    {
+        var (userToken, user, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        var memberUser = await _userSeeder.CreateActivatedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        var member = _workspace.Members.First(item => item.User.Id == memberUser.Id);
+        var payment = _factory.Generate();
+
+        var response = await PostRequestAsync(Url, userToken, new AddRequest()
+        {
+            WorkspaceId = _workspace.Id,
+            ClientId = _client.Id,
+            MemberId = member.Id,
+            Amount = payment.Amount,
+            Description = payment.Description,
+            PaymentTime = payment.PaymentTime
+        });
+
+        var responseData = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), responseData.ErrorCode);
+    }
     
     [Fact]
     public async Task NonMemberCantAddOwnMemberPayment()

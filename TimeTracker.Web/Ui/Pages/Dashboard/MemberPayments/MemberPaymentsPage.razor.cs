@@ -1,6 +1,7 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Web.Store.MemberPayments;
+using WorkspaceMemberActions = TimeTracker.Web.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.MemberPayments;
 
@@ -18,5 +19,6 @@ public partial class MemberPaymentsPage
     {
         base.OnInitialized();
         _dispatcher.Dispatch(new LoadMemberPaymentListAction(true));
+        _dispatcher.Dispatch(new WorkspaceMemberActions.LoadListAction());
     }
 }

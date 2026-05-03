@@ -16,6 +16,9 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPaymen
         
         [Display(Name = "Project")]
         public Guid ProjectId { get; set; }
+
+        [Display(Name = "Member")]
+        public Guid MemberId { get; set; }
         
         [Required]
         [Display(Name = "Payment Time")]

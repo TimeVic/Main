@@ -32,6 +32,7 @@ public interface IMemberPaymentDao: IDomainService
 
     Task<MemberPaymentEntity?> UpdateMemberPaymentAsync(
         Guid paymentId,
+        WorkspaceMemberEntity member,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
@@ -40,6 +41,8 @@ public interface IMemberPaymentDao: IDomainService
     );
     
     Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceMemberEntity member, int page);
+
+    Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceEntity workspace, int page);
     
     Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceEntity workspace, UserEntity user, int page);
 }

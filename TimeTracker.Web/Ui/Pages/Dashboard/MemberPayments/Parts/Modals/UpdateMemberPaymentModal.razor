@@ -1,5 +1,6 @@
 @using LumexUI
 @using LumexUI.Common
+@using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
@@ -46,6 +47,17 @@
                             SelectedItemChanged="OnProjectSelected"
                             Disabled="@(model.ClientId == Guid.Empty)"/>
                     </div>
+                    @if (AuthState.Value.IsRoleAdmin)
+                    {
+                        <div>
+                            <MembersDropDown
+                                Label="Member"
+                                Type="DropDownType.Select"
+                                Value="model.MemberId"
+                                ValueExpression="() => model.MemberId"
+                                SelectedItemChanged="OnMemberSelected"/>
+                        </div>
+                    }
                     <div>
                         <InputDateTimeField
                             Size="Size.Small"

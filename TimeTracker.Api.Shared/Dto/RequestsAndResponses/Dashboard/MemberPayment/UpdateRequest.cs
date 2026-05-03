@@ -15,6 +15,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPaymen
             MemberPaymentId = payment.Id;
             ClientId = payment.Client.Id;
             ProjectId = payment.Project?.Id ?? Guid.Empty;
+            MemberId = payment.Member.Id;
             Amount = payment.Amount;
             Description = payment.Description;
             PaymentTime = payment.PaymentTime;
