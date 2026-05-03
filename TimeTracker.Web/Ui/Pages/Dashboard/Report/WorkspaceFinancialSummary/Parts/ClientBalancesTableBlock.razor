@@ -1,0 +1,63 @@
+@using Fluxor
+@using TimeTracker.Api.Shared.Dto.Model.Report.WorkspaceFinancialSummary
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Web.Store.Report
+@using TimeTracker.Web.Ui.Shared.Components
+
+@inherits BaseReactiveComponent
+@inject IState<ReportsState> ReportsState
+
+<section class="@Class">
+    <h2 class="mb-4 text-base font-semibold text-slate-700">Client Balances</h2>
+    @{
+        var items = ReportsState.Value.WorkspaceFinancialSummaryData?.ClientBalances ?? [];
+    }
+    @if (items.Count == 0)
+    {
+        <p class="text-sm text-slate-500">No client data for the selected period.</p>
+    }
+    else
+    {
+        <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+            <table class="min-w-full text-sm">
+                <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    <tr>
+                        <th class="px-4 py-3 text-left">Client</th>
+                        <th class="px-4 py-3 text-right">Hours</th>
+                        <th class="px-4 py-3 text-right">Earned</th>
+                        <th class="px-4 py-3 text-right">Received</th>
+                        <th class="px-4 py-3 text-right">Outstanding</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @foreach (var item in items)
+                    {
+                        <tr class="hover:bg-slate-50/50">
+                            <td class="px-4 py-3 font-medium text-slate-800">@(item.Client?.Name ?? "No client")</td>
+                            <td class="px-4 py-3 text-right text-slate-600">@item.Duration.ToReadableShortString()</td>
+                            <td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.Earned"/></td>
+                            <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@item.Received"/></td>
+                            <td class="px-4 py-3 text-right font-semibold @(item.Outstanding > 0 ? "text-red-700" : "text-slate-700")">
+                                <AmountDisplay Amount="@item.Outstanding"/>
+                            </td>
+                        </tr>
+                    }
+                    <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
+                        <td class="px-4 py-3">Total</td>
+                        <td class="px-4 py-3 text-right">@items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()</td>
+                        <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.Earned)"/></td>
+                        <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@items.Sum(i => i.Received)"/></td>
+                        <td class="px-4 py-3 text-right @(items.Sum(i => i.Outstanding) > 0 ? "text-red-700" : "text-slate-700")">
+                            <AmountDisplay Amount="@items.Sum(i => i.Outstanding)"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+@code {
+    [Parameter]
+    public string? Class { get; set; }
+}

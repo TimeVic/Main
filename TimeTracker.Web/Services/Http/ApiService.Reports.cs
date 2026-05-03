@@ -31,5 +31,22 @@ namespace TimeTracker.Web.Services.Http
                 Type = reportType
             });
         }
+
+        public async Task<WorkspaceFinancialSummaryReportResponse?> ReportsGetWorkspaceFinancialSummaryAsync(
+            Guid workspaceId,
+            DateTime startDate,
+            DateTime endDate
+        )
+        {
+            return await PostAsync<WorkspaceFinancialSummaryReportResponse?>(
+                ApiUrl.ReportWorkspaceFinancialSummary,
+                new WorkspaceFinancialSummaryReportRequest
+                {
+                    WorkspaceId = workspaceId,
+                    StartDate = startDate,
+                    EndDate = endDate
+                }
+            );
+        }
     }
 }
