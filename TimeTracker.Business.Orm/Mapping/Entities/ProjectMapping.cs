@@ -36,6 +36,13 @@ public class ProjectMapping: BaseGuidMappings<ProjectEntity>
             .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
+
+        HasMany(x => x.ClientPayments)
+            .KeyColumn("project_id")
+            .Fetch.Select()
+            .LazyLoad()
+            .Cascade.SaveUpdate()
+            .Inverse();
         
         HasMany(x => x.MemberProjectAccess)
             .KeyColumn("project_id")

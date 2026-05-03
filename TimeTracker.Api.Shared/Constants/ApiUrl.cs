@@ -52,6 +52,15 @@ public class ApiUrl
     public const string MemberPaymentList = "dashboard/member-payments/list";
     
     #endregion
+
+    #region ClientPayment
+
+    public const string ClientPaymentAdd = "dashboard/client-payments/add";
+    public const string ClientPaymentUpdate = "dashboard/client-payments/update";
+    public const string ClientPaymentDelete = "dashboard/client-payments/delete";
+    public const string ClientPaymentList = "dashboard/client-payments/list";
+
+    #endregion
     
     #region Report
     

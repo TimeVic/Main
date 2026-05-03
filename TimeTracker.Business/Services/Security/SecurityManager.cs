@@ -66,6 +66,10 @@ public class SecurityManager: ISecurityManager
         {
             return await HasAccessToMemberPayment(accessLevel, user, paymentEntity);
         }
+        if (entity is ClientPaymentEntity clientPaymentEntity)
+        {
+            return await HasAccessToClientPayment(accessLevel, user, clientPaymentEntity);
+        }
         if (entity is TaskEntity taskEntity)
         {
             return await HasAccessToTask(user, taskEntity);
@@ -161,6 +165,11 @@ public class SecurityManager: ISecurityManager
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, payment.Member.Workspace);
         return accessType != null
             && payment.Member.User.Id == user.Id;
+    }
+
+    private async Task<bool> HasAccessToClientPayment(AccessLevel accessLevel, UserEntity user, ClientPaymentEntity payment)
+    {
+        return await HasAccessToWorkspace(accessLevel, user, payment.Workspace);
     }
     
     private async Task<bool> HasAccessToTask(UserEntity user, TaskEntity task)

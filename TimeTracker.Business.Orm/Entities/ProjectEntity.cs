@@ -18,6 +18,7 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual ClientEntity? Client { get; set; }
 
         public virtual ICollection<MemberPaymentEntity> MemberPayments { get; set; } = new List<MemberPaymentEntity>();
+        public virtual ICollection<ClientPaymentEntity> ClientPayments { get; set; } = new List<ClientPaymentEntity>();
         public virtual ICollection<WorkspaceMemberProjectAccessEntity> MemberProjectAccess { get; set; } = new List<WorkspaceMemberProjectAccessEntity>();
         public virtual ICollection<TaskListEntity> TaskLists { get; set; } = new List<TaskListEntity>();
 
@@ -37,6 +38,12 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual void AddMemberPayment(MemberPaymentEntity payment)
         {
             MemberPayments.Add(payment);
+            payment.Project = this;
+        }
+
+        public virtual void AddClientPayment(ClientPaymentEntity payment)
+        {
+            ClientPayments.Add(payment);
             payment.Project = this;
         }
     }
