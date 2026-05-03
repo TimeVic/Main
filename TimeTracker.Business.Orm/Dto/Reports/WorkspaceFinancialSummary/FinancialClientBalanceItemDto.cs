@@ -20,7 +20,7 @@ public class FinancialClientBalanceItemDto
 
     public decimal ReceivedAmount => Convert.ToDecimal(ReceivedAmountOriginal);
 
-    public decimal OutstandingAmount => Math.Max(EarnedAmount - ReceivedAmount, 0);
+    public decimal OutstandingAmount => EarnedAmount - ReceivedAmount;
 
     public DateTime? LastPaymentDate => LastPaymentDateRaw == null ? null : Convert.ToDateTime(LastPaymentDateRaw);
 }

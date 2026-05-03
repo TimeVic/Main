@@ -10,10 +10,10 @@
 
 <section class="@Class">
     <h2 class="mb-4 text-base font-semibold text-slate-700">Money Overview</h2>
-    <div class="grid gap-4 @(_data?.IsTeamWorkspace == true ? "md:grid-cols-2 xl:grid-cols-4" : "md:grid-cols-3")">
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <SummaryMetricCard
             Title="Client Earned"
-            HelperText="Billable work recorded for clients"
+            HelperText="Billable work recorded for clients across all time."
             Variant="neutral"
             IconClass="fa-solid fa-file-invoice-dollar">
             <Value>
@@ -23,7 +23,7 @@
 
         <SummaryMetricCard
             Title="Client Received"
-            HelperText="Payments received from clients"
+            HelperText="Payments received from clients across all time."
             Variant="success"
             IconClass="fa-solid fa-circle-check">
             <Value>
@@ -32,8 +32,8 @@
         </SummaryMetricCard>
 
         <SummaryMetricCard
-            Title="Client Outstanding"
-            HelperText="Still unpaid by clients"
+            Title="Unpaid by Clients"
+            HelperText="Current amount clients still owe."
             Variant="@(_totals?.ClientOutstanding > 0 ? "danger" : "neutral")"
             Emphasis="@(_totals?.ClientOutstanding > 0)"
             IconClass="fa-solid fa-triangle-exclamation">
@@ -42,11 +42,23 @@
             </Value>
         </SummaryMetricCard>
 
-        @if (_data?.IsTeamWorkspace == true)
-        {
+        <SummaryMetricCard
+            Title="Estimated Margin"
+            HelperText="Client earned minus member earnings."
+            Variant="@(_totals?.EstimatedMargin >= 0 ? "success" : "danger")"
+            IconClass="fa-solid fa-chart-line">
+            <Value>
+                <AmountDisplay Amount="@(_totals?.EstimatedMargin ?? 0)"/>
+            </Value>
+        </SummaryMetricCard>
+    </div>
+
+    @if (_data?.IsTeamWorkspace == true)
+    {
+        <div class="mt-4 grid gap-4 md:grid-cols-3">
             <SummaryMetricCard
-                Title="Team Cost"
-                HelperText="Amount owed to members based on their rates"
+                Title="Member Earnings"
+                HelperText="Member earnings calculated by rate across all time."
                 Variant="neutral"
                 IconClass="fa-solid fa-users">
                 <Value>
@@ -55,8 +67,8 @@
             </SummaryMetricCard>
 
             <SummaryMetricCard
-                Title="Member Paid Out"
-                HelperText="Payments already made to members"
+                Title="Paid to Members"
+                HelperText="Payments already made to members across all time."
                 Variant="success"
                 IconClass="fa-solid fa-hand-holding-dollar">
                 <Value>
@@ -65,36 +77,16 @@
             </SummaryMetricCard>
 
             <SummaryMetricCard
-                Title="Member Outstanding"
-                HelperText="Still unpaid to members"
+                Title="Owed to Members"
+                HelperText="Current amount still owed to members."
                 Variant="@(_totals?.MemberOutstanding > 0 ? "danger" : "neutral")"
                 IconClass="fa-solid fa-clock-rotate-left">
                 <Value>
                     <AmountDisplay Amount="@(_totals?.MemberOutstanding ?? 0)"/>
                 </Value>
             </SummaryMetricCard>
-
-            <SummaryMetricCard
-                Title="Estimated Margin"
-                HelperText="Client earned minus team cost"
-                Variant="@(_totals?.EstimatedMargin >= 0 ? "success" : "danger")"
-                IconClass="fa-solid fa-chart-line">
-                <Value>
-                    <AmountDisplay Amount="@(_totals?.EstimatedMargin ?? 0)"/>
-                </Value>
-            </SummaryMetricCard>
-
-            <SummaryMetricCard
-                Title="Realized Margin"
-                HelperText="Client received minus member paid out"
-                Variant="@(_totals?.RealizedMargin >= 0 ? "success" : "danger")"
-                IconClass="fa-solid fa-scale-balanced">
-                <Value>
-                    <AmountDisplay Amount="@(_totals?.RealizedMargin ?? 0)"/>
-                </Value>
-            </SummaryMetricCard>
-        }
-    </div>
+        </div>
+    }
     
     @if (_totals?.ClientEarned > 0 && _totals?.ClientReceived <= 0)
     {

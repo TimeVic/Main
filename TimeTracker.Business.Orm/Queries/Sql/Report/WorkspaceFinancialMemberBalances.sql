@@ -11,8 +11,6 @@ with cost_by_member as (
              inner join users u on u.id = wm.user_id
     where te.workspace_id = :workspaceId
       and te.end_time is not null
-      and cast(te.start_time as date) >= cast(:startDate as date)
-      and cast(te.start_time as date) <= cast(:endDate as date)
     group by wm.id, u.id, u.user_name, u.email
 ),
 paidout_by_member as (
@@ -23,8 +21,6 @@ paidout_by_member as (
     from member_payments mp
              inner join workspace_members wm on wm.id = mp.member_id
     where wm.workspace_id = :workspaceId
-      and cast(mp.payment_time as date) >= cast(:startDate as date)
-      and cast(mp.payment_time as date) <= cast(:endDate as date)
     group by mp.member_id
 ),
 relevant_members as (

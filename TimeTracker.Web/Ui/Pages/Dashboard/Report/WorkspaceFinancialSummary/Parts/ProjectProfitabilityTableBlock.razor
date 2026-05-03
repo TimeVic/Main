@@ -8,15 +8,20 @@
 @inject IState<ReportsState> ReportsState
 
 <section class="@Class">
-    <h2 class="mb-4 text-base font-semibold text-slate-700">Project Profitability</h2>
+    <div class="mb-4">
+        <h2 class="text-base font-semibold text-slate-700">Project Profitability</h2>
+        <p class="mt-1 text-sm text-slate-500">Compares client billable amount with member earnings for each project.</p>
+    </div>
     @{
         var data = ReportsState.Value.WorkspaceFinancialSummaryData;
         var items = data?.ProjectProfitability ?? [];
-        var isTeam = data?.IsTeamWorkspace == true;
     }
     @if (items.Count == 0)
     {
-        <p class="text-sm text-slate-500">No project data for the selected period.</p>
+        <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6">
+            <p class="text-sm font-medium text-slate-700">No project profitability yet</p>
+            <p class="mt-1 text-sm text-slate-500">Billable project work will appear here after it is recorded.</p>
+        </div>
     }
     else
     {
@@ -27,13 +32,10 @@
                         <th class="px-4 py-3 text-left">Project</th>
                         <th class="px-4 py-3 text-left">Client</th>
                         <th class="px-4 py-3 text-right">Hours</th>
-                        <th class="px-4 py-3 text-right">@(isTeam ? "Client Earned" : "Earned")</th>
-                        @if (isTeam)
-                        {
-                            <th class="px-4 py-3 text-right">Team Cost</th>
-                            <th class="px-4 py-3 text-right">Est. Margin</th>
-                            <th class="px-4 py-3 text-right">Margin %</th>
-                        }
+                        <th class="px-4 py-3 text-right">Client Earned</th>
+                        <th class="px-4 py-3 text-right">Member Earnings</th>
+                        <th class="px-4 py-3 text-right">Estimated Margin</th>
+                        <th class="px-4 py-3 text-right">Margin %</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -44,16 +46,13 @@
                             <td class="px-4 py-3 text-slate-600">@(item.Client?.Name ?? "—")</td>
                             <td class="px-4 py-3 text-right text-slate-600">@item.Duration.ToReadableShortString()</td>
                             <td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.ClientEarned"/></td>
-                            @if (isTeam)
-                            {
-                                <td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.TeamCost"/></td>
-                                <td class="px-4 py-3 text-right font-semibold @(item.EstimatedMargin < 0 ? "text-red-700" : "text-emerald-700")">
-                                    <AmountDisplay Amount="@item.EstimatedMargin"/>
-                                </td>
-                                <td class="px-4 py-3 text-right @(item.MarginPercent < 0 ? "text-red-700" : "text-slate-700")">
-                                    @(item.ClientEarned == 0 ? "—" : $"{Math.Round(item.MarginPercent.GetValueOrDefault(), 0)}%")
-                                </td>
-                            }
+                            <td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.TeamCost"/></td>
+                            <td class="px-4 py-3 text-right font-semibold @(item.EstimatedMargin < 0 ? "text-red-700" : "text-emerald-700")">
+                                <AmountDisplay Amount="@item.EstimatedMargin"/>
+                            </td>
+                            <td class="px-4 py-3 text-right @(item.MarginPercent < 0 ? "text-red-700" : "text-slate-700")">
+                                @(item.ClientEarned == 0 ? "—" : $"{Math.Round(item.MarginPercent.GetValueOrDefault(), 0)}%")
+                            </td>
                         </tr>
                     }
                     <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
@@ -61,18 +60,17 @@
                         <td class="px-4 py-3"></td>
                         <td class="px-4 py-3 text-right">@items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()</td>
                         <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.ClientEarned)"/></td>
-                        @if (isTeam)
-                        {
+                        @{
                             var totalMargin = items.Sum(i => i.EstimatedMargin);
                             var totalEarned = items.Sum(i => i.ClientEarned);
-                            <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.TeamCost)"/></td>
-                            <td class="px-4 py-3 text-right @(totalMargin < 0 ? "text-red-700" : "text-emerald-700")">
-                                <AmountDisplay Amount="@totalMargin"/>
-                            </td>
-                            <td class="px-4 py-3 text-right">
-                                @(totalEarned == 0 ? "—" : $"{Math.Round(totalMargin / totalEarned * 100, 0)}%")
-                            </td>
                         }
+                        <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.TeamCost)"/></td>
+                        <td class="px-4 py-3 text-right @(totalMargin < 0 ? "text-red-700" : "text-emerald-700")">
+                            <AmountDisplay Amount="@totalMargin"/>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            @(totalEarned == 0 ? "—" : $"{Math.Round(totalMargin / totalEarned * 100, 0)}%")
+                        </td>
                     </tr>
                 </tbody>
             </table>

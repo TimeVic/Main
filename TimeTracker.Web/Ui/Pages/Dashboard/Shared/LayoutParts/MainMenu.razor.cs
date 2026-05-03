@@ -25,6 +25,12 @@ public partial class MainMenu
     {
         new MenuItemModel("Time Entries", "fa-regular fa-clock", SiteUrl.Dashboard_TimeEntry),
         new MenuItemModel("Summary", "fa-regular fa-bar-chart", SiteUrl.Dashboard_Reports_Summary),
+        new MenuItemModel(
+            "Money",
+            "fa-solid fa-chart-pie",
+            SiteUrl.Dashboard_WorkspaceMoney,
+            RequiredPermission: WorkspacePermission.ReadWorkspaceFinancialSummary
+        ),
         new MenuItemModel("Tasks", "fa-regular fa-square-check", SiteUrl.Dashboard_Tasks_Main),
         new MenuItemModel("Member Payments", "fa-regular fa-credit-card", SiteUrl.Dashboard_MemberPayments, ""),
         new MenuItemModel(
@@ -36,13 +42,6 @@ public partial class MainMenu
         ),
         new MenuItemModel("Payments report", "fa-regular fa-credit-card", SiteUrl.Dashboard_Reports_MemberPayments, "Reports"),
         new MenuItemModel("Time entries report", "fa-regular fa-clock", SiteUrl.Dashboard_Reports_TimeEntries, "Reports"),
-        new MenuItemModel(
-            "Workspace Financial Summary",
-            "fa-solid fa-chart-pie",
-            SiteUrl.Dashboard_Reports_WorkspaceFinancialSummary,
-            "Reports",
-            WorkspacePermission.ReadWorkspaceFinancialSummary
-        ),
         new MenuItemModel(
             "",
             "fa-solid fa-sliders",

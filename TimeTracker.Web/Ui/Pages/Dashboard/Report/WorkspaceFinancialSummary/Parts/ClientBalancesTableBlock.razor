@@ -8,13 +8,19 @@
 @inject IState<ReportsState> ReportsState
 
 <section class="@Class">
-    <h2 class="mb-4 text-base font-semibold text-slate-700">Client Balances</h2>
+    <div class="mb-4">
+        <h2 class="text-base font-semibold text-slate-700">Client Balances</h2>
+        <p class="mt-1 text-sm text-slate-500">Shows how much each client was billed, how much they paid, and their current balance.</p>
+    </div>
     @{
         var items = ReportsState.Value.WorkspaceFinancialSummaryData?.ClientBalances ?? [];
     }
     @if (items.Count == 0)
     {
-        <p class="text-sm text-slate-500">No client data for the selected period.</p>
+        <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6">
+            <p class="text-sm font-medium text-slate-700">No client balances yet</p>
+            <p class="mt-1 text-sm text-slate-500">Billable work and client payments will appear here after they are recorded.</p>
+        </div>
     }
     else
     {
@@ -26,19 +32,32 @@
                         <th class="px-4 py-3 text-right">Hours</th>
                         <th class="px-4 py-3 text-right">Earned</th>
                         <th class="px-4 py-3 text-right">Received</th>
-                        <th class="px-4 py-3 text-right">Outstanding</th>
+                        <th class="px-4 py-3 text-right">Balance</th>
+                        <th class="px-4 py-3 text-left">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @foreach (var item in items)
                     {
+                        var status = GetClientStatus(item.Outstanding);
                         <tr class="hover:bg-slate-50/50">
                             <td class="px-4 py-3 font-medium text-slate-800">@(item.Client?.Name ?? "No client")</td>
                             <td class="px-4 py-3 text-right text-slate-600">@item.Duration.ToReadableShortString()</td>
                             <td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.Earned"/></td>
                             <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@item.Received"/></td>
-                            <td class="px-4 py-3 text-right font-semibold @(item.Outstanding > 0 ? "text-red-700" : "text-slate-700")">
-                                <AmountDisplay Amount="@item.Outstanding"/>
+                            <td class="px-4 py-3 text-right font-semibold @GetBalanceTextClass(item.Outstanding)">
+                                @if (item.Outstanding == 0)
+                                {
+                                    <span>Settled</span>
+                                }
+                                else
+                                {
+                                    <AmountDisplay Amount="@Math.Abs(item.Outstanding)"/>
+                                    <span>@(item.Outstanding > 0 ? "due" : "credit")</span>
+                                }
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold @status.Class">@status.Text</span>
                             </td>
                         </tr>
                     }
@@ -47,9 +66,10 @@
                         <td class="px-4 py-3 text-right">@items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()</td>
                         <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.Earned)"/></td>
                         <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@items.Sum(i => i.Received)"/></td>
-                        <td class="px-4 py-3 text-right @(items.Sum(i => i.Outstanding) > 0 ? "text-red-700" : "text-slate-700")">
+                        <td class="px-4 py-3 text-right @GetBalanceTextClass(items.Sum(i => i.Outstanding))">
                             <AmountDisplay Amount="@items.Sum(i => i.Outstanding)"/>
                         </td>
+                        <td class="px-4 py-3"></td>
                     </tr>
                 </tbody>
             </table>
@@ -60,4 +80,18 @@
 @code {
     [Parameter]
     public string? Class { get; set; }
+
+    private static string GetBalanceTextClass(decimal balance)
+    {
+        if (balance > 0) return "text-red-700";
+        if (balance < 0) return "text-blue-700";
+        return "text-emerald-700";
+    }
+
+    private static (string Text, string Class) GetClientStatus(decimal balance)
+    {
+        if (balance > 0) return ("Due", "bg-red-100 text-red-700");
+        if (balance < 0) return ("Credit", "bg-blue-100 text-blue-700");
+        return ("Settled", "bg-emerald-100 text-emerald-700");
+    }
 }

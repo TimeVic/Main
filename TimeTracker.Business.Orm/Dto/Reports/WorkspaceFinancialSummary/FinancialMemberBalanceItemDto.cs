@@ -26,7 +26,7 @@ public class FinancialMemberBalanceItemDto
 
     public decimal PaidOutAmount => Convert.ToDecimal(PaidOutAmountOriginal);
 
-    public decimal OwedAmount => Math.Max(CostAmount - PaidOutAmount, 0);
+    public decimal OwedAmount => CostAmount - PaidOutAmount;
 
     public DateTime? LastPayoutDate => LastPayoutDateRaw == null ? null : Convert.ToDateTime(LastPayoutDateRaw);
 }

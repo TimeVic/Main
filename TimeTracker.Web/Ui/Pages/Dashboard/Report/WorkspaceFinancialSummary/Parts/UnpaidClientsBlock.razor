@@ -17,7 +17,8 @@
     @if (items.Count == 0)
     {
         <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center">
-            <p class="text-sm text-slate-500">All clients are paid for the selected period.</p>
+            <p class="text-sm font-medium text-slate-700">No unpaid clients</p>
+            <p class="mt-1 text-sm text-slate-500">Clients with positive all-time balances will appear here.</p>
         </div>
     }
     else
@@ -27,7 +28,7 @@
                 <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     <tr>
                         <th class="px-4 py-3 text-left">Client</th>
-                        <th class="px-4 py-3 text-right">Outstanding</th>
+                        <th class="px-4 py-3 text-right">Balance</th>
                         <th class="px-4 py-3 text-left">Last Payment</th>
                         <th class="px-4 py-3 text-left">Status</th>
                     </tr>
@@ -39,6 +40,7 @@
                             <td class="px-4 py-3 font-medium text-slate-800">@(item.Client?.Name ?? "No client")</td>
                             <td class="px-4 py-3 text-right font-semibold text-red-700">
                                 <AmountDisplay Amount="@item.Outstanding"/>
+                                <span>due</span>
                             </td>
                             <td class="px-4 py-3 text-slate-500">
                                 @(item.LastPaymentDate.HasValue ? item.LastPaymentDate.Value.ToString("MMM d, yyyy") : "—")
