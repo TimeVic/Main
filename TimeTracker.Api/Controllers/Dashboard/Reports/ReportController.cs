@@ -16,12 +16,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports;
 [Route("/dashboard/[controller]")]
 public class ReportController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
-    [HttpPost("payments")]
+    [HttpPost("member-payments")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> PaymentsReport([FromBody] PaymentReportRequest request)
+    public Task<IActionResult> MemberPaymentsReport([FromBody] MemberPaymentReportRequest request)
         => this.RequestAsync()
-            .For<PaymentReportResponse>()
+            .For<MemberPaymentReportResponse>()
             .With(request);
     
     [HttpPost("summary")]

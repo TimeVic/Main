@@ -28,7 +28,7 @@ public class ForUserTest: BaseTest
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly ITimeEntryReportsDao _timeEntryReportDao;
-    private readonly IPaymentDao _paymentDao;
+    private readonly IMemberPaymentDao _paymentDao;
     private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
     private readonly ClientEntity _client = null!;
@@ -42,7 +42,7 @@ public class ForUserTest: BaseTest
     {
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
-        _paymentDao = ServiceProvider.GetRequiredService<IPaymentDao>();
+        _paymentDao = ServiceProvider.GetRequiredService<IMemberPaymentDao>();
         _timeEntryReportDao = ServiceProvider.GetRequiredService<ITimeEntryReportsDao>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();

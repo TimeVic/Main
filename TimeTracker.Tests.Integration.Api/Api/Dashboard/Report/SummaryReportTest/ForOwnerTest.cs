@@ -25,7 +25,7 @@ public class ForOwnerTest: BaseTest
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly ITimeEntryReportsDao _timeEntryReportDao;
-    private readonly IPaymentDao _paymentDao;
+    private readonly IMemberPaymentDao _paymentDao;
     private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
     private readonly ClientEntity _client = null!;
@@ -34,7 +34,7 @@ public class ForOwnerTest: BaseTest
     {
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
-        _paymentDao = ServiceProvider.GetRequiredService<IPaymentDao>();
+        _paymentDao = ServiceProvider.GetRequiredService<IMemberPaymentDao>();
         _timeEntryReportDao = ServiceProvider.GetRequiredService<ITimeEntryReportsDao>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;

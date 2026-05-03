@@ -26,8 +26,8 @@ public partial class MainMenu
         new MenuItemModel("Time Entries", "fa-regular fa-clock", SiteUrl.Dashboard_TimeEntry),
         new MenuItemModel("Summary", "fa-regular fa-bar-chart", SiteUrl.Dashboard_Reports_Summary),
         new MenuItemModel("Tasks", "fa-regular fa-square-check", SiteUrl.Dashboard_Tasks_Main),
-        new MenuItemModel("Payments", "fa-regular fa-credit-card", SiteUrl.Dashboard_Payments, ""),
-        new MenuItemModel("Payments report", "fa-regular fa-credit-card", SiteUrl.Dashboard_Reports_Payments, "Reports"),
+        new MenuItemModel("Payments", "fa-regular fa-credit-card", SiteUrl.Dashboard_MemberPayments, ""),
+        new MenuItemModel("Payments report", "fa-regular fa-credit-card", SiteUrl.Dashboard_Reports_MemberPayments, "Reports"),
         new MenuItemModel("Time entries report", "fa-regular fa-clock", SiteUrl.Dashboard_Reports_TimeEntries, "Reports"),
         new MenuItemModel(
             "",

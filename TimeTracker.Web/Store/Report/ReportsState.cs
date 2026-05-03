@@ -12,7 +12,7 @@ namespace TimeTracker.Web.Store.Report;
 [FeatureState]
 public record ReportsState
 {
-    public ICollection<PaymentsReportItemDto> PaymentReportItems { get; set; } = new List<PaymentsReportItemDto>();
+    public ICollection<MemberPaymentsReportItemDto> MemberPaymentReportItems { get; set; } = new List<MemberPaymentsReportItemDto>();
     
     public SummaryReportResponse? SummaryReportData { get; set; }
 
@@ -25,7 +25,7 @@ public record ReportsState
         DateTime.Now
     );
     
-    public PaymentReportFilterState PaymentReportFilter { get; set; } = new(
+    public MemberPaymentReportFilterState MemberPaymentReportFilter { get; set; } = new(
         DateTime.Now
     );
 }
@@ -37,6 +37,6 @@ public record SummaryReportFilterState(
     DateTime EndDate
 );
 
-public record PaymentReportFilterState(
+public record MemberPaymentReportFilterState(
     DateTime EndDate
 );

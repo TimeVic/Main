@@ -8,23 +8,23 @@ namespace TimeTracker.Web.Store.Report;
 
 public class ReportReducers
 {
-    #region Payment
+    #region MemberPayment
     
     [ReducerMethod]
-    public static ReportsState Reducer(ReportsState state, ReportSetPaymentReportFilterAction action)
+    public static ReportsState Reducer(ReportsState state, ReportSetMemberPaymentReportFilterAction action)
     {
         return state with
         {
-            PaymentReportFilter = action.FilterState
+            MemberPaymentReportFilter = action.FilterState
         };
     }
     
     [ReducerMethod]
-    public static ReportsState Reducer(ReportsState state, ReportSetPaymentReportItemsAction action)
+    public static ReportsState Reducer(ReportsState state, ReportSetMemberPaymentReportItemsAction action)
     {
         return state with
         {
-            PaymentReportItems = action.Items
+            MemberPaymentReportItems = action.Items
         };
     }
     

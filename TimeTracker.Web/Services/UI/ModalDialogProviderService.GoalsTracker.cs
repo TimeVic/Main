@@ -2,7 +2,6 @@
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts;
-using TimeTracker.Web.Pages.Dashboard.Payment.Parts;
 using TimeTracker.Web.Pages.Dashboard.Tag.Parts;
 
 namespace TimeTracker.Web.Services.UI;

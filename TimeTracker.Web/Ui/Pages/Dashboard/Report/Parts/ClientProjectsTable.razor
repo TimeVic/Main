@@ -56,21 +56,21 @@
 
 @code {
     [Parameter]
-    public IEnumerable<PaymentsReportItemDto> Items { get; set; } = Enumerable.Empty<PaymentsReportItemDto>();
+    public IEnumerable<MemberPaymentsReportItemDto> Items { get; set; } = Enumerable.Empty<MemberPaymentsReportItemDto>();
 
-    private static string GetProjectName(PaymentsReportItemDto item)
+    private static string GetProjectName(MemberPaymentsReportItemDto item)
     {
         return string.IsNullOrWhiteSpace(item.ProjectName) ? "Unnamed project" : item.ProjectName;
     }
 
-    private static string GetProjectNameClass(PaymentsReportItemDto item)
+    private static string GetProjectNameClass(MemberPaymentsReportItemDto item)
     {
         return string.IsNullOrWhiteSpace(item.ProjectName)
             ? "font-medium italic text-slate-400"
             : "font-medium text-slate-900";
     }
 
-    private static decimal GetProjectOutstandingAmount(PaymentsReportItemDto item)
+    private static decimal GetProjectOutstandingAmount(MemberPaymentsReportItemDto item)
     {
         return Math.Max(item.Amount - item.PaidAmountByProject, 0);
     }

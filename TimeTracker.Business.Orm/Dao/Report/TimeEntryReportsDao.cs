@@ -14,17 +14,17 @@ public class TimeEntryReportsDao: BaseDao, ITimeEntryReportsDao
     {
     }
     
-    public async Task<ICollection<ProjectPaymentsReportItemDto>> GetProjectPaymentsReport(
+    public async Task<ICollection<ProjectMemberPaymentsReportItemDto>> GetProjectMemberPaymentsReport(
         Guid workspaceId,
         Guid userId,
         DateTime endDate
     )
     {
-        return await Session.CreateSQLQuery(ReadSqlQuery("Report.ProjectPayments"))
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.ProjectMemberPayments"))
             .SetParameter("workspaceId", workspaceId)
             .SetParameter("userId", userId)
             .SetParameter("endDate", endDate.EndOfDay())
-            .SetResultTransformer(Transformers.AliasToBean<ProjectPaymentsReportItemDto>())
-            .ListAsync<ProjectPaymentsReportItemDto>();
+            .SetResultTransformer(Transformers.AliasToBean<ProjectMemberPaymentsReportItemDto>())
+            .ListAsync<ProjectMemberPaymentsReportItemDto>();
     }
 }

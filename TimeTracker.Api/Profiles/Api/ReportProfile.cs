@@ -9,7 +9,7 @@ public class ReportProfile : Profile
 {
     public ReportProfile()
     {
-        CreateMap<ProjectPaymentsReportItemDto, PaymentsReportItemDto>();
+        CreateMap<ProjectMemberPaymentsReportItemDto, MemberPaymentsReportItemDto>();
         CreateMap<ByDaysReportItemDto, SummaryByDaysReportItemDto>();
         CreateMap<ByMonthsReportItemDto, SummaryByMonthsReportItemDto>();
         CreateMap<ByWeeksReportItemDto, SummaryByWeeksReportItemDto>();

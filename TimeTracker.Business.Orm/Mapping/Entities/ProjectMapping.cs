@@ -30,7 +30,7 @@ public class ProjectMapping: BaseGuidMappings<ProjectEntity>
             .Nullable()
             .Cascade.SaveUpdate();
         
-        HasMany(x => x.Payments)
+        HasMany(x => x.MemberPayments)
             .KeyColumn("project_id")
             .Fetch.Select()
             .LazyLoad()

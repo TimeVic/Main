@@ -13,7 +13,7 @@
 
     private decimal GetOutstanding(Guid? projectId, decimal earned)
     {
-        var paid = ReportsState.Value.PaymentReportItems.FirstOrDefault(item => item.ProjectId == projectId)?.PaidAmountByProject ?? 0;
+        var paid = ReportsState.Value.MemberPaymentReportItems.FirstOrDefault(item => item.ProjectId == projectId)?.PaidAmountByProject ?? 0;
         return Math.Max(earned - paid, 0);
     }
 

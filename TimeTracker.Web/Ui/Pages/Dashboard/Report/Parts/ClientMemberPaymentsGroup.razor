@@ -1,0 +1,124 @@
+@using TimeTracker.Api.Shared.Dto.Model.Report
+
+@inherits BaseReactiveComponent
+
+<LumexCard Class="@ContainerClass">
+    <LumexCardBody Class="p-0">
+        <div class="@HeaderClass">
+            <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-3">
+                    <h3 class="truncate text-lg font-semibold text-slate-900">@ClientName</h3>
+                    <MemberPaymentStatusBadge Earned="@_earned" Received="@_received" Outstanding="@_outstanding"/>
+                </div>
+                <p class="@InsightClass">@ClientInsight</p>
+            </div>
+
+            <ClientMemberPaymentsSummaryPills
+                Earned="@_earned"
+                Received="@_received"
+                Outstanding="@_outstanding"/>
+        </div>
+
+        <div class="border-t border-slate-200 bg-white">
+            <ClientProjectsTable Items="@_sortedItems"/>
+        </div>
+    </LumexCardBody>
+</LumexCard>
+
+@code {
+    private IReadOnlyList<MemberPaymentsReportItemDto> _items = Array.Empty<MemberPaymentsReportItemDto>();
+
+    [Parameter]
+    public IEnumerable<MemberPaymentsReportItemDto> Items { get; set; } = Enumerable.Empty<MemberPaymentsReportItemDto>();
+
+    protected override void OnParametersSet()
+    {
+        _items = Items.ToList();
+    }
+
+    private IEnumerable<MemberPaymentsReportItemDto> _sortedItems
+    {
+        get => _items
+            .OrderByDescending(GetProjectOutstandingAmount)
+            .ThenByDescending(item => item.Amount)
+            .ThenBy(item => item.ProjectName);
+    }
+
+    private string ClientName
+    {
+        get
+        {
+            var clientName = _items.FirstOrDefault()?.ClientName;
+            return string.IsNullOrWhiteSpace(clientName) ? "Other projects" : clientName;
+        }
+    }
+
+    private decimal _earned
+    {
+        get => _items.Sum(item => item.Amount);
+    }
+
+    private decimal _received
+    {
+        get => _items.FirstOrDefault()?.PaidAmountByClient ?? 0;
+    }
+
+    private decimal _outstanding
+    {
+        get => Math.Max(_earned - _received, 0);
+    }
+
+    private string ProjectCountLabel
+    {
+        get => _items.Count == 1 ? "1 project" : $"{_items.Count} projects";
+    }
+
+    private string ClientInsight
+    {
+        get
+        {
+            if (_outstanding > 0)
+            {
+                return $"{ProjectCountLabel}, unpaid balance remains";
+            }
+
+            if (_received > _earned && _received > 0)
+            {
+                return "Received exceeds currently tracked earned value";
+            }
+
+            if (_earned > 0 || _received > 0)
+            {
+                return "All tracked value is covered by received payments";
+            }
+
+            return ProjectCountLabel;
+        }
+    }
+
+    private string ContainerClass
+    {
+        get => _outstanding > 0
+            ? "overflow-hidden border-red-200 bg-red-50/40 shadow-sm"
+            : "overflow-hidden border-slate-200 bg-white shadow-sm";
+    }
+
+    private string HeaderClass
+    {
+        get => _outstanding > 0
+            ? "flex flex-col gap-5 border-l-4 border-red-400 bg-red-50/70 px-5 py-5 lg:flex-row lg:items-center lg:justify-between"
+            : "flex flex-col gap-5 px-5 py-5 lg:flex-row lg:items-center lg:justify-between";
+    }
+
+    private string InsightClass
+    {
+        get => _outstanding > 0
+            ? "mt-2 text-sm font-medium text-red-700"
+            : "mt-2 text-sm text-slate-500";
+    }
+
+    private static decimal GetProjectOutstandingAmount(MemberPaymentsReportItemDto item)
+    {
+        return Math.Max(item.Amount - item.PaidAmountByProject, 0);
+    }
+}
