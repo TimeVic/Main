@@ -21,3 +21,11 @@ public record struct ReportResetSummaryReportFilterAction();
 public record struct ReportSetMemberPaymentReportFilterAction(MemberPaymentReportFilterState FilterState);
 
 public record struct ReportSetIsLoadingAction(bool IsLoading);
+
+public record struct ReportFetchWorkspaceFinancialSummaryAction();
+
+public record struct ReportSetWorkspaceFinancialSummaryAction(WorkspaceFinancialSummaryReportResponse ReportData);
+
+public record struct ReportSetWorkspaceFinancialSummaryFilterAction(WorkspaceFinancialSummaryFilterState FilterState);
+
+public record struct ReportResetWorkspaceFinancialSummaryFilterAction();

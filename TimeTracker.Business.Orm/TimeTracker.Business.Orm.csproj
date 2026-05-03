@@ -63,6 +63,12 @@
       <EmbeddedResource Include="Queries\Sql\Report\SummaryByWeekForOther.sql" />
       <None Remove="Queries\Sql\Report\SummaryByWeekForOwner.sql" />
       <EmbeddedResource Include="Queries\Sql\Report\SummaryByWeekForOwner.sql" />
+      <None Remove="Queries\Sql\Report\WorkspaceFinancialClientBalances.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\WorkspaceFinancialClientBalances.sql" />
+      <None Remove="Queries\Sql\Report\WorkspaceFinancialMemberBalances.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\WorkspaceFinancialMemberBalances.sql" />
+      <None Remove="Queries\Sql\Report\WorkspaceFinancialProjectProfitability.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\WorkspaceFinancialProjectProfitability.sql" />
     </ItemGroup>
 
     <ItemGroup>

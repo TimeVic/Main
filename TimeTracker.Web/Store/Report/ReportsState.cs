@@ -16,6 +16,8 @@ public record ReportsState
     
     public SummaryReportResponse? SummaryReportData { get; set; }
 
+    public WorkspaceFinancialSummaryReportResponse? WorkspaceFinancialSummaryData { get; set; }
+
     public bool IsLoading { get; set; }
 
     public SummaryReportFilterState SummaryReportFilter { get; set; } = new(
@@ -28,6 +30,12 @@ public record ReportsState
     public MemberPaymentReportFilterState MemberPaymentReportFilter { get; set; } = new(
         DateTime.Now
     );
+
+    public WorkspaceFinancialSummaryFilterState WorkspaceFinancialSummaryFilter { get; set; } = new(
+        SummaryReportPeriodType.ThisMonth,
+        DateTime.Now.StartOfMonth(),
+        DateTime.Now
+    );
 }
 
 public record SummaryReportFilterState(
@@ -38,5 +46,11 @@ public record SummaryReportFilterState(
 );
 
 public record MemberPaymentReportFilterState(
+    DateTime EndDate
+);
+
+public record WorkspaceFinancialSummaryFilterState(
+    SummaryReportPeriodType PeriodType,
+    DateTime StartDate,
     DateTime EndDate
 );

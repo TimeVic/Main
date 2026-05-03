@@ -41,6 +41,7 @@ public static class SiteUrl
     public static readonly string Dashboard_Reports_Summary = "/board/report/summary";
     public static readonly string Dashboard_Reports_MemberPayments = "/board/report/member-payments";
     public static readonly string Dashboard_Reports_TimeEntries = "/board/report/time-entries";
+    public static readonly string Dashboard_Reports_WorkspaceFinancialSummary = "/board/report/workspace-financial-summary";
     
     public static readonly string Dashboard_Tasks_Default = "/board/tasks/0";
     public static readonly string Dashboard_Tasks_Main = "/board/tasks";

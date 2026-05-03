@@ -37,6 +37,13 @@ public partial class MainMenu
         new MenuItemModel("Payments report", "fa-regular fa-credit-card", SiteUrl.Dashboard_Reports_MemberPayments, "Reports"),
         new MenuItemModel("Time entries report", "fa-regular fa-clock", SiteUrl.Dashboard_Reports_TimeEntries, "Reports"),
         new MenuItemModel(
+            "Workspace Financial Summary",
+            "fa-solid fa-chart-pie",
+            SiteUrl.Dashboard_Reports_WorkspaceFinancialSummary,
+            "Reports",
+            WorkspacePermission.ReadWorkspaceFinancialSummary
+        ),
+        new MenuItemModel(
             "",
             "fa-solid fa-sliders",
             SiteUrl.Dashboard_Workspace_Settings,

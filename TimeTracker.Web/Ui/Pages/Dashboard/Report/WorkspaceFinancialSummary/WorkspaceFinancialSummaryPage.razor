@@ -1,0 +1,76 @@
+@page "/board/report/workspace-financial-summary"
+@using Fluxor
+@using TimeTracker.Web.Store.Report
+@using TimeTracker.Web.Ui.Pages.Dashboard.Report.WorkspaceFinancialSummary.Parts
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared
+@using Layout = TimeTracker.Web.Ui.Pages.Dashboard.Shared.Layout
+
+@inherits BaseReactiveComponent
+@inject IState<ReportsState> _state
+@layout Layout
+
+@if (!_isAuthorized)
+{
+    <div class="mt-8 flex items-center justify-center rounded-2xl border border-slate-200 bg-white py-16">
+        <div class="text-center">
+            <i class="fa-solid fa-lock mb-4 text-4xl text-slate-300"></i>
+            <p class="text-lg font-semibold text-slate-700">Access Restricted</p>
+            <p class="mt-1 text-sm text-slate-500">This report is available to workspace owners and managers only.</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="space-y-2">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900">Workspace Financial Summary</h1>
+            <p class="mt-1 text-sm text-slate-500">Financial state across all workspace work, clients, and members.</p>
+        </div>
+
+        <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
+            Client outstanding = client earned − client received.
+            @if (_reportData?.IsTeamWorkspace == true)
+            {
+                <span class="ml-1">Member outstanding = member cost − member paid out. Estimated margin = client earned − member cost.</span>
+            }
+        </div>
+    </div>
+
+    <FilterFormBlock Class="mt-4"/>
+
+    @if (_state.Value.IsLoading)
+    {
+        <div class="mt-8 flex justify-center rounded-2xl border border-slate-200 bg-white py-10">
+            <LumexSpinner/>
+        </div>
+    }
+    else if (_reportData == null || (_reportData.ClientBalances.Count == 0 && _reportData.MemberBalances.Count == 0))
+    {
+        <LumexCard Class="mt-8 border-dashed border-slate-200 bg-slate-50 shadow-none">
+            <LumexCardBody>
+                <p class="text-sm font-medium text-slate-700">No tracked work yet</p>
+                <p class="mt-1 text-sm text-slate-500">Track time on a project to see workspace financial summary.</p>
+            </LumexCardBody>
+        </LumexCard>
+    }
+    else
+    {
+        <MoneyOverviewBlock Class="mt-6"/>
+
+        <ClientBalancesTableBlock Class="mt-8"/>
+
+        @if (_reportData.IsTeamWorkspace)
+        {
+            <MemberBalancesTableBlock Class="mt-8"/>
+        }
+
+        <ProjectProfitabilityTableBlock Class="mt-8"/>
+
+        <UnpaidClientsBlock Class="mt-8"/>
+
+        @if (_reportData.IsTeamWorkspace)
+        {
+            <MembersToPayBlock Class="mt-8"/>
+        }
+    }
+}

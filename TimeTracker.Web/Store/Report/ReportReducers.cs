@@ -138,4 +138,54 @@ public class ReportReducers
     }
     
     #endregion
+
+    #region WorkspaceFinancialSummary
+
+    [ReducerMethod]
+    public static ReportsState Reducer(ReportsState state, ReportSetWorkspaceFinancialSummaryAction action)
+    {
+        return state with
+        {
+            WorkspaceFinancialSummaryData = action.ReportData
+        };
+    }
+
+    [ReducerMethod]
+    public static ReportsState Reducer(ReportsState state, ReportSetWorkspaceFinancialSummaryFilterAction action)
+    {
+        var startDate = action.FilterState.StartDate;
+        var endDate = action.FilterState.EndDate;
+        var periodType = action.FilterState.PeriodType;
+        if (periodType != SummaryReportPeriodType.Custom)
+        {
+            (startDate, endDate) = GetPeriodBasedOnPeriodType(periodType);
+        }
+
+        var updatedFilter = action.FilterState with
+        {
+            StartDate = startDate,
+            EndDate = endDate
+        };
+
+        return state with
+        {
+            WorkspaceFinancialSummaryFilter = updatedFilter
+        };
+    }
+
+    [ReducerMethod]
+    public static ReportsState Reducer(ReportsState state, ReportResetWorkspaceFinancialSummaryFilterAction action)
+    {
+        var (startDate, endDate) = GetPeriodBasedOnPeriodType(SummaryReportPeriodType.ThisMonth);
+        return state with
+        {
+            WorkspaceFinancialSummaryFilter = new WorkspaceFinancialSummaryFilterState(
+                SummaryReportPeriodType.ThisMonth,
+                startDate,
+                endDate
+            )
+        };
+    }
+
+    #endregion
 }
