@@ -52,7 +52,7 @@
             Emphasis="true"
             IconClass="fa-solid fa-triangle-exclamation"
             ActionText="View unpaid by client"
-            ActionHref="@SiteUrl.Dashboard_Reports_Payments">
+            ActionHref="@SiteUrl.Dashboard_Reports_MemberPayments">
             <Value>
                 <AmountDisplay Amount="@_outstandingBalance"/>
             </Value>
@@ -61,14 +61,14 @@
 </section>
 
 @code {
-    private IEnumerable<IGrouping<Guid?, PaymentsReportItemDto>> _paymentReportGroups
+    private IEnumerable<IGrouping<Guid?, MemberPaymentsReportItemDto>> _paymentReportGroups
     {
-        get => ReportsState.Value.PaymentReportItems.GroupBy(item => item.ClientId);
+        get => ReportsState.Value.MemberPaymentReportItems.GroupBy(item => item.ClientId);
     }
 
     private decimal _totalEarned
     {
-        get => ReportsState.Value.PaymentReportItems.Sum(item => item.Amount);
+        get => ReportsState.Value.MemberPaymentReportItems.Sum(item => item.Amount);
     }
 
     private decimal _totalReceived

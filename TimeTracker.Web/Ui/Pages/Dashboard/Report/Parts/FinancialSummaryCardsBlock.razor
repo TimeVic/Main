@@ -54,14 +54,14 @@
     [Parameter]
     public string Class { get; set; } = string.Empty;
 
-    private IEnumerable<IGrouping<Guid?, PaymentsReportItemDto>> _paymentReportGroups
+    private IEnumerable<IGrouping<Guid?, MemberPaymentsReportItemDto>> _paymentReportGroups
     {
-        get => ReportsState.Value.PaymentReportItems.GroupBy(item => item.ClientId);
+        get => ReportsState.Value.MemberPaymentReportItems.GroupBy(item => item.ClientId);
     }
 
     private decimal _totalEarned
     {
-        get => ReportsState.Value.PaymentReportItems.Sum(item => item.Amount);
+        get => ReportsState.Value.MemberPaymentReportItems.Sum(item => item.Amount);
     }
 
     private decimal _totalPaid

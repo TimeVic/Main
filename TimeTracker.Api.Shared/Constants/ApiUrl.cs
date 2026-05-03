@@ -44,18 +44,18 @@ public class ApiUrl
     
     #endregion
     
-    #region Payment
+    #region MemberPayment
     
-    public const string PaymentAdd = "dashboard/payment/add";
-    public const string PaymentUpdate = "dashboard/payment/update";
-    public const string PaymentDelete = "dashboard/payment/delete";
-    public const string PaymentList = "dashboard/payment/list";
+    public const string MemberPaymentAdd = "dashboard/member-payments/add";
+    public const string MemberPaymentUpdate = "dashboard/member-payments/update";
+    public const string MemberPaymentDelete = "dashboard/member-payments/delete";
+    public const string MemberPaymentList = "dashboard/member-payments/list";
     
     #endregion
     
     #region Report
     
-    public const string ReportPayments = "dashboard/report/payments";
+    public const string ReportMemberPayments = "dashboard/report/member-payments";
 
     public const string ReportSummary = "dashboard/report/summary";
 

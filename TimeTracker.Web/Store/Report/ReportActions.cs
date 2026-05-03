@@ -6,9 +6,9 @@ using TimeTracker.Business.Common.Constants.Reports;
 
 namespace TimeTracker.Web.Store.Report;
 
-public record struct ReportFetchPaymentsReportAction();
+public record struct ReportFetchMemberPaymentsReportAction();
 
-public record struct ReportSetPaymentReportItemsAction(ICollection<PaymentsReportItemDto> Items);
+public record struct ReportSetMemberPaymentReportItemsAction(ICollection<MemberPaymentsReportItemDto> Items);
 
 public record struct ReportFetchSummaryReportAction();
 
@@ -18,6 +18,6 @@ public record struct ReportSetSummaryReportFilterAction(SummaryReportFilterState
 
 public record struct ReportResetSummaryReportFilterAction();
 
-public record struct ReportSetPaymentReportFilterAction(PaymentReportFilterState FilterState);
+public record struct ReportSetMemberPaymentReportFilterAction(MemberPaymentReportFilterState FilterState);
 
 public record struct ReportSetIsLoadingAction(bool IsLoading);

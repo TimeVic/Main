@@ -23,7 +23,7 @@ public class GetReportByUserTest: BaseTest
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
     private readonly IProjectSeeder _projectSeederSeeder;
-    private readonly IPaymentDao _paymentDao;
+    private readonly IMemberPaymentDao _paymentDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IUserDao _userDao;
 
@@ -33,7 +33,7 @@ public class GetReportByUserTest: BaseTest
         _projectSeederSeeder = Scope.Resolve<IProjectSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
-        _paymentDao = Scope.Resolve<IPaymentDao>();
+        _paymentDao = Scope.Resolve<IMemberPaymentDao>();
         _reportsDao = Scope.Resolve<ISummaryReportDao>();
         _userDao = Scope.Resolve<IUserDao>();
 

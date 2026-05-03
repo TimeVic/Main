@@ -18,15 +18,15 @@ public class GetListTest: BaseTest
     private readonly string Url = "/dashboard/list/currency/list";
     
     private readonly UserEntity _user;
-    private new readonly IDataFactory<PaymentEntity> _factory;
+    private new readonly IDataFactory<MemberPaymentEntity> _factory;
     private readonly string _jwtToken;
     private readonly WorkspaceEntity _workspace;
-    private readonly IPaymentSeeder _paymentSeeder;
+    private readonly IMemberPaymentSeeder _paymentSeeder;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
-        _factory = ServiceProvider.GetRequiredService<IDataFactory<PaymentEntity>>();
-        _paymentSeeder = ServiceProvider.GetRequiredService<IPaymentSeeder>();
+        _factory = ServiceProvider.GetRequiredService<IDataFactory<MemberPaymentEntity>>();
+        _paymentSeeder = ServiceProvider.GetRequiredService<IMemberPaymentSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 

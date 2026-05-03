@@ -37,8 +37,8 @@
       <EmbeddedResource Include="Hibernate\hibernate.hbm.xml" />
       <None Remove="Queries\Test\TestNamedQuery.hbm.xml" />
       <None Remove="Queries\TimeEntry\GetListGroupedByDayIds.sql" />
-      <None Remove="Queries\Sql\Report\ProjectPayments.sql" />
-      <EmbeddedResource Include="Queries\Sql\Report\ProjectPayments.sql" />
+      <None Remove="Queries\Sql\Report\ProjectMemberPayments.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\ProjectMemberPayments.sql" />
       <None Remove="Queries\Sql\Report\SummaryByClientForOther.sql" />
       <EmbeddedResource Include="Queries\Sql\Report\SummaryByClientForOther.sql" />
       <None Remove="Queries\Sql\Report\SummaryByClientForOwner.sql" />

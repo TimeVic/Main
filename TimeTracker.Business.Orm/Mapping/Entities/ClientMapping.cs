@@ -27,7 +27,7 @@ public class ClientMapping: BaseGuidMappings<ClientEntity>
             .Cascade.SaveUpdate()
             .Inverse();
         
-        HasMany(x => x.Payments)
+        HasMany(x => x.MemberPayments)
             .KeyColumn("client_id")
             .Fetch.Select()
             .LazyLoad()
