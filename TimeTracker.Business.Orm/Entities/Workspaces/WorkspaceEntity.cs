@@ -22,7 +22,7 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
         public virtual ICollection<WorkspaceSettingsClickUpEntity> SettingsClickUp { get; set; } = new List<WorkspaceSettingsClickUpEntity>();
         public virtual ICollection<WorkspaceSettingsRedmineEntity> SettingsRedmine { get; set; } = new List<WorkspaceSettingsRedmineEntity>();
         public virtual ICollection<WorkspaceSettingsJiraEntity> SettingsJira { get; set; } = new List<WorkspaceSettingsJiraEntity>();
-        public virtual ICollection<WorkspaceMembershipEntity> Memberships { get; set; } = new List<WorkspaceMembershipEntity>();
+        public virtual ICollection<WorkspaceMemberEntity> Members { get; set; } = new List<WorkspaceMemberEntity>();
         public virtual ICollection<TagEntity> Tags { get; set; } = new List<TagEntity>();
 
         #endregion

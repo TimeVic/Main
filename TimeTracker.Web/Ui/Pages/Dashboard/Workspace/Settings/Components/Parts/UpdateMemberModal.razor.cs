@@ -2,17 +2,17 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Store.Project;
-using LoadListAction = TimeTracker.Web.Store.WorkspaceMemberships.LoadListAction;
+using LoadListAction = TimeTracker.Web.Store.WorkspaceMembers.LoadListAction;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts;
 
 public partial class UpdateMemberModal
 {
     [Parameter]
-    public required WorkspaceMembershipDto Membership { get; set; }
+    public required WorkspaceMemberDto Member { get; set; }
 
     [Parameter]
     public required bool IsOpened { get; set; }
@@ -36,7 +36,7 @@ public partial class UpdateMemberModal
     protected override void OnParametersSet()
     {
         _model = new UpdateRequest();
-        _model.Fill(Membership, ProjectState.Value.List);
+        _model.Fill(Member, ProjectState.Value.List);
         base.OnParametersSet();
     }
 
@@ -65,7 +65,7 @@ public partial class UpdateMemberModal
         _isLoading = true;
         try
         {
-            var result = await ApiService.WorkspaceMembershipUpdateAsync(_model);
+            var result = await ApiService.WorkspaceMemberUpdateAsync(_model);
             if (result != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true));

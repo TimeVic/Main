@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Store.Project;
-using LoadListAction = TimeTracker.Web.Store.WorkspaceMemberships.LoadListAction;
+using LoadListAction = TimeTracker.Web.Store.WorkspaceMembers.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Members.Parts;
 
@@ -18,7 +18,7 @@ public partial class MemberAccessModal
     public IState<ProjectState> _projectState { get; set; }
     
     [Parameter]
-    public WorkspaceMembershipDto WorkspaceMembership { get; set; }
+    public WorkspaceMemberDto WorkspaceMember { get; set; }
     
     private ProjectDto? _project;
     private UpdateRequest model = new();
@@ -35,7 +35,7 @@ public partial class MemberAccessModal
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.Fill(WorkspaceMembership, _projectState.Value.List);
+        model.Fill(WorkspaceMember, _projectState.Value.List);
     }
     
     private string GetProjectName(long projectId)
@@ -68,8 +68,8 @@ public partial class MemberAccessModal
                 }).ToList();
             }
 
-            var membershipDto = await ApiService.WorkspaceMembershipUpdateAsync(model);
-            if (membershipDto != null)
+            var memberDto = await ApiService.WorkspaceMemberUpdateAsync(model);
+            if (memberDto != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
                 await ToastService.ShowInfo("Member access has been changed");

@@ -1,0 +1,17 @@
+﻿using System.ComponentModel.DataAnnotations;
+using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Common.Dto;
+using TimeTracker.Business.Common.Mvc.Attribute.Validation;
+
+namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
+
+public class GetListResponse: PaginatedListDto<WorkspaceMemberDto>
+{
+    public GetListResponse(
+        ICollection<WorkspaceMemberDto> responseList,
+        int totalItems
+    ) : base(responseList, totalItems)
+    {
+    }
+}

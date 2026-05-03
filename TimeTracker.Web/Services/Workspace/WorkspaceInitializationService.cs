@@ -48,7 +48,7 @@ public class WorkspaceInitializationService
     {
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(false));
         await LoadWorkspacePermissionsAsync();
-        _dispatcher.Dispatch(new TimeTracker.Web.Store.WorkspaceMemberships.LoadListAction(isReload));
+        _dispatcher.Dispatch(new TimeTracker.Web.Store.WorkspaceMembers.LoadListAction(isReload));
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadListAction(isReload));
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Client.LoadListAction(isReload));
         _dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.LoadListAction(isReload));

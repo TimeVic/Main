@@ -61,12 +61,12 @@ public class ApiUrl
 
     #endregion
 
-    #region Workspace Membership
+    #region Workspace Member
     
-    public const string WorkspaceMembershipAdd = "dashboard/workspace/membership/add";
-    public const string WorkspaceMembershipUpdate = "dashboard/workspace/membership/update";
-    public const string WorkspaceMembershipDelete = "dashboard/workspace/membership/delete";
-    public const string WorkspaceMembershipList = "dashboard/workspace/membership/list";
+    public const string WorkspaceMemberAdd = "dashboard/workspace/member/add";
+    public const string WorkspaceMemberUpdate = "dashboard/workspace/member/update";
+    public const string WorkspaceMemberDelete = "dashboard/workspace/member/delete";
+    public const string WorkspaceMemberList = "dashboard/workspace/member/list";
     
     #endregion
     

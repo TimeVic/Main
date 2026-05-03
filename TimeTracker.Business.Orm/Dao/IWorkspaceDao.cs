@@ -15,9 +15,9 @@ public interface IWorkspaceDao: IDomainService
 
     Task<bool> HasActiveTimeEntriesAsync(WorkspaceEntity workspace);
 
-    Task<ListDto<WorkspaceMembershipEntity>> GetMembershipsAsync(WorkspaceEntity workspace, int page);
+    Task<ListDto<WorkspaceMemberEntity>> GetMembersAsync(WorkspaceEntity workspace, int page);
 
-    Task<WorkspaceMembershipEntity> GetMembershipAsync(Guid id);
+    Task<WorkspaceMemberEntity> GetMemberAsync(Guid id);
 
     Task<WorkspaceEntity> UpdateWorkspaceAsync(
         WorkspaceEntity workspace,

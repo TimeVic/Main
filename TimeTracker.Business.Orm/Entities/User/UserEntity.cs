@@ -19,7 +19,7 @@ namespace TimeTracker.Business.Orm.Entities.User
 
         public virtual ICollection<WorkspaceEntity> CreatedWorkspaces { get; set; } = new List<WorkspaceEntity>();
         public virtual ICollection<TimeEntryEntity> TimeEntries { get; set; } = new List<TimeEntryEntity>();
-        public virtual ICollection<WorkspaceMembershipEntity> WorkspaceMemberships { get; set; } = new List<WorkspaceMembershipEntity>();
+        public virtual ICollection<WorkspaceMemberEntity> WorkspaceMembers { get; set; } = new List<WorkspaceMemberEntity>();
         public virtual ICollection<UserNotificationTokenEntity> NotificationTokens { get; set; } = new List<UserNotificationTokenEntity>();
         public virtual ISet<MessagingCounterEntity> MessageCounters { get; set; } = new HashSet<MessagingCounterEntity>();
 

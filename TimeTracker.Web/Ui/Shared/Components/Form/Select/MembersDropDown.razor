@@ -1,4 +1,4 @@
-﻿@inherits TimeTracker.Web.Ui.Shared.Components.Form.Select.Core.BaseSingleSelect<WorkspaceMembershipDto>
+﻿@inherits TimeTracker.Web.Ui.Shared.Components.Form.Select.Core.BaseSingleSelect<WorkspaceMemberDto>
 
 @using LumexUI
 @using LumexUI.Common
@@ -54,7 +54,7 @@
     else
     {
         <LumexSelect 
-            TValue="WorkspaceMembershipDto"
+            TValue="WorkspaceMemberDto"
             Label="@Label"
             Placeholder="@_placeholder"
             Color="ThemeColor.Default"

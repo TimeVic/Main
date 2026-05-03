@@ -1,20 +1,20 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMembership;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Shared.Components.Form;
 using TimeTracker.Web.Store.Project;
-using TimeTracker.Web.Store.WorkspaceMemberships;
-using LoadListAction = TimeTracker.Web.Store.WorkspaceMemberships.LoadListAction;
+using TimeTracker.Web.Store.WorkspaceMembers;
+using LoadListAction = TimeTracker.Web.Store.WorkspaceMembers.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
 {
     public partial class MembersList
     {
         [Inject] 
-        private IState<WorkspaceMembershipsState> _state { get; set; }
+        private IState<WorkspaceMembersState> _state { get; set; }
     
         [Inject]
         public IState<ProjectState> _projectState { get; set; }
@@ -32,11 +32,11 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
             Dispatcher.Dispatch(new LoadListAction(true));
         }
 
-        private string GetProjectNames(WorkspaceMembershipDto membershipDto)
+        private string GetProjectNames(WorkspaceMemberDto memberDto)
         {
             return string.Join(
                 ", ",
-                membershipDto.ProjectAccesses.Select(
+                memberDto.ProjectAccesses.Select(
                     item => _projectState.Value.List.FirstOrDefault(project => project.Id == item.Project.Id)
                 )
                     .Where(item => item != null)
@@ -52,15 +52,15 @@ namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
 
         private async Task OnAdd()
         {
-            await ModalDialogService.ShowAddWorkspaceMembershipModal();
+            await ModalDialogService.ShowAddWorkspaceMemberModal();
         }
 
-        private async Task OnEdit(WorkspaceMembershipDto item)
+        private async Task OnEdit(WorkspaceMemberDto item)
         {
-            await ModalDialogService.ShowUpdateWorkspaceMembershipModal(item);
+            await ModalDialogService.ShowUpdateWorkspaceMemberModal(item);
         }
 
-        private async Task OnDelete(WorkspaceMembershipDto item)
+        private async Task OnDelete(WorkspaceMemberDto item)
         {
             var isOk = await ModalDialogService.ShowDeleteConfirmationDialog();
             if (isOk.HasValue && isOk.Value)

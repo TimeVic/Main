@@ -1,0 +1,47 @@
+﻿using TimeTracker.Api.Shared.Constants;
+using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Web.Core.Exceptions;
+
+namespace TimeTracker.Web.Services.Http
+{
+    public partial class ApiService
+    {
+        public async Task<WorkspaceMemberDto?> WorkspaceMemberAddAsync(Guid workspaceId, string email)
+        {
+            return await PostAsync<WorkspaceMemberDto>(
+                ApiUrl.WorkspaceMemberAdd,
+                new AddRequest()
+                {
+                    WorkspaceId = workspaceId,
+                    Email = email
+                }
+            );
+        }
+        
+        public async Task<WorkspaceMemberDto?> WorkspaceMemberUpdateAsync(UpdateRequest request)
+        {
+            return await PostAsync<WorkspaceMemberDto>(
+                ApiUrl.WorkspaceMemberUpdate,
+                request
+            );
+        }
+        
+        public async Task<GetListResponse?> WorkspaceMemberGetListAsync(GetListRequest model)
+        {
+            return await PostAsync<GetListResponse>(ApiUrl.WorkspaceMemberList, model);
+        }
+        
+        public async Task WorkspaceMemberDeleteAsync(Guid memberId)
+        {
+            await PostAsync<object>(
+                ApiUrl.WorkspaceMemberDelete,
+                new DeleteRequest()
+                {
+                    MemberId = memberId
+                }
+            );
+        }
+    }
+}

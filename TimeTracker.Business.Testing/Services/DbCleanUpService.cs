@@ -40,8 +40,8 @@ public class DbCleanUpService: IDbCleanUpService
             "user_access_tokens",
             "user_notification_tokens",
             "user_reset_password_requests",
-            "workspace_membership_project_accesses",
-            "workspace_memberships",
+            "workspace_member_project_accesses",
+            "workspace_members",
             "workspace_setting_clickups",
             "workspace_setting_redmines",
             

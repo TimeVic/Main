@@ -104,7 +104,7 @@ public class HubMessagingService: IHubMessagingService
     
     public async Task InitChannels(WorkspaceEntity workspace, UserEntity user)
     {
-        var workspaceMembers = workspace.Memberships.Select(item => item.User).ToList();
+        var workspaceMembers = workspace.Members.Select(item => item.User).ToList();
         foreach (var workspaceMember in workspaceMembers)
         {
             var (channel, isCreated) = await _messagingDao.GetOrCreateDirectChannel(workspace, user, workspaceMember);

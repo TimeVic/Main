@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Services.Security;
-using TimeTracker.Web.Store.WorkspaceMemberships;
+using TimeTracker.Web.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
@@ -58,7 +58,7 @@ public partial class MultipleUsersDropDown
     private ISecurityManager _securityManager { get; set; }
     
     [Inject]
-    public IState<WorkspaceMembershipsState> _state { get; set; }
+    public IState<WorkspaceMembersState> _state { get; set; }
     
     private ICollection<UserDto> _selectedItems => _list.Where(item => _selectedIds.Contains(item.Id)).ToList();
     private IEnumerable<Guid> _allowedIds { get; set; } = new List<Guid>();

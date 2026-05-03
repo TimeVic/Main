@@ -24,55 +24,55 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<WorkspaceMembershipEntity> ShareAccessAsync(
+    public async Task<WorkspaceMemberEntity> ShareAccessAsync(
         WorkspaceEntity workspace,
         UserEntity user,
         MembershipAccessType access,
         ICollection<ProjectAccessModel>? projectsAccess = null
     )
     {
-        var membership = workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id);
-        if (membership == null)
+        var member = workspace.Members.FirstOrDefault(item => item.User.Id == user.Id);
+        if (member == null)
         {
-            membership = new WorkspaceMembershipEntity()
+            member = new WorkspaceMemberEntity()
             {
                 User = user,
                 Workspace = workspace,
                 CreatedAt = DateTime.UtcNow
             };
-            workspace.Memberships.Add(membership);
+            workspace.Members.Add(member);
         }
-        membership.UpdatedAt = DateTime.UtcNow;
-        membership.Access = access;
+        member.UpdatedAt = DateTime.UtcNow;
+        member.Access = access;
 
         projectsAccess ??= new List<ProjectAccessModel>();
-        membership.ProjectAccesses.Clear();
+        member.ProjectAccesses.Clear();
         if (projectsAccess.Any())
         {
             foreach (var projectAccess in projectsAccess.DistinctBy(item => item.Project.Id))
             {
-                var accessEntity = new WorkspaceMembershipProjectAccessEntity()
+                var accessEntity = new WorkspaceMemberProjectAccessEntity()
                 {
                     Project = projectAccess.Project,
                     HourlyRate = projectAccess.HourlyRate,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
-                    WorkspaceMembership = membership
+                    WorkspaceMember = member
                 };
-                membership.ProjectAccesses.Add(accessEntity);
+                member.ProjectAccesses.Add(accessEntity);
             }
         }
-        await _sessionProvider.CurrentSession.SaveAsync(membership);
-        return membership;
+        await _sessionProvider.CurrentSession.SaveAsync(member);
+        return member;
     }
 
-    public async Task<bool> RemoveAccessAsync(Guid membershipId)
+    public async Task<bool> RemoveAccessAsync(Guid memberId)
     {
-        await _sessionProvider.CurrentSession.Query<WorkspaceMembershipProjectAccessEntity>()
-            .Where(item => item.WorkspaceMembership.Id == membershipId)
+        await _sessionProvider.CurrentSession.Query<WorkspaceMemberProjectAccessEntity>()
+            .Where(item => item.WorkspaceMember.Id == memberId)
             .DeleteAsync();
-        var counter = await _sessionProvider.CurrentSession.Query<WorkspaceMembershipEntity>()
-            .Where(item => item.Id == membershipId)
+        var counter = await _sessionProvider.CurrentSession.Query<WorkspaceMemberEntity>()
+            .Where(item => item.Id == memberId)
             .DeleteAsync();
         return counter > 0;
     }
@@ -83,13 +83,13 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         ProjectEntity? project = null
     )
     {
-        var member = GetMembershipAsync(user, workspace);
+        var member = GetMemberAsync(user, workspace);
         return member?.Access;
     }
     
     public async Task<MembershipAccessType?> GetAccessTypeAsync(UserEntity user, ProjectEntity project)
     {
-        var member = GetMembershipAsync(user, project.Workspace);
+        var member = GetMemberAsync(user, project.Workspace);
         if (member == null)
         {
             return null;
@@ -109,11 +109,11 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         return null;
     }
     
-    public WorkspaceMembershipEntity? GetMembershipAsync(
+    public WorkspaceMemberEntity? GetMemberAsync(
         UserEntity user, 
         WorkspaceEntity workspace
     )
     {
-        return workspace.Memberships.FirstOrDefault(item => item.User.Id == user.Id);
+        return workspace.Members.FirstOrDefault(item => item.User.Id == user.Id);
     }
 }

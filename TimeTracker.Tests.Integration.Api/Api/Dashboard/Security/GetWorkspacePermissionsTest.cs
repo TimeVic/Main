@@ -100,7 +100,7 @@ public class GetWorkspacePermissionsTest: BaseTest
     }
 
     [Fact]
-    public async Task UserWithoutWorkspaceMembershipShouldNotReceivePermissions()
+    public async Task UserWithoutWorkspaceMemberShouldNotReceivePermissions()
     {
         var (otherJwtToken, _, _) = await UserSeeder.CreateAuthorizedAsync();
 

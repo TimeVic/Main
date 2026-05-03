@@ -57,6 +57,6 @@ public class RemoveAccessTest: BaseTest
         await FlushDbChanges();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_workspace);
-        Assert.DoesNotContain(_workspace.Memberships, item => item.User.Id == expectedUser.Id);
+        Assert.DoesNotContain(_workspace.Members, item => item.User.Id == expectedUser.Id);
     }
 }
