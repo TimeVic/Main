@@ -32,6 +32,7 @@ public static class SiteUrl
     public static readonly string Dashboard_Clients = "/board/client";
     public static readonly string Dashboard_Tags = "/board/tag";
     public static readonly string Dashboard_MemberPayments = "/board/member-payments";
+    public static readonly string Dashboard_ClientPayments = "/board/client-payments";
     public static readonly string Dashboard_Members = "/board/members";
     public static readonly string Dashboard_Integrations = "/board/integrations";
     public static readonly string Dashboard_Workspace_Settings = "/board/workspace/settings";

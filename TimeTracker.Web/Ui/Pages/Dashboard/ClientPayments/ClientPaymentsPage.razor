@@ -1,0 +1,170 @@
+@page "/board/client-payments"
+@attribute [RequireWorkspacePermission(WorkspacePermission.ReadClientPayment)]
+
+@using TimeTracker.Api.Shared.Constants
+@using TimeTracker.Web.Ui.Pages.Dashboard.ClientPayments.Parts
+@using TimeTracker.Web.Ui.Pages.Dashboard.ClientPayments.Parts.Modals
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared
+@using TimeTracker.Web.Ui.Shared.Components
+
+@inherits BaseReactiveComponent
+@layout Layout
+@implements IDisposable
+
+<AddClientPaymentModal
+    IsOpened="_isShowAddClientPaymentModal"
+    IsOpenedChanged="isOpened => _isShowAddClientPaymentModal = isOpened"/>
+
+<div class="mt-6 space-y-6">
+    <section class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+            <h1 class="text-3xl font-semibold text-slate-950">Client Payments</h1>
+            <p class="mt-2 max-w-3xl text-sm text-slate-500">
+                Track payments received from clients and keep workspace balances up to date.
+            </p>
+        </div>
+        @if (CanCreatePayments)
+        {
+            <CustomButton OnClick="@(() => _isShowAddClientPaymentModal = true)">
+                <StartContent>
+                    <i class="fa-solid fa-plus"></i>
+                </StartContent>
+                <ChildContent>
+                    Add client payment
+                </ChildContent>
+            </CustomButton>
+        }
+    </section>
+
+    <section class="grid gap-4 md:grid-cols-3">
+        <LumexCard>
+            <LumexCardBody>
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Received</p>
+                <p class="mt-2 text-2xl font-semibold text-emerald-700">
+                    <AmountDisplay Amount="@FilteredTotal"></AmountDisplay>
+                </p>
+                <p class="mt-1 text-sm text-slate-500">Payments matching current filters</p>
+            </LumexCardBody>
+        </LumexCard>
+        <LumexCard>
+            <LumexCardBody>
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Clients paid</p>
+                <p class="mt-2 text-2xl font-semibold text-slate-900">@PaidClientsCount</p>
+                <p class="mt-1 text-sm text-slate-500">Unique clients in the filtered list</p>
+            </LumexCardBody>
+        </LumexCard>
+        <LumexCard>
+            <LumexCardBody>
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Outstanding balance</p>
+                <p class="mt-2 text-2xl font-semibold text-slate-900">Not tracked</p>
+                <p class="mt-1 text-sm text-slate-500">Client payments are recorded separately from billable totals</p>
+            </LumexCardBody>
+        </LumexCard>
+    </section>
+
+    <LumexCard>
+        <LumexCardHeader>
+            <div>
+                <p class="text-sm font-semibold text-slate-900">Filters</p>
+                <p class="text-sm text-slate-500">Narrow payments by period, client, project, status, or text.</p>
+            </div>
+        </LumexCardHeader>
+        <LumexCardBody>
+            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <label class="block">
+                    <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Period</span>
+                    <select
+                        class="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"
+                        value="@_periodFilter"
+                        @onchange="OnPeriodChanged">
+                        <option value="@ClientPaymentPeriodFilter.ThisMonth">This month</option>
+                        <option value="@ClientPaymentPeriodFilter.LastMonth">Last month</option>
+                        <option value="@ClientPaymentPeriodFilter.AllTime">All time</option>
+                        <option value="@ClientPaymentPeriodFilter.Custom">Custom</option>
+                    </select>
+                </label>
+                <label class="block">
+                    <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Client</span>
+                    <ClientsDropDown
+                        Clearable="true"
+                        Value="@SelectedClientId"
+                        SelectedItemChanged="OnClientFilterChanged"/>
+                </label>
+                <label class="block">
+                    <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Project</span>
+                    <ProjectsDropDown
+                        Clearable="true"
+                        ClientId="@SelectedClientId"
+                        Value="@SelectedProjectId"
+                        SelectedItemChanged="OnProjectFilterChanged"/>
+                </label>
+                <label class="block">
+                    <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Search</span>
+                    <input
+                        class="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"
+                        placeholder="Client, project, note, reference"
+                        value="@_search"
+                        @oninput="OnSearchChanged"/>
+                </label>
+            </div>
+            @if (_periodFilter == ClientPaymentPeriodFilter.Custom)
+            {
+                <div class="mt-4 grid gap-4 md:grid-cols-2 xl:w-2/5">
+                    <label class="block">
+                        <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">From</span>
+                        <input
+                            class="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"
+                            type="date"
+                            value="@CustomFromText"
+                            @onchange="OnCustomFromChanged"/>
+                    </label>
+                    <label class="block">
+                        <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">To</span>
+                        <input
+                            class="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"
+                            type="date"
+                            value="@CustomToText"
+                            @onchange="OnCustomToChanged"/>
+                    </label>
+                </div>
+            }
+        </LumexCardBody>
+    </LumexCard>
+
+    <LumexCard Class="overflow-x-auto pb-2">
+        <LumexCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="text-sm font-semibold text-slate-900">Received client payments</p>
+                <p class="text-sm text-slate-500">Simple income records for client work in this workspace.</p>
+            </div>
+        </LumexCardHeader>
+        <LumexCardBody>
+            @if (!_state.Value.IsListLoading && !FilteredPayments.Any())
+            {
+                <div class="px-4 py-12 text-center">
+                    <p class="text-base font-semibold text-slate-900">No client payments yet</p>
+                    <p class="mt-2 text-sm text-slate-500">
+                        Add your first client payment to see received income and outstanding balances.
+                    </p>
+                    @if (CanCreatePayments)
+                    {
+                        <div class="mt-5">
+                            <CustomButton OnClick="@(() => _isShowAddClientPaymentModal = true)">
+                                <StartContent>
+                                    <i class="fa-solid fa-plus"></i>
+                                </StartContent>
+                                <ChildContent>
+                                    Add client payment
+                                </ChildContent>
+                            </CustomButton>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <ClientPaymentsTableBlock Items="@FilteredPayments"></ClientPaymentsTableBlock>
+            }
+        </LumexCardBody>
+    </LumexCard>
+</div>
