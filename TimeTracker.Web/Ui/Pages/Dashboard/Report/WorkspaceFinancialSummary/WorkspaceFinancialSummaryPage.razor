@@ -4,6 +4,7 @@
 @using TimeTracker.Web.Store.Report
 @using TimeTracker.Web.Ui.Pages.Dashboard.Report.WorkspaceFinancialSummary.Parts
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared
+@using TimeTracker.Web.Ui.Shared.Components
 @using Layout = TimeTracker.Web.Ui.Pages.Dashboard.Shared.Layout
 
 @inherits BaseReactiveComponent
@@ -57,10 +58,23 @@ else
                 <h2 class="text-base font-semibold text-slate-700">Needs attention</h2>
             </div>
 
+            <div class="mb-4 grid gap-3 xl:grid-cols-2">
+                <div class="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700">
+                    @_unpaidClientCount clients need follow-up · <span class="@(_unpaidClientAmount > 0 ? "text-red-700" : "text-slate-500")"><AmountDisplay Amount="@_unpaidClientAmount"/> due</span>
+                </div>
+
+                @if (_showMemberPayouts)
+                {
+                    <div class="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700">
+                        @_membersToPayCount members need payout · <span class="@(_membersToPayAmount > 0 ? "text-red-700" : "text-slate-500")"><AmountDisplay Amount="@_membersToPayAmount"/> owed</span>
+                    </div>
+                }
+            </div>
+
             <div class="grid gap-4 xl:grid-cols-2">
                 <UnpaidClientsBlock/>
 
-                @if (_reportData.IsTeamWorkspace)
+                @if (_showMemberPayouts)
                 {
                     <MembersToPayBlock/>
                 }
@@ -69,7 +83,7 @@ else
 
         <ClientBalancesTableBlock Class="mt-8"/>
 
-        @if (_reportData.IsTeamWorkspace)
+        @if (_showMemberPayouts)
         {
             <MemberBalancesTableBlock Class="mt-8"/>
         }

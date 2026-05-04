@@ -40,14 +40,14 @@
                             <td class="px-4 py-3 font-medium text-slate-800">@(item.Client?.Name ?? "No client")</td>
                             <td class="px-4 py-3 text-right font-semibold text-red-700">
                                 <AmountDisplay Amount="@item.Outstanding"/>
-                                <span>due</span>
+                                <span title="Client earned is greater than payments received. This amount is currently due.">due</span>
                             </td>
                             <td class="px-4 py-3 text-slate-500">
                                 @(item.LastPaymentDate.HasValue ? item.LastPaymentDate.Value.ToString("MMM d, yyyy") : "—")
                             </td>
                             <td class="px-4 py-3">
                                 <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold @(item.Received > 0 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700")">
-                                    @(item.Received > 0 ? "Partially paid" : "Unpaid")
+                                    @(item.Received > 0 ? "Partially paid" : "Due")
                                 </span>
                             </td>
                         </tr>
