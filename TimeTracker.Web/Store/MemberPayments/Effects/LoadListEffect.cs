@@ -39,7 +39,8 @@ public class LoadListEffect: Effect<LoadMemberPaymentListAction>
             var response = await _apiService.MemberPaymentGetListAsync(new GetListRequest()
             {
                 WorkspaceId = _authState.Value.Workspace!.Id,
-                Page = 1
+                Page = 1,
+                MemberId = action.MemberId
             });
             dispatcher.Dispatch(new SetListItemsAction(response));
         }

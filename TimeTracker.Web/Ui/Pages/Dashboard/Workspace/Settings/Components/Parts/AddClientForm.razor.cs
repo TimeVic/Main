@@ -18,6 +18,12 @@ public partial class AddClientForm
     
     private async Task Submit()
     {
+        model.WorkspaceId = AuthState.Value.Workspace!.Id;
+        if (!_form.EditContext!.Validate())
+        {
+            return;
+        }
+        
         if (!_form.EditContext!.Validate())
         {
             return;
@@ -26,7 +32,6 @@ public partial class AddClientForm
         _isLoading = true;
         try
         {
-            model.WorkspaceId = AuthState.Value.Workspace!.Id;
             var workspace = await ApiService.ClientAddAsync(model);
             if (workspace != null)
             {

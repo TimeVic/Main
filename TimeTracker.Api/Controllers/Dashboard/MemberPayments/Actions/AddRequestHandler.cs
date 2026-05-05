@@ -66,8 +66,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             var member = currentMember;
             if (request.MemberId != Guid.Empty && request.MemberId != currentMember.Id)
             {
-                var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
-                if (accessType is not (MembershipAccessType.Owner or MembershipAccessType.Manager))
+                if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
                 {
                     throw new HasNoAccessException();
                 }

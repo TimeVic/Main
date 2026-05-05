@@ -7,8 +7,7 @@ using TimeTracker.Business.Services.Http;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Security.Actions;
 
-public class GetWorkspacePermissionsRequestHandler
-    : IAsyncRequestHandler<GetWorkspacePermissionsRequest, GetWorkspacePermissionsResponse>
+public class GetWorkspacePermissionsRequestHandler : IAsyncRequestHandler<GetWorkspacePermissionsRequest, GetWorkspacePermissionsResponse>
 {
     private readonly IApiRequestService _apiRequestService;
     private readonly IUserDao _userDao;

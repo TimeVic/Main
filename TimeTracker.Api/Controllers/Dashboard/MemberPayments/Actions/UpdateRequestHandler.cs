@@ -22,7 +22,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
         private readonly IClientDao _clientDao;
         private readonly ISecurityManager _securityManager;
         private readonly IWorkspaceDao _workspaceDao;
-        private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public UpdateRequestHandler(
             IMapper mapper,
@@ -32,8 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             IMemberPaymentDao paymentDao,
             IClientDao clientDao,
             ISecurityManager securityManager,
-            IWorkspaceDao workspaceDao,
-            IWorkspaceAccessService workspaceAccessService
+            IWorkspaceDao workspaceDao
         )
         {
             _mapper = mapper;
@@ -44,7 +42,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             _clientDao = clientDao;
             _securityManager = securityManager;
             _workspaceDao = workspaceDao;
-            _workspaceAccessService = workspaceAccessService;
         }
     
         public async Task<MemberPaymentDto> ExecuteAsync(UpdateRequest request)
@@ -68,8 +65,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             var member = payment!.Member;
             if (request.MemberId != Guid.Empty && request.MemberId != payment.Member.Id)
             {
-                var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, payment.Member.Workspace);
-                if (accessType is not (MembershipAccessType.Owner or MembershipAccessType.Manager))
+                if (!await _securityManager.HasAccess(AccessLevel.Write, user, payment.Member.Workspace))
                 {
                     throw new HasNoAccessException();
                 }

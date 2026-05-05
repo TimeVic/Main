@@ -2,9 +2,11 @@
 using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
 using TimeTracker.Web.Services.DateTimes;
+using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Store.MemberPayments;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.MemberPayments.Parts.Modals;
@@ -19,12 +21,17 @@ public partial class AddMemberPaymentModal
     
     [Inject]
     public ILogger<AddMemberPaymentModal> _logger { get; set; }
+
+    [Inject]
+    public ISecurityManager SecurityManager { get; set; }
     
     private AddRequest model;
     private bool _isLoading = false;
     private EditForm _form;
     private bool _isValid = false;
     private LumexModal modal;
+    private bool CanCreatePaymentForOtherMembers =>
+        SecurityManager.HasPermission(WorkspacePermission.CreateMemberPaymentForOtherMembers);
 
     protected override async Task OnInitializedAsync()
     {

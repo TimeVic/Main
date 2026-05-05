@@ -47,7 +47,7 @@
                             SelectedItemChanged="OnProjectSelected"
                             Disabled="@(model.ClientId == Guid.Empty)"/>
                     </div>
-                    @if (AuthState.Value.IsRoleAdmin)
+                    @if (CanCreatePaymentForOtherMembers)
                     {
                         <div>
                             <MembersDropDown

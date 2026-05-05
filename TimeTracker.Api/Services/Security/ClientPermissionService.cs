@@ -19,13 +19,14 @@ public class ClientPermissionService : IClientPermissionService
             [WorkspacePermission.UpdateProject] = AccessLevel.Write,
             [WorkspacePermission.CreateClient] = AccessLevel.Write,
             [WorkspacePermission.UpdateClient] = AccessLevel.Write,
-            [WorkspacePermission.ReadClientPayment] = AccessLevel.Read,
+            [WorkspacePermission.ReadClientPayment] = AccessLevel.Write,
             [WorkspacePermission.CreateClientPayment] = AccessLevel.Write,
             [WorkspacePermission.UpdateClientPayment] = AccessLevel.Write,
             [WorkspacePermission.ReadMemberPayment] = AccessLevel.Read,
             [WorkspacePermission.CreateMemberPayment] = AccessLevel.Read,
             [WorkspacePermission.UpdateMemberPayment] = AccessLevel.Read,
-            [WorkspacePermission.ReadWorkspaceFinancialSummary] = AccessLevel.Write
+            [WorkspacePermission.ReadWorkspaceFinancialSummary] = AccessLevel.Write,
+            [WorkspacePermission.CreateMemberPaymentForOtherMembers] = AccessLevel.Write
         };
 
     private readonly ISecurityManager _securityManager;

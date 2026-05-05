@@ -128,6 +128,31 @@ public class GetListTest: BaseTest
     }
 
     [Fact]
+    public async Task UserCanNotFilterByWorkspaceMember()
+    {
+        var (userJwt, _, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        var memberUser = await _userSeeder.CreateActivatedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+        await FlushDbChanges();
+        var member = _workspace.Members.First(item => item.User.Id == memberUser.Id);
+
+        var response = await PostRequestAsync(Url, userJwt, new GetListRequest()
+        {
+            WorkspaceId = _workspace.Id,
+            Page = 1,
+            MemberId = member.Id
+        });
+
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
+    }
+
+    [Fact]
     public async Task ManagerShouldReceivePaymentsForAllWorkspaceMembers()
     {
         var (managerJwt, managerUser, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
@@ -147,5 +172,30 @@ public class GetListTest: BaseTest
 
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(7, actualResponse.TotalCount);
+    }
+
+    [Fact]
+    public async Task ManagerShouldFilterPaymentsByWorkspaceMember()
+    {
+        var (managerJwt, managerUser, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.Manager
+        );
+        await FlushDbChanges();
+        var managerMember = _workspace.Members.First(item => item.User.Id == managerUser.Id);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _client, _project, 3);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, managerUser, _client, _project, 4);
+
+        var response = await PostRequestAsync(Url, managerJwt, new GetListRequest()
+        {
+            WorkspaceId = _workspace.Id,
+            Page = 1,
+            MemberId = managerMember.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(4, actualResponse.TotalCount);
+        Assert.All(actualResponse.Items, item => Assert.Equal(managerUser.Id, item.Member.User.Id));
     }
 }

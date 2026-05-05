@@ -38,7 +38,7 @@ public partial class MainMenu
             "fa-solid fa-money-bill-transfer",
             SiteUrl.Dashboard_ClientPayments,
             "",
-            WorkspacePermission.ReadClientPayment
+            WorkspacePermission.ReadWorkspaceFinancialSummary
         ),
         new MenuItemModel("Payments report", "fa-regular fa-credit-card", SiteUrl.Dashboard_Reports_MemberPayments, "Reports"),
         new MenuItemModel("Time entries report", "fa-regular fa-clock", SiteUrl.Dashboard_Reports_TimeEntries, "Reports"),

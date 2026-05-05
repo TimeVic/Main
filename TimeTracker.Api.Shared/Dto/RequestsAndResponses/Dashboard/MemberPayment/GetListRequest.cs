@@ -12,4 +12,6 @@ public class GetListRequest: IRequest<GetListResponse>
     [Required]
     [IsPositive]
     public int Page { get; set; }
+
+    public Guid MemberId { get; set; }
 }
