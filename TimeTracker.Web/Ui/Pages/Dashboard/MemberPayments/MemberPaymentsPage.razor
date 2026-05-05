@@ -1,5 +1,6 @@
 @page "/board/member-payments"
 
+@using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Ui.Pages.Dashboard.MemberPayments.Parts
 @using TimeTracker.Web.Ui.Pages.Dashboard.MemberPayments.Parts.Modals
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared
@@ -25,14 +26,26 @@
             <p class="text-sm font-semibold text-slate-900">Payments</p>
             <p class="text-sm text-slate-500">Track payments received from clients for completed work on workspace projects.</p>
         </div>
-        <CustomButton OnClick="@(() => _isShowAddMemberPaymentModal = true)">
-            <StartContent>
-                <i class="fa-solid fa-plus"></i>    
-            </StartContent>
-            <ChildContent>
-                Add payment
-            </ChildContent>
-        </CustomButton>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+            @if (CanManageOtherMemberPayments)
+            {
+                <MembersDropDown
+                    Class="min-w-56"
+                    Label="Member"
+                    Type="DropDownType.Select"
+                    Clearable="true"
+                    Value="_memberFilterId"
+                    SelectedItemChanged="OnMemberFilterChanged"/>
+            }
+            <CustomButton OnClick="@(() => _isShowAddMemberPaymentModal = true)">
+                <StartContent>
+                    <i class="fa-solid fa-plus"></i>    
+                </StartContent>
+                <ChildContent>
+                    Add payment
+                </ChildContent>
+            </CustomButton>
+        </div>
     </LumexCardHeader>
     <LumexCardBody>
         @if (_state.Value.TotalCount == 0)

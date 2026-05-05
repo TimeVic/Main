@@ -5,6 +5,9 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dto;
+using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
@@ -18,7 +21,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
         private readonly IUserDao _userDao;
         private readonly IMemberPaymentDao _paymentDao;
         private readonly ISecurityManager _securityManager;
-        private readonly IWorkspaceAccessService _workspaceAccessService;
+        private readonly IWorkspaceDao _workspaceDao;
 
         public GetListRequestHandler(
             IMapper mapper,
@@ -26,7 +29,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             IUserDao userDao,
             IMemberPaymentDao paymentDao,
             ISecurityManager securityManager,
-            IWorkspaceAccessService workspaceAccessService
+            IWorkspaceDao workspaceDao
         )
         {
             _mapper = mapper;
@@ -34,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             _userDao = userDao;
             _paymentDao = paymentDao;
             _securityManager = securityManager;
-            _workspaceAccessService = workspaceAccessService;
+            _workspaceDao = workspaceDao;
         }
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
@@ -50,15 +53,46 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
                 throw new HasNoAccessException();
             }
 
-            var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
-            var listDto = accessType is MembershipAccessType.Owner or MembershipAccessType.Manager
-                ? await _paymentDao.GetListAsync(workspace, request.Page)
-                : await _paymentDao.GetListAsync(workspace, user, request.Page);
+            var hasWriteAccessToWorkspace = await _securityManager.HasAccess(AccessLevel.Write, user, workspace);
+            if (!hasWriteAccessToWorkspace)
+            {
+                if (request.MemberId != Guid.Empty)
+                {
+                    throw new HasNoAccessException();
+                }
+
+                var userListDto = await _paymentDao.GetListAsync(workspace, user, request.Page);
+                return new GetListResponse(
+                    _mapper.Map<ICollection<MemberPaymentDto>>(userListDto.Items),
+                    userListDto.TotalCount
+                );
+            }
+
+            var listDto = await GetListForWorkspaceUserAsync(request, workspace);
 
             return new GetListResponse(
                 _mapper.Map<ICollection<MemberPaymentDto>>(listDto.Items),
                 listDto.TotalCount
             );
+        }
+
+        private async Task<ListDto<MemberPaymentEntity>> GetListForWorkspaceUserAsync(
+            GetListRequest request,
+            WorkspaceEntity workspace
+        )
+        {
+            if (request.MemberId == Guid.Empty)
+            {
+                return await _paymentDao.GetListAsync(workspace, request.Page);
+            }
+
+            var member = await _workspaceDao.GetMemberAsync(request.MemberId);
+            if (member == null || member.Workspace.Id != workspace.Id)
+            {
+                throw new HasNoAccessException();
+            }
+
+            return await _paymentDao.GetListAsync(member, request.Page);
         }
     }
 }

@@ -93,16 +93,53 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
         Assert.Equal(_workspace.Id, actual.WorkspaceId);
-        Assert.Equal(6, actual.Permissions.Count);
         Assert.Contains(WorkspacePermission.ReadWorkspaceSettings, actual.Permissions);
         Assert.Contains(WorkspacePermission.ReadWorkspaceMembers, actual.Permissions);
-        Assert.Contains(WorkspacePermission.ReadClientPayment, actual.Permissions);
         Assert.Contains(WorkspacePermission.ReadMemberPayment, actual.Permissions);
         Assert.Contains(WorkspacePermission.CreateMemberPayment, actual.Permissions);
         Assert.Contains(WorkspacePermission.UpdateMemberPayment, actual.Permissions);
+        Assert.Equal(5, actual.Permissions.Count);
         Assert.DoesNotContain(WorkspacePermission.UpdateWorkspaceMembers, actual.Permissions);
+        Assert.DoesNotContain(WorkspacePermission.ReadClientPayment, actual.Permissions);
         Assert.DoesNotContain(WorkspacePermission.CreateClientPayment, actual.Permissions);
         Assert.DoesNotContain(WorkspacePermission.UpdateClientPayment, actual.Permissions);
+        Assert.DoesNotContain(WorkspacePermission.CreateMemberPaymentForOtherMembers, actual.Permissions);
+    }
+
+    [Fact]
+    public async Task UserShouldNotReceiveWorkspacePermissionsWithWriteAccess()
+    {
+        var (otherJwtToken, _, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+
+        var response = await PostRequestAsync(Url, otherJwtToken, new GetWorkspacePermissionsRequest()
+        {
+            WorkspaceId = _workspace.Id
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
+        var writeAccessPermissions = new[]
+        {
+            WorkspacePermission.UpdateWorkspaceSettings,
+            WorkspacePermission.UpdateWorkspaceMembers,
+            WorkspacePermission.CreateProject,
+            WorkspacePermission.UpdateProject,
+            WorkspacePermission.ReadClientPayment,
+            WorkspacePermission.CreateClient,
+            WorkspacePermission.UpdateClient,
+            WorkspacePermission.CreateClientPayment,
+            WorkspacePermission.UpdateClientPayment,
+            WorkspacePermission.ReadWorkspaceFinancialSummary,
+            WorkspacePermission.CreateMemberPaymentForOtherMembers
+        };
+
+        Assert.All(
+            writeAccessPermissions,
+            permission => Assert.DoesNotContain(permission, actual.Permissions)
+        );
     }
 
     [Fact]

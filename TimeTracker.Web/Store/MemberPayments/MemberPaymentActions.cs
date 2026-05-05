@@ -3,7 +3,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
 
 namespace TimeTracker.Web.Store.MemberPayments;
 
-public record struct LoadMemberPaymentListAction(bool IsReload = false);
+public record struct LoadMemberPaymentListAction(bool IsReload = false, Guid MemberId = default);
 
 public record struct SetListItemsAction(GetListResponse Response);
 
