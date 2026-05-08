@@ -23,17 +23,13 @@ public partial class ClientPaymentsPage
     public IDispatcher _dispatcher { get; set; }
 
     private bool _isShowAddClientPaymentModal;
-    private ClientPaymentPeriodFilter _periodFilter = ClientPaymentPeriodFilter.ThisMonth;
     private string? _search;
     private Guid SelectedClientId { get; set; }
     private Guid SelectedProjectId { get; set; }
-    private DateTime? _customFrom;
-    private DateTime? _customTo;
 
     private bool CanCreatePayments => SecurityManager.HasPermission(WorkspacePermission.CreateClientPayment);
 
     private IReadOnlyCollection<ClientPaymentDto> FilteredPayments => _state.Value.List
-        .Where(MatchesPeriod)
         .Where(MatchesClient)
         .Where(MatchesProject)
         .Where(MatchesSearch)
@@ -47,31 +43,11 @@ public partial class ClientPaymentsPage
         .Distinct()
         .Count();
 
-    private string CustomFromText => _customFrom?.ToString("yyyy-MM-dd") ?? string.Empty;
-
-    private string CustomToText => _customTo?.ToString("yyyy-MM-dd") ?? string.Empty;
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
         WorkspacePermissionsState.StateChanged += OnWorkspacePermissionsStateChanged;
         _dispatcher.Dispatch(new LoadClientPaymentListAction(true));
-    }
-
-    private bool MatchesPeriod(ClientPaymentDto payment)
-    {
-        var paymentDate = payment.PaymentTime.Date;
-        var today = DateTime.Today;
-        var thisMonthStart = new DateTime(today.Year, today.Month, 1);
-
-        return _periodFilter switch
-        {
-            ClientPaymentPeriodFilter.ThisMonth => paymentDate >= thisMonthStart && paymentDate < thisMonthStart.AddMonths(1),
-            ClientPaymentPeriodFilter.LastMonth => paymentDate >= thisMonthStart.AddMonths(-1) && paymentDate < thisMonthStart,
-            ClientPaymentPeriodFilter.Custom => (!_customFrom.HasValue || paymentDate >= _customFrom.Value.Date)
-                && (!_customTo.HasValue || paymentDate <= _customTo.Value.Date),
-            _ => true
-        };
     }
 
     private bool MatchesClient(ClientPaymentDto payment)
@@ -103,14 +79,6 @@ public partial class ClientPaymentsPage
         return value?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false;
     }
 
-    private void OnPeriodChanged(ChangeEventArgs args)
-    {
-        if (Enum.TryParse<ClientPaymentPeriodFilter>(args.Value?.ToString(), out var value))
-        {
-            _periodFilter = value;
-        }
-    }
-
     private void OnSearchChanged(ChangeEventArgs args)
     {
         _search = args.Value?.ToString();
@@ -127,21 +95,6 @@ public partial class ClientPaymentsPage
         SelectedProjectId = project?.Id ?? Guid.Empty;
     }
 
-    private void OnCustomFromChanged(ChangeEventArgs args)
-    {
-        _customFrom = ParseDate(args.Value?.ToString());
-    }
-
-    private void OnCustomToChanged(ChangeEventArgs args)
-    {
-        _customTo = ParseDate(args.Value?.ToString());
-    }
-
-    private static DateTime? ParseDate(string? value)
-    {
-        return DateTime.TryParse(value, out var date) ? date : null;
-    }
-
     private void OnWorkspacePermissionsStateChanged(object? sender, EventArgs args)
     {
         InvokeAsync(StateHasChanged);
@@ -151,12 +104,4 @@ public partial class ClientPaymentsPage
     {
         WorkspacePermissionsState.StateChanged -= OnWorkspacePermissionsStateChanged;
     }
-}
-
-public enum ClientPaymentPeriodFilter
-{
-    ThisMonth,
-    LastMonth,
-    AllTime,
-    Custom
 }

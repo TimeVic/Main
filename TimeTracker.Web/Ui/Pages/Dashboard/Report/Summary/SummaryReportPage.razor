@@ -13,7 +13,7 @@
 {
     var grouppedByString = @_state.Value.SummaryReportFilter.PeriodType.GetDisplayName();
 
-    <MoneyOverviewSection/>
+    @* <MoneyOverviewSection/> *@
     <PeriodAnalyticsSection/>
     <SummaryChartSection Items="@_byDateItems" PeriodLabel="@grouppedByString"/>
     <GroupedSummaryTableSection ReportData="@_state.Value.SummaryReportData" PeriodLabel="@grouppedByString"/>

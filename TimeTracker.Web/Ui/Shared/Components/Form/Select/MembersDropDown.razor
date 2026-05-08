@@ -60,7 +60,7 @@
             Color="ThemeColor.Default"
             Variant="InputVariant.Outlined"
             LabelPlacement="@LabelPlacement.Outside"
-            ValueChanged="dto => OnValueChanged(dto)"
+            ValueChanged="OnMemberValueChanged"
             Value="_selectedItem"
             Invalid="@IsInvalid">
             <ChildContent>

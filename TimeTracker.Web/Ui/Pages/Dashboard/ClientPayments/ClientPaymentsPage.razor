@@ -67,23 +67,11 @@
         <LumexCardHeader>
             <div>
                 <p class="text-sm font-semibold text-slate-900">Filters</p>
-                <p class="text-sm text-slate-500">Narrow payments by period, client, project, status, or text.</p>
+                <p class="text-sm text-slate-500">Narrow payments by client, project, or text.</p>
             </div>
         </LumexCardHeader>
         <LumexCardBody>
-            <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                <label class="block">
-                    <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Period</span>
-                    <select
-                        class="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"
-                        value="@_periodFilter"
-                        @onchange="OnPeriodChanged">
-                        <option value="@ClientPaymentPeriodFilter.ThisMonth">This month</option>
-                        <option value="@ClientPaymentPeriodFilter.LastMonth">Last month</option>
-                        <option value="@ClientPaymentPeriodFilter.AllTime">All time</option>
-                        <option value="@ClientPaymentPeriodFilter.Custom">Custom</option>
-                    </select>
-                </label>
+            <div class="grid gap-4 md:grid-cols-3">
                 <label class="block">
                     <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Client</span>
                     <ClientsDropDown
@@ -108,27 +96,6 @@
                         @oninput="OnSearchChanged"/>
                 </label>
             </div>
-            @if (_periodFilter == ClientPaymentPeriodFilter.Custom)
-            {
-                <div class="mt-4 grid gap-4 md:grid-cols-2 xl:w-2/5">
-                    <label class="block">
-                        <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">From</span>
-                        <input
-                            class="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"
-                            type="date"
-                            value="@CustomFromText"
-                            @onchange="OnCustomFromChanged"/>
-                    </label>
-                    <label class="block">
-                        <span class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">To</span>
-                        <input
-                            class="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"
-                            type="date"
-                            value="@CustomToText"
-                            @onchange="OnCustomToChanged"/>
-                    </label>
-                </div>
-            }
         </LumexCardBody>
     </LumexCard>
 

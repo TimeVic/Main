@@ -25,7 +25,7 @@ public class ClientPermissionService : IClientPermissionService
             [WorkspacePermission.ReadMemberPayment] = AccessLevel.Read,
             [WorkspacePermission.CreateMemberPayment] = AccessLevel.Read,
             [WorkspacePermission.UpdateMemberPayment] = AccessLevel.Read,
-            [WorkspacePermission.ReadWorkspaceFinancialSummary] = AccessLevel.Write,
+            [WorkspacePermission.ReadWorkspaceFinancialSummary] = AccessLevel.Read,
             [WorkspacePermission.CreateMemberPaymentForOtherMembers] = AccessLevel.Write
         };
 

@@ -74,6 +74,12 @@ public partial class MembersDropDown
         _isOpen = false;
         await InvokeAsync(StateHasChanged);
         await Task.Yield();
+        OnMemberValueChanged(member);
+    }
+
+    private void OnMemberValueChanged(WorkspaceMemberDto? member)
+    {
+        _userId = member?.Id == Guid.Empty ? null : member?.User.Id;
         OnValueChanged(member);
     }
 }
