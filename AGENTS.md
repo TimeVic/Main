@@ -152,3 +152,4 @@ dotnet test ./TimeTracker.Tests.Unit.Business
  - Property or var names with boolean values should be started with prefix "Is". Incorrect: GroupByClient, Correct: IsGroupByClient 
  - Sub Classes/Interfecaes/Records and etc. should placed in the top of the class
  - Interface names should be started with prefix "I". Incorrect: ProjectService, Correct: IProjectService 
+ - If added some fix of the specific issue, bug, etc., add comment with description of the resolved issue
