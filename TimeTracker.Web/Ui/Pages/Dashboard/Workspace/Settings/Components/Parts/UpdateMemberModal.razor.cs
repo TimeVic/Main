@@ -11,6 +11,13 @@ namespace TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
 
 public partial class UpdateMemberModal
 {
+    private sealed class ProjectAccessGroup
+    {
+        public required string ClientName { get; init; }
+
+        public required IReadOnlyCollection<MemberProjectAccessRequest> ProjectsAccess { get; init; }
+    }
+
     [Parameter]
     public required WorkspaceMemberDto Member { get; set; }
 
@@ -42,9 +49,38 @@ public partial class UpdateMemberModal
 
     private string GetProjectName(Guid projectId)
     {
-        var project = ProjectState.Value.List.FirstOrDefault(p => p.Id == projectId);
+        var project = GetProject(projectId);
         if (project == null) return projectId.ToString();
-        return project.Client != null ? $"{project.Name} ({project.Client.Name})" : project.Name;
+
+        // Project titles omit client names because the access list is grouped by client.
+        return project.Name;
+    }
+
+    private IReadOnlyCollection<ProjectAccessGroup> GetProjectAccessGroups()
+    {
+        return _model.ProjectsAccess
+            .Select(item => new
+            {
+                ProjectAccess = item,
+                Project = GetProject(item.ProjectId)
+            })
+            .GroupBy(item => item.Project?.Client?.Id)
+            .Select(group => new ProjectAccessGroup
+            {
+                ClientName = GetClientGroupName(group.First().Project),
+                ProjectsAccess = group.Select(item => item.ProjectAccess).ToList()
+            })
+            .ToList();
+    }
+
+    private ProjectDto? GetProject(Guid projectId)
+    {
+        return ProjectState.Value.List.FirstOrDefault(p => p.Id == projectId);
+    }
+
+    private static string GetClientGroupName(ProjectDto? project)
+    {
+        return project?.Client?.Name ?? "No client";
     }
 
     private async Task Submit()
@@ -90,7 +126,6 @@ public partial class UpdateMemberModal
         IsOpened = false;
     }
 }
-
 
 
 

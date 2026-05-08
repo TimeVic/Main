@@ -39,31 +39,41 @@
                     {
                         <div>
                             <p class="mb-2 text-sm font-semibold text-slate-700">Project access</p>
-                            <div class="grid gap-3 sm:grid-cols-2">
-                                @foreach (var item in _model.ProjectsAccess)
+                            <div class="space-y-4">
+                                @foreach (var group in GetProjectAccessGroups())
                                 {
-                                    var projectName = GetProjectName(item.ProjectId);
-                                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
-                                        <p class="text-sm font-semibold text-slate-900">@projectName</p>
-                                        <div class="rounded-xl border border-slate-200 bg-white/60 p-3 flex items-center justify-between gap-4">
-                                            <div>
-                                                <p class="text-xs font-medium text-slate-700">Has access</p>
-                                            </div>
-                                            <LumexSwitch
-                                                Value="@item.HasAccess"
-                                                Disabled="@(_model.Access == MembershipAccessType.Manager)"
-                                                ValueChanged="@(v => item.HasAccess = v)"/>
+                                    <section class="space-y-2">
+                                        <p class="text-sm font-semibold text-slate-900">@group.ClientName</p>
+                                        <div class="space-y-3">
+                                            @foreach (var item in group.ProjectsAccess)
+                                            {
+                                                var projectName = GetProjectName(item.ProjectId);
+                                                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3">
+                                                    <p class="text-sm font-semibold text-slate-900">@projectName</p>
+                                                    <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                                                        <div class="rounded-xl border border-slate-200 bg-white/60 p-3 flex items-center justify-between gap-4">
+                                                            <div>
+                                                                <p class="text-xs font-medium text-slate-700">Has access</p>
+                                                            </div>
+                                                            <LumexSwitch
+                                                                Value="@item.HasAccess"
+                                                                Disabled="@(_model.Access == MembershipAccessType.Manager)"
+                                                                ValueChanged="@(v => item.HasAccess = v)"/>
+                                                        </div>
+                                                        <InputNumericNullableField
+                                                            TItem="decimal"
+                                                            Label="Hourly rate"
+                                                            Size="Size.Small"
+                                                            Step="00.01"
+                                                            Variant="InputVariant.Outlined"
+                                                            Value="@item.HourlyRate"
+                                                            ValueExpression="() => item.HourlyRate"
+                                                            ValueChanged="@(v => item.HourlyRate = v)"/>
+                                                    </div>
+                                                </div>
+                                            }
                                         </div>
-                                        <InputNumericNullableField
-                                            TItem="decimal"
-                                            Label="Hourly rate"
-                                            Size="Size.Small"
-                                            Step="00.01"
-                                            Variant="InputVariant.Outlined"
-                                            Value="@item.HourlyRate"
-                                            ValueExpression="() => item.HourlyRate"
-                                            ValueChanged="@(v => item.HourlyRate = v)"/>
-                                    </div>
+                                    </section>
                                 }
                             </div>
                         </div>
@@ -83,7 +93,3 @@
         </LumexModalFooter>
     </LumexModalContent>
 </LumexModal>
-
-
-
-
