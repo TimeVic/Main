@@ -10,9 +10,16 @@ public partial class TagsBlock
     [Inject]
     private IState<TagState> _state { get; set; }
 
+    private bool _isAddTagModalOpened { get; set; }
     private TagDto? _tagToUpdate { get; set; }
     
     private TagDto? _tagToDelete { get; set; }
+
+    private Task OnAdd()
+    {
+        _isAddTagModalOpened = true;
+        return Task.CompletedTask;
+    }
 
     private Task OnEdit(TagDto context)
     {

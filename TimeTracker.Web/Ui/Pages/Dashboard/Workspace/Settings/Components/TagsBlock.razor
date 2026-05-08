@@ -1,8 +1,13 @@
 @using LumexUI.Common
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tags
 @using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
 @using TimeTracker.Web.Ui.Shared.Components.Dialogs
 
 @inherits BaseReactiveComponent
+
+<AddTagModal
+    IsOpened="_isAddTagModalOpened"
+    IsOpenedChanged="isOpened => _isAddTagModalOpened = isOpened"/>
 
 @if (_tagToUpdate != null)
 {
@@ -32,7 +37,18 @@
                     <h2 class="mt-2 text-lg font-semibold text-slate-900">Workspace tags</h2>
                     <p class="mt-1 text-sm text-slate-600">Tags keep time entries searchable and visually grouped by color.</p>
                 </div>
-                <AddTagForm/>
+                <CustomButton
+                    Size="Size.Small"
+                    OnClick="@OnAdd"
+                    Color="@ThemeColor.Primary"
+                    Radius="@Radius.Full">
+                    <StartContent>
+                        <i class="fa-solid fa-plus"></i>
+                    </StartContent>
+                    <ChildContent>
+                        Add tag
+                    </ChildContent>
+                </CustomButton>
             </div>
         </LumexCardBody>
     </LumexCard>
