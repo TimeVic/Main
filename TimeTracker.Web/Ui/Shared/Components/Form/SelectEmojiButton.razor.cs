@@ -1,66 +1,67 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using TimeTracker.Web.Constants.Ui;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form;
 
-public partial class SelectEmojiButton
+public partial class SelectEmojiButton : IDisposable
 {
     [Parameter]
     public EventCallback<EmojiList.EmojiOptionModel> OnSelected { get; set; }
 
-    private IEnumerable<string> Categories => new[] { "All" }
-        .Concat(EmojiList.List
-            .Select(option => option.Category)
-            .Distinct(StringComparer.Ordinal)
-            .OrderBy(category => category, StringComparer.Ordinal));
-
-    private IEnumerable<EmojiList.EmojiOptionModel> FilteredEmojis => EmojiList.List
-        .Where(option => MatchesCategory(option) && MatchesSearch(option));
+    private IEnumerable<IGrouping<string, EmojiList.EmojiOptionModel>> GroupedEmojis => EmojiList.List
+        .GroupBy(option => option.Category);
 
     private bool _isOpen;
-    private string _searchText = string.Empty;
-    private string _activeCategory = "All";
+    private string _panelStyle = string.Empty;
+    private ElementReference _popoverElement;
+    private ElementReference _triggerElement;
 
-    private Task OnOpenChanged(bool isOpen)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _isOpen = isOpen;
-        return Task.CompletedTask;
-    }
+        await base.OnAfterRenderAsync(firstRender);
 
-    private void SetCategory(string category)
-    {
-        _activeCategory = category;
-    }
-
-    private bool MatchesCategory(EmojiList.EmojiOptionModel option)
-    {
-        return _activeCategory == "All" || string.Equals(option.Category, _activeCategory, StringComparison.Ordinal);
-    }
-
-    private bool MatchesSearch(EmojiList.EmojiOptionModel option)
-    {
-        var query = _searchText.Trim();
-        if (string.IsNullOrWhiteSpace(query))
+        if (_isOpen)
         {
-            return true;
+            await Js.InvokeVoidAsync("popupPortal.showPopover", _popoverElement);
+        }
+    }
+
+    private async Task TogglePicker()
+    {
+        if (_isOpen)
+        {
+            ClosePicker();
+            return;
         }
 
-        var haystack = string.Join(" ", option.Symbol, option.Name, option.HtmlCode, option.Category, option.Keywords);
-        return haystack.Contains(query, StringComparison.OrdinalIgnoreCase);
+        var panelStyle = await Js.InvokeAsync<string>(
+            "popupPortal.getPanelStyle",
+            [
+                _triggerElement,
+                340,
+                420,
+                8,
+                12
+            ]);
+
+        _panelStyle = panelStyle;
+        _isOpen = true;
+    }
+
+    private void ClosePicker()
+    {
+        _isOpen = false;
     }
 
     private async Task SelectEmoji(EmojiList.EmojiOptionModel emoji)
     {
-        _isOpen = false;
-        _searchText = string.Empty;
-        _activeCategory = "All";
         await OnSelected.InvokeAsync(emoji);
     }
 
-    private string GetCategoryClass(string category)
+    public void Dispose()
     {
-        return _activeCategory == category
-            ? "rounded-full bg-blue-600 px-2.5 py-1 text-xs font-semibold text-white"
-            : "rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-500 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700";
+        ClosePicker();
     }
 }

@@ -3,68 +3,58 @@
 
 @inherits BaseComponent
 
-<LumexDropdown
-    Open="@_isOpen"
-    OpenChanged="@OnOpenChanged">
-    <LumexDropdownTrigger>
-        <LumexButton
-            Class="text-slate-500 hover:text-blue-600"
-            Color="ThemeColor.Default"
-            IconOnly="true"
-            Size="Size.Small"
-            Variant="Variant.Light">
-            <StartContent>
-                <span class="text-base leading-none">😊</span>
-            </StartContent>
-        </LumexButton>
-    </LumexDropdownTrigger>
-    <LumexDropdownMenu
-        Class="w-[340px] max-w-[calc(100vw-3rem)] p-3"
+<span @ref="_triggerElement" class="inline-flex" @onclick:stopPropagation="true">
+    <LumexButton
+        Class="text-slate-500 hover:text-blue-600"
         Color="ThemeColor.Default"
-        Variant="MenuVariant.Outlined">
-        <div class="space-y-3" @onclick:stopPropagation="true">
-            <div>
-                <InputText
-                    @bind-Value="_searchText"
-                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500"
-                    placeholder="Search emoji"/>
-            </div>
+        IconOnly="true"
+        OnClick="@TogglePicker"
+        Size="Size.Small"
+        Variant="Variant.Light">
+        <StartContent>
+            <span class="text-base leading-none">😊</span>
+        </StartContent>
+    </LumexButton>
+</span>
 
-            <div class="flex max-h-20 flex-wrap gap-1 overflow-y-auto">
-                @foreach (var category in Categories)
+@if (_isOpen)
+{
+    <div
+        @ref="_popoverElement"
+        popover="manual"
+        class="fixed inset-0 z-[2147483647] m-0 h-[100dvh] w-screen max-h-none max-w-none overflow-hidden border-0 bg-transparent p-0"
+        style="margin:0;"
+        @onclick="ClosePicker">
+        <div
+            class="fixed z-[2147483647] w-[340px] max-w-[calc(100vw-3rem)] overflow-x-hidden rounded-xl border border-slate-200 bg-white p-3 shadow-large"
+            style="@_panelStyle"
+            @onmousedown:stopPropagation="true"
+            @onclick:stopPropagation="true">
+            <div class="max-h-80 overflow-y-auto overflow-x-hidden" @onclick:stopPropagation="true">
+                @foreach (var group in GroupedEmojis)
                 {
-                    <button
-                        type="button"
-                        @onclick="@(() => SetCategory(category))"
-                        class="@(GetCategoryClass(category))">
-                        @category
-                    </button>
-                }
-            </div>
-
-            <div class="max-h-56 overflow-y-auto">
-                @if (FilteredEmojis.Any())
-                {
-                    <div class="grid grid-cols-8 gap-1">
-                        @foreach (var emoji in FilteredEmojis.Take(96))
-                        {
-                            <button
-                                type="button"
-                                title="@emoji.Name"
-                                @onclick="@(() => SelectEmoji(emoji))"
-                                class="flex h-9 w-9 items-center justify-center rounded-lg text-xl transition hover:bg-blue-50 focus:bg-blue-50 focus:outline-none">
-                                @emoji.Symbol
-                            </button>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">
-                        No emoji found
-                    </div>
+                    <section class="not-first:mt-4">
+                        <h3 class="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                            @group.Key
+                        </h3>
+                        <div class="grid min-w-0 grid-cols-8 gap-1">
+                            @foreach (var emoji in group)
+                            {
+                                <button
+                                    type="button"
+                                    title="@emoji.Name"
+                                    @onmousedown:stopPropagation="true"
+                                    @onclick:stopPropagation="true"
+                                    @onclick:preventDefault="true"
+                                    @onclick="@(() => SelectEmoji(emoji))"
+                                    class="flex h-9 w-full min-w-0 items-center justify-center rounded-lg text-xl transition hover:bg-blue-50 focus:bg-blue-50 focus:outline-none">
+                                    @emoji.Symbol
+                                </button>
+                            }
+                        </div>
+                    </section>
                 }
             </div>
         </div>
-    </LumexDropdownMenu>
-</LumexDropdown>
+    </div>
+}

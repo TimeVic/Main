@@ -42,6 +42,37 @@ window.isTextSelected = function () {
     return window.getSelection().toString().length > 0;
 };
 
+window.popupPortal = {
+    showPopover: function (element) {
+        if (!element || typeof element.showPopover !== "function" || element.matches(":popover-open")) {
+            return;
+        }
+
+        element.showPopover();
+    },
+
+    getPanelStyle: function (anchor, panelWidth, estimatedPanelHeight, offset, viewportPadding) {
+        if (!anchor) {
+            return "";
+        }
+
+        const rect = anchor.getBoundingClientRect();
+        const width = Math.min(panelWidth, window.innerWidth - viewportPadding * 2);
+        const left = Math.min(
+            Math.max(rect.right - width, viewportPadding),
+            window.innerWidth - width - viewportPadding
+        );
+
+        const spaceBelow = window.innerHeight - rect.bottom - viewportPadding;
+        const isOpenAbove = spaceBelow < estimatedPanelHeight && rect.top > spaceBelow;
+        const top = isOpenAbove
+            ? Math.max(rect.top - estimatedPanelHeight - offset, viewportPadding)
+            : Math.min(rect.bottom + offset, window.innerHeight - viewportPadding);
+
+        return `left:${left}px;top:${top}px;width:${width}px;max-width:calc(100vw - ${viewportPadding * 2}px);`;
+    }
+};
+
 
 window.openInNewTab = function (url) {
     window.open(url, "_blank");
