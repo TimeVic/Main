@@ -1,14 +1,70 @@
 @using LumexUI.Common
 @using TimeTracker.Web.Constants.Ui
-@using TimeTracker.Web.Ui.Shared.Components.Dialogs
 
 @inherits BaseComponent
 
-<LumexButton
-    OnClick="@SelectEmoji"
-    Color="ThemeColor.Primary"
-    IconOnly="true"
-    Size="Size.Large"
-    Variant="Variant.Outlined">
-    <StartContent>😊</StartContent>
-</LumexButton>
+<LumexDropdown
+    Open="@_isOpen"
+    OpenChanged="@OnOpenChanged">
+    <LumexDropdownTrigger>
+        <LumexButton
+            Class="text-slate-500 hover:text-blue-600"
+            Color="ThemeColor.Default"
+            IconOnly="true"
+            Size="Size.Small"
+            Variant="Variant.Light">
+            <StartContent>
+                <span class="text-base leading-none">😊</span>
+            </StartContent>
+        </LumexButton>
+    </LumexDropdownTrigger>
+    <LumexDropdownMenu
+        Class="w-[340px] max-w-[calc(100vw-3rem)] p-3"
+        Color="ThemeColor.Default"
+        Variant="MenuVariant.Outlined">
+        <div class="space-y-3" @onclick:stopPropagation="true">
+            <div>
+                <InputText
+                    @bind-Value="_searchText"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500"
+                    placeholder="Search emoji"/>
+            </div>
+
+            <div class="flex max-h-20 flex-wrap gap-1 overflow-y-auto">
+                @foreach (var category in Categories)
+                {
+                    <button
+                        type="button"
+                        @onclick="@(() => SetCategory(category))"
+                        class="@(GetCategoryClass(category))">
+                        @category
+                    </button>
+                }
+            </div>
+
+            <div class="max-h-56 overflow-y-auto">
+                @if (FilteredEmojis.Any())
+                {
+                    <div class="grid grid-cols-8 gap-1">
+                        @foreach (var emoji in FilteredEmojis.Take(96))
+                        {
+                            <button
+                                type="button"
+                                title="@emoji.Name"
+                                @onclick="@(() => SelectEmoji(emoji))"
+                                class="flex h-9 w-9 items-center justify-center rounded-lg text-xl transition hover:bg-blue-50 focus:bg-blue-50 focus:outline-none">
+                                @emoji.Symbol
+                            </button>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">
+                        No emoji found
+                    </div>
+                }
+            </div>
+        </div>
+    </LumexDropdownMenu>
+</LumexDropdown>

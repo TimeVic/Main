@@ -1,34 +1,39 @@
 @inherits InputBase<string>
 @using LumexUI.Common
+@using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Services.UI.Modal
 
-<div class="flex items-center gap-2">
-    <LumexTextbox
-        @bind-Value="CurrentValue"
-        Class="@Class"
-        Placeholder="@Placeholder"
-        Type="@Type"
-        Label="@Label"
-        Invalid="@HasError"
-        Disabled="Disabled"
-        FullWidth="FullWidth"
-        Required="@Required"
-        Variant="Variant"
-        Color="Color"
-        LabelPlacement="LabelPlacement"
-        Size="Size"
-        Clearable="Clearable"
-        ErrorMessage="@FirstError">
-    
-        <StartContent>@StartContent</StartContent>
-        <EndContent>@EndContent</EndContent>
-    </LumexTextbox>
-    
-    @if (IsShowEmojiButton)
-    {
-        <SelectEmojiButton OnSelected="emoji => CurrentValue += emoji.Symbol" />
-    }
-</div>
+<LumexTextbox
+    @bind-Value="CurrentValue"
+    Class="@Class"
+    Placeholder="@Placeholder"
+    Type="@Type"
+    Label="@Label"
+    Invalid="@HasError"
+    Disabled="Disabled"
+    FullWidth="FullWidth"
+    Required="@Required"
+    Variant="Variant"
+    Color="Color"
+    LabelPlacement="LabelPlacement"
+    Size="Size"
+    Clearable="Clearable"
+    ErrorMessage="@FirstError">
+
+    <StartContent>@StartContent</StartContent>
+    <EndContent>
+        @if (EndContent != null || IsShowEmojiButton)
+        {
+            <span class="inline-flex items-center gap-1">
+                @EndContent
+                @if (IsShowEmojiButton)
+                {
+                    <SelectEmojiButton OnSelected="OnEmojiSelected"/>
+                }
+            </span>
+        }
+    </EndContent>
+</LumexTextbox>
 
 @code {
     [Parameter]
@@ -85,6 +90,11 @@
         EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
 
     public bool _isShowEmojiModal { get; set; } = false;
+
+    private void OnEmojiSelected(EmojiList.EmojiOptionModel emoji)
+    {
+        CurrentValue += emoji.Symbol;
+    }
 
     protected override bool TryParseValueFromString(
         string? value,
