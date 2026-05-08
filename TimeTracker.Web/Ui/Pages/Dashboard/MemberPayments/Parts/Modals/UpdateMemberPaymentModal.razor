@@ -18,7 +18,7 @@
                 </div>
                 <div>
                     <h2 class="mt-2 text-xl font-semibold text-slate-900">Edit payment</h2>
-                    <p class="mt-1 text-sm text-slate-600">Update the received amount, date, client, project, or note.</p>
+                    <p class="mt-1 text-sm text-slate-600">Update the received amount, date, project, or note.</p>
                 </div>
             </div>
         </LumexModalHeader>
@@ -31,25 +31,19 @@
                 <DataAnnotationsValidator/>
 
                 <div class="grid gap-4 md:grid-cols-2">
-                    <div>
-                        <ClientsDropDown
-                            Value="model.ClientId"
-                            ValueExpression="() => model.ClientId"
-                            SelectedItemChanged="OnChangeClient"/>
-                        <CustomValidationMessage For="@(() => model.ClientId)"/>
-                    </div>
-                    <div>
+                    <div class="md:col-span-2">
                         <ProjectsDropDown
                             Label="Project"
-                            ClientId="model.ClientId"
+                            IsGroupByClient="true"
+                            IsShowProjectsWithoutClients="false"
                             Value="model.ProjectId"
                             ValueExpression="() => model.ProjectId"
-                            SelectedItemChanged="OnProjectSelected"
-                            Disabled="@(model.ClientId == Guid.Empty)"/>
+                            SelectedItemChanged="OnProjectSelected"/>
+                        <CustomValidationMessage For="@(() => model.ClientId)"/>
                     </div>
                     @if (CanCreatePaymentForOtherMembers)
                     {
-                        <div>
+                        <div class="md:col-span-2">
                             <MembersDropDown
                                 Label="Member"
                                 Type="DropDownType.Select"

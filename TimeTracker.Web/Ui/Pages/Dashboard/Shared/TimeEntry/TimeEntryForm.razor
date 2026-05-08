@@ -70,6 +70,7 @@
                                     Value="@(_activeEntry?.Project?.Id ?? Guid.Empty)"
                                     Disabled="@(!_hasActiveEntry)"
                                     Clearable="true"
+                                    IsGroupByClient="true"
                                     SelectedItemChanged="@OnChangeProject"/>
                             </div>
                         </div>
@@ -129,4 +130,3 @@
         </div>
     </section>
 </div>
-

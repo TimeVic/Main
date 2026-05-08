@@ -15,8 +15,8 @@
             <LumexDropdownTrigger>
                 <LumexButton
                     FullWidth="true"
-                    Color="ThemeColor.Default"
-                    Variant="Variant.Outlined"
+                    Color="DropDownColor"
+                    Variant="DropDownVariant"
                     Disabled="Disabled">
                     @if (_selectedItem is null)
                     {
@@ -29,8 +29,8 @@
                 </LumexButton>
             </LumexDropdownTrigger>
             <LumexDropdownMenu
-                Color="ThemeColor.Default"
-                Variant="MenuVariant.Outlined">
+                Color="DropDownColor"
+                Variant="DropDownMenuVariant">
                 @if (Clearable && _selectedItem != null)
                 {
                     <LumexDropdownItem OnClick="@(() => OnMemberSelected(null))" Class="text-slate-400">
@@ -58,7 +58,7 @@
             Label="@Label"
             Placeholder="@_placeholder"
             Color="ThemeColor.Default"
-            Variant="InputVariant.Outlined"
+            Variant="SelectVariant"
             LabelPlacement="@LabelPlacement.Outside"
             ValueChanged="OnMemberValueChanged"
             Value="_selectedItem"

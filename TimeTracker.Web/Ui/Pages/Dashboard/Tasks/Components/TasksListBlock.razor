@@ -35,6 +35,7 @@
                 <ProjectsDropDown
                     Value="@(_selectedProject?.Id ?? Guid.Empty)"
                     FullWidth="false"
+                    IsGroupByClient="true"
                     SelectedItemChanged="OnSelectedProject">
                 </ProjectsDropDown>
                 @* <p class="mt-1 text-xs text-slate-500">Grouped by client; projects without a client appear under “No client”.</p> *@
