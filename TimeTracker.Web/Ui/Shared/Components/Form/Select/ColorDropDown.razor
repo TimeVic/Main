@@ -2,51 +2,95 @@
 
 @using LumexUI
 @using LumexUI.Common
+@using TimeTracker.Web.Constants.Ui
 
 <div class="@Class">
-    @if (!string.IsNullOrEmpty(Label))
+    @if (Type == DropDownType.DropDown && !string.IsNullOrEmpty(Label))
     {
         <label class="mb-1 block text-xs font-medium tracking-wide text-slate-500">@Label</label>
     }
-    <div class="flex gap-1">
-        <LumexDropdown>
-            <LumexDropdownTrigger>
-                <LumexButton
-                    Disabled="Disabled"
-                    FullWidth="FullWidth"
-                    Color="@(HasError ? ThemeColor.Danger : ThemeColor.Default)"
-                    Variant="Variant.Outlined">
-                    @if (SelectedColor is null)
-                    {
-                        @Placeholder
-                    }
-                    else
-                    {
-                        <span class="inline-flex items-center gap-2">
-                            <span
-                                class="inline-block h-4 w-4 rounded border border-slate-200"
-                                style="@GetColorStyle(SelectedColor.Code)">
+    @if (Type == DropDownType.DropDown)
+    {
+        <div class="flex gap-1">
+            <LumexDropdown>
+                <LumexDropdownTrigger>
+                    <LumexButton
+                        Disabled="Disabled"
+                        FullWidth="FullWidth"
+                        Color="@(HasError ? ThemeColor.Danger : DropDownColor)"
+                        Variant="DropDownVariant"
+                        Size="Size">
+                        @if (SelectedColor is null)
+                        {
+                            @Placeholder
+                        }
+                        else
+                        {
+                            <span class="inline-flex items-center gap-2">
+                                <span
+                                    class="inline-block h-4 w-4 rounded border border-slate-200"
+                                    style="@GetColorStyle(SelectedColor.Code)">
+                                </span>
+                                <span>@SelectedColor.Code</span>
                             </span>
-                            <span>@SelectedColor.Code</span>
-                        </span>
+                        }
+                    </LumexButton>
+                </LumexDropdownTrigger>
+                <LumexDropdownMenu
+                    Color="DropDownColor"
+                    Variant="DropDownMenuVariant">
+                    @if (Clearable && SelectedColor != null)
+                    {
+                        <LumexDropdownItem OnClick="@OnClear" Class="text-slate-400">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                                None
+                            </span>
+                        </LumexDropdownItem>
                     }
-                </LumexButton>
-            </LumexDropdownTrigger>
-            <LumexDropdownMenu
-                Color="ThemeColor.Default"
-                Variant="MenuVariant.Outlined">
+                    @foreach (var color in Colors)
+                    {
+                        <LumexDropdownItem OnClick="@(() => OnColorSelected(color.Code))">
+                            <span class="inline-flex items-center gap-2">
+                                <span
+                                    class="inline-block h-4 w-4 rounded border border-slate-200"
+                                    style="@GetColorStyle(color.Code)">
+                                </span>
+                                <span class="font-mono text-xs">@color.Code</span>
+                            </span>
+                        </LumexDropdownItem>
+                    }
+                </LumexDropdownMenu>
+            </LumexDropdown>
+        </div>
+    }
+    else
+    {
+        <LumexSelect
+            TValue="string"
+            Label="@Label"
+            Placeholder="@Placeholder"
+            LabelPlacement="LabelPlacement.Outside"
+            Variant="@SelectVariant"
+            Size="Size"
+            Disabled="Disabled"
+            Color="@(HasError ? ThemeColor.Danger : DropDownColor)"
+            Invalid="@HasError"
+            Value="@CurrentValue"
+            ValueChanged="OnColorSelected">
+            <ChildContent>
                 @if (Clearable && SelectedColor != null)
                 {
-                    <LumexDropdownItem OnClick="@OnClear" Class="text-slate-400">
-                        <span class="flex items-center gap-2">
+                    <LumexSelectItem Value="@ClearValue" TextValue="">
+                        <div class="flex items-center gap-2 text-slate-400">
                             <i class="fa-solid fa-xmark text-xs"></i>
-                            None
-                        </span>
-                    </LumexDropdownItem>
+                            <span class="text-small">None</span>
+                        </div>
+                    </LumexSelectItem>
                 }
                 @foreach (var color in Colors)
                 {
-                    <LumexDropdownItem OnClick="@(() => OnColorSelected(color.Code))">
+                    <LumexSelectItem @key="@color" Value="@color.Code" TextValue="@color.Code">
                         <span class="inline-flex items-center gap-2">
                             <span
                                 class="inline-block h-4 w-4 rounded border border-slate-200"
@@ -54,11 +98,24 @@
                             </span>
                             <span class="font-mono text-xs">@color.Code</span>
                         </span>
-                    </LumexDropdownItem>
+                    </LumexSelectItem>
                 }
-            </LumexDropdownMenu>
-        </LumexDropdown>
-    </div>
+            </ChildContent>
+            <ValueContent>
+                @if (string.IsNullOrEmpty(context))
+                {
+                    return;
+                }
+                <span class="inline-flex items-center gap-2">
+                    <span
+                        class="inline-block h-4 w-4 rounded border border-slate-200"
+                        style="@GetColorStyle(context)">
+                    </span>
+                    <span class="font-mono text-xs">@context</span>
+                </span>
+            </ValueContent>
+        </LumexSelect>
+    }
     @if (HasError)
     {
         <p class="mt-1 text-xs text-red-600">@FirstError</p>
@@ -68,6 +125,9 @@
 @code {
     [Parameter]
     public string? Label { get; set; }
+
+    [Parameter]
+    public DropDownType Type { get; set; } = DropDownType.DropDown;
 
     [Parameter]
     public string Placeholder { get; set; } = "Select color";
@@ -82,7 +142,24 @@
     public bool FullWidth { get; set; } = true;
 
     [Parameter]
+    public Size Size { get; set; } = Size.Medium;
+
+    [Parameter]
+    public Variant DropDownVariant { get; set; } = Variant.Outlined;
+
+    [Parameter]
+    public MenuVariant DropDownMenuVariant { get; set; } = MenuVariant.Outlined;
+
+    [Parameter]
+    public ThemeColor DropDownColor { get; set; } = ThemeColor.Default;
+
+    [Parameter]
+    public InputVariant SelectVariant { get; set; } = InputVariant.Outlined;
+
+    [Parameter]
     public string Class { get; set; } = string.Empty;
+
+    private const string ClearValue = "";
 
     private static readonly IReadOnlyList<TagColorOption> Colors =
     [
@@ -130,7 +207,7 @@
 
     private void OnColorSelected(string color)
     {
-        CurrentValue = color;
+        CurrentValue = string.IsNullOrEmpty(color) ? null : color;
     }
 
     private void OnClear()

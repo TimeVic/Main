@@ -1,5 +1,7 @@
 @using LumexUI
 @using LumexUI.Common
+@using TimeTracker.Web.Constants.Ui
+@using TimeTracker.Web.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
 
@@ -28,23 +30,29 @@
                 novalidate>
                 <DataAnnotationsValidator/>
 
-                <div class="space-y-5">
+                <div>
                     <div class="mt-1">
                         <InputTextField
                             FullWidth="true"
                             Label="Tag"
                             Placeholder="Tag name"
                             Variant="InputVariant.Outlined"
+                            IsShowEmojiButton="true"
                             @bind-Value="model.Name"/>
+                        <CustomValidationMessage For="@(() => model.Name)"/>
                     </div>
 
-                    <div class="mt-1">
+                    <div class="pt-8">
                         <ColorDropDown
                             Label="Color"
+                            Type="DropDownType.Select"
                             Clearable="true"
                             @bind-Value="model.Color"/>
+                        <CustomValidationMessage For="@(() => model.Color)"/>
                     </div>
                 </div>
+
+                <CustomValidationSummary/>
             </EditForm>
         </LumexModalBody>
         <LumexModalFooter>
