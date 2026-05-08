@@ -1,15 +1,11 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic.CompilerServices;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Linq;
-using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Utils;
-using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao.Common;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
@@ -124,9 +120,18 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
                         Projections.Property<TimeEntryEntity>(s => s.Id)
                     )
                 );
-            query.WithSubquery
-                .WhereProperty(item => item.Id)
-                .In(allowedIdsSubQuery);
+            query = query.And(
+                Restrictions.Or(
+                    Subqueries.PropertyIn(
+                        nameof(TimeEntryEntity.Id),
+                        allowedIdsSubQuery.DetachedCriteria
+                    ),
+                    Restrictions.Eq(
+                        Projections.Property(() => rootUserAlias!.Id),
+                        user.Id
+                    )
+                )
+            );
         }
 
         var offset = PaginationUtils.CalculateOffset(page);

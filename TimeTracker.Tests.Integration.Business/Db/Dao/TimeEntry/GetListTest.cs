@@ -426,7 +426,7 @@ public class GetListTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldReturnTimeEntriesOnlyForSharedProjectsForUserWithRoleUser()
+    public async Task ShouldReturnSharedProjectAndOwnTimeEntriesForUserWithRoleUser()
     {
         var accessType = MembershipAccessType.User;
         var projects = await _projectSeeder.CreateSeveralAsync(_workspace, 4);
@@ -455,7 +455,7 @@ public class GetListTest: BaseTest
             accessType: accessType
         );
         
-        Assert.Equal(6, actualList.TotalCount);
+        Assert.Equal(9, actualList.TotalCount);
         Assert.All(actualList.Items, item =>
         {
             Assert.NotNull(item.Project);
