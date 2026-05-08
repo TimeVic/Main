@@ -4,14 +4,15 @@
 <section class="border-b border-slate-200 bg-slate-50/70">
     <div class="px-4 py-3 sm:px-6 lg:px-8">
         @{
-            var primaryItems = _navItems
+            var availableNavItems = AvailableNavItems.ToList();
+            var primaryItems = availableNavItems
                 .Where(item => item.GroupName == null && !string.IsNullOrEmpty(item.Name))
                 .AsQueryable();
-            var groupedItems = _navItems
+            var groupedItems = availableNavItems
                 .Where(item => item.GroupName != null)
                 .GroupBy(i => i.GroupName)
                 .AsQueryable();
-            var settingsItem = _navItems.FirstOrDefault(item => string.IsNullOrEmpty(item.Name));
+            var settingsItem = availableNavItems.FirstOrDefault(item => string.IsNullOrEmpty(item.Name));
         }
         <div class="flex flex-col gap-3">
             <div>
@@ -27,7 +28,6 @@
                         Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
                         Variant="@(IsMenuItemSelected(item) ? Variant.Solid : Variant.Outlined)"
                         Size="@Size.Medium"
-                        Disabled="@IsMenuItemDisabled(item)"
                         OnClick="@(() => OnMenuItemSelected(item.Url))">
                         <StartContent>
                             <i class="@item.Icon"></i>
@@ -59,7 +59,6 @@
                                         <LumexDropdownItem
                                             Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
                                             Variant="@(IsMenuItemSelected(item) ? MenuVariant.Solid : MenuVariant.Outlined)"
-                                            Disabled="@IsMenuItemDisabled(item)"
                                             OnClick="@(() => OnMenuItemSelected(item.Url))">
                                             <StartContent>
                                                 <span class="flex items-center gap-2">
@@ -84,7 +83,6 @@
                                         <LumexDropdownItem
                                             Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
                                             Variant="@(IsMenuItemSelected(item) ? MenuVariant.Solid : MenuVariant.Outlined)"
-                                            Disabled="@IsMenuItemDisabled(item)"
                                             OnClick="@(() => OnMenuItemSelected(item.Url))">
                                             <StartContent>
                                                 <span class="flex items-center gap-2">
@@ -110,7 +108,6 @@
                             Variant="@(IsMenuItemSelected(settingsItem) ? Variant.Solid : Variant.Outlined)"
                             Size="@Size.Medium"
                             IconOnly="true"
-                            Disabled="@IsMenuItemDisabled(settingsItem)"
                             OnClick="@(() => OnMenuItemSelected(settingsItem.Url))">
                             <StartContent>
                                 <span class="flex items-center gap-2">

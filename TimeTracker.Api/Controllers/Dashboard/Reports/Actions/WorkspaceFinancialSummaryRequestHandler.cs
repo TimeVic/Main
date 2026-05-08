@@ -53,7 +53,7 @@ public class WorkspaceFinancialSummaryRequestHandler
         var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
         RecordNotFoundException.ThrowIfNull(workspace);
 
-        if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
+        if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
         {
             throw new HasNoAccessException();
         }
