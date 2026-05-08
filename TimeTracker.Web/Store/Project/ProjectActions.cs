@@ -5,6 +5,8 @@ namespace TimeTracker.Web.Store.Project;
 
 public record struct UpdateAction(UpdateRequest Request);
 
+public record struct AddAction(AddRequest Request);
+
 public record struct LoadListAction(bool IsReload = false);
 
 public record struct SetListItemsAction(GetListResponse Response);

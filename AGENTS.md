@@ -143,6 +143,7 @@ dotnet test ./TimeTracker.Tests.Unit.Business
   - For each component create *.razor.cs file. Only if additional business logic needed.
   - For component-scoped styles, create `*.razor.less` files, not `*.razor.css`. The build generates `*.razor.css` from LESS, and generated CSS files are gitignored.
   - In case when page component is too big(more that 200 lines) create separate page component and partial component, create separated directory for this page component, create separated directory for this partial components.
+  - If added component used more that 1 place it should be placed in the nearest shared directory
 
 ## Database
  - Create migrations using FluentMigrator mechanism(classes, helpers, etc.) if it's possible

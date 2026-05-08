@@ -46,7 +46,13 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             {
                 throw new HasNoAccessException();
             }
-            var project = await _projectDao.CreateAsync(workspace!, request.Name);
+            var client = workspace!.Clients.FirstOrDefault(item => item.Id == request.ClientId);
+            RecordNotFoundException.ThrowIfNull(client);
+
+            var project = await _projectDao.CreateAsync(workspace, request.Name);
+            project.SetClient(client);
+            await _sessionProvider.CurrentSession.SaveAsync(project);
+
             return _mapper.Map<ProjectDto>(project);
         }
     }
