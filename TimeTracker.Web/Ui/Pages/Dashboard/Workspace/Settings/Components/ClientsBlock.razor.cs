@@ -10,6 +10,14 @@ public partial class ClientsBlock
     [Inject] 
     private IState<ClientState> _state { get; set; }
 
+    private bool _isAddClientModalOpened { get; set; }
+
+    private Task OnAdd()
+    {
+        _isAddClientModalOpened = true;
+        return Task.CompletedTask;
+    }
+
     private Task OnSave(ClientDto context)
     {
         if (!string.IsNullOrEmpty(context.Name))

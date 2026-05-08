@@ -16,5 +16,7 @@ public record ClientState
     
     public bool IsListLoading { get; set; }
 
+    public bool IsSaving { get; set; }
+
     public bool IsLoaded { get; set; } = false;
 }
