@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Http;
@@ -39,10 +40,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var payment = await _paymentDao.GetById(request.MemberPaymentId);
-            if (
-                payment == null 
-                || !await _securityManager.HasAccess(AccessLevel.Write, user, payment)
-            )
+            RecordNotFoundException.ThrowIfNull(payment);
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, payment))
             {
                 throw new HasNoAccessException();
             }
