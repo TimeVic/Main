@@ -1,5 +1,7 @@
 @using LumexUI.Common
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Clients
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Projects
+@using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
 
 @inherits BaseReactiveComponent
 
@@ -7,14 +9,27 @@
     IsOpened="_isAddClientModalOpened"
     IsOpenedChanged="isOpened => _isAddClientModalOpened = isOpened"/>
 
+<AddProjectModal
+    IsOpened="_isAddProjectModalOpened"
+    InitialClientId="_initialProjectClientId"
+    IsOpenedChanged="OnAddProjectModalOpenedChanged"/>
+
+@if (_projectToUpdate != null)
+{
+    <UpdateProjectModal
+        Project="_projectToUpdate"
+        IsOpened="_projectToUpdate != null"
+        IsOpenedChanged="isOpened => { _projectToUpdate = isOpened ? _projectToUpdate : null; }"/>
+}
+
 <section class="space-y-6">
     <LumexCard>
         <LumexCardBody>
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">Clients</p>
-                    <h2 class="mt-2 text-lg font-semibold text-slate-900">Client directory</h2>
-                    <p class="mt-1 text-sm text-slate-600">Clients are presented as a clean list with quick icon actions.</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">Clients and projects</p>
+                    <h2 class="mt-2 text-lg font-semibold text-slate-900">Client project directory</h2>
+                    <p class="mt-1 text-sm text-slate-600">Create clients, add their projects, and reassign projects between clients from one workspace tab.</p>
                 </div>
                 <CustomButton
                     Size="Size.Small"
@@ -32,38 +47,32 @@
         </LumexCardBody>
     </LumexCard>
     
-    @if (_state.Value.List.Any())
+    @if (_clientState.Value.List.Any() || _projectState.Value.List.Any())
     {
-        <LumexDataGrid
-            Data="@_state.Value.List.AsQueryable()"
-            Radius="@Radius.Medium"
-            Class="mt-3">
-            <LumexUI.EditColumn
-                Title="Name"
-                Property="@(p => p.Name)"/>
-            <LumexUI.PropertyColumn
-                Title="Actions"
-                Property="@(p => p.Id)">
-                <Content>
-                    <CustomButton
-                        Class="inline-flex rounded-full"
-                        OnClick="@(() => OnSave(context))"
-                        Size="Size.Small"
-                        Color="ThemeColor.Success"
-                        Variant="Variant.Light"
-                        IconOnly="true">
-                        <ChildContent>
-                            <i class="fa-regular fa-floppy-disk"></i>
-                        </ChildContent>
-                    </CustomButton>
-                </Content>
-            </LumexUI.PropertyColumn>
-        </LumexDataGrid>
+        <div class="space-y-4">
+            @foreach (var client in _clientState.Value.List.OrderBy(client => client.Name))
+            {
+                <ClientProjectsGroupBlock
+                    @key="client.Id"
+                    Client="@client"
+                    Projects="@GetProjectsByClient(client)"
+                    AddProjectRequested="OnAddProject"
+                    EditProjectRequested="OnEditProject"/>
+            }
+
+            @if (GetProjectsWithoutClient().Any())
+            {
+                <ClientProjectsGroupBlock
+                    Projects="@GetProjectsWithoutClient()"
+                    AddProjectRequested="OnAddProject"
+                    EditProjectRequested="OnEditProject"/>
+            }
+        </div>
     }
     else
     {
         <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-            Add your first client to track payments.
+            Add your first client to start organizing workspace projects.
         </div>
     }
 </section>

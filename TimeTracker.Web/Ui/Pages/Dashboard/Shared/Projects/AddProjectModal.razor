@@ -26,11 +26,13 @@
                 Context="form"
                 @ref="_form"
                 Model="@model"
+                OnSubmit="@SubmitForm"
                 novalidate>
                 <DataAnnotationsValidator/>
+                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Submit</button>
 
-                <div class="space-y-5">
-                    <div class="mt-1">
+                <div class="grid gap-4">
+                    <div>
                         <ClientsDropDown
                             Value="model.ClientId"
                             ValueExpression="() => model.ClientId"
@@ -39,7 +41,7 @@
                         <CustomValidationMessage For="@(() => model.ClientId)"/>
                     </div>
 
-                    <div class="mt-1">
+                    <div>
                         <InputTextField
                             FullWidth="true"
                             Label="Project"

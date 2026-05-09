@@ -10,12 +10,20 @@ public partial class MembersBlock
     [Inject]
     private IState<WorkspaceMembersState> _state { get; set; } = default!;
 
+    private bool _isAddMemberModalOpened { get; set; }
+
     private WorkspaceMemberDto? _memberToUpdate { get; set; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         Dispatcher.Dispatch(new LoadListAction());
+    }
+
+    private Task OnAdd()
+    {
+        _isAddMemberModalOpened = true;
+        return Task.CompletedTask;
     }
 
     private Task OnEdit(WorkspaceMemberDto member)
@@ -30,4 +38,3 @@ public partial class MembersBlock
         return Task.CompletedTask;
     }
 }
-

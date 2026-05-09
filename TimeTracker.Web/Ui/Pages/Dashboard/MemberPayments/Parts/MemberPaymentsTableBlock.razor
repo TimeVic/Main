@@ -28,14 +28,14 @@
     OnRowClick="@OnRowClickHandler"
     Loading="_isLoading">
     <LumexUI.PropertyColumn Title="#" Property="@(p => p.PaymentTime.ToShortDateString())"/>
-    <LumexUI.PropertyColumn Title="Client" Property="@(p => p.Client)">
+    <LumexUI.PropertyColumn Title="Project" Property="@(p => p.Project)">
         <Content>
             <div class="font-medium text-slate-900">
-                @context.Client?.Name
+                @context.Project?.Name
             </div>
-            @if (context.Project != null)
+            @if (context.Client != null)
             {
-                <div class="mt-1 max-w-xl text-slate-500">@context.Project?.Name</div>    
+                <div class="mt-1 max-w-xl text-slate-500">@context.Client?.Name</div>
             }
         </Content>
     </LumexUI.PropertyColumn>

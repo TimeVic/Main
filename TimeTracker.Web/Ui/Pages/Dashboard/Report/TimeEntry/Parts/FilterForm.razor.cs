@@ -11,14 +11,9 @@ public partial class FilterForm
     [Inject]
     public IState<TimeEntryState> _state { get; set; }
 
-    private void OnChangeClient(ClientDto? client)
-    {
-        UpdateFilter(_state.Value.Filter with { ClientId = client?.Id, ProjectId = null });
-    }
-
     private void OnChangeProject(ProjectDto? project)
     {
-        UpdateFilter(_state.Value.Filter with { ProjectId = project?.Id });
+        UpdateFilter(_state.Value.Filter with { ClientId = project?.Client?.Id, ProjectId = project?.Id });
     }
 
     private void OnChangeSearch(string? search)

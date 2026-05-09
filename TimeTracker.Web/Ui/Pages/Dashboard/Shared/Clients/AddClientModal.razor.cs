@@ -22,6 +22,11 @@ public partial class AddClientModal
     private EditForm _form;
     private LumexModal modal;
 
+    private Task SubmitForm(EditContext editContext)
+    {
+        return Submit();
+    }
+
     private async Task Submit()
     {
         model.WorkspaceId = AuthState.Value.Workspace!.Id;
