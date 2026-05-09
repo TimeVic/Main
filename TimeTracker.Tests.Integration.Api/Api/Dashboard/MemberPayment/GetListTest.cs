@@ -21,10 +21,9 @@ public class GetListTest: BaseTest
     private readonly UserEntity _user;
     private new readonly IDataFactory<MemberPaymentEntity> _factory;
     private readonly string _jwtToken;
-    private readonly IClientDao _clientDao;
     private readonly WorkspaceEntity _workspace;
     private readonly ClientEntity _client;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
     private readonly IMemberPaymentSeeder _paymentSeeder;
     private readonly IUserSeeder _userSeeder;
@@ -32,15 +31,13 @@ public class GetListTest: BaseTest
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _factory = ServiceProvider.GetRequiredService<IDataFactory<MemberPaymentEntity>>();
-        _clientDao = ServiceProvider.GetRequiredService<IClientDao>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _paymentSeeder = ServiceProvider.GetRequiredService<IMemberPaymentSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _client = _clientDao.CreateAsync(_workspace, "Test new client").Result;
-        _project = _projectDao.CreateAsync(_workspace, "Test new project").Result;
-        _project.SetClient(_client);
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
+        _client = _project.Client;
         FlushDbChanges().Wait();
     }
 

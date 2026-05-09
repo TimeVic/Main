@@ -34,7 +34,7 @@ public partial class AddTask: BaseTest
     private readonly IQueueService _queueService;
     private readonly UserEntity _user;
     private readonly IDataFactory<TaskEntity> _taskFactory;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ITaskSeeder _taskSeeder;
     private readonly ITaskListSeeder _taskListSeeder;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
@@ -44,14 +44,14 @@ public partial class AddTask: BaseTest
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         _taskDao = ServiceProvider.GetRequiredService<ITaskDao>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
-        _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
         _taskList = _taskListSeeder.CreateAsync(_project).Result;
         
         var configuration = ServiceProvider.GetRequiredService<IConfiguration>();
@@ -135,7 +135,7 @@ public partial class AddTask: BaseTest
     public async Task ShouldNotAddIfIncorrectWorkspaceId()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
-        var otherProject = _projectDao.CreateAsync(otherWorkspace, "Test adding").Result;
+        var otherProject = _projectSeeder.CreateAsync(otherWorkspace).Result;
         var otherTaskList = _taskListSeeder.CreateAsync(otherProject).Result;
         
         var task = _taskFactory.Generate();

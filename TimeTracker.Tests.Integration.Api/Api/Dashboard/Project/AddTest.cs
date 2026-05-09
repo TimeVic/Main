@@ -11,6 +11,7 @@ using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Api.Core;
+using TimeTracker.Business.Testing.Seeders.Entity;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Project;
 
@@ -21,7 +22,7 @@ public class AddTest: BaseTest
     private readonly IQueueService _queueService;
     private readonly UserEntity _user;
     private readonly IDataFactory<ProjectEntity> _projectFactory;
-    private readonly IClientDao _clientDao;
+    private readonly IClientSeeder _clientSeeder;
     private readonly ClientEntity _client;
     private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
@@ -30,9 +31,9 @@ public class AddTest: BaseTest
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _projectFactory = ServiceProvider.GetRequiredService<IDataFactory<ProjectEntity>>();
-        _clientDao = ServiceProvider.GetRequiredService<IClientDao>();
+        _clientSeeder = ServiceProvider.GetRequiredService<IClientSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
-        _client = _clientDao.CreateAsync(_workspace, "Test client").Result;
+        _client = _clientSeeder.Create(_workspace).Result;
     }
 
     [Fact]
@@ -68,7 +69,7 @@ public class AddTest: BaseTest
     public async Task ShouldNotAddIfClientFromInaccessibleWorkspace()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
-        var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Other client");
+        var otherClient = await _clientSeeder.Create(otherWorkspace);
         var project = _projectFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {

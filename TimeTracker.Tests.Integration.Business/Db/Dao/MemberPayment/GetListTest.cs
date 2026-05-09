@@ -17,21 +17,19 @@ public class GetListTest: BaseTest
     private readonly IUserSeeder _userSeeder;
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IDataFactory<ClientEntity> _clientFactory;
-    private readonly IClientDao _clientDao;
     private readonly IMemberPaymentDao _paymentDao;
     private readonly IDataFactory<MemberPaymentEntity> _paymentFactory;
 
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly IMemberPaymentSeeder _paymentSeeder;
     private readonly IUserDao _userDao;
 
     public GetListTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
-        _clientDao = Scope.Resolve<IClientDao>();
-        _projectDao = Scope.Resolve<IProjectDao>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
         _paymentDao = Scope.Resolve<IMemberPaymentDao>();
         _paymentSeeder = Scope.Resolve<IMemberPaymentSeeder>();
@@ -76,9 +74,8 @@ public class GetListTest: BaseTest
         await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
         var otherUser = await _userSeeder.CreateActivatedAsync();
         var otherWorkspace = (await _userDao.GetUsersWorkspaces(otherUser, MembershipAccessType.Owner)).First();
-        var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
-        var otherProject = await _projectDao.CreateAsync(otherWorkspace, "Test");
-        otherProject.SetClient(otherClient);
+        var otherProject = await _projectSeeder.CreateAsync(otherWorkspace);
+        var otherClient = otherProject.Client;
         await _paymentSeeder.CreateSeveralAsync(otherWorkspace, otherUser, otherProject, 15);
 
         await FlushDbChanges();
@@ -94,9 +91,8 @@ public class GetListTest: BaseTest
         await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
         var otherUser = await _userSeeder.CreateActivatedAsync();
         var otherWorkspace = (await _userDao.GetUsersWorkspaces(otherUser, MembershipAccessType.Owner)).First();
-        var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
-        var otherProject = await _projectDao.CreateAsync(otherWorkspace, "Test");
-        otherProject.SetClient(otherClient);
+        var otherProject = await _projectSeeder.CreateAsync(otherWorkspace);
+        var otherClient = otherProject.Client;
         await _paymentSeeder.CreateSeveralAsync(otherWorkspace, otherUser, otherProject, 15);
         
         await FlushDbChanges();

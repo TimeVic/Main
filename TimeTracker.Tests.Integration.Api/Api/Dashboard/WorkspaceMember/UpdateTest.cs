@@ -33,14 +33,14 @@ public class UpdateTest: BaseTest
     private string _jwtTokenOtherUser;
     private UserEntity _otherUser;
     private readonly WorkspaceMemberEntity _membership;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly List<ProjectEntity> _projects;
     private WorkspaceEntity _otherWorkspace;
 
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _userFactory = ServiceProvider.GetRequiredService<IDataFactory<UserEntity>>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
@@ -56,9 +56,9 @@ public class UpdateTest: BaseTest
         
         _projects = new List<ProjectEntity>()
         {
-            _projectDao.CreateAsync(_workspace, "test 1").Result,
-            _projectDao.CreateAsync(_workspace, "test 2").Result,
-            _projectDao.CreateAsync(_workspace, "test 3").Result
+            _projectSeeder.CreateAsync(_workspace).Result,
+            _projectSeeder.CreateAsync(_workspace).Result,
+            _projectSeeder.CreateAsync(_workspace).Result
         };
     }
 
@@ -206,8 +206,8 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldNotAddProjectsFromAnotherWorkspace()
     {
-        var anotherProject = await _projectDao.CreateAsync(_otherWorkspace, "other 1");
-        var anotherProject2 = await _projectDao.CreateAsync(_otherWorkspace, "other 1");
+        var anotherProject = await _projectSeeder.CreateAsync(_otherWorkspace);
+        var anotherProject2 = await _projectSeeder.CreateAsync(_otherWorkspace);
         await FlushDbChanges();
         
         var expectAccess = MembershipAccessType.User;

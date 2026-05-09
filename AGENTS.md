@@ -105,6 +105,8 @@ Three test projects:
 - Call `FlushDbChanges()` before assertions that re-query the DB; use `FlushAndRefreshEntity(entity)` to reload NHibernate-tracked objects.
 - External services are mocked: `SmtpClientServiceMock`, `FirebaseClientServiceMock`, `ClickUpClientMock`, `RedmineClientMock`, `JiraClientMock`.
 - Queue processing in tests: `await QueueProcess(QueueChannel.Default)` (flushes pending items and runs handlers synchronously).
+- To generate data use factories `IDataFactory<SomeEntity>`
+- To seed data use `ISeeder<EntityName>` (e.g. `ITimeEntrySeeder`, `IWorkspaceSeeder`)
 
 **Run tests:**
 ```bash

@@ -21,7 +21,7 @@ public partial class StartNewTest: BaseTest
         var expectHourlyRate = 123.56m;
         
         var workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
-        var project = await _projectDao.CreateAsync(workspace, "test");
+        var project = await _projectSeeder.CreateAsync(workspace);
         project.DefaultHourlyRate = expectHourlyRate;
         project.IsBillableByDefault = true;
         await FlushDbChanges();

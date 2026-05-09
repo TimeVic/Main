@@ -33,12 +33,12 @@ public class DeleteTest: BaseTest
     private string _jwtTokenOtherUser;
     private UserEntity _otherUser;
     private readonly WorkspaceMemberEntity _membership;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
 
     public DeleteTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _userFactory = ServiceProvider.GetRequiredService<IDataFactory<UserEntity>>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
@@ -48,9 +48,9 @@ public class DeleteTest: BaseTest
         
         var projectsAccess = new List<ProjectAccessModel>()
         {
-            new () { Project = _projectDao.CreateAsync(_workspace, "test 1").Result },
-            new () { Project = _projectDao.CreateAsync(_workspace, "test 2").Result },
-            new () { Project = _projectDao.CreateAsync(_workspace, "test 3").Result },
+            new () { Project = _projectSeeder.CreateAsync(_workspace).Result },
+            new () { Project = _projectSeeder.CreateAsync(_workspace).Result },
+            new () { Project = _projectSeeder.CreateAsync(_workspace).Result },
         };
         FlushDbChanges().Wait();
         _membership = _workspaceAccessService.ShareAccessAsync(

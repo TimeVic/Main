@@ -32,27 +32,6 @@ public class ProjectDao: IProjectDao
         return project;
     }
 
-    public async Task<ProjectEntity> CreateAsync(WorkspaceEntity workspace, string name)
-    {
-        var client = await _sessionProvider.CurrentSession.Query<ClientEntity>()
-            .Where(item => item.Workspace.Id == workspace.Id)
-            .FirstOrDefaultAsync();
-        if (client == null)
-        {
-            client = new ClientEntity
-            {
-                Workspace = workspace,
-                Name = "Default",
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-            workspace.Clients.Add(client);
-            await _sessionProvider.CurrentSession.SaveAsync(client);
-        }
-
-        return await CreateAsync(client, name);
-    }
-
     public async Task<ProjectEntity?> GetById(Guid? projectId, bool isOnlyActive = true)
     {
         if (projectId == null)

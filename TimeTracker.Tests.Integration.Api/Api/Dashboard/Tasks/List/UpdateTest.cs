@@ -13,6 +13,7 @@ using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Api.Core;
 using UpdateRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.UpdateRequest;
+using TimeTracker.Business.Testing.Seeders.Entity;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Tasks.List;
 
@@ -25,7 +26,7 @@ public class UpdateTest: BaseTest
     private readonly IDataFactory<TaskListEntity> _taskListFactory;
     private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
     private readonly ITaskListDao _taskListDao;
 
@@ -33,11 +34,11 @@ public class UpdateTest: BaseTest
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _taskListDao = ServiceProvider.GetRequiredService<ITaskListDao>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
-        _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
     }
 
     [Fact]
@@ -77,7 +78,7 @@ public class UpdateTest: BaseTest
     [Fact]
     public async Task ShouldUpdateProject()
     {
-        var project2 = _projectDao.CreateAsync(_workspace, "Test adding").Result;
+        var project2 = _projectSeeder.CreateAsync(_workspace).Result;
         var expectedName = _taskListFactory.Generate().Name;
         var taskList = await _taskListDao.CreateTaskListAsync(_project, expectedName);
         
@@ -98,7 +99,7 @@ public class UpdateTest: BaseTest
     public async Task ShouldNotUpdateIfIncorrectWorkspaceId()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
-        var otherProject = _projectDao.CreateAsync(otherWorkspace, "Test adding").Result;
+        var otherProject = _projectSeeder.CreateAsync(otherWorkspace).Result;
         var taskList = await _taskListDao.CreateTaskListAsync(_project, "Some name");
         var project = _taskListFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
