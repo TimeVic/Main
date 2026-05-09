@@ -2,15 +2,22 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Store.Client;
+using TimeTracker.Web.Store.Project;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components;
 
 public partial class ClientsBlock
 {
     [Inject] 
-    private IState<ClientState> _state { get; set; }
+    private IState<ClientState> _clientState { get; set; }
+    
+    [Inject] 
+    private IState<ProjectState> _projectState { get; set; }
 
     private bool _isAddClientModalOpened { get; set; }
+    private bool _isAddProjectModalOpened { get; set; }
+    private Guid? _initialProjectClientId { get; set; }
+    private ProjectDto? _projectToUpdate { get; set; }
 
     private Task OnAdd()
     {
@@ -18,12 +25,43 @@ public partial class ClientsBlock
         return Task.CompletedTask;
     }
 
-    private Task OnSave(ClientDto context)
+    private IReadOnlyCollection<ProjectDto> GetProjectsByClient(ClientDto client)
     {
-        if (!string.IsNullOrEmpty(context.Name))
+        return _projectState.Value.List
+            .Where(project => project.Client?.Id == client.Id)
+            .OrderBy(project => project.Name)
+            .ToList();
+    }
+
+    private IReadOnlyCollection<ProjectDto> GetProjectsWithoutClient()
+    {
+        return _projectState.Value.List
+            .Where(project => project.Client == null)
+            .OrderBy(project => project.Name)
+            .ToList();
+    }
+
+    private Task OnAddProject(ClientDto? client)
+    {
+        _initialProjectClientId = client?.Id;
+        _isAddProjectModalOpened = true;
+        return Task.CompletedTask;
+    }
+    
+    private Task OnEditProject(ProjectDto project)
+    {
+        _projectToUpdate = project;
+        return Task.CompletedTask;
+    }
+    
+    private Task OnAddProjectModalOpenedChanged(bool isOpened)
+    {
+        _isAddProjectModalOpened = isOpened;
+        if (!isOpened)
         {
-            Dispatcher.Dispatch(new UpdateAction(context));
+            _initialProjectClientId = null;
         }
+
         return Task.CompletedTask;
     }
 }

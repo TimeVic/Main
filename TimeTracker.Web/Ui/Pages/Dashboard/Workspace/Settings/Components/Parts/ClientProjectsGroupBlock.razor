@@ -1,0 +1,103 @@
+@using LumexUI.Common
+
+@inherits BaseReactiveComponent
+
+<LumexCard>
+    <LumexCardBody>
+        <div class="space-y-5">
+            <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+                <div class="min-w-0 flex-1">
+                    @if (Client != null)
+                    {
+                        <InputTextField
+                            FullWidth="true"
+                            Label="Client"
+                            Placeholder="Client name"
+                            Variant="InputVariant.Outlined"
+                            IsShowEmojiButton="true"
+                            @bind-Value="Client.Name"/>
+                    }
+                    else
+                    {
+                        <div>
+                            <p class="text-sm font-semibold text-slate-900">Projects without client</p>
+                            <p class="mt-1 text-xs text-slate-500">Assign these projects to a client when the project should be managed under a client group.</p>
+                        </div>
+                    }
+                </div>
+
+                <div class="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center">
+                    @if (Client != null)
+                    {
+                        <CustomButton
+                            OnClick="@OnSaveClient"
+                            Size="Size.Small"
+                            Color="ThemeColor.Success"
+                            Variant="Variant.Light"
+                            Radius="@Radius.Full">
+                            <StartContent>
+                                <i class="fa-regular fa-floppy-disk"></i>
+                            </StartContent>
+                            <ChildContent>
+                                Save client
+                            </ChildContent>
+                        </CustomButton>
+                    }
+
+                    <CustomButton
+                        OnClick="@OnAddProject"
+                        Size="Size.Small"
+                        Color="@ThemeColor.Primary"
+                        Radius="@Radius.Full">
+                        <StartContent>
+                            <i class="fa-solid fa-plus"></i>
+                        </StartContent>
+                        <ChildContent>
+                            Add project
+                        </ChildContent>
+                    </CustomButton>
+                </div>
+            </div>
+
+            @if (Projects.Any())
+            {
+                <LumexDataGrid
+                    Data="@Projects.AsQueryable()"
+                    Radius="@Radius.Medium">
+                    <LumexUI.PropertyColumn
+                        Title="Project"
+                        Property="@(p => p.Name)"/>
+                    <LumexUI.PropertyColumn
+                        Title="Billable by default"
+                        Property="@(p => p.IsBillableByDefault)"/>
+                    <LumexUI.PropertyColumn
+                        Title="Default hourly rate"
+                        Property="@(p => p.DefaultHourlyRate)"/>
+                    <LumexUI.PropertyColumn
+                        Title="Actions"
+                        Property="@(p => p.Id)">
+                        <Content>
+                            <CustomButton
+                                Class="inline-flex rounded-full"
+                                OnClick="@(() => OnEditProject(context))"
+                                Size="Size.Small"
+                                Color="ThemeColor.Primary"
+                                Variant="Variant.Light"
+                                IconOnly="true">
+                                <ChildContent>
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </ChildContent>
+                            </CustomButton>
+                        </Content>
+                    </LumexUI.PropertyColumn>
+                </LumexDataGrid>
+            }
+            else
+            {
+                <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                    This client has no projects yet.
+                </div>
+            }
+        </div>
+    </LumexCardBody>
+</LumexCard>

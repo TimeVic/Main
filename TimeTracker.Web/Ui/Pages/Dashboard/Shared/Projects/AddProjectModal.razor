@@ -29,8 +29,8 @@
                 novalidate>
                 <DataAnnotationsValidator/>
 
-                <div class="space-y-5">
-                    <div class="mt-1">
+                <div class="grid gap-4">
+                    <div>
                         <ClientsDropDown
                             Value="model.ClientId"
                             ValueExpression="() => model.ClientId"
@@ -39,7 +39,7 @@
                         <CustomValidationMessage For="@(() => model.ClientId)"/>
                     </div>
 
-                    <div class="mt-1">
+                    <div>
                         <InputTextField
                             FullWidth="true"
                             Label="Project"

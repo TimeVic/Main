@@ -15,6 +15,9 @@ public partial class AddProjectModal
 
     [Parameter]
     public virtual EventCallback<bool> IsOpenedChanged { get; set; }
+    
+    [Parameter]
+    public Guid? InitialClientId { get; set; }
 
     [Inject]
     public IState<ProjectState> _state { get; set; }
@@ -22,6 +25,16 @@ public partial class AddProjectModal
     private AddRequest model = new();
     private EditForm _form;
     private LumexModal modal;
+    
+    protected override void OnParametersSet()
+    {
+        if (IsOpened && InitialClientId.HasValue && model.ClientId == Guid.Empty)
+        {
+            model.ClientId = InitialClientId.Value;
+        }
+
+        base.OnParametersSet();
+    }
 
     private async Task Submit()
     {
