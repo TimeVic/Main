@@ -139,7 +139,8 @@
                     CurrentPage="@_state.Value.SelectedPage"
                     CurrentPageChanged="OnPageChanged"
                     TotalPages="@_state.Value.TotalPages"
-                    SummaryText="@PaymentPaginationSummary"/>
+                    TotalItems="@_state.Value.TotalCount"
+                    IsLoading="@_state.Value.IsListLoading"/>
             </div>
         </LumexCardBody>
     </LumexCard>

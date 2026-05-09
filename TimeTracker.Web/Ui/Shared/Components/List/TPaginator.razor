@@ -1,34 +1,77 @@
 @using System.Linq
 @using Microsoft.AspNetCore.Components
 
-@if (TotalPages > 1)
+@if (IsVisible)
 {
     <div class="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-        @if (!string.IsNullOrWhiteSpace(SummaryText))
-        {
-            <p class="text-sm text-slate-500">@SummaryText</p>
-        }
+        <p class="text-sm text-slate-500">@Summary</p>
         <div class="flex flex-wrap items-center gap-2">
-            <button type="button" @onclick="GoToPreviousPageAsync" disabled="@(CurrentPage <= 1)" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50">
-                <i class="fa-solid fa-chevron-left"></i>
-                Previous
+            <button type="button" @onclick="GoToFirstPageAsync" disabled="@(IsLoading || IsOnFirstPage)" class="@NavigationButtonClass()" aria-label="First page" title="First page">
+                @if (IsControlLoading("first"))
+                {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                }
+                else
+                {
+                    <i class="fa-solid fa-angles-left"></i>
+                }
+            </button>
+
+            <button type="button" @onclick="GoToPreviousPageAsync" disabled="@(IsLoading || IsOnFirstPage)" class="@NavigationButtonClass()" aria-label="Previous page" title="Previous page">
+                @if (IsControlLoading("previous"))
+                {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                }
+                else
+                {
+                    <i class="fa-solid fa-chevron-left"></i>
+                }
             </button>
 
             <div class="flex flex-wrap items-center gap-2">
-                @foreach (var pageNumber in VisiblePages)
+                @foreach (var pageItem in VisiblePageItems)
                 {
-                    var isActive = pageNumber == CurrentPage;
-                    <button type="button" @onclick="@(() => SetPageAsync(pageNumber))" class="@(isActive
-                        ? "inline-flex h-10 min-w-10 items-center justify-center rounded-xl bg-slate-900 px-3 text-sm font-semibold text-white shadow-sm"
-                        : "inline-flex h-10 min-w-10 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-900")">
-                        @pageNumber
-                    </button>
+                    if (pageItem.IsEllipsis)
+                    {
+                        <span class="inline-flex h-10 min-w-10 items-center justify-center px-2 text-sm font-medium text-slate-400">...</span>
+                    }
+                    else
+                    {
+                        var isActive = pageItem.Page == SafeCurrentPage;
+                        <button type="button" @onclick="@(() => SetPageAsync(pageItem.Page))" disabled="@IsPageButtonDisabled(pageItem.Page)" class="@PageButtonClass(isActive)" aria-label="@($"Page {pageItem.Page}")" title="@($"Page {pageItem.Page}")">
+                            @if (IsControlLoading(PageControlKey(pageItem.Page)))
+                            {
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                            }
+                            else
+                            {
+                                @pageItem.Page
+                            }
+                        </button>
+                    }
                 }
             </div>
 
-            <button type="button" @onclick="GoToNextPageAsync" disabled="@(CurrentPage >= TotalPages)" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-50">
-                Next
-                <i class="fa-solid fa-chevron-right"></i>
+            <button type="button" @onclick="GoToNextPageAsync" disabled="@(IsLoading || IsOnLastPage)" class="@NavigationButtonClass()" aria-label="Next page" title="Next page">
+                @if (IsControlLoading("next"))
+                {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                }
+                else
+                {
+                    <i class="fa-solid fa-chevron-right"></i>
+                }
+            </button>
+
+            <button type="button" @onclick="GoToLastPageAsync" disabled="@(IsLoading || IsOnLastPage)" class="@NavigationButtonClass()" aria-label="Last page" title="Last page">
+                @if (IsControlLoading("last"))
+                {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                }
+                else
+                {
+                    <i class="fa-solid fa-angles-right"></i>
+                }
             </button>
         </div>
     </div>

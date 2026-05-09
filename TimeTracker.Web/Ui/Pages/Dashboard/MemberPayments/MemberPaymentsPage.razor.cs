@@ -24,9 +24,6 @@ public partial class MemberPaymentsPage
     private bool CanManageOtherMemberPayments =>
         SecurityManager.HasPermission(WorkspacePermission.CreateMemberPaymentForOtherMembers);
 
-    private string PaymentPaginationSummary =>
-        $"Page {_state.Value.SelectedPage} of {_state.Value.TotalPages} ({_state.Value.TotalCount} payments)";
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
