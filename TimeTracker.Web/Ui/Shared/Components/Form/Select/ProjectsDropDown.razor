@@ -4,6 +4,17 @@
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity
 @using TimeTracker.Web.Constants.Ui
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Clients
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Projects
+
+<AddClientModal
+    IsOpened="_isAddClientModalOpened"
+    IsOpenedChanged="isOpened => _isAddClientModalOpened = isOpened"/>
+
+<AddProjectModal
+    IsOpened="_isAddProjectModalOpened"
+    IsOpenedChanged="OnAddProjectModalOpenedChanged"
+    InitialClientId="_projectClientIdToAdd"/>
 
 <div class="@Class">
     @if (Type == DropDownType.DropDown)
@@ -46,6 +57,19 @@
                         </ChildContent>
                     </LumexDropdownItem>
                 }
+                @if (_shouldShowAddFirstClientAction)
+                {
+                    <LumexDropdownItem
+                        OnClick="@OnAddFirstClient"
+                        Class="text-blue-600">
+                        <ChildContent>
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                                Add first client
+                            </span>
+                        </ChildContent>
+                    </LumexDropdownItem>
+                }
                 @foreach (var group in _projectGroups)
                 {
                     @if (_shouldGroupByClient)
@@ -54,11 +78,24 @@
                             Disabled="true"
                             Class="cursor-default px-2 pb-1 pt-2 text-xs font-semibold uppercase text-slate-400 opacity-100">
                             <ChildContent>
-                                @group.Key.Name
+                                @group.Name
                             </ChildContent>
                         </LumexDropdownItem>
                     }
-                    @foreach (var project in group)
+                    @if (IsCanCreateProject && _state.Value.IsLoaded && !group.Projects.Any() && group.ClientId != Guid.Empty)
+                    {
+                        <LumexDropdownItem
+                            OnClick="@(() => OnAddProject(group.ClientId))"
+                            Class="text-blue-600">
+                            <ChildContent>
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                    Add project
+                                </span>
+                            </ChildContent>
+                        </LumexDropdownItem>
+                    }
+                    @foreach (var project in group.Projects)
                     {
                         <LumexDropdownItem 
                             Description="@GetProjectDescription(project)"
@@ -82,7 +119,7 @@
             Size="Size"
             Variant="@Variant"
             Color="@(IsInvalid ? ThemeColor.Danger : ThemeColor.Default)"
-            ValueChanged="dto => OnValueChanged(dto)"
+            ValueChanged="OnSelectValueChanged"
             Value="_selectedItem"
             Invalid="@IsInvalid">
             <ChildContent>
@@ -95,21 +132,43 @@
                         </div>
                     </LumexSelectItem>
                 }
+                @if (_shouldShowAddFirstClientAction)
+                {
+                    <LumexSelectItem
+                        Value="@_addFirstClientActionItem"
+                        TextValue="Add first client">
+                        <span class="flex items-center gap-2 text-blue-600">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                            Add first client
+                        </span>
+                    </LumexSelectItem>
+                }
                 @foreach (var group in _projectGroups)
                 {
                     @if (_shouldGroupByClient)
                     {
                         <LumexSelectItem
-                            @key="@group.Key"
-                            Value="@GetGroupHeaderItem(group.Key)"
-                            TextValue="@group.Key.Name"
+                            @key="@group"
+                            Value="@GetGroupHeaderItem(group.Name)"
+                            TextValue="@group.Name"
                             Disabled="true">
                             <span class="text-xs font-semibold uppercase text-slate-400">
-                                @group.Key.Name
+                                @group.Name
                             </span>
                         </LumexSelectItem>
                     }
-                    @foreach (var project in group)
+                    @if (IsCanCreateProject && _state.Value.IsLoaded && !group.Projects.Any() && group.ClientId != Guid.Empty)
+                    {
+                        <LumexSelectItem
+                            Value="@GetAddProjectActionItem(group.ClientId)"
+                            TextValue="Add project">
+                            <span class="flex items-center gap-2 text-blue-600">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                                Add project
+                            </span>
+                        </LumexSelectItem>
+                    }
+                    @foreach (var project in group.Projects)
                     {
                         <LumexSelectItem @key="@project" Value="@project" Description="@GetProjectDescription(project)">
                             @project?.Name

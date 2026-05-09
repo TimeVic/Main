@@ -26,8 +26,10 @@
                 Context="form"
                 @ref="_form"
                 Model="@model"
+                OnSubmit="@SubmitForm"
                 novalidate>
                 <DataAnnotationsValidator/>
+                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Submit</button>
 
                 <div class="grid gap-4">
                     <div>

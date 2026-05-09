@@ -36,6 +36,11 @@ public partial class AddProjectModal
         base.OnParametersSet();
     }
 
+    private Task SubmitForm(EditContext editContext)
+    {
+        return Submit();
+    }
+
     private async Task Submit()
     {
         model.WorkspaceId = AuthState.Value.Workspace!.Id;
