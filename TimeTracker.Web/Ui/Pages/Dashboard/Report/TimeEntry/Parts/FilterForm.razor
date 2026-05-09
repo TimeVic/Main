@@ -7,22 +7,13 @@
     <LumexCardBody>
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             <div>
-                <ClientsDropDown
-                    Type="DropDownType.Select"
-                    Label="Client"
-                    Clearable="true"
-                    FullWidth="true"
-                    Value="@(_state.Value.Filter.ClientId ?? Guid.Empty)"
-                    SelectedItemChanged="OnChangeClient"/>
-            </div>
-            <div>
                 <ProjectsDropDown
                     Type="DropDownType.Select"
-                    Label="Project"
+                    Label="Projects"
                     Clearable="true"
                     FullWidth="true"
+                    IsGroupByClient="true"
                     Value="@(_state.Value.Filter.ProjectId ?? Guid.Empty)"
-                    ClientId="@_state.Value.Filter.ClientId"
                     SelectedItemChanged="OnChangeProject"/>
             </div>
             <div>

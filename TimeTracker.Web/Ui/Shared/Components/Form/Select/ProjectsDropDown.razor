@@ -99,9 +99,15 @@
                 {
                     @if (_shouldGroupByClient)
                     {
-                        <div class="px-2 pb-1 pt-2 text-xs font-semibold uppercase text-slate-400">
-                            @group.Key.Name
-                        </div>
+                        <LumexSelectItem
+                            @key="@group.Key"
+                            Value="@GetGroupHeaderItem(group.Key)"
+                            TextValue="@group.Key.Name"
+                            Disabled="true">
+                            <span class="text-xs font-semibold uppercase text-slate-400">
+                                @group.Key.Name
+                            </span>
+                        </LumexSelectItem>
                     }
                     @foreach (var project in group)
                     {

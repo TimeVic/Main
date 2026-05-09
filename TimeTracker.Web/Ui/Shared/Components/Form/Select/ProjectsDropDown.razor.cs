@@ -41,6 +41,7 @@ public partial class ProjectsDropDown: IDisposable
     
     private Guid? _clientId;
     private bool _isOpen;
+    private readonly Dictionary<ProjectClientGroupKey, ProjectDto> _groupHeaderItems = new();
     private bool _shouldGroupByClient => IsGroupByClient && (!_clientId.HasValue || _clientId.Value == Guid.Empty);
     private IEnumerable<IGrouping<ProjectClientGroupKey, ProjectDto>> _projectGroups => _shouldGroupByClient
         ? _list
@@ -101,6 +102,23 @@ public partial class ProjectsDropDown: IDisposable
     private string? GetProjectDescription(ProjectDto project)
     {
         return _shouldGroupByClient ? null : project.Client?.Name;
+    }
+
+    private ProjectDto GetGroupHeaderItem(ProjectClientGroupKey groupKey)
+    {
+        if (_groupHeaderItems.TryGetValue(groupKey, out var item))
+        {
+            return item;
+        }
+
+        item = new ProjectDto
+        {
+            Id = Guid.NewGuid(),
+            Name = groupKey.Name
+        };
+
+        _groupHeaderItems[groupKey] = item;
+        return item;
     }
 
     private readonly record struct ProjectClientGroupKey(Guid Id, string Name)
