@@ -15,6 +15,7 @@ using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
+using TimeTracker.Business.Testing.Seeders.Entity;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Tasks.Comments;
 
@@ -27,7 +28,7 @@ public class DeleteTest: BaseTest
     private readonly IDataFactory<TaskListEntity> _taskListFactory;
     private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
     private readonly IDataFactory<TaskCommentEntity> _taskCommentFactory;
     private readonly TaskCommentEntity _fakeComment;
@@ -43,14 +44,14 @@ public class DeleteTest: BaseTest
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
         _taskCommentFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskCommentEntity>>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
         _taskCommentSeeder = ServiceProvider.GetRequiredService<ITaskCommentSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
-        _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
         var taskList = _taskListSeeder.CreateAsync(_project).Result;
         _task = _taskSeeder.CreateAsync(taskList, user: _user).Result;
         

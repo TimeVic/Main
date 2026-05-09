@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
@@ -38,7 +38,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
             if (workspace == null)
             {
                 throw new HasNoAccessException();

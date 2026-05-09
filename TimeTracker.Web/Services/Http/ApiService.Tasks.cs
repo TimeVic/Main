@@ -47,7 +47,6 @@ namespace TimeTracker.Web.Services.Http
         {
             return await PostAsync<GetListResponse?>(ApiUrl.TasksMyList, new GetMyListRequest
             {
-                WorkspaceId = workspaceId,
                 Statuses = taskStatuses,
                 SearchString = searchString
             });
@@ -60,7 +59,6 @@ namespace TimeTracker.Web.Services.Http
         {
             return await PostAsync<GetListResponse>(ApiUrl.TasksMyList, new GetMyListRequest
             {
-                WorkspaceId = workspaceId,
                 Statuses = new List<TaskStatus>()
                 {
                     TaskStatus.Backlog,

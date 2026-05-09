@@ -43,8 +43,7 @@ public class ProjectSeeder: IProjectSeeder
     {
         client ??= (await _clientSeeder.CreateSeveralAsync(workspace)).First();
         var fakeEntry = _projectFactory.Generate();
-        var entry = await _projectDao.CreateAsync(workspace, fakeEntry.Name);
-        entry.SetClient(client);
+        var entry = await _projectDao.CreateAsync(client, fakeEntry.Name);
 
         return entry;
     }

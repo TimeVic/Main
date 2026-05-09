@@ -16,42 +16,36 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
     {
         private readonly IMapper _mapper;
         private readonly IApiRequestService _apiRequestService;
-        private readonly IUserDao _userDao;
+        private readonly IClientDao _clientDao;
         private readonly IProjectDao _projectDao;
-        private readonly IDbSessionProvider _sessionProvider;
         private readonly ISecurityManager _securityManager;
 
         public AddRequestHandler(
             IMapper mapper,
             IApiRequestService apiRequestService,
-            IUserDao userDao,
+            IClientDao clientDao,
             IProjectDao projectDao,
-            IDbSessionProvider sessionProvider,
             ISecurityManager securityManager
         )
         {
             _mapper = mapper;
             _apiRequestService = apiRequestService;
-            _userDao = userDao;
+            _clientDao = clientDao;
             _projectDao = projectDao;
-            _sessionProvider = sessionProvider;
             _securityManager = securityManager;
         }
     
         public async Task<ProjectDto> ExecuteAsync(AddRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
-            if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
+            var client = await _clientDao.GetById(request.ClientId);
+            RecordNotFoundException.ThrowIfNull(client);
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, client.Workspace))
             {
                 throw new HasNoAccessException();
             }
-            var client = workspace!.Clients.FirstOrDefault(item => item.Id == request.ClientId);
-            RecordNotFoundException.ThrowIfNull(client);
 
-            var project = await _projectDao.CreateAsync(workspace, request.Name);
-            project.SetClient(client);
-            await _sessionProvider.CurrentSession.SaveAsync(project);
+            var project = await _projectDao.CreateAsync(client, request.Name);
 
             return _mapper.Map<ProjectDto>(project);
         }

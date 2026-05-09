@@ -38,5 +38,5 @@ from projects p
          left join earned_by_project e on e.ProjectId = p.id
          left join clients c on c.id = p.client_id
          left join member_earnings_by_project tc on tc.ProjectId = p.id
-where p.workspace_id = :workspaceId
+where c.workspace_id = :workspaceId
 order by p.name

@@ -19,25 +19,22 @@ public class GetListTest: BaseTest
 
     private readonly UserEntity _user;
     private readonly string _jwtToken;
-    private readonly IClientDao _clientDao;
     private readonly WorkspaceEntity _workspace;
     private readonly ClientEntity _client;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
     private readonly IClientPaymentSeeder _paymentSeeder;
     private readonly IUserSeeder _userSeeder;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
-        _clientDao = ServiceProvider.GetRequiredService<IClientDao>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _paymentSeeder = ServiceProvider.GetRequiredService<IClientPaymentSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _client = _clientDao.CreateAsync(_workspace, "Test new client").Result;
-        _project = _projectDao.CreateAsync(_workspace, "Test new project").Result;
-        _project.SetClient(_client);
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
+        _client = _project.Client;
         FlushDbChanges().Wait();
     }
 
@@ -46,7 +43,6 @@ public class GetListTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -56,11 +52,10 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveListIfWorkspaceOwner()
     {
         var expectedTotal = 21;
-        await _paymentSeeder.CreateSeveralAsync(_workspace, _client, _project, expectedTotal);
+        await _paymentSeeder.CreateSeveralAsync(_client, _project, expectedTotal);
 
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
         });
         response.EnsureSuccessStatusCode();
@@ -84,7 +79,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveListIfWorkspaceUser()
     {
         var expectedTotal = 3;
-        await _paymentSeeder.CreateSeveralAsync(_workspace, _client, _project, expectedTotal);
+        await _paymentSeeder.CreateSeveralAsync(_client, _project, expectedTotal);
         var (otherJwtToken, _, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
             MembershipAccessType.User
@@ -92,9 +87,8 @@ public class GetListTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherJwtToken, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
@@ -108,9 +102,8 @@ public class GetListTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherJwtToken, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
-        });
+        }, _workspace.Id);
         var errorResponse = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), errorResponse.ErrorCode);
     }

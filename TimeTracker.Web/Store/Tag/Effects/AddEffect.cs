@@ -30,7 +30,6 @@ public class AddEffect : Effect<AddAction>
         try
         {
             dispatcher.Dispatch(new SetIsSavingAction(true));
-            action.Request.WorkspaceId = _authState.Value.Workspace!.Id;
 
             var response = await _apiService.TagAddAsync(action.Request);
             if (response != null)

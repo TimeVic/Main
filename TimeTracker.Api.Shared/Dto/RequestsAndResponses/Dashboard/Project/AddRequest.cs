@@ -7,9 +7,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
 {
     public class AddRequest : IRequest<ProjectDto>
     {
-        [RequiredNonEmpty]
-        public Guid WorkspaceId { get; set; }
-
         [Display(Name = "Client")]
         [RequiredNonEmpty]
         public Guid ClientId { get; set; }

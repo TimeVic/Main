@@ -39,7 +39,7 @@ public class MemberPaymentDao: IMemberPaymentDao
     {
         var workspace = member.Workspace;
 
-        if (project.Workspace.Id != workspace.Id)
+        if (project.Client.Workspace.Id != workspace.Id)
         {
             throw new DataInconsistencyException($"This workspace does not contain project: {project.Id}");
         }
@@ -94,7 +94,7 @@ public class MemberPaymentDao: IMemberPaymentDao
         payment.Amount = amount;
         payment.PaymentTime = paymentTime;
         payment.Description = description;
-        if (project.Workspace.Id != member.Workspace.Id)
+        if (project.Client.Workspace.Id != member.Workspace.Id)
         {
             throw new DataInconsistencyException($"This workspace does not contain project: {project.Id}");
         }

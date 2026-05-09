@@ -13,6 +13,7 @@ using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Api.Core;
 using UpdateRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.UpdateRequest;
+using TimeTracker.Business.Testing.Seeders.Entity;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Tasks.List;
 
@@ -24,7 +25,7 @@ public class ArchiveTest: BaseTest
     private readonly IDataFactory<TaskListEntity> _taskListFactory;
     private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
     private readonly ITaskListDao _taskListDao;
     private readonly TaskListEntity _taskList;
@@ -33,11 +34,11 @@ public class ArchiveTest: BaseTest
     public ArchiveTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _taskListDao = ServiceProvider.GetRequiredService<ITaskListDao>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
-        _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
         var taskList = _taskListFactory.Generate();
 
         _taskListName = taskList.Name;

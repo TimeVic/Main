@@ -9,7 +9,7 @@ namespace TimeTracker.Business.Orm.Dao;
 
 public interface IProjectDao: IDomainService
 {
-    Task<ProjectEntity> CreateAsync(WorkspaceEntity workspace, string name);
+    Task<ProjectEntity> CreateAsync(ClientEntity client, string name);
     
     Task<ProjectEntity?> GetById(Guid? projectId, bool isOnlyActive = true);
 

@@ -20,13 +20,13 @@ public class RemoveAccessTest: BaseTest
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
     private readonly IWorkspaceAccessService _workspaceAccessService;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly IUserDao _userDao;
 
     public RemoveAccessTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
-        _projectDao = Scope.Resolve<IProjectDao>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         _userDao = Scope.Resolve<IUserDao>();
 
@@ -41,7 +41,7 @@ public class RemoveAccessTest: BaseTest
     {
         var expectedAccess = MembershipAccessType.User;
         var expectedUser = await _userSeeder.CreateActivatedAsync();
-        var expectedProject1 = await _projectDao.CreateAsync(_workspace, "Test 1");
+        var expectedProject1 = await _projectSeeder.CreateAsync(_workspace);
         await FlushDbChanges();
 
         var actualMembership = await _workspaceAccessService.ShareAccessAsync(_workspace, expectedUser, expectedAccess,

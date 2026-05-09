@@ -7,9 +7,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.ClientPaymen
 public class GetListRequest: IRequest<GetListResponse>
 {
     [Required]
-    public Guid WorkspaceId { get; set; }
-
-    [Required]
     [IsPositive]
     public int Page { get; set; }
 }

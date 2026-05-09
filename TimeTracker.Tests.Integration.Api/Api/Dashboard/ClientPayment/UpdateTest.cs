@@ -22,9 +22,8 @@ public class UpdateTest: BaseTest
     private readonly UserEntity _user;
     private new readonly IDataFactory<ClientPaymentEntity> _factory;
     private readonly string _jwtToken;
-    private readonly IClientDao _clientDao;
     private readonly WorkspaceEntity _workspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly IClientPaymentSeeder _paymentSeeder;
     private readonly ClientPaymentEntity _payment;
     private readonly IUserSeeder _userSeeder;
@@ -32,13 +31,13 @@ public class UpdateTest: BaseTest
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _factory = ServiceProvider.GetRequiredService<IDataFactory<ClientPaymentEntity>>();
-        _clientDao = ServiceProvider.GetRequiredService<IClientDao>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _paymentSeeder = ServiceProvider.GetRequiredService<IClientPaymentSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _payment = _paymentSeeder.CreateSeveralAsync(_workspace, 1).Result.First();
+        var project = _projectSeeder.CreateAsync(_workspace).Result;
+        _payment = _paymentSeeder.CreateSeveralAsync(project.Client, project, 1).Result.First();
         FlushDbChanges().Wait();
 
         Assert.NotNull(_payment.Project);
@@ -50,7 +49,6 @@ public class UpdateTest: BaseTest
         var expectPayment = _factory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientPaymentId = _payment.Id,
             ClientId = _payment.Client.Id,
             Amount = expectPayment.Amount,
@@ -65,14 +63,12 @@ public class UpdateTest: BaseTest
     public async Task ShouldUpdateIfWorkspaceOwner()
     {
         var expectPayment = _factory.Generate();
-        var expectedClient = await _clientDao.CreateAsync(_workspace, "Test new client");
-        var expectProject = await _projectDao.CreateAsync(_workspace, "Test new project");
-        expectProject.SetClient(expectedClient);
+        var expectProject = await _projectSeeder.CreateAsync(_workspace);
+        var expectedClient = expectProject.Client;
         await FlushDbChanges();
 
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientPaymentId = _payment.Id,
             ClientId = expectedClient.Id,
             Amount = expectPayment.Amount,
@@ -103,7 +99,6 @@ public class UpdateTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientPaymentId = _payment.Id,
             ClientId = _payment.Client.Id,
             Amount = expectPayment.Amount,
@@ -126,7 +121,6 @@ public class UpdateTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientPaymentId = _payment.Id,
             ClientId = _payment.Client.Id,
             Amount = expectPayment.Amount,

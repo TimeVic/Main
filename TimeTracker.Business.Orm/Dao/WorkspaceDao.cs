@@ -23,8 +23,11 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
         _currencyDao = currencyDao;
     }
 
-    public async Task<WorkspaceEntity?> GetById(Guid id)
+    public async Task<WorkspaceEntity?> GetById(Guid? id)
     {
+        if (id == null)
+            return null;
+
         return await Session.Query<WorkspaceEntity>()
             .FirstOrDefaultAsync(item => item.Id == id);
     }

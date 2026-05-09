@@ -11,7 +11,6 @@ public partial class ApiService
             ApiUrl.WorkspacePermissions,
             new GetWorkspacePermissionsRequest
             {
-                WorkspaceId = workspaceId
             }
         );
     }

@@ -39,7 +39,6 @@ public class SetClickUpSettingsTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new SetClickUpSettingsRequest()
         {
-            WorkspaceId = _workspace.Id,
             SecurityKey = "someApi",
             TeamId = "someTeamId",
             IsCustomTaskIds = true,
@@ -55,12 +54,11 @@ public class SetClickUpSettingsTest: BaseTest
         var expectApiKey = "someasdasdAPIKey";
         var response = await PostRequestAsync(Url, _jwtToken, new SetClickUpSettingsRequest()
         {
-            WorkspaceId = _workspace.Id,
             SecurityKey = expectApiKey,
             TeamId = expectTeamId,
             IsCustomTaskIds = true,
             IsFillTimeEntryWithTaskDetails = false
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<WorkspaceSettingsClickUpDto>();
@@ -75,12 +73,11 @@ public class SetClickUpSettingsTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new SetClickUpSettingsRequest()
         {
-            WorkspaceId = _workspace.Id,
             SecurityKey = "someasdasdAPIKey",
             TeamId = "someTeamId",
             IsCustomTaskIds = true,
             IsFillTimeEntryWithTaskDetails = false
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<WorkspaceSettingsClickUpDto>();

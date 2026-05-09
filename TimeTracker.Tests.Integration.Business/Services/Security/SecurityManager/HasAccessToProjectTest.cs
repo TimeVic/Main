@@ -21,12 +21,12 @@ public class HasAccessToProjectTest: BaseTest
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly ISecurityManager _securityManager;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private IUserDao _userDao;
 
     public HasAccessToProjectTest(): base()
     {
-        _projectDao = Scope.Resolve<IProjectDao>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _timeEntrySeeder = Scope.Resolve<ITimeEntrySeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
@@ -46,7 +46,7 @@ public class HasAccessToProjectTest: BaseTest
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(_owner, _ownWorkspace);
         Assert.Equal(MembershipAccessType.Owner, accessType);
-        var project = await _projectDao.CreateAsync(_ownWorkspace, "Test 1");
+        var project = await _projectSeeder.CreateAsync(_ownWorkspace);
         var hasAccess = await _securityManager.HasAccess(accessLevel, _owner, project);
         Assert.True(hasAccess);
     }
@@ -57,7 +57,7 @@ public class HasAccessToProjectTest: BaseTest
     public async Task ShouldNoAccessIfWorkspaceIfNotMember(AccessLevel accessLevel)
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var project = await _projectDao.CreateAsync(_ownWorkspace, "Test 1");
+        var project = await _projectSeeder.CreateAsync(_ownWorkspace);
         var hasAccess = await _securityManager.HasAccess(accessLevel, otherUser, project);
         Assert.False(hasAccess);
     }
@@ -66,7 +66,7 @@ public class HasAccessToProjectTest: BaseTest
     public async Task ShouldHasNoAccessIfProjectWasNotSharedForUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var project = await _projectDao.CreateAsync(_ownWorkspace, "Test 1");
+        var project = await _projectSeeder.CreateAsync(_ownWorkspace);
 
         await _workspaceAccessService.ShareAccessAsync(
             _ownWorkspace,
@@ -85,7 +85,7 @@ public class HasAccessToProjectTest: BaseTest
     public async Task ShouldHasOnlyReadAccessIfProjectWasSharedForUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var project = await _projectDao.CreateAsync(_ownWorkspace, "Test 1");
+        var project = await _projectSeeder.CreateAsync(_ownWorkspace);
         await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
@@ -109,7 +109,7 @@ public class HasAccessToProjectTest: BaseTest
     public async Task ShouldHasReadAndWriteAccessIfUsersRoleIsManager()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var project = await _projectDao.CreateAsync(_ownWorkspace, "Test 1");
+        var project = await _projectSeeder.CreateAsync(_ownWorkspace);
         await FlushDbChanges();
 
         await _workspaceAccessService.ShareAccessAsync(

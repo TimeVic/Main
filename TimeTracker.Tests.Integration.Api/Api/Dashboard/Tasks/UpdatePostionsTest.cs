@@ -23,7 +23,7 @@ public class UpdatePositionsTest: BaseTest
     private readonly IDataFactory<TaskEntity> _taskFactory;
     private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
     private readonly ITaskSeeder _taskSeeder;
     private readonly ITaskListSeeder _taskListSeeder;
@@ -39,7 +39,7 @@ public class UpdatePositionsTest: BaseTest
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _tagSeeder = ServiceProvider.GetRequiredService<ITagSeeder>();
@@ -47,7 +47,7 @@ public class UpdatePositionsTest: BaseTest
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
-        _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
         _taskList = _taskListSeeder.CreateAsync(_project).Result;
         _otherTaskList = _taskListSeeder.CreateAsync(_project).Result;
         _task = _taskSeeder.CreateAsync(_taskList).Result;

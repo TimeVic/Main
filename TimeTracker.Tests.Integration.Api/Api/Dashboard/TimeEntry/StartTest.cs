@@ -12,6 +12,7 @@ using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
+using TimeTracker.Business.Testing.Seeders.Entity;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.TimeEntry;
 
@@ -24,7 +25,7 @@ public partial class StartTest: BaseTest
     private readonly IDataFactory<TimeEntryEntity> _timeEntryFactory;
     private readonly string _jwtToken;
     private readonly WorkspaceEntity _defaultWorkspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly ITaskSeeder _taskSeeder;
 
@@ -32,7 +33,7 @@ public partial class StartTest: BaseTest
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _timeEntryFactory = ServiceProvider.GetRequiredService<IDataFactory<TimeEntryEntity>>();
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
@@ -43,7 +44,6 @@ public partial class StartTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             StartTime = DateTime.UtcNow.AddSeconds(1)
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -54,7 +54,6 @@ public partial class StartTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             StartTime = DateTime.UtcNow
         });
         response.EnsureSuccessStatusCode();
@@ -73,13 +72,11 @@ public partial class StartTest: BaseTest
     {
         await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             StartTime = DateTime.UtcNow.AddSeconds(1)
         });
         await _timeEntryDao.StopActiveAsync(_defaultWorkspace, _user, DateTime.UtcNow.AddHours(1));
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             StartTime = DateTime.UtcNow.AddSeconds(1)
         });
         await response.GetJsonDataAsync();
@@ -95,11 +92,10 @@ public partial class StartTest: BaseTest
     public async Task ShouldStartFilled()
     {
         var fakeTimeEntry = _timeEntryFactory.Generate();
-        var project = await _projectDao.CreateAsync(_defaultWorkspace, "Test project");
+        var project = await _projectSeeder.CreateAsync(_defaultWorkspace);
         await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             IsBillable = fakeTimeEntry.IsBillable,
@@ -122,7 +118,6 @@ public partial class StartTest: BaseTest
         var expectedStartTime = DateTime.UtcNow.AddMinutes(13);
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             StartTime = expectedStartTime
         });
         response.EnsureSuccessStatusCode();
@@ -138,13 +133,12 @@ public partial class StartTest: BaseTest
         var expectedHourlyRate = 14.3m;
         
         var fakeTimeEntry = _timeEntryFactory.Generate();
-        var project = await _projectDao.CreateAsync(_defaultWorkspace, "Test project");
+        var project = await _projectSeeder.CreateAsync(_defaultWorkspace);
         project.IsBillableByDefault = true;
         project.DefaultHourlyRate = expectedHourlyRate;
 
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             StartTime = DateTime.UtcNow.AddSeconds(1),
@@ -165,12 +159,11 @@ public partial class StartTest: BaseTest
         var expectedHourlyRate = 14.3m;
         
         var fakeTimeEntry = _timeEntryFactory.Generate();
-        var project = await _projectDao.CreateAsync(_defaultWorkspace, "Test project");
+        var project = await _projectSeeder.CreateAsync(_defaultWorkspace);
         project.DefaultHourlyRate = expectedHourlyRate;
 
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             StartTime = DateTime.UtcNow.AddSeconds(1),

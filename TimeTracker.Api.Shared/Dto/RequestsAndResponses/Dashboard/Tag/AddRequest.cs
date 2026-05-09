@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -8,9 +8,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag
 {
     public class AddRequest : IRequest<TagDto>
     {
-        [Required]
-        public Guid WorkspaceId { get; set; }
-        
         [Required]
         [StringLength(256, MinimumLength = 2)]
         public required string Name { get; set; }

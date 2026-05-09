@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
@@ -45,7 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
         public async Task<WorkspaceSettingsRedmineDto> ExecuteAsync(SetRedmineSettingsRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _workspaceDao.GetById(request.WorkspaceId);
+            var workspace = await _workspaceDao.GetById(_apiRequestService.GetCurrentWorkspaceId());
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();

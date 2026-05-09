@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
@@ -7,9 +7,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
 {
     public class StartRequest : IRequest<TimeEntryDto>
     {
-        [Required]
-        public Guid WorkspaceId { get; set; }
-        
         public Guid? ProjectId { get; set; }
         
         [StringLength(1000)]

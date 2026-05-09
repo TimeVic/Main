@@ -39,7 +39,7 @@ public partial class JiraClient
         string externalTaskId
     )
     {
-        var externalTask = await GetValidatedTaskAsync(taskList.Project.Workspace, user, externalTaskId);
+        var externalTask = await GetValidatedTaskAsync(taskList.Project.Client.Workspace, user, externalTaskId);
         return await CreateTaskAsync(taskList, user, externalTaskId, externalTask);
     }
 
@@ -49,7 +49,7 @@ public partial class JiraClient
         string externalTaskId
     )
     {
-        var externalTask = await GetValidatedTaskAsync(taskList.Project.Workspace, timeEntry.User, externalTaskId);
+        var externalTask = await GetValidatedTaskAsync(taskList.Project.Client.Workspace, timeEntry.User, externalTaskId);
         var task = await CreateTaskAsync(taskList, timeEntry.User, externalTaskId, externalTask);
         timeEntry.Task = task;
         await _dbSessionProvider.CurrentSession.SaveAsync(timeEntry);

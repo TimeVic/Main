@@ -86,7 +86,6 @@ public class WorkspaceInitializationService
                     new SetWorkspacePermissionsAction(
                         new GetWorkspacePermissionsResponse
                         {
-                            WorkspaceId = workspaceId.Value,
                             Permissions = new List<WorkspacePermission>()
                         }
                     )
@@ -100,7 +99,6 @@ public class WorkspaceInitializationService
                 new SetWorkspacePermissionsAction(
                     new GetWorkspacePermissionsResponse
                     {
-                        WorkspaceId = workspaceId.Value,
                         Permissions = new List<WorkspacePermission>()
                     }
                 )

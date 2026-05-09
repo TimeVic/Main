@@ -20,7 +20,7 @@ public partial class SetTest: BaseTest
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IDataFactory<TimeEntryEntity> _timeEntryFactory;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly IUserDao _userDao;
     private readonly ITaskSeeder _taskSeeder;
     private readonly UserEntity _user;
@@ -30,7 +30,7 @@ public partial class SetTest: BaseTest
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
-        _projectDao = Scope.Resolve<IProjectDao>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
         _timeEntryFactory = Scope.Resolve<IDataFactory<TimeEntryEntity>>();
         _userDao = Scope.Resolve<IUserDao>();
@@ -52,7 +52,7 @@ public partial class SetTest: BaseTest
         };
         
         var expectWorkspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();;
-        var expectProject = await _projectDao.CreateAsync(expectWorkspace, "Test project");
+        var expectProject = await _projectSeeder.CreateAsync(expectWorkspace);
         
         var newEntry = await _timeEntryDao.SetAsync(_user, expectWorkspace, expectedDto, expectProject);
         Assert.NotEqual(Guid.Empty, newEntry.Id);
@@ -80,7 +80,7 @@ public partial class SetTest: BaseTest
         };
         
         var initialWorkspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();;
-        var initialProject = await _projectDao.CreateAsync(initialWorkspace, "Test project1");
+        var initialProject = await _projectSeeder.CreateAsync(initialWorkspace);
         
         var initialEntry = await _timeEntryDao.SetAsync(_user, initialWorkspace, initialDto, initialProject);
         
@@ -94,7 +94,7 @@ public partial class SetTest: BaseTest
             HourlyRate = fakeTimeEntry2.HourlyRate,
             IsBillable = fakeTimeEntry2.IsBillable
         };
-        var expectedProject = await _projectDao.CreateAsync(initialWorkspace, "Test project2");
+        var expectedProject = await _projectSeeder.CreateAsync(initialWorkspace);
         
         await FlushDbChanges();
         var actualEntry = await _timeEntryDao.SetAsync(_user, initialWorkspace, expectedDto, expectedProject);
@@ -125,7 +125,7 @@ public partial class SetTest: BaseTest
         
         
         var initialWorkspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();;
-        var initialProject = await _projectDao.CreateAsync(initialWorkspace, "Test project1");
+        var initialProject = await _projectSeeder.CreateAsync(initialWorkspace);
         
         var initialEntry = await _timeEntryDao.StartNewAsync(
             _user,
@@ -146,7 +146,7 @@ public partial class SetTest: BaseTest
             HourlyRate = fakeTimeEntry2.HourlyRate,
             IsBillable = fakeTimeEntry2.IsBillable
         };
-        var expectedProject = await _projectDao.CreateAsync(initialWorkspace, "Test project2");
+        var expectedProject = await _projectSeeder.CreateAsync(initialWorkspace);
         
         await FlushDbChanges();
         var actualEntry = await _timeEntryDao.SetAsync(_user, initialWorkspace, expectedDto, expectedProject);

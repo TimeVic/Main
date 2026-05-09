@@ -11,7 +11,8 @@ public class ClientPaymentEntity: AEntity
 
     #region Relationships
 
-    public virtual required WorkspaceEntity Workspace { get; set; }
+    public virtual WorkspaceEntity Workspace => Client.Workspace;
+
     public virtual required ClientEntity Client { get; set; }
     public virtual ProjectEntity? Project { get; set; }
 

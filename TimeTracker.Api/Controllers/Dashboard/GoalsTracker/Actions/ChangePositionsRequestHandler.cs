@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
@@ -32,7 +32,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
         public async Task ExecuteAsync(ChangePositionsRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
             RecordNotFoundException.ThrowIfNull(workspace, "Workspace not found");
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {

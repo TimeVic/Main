@@ -49,7 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             var project = await _projectDao.GetById(request.ProjectId);
             RecordNotFoundException.ThrowIfNull(project);
             if (
-                project.Workspace.Id != payment.Member.Workspace.Id
+                project.Client.Workspace.Id != payment.Member.Workspace.Id
                 || !await _securityManager.HasAccess(AccessLevel.Read, user, project)
             )
             {

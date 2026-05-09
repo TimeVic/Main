@@ -50,7 +50,7 @@ public class WorkspaceFinancialSummaryRequestHandler
     )
     {
         var user = await _apiRequestService.GetCurrentUser();
-        var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+        var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
         RecordNotFoundException.ThrowIfNull(workspace);
 
         if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))

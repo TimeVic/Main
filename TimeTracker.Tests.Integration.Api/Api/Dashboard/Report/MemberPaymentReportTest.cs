@@ -41,7 +41,6 @@ public class MemberPaymentReportTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new MemberPaymentReportRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -71,7 +70,6 @@ public class MemberPaymentReportTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new MemberPaymentReportRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             EndDate = DateTime.UtcNow
         });
         await response.GetJsonDataAsync();
@@ -108,7 +106,6 @@ public class MemberPaymentReportTest: BaseTest
 
         var response = await PostRequestAsync(Url, _jwtToken, new MemberPaymentReportRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             EndDate = DateTime.UtcNow.Date
         });
 

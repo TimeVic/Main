@@ -41,7 +41,6 @@ public class AddTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
             Name = client.Name,
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -53,7 +52,6 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Name = client.Name,
-            WorkspaceId = _workspace.Id
         });
         await response.EnsureSuccessStatusCodeWithoutError();
 
@@ -72,8 +70,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest
         {
             Name = client.Name,
-            WorkspaceId = workspaces.First().Id
-        });
+        }, workspaces.First().Id);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var responseData = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), responseData.ErrorCode);

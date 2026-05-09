@@ -64,11 +64,13 @@ public class TaskDao: ITaskDao
     {
         TaskListEntity taskListAlias = null!;
         ProjectEntity projectAlias = null!;
+        ClientEntity clientAlias = null!;
         WorkspaceEntity workspaceAlias = null!;
         return await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
             .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
-            .Inner.JoinAlias(item => projectAlias!.Workspace, () => workspaceAlias)
+            .Inner.JoinAlias(() => projectAlias!.Client, () => clientAlias)
+            .Inner.JoinAlias(() => clientAlias!.Workspace, () => workspaceAlias)
             .Where(
                 item => item.TaskId == workspaceTaskId
                 && workspaceAlias!.Id == workspaceId
@@ -90,7 +92,7 @@ public class TaskDao: ITaskDao
         ExternalSourceType externalSourceType = ExternalSourceType.Manual
     )
     {
-        var taskId = await _sequenceDao.GetNextValue(taskList.Project.Workspace);
+        var taskId = await _sequenceDao.GetNextValue(taskList.Project.Client.Workspace);
         var topPositionIndex = await GetTopPositionIndexAsync(taskList.Id);
         var task = new TaskEntity()
         {
@@ -174,12 +176,14 @@ public class TaskDao: ITaskDao
         
         TaskListEntity taskListAlias = null!;
         ProjectEntity projectAlias = null!;
+        ClientEntity clientAlias = null!;
         WorkspaceEntity workspaceAlias = null!;
         UserEntity userAlias = null!;
         var query = _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
             .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
-            .Inner.JoinAlias(item => projectAlias!.Workspace, () => workspaceAlias)
+            .Inner.JoinAlias(() => projectAlias!.Client, () => clientAlias)
+            .Inner.JoinAlias(() => clientAlias!.Workspace, () => workspaceAlias)
             .Inner.JoinAlias(item => item.User, () => userAlias);
 
         if (taskList != null)
@@ -273,12 +277,10 @@ public class TaskDao: ITaskDao
         var timeToRemind = DateTime.UtcNow + GlobalConstants.TaskReminderTimeout;
         TaskListEntity taskListAlias = null!;
         ProjectEntity projectAlias = null!;
-        WorkspaceEntity workspaceAlias = null!;
         UserEntity userAlias = null!;
         return await _sessionProvider.CurrentSession.QueryOver<TaskEntity>()
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
             .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
-            .Inner.JoinAlias(item => projectAlias!.Workspace, () => workspaceAlias)
             .Inner.JoinAlias(item => item.User, () => userAlias)
             .Where(item => item.IsArchived == false)
             .Where(

@@ -9,10 +9,13 @@ using Microsoft.Net.Http.Headers;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Clients.Smtp;
+using TimeTracker.Business.Common.Constants.Http;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
@@ -36,6 +39,8 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     protected readonly FirebaseClientServiceMock FirebaseClientService;
     protected readonly IQueueDao _queueDao;
     private readonly IQueueService _queueService;
+    private readonly IJwtAuthService _jwtAuthService;
+    private readonly IUserDao _userDao;
 
     public BaseTest(ApiCustomWebApplicationFactory factory)
     {
@@ -51,6 +56,8 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         UserFactory = ServiceProvider.GetRequiredService<IDataFactory<UserEntity>>();
         _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
+        _jwtAuthService = ServiceProvider.GetRequiredService<IJwtAuthService>();
+        _userDao = ServiceProvider.GetRequiredService<IUserDao>();
         SmtpClientServiceMock = (ServiceProvider.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock)!;
         FirebaseClientService = (ServiceProvider.GetRequiredService<IFirebaseClientService>() as FirebaseClientServiceMock)!;
 
@@ -117,15 +124,23 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     {
         await FlushDbChanges();
 
+        HttpClient.DefaultRequestHeaders.Authorization = null;
+        HttpClient.DefaultRequestHeaders.Remove(AuthConstants.WorkspaceIdHeaderName);
         var requestData = JsonContent.Create(data ?? new { });
         return await HttpClient.PostAsync(url, requestData);
     }
         
-    public async Task<HttpResponseMessage> PostRequestAsync(string url, string jwtToken,  object? data = null)
+    public async Task<HttpResponseMessage> PostRequestAsync(
+        string url,
+        string jwtToken,
+        object? data = null,
+        Guid? workspaceId = null
+    )
     {
         await FlushDbChanges();
 
         HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+        await SetWorkspaceHeaderAsync(jwtToken, workspaceId);
         var requestData = JsonContent.Create(data ?? new {});
         return await HttpClient.PostAsync(url, requestData);
     }
@@ -140,15 +155,31 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         var uri = new Uri(QueryHelpers.AddQueryString(url, queryParams), UriKind.Relative);
         await FlushDbChanges();
 
+        HttpClient.DefaultRequestHeaders.Authorization = null;
+        HttpClient.DefaultRequestHeaders.Remove(AuthConstants.WorkspaceIdHeaderName);
         return await HttpClient.GetAsync(uri);
     }
         
-    public async Task<HttpResponseMessage> GetRequestAsync(string url, string jwtToken, Dictionary<string, string>? urlParams = null)
+    public async Task<HttpResponseMessage> GetRequestAsync(
+        string url,
+        string? jwtToken,
+        Dictionary<string, string>? urlParams = null,
+        Guid? workspaceId = null
+    )
     {
         await FlushDbChanges();
 
         urlParams ??= new Dictionary<string, string>();
-        HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+        if (!string.IsNullOrEmpty(jwtToken))
+        {
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+            await SetWorkspaceHeaderAsync(jwtToken, workspaceId);
+        }
+        else
+        {
+            HttpClient.DefaultRequestHeaders.Authorization = null;
+            HttpClient.DefaultRequestHeaders.Remove(AuthConstants.WorkspaceIdHeaderName);
+        }
         HttpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
         HttpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "text/json");
         
@@ -168,7 +199,8 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
 
         if (!string.IsNullOrEmpty(token))
         {
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);    
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            await SetWorkspaceHeaderAsync(token);
         }
         using var multipartFormContent = new MultipartFormDataContent();
         if (data != null)
@@ -184,6 +216,30 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
             multipartFormContent.Add(fileStreamContent, name: "File", fileName: file.FileName);
         }
         return await HttpClient.PostAsync(url, multipartFormContent);
+    }
+
+    private async Task SetWorkspaceHeaderAsync(string jwtToken, Guid? workspaceId = null)
+    {
+        workspaceId ??= await GetDefaultWorkspaceIdAsync(jwtToken);
+        HttpClient.DefaultRequestHeaders.Remove(AuthConstants.WorkspaceIdHeaderName);
+        if (workspaceId != null)
+        {
+            HttpClient.DefaultRequestHeaders.Add(AuthConstants.WorkspaceIdHeaderName, workspaceId.Value.ToString());
+        }
+    }
+
+    private async Task<Guid?> GetDefaultWorkspaceIdAsync(string jwtToken)
+    {
+        var userId = _jwtAuthService.GetUserId(jwtToken);
+        if (userId == Guid.Empty)
+            return null;
+
+        var user = await _userDao.GetById(userId);
+        if (user == null)
+            return null;
+
+        var workspaces = await _userDao.GetUsersWorkspaces(user);
+        return (workspaces.FirstOrDefault(item => !item.IsDefault) ?? workspaces.FirstOrDefault(item => item.IsDefault))?.Id;
     }
     #endregion
     

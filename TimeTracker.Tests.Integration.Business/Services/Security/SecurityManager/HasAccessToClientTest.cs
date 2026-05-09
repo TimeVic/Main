@@ -20,14 +20,12 @@ public class HasAccessToClientTest: BaseTest
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly ISecurityManager _securityManager;
-    private readonly IProjectDao _projectDao;
-    private readonly IClientDao _clientDao;
+    private readonly IClientSeeder _clientSeeder;
     private readonly IUserDao _userDao;
 
     public HasAccessToClientTest(): base()
     {
-        _projectDao = Scope.Resolve<IProjectDao>();
-        _clientDao = Scope.Resolve<IClientDao>();
+        _clientSeeder = Scope.Resolve<IClientSeeder>();
         _timeEntrySeeder = Scope.Resolve<ITimeEntrySeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
@@ -47,7 +45,7 @@ public class HasAccessToClientTest: BaseTest
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(_owner, _ownWorkspace);
         Assert.Equal(MembershipAccessType.Owner, accessType);
-        var client = await _clientDao.CreateAsync(_ownWorkspace, "Test 1");
+        var client = await _clientSeeder.Create(_ownWorkspace);
         var hasAccess = await _securityManager.HasAccess(accessLevel, _owner, client);
         Assert.True(hasAccess);
     }
@@ -58,7 +56,7 @@ public class HasAccessToClientTest: BaseTest
     public async Task ShouldNoAccessIfWorkspaceIfNotMember(AccessLevel accessLevel)
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var client = await _clientDao.CreateAsync(_ownWorkspace, "Test 1");
+        var client = await _clientSeeder.Create(_ownWorkspace);
         var hasAccess = await _securityManager.HasAccess(accessLevel, otherUser, client);
         Assert.False(hasAccess);
     }
@@ -67,7 +65,7 @@ public class HasAccessToClientTest: BaseTest
     public async Task ShouldHasNoAccessIfClientWasNotSharedForUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var client = await _clientDao.CreateAsync(_ownWorkspace, "Test 1");
+        var client = await _clientSeeder.Create(_ownWorkspace);
         
         var hasAccess = await _securityManager.HasAccess(AccessLevel.Read, otherUser, client);
         Assert.False(hasAccess);
@@ -80,7 +78,7 @@ public class HasAccessToClientTest: BaseTest
     public async Task ShouldHasOnlyReadAccessIfClientWasSharedForUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var client = await _clientDao.CreateAsync(_ownWorkspace, "Test 1");
+        var client = await _clientSeeder.Create(_ownWorkspace);
         await FlushDbChanges();
        
         await _workspaceAccessService.ShareAccessAsync(
@@ -100,7 +98,7 @@ public class HasAccessToClientTest: BaseTest
     public async Task ShouldHasReadAndWriteAccessIfUsersRoleIsManager()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var client = await _clientDao.CreateAsync(_ownWorkspace, "Test 1");
+        var client = await _clientSeeder.Create(_ownWorkspace);
         await FlushDbChanges();
 
         await _workspaceAccessService.ShareAccessAsync(

@@ -2,6 +2,7 @@ using Autofac;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Security;
@@ -18,11 +19,13 @@ public class HasAccessToClientPaymentTest: BaseTest
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly ISecurityManager _securityManager;
     private readonly IClientPaymentSeeder _paymentSeeder;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly IUserDao _userDao;
 
     public HasAccessToClientPaymentTest(): base()
     {
         _paymentSeeder = Scope.Resolve<IClientPaymentSeeder>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         _securityManager = Scope.Resolve<ISecurityManager>();
@@ -38,7 +41,7 @@ public class HasAccessToClientPaymentTest: BaseTest
     [InlineData(AccessLevel.Write)]
     public async Task ShouldHasAccessIfWorkspaceOwner(AccessLevel accessLevel)
     {
-        var payment = (await _paymentSeeder.CreateSeveralAsync(_ownWorkspace)).First();
+        var payment = await CreatePaymentAsync();
 
         var hasAccess = await _securityManager.HasAccess(accessLevel, _owner, payment);
 
@@ -53,7 +56,7 @@ public class HasAccessToClientPaymentTest: BaseTest
         var otherUser = await _userSeeder.CreateActivatedAsync();
         await _workspaceAccessService.ShareAccessAsync(_ownWorkspace, otherUser, MembershipAccessType.Manager);
         await FlushDbChanges();
-        var payment = (await _paymentSeeder.CreateSeveralAsync(_ownWorkspace)).First();
+        var payment = await CreatePaymentAsync();
 
         var hasAccess = await _securityManager.HasAccess(accessLevel, otherUser, payment);
 
@@ -66,7 +69,7 @@ public class HasAccessToClientPaymentTest: BaseTest
         var otherUser = await _userSeeder.CreateActivatedAsync();
         await _workspaceAccessService.ShareAccessAsync(_ownWorkspace, otherUser, MembershipAccessType.User);
         await FlushDbChanges();
-        var payment = (await _paymentSeeder.CreateSeveralAsync(_ownWorkspace)).First();
+        var payment = await CreatePaymentAsync();
 
         var hasReadAccess = await _securityManager.HasAccess(AccessLevel.Read, otherUser, payment);
         var hasWriteAccess = await _securityManager.HasAccess(AccessLevel.Write, otherUser, payment);
@@ -79,12 +82,18 @@ public class HasAccessToClientPaymentTest: BaseTest
     public async Task ShouldHasNoAccessIfWorkspaceWasNotSharedForUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
-        var payment = (await _paymentSeeder.CreateSeveralAsync(_ownWorkspace)).First();
+        var payment = await CreatePaymentAsync();
 
         var hasReadAccess = await _securityManager.HasAccess(AccessLevel.Read, otherUser, payment);
         var hasWriteAccess = await _securityManager.HasAccess(AccessLevel.Write, otherUser, payment);
 
         Assert.False(hasReadAccess);
         Assert.False(hasWriteAccess);
+    }
+
+    private async Task<ClientPaymentEntity> CreatePaymentAsync()
+    {
+        var project = await _projectSeeder.CreateAsync(_ownWorkspace);
+        return (await _paymentSeeder.CreateSeveralAsync(project.Client, project)).First();
     }
 }

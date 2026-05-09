@@ -6,7 +6,4 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Security;
 
 public class GetWorkspacePermissionsRequest : IRequest<GetWorkspacePermissionsResponse>
 {
-    [Required]
-    [RequiredNonEmpty]
-    public Guid WorkspaceId { get; set; }
 }

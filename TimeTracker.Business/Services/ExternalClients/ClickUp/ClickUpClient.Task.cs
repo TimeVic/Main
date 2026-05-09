@@ -61,7 +61,7 @@ public partial class ClickUpClient
         string externalTaskId
     )
     {
-        var externalTask = await GetTaskAsync(taskList.Project.Workspace, user, externalTaskId);
+        var externalTask = await GetTaskAsync(taskList.Project.Client.Workspace, user, externalTaskId);
         if (externalTask == null)
         {
             throw new RecordNotFoundException("Incorrect ExternalTaskId");

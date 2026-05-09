@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.NotificationsCenter;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dao.User;
@@ -31,7 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.NotificationsCenter.Actions
         public async Task<GetCountResponse> ExecuteAsync(GetCountRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
 
             return new GetCountResponse()
             {

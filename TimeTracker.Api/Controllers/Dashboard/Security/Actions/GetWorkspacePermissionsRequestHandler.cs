@@ -27,7 +27,7 @@ public class GetWorkspacePermissionsRequestHandler : IAsyncRequestHandler<GetWor
     public async Task<GetWorkspacePermissionsResponse> ExecuteAsync(GetWorkspacePermissionsRequest request)
     {
         var user = await _apiRequestService.GetCurrentUser();
-        var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+        var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
         RecordNotFoundException.ThrowIfNull(workspace);
 
         return new GetWorkspacePermissionsResponse

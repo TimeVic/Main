@@ -22,17 +22,15 @@ public class UpdateTest: BaseTest
     private readonly UserEntity _user;
     private new readonly IDataFactory<MemberPaymentEntity> _factory;
     private readonly string _jwtToken;
-    private readonly IClientDao _clientDao;
     private readonly WorkspaceEntity _workspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly IMemberPaymentSeeder _paymentSeeder;
     private readonly MemberPaymentEntity _payment;
 
     public UpdateTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _factory = ServiceProvider.GetRequiredService<IDataFactory<MemberPaymentEntity>>();
-        _clientDao = ServiceProvider.GetRequiredService<IClientDao>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _paymentSeeder = ServiceProvider.GetRequiredService<IMemberPaymentSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
@@ -49,7 +47,6 @@ public class UpdateTest: BaseTest
         var expectMemberPayment = _factory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             MemberPaymentId = _payment.Id,
             Amount = expectMemberPayment.Amount,
             Description = expectMemberPayment.Description,
@@ -63,14 +60,12 @@ public class UpdateTest: BaseTest
     public async Task ShouldUpdate()
     {
         var expectMemberPayment = _factory.Generate();
-        var expectedClient = await _clientDao.CreateAsync(_workspace, "Test new client");
-        var expectProject = await _projectDao.CreateAsync(_workspace, "Test new project");
-        expectProject.SetClient(expectedClient);
+        var expectProject = await _projectSeeder.CreateAsync(_workspace);
+        var expectedClient = expectProject.Client;
         await FlushDbChanges();
         
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             MemberPaymentId = _payment.Id,
             Amount = expectMemberPayment.Amount,
             Description = expectMemberPayment.Description,
@@ -108,7 +103,6 @@ public class UpdateTest: BaseTest
 
         var response = await PostRequestAsync(Url, managerToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             MemberPaymentId = _payment.Id,
             MemberId = member.Id,
             Amount = expectMemberPayment.Amount,
@@ -142,7 +136,6 @@ public class UpdateTest: BaseTest
 
         var response = await PostRequestAsync(Url, userToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             MemberPaymentId = payment.Id,
             MemberId = member.Id,
             Amount = expectMemberPayment.Amount,
@@ -163,7 +156,6 @@ public class UpdateTest: BaseTest
         
         var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             MemberPaymentId = _payment.Id,
             Amount = expectMemberPayment.Amount,
             Description = expectMemberPayment.Description,

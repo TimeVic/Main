@@ -12,6 +12,7 @@ using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Api.Core;
 using AddRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.AddRequest;
+using TimeTracker.Business.Testing.Seeders.Entity;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Tasks.List;
 
@@ -24,17 +25,17 @@ public class AddTest: BaseTest
     private readonly IDataFactory<TaskListEntity> _taskListFactory;
     private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
 
     public AddTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
-        _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
     }
 
     [Fact]
@@ -70,7 +71,7 @@ public class AddTest: BaseTest
     public async System.Threading.Tasks.Task ShouldNotAddIfIncorrectWorkspaceId()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
-        var otherProject = _projectDao.CreateAsync(otherWorkspace, "Test adding").Result;
+        var otherProject = _projectSeeder.CreateAsync(otherWorkspace).Result;
         var project = _taskListFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {

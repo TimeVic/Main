@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
@@ -7,9 +7,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
 {
     public class SetClickUpSettingsRequest : IRequest<WorkspaceSettingsClickUpDto>
     {
-        [Required]
-        public virtual Guid WorkspaceId { get; set; }
-        
         [Required]
         [StringLength(255)]
         public virtual string SecurityKey { get; set; } = "";

@@ -29,7 +29,7 @@ public partial class SetTest: BaseTest
         };
         
         var expectWorkspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();;
-        var expectProject = await _projectDao.CreateAsync(expectWorkspace, "Test project");
+        var expectProject = await _projectSeeder.CreateAsync(expectWorkspace);
         var initialEntry = await _timeEntryDao.StartNewAsync(
             _user,
             expectWorkspace,

@@ -16,20 +16,18 @@ public class CreateTest: BaseTest
     private readonly IUserSeeder _userSeeder;
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IDataFactory<ClientEntity> _clientFactory;
-    private readonly IClientDao _clientDao;
     private readonly IMemberPaymentDao _paymentDao;
     private readonly IDataFactory<MemberPaymentEntity> _paymentFactory;
 
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private IUserDao _userDao;
 
     public CreateTest(): base()
     {
         _userSeeder = Scope.Resolve<IUserSeeder>();
-        _clientDao = Scope.Resolve<IClientDao>();
-        _projectDao = Scope.Resolve<IProjectDao>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
         _paymentDao = Scope.Resolve<IMemberPaymentDao>();
         _clientFactory = Scope.Resolve<IDataFactory<ClientEntity>>();
@@ -44,9 +42,8 @@ public class CreateTest: BaseTest
     public async Task ShouldCreate()
     {
         var expectMemberPayment = _paymentFactory.Generate(); 
-        var expectClient = await _clientDao.CreateAsync(_workspace, "Test");
-        var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
-        expectProject.SetClient(expectClient);
+        var expectProject = await _projectSeeder.CreateAsync(_workspace);
+        var expectClient = expectProject.Client;
         await FlushDbChanges();
 
         var actualMemberPayment = await _paymentDao.CreateAsync(
@@ -72,7 +69,7 @@ public class CreateTest: BaseTest
     public async Task ShouldCreateForProjectWithoutClient()
     {
         var expectMemberPayment = _paymentFactory.Generate(); 
-        var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
+        var expectProject = await _projectSeeder.CreateAsync(_workspace);
         await FlushDbChanges();
        
         var actualMemberPayment = await _paymentDao.CreateAsync(

@@ -56,7 +56,6 @@ public class GetMyListTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetMyListRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -70,7 +69,6 @@ public class GetMyListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetMyListRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -110,7 +108,6 @@ public class GetMyListTest: BaseTest
 
         var response = await PostRequestAsync(Url, _jwtToken, new GetMyListRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -138,7 +135,6 @@ public class GetMyListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetMyListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Statuses = new List<TaskStatus>()
             {
                 TaskStatus.InProgress
@@ -165,7 +161,6 @@ public class GetMyListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetMyListRequest()
         {
-            WorkspaceId = _workspace.Id,
             SearchString = expectedSearchString
         });
         await response.GetJsonDataAsync();
@@ -190,7 +185,6 @@ public class GetMyListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetMyListRequest()
         {
-            WorkspaceId = _workspace.Id,
             SearchString = expectedSearchString
         });
         response.EnsureSuccessStatusCode();
@@ -214,7 +208,6 @@ public class GetMyListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetMyListRequest()
         {
-            WorkspaceId = _workspace.Id,
         });
         response.EnsureSuccessStatusCode();
 
@@ -232,7 +225,6 @@ public class GetMyListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetMyListRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 

@@ -49,7 +49,6 @@ public class GetListTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -62,7 +61,6 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -90,7 +88,6 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -123,8 +120,7 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, otherJwtToken, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
-        });
+        }, _defaultWorkspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
@@ -151,8 +147,7 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, otherJwtToken, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
-        });
+        }, _defaultWorkspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
@@ -172,8 +167,7 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, managerJwtToken, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id
-        });
+        }, _defaultWorkspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();

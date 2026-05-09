@@ -34,13 +34,6 @@ public class WorkspaceMapping: BaseGuidMappings<WorkspaceEntity>
             .Cascade.SaveUpdate()
             .Inverse();
         
-        HasMany(x => x.Projects)
-            .KeyColumn("workspace_id")
-            .Fetch.Select()
-            .LazyLoad()
-            .Cascade.SaveUpdate()
-            .Inverse();
-        
         HasMany(x => x.TimeEntries)
             .KeyColumn("workspace_id")
             .Fetch.Select()

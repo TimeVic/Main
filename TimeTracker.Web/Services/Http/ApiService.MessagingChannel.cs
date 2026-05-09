@@ -12,7 +12,6 @@ namespace TimeTracker.Web.Services.Http
                 ApiUrl.MessagingChannelCreate,
                 new CreateRequest()
                 {
-                    WorkspaceId = workspaceId,
                     Slug = slug
                 }
             );
@@ -24,14 +23,13 @@ namespace TimeTracker.Web.Services.Http
                 ApiUrl.MessagingChannelInit,
                 new InitRequest()
                 {
-                    WorkspaceId = workspaceId
                 }
             );
         }
         
         public async Task<GetListResponse?> MessagingChannelGetListAsync(Guid workspaceId)
         {
-            return await PostAsync<GetListResponse>(ApiUrl.MessagingChannelGetList, new GetListRequest() { WorkspaceId = workspaceId});
+            return await PostAsync<GetListResponse>(ApiUrl.MessagingChannelGetList, new GetListRequest());
         }
     }
 }

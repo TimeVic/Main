@@ -43,9 +43,13 @@ public class TaskListDao: ITaskListDao
     public async Task<ListDto<TaskListEntity>> GetList(WorkspaceEntity workspace)
     {
         ProjectEntity projectAlias = null!;
+        ClientEntity clientAlias = null!;
+        WorkspaceEntity workspaceAlias = null!;
         var query = _sessionProvider.CurrentSession.QueryOver<TaskListEntity>()
             .Inner.JoinAlias(item => item.Project, () => projectAlias)
-            .Where(() => projectAlias!.Workspace.Id == workspace.Id)
+            .Inner.JoinAlias(() => projectAlias!.Client, () => clientAlias)
+            .Inner.JoinAlias(() => clientAlias!.Workspace, () => workspaceAlias)
+            .Where(() => workspaceAlias!.Id == workspace.Id)
             .Where(taskList => taskList.IsArchived == false);
         
         var items = await query
@@ -65,12 +69,16 @@ public class TaskListDao: ITaskListDao
     )
     {
         ProjectEntity projectAlias = null!;
+        ClientEntity clientAlias = null!;
+        WorkspaceEntity workspaceAlias = null!;
         var query = _sessionProvider.CurrentSession.QueryOver<TaskListEntity>()
             .Select(
                 Projections.Group<TaskListEntity>(item => item.Id)
             )
             .Inner.JoinAlias(item => item.Project, () => projectAlias)
-            .Where(() => projectAlias!.Workspace.Id == workspace.Id)
+            .Inner.JoinAlias(() => projectAlias!.Client, () => clientAlias)
+            .Inner.JoinAlias(() => clientAlias!.Workspace, () => workspaceAlias)
+            .Where(() => workspaceAlias!.Id == workspace.Id)
             .Where(() => !projectAlias!.IsArchived)
             .Where(taskList => !taskList.IsArchived);
 

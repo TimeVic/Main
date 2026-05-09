@@ -1,7 +1,6 @@
 using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
-using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Entities
 {
@@ -14,8 +13,7 @@ namespace TimeTracker.Business.Orm.Entities
 
         #region Relationships
 
-        public virtual required WorkspaceEntity Workspace { get; set; }
-        public virtual ClientEntity? Client { get; set; }
+        public virtual required ClientEntity Client { get; set; }
 
         public virtual ICollection<MemberPaymentEntity> MemberPayments { get; set; } = new List<MemberPaymentEntity>();
         public virtual ICollection<ClientPaymentEntity> ClientPayments { get; set; } = new List<ClientPaymentEntity>();
@@ -24,15 +22,15 @@ namespace TimeTracker.Business.Orm.Entities
 
         #endregion
         
-        public virtual void SetClient(ClientEntity? client)
+        public virtual void SetClient(ClientEntity client)
         {
-            if (Client?.Id == client?.Id)
+            if (Client.Id == client.Id)
             {
                 return;
             }
 
             Client = client;
-            client?.Projects.Add(this);
+            client.Projects.Add(this);
         }
         
         public virtual void AddMemberPayment(MemberPaymentEntity payment)

@@ -19,7 +19,7 @@ public partial class StartNewTest: BaseTest
     private readonly IUserSeeder _userSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IWorkspaceDao _workspaceDao;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly IUserDao _userDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly ITaskSeeder _taskSeeder;
@@ -32,7 +32,7 @@ public partial class StartNewTest: BaseTest
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _timeEntryDao = Scope.Resolve<ITimeEntryDao>();
         _workspaceDao = Scope.Resolve<IWorkspaceDao>();
-        _projectDao = Scope.Resolve<IProjectDao>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _userDao = Scope.Resolve<IUserDao>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         
@@ -107,7 +107,7 @@ public partial class StartNewTest: BaseTest
         var expectHourlyRate = 123.56m;
         
         var workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
-        var project = await _projectDao.CreateAsync(workspace, "test");
+        var project = await _projectSeeder.CreateAsync(workspace);
         project.DefaultHourlyRate = expectHourlyRate;
         project.IsBillableByDefault = true;
         await FlushDbChanges();

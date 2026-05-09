@@ -1,4 +1,5 @@
 ﻿using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
@@ -12,19 +13,19 @@ public class TimeEntrySeeder: ITimeEntrySeeder
     private readonly IDataFactory<TimeEntryEntity> _timeEntryFactory;
     private readonly IUserSeeder _userSeeder;
     private readonly ITimeEntryDao _timeEntryDao;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
 
     public TimeEntrySeeder(
         IDataFactory<TimeEntryEntity> timeEntryFactory,
         IUserSeeder userSeeder,
         ITimeEntryDao timeEntryDao,
-        IProjectDao projectDao
+        IProjectSeeder projectSeeder
     )
     {
         _timeEntryFactory = timeEntryFactory;
         _userSeeder = userSeeder;
         _timeEntryDao = timeEntryDao;
-        _projectDao = projectDao;
+        _projectSeeder = projectSeeder;
     }
 
     public async Task<TimeEntryEntity> CreateAsync(WorkspaceEntity workspace, UserEntity user, ProjectEntity? project = null)
@@ -48,7 +49,7 @@ public class TimeEntrySeeder: ITimeEntrySeeder
     
     public async Task<ICollection<TimeEntryEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1, ProjectEntity? project = null)
     {
-        project ??= await _projectDao.CreateAsync(workspace, "Test project name");
+        project ??= await _projectSeeder.CreateAsync(workspace);
         var result = new List<TimeEntryEntity>();
         for (int i = 0; i < count; i++)
         {

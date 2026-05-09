@@ -45,7 +45,6 @@ public class SendTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new SendRequest()
         {
             Text = "Some text",
-            WorkspaceId = _workspace.Id,
             ReceiverId = _receiver.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -68,7 +67,6 @@ public class SendTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new SendRequest()
         {
             Text = expectedMessage,
-            WorkspaceId = _workspace.Id,
             ReceiverId = _receiver.Id
         });
         await response.GetJsonDataAsync();

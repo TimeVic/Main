@@ -20,6 +20,7 @@ using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
+using TimeTracker.Business.Testing.Seeders.Entity;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Tasks.Comments;
 
@@ -32,7 +33,7 @@ public class AddTest: BaseTest
     private readonly IDataFactory<TaskListEntity> _taskListFactory;
     private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
-    private readonly IProjectDao _projectDao;
+    private readonly IProjectSeeder _projectSeeder;
     private readonly ProjectEntity _project;
     private readonly IDataFactory<TaskCommentEntity> _taskCommentFactory;
     private readonly TaskCommentEntity _fakeComment;
@@ -47,14 +48,14 @@ public class AddTest: BaseTest
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
         _taskCommentFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskCommentEntity>>();
-        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         _userNotificationTokenDao = ServiceProvider.GetRequiredService<IUserNotificationTokenDao>();
         _notificationCenterService = ServiceProvider.GetRequiredService<INotificationCenterService>();
         
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
-        _project = _projectDao.CreateAsync(_workspace, "Test adding").Result;
+        _project = _projectSeeder.CreateAsync(_workspace).Result;
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
         _fakeComment = _taskCommentFactory.Generate();

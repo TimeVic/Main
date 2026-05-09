@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Message;
 using TimeTracker.Api.WebSocket.Services;
@@ -46,7 +46,7 @@ namespace TimeTracker.Api.Controllers.Massaging.Message.Actions
             MessagingChannelEntity? channel = null;
             
             var currentUser = await _apiRequestService.GetCurrentUser();
-            var workspace = await _workspaceDao.GetById(request.WorkspaceId);
+            var workspace = await _workspaceDao.GetById(_apiRequestService.GetCurrentWorkspaceId());
             DataValidationException.ThrowIfNull(workspace);
             await _securityManager.CheckAccess(AccessLevel.Read, currentUser, workspace);
 

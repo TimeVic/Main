@@ -40,7 +40,10 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspaceId = _apiRequestService.GetCurrentWorkspaceId();
+            var workspace = workspaceId.HasValue
+                ? await _userDao.GetUsersWorkspace(user, workspaceId.Value)
+                : await _userDao.GetDefaultWorkspace(user);
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();

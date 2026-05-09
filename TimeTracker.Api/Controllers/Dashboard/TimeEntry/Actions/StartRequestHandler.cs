@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -57,7 +57,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         public async Task<TimeEntryDto> ExecuteAsync(StartRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
+            RecordNotFoundException.ThrowIfNull(workspace, "Workspace not found");
             var task = await _taskDao.GetById(request.InternalTaskId ?? Guid.Empty);
             if (task != null)
             {
@@ -77,8 +78,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 throw new HasNoAccessException();
             }
 
-            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace!);
-            var userProjects = await _projectDao.GetAvailableForUserListAsync(workspace!, user, userAccess);
+            var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+            var userProjects = await _projectDao.GetAvailableForUserListAsync(workspace, user, userAccess);
             var project = userProjects.Items.FirstOrDefault(item => item.Id == request.ProjectId);
 
             var isBillable = request.IsBillable ?? project?.IsBillableByDefault ?? false;

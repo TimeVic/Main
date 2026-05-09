@@ -9,4 +9,6 @@ public interface IApiRequestService: IBaseApiRequestService
     Task<UserEntity> GetCurrentUser();
 
     Task<UserEntity?> GetCurrentUserOrNull();
+
+    Guid? GetCurrentWorkspaceId();
 }

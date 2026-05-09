@@ -17,7 +17,8 @@ received_by_client as (
         sum(cp.amount)                                                                                       as ReceivedAmount,
         max(cp.payment_time)                                                                                 as LastPaymentDate
     from client_payments cp
-    where cp.workspace_id = :workspaceId
+             inner join clients c on c.id = cp.client_id
+    where c.workspace_id = :workspaceId
     group by cp.client_id
 ),
 relevant_clients as (
