@@ -63,10 +63,9 @@ public class MemberPaymentReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _defaultWorkspace, 
             _user, 
-            project1.Client!,
+            project1,
             120,
             DateTime.UtcNow,
-            project1.Id,
             ""
         );
         
@@ -98,11 +97,10 @@ public class MemberPaymentReportTest: BaseTest
     public async Task ShouldIncludeCurrentDayMemberPaymentWithoutTimeEntries()
     {
         var project = (await _projectDao.CreateSeveralAsync(_defaultWorkspace, 1)).First();
-        var client = project.Client!;
         await _paymentDao.CreateAsync(
             _defaultWorkspace,
             _user,
-            client,
+            project,
             125,
             DateTime.UtcNow.Date.AddHours(12)
         );
@@ -116,14 +114,15 @@ public class MemberPaymentReportTest: BaseTest
 
         response.EnsureSuccessStatusCode();
         var actualDto = await response.GetJsonDataAsync<MemberPaymentReportResponse>();
+        var client = project.Client!;
         var actualForClient = actualDto.Items.FirstOrDefault(item => item.ClientId == client.Id);
         Assert.NotNull(actualForClient);
-        Assert.Null(actualForClient.ProjectId);
+        Assert.Equal(project.Id, actualForClient.ProjectId);
         Assert.Equal(client.Id, actualForClient.ClientId);
         Assert.Equal(client.Name, actualForClient.ClientName);
         Assert.Equal(0, actualForClient.Amount);
         Assert.Equal(125, actualForClient.PaidAmountByClient);
-        Assert.Equal(0, actualForClient.PaidAmountByProject);
+        Assert.Equal(125, actualForClient.PaidAmountByProject);
         Assert.Equal(TimeSpan.Zero, actualForClient.TotalDuration);
     }
 }

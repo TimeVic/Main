@@ -65,15 +65,9 @@ public partial class AddMemberPaymentModal
         model.PaymentTime = UserDateTimeProviderService.GetCurrentTime().DateTime;
     }
 
-    private void OnChangeClient(ClientDto client)
+    private void OnProjectSelected(ProjectDto? project)
     {
-        model.ClientId = client.Id;
-        model.ProjectId = Guid.Empty;
-    }
-
-    private void OnProjectSelected(ProjectDto project)
-    {
-        model.ProjectId = project.Id;
+        model.ProjectId = project?.Id ?? Guid.Empty;
     }
 
     private void OnMemberSelected(WorkspaceMemberDto? member)

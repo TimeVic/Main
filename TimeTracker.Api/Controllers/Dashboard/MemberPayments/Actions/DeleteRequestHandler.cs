@@ -39,10 +39,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var payment = await _paymentDao.GetById(request.MemberPaymentId);
-            if (
-                payment == null 
-                || !await _securityManager.HasAccess(AccessLevel.Write, user, payment)
-            )
+            RecordNotFoundException.ThrowIfNull(payment);
+            if (!await _securityManager.HasAccess(AccessLevel.Write, user, payment))
             {
                 throw new HasNoAccessException();
             }

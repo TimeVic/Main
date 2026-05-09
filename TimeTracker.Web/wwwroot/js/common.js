@@ -42,6 +42,83 @@ window.isTextSelected = function () {
     return window.getSelection().toString().length > 0;
 };
 
+window.popupPortal = {
+    showPopover: function (element) {
+        if (!element || typeof element.showPopover !== "function" || element.matches(":popover-open")) {
+            return;
+        }
+
+        element.showPopover();
+    },
+
+    getPanelStyle: function (anchor, panelWidth, estimatedPanelHeight, offset, viewportPadding) {
+        if (!anchor) {
+            return "";
+        }
+
+        const rect = anchor.getBoundingClientRect();
+        const width = Math.min(panelWidth, window.innerWidth - viewportPadding * 2);
+        const left = Math.min(
+            Math.max(rect.right - width, viewportPadding),
+            window.innerWidth - width - viewportPadding
+        );
+
+        const spaceBelow = window.innerHeight - rect.bottom - viewportPadding;
+        const isOpenAbove = spaceBelow < estimatedPanelHeight && rect.top > spaceBelow;
+        const top = isOpenAbove
+            ? Math.max(rect.top - estimatedPanelHeight - offset, viewportPadding)
+            : Math.min(rect.bottom + offset, window.innerHeight - viewportPadding);
+
+        return `left:${left}px;top:${top}px;width:${width}px;max-width:calc(100vw - ${viewportPadding * 2}px);`;
+    }
+};
+
+// Lumex modals close on clicks outside the dialog rect. Popovers can visually extend outside that rect,
+// so suppress only the modal close call while keeping the click event available for Blazor item selection.
+window.lumexModalPopoverGuard = (() => {
+    const suppressedDialogs = new WeakSet();
+    const originalClose = HTMLDialogElement.prototype.close;
+
+    HTMLDialogElement.prototype.close = function (...args) {
+        if (suppressedDialogs.has(this)) {
+            return;
+        }
+
+        return originalClose.apply(this, args);
+    };
+
+    const suppressModalClose = (event) => {
+        const popover = event.target.closest("dialog [data-popover]");
+
+        if (!popover) {
+            return;
+        }
+
+        const dialog = popover.closest("dialog");
+
+        if (!dialog) {
+            return;
+        }
+
+        const rect = dialog.getBoundingClientRect();
+        const isOutsideDialog =
+            event.clientY < rect.top ||
+            event.clientY > rect.bottom ||
+            event.clientX < rect.left ||
+            event.clientX > rect.right;
+
+        if (isOutsideDialog) {
+            suppressedDialogs.add(dialog);
+
+            setTimeout(() => {
+                suppressedDialogs.delete(dialog);
+            });
+        }
+    };
+
+    document.addEventListener("click", suppressModalClose, true);
+})();
+
 
 window.openInNewTab = function (url) {
     window.open(url, "_blank");

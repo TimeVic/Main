@@ -11,7 +11,7 @@ public interface IMemberPaymentSeeder: IDomainService
     
     Task<ICollection<MemberPaymentEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1);
 
-    Task<ICollection<MemberPaymentEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, ClientEntity client, ProjectEntity? project, int count = 1);
+    Task<ICollection<MemberPaymentEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, ProjectEntity project, int count = 1);
 
     Task<ICollection<MemberPaymentEntity>> CreateSeveralAsync(int count = 1);
 }

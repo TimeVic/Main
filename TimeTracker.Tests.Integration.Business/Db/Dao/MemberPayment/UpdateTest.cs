@@ -57,10 +57,9 @@ public class UpdateTest: BaseTest
         var actualMemberPayment = await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            client,
+            project,
             payment.Amount,
             payment.PaymentTime,
-            project.Id,
             payment.Description
         );
         
@@ -68,10 +67,9 @@ public class UpdateTest: BaseTest
         actualMemberPayment = await _paymentDao.UpdateMemberPaymentAsync(
             actualMemberPayment.Id,
             actualMemberPayment.Member,
-            expectClient,
+            expectProject,
             expectedMemberPayment.Amount,
             expectedMemberPayment.PaymentTime,
-            expectProject.Id,
             expectedMemberPayment.Description
         );
 
@@ -82,11 +80,11 @@ public class UpdateTest: BaseTest
         Assert.Equal(expectedMemberPayment.Description, actualMemberPayment.Description);
         Assert.Equal(expectedMemberPayment.PaymentTime, actualMemberPayment.PaymentTime);
         Assert.Equal(expectProject.Id, actualMemberPayment.Project.Id);
-        Assert.Equal(expectClient.Id, actualMemberPayment.Client.Id);
+        Assert.Equal(expectClient.Id, actualMemberPayment.Project.Client!.Id);
     }
     
     [Fact]
-    public async Task ShouldNotAddProjectNotForCurrentClient()
+    public async Task ShouldUpdateToProjectWithoutClient()
     {
         var payment = _paymentFactory.Generate();
         var client = await _clientDao.CreateAsync(_workspace, "Test");
@@ -94,17 +92,15 @@ public class UpdateTest: BaseTest
         project.SetClient(client);
         
         var expectedMemberPayment = _paymentFactory.Generate();
-        var expectClient = await _clientDao.CreateAsync(_workspace, "Test2");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
         await FlushDbChanges();
 
         var actualMemberPayment = await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            client,
+            project,
             payment.Amount,
             payment.PaymentTime,
-            project.Id,
             payment.Description
         );
         
@@ -112,15 +108,15 @@ public class UpdateTest: BaseTest
         actualMemberPayment = await _paymentDao.UpdateMemberPaymentAsync(
             actualMemberPayment.Id,
             actualMemberPayment.Member,
-            expectClient,
+            expectProject,
             expectedMemberPayment.Amount,
             expectedMemberPayment.PaymentTime,
-            expectProject.Id,
             expectedMemberPayment.Description
         );
 
         Assert.NotNull(actualMemberPayment);
         Assert.NotEqual(Guid.Empty, actualMemberPayment.Id);
-        Assert.Null(actualMemberPayment.Project);
+        Assert.Equal(expectProject.Id, actualMemberPayment.Project.Id);
+        Assert.Null(actualMemberPayment.Project.Client);
     }
 }

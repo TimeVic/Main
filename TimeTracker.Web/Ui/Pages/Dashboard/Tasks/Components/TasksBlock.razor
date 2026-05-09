@@ -33,7 +33,10 @@
                 <p class="mt-1 text-sm text-slate-500">Tasks are optional and mainly used for tracking time.</p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
-                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">@_taskList?.Project.Name</span>
+                @if (_taskList != null)
+                {
+                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">@_taskList.Project.Name</span>
+                }
 
                 <CustomButton
                     Variant="Variant.Outlined"

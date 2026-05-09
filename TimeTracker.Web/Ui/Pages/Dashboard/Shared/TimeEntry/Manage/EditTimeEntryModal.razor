@@ -49,6 +49,7 @@
                                     <ProjectsDropDown
                                         Value="_model.Project?.Id ?? Guid.Empty"
                                         Clearable="true"
+                                        IsGroupByClient="true"
                                         SelectedItemChanged="@OnProjectSelected"
                                     />
                                     @if (_model.Project != null)

@@ -17,7 +17,10 @@ public partial class ProjectsDropDown: IDisposable
     public Size Size { get; set; } = Size.Medium;
     
     [Parameter]
-    public bool ShowProjectsWithoutClients { get; set; } = true;
+    public bool IsShowProjectsWithoutClients { get; set; } = true;
+
+    [Parameter]
+    public bool IsGroupByClient { get; set; }
     
     [Parameter]
     public Guid? ClientId
@@ -38,6 +41,13 @@ public partial class ProjectsDropDown: IDisposable
     
     private Guid? _clientId;
     private bool _isOpen;
+    private bool _shouldGroupByClient => IsGroupByClient && (!_clientId.HasValue || _clientId.Value == Guid.Empty);
+    private IEnumerable<IGrouping<ProjectClientGroupKey, ProjectDto>> _projectGroups => _shouldGroupByClient
+        ? _list
+            .OrderBy(GetClientSortName, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(item => item.Name, StringComparer.OrdinalIgnoreCase)
+            .GroupBy(GetClientGroupKey)
+        : _list.GroupBy(_ => ProjectClientGroupKey.Empty);
     
     protected override void OnInitialized()
     {
@@ -56,7 +66,7 @@ public partial class ProjectsDropDown: IDisposable
     private void UpdateList()
     {
         _list = _state.Value.List.ToList();
-        if (_clientId == Guid.Empty && ShowProjectsWithoutClients)
+        if (_clientId == Guid.Empty && IsShowProjectsWithoutClients)
         {
             _list = _list.Where(item => item.Client == null).ToList();
         }
@@ -64,7 +74,38 @@ public partial class ProjectsDropDown: IDisposable
         {
             _list = _list.Where(item => item.Client?.Id == _clientId).ToList();
         }
+
+        if (!IsShowProjectsWithoutClients)
+        {
+            _list = _list.Where(item => item.Client != null).ToList();
+        }
+
         UpdateSelectedItem();
+    }
+
+    private static ProjectClientGroupKey GetClientGroupKey(ProjectDto project)
+    {
+        return new ProjectClientGroupKey(
+            project.Client?.Id ?? Guid.Empty,
+            string.IsNullOrWhiteSpace(project.Client?.Name) ? "No client" : project.Client.Name
+        );
+    }
+
+    private static string GetClientSortName(ProjectDto project)
+    {
+        return string.IsNullOrWhiteSpace(project.Client?.Name)
+            ? "zzzzzzzz-no-client"
+            : project.Client.Name;
+    }
+
+    private string? GetProjectDescription(ProjectDto project)
+    {
+        return _shouldGroupByClient ? null : project.Client?.Name;
+    }
+
+    private readonly record struct ProjectClientGroupKey(Guid Id, string Name)
+    {
+        public static ProjectClientGroupKey Empty { get; } = new(Guid.Empty, string.Empty);
     }
     
     protected override void UpdateSelectedItem()

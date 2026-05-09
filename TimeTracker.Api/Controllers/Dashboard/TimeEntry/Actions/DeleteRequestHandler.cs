@@ -39,10 +39,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var timeEntry = await _timeEntryDao.GetByIdAsync(request.TimeEntryId);
-            if (timeEntry == null)
-            {
-                throw new RecordNotFoundException();
-            }
+            RecordNotFoundException.ThrowIfNull(timeEntry);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, timeEntry))
             {
                 throw new PermissionException();

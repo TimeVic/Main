@@ -1,15 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
 {
     public class AddRequest : IRequest<ProjectDto>
     {
-        [Required]
+        [RequiredNonEmpty]
         public Guid WorkspaceId { get; set; }
+
+        [Display(Name = "Client")]
+        [RequiredNonEmpty]
+        public Guid ClientId { get; set; }
         
         [Required]
         [StringLength(256, MinimumLength = 2)]

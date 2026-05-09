@@ -1,4 +1,5 @@
 ﻿using Fluxor;
+using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Store.WorkspaceMembers;
@@ -20,6 +21,18 @@ public partial class MembersDropDown
     
     [Parameter]
     public ICollection<Guid> AllowedIds { get; set; } = new List<Guid>();
+
+    [Parameter] 
+    public Variant DropDownVariant { get; set; } = Variant.Outlined;
+
+    [Parameter] 
+    public MenuVariant DropDownMenuVariant { get; set; } = MenuVariant.Outlined;
+
+    [Parameter] 
+    public ThemeColor DropDownColor { get; set; } = ThemeColor.Default;
+
+    [Parameter]
+    public InputVariant SelectVariant { get; set; } = InputVariant.Outlined;
 
     [Inject]
     public IState<WorkspaceMembersState> _state { get; set; }

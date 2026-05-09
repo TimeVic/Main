@@ -34,10 +34,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var client = await _clientDao.GetById(request.Id);
-            if (client == null)
-            {
-                throw new RecordNotFoundException();
-            }
+            RecordNotFoundException.ThrowIfNull(client);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, client.Workspace))
             {
                 throw new HasNoAccessException();

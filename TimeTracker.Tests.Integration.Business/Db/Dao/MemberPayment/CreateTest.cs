@@ -52,10 +52,9 @@ public class CreateTest: BaseTest
         var actualMemberPayment = await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            expectClient,
+            expectProject,
             expectMemberPayment.Amount,
             expectMemberPayment.PaymentTime,
-            expectProject.Id,
             expectMemberPayment.Description
         );
 
@@ -66,27 +65,26 @@ public class CreateTest: BaseTest
         Assert.Equal(expectMemberPayment.Description, actualMemberPayment.Description);
         Assert.Equal(expectMemberPayment.PaymentTime, actualMemberPayment.PaymentTime);
         Assert.Equal(expectProject.Id, actualMemberPayment.Project.Id);
-        Assert.Equal(expectClient.Id, actualMemberPayment.Client.Id);
+        Assert.Equal(expectClient.Id, actualMemberPayment.Project.Client!.Id);
     }
     
     [Fact]
-    public async Task ShouldNotAddProjectNotForCurrentClient()
+    public async Task ShouldCreateForProjectWithoutClient()
     {
         var expectMemberPayment = _paymentFactory.Generate(); 
-        var expectClient = await _clientDao.CreateAsync(_workspace, "Test");
         var expectProject = await _projectDao.CreateAsync(_workspace, "Test");
         await FlushDbChanges();
        
         var actualMemberPayment = await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            expectClient,
+            expectProject,
             expectMemberPayment.Amount,
             expectMemberPayment.PaymentTime,
-            expectProject.Id,
             expectMemberPayment.Description
         );
         
-        Assert.Null(actualMemberPayment.Project);
+        Assert.Equal(expectProject.Id, actualMemberPayment.Project.Id);
+        Assert.Null(actualMemberPayment.Project.Client);
     }
 }

@@ -58,12 +58,6 @@ public partial class UpdateMemberPaymentModal
         IsOpened = false;
     }
 
-    private void OnChangeClient(ClientDto? client)
-    {
-        model.ClientId = client?.Id ?? Guid.Empty;
-        model.ProjectId = Guid.Empty;
-    }
-
     private void OnProjectSelected(ProjectDto? project)
     {
         model.ProjectId = project?.Id ?? Guid.Empty;

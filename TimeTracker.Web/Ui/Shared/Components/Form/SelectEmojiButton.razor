@@ -1,14 +1,60 @@
 @using LumexUI.Common
 @using TimeTracker.Web.Constants.Ui
-@using TimeTracker.Web.Ui.Shared.Components.Dialogs
 
 @inherits BaseComponent
 
-<LumexButton
-    OnClick="@SelectEmoji"
-    Color="ThemeColor.Primary"
-    IconOnly="true"
-    Size="Size.Large"
-    Variant="Variant.Outlined">
-    <StartContent>😊</StartContent>
-</LumexButton>
+<span @ref="_triggerElement" class="inline-flex" @onclick:stopPropagation="true">
+    <LumexButton
+        Class="text-slate-500 hover:text-blue-600"
+        Color="ThemeColor.Default"
+        IconOnly="true"
+        OnClick="@TogglePicker"
+        Size="Size.Small"
+        Variant="Variant.Light">
+        <StartContent>
+            <span class="text-base leading-none">😊</span>
+        </StartContent>
+    </LumexButton>
+</span>
+
+@if (_isOpen)
+{
+    <div
+        @ref="_popoverElement"
+        popover="manual"
+        class="fixed inset-0 z-[2147483647] m-0 h-[100dvh] w-screen max-h-none max-w-none overflow-hidden border-0 bg-transparent p-0"
+        style="margin:0;"
+        @onclick="ClosePicker">
+        <div
+            class="fixed z-[2147483647] w-[340px] max-w-[calc(100vw-3rem)] overflow-x-hidden rounded-xl border border-slate-200 bg-white p-3 shadow-large"
+            style="@_panelStyle"
+            @onmousedown:stopPropagation="true"
+            @onclick:stopPropagation="true">
+            <div class="max-h-80 overflow-y-auto overflow-x-hidden" @onclick:stopPropagation="true">
+                @foreach (var group in GroupedEmojis)
+                {
+                    <section class="not-first:mt-4">
+                        <h3 class="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                            @group.Key
+                        </h3>
+                        <div class="grid min-w-0 grid-cols-8 gap-1">
+                            @foreach (var emoji in group)
+                            {
+                                <button
+                                    type="button"
+                                    title="@emoji.Name"
+                                    @onmousedown:stopPropagation="true"
+                                    @onclick:stopPropagation="true"
+                                    @onclick:preventDefault="true"
+                                    @onclick="@(() => SelectEmoji(emoji))"
+                                    class="flex h-9 w-full min-w-0 items-center justify-center rounded-lg text-xl transition hover:bg-blue-50 focus:bg-blue-50 focus:outline-none">
+                                    @emoji.Symbol
+                                </button>
+                            }
+                        </div>
+                    </section>
+                }
+            </div>
+        </div>
+    </div>
+}

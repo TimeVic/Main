@@ -42,20 +42,19 @@ public class MemberPaymentSeeder: IMemberPaymentSeeder
     {
         var workspace = (await _userDao.GetUsersWorkspaces(user, MembershipAccessType.Owner)).First();
         var project = (await _projectSeeder.CreateSeveralAsync(workspace)).First();
-        return await CreateSeveralAsync(workspace, user, project.Client!, project, count);
+        return await CreateSeveralAsync(workspace, user, project, count);
     }
     
     public async Task<ICollection<MemberPaymentEntity>> CreateSeveralAsync(WorkspaceEntity workspace, UserEntity user, int count = 1)
     {
         var project = (await _projectSeeder.CreateSeveralAsync(workspace)).First();
-        return await CreateSeveralAsync(workspace, user, project.Client!, project, count);
+        return await CreateSeveralAsync(workspace, user, project, count);
     }
 
     public async Task<ICollection<MemberPaymentEntity>> CreateSeveralAsync(
         WorkspaceEntity workspace,
         UserEntity user,
-        ClientEntity client,
-        ProjectEntity? project,
+        ProjectEntity project,
         int count = 1
     )
     {
@@ -66,10 +65,9 @@ public class MemberPaymentSeeder: IMemberPaymentSeeder
             var entry = await _paymentDao.CreateAsync(
                 workspace,
                 user,
-                client, 
+                project,
                 fakeEntry.Amount,
                 fakeEntry.PaymentTime,
-                project?.Id,
                 fakeEntry.Description
             );;
             result.Add(entry);

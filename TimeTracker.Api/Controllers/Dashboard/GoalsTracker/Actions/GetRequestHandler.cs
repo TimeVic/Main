@@ -46,10 +46,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
-            if (workspace == null)
-            {
-                throw new RecordNotFoundException("Workspace not found");
-            }
+            RecordNotFoundException.ThrowIfNull(workspace, "Workspace not found");
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();

@@ -10,11 +10,8 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPaymen
         [RequiredNonEmpty]
         public Guid WorkspaceId { get; set; }
         
-        [Display(Name = "Client")]
-        [RequiredNonEmpty]
-        public Guid ClientId { get; set; }
-        
         [Display(Name = "Project")]
+        [RequiredNonEmpty]
         public Guid ProjectId { get; set; }
 
         [Display(Name = "Member")]

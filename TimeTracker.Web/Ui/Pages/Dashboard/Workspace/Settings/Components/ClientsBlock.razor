@@ -1,7 +1,11 @@
 @using LumexUI.Common
-@using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Clients
 
 @inherits BaseReactiveComponent
+
+<AddClientModal
+    IsOpened="_isAddClientModalOpened"
+    IsOpenedChanged="isOpened => _isAddClientModalOpened = isOpened"/>
 
 <section class="space-y-6">
     <LumexCard>
@@ -12,7 +16,18 @@
                     <h2 class="mt-2 text-lg font-semibold text-slate-900">Client directory</h2>
                     <p class="mt-1 text-sm text-slate-600">Clients are presented as a clean list with quick icon actions.</p>
                 </div>
-                <AddClientForm/>
+                <CustomButton
+                    Size="Size.Small"
+                    OnClick="@OnAdd"
+                    Color="@ThemeColor.Primary"
+                    Radius="@Radius.Full">
+                    <StartContent>
+                        <i class="fa-solid fa-plus"></i>
+                    </StartContent>
+                    <ChildContent>
+                        Add client
+                    </ChildContent>
+                </CustomButton>
             </div>
         </LumexCardBody>
     </LumexCard>

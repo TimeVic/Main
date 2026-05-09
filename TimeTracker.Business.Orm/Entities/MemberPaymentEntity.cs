@@ -11,8 +11,7 @@ namespace TimeTracker.Business.Orm.Entities
 
         #region Relationships
 
-        public virtual ProjectEntity? Project { get; set; }
-        public virtual required ClientEntity Client { get; set; }
+        public virtual required ProjectEntity Project { get; set; }
         public virtual required WorkspaceMemberEntity Member { get; set; }
 
         #endregion

@@ -1,6 +1,5 @@
 @using LumexUI
 @using LumexUI.Common
-@using TimeTracker.Web.Constants.Ui
 @using TimeTracker.Web.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
@@ -14,11 +13,11 @@
         <LumexModalHeader Class="flex items-center gap-3">
             <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-plus"></i>
                 </div>
                 <div>
-                    <h2 class="mt-2 text-xl font-semibold text-slate-900">Edit "@model.Name"</h2>
-                    <p class="mt-1 text-sm text-slate-600">Update the tag name and color used across workspace time entries.</p>
+                    <h2 class="mt-2 text-xl font-semibold text-slate-900">Add project</h2>
+                    <p class="mt-1 text-sm text-slate-600">Choose a client and enter the project name.</p>
                 </div>
             </div>
         </LumexModalHeader>
@@ -30,25 +29,25 @@
                 novalidate>
                 <DataAnnotationsValidator/>
 
-                <div>
+                <div class="space-y-5">
+                    <div class="mt-1">
+                        <ClientsDropDown
+                            Value="model.ClientId"
+                            ValueExpression="() => model.ClientId"
+                            Clearable="false"
+                            SelectedItemChanged="OnClientChanged"/>
+                        <CustomValidationMessage For="@(() => model.ClientId)"/>
+                    </div>
+
                     <div class="mt-1">
                         <InputTextField
                             FullWidth="true"
-                            Label="Tag"
-                            Placeholder="Tag name"
+                            Label="Project"
+                            Placeholder="Project name"
                             Variant="InputVariant.Outlined"
                             IsShowEmojiButton="true"
                             @bind-Value="model.Name"/>
                         <CustomValidationMessage For="@(() => model.Name)"/>
-                    </div>
-
-                    <div class="pt-8">
-                        <ColorDropDown
-                            Label="Color"
-                            Type="DropDownType.Select"
-                            Clearable="true"
-                            @bind-Value="model.Color"/>
-                        <CustomValidationMessage For="@(() => model.Color)"/>
                     </div>
                 </div>
 
@@ -62,7 +61,7 @@
                 IsLoading="_state.Value.IsSaving"
                 Color="@ThemeColor.Primary"
                 Radius="@Radius.Full">
-                Update
+                Add
             </CustomButton>
         </LumexModalFooter>
     </LumexModalContent>

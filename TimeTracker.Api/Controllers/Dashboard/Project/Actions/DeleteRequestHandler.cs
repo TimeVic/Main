@@ -40,10 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             var user = await _apiRequestService.GetCurrentUser();
 
             var project = await _projectDao.GetById(request.ProjectId, true);
-            if (project == null)
-            {
-                throw new RecordNotFoundException();
-            }
+            RecordNotFoundException.ThrowIfNull(project);
 
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
             {

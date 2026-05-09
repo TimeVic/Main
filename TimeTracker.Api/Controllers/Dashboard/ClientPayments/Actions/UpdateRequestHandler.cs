@@ -37,15 +37,16 @@ public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, ClientPa
     {
         var user = await _apiRequestService.GetCurrentUser();
         var payment = await _paymentDao.GetById(request.ClientPaymentId);
+        RecordNotFoundException.ThrowIfNull(payment);
         if (!await _securityManager.HasAccess(AccessLevel.Write, user, payment))
         {
             throw new HasNoAccessException();
         }
 
         var client = await _clientDao.GetById(request.ClientId);
+        RecordNotFoundException.ThrowIfNull(client);
         if (
-            client == null
-            || client.Workspace.Id != payment!.Workspace.Id
+            client.Workspace.Id != payment.Workspace.Id
             || !await _securityManager.HasAccess(AccessLevel.Write, user, client)
         )
         {

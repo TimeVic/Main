@@ -1,7 +1,12 @@
 @using LumexUI.Common
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Projects
 @using TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
 
 @inherits BaseReactiveComponent
+
+<AddProjectModal
+    IsOpened="_isAddProjectModalOpened"
+    IsOpenedChanged="isOpened => _isAddProjectModalOpened = isOpened"/>
 
 @if (_projectToUpdate != null)
 {
@@ -20,7 +25,18 @@
                     <h2 class="mt-2 text-lg font-semibold text-slate-900">Workspace projects</h2>
                     <p class="mt-1 text-sm text-slate-600">Projects keep their assigned client visible, but existing client links stay read-only here.</p>
                 </div>
-                <AddProjectForm/>
+                <CustomButton
+                    Size="Size.Small"
+                    OnClick="@OnAdd"
+                    Color="@ThemeColor.Primary"
+                    Radius="@Radius.Full">
+                    <StartContent>
+                        <i class="fa-solid fa-plus"></i>
+                    </StartContent>
+                    <ChildContent>
+                        Add project
+                    </ChildContent>
+                </CustomButton>
             </div>
         </LumexCardBody>
     </LumexCard>

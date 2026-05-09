@@ -46,15 +46,28 @@
                         </ChildContent>
                     </LumexDropdownItem>
                 }
-                @foreach (var project in _list)
+                @foreach (var group in _projectGroups)
                 {
-                    <LumexDropdownItem 
-                        Description="@project?.Client?.Name"
-                        OnClick="@(() => OnProjectSelected(project))">
-                        <ChildContent>
-                            @project?.Name
-                        </ChildContent>
-                    </LumexDropdownItem>
+                    @if (_shouldGroupByClient)
+                    {
+                        <LumexDropdownItem
+                            Disabled="true"
+                            Class="cursor-default px-2 pb-1 pt-2 text-xs font-semibold uppercase text-slate-400 opacity-100">
+                            <ChildContent>
+                                @group.Key.Name
+                            </ChildContent>
+                        </LumexDropdownItem>
+                    }
+                    @foreach (var project in group)
+                    {
+                        <LumexDropdownItem 
+                            Description="@GetProjectDescription(project)"
+                            OnClick="@(() => OnProjectSelected(project))">
+                            <ChildContent>
+                                @project?.Name
+                            </ChildContent>
+                        </LumexDropdownItem>
+                    }
                 }
             </LumexDropdownMenu>
         </LumexDropdown>
@@ -82,11 +95,20 @@
                         </div>
                     </LumexSelectItem>
                 }
-                @foreach (var project in _list)
+                @foreach (var group in _projectGroups)
                 {
-                    <LumexSelectItem @key="@project" Value="@project" Description="@project?.Client?.Name">
-                        @project?.Name
-                    </LumexSelectItem>
+                    @if (_shouldGroupByClient)
+                    {
+                        <div class="px-2 pb-1 pt-2 text-xs font-semibold uppercase text-slate-400">
+                            @group.Key.Name
+                        </div>
+                    }
+                    @foreach (var project in group)
+                    {
+                        <LumexSelectItem @key="@project" Value="@project" Description="@GetProjectDescription(project)">
+                            @project?.Name
+                        </LumexSelectItem>
+                    }
                 }
             </ChildContent>
             <ValueContent>

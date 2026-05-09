@@ -51,7 +51,6 @@ public class UpdateTest: BaseTest
         {
             WorkspaceId = _workspace.Id,
             MemberPaymentId = _payment.Id,
-            ClientId = _payment.Client.Id,
             Amount = expectMemberPayment.Amount,
             Description = expectMemberPayment.Description,
             PaymentTime = expectMemberPayment.PaymentTime,
@@ -73,7 +72,6 @@ public class UpdateTest: BaseTest
         {
             WorkspaceId = _workspace.Id,
             MemberPaymentId = _payment.Id,
-            ClientId = expectedClient.Id,
             Amount = expectMemberPayment.Amount,
             Description = expectMemberPayment.Description,
             PaymentTime = expectMemberPayment.PaymentTime,
@@ -86,7 +84,7 @@ public class UpdateTest: BaseTest
         Assert.NotNull(actualMemberPayment);
         Assert.NotNull(actualMemberPayment.Project);
         Assert.NotEqual(Guid.Empty, actualMemberPayment.Id);
-        Assert.Equal(expectedClient.Id, actualMemberPayment.Client.Id);
+        Assert.Equal(expectedClient.Id, actualMemberPayment.Client!.Id);
         Assert.Equal(expectProject.Id, actualMemberPayment.Project.Id);
         Assert.Equal(expectMemberPayment.Amount, actualMemberPayment.Amount);
         Assert.Equal(expectMemberPayment.Description, actualMemberPayment.Description);
@@ -112,7 +110,6 @@ public class UpdateTest: BaseTest
         {
             WorkspaceId = _workspace.Id,
             MemberPaymentId = _payment.Id,
-            ClientId = _payment.Client.Id,
             MemberId = member.Id,
             Amount = expectMemberPayment.Amount,
             Description = expectMemberPayment.Description,
@@ -147,7 +144,6 @@ public class UpdateTest: BaseTest
         {
             WorkspaceId = _workspace.Id,
             MemberPaymentId = payment.Id,
-            ClientId = payment.Client.Id,
             MemberId = member.Id,
             Amount = expectMemberPayment.Amount,
             Description = expectMemberPayment.Description,
@@ -169,7 +165,6 @@ public class UpdateTest: BaseTest
         {
             WorkspaceId = _workspace.Id,
             MemberPaymentId = _payment.Id,
-            ClientId = _payment.Client.Id,
             Amount = expectMemberPayment.Amount,
             Description = expectMemberPayment.Description,
             PaymentTime = expectMemberPayment.PaymentTime,

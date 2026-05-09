@@ -59,7 +59,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveList()
     {
         var expectedTotal = 21;
-        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _client, _project, expectedTotal);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _project, expectedTotal);
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
@@ -75,7 +75,7 @@ public class GetListTest: BaseTest
         {
             Assert.NotNull(item.Project);
             Assert.NotEqual(Guid.Empty, item.Id);
-            Assert.Equal(_client.Id, item.Client.Id);
+            Assert.Equal(_client.Id, item.Client!.Id);
             Assert.Equal(_project.Id, item.Project.Id);
             Assert.Equal(_user.Id, item.Member.User.Id);
             Assert.True(item.Amount > 0);
@@ -110,10 +110,10 @@ public class GetListTest: BaseTest
             MembershipAccessType.User
         );
         await FlushDbChanges();
-        await _paymentSeeder.CreateSeveralAsync(_workspace, otherUser, _client, _project, 5);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, otherUser, _project, 5);
         
         var expectedTotal = 21;
-        await _paymentSeeder.CreateSeveralAsync(_workspace, workspaceUser, _client, _project, expectedTotal);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, workspaceUser, _project, expectedTotal);
         
         var response = await PostRequestAsync(Url, userJwt, new GetListRequest()
         {
@@ -160,8 +160,8 @@ public class GetListTest: BaseTest
             MembershipAccessType.Manager
         );
         await FlushDbChanges();
-        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _client, _project, 3);
-        await _paymentSeeder.CreateSeveralAsync(_workspace, managerUser, _client, _project, 4);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _project, 3);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, managerUser, _project, 4);
 
         var response = await PostRequestAsync(Url, managerJwt, new GetListRequest()
         {
@@ -183,8 +183,8 @@ public class GetListTest: BaseTest
         );
         await FlushDbChanges();
         var managerMember = _workspace.Members.First(item => item.User.Id == managerUser.Id);
-        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _client, _project, 3);
-        await _paymentSeeder.CreateSeveralAsync(_workspace, managerUser, _client, _project, 4);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, _user, _project, 3);
+        await _paymentSeeder.CreateSeveralAsync(_workspace, managerUser, _project, 4);
 
         var response = await PostRequestAsync(Url, managerJwt, new GetListRequest()
         {

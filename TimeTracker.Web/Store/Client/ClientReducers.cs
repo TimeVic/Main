@@ -27,6 +27,15 @@ public class ClientReducers
             IsListLoading = action.IsLoading
         };
     }
+
+    [ReducerMethod]
+    public static ClientState SetIsSavingReducer(ClientState state, SetIsSavingAction action)
+    {
+        return state with
+        {
+            IsSaving = action.IsSaving
+        };
+    }
     
     [ReducerMethod]
     public static ClientState SetListItemActionReducer(ClientState state, SetListItemAction action)

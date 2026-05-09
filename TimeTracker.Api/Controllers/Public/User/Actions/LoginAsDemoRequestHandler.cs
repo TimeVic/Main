@@ -174,11 +174,11 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
 
         await SeedMemberPaymentsAsync(ws, user, new[]
         {
-            new DemoMemberPaymentSeed(acmeClient, project1, 620, -21, "Bug fixing retainer"),
-            new DemoMemberPaymentSeed(acmeClient, project3, 380, -10, "Maintenance milestone"),
-            new DemoMemberPaymentSeed(northstarClient, project2, 540, -14, "Design system phase 1"),
-            new DemoMemberPaymentSeed(brightAppsClient, project4, 450, -5, "Mobile release deposit"),
-            new DemoMemberPaymentSeed(acmeClient, null, 250, -3, "General account credit")
+            new DemoMemberPaymentSeed(project1, 620, -21, "Bug fixing retainer"),
+            new DemoMemberPaymentSeed(project3, 380, -10, "Maintenance milestone"),
+            new DemoMemberPaymentSeed(project2, 540, -14, "Design system phase 1"),
+            new DemoMemberPaymentSeed(project4, 450, -5, "Mobile release deposit"),
+            new DemoMemberPaymentSeed(project1, 250, -3, "General account credit")
         });
         await SeedTimeEntriesAsync(ws, user, tasks);
     }
@@ -223,12 +223,12 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
 
         await SeedMemberPaymentsAsync(ws, user, new[]
         {
-            new DemoMemberPaymentSeed(mediaClient, project1, 780, -24, "Campaign kickoff payment"),
-            new DemoMemberPaymentSeed(mediaClient, project1, 430, -7, "Launch copy approval"),
-            new DemoMemberPaymentSeed(insightClient, project2, 690, -17, "Analytics dashboard milestone"),
-            new DemoMemberPaymentSeed(topClient, project3, 900, -11, "Security audit advance"),
-            new DemoMemberPaymentSeed(qualityClient, project4, 360, -4, "QA automation setup"),
-            new DemoMemberPaymentSeed(topClient, null, 300, -2, "Client balance adjustment")
+            new DemoMemberPaymentSeed(project1, 780, -24, "Campaign kickoff payment"),
+            new DemoMemberPaymentSeed(project1, 430, -7, "Launch copy approval"),
+            new DemoMemberPaymentSeed(project2, 690, -17, "Analytics dashboard milestone"),
+            new DemoMemberPaymentSeed(project3, 900, -11, "Security audit advance"),
+            new DemoMemberPaymentSeed(project4, 360, -4, "QA automation setup"),
+            new DemoMemberPaymentSeed(project3, 300, -2, "Client balance adjustment")
         });
         await SeedTimeEntriesAsync(ws, user, tasks);
     }
@@ -258,10 +258,9 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
             await _paymentDao.CreateAsync(
                 workspace,
                 user,
-                payment.Client,
+                payment.Project,
                 payment.Amount,
                 DateTime.UtcNow.Date.AddDays(payment.DayOffset).AddHours(12),
-                payment.Project?.Id,
                 payment.Description
             );
         }
@@ -308,8 +307,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
     }
 
     private sealed record DemoMemberPaymentSeed(
-        ClientEntity Client,
-        ProjectEntity? Project,
+        ProjectEntity Project,
         decimal Amount,
         int DayOffset,
         string Description
