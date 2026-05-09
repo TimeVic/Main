@@ -43,6 +43,9 @@ public partial class ClientPaymentsPage
         .Distinct()
         .Count();
 
+    private string PaymentPaginationSummary =>
+        $"Page {_state.Value.SelectedPage} of {_state.Value.TotalPages} ({_state.Value.TotalCount} payments)";
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -93,6 +96,12 @@ public partial class ClientPaymentsPage
     private void OnProjectFilterChanged(ProjectDto? project)
     {
         SelectedProjectId = project?.Id ?? Guid.Empty;
+    }
+
+    private void OnPageChanged(int selectedPage)
+    {
+        _dispatcher.Dispatch(new SetClientPaymentSelectedPageAction(selectedPage));
+        _dispatcher.Dispatch(new LoadClientPaymentListAction(true));
     }
 
     private void OnWorkspacePermissionsStateChanged(object? sender, EventArgs args)

@@ -7,6 +7,8 @@ public record struct LoadMemberPaymentListAction(bool IsReload = false, Guid Mem
 
 public record struct SetListItemsAction(GetListResponse Response);
 
+public record struct SetMemberPaymentSelectedPageAction(int SelectedPage);
+
 public record struct SetListItemAction(MemberPaymentDto MemberPayment);
 
 public record struct UpdateAction(UpdateRequest Request);

@@ -8,10 +8,11 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
 using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Store.MemberPayments;
+using TimeTracker.Web.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.MemberPayments.Parts.Modals;
 
-public partial class AddMemberPaymentModal
+public partial class AddMemberPaymentModal : IDisposable
 {   
     [Parameter]
     public required bool IsOpened { get; set; } = false;
@@ -24,6 +25,9 @@ public partial class AddMemberPaymentModal
 
     [Inject]
     public ISecurityManager SecurityManager { get; set; }
+
+    [Inject]
+    public IState<WorkspaceMembersState> WorkspaceMembersState { get; set; }
     
     private AddRequest model;
     private bool _isLoading = false;
@@ -36,6 +40,7 @@ public partial class AddMemberPaymentModal
     protected override async Task OnInitializedAsync()
     {
         InitModel();
+        WorkspaceMembersState.StateChanged += OnWorkspaceMembersStateChanged;
         await base.OnInitializedAsync();
     }
 
@@ -60,8 +65,32 @@ public partial class AddMemberPaymentModal
 
     private void InitModel()
     {
-        model = new AddRequest();
-        model.PaymentTime = UserDateTimeProviderService.GetCurrentTime().DateTime;
+        model = new AddRequest
+        {
+            PaymentTime = UserDateTimeProviderService.GetCurrentTime().DateTime
+        };
+        SetCurrentUserMemberAsDefault();
+    }
+
+    private void OnWorkspaceMembersStateChanged(object? sender, EventArgs args)
+    {
+        if (model.MemberId != Guid.Empty)
+        {
+            return;
+        }
+
+        SetCurrentUserMemberAsDefault();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void SetCurrentUserMemberAsDefault()
+    {
+        // Fixes the add payment form default member so it uses the current user's workspace member.
+        var currentMember = WorkspaceMembersState.Value.List.FirstOrDefault(
+            item => item.User.Id == AuthState.Value.User.Id
+        );
+
+        model.MemberId = currentMember?.Id ?? Guid.Empty;
     }
 
     private void OnProjectSelected(ProjectDto? project)
@@ -72,5 +101,10 @@ public partial class AddMemberPaymentModal
     private void OnMemberSelected(WorkspaceMemberDto? member)
     {
         model.MemberId = member?.Id ?? Guid.Empty;
+    }
+
+    public void Dispose()
+    {
+        WorkspaceMembersState.StateChanged -= OnWorkspaceMembersStateChanged;
     }
 }

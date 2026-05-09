@@ -8,6 +8,8 @@ public record ClientPaymentState
 {
     public ICollection<ClientPaymentDto> List { get; set; } = new List<ClientPaymentDto>();
 
+    public int SelectedPage { get; set; } = 1;
+
     public int TotalCount { get; set; }
 
     public int TotalPages { get; set; }

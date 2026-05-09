@@ -7,6 +7,8 @@ public record struct LoadClientPaymentListAction(bool IsReload = false);
 
 public record struct SetClientPaymentListItemsAction(GetListResponse Response);
 
+public record struct SetClientPaymentSelectedPageAction(int SelectedPage);
+
 public record struct SetClientPaymentListItemAction(ClientPaymentDto ClientPayment);
 
 public record struct UpdateClientPaymentAction(UpdateRequest Request);
