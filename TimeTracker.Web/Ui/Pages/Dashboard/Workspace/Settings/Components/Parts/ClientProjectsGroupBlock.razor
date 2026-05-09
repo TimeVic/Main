@@ -32,8 +32,7 @@
                         <CustomButton
                             OnClick="@OnSaveClient"
                             Size="Size.Small"
-                            Color="ThemeColor.Success"
-                            Variant="Variant.Light"
+                            Color="@ThemeColor.Primary"
                             Radius="@Radius.Full">
                             <StartContent>
                                 <i class="fa-regular fa-floppy-disk"></i>
@@ -43,7 +42,63 @@
                             </ChildContent>
                         </CustomButton>
                     }
+                </div>
+            </div>
 
+            @if (Projects.Any())
+            {
+                <div class="space-y-3">
+                    <div class="flex items-center justify-end">
+                        <CustomButton
+                            OnClick="@OnAddProject"
+                            Size="Size.Small"
+                            Color="@ThemeColor.Primary"
+                            Radius="@Radius.Full">
+                            <StartContent>
+                                <i class="fa-solid fa-plus"></i>
+                            </StartContent>
+                            <ChildContent>
+                                Add project
+                            </ChildContent>
+                        </CustomButton>
+                    </div>
+
+                    <LumexDataGrid
+                        Data="@Projects.AsQueryable()"
+                        Radius="@Radius.Medium">
+                        <LumexUI.PropertyColumn
+                            Title="Project"
+                            Property="@(p => p.Name)"/>
+                        <LumexUI.PropertyColumn
+                            Title="Billable by default"
+                            Property="@(p => p.IsBillableByDefault)"/>
+                        <LumexUI.PropertyColumn
+                            Title="Default hourly rate"
+                            Property="@(p => p.DefaultHourlyRate)"/>
+                        <LumexUI.PropertyColumn
+                            Title="Actions"
+                            Property="@(p => p.Id)">
+                            <Content>
+                                <CustomButton
+                                    Class="inline-flex rounded-full"
+                                    OnClick="@(() => OnEditProject(context))"
+                                    Size="Size.Small"
+                                    Color="ThemeColor.Primary"
+                                    Variant="Variant.Light"
+                                    IconOnly="true">
+                                    <ChildContent>
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </ChildContent>
+                                </CustomButton>
+                            </Content>
+                        </LumexUI.PropertyColumn>
+                    </LumexDataGrid>
+                </div>
+            }
+            else
+            {
+                <div class="flex flex-col gap-3 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+                    <span>This client has no projects yet.</span>
                     <CustomButton
                         OnClick="@OnAddProject"
                         Size="Size.Small"
@@ -56,46 +111,6 @@
                             Add project
                         </ChildContent>
                     </CustomButton>
-                </div>
-            </div>
-
-            @if (Projects.Any())
-            {
-                <LumexDataGrid
-                    Data="@Projects.AsQueryable()"
-                    Radius="@Radius.Medium">
-                    <LumexUI.PropertyColumn
-                        Title="Project"
-                        Property="@(p => p.Name)"/>
-                    <LumexUI.PropertyColumn
-                        Title="Billable by default"
-                        Property="@(p => p.IsBillableByDefault)"/>
-                    <LumexUI.PropertyColumn
-                        Title="Default hourly rate"
-                        Property="@(p => p.DefaultHourlyRate)"/>
-                    <LumexUI.PropertyColumn
-                        Title="Actions"
-                        Property="@(p => p.Id)">
-                        <Content>
-                            <CustomButton
-                                Class="inline-flex rounded-full"
-                                OnClick="@(() => OnEditProject(context))"
-                                Size="Size.Small"
-                                Color="ThemeColor.Primary"
-                                Variant="Variant.Light"
-                                IconOnly="true">
-                                <ChildContent>
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </ChildContent>
-                            </CustomButton>
-                        </Content>
-                    </LumexUI.PropertyColumn>
-                </LumexDataGrid>
-            }
-            else
-            {
-                <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-                    This client has no projects yet.
                 </div>
             }
         </div>
