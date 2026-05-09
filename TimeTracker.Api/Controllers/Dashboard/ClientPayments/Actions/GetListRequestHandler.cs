@@ -38,10 +38,7 @@ public class GetListRequestHandler : IAsyncRequestHandler<GetListRequest, GetLis
     {
         var user = await _apiRequestService.GetCurrentUser();
         var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
-        if (workspace == null)
-        {
-            throw new RecordNotFoundException(nameof(request.WorkspaceId));
-        }
+        RecordNotFoundException.ThrowIfNull(workspace, nameof(request.WorkspaceId));
         if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
         {
             throw new HasNoAccessException();

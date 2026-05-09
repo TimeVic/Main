@@ -37,10 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         public async Task<TaskFullDto> ExecuteAsync(UpdateRequest request)
         {
             var user = await _userDao.GetById(request.UserId);
-            if (user == null)
-            {
-                throw new RecordNotFoundException("User not found");
-            }
+            RecordNotFoundException.ThrowIfNull(user, "User not found");
             var taskList = await _taskListDao.GetById(request.TaskListId);
             if (taskList == null)
             {

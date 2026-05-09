@@ -74,11 +74,12 @@ public class GetListTest: BaseTest
     {
         var expectedTotal = 7;
         await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
-        var otherWorkspace = await _workspaceDao.CreateWorkspaceAsync(_user, "Test 2");
+        var otherUser = await _userSeeder.CreateActivatedAsync();
+        var otherWorkspace = (await _userDao.GetUsersWorkspaces(otherUser, MembershipAccessType.Owner)).First();
         var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
         var otherProject = await _projectDao.CreateAsync(otherWorkspace, "Test");
         otherProject.SetClient(otherClient);
-        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherProject, 15);
+        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, otherUser, otherProject, 15);
 
         await FlushDbChanges();
         var listModel = await _paymentDao.GetListAsync(_workspace, _user, 1);
@@ -91,11 +92,12 @@ public class GetListTest: BaseTest
     {
         var expectedTotal = 7;
         await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
-        var otherWorkspace = await _workspaceDao.CreateWorkspaceAsync(_user, "Test 2");
+        var otherUser = await _userSeeder.CreateActivatedAsync();
+        var otherWorkspace = (await _userDao.GetUsersWorkspaces(otherUser, MembershipAccessType.Owner)).First();
         var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
         var otherProject = await _projectDao.CreateAsync(otherWorkspace, "Test");
         otherProject.SetClient(otherClient);
-        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherProject, 15);
+        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, otherUser, otherProject, 15);
         
         await FlushDbChanges();
         var listModel = await _paymentDao.GetListAsync(_workspace, _user, 1);
@@ -110,6 +112,7 @@ public class GetListTest: BaseTest
         await _paymentSeeder.CreateSeveralAsync(_user, 12);
         
         var otherUser = await _userSeeder.CreateActivatedAndShareAsync(_workspace);
+        await FlushDbChanges();
         await _paymentSeeder.CreateSeveralAsync(_workspace, otherUser, expectedTotal);
 
         await FlushDbChanges();

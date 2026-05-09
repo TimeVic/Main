@@ -51,10 +51,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
             var user = await _apiRequestService.GetCurrentUser();
             var project = await _projectDao.GetById(request.ProjectId, true);
             var taskList = await _taskListDao.GetById(request.TaskListId);
-            if (taskList == null || project == null)
-            {
-                throw new RecordNotFoundException();
-            }
+            RecordNotFoundException.ThrowIfNull(project);
+            RecordNotFoundException.ThrowIfNull(taskList);
             
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
             {

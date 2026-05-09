@@ -9,6 +9,7 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
@@ -88,7 +89,8 @@ public class AddTest: BaseTest
     {
         var (otherToken, otherUser, otherWorkspace) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
-            MembershipAccessType.User
+            MembershipAccessType.User,
+            new List<ProjectAccessModel> { new() { Project = _project } }
         );
         
         var payment = _factory.Generate();

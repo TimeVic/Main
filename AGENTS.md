@@ -148,7 +148,10 @@ dotnet test ./TimeTracker.Tests.Unit.Business
 ## Database
  - Create migrations using FluentMigrator mechanism(classes, helpers, etc.) if it's possible
 
-### Common
+## API requests and handlers
+ - Use exception which implemets IDomainException to return correct error code from the API request(TimeTracker.Business.Common/Exceptions/Api). sHow example: RecordNotFoundException.ThrowIfNull - use if record not found.
+
+## Common
  - Property or var names with boolean values should be started with prefix "Is". Incorrect: GroupByClient, Correct: IsGroupByClient 
  - Sub Classes/Interfecaes/Records and etc. should placed in the top of the class
  - Interface names should be started with prefix "I". Incorrect: ProjectService, Correct: IProjectService 

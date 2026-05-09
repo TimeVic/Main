@@ -47,10 +47,10 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
             var project = await _projectDao.GetById(request.ProjectId);
+            RecordNotFoundException.ThrowIfNull(project);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (
                 workspace == null 
-                || project == null
                 || project.Workspace.Id != workspace.Id
                 || !await _securityManager.HasAccess(AccessLevel.Read, user, workspace)
                 || !await _securityManager.HasAccess(AccessLevel.Read, user, project)

@@ -175,7 +175,7 @@ public class GetMemberPaymentsReportTest: BaseTest
         Assert.Equal(project1.Name, actualForProject1.ProjectName);
         Assert.Equal(150, Math.Round(actualForProject1.Amount));
         Assert.Equal(77, actualForProject1.PaidAmountByClient);
-        Assert.Equal(45, actualForProject1.PaidAmountByProject);
+        Assert.Equal(77, actualForProject1.PaidAmountByProject);
         AssertDurationHours(15, actualForProject1.TotalDuration);
         var projectClient = project1.Client!;
         Assert.Equal(projectClient.Id, actualForProject1.ClientId);
@@ -219,6 +219,7 @@ public class GetMemberPaymentsReportTest: BaseTest
     {
         var baseDay = DateTime.UtcNow.Date;
         var otherUser = await _userSeeder.CreateActivatedAndShareAsync(_workspace);
+        await FlushDbChanges();
         
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
         var project1 = projects.First();

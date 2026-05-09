@@ -41,15 +41,16 @@ public class AddRequestHandler : IAsyncRequestHandler<AddRequest, ClientPaymentD
     {
         var user = await _apiRequestService.GetCurrentUser();
         var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+        RecordNotFoundException.ThrowIfNull(workspace, nameof(request.WorkspaceId));
         if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
         {
             throw new HasNoAccessException();
         }
 
         var client = await _clientDao.GetById(request.ClientId);
+        RecordNotFoundException.ThrowIfNull(client);
         if (
-            client == null
-            || client.Workspace.Id != workspace!.Id
+            client.Workspace.Id != workspace.Id
             || !await _securityManager.HasAccess(AccessLevel.Write, user, client)
         )
         {

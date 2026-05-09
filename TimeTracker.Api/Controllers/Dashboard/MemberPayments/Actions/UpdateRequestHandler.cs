@@ -4,7 +4,6 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
-using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
@@ -48,9 +47,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             }
             
             var project = await _projectDao.GetById(request.ProjectId);
+            RecordNotFoundException.ThrowIfNull(project);
             if (
-                project == null
-                || project.Workspace.Id != payment.Member.Workspace.Id
+                project.Workspace.Id != payment.Member.Workspace.Id
                 || !await _securityManager.HasAccess(AccessLevel.Read, user, project)
             )
             {

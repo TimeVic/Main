@@ -49,10 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.GoalsTrackerItemCon
         {
             var user = await _apiRequestService.GetCurrentUser();
             var goalsTracker = await _goalsTrackerDao.GetById(request.GoalsTrackerId);
-            if (goalsTracker == null)
-            {
-                throw new RecordNotFoundException("Workspace not found");
-            }
+            RecordNotFoundException.ThrowIfNull(goalsTracker, "Workspace not found");
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, goalsTracker))
             {
                 throw new HasNoAccessException();

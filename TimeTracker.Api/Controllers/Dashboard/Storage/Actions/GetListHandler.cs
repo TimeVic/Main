@@ -48,10 +48,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
             if (request.EntityType == StorageEntityType.Task)
             {
                 var task = await _taskDao.GetById(request.EntityId);
-                if (task == null)
-                {
-                    throw new RecordNotFoundException();
-                }
+                RecordNotFoundException.ThrowIfNull(task);
                 if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
                 {
                     throw new HasNoAccessException();

@@ -26,10 +26,7 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
         public async Task ExecuteAsync(ResetPasswordStep1Request request)
         {
             var user = await _userDao.GetByEmail(request.Email);
-            if (user == null)
-            {
-                throw new RecordNotFoundException();
-            }
+            RecordNotFoundException.ThrowIfNull(user);
             await _resetPasswordService.Generate(user);
         }
     }
