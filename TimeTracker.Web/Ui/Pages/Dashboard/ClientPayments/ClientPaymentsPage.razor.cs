@@ -43,9 +43,6 @@ public partial class ClientPaymentsPage
         .Distinct()
         .Count();
 
-    private string PaymentPaginationSummary =>
-        $"Page {_state.Value.SelectedPage} of {_state.Value.TotalPages} ({_state.Value.TotalCount} payments)";
-
     protected override void OnInitialized()
     {
         base.OnInitialized();

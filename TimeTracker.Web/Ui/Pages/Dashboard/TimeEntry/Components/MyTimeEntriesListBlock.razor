@@ -90,7 +90,9 @@
             <TPaginator
                 CurrentPage="@_state.Value.SelectedPage"
                 CurrentPageChanged="OnPageChanged"
-                TotalPages="@_state.Value.TotalPages" />
+                TotalPages="@_state.Value.TotalPages"
+                TotalItems="@_state.Value.TotalCount"
+                IsLoading="@_state.Value.IsListLoading" />
         }
         else
         {

@@ -111,6 +111,8 @@
         <TPaginator
             CurrentPage="@_state.Value.FilteredSelectedPage"
             CurrentPageChanged="OnPageChanged"
-            TotalPages="@_state.Value.FilteredTotalPages"/>
+            TotalPages="@_state.Value.FilteredTotalPages"
+            TotalItems="@_state.Value.FilteredTotalCount"
+            IsLoading="@_state.Value.IsListLoading"/>
     </div>
 </div>
