@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
@@ -41,7 +41,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMember.Actions
         public async Task<WorkspaceMemberDto> ExecuteAsync(AddRequest request)
         {
             var currentUser = await _apiRequestService.GetCurrentUser();
-            var workspace = await _userDao.GetUsersWorkspace(currentUser, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(currentUser, _apiRequestService.GetCurrentWorkspaceId());
             if (!await _securityManager.HasAccess(AccessLevel.Write, currentUser, workspace))
             {
                 throw new HasNoAccessException();

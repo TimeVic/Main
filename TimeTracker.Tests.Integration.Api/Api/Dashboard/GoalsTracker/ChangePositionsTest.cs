@@ -50,7 +50,6 @@ public class ChangePositionsTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new ChangePositionsRequest()
         {
             Date = DateTime.Now,
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -77,7 +76,6 @@ public class ChangePositionsTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new ChangePositionsRequest()
         {
             Date = expectedDate,
-            WorkspaceId = _workspace.Id,
             Positions = new Dictionary<Guid, int>()
             {
                 { goal1.Id, 6 },
@@ -102,11 +100,11 @@ public class ChangePositionsTest: BaseTest
     public async Task ShouldNotAddIfIncorrectWorkspaceId()
     {
         var user2 = await UserSeeder.CreateActivatedAsync();
+        var otherWorkspace = (await _userDao.GetUsersWorkspaces(user2, MembershipAccessType.Owner)).First();
         var response = await PostRequestAsync(Url, _jwtToken, new ChangePositionsRequest()
         {
-            Date = DateTime.Now,
-            WorkspaceId = (await _userDao.GetUsersWorkspaces(user2, MembershipAccessType.Owner)).First().Id
-        });
+            Date = DateTime.Now
+        }, otherWorkspace.Id);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);

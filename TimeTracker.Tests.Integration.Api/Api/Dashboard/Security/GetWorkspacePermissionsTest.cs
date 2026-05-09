@@ -30,7 +30,6 @@ public class GetWorkspacePermissionsTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetWorkspacePermissionsRequest()
         {
-            WorkspaceId = _workspace.Id
         });
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -41,7 +40,6 @@ public class GetWorkspacePermissionsTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new GetWorkspacePermissionsRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -64,8 +62,7 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherJwtToken, new GetWorkspacePermissionsRequest()
         {
-            WorkspaceId = _workspace.Id
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
@@ -87,8 +84,7 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherJwtToken, new GetWorkspacePermissionsRequest()
         {
-            WorkspaceId = _workspace.Id
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
@@ -116,8 +112,7 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherJwtToken, new GetWorkspacePermissionsRequest()
         {
-            WorkspaceId = _workspace.Id
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
@@ -149,8 +144,7 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherJwtToken, new GetWorkspacePermissionsRequest()
         {
-            WorkspaceId = _workspace.Id
-        });
+        }, _workspace.Id);
 
         var actual = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), actual.ErrorCode);

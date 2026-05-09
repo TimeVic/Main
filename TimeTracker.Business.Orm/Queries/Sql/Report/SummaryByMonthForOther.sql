@@ -18,7 +18,7 @@ select
         where end_time is not null
     ) te
     join projects p on p.id = te.project_id
-    join workspaces w on w.id = p.workspace_id
+    join workspaces w on w.id = te.workspace_id
     cross join lateral fn_split_time_entry_by_day(
     te.start_time,
     te.end_time,

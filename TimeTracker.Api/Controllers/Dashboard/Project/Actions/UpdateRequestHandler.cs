@@ -18,6 +18,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
         private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
+        private readonly IClientDao _clientDao;
         private readonly IDbSessionProvider _sessionProvider;
         private readonly ISecurityManager _securityManager;
 
@@ -26,6 +27,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             IApiRequestService apiRequestService,
             IUserDao userDao,
             IProjectDao projectDao,
+            IClientDao clientDao,
             IDbSessionProvider sessionProvider,
             ISecurityManager securityManager
         )
@@ -34,6 +36,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             _apiRequestService = apiRequestService;
             _userDao = userDao;
             _projectDao = projectDao;
+            _clientDao = clientDao;
             _sessionProvider = sessionProvider;
             _securityManager = securityManager;
         }
@@ -49,7 +52,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
             {
                 throw new HasNoAccessException();
             }
-            var client = project.Workspace.Clients.FirstOrDefault(item => item.Id == request.ClientId);
+            var client = await _clientDao.GetById(request.ClientId, project.Client.Workspace);
+            RecordNotFoundException.ThrowIfNull(client);
             project.SetClient(client);
             project = _mapper.Map(request, project);
             await _sessionProvider.CurrentSession.SaveAsync(project);

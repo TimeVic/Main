@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Channel;
@@ -37,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Massaging.Channel.Actions
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
         {
             var currentUser = await _apiRequestService.GetCurrentUser();
-            var workspace = await _workspaceDao.GetById(request.WorkspaceId);
+            var workspace = await _workspaceDao.GetById(_apiRequestService.GetCurrentWorkspaceId());
             DataValidationException.ThrowIfNull(workspace);
             await _securityManager.CheckAccess(AccessLevel.Read, currentUser, workspace);
 

@@ -18,7 +18,7 @@ public interface IUserDao: IDomainService
 
     Task<UserEntity?> GetByVerificationToken(string token);
 
-    Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, Guid workspaceId);
+    Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, Guid? workspaceId);
 
     Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user, MembershipAccessType? accessType = null);
 

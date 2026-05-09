@@ -44,7 +44,6 @@ public partial class MarkAllAsReadTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new MarkAllAsReadRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -67,7 +66,6 @@ public partial class MarkAllAsReadTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new MarkAllAsReadRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         
         // Assert
@@ -106,7 +104,6 @@ public partial class MarkAllAsReadTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new MarkAllAsReadRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         
         // Assert

@@ -16,7 +16,6 @@ public partial class StartTest
         await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             IsBillable = fakeTimeEntry.IsBillable,

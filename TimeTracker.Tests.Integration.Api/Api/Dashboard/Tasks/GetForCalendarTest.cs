@@ -53,7 +53,6 @@ public class GetForCalendarTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetForCalendarRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -73,7 +72,6 @@ public class GetForCalendarTest: BaseTest
 
         var response = await PostRequestAsync(Url, _jwtToken, new GetForCalendarRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = expectedStartTime.AddMinutes(-1),
             EndTime = expectedEndTime.AddMinutes(1)
         });
@@ -104,7 +102,6 @@ public class GetForCalendarTest: BaseTest
 
         var response = await PostRequestAsync(Url, _jwtToken, new GetForCalendarRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = expectedStartTime.AddMinutes(-1),
             EndTime = expectedEndTime.AddMinutes(1)
         });

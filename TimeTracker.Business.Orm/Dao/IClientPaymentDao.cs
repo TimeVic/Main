@@ -10,7 +10,6 @@ public interface IClientPaymentDao: IDomainService
     Task<ClientPaymentEntity?> GetById(Guid? id);
 
     Task<ClientPaymentEntity> CreateAsync(
-        WorkspaceEntity workspace,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,

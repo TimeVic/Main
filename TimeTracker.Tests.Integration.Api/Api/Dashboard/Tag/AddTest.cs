@@ -39,7 +39,6 @@ public class AddTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
             Name = project.Name,
-            WorkspaceId = _workspace.Id,
             Color = _expectedColor.ToHexString()
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -52,7 +51,6 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Name = project.Name,
-            WorkspaceId = _workspace.Id,
             Color = _expectedColor.ToHexString()
         });
         await response.GetJsonDataAsync();
@@ -73,8 +71,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Name = tag.Name,
-            WorkspaceId = otherWorkspace.Id
-        });
+        }, otherWorkspace.Id);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);

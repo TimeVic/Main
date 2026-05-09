@@ -48,8 +48,6 @@ public partial class IntegrationsBlock
     {
         await base.OnInitializedAsync();
 
-        SetWorkspaceIds();
-
         try
         {
             var settings = await ApiService.WorkspaceIntegrationSettingsGetAsync(AuthState.Value.Workspace!.Id);
@@ -146,7 +144,6 @@ public partial class IntegrationsBlock
     )
     {
         _savingService = serviceType;
-        SetWorkspaceIds();
 
         try
         {
@@ -189,15 +186,6 @@ public partial class IntegrationsBlock
             _jiraModel.Fill(_settings.IntegrationJira);
         }
 
-        SetWorkspaceIds();
-    }
-
-    private void SetWorkspaceIds()
-    {
-        var workspaceId = AuthState.Value.Workspace!.Id;
-        _clickUpModel.WorkspaceId = workspaceId;
-        _redmineModel.WorkspaceId = workspaceId;
-        _jiraModel.WorkspaceId = workspaceId;
     }
 
     private static bool IsFormValid(EditForm? form)

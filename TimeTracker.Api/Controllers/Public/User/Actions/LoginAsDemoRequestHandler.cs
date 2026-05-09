@@ -139,10 +139,10 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         var acmeClient = await _clientDao.CreateAsync(ws, "🎯 Acme Corporation");
         var northstarClient = await _clientDao.CreateAsync(ws, "🧭 Northstar Labs");
         var brightAppsClient = await _clientDao.CreateAsync(ws, "📱 Bright Apps");
-        var project1 = await CreateDemoProjectAsync(ws, "🐛 Bug Fixes", 95, acmeClient);
-        var project2 = await CreateDemoProjectAsync(ws, "🎨 Design System", 110, northstarClient);
-        var project3 = await CreateDemoProjectAsync(ws, "⚙️ Platform Maintenance", 85, acmeClient);
-        var project4 = await CreateDemoProjectAsync(ws, "📱 Mobile App", 105, brightAppsClient);
+        var project1 = await CreateDemoProjectAsync("🐛 Bug Fixes", 95, acmeClient);
+        var project2 = await CreateDemoProjectAsync("🎨 Design System", 110, northstarClient);
+        var project3 = await CreateDemoProjectAsync("⚙️ Platform Maintenance", 85, acmeClient);
+        var project4 = await CreateDemoProjectAsync("📱 Mobile App", 105, brightAppsClient);
 
         var list1 = await _taskListDao.CreateTaskListAsync(project1, "Sprint 1");
         tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Fix login page crash", priority: TaskPriority.High, status: TaskStatus.InProgress));
@@ -192,7 +192,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         var topClient = await _clientDao.CreateAsync(ws, "🏆 Top Client Inc");
         var qualityClient = await _clientDao.CreateAsync(ws, "🧪 Quality Works");
 
-        var project1 = await CreateDemoProjectAsync(ws, "🚀 Launch Campaign", 120, mediaClient);
+        var project1 = await CreateDemoProjectAsync("🚀 Launch Campaign", 120, mediaClient);
         var list1 = await _taskListDao.CreateTaskListAsync(project1, "Planning");
         tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Define campaign goals", status: TaskStatus.Done, priority: TaskPriority.High));
         tasks.Add(await _taskDao.AddTaskAsync(list1, user, "Identify target audience", status: TaskStatus.Done));
@@ -202,21 +202,20 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         tasks.Add(await _taskDao.AddTaskAsync(list2, user, "Create landing page copy"));
         tasks.Add(await _taskDao.AddTaskAsync(list2, user, "Design social media assets", priority: TaskPriority.Medium));
 
-        var project2 = await CreateDemoProjectAsync(ws, "📊 Analytics Dashboard", 115, insightClient);
+        var project2 = await CreateDemoProjectAsync("📊 Analytics Dashboard", 115, insightClient);
         var list3 = await _taskListDao.CreateTaskListAsync(project2, "Features");
         tasks.Add(await _taskDao.AddTaskAsync(list3, user, "Implement funnel report"));
         tasks.Add(await _taskDao.AddTaskAsync(list3, user, "Add export to CSV"));
 
-        // empty project
-        await _projectDao.CreateAsync(ws, "Future Ideas");
+        await CreateDemoProjectAsync("Future Ideas", null, insightClient);
 
-        var project3 = await CreateDemoProjectAsync(ws, "🔒 Security Audit", 140, topClient);
+        var project3 = await CreateDemoProjectAsync("🔒 Security Audit", 140, topClient);
         var list4 = await _taskListDao.CreateTaskListAsync(project3, "Audit Checklist");
         tasks.Add(await _taskDao.AddTaskAsync(list4, user, "Review authentication flows", priority: TaskPriority.High));
         tasks.Add(await _taskDao.AddTaskAsync(list4, user, "Check OWASP top 10", priority: TaskPriority.High));
         tasks.Add(await _taskDao.AddTaskAsync(list4, user, "Generate penetration test report"));
 
-        var project4 = await CreateDemoProjectAsync(ws, "🧪 QA Automation", 100, qualityClient);
+        var project4 = await CreateDemoProjectAsync("🧪 QA Automation", 100, qualityClient);
         var list5 = await _taskListDao.CreateTaskListAsync(project4, "Regression");
         tasks.Add(await _taskDao.AddTaskAsync(list5, user, "Stabilize smoke tests", priority: TaskPriority.High));
         tasks.Add(await _taskDao.AddTaskAsync(list5, user, "Add reporting screenshots", priority: TaskPriority.Medium));
@@ -234,16 +233,14 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
     }
 
     private async Task<ProjectEntity> CreateDemoProjectAsync(
-        WorkspaceEntity workspace,
         string name,
         decimal? defaultHourlyRate,
-        ClientEntity? client = null
+        ClientEntity client
     )
     {
-        var project = await _projectDao.CreateAsync(workspace, name);
+        var project = await _projectDao.CreateAsync(client, name);
         project.DefaultHourlyRate = defaultHourlyRate;
         project.IsBillableByDefault = defaultHourlyRate.HasValue;
-        project.SetClient(client);
         return project;
     }
 

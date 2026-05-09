@@ -58,7 +58,6 @@ public class AddTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
             Email = _newUserFake.Email,
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -69,7 +68,6 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Email = _newUserFake.Email,
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -86,7 +84,6 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Email = _newUserFake.Email,
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -109,11 +106,11 @@ public class AddTest: BaseTest
     [Fact]
     public async Task ShouldNotAddIfIncorrectWorkspaceId()
     {
+        var (_, _, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Email = _newUserFake.Email,
-            WorkspaceId = _otherWorkspace.Id
-        });
+        }, otherWorkspace.Id);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
@@ -135,8 +132,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, otherJwtToken, new AddRequest()
         {
             Email = _newUserFake.Email,
-            WorkspaceId = _workspace.Id
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
     }
     
@@ -153,8 +149,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, otherJwtToken, new AddRequest()
         {
             Email = _newUserFake.Email,
-            WorkspaceId = _workspace.Id
-        });
+        }, _workspace.Id);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
@@ -180,8 +175,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, otherJwtToken, new AddRequest()
         {
             Email = activeUser.Email,
-            WorkspaceId = _workspace.Id
-        });
+        }, _workspace.Id);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new RecordIsExistsException().GetTypeName(), error.ErrorCode);

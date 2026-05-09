@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
@@ -45,7 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.GoalsTracker.Actions
         public async Task<GoalsTrackerDto> ExecuteAsync(GetRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
             RecordNotFoundException.ThrowIfNull(workspace, "Workspace not found");
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {

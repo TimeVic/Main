@@ -30,7 +30,6 @@ public class AddEffect : Effect<AddClientPaymentAction>
         try
         {
             dispatcher.Dispatch(new SetClientPaymentIsListLoadingAction(true));
-            action.Request.WorkspaceId = _authState.Value.Workspace!.Id;
             var payment = await _apiService.ClientPaymentAddAsync(action.Request);
             if (payment != null)
             {

@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Channel;
 using TimeTracker.Api.WebSocket.Services;
 using TimeTracker.Business.Common.Constants;
@@ -39,7 +39,7 @@ namespace TimeTracker.Api.Controllers.Massaging.Channel.Actions
         public async Task ExecuteAsync(InitRequest request)
         {
             var currentUser = await _apiRequestService.GetCurrentUser();
-            var workspace = await _workspaceDao.GetById(request.WorkspaceId);
+            var workspace = await _workspaceDao.GetById(_apiRequestService.GetCurrentWorkspaceId());
             DataValidationException.ThrowIfNull(workspace);
             await _securityManager.CheckAccess(AccessLevel.Read, currentUser, workspace);
             

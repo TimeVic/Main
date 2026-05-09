@@ -53,11 +53,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMember.Actions
             var projects = new List<ProjectEntity>();
             if (request.ProjectsAccess.Any())
             {
-                projects = member.Workspace.Projects.Where(
-                    item => request.ProjectsAccess.Any(
-                        projectAccessDto => projectAccessDto.ProjectId == item.Id && projectAccessDto.HasAccess
+                projects = member.Workspace.Clients
+                    .SelectMany(item => item.Projects)
+                    .Where(
+                        item => request.ProjectsAccess.Any(
+                            projectAccessDto => projectAccessDto.ProjectId == item.Id && projectAccessDto.HasAccess
+                        )
                     )
-                ).ToList();    
+                    .ToList();
             }
             // TODO: Should be refactored to Manager role. In this case HourlyRate will not be saved if HasAccess = false
             var workspaceMember = await _workspaceAccessService.ShareAccessAsync(

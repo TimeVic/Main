@@ -227,11 +227,15 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         };
         if (internalTask != null)
         {
-            projectId = internalTask?.TaskList.Project.Id;
+            entry.Project = internalTask.TaskList.Project;
         }
-        if (projectId != null)
+        else if (projectId != null)
         {
-            entry.Project = workspace.Projects.FirstOrDefault(item => item.Id == projectId);
+            var project = await _projectDao.GetById(projectId);
+            if (project?.Client.Workspace.Id == workspace.Id)
+            {
+                entry.Project = project;
+            }
         }
         entry.HourlyRate = hourlyRate ?? entry.Project?.DefaultHourlyRate;
         await Session.SaveAsync(entry);

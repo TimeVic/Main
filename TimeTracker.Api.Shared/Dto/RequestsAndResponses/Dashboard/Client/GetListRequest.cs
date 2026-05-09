@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
@@ -9,7 +9,4 @@ public class GetListRequest: IRequest<GetListResponse>
     [Required]
     [IsPositive]
     public int Page { get; set; }
-    
-    [RequiredNonEmpty]
-    public Guid WorkspaceId { get; set; }
 }

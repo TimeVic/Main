@@ -49,7 +49,6 @@ public class GetListTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -63,7 +62,6 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
         });
         response.EnsureSuccessStatusCode();
@@ -91,9 +89,8 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, otherJwtToken, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
-        });
+        }, _workspace.Id);
         var errorResponse = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), errorResponse.ErrorCode);
     }
@@ -117,9 +114,8 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, userJwt, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
@@ -143,10 +139,9 @@ public class GetListTest: BaseTest
 
         var response = await PostRequestAsync(Url, userJwt, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1,
             MemberId = member.Id
-        });
+        }, _workspace.Id);
 
         var errorResponse = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
@@ -165,9 +160,8 @@ public class GetListTest: BaseTest
 
         var response = await PostRequestAsync(Url, managerJwt, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
@@ -188,10 +182,9 @@ public class GetListTest: BaseTest
 
         var response = await PostRequestAsync(Url, managerJwt, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1,
             MemberId = managerMember.Id
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();

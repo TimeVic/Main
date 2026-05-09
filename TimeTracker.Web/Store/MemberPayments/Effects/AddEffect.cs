@@ -32,7 +32,6 @@ public class AddEffect: Effect<AddMemberPaymentAction>
     {
         try
         {
-            action.Request.WorkspaceId = _authState.Value.Workspace!.Id;
             var payment = await _apiService.MemberPaymentAddAsync(action.Request);
             if (payment != null)
             {

@@ -87,7 +87,6 @@ public class GetIntegrationSettingsTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetIntegrationSettingsRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -97,8 +96,7 @@ public class GetIntegrationSettingsTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new GetIntegrationSettingsRequest()
         {
-            WorkspaceId = _workspace.Id
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualResponse = await response.GetJsonDataAsync<GetIntegrationSettingsResponse>();
@@ -124,8 +122,7 @@ public class GetIntegrationSettingsTest: BaseTest
         await FlushDbChanges();
         var response = await PostRequestAsync(Url, otherJwt, new GetIntegrationSettingsRequest()
         {
-            WorkspaceId = _workspace.Id
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualResponse = await response.GetJsonDataAsync<GetIntegrationSettingsResponse>();

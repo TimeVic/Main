@@ -50,7 +50,6 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             Amount = payment.Amount,
             Description = payment.Description,
             PaymentTime = DateTime.Now,
@@ -66,7 +65,6 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             Amount = payment.Amount,
             Description = payment.Description,
             PaymentTime = expectedPaymentTime,
@@ -96,12 +94,11 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsync(Url, otherToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             Amount = payment.Amount,
             Description = payment.Description,
             PaymentTime = payment.PaymentTime,
             ProjectId = _project.Id
-        });
+        }, _workspace.Id);
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
@@ -120,12 +117,11 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsync(Url, otherToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             Amount = payment.Amount,
             Description = payment.Description,
             PaymentTime = payment.PaymentTime,
             ProjectId = _project.Id
-        });
+        }, _workspace.Id);
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
@@ -149,13 +145,12 @@ public class AddTest: BaseTest
 
         var response = await PostRequestAsync(Url, managerToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             MemberId = member.Id,
             Amount = payment.Amount,
             Description = payment.Description,
             PaymentTime = payment.PaymentTime,
             ProjectId = _project.Id
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualMemberPayment = await response.GetJsonDataAsync<MemberPaymentDto>();
@@ -179,13 +174,12 @@ public class AddTest: BaseTest
 
         var response = await PostRequestAsync(Url, userToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             MemberId = member.Id,
             Amount = payment.Amount,
             Description = payment.Description,
             PaymentTime = payment.PaymentTime,
             ProjectId = _project.Id
-        });
+        }, _workspace.Id);
 
         var responseData = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), responseData.ErrorCode);
@@ -199,7 +193,6 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsync(Url, otherToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             Amount = payment.Amount,
             Description = payment.Description,
             PaymentTime = payment.PaymentTime,

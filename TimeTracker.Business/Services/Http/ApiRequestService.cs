@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using TimeTracker.Business.Common.Constants.Http;
 using TimeTracker.Business.Common.Exceptions;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.User;
@@ -8,6 +9,7 @@ namespace TimeTracker.Business.Services.Http;
 
 public class ApiRequestService: BaseApiRequestService, IApiRequestService
 {
+    private readonly IHttpContextAccessor _httpContext;
     private readonly IUserDao _userDao;
 
     public ApiRequestService(
@@ -17,7 +19,14 @@ public class ApiRequestService: BaseApiRequestService, IApiRequestService
         IHttpTokenResolverService httpTokenResolverService
     ): base(httpContext, jwtAuthService, httpTokenResolverService)
     {
+        _httpContext = httpContext;
         _userDao = userDao;
+    }
+
+    public Guid? GetCurrentWorkspaceId()
+    {
+        var rawWorkspaceId = _httpContext.HttpContext?.Request.Headers[AuthConstants.WorkspaceIdHeaderName].FirstOrDefault();
+        return Guid.TryParse(rawWorkspaceId, out var workspaceId) ? workspaceId : null;
     }
     
     public async Task<UserEntity> GetCurrentUser()

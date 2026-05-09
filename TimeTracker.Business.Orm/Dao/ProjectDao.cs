@@ -1,13 +1,10 @@
-﻿using NHibernate.Criterion;
-using NHibernate.Linq;
-using NHibernate.Transform;
+﻿using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
-using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao;
@@ -21,18 +18,39 @@ public class ProjectDao: IProjectDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<ProjectEntity> CreateAsync(WorkspaceEntity workspace, string name)
+    public async Task<ProjectEntity> CreateAsync(ClientEntity client, string name)
     {
         var project = new ProjectEntity()
         {
             Name = name,
-            Workspace = workspace,
+            Client = client,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        workspace.Projects.Add(project);
+        client.Projects.Add(project);
         await _sessionProvider.CurrentSession.SaveAsync(project);
         return project;
+    }
+
+    public async Task<ProjectEntity> CreateAsync(WorkspaceEntity workspace, string name)
+    {
+        var client = await _sessionProvider.CurrentSession.Query<ClientEntity>()
+            .Where(item => item.Workspace.Id == workspace.Id)
+            .FirstOrDefaultAsync();
+        if (client == null)
+        {
+            client = new ClientEntity
+            {
+                Workspace = workspace,
+                Name = "Default",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+            workspace.Clients.Add(client);
+            await _sessionProvider.CurrentSession.SaveAsync(client);
+        }
+
+        return await CreateAsync(client, name);
     }
 
     public async Task<ProjectEntity?> GetById(Guid? projectId, bool isOnlyActive = true)
@@ -67,11 +85,8 @@ public class ProjectDao: IProjectDao
         MembershipAccessType? accessType = null
     )
     {
-        var query = _sessionProvider.CurrentSession.QueryOver<ProjectEntity>()
-            .Select(
-                Projections.Group<ProjectEntity>(x => x.Id)
-            )
-            .Where(item => item.Workspace.Id == workspace.Id)
+        var query = _sessionProvider.CurrentSession.Query<ProjectEntity>()
+            .Where(item => item.Client != null && item.Client.Workspace.Id == workspace.Id)
             .Where(item => !item.IsArchived);
 
         if (
@@ -81,16 +96,15 @@ public class ProjectDao: IProjectDao
         )
         {
             // Is not owner
-            WorkspaceMemberProjectAccessEntity projectAccessAlias = null!;
-            WorkspaceMemberEntity workspaceMemberAlias = null!;
-            UserEntity userAlias = null!;
-            query = query.Inner.JoinAlias(item => item.MemberProjectAccess, () => projectAccessAlias)
-                .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMember, () => workspaceMemberAlias)
-                .Inner.JoinAlias(() => workspaceMemberAlias!.User, () => userAlias)
-                .And(item => userAlias!.Id == user.Id);
+            query = query.Where(item => item.MemberProjectAccess.Any(
+                access => access.WorkspaceMember.User.Id == user.Id
+            ));
         }
 
-        var projectIds = await query.ListAsync<Guid>();
+        var projectIds = await query
+            .Select(item => item.Id)
+            .Distinct()
+            .ToListAsync();
         var projects = await _sessionProvider.CurrentSession.Query<ProjectEntity>()
             .Where(item => projectIds.Contains(item.Id))
             .OrderByDescending(item => item.Name)

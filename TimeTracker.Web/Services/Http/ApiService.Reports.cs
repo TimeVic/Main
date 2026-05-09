@@ -11,7 +11,6 @@ namespace TimeTracker.Web.Services.Http
         {
             return await PostAsync<MemberPaymentReportResponse?>(ApiUrl.ReportMemberPayments, new MemberPaymentReportRequest()
             {
-                WorkspaceId = workspaceId,
                 EndDate = endDate
             });
         }
@@ -25,7 +24,6 @@ namespace TimeTracker.Web.Services.Http
         {
             return await PostAsync<SummaryReportResponse?>(ApiUrl.ReportSummary, new SummaryReportRequest()
             {
-                WorkspaceId = workspaceId,
                 StartTime = startDate,
                 EndTime = endTime,
                 Type = reportType
@@ -38,7 +36,6 @@ namespace TimeTracker.Web.Services.Http
                 ApiUrl.ReportWorkspaceFinancialSummary,
                 new WorkspaceFinancialSummaryReportRequest
                 {
-                    WorkspaceId = workspaceId
                 }
             );
         }

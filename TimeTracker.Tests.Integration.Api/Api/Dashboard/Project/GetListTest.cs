@@ -30,10 +30,7 @@ public class GetListTest: BaseTest
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
-        {
-            WorkspaceId = _defaultWorkspace.Id
-        });
+        var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest());
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
     
@@ -43,10 +40,7 @@ public class GetListTest: BaseTest
         var expectedCounter = 15;
         await _projectSeeder.CreateSeveralAsync(_defaultWorkspace, expectedCounter);
         
-        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
-        {
-            WorkspaceId = _defaultWorkspace.Id
-        });
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest());
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();

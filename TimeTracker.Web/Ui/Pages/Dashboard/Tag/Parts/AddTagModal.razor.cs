@@ -37,7 +37,6 @@ public partial class AddTagModal
         _isLoading = true;
         try
         {
-            model.WorkspaceId = AuthState.Value.Workspace.Id;
             var responseDto = await ApiService.TagAddAsync(model);
             if (responseDto != null)
             {

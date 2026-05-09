@@ -12,7 +12,6 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<GetIntegrationSettingsResponse?>(
                 ApiUrl.WorkspaceIntegrationSettingsGet,
                 new GetIntegrationSettingsRequest() {
-                    WorkspaceId = workspaceId
                 }
             );
         }

@@ -78,7 +78,6 @@ public class SetTest: BaseTest
         var endTime = DateTime.UtcNow.AddHours(1);
         var response = await PostRequestAsync(Url, _jwtToken, new SetRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             Description = fakeEntry.Description,
             EndTime = endTime,
             StartTime = startTime,
@@ -121,7 +120,6 @@ public class SetTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new SetRequest()
         {
             Id = timeEntry.Id,
-            WorkspaceId = _defaultWorkspace.Id,
             Description = fakeEntry.Description,
             EndTime = null,
             StartTime = fakeEntry.StartTime,
@@ -169,14 +167,13 @@ public class SetTest: BaseTest
         var response = await PostRequestAsync(Url, jwtToken, new SetRequest()
         {
             Id = timeEntry.Id,
-            WorkspaceId = _defaultWorkspace.Id,
             Description = fakeEntry.Description,
             EndTime = null,
             StartTime = startTime,
             HourlyRate = fakeEntry.HourlyRate,
             IsBillable = fakeEntry.IsBillable,
             ProjectId = expectedProject.Id
-        });
+        }, _defaultWorkspace.Id);
         await response.EnsureSuccessStatusCodeWithoutError();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
@@ -197,7 +194,6 @@ public class SetTest: BaseTest
 
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             StartTime = DateTime.UtcNow.AddSeconds(1),

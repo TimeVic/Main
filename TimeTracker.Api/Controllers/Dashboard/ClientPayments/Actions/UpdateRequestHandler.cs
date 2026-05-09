@@ -46,7 +46,7 @@ public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, ClientPa
         var client = await _clientDao.GetById(request.ClientId);
         RecordNotFoundException.ThrowIfNull(client);
         if (
-            client.Workspace.Id != payment.Workspace.Id
+            client.Workspace.Id != payment.Client.Workspace.Id
             || !await _securityManager.HasAccess(AccessLevel.Write, user, client)
         )
         {

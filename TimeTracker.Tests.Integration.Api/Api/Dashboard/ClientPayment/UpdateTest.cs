@@ -38,7 +38,8 @@ public class UpdateTest: BaseTest
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _payment = _paymentSeeder.CreateSeveralAsync(_workspace, 1).Result.First();
+        var project = _projectDao.CreateAsync(_workspace, "Test payment project").Result;
+        _payment = _paymentSeeder.CreateSeveralAsync(project.Client, project, 1).Result.First();
         FlushDbChanges().Wait();
 
         Assert.NotNull(_payment.Project);
@@ -50,7 +51,6 @@ public class UpdateTest: BaseTest
         var expectPayment = _factory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientPaymentId = _payment.Id,
             ClientId = _payment.Client.Id,
             Amount = expectPayment.Amount,
@@ -72,7 +72,6 @@ public class UpdateTest: BaseTest
 
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientPaymentId = _payment.Id,
             ClientId = expectedClient.Id,
             Amount = expectPayment.Amount,
@@ -103,7 +102,6 @@ public class UpdateTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientPaymentId = _payment.Id,
             ClientId = _payment.Client.Id,
             Amount = expectPayment.Amount,
@@ -126,7 +124,6 @@ public class UpdateTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientPaymentId = _payment.Id,
             ClientId = _payment.Client.Id,
             Amount = expectPayment.Amount,

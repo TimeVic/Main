@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using Api.Requests.Abstractions;
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
@@ -39,7 +39,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tag.Actions
         public async Task<TagDto> ExecuteAsync(AddRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
             {
                 throw new HasNoAccessException();

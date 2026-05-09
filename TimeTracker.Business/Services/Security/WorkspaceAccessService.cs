@@ -89,7 +89,7 @@ public class WorkspaceAccessService: IWorkspaceAccessService
     
     public async Task<MembershipAccessType?> GetAccessTypeAsync(UserEntity user, ProjectEntity project)
     {
-        var member = GetMemberAsync(user, project.Workspace);
+        var member = GetMemberAsync(user, project.Client.Workspace);
         if (member == null)
         {
             return null;

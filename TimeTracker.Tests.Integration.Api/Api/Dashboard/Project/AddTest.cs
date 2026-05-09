@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -20,6 +21,8 @@ public class AddTest: BaseTest
     private readonly IQueueService _queueService;
     private readonly UserEntity _user;
     private readonly IDataFactory<ProjectEntity> _projectFactory;
+    private readonly IClientDao _clientDao;
+    private readonly ClientEntity _client;
     private readonly string _jwtToken;
     private WorkspaceEntity _workspace;
 
@@ -27,7 +30,9 @@ public class AddTest: BaseTest
     {
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _projectFactory = ServiceProvider.GetRequiredService<IDataFactory<ProjectEntity>>();
+        _clientDao = ServiceProvider.GetRequiredService<IClientDao>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _client = _clientDao.CreateAsync(_workspace, "Test client").Result;
     }
 
     [Fact]
@@ -37,7 +42,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
             Name = project.Name,
-            WorkspaceId = _workspace.Id
+            ClientId = _client.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -49,7 +54,7 @@ public class AddTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Name = project.Name,
-            WorkspaceId = _workspace.Id
+            ClientId = _client.Id
         });
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
@@ -60,14 +65,15 @@ public class AddTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldNotAddIfIncorrectWorkspaceId()
+    public async Task ShouldNotAddIfClientFromInaccessibleWorkspace()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
+        var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Other client");
         var project = _projectFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
             Name = project.Name,
-            WorkspaceId = otherWorkspace.Id
+            ClientId = otherClient.Id
         });
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();

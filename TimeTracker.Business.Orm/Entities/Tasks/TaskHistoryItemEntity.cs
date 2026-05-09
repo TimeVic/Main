@@ -35,7 +35,7 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
 
         #region Calculated
 
-        public virtual WorkspaceEntity Workspace => TaskList.Project.Workspace;
+        public virtual WorkspaceEntity Workspace => TaskList.Project.Client.Workspace;
 
         #endregion
     }

@@ -6,6 +6,4 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 
 public class WorkspaceFinancialSummaryReportRequest : IRequest<WorkspaceFinancialSummaryReportResponse>
 {
-    [Required]
-    public Guid WorkspaceId { get; set; }
 }

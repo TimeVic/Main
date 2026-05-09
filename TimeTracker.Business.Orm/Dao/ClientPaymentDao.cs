@@ -28,7 +28,6 @@ public class ClientPaymentDao: IClientPaymentDao
     }
 
     public async Task<ClientPaymentEntity> CreateAsync(
-        WorkspaceEntity workspace,
         ClientEntity client,
         decimal amount,
         DateTime paymentTime,
@@ -36,14 +35,8 @@ public class ClientPaymentDao: IClientPaymentDao
         string? description = null
     )
     {
-        if (client.Workspace.Id != workspace.Id)
-        {
-            throw new DataInconsistencyException($"This workspace does not contain client: {client.Id}");
-        }
-
         var entity = new ClientPaymentEntity
         {
-            Workspace = workspace,
             Client = client,
             Amount = amount,
             PaymentTime = paymentTime,
@@ -75,7 +68,7 @@ public class ClientPaymentDao: IClientPaymentDao
             .FirstOrDefaultAsync(item => item.Id == paymentId);
         if (payment != null)
         {
-            if (client.Workspace.Id != payment.Workspace.Id)
+            if (client.Workspace.Id != payment.Client.Workspace.Id)
             {
                 throw new DataInconsistencyException($"This workspace does not contain client: {client.Id}");
             }
@@ -96,7 +89,7 @@ public class ClientPaymentDao: IClientPaymentDao
     {
         var offset = PaginationUtils.CalculateOffset(page);
         var query = _sessionProvider.CurrentSession.Query<ClientPaymentEntity>()
-            .Where(item => item.Workspace.Id == workspace.Id);
+            .Where(item => item.Client.Workspace.Id == workspace.Id);
 
         var items = await query
             .Fetch(item => item.Client)

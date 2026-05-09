@@ -59,7 +59,6 @@ public class ForOwnerTest : BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(_url, new WorkspaceFinancialSummaryReportRequest
         {
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -69,7 +68,6 @@ public class ForOwnerTest : BaseTest
     {
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -90,8 +88,7 @@ public class ForOwnerTest : BaseTest
 
         var response = await PostRequestAsync(_url, memberToken, new WorkspaceFinancialSummaryReportRequest
         {
-            WorkspaceId = _workspace.Id
-        });
+        }, _workspace.Id);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
@@ -100,7 +97,6 @@ public class ForOwnerTest : BaseTest
     {
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -112,11 +108,10 @@ public class ForOwnerTest : BaseTest
     [Fact]
     public async Task ClientOutstandingEqualsEarnedMinusReceived()
     {
-        await _clientPaymentSeeder.CreateSeveralAsync(_workspace, _client, _project, 1);
+        await _clientPaymentSeeder.CreateSeveralAsync(_client, _project, 1);
 
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -133,7 +128,6 @@ public class ForOwnerTest : BaseTest
     {
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -155,7 +149,6 @@ public class ForOwnerTest : BaseTest
 
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -177,7 +170,6 @@ public class ForOwnerTest : BaseTest
 
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -199,12 +191,11 @@ public class ForOwnerTest : BaseTest
             MembershipAccessType.User,
             new List<ProjectAccessModel>()
         );
-        await _clientPaymentSeeder.CreateSeveralAsync(_workspace, _client, _project, 1);
+        await _clientPaymentSeeder.CreateSeveralAsync(_client, _project, 1);
         await _memberPaymentSeeder.CreateSeveralAsync(_workspace, _owner, 1);
 
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 
@@ -229,7 +220,6 @@ public class ForOwnerTest : BaseTest
 
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
-            WorkspaceId = _workspace.Id
         });
         response.EnsureSuccessStatusCode();
 

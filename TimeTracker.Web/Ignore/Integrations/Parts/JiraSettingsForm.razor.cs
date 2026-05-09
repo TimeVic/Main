@@ -32,8 +32,6 @@ public partial class JiraSettingsForm
         {
             _model.Fill(Value);    
         }
-
-        _model.WorkspaceId = _authState.Value.Workspace.Id;
     }
     
     private async Task HandleSubmit()

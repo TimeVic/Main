@@ -92,7 +92,6 @@ public class ForUserTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -102,11 +101,10 @@ public class ForUserTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _otherJwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow.AddDays(-2),
             Type = SummaryReportType.GroupByDay
-        });
+        }, _workspace.Id);
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
@@ -134,11 +132,10 @@ public class ForUserTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _otherJwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByMonth
-        });
+        }, _workspace.Id);
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
@@ -158,11 +155,10 @@ public class ForUserTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _otherJwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByWeek
-        });
+        }, _workspace.Id);
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
@@ -183,11 +179,10 @@ public class ForUserTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _otherJwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByClient
-        });
+        }, _workspace.Id);
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
@@ -208,11 +203,10 @@ public class ForUserTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _otherJwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByProject
-        });
+        }, _workspace.Id);
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
@@ -233,11 +227,10 @@ public class ForUserTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _otherJwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByUser
-        });
+        }, _workspace.Id);
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 

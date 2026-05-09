@@ -44,7 +44,6 @@ public partial class GetCountTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetCountRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -67,7 +66,6 @@ public partial class GetCountTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new GetCountRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         
         // Assert
@@ -92,7 +90,6 @@ public partial class GetCountTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new GetCountRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         
         // Assert

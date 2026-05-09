@@ -22,7 +22,6 @@ public partial class GetCountTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new GetCountRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         
         // Assert

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
@@ -10,10 +10,6 @@ public class GetFilteredListRequest: IRequest<GetFilteredListResponse>
     [Required]
     [IsPositive]
     public int Page { get; set; }
-    
-    [Required]
-    public Guid WorkspaceId { get; set; }
-    
     public Guid? ClientId { get; set; }
     
     public Guid? ProjectId { get; set; }

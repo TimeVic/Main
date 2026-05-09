@@ -13,7 +13,6 @@ namespace TimeTracker.Web.Services.Http
                 ApiUrl.MessagingMessageSend,
                 new SendRequest()
                 {
-                    WorkspaceId = workspaceId,
                     Text = text,
                     ReceiverId = receiverId,
                     ChannelId = channelId

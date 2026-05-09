@@ -41,7 +41,6 @@ public class InitTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new InitRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -63,7 +62,6 @@ public class InitTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new InitRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         await response.EnsureSuccessStatusCodeWithoutError();
 
@@ -100,7 +98,6 @@ public class InitTest: BaseTest
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new InitRequest()
         {
-            WorkspaceId = _workspace.Id
         });
         await response.EnsureSuccessStatusCodeWithoutError();
 

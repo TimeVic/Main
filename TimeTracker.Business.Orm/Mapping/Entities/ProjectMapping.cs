@@ -17,17 +17,10 @@ public class ProjectMapping: BaseGuidMappings<ProjectEntity>
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         
-        References(x => x.Workspace)
-            .Column("workspace_id")
-            .Fetch.Select()
-            .LazyLoad()
-            .Cascade.SaveUpdate();
-        
         References(x => x.Client)
             .Column("client_id")
             .Fetch.Select()
             .LazyLoad()
-            .Nullable()
             .Cascade.SaveUpdate();
         
         HasMany(x => x.MemberPayments)

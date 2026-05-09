@@ -14,7 +14,6 @@ namespace TimeTracker.Web.Services.Http
                 ApiUrl.WorkspaceMemberAdd,
                 new AddRequest()
                 {
-                    WorkspaceId = workspaceId,
                     Email = email
                 }
             );

@@ -42,7 +42,6 @@ public class CreateTest: BaseTest
         var response = await PostRequestAsAnonymousAsync(Url, new CreateRequest()
         {
             Slug = "some-channel",
-            WorkspaceId = _workspace.Id
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -64,7 +63,6 @@ public class CreateTest: BaseTest
         var response = await PostRequestAsync(Url, _jwtToken, new CreateRequest()
         {
             Slug = expectedSlug,
-            WorkspaceId = _workspace.Id
         });
         await response.EnsureSuccessStatusCodeWithoutError();
 

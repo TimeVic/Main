@@ -10,7 +10,6 @@ namespace TimeTracker.Web.Services.Http
         {
             var response = await PostAsync<GetCountResponse>(ApiUrl.NotificationCenterGetCount, new GetCountRequest()
             {
-                WorkspaceId = workspaceId
             });
             if (response == null)
             {
@@ -24,7 +23,6 @@ namespace TimeTracker.Web.Services.Http
         {
             return await PostAsync<GetListResponse?>(ApiUrl.NotificationCenterGetList, new GetListRequest()
             {
-                WorkspaceId = workspaceId,
                 Page = page
             });
         }
@@ -33,7 +31,6 @@ namespace TimeTracker.Web.Services.Http
         {
             await PostAsync<GetListResponse>(ApiUrl.NotificationCenterMarkAllAsRead, new MarkAllAsReadRequest()
             {
-                WorkspaceId = workspaceId
             });
         }
         

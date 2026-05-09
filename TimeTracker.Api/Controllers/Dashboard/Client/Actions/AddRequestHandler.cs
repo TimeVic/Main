@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -40,7 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Client.Actions
             var userId = _apiRequestService.GetCurrentUserId();
             var user = await _userDao.GetById(userId);
             RecordNotFoundException.ThrowIfNull(user);
-            var workspace = await _userDao.GetUsersWorkspace(user!, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user!, _apiRequestService.GetCurrentWorkspaceId());
             RecordNotFoundException.ThrowIfNull(workspace, "Workspace not found");
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
             {

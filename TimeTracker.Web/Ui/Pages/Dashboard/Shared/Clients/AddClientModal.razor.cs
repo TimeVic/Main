@@ -29,7 +29,6 @@ public partial class AddClientModal
 
     private async Task Submit()
     {
-        model.WorkspaceId = AuthState.Value.Workspace!.Id;
         if (!_form.EditContext!.Validate())
         {
             return;

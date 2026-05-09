@@ -24,12 +24,10 @@ public partial class AddChannelModal
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        model.WorkspaceId = AuthState.Value.Workspace!.Id;
     }
 
     private void OnSubmit()
     {
-        model.WorkspaceId = AuthState.Value.Workspace!.Id;
         if (!_form.EditContext!.Validate())
         {
             StateHasChanged();

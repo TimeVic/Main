@@ -43,7 +43,7 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
         
         #region Calculated
 
-        public virtual WorkspaceEntity Workspace => TaskList.Project.Workspace;
+        public virtual WorkspaceEntity Workspace => TaskList.Project.Client.Workspace;
 
         public virtual string TagsString => string.Join(";", Tags.Select(item => item.Name));
         

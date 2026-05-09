@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
 namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
@@ -11,6 +10,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
         [Required]
         public Guid ProjectId { get; set; }
 
+        [RequiredNonEmpty]
         public Guid ClientId { get; set; }
         
         [Required]
@@ -25,7 +25,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project
         public void Fill(ProjectDto project)
         {
             ProjectId = project.Id;
-            ClientId = project.Client?.Id ?? Guid.Empty;
+            ClientId = project.Client!.Id;
             Name = project.Name;
             IsBillableByDefault = project.IsBillableByDefault;
             DefaultHourlyRate = project.DefaultHourlyRate;

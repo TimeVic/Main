@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
@@ -48,10 +48,10 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             var user = await _apiRequestService.GetCurrentUser();
             var project = await _projectDao.GetById(request.ProjectId);
             RecordNotFoundException.ThrowIfNull(project);
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
             if (
                 workspace == null 
-                || project.Workspace.Id != workspace.Id
+                || project.Client.Workspace.Id != workspace.Id
                 || !await _securityManager.HasAccess(AccessLevel.Read, user, workspace)
                 || !await _securityManager.HasAccess(AccessLevel.Read, user, project)
             )

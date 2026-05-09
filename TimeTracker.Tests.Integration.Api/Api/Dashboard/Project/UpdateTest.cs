@@ -73,7 +73,7 @@ public class UpdateTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldSetClientToNull()
+    public async Task ShouldNotSetClientToNull()
     {
         var expectedClient = _clientSeeder.CreateSeveralAsync(_workspace).Result.First();
         _project.SetClient(expectedClient);
@@ -84,11 +84,8 @@ public class UpdateTest: BaseTest
             Name = _project.Name,
             ClientId = Guid.Empty
         });
-        response.EnsureSuccessStatusCode();
 
-        var actualProject = await response.GetJsonDataAsync<ProjectDto>();
-        Assert.NotEqual(Guid.Empty, actualProject.Id);
-        Assert.Null(actualProject.Client);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
     
     [Fact]
@@ -103,11 +100,8 @@ public class UpdateTest: BaseTest
             Name = _project.Name,
             ClientId = otherClient.Id
         });
-        response.EnsureSuccessStatusCode();
 
-        var actualProject = await response.GetJsonDataAsync<ProjectDto>();
-        Assert.NotEqual(Guid.Empty, actualProject.Id);
-        Assert.Null(actualProject.Client);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
     
     [Fact]
@@ -119,7 +113,8 @@ public class UpdateTest: BaseTest
         var response = await PostRequestAsync(Url, otherJwtToken, new UpdateRequest()
         {
             ProjectId = _project.Id,
-            Name = _project.Name
+            Name = _project.Name,
+            ClientId = _project.Client.Id
         });
         
         var errorResponse = await response.GetJsonResponseAsync<object>();

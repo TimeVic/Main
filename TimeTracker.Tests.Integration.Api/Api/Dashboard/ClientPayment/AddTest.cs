@@ -49,7 +49,6 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsAnonymousAsync(Url, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientId = _client.Id,
             Amount = payment.Amount,
             Description = payment.Description,
@@ -66,7 +65,6 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientId = _client.Id,
             Amount = payment.Amount,
             Description = payment.Description,
@@ -96,12 +94,11 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsync(Url, otherToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientId = _client.Id,
             Amount = payment.Amount,
             Description = payment.Description,
             PaymentTime = payment.PaymentTime
-        });
+        }, _workspace.Id);
 
         response.EnsureSuccessStatusCode();
         var actualPayment = await response.GetJsonDataAsync<ClientPaymentDto>();
@@ -119,12 +116,11 @@ public class AddTest: BaseTest
         var payment = _factory.Generate();
         var response = await PostRequestAsync(Url, otherToken, new AddRequest()
         {
-            WorkspaceId = _workspace.Id,
             ClientId = _client.Id,
             Amount = payment.Amount,
             Description = payment.Description,
             PaymentTime = payment.PaymentTime
-        });
+        }, _workspace.Id);
 
         var responseData = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), responseData.ErrorCode);

@@ -7,9 +7,6 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.ClientPaymen
 
 public class AddRequest : IRequest<ClientPaymentDto>
 {
-    [RequiredNonEmpty]
-    public Guid WorkspaceId { get; set; }
-
     [Display(Name = "Client")]
     [RequiredNonEmpty]
     public Guid ClientId { get; set; }

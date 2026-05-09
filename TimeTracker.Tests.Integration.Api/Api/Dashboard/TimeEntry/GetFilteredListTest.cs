@@ -38,7 +38,6 @@ public class GetFilteredListTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetFilteredListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             Page = 1
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -55,7 +54,6 @@ public class GetFilteredListTest: BaseTest
         Assert.NotNull(expectedProject.Client);
         var response = await PostRequestAsync(Url, _jwtToken, new GetFilteredListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             Page = 1,
             Search = "cript223",
             ClientId = expectedProject.Client.Id,
@@ -92,9 +90,8 @@ public class GetFilteredListTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherJwt, new GetFilteredListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             Page = 1
-        });
+        }, _defaultWorkspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<GetFilteredListResponse>();

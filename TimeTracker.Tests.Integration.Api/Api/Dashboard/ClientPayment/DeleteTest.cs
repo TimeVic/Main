@@ -24,15 +24,18 @@ public class DeleteTest: BaseTest
     private readonly IClientPaymentDao _paymentDao;
     private readonly WorkspaceEntity _workspace;
     private readonly IUserSeeder _userSeeder;
+    private readonly IProjectDao _projectDao;
 
     public DeleteTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _paymentDao = ServiceProvider.GetRequiredService<IClientPaymentDao>();
+        _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _paymentSeeder = ServiceProvider.GetRequiredService<IClientPaymentSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
 
-        _payment = _paymentSeeder.CreateSeveralAsync(_workspace, 1).Result.First();
+        var project = _projectDao.CreateAsync(_workspace, "Test payment project").Result;
+        _payment = _paymentSeeder.CreateSeveralAsync(project.Client, project, 1).Result.First();
     }
 
     [Fact]
@@ -61,7 +64,8 @@ public class DeleteTest: BaseTest
     [Fact]
     public async Task ShouldDeleteIfWorkspaceManager()
     {
-        var payment = (await _paymentSeeder.CreateSeveralAsync(_workspace, 1)).First();
+        var project = await _projectDao.CreateAsync(_workspace, "Test manager payment project");
+        var payment = (await _paymentSeeder.CreateSeveralAsync(project.Client, project, 1)).First();
         var (otherToken, _, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
             MembershipAccessType.Manager

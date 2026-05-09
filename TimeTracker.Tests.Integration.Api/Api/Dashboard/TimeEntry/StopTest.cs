@@ -44,7 +44,6 @@ public class StopTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new StopRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             EndTime = DateTime.UtcNow.AddHours(1)
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -61,7 +60,6 @@ public class StopTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             EndTime = DateTime.UtcNow.AddHours(1)
         });
         response.EnsureSuccessStatusCode();
@@ -82,7 +80,6 @@ public class StopTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             EndTime = DateTime.UtcNow.AddHours(1)
         });
         response.EnsureSuccessStatusCode();
@@ -108,7 +105,6 @@ public class StopTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             EndTime = startTime.AddHours(1)
         });
         response.EnsureSuccessStatusCode();

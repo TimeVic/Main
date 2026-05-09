@@ -39,7 +39,6 @@ public class SetRedmineSettingsTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             Name = _workspace.Name,
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -54,12 +53,11 @@ public class SetRedmineSettingsTest: BaseTest
         var expectUrl = "http://some.url/";
         var response = await PostRequestAsync(Url, _jwtToken, new SetRedmineSettingsRequest()
         {
-            WorkspaceId = _workspace.Id,
             Url = expectUrl,
             ActivityId = expectActivityId,
             ApiKey = expectApiKey,
             RedmineUserId = expectUserId
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<WorkspaceSettingsRedmineDto>();
@@ -74,12 +72,11 @@ public class SetRedmineSettingsTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new SetRedmineSettingsRequest()
         {
-            WorkspaceId = _workspace.Id,
             Url = "http://some.url/",
             ActivityId = 9,
             ApiKey = "someasdasdAPIKey",
             RedmineUserId = 8
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<WorkspaceSettingsRedmineDto>();

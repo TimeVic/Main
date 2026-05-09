@@ -11,7 +11,6 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<GoalsTrackerDto?>(ApiUrl.GoalsTrackerGet, new GetRequest()
             {
                 Date = date,
-                WorkspaceId = workspaceId
             });
         }
         
@@ -24,7 +23,6 @@ namespace TimeTracker.Web.Services.Http
             await PostAsync<object>(ApiUrl.GoalsTrackerChangePositions, new ChangePositionsRequest()
             {
                 Date = date,
-                WorkspaceId = workspaceId,
                 Positions = items.ToDictionary(x => x.Id, y => y.Position)
             });
         }

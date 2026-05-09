@@ -52,7 +52,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
                 throw new HasNoAccessException("This user has no permissions for task");
-            if (taskList.Project.Workspace != task.Workspace)
+            if (taskList.Project.Client.Workspace.Id != task.Workspace.Id)
                 throw new ValidationException("Incorrect TaskListId");
             
             task = _mapper.Map(request, task);

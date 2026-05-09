@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -42,7 +42,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
         public async Task<MemberPaymentReportResponse> ExecuteAsync(MemberPaymentReportRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
+            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
             RecordNotFoundException.ThrowIfNull(workspace);
             
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))

@@ -38,7 +38,6 @@ public class GetListTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             Page = 1
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -52,7 +51,6 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             Page = 1
         });
         response.EnsureSuccessStatusCode();
@@ -86,7 +84,6 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             Page = 1
         });
         response.EnsureSuccessStatusCode();
@@ -113,7 +110,6 @@ public class GetListTest: BaseTest
         
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             Page = 1
         });
         response.EnsureSuccessStatusCode();
@@ -167,7 +163,6 @@ public class GetListTest: BaseTest
 
         var firstPageResponse = await PostRequestAsync(Url, _jwtToken, new GetListRequest
         {
-            WorkspaceId = _defaultWorkspace.Id,
             Page = 1
         });
         firstPageResponse.EnsureSuccessStatusCode();
@@ -175,7 +170,6 @@ public class GetListTest: BaseTest
 
         var secondPageResponse = await PostRequestAsync(Url, _jwtToken, new GetListRequest
         {
-            WorkspaceId = _defaultWorkspace.Id,
             Page = 2
         });
         secondPageResponse.EnsureSuccessStatusCode();

@@ -46,7 +46,6 @@ public class GetListTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -56,11 +55,10 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveListIfWorkspaceOwner()
     {
         var expectedTotal = 21;
-        await _paymentSeeder.CreateSeveralAsync(_workspace, _client, _project, expectedTotal);
+        await _paymentSeeder.CreateSeveralAsync(_client, _project, expectedTotal);
 
         var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
         });
         response.EnsureSuccessStatusCode();
@@ -84,7 +82,7 @@ public class GetListTest: BaseTest
     public async Task ShouldReceiveListIfWorkspaceUser()
     {
         var expectedTotal = 3;
-        await _paymentSeeder.CreateSeveralAsync(_workspace, _client, _project, expectedTotal);
+        await _paymentSeeder.CreateSeveralAsync(_client, _project, expectedTotal);
         var (otherJwtToken, _, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
             MembershipAccessType.User
@@ -92,9 +90,8 @@ public class GetListTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherJwtToken, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
@@ -108,9 +105,8 @@ public class GetListTest: BaseTest
 
         var response = await PostRequestAsync(Url, otherJwtToken, new GetListRequest()
         {
-            WorkspaceId = _workspace.Id,
             Page = 1
-        });
+        }, _workspace.Id);
         var errorResponse = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), errorResponse.ErrorCode);
     }

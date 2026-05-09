@@ -41,7 +41,6 @@ public class UpdateTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             Name = _workspace.Name,
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -53,7 +52,6 @@ public class UpdateTest: BaseTest
         var expectWorkspace = _workspaceFactory.Generate();
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             Name = expectWorkspace.Name,
         });
         response.EnsureSuccessStatusCode();
@@ -75,9 +73,8 @@ public class UpdateTest: BaseTest
         var expectWorkspace = _workspaceFactory.Generate();
         var response = await PostRequestAsync(Url, otherJwt, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             Name = expectWorkspace.Name,
-        });
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
 
         var actual = await response.GetJsonDataAsync<WorkspaceDto>();
@@ -97,9 +94,8 @@ public class UpdateTest: BaseTest
         var expectWorkspace = _workspaceFactory.Generate();
         var response = await PostRequestAsync(Url, otherJwt, new UpdateRequest()
         {
-            WorkspaceId = _workspace.Id,
             Name = expectWorkspace.Name,
-        });
+        }, _workspace.Id);
 
         var actual = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), actual.ErrorCode);

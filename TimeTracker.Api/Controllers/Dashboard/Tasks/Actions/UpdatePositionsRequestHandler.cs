@@ -48,7 +48,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList))
                 throw new HasNoAccessException("This user has no permissions for provided task list");
 
-            await _taskDao.UpdatePositions(taskList.Project.Workspace, request.Items);
+            await _taskDao.UpdatePositions(taskList.Project.Client.Workspace, request.Items);
         }
     }
 }

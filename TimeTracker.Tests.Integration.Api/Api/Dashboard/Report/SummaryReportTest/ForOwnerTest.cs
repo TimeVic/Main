@@ -58,7 +58,6 @@ public class ForOwnerTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -68,7 +67,6 @@ public class ForOwnerTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByDay
@@ -100,7 +98,6 @@ public class ForOwnerTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByMonth
@@ -124,7 +121,6 @@ public class ForOwnerTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByWeek
@@ -149,7 +145,6 @@ public class ForOwnerTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByClient
@@ -174,7 +169,6 @@ public class ForOwnerTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByProject
@@ -199,7 +193,6 @@ public class ForOwnerTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new SummaryReportRequest()
         {
-            WorkspaceId = _workspace.Id,
             StartTime = DateTime.UtcNow.AddDays(-32),
             EndTime = DateTime.UtcNow,
             Type = SummaryReportType.GroupByUser

@@ -62,10 +62,12 @@ public class UserDao: BaseDao, IUserDao
         return user;
     }
     
-    public async Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, Guid workspaceId)
+    public async Task<WorkspaceEntity?> GetUsersWorkspace(UserEntity user, Guid? workspaceId)
     {
         var allWorkspaces = await GetUsersWorkspaces(user);
-        return allWorkspaces.FirstOrDefault(item => item.Id == workspaceId);
+        return workspaceId == null
+            ? allWorkspaces.FirstOrDefault(item => item.IsDefault)
+            : allWorkspaces.FirstOrDefault(item => item.Id == workspaceId);
     }
     
     public async Task<WorkspaceEntity> GetDefaultWorkspace(UserEntity user)

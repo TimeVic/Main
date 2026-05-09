@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Business.Common.Mvc.Attribute.Validation;
 
@@ -6,7 +6,5 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notification
 {
     public class GetCountRequest : IRequest<GetCountResponse>
     {
-        [RequiredNonEmpty]
-        public Guid WorkspaceId { get; set; }
     }
 }

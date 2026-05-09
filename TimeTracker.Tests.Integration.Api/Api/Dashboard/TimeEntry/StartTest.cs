@@ -43,7 +43,6 @@ public partial class StartTest: BaseTest
     {
         var response = await PostRequestAsAnonymousAsync(Url, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             StartTime = DateTime.UtcNow.AddSeconds(1)
         });
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -54,7 +53,6 @@ public partial class StartTest: BaseTest
     {
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             StartTime = DateTime.UtcNow
         });
         response.EnsureSuccessStatusCode();
@@ -73,13 +71,11 @@ public partial class StartTest: BaseTest
     {
         await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             StartTime = DateTime.UtcNow.AddSeconds(1)
         });
         await _timeEntryDao.StopActiveAsync(_defaultWorkspace, _user, DateTime.UtcNow.AddHours(1));
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             StartTime = DateTime.UtcNow.AddSeconds(1)
         });
         await response.GetJsonDataAsync();
@@ -99,7 +95,6 @@ public partial class StartTest: BaseTest
         await FlushDbChanges();
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             IsBillable = fakeTimeEntry.IsBillable,
@@ -122,7 +117,6 @@ public partial class StartTest: BaseTest
         var expectedStartTime = DateTime.UtcNow.AddMinutes(13);
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             StartTime = expectedStartTime
         });
         response.EnsureSuccessStatusCode();
@@ -144,7 +138,6 @@ public partial class StartTest: BaseTest
 
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             StartTime = DateTime.UtcNow.AddSeconds(1),
@@ -170,7 +163,6 @@ public partial class StartTest: BaseTest
 
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
         {
-            WorkspaceId = _defaultWorkspace.Id,
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             StartTime = DateTime.UtcNow.AddSeconds(1),

@@ -17,7 +17,9 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
         public virtual required CurrencyEntity Currency { get; set; }
         public virtual required UserEntity CreatedUser { get; set; }
         public virtual ICollection<ClientEntity> Clients { get; set; } = new List<ClientEntity>();
-        public virtual ICollection<ProjectEntity> Projects { get; set; } = new List<ProjectEntity>();
+        public virtual ICollection<ProjectEntity> Projects => Clients
+            .SelectMany(item => item.Projects)
+            .ToList();
         public virtual ICollection<TimeEntryEntity> TimeEntries { get; set; } = new List<TimeEntryEntity>();
         public virtual ICollection<WorkspaceSettingsClickUpEntity> SettingsClickUp { get; set; } = new List<WorkspaceSettingsClickUpEntity>();
         public virtual ICollection<WorkspaceSettingsRedmineEntity> SettingsRedmine { get; set; } = new List<WorkspaceSettingsRedmineEntity>();
@@ -94,7 +96,7 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
             {
                 return false;
             }
-            return Projects.Any(item => item.Id == project.Id);
+            return project.Client.Workspace.Id == Id;
         }
         
         #endregion

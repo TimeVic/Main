@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Business.Common.Constants.Http;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Services.Http.Auth;
 using TimeTracker.Web.Store.Auth;
@@ -17,6 +18,7 @@ public class HttpInterceptorService
     private readonly ILogger<HttpInterceptorService> _logger;
     private readonly NavigationManager _navigationManager;
     private readonly IDispatcher _dispatcher;
+    private readonly IState<AuthState> _authState;
 
     private string[] ExcludedUrls => _configuration.GetSection("Auth:ExcludedApiUrls").Get<string[]>() ?? [];
 
@@ -26,7 +28,8 @@ public class HttpInterceptorService
         RefreshJwtTokenService refreshJwtTokenService,
         ILogger<HttpInterceptorService> logger,
         NavigationManager navigationManager,
-        IDispatcher dispatcher
+        IDispatcher dispatcher,
+        IState<AuthState> authState
     )
     {
         _interceptor = interceptor;
@@ -35,6 +38,7 @@ public class HttpInterceptorService
         _logger = logger;
         _navigationManager = navigationManager;
         _dispatcher = dispatcher;
+        _authState = authState;
     }
 
     public void Register()
@@ -55,6 +59,12 @@ public class HttpInterceptorService
         var isExcludedUrl = ExcludedUrls.Any(excludedUrl => absPath.StartsWith(excludedUrl));
         if (!isExcludedUrl)
         {
+            if (_authState.Value.Workspace != null)
+            {
+                e.Request.Headers.Remove(AuthConstants.WorkspaceIdHeaderName);
+                e.Request.Headers.Add(AuthConstants.WorkspaceIdHeaderName, _authState.Value.Workspace.Id.ToString());
+            }
+
             var jwtToken = await _refreshJwtTokenService.TryRefreshToken();
             if(!string.IsNullOrEmpty(jwtToken))
             {
