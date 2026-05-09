@@ -16,18 +16,11 @@ public class MemberPaymentMapping: BaseGuidMappings<MemberPaymentEntity>
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         
-        References(x => x.Client)
-            .Column("client_id")
-            .Fetch.Select()
-            .LazyLoad()
-            .Nullable()
-            .Cascade.SaveUpdate();
-        
         References(x => x.Project)
             .Column("project_id")
             .Fetch.Select()
             .LazyLoad()
-            .Nullable()
+            .Not.Nullable()
             .Cascade.SaveUpdate();
         
         References(x => x.Member)

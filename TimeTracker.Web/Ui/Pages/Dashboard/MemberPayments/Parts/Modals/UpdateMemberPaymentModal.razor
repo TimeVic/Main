@@ -39,7 +39,7 @@
                             Value="model.ProjectId"
                             ValueExpression="() => model.ProjectId"
                             SelectedItemChanged="OnProjectSelected"/>
-                        <CustomValidationMessage For="@(() => model.ClientId)"/>
+                        <CustomValidationMessage For="@(() => model.ProjectId)"/>
                     </div>
                     @if (CanCreatePaymentForOtherMembers)
                     {

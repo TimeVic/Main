@@ -57,7 +57,7 @@ public class GetListTest: BaseTest
         Assert.All(listModel.Items, item =>
         {
             Assert.NotEqual(Guid.Empty, item.Id);
-            Assert.NotNull(item.Client);
+            Assert.NotNull(item.Project);
             Assert.NotEmpty(item.Description!);
             Assert.True(item.Amount > 0);
             Assert.True(item.PaymentTime > DateTime.MinValue);
@@ -76,7 +76,9 @@ public class GetListTest: BaseTest
         await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
         var otherWorkspace = await _workspaceDao.CreateWorkspaceAsync(_user, "Test 2");
         var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
-        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherClient, null, 15);
+        var otherProject = await _projectDao.CreateAsync(otherWorkspace, "Test");
+        otherProject.SetClient(otherClient);
+        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherProject, 15);
 
         await FlushDbChanges();
         var listModel = await _paymentDao.GetListAsync(_workspace, _user, 1);
@@ -91,7 +93,9 @@ public class GetListTest: BaseTest
         await _paymentSeeder.CreateSeveralAsync(_user, expectedTotal);
         var otherWorkspace = await _workspaceDao.CreateWorkspaceAsync(_user, "Test 2");
         var otherClient = await _clientDao.CreateAsync(otherWorkspace, "Test");
-        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherClient, null, 15);
+        var otherProject = await _projectDao.CreateAsync(otherWorkspace, "Test");
+        otherProject.SetClient(otherClient);
+        await _paymentSeeder.CreateSeveralAsync(otherWorkspace, _user, otherProject, 15);
         
         await FlushDbChanges();
         var listModel = await _paymentDao.GetListAsync(_workspace, _user, 1);

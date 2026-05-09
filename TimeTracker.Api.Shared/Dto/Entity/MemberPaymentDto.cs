@@ -11,9 +11,9 @@ public class MemberPaymentDto: BaseDto
     
     public decimal Amount { get; set; }
     
-    public ProjectDto? Project { get; set; }
+    public ProjectDto Project { get; set; } = null!;
     
-    public ClientDto Client { get; set; } = null!;
+    public ClientDto? Client { get; set; }
 
     public WorkspaceMemberDto Member { get; set; } = null!;
     

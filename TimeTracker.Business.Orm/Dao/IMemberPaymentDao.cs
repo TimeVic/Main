@@ -13,30 +13,27 @@ public interface IMemberPaymentDao: IDomainService
     
     Task<MemberPaymentEntity> CreateAsync(
         WorkspaceMemberEntity member,
-        ClientEntity client,
+        ProjectEntity project,
         decimal amount,
         DateTime paymentTime,
-        Guid? projectId = null,
         string? description = null
     );
 
     Task<MemberPaymentEntity> CreateAsync(
         WorkspaceEntity workspace,
         UserEntity user,
-        ClientEntity client,
+        ProjectEntity project,
         decimal amount,
         DateTime paymentTime,
-        Guid? projectId = null,
         string? description = null
     );
 
     Task<MemberPaymentEntity?> UpdateMemberPaymentAsync(
         Guid paymentId,
         WorkspaceMemberEntity member,
-        ClientEntity client,
+        ProjectEntity project,
         decimal amount,
         DateTime paymentTime,
-        Guid? projectId,
         string? description
     );
     

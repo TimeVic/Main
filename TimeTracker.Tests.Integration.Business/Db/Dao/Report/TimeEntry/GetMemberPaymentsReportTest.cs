@@ -141,25 +141,23 @@ public class GetMemberPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client!,
+            project1,
             25,
             DateTime.UtcNow,
-            project1.Id,
             ""
         );
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client!,
+            project1,
             20,
             DateTime.UtcNow,
-            project1.Id,
             ""
         );
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client!,
+            project1,
             32,
             DateTime.UtcNow
         );
@@ -193,7 +191,7 @@ public class GetMemberPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            client,
+            project,
             125,
             paymentTime
         );
@@ -207,12 +205,12 @@ public class GetMemberPaymentsReportTest: BaseTest
 
         var actualForClient = result.FirstOrDefault(item => item.ClientId == client.Id);
         Assert.NotNull(actualForClient);
-        Assert.Null(actualForClient.ProjectId);
+        Assert.Equal(project.Id, actualForClient.ProjectId);
         Assert.Equal(client.Id, actualForClient.ClientId);
         Assert.Equal(client.Name, actualForClient.ClientName);
         Assert.Equal(0, actualForClient.Amount);
         Assert.Equal(125, actualForClient.PaidAmountByClient);
-        Assert.Equal(0, actualForClient.PaidAmountByProject);
+        Assert.Equal(125, actualForClient.PaidAmountByProject);
         Assert.Equal(TimeSpan.Zero, actualForClient.TotalDuration);
     }
     
@@ -228,10 +226,9 @@ public class GetMemberPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             otherUser,
-            project1.Client!,
+            project1,
             15,
             DateTime.UtcNow,
-            project1.Id,
             ""
         );
         await _timeEntryDao.SetAsync(otherUser, _workspace, new TimeEntryCreationDto()
@@ -252,10 +249,9 @@ public class GetMemberPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client!,
+            project1,
             10,
             DateTime.UtcNow,
-            project1.Id,
             ""
         );
 
@@ -288,19 +284,17 @@ public class GetMemberPaymentsReportTest: BaseTest
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client!,
+            project1,
             15,
             DateTime.UtcNow.AddDays(-4),
-            project1.Id,
             ""
         );
         await _paymentDao.CreateAsync(
             _workspace,
             _user,
-            project1.Client!,
+            project1,
             15,
             DateTime.UtcNow.AddDays(-10),
-            project1.Id,
             ""
         );
         await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()

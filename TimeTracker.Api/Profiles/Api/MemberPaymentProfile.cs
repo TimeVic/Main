@@ -8,6 +8,7 @@ public class MemberPaymentProfile : Profile
 {
     public MemberPaymentProfile()
     {
-        CreateMap<MemberPaymentEntity, MemberPaymentDto>();
+        CreateMap<MemberPaymentEntity, MemberPaymentDto>()
+            .ForMember(dto => dto.Client, options => options.MapFrom(entity => entity.Project.Client));
     }
 }

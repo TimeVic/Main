@@ -31,18 +31,17 @@ public class MemberPaymentDao: IMemberPaymentDao
     
     public async Task<MemberPaymentEntity> CreateAsync(
         WorkspaceMemberEntity member,
-        ClientEntity client,
+        ProjectEntity project,
         decimal amount,
         DateTime paymentTime,
-        Guid? projectId = null,
         string? description = null
     )
     {
         var workspace = member.Workspace;
 
-        if (workspace.Clients.All(item => item.Id != client.Id))
+        if (project.Workspace.Id != workspace.Id)
         {
-            throw new DataInconsistencyException($"This workspace does not contain client: {client.Id}");
+            throw new DataInconsistencyException($"This workspace does not contain project: {project.Id}");
         }
 
         var entity = new MemberPaymentEntity
@@ -53,14 +52,9 @@ public class MemberPaymentDao: IMemberPaymentDao
             Description = description,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            Client = client
+            Project = project
         };
-        client.AddMemberPayment(entity);
-        var project = client.Projects.FirstOrDefault(item => item.Id == projectId);
-        if (project != null)
-        {
-            project.AddMemberPayment(entity);
-        }
+        project.AddMemberPayment(entity);
 
         await _sessionProvider.CurrentSession.SaveAsync(entity);
         return entity;
@@ -69,47 +63,43 @@ public class MemberPaymentDao: IMemberPaymentDao
     public async Task<MemberPaymentEntity> CreateAsync(
         WorkspaceEntity workspace,
         UserEntity user,
-        ClientEntity client,
+        ProjectEntity project,
         decimal amount,
         DateTime paymentTime,
-        Guid? projectId = null,
         string? description = null
     )
     {
         var member = await GetMemberAsync(workspace, user);
-        return await CreateAsync(member, client, amount, paymentTime, projectId, description);
+        return await CreateAsync(member, project, amount, paymentTime, description);
     }
     
     public async Task<MemberPaymentEntity?> UpdateMemberPaymentAsync(
         Guid paymentId,
         WorkspaceMemberEntity member,
-        ClientEntity client,
+        ProjectEntity project,
         decimal amount,
         DateTime paymentTime,
-        Guid? projectId,
         string? description    
     )
     {
         var payment = await _sessionProvider.CurrentSession.Query<MemberPaymentEntity>()
             .FirstOrDefaultAsync(item => item.Id == paymentId);
-        if (payment != null)
+        if (payment == null)
         {
-            payment.UpdatedAt = DateTime.UtcNow;
-            payment.Member = member;
-            payment.Client = client;
-            payment.Amount = amount;
-            payment.PaymentTime = paymentTime;
-            payment.Description = description;
-            var project = payment.Client.Projects.FirstOrDefault(item => item.Id == projectId);
-            if (project != null)
-            {
-                project.AddMemberPayment(payment);
-            }
-            else
-            {
-                payment.Project = null!;
-            }
+            return null;
         }
+
+        payment.UpdatedAt = DateTime.UtcNow;
+        payment.Member = member;
+        payment.Amount = amount;
+        payment.PaymentTime = paymentTime;
+        payment.Description = description;
+        if (project.Workspace.Id != member.Workspace.Id)
+        {
+            throw new DataInconsistencyException($"This workspace does not contain project: {project.Id}");
+        }
+
+        project.AddMemberPayment(payment);
 
         await _sessionProvider.CurrentSession.SaveAsync(payment);
         return payment;
@@ -171,8 +161,8 @@ public class MemberPaymentDao: IMemberPaymentDao
     private static IQueryable<MemberPaymentEntity> BuildListQuery(IQueryable<MemberPaymentEntity> query)
     {
         return query
-            .Fetch(item => item.Client)
             .Fetch(item => item.Project)
+            .ThenFetch(item => item.Client)
             .Fetch(item => item.Member)
             .ThenFetch(item => item.User);
     }

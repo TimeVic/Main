@@ -26,13 +26,14 @@ report_rows as (
 
     union
 
-    select pm.project_id as ProjectId, pm.client_id as ClientId
+    select pm.project_id as ProjectId, p.client_id as ClientId
     from member_payments pm
              inner join workspace_members wm on wm.id = pm.member_id
+             inner join projects p on p.id = pm.project_id
     where wm.user_id = :userId
       and wm.workspace_id = :workspaceId
       and pm.payment_time <= :endDate
-    group by pm.project_id, pm.client_id
+    group by pm.project_id, p.client_id
 )
 select
     rr.ProjectId as ProjectId,
@@ -45,11 +46,12 @@ select
         select sum(pm.amount)
         from member_payments pm
                  inner join workspace_members wm on wm.id = pm.member_id
-        where pm.client_id = rr.ClientId
+                 inner join projects p on p.id = pm.project_id
+        where p.client_id = rr.ClientId
           and wm.user_id = :userId
           and wm.workspace_id = :workspaceId
           and pm.payment_time <= :endDate
-        group by pm.client_id
+        group by p.client_id
     ), 0) as PaidAmountByClientOriginal,
     coalesce((
         select sum(pm.amount)

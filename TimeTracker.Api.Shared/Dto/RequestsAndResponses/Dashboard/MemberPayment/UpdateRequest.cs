@@ -13,8 +13,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPaymen
         public void Fill(MemberPaymentDto payment)
         {
             MemberPaymentId = payment.Id;
-            ClientId = payment.Client.Id;
-            ProjectId = payment.Project?.Id ?? Guid.Empty;
+            ProjectId = payment.Project.Id;
             MemberId = payment.Member.Id;
             Amount = payment.Amount;
             Description = payment.Description;

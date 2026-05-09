@@ -17,7 +17,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
         private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly IMemberPaymentDao _paymentDao;
-        private readonly IClientDao _clientDao;
+        private readonly IProjectDao _projectDao;
         private readonly ISecurityManager _securityManager;
         private readonly IWorkspaceDao _workspaceDao;
         private readonly IWorkspaceAccessService _workspaceAccessService;
@@ -27,7 +27,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             IApiRequestService apiRequestService,
             IUserDao userDao,
             IMemberPaymentDao paymentDao,
-            IClientDao clientDao,
+            IProjectDao projectDao,
             ISecurityManager securityManager,
             IWorkspaceDao workspaceDao,
             IWorkspaceAccessService workspaceAccessService
@@ -37,7 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             _apiRequestService = apiRequestService;
             _userDao = userDao;
             _paymentDao = paymentDao;
-            _clientDao = clientDao;
+            _projectDao = projectDao;
             _securityManager = securityManager;
             _workspaceDao = workspaceDao;
             _workspaceAccessService = workspaceAccessService;
@@ -46,12 +46,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
         public async Task<MemberPaymentDto> ExecuteAsync(AddRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var client = await _clientDao.GetById(request.ClientId);
+            var project = await _projectDao.GetById(request.ProjectId);
             var workspace = await _userDao.GetUsersWorkspace(user, request.WorkspaceId);
             if (
                 workspace == null 
-                || client == null 
+                || project == null
+                || project.Workspace.Id != workspace.Id
                 || !await _securityManager.HasAccess(AccessLevel.Read, user, workspace)
+                || !await _securityManager.HasAccess(AccessLevel.Read, user, project)
             )
             {
                 throw new HasNoAccessException();
@@ -80,10 +82,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
 
             var payment = await _paymentDao.CreateAsync(
                 member,
-                client,
+                project,
                 request.Amount,
                 request.PaymentTime,
-                request.ProjectId,
                 request.Description
             );
             return _mapper.Map<MemberPaymentDto>(payment);
