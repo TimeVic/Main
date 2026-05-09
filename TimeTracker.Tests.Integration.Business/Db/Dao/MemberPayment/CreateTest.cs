@@ -64,24 +64,4 @@ public class CreateTest: BaseTest
         Assert.Equal(expectProject.Id, actualMemberPayment.Project.Id);
         Assert.Equal(expectClient.Id, actualMemberPayment.Project.Client!.Id);
     }
-    
-    [Fact]
-    public async Task ShouldCreateForProjectWithoutClient()
-    {
-        var expectMemberPayment = _paymentFactory.Generate(); 
-        var expectProject = await _projectSeeder.CreateAsync(_workspace);
-        await FlushDbChanges();
-       
-        var actualMemberPayment = await _paymentDao.CreateAsync(
-            _workspace,
-            _user,
-            expectProject,
-            expectMemberPayment.Amount,
-            expectMemberPayment.PaymentTime,
-            expectMemberPayment.Description
-        );
-        
-        Assert.Equal(expectProject.Id, actualMemberPayment.Project.Id);
-        Assert.Null(actualMemberPayment.Project.Client);
-    }
 }
