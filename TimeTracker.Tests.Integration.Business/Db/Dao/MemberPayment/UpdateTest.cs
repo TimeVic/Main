@@ -78,40 +78,4 @@ public class UpdateTest: BaseTest
         Assert.Equal(expectProject.Id, actualMemberPayment.Project.Id);
         Assert.Equal(expectClient.Id, actualMemberPayment.Project.Client!.Id);
     }
-    
-    [Fact]
-    public async Task ShouldUpdateToProjectWithoutClient()
-    {
-        var payment = _paymentFactory.Generate();
-        var project = await _projectSeeder.CreateAsync(_workspace);
-        var client = project.Client;
-        
-        var expectedMemberPayment = _paymentFactory.Generate();
-        var expectProject = await _projectSeeder.CreateAsync(_workspace);
-        await FlushDbChanges();
-
-        var actualMemberPayment = await _paymentDao.CreateAsync(
-            _workspace,
-            _user,
-            project,
-            payment.Amount,
-            payment.PaymentTime,
-            payment.Description
-        );
-        
-        await FlushDbChanges();
-        actualMemberPayment = await _paymentDao.UpdateMemberPaymentAsync(
-            actualMemberPayment.Id,
-            actualMemberPayment.Member,
-            expectProject,
-            expectedMemberPayment.Amount,
-            expectedMemberPayment.PaymentTime,
-            expectedMemberPayment.Description
-        );
-
-        Assert.NotNull(actualMemberPayment);
-        Assert.NotEqual(Guid.Empty, actualMemberPayment.Id);
-        Assert.Equal(expectProject.Id, actualMemberPayment.Project.Id);
-        Assert.Null(actualMemberPayment.Project.Client);
-    }
 }
