@@ -21,6 +21,18 @@ public class ClientPaymentReducers
     }
 
     [ReducerMethod]
+    public static ClientPaymentState SetClientPaymentSelectedPageActionReducer(
+        ClientPaymentState state,
+        SetClientPaymentSelectedPageAction action
+    )
+    {
+        return state with
+        {
+            SelectedPage = action.SelectedPage
+        };
+    }
+
+    [ReducerMethod]
     public static ClientPaymentState SetClientPaymentIsListLoadingReducer(
         ClientPaymentState state,
         SetClientPaymentIsListLoadingAction action

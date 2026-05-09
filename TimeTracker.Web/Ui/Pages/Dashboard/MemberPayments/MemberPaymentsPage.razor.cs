@@ -24,6 +24,9 @@ public partial class MemberPaymentsPage
     private bool CanManageOtherMemberPayments =>
         SecurityManager.HasPermission(WorkspacePermission.CreateMemberPaymentForOtherMembers);
 
+    private string PaymentPaginationSummary =>
+        $"Page {_state.Value.SelectedPage} of {_state.Value.TotalPages} ({_state.Value.TotalCount} payments)";
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -34,6 +37,13 @@ public partial class MemberPaymentsPage
     private void OnMemberFilterChanged(WorkspaceMemberDto? member)
     {
         _memberFilterId = member?.Id ?? Guid.Empty;
+        _dispatcher.Dispatch(new SetMemberPaymentSelectedPageAction(1));
+        _dispatcher.Dispatch(new LoadMemberPaymentListAction(true, _memberFilterId));
+    }
+
+    private void OnPageChanged(int selectedPage)
+    {
+        _dispatcher.Dispatch(new SetMemberPaymentSelectedPageAction(selectedPage));
         _dispatcher.Dispatch(new LoadMemberPaymentListAction(true, _memberFilterId));
     }
 }

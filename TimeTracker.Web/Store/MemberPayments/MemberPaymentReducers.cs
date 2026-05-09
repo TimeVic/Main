@@ -20,6 +20,18 @@ public class MemberPaymentReducers
     }
 
     [ReducerMethod]
+    public static MemberPaymentState SetMemberPaymentSelectedPageActionReducer(
+        MemberPaymentState state,
+        SetMemberPaymentSelectedPageAction action
+    )
+    {
+        return state with
+        {
+            SelectedPage = action.SelectedPage
+        };
+    }
+
+    [ReducerMethod]
     public static MemberPaymentState SetMemberPaymentIsListLoadingReducer(MemberPaymentState state, SetIsListLoading action)
     {
         return state with
@@ -55,7 +67,7 @@ public class MemberPaymentReducers
     {
         return state with
         {
-            TotalCount = --state.TotalCount,
+            TotalCount = Math.Max(0, state.TotalCount - 1),
             List = state.List.Where(item => item.Id != action.MemberPaymentId).ToList()
         };
     }

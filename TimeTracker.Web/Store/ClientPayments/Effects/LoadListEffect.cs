@@ -38,7 +38,8 @@ public class LoadListEffect : Effect<LoadClientPaymentListAction>
             dispatcher.Dispatch(new SetClientPaymentIsListLoadingAction(true));
             var response = await _apiService.ClientPaymentGetListAsync(new GetListRequest
             {
-                Page = 1
+                // Fixes payment pagination by loading the page selected in TPaginator.
+                Page = Math.Max(1, _state.Value.SelectedPage)
             });
 
             if (response != null)

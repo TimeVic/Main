@@ -7,6 +7,8 @@ namespace TimeTracker.Web.Store.MemberPayments;
 public record MemberPaymentState
 {
     public ICollection<MemberPaymentDto> List { get; set; } = new List<MemberPaymentDto>();
+
+    public int SelectedPage { get; set; } = 1;
     
     public int TotalCount { get; set; }
     

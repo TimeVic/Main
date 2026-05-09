@@ -4,6 +4,7 @@
 @using TimeTracker.Web.Ui.Pages.Dashboard.MemberPayments.Parts
 @using TimeTracker.Web.Ui.Pages.Dashboard.MemberPayments.Parts.Modals
 @using TimeTracker.Web.Ui.Pages.Dashboard.Shared
+@using TimeTracker.Web.Ui.Shared.Components.List
 
 @inherits BaseReactiveComponent
 @layout Layout
@@ -56,5 +57,12 @@
         {
             <MemberPaymentsTableBlock></MemberPaymentsTableBlock>
         }
+        <div class="mt-4">
+            <TPaginator
+                CurrentPage="@_state.Value.SelectedPage"
+                CurrentPageChanged="OnPageChanged"
+                TotalPages="@_state.Value.TotalPages"
+                SummaryText="@PaymentPaginationSummary"/>
+        </div>
     </LumexCardBody>
 </LumexCard>

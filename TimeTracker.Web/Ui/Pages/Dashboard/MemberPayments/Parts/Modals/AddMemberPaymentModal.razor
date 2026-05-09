@@ -48,8 +48,7 @@
                         <InputDateTimeField
                             Size="Size.Small"
                             Required="true"
-                            Value="@model.PaymentTime"
-                            ValueExpression="() => model.PaymentTime"
+                            @bind-Value="@model.PaymentTime"
                             Label="Payment Date"/>
                         <CustomValidationMessage For="@(() => model.PaymentTime)"/>
                     </div>
