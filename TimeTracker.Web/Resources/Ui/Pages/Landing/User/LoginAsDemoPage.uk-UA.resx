@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>TimeVic — завантаження демо</value>
+  </data>
+  <data name="Content_SomethingWentWrong" xml:space="preserve">
+    <value>Щось пішло не так</value>
+  </data>
+  <data name="Content_CouldNotLoadTheDemoAccountPleaseTryAgain" xml:space="preserve">
+    <value>Не вдалося відкрити демоакаунт. Спробуй ще раз.</value>
+  </data>
+  <data name="Content_Retry" xml:space="preserve">
+    <value>Спробувати ще раз</value>
+  </data>
+  <data name="Content_SettingUpYourDemo" xml:space="preserve">
+    <value>Готуємо демо</value>
+  </data>
+  <data name="Content_WeRePreparingAWorkspaceWithSampleDataThisTakes" xml:space="preserve">
+    <value>Створюємо workspace з прикладами клієнтів, проєктів і задач. Це займе кілька секунд.</value>
+  </data>
+  <data name="Content_WorkspacesClients" xml:space="preserve">
+    <value>Workspace і клієнти</value>
+  </data>
+  <data name="Content_ProjectsTaskLists" xml:space="preserve">
+    <value>Проєкти і списки задач</value>
+  </data>
+  <data name="Content_SampleTasks" xml:space="preserve">
+    <value>Приклади задач</value>
+  </data>
+</root>

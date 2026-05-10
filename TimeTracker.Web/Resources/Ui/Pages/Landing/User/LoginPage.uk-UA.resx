@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>TimeVic — вхід</value>
+  </data>
+  <data name="Content_WorkspaceDemoAccess" xml:space="preserve">
+    <value>Доступ до workspace</value>
+  </data>
+  <data name="Content_SignInToTheTimevicWorkspace" xml:space="preserve">
+    <value>Увійди у свій workspace TimeVic</value>
+  </data>
+  <data name="Content_AfterSigningInTheUserLandsOnTheDashboardOr" xml:space="preserve">
+    <value>Після входу відкриється кабінет з клієнтами, проєктами, часом, оплатами і залишками.</value>
+  </data>
+  <data name="Content_SingleSignIn" xml:space="preserve">
+    <value>Один вхід</value>
+  </data>
+  <data name="Content_AuthenticationStateIsStoredLocallyForABackendFreePreview" xml:space="preserve">
+    <value>Сесія зберігається локально, щоб не вводити дані щоразу.</value>
+  </data>
+  <data name="Content_ProtectedPages" xml:space="preserve">
+    <value>Приватні сторінки</value>
+  </data>
+  <data name="Content_DashboardChatAndWorkspacePagesOpenOnlyAfterSignIn" xml:space="preserve">
+    <value>Кабінет, workspace і робочі дані відкриваються тільки після входу.</value>
+  </data>
+  <data name="Content_QuickStart" xml:space="preserve">
+    <value>Швидкий старт</value>
+  </data>
+  <data name="Content_EnterAnyValidEmailAndPasswordToAccessThePreview" xml:space="preserve">
+    <value>У демо можна подивитися приклад workspace з клієнтами, ставками й оплатами.</value>
+  </data>
+  <data name="Content_Auth" xml:space="preserve">
+    <value>Вхід</value>
+  </data>
+  <data name="Content_UserSignIn" xml:space="preserve">
+    <value>Увійти в акаунт</value>
+  </data>
+  <data name="Content_RememberThisSession" xml:space="preserve">
+    <value>Запамʼятати цю сесію</value>
+  </data>
+  <data name="Content_SignInAndOpenWorkspace" xml:space="preserve">
+    <value>Увійти і відкрити workspace</value>
+  </data>
+  <data name="Content_NoAccountYet" xml:space="preserve">
+    <value>Ще немає акаунта?</value>
+  </data>
+  <data name="Content_CreateOne" xml:space="preserve">
+    <value>Створити акаунт</value>
+  </data>
+  <data name="Content_SignInWithAMagicLink" xml:space="preserve">
+    <value>Увійти через magic link</value>
+  </data>
+  <data name="Content_WeLlSendAOneTimeLoginLinkToYour" xml:space="preserve">
+    <value>Ми надішлемо одноразове посилання для входу на твій email.</value>
+  </data>
+  <data name="Content_SendMagicLink" xml:space="preserve">
+    <value>Надіслати magic link</value>
+  </data>
+  <data name="Content_MagicLinkSent" xml:space="preserve">
+    <value>Посилання надіслано</value>
+  </data>
+  <data name="Content_CheckYourInboxAndClickTheLinkToSignIn" xml:space="preserve">
+    <value>Перевір пошту і перейди за посиланням, щоб увійти.</value>
+  </data>
+  <data name="Toast_IncorrectEmailOrPassword" xml:space="preserve">
+    <value>Неправильний email або пароль</value>
+  </data>
+  <data name="Toast_FailedToSendMagicLink" xml:space="preserve">
+    <value>Не вдалося надіслати magic link</value>
+  </data>
+</root>

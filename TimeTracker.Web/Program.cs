@@ -22,7 +22,6 @@ using ToastService = TimeTracker.Web.Services.UI.ToastService;
 using LumexUI.Extensions;
 using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.UI.Modal;
-using TimeTracker.Web.Services;
 using Microsoft.AspNetCore.Components;
 
 var currentAssembly = typeof(Program).Assembly;

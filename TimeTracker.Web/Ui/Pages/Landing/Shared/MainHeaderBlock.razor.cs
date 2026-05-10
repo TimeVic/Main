@@ -29,6 +29,10 @@ public partial class MainHeaderBlock
 
     protected string NavFaqUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.Faq, CurrentCulture);
 
+    protected string RegistrationUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.Registration_Step1, CurrentCulture);
+
+    protected string LoginUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.Login, CurrentCulture);
+
     protected string EnglishUrl => LocalizationUrlService.GetEnglishUrl(CurrentPath);
 
     protected string UkrainianUrl => LocalizationUrlService.GetUkrainianUrl(CurrentPath);
@@ -37,4 +41,3 @@ public partial class MainHeaderBlock
 
     protected void SwitchToUkrainian() => NavigationManager.NavigateTo(UkrainianUrl, forceLoad: true);
 }
-

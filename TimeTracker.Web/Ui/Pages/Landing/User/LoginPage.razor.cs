@@ -81,7 +81,7 @@ public partial class LoginPage
 
     private void ForgotPassword()
     {
-        NavigationManager.NavigateTo(SiteUrl.ForgotPassword);
+        NavigationManager.NavigateTo(LocalizationUrlService.GetLocalizedUrl(SiteUrl.ForgotPassword, CurrentCulture));
     }
 
     private async Task SubmitMagic()

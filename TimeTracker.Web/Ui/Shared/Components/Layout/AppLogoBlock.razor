@@ -1,5 +1,9 @@
+@using TimeTracker.Web.Services
 @inject IStringLocalizer<PublicLandingResource> SharedLocalizer
-<a href="/" class="flex items-center gap-3">
+@inject ILocalizationUrlService LocalizationUrlService
+@inject NavigationManager NavigationManager
+
+<a href="@HomeUrl" class="flex items-center gap-3">
     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
         <i class="fa-regular fa-clock text-lg"></i>
     </div>
@@ -18,4 +22,10 @@
 @code {
     [Parameter]
     public string Eyebrow { get; set; } = string.Empty;
+
+    private string CurrentPath => new Uri(NavigationManager.Uri).AbsolutePath;
+
+    private string CurrentCulture => LocalizationUrlService.GetCurrentCultureName(CurrentPath);
+
+    private string HomeUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.Main, CurrentCulture);
 }

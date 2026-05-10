@@ -2,12 +2,14 @@
 @page "/uk/use-cases"
 
 @using LumexUI.Common
+@using TimeTracker.Web.Services
 @using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.LandingLayout
 @inherits BaseReactiveComponent
 @layout Layout
 
 @inject IStringLocalizer<PublicLandingResource> SharedLocalizer
 @inject IStringLocalizer<UseCasesPage> Localizer
+@inject ILocalizationUrlService LocalizationUrlService
 <SeoHead
     Title="@Localizer["Meta_Title"]"
     Description="@Localizer["Meta_Description"]"
@@ -44,7 +46,7 @@
                         Radius="@Radius.Large"
                         Color="@ThemeColor.Success"
                         Class="w-full rounded-2xl px-6 font-semibold shadow-sm shadow-emerald-200/80 sm:w-auto"
-                        OnClick="@(() => NavigationManager.NavigateTo(SiteUrl.Registration_Step1))">
+                        OnClick="@(() => NavigationManager.NavigateTo(LocalizedUrl(SiteUrl.Registration_Step1)))">
                         <StartContent>
                             <i class="fa-solid fa-wallet"></i>
                         </StartContent>
@@ -373,14 +375,14 @@
                             Radius="@Radius.Large"
                             Color="@ThemeColor.Success"
                             Class="w-full rounded-2xl px-6 font-semibold shadow-sm shadow-emerald-950/20 sm:w-auto"
-                            OnClick="@(() => NavigationManager.NavigateTo(SiteUrl.Registration_Step1))">
+                            OnClick="@(() => NavigationManager.NavigateTo(LocalizedUrl(SiteUrl.Registration_Step1)))">
                             <StartContent>
                                 <i class="fa-solid fa-user-plus"></i>
                             </StartContent>
                             <ChildContent>@SharedLocalizer["CTA_StartFree"]</ChildContent>
                         </LumexButton>
 
-                        <a href="@SiteUrl.LoginAsDemo" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">
+                        <a href="@LocalizedUrl(SiteUrl.LoginAsDemo)" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">
                             <i class="fa-solid fa-flask"></i>
                             <span>@SharedLocalizer["CTA_PreviewDemo"]</span>
                         </a>
@@ -392,3 +394,11 @@
         </div>
     </section>
 </main>
+
+@code {
+    private string CurrentPath => new Uri(NavigationManager.Uri).AbsolutePath;
+
+    private string CurrentCulture => LocalizationUrlService.GetCurrentCultureName(CurrentPath);
+
+    private string LocalizedUrl(string path) => LocalizationUrlService.GetLocalizedUrl(path, CurrentCulture);
+}
