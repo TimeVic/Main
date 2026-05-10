@@ -11,6 +11,8 @@ with cost_by_member as (
              inner join users u on u.id = wm.user_id
     where te.workspace_id = :workspaceId
       and te.end_time is not null
+      and te.is_billable = true
+      and te.hourly_rate is not null
     group by wm.id, u.id, u.user_name, u.email
 ),
 paidout_by_member as (

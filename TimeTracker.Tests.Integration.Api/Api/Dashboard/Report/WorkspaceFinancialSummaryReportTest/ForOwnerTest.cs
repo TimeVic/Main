@@ -182,6 +182,52 @@ public class ForOwnerTest : BaseTest
     }
 
     [Fact]
+    public async Task ReportIgnoresTimeEntriesWithoutBillableRate()
+    {
+        _project.DefaultHourlyRate = 1000;
+
+        await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
+        {
+            StartTime = DateTime.UtcNow.StartOfDay().AddHours(12),
+            EndTime = DateTime.UtcNow.StartOfDay().AddHours(13),
+            IsBillable = false,
+            HourlyRate = 100
+        }, _project);
+
+        await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
+        {
+            StartTime = DateTime.UtcNow.StartOfDay().AddHours(14),
+            EndTime = DateTime.UtcNow.StartOfDay().AddHours(15),
+            IsBillable = true,
+            HourlyRate = null
+        }, _project);
+
+        await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
+        {
+            StartTime = DateTime.UtcNow.StartOfDay().AddHours(16),
+            EndTime = DateTime.UtcNow.StartOfDay().AddHours(17),
+            IsBillable = true,
+            HourlyRate = 60
+        }, _project);
+
+        var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
+        {
+        });
+        response.EnsureSuccessStatusCode();
+
+        var data = await response.GetJsonDataAsync<WorkspaceFinancialSummaryReportResponse>();
+        Assert.NotNull(data?.Totals);
+        Assert.Equal(260, data.Totals.ClientEarned);
+        Assert.Equal(260, data.Totals.TeamCost);
+        Assert.Equal(0, data.Totals.EstimatedMargin);
+
+        var projectProfitability = Assert.Single(data.ProjectProfitability);
+        Assert.Equal(260, projectProfitability.ClientEarned);
+        Assert.Equal(260, projectProfitability.TeamCost);
+        Assert.Equal(0, projectProfitability.EstimatedMargin);
+    }
+
+    [Fact]
     public async Task RealizedMarginEqualsClientReceivedMinusMemberPaidOut()
     {
         var (_, member, _) = await UserSeeder.CreateAuthorizedAsync();

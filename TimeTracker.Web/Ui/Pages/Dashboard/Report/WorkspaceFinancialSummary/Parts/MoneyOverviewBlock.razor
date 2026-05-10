@@ -45,21 +45,21 @@
         </SummaryMetricCard>
 
         <SummaryMetricCard
-            Title="Estimated Margin"
-            HelperText="Client earned minus member earnings."
-            TooltipText="Estimated Margin = Client Earned minus Member Earnings."
-            Variant="@(_totals?.EstimatedMargin >= 0 ? "success" : "danger")"
+            Title="Owner Revenue"
+            HelperText="Client received minus payouts to members."
+            TooltipText="Owner Revenue = Client Received minus Paid to Members."
+            Variant="@(_totals?.RealizedMargin >= 0 ? "success" : "danger")"
             IconClass="fa-solid fa-chart-line">
             <Value>
-                <AmountDisplay Amount="@(_totals?.EstimatedMargin ?? 0)"/>
+                <AmountDisplay Amount="@(_totals?.RealizedMargin ?? 0)"/>
             </Value>
         </SummaryMetricCard>
     </div>
 
-    @if (_totals?.EstimatedMargin < 0)
+    @if (_totals?.RealizedMargin < 0)
     {
         <div class="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-            Member earnings exceed client earned by <AmountDisplay Amount="@Math.Abs(_totals.EstimatedMargin)"/>. Check client billing rates or member rates.
+            Member payouts exceed client received by <AmountDisplay Amount="@Math.Abs(_totals.RealizedMargin)"/>. Check client payments or member payouts.
         </div>
     }
 
