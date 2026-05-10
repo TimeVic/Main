@@ -158,3 +158,59 @@ dotnet test ./TimeTracker.Tests.Unit.Business
  - Sub Classes/Interfecaes/Records and etc. should placed in the top of the class
  - Interface names should be started with prefix "I". Incorrect: ProjectService, Correct: IProjectService 
  - If added some fix of the specific issue, bug, etc., add comment with description of the resolved issue
+
+## Localization rules for UI components
+
+When creating or changing public pages or dashboard components, do not hardcode user-facing text directly in Razor/HTML/C# components.
+
+All visible UI strings must be added to localization resources for both supported locales:
+
+- `en` — English/default
+- `uk-UA` — Ukrainian
+
+Use stable, descriptive resource keys, for example:
+
+- `Hero_Title`
+- `Hero_Subtitle`
+- `Button_Save`
+- `Button_Cancel`
+- `Menu_Settings`
+- `Dashboard_TotalEarned`
+- `Payments_OutstandingBalance`
+
+Avoid generic keys like `Text1`, `Title2`, `Label3`.
+
+For English texts:
+- keep wording simple, clear, and product-focused
+- emphasize TimeVic as an income/time/payment tracking tool for freelancers
+- prefer terms like `earned`, `paid`, `outstanding`, `client`, `project`, `time entry`
+
+For Ukrainian texts:
+- do not use machine-like direct translation
+- adapt wording for Ukrainian freelancers and small teams
+- use `проєкт`, not `проект`
+- use `облік часу` for formal UI labels
+- `трекати`, `затрекано`, `затреканий` are acceptable in product/contextual text
+- translate key financial terms consistently:
+    - `Earned` -> `Зароблено`
+    - `Paid` -> `Оплачено`
+    - `Outstanding Balance` -> `Неоплачений залишок`
+    - `Time Entries` -> `Записи часу`
+    - `Payments` -> `Оплати`
+    - `Clients` -> `Клієнти`
+    - `Projects` -> `Проєкти`
+
+When adding a new component:
+1. Add all English strings to the `en` resource file.
+2. Add matching Ukrainian strings to the `uk-UA` resource file.
+3. Use `IStringLocalizer<T>` or the existing project localization abstraction.
+4. Keep resource keys identical between locales.
+5. Do not leave fallback English text in Ukrainian UI.
+6. Do not localize brand/product names such as `TimeVic`, `Jira`, `CSV`, `PDF`.
+
+For public SEO pages, also localize:
+- page title
+- meta description
+- CTA labels
+- navigation labels
+- footer labels
