@@ -19,6 +19,8 @@ public partial class MainMenu: IDisposable
         string? GroupName = null,
         params WorkspacePermission[] RequiredPermissions
     );
+    
+    private string Text(string key) => DashboardLocalizer[key].Value;
 
     [Inject]
     public ISecurityManager SecurityManager { get; set; } = null!;
@@ -26,43 +28,43 @@ public partial class MainMenu: IDisposable
     [Inject]
     public IState<WorkspacePermissionsState> WorkspacePermissionsState { get; set; } = null!;
     
-    private List<MenuItemModel> _navItems = new()
+    private IReadOnlyCollection<MenuItemModel> NavItems => new List<MenuItemModel>
     {
-        new MenuItemModel("Time Entries", "fa-regular fa-clock", SiteUrl.Dashboard_TimeEntry),
-        new MenuItemModel("Summary", "fa-regular fa-bar-chart", SiteUrl.Dashboard_Reports_Summary),
-        new MenuItemModel(
-            "Money",
+        new(Text("TimeEntries"), "fa-regular fa-clock", SiteUrl.Dashboard_TimeEntry),
+        new(Text("Summary"), "fa-regular fa-bar-chart", SiteUrl.Dashboard_Reports_Summary),
+        new(
+            Text("Money"),
             "fa-solid fa-chart-pie",
             SiteUrl.Dashboard_WorkspaceMoney,
             null,
             WorkspacePermission.ReadWorkspaceFinancialSummary
         ),
-        new MenuItemModel("Tasks", "fa-regular fa-square-check", SiteUrl.Dashboard_Tasks_Main),
-        new MenuItemModel(
-            "Member Payments",
+        new(Text("Tasks"), "fa-regular fa-square-check", SiteUrl.Dashboard_Tasks_Main),
+        new(
+            Text("MemberPayments"),
             "fa-regular fa-credit-card",
             SiteUrl.Dashboard_MemberPayments,
             "",
             WorkspacePermission.ReadMemberPayment
         ),
-        new MenuItemModel(
-            "Client Payments",
+        new(
+            Text("ClientPayments"),
             "fa-solid fa-money-bill-transfer",
             SiteUrl.Dashboard_ClientPayments,
             "",
             WorkspacePermission.ReadClientPayment,
             WorkspacePermission.ReadWorkspaceFinancialSummary
         ),
-        new MenuItemModel(
-            "Payments report",
+        new(
+            Text("PaymentsReportTitle"),
             "fa-regular fa-credit-card",
             SiteUrl.Dashboard_Reports_MemberPayments,
-            "Reports",
+            Text("Reports"),
             WorkspacePermission.ReadMemberPayment
         ),
-        new MenuItemModel("Time entries report", "fa-regular fa-clock", SiteUrl.Dashboard_Reports_TimeEntries, "Reports"),
-        new MenuItemModel(
-            "",
+        new(Text("TimeEntriesReportTitle"), "fa-regular fa-clock", SiteUrl.Dashboard_Reports_TimeEntries, Text("Reports")),
+        new(
+            string.Empty,
             "fa-solid fa-sliders",
             SiteUrl.Dashboard_Workspace_Settings,
             null,
@@ -70,7 +72,7 @@ public partial class MainMenu: IDisposable
         ),
     };
 
-    private IEnumerable<MenuItemModel> AvailableNavItems => _navItems.Where(HasMenuItemAccess);
+    private IEnumerable<MenuItemModel> AvailableNavItems => NavItems.Where(HasMenuItemAccess);
 
     protected override void OnInitialized()
     {
@@ -81,7 +83,7 @@ public partial class MainMenu: IDisposable
 
     private void OnMenuItemSelected(string itemUrl)
     {
-        var item = _navItems.FirstOrDefault(i => i.Url == itemUrl);
+        var item = NavItems.FirstOrDefault(i => i.Url == itemUrl);
         if (item != null && !HasMenuItemAccess(item))
         {
             return;

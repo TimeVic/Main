@@ -22,7 +22,7 @@ public partial class TaskEstimateSummaryBlock
     public ExternalSourceType ExternalSourceType { get; set; } = ExternalSourceType.Manual;
 
     [Parameter]
-    public string EmptyEstimateText { get; set; } = "No estimate";
+    public string EmptyEstimateText { get; set; } = string.Empty;
 
     [Parameter]
     public string Class { get; set; } = string.Empty;
@@ -35,18 +35,18 @@ public partial class TaskEstimateSummaryBlock
     private string PlannedDurationText =>
         Analytics.HasEstimate
             ? TimeParsingService.TimeSpanToDurationString(PlannedDuration)
-            : EmptyEstimateText;
+            : NoEstimateText;
 
     private string TrackedDurationText => TimeParsingService.TimeSpanToDurationString(TrackedDuration);
 
     private string CompactSummaryText =>
         Analytics.HasEstimate
             ? $"{TrackedDurationText} / {PlannedDurationText} · {ProgressPercentText} · {StatusLabel}"
-            : $"No estimate · {TrackedDurationText} tracked";
+            : string.Format(DashboardLocalizer["TaskEstimateSummaryBlock_NoEstimateTracked"], TrackedDurationText);
 
-    private string ProgressPercentText => Analytics.HasEstimate ? $"{Analytics.RoundedProgressPercent}%" : "No estimate";
+    private string ProgressPercentText => Analytics.HasEstimate ? $"{Analytics.RoundedProgressPercent}%" : NoEstimateText;
 
-    private string StatusLabel => Analytics.Status.ToLabel();
+    private string StatusLabel => LocalizeStatus(Analytics.Status);
 
     private string StatusTextClass => Analytics.Status.ToTextClass();
 
@@ -58,20 +58,20 @@ public partial class TaskEstimateSummaryBlock
         {
             if (!Analytics.HasEstimate)
             {
-                return "No estimate";
+                return NoEstimateText;
             }
 
             if (Analytics.IsOverEstimate)
             {
-                return $"{FormatDuration(Analytics.OverrunDuration)} over";
+                return string.Format(DashboardLocalizer["TaskEstimateSummaryBlock_Over"], FormatDuration(Analytics.OverrunDuration));
             }
 
             if (Analytics.RemainingDuration > TimeSpan.Zero)
             {
-                return $"{FormatDuration(Analytics.RemainingDuration)} remaining";
+                return string.Format(DashboardLocalizer["TaskEstimateSummaryBlock_Remaining"], FormatDuration(Analytics.RemainingDuration));
             }
 
-            return "On estimate";
+            return DashboardLocalizer["TaskEstimateStatus_OnTrack"].Value;
         }
     }
 
@@ -84,8 +84,17 @@ public partial class TaskEstimateSummaryBlock
 
     private string SectionDescription =>
         ExternalSourceType == ExternalSourceType.Jira && Analytics.HasEstimate
-            ? "Original estimate came from Jira. Tracked time is compared against that value."
-            : "Tracked time is compared against the planned time set in TimeVic.";
+            ? DashboardLocalizer["TaskEstimateSummaryBlock_JiraEstimateDescription"].Value
+            : DashboardLocalizer["TaskEstimateSummaryBlock_ManualEstimateDescription"].Value;
 
     private string FormatDuration(TimeSpan duration) => TimeParsingService.TimeSpanToDurationString(duration);
+
+    private string NoEstimateText =>
+        string.IsNullOrWhiteSpace(EmptyEstimateText) ? DashboardLocalizer["NoEstimate"].Value : EmptyEstimateText;
+
+    private string LocalizeStatus(TaskEstimateStatus status)
+    {
+        var localized = DashboardLocalizer[$"TaskEstimateStatus_{status}"];
+        return localized.ResourceNotFound ? status.ToLabel() : localized.Value;
+    }
 }

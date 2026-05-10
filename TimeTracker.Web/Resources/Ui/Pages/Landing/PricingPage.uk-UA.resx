@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Ціни TimeVic — безкоштовно на старті</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>TimeVic зараз доступний безкоштовно. Використовуй облік часу, клієнтів, проєктів, оплат і звітів без складного тарифного плану.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>ціни TimeVic, безкоштовний облік часу, облік оплат клієнтів, фриланс дохід, безкоштовний трекер для фрилансерів</value>
+  </data>
+  <data name="Content_TrackYourWork" xml:space="preserve">
+    <value>Простий старт</value>
+  </data>
+  <data name="Content_UnderstandYourMoney" xml:space="preserve">
+    <value>без складних тарифів</value>
+  </data>
+  <data name="Content_SeeHowMuchYouVeEarnedWhatSBeenPaid" xml:space="preserve">
+    <value>TimeVic зараз можна використовувати безкоштовно, поки продукт розвивається і ми збираємо зворотний звʼязок від перших користувачів.</value>
+  </data>
+  <data name="Content_SeeHowItWorks" xml:space="preserve">
+    <value>Подивитись сценарії</value>
+  </data>
+  <data name="Content_Free0" xml:space="preserve">
+    <value>Free — $0</value>
+  </data>
+  <data name="Content_Month" xml:space="preserve">
+    <value> на старті</value>
+  </data>
+  <data name="Content_FromHoursToMoneyClarity" xml:space="preserve">
+    <value>Що доступно безкоштовно</value>
+  </data>
+  <data name="Content_TrackWork" xml:space="preserve">
+    <value>Облік часу</value>
+  </data>
+  <data name="Content_LogTimeByClientProjectAndTask" xml:space="preserve">
+    <value>Записуй час по клієнтах, проєктах і задачах.</value>
+  </data>
+  <data name="Content_TurnTimeIntoMoney" xml:space="preserve">
+    <value>Погодинні ставки</value>
+  </data>
+  <data name="Content_AutomaticallyCalculateEarningsUsingHourlyRates" xml:space="preserve">
+    <value>TimeVic автоматично рахує зароблену суму за ставками.</value>
+  </data>
+  <data name="Content_Earned" xml:space="preserve">
+    <value>зароблено</value>
+  </data>
+  <data name="Content_TrackPayments" xml:space="preserve">
+    <value>Оплати клієнтів</value>
+  </data>
+  <data name="Content_RecordWhatClientsHavePaidYou" xml:space="preserve">
+    <value>Фіксуй, що клієнти вже оплатили.</value>
+  </data>
+  <data name="Content_Paid" xml:space="preserve">
+    <value>оплачено</value>
+  </data>
+  <data name="Content_SeeWhatSMissing" xml:space="preserve">
+    <value>Неоплачені суми</value>
+  </data>
+  <data name="Content_InstantlySeeUnpaidWorkAndOutstandingBalances" xml:space="preserve">
+    <value>Бач відкритий залишок і роботу, яку ще не оплатили.</value>
+  </data>
+  <data name="Content_Unpaid" xml:space="preserve">
+    <value>неоплачено</value>
+  </data>
+  <data name="Content_WhatYouCanDoWithTimevic" xml:space="preserve">
+    <value>Що входить у стартовий доступ</value>
+  </data>
+  <data name="Content_SimpleAndTransparent" xml:space="preserve">
+    <value>Просто і прозоро</value>
+  </data>
+  <data name="Content_TimevicIsFreeToUseTheFocusIsOnHelping" xml:space="preserve">
+    <value>У майбутньому можуть зʼявитися платні плани, але базова цінність продукту зараз доступна безкоштовно.</value>
+  </data>
+  <data name="Content_StartTrackingYourTimeAndIncome" xml:space="preserve">
+    <value>Почни безкоштовно вести час, дохід і оплати</value>
+  </data>
+  <data name="Capability_TimeTrackingPerClientAndProject" xml:space="preserve">
+    <value>Облік часу</value>
+  </data>
+  <data name="Capability_HourlyRatesAutomaticEarningsCalculation" xml:space="preserve">
+    <value>Клієнти та проєкти</value>
+  </data>
+  <data name="Capability_PaymentTracking" xml:space="preserve">
+    <value>Погодинні ставки</value>
+  </data>
+  <data name="Capability_PaidVsUnpaidOverview" xml:space="preserve">
+    <value>Звіти по доходу</value>
+  </data>
+  <data name="Capability_ClientLevelSummaries" xml:space="preserve">
+    <value>Облік оплат клієнтів і контроль неоплачених сум</value>
+  </data>
+</root>

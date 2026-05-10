@@ -10,8 +10,8 @@
 
 <section class="mt-10 space-y-4">
     <SummarySectionHeader
-        Title="Selected period"
-        HelperText="Metrics tied to the current filters."/>
+        Title="@DashboardLocalizer["SelectedPeriod"].Value"
+        HelperText="@DashboardLocalizer["SelectedPeriodHelper"].Value"/>
 
     @if (!string.IsNullOrWhiteSpace(_periodInsight))
     {
@@ -22,8 +22,8 @@
 
     <div class="grid gap-4 md:grid-cols-3">
         <SummaryMetricCard
-            Title="Duration"
-            HelperText="Worked during the selected period"
+            Title="@DashboardLocalizer["Duration"].Value"
+            HelperText="@DashboardLocalizer["DurationSelectedPeriodHelper"].Value"
             Variant="neutral"
             IconClass="fa-regular fa-clock">
             <Value>
@@ -32,8 +32,8 @@
         </SummaryMetricCard>
 
         <SummaryMetricCard
-            Title="Earned in selected period"
-            HelperText="Billable value in the selected range"
+            Title="@DashboardLocalizer["EarnedSelectedPeriod"].Value"
+            HelperText="@DashboardLocalizer["EarnedSelectedPeriodHelper"].Value"
             Variant="neutral"
             IconClass="fa-solid fa-coins">
             <Value>
@@ -42,8 +42,8 @@
         </SummaryMetricCard>
 
         <SummaryMetricCard
-            Title="Effective hourly rate"
-            HelperText="Average earned amount per tracked hour"
+            Title="@DashboardLocalizer["EffectiveHourlyRate"].Value"
+            HelperText="@DashboardLocalizer["EffectiveHourlyRateHelper"].Value"
             Variant="neutral"
             IconClass="fa-solid fa-gauge-high">
             <Value>
@@ -89,7 +89,7 @@
         {
             if (_totalDuration.TotalMinutes < 1)
             {
-                return "No meaningful activity in the selected period.";
+                return DashboardLocalizer["NoActivitySelectedPeriod"].Value;
             }
 
             return string.Empty;

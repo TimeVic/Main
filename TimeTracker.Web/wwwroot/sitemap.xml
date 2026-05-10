@@ -1,15 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://timevic.com/</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://timevic.com/" />
+        <xhtml:link rel="alternate" hreflang="uk-UA" href="https://timevic.com/uk/" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://timevic.com/" />
     </url>
     <url>
-        <loc>https://timevic.com/faq</loc>
+        <loc>https://timevic.com/uk/</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://timevic.com/" />
+        <xhtml:link rel="alternate" hreflang="uk-UA" href="https://timevic.com/uk/" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://timevic.com/" />
     </url>
     <url>
         <loc>https://timevic.com/use-cases</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://timevic.com/use-cases" />
+        <xhtml:link rel="alternate" hreflang="uk-UA" href="https://timevic.com/uk/use-cases" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://timevic.com/use-cases" />
     </url>
     <url>
-        <loc>https://timevic.com/registration/step1</loc>
+        <loc>https://timevic.com/uk/use-cases</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://timevic.com/use-cases" />
+        <xhtml:link rel="alternate" hreflang="uk-UA" href="https://timevic.com/uk/use-cases" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://timevic.com/use-cases" />
+    </url>
+    <url>
+        <loc>https://timevic.com/pricing</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://timevic.com/pricing" />
+        <xhtml:link rel="alternate" hreflang="uk-UA" href="https://timevic.com/uk/pricing" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://timevic.com/pricing" />
+    </url>
+    <url>
+        <loc>https://timevic.com/uk/pricing</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://timevic.com/pricing" />
+        <xhtml:link rel="alternate" hreflang="uk-UA" href="https://timevic.com/uk/pricing" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://timevic.com/pricing" />
+    </url>
+    <url>
+        <loc>https://timevic.com/faq</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://timevic.com/faq" />
+        <xhtml:link rel="alternate" hreflang="uk-UA" href="https://timevic.com/uk/faq" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://timevic.com/faq" />
+    </url>
+    <url>
+        <loc>https://timevic.com/uk/faq</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://timevic.com/faq" />
+        <xhtml:link rel="alternate" hreflang="uk-UA" href="https://timevic.com/uk/faq" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://timevic.com/faq" />
     </url>
 </urlset>

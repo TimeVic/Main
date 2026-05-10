@@ -28,7 +28,7 @@
     OnRowClick="@OnRowClickHandler"
     Loading="_isLoading">
     <LumexUI.PropertyColumn Title="#" Property="@(p => p.PaymentTime.ToShortDateString())"/>
-    <LumexUI.PropertyColumn Title="Project" Property="@(p => p.Project)">
+    <LumexUI.PropertyColumn Title="@DashboardLocalizer["Project"].Value" Property="@(p => p.Project)">
         <Content>
             <div class="font-medium text-slate-900">
                 @context.Project?.Name
@@ -40,7 +40,7 @@
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn 
-        Title="Received"
+        Title="@DashboardLocalizer["Received"].Value"
         Property="@(p => p.Amount)"
         Sortable="@true">
         <Content>
@@ -50,7 +50,7 @@
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn
-        Title="Member"
+        Title="@DashboardLocalizer["Member"].Value"
         Property="@(p => p.Member)">
         <Content>
             <div class="font-medium text-slate-900">
@@ -59,7 +59,7 @@
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn 
-        Title="Description"
+        Title="@DashboardLocalizer["Description"].Value"
         Property="@(p => p.Description)"
         Sortable="@true">
         <Content>
@@ -67,7 +67,7 @@
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn
-        Title="Actions"
+        Title="@DashboardLocalizer["Actions"].Value"
         Property="@(p => p.Id)">
         <Content>
             <div @onclick:stopPropagation="true">

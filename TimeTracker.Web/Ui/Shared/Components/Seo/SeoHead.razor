@@ -18,25 +18,13 @@
         <meta name="robots" content="@Robots" />
     }
 
-    @if (!string.IsNullOrWhiteSpace(CanonicalUrl))
+    @if (!string.IsNullOrWhiteSpace(ResolvedCanonicalUrl))
     {
-        <link rel="canonical" href="@CanonicalUrl" />
+        <link rel="canonical" href="@ResolvedCanonicalUrl" />
+    }
+
+    @foreach (var alternateUrl in AlternateUrls)
+    {
+        <link rel="alternate" hreflang="@alternateUrl.Hreflang" href="@alternateUrl.Href" />
     }
 </HeadContent>
-
-@code {
-    [Parameter, EditorRequired]
-    public string Title { get; set; } = string.Empty;
-
-    [Parameter]
-    public string? Description { get; set; }
-
-    [Parameter]
-    public string? Keywords { get; set; }
-
-    [Parameter]
-    public string? Robots { get; set; }
-
-    [Parameter]
-    public string? CanonicalUrl { get; set; }
-}

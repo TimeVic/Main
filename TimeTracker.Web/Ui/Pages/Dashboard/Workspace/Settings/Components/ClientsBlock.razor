@@ -27,9 +27,9 @@
         <LumexCardBody>
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">Clients and projects</p>
-                    <h2 class="mt-2 text-lg font-semibold text-slate-900">Client project directory</h2>
-                    <p class="mt-1 text-sm text-slate-600">Create clients, add their projects, and reassign projects between clients from one workspace tab.</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">@DashboardLocalizer["SettingsPage_ClientsAndProjectsTab"]</p>
+                    <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["ClientsBlock_ProjectDirectoryTitle"]</h2>
+                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["ClientsBlock_Description"]</p>
                 </div>
                 <CustomButton
                     Size="Size.Small"
@@ -40,7 +40,7 @@
                         <i class="fa-solid fa-plus"></i>
                     </StartContent>
                     <ChildContent>
-                        Add client
+                        @DashboardLocalizer["AddClient"]
                     </ChildContent>
                 </CustomButton>
             </div>
@@ -72,7 +72,7 @@
     else
     {
         <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-            Add your first client to start organizing workspace projects.
+            @DashboardLocalizer["ClientsBlock_Empty"]
         </div>
     }
 </section>

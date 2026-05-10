@@ -6,15 +6,15 @@
             <i class="@IconClass"></i>
         </div>
         <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Service</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">@DashboardLocalizer["IntegrationServiceHeader_Service"]</p>
             <h2 class="mt-1 text-lg font-semibold text-slate-900">@ServiceName</h2>
             <span class="@StatusClass">
                 <i class="fa-solid @(IsActive ? "fa-link" : "fa-link-slash")"></i>
-                @(IsActive ? "Active" : "Inactive")
+                @(IsActive ? DashboardLocalizer["IntegrationServiceHeader_Active"] : DashboardLocalizer["IntegrationServiceHeader_Inactive"])
             </span>
         </div>
     </div>
-    <span title="@($"How to connect {ServiceName}")">
+    <span title="@string.Format(DashboardLocalizer["IntegrationServiceHeader_HowToConnect"], ServiceName)">
         <CustomButton
             IconOnly="true"
             Size="Size.Small"

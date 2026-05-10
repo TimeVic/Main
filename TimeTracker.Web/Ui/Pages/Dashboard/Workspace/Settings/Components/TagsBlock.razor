@@ -20,9 +20,9 @@
 @if (_tagToDelete != null)
 {
     <ConfirmationModal
-        Title="Delete tag"
-        Subtitle="@($"Are you sure you want to delete \"{_tagToDelete.Name}\"?")"
-        ConfirmText="Delete"
+        Title="@DashboardLocalizer["TagsBlock_DeleteTagTitle"].Value"
+        Subtitle="@string.Format(DashboardLocalizer["TagsBlock_DeleteTagSubtitle"].Value, _tagToDelete.Name)"
+        ConfirmText="@DashboardLocalizer["Delete"].Value"
         OnClose="@OnCloseDeleteConfirmation"
         OnCancel="@OnCloseDeleteConfirmation"
         OnConfirm="@OnConfirmDelete"/>
@@ -33,9 +33,9 @@
         <LumexCardBody>
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">Tags</p>
-                    <h2 class="mt-2 text-lg font-semibold text-slate-900">Workspace tags</h2>
-                    <p class="mt-1 text-sm text-slate-600">Tags keep time entries searchable and visually grouped by color.</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">@DashboardLocalizer["Tags"]</p>
+                    <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["TagsBlock_WorkspaceTagsTitle"]</h2>
+                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["TagsBlock_Description"]</p>
                 </div>
                 <CustomButton
                     Size="Size.Small"
@@ -46,7 +46,7 @@
                         <i class="fa-solid fa-plus"></i>
                     </StartContent>
                     <ChildContent>
-                        Add tag
+                        @DashboardLocalizer["TagsBlock_AddTag"]
                     </ChildContent>
                 </CustomButton>
             </div>
@@ -58,10 +58,10 @@
         Radius="@Radius.Medium"
         Class="mt-3">
         <LumexUI.EditColumn
-            Title="Name"
+            Title="@DashboardLocalizer["Name"].Value"
             Property="@(p => p.Name)"/>
         <LumexUI.PropertyColumn
-            Title="Color"
+            Title="@DashboardLocalizer["Color"].Value"
             Property="@(p => p.Color ?? string.Empty)">
             <Content>
                 <div class="inline-flex items-center gap-2">
@@ -75,13 +75,13 @@
                     }
                     else
                     {
-                        <span class="text-xs text-slate-400">No color</span>
+                        <span class="text-xs text-slate-400">@DashboardLocalizer["TagsBlock_NoColor"]</span>
                     }
                 </div>
             </Content>
         </LumexUI.PropertyColumn>
         <LumexUI.PropertyColumn
-            Title="Actions"
+            Title="@DashboardLocalizer["Actions"].Value"
             Property="@(p => p.Id)">
             <Content>
                 <div class="inline-flex items-center gap-2">

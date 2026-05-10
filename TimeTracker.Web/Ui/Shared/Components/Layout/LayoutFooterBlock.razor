@@ -1,9 +1,38 @@
+@using TimeTracker.Web.Services
+@inject IStringLocalizer<PublicLandingResource> SharedLocalizer
+@inject ILocalizationUrlService LocalizationUrlService
+@inject NavigationManager NavigationManager
+
 <footer class="mt-auto border-t border-slate-200/70 bg-white/70">
-    <div class="mx-auto w-full max-w-7xl px-4 py-4 text-center text-xs text-slate-400 sm:px-6 lg:px-8">
-        <p>
-            Copyright © 2026
-            <a href="mailto:support@timevic.com" class="font-medium text-slate-500 transition hover:text-slate-700 hover:underline">Georgy Shira</a>
-            Apache License Version 2.0
-        </p>
+    <div class="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 text-sm text-slate-500 sm:px-6 md:grid-cols-[minmax(0,1fr)_auto] lg:px-8">
+        <div class="max-w-md">
+            <p class="text-base font-semibold text-slate-900">TimeVic</p>
+            <p class="mt-2 leading-6">@SharedLocalizer["Footer_Description"]</p>
+        </div>
+
+        <nav class="flex flex-col gap-2 md:items-end" aria-label="@SharedLocalizer["Footer_Product"]">
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">@SharedLocalizer["Footer_Product"]</p>
+            <a href="@LocalizedUrl(SiteUrl.Main)" class="transition hover:text-slate-900 hover:underline">@SharedLocalizer["Nav_Home"]</a>
+            <a href="@LocalizedUrl(SiteUrl.UseCases)" class="transition hover:text-slate-900 hover:underline">@SharedLocalizer["Nav_UseCases"]</a>
+            <a href="@LocalizedUrl(SiteUrl.Pricing)" class="transition hover:text-slate-900 hover:underline">@SharedLocalizer["Nav_Pricing"]</a>
+            <a href="@LocalizedUrl(SiteUrl.Faq)" class="transition hover:text-slate-900 hover:underline">@SharedLocalizer["Nav_FAQ"]</a>
+        </nav>
+    </div>
+    <div class="border-t border-slate-200/70">
+        <div class="mx-auto w-full max-w-7xl px-4 py-4 text-center text-xs text-slate-400 sm:px-6 lg:px-8">
+            <p>
+                @SharedLocalizer["Footer_Copyright"]
+                <a href="mailto:support@timevic.com" class="font-medium text-slate-500 transition hover:text-slate-700 hover:underline">@SharedLocalizer["Footer_AuthorName"]</a>
+                @SharedLocalizer["Footer_License"]
+            </p>
+        </div>
     </div>
 </footer>
+
+@code {
+    private string CurrentPath => new Uri(NavigationManager.Uri).AbsolutePath;
+
+    private string CurrentCulture => LocalizationUrlService.GetCurrentCultureName(CurrentPath);
+
+    private string LocalizedUrl(string path) => LocalizationUrlService.GetLocalizedUrl(path, CurrentCulture);
+}

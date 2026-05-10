@@ -1,0 +1,282 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>FAQ TimeVic — питання про облік часу, оплат і клієнтів</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Відповіді на часті питання про TimeVic: облік часу, клієнтів, проєктів, погодинних ставок, оплат і звітів.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>FAQ TimeVic, облік часу фрилансера, оплати клієнтів, погодинні ставки, неоплачена робота, звіти по доходу</value>
+  </data>
+  <data name="Title_WhatIsTimevic" xml:space="preserve">
+    <value>Що таке TimeVic?</value>
+  </data>
+  <data name="Title_IsTimevicJustATimeTracker" xml:space="preserve">
+    <value>Чим TimeVic відрізняється від звичайного time tracker?</value>
+  </data>
+  <data name="Title_WhoIsTimevicFor" xml:space="preserve">
+    <value>Для кого TimeVic?</value>
+  </data>
+  <data name="Title_WhyNotJustUseATimeTrackerAndASpreadsheet" xml:space="preserve">
+    <value>Чому не просто time tracker і таблиця?</value>
+  </data>
+  <data name="Title_HowDoesTimevicCalculateEarnings" xml:space="preserve">
+    <value>Чи можна вказувати погодинну ставку?</value>
+  </data>
+  <data name="Title_CanITrackPaymentsFromClients" xml:space="preserve">
+    <value>Чи можна фіксувати оплати від клієнтів?</value>
+  </data>
+  <data name="Title_WhatHappensIfAClientHasnTPaidYet" xml:space="preserve">
+    <value>Що, якщо клієнт ще не оплатив?</value>
+  </data>
+  <data name="Title_CanISeePaidVsUnpaidWorkPerClient" xml:space="preserve">
+    <value>Чи видно оплачено і неоплачено по клієнтах?</value>
+  </data>
+  <data name="Title_CanISeeWhoOwesMeMoney" xml:space="preserve">
+    <value>Чи видно, хто ще винен гроші?</value>
+  </data>
+  <data name="Title_DoesTimevicReplaceInvoicingTools" xml:space="preserve">
+    <value>Чи замінює TimeVic інвойси?</value>
+  </data>
+  <data name="Title_DoINeedToTrackEveryMinute" xml:space="preserve">
+    <value>Чи потрібно трекати кожну хвилину?</value>
+  </data>
+  <data name="Title_CanIManageMultipleClients" xml:space="preserve">
+    <value>Чи можна вести кілька клієнтів?</value>
+  </data>
+  <data name="Title_DoesTimevicReplaceJiraOrTaskManagers" xml:space="preserve">
+    <value>Чи підходить TimeVic для команди?</value>
+  </data>
+  <data name="Title_CanIAttachTimeToTasks" xml:space="preserve">
+    <value>Чи можна привʼязувати час до задач?</value>
+  </data>
+  <data name="Title_IsTimevicFree" xml:space="preserve">
+    <value>Чи є TimeVic безкоштовним?</value>
+  </data>
+  <data name="Title_DoINeedToInstallAnything" xml:space="preserve">
+    <value>Чи треба щось встановлювати?</value>
+  </data>
+  <data name="Title_HowDoIStart" xml:space="preserve">
+    <value>Як почати?</value>
+  </data>
+  <data name="Title_HowLongDoesItTakeToSeeValue" xml:space="preserve">
+    <value>Коли буде користь?</value>
+  </data>
+  <data name="Content_ForFreelanceDevelopersWorkingWithMultipleClients" xml:space="preserve">
+    <value>Для фрилансерів, які працюють з кількома клієнтами</value>
+  </data>
+  <data name="Content_EverythingAboutTrackingYourIncomeAndClientPayments" xml:space="preserve">
+    <value>Поширені питання</value>
+  </data>
+  <data name="Content_LearnHowTimevicHelpsFreelanceDevelopersTrackEarningsPaymentsAnd" xml:space="preserve">
+    <value>Коротко про те, як TimeVic допомагає фрилансерам контролювати час, дохід і оплати клієнтів.</value>
+  </data>
+  <data name="Content_MostToolsTrackTimeTimevicHelpsYouUnderstandYourIncome" xml:space="preserve">
+    <value>TimeVic фокусується не тільки на годинах, а й на грошах за клієнтську роботу.</value>
+  </data>
+  <data name="Content_QuickExample" xml:space="preserve">
+    <value>Простий приклад</value>
+  </data>
+  <data name="Content_TrackTheWorkSeeTheMoneyImmediately" xml:space="preserve">
+    <value>Затрекав роботу — одразу бачиш гроші</value>
+  </data>
+  <data name="Content_YouWorked30HoursThatEarned1500TheClient" xml:space="preserve">
+    <value>Ти відпрацював 30 годин. Це $1,500. Клієнт оплатив $500. TimeVic одразу показує залишок $1,000.</value>
+  </data>
+  <data name="Content_TrackedWork" xml:space="preserve">
+    <value>Затрекано</value>
+  </data>
+  <data name="Content_30Hours" xml:space="preserve">
+    <value>30 годин</value>
+  </data>
+  <data name="Content_Earned" xml:space="preserve">
+    <value>Зароблено</value>
+  </data>
+  <data name="Content_Paid" xml:space="preserve">
+    <value>Оплачено</value>
+  </data>
+  <data name="Content_Outstanding" xml:space="preserve">
+    <value>Залишок</value>
+  </data>
+  <data name="Content_TimevicShowsThisInstantly" xml:space="preserve">
+    <value>TimeVic показує це одразу.</value>
+  </data>
+  <data name="Content_Section1" xml:space="preserve">
+    <value>Розділ 1</value>
+  </data>
+  <data name="Content_ProductBasics" xml:space="preserve">
+    <value>Основи продукту</value>
+  </data>
+  <data name="Content_StartHereIfYouWantTheShortVersionOfWhat" xml:space="preserve">
+    <value>Коротко про те, для кого створений TimeVic і яку проблему він закриває.</value>
+  </data>
+  <data name="Content_TimevicIsAnIncomeTrackingToolForFreelanceDevelopersWho" xml:space="preserve">
+    <value>TimeVic створений насамперед для фрилансерів, розробників і маленьких команд, які працюють з клієнтами погодинно.</value>
+  </data>
+  <data name="Content_ItTurnsTrackedWorkIntoClearNumbersHowMuchYou" xml:space="preserve">
+    <value>Він перетворює затреканий час на зрозумілі цифри: скільки ти заробив, скільки клієнт оплатив і скільки ще залишилось неоплаченим.</value>
+  </data>
+  <data name="Content_TheGoalIsSimpleFinancialClarityFromClientWork" xml:space="preserve">
+    <value>Мета проста: прозора фінансова картина по клієнтській роботі.</value>
+  </data>
+  <data name="Content_No" xml:space="preserve">
+    <value>Ні.</value>
+  </data>
+  <data name="Content_TimeTrackingIsOnlyTheInput" xml:space="preserve">
+    <value>Облік часу — це тільки вхідні дані.</value>
+  </data>
+  <data name="Content_TheOutputIsIncomeVisibilityEarnedMoneyPaidMoneyAnd" xml:space="preserve">
+    <value>Результат — розуміння доходу: зароблені гроші, оплачені суми і неоплачена робота.</value>
+  </data>
+  <data name="Content_TimevicIsForFreelanceDevelopersWhoWorkWithMultipleClients" xml:space="preserve">
+    <value>TimeVic для фрилансерів і розробників, які працюють з кількома клієнтами, ведуть погодинну роботу і хочуть бачити реальний стан оплат.</value>
+  </data>
+  <data name="Content_IfYouNeedToKnowWhatEachClientOwesYou" xml:space="preserve">
+    <value>Якщо тобі важливо знати, що кожен клієнт уже оплатив і що ще винен, це саме той сценарій.</value>
+  </data>
+  <data name="Content_YouCanButThenYouDoTheMoneyWorkManually" xml:space="preserve">
+    <value>Можна, але тоді всю фінансову частину доведеться збирати вручну.</value>
+  </data>
+  <data name="Content_YouHaveToCalculateEarningsLogPaymentsSomewhereElseAnd" xml:space="preserve">
+    <value>Потрібно окремо рахувати дохід, десь записувати платежі й звіряти, що оплачено, а що ще ні.</value>
+  </data>
+  <data name="Content_TimevicKeepsThatInOnePlaceSoYourTrackedWork" xml:space="preserve">
+    <value>TimeVic тримає це в одному місці, тому затрекана робота одразу повʼязана з грошима.</value>
+  </data>
+  <data name="Content_MostImportantSection" xml:space="preserve">
+    <value>Найважливіше</value>
+  </data>
+  <data name="Content_Section2" xml:space="preserve">
+    <value>Розділ 2</value>
+  </data>
+  <data name="Content_MoneyPayments" xml:space="preserve">
+    <value>Гроші та оплати</value>
+  </data>
+  <data name="Content_ThisIsWhereTimevicBecomesMoreThanATimeTracker" xml:space="preserve">
+    <value>Тут TimeVic стає більше, ніж звичайний time tracker: він показує гроші за годинами.</value>
+  </data>
+  <data name="Content_YouSetAnHourlyRateForTheWorkYouTrack" xml:space="preserve">
+    <value>Так. Для проєктів можна вказувати погодинну ставку.</value>
+  </data>
+  <data name="Content_TimevicConvertsThoseHoursIntoEarnedIncomeAutomaticallySoYou" xml:space="preserve">
+    <value>TimeVic автоматично рахує зароблену суму на основі затреканого часу, тож не треба вручну множити години на ставку.</value>
+  </data>
+  <data name="Content_Yes" xml:space="preserve">
+    <value>Так.</value>
+  </data>
+  <data name="Content_YouCanRecordClientPaymentsAndCompareThemDirectlyAgainst" xml:space="preserve">
+    <value>Ти можеш додавати платежі від клієнтів і порівнювати їх із заробленою сумою.</value>
+  </data>
+  <data name="Content_ThatGivesYouAClearSplitBetweenPaidWorkAnd" xml:space="preserve">
+    <value>Так видно, яка частина роботи вже оплачена, а яка ще ні.</value>
+  </data>
+  <data name="Content_TimevicHighlightsTheUnpaidWorkAndTheOutstandingBalance" xml:space="preserve">
+    <value>TimeVic показує неоплачену роботу і відкритий залишок.</value>
+  </data>
+  <data name="Content_YouAlwaysKnowWhichClientStillOwesYouMoneyAnd" xml:space="preserve">
+    <value>Ти завжди бачиш, який клієнт ще винен гроші і яку суму потрібно оплатити.</value>
+  </data>
+  <data name="Content_TimevicHelpsYouReviewEarnedPaidAndOutstandingAmountsFor" xml:space="preserve">
+    <value>Так. TimeVic показує earned, paid і outstanding balance по кожному клієнту та проєкту.</value>
+  </data>
+  <data name="Content_ThePlatformMakesUnpaidBalancesVisibleSoYouCanSee" xml:space="preserve">
+    <value>Так. Неоплачені залишки видно без пошуку по нотатках, інвойсах і таблицях.</value>
+  </data>
+  <data name="Content_TimevicIsFocusedOnEarningsPaymentsAndOutstandingBalancesIt" xml:space="preserve">
+    <value>TimeVic фокусується на доході, оплатах і залишках. Це не повноцінна система інвойсингу.</value>
+  </data>
+  <data name="Content_Section3" xml:space="preserve">
+    <value>Розділ 3</value>
+  </data>
+  <data name="Content_FeaturesUsage" xml:space="preserve">
+    <value>Можливості та використання</value>
+  </data>
+  <data name="Content_TheProductStaysFocusedFeaturesSupportIncomeTrackingInsteadOf" xml:space="preserve">
+    <value>Продукт залишається сфокусованим: можливості підтримують облік часу і доходу, а не перетворюють TimeVic на enterprise/task manager.</value>
+  </data>
+  <data name="Content_YouCanTrackAsMuchOrAsLittleAsYou" xml:space="preserve">
+    <value>Ні. Можна трекати стільки деталей, скільки потрібно. Навіть частковий облік уже краще показує дохід, ніж розрізнені нотатки.</value>
+  </data>
+  <data name="Content_YesTimevicIsBuiltForMultipleClientsMultipleProjectsAnd" xml:space="preserve">
+    <value>Так. Можна створювати клієнтів, проєкти, задачі та вести окремий облік часу й оплат по кожному з них.</value>
+  </data>
+  <data name="Content_TimevicIsNotATaskManager" xml:space="preserve">
+    <value>Так, TimeVic можна використовувати в workspace для маленької команди.</value>
+  </data>
+  <data name="Content_TasksAreSimpleOptionalAndOnlyExistToSupportTime" xml:space="preserve">
+    <value>Але продукт не намагається замінити Jira або ClickUp — задачі потрібні насамперед для привʼязки часу до роботи.</value>
+  </data>
+  <data name="Content_YesYouCanAttachTimeEntriesToTasksWhenYou" xml:space="preserve">
+    <value>Так. Можна привʼязувати записи часу до задач, коли потрібен контекст, але головними залишаються час, гроші й оплати.</value>
+  </data>
+  <data name="Content_Section4" xml:space="preserve">
+    <value>Розділ 4</value>
+  </data>
+  <data name="Content_PricingAccess" xml:space="preserve">
+    <value>Ціни та доступ</value>
+  </data>
+  <data name="Content_KeepSetupFrictionLowSoYouCanStartTrackingClients" xml:space="preserve">
+    <value>Старт має бути простим, щоб ти швидко перейшов до обліку клієнтів, часу і грошей.</value>
+  </data>
+  <data name="Content_YesTimevicIsFreeToUse" xml:space="preserve">
+    <value>Зараз TimeVic доступний безкоштовно. У майбутньому можуть зʼявитися платні плани, але на поточному етапі продукт можна використовувати без оплати.</value>
+  </data>
+  <data name="Content_NoTimevicWorksInYourBrowser" xml:space="preserve">
+    <value>Ні. TimeVic працює у браузері.</value>
+  </data>
+  <data name="Content_Section5" xml:space="preserve">
+    <value>Розділ 5</value>
+  </data>
+  <data name="Content_GettingStarted" xml:space="preserve">
+    <value>Перший старт</value>
+  </data>
+  <data name="Content_TheFirstSetupIsShortAddTheClientSetThe" xml:space="preserve">
+    <value>Початкове налаштування коротке: додай клієнта, створи проєкт, вкажи ставку і почни вести час.</value>
+  </data>
+  <data name="Content_AddAClient" xml:space="preserve">
+    <value>Додати клієнта</value>
+  </data>
+  <data name="Content_CreateAProject" xml:space="preserve">
+    <value>Створити проєкт</value>
+  </data>
+  <data name="Content_SetAnHourlyRate" xml:space="preserve">
+    <value>Вказати погодинну ставку</value>
+  </data>
+  <data name="Content_TrackTime" xml:space="preserve">
+    <value>Записати час</value>
+  </data>
+  <data name="Content_YouWillImmediatelySeeHowMuchYouEarnedFromThe" xml:space="preserve">
+    <value>Після першого запису одразу буде видно, скільки зароблено за цю роботу.</value>
+  </data>
+  <data name="Content_About2Minutes" xml:space="preserve">
+    <value>Приблизно кілька хвилин.</value>
+  </data>
+  <data name="Content_AsSoonAsYouAddAClientSetARate" xml:space="preserve">
+    <value>Щойно додаси клієнта, ставку і перший запис часу, TimeVic покаже зароблену суму та неоплачений залишок.</value>
+  </data>
+  <data name="Content_IncomeClarity" xml:space="preserve">
+    <value>Фінансова ясність</value>
+  </data>
+  <data name="Content_StartTrackingYourIncomeNotJustTime" xml:space="preserve">
+    <value>Почни вести дохід, а не тільки години</value>
+  </data>
+  <data name="Content_KnowHowMuchYouEarnedAndWhoStillOwesYou" xml:space="preserve">
+    <value>Знай, скільки зароблено і хто ще винен гроші</value>
+  </data>
+  <data name="Content_NoSetupComplexityJustAddAClientSetARate" xml:space="preserve">
+    <value>Без складного налаштування: додай клієнта, вкажи ставку і трекай час.</value>
+  </data>
+</root>

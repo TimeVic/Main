@@ -2,6 +2,10 @@
 
 public static class SiteUrl
 {
+    #region Localization
+    public static readonly string UkLocalePrefix = "/uk";
+    #endregion
+
     #region Public
     public static readonly string Main = "/";
     public static readonly string UseCases = "/use-cases";

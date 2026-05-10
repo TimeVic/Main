@@ -49,13 +49,13 @@ public partial class Step1Page
             if (isOk)
             {
                 _isSent = true;
-                ToastService.ShowInfo("Registration email is sent");
+                ToastService.ShowInfo(Localizer["Toast_RegistrationEmailSent"]);
                 model.Email = string.Empty;
             }
         }
         catch (Exception)
         {
-            ToastService.ShowError("Registration error");
+            ToastService.ShowError(Localizer["Toast_RegistrationError"]);
         }
         finally
         {

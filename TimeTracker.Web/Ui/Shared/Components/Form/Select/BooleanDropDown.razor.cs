@@ -15,7 +15,7 @@ public partial class BooleanDropDown
     public string? Label { get; set; }
 
     [Parameter]
-    public string Placeholder { get; set; } = "Select";
+    public string Placeholder { get; set; } = string.Empty;
 
     [Parameter]
     public string Class { get; set; } = string.Empty;

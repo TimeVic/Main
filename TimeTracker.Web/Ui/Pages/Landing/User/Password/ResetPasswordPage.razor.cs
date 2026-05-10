@@ -57,18 +57,18 @@ public partial class ResetPasswordPage
             var isSuccess = await _apiService.ResetPasswordStep1(model);
             if (isSuccess)
             {
-                _toastService.ShowInfo("Email has been sent");
+                _toastService.ShowInfo(Localizer["Toast_EmailSent"]);
                 model.Email = string.Empty;
                 _isSent = true;
             }
             else
             {
-                ToastService.ShowError("Incorrect email or password");
+                ToastService.ShowError(Localizer["Toast_IncorrectEmailOrPassword"]);
             }
         }
         catch (Exception)
         {
-            ToastService.ShowError("Incorrect email or password");
+            ToastService.ShowError(Localizer["Toast_IncorrectEmailOrPassword"]);
         }
         finally
         {

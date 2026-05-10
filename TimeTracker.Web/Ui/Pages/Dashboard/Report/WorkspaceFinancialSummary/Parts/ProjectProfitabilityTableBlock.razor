@@ -9,8 +9,8 @@
 
 <section class="@Class">
     <div class="mb-4">
-        <h2 class="text-base font-semibold text-slate-700">Project Profitability</h2>
-        <p class="mt-1 text-sm text-slate-500">Compares client billable amount with member earnings for each project.</p>
+        <h2 class="text-base font-semibold text-slate-700">@DashboardLocalizer["ProjectProfitabilityTableBlock_Title"]</h2>
+        <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["ProjectProfitabilityTableBlock_Description"]</p>
     </div>
     @{
         var data = ReportsState.Value.WorkspaceFinancialSummaryData;
@@ -19,14 +19,14 @@
     @if (data?.HasUsefulProjectProfitability != true)
     {
         <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6">
-            <p class="text-sm font-medium text-slate-700">Project profitability appears when member rates differ from client billing rates.</p>
+            <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["ProjectProfitabilityTableBlock_RateDifferenceHint"]</p>
         </div>
     }
     else if (items.Count == 0)
     {
         <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6">
-            <p class="text-sm font-medium text-slate-700">No project profitability yet</p>
-            <p class="mt-1 text-sm text-slate-500">Billable project work will appear here after it is recorded.</p>
+            <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["ProjectProfitabilityTableBlock_NoProfitabilityTitle"]</p>
+            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["ProjectProfitabilityTableBlock_NoProfitabilityDescription"]</p>
         </div>
     }
     else
@@ -35,13 +35,13 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     <tr>
-                        <th class="px-4 py-3 text-left">Project</th>
-                        <th class="px-4 py-3 text-left">Client</th>
-                        <th class="px-4 py-3 text-right">Hours</th>
-                        <th class="px-4 py-3 text-right">Client Earned</th>
-                        <th class="px-4 py-3 text-right">Member Earnings</th>
-                        <th class="px-4 py-3 text-right">Estimated Margin</th>
-                        <th class="px-4 py-3 text-right">Margin %</th>
+                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Project"]</th>
+                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Client"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Hours"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_ClientEarned"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_MemberEarnings"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_EstimatedMargin"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_MarginPercent"]</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -62,7 +62,7 @@
                         </tr>
                     }
                     <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
-                        <td class="px-4 py-3">Total</td>
+                        <td class="px-4 py-3">@DashboardLocalizer["Total"]</td>
                         <td class="px-4 py-3"></td>
                         <td class="px-4 py-3 text-right">@items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()</td>
                         <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.ClientEarned)"/></td>

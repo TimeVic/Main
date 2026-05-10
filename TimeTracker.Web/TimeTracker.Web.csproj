@@ -7,6 +7,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
         <WarningsAsErrors>CS0168,CS8602,CS0169,CS1998</WarningsAsErrors>
+        <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Production' ">
@@ -36,6 +37,7 @@
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.7" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.7" />
         <PackageReference Include="Microsoft.DotNet.HotReload.WebAssembly.Browser" Version="10.0.203" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.7" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.18.0" />
         <PackageReference Include="System.Reactive.Linq" Version="6.1.0" />
         <PackageReference Include="Toolbelt.Blazor.HttpClientInterceptor" Version="10.2.0" />

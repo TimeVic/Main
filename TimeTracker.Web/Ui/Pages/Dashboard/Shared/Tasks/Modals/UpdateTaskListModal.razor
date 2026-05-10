@@ -13,7 +13,7 @@
                 <i class="fa-regular fa-pen-to-square"></i>
             </div>
             <div>
-                <h3 class="text-2xl font-medium text-slate-900">Edit task list</h3>
+                <h3 class="text-2xl font-medium text-slate-900">@DashboardLocalizer["UpdateTaskListModal_Title"]</h3>
                 <p class="mt-1 text-sm text-slate-500">@TaskList.Project.Name</p>
             </div>
         </LumexModalHeader>
@@ -25,13 +25,13 @@
                 OnValidSubmit="@Submit"
                 novalidate>
                 <DataAnnotationsValidator/>
-                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Submit</button>
+                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Update"]</button>
 
                 <div class="mt-1">
                     <InputTextField
                         FullWidth="true"
-                        Label="Name"
-                        Placeholder="Task list name"
+                        Label="@DashboardLocalizer["Name"].Value"
+                        Placeholder="@DashboardLocalizer["UpdateTaskListModal_NamePlaceholder"].Value"
                         Variant="InputVariant.Outlined"
                         @bind-Value="_model.Name"/>
                 </div>
@@ -44,7 +44,7 @@
                 Disabled="_isLoading"
                 Color="@ThemeColor.Primary"
                 Radius="@Radius.Full">
-                Update
+                @DashboardLocalizer["Update"]
             </CustomButton>
         </LumexModalFooter>
     </LumexModalContent>

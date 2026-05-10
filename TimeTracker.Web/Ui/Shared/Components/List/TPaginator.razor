@@ -6,7 +6,7 @@
     <div class="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <p class="text-sm text-slate-500">@Summary</p>
         <div class="flex flex-wrap items-center gap-2">
-            <button type="button" @onclick="GoToFirstPageAsync" disabled="@(IsLoading || IsOnFirstPage)" class="@NavigationButtonClass()" aria-label="First page" title="First page">
+            <button type="button" @onclick="GoToFirstPageAsync" disabled="@(IsLoading || IsOnFirstPage)" class="@NavigationButtonClass()" aria-label="@DashboardLocalizer["FirstPage"]" title="@DashboardLocalizer["FirstPage"]">
                 @if (IsControlLoading("first"))
                 {
                     <i class="fa-solid fa-spinner fa-spin"></i>
@@ -17,7 +17,7 @@
                 }
             </button>
 
-            <button type="button" @onclick="GoToPreviousPageAsync" disabled="@(IsLoading || IsOnFirstPage)" class="@NavigationButtonClass()" aria-label="Previous page" title="Previous page">
+            <button type="button" @onclick="GoToPreviousPageAsync" disabled="@(IsLoading || IsOnFirstPage)" class="@NavigationButtonClass()" aria-label="@DashboardLocalizer["PreviousPage"]" title="@DashboardLocalizer["PreviousPage"]">
                 @if (IsControlLoading("previous"))
                 {
                     <i class="fa-solid fa-spinner fa-spin"></i>
@@ -38,7 +38,7 @@
                     else
                     {
                         var isActive = pageItem.Page == SafeCurrentPage;
-                        <button type="button" @onclick="@(() => SetPageAsync(pageItem.Page))" disabled="@IsPageButtonDisabled(pageItem.Page)" class="@PageButtonClass(isActive)" aria-label="@($"Page {pageItem.Page}")" title="@($"Page {pageItem.Page}")">
+                        <button type="button" @onclick="@(() => SetPageAsync(pageItem.Page))" disabled="@IsPageButtonDisabled(pageItem.Page)" class="@PageButtonClass(isActive)" aria-label="@string.Format(DashboardLocalizer["Page"].Value, pageItem.Page)" title="@string.Format(DashboardLocalizer["Page"].Value, pageItem.Page)">
                             @if (IsControlLoading(PageControlKey(pageItem.Page)))
                             {
                                 <i class="fa-solid fa-spinner fa-spin"></i>
@@ -52,7 +52,7 @@
                 }
             </div>
 
-            <button type="button" @onclick="GoToNextPageAsync" disabled="@(IsLoading || IsOnLastPage)" class="@NavigationButtonClass()" aria-label="Next page" title="Next page">
+            <button type="button" @onclick="GoToNextPageAsync" disabled="@(IsLoading || IsOnLastPage)" class="@NavigationButtonClass()" aria-label="@DashboardLocalizer["NextPage"]" title="@DashboardLocalizer["NextPage"]">
                 @if (IsControlLoading("next"))
                 {
                     <i class="fa-solid fa-spinner fa-spin"></i>
@@ -63,7 +63,7 @@
                 }
             </button>
 
-            <button type="button" @onclick="GoToLastPageAsync" disabled="@(IsLoading || IsOnLastPage)" class="@NavigationButtonClass()" aria-label="Last page" title="Last page">
+            <button type="button" @onclick="GoToLastPageAsync" disabled="@(IsLoading || IsOnLastPage)" class="@NavigationButtonClass()" aria-label="@DashboardLocalizer["LastPage"]" title="@DashboardLocalizer["LastPage"]">
                 @if (IsControlLoading("last"))
                 {
                     <i class="fa-solid fa-spinner fa-spin"></i>

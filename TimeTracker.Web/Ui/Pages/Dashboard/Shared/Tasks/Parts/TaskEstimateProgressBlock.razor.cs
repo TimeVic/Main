@@ -22,12 +22,19 @@ public partial class TaskEstimateProgressBlock
 
     private TaskEstimateAnalytics Analytics => new(PlannedDuration, TrackedDuration);
 
-    private string ProgressPercentText => Analytics.HasEstimate ? $"{Analytics.RoundedProgressPercent}%" : "No estimate";
+    private string ProgressPercentText => Analytics.HasEstimate ? $"{Analytics.RoundedProgressPercent}%" : DashboardLocalizer["NoEstimate"].Value;
 
     private string ProgressWidthStyle =>
         $"{Analytics.ProgressWidthPercent.ToString("0.##", CultureInfo.InvariantCulture)}%";
 
-    private string StatusLabel => Analytics.Status.ToLabel();
+    private string StatusLabel
+    {
+        get
+        {
+            var localized = DashboardLocalizer[$"TaskEstimateStatus_{Analytics.Status}"];
+            return localized.ResourceNotFound ? Analytics.Status.ToLabel() : localized.Value;
+        }
+    }
 
     private string BarClass => Analytics.Status.ToBarClass();
 

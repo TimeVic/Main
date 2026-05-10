@@ -1,18 +1,28 @@
 @using TimeTracker.Web.Ui.Shared.Components.Layout
 @inherits BaseReactiveComponent
 
+@inject IStringLocalizer<PublicLandingResource> SharedLocalizer
 <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         
         <AppLogoBlock
-            Eyebrow="Freelance income tracker"
+            Eyebrow="@SharedLocalizer["AppLogo_Eyebrow"]"
         />
         
         <nav class="hidden items-center gap-6 md:flex">
-            <a href="@SiteUrl.Main" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Home</a>
-            <a href="@SiteUrl.UseCases" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Use cases</a>
-            <a href="@SiteUrl.Pricing" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">Pricing</a>
-            <a href="@SiteUrl.Faq" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">FAQ</a>
+            <a href="@NavHomeUrl" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">@SharedLocalizer["Nav_Home"]</a>
+            <a href="@NavUseCasesUrl" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">@SharedLocalizer["Nav_UseCases"]</a>
+            <a href="@NavPricingUrl" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">@SharedLocalizer["Nav_Pricing"]</a>
+            <a href="@NavFaqUrl" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">@SharedLocalizer["Nav_FAQ"]</a>
+            <div class="flex items-center gap-1 border-l border-slate-200 pl-4 text-sm font-medium">
+                <button @onclick="SwitchToEnglish" class="@(!IsUkrainianLocale ? "font-semibold text-slate-900" : "text-slate-400 hover:text-slate-600") inline-flex items-center gap-1 transition">
+                    <span>🇬🇧</span><span>EN</span>
+                </button>
+                <span class="text-slate-300">|</span>
+                <button @onclick="SwitchToUkrainian" class="@(IsUkrainianLocale ? "font-semibold text-slate-900" : "text-slate-400 hover:text-slate-600") inline-flex items-center gap-1 transition">
+                    <span>🇺🇦</span><span>UK</span>
+                </button>
+            </div>
             @if (AuthState.Value.IsLoggedIn)
             {
                 <a 
@@ -20,21 +30,21 @@
                     class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                 >
                     <i class="fa-regular fa-chart-bar"></i>
-                    <span>Dashboard</span>
+                    <span>@SharedLocalizer["CTA_Dashboard"]</span>
                 </a>    
             }
             else
             {
-                <a href="@SiteUrl.Registration_Step1" class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
+                <a href="@RegistrationUrl" class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                     <i class="fa-solid fa-user-plus"></i>
-                    <span>Start tracking your income — free</span>
+                    <span>@SharedLocalizer["CTA_RegisterIncomeFree"]</span>
                 </a>
                 <a 
-                    href="@SiteUrl.Login" 
+                    href="@LoginUrl" 
                     class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                 >
                     <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                    <span>Sign in</span>
+                    <span>@SharedLocalizer["CTA_Login"]</span>
                 </a>
             }
         </nav>

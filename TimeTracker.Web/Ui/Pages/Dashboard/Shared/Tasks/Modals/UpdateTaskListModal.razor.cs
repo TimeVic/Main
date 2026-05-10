@@ -53,7 +53,7 @@ public partial class UpdateTaskListModal
             if (responseDto != null)
             {
                 Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                ToastService.ShowInfo("Task list was updated");
+                ToastService.ShowInfo(DashboardLocalizer["UpdateTaskListModal_TaskListUpdated"].Value);
                 await OnCloseModal();
             }
         }

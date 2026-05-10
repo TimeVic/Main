@@ -6,16 +6,16 @@
 <LumexCard Class="border-slate-200 bg-slate-50/50 shadow-none">
     <LumexCardHeader>
         <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Filter</p>
-            <h2 class="mt-2 text-lg font-semibold text-slate-900">Summary report parameters</h2>
-            <p class="mt-1 text-sm text-slate-500">Change grouping and period to rebuild both the chart and grouped table.</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">@DashboardLocalizer["Filter"]</p>
+            <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["SummaryReportParameters"]</h2>
+            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["ReportFilterHelper"]</p>
         </div>
     </LumexCardHeader>
     <LumexCardBody>
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div>
                 <EnumDropDown
-                    Label="Group by"
+                    Label="@DashboardLocalizer["GroupBy"].Value"
                     TItem="SummaryReportType"
                     DropDownColor="ThemeColor.Default"
                     Value="@_filterState.ReportType"
@@ -24,7 +24,7 @@
 
             <div>
                 <EnumDropDown
-                    Label="Period"
+                    Label="@DashboardLocalizer["Period"].Value"
                     TItem="SummaryReportPeriodType"
                     DropDownColor="ThemeColor.Default"
                     Value="@_filterState.PeriodType"
@@ -41,7 +41,7 @@
                         Variant="InputVariant.Outlined"
                         LabelPlacement="LabelPlacement.Outside"
                         ValueChanged="@OnChangeDateStart"
-                        Label="Date from"/>
+                        Label="@DashboardLocalizer["DateFrom"].Value"/>
                 </div>
 
                 <div>
@@ -52,7 +52,7 @@
                         Variant="InputVariant.Outlined"
                         LabelPlacement="LabelPlacement.Outside"
                         ValueChanged="@OnChangeDateEnd"
-                        Label="Date to"/>
+                        Label="@DashboardLocalizer["DateTo"].Value"/>
                 </div>
             }
         </div>

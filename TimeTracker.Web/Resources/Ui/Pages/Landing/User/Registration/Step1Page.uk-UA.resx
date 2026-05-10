@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Створити акаунт TimeVic — облік часу і оплат для фрилансерів</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Створи акаунт TimeVic, щоб вести робочий час, рахувати зароблені гроші, фіксувати оплати клієнтів і бачити неоплачені залишки.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>створити акаунт TimeVic, облік часу фрилансера, облік оплат клієнтів, борги клієнтів, погодинні ставки</value>
+  </data>
+  <data name="Content_Registration" xml:space="preserve">
+    <value>Реєстрація</value>
+  </data>
+  <data name="Content_CreateAccount" xml:space="preserve">
+    <value>Створити акаунт</value>
+  </data>
+  <data name="Content_Step1Of2StartWithYourEmailAddress" xml:space="preserve">
+    <value>Крок 1 з 2 — почни з email.</value>
+  </data>
+  <data name="Content_SendVerificationEmail" xml:space="preserve">
+    <value>Надіслати лист для підтвердження</value>
+  </data>
+  <data name="Content_VerificationEmailSent" xml:space="preserve">
+    <value>Лист для підтвердження надіслано</value>
+  </data>
+  <data name="Content_WeVeSentYouAnEmailPleaseFollowTheLink" xml:space="preserve">
+    <value>Ми надіслали лист. Перейди за посиланням у листі, щоб продовжити реєстрацію.</value>
+  </data>
+  <data name="Toast_RegistrationEmailSent" xml:space="preserve">
+    <value>Лист для реєстрації надіслано</value>
+  </data>
+  <data name="Toast_RegistrationError" xml:space="preserve">
+    <value>Помилка реєстрації</value>
+  </data>
+</root>

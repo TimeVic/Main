@@ -19,7 +19,7 @@ public partial class TagsList
     private async Task OnDelete(TagDto item)
     {
         var isOk = await ModalDialogService.ShowDeleteConfirmationDialog(
-            "Are you sure you want to remove this tag?"
+            DashboardLocalizer["TagsList_RemoveTagConfirmation"].Value
         );
         if (isOk.HasValue && isOk.Value)
         {

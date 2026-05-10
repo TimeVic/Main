@@ -39,7 +39,7 @@
             <div class="min-w-0 flex-1">
                 <input
                     type="text"
-                    placeholder="What are you working on?"
+                    placeholder="@DashboardLocalizer["WhatAreYouWorkingOn"]"
                     value="@(_activeEntry?.Description ?? string.Empty)"
                     @onchange="@OnDescriptionChanged"
                     @onclick="@OnDescriptionClick"
@@ -86,7 +86,7 @@
                                     <i class="fa-solid fa-plus"></i>
                                 </StartContent>
                                 <ChildContent>
-                                    <span class="hidden sm:inline">Task</span>
+                                    <span class="hidden sm:inline">@DashboardLocalizer["Task"]</span>
                                 </ChildContent>
                             </CustomButton>
                         }
@@ -108,7 +108,7 @@
                         <i class="fa-solid @(_hasActiveEntry ? "fa-stop" : "fa-play")"></i>
                     </StartContent>
                     <ChildContent>
-                        <span class="hidden sm:inline">@(_hasActiveEntry ? "Stop" : "Start")</span>
+                        <span class="hidden sm:inline">@(_hasActiveEntry ? DashboardLocalizer["Stop"] : DashboardLocalizer["Start"])</span>
                     </ChildContent>
                 </CustomButton>
 

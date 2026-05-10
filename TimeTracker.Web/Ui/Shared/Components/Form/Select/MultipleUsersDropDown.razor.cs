@@ -28,7 +28,10 @@ public partial class MultipleUsersDropDown
     public EventCallback<IEnumerable<UserDto>> SelectedItemChanged { get; set; }
     
     [Parameter]
-    public string Placeholder { get; set; } = "Select user";
+    public string Placeholder { get; set; } = string.Empty;
+
+    private string LocalizedPlaceholder =>
+        string.IsNullOrWhiteSpace(Placeholder) ? DashboardLocalizer["SelectUser"].Value : Placeholder;
     
     [Parameter]
     public string Class { get; set; }

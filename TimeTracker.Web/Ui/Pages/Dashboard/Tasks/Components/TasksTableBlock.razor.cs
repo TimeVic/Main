@@ -15,7 +15,7 @@ public partial class TasksTableBlock
     public IReadOnlyList<TaskDto> Tasks { get; set; } = [];
 
     [Parameter]
-    public string EmptyMessage { get; set; } = "No tasks found.";
+    public string EmptyMessage { get; set; } = string.Empty;
 
     [Parameter]
     public bool IsLoading { get; set; }

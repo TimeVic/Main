@@ -12,6 +12,8 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BH3T02NNZ8"></script>
     <script>
+        document.documentElement.lang = location.pathname === "/uk" || location.pathname.startsWith("/uk/") ? "uk-UA" : "en";
+
         window.dataLayer = window.dataLayer || [];
 
         function gtag() {

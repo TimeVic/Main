@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Content_WorkspaceAccountActivation" xml:space="preserve">
+    <value>Активація акаунта workspace</value>
+  </data>
+  <data name="Content_JoinTimevicAndStartWorkingInYourWorkspace" xml:space="preserve">
+    <value>Приєднайся до TimeVic і почни працювати у своєму workspace</value>
+  </data>
+  <data name="Content_RegistrationAndWorkspaceInvitationsUseTheSameVerificationStepOpen" xml:space="preserve">
+    <value>Реєстрація і запрошення до workspace проходять однаково: відкрий посилання з листа, створи пароль і переходь у кабінет.</value>
+  </data>
+  <data name="Content_ReceiveInvite" xml:space="preserve">
+    <value>Отримай запрошення</value>
+  </data>
+  <data name="Content_AWorkspaceOwnerAddsYourEmailToTheTeam" xml:space="preserve">
+    <value>Власник workspace додає твій email до команди.</value>
+  </data>
+  <data name="Content_OpenEmailLink" xml:space="preserve">
+    <value>Відкрий посилання з листа</value>
+  </data>
+  <data name="Content_TheVerificationLinkConfirmsTheInvitedAccount" xml:space="preserve">
+    <value>Посилання підтверджує запрошений акаунт.</value>
+  </data>
+  <data name="Content_FinishActivationAndEnterTheWorkspace" xml:space="preserve">
+    <value>Заверши активацію і зайди у workspace.</value>
+  </data>
+</root>

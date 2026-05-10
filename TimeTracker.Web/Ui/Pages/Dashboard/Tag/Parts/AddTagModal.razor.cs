@@ -41,7 +41,7 @@ public partial class AddTagModal
             if (responseDto != null)
             {
                 Microsoft.AspNetCore.Components.Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                await Microsoft.FluentUI.AspNetCore.Components.ToastService.ShowInfo("Tag added");
+                await Microsoft.FluentUI.AspNetCore.Components.ToastService.ShowInfo(DashboardLocalizer["TagAdded"].Value);
                 OnCloseModal();
             }
         }

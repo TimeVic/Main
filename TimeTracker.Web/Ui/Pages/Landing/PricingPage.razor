@@ -1,16 +1,22 @@
 @page "/pricing"
+@page "/uk/pricing"
 
 @using LumexUI.Common
+@using TimeTracker.Web.Services
 @using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.LandingLayout
 
 @layout Layout
 
+@inject IStringLocalizer<PublicLandingResource> SharedLocalizer
+@inject IStringLocalizer<PricingPage> Localizer
+@inject ILocalizationUrlService LocalizationUrlService
+@inject NavigationManager NavigationManager
 <SeoHead
-    Title="@SiteMetadata.PricingTitle"
-    Description="@SiteMetadata.PricingDescription"
-    Keywords="@SiteMetadata.PricingKeywords"
+    Title="@Localizer["Meta_Title"]"
+    Description="@Localizer["Meta_Description"]"
+    Keywords="@Localizer["Meta_Keywords"]"
     Robots="@SiteMetadata.IndexRobots"
-    CanonicalUrl="@SiteMetadata.ToAbsoluteUrl(SiteUrl.Pricing)" />
+    PublicPagePath="@SiteUrl.Pricing" />
 
 <main class="bg-white text-slate-950">
 
@@ -18,29 +24,29 @@
     <section class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white">
         <div class="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 lg:py-28">
             <h1 class="text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
-                Track your work.<br />Understand your money.
+                @Localizer["Content_TrackYourWork"]<br />@Localizer["Content_UnderstandYourMoney"]
             </h1>
             <p class="mx-auto mt-6 max-w-xl text-base leading-7 text-slate-500 sm:text-lg">
-                See how much you've earned, what's been paid, and who still owes you — without spreadsheets.
+                @Localizer["Content_SeeHowMuchYouVeEarnedWhatSBeenPaid"]
             </p>
 
             <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <a href="@SiteUrl.Registration_Step1" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-7 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800">
-                    Start tracking your earnings
+                <a href="@LocalizedUrl(SiteUrl.Registration_Step1)" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-7 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800">
+                    @SharedLocalizer["CTA_StartTrackingEarnings"]
                 </a>
-                <a href="@SiteUrl.UseCases" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-7 py-3.5 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50">
-                    See how it works
+                <a href="@LocalizedUrl(SiteUrl.UseCases)" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 px-7 py-3.5 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50">
+                    @Localizer["Content_SeeHowItWorks"]
                 </a>
             </div>
-            <p class="mt-4 text-xs text-slate-400">Free. No credit card required.</p>
+            <p class="mt-4 text-xs text-slate-400">@SharedLocalizer["CTA_FreeNoCreditCardRequired"]</p>
         </div>
     </section>
 
     @* 2. Price statement *@
     <section class="border-b border-slate-200 bg-white">
         <div class="mx-auto max-w-sm px-4 py-14 text-center sm:px-6">
-            <p class="text-4xl font-bold text-slate-950">Free — $0<span class="text-xl font-normal text-slate-400">/month</span></p>
-            <p class="mt-3 text-sm text-slate-400">No credit card required</p>
+            <p class="text-4xl font-bold text-slate-950">@Localizer["Content_Free0"]<span class="text-xl font-normal text-slate-400">@Localizer["Content_Month"]</span></p>
+            <p class="mt-3 text-sm text-slate-400">@SharedLocalizer["CTA_NoCreditCardRequired"]</p>
         </div>
     </section>
 
@@ -48,7 +54,7 @@
     <section class="border-b border-slate-200 bg-slate-50">
         <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
             <div class="mb-10 max-w-xl">
-                <h2 class="text-3xl font-semibold text-slate-950 sm:text-4xl">From hours to money clarity</h2>
+                <h2 class="text-3xl font-semibold text-slate-950 sm:text-4xl">@Localizer["Content_FromHoursToMoneyClarity"]</h2>
             </div>
 
             <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -56,35 +62,35 @@
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
                         <i class="fa-regular fa-clock"></i>
                     </div>
-                    <h3 class="mt-5 text-base font-semibold text-slate-900">Track work</h3>
-                    <p class="mt-1.5 text-sm leading-6 text-slate-500">Log time by client, project, and task.</p>
+                    <h3 class="mt-5 text-base font-semibold text-slate-900">@Localizer["Content_TrackWork"]</h3>
+                    <p class="mt-1.5 text-sm leading-6 text-slate-500">@Localizer["Content_LogTimeByClientProjectAndTask"]</p>
                 </div>
 
                 <div class="rounded-[1.5rem] border border-emerald-100 bg-emerald-50 p-6">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
                         <i class="fa-solid fa-arrow-right-arrow-left"></i>
                     </div>
-                    <h3 class="mt-5 text-base font-semibold text-slate-900">Turn time into money</h3>
-                    <p class="mt-1.5 text-sm leading-6 text-slate-600">Automatically calculate earnings using hourly rates.</p>
-                    <p class="mt-3 text-xs font-semibold text-emerald-600">earned</p>
+                    <h3 class="mt-5 text-base font-semibold text-slate-900">@Localizer["Content_TurnTimeIntoMoney"]</h3>
+                    <p class="mt-1.5 text-sm leading-6 text-slate-600">@Localizer["Content_AutomaticallyCalculateEarningsUsingHourlyRates"]</p>
+                    <p class="mt-3 text-xs font-semibold text-emerald-600">@Localizer["Content_Earned"]</p>
                 </div>
 
                 <div class="rounded-[1.5rem] border border-blue-100 bg-blue-50 p-6">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                         <i class="fa-solid fa-hand-holding-dollar"></i>
                     </div>
-                    <h3 class="mt-5 text-base font-semibold text-slate-900">Track payments</h3>
-                    <p class="mt-1.5 text-sm leading-6 text-slate-600">Record what clients have paid you.</p>
-                    <p class="mt-3 text-xs font-semibold text-blue-600">paid</p>
+                    <h3 class="mt-5 text-base font-semibold text-slate-900">@Localizer["Content_TrackPayments"]</h3>
+                    <p class="mt-1.5 text-sm leading-6 text-slate-600">@Localizer["Content_RecordWhatClientsHavePaidYou"]</p>
+                    <p class="mt-3 text-xs font-semibold text-blue-600">@Localizer["Content_Paid"]</p>
                 </div>
 
                 <div class="rounded-[1.5rem] border border-red-100 bg-red-50 p-6">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-100 text-red-600">
                         <i class="fa-regular fa-circle-dot"></i>
                     </div>
-                    <h3 class="mt-5 text-base font-semibold text-slate-900">See what's missing</h3>
-                    <p class="mt-1.5 text-sm leading-6 text-slate-600">Instantly see unpaid work and outstanding balances.</p>
-                    <p class="mt-3 text-xs font-semibold text-red-500">unpaid</p>
+                    <h3 class="mt-5 text-base font-semibold text-slate-900">@Localizer["Content_SeeWhatSMissing"]</h3>
+                    <p class="mt-1.5 text-sm leading-6 text-slate-600">@Localizer["Content_InstantlySeeUnpaidWorkAndOutstandingBalances"]</p>
+                    <p class="mt-3 text-xs font-semibold text-red-500">@Localizer["Content_Unpaid"]</p>
                 </div>
             </div>
         </div>
@@ -93,9 +99,9 @@
     @* 4. What you actually get *@
     <section class="border-b border-slate-200 bg-white">
         <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:py-20">
-            <h2 class="text-2xl font-semibold text-slate-950 sm:text-3xl">What you can do with TimeVic</h2>
+            <h2 class="text-2xl font-semibold text-slate-950 sm:text-3xl">@Localizer["Content_WhatYouCanDoWithTimevic"]</h2>
             <ul class="mt-8 space-y-4">
-                @foreach (var item in _capabilities)
+                @foreach (var item in Capabilities)
                 {
                     <li class="flex items-start gap-3">
                         <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500">
@@ -111,9 +117,9 @@
     @* 5. Trust section *@
     <section class="border-b border-slate-200 bg-slate-50">
         <div class="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:py-20">
-            <h2 class="text-2xl font-semibold text-slate-950 sm:text-3xl">Simple and transparent</h2>
+            <h2 class="text-2xl font-semibold text-slate-950 sm:text-3xl">@Localizer["Content_SimpleAndTransparent"]</h2>
             <p class="mx-auto mt-5 max-w-xl text-base leading-7 text-slate-500">
-                TimeVic is free to use. The focus is on helping freelancers understand their income, not just track time.
+                @Localizer["Content_TimevicIsFreeToUseTheFocusIsOnHelping"]
             </p>
         </div>
     </section>
@@ -122,26 +128,32 @@
     <section class="bg-slate-950 text-white">
         <div class="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:py-20">
             <h2 class="text-3xl font-semibold leading-tight sm:text-4xl">
-                Start tracking your time and income
+                @Localizer["Content_StartTrackingYourTimeAndIncome"]
             </h2>
             <div class="mt-8">
-                <a href="@SiteUrl.Registration_Step1" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-100">
-                    Start for free
+                <a href="@LocalizedUrl(SiteUrl.Registration_Step1)" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-100">
+                    @SharedLocalizer["CTA_StartForFree"]
                 </a>
             </div>
-            <p class="mt-4 text-sm text-slate-400">No credit card required</p>
+            <p class="mt-4 text-sm text-slate-400">@SharedLocalizer["CTA_NoCreditCardRequired"]</p>
         </div>
     </section>
 
 </main>
 
 @code {
-    private static readonly string[] _capabilities =
+    private string CurrentPath => new Uri(NavigationManager.Uri).AbsolutePath;
+
+    private string CurrentCulture => LocalizationUrlService.GetCurrentCultureName(CurrentPath);
+
+    private string LocalizedUrl(string path) => LocalizationUrlService.GetLocalizedUrl(path, CurrentCulture);
+
+    private string[] Capabilities =>
     [
-        "Time tracking per client and project",
-        "Hourly rates → automatic earnings calculation",
-        "Payment tracking",
-        "Paid vs unpaid overview",
-        "Client-level summaries",
+        Localizer["Capability_TimeTrackingPerClientAndProject"],
+        Localizer["Capability_HourlyRatesAutomaticEarningsCalculation"],
+        Localizer["Capability_PaymentTracking"],
+        Localizer["Capability_PaidVsUnpaidOverview"],
+        Localizer["Capability_ClientLevelSummaries"],
     ];
 }

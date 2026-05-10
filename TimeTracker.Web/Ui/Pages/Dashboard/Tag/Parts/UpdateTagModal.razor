@@ -12,11 +12,11 @@
                     T="string?"
                     For="() => model.Name"
                     @bind-Value="@(model.Name)"
-                    Label="Tag name">
+                    Label="@DashboardLocalizer["TagName"]">
                 </FluentTextField>
 
                 <MudColorPicker
-                    Label="Color"
+                    Label="@DashboardLocalizer["Color"]"
                     Clearable="true"
                     ColorPickerView="ColorPickerView.Palette"
                     @bind-Value="@(_mudColor)"/>
@@ -24,13 +24,13 @@
         </MudForm>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="@OnCloseModal">Cancel</MudButton>
+        <MudButton OnClick="@OnCloseModal">@DashboardLocalizer["Cancel"]</MudButton>
         <MudButton
             ButtonType="MudBlazor.ButtonType.Submit"
             OnClick="@Submit"
             Disabled="@_isLoading"
             Color="Color.Primary">
-            Update
+            @DashboardLocalizer["Update"]
         </MudButton>
     </DialogActions>
 </MudDialog>

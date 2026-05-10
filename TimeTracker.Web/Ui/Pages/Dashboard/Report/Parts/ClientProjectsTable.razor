@@ -8,12 +8,12 @@
     <table class="min-w-full divide-y divide-slate-200 text-sm">
         <thead class="bg-slate-50">
         <tr>
-            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Project</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Duration</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Earned</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Received</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Outstanding</th>
-            <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Effective hourly rate</th>
+            <th class="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["Project"]</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["Duration"]</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["Earned"]</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["Received"]</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["Outstanding"]</th>
+            <th class="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["EffectiveHourlyRate"]</th>
         </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 bg-white">
@@ -58,9 +58,9 @@
     [Parameter]
     public IEnumerable<MemberPaymentsReportItemDto> Items { get; set; } = Enumerable.Empty<MemberPaymentsReportItemDto>();
 
-    private static string GetProjectName(MemberPaymentsReportItemDto item)
+    private string GetProjectName(MemberPaymentsReportItemDto item)
     {
-        return string.IsNullOrWhiteSpace(item.ProjectName) ? "Unnamed project" : item.ProjectName;
+        return string.IsNullOrWhiteSpace(item.ProjectName) ? DashboardLocalizer["UnnamedProject"].Value : item.ProjectName;
     }
 
     private static string GetProjectNameClass(MemberPaymentsReportItemDto item)

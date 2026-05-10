@@ -2,6 +2,7 @@
 using LumexUI;
 using LumexUI.Common;
 using TimeTracker.Web.Constants.Ui;
+using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
@@ -24,7 +25,7 @@ public partial class EnumDropDown<TItem>
     public EventCallback<TItem?> OnChanged { get; set; }
     
     [Parameter]
-    public string Placeholder { get; set; } = "Select item";
+    public string Placeholder { get; set; } = string.Empty;
     
     [Parameter]
     public string? Label { get; set; } = null;
@@ -71,7 +72,22 @@ public partial class EnumDropDown<TItem>
     
     private List<TItem?> _list;
     private TItem? _value;
-    public string? _placeholder => _value is null ? Placeholder : null;
+    public string? _placeholder => _value is null ? LocalizedPlaceholder : null;
+
+    private string LocalizedPlaceholder =>
+        string.IsNullOrWhiteSpace(Placeholder) ? DashboardLocalizer["Select"].Value : Placeholder;
+
+    private string GetLocalizedDisplayName(TItem? item)
+    {
+        if (item is null)
+        {
+            return string.Empty;
+        }
+
+        var key = $"{typeof(TItem).Name}_{item}";
+        var localized = DashboardLocalizer[key];
+        return localized.ResourceNotFound ? EnumHelpers.GetDisplayName(typeof(TItem), item) : localized.Value;
+    }
 
     protected string SelectClass
     {

@@ -42,12 +42,19 @@ public partial class BaseLayout
         get
         {
             var path = NavigationManager.GetPath();
-            return path.Equals("/") 
-                || path.StartsWith(SiteUrl.Login)
-                || path.StartsWith(SiteUrl.LoginAsDemo)
-                || path.StartsWith(SiteUrl.Registration_Step1)
-                || path.StartsWith("/registration")
-                || path.StartsWith("/documentation");
+            // Strip /uk prefix to normalize Ukrainian locale paths before matching
+            var normalizedPath = path == SiteUrl.UkLocalePrefix || path == SiteUrl.UkLocalePrefix + "/" ? "/"
+                : path.StartsWith(SiteUrl.UkLocalePrefix + "/") ? path[SiteUrl.UkLocalePrefix.Length..]
+                : path;
+            return normalizedPath.Equals("/")
+                || normalizedPath.StartsWith(SiteUrl.UseCases)
+                || normalizedPath.StartsWith(SiteUrl.Faq)
+                || normalizedPath.StartsWith(SiteUrl.Pricing)
+                || normalizedPath.StartsWith(SiteUrl.Login)
+                || normalizedPath.StartsWith(SiteUrl.LoginAsDemo)
+                || normalizedPath.StartsWith(SiteUrl.Registration_Step1)
+                || normalizedPath.StartsWith("/registration")
+                || normalizedPath.StartsWith("/documentation");
         }
     }
 

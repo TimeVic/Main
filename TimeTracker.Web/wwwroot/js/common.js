@@ -28,6 +28,10 @@ window.setFavicon = function (fileName) {
     element.setAttribute('href', `/img/logo/${fileName}`)
 };
 
+window.setDocumentLanguage = function (language) {
+    document.documentElement.lang = language || "en";
+};
+
 window.openFile = function(data) {
     var link = this.document.createElement('a');
     link.download = data.fileName;

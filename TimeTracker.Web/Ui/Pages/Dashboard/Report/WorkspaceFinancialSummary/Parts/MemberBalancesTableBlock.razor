@@ -9,8 +9,8 @@
 
 <section class="@Class">
     <div class="mb-4">
-        <h2 class="text-base font-semibold text-slate-700">Member Earnings &amp; Payouts</h2>
-        <p class="mt-1 text-sm text-slate-500">Shows what members earned by rate, what was paid out, and what is still owed.</p>
+        <h2 class="text-base font-semibold text-slate-700">@DashboardLocalizer["MemberBalancesTableBlock_Title"]</h2>
+        <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["MemberBalancesTableBlock_Description"]</p>
     </div>
     @{
         var items = ReportsState.Value.WorkspaceFinancialSummaryData?.MemberBalances ?? [];
@@ -18,8 +18,8 @@
     @if (items.Count == 0)
     {
         <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6">
-            <p class="text-sm font-medium text-slate-700">No member earnings yet</p>
-            <p class="mt-1 text-sm text-slate-500">Member earnings and payouts will appear here after team work is recorded.</p>
+            <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["MemberBalancesTableBlock_NoEarningsTitle"]</p>
+            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["MemberBalancesTableBlock_NoEarningsDescription"]</p>
         </div>
     }
     else
@@ -28,12 +28,12 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     <tr>
-                        <th class="px-4 py-3 text-left">Member</th>
-                        <th class="px-4 py-3 text-right">Hours</th>
-                        <th class="px-4 py-3 text-right">Earned by Rate</th>
-                        <th class="px-4 py-3 text-right">Paid Out</th>
-                        <th class="px-4 py-3 text-right">Balance</th>
-                        <th class="px-4 py-3 text-left">Status</th>
+                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Member"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Hours"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["MemberBalancesTableBlock_EarnedByRate"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["MemberBalancesTableBlock_PaidOut"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Balance"]</th>
+                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Status"]</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -48,12 +48,12 @@
                             <td class="px-4 py-3 text-right font-semibold @GetBalanceTextClass(item.Owed)">
                                 @if (item.Owed == 0)
                                 {
-                                    <span>Settled</span>
+                                    <span>@DashboardLocalizer["Settled"]</span>
                                 }
                                 else
                                 {
                                     <AmountDisplay Amount="@Math.Abs(item.Owed)"/>
-                                    <span>@(item.Owed > 0 ? "owed" : "overpaid")</span>
+                                    <span>@(item.Owed > 0 ? DashboardLocalizer["Owed"].Value : DashboardLocalizer["MemberBalancesTableBlock_Overpaid"].Value)</span>
                                 }
                             </td>
                             <td class="px-4 py-3">
@@ -62,7 +62,7 @@
                         </tr>
                     }
                     <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
-                        <td class="px-4 py-3">Total</td>
+                        <td class="px-4 py-3">@DashboardLocalizer["Total"]</td>
                         <td class="px-4 py-3 text-right">@items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()</td>
                         <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.Cost)"/></td>
                         <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@items.Sum(i => i.PaidOut)"/></td>
@@ -88,10 +88,10 @@
         return "text-emerald-700";
     }
 
-    private static (string Text, string Class) GetMemberStatus(decimal balance)
+    private (string Text, string Class) GetMemberStatus(decimal balance)
     {
-        if (balance > 0) return ("Owed", "bg-red-100 text-red-700");
-        if (balance < 0) return ("Overpaid", "bg-blue-100 text-blue-700");
-        return ("Settled", "bg-emerald-100 text-emerald-700");
+        if (balance > 0) return (DashboardLocalizer["Owed"].Value, "bg-red-100 text-red-700");
+        if (balance < 0) return (DashboardLocalizer["MemberBalancesTableBlock_Overpaid"].Value, "bg-blue-100 text-blue-700");
+        return (DashboardLocalizer["Settled"].Value, "bg-emerald-100 text-emerald-700");
     }
 }

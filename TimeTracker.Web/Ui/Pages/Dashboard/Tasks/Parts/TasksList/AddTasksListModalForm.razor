@@ -10,7 +10,7 @@
             <div class="size-10 flex items-center justify-center bg-default-100 rounded-full">
                 <i class="fa-solid fa-plus text-xl"></i>
             </div>
-            Add task list
+            @DashboardLocalizer["AddTasksListModalForm_Title"]
         </LumexModalHeader>
         <LumexModalBody>
             <EditForm
@@ -20,20 +20,20 @@
                 OnValidSubmit="@Submit"
                 novalidate>
                 <DataAnnotationsValidator/>
-                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Submit</button>
+                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Create"]</button>
 
                 <div class="space-y-6">
                     <div class="rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3">
-                        <p class="text-xs font-medium uppercase tracking-[0.18em] text-blue-600">Project</p>
+                        <p class="text-xs font-medium uppercase tracking-[0.18em] text-blue-600">@DashboardLocalizer["Project"]</p>
                         <p class="mt-1 text-sm font-semibold text-slate-900">@Project?.Name</p>
                     </div>
 
                     <div>
                         <InputTextField
                             FullWidth="true"
-                            Label="Name"
+                            Label="@DashboardLocalizer["Name"].Value"
                             @bind-Value="model.Name"
-                            Placeholder="Enter list name"/>
+                            Placeholder="@DashboardLocalizer["AddTasksListModalForm_NamePlaceholder"].Value"/>
                     </div>
                 </div>
             </EditForm>
@@ -44,7 +44,7 @@
                 OnClick="@Submit"
                 Color="@ThemeColor.Primary"
                 Radius="@Radius.Full">
-                Add
+                @DashboardLocalizer["Add"]
             </CustomButton>
         </LumexModalFooter>
     </LumexModalContent>

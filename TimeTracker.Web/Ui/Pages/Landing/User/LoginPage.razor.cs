@@ -69,7 +69,7 @@ public partial class LoginPage
         }
         catch (Exception)
         {
-            ToastService.ShowError("Incorrect email or password");
+            ToastService.ShowError(Localizer["Toast_IncorrectEmailOrPassword"]);
         }
         finally
         {
@@ -81,7 +81,7 @@ public partial class LoginPage
 
     private void ForgotPassword()
     {
-        NavigationManager.NavigateTo(SiteUrl.ForgotPassword);
+        NavigationManager.NavigateTo(LocalizationUrlService.GetLocalizedUrl(SiteUrl.ForgotPassword, CurrentCulture));
     }
 
     private async Task SubmitMagic()
@@ -103,7 +103,7 @@ public partial class LoginPage
         }
         catch (Exception)
         {
-            ToastService.ShowError("Failed to send magic link");
+            ToastService.ShowError(Localizer["Toast_FailedToSendMagicLink"]);
         }
         finally
         {

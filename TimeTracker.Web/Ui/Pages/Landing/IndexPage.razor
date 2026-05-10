@@ -1,15 +1,20 @@
-﻿@page "/"
+@page "/"
+@page "/uk"
 
+@using TimeTracker.Web.Services
 @using Layout = TimeTracker.Web.Ui.Pages.Landing.Shared.LandingLayout
 @inherits BaseReactiveComponent
 @layout Layout
 
+@inject IStringLocalizer<PublicLandingResource> SharedLocalizer
+@inject IStringLocalizer<IndexPage> Localizer
+@inject ILocalizationUrlService LocalizationUrlService
 <SeoHead
-    Title="@SiteMetadata.HomeTitle"
-    Description="@SiteMetadata.HomeDescription"
-    Keywords="@SiteMetadata.HomeKeywords"
+    Title="@Localizer["Meta_Title"]"
+    Description="@Localizer["Meta_Description"]"
+    Keywords="@Localizer["Meta_Keywords"]"
     Robots="@SiteMetadata.IndexRobots"
-    CanonicalUrl="@SiteMetadata.ToAbsoluteUrl(SiteUrl.Main)" />
+    PublicPagePath="@SiteUrl.Main" />
 
 <main>
         <section class="relative overflow-hidden border-b border-slate-200 bg-gradient-to-br from-blue-50 via-white to-emerald-50">
@@ -18,38 +23,38 @@
                 <section class="relative z-10">
                     <div class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm">
                         <i class="fa-solid fa-bolt"></i>
-                        <span>For freelance developers working with multiple clients</span>
+                        <span>@Localizer["Content_ForFreelanceDevelopersWorkingWithMultipleClients"]</span>
                     </div>
-                    <h1 class="mt-6 max-w-4xl text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl lg:text-6xl">Track time. See money. Know who owes you.</h1>
-                    <p class="mt-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">TimeVic helps freelance developers track hours, calculate earnings, and see unpaid balances across all clients.</p>
+                    <h1 class="mt-6 max-w-4xl text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl lg:text-6xl">@Localizer["Content_TrackTimeSeeMoneyKnowWhoOwesYou"]</h1>
+                    <p class="mt-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">@Localizer["Content_TimevicHelpsFreelanceDevelopersTrackHoursCalculateEarningsAndSee"]</p>
 
                     <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                        <a href="@SiteUrl.Registration_Step1" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
+                        <a href="@LocalizedUrl(SiteUrl.Registration_Step1)" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                             <i class="fa-solid fa-rocket"></i>
-                            <span>Start tracking your income — free</span>
+                            <span>@SharedLocalizer["CTA_RegisterIncomeFree"]</span>
                         </a>
-                        <a href="@SiteUrl.LoginAsDemo" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50">
+                        <a href="@LocalizedUrl(SiteUrl.LoginAsDemo)" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50">
                             <i class="fa-regular fa-eye"></i>
-                            <span>View demo dashboard</span>
+                            <span>@SharedLocalizer["CTA_DemoDashboard"]</span>
                         </a>
                     </div>
-                    <p class="mt-3 text-sm font-medium text-slate-500">No credit card required</p>
+                    <p class="mt-3 text-sm font-medium text-slate-500">@SharedLocalizer["CTA_NoCreditCardRequired"]</p>
 
                     <div class="mt-10 grid gap-4 sm:grid-cols-3">
                         <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">Track</p>
-                            <p class="mt-3 text-lg font-semibold text-slate-900">Hours by client and project</p>
-                            <p class="mt-2 text-sm leading-6 text-slate-600">Log billable work against the right client, project, and task without scattered notes.</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-600">@Localizer["Content_Track"]</p>
+                            <p class="mt-3 text-lg font-semibold text-slate-900">@Localizer["Content_HoursByClientAndProject"]</p>
+                            <p class="mt-2 text-sm leading-6 text-slate-600">@Localizer["Content_LogBillableWorkAgainstTheRightClientProjectAndTask"]</p>
                         </div>
                         <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-600">Earn</p>
-                            <p class="mt-3 text-lg font-semibold text-slate-900">Earnings calculated from rates</p>
-                            <p class="mt-2 text-sm leading-6 text-slate-600">Set hourly rates and let TimeVic turn tracked hours into income totals.</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-600">@Localizer["Content_Earn"]</p>
+                            <p class="mt-3 text-lg font-semibold text-slate-900">@Localizer["Content_EarningsCalculatedFromRates"]</p>
+                            <p class="mt-2 text-sm leading-6 text-slate-600">@Localizer["Content_SetHourlyRatesAndLetTimevicTurnTrackedHoursInto"]</p>
                         </div>
                         <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-amber-600">Monetize</p>
-                            <p class="mt-3 text-lg font-semibold text-slate-900">Paid and unpaid work</p>
-                            <p class="mt-2 text-sm leading-6 text-slate-600">See what was paid, what is unpaid, and which client balance needs attention.</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-amber-600">@Localizer["Content_Monetize"]</p>
+                            <p class="mt-3 text-lg font-semibold text-slate-900">@Localizer["Content_PaidAndUnpaidWork"]</p>
+                            <p class="mt-2 text-sm leading-6 text-slate-600">@Localizer["Content_SeeWhatWasPaidWhatIsUnpaidAndWhichClient"]</p>
                         </div>
                     </div>
                 </section>
@@ -59,8 +64,8 @@
                         <div class="border-b border-white/10 px-6 py-5">
                             <div class="flex items-center justify-between gap-4">
                                 <div>
-                                    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-200">Income clarity</p>
-                                    <h2 class="mt-2 text-2xl font-semibold">Work, earnings, and payments in one view</h2>
+                                    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-200">@Localizer["Content_IncomeClarity"]</p>
+                                    <h2 class="mt-2 text-2xl font-semibold">@Localizer["Content_WorkEarningsAndPaymentsInOneView"]</h2>
                                 </div>
                                 <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/20 text-blue-200">
                                     <i class="fa-solid fa-layer-group text-xl"></i>
@@ -75,8 +80,8 @@
                                         <i class="fa-regular fa-clock"></i>
                                     </div>
                                     <div>
-                                        <p class="text-base font-semibold">Track time across clients and projects</p>
-                                        <p class="mt-2 text-sm leading-6 text-slate-300">Record billable hours where they belong, whether you use a live timer or add time manually.</p>
+                                        <p class="text-base font-semibold">@Localizer["Content_TrackTimeAcrossClientsAndProjects"]</p>
+                                        <p class="mt-2 text-sm leading-6 text-slate-300">@Localizer["Content_RecordBillableHoursWhereTheyBelongWhetherYouUseA"]</p>
                                     </div>
                                 </div>
                             </div>
@@ -86,8 +91,8 @@
                                         <i class="fa-regular fa-comments"></i>
                                     </div>
                                     <div>
-                                        <p class="text-base font-semibold">Connect tasks to time entries</p>
-                                        <p class="mt-2 text-sm leading-6 text-slate-300">Keep task tracking simple and link each piece of work to the hours it generated.</p>
+                                        <p class="text-base font-semibold">@Localizer["Content_ConnectTasksToTimeEntries"]</p>
+                                        <p class="mt-2 text-sm leading-6 text-slate-300">@Localizer["Content_KeepTaskTrackingSimpleAndLinkEachPieceOfWork"]</p>
                                     </div>
                                 </div>
                             </div>
@@ -97,8 +102,8 @@
                                         <i class="fa-solid fa-hand-holding-dollar"></i>
                                     </div>
                                     <div>
-                                        <p class="text-base font-semibold">Client balances you can trust</p>
-                                        <p class="mt-2 text-sm leading-6 text-slate-300">See total earned, total paid, and the outstanding balance for every client.</p>
+                                        <p class="text-base font-semibold">@Localizer["Content_ClientBalancesYouCanTrust"]</p>
+                                        <p class="mt-2 text-sm leading-6 text-slate-300">@Localizer["Content_SeeTotalEarnedTotalPaidAndTheOutstandingBalanceFor"]</p>
                                     </div>
                                 </div>
                             </div>
@@ -111,9 +116,9 @@
         <section id="features" class="border-b border-slate-200 bg-white">
             <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
                 <div class="max-w-3xl">
-                    <p class="text-sm font-semibold uppercase tracking-[0.28em] text-blue-600">Features</p>
-                    <h2 class="mt-4 text-3xl font-semibold text-slate-950 sm:text-4xl">Turn tracked time into income insights</h2>
-                    <p class="mt-4 text-base leading-7 text-slate-600">Track work, money, and payments in one place so you always know what each client owes you.</p>
+                    <p class="text-sm font-semibold uppercase tracking-[0.28em] text-blue-600">@Localizer["Content_Features"]</p>
+                    <h2 class="mt-4 text-3xl font-semibold text-slate-950 sm:text-4xl">@Localizer["Content_TurnTrackedTimeIntoIncomeInsights"]</h2>
+                    <p class="mt-4 text-base leading-7 text-slate-600">@Localizer["Content_TrackWorkMoneyAndPaymentsInOnePlaceSoYou"]</p>
                 </div>
 
                 <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -121,29 +126,29 @@
                         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm">
                             <i class="fa-regular fa-hourglass-half"></i>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-slate-900">Track time across multiple clients and projects</h3>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">Capture billable hours in real time or add them later with the right client and project attached.</p>
+                        <h3 class="mt-5 text-xl font-semibold text-slate-900">@Localizer["Content_TrackTimeAcrossMultipleClientsAndProjects"]</h3>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_CaptureBillableHoursInRealTimeOrAddThemLater"]</p>
                     </div>
                     <div class="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-6">
                         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-sm">
                             <i class="fa-solid fa-list-check"></i>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-slate-900">Set hourly rates and automatically calculate earnings</h3>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">Assign rates to your work and see how every entry adds to your income.</p>
+                        <h3 class="mt-5 text-xl font-semibold text-slate-900">@Localizer["Content_SetHourlyRatesAndAutomaticallyCalculateEarnings"]</h3>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_AssignRatesToYourWorkAndSeeHowEveryEntry"]</p>
                     </div>
                     <div class="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-6">
                         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500 text-white shadow-sm">
                             <i class="fa-regular fa-chart-bar"></i>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-slate-900">See paid vs unpaid work per client</h3>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">Compare earned totals with payments received and spot outstanding balances quickly.</p>
+                        <h3 class="mt-5 text-xl font-semibold text-slate-900">@Localizer["Content_SeePaidVsUnpaidWorkPerClient"]</h3>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_CompareEarnedTotalsWithPaymentsReceivedAndSpotOutstandingBalances"]</p>
                     </div>
                     <div class="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-6">
                         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-sm">
                             <i class="fa-regular fa-folder-open"></i>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-slate-900">Get clear summaries of your income</h3>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">Review earnings by client, project, date, or task before invoicing.</p>
+                        <h3 class="mt-5 text-xl font-semibold text-slate-900">@Localizer["Content_GetClearSummariesOfYourIncome"]</h3>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_ReviewEarningsByClientProjectDateOrTaskBeforeInvoicing"]</p>
                     </div>
                 </div>
             </div>
@@ -153,26 +158,26 @@
             <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
                 <div class="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start">
                     <div>
-                        <p class="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-600">Client and project view</p>
-                        <h2 class="mt-4 text-3xl font-semibold text-slate-950 sm:text-4xl">See exactly how much each client owes you</h2>
-                        <p class="mt-4 text-base leading-7 text-slate-600">TimeVic connects tracked hours, hourly rates, and received payments so every client balance is clear before you invoice or follow up.</p>
+                        <p class="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-600">@Localizer["Content_ClientAndProjectView"]</p>
+                        <h2 class="mt-4 text-3xl font-semibold text-slate-950 sm:text-4xl">@Localizer["Content_SeeExactlyHowMuchEachClientOwesYou"]</h2>
+                        <p class="mt-4 text-base leading-7 text-slate-600">@Localizer["Content_TimevicConnectsTrackedHoursHourlyRatesAndReceivedPaymentsSo"]</p>
                     </div>
                     <div class="grid gap-4 sm:grid-cols-2">
                         <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                            <p class="text-sm font-semibold text-slate-900">Total earned</p>
-                            <p class="mt-3 text-sm leading-6 text-slate-600">Know how much billable work you have completed for each client and project.</p>
+                            <p class="text-sm font-semibold text-slate-900">@Localizer["Content_TotalEarned"]</p>
+                            <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_KnowHowMuchBillableWorkYouHaveCompletedForEach"]</p>
                         </div>
                         <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                            <p class="text-sm font-semibold text-slate-900">Total paid</p>
-                            <p class="mt-3 text-sm leading-6 text-slate-600">Record received payments and compare them against your earned totals.</p>
+                            <p class="text-sm font-semibold text-slate-900">@Localizer["Content_TotalPaid"]</p>
+                            <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_RecordReceivedPaymentsAndCompareThemAgainstYourEarnedTotals"]</p>
                         </div>
                         <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                            <p class="text-sm font-semibold text-slate-900">Outstanding balance</p>
-                            <p class="mt-3 text-sm leading-6 text-slate-600">See exactly how much each client has paid and what is still outstanding.</p>
+                            <p class="text-sm font-semibold text-slate-900">@Localizer["Content_OutstandingBalance"]</p>
+                            <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_SeeExactlyHowMuchEachClientHasPaidAndWhat"]</p>
                         </div>
                         <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                            <p class="text-sm font-semibold text-slate-900">Invoice-ready detail</p>
-                            <p class="mt-3 text-sm leading-6 text-slate-600">Open a client or project and review the work, money, and payments behind the balance.</p>
+                            <p class="text-sm font-semibold text-slate-900">@Localizer["Content_InvoiceReadyDetail"]</p>
+                            <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_OpenAClientOrProjectAndReviewTheWorkMoney"]</p>
                         </div>
                     </div>
                 </div>
@@ -182,9 +187,9 @@
         <section id="share" class="border-b border-slate-200 bg-white">
             <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
                 <div class="max-w-3xl">
-                    <p class="text-sm font-semibold uppercase tracking-[0.28em] text-violet-600">Tasks and integrations</p>
-                    <h2 class="mt-4 text-3xl font-semibold text-slate-950 sm:text-4xl">Simple task tracking connected to your time entries</h2>
-                    <p class="mt-4 text-base leading-7 text-slate-600">Keep tasks lightweight, connect them to billable hours, and link TimeVic entries to Jira when your client work already lives there.</p>
+                    <p class="text-sm font-semibold uppercase tracking-[0.28em] text-violet-600">@Localizer["Content_TasksAndIntegrations"]</p>
+                    <h2 class="mt-4 text-3xl font-semibold text-slate-950 sm:text-4xl">@Localizer["Content_SimpleTaskTrackingConnectedToYourTimeEntries"]</h2>
+                    <p class="mt-4 text-base leading-7 text-slate-600">@Localizer["Content_KeepTasksLightweightConnectThemToBillableHoursAndLink"]</p>
                 </div>
 
                 <div class="mt-10 grid gap-6 lg:grid-cols-3">
@@ -192,44 +197,44 @@
                         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-sm">
                             <i class="fa-solid fa-share-nodes"></i>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-slate-900">Tasks without project management overhead</h3>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">Simple task tracking connected to your time entries without the complexity of full project management tools.</p>
+                        <h3 class="mt-5 text-xl font-semibold text-slate-900">@Localizer["Content_TasksWithoutProjectManagementOverhead"]</h3>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_SimpleTaskTrackingConnectedToYourTimeEntriesWithoutThe"]</p>
                     </div>
                     <div class="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-6">
                         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm">
                             <i class="fa-solid fa-users"></i>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-slate-900">Jira links when you need them</h3>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">Track time in TimeVic and link it to your Jira tasks.</p>
+                        <h3 class="mt-5 text-xl font-semibold text-slate-900">@Localizer["Content_JiraLinksWhenYouNeedThem"]</h3>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_TrackTimeInTimevicAndLinkItToYourJira"]</p>
                     </div>
                     <div class="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-6">
                         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-sm">
                             <i class="fa-solid fa-bullhorn"></i>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-slate-900">Optional sync for client workflows</h3>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">Use TimeVic for time, earnings, and payment clarity while keeping Jira as the place where detailed development work happens.</p>
+                        <h3 class="mt-5 text-xl font-semibold text-slate-900">@Localizer["Content_OptionalSyncForClientWorkflows"]</h3>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_UseTimevicForTimeEarningsAndPaymentClarityWhileKeeping"]</p>
                     </div>
                 </div>
 
                 <div class="mt-10 rounded-[2rem] border border-slate-200 bg-slate-950 p-8 text-white shadow-xl">
                     <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                         <div>
-                            <p class="text-sm font-semibold uppercase tracking-[0.28em] text-blue-200">Ready to see your numbers</p>
-                            <h3 class="mt-3 text-3xl font-semibold">Start tracking work, money, and payments in one place</h3>
-                            <p class="mt-4 max-w-3xl text-sm leading-6 text-slate-300">Use TimeVic to turn billable hours into clear client balances, income summaries, and payment follow-ups.</p>
+                            <p class="text-sm font-semibold uppercase tracking-[0.28em] text-blue-200">@Localizer["Content_ReadyToSeeYourNumbers"]</p>
+                            <h3 class="mt-3 text-3xl font-semibold">@Localizer["Content_StartTrackingWorkMoneyAndPaymentsInOnePlace"]</h3>
+                            <p class="mt-4 max-w-3xl text-sm leading-6 text-slate-300">@Localizer["Content_UseTimevicToTurnBillableHoursIntoClearClientBalances"]</p>
                         </div>
                         <div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                            <a href="@SiteUrl.Registration_Step1" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-blue-700">
+                            <a href="@LocalizedUrl(SiteUrl.Registration_Step1)" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-blue-700">
                                 <i class="fa-solid fa-user-plus"></i>
-                                <span>Start tracking your income — free</span>
+                                <span>@SharedLocalizer["CTA_RegisterIncomeFree"]</span>
                             </a>
-                            <a href="@SiteUrl.LoginAsDemo" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">
+                            <a href="@LocalizedUrl(SiteUrl.LoginAsDemo)" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">
                                 <i class="fa-regular fa-eye"></i>
-                                <span>View demo</span>
+                                <span>@SharedLocalizer["CTA_Demo"]</span>
                             </a>
                             <p class="text-center text-sm text-slate-300 sm:text-left lg:text-center">
-                                Already have an account?
-                                <a href="@SiteUrl.Login" class="font-semibold text-white underline underline-offset-4 transition hover:text-blue-100">Sign in</a>
+                                @Localizer["Content_AlreadyHaveAnAccount"]
+                                <a href="@LocalizedUrl(SiteUrl.Login)" class="font-semibold text-white underline underline-offset-4 transition hover:text-blue-100">@SharedLocalizer["CTA_Login"]</a>
                             </p>
                         </div>
                     </div>
@@ -241,18 +246,26 @@
             <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
                 <div class="grid gap-6 lg:grid-cols-3">
                     <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
-                        <p class="text-sm font-semibold text-slate-900">What is TimeVic?</p>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">A focused time, income, and payment tracker for freelance developers with multiple clients.</p>
+                        <p class="text-sm font-semibold text-slate-900">@Localizer["Content_WhatIsTimevic"]</p>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_AFocusedTimeIncomeAndPaymentTrackerForFreelanceDevelopers"]</p>
                     </div>
                     <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
-                        <p class="text-sm font-semibold text-slate-900">Why use it?</p>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">It shows how much you earned, how much was paid, and what each client still owes.</p>
+                        <p class="text-sm font-semibold text-slate-900">@Localizer["Content_WhyUseIt"]</p>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_ItShowsHowMuchYouEarnedHowMuchWasPaid"]</p>
                     </div>
                     <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6">
-                        <p class="text-sm font-semibold text-slate-900">Why keep tasks here?</p>
-                        <p class="mt-3 text-sm leading-6 text-slate-600">Because lightweight tasks keep time entries connected to real work without replacing Jira or ClickUp.</p>
+                        <p class="text-sm font-semibold text-slate-900">@Localizer["Content_WhyKeepTasksHere"]</p>
+                        <p class="mt-3 text-sm leading-6 text-slate-600">@Localizer["Content_BecauseLightweightTasksKeepTimeEntriesConnectedToRealWork"]</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+
+@code {
+    private string CurrentPath => new Uri(NavigationManager.Uri).AbsolutePath;
+
+    private string CurrentCulture => LocalizationUrlService.GetCurrentCultureName(CurrentPath);
+
+    private string LocalizedUrl(string path) => LocalizationUrlService.GetLocalizedUrl(path, CurrentCulture);
+}

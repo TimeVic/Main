@@ -46,7 +46,7 @@ public partial class UpdateTagModal
             if (responseDto != null)
             {
                 Microsoft.AspNetCore.Components.Dispatcher.Dispatch(new SetListItemAction(responseDto));
-                await ToastService.ShowInfo("Tag was updated");
+                await ToastService.ShowInfo(DashboardLocalizer["TagUpdated"].Value);
                 OnCloseModal();
             }
         }

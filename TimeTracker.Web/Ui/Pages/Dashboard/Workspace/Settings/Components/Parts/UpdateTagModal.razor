@@ -17,8 +17,8 @@
                     <i class="fa-solid fa-tag"></i>
                 </div>
                 <div>
-                    <h2 class="mt-2 text-xl font-semibold text-slate-900">Edit "@model.Name"</h2>
-                    <p class="mt-1 text-sm text-slate-600">Update the tag name and color used across workspace time entries.</p>
+                    <h2 class="mt-2 text-xl font-semibold text-slate-900">@string.Format(DashboardLocalizer["UpdateTagModal_Title"], model.Name)</h2>
+                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["UpdateTagModal_Description"]</p>
                 </div>
             </div>
         </LumexModalHeader>
@@ -34,8 +34,8 @@
                     <div class="mt-1">
                         <InputTextField
                             FullWidth="true"
-                            Label="Tag"
-                            Placeholder="Tag name"
+                            Label="@DashboardLocalizer["Tag"]"
+                            Placeholder="@DashboardLocalizer["TagName"]"
                             Variant="InputVariant.Outlined"
                             IsShowEmojiButton="true"
                             @bind-Value="model.Name"/>
@@ -44,7 +44,7 @@
 
                     <div class="pt-8">
                         <ColorDropDown
-                            Label="Color"
+                            Label="@DashboardLocalizer["Color"]"
                             Type="DropDownType.Select"
                             Clearable="true"
                             @bind-Value="model.Color"/>
@@ -62,7 +62,7 @@
                 IsLoading="_state.Value.IsSaving"
                 Color="@ThemeColor.Primary"
                 Radius="@Radius.Full">
-                Update
+                @DashboardLocalizer["Update"]
             </CustomButton>
         </LumexModalFooter>
     </LumexModalContent>

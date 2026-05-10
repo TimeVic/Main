@@ -67,8 +67,7 @@ public partial class ProjectsDropDown: IDisposable
     private Guid? _projectClientIdToAdd;
     private readonly ProjectDto _addFirstClientActionItem = new()
     {
-        Id = Guid.NewGuid(),
-        Name = "Add first client"
+        Id = Guid.NewGuid()
     };
     private readonly Dictionary<Guid, ProjectDto> _addProjectActionItems = new();
     private readonly Dictionary<string, ProjectDto> _groupHeaderItems = new();
@@ -92,7 +91,8 @@ public partial class ProjectsDropDown: IDisposable
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Placeholder = "Select project";
+        Placeholder = DashboardLocalizer["SelectProject"].Value;
+        _addFirstClientActionItem.Name = DashboardLocalizer["ProjectsDropDown_AddFirstClient"].Value;
 
         _state.StateChanged += UpdateList;
         _clientState.StateChanged += UpdateList;
@@ -149,7 +149,7 @@ public partial class ProjectsDropDown: IDisposable
             groups.Add(new ProjectClientGroup
             {
                 ClientId = Guid.Empty,
-                Name = "No client",
+                Name = DashboardLocalizer["NoClient"].Value,
                 Projects = projectsWithoutClient
             });
         }
@@ -189,7 +189,7 @@ public partial class ProjectsDropDown: IDisposable
         item = new ProjectDto
         {
             Id = Guid.NewGuid(),
-            Name = "Add project"
+            Name = DashboardLocalizer["AddProject"].Value
         };
 
         _addProjectActionItems[clientId] = item;

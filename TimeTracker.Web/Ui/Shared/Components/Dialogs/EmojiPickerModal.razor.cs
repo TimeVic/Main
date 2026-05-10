@@ -59,6 +59,12 @@ public partial class EmojiPickerModal: IModalComponent
         await CloseAsync();
         await OnEmojiSelected.InvokeAsync(emoji);
     }
+
+    private string DisplayCategory(string category)
+    {
+        var localized = DashboardLocalizer[$"EmojiCategory_{category}"];
+        return localized.ResourceNotFound ? category : localized.Value;
+    }
     
     private string searchText = string.Empty;
     private string activeCategory = "All";

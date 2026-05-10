@@ -5,9 +5,11 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.Extensions.Localization
 @using Microsoft.JSInterop
 
 @using TimeTracker.Web
+@using TimeTracker.Web.Localization
 @using TimeTracker.Web.Core.Components
 @using TimeTracker.Web.Core.Routing
 @using TimeTracker.Web.Ui.Shared.Components.Form
@@ -19,3 +21,5 @@
 
 @using LumexUI
 @using LumexUI.Shared.Icons
+
+@inject IStringLocalizer<DashboardResource> DashboardLocalizer

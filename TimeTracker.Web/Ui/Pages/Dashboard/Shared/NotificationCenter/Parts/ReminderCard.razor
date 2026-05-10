@@ -18,7 +18,7 @@
                     Icon="@Icons.Material.Filled.AccessTime"
                     Size="Size.Small"
                     Color="Color.Primary">
-                    Reminder
+                    @DashboardLocalizer["Reminder"]
                 </MudChip>
             </MudBadge>
         }
@@ -28,13 +28,13 @@
                 Icon="@Icons.Material.Filled.AccessTime"
                 Size="Size.Small"
                 Color="Color.Surface">
-                Reminder
+                @DashboardLocalizer["Reminder"]
             </MudChip>
         }
         <MudText
             Class="mt-1 ml-2"
             Typo="Typo.body1">
-            <b>Due Time:</b> @Notification.Task.ReminderTime?.ToString("MM/dd/yyyy h:mm:ss")
+            <b>@DashboardLocalizer["ReminderCard_DueTime"]:</b> @Notification.Task.ReminderTime?.ToString("MM/dd/yyyy h:mm:ss")
         </MudText>
     </MudStack>
     <MudText

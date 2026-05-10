@@ -14,6 +14,7 @@ public class UrlService
     private readonly NavigationManager _navigationManager;
 
     private readonly string _apiUrl;
+    private readonly string _baseUrl;
 
     private string _jwtToken => _authState?.Value.JwtToken ?? string.Empty;
 
@@ -28,6 +29,18 @@ public class UrlService
         _navigationManager = navigationManager;
 
         _apiUrl = _configuration.GetValue<string>("ApiUrl") ?? string.Empty;
+        _baseUrl = (_configuration.GetValue<string>("BaseUrl") ?? _navigationManager.BaseUri).TrimEnd('/');
+    }
+
+    public string ToAbsoluteUrl(string relativePath)
+    {
+        if (string.IsNullOrWhiteSpace(relativePath) || relativePath == "/")
+        {
+            return $"{_baseUrl}/";
+        }
+
+        relativePath = relativePath.StartsWith("/") ? relativePath : $"/{relativePath}";
+        return $"{_baseUrl}{relativePath}";
     }
 
     public string GetStorageUrl(string url)

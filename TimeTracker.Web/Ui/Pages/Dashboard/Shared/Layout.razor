@@ -8,7 +8,7 @@
 @inherits TimeTracker.Web.Ui.Shared.BaseLayout
 
 <SeoHead
-    Title="TimeVic Workspace"
+    Title="@($"TimeVic - {DashboardLocalizer["Workspace"]}")"
     Robots="@SiteMetadata.NoIndexRobots" />
 
 <div class="min-h-screen flex flex-col bg-white text-slate-800">
@@ -21,10 +21,10 @@
                 @if (AuthState.Value.User != null && DemoAccountConstants.IsDemoEmail(AuthState.Value.User.Email))
                 {
                     <div class="mb-6 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-blue-950 shadow-sm sm:flex sm:items-center sm:justify-between sm:gap-4">
-                        <p class="text-sm font-semibold">This is a demo. Start tracking your own income</p>
+                        <p class="text-sm font-semibold">@DashboardLocalizer["DemoBannerTitle"]</p>
                         <a href="@SiteUrl.Registration_Step1" class="mt-3 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 sm:mt-0">
                             <i class="fa-solid fa-user-plus"></i>
-                            <span>Start tracking your income — free</span>
+                            <span>@DashboardLocalizer["StartTrackingIncomeFree"]</span>
                         </a>
                     </div>
                 }

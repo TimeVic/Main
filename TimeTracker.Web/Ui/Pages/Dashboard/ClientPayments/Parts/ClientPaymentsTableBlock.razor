@@ -35,17 +35,17 @@
     Data="@Items.AsQueryable()"
     Hoverable="true"
     Loading="_isLoading">
-    <LumexUI.PropertyColumn Title="Date" Property="@(p => p.PaymentTime)">
+    <LumexUI.PropertyColumn Title="@DashboardLocalizer["Date"].Value" Property="@(p => p.PaymentTime)">
         <Content>
             <span class="text-sm text-slate-700">@context.PaymentTime.ToShortDateString()</span>
         </Content>
     </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Title="Client" Property="@(p => p.Client.Name)">
+    <LumexUI.PropertyColumn Title="@DashboardLocalizer["Client"].Value" Property="@(p => p.Client.Name)">
         <Content>
             <div class="font-medium text-slate-900">@context.Client?.Name</div>
         </Content>
     </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Title="Project" Property="@(p => p.Project)">
+    <LumexUI.PropertyColumn Title="@DashboardLocalizer["Project"].Value" Property="@(p => p.Project)">
         <Content>
             @if (context.Project != null)
             {
@@ -53,12 +53,12 @@
             }
             else
             {
-                <span class="text-sm text-slate-400">No project</span>
+                <span class="text-sm text-slate-400">@DashboardLocalizer["NoProject"]</span>
             }
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn
-        Title="Amount"
+        Title="@DashboardLocalizer["Amount"].Value"
         Property="@(p => p.Amount)"
         Sortable="@true">
         <Content>
@@ -67,19 +67,19 @@
             </span>
         </Content>
     </LumexUI.PropertyColumn>
-    <LumexUI.PropertyColumn Title="Added By" Property="@(p => p.Id)">
+    <LumexUI.PropertyColumn Title="@DashboardLocalizer["AddedBy"].Value" Property="@(p => p.Id)">
         <Content>
-            <span class="text-sm text-slate-400">Not tracked</span>
+            <span class="text-sm text-slate-400">@DashboardLocalizer["NotTracked"]</span>
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn
-        Title="Note / Reference"
+        Title="@DashboardLocalizer["PaymentNoteReference"].Value"
         Property="@(p => p.Description)"
         Sortable="@true">
         <Content>
             @if (string.IsNullOrWhiteSpace(context.Description))
             {
-                <span class="text-sm text-slate-400">No note</span>
+                <span class="text-sm text-slate-400">@DashboardLocalizer["NoNote"]</span>
             }
             else
             {
@@ -88,7 +88,7 @@
         </Content>
     </LumexUI.PropertyColumn>
     <LumexUI.PropertyColumn
-        Title="Actions"
+        Title="@DashboardLocalizer["Actions"].Value"
         Property="@(p => p.Id)">
         <Content>
             <div class="flex items-center gap-2" @onclick:stopPropagation="true">

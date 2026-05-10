@@ -17,7 +17,7 @@ public partial class CurrenciesSelect: IDisposable
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Placeholder = "Select currency";
+        Placeholder = DashboardLocalizer["SelectCurrency"].Value;
         Dispatcher.Dispatch(new LoadListAction());
         _state.StateChanged += UpdateList;
         UpdateList();

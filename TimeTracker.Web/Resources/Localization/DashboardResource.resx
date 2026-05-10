@@ -1,0 +1,588 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Workspace" xml:space="preserve"><value>Workspace</value></data>
+  <data name="Workspaces" xml:space="preserve"><value>Workspaces</value></data>
+  <data name="WorkspacePages" xml:space="preserve"><value>Workspace Pages</value></data>
+  <data name="WorkspacePagesDescription" xml:space="preserve"><value>Switch sections without taking attention away from the timer above.</value></data>
+  <data name="TimeWorkspace" xml:space="preserve"><value>Time workspace</value></data>
+  <data name="WorkspaceHeaderDescription" xml:space="preserve"><value>Keep the active timer in view while the rest of the workspace scrolls under it.</value></data>
+  <data name="CurrentWorkspace" xml:space="preserve"><value>Current workspace</value></data>
+  <data name="NewWorkspace" xml:space="preserve"><value>New workspace</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>Dashboard</value></data>
+  <data name="Summary" xml:space="preserve"><value>Summary</value></data>
+  <data name="Reports" xml:space="preserve"><value>Reports</value></data>
+  <data name="TimeEntries" xml:space="preserve"><value>Time Entries</value></data>
+  <data name="TimeEntriesReport" xml:space="preserve"><value>Time entries report</value></data>
+  <data name="Projects" xml:space="preserve"><value>Projects</value></data>
+  <data name="Tasks" xml:space="preserve"><value>Tasks</value></data>
+  <data name="Clients" xml:space="preserve"><value>Clients</value></data>
+  <data name="Payments" xml:space="preserve"><value>Payments</value></data>
+  <data name="MemberPayments" xml:space="preserve"><value>Member Payments</value></data>
+  <data name="ClientPayments" xml:space="preserve"><value>Client Payments</value></data>
+  <data name="PaymentsReport" xml:space="preserve"><value>Payments report</value></data>
+  <data name="Money" xml:space="preserve"><value>Money</value></data>
+  <data name="WorkspaceMoney" xml:space="preserve"><value>Workspace Money</value></data>
+  <data name="Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="HelpSupport" xml:space="preserve"><value>Help &amp; Support</value></data>
+  <data name="LogOut" xml:space="preserve"><value>Log Out</value></data>
+  <data name="Language" xml:space="preserve"><value>Language</value></data>
+  <data name="English" xml:space="preserve"><value>English</value></data>
+  <data name="Ukrainian" xml:space="preserve"><value>Ukrainian</value></data>
+  <data name="SignedInAs" xml:space="preserve"><value>Signed in as</value></data>
+  <data name="CurrentLanguage" xml:space="preserve"><value>Current language</value></data>
+  <data name="Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Add" xml:space="preserve"><value>Add</value></data>
+  <data name="Update" xml:space="preserve"><value>Update</value></data>
+  <data name="Search" xml:space="preserve"><value>Search</value></data>
+  <data name="Filter" xml:space="preserve"><value>Filter</value></data>
+  <data name="Filters" xml:space="preserve"><value>Filters</value></data>
+  <data name="Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="Reset" xml:space="preserve"><value>Reset</value></data>
+  <data name="Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="Close" xml:space="preserve"><value>Close</value></data>
+  <data name="Back" xml:space="preserve"><value>Back</value></data>
+  <data name="Loading" xml:space="preserve"><value>Loading</value></data>
+  <data name="NoData" xml:space="preserve"><value>No data</value></data>
+  <data name="None" xml:space="preserve"><value>None</value></data>
+  <data name="SelectProject" xml:space="preserve"><value>Select project</value></data>
+  <data name="SelectClient" xml:space="preserve"><value>Select client</value></data>
+  <data name="SelectWorkspace" xml:space="preserve"><value>Select workspace</value></data>
+  <data name="Total" xml:space="preserve"><value>Total</value></data>
+  <data name="TotalDuration" xml:space="preserve"><value>Total duration</value></data>
+  <data name="TotalEarned" xml:space="preserve"><value>Total Earned</value></data>
+  <data name="TotalPaid" xml:space="preserve"><value>Total Paid</value></data>
+  <data name="TotalReceived" xml:space="preserve"><value>Total received</value></data>
+  <data name="OutstandingBalance" xml:space="preserve"><value>Outstanding Balance</value></data>
+  <data name="TrackedTime" xml:space="preserve"><value>Tracked Time</value></data>
+  <data name="BillableTime" xml:space="preserve"><value>Billable Time</value></data>
+  <data name="NonBillableTime" xml:space="preserve"><value>Non-billable Time</value></data>
+  <data name="ThisMonth" xml:space="preserve"><value>This month</value></data>
+  <data name="ThisWeek" xml:space="preserve"><value>This week</value></data>
+  <data name="Today" xml:space="preserve"><value>Today</value></data>
+  <data name="Last7Days" xml:space="preserve"><value>Last 7 days</value></data>
+  <data name="Last30Days" xml:space="preserve"><value>Last 30 days</value></data>
+  <data name="CustomPeriod" xml:space="preserve"><value>Custom period</value></data>
+  <data name="Earned" xml:space="preserve"><value>Earned</value></data>
+  <data name="Paid" xml:space="preserve"><value>Paid</value></data>
+  <data name="Received" xml:space="preserve"><value>Received</value></data>
+  <data name="Outstanding" xml:space="preserve"><value>Outstanding</value></data>
+  <data name="Balance" xml:space="preserve"><value>Balance</value></data>
+  <data name="Amount" xml:space="preserve"><value>Amount</value></data>
+  <data name="Currency" xml:space="preserve"><value>Currency</value></data>
+  <data name="HourlyRate" xml:space="preserve"><value>Hourly Rate</value></data>
+  <data name="EffectiveHourlyRate" xml:space="preserve"><value>Effective hourly rate</value></data>
+  <data name="Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="StartTimer" xml:space="preserve"><value>Start timer</value></data>
+  <data name="StopTimer" xml:space="preserve"><value>Stop timer</value></data>
+  <data name="Timer" xml:space="preserve"><value>Timer</value></data>
+  <data name="AddTime" xml:space="preserve"><value>Add time</value></data>
+  <data name="AddTimeEntry" xml:space="preserve"><value>Add time entry</value></data>
+  <data name="EditTimeEntry" xml:space="preserve"><value>Edit time entry</value></data>
+  <data name="DeleteTimeEntry" xml:space="preserve"><value>Delete time entry</value></data>
+  <data name="StartTime" xml:space="preserve"><value>Start time</value></data>
+  <data name="EndTime" xml:space="preserve"><value>End time</value></data>
+  <data name="Duration" xml:space="preserve"><value>Duration</value></data>
+  <data name="Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Task" xml:space="preserve"><value>Task</value></data>
+  <data name="Project" xml:space="preserve"><value>Project</value></data>
+  <data name="Client" xml:space="preserve"><value>Client</value></data>
+  <data name="NoProject" xml:space="preserve"><value>No project</value></data>
+  <data name="NoTaskSelected" xml:space="preserve"><value>No task selected</value></data>
+  <data name="WhatAreYouWorkingOn" xml:space="preserve"><value>What are you working on?</value></data>
+  <data name="AddProject" xml:space="preserve"><value>Add project</value></data>
+  <data name="CreateProject" xml:space="preserve"><value>Create project</value></data>
+  <data name="EditProject" xml:space="preserve"><value>Edit project</value></data>
+  <data name="DeleteProject" xml:space="preserve"><value>Delete project</value></data>
+  <data name="ProjectName" xml:space="preserve"><value>Project name</value></data>
+  <data name="ProjectRate" xml:space="preserve"><value>Project rate</value></data>
+  <data name="DefaultHourlyRate" xml:space="preserve"><value>Default hourly rate</value></data>
+  <data name="ProjectClient" xml:space="preserve"><value>Project client</value></data>
+  <data name="BillableByDefault" xml:space="preserve"><value>Billable by default</value></data>
+  <data name="AddClient" xml:space="preserve"><value>Add client</value></data>
+  <data name="AddFirstClient" xml:space="preserve"><value>Add first client</value></data>
+  <data name="CreateClient" xml:space="preserve"><value>Create client</value></data>
+  <data name="EditClient" xml:space="preserve"><value>Edit client</value></data>
+  <data name="DeleteClient" xml:space="preserve"><value>Delete client</value></data>
+  <data name="ClientName" xml:space="preserve"><value>Client name</value></data>
+  <data name="ClientEmail" xml:space="preserve"><value>Client email</value></data>
+  <data name="ClientDetails" xml:space="preserve"><value>Client details</value></data>
+  <data name="ClientBalance" xml:space="preserve"><value>Client balance</value></data>
+  <data name="ClientPaymentsTitle" xml:space="preserve"><value>Client payments</value></data>
+  <data name="AddTask" xml:space="preserve"><value>Add task</value></data>
+  <data name="CreateTask" xml:space="preserve"><value>Create task</value></data>
+  <data name="EditTask" xml:space="preserve"><value>Edit task</value></data>
+  <data name="DeleteTask" xml:space="preserve"><value>Delete task</value></data>
+  <data name="TaskName" xml:space="preserve"><value>Task name</value></data>
+  <data name="TaskDescription" xml:space="preserve"><value>Task description</value></data>
+  <data name="ExternalTaskId" xml:space="preserve"><value>External task ID</value></data>
+  <data name="JiraIssue" xml:space="preserve"><value>Jira issue</value></data>
+  <data name="OriginalEstimate" xml:space="preserve"><value>Original estimate</value></data>
+  <data name="Tracked" xml:space="preserve"><value>Tracked</value></data>
+  <data name="Estimate" xml:space="preserve"><value>Estimate</value></data>
+  <data name="OverEstimate" xml:space="preserve"><value>Over estimate</value></data>
+  <data name="WithinEstimate" xml:space="preserve"><value>Within estimate</value></data>
+  <data name="Status" xml:space="preserve"><value>Status</value></data>
+  <data name="Priority" xml:space="preserve"><value>Priority</value></data>
+  <data name="Assignee" xml:space="preserve"><value>Assignee</value></data>
+  <data name="Actions" xml:space="preserve"><value>Actions</value></data>
+  <data name="Archive" xml:space="preserve"><value>Archive</value></data>
+  <data name="Restore" xml:space="preserve"><value>Restore</value></data>
+  <data name="AddPayment" xml:space="preserve"><value>Add payment</value></data>
+  <data name="AddClientPayment" xml:space="preserve"><value>Add client payment</value></data>
+  <data name="EditPayment" xml:space="preserve"><value>Edit payment</value></data>
+  <data name="DeletePayment" xml:space="preserve"><value>Delete payment</value></data>
+  <data name="PaymentDate" xml:space="preserve"><value>Payment Date</value></data>
+  <data name="PaymentAmount" xml:space="preserve"><value>Payment amount</value></data>
+  <data name="PaymentMethod" xml:space="preserve"><value>Payment method</value></data>
+  <data name="PaymentNote" xml:space="preserve"><value>Payment note</value></data>
+  <data name="ClientPayment" xml:space="preserve"><value>Client payment</value></data>
+  <data name="ReceivedPayment" xml:space="preserve"><value>Received payment</value></data>
+  <data name="PaidAmount" xml:space="preserve"><value>Paid amount</value></data>
+  <data name="UnpaidAmount" xml:space="preserve"><value>Unpaid amount</value></data>
+  <data name="PaymentNoteReference" xml:space="preserve"><value>Note / Reference</value></data>
+  <data name="OptionalPaymentNoteReference" xml:space="preserve"><value>Optional payment note or reference</value></data>
+  <data name="SummaryReport" xml:space="preserve"><value>Summary report</value></data>
+  <data name="SummaryReportParameters" xml:space="preserve"><value>Summary report parameters</value></data>
+  <data name="TimeEntriesReportTitle" xml:space="preserve"><value>Time entries report</value></data>
+  <data name="PaymentsReportTitle" xml:space="preserve"><value>Payments report</value></data>
+  <data name="ClientReport" xml:space="preserve"><value>Client report</value></data>
+  <data name="ProjectReport" xml:space="preserve"><value>Project report</value></data>
+  <data name="ReportPeriod" xml:space="preserve"><value>Report period</value></data>
+  <data name="Export" xml:space="preserve"><value>Export</value></data>
+  <data name="ExportCsv" xml:space="preserve"><value>Export CSV</value></data>
+  <data name="ExportPdf" xml:space="preserve"><value>Export PDF</value></data>
+  <data name="GroupBy" xml:space="preserve"><value>Group by</value></data>
+  <data name="Period" xml:space="preserve"><value>Period</value></data>
+  <data name="DateFrom" xml:space="preserve"><value>Date from</value></data>
+  <data name="DateTo" xml:space="preserve"><value>Date to</value></data>
+  <data name="Date" xml:space="preserve"><value>Date</value></data>
+  <data name="Month" xml:space="preserve"><value>Month</value></data>
+  <data name="Week" xml:space="preserve"><value>Week</value></data>
+  <data name="User" xml:space="preserve"><value>User</value></data>
+  <data name="Table" xml:space="preserve"><value>Table</value></data>
+  <data name="Chart" xml:space="preserve"><value>Chart</value></data>
+  <data name="GroupedSummary" xml:space="preserve"><value>Grouped summary</value></data>
+  <data name="MoneyOverview" xml:space="preserve"><value>Money overview</value></data>
+  <data name="SelectedPeriod" xml:space="preserve"><value>Selected period</value></data>
+  <data name="NoClientsYet" xml:space="preserve"><value>No clients yet</value></data>
+  <data name="NoProjectsYet" xml:space="preserve"><value>No projects yet</value></data>
+  <data name="NoTimeEntriesYet" xml:space="preserve"><value>No time entries yet</value></data>
+  <data name="NoPaymentsYet" xml:space="preserve"><value>No payments yet</value></data>
+  <data name="NoClientPaymentsYet" xml:space="preserve"><value>No client payments yet</value></data>
+  <data name="CreateFirstClient" xml:space="preserve"><value>Create your first client</value></data>
+  <data name="CreateFirstProject" xml:space="preserve"><value>Create your first project</value></data>
+  <data name="StartTrackingTime" xml:space="preserve"><value>Start tracking time</value></data>
+  <data name="AddFirstPayment" xml:space="preserve"><value>Add your first payment</value></data>
+  <data name="EmptyDashboardMessage" xml:space="preserve"><value>Add a client, create a project, and start tracking time to see earned money and unpaid amounts.</value></data>
+  <data name="YouHaveUnpaidWork" xml:space="preserve"><value>You have unpaid work</value></data>
+  <data name="ClientStillOwesYou" xml:space="preserve"><value>This client still owes you</value></data>
+  <data name="NoUnpaidBalance" xml:space="preserve"><value>No unpaid balance</value></data>
+  <data name="AllTrackedWorkIsPaid" xml:space="preserve"><value>All tracked work is paid</value></data>
+  <data name="AreYouSure" xml:space="preserve"><value>Are you sure?</value></data>
+  <data name="ActionCannotBeUndone" xml:space="preserve"><value>This action cannot be undone</value></data>
+  <data name="ConfirmAction" xml:space="preserve"><value>Confirm action</value></data>
+  <data name="ConfirmActionSubtitle" xml:space="preserve"><value>Please review this action before continuing.</value></data>
+  <data name="Confirm" xml:space="preserve"><value>Confirm</value></data>
+  <data name="SavedSuccessfully" xml:space="preserve"><value>Saved successfully</value></data>
+  <data name="UpdatedSuccessfully" xml:space="preserve"><value>Updated successfully</value></data>
+  <data name="DeletedSuccessfully" xml:space="preserve"><value>Deleted successfully</value></data>
+  <data name="PaymentAdded" xml:space="preserve"><value>Payment added</value></data>
+  <data name="TimeEntryAdded" xml:space="preserve"><value>Time entry added</value></data>
+  <data name="ProjectCreated" xml:space="preserve"><value>Project created</value></data>
+  <data name="ClientCreated" xml:space="preserve"><value>Client created</value></data>
+  <data name="SomethingWentWrong" xml:space="preserve"><value>Something went wrong</value></data>
+  <data name="TryAgain" xml:space="preserve"><value>Try again</value></data>
+  <data name="DemoBannerTitle" xml:space="preserve"><value>This is a demo. Start tracking your own income</value></data>
+  <data name="StartTrackingIncomeFree" xml:space="preserve"><value>Start tracking your income — free</value></data>
+  <data name="ClientsAndProjects" xml:space="preserve"><value>Clients and projects</value></data>
+  <data name="Members" xml:space="preserve"><value>Members</value></data>
+  <data name="Integrations" xml:space="preserve"><value>Integrations</value></data>
+  <data name="Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Member" xml:space="preserve"><value>Member</value></data>
+  <data name="NoAssignee" xml:space="preserve"><value>No assignee</value></data>
+  <data name="NoClient" xml:space="preserve"><value>No client</value></data>
+  <data name="InvalidNumberFormat" xml:space="preserve"><value>Invalid number format</value></data>
+  <data name="FirstPage" xml:space="preserve"><value>First page</value></data>
+  <data name="PreviousPage" xml:space="preserve"><value>Previous page</value></data>
+  <data name="NextPage" xml:space="preserve"><value>Next page</value></data>
+  <data name="LastPage" xml:space="preserve"><value>Last page</value></data>
+  <data name="Page" xml:space="preserve"><value>Page {0}</value></data>
+  <data name="PageOf" xml:space="preserve"><value>Page {0} of {1}</value></data>
+  <data name="ItemsPageOf" xml:space="preserve"><value>{0} {1} | Page {2} of {3}</value></data>
+  <data name="Items" xml:space="preserve"><value>items</value></data>
+  <data name="TimeWorkspaceDescription" xml:space="preserve"><value>Keep the active timer in view while the rest of the workspace scrolls under it.</value></data>
+  <data name="SummaryEmptyMessage" xml:space="preserve"><value>Start tracking time to see your entries.</value></data>
+  <data name="ReportFilterHelper" xml:space="preserve"><value>Change grouping and period to rebuild both the chart and grouped table.</value></data>
+  <data name="SearchByDescription" xml:space="preserve"><value>Search by description...</value></data>
+  <data name="NoTimeEntriesFilterMessage" xml:space="preserve"><value>No time entries found. Try adjusting the filter settings.</value></data>
+  <data name="Billable" xml:space="preserve"><value>Billable</value></data>
+  <data name="MoneyOverviewHelper" xml:space="preserve"><value>Cumulative financial state across all recorded work.</value></data>
+  <data name="OutstandingFormula" xml:space="preserve"><value>Outstanding balance = total earned - total received.</value></data>
+  <data name="TotalEarnedHelper" xml:space="preserve"><value>Billable work recorded across all time</value></data>
+  <data name="TotalReceivedHelper" xml:space="preserve"><value>Client payments received</value></data>
+  <data name="OutstandingBalanceHelper" xml:space="preserve"><value>Still unpaid by clients</value></data>
+  <data name="ViewUnpaidByClient" xml:space="preserve"><value>View unpaid by client</value></data>
+  <data name="WorkRecordedNoPaymentsYet" xml:space="preserve"><value>Work recorded, but no payments received yet.</value></data>
+  <data name="SelectedPeriodHelper" xml:space="preserve"><value>Metrics tied to the current filters.</value></data>
+  <data name="DurationSelectedPeriodHelper" xml:space="preserve"><value>Worked during the selected period</value></data>
+  <data name="EarnedSelectedPeriod" xml:space="preserve"><value>Earned in selected period</value></data>
+  <data name="EarnedSelectedPeriodHelper" xml:space="preserve"><value>Billable value in the selected range</value></data>
+  <data name="EffectiveHourlyRateHelper" xml:space="preserve"><value>Average earned amount per tracked hour</value></data>
+  <data name="NoActivitySelectedPeriod" xml:space="preserve"><value>No meaningful activity in the selected period.</value></data>
+  <data name="BillableValueIncludedWork" xml:space="preserve"><value>Billable value recorded across all included work</value></data>
+  <data name="PaymentsCollectedFromClients" xml:space="preserve"><value>Payments collected from clients</value></data>
+  <data name="StillUnpaidRequiresAttention" xml:space="preserve"><value>Still unpaid and requiring attention</value></data>
+  <data name="SummaryBy" xml:space="preserve"><value>Summary by {0}</value></data>
+  <data name="SummaryChartHelper" xml:space="preserve"><value>Duration and earned value for each day in the selected period.</value></data>
+  <data name="NoSignificantActivityPeriod" xml:space="preserve"><value>No significant activity in this period</value></data>
+  <data name="StartTrackingEarnings" xml:space="preserve"><value>Start tracking time to see your earnings.</value></data>
+  <data name="OneDayTracked" xml:space="preserve"><value>1 day tracked</value></data>
+  <data name="DaysTracked" xml:space="preserve"><value>{0} days tracked</value></data>
+  <data name="DetailedRowsSelectedGrouping" xml:space="preserve"><value>Detailed rows for the selected grouping.</value></data>
+  <data name="ClientPaymentsDescription" xml:space="preserve"><value>Track payments received from clients and keep workspace balances up to date.</value></data>
+  <data name="PaymentsMatchingCurrentFilters" xml:space="preserve"><value>Payments matching current filters</value></data>
+  <data name="ClientsPaid" xml:space="preserve"><value>Clients paid</value></data>
+  <data name="UniqueClientsFilteredList" xml:space="preserve"><value>Unique clients in the filtered list</value></data>
+  <data name="NotTracked" xml:space="preserve"><value>Not tracked</value></data>
+  <data name="ClientPaymentsRecordedSeparately" xml:space="preserve"><value>Client payments are recorded separately from billable totals</value></data>
+  <data name="PaymentsFiltersHelper" xml:space="preserve"><value>Narrow payments by client, project, or text.</value></data>
+  <data name="ClientProjectNoteReference" xml:space="preserve"><value>Client, project, note, reference</value></data>
+  <data name="ReceivedClientPayments" xml:space="preserve"><value>Received client payments</value></data>
+  <data name="ReceivedClientPaymentsHelper" xml:space="preserve"><value>Simple income records for client work in this workspace.</value></data>
+  <data name="NoClientPaymentsHelper" xml:space="preserve"><value>Add your first client payment to see received income and outstanding balances.</value></data>
+  <data name="AddedBy" xml:space="preserve"><value>Added By</value></data>
+  <data name="NoNote" xml:space="preserve"><value>No note</value></data>
+  <data name="RecordMoneyReceivedClient" xml:space="preserve"><value>Record money received from a client.</value></data>
+  <data name="EditClientPayment" xml:space="preserve"><value>Edit client payment</value></data>
+  <data name="EditClientPaymentHelper" xml:space="preserve"><value>Update the amount, date, client, project, or note.</value></data>
+  <data name="SavedCurrentWorkspace" xml:space="preserve"><value>Saved for the current workspace</value></data>
+  <data name="MemberPaymentsDescription" xml:space="preserve"><value>Track payments received from clients for completed work on workspace projects.</value></data>
+  <data name="NoPaymentsAddedHelper" xml:space="preserve"><value>No payments added yet. Use the add button to create the first payment.</value></data>
+  <data name="Report" xml:space="preserve"><value>Report</value></data>
+  <data name="BillableValueTrackedWork" xml:space="preserve"><value>Billable value of tracked work</value></data>
+  <data name="PaymentsRecordedFromClients" xml:space="preserve"><value>Payments recorded from clients</value></data>
+  <data name="NeedsCollection" xml:space="preserve"><value>Needs collection</value></data>
+  <data name="UnnamedProject" xml:space="preserve"><value>Unnamed project</value></data>
+  <data name="OneProject" xml:space="preserve"><value>1 project</value></data>
+  <data name="ProjectCount" xml:space="preserve"><value>{0} projects</value></data>
+  <data name="PaymentsSummaryReport" xml:space="preserve"><value>Payments summary report</value></data>
+  <data name="PaymentsSummaryReportHelper" xml:space="preserve"><value>Review earned value, received payments, and balances still requiring follow-up.</value></data>
+  <data name="DateEnd" xml:space="preserve"><value>Date end</value></data>
+  <data name="SynchronizedExternalService" xml:space="preserve"><value>Synchronized with an external service (Jira / Redmine).</value></data>
+  <data name="CalculatedTimeEntryValue" xml:space="preserve"><value>Calculated value for this time entry.</value></data>
+  <data name="HourlyRateNotSet" xml:space="preserve"><value>Hourly rate is not set.</value></data>
+  <data name="Rate" xml:space="preserve"><value>Rate</value></data>
+  <data name="Duplicate" xml:space="preserve"><value>Duplicate</value></data>
+  <data name="AddPaymentList" xml:space="preserve"><value>Add payment list</value></data>
+  <data name="OptionalPaymentNote" xml:space="preserve"><value>Optional payment note</value></data>
+  <data name="EditPaymentHelper" xml:space="preserve"><value>Update the received amount, date, project, or note.</value></data>
+  <data name="AccessRestricted" xml:space="preserve"><value>Access Restricted</value></data>
+  <data name="WorkspaceMoneyDescription" xml:space="preserve"><value>Owner-only view of client balances, member payouts, and workspace margin.</value></data>
+  <data name="NoTrackedWorkYet" xml:space="preserve"><value>No tracked work yet</value></data>
+  <data name="NeedsAttention" xml:space="preserve"><value>Needs attention</value></data>
+  <data name="NoClientBalancesYet" xml:space="preserve"><value>No client balances yet</value></data>
+  <data name="NoOpenClientBalances" xml:space="preserve"><value>No open client balances</value></data>
+  <data name="ShowSettledClients" xml:space="preserve"><value>Show settled / zero-balance clients</value></data>
+  <data name="Hours" xml:space="preserve"><value>Hours</value></data>
+  <data name="Settled" xml:space="preserve"><value>Settled</value></data>
+  <data name="Due" xml:space="preserve"><value>due</value></data>
+  <data name="Credit" xml:space="preserve"><value>credit</value></data>
+  <data name="UnpaidClients" xml:space="preserve"><value>Unpaid Clients</value></data>
+  <data name="NoUnpaidClients" xml:space="preserve"><value>No unpaid clients</value></data>
+  <data name="LastPayment" xml:space="preserve"><value>Last Payment</value></data>
+  <data name="PartiallyPaid" xml:space="preserve"><value>Partially paid</value></data>
+  <data name="MembersToPay" xml:space="preserve"><value>Members To Pay</value></data>
+  <data name="NoMembersToPay" xml:space="preserve"><value>No members to pay</value></data>
+  <data name="LastPayout" xml:space="preserve"><value>Last Payout</value></data>
+  <data name="NoPayoutsRecorded" xml:space="preserve"><value>No payouts recorded</value></data>
+  <data name="Owed" xml:space="preserve"><value>owed</value></data>
+  <data name="WorkspaceFinancialSummaryPage_AccessRestrictedDescription" xml:space="preserve"><value>This report is available to workspace owners and admins only.</value></data>
+  <data name="WorkspaceFinancialSummaryPage_CurrentBalancesDescription" xml:space="preserve"><value>Current balances across all recorded work and payments. Calculated across all time.</value></data>
+  <data name="WorkspaceFinancialSummaryPage_NoTrackedWorkDescription" xml:space="preserve"><value>Track billable work or record payments to see workspace balances.</value></data>
+  <data name="WorkspaceFinancialSummaryPage_ClientsNeedFollowUp" xml:space="preserve"><value>{0} clients need follow-up</value></data>
+  <data name="WorkspaceFinancialSummaryPage_AmountDue" xml:space="preserve"><value>{0} due</value></data>
+  <data name="WorkspaceFinancialSummaryPage_MembersNeedPayout" xml:space="preserve"><value>{0} members need payout</value></data>
+  <data name="WorkspaceFinancialSummaryPage_AmountOwed" xml:space="preserve"><value>{0} owed</value></data>
+  <data name="ClientBalancesTableBlock_Title" xml:space="preserve"><value>Client Balances</value></data>
+  <data name="ClientBalancesTableBlock_Description" xml:space="preserve"><value>Shows how much each client was billed, how much they paid, and their current balance.</value></data>
+  <data name="ClientBalancesTableBlock_NoBalancesDescription" xml:space="preserve"><value>Billable work and client payments will appear here after they are recorded.</value></data>
+  <data name="ClientBalancesTableBlock_NoOpenBalancesDescription" xml:space="preserve"><value>All clients are settled. Turn on settled clients to review zero-balance rows.</value></data>
+  <data name="ClientBalancesTableBlock_DueTooltip" xml:space="preserve"><value>Client earned is greater than payments received. This amount is currently due.</value></data>
+  <data name="ClientBalancesTableBlock_CreditTooltip" xml:space="preserve"><value>Payments received are greater than client earned. This client has a credit balance.</value></data>
+  <data name="ClientBalancesTableBlock_SettledTooltip" xml:space="preserve"><value>Client earned equals payments received.</value></data>
+  <data name="UnpaidClientsBlock_NoUnpaidDescription" xml:space="preserve"><value>Clients with positive all-time balances will appear here.</value></data>
+  <data name="MembersToPayBlock_NoMembersDescription" xml:space="preserve"><value>Members with positive all-time payout balances will appear here.</value></data>
+  <data name="MemberBalancesTableBlock_Title" xml:space="preserve"><value>Member Earnings &amp; Payouts</value></data>
+  <data name="MemberBalancesTableBlock_Description" xml:space="preserve"><value>Shows what members earned by rate, what was paid out, and what is still owed.</value></data>
+  <data name="MemberBalancesTableBlock_NoEarningsTitle" xml:space="preserve"><value>No member earnings yet</value></data>
+  <data name="MemberBalancesTableBlock_NoEarningsDescription" xml:space="preserve"><value>Member earnings and payouts will appear here after team work is recorded.</value></data>
+  <data name="MemberBalancesTableBlock_EarnedByRate" xml:space="preserve"><value>Earned by Rate</value></data>
+  <data name="MemberBalancesTableBlock_PaidOut" xml:space="preserve"><value>Paid Out</value></data>
+  <data name="MemberBalancesTableBlock_Overpaid" xml:space="preserve"><value>overpaid</value></data>
+  <data name="ProjectProfitabilityTableBlock_Title" xml:space="preserve"><value>Project Profitability</value></data>
+  <data name="ProjectProfitabilityTableBlock_Description" xml:space="preserve"><value>Compares client billable amount with member earnings for each project.</value></data>
+  <data name="ProjectProfitabilityTableBlock_RateDifferenceHint" xml:space="preserve"><value>Project profitability appears when member rates differ from client billing rates.</value></data>
+  <data name="ProjectProfitabilityTableBlock_NoProfitabilityTitle" xml:space="preserve"><value>No project profitability yet</value></data>
+  <data name="ProjectProfitabilityTableBlock_NoProfitabilityDescription" xml:space="preserve"><value>Billable project work will appear here after it is recorded.</value></data>
+  <data name="ProjectProfitabilityTableBlock_ClientEarned" xml:space="preserve"><value>Client Earned</value></data>
+  <data name="ProjectProfitabilityTableBlock_MemberEarnings" xml:space="preserve"><value>Member Earnings</value></data>
+  <data name="ProjectProfitabilityTableBlock_EstimatedMargin" xml:space="preserve"><value>Estimated Margin</value></data>
+  <data name="ProjectProfitabilityTableBlock_MarginPercent" xml:space="preserve"><value>Margin %</value></data>
+  <data name="MoneyOverviewBlock_ClientEarned" xml:space="preserve"><value>Client Earned</value></data>
+  <data name="MoneyOverviewBlock_ClientReceived" xml:space="preserve"><value>Client Received</value></data>
+  <data name="MoneyOverviewBlock_UnpaidByClients" xml:space="preserve"><value>Unpaid by Clients</value></data>
+  <data name="MoneyOverviewBlock_OwnerRevenue" xml:space="preserve"><value>Owner Revenue</value></data>
+  <data name="MoneyOverviewBlock_OwnerRevenueHelper" xml:space="preserve"><value>Client received minus payouts to members.</value></data>
+  <data name="MoneyOverviewBlock_OwnerRevenueTooltip" xml:space="preserve"><value>Owner Revenue = Client Received minus Paid to Members.</value></data>
+  <data name="MoneyOverviewBlock_NegativeRevenueWarning" xml:space="preserve"><value>Member payouts exceed client received. Check client payments or member payouts.</value></data>
+  <data name="MoneyOverviewBlock_MemberPayouts" xml:space="preserve"><value>Member payouts</value></data>
+  <data name="MoneyOverviewBlock_MemberEarningsTooltip" xml:space="preserve"><value>Member Earnings are calculated from tracked work using member rates.</value></data>
+  <data name="MoneyOverviewBlock_PaidToMembers" xml:space="preserve"><value>Paid to Members</value></data>
+  <data name="MoneyOverviewBlock_OwedToMembers" xml:space="preserve"><value>Owed to Members</value></data>
+  <data name="MoneyOverviewBlock_NoClientPayments" xml:space="preserve"><value>No client payments recorded yet.</value></data>
+  <data name="MoneyOverviewBlock_NoMemberPayouts" xml:space="preserve"><value>No member payouts recorded yet.</value></data>
+  <data name="MemberPaymentReportPage_EmptyTitle" xml:space="preserve"><value>Start tracking time to see your earnings.</value></data>
+  <data name="MemberPaymentReportPage_EmptyDescription" xml:space="preserve"><value>Add your first client to track payments.</value></data>
+  <data name="MemberPaymentReportPage_ClientPaymentStatus" xml:space="preserve"><value>Client payment status</value></data>
+  <data name="MemberPaymentReportPage_ClientPaymentStatusDescription" xml:space="preserve"><value>Clients with unpaid balances are sorted first.</value></data>
+  <data name="MemberPaymentReportPage_OtherProjects" xml:space="preserve"><value>Other projects</value></data>
+  <data name="TasksBlock_DeleteTaskListTitle" xml:space="preserve"><value>Delete task list</value></data>
+  <data name="TasksBlock_DeleteTaskListSubtitle" xml:space="preserve"><value>Are you sure you want to delete this task list?</value></data>
+  <data name="TasksBlock_TaskListDescription" xml:space="preserve"><value>Tasks are optional and mainly used for tracking time.</value></data>
+  <data name="TasksBlock_EditTaskList" xml:space="preserve"><value>Edit task list</value></data>
+  <data name="TasksBoardBlock_Todo" xml:space="preserve"><value>To do</value></data>
+  <data name="TasksBoardBlock_TodoDescription" xml:space="preserve"><value>Optional work items available for time tracking.</value></data>
+  <data name="TasksBoardBlock_Backlog" xml:space="preserve"><value>Backlog</value></data>
+  <data name="TasksBoardBlock_BacklogDescription" xml:space="preserve"><value>Lower-priority items kept out of the main tracking flow.</value></data>
+  <data name="TasksBoardBlock_NoTodoTasks" xml:space="preserve"><value>No todo tasks match the current filters.</value></data>
+  <data name="TasksBoardBlock_NoBacklogTasks" xml:space="preserve"><value>No backlog tasks match the current filters.</value></data>
+  <data name="TasksListBlock_Title" xml:space="preserve"><value>Task lists</value></data>
+  <data name="TasksListBlock_Description" xml:space="preserve"><value>Choose a project and open the list you want to work from.</value></data>
+  <data name="TasksListBlock_SearchPlaceholder" xml:space="preserve"><value>Search task lists...</value></data>
+  <data name="TasksListBlock_SelectProjectEmpty" xml:space="preserve"><value>Select a project to load task lists.</value></data>
+  <data name="TasksListBlock_NoMatches" xml:space="preserve"><value>No task lists match “{0}”.</value></data>
+  <data name="TasksListBlock_ListIsEmpty" xml:space="preserve"><value>List is empty</value></data>
+  <data name="TasksTableBlock_SelectedCount" xml:space="preserve"><value>{0} selected</value></data>
+  <data name="TasksTableBlock_NoTasksFound" xml:space="preserve"><value>No tasks found.</value></data>
+  <data name="TasksTableBlock_ArchiveThisTask" xml:space="preserve"><value>Archive this task</value></data>
+  <data name="AddTasksListModalForm_Title" xml:space="preserve"><value>Add task list</value></data>
+  <data name="AddTasksListModalForm_NamePlaceholder" xml:space="preserve"><value>Enter list name</value></data>
+  <data name="AddTaskModal_Title" xml:space="preserve"><value>Add new task</value></data>
+  <data name="AddTaskModal_Description" xml:space="preserve"><value>Select a task list and fill in Title or External Task ID. You can enter both fields if needed.</value></data>
+  <data name="AddTaskModal_TaskWillBeAddedTo" xml:space="preserve"><value>Task will be added to:</value></data>
+  <data name="AddTaskModal_TaskTitlePlaceholder" xml:space="preserve"><value>Task title</value></data>
+  <data name="AddTaskModal_ExternalTaskIdPlaceholder" xml:space="preserve"><value>For example: JIRA-154 or RM-982</value></data>
+  <data name="AddTaskModal_ExternalTaskHelp" xml:space="preserve"><value>Use this when the task already exists in an external service like Jira, ClickUp, or Redmine.</value></data>
+  <data name="AddTaskModal_TitleOrExternalIdRequired" xml:space="preserve"><value>Title or External Task ID is required.</value></data>
+  <data name="AddTaskModal_TitleOrExternalIdRequiredDescription" xml:space="preserve"><value>You can fill both fields, but at least one of them must be entered.</value></data>
+  <data name="UpdateTaskListModal_Title" xml:space="preserve"><value>Edit task list</value></data>
+  <data name="UpdateTaskListModal_NamePlaceholder" xml:space="preserve"><value>Task list name</value></data>
+  <data name="SettingsPage_ClientsAndProjectsTab" xml:space="preserve"><value>Clients and projects</value></data>
+  <data name="ProjectsBlock_WorkspaceProjectsTitle" xml:space="preserve"><value>Workspace projects</value></data>
+  <data name="ProjectsBlock_Description" xml:space="preserve"><value>Projects keep their assigned client visible, but existing client links stay read-only here.</value></data>
+  <data name="ClientsBlock_ProjectDirectoryTitle" xml:space="preserve"><value>Client project directory</value></data>
+  <data name="ClientsBlock_Description" xml:space="preserve"><value>Create clients, add their projects, and reassign projects between clients from one workspace tab.</value></data>
+  <data name="ClientsBlock_Empty" xml:space="preserve"><value>Add your first client to start organizing workspace projects.</value></data>
+  <data name="SettingsBlock_General" xml:space="preserve"><value>General</value></data>
+  <data name="SettingsBlock_WorkspaceProfileTitle" xml:space="preserve"><value>Workspace profile</value></data>
+  <data name="SettingsBlock_Description" xml:space="preserve"><value>Edit core workspace information and save it from this section.</value></data>
+  <data name="SettingsBlock_DefaultWorkspace" xml:space="preserve"><value>Default</value></data>
+  <data name="MembersBlock_WorkspaceMembersTitle" xml:space="preserve"><value>Workspace members</value></data>
+  <data name="MembersBlock_Description" xml:space="preserve"><value>Invite people by email. New users receive a verification link to set their password.</value></data>
+  <data name="MembersBlock_InviteMember" xml:space="preserve"><value>Invite member</value></data>
+  <data name="MembersBlock_Access" xml:space="preserve"><value>Access</value></data>
+  <data name="TagsBlock_DeleteTagTitle" xml:space="preserve"><value>Delete tag</value></data>
+  <data name="TagsBlock_DeleteTagSubtitle" xml:space="preserve"><value>Are you sure you want to delete “{0}”?</value></data>
+  <data name="TagsBlock_WorkspaceTagsTitle" xml:space="preserve"><value>Workspace tags</value></data>
+  <data name="TagsBlock_Description" xml:space="preserve"><value>Tags keep time entries searchable and visually grouped by color.</value></data>
+  <data name="TagsBlock_AddTag" xml:space="preserve"><value>Add tag</value></data>
+  <data name="TagsBlock_NoColor" xml:space="preserve"><value>No color</value></data>
+  <data name="Color" xml:space="preserve"><value>Color</value></data>
+  <data name="Email" xml:space="preserve"><value>Email</value></data>
+  <data name="Yes" xml:space="preserve"><value>Yes</value></data>
+  <data name="No" xml:space="preserve"><value>No</value></data>
+  <data name="SelectColor" xml:space="preserve"><value>Select color</value></data>
+  <data name="SelectTaskList" xml:space="preserve"><value>Select task list</value></data>
+  <data name="SelectUser" xml:space="preserve"><value>Select user</value></data>
+  <data name="CustomValidationSummary_FixHighlightedFields" xml:space="preserve"><value>Please fix the highlighted fields before saving.</value></data>
+  <data name="Select" xml:space="preserve"><value>Select</value></data>
+  <data name="NotSet" xml:space="preserve"><value>Not set</value></data>
+  <data name="RequiredField" xml:space="preserve"><value>This field is required</value></data>
+  <data name="Submit" xml:space="preserve"><value>Submit</value></data>
+  <data name="End" xml:space="preserve"><value>End</value></data>
+  <data name="Tag" xml:space="preserve"><value>Tag</value></data>
+  <data name="Tags" xml:space="preserve"><value>Tags</value></data>
+  <data name="TagName" xml:space="preserve"><value>Tag name</value></data>
+  <data name="TagAdded" xml:space="preserve"><value>Tag added</value></data>
+  <data name="TagUpdated" xml:space="preserve"><value>Tag updated</value></data>
+  <data name="TaskList" xml:space="preserve"><value>Task list</value></data>
+  <data name="TaskId" xml:space="preserve"><value>Task ID</value></data>
+  <data name="Attachments" xml:space="preserve"><value>Attachments</value></data>
+  <data name="NoEstimate" xml:space="preserve"><value>No estimate</value></data>
+  <data name="SelectCurrency" xml:space="preserve"><value>Select currency</value></data>
+  <data name="SelectTags" xml:space="preserve"><value>Select tags</value></data>
+  <data name="DurationInput_InvalidFormat" xml:space="preserve"><value>Use formats like 1h 30m, 2d, 1w or 01:30</value></data>
+  <data name="AttachmentsBlock_DeleteAttachment" xml:space="preserve"><value>Delete attachment</value></data>
+  <data name="FileUploader_Uploading" xml:space="preserve"><value>Uploading...</value></data>
+  <data name="FileUploader_SelectFiles" xml:space="preserve"><value>Select files</value></data>
+  <data name="ProjectsDropDown_AddFirstClient" xml:space="preserve"><value>Add first client</value></data>
+  <data name="TaskStatus_Backlog" xml:space="preserve"><value>Backlog</value></data>
+  <data name="TaskStatus_ToDo" xml:space="preserve"><value>To Do</value></data>
+  <data name="TaskStatus_InProgress" xml:space="preserve"><value>In Progress</value></data>
+  <data name="TaskStatus_Done" xml:space="preserve"><value>Done</value></data>
+  <data name="TaskPriority_Urgent" xml:space="preserve"><value>Urgent</value></data>
+  <data name="TaskPriority_High" xml:space="preserve"><value>High</value></data>
+  <data name="TaskPriority_Medium" xml:space="preserve"><value>Medium</value></data>
+  <data name="TaskPriority_Low" xml:space="preserve"><value>Low</value></data>
+  <data name="MembershipAccessType_User" xml:space="preserve"><value>User</value></data>
+  <data name="MembershipAccessType_Manager" xml:space="preserve"><value>Manager</value></data>
+  <data name="MembershipAccessType_Owner" xml:space="preserve"><value>Owner</value></data>
+  <data name="IntegrationServiceHeader_Service" xml:space="preserve"><value>Service</value></data>
+  <data name="IntegrationServiceHeader_Active" xml:space="preserve"><value>Active</value></data>
+  <data name="IntegrationServiceHeader_Inactive" xml:space="preserve"><value>Inactive</value></data>
+  <data name="IntegrationServiceHeader_HowToConnect" xml:space="preserve"><value>How to connect {0}</value></data>
+  <data name="IntegrationsBlock_ConnectionTitle" xml:space="preserve"><value>{0} connection</value></data>
+  <data name="IntegrationsBlock_ConnectionCheckNotice" xml:space="preserve"><value>After saving, TimeVic checks the connection with the service. The integration becomes active only when the provided credentials are accepted by the external API.</value></data>
+  <data name="IntegrationsBlock_HeaderKicker" xml:space="preserve"><value>Integration services</value></data>
+  <data name="IntegrationsBlock_Title" xml:space="preserve"><value>External task tracking</value></data>
+  <data name="IntegrationsBlock_Description" xml:space="preserve"><value>After a service is connected and active, tasks can be added by the connected service task ID. Time entries can then be tracked in TimeVic and synchronized with that service.</value></data>
+  <data name="IntegrationsBlock_Loading" xml:space="preserve"><value>Loading integration settings</value></data>
+  <data name="IntegrationsBlock_ApiToken" xml:space="preserve"><value>API token</value></data>
+  <data name="IntegrationsBlock_TeamId" xml:space="preserve"><value>Team ID</value></data>
+  <data name="IntegrationsBlock_UseCustomTaskIds" xml:space="preserve"><value>Use custom task IDs</value></data>
+  <data name="IntegrationsBlock_UseCustomTaskIdsDescription" xml:space="preserve"><value>Match tasks by custom IDs configured in ClickUp.</value></data>
+  <data name="IntegrationsBlock_FillEntriesFromTaskDetails" xml:space="preserve"><value>Fill entries from task details</value></data>
+  <data name="IntegrationsBlock_FillEntriesFromTaskDetailsDescription" xml:space="preserve"><value>Use connected task details when time entries are created.</value></data>
+  <data name="IntegrationsBlock_SaveService" xml:space="preserve"><value>Save {0}</value></data>
+  <data name="IntegrationsBlock_RedmineUrl" xml:space="preserve"><value>Redmine URL</value></data>
+  <data name="IntegrationsBlock_ApiKey" xml:space="preserve"><value>API key</value></data>
+  <data name="IntegrationsBlock_ApiAccessKeyPlaceholder" xml:space="preserve"><value>API access key</value></data>
+  <data name="IntegrationsBlock_UserId" xml:space="preserve"><value>User ID</value></data>
+  <data name="IntegrationsBlock_ActivityId" xml:space="preserve"><value>Activity ID</value></data>
+  <data name="IntegrationsBlock_JiraUrl" xml:space="preserve"><value>Jira URL</value></data>
+  <data name="IntegrationsBlock_UserEmail" xml:space="preserve"><value>User email</value></data>
+  <data name="IntegrationsBlock_AtlassianApiTokenPlaceholder" xml:space="preserve"><value>Atlassian API token</value></data>
+  <data name="IntegrationsBlock_LoadingError" xml:space="preserve"><value>Integration settings loading error</value></data>
+  <data name="IntegrationsBlock_SettingsSaved" xml:space="preserve"><value>{0} settings have been saved</value></data>
+  <data name="IntegrationsBlock_IntegrationActive" xml:space="preserve"><value>{0} integration is active</value></data>
+  <data name="IntegrationsBlock_IntegrationInactive" xml:space="preserve"><value>{0} integration is inactive. Check the connection settings.</value></data>
+  <data name="IntegrationsBlock_SettingsSavingError" xml:space="preserve"><value>{0} settings saving error</value></data>
+  <data name="IntegrationsBlock_ClickUpHelpSummary" xml:space="preserve"><value>Connect a ClickUp workspace by using a personal API token and team ID.</value></data>
+  <data name="IntegrationsBlock_ClickUpHelpTokenInstruction" xml:space="preserve"><value>Create or copy a personal API token in ClickUp from the Apps/API section of your ClickUp settings.</value></data>
+  <data name="IntegrationsBlock_ClickUpHelpFieldsInstruction" xml:space="preserve"><value>Use the ClickUp team ID for the workspace that contains tasks. Enable custom task IDs only when tasks are configured to use them in ClickUp.</value></data>
+  <data name="IntegrationsBlock_RedmineHelpSummary" xml:space="preserve"><value>Connect a Redmine instance by using the site URL, API key, user ID, and time entry activity ID.</value></data>
+  <data name="IntegrationsBlock_RedmineHelpTokenInstruction" xml:space="preserve"><value>Enable REST API in Redmine administration, then copy the API access key from the user account page.</value></data>
+  <data name="IntegrationsBlock_RedmineHelpFieldsInstruction" xml:space="preserve"><value>Use the numeric Redmine user ID for the account that owns time entries and the numeric activity ID used for synced time.</value></data>
+  <data name="IntegrationsBlock_JiraHelpSummary" xml:space="preserve"><value>Connect a Jira Cloud site by using the site URL, account email, and Atlassian API token.</value></data>
+  <data name="IntegrationsBlock_JiraHelpTokenInstruction" xml:space="preserve"><value>Create an Atlassian API token from the Atlassian account security page and use the email address for that account.</value></data>
+  <data name="IntegrationsBlock_JiraHelpFieldsInstruction" xml:space="preserve"><value>Use the Jira site URL that contains the target project, for example https://company.atlassian.net.</value></data>
+  <data name="UpdateWorkspaceForm_WorkspaceName" xml:space="preserve"><value>Workspace name</value></data>
+  <data name="UpdateWorkspaceForm_TimeZone" xml:space="preserve"><value>Time zone</value></data>
+  <data name="UpdateWorkspaceForm_SaveSettings" xml:space="preserve"><value>Save settings</value></data>
+  <data name="UpdateProjectModal_Title" xml:space="preserve"><value>Edit "{0}"</value></data>
+  <data name="UpdateProjectModal_Description" xml:space="preserve"><value>Update the project name and reassign it to another client if needed.</value></data>
+  <data name="UpdateProjectModal_BillHourlyByDefault" xml:space="preserve"><value>Bill hourly by default</value></data>
+  <data name="UpdateProjectModal_BillHourlyByDefaultDescription" xml:space="preserve"><value>Use the project hourly rate automatically for new time entries.</value></data>
+  <data name="UpdateProjectModal_RateCurrencyHint" xml:space="preserve"><value>Saved in {0} and applied when billable by default is enabled.</value></data>
+  <data name="AddMemberModal_Title" xml:space="preserve"><value>Invite member</value></data>
+  <data name="AddMemberModal_Description" xml:space="preserve"><value>Send a workspace invitation by email.</value></data>
+  <data name="AddMemberModal_MemberEmail" xml:space="preserve"><value>Member email</value></data>
+  <data name="AddMemberModal_InviteMember" xml:space="preserve"><value>Invite member</value></data>
+  <data name="UpdateMemberModal_Title" xml:space="preserve"><value>Edit "{0}"</value></data>
+  <data name="UpdateMemberModal_Description" xml:space="preserve"><value>Change access level and configure per-project access for this member.</value></data>
+  <data name="UpdateMemberModal_AccessLevel" xml:space="preserve"><value>Access level</value></data>
+  <data name="UpdateMemberModal_ProjectAccess" xml:space="preserve"><value>Project access</value></data>
+  <data name="UpdateMemberModal_HasAccess" xml:space="preserve"><value>Has access</value></data>
+  <data name="UpdateMemberModal_MemberAccessUpdated" xml:space="preserve"><value>Member access has been updated</value></data>
+  <data name="UpdateMemberModal_MemberUpdateError" xml:space="preserve"><value>Member update error</value></data>
+  <data name="UpdateTagModal_Title" xml:space="preserve"><value>Edit "{0}"</value></data>
+  <data name="UpdateTagModal_Description" xml:space="preserve"><value>Update the tag name and color used across workspace time entries.</value></data>
+  <data name="ClientProjectsGroupBlock_ProjectsWithoutClient" xml:space="preserve"><value>Projects without client</value></data>
+  <data name="ClientProjectsGroupBlock_ProjectsWithoutClientDescription" xml:space="preserve"><value>Assign these projects to a client when the project should be managed under a client group.</value></data>
+  <data name="ClientProjectsGroupBlock_SaveClient" xml:space="preserve"><value>Save client</value></data>
+  <data name="ClientProjectsGroupBlock_BillableByDefault" xml:space="preserve"><value>Billable by default</value></data>
+  <data name="ClientProjectsGroupBlock_ClientHasNoProjects" xml:space="preserve"><value>This client has no projects yet.</value></data>
+  <data name="AddWorkspaceModal_Kicker" xml:space="preserve"><value>New workspace</value></data>
+  <data name="AddWorkspaceModal_Title" xml:space="preserve"><value>Add workspace</value></data>
+  <data name="AddWorkspaceModal_Description" xml:space="preserve"><value>After creation the app will switch to it automatically.</value></data>
+  <data name="AddWorkspaceModal_WorkspaceCreated" xml:space="preserve"><value>Workspace has been created</value></data>
+  <data name="AddWorkspaceModal_WorkspaceAddingError" xml:space="preserve"><value>Workspace adding error</value></data>
+  <data name="AddTagModal_Description" xml:space="preserve"><value>Enter the tag name and choose a color.</value></data>
+  <data name="AddClientModal_Description" xml:space="preserve"><value>Enter the client name.</value></data>
+  <data name="AddProjectModal_Description" xml:space="preserve"><value>Choose a client and enter the project name.</value></data>
+  <data name="TaskEstimateSummaryBlock_PlannedVsTracked" xml:space="preserve"><value>Planned vs tracked</value></data>
+  <data name="TaskEstimateSummaryBlock_Planned" xml:space="preserve"><value>Planned</value></data>
+  <data name="TaskEstimateSummaryBlock_RemainingOverBy" xml:space="preserve"><value>Remaining / Over by</value></data>
+  <data name="TaskEstimateSummaryBlock_TrackedText" xml:space="preserve"><value>{0} tracked</value></data>
+  <data name="TaskEstimateSummaryBlock_NoEstimateTracked" xml:space="preserve"><value>No estimate · {0} tracked</value></data>
+  <data name="TaskEstimateSummaryBlock_Over" xml:space="preserve"><value>{0} over</value></data>
+  <data name="TaskEstimateSummaryBlock_Remaining" xml:space="preserve"><value>{0} remaining</value></data>
+  <data name="TaskEstimateSummaryBlock_JiraEstimateDescription" xml:space="preserve"><value>Original estimate came from Jira. Tracked time is compared against that value.</value></data>
+  <data name="TaskEstimateSummaryBlock_ManualEstimateDescription" xml:space="preserve"><value>Tracked time is compared against the planned time set in TimeVic.</value></data>
+  <data name="TaskEstimateStatus_NoEstimate" xml:space="preserve"><value>No estimate</value></data>
+  <data name="TaskEstimateStatus_OnTrack" xml:space="preserve"><value>On track</value></data>
+  <data name="TaskEstimateStatus_NearEstimate" xml:space="preserve"><value>Near estimate</value></data>
+  <data name="TaskEstimateStatus_OverEstimate" xml:space="preserve"><value>Over estimate</value></data>
+  <data name="TaskEstimateStatus_HighOverrun" xml:space="preserve"><value>High overrun</value></data>
+  <data name="UpdateTaskForm_Assigned" xml:space="preserve"><value>Assigned</value></data>
+  <data name="UpdateTaskForm_AttachmentsHint" xml:space="preserve"><value>Paste images or drag files into this form to attach them.</value></data>
+  <data name="UpdateTaskForm_PlannedTime" xml:space="preserve"><value>Planned time</value></data>
+  <data name="UpdateTaskForm_JiraEstimateHint" xml:space="preserve"><value>Task was imported from Jira. 1d = 8h, 1w = 5d.</value></data>
+  <data name="UpdateTaskForm_ManualEstimateHint" xml:space="preserve"><value>Supports Jira-like input. 1d = 8h, 1w = 5d.</value></data>
+  <data name="UpdateTaskForm_AttachmentUploadError" xml:space="preserve"><value>Attachment upload error</value></data>
+  <data name="AddTasksListModalForm_TaskListAdded" xml:space="preserve"><value>Task list has been added</value></data>
+  <data name="AddTasksListModalForm_TaskListAddingError" xml:space="preserve"><value>Task list adding error</value></data>
+  <data name="UpdateTaskListModal_TaskListUpdated" xml:space="preserve"><value>Task list was updated</value></data>
+  <data name="AddTaskModal_TaskListRequired" xml:space="preserve"><value>Task list is required.</value></data>
+  <data name="EditTimeEntryModal_Title" xml:space="preserve"><value>Time entry details</value></data>
+  <data name="EditTimeEntryModal_AttachedTask" xml:space="preserve"><value>Attached task: {0}</value></data>
+  <data name="EditTimeEntryModal_AttachedTaskDescription" xml:space="preserve"><value>This entry is attached to a task, so the project follows that task automatically.</value></data>
+  <data name="EditTimeEntryModal_Pricing" xml:space="preserve"><value>Pricing</value></data>
+  <data name="BillableIndicator_ActiveEntryValue" xml:space="preserve"><value>Current value for the active time entry.</value></data>
+  <data name="BillableIndicator_CalculatedEntryValue" xml:space="preserve"><value>Calculated value for this time entry.</value></data>
+  <data name="BillableIndicator_Rate" xml:space="preserve"><value>Rate</value></data>
+  <data name="BillableIndicator_HourlyRateNotSet" xml:space="preserve"><value>Hourly rate is not set for this time entry yet.</value></data>
+  <data name="NotificationCenter_ReadAll" xml:space="preserve"><value>Read All</value></data>
+  <data name="Reminder" xml:space="preserve"><value>Reminder</value></data>
+  <data name="ReminderCard_DueTime" xml:space="preserve"><value>Due Time</value></data>
+  <data name="EmojiPicker_EmojiLibrary" xml:space="preserve"><value>Emoji library</value></data>
+  <data name="EmojiPicker_ChooseEmoji" xml:space="preserve"><value>Choose an emoji</value></data>
+  <data name="EmojiPicker_Description" xml:space="preserve"><value>Search by name, category, or HTML code and insert an emoji into the workspace name.</value></data>
+  <data name="EmojiPicker_SearchEmoji" xml:space="preserve"><value>Search emoji</value></data>
+  <data name="EmojiPicker_SearchPlaceholder" xml:space="preserve"><value>For example: rocket, fire, heart, 🚀 or &amp;#x1F680;</value></data>
+  <data name="EmojiPicker_Found" xml:space="preserve"><value>Found</value></data>
+  <data name="EmojiPicker_NoMatchesFound" xml:space="preserve"><value>No matches found</value></data>
+  <data name="EmojiPicker_NoMatchesDescription" xml:space="preserve"><value>Try a different search term or switch the category.</value></data>
+  <data name="EmojiPicker_CopiedToClipboard" xml:space="preserve"><value>Emoji copied to clipboard!</value></data>
+  <data name="EmojiCategory_All" xml:space="preserve"><value>All</value></data>
+  <data name="EmojiCategory_Activities" xml:space="preserve"><value>Activities</value></data>
+  <data name="EmojiCategory_Animals" xml:space="preserve"><value>Animals</value></data>
+  <data name="EmojiCategory_Business" xml:space="preserve"><value>Business</value></data>
+  <data name="EmojiCategory_Celebration" xml:space="preserve"><value>Celebration</value></data>
+  <data name="EmojiCategory_Food" xml:space="preserve"><value>Food</value></data>
+  <data name="EmojiCategory_Hearts" xml:space="preserve"><value>Hearts</value></data>
+  <data name="EmojiCategory_Nature" xml:space="preserve"><value>Nature</value></data>
+  <data name="EmojiCategory_Objects" xml:space="preserve"><value>Objects</value></data>
+  <data name="EmojiCategory_People" xml:space="preserve"><value>People</value></data>
+  <data name="EmojiCategory_Smileys" xml:space="preserve"><value>Smileys</value></data>
+  <data name="EmojiCategory_Symbols" xml:space="preserve"><value>Symbols</value></data>
+  <data name="EmojiCategory_Travel" xml:space="preserve"><value>Travel</value></data>
+  <data name="TagsList_RemoveTagConfirmation" xml:space="preserve"><value>Are you sure you want to remove this tag?</value></data>
+</root>

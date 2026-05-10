@@ -34,7 +34,7 @@ public partial class AttachmentsBlock: IDisposable
     public bool HideWhenEmpty { get; set; } = true;
 
     [Parameter]
-    public string Title { get; set; } = "Attachments";
+    public string Title { get; set; } = string.Empty;
 
     [Parameter]
     public string Class { get; set; } = "rounded-2xl border border-slate-200 p-4 mt-3";
@@ -55,6 +55,9 @@ public partial class AttachmentsBlock: IDisposable
     private System.Timers.Timer? _attachmentsReloadTimer;
 
     private bool IsVisible => !HideWhenEmpty || Files.Any() || UploadingFiles.Any();
+
+    private string LocalizedTitle =>
+        string.IsNullOrWhiteSpace(Title) ? DashboardLocalizer["Attachments"].Value : Title;
 
     protected override Task OnInitializedAsync()
     {

@@ -10,17 +10,17 @@
     <LumexCardHeader>
         <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <SummarySectionHeader
-                Overline="Chart"
-                Title="@($"Summary by {PeriodLabel}")"
-                HelperText="Duration and earned value for each day in the selected period."/>
+                Overline="@DashboardLocalizer["Chart"].Value"
+                Title="@string.Format(DashboardLocalizer["SummaryBy"].Value, PeriodLabel)"
+                HelperText="@DashboardLocalizer["SummaryChartHelper"].Value"/>
             <div class="flex flex-wrap items-center gap-3 text-xs font-semibold">
                 <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-700">
                     <span class="h-2.5 w-2.5 rounded-full bg-blue-600"></span>
-                    Duration
+                    @DashboardLocalizer["Duration"]
                 </span>
                 <span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-slate-700">
                     <span class="h-2.5 w-2.5 rounded-full bg-slate-500"></span>
-                    Earned
+                    @DashboardLocalizer["Earned"]
                 </span>
             </div>
         </div>
@@ -29,11 +29,11 @@
         <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
             @if (Items.Any() && _trackedDaysCount > 0)
             {
-                <span>@_trackedDaysLabel • <AmountDisplay Amount="@_totalEarned"/> earned</span>
+                <span>@_trackedDaysLabel • <AmountDisplay Amount="@_totalEarned"/> @DashboardLocalizer["Earned"]</span>
             }
             else
             {
-                <span>No significant activity in this period</span>
+                <span>@DashboardLocalizer["NoSignificantActivityPeriod"]</span>
             }
         </div>
 
@@ -65,7 +65,7 @@
         else
         {
             <div class="mt-6 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 py-10 text-center text-sm text-slate-500">
-                Start tracking time to see your earnings.
+                @DashboardLocalizer["StartTrackingEarnings"]
             </div>
         }
     </LumexCardBody>
@@ -90,7 +90,9 @@
 
     private string _trackedDaysLabel
     {
-        get => _trackedDaysCount == 1 ? "1 day tracked" : $"{_trackedDaysCount} days tracked";
+        get => _trackedDaysCount == 1
+            ? DashboardLocalizer["OneDayTracked"].Value
+            : string.Format(DashboardLocalizer["DaysTracked"].Value, _trackedDaysCount);
     }
 
     private string GetDurationBarStyle(SummaryByDaysReportItemDto item)

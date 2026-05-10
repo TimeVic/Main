@@ -14,29 +14,29 @@
                 <i class="fa-regular fa-eye"></i>
             </div>
             <div>
-                <h2 class="mt-2 text-xl font-semibold text-slate-900">Client payment</h2>
+                <h2 class="mt-2 text-xl font-semibold text-slate-900">@DashboardLocalizer["ClientPayment"]</h2>
                 <p class="mt-1 text-sm text-slate-600">@ClientPayment.PaymentTime.ToShortDateString()</p>
             </div>
         </LumexModalHeader>
         <LumexModalBody>
             <dl class="grid gap-4 md:grid-cols-2">
                 <div>
-                    <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">Client</dt>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["Client"]</dt>
                     <dd class="mt-1 text-sm font-medium text-slate-900">@ClientPayment.Client.Name</dd>
                 </div>
                 <div>
-                    <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">Project</dt>
-                    <dd class="mt-1 text-sm text-slate-700">@(ClientPayment.Project?.Name ?? "No project")</dd>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["Project"]</dt>
+                    <dd class="mt-1 text-sm text-slate-700">@(ClientPayment.Project?.Name ?? DashboardLocalizer["NoProject"].Value)</dd>
                 </div>
                 <div>
-                    <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">Amount</dt>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["Amount"]</dt>
                     <dd class="mt-1 text-sm font-semibold text-emerald-700">
                         <AmountDisplay Amount="@ClientPayment.Amount"></AmountDisplay>
                     </dd>
                 </div>
                 <div class="md:col-span-2">
-                    <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">Note / Reference</dt>
-                    <dd class="mt-1 whitespace-pre-wrap text-sm text-slate-700">@(string.IsNullOrWhiteSpace(ClientPayment.Description) ? "No note" : ClientPayment.Description)</dd>
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["PaymentNoteReference"]</dt>
+                    <dd class="mt-1 whitespace-pre-wrap text-sm text-slate-700">@(string.IsNullOrWhiteSpace(ClientPayment.Description) ? DashboardLocalizer["NoNote"].Value : ClientPayment.Description)</dd>
                 </div>
             </dl>
         </LumexModalBody>
@@ -44,7 +44,7 @@
             <CustomButton
                 OnClick="@OnCloseModal"
                 Variant="Variant.Outlined">
-                Close
+                @DashboardLocalizer["Close"]
             </CustomButton>
         </LumexModalFooter>
     </LumexModalContent>
