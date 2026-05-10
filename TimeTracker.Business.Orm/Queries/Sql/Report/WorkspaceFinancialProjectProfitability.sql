@@ -2,11 +2,13 @@ with earned_by_project as (
     select
         te.project_id                                                                                        as ProjectId,
         sum(extract(epoch from te.end_time - te.start_time))                                                 as DurationAsEpoch,
-        sum(round(te.hourly_rate / 60.0 / 60.0 * extract(epoch from te.end_time - te.start_time), 2))       as EarnedAmount
+        -- Financial reports must only use billable entries with a rate fixed on the time entry.
+        sum(round(te.hourly_rate / 60.0 / 60.0 * extract(epoch from te.end_time - te.start_time), 2)) as EarnedAmount
     from time_entries te
     where te.workspace_id = :workspaceId
       and te.end_time is not null
       and te.is_billable = true
+      and te.hourly_rate is not null
       and te.project_id is not null
     group by te.project_id
 ),
@@ -17,6 +19,8 @@ member_earnings_by_project as (
     from time_entries te
     where te.workspace_id = :workspaceId
       and te.end_time is not null
+      and te.is_billable = true
+      and te.hourly_rate is not null
       and te.project_id is not null
     group by te.project_id
 ),
