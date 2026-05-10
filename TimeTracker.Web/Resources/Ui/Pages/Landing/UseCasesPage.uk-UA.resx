@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Сценарії використання TimeVic - облік доходів для freelance-розробників</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Дізнайтесь, як TimeVic допомагає freelance-розробникам з кількома клієнтами рахувати дохід, порівнювати оплати й швидко знаходити неоплачену роботу.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>сценарії freelance розробників, облік оплат клієнтів, неоплачена робота, трекер погодинної ставки, облік freelance доходів</value>
+  </data>
+</root>

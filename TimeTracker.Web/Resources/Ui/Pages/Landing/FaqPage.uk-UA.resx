@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>FAQ TimeVic - облік доходів для freelance-розробників</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Відповіді про те, як у TimeVic відстежувати час, рахувати дохід, записувати оплати клієнтів і бачити неоплачені баланси.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>FAQ TimeVic, облік доходів freelance розробника, облік неоплачених балансів, облік оплат для фрилансерів</value>
+  </data>
+</root>

@@ -2,8 +2,6 @@ namespace TimeTracker.Web.Constants;
 
 public static class SiteMetadata
 {
-    public const string BaseUrl = "https://timevic.com";
-
     public const string IndexRobots = "index, follow";
     public const string NoIndexRobots = "noindex, nofollow, noarchive";
 
@@ -36,14 +34,4 @@ public static class SiteMetadata
         "Create a TimeVic account to track hours, calculate earnings, review client balances, and record payments for freelance client work.";
     public const string RegistrationKeywords =
         "create freelance time tracker account, income tracking app, client balance tracker, paid unpaid work tracker, project time tracking";
-
-    public static string ToAbsoluteUrl(string relativePath)
-    {
-        if (string.IsNullOrWhiteSpace(relativePath) || relativePath == "/")
-        {
-            return BaseUrl;
-        }
-
-        return $"{BaseUrl}{relativePath}";
-    }
 }

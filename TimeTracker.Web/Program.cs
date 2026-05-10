@@ -100,6 +100,7 @@ builder.Services.AddScoped<MessagingWebSocketClientService>();
 builder.Services.AddScoped<ModalDialogService>();
 builder.Services.AddScoped<UserDateTimeProviderService>();
 builder.Services.AddScoped<ILocalizationUrlService, LocalizationUrlService>();
+builder.Services.AddScoped<ISeoUrlService, SeoUrlService>();
 
 // Lumex UI
 builder.Services.AddLumexServices();

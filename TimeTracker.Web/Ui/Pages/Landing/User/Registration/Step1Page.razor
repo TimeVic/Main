@@ -12,12 +12,13 @@
 
 @inject IStringLocalizer<PublicLandingResource> SharedLocalizer
 @inject IStringLocalizer<Step1Page> Localizer
+@inject TimeTracker.Web.Services.UI.UrlService UrlService
 <SeoHead
     Title="@Localizer["Meta_Title"]"
     Description="@Localizer["Meta_Description"]"
     Keywords="@Localizer["Meta_Keywords"]"
     Robots="@SiteMetadata.IndexRobots"
-    CanonicalUrl="@SiteMetadata.ToAbsoluteUrl(SiteUrl.Registration_Step1)" />
+    CanonicalUrl="@UrlService.ToAbsoluteUrl(SiteUrl.Registration_Step1)" />
 
 <RegistrationCntainerBlock>
     <ChildContent>
