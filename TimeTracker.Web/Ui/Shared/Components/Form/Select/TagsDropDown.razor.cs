@@ -29,7 +29,7 @@ public partial class TagsDropDown
     public EventCallback<IEnumerable<TagDto>> SelectedItemChanged { get; set; }
     
     [Parameter]
-    public string Placeholder { get; set; } = "Select tags";
+    public string Placeholder { get; set; } = string.Empty;
     
     [Parameter]
     public string Class { get; set; } = string.Empty;
@@ -57,6 +57,9 @@ public partial class TagsDropDown
         .ToList();
 
     private ICollection<TagDto> _list = [];
+
+    private string LocalizedPlaceholder =>
+        string.IsNullOrWhiteSpace(Placeholder) ? DashboardLocalizer["SelectTags"].Value : Placeholder;
 
     protected override void OnInitialized()
     {

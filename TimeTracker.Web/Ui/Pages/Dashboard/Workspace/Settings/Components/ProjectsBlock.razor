@@ -21,9 +21,9 @@
         <LumexCardBody>
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">Projects</p>
-                    <h2 class="mt-2 text-lg font-semibold text-slate-900">Workspace projects</h2>
-                    <p class="mt-1 text-sm text-slate-600">Projects keep their assigned client visible, but existing client links stay read-only here.</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">@DashboardLocalizer["Projects"]</p>
+                    <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["ProjectsBlock_WorkspaceProjectsTitle"]</h2>
+                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["ProjectsBlock_Description"]</p>
                 </div>
                 <CustomButton
                     Size="Size.Small"
@@ -34,7 +34,7 @@
                         <i class="fa-solid fa-plus"></i>
                     </StartContent>
                     <ChildContent>
-                        Add project
+                        @DashboardLocalizer["AddProject"]
                     </ChildContent>
                 </CustomButton>
             </div>
@@ -46,20 +46,20 @@
         Radius="@Radius.Medium"
         Class="mt-3">
         <LumexUI.EditColumn
-            Title="Name"
+            Title="@DashboardLocalizer["Name"].Value"
             Property="@(p => p.Name)"/>
         <LumexUI.PropertyColumn
-            Title="Billable by default"
+            Title="@DashboardLocalizer["BillableByDefault"].Value"
             Property="@(p => p.IsBillableByDefault)"/>
         <LumexUI.PropertyColumn
-            Title="Default hourly rate"
+            Title="@DashboardLocalizer["DefaultHourlyRate"].Value"
             Property="@(p => p.DefaultHourlyRate)"/>
         <LumexUI.PropertyColumn
-            Title="Client"
+            Title="@DashboardLocalizer["Client"].Value"
             Sortable="true"
             Property="@(p => p.Client != null ? p.Client.Name : string.Empty)"/>
         <LumexUI.PropertyColumn
-            Title="Actions"
+            Title="@DashboardLocalizer["Actions"].Value"
             Property="@(p => p.Id)">
             <Content>
                 <CustomButton

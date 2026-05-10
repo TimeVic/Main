@@ -14,8 +14,8 @@
                     <i class="fa-regular fa-pen-to-square"></i>
                 </div>
                 <div>
-                    <h2 class="mt-2 text-xl font-semibold text-slate-900">Edit "@Member.User.Name"</h2>
-                    <p class="mt-1 text-sm text-slate-600">Change access level and configure per-project access for this member.</p>
+                    <h2 class="mt-2 text-xl font-semibold text-slate-900">@string.Format(DashboardLocalizer["UpdateMemberModal_Title"], Member.User.Name)</h2>
+                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["UpdateMemberModal_Description"]</p>
                 </div>
             </div>
         </LumexModalHeader>
@@ -30,7 +30,7 @@
                 <div class="space-y-5">
                     <EnumDropDown
                         TItem="MembershipAccessType"
-                        Label="Access level"
+                        Label="@DashboardLocalizer["UpdateMemberModal_AccessLevel"]"
                         AllowedValues="_allowedAccessLevels"
                         Value="@_model.Access"
                         ValueChanged="@(v => _model.Access = v ?? MembershipAccessType.User)"/>
@@ -38,7 +38,7 @@
                     @if (_model.ProjectsAccess.Any())
                     {
                         <div>
-                            <p class="mb-2 text-sm font-semibold text-slate-700">Project access</p>
+                            <p class="mb-2 text-sm font-semibold text-slate-700">@DashboardLocalizer["UpdateMemberModal_ProjectAccess"]</p>
                             <div class="space-y-4">
                                 @foreach (var group in GetProjectAccessGroups())
                                 {
@@ -53,7 +53,7 @@
                                                     <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
                                                         <div class="rounded-xl border border-slate-200 bg-white/60 p-3 flex items-center justify-between gap-4">
                                                             <div>
-                                                                <p class="text-xs font-medium text-slate-700">Has access</p>
+                                                                <p class="text-xs font-medium text-slate-700">@DashboardLocalizer["UpdateMemberModal_HasAccess"]</p>
                                                             </div>
                                                             <LumexSwitch
                                                                 Value="@item.HasAccess"
@@ -62,7 +62,7 @@
                                                         </div>
                                                         <InputNumericNullableField
                                                             TItem="decimal"
-                                                            Label="Hourly rate"
+                                                            Label="@DashboardLocalizer["HourlyRate"]"
                                                             Size="Size.Small"
                                                             Step="00.01"
                                                             Variant="InputVariant.Outlined"
@@ -88,7 +88,7 @@
                 IsLoading="_isLoading"
                 Color="@ThemeColor.Primary"
                 Radius="@Radius.Full">
-                Save
+                @DashboardLocalizer["Save"]
             </CustomButton>
         </LumexModalFooter>
     </LumexModalContent>

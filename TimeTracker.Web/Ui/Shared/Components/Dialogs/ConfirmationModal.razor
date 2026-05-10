@@ -18,10 +18,10 @@
                     <i class="@IconClass"></i>
                 </div>
                 <div>
-                    <h3 class="text-xl font-semibold text-slate-900">@Title</h3>
-                    @if (!string.IsNullOrWhiteSpace(Subtitle))
+                    <h3 class="text-xl font-semibold text-slate-900">@DisplayTitle</h3>
+                    @if (!string.IsNullOrWhiteSpace(DisplaySubtitle))
                     {
-                        <p class="mt-1 text-sm text-slate-500">@Subtitle</p>
+                        <p class="mt-1 text-sm text-slate-500">@DisplaySubtitle</p>
                     }
                 </div>
             </div>
@@ -43,7 +43,7 @@
                 Color="@ThemeColor.Default"
                 Variant="Variant.Outlined"
                 Radius="@Radius.Medium">
-                @CancelButtonText
+                @DisplayCancelButtonText
             </CustomButton>
             <CustomButton
                 FullWidth="@true"
@@ -51,7 +51,7 @@
                 Color="@ThemeColor.Danger"
                 Variant="Variant.Solid"
                 Radius="@Radius.Medium">
-                @ConfirmText
+                @DisplayConfirmText
             </CustomButton>
         </LumexModalFooter>
     </LumexModalContent>
@@ -69,19 +69,19 @@
     public ConfirmationVariant DialogVariant { get; set; } = ConfirmationVariant.Delete;
     
     [Parameter]
-    public string Title { get; set; } = "Confirm action";
+    public string Title { get; set; } = string.Empty;
     
     [Parameter]
-    public string Subtitle { get; set; } = "Please review this action before continuing.";
+    public string Subtitle { get; set; } = string.Empty;
     
     [Parameter]
     public string Message { get; set; } = string.Empty;
     
     [Parameter]
-    public string ConfirmText { get; set; } = "Confirm";
+    public string ConfirmText { get; set; } = string.Empty;
     
     [Parameter]
-    public string CancelButtonText { get; set; } = "Cancel";
+    public string CancelButtonText { get; set; } = string.Empty;
     
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -96,6 +96,22 @@
     public EventCallback OnClose { get; set; }
     
     LumexModal modal;
+    
+    private string DisplayTitle => string.IsNullOrWhiteSpace(Title)
+        ? DashboardLocalizer["ConfirmAction"].Value
+        : Title;
+    
+    private string DisplaySubtitle => string.IsNullOrWhiteSpace(Subtitle)
+        ? DashboardLocalizer["ConfirmActionSubtitle"].Value
+        : Subtitle;
+    
+    private string DisplayConfirmText => string.IsNullOrWhiteSpace(ConfirmText)
+        ? DashboardLocalizer["Confirm"].Value
+        : ConfirmText;
+    
+    private string DisplayCancelButtonText => string.IsNullOrWhiteSpace(CancelButtonText)
+        ? DashboardLocalizer["Cancel"].Value
+        : CancelButtonText;
     
     public string IconBackgroundClass
     {

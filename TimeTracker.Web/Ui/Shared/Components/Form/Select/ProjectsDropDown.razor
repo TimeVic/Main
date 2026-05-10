@@ -52,7 +52,7 @@
                         <ChildContent>
                             <span class="flex items-center gap-2">
                                 <i class="fa-solid fa-xmark text-xs"></i>
-                                None
+                                @DashboardLocalizer["None"]
                             </span>
                         </ChildContent>
                     </LumexDropdownItem>
@@ -65,7 +65,7 @@
                         <ChildContent>
                             <span class="flex items-center gap-2">
                                 <i class="fa-solid fa-plus text-xs"></i>
-                                Add first client
+                                @DashboardLocalizer["AddFirstClient"]
                             </span>
                         </ChildContent>
                     </LumexDropdownItem>
@@ -90,7 +90,7 @@
                             <ChildContent>
                                 <span class="flex items-center gap-2">
                                     <i class="fa-solid fa-plus text-xs"></i>
-                                    Add project
+                                    @DashboardLocalizer["AddProject"]
                                 </span>
                             </ChildContent>
                         </LumexDropdownItem>
@@ -128,7 +128,7 @@
                     <LumexSelectItem Value="@_clearSentinel" TextValue="">
                         <div class="flex items-center gap-2 text-slate-400">
                             <i class="fa-solid fa-xmark text-xs"></i>
-                            <span class="text-small">None</span>
+                            <span class="text-small">@DashboardLocalizer["None"]</span>
                         </div>
                     </LumexSelectItem>
                 }
@@ -136,10 +136,10 @@
                 {
                     <LumexSelectItem
                         Value="@_addFirstClientActionItem"
-                        TextValue="Add first client">
+                        TextValue="@DashboardLocalizer["AddFirstClient"].Value">
                         <span class="flex items-center gap-2 text-blue-600">
                             <i class="fa-solid fa-plus text-xs"></i>
-                            Add first client
+                            @DashboardLocalizer["AddFirstClient"]
                         </span>
                     </LumexSelectItem>
                 }
@@ -161,10 +161,10 @@
                     {
                         <LumexSelectItem
                             Value="@GetAddProjectActionItem(group.ClientId)"
-                            TextValue="Add project">
+                            TextValue="@DashboardLocalizer["AddProject"].Value">
                             <span class="flex items-center gap-2 text-blue-600">
                                 <i class="fa-solid fa-plus text-xs"></i>
-                                Add project
+                                @DashboardLocalizer["AddProject"]
                             </span>
                         </LumexSelectItem>
                     }

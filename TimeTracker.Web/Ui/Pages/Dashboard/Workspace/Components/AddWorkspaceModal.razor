@@ -7,9 +7,9 @@
     <LumexModalContent>
         <LumexModalHeader Class="flex items-center gap-3">
             <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">New workspace</p>
-                <h2 class="mt-2 text-xl font-semibold text-slate-900">Add workspace</h2>
-                <p class="mt-1 text-sm text-slate-500">After creation the app will switch to it automatically.</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-600">@DashboardLocalizer["AddWorkspaceModal_Kicker"]</p>
+                <h2 class="mt-2 text-xl font-semibold text-slate-900">@DashboardLocalizer["AddWorkspaceModal_Title"]</h2>
+                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["AddWorkspaceModal_Description"]</p>
             </div>
         </LumexModalHeader>
         <LumexModalBody>
@@ -20,12 +20,12 @@
                 OnValidSubmit="@Submit"
                 novalidate>
                 <DataAnnotationsValidator/>
-                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Submit</button>
+                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Submit"]</button>
                 
                 <div>
                     <InputTextField
                         FullWidth="true"
-                        Label="Workspace name"
+                        Label="@DashboardLocalizer["UpdateWorkspaceForm_WorkspaceName"]"
                         IsShowEmojiButton="true"
                         @bind-Value="model.Name"/>
                 </div>
@@ -37,7 +37,7 @@
                 OnClick="@Submit"
                 Color="@ThemeColor.Primary"
                 Radius="@Radius.Full">
-                Add
+                @DashboardLocalizer["Add"]
             </CustomButton>
         </LumexModalFooter>
     </LumexModalContent>

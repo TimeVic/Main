@@ -16,7 +16,7 @@
                     <i class="fa-solid fa-circle-info"></i>
                 </div>
                 <div>
-                    <h2 class="text-xl font-semibold text-slate-900">@_helpInfo.Name connection</h2>
+                    <h2 class="text-xl font-semibold text-slate-900">@string.Format(DashboardLocalizer["IntegrationsBlock_ConnectionTitle"], _helpInfo.Name)</h2>
                     <p class="mt-1 text-sm text-slate-600">@_helpInfo.Summary</p>
                 </div>
             </LumexModalHeader>
@@ -27,7 +27,7 @@
                     <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-900">
                         <div class="flex items-start gap-3">
                             <i class="fa-solid fa-key mt-1"></i>
-                            <p>After saving, TimeVic checks the connection with the service. The integration becomes active only when the provided credentials are accepted by the external API.</p>
+                            <p>@DashboardLocalizer["IntegrationsBlock_ConnectionCheckNotice"]</p>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                     Color="ThemeColor.Primary"
                     Variant="Variant.Solid"
                     OnClick="@CloseHelpModal">
-                    Close
+                    @DashboardLocalizer["Close"]
                 </CustomButton>
             </LumexModalFooter>
         </LumexModalContent>
@@ -48,10 +48,10 @@
     <div class="rounded-3xl border border-cyan-200 bg-cyan-50 p-5 text-cyan-950">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div class="max-w-4xl">
-                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">Integration services</p>
-                <h2 class="mt-2 text-lg font-semibold">External task tracking</h2>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-700">@DashboardLocalizer["IntegrationsBlock_HeaderKicker"]</p>
+                <h2 class="mt-2 text-lg font-semibold">@DashboardLocalizer["IntegrationsBlock_Title"]</h2>
                 <p class="mt-2 text-sm leading-6">
-                    After a service is connected and active, tasks can be added by the connected service task ID. Time entries can then be tracked in TimeVic and synchronized with that service.
+                    @DashboardLocalizer["IntegrationsBlock_Description"]
                 </p>
             </div>
             <div class="grid min-w-[220px] grid-cols-3 gap-2 text-center text-xs font-semibold">
@@ -68,7 +68,7 @@
             <LumexCardBody>
                 <div class="flex items-center justify-center gap-3 py-12 text-sm font-medium text-slate-500">
                     <i class="fa-solid fa-circle-notch animate-spin text-cyan-600"></i>
-                    <span>Loading integration settings</span>
+                    <span>@DashboardLocalizer["IntegrationsBlock_Loading"]</span>
                 </div>
             </LumexCardBody>
         </LumexCard>
@@ -96,7 +96,7 @@
                             <InputTextField
                                 FullWidth="true"
                                 Required="true"
-                                Label="API token"
+                                Label="@DashboardLocalizer["IntegrationsBlock_ApiToken"]"
                                 Placeholder="pk_..."
                                 Type="InputType.Password"
                                 @bind-Value="_clickUpModel.SecurityKey"/>
@@ -104,15 +104,15 @@
                             <InputTextField
                                 FullWidth="true"
                                 Required="true"
-                                Label="Team ID"
+                                Label="@DashboardLocalizer["IntegrationsBlock_TeamId"]"
                                 Placeholder="123456"
                                 @bind-Value="_clickUpModel.TeamId"/>
 
                             <div class="space-y-3 rounded-3xl border border-slate-200 bg-slate-50 p-4">
                                 <div class="flex items-start justify-between gap-4">
                                     <div>
-                                        <p class="text-sm font-semibold text-slate-900">Use custom task IDs</p>
-                                        <p class="mt-1 text-xs leading-5 text-slate-500">Match tasks by custom IDs configured in ClickUp.</p>
+                                        <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["IntegrationsBlock_UseCustomTaskIds"]</p>
+                                        <p class="mt-1 text-xs leading-5 text-slate-500">@DashboardLocalizer["IntegrationsBlock_UseCustomTaskIdsDescription"]</p>
                                     </div>
                                     <label class="inline-flex cursor-pointer items-center rounded-2xl px-2 py-1">
                                         <LumexSwitch @bind-Value="_clickUpModel.IsCustomTaskIds"/>
@@ -120,8 +120,8 @@
                                 </div>
                                 <div class="flex items-start justify-between gap-4">
                                     <div>
-                                        <p class="text-sm font-semibold text-slate-900">Fill entries from task details</p>
-                                        <p class="mt-1 text-xs leading-5 text-slate-500">Use connected task details when time entries are created.</p>
+                                        <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["IntegrationsBlock_FillEntriesFromTaskDetails"]</p>
+                                        <p class="mt-1 text-xs leading-5 text-slate-500">@DashboardLocalizer["IntegrationsBlock_FillEntriesFromTaskDetailsDescription"]</p>
                                     </div>
                                     <label class="inline-flex cursor-pointer items-center rounded-2xl px-2 py-1">
                                         <LumexSwitch @bind-Value="_clickUpModel.IsFillTimeEntryWithTaskDetails"/>
@@ -145,7 +145,7 @@
                             <i class="fa-regular fa-floppy-disk"></i>
                         </StartContent>
                         <ChildContent>
-                            Save ClickUp
+                            @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "ClickUp")
                         </ChildContent>
                     </CustomButton>
                 </LumexCardFooter>
@@ -171,7 +171,7 @@
                             <InputTextField
                                 FullWidth="true"
                                 Required="true"
-                                Label="Redmine URL"
+                                Label="@DashboardLocalizer["IntegrationsBlock_RedmineUrl"]"
                                 Placeholder="https://redmine.example.com"
                                 Type="InputType.Url"
                                 @bind-Value="_redmineModel.Url"/>
@@ -179,8 +179,8 @@
                             <InputTextField
                                 FullWidth="true"
                                 Required="true"
-                                Label="API key"
-                                Placeholder="API access key"
+                                Label="@DashboardLocalizer["IntegrationsBlock_ApiKey"]"
+                                Placeholder="@DashboardLocalizer["IntegrationsBlock_ApiAccessKeyPlaceholder"]"
                                 Type="InputType.Password"
                                 @bind-Value="_redmineModel.ApiKey"/>
 
@@ -189,7 +189,7 @@
                                     TItem="long"
                                     FullWidth="true"
                                     Required="true"
-                                    Label="User ID"
+                                    Label="@DashboardLocalizer["IntegrationsBlock_UserId"]"
                                     Placeholder="1"
                                     @bind-Value="_redmineModel.RedmineUserId"/>
 
@@ -197,7 +197,7 @@
                                     TItem="long"
                                     FullWidth="true"
                                     Required="true"
-                                    Label="Activity ID"
+                                    Label="@DashboardLocalizer["IntegrationsBlock_ActivityId"]"
                                     Placeholder="9"
                                     @bind-Value="_redmineModel.ActivityId"/>
                             </div>
@@ -218,7 +218,7 @@
                             <i class="fa-regular fa-floppy-disk"></i>
                         </StartContent>
                         <ChildContent>
-                            Save Redmine
+                            @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "Redmine")
                         </ChildContent>
                     </CustomButton>
                 </LumexCardFooter>
@@ -244,7 +244,7 @@
                             <InputTextField
                                 FullWidth="true"
                                 Required="true"
-                                Label="Jira URL"
+                                Label="@DashboardLocalizer["IntegrationsBlock_JiraUrl"]"
                                 Placeholder="https://company.atlassian.net"
                                 Type="InputType.Url"
                                 @bind-Value="_jiraModel.Url"/>
@@ -252,15 +252,15 @@
                             <InputTextField
                                 FullWidth="true"
                                 Required="true"
-                                Label="User email"
+                                Label="@DashboardLocalizer["IntegrationsBlock_UserEmail"]"
                                 Placeholder="name@company.com"
                                 @bind-Value="_jiraModel.UserName"/>
 
                             <InputTextField
                                 FullWidth="true"
                                 Required="true"
-                                Label="API token"
-                                Placeholder="Atlassian API token"
+                                Label="@DashboardLocalizer["IntegrationsBlock_ApiToken"]"
+                                Placeholder="@DashboardLocalizer["IntegrationsBlock_AtlassianApiTokenPlaceholder"]"
                                 Type="InputType.Password"
                                 @bind-Value="_jiraModel.ApiKey"/>
 
@@ -280,7 +280,7 @@
                             <i class="fa-regular fa-floppy-disk"></i>
                         </StartContent>
                         <ChildContent>
-                            Save Jira
+                            @string.Format(DashboardLocalizer["IntegrationsBlock_SaveService"], "Jira")
                         </ChildContent>
                     </CustomButton>
                 </LumexCardFooter>

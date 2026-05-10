@@ -10,11 +10,11 @@
 
 <section class="mt-10 space-y-4">
     <SummarySectionHeader
-        Title="Money overview"
-        HelperText="Cumulative financial state across all recorded work."/>
+        Title="@DashboardLocalizer["MoneyOverview"].Value"
+        HelperText="@DashboardLocalizer["MoneyOverviewHelper"].Value"/>
 
     <p class="text-sm text-slate-500">
-        Outstanding balance = total earned - total received.
+        @DashboardLocalizer["OutstandingFormula"]
     </p>
 
     @if (!string.IsNullOrWhiteSpace(_moneyInsight))
@@ -26,8 +26,8 @@
 
     <div class="grid gap-4 lg:grid-cols-3">
         <SummaryMetricCard
-            Title="Total earned"
-            HelperText="Billable work recorded across all time"
+            Title="@DashboardLocalizer["TotalEarned"].Value"
+            HelperText="@DashboardLocalizer["TotalEarnedHelper"].Value"
             Variant="neutral"
             IconClass="fa-solid fa-chart-line">
             <Value>
@@ -36,8 +36,8 @@
         </SummaryMetricCard>
 
         <SummaryMetricCard
-            Title="Total received"
-            HelperText="Client payments received"
+            Title="@DashboardLocalizer["TotalReceived"].Value"
+            HelperText="@DashboardLocalizer["TotalReceivedHelper"].Value"
             Variant="success"
             IconClass="fa-solid fa-check">
             <Value>
@@ -46,12 +46,12 @@
         </SummaryMetricCard>
 
         <SummaryMetricCard
-            Title="Outstanding balance"
-            HelperText="Still unpaid by clients"
+            Title="@DashboardLocalizer["OutstandingBalance"].Value"
+            HelperText="@DashboardLocalizer["OutstandingBalanceHelper"].Value"
             Variant="danger"
             Emphasis="true"
             IconClass="fa-solid fa-triangle-exclamation"
-            ActionText="View unpaid by client"
+            ActionText="@DashboardLocalizer["ViewUnpaidByClient"].Value"
             ActionHref="@SiteUrl.Dashboard_Reports_MemberPayments">
             <Value>
                 <AmountDisplay Amount="@_outstandingBalance"/>
@@ -92,7 +92,7 @@
         {
             if (_totalEarned > 0 && _totalReceived <= 0)
             {
-                return "Work recorded, but no payments received yet.";
+                return DashboardLocalizer["WorkRecordedNoPaymentsYet"].Value;
             }
 
             return string.Empty;

@@ -48,7 +48,7 @@ public partial class TaskListsDropDown: IDisposable
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Placeholder = "Select task list";
+        Placeholder = DashboardLocalizer["SelectTaskList"].Value;
         _isInitialized = true;
 
         _state.StateChanged += OnStateChanged;

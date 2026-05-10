@@ -16,7 +16,7 @@ public partial class YesNoDropDown
     public EventCallback<bool?> ValueChanged { get; set; }
 
     [Parameter]
-    public string Placeholder { get; set; } = "Select value";
+    public string Placeholder { get; set; } = string.Empty;
     
     [Parameter]
     public string Class { get; set; }
@@ -24,12 +24,15 @@ public partial class YesNoDropDown
     [Inject]
     public ILogger<YesNoDropDown> _logger { get; set; }
     
-    private ICollection<YesNoDropDownItem> _listItems = new List<YesNoDropDownItem>()
-    {
-        new(null, "Not set"),
-        new(true, "Yes"),
-        new(false, "No"),
-    };
+    private string LocalizedPlaceholder =>
+        string.IsNullOrWhiteSpace(Placeholder) ? DashboardLocalizer["Select"].Value : Placeholder;
+
+    private ICollection<YesNoDropDownItem> ListItems =>
+    [
+        new(null, DashboardLocalizer["NotSet"].Value),
+        new(true, DashboardLocalizer["Yes"].Value),
+        new(false, DashboardLocalizer["No"].Value)
+    ];
 
     private void OnValueChanged(bool? selectedValue)
     {
@@ -38,7 +41,7 @@ public partial class YesNoDropDown
     
     private string ToStringFunc(bool? itemValue)
     {
-        var item = _listItems.FirstOrDefault(item => item.Value == itemValue);
+        var item = ListItems.FirstOrDefault(item => item.Value == itemValue);
         return item.Name;
     }
 }

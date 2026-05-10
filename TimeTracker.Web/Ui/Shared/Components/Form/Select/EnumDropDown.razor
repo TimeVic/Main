@@ -22,7 +22,7 @@
                     }
                     else
                     {
-                        @(EnumHelpers.GetDisplayName(typeof(TItem), _value))
+                        @GetLocalizedDisplayName(_value)
                     }
                 </LumexButton>
             </LumexDropdownTrigger>
@@ -32,7 +32,7 @@
                 @foreach (var item in _list)
                 {
                     <LumexDropdownItem OnClick="@(() => OnItemSelected(item))">
-                        @(EnumHelpers.GetDisplayName(typeof(TItem), item))
+                        @GetLocalizedDisplayName(item)
                     </LumexDropdownItem>
                 }
             </LumexDropdownMenu>
@@ -54,7 +54,7 @@
                 @foreach (var character in _list)
                 {
                     <LumexSelectItem @key="@character" Value="@character">
-                        @(EnumHelpers.GetDisplayName(typeof(TItem), character))
+                        @GetLocalizedDisplayName(character)
                     </LumexSelectItem>
                 }
             </ChildContent>
@@ -63,7 +63,7 @@
                 {
                     return;
                 }
-                @(EnumHelpers.GetDisplayName(typeof(TItem), context))
+                @GetLocalizedDisplayName(context)
             </ValueContent>
         </LumexSelect>
     }

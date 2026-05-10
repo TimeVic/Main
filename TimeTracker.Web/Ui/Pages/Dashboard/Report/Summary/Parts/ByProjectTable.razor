@@ -29,22 +29,22 @@
 }
 
 <LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
-    <PropertyColumn Title="Project" Property="@(p => p.ProjectName)">
+    <PropertyColumn Title="@DashboardLocalizer["Project"].Value" Property="@(p => p.ProjectName)">
         <Content>
-            @(context.ProjectName ?? "- No project -")
+            @(context.ProjectName ?? DashboardLocalizer["NoProject"].Value)
         </Content>
     </PropertyColumn>
-    <PropertyColumn Title="Duration" Property="@(p => p.Duration)">
+    <PropertyColumn Title="@DashboardLocalizer["Duration"].Value" Property="@(p => p.Duration)">
         <Content>
             @context.Duration.ToReadableShortString()
         </Content>
     </PropertyColumn>
-    <PropertyColumn Title="Earned" Property="@(p => p.Amount)">
+    <PropertyColumn Title="@DashboardLocalizer["Earned"].Value" Property="@(p => p.Amount)">
         <Content>
             <AmountDisplay Amount="@context.Amount"/>
         </Content>
     </PropertyColumn>
-    <PropertyColumn Title="Outstanding" Property="@(p => p.Amount)">
+    <PropertyColumn Title="@DashboardLocalizer["Outstanding"].Value" Property="@(p => p.Amount)">
         <Content>
             @{
                 var outstanding = GetOutstanding(context.ProjectId, context.Amount);
@@ -54,7 +54,7 @@
             </span>
         </Content>
     </PropertyColumn>
-    <PropertyColumn Title="Effective hourly rate" Property="@(p => p.Amount)">
+    <PropertyColumn Title="@DashboardLocalizer["EffectiveHourlyRate"].Value" Property="@(p => p.Amount)">
         <Content>
             <AmountDisplay Amount="@GetEffectiveHourlyRate(context.Amount, context.Duration)"/>/h
         </Content>

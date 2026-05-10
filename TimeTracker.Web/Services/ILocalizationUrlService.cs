@@ -15,6 +15,8 @@ public interface ILocalizationUrlService
     /// <summary>Applies DefaultThreadCurrentCulture/UICulture based on the provided URL path.</summary>
     void ApplyCultureFromPath(string path);
 
+    void ApplyCulture(string cultureName);
+
     /// <summary>Returns the English (default) version of the given path by stripping the /uk prefix.</summary>
     string GetEnglishUrl(string path);
 

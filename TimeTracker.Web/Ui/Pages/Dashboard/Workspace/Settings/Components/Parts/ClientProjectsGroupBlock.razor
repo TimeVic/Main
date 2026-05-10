@@ -11,8 +11,8 @@
                     {
                         <InputTextField
                             FullWidth="true"
-                            Label="Client"
-                            Placeholder="Client name"
+                            Label="@DashboardLocalizer["Client"]"
+                            Placeholder="@DashboardLocalizer["ClientName"]"
                             Variant="InputVariant.Outlined"
                             IsShowEmojiButton="true"
                             @bind-Value="Client.Name"/>
@@ -20,8 +20,8 @@
                     else
                     {
                         <div>
-                            <p class="text-sm font-semibold text-slate-900">Projects without client</p>
-                            <p class="mt-1 text-xs text-slate-500">Assign these projects to a client when the project should be managed under a client group.</p>
+                            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["ClientProjectsGroupBlock_ProjectsWithoutClient"]</p>
+                            <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["ClientProjectsGroupBlock_ProjectsWithoutClientDescription"]</p>
                         </div>
                     }
                 </div>
@@ -38,7 +38,7 @@
                                 <i class="fa-regular fa-floppy-disk"></i>
                             </StartContent>
                             <ChildContent>
-                                Save client
+                                @DashboardLocalizer["ClientProjectsGroupBlock_SaveClient"]
                             </ChildContent>
                         </CustomButton>
                     }
@@ -58,7 +58,7 @@
                                 <i class="fa-solid fa-plus"></i>
                             </StartContent>
                             <ChildContent>
-                                Add project
+                                @DashboardLocalizer["AddProject"]
                             </ChildContent>
                         </CustomButton>
                     </div>
@@ -67,16 +67,16 @@
                         Data="@Projects.AsQueryable()"
                         Radius="@Radius.Medium">
                         <LumexUI.PropertyColumn
-                            Title="Project"
+                            Title="@DashboardLocalizer["Project"]"
                             Property="@(p => p.Name)"/>
                         <LumexUI.PropertyColumn
-                            Title="Billable by default"
+                            Title="@DashboardLocalizer["ClientProjectsGroupBlock_BillableByDefault"]"
                             Property="@(p => p.IsBillableByDefault)"/>
                         <LumexUI.PropertyColumn
-                            Title="Default hourly rate"
+                            Title="@DashboardLocalizer["DefaultHourlyRate"]"
                             Property="@(p => p.DefaultHourlyRate)"/>
                         <LumexUI.PropertyColumn
-                            Title="Actions"
+                            Title="@DashboardLocalizer["Actions"]"
                             Property="@(p => p.Id)">
                             <Content>
                                 <CustomButton
@@ -98,7 +98,7 @@
             else
             {
                 <div class="flex flex-col gap-3 rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
-                    <span>This client has no projects yet.</span>
+                    <span>@DashboardLocalizer["ClientProjectsGroupBlock_ClientHasNoProjects"]</span>
                     <CustomButton
                         OnClick="@OnAddProject"
                         Size="Size.Small"
@@ -108,7 +108,7 @@
                             <i class="fa-solid fa-plus"></i>
                         </StartContent>
                         <ChildContent>
-                            Add project
+                            @DashboardLocalizer["AddProject"]
                         </ChildContent>
                     </CustomButton>
                 </div>

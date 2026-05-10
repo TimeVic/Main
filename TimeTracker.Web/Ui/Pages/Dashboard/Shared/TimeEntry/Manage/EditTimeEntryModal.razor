@@ -27,7 +27,7 @@
                 <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
                     <i class="fa-regular fa-pen-to-square"></i>
                 </div>
-                <h3 class="text-2xl font-medium text-slate-900">Time entry details</h3>
+                <h3 class="text-2xl font-medium text-slate-900">@DashboardLocalizer["EditTimeEntryModal_Title"]</h3>
             </div>
         </LumexModalHeader>
         <LumexModalBody>
@@ -63,7 +63,7 @@
                                                 <i class="fa-solid fa-plus"></i>
                                             </StartContent>
                                             <ChildContent>
-                                                <span>Task</span>
+                                                <span>@DashboardLocalizer["Task"]</span>
                                             </ChildContent>
                                         </CustomButton>
                                     }
@@ -72,8 +72,8 @@
                             else
                             {
                                 <div class="font-medium text-slate-900">@_model.Task.TaskList.Project.Name</div>
-                                <div class="mt-1 text-slate-500">Attached task: @_model.Task.FormattedId</div>
-                                <p class="mt-2 text-xs text-slate-500">This entry is attached to a task, so the project follows that task automatically.</p>
+                                <div class="mt-1 text-slate-500">@string.Format(DashboardLocalizer["EditTimeEntryModal_AttachedTask"], _model.Task.FormattedId)</div>
+                                <p class="mt-2 text-xs text-slate-500">@DashboardLocalizer["EditTimeEntryModal_AttachedTaskDescription"]</p>
                             }
                         </LumexCardBody>
                     </LumexCard>
@@ -88,11 +88,11 @@
                                         Value="@_model.StartTime.Date"
                                         ValueChanged="OnDateChanged"
                                         Disabled="_isActiveTimeEntry"
-                                        Label="Date"/>
+                                        Label="@DashboardLocalizer["Date"]"/>
                                 </div>
                                 <div>
                                     <TimeEditField
-                                        Label="Start"
+                                        Label="@DashboardLocalizer["Start"]"
                                         Value="@_model.StartTime"
                                         ValueChanged="@OnChangeStartTime"
                                         Disabled="_isActiveTimeEntry"
@@ -103,7 +103,7 @@
                                 {
                                     <div>
                                         <TimeEditField
-                                            Label="End"
+                                            Label="@DashboardLocalizer["End"]"
                                             Value="@_model.EndTime"
                                             ValueChanged="@OnChangeEndTime"
                                             FullWidth="true"
@@ -112,7 +112,7 @@
                                 }
                             </div>
                             <p class="mt-2 text-sm text-slate-700">
-                                Duration: 
+                                @DashboardLocalizer["Duration"]:
                                 <span class="font-semibold text-slate-900">
                                     @_timeParsingService.TimeSpanToTimeString(_displayDuration, true)
                                 </span>
@@ -121,10 +121,10 @@
                     </LumexCard>
 
                 <LumexTabs>
-                    <LumexTab Title="Description">
+                    <LumexTab Title="@DashboardLocalizer["Description"]">
                         <LumexCard>
                             <LumexCardBody>
-                                <label class="mb-2 block text-sm font-medium text-slate-700">Description</label>
+                                <label class="mb-2 block text-sm font-medium text-slate-700">@DashboardLocalizer["Description"]</label>
                                 <InputTextArea
                                     Value="@_model.Description"
                                     ValueChanged="@OnDescriptionChanged"
@@ -138,7 +138,7 @@
                             </LumexCardBody>
                         </LumexCard>
                     </LumexTab>
-                    <LumexTab Title="Pricing">
+                    <LumexTab Title="@DashboardLocalizer["EditTimeEntryModal_Pricing"]">
                         <LumexCard>
                             <LumexCardBody>
                                 <div class="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
@@ -146,11 +146,11 @@
                                         <LumexSwitch
                                             Value="@_model.IsBillable"
                                             ValueChanged="OnChangeBillable">
-                                            Billable
+                                            @DashboardLocalizer["Billable"]
                                         </LumexSwitch>
                                     </label>
                                     <div>
-                                        <label class="mb-2 block text-sm font-medium text-slate-700">Hourly Rate</label>
+                                        <label class="mb-2 block text-sm font-medium text-slate-700">@DashboardLocalizer["HourlyRate"]</label>
                                         <InputNumericNullableField 
                                             TItem="decimal"
                                             Size="Size.Small"

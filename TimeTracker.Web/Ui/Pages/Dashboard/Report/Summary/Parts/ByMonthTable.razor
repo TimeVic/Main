@@ -10,7 +10,7 @@
 
     private string GetName(int month, int year)
     {
-        return new DateTime(year, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
+        return new DateTime(year, month, 1).ToString("MMM", CultureInfo.CurrentUICulture);
     }
 
     private static decimal GetEffectiveHourlyRate(decimal amount, TimeSpan duration)
@@ -25,27 +25,27 @@
 }
 
 <LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
-    <PropertyColumn Title="Month" Property="@(p => p.Month)">
+    <PropertyColumn Title="@DashboardLocalizer["Month"].Value" Property="@(p => p.Month)">
         <Content>
             @GetName(context.Month, context.Year)
         </Content>
     </PropertyColumn>
-    <PropertyColumn Title="Duration" Property="@(p => p.Duration)">
+    <PropertyColumn Title="@DashboardLocalizer["Duration"].Value" Property="@(p => p.Duration)">
         <Content>
             @context.Duration.ToReadableShortString()
         </Content>
     </PropertyColumn>
-    <PropertyColumn Title="Earned" Property="@(p => p.Amount)">
+    <PropertyColumn Title="@DashboardLocalizer["Earned"].Value" Property="@(p => p.Amount)">
         <Content>
             <AmountDisplay Amount="@context.Amount"/>
         </Content>
     </PropertyColumn>
-    <PropertyColumn Title="Outstanding" Property="@(p => p.Amount)">
+    <PropertyColumn Title="@DashboardLocalizer["Outstanding"].Value" Property="@(p => p.Amount)">
         <Content>
             <span class="text-slate-400">-</span>
         </Content>
     </PropertyColumn>
-    <PropertyColumn Title="Effective hourly rate" Property="@(p => p.Amount)">
+    <PropertyColumn Title="@DashboardLocalizer["EffectiveHourlyRate"].Value" Property="@(p => p.Amount)">
         <Content>
             <AmountDisplay Amount="@GetEffectiveHourlyRate(context.Amount, context.Duration)"/>/h
         </Content>

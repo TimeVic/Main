@@ -9,19 +9,19 @@
         </div>
         <div class="grid gap-3 sm:grid-cols-3 lg:min-w-[560px]">
             <div class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
-                <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Earned</p>
+                <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["Earned"]</p>
                 <p class="mt-1 text-xl font-semibold text-slate-900">
                     <AmountDisplay Amount="@Earned"/>
                 </p>
             </div>
             <div class="rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2">
-                <p class="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">Received</p>
+                <p class="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">@DashboardLocalizer["Received"]</p>
                 <p class="mt-1 text-xl font-semibold text-emerald-700">
                     <AmountDisplay Amount="@Paid"/>
                 </p>
             </div>
             <div class="rounded-lg border px-3 py-2 @(Outstanding > 0 ? "border-red-200 bg-red-50" : "border-slate-200 bg-slate-50")">
-                <p class="text-[11px] font-semibold uppercase tracking-wide @(Outstanding > 0 ? "text-red-600" : "text-slate-500")">Outstanding</p>
+                <p class="text-[11px] font-semibold uppercase tracking-wide @(Outstanding > 0 ? "text-red-600" : "text-slate-500")">@DashboardLocalizer["Outstanding"]</p>
                 <p class="mt-1 text-xl font-semibold @(Outstanding > 0 ? "text-red-700" : "text-slate-900")">
                     <AmountDisplay Amount="@Outstanding"/>
                 </p>
@@ -46,5 +46,7 @@
     [Parameter]
     public int ProjectCount { get; set; }
 
-    private string ProjectCountLabel => ProjectCount == 1 ? "1 project" : $"{ProjectCount} projects";
+    private string ProjectCountLabel => ProjectCount == 1
+        ? DashboardLocalizer["OneProject"].Value
+        : string.Format(DashboardLocalizer["ProjectCount"].Value, ProjectCount);
 }

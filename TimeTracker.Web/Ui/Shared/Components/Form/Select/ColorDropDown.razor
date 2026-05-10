@@ -22,7 +22,7 @@
                         Size="Size">
                         @if (SelectedColor is null)
                         {
-                            @Placeholder
+                            @LocalizedPlaceholder
                         }
                         else
                         {
@@ -44,7 +44,7 @@
                         <LumexDropdownItem OnClick="@OnClear" Class="text-slate-400">
                             <span class="flex items-center gap-2">
                                 <i class="fa-solid fa-xmark text-xs"></i>
-                                None
+                                @DashboardLocalizer["None"]
                             </span>
                         </LumexDropdownItem>
                     }
@@ -69,7 +69,7 @@
         <LumexSelect
             TValue="string"
             Label="@Label"
-            Placeholder="@Placeholder"
+            Placeholder="@LocalizedPlaceholder"
             LabelPlacement="LabelPlacement.Outside"
             Variant="@SelectVariant"
             Size="Size"
@@ -84,7 +84,7 @@
                     <LumexSelectItem Value="@ClearValue" TextValue="">
                         <div class="flex items-center gap-2 text-slate-400">
                             <i class="fa-solid fa-xmark text-xs"></i>
-                            <span class="text-small">None</span>
+                            <span class="text-small">@DashboardLocalizer["None"]</span>
                         </div>
                     </LumexSelectItem>
                 }
@@ -130,7 +130,7 @@
     public DropDownType Type { get; set; } = DropDownType.DropDown;
 
     [Parameter]
-    public string Placeholder { get; set; } = "Select color";
+    public string Placeholder { get; set; } = string.Empty;
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -204,6 +204,9 @@
 
     private string FirstError =>
         EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
+
+    private string LocalizedPlaceholder =>
+        string.IsNullOrWhiteSpace(Placeholder) ? DashboardLocalizer["SelectColor"].Value : Placeholder;
 
     private void OnColorSelected(string color)
     {

@@ -35,7 +35,7 @@
                     </span>
                 </LumexPopoverTrigger>
                 <LumexPopoverContent>
-                    Synchronized with an external service (Jira / Redmine).
+                    @DashboardLocalizer["SynchronizedExternalService"]
                 </LumexPopoverContent>
             </LumexPopover>
         }
@@ -50,28 +50,28 @@
                 <LumexPopoverContent>
                     <div class="min-w-[200px] space-y-2 p-3">
                         <div>
-                            <p class="text-sm font-semibold text-slate-900">Billable</p>
-                            <p class="text-xs text-slate-500">Calculated value for this time entry.</p>
+                            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Billable"]</p>
+                            <p class="text-xs text-slate-500">@DashboardLocalizer["CalculatedTimeEntryValue"]</p>
                         </div>
                         @if (Entry.HourlyRate.HasValue)
                         {
                             <div>
-                                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-400">Amount</p>
+                                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-400">@DashboardLocalizer["Amount"]</p>
                                 <p class="text-base font-semibold text-slate-900">@GetBillableAmountLabel()</p>
                             </div>
                             <div class="flex justify-between text-xs text-slate-500">
-                                <span>Rate</span>
+                                <span>@DashboardLocalizer["Rate"]</span>
                                 <span class="font-medium text-slate-700">@GetHourlyRateLabel()/h</span>
                             </div>
                         }
                         else
                         {
                             <div class="rounded border border-amber-200 bg-amber-50 px-2 py-1.5 text-xs text-amber-900">
-                                Hourly rate is not set.
+                                @DashboardLocalizer["HourlyRateNotSet"]
                             </div>
                         }
                         <div class="flex justify-between text-xs text-slate-500">
-                            <span>Tracked</span>
+                            <span>@DashboardLocalizer["Tracked"]</span>
                             <span class="font-medium text-slate-700">@_timeParsingService.TimeSpanToTimeString(Entry.Duration, true)</span>
                         </div>
                     </div>
@@ -126,16 +126,16 @@
             </LumexDropdownTrigger>
             <LumexDropdownMenu>
                 <LumexDropdownItem OnClick="@(() => OnEdit.InvokeAsync(Entry))">
-                    <span class="flex items-center gap-2"><i class="fa-regular fa-pen-to-square w-4"></i> Edit</span>
+                    <span class="flex items-center gap-2"><i class="fa-regular fa-pen-to-square w-4"></i> @DashboardLocalizer["Edit"]</span>
                 </LumexDropdownItem>
                 <LumexDropdownItem OnClick="@(() => OnClone.InvokeAsync(Entry))">
-                    <span class="flex items-center gap-2"><i class="fa-regular fa-clone w-4"></i> Duplicate</span>
+                    <span class="flex items-center gap-2"><i class="fa-regular fa-clone w-4"></i> @DashboardLocalizer["Duplicate"]</span>
                 </LumexDropdownItem>
                 <LumexDropdownItem
                     Color="@ThemeColor.Danger"
                     Class="text-danger"
                     OnClick="@(() => OnDelete.InvokeAsync(Entry))">
-                    <span class="flex items-center gap-2"><i class="fa-regular fa-trash-can w-4"></i> Delete</span>
+                    <span class="flex items-center gap-2"><i class="fa-regular fa-trash-can w-4"></i> @DashboardLocalizer["Delete"]</span>
                 </LumexDropdownItem>
             </LumexDropdownMenu>
         </LumexDropdown>

@@ -16,8 +16,8 @@
                     <i class="fa-solid fa-plus"></i>
                 </div>
                 <div>
-                    <h2 class="mt-2 text-xl font-semibold text-slate-900">Add client</h2>
-                    <p class="mt-1 text-sm text-slate-600">Enter the client name.</p>
+                    <h2 class="mt-2 text-xl font-semibold text-slate-900">@DashboardLocalizer["AddClient"]</h2>
+                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["AddClientModal_Description"]</p>
                 </div>
             </div>
         </LumexModalHeader>
@@ -29,13 +29,13 @@
                 OnSubmit="@SubmitForm"
                 novalidate>
                 <DataAnnotationsValidator/>
-                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">Submit</button>
+                <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Submit"]</button>
 
                 <div class="mt-1">
                     <InputTextField
                         FullWidth="true"
-                        Label="Client"
-                        Placeholder="Client name"
+                        Label="@DashboardLocalizer["Client"]"
+                        Placeholder="@DashboardLocalizer["ClientName"]"
                         Variant="InputVariant.Outlined"
                         IsShowEmojiButton="true"
                         @bind-Value="model.Name"/>
@@ -52,7 +52,7 @@
                 IsLoading="_state.Value.IsSaving"
                 Color="@ThemeColor.Primary"
                 Radius="@Radius.Full">
-                Add
+                @DashboardLocalizer["Add"]
             </CustomButton>
         </LumexModalFooter>
     </LumexModalContent>

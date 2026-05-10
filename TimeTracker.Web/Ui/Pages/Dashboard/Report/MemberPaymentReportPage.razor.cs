@@ -69,10 +69,10 @@ public partial class MemberPaymentReportPage
         return 2;
     }
 
-    private static string GetClientDisplayName(IGrouping<Guid?, MemberPaymentsReportItemDto> group)
+    private string GetClientDisplayName(IGrouping<Guid?, MemberPaymentsReportItemDto> group)
     {
         var clientName = group.FirstOrDefault()?.ClientName;
-        return string.IsNullOrWhiteSpace(clientName) ? "Other projects" : clientName;
+        return string.IsNullOrWhiteSpace(clientName) ? DashboardLocalizer["MemberPaymentReportPage_OtherProjects"].Value : clientName;
     }
 
     private void OnChangeDateEnd(DateTime? endDate)

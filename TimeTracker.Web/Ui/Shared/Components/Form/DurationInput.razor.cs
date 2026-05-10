@@ -79,7 +79,7 @@ public partial class DurationInput : InputBase<TimeSpan?>
             return true;
         }
 
-        validationErrorMessage = "Use formats like 1h 30m, 2d, 1w or 01:30";
+        validationErrorMessage = DashboardLocalizer["DurationInput_InvalidFormat"];
         return false;
     }
 }

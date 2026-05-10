@@ -8,9 +8,9 @@
 @if (IsVisible)
 {
     <div class="@Class">
-        @if (!string.IsNullOrWhiteSpace(Title))
+        @if (!string.IsNullOrWhiteSpace(LocalizedTitle))
         {
-            <label class="mb-3 block text-xs font-medium uppercase tracking-wide text-slate-500">@Title</label>
+            <label class="mb-3 block text-xs font-medium uppercase tracking-wide text-slate-500">@LocalizedTitle</label>
         }
         <div class="@ListClass">
             @foreach (var attachment in UploadingFiles)
@@ -68,7 +68,7 @@
                         <button
                             type="button"
                             class="absolute right-2 top-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/90 text-slate-500 shadow-sm transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-70"
-                            title="Delete attachment"
+                            title="@DashboardLocalizer["AttachmentsBlock_DeleteAttachment"]"
                             disabled="@IsAttachmentDeleting(attachment)"
                             @onclick="@(() => OnDeleteAttachment(attachment))"
                             @onclick:stopPropagation="true">

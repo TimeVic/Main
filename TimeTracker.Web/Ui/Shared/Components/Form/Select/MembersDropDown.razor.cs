@@ -43,7 +43,7 @@ public partial class MembersDropDown
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Placeholder = "Select user";
+        Placeholder = DashboardLocalizer["SelectUser"].Value;
 
         _state.StateChanged += (sender, args) =>
         {

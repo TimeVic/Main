@@ -37,7 +37,7 @@ public partial class MyTimeEntryCard
 
     private string GetProjectLabel()
     {
-        return string.IsNullOrWhiteSpace(Entry.Project?.Name) ? "No project" : Entry.Project.Name;
+        return string.IsNullOrWhiteSpace(Entry.Project?.Name) ? DashboardLocalizer["NoProject"].Value : Entry.Project.Name;
     }
 
     private string GetDescriptionOrTaskTitle()

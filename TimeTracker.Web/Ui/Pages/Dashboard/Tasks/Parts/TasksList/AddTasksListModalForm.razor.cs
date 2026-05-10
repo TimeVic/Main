@@ -57,7 +57,7 @@ public partial class AddTasksListModalForm
             if (taskList != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true, Project?.Id));
-                ToastService.ShowInfo("Task list has been added");
+                ToastService.ShowInfo(DashboardLocalizer["AddTasksListModalForm_TaskListAdded"].Value);
                 IsOpened = false;
                 model = new AddRequest();
                 await OnAdded.InvokeAsync(taskList);
@@ -67,7 +67,7 @@ public partial class AddTasksListModalForm
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            ToastService.ShowError("Task list adding error");
+            ToastService.ShowError(DashboardLocalizer["AddTasksListModalForm_TaskListAddingError"].Value);
         }
         finally
         {

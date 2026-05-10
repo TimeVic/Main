@@ -11,13 +11,13 @@
     <div class="mb-4">
         <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
             <div>
-                <h2 class="text-base font-semibold text-slate-700">Client Balances</h2>
-                <p class="mt-1 text-sm text-slate-500">Shows how much each client was billed, how much they paid, and their current balance.</p>
+                <h2 class="text-base font-semibold text-slate-700">@DashboardLocalizer["ClientBalancesTableBlock_Title"]</h2>
+                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["ClientBalancesTableBlock_Description"]</p>
             </div>
 
             <label class="inline-flex items-center gap-2 text-sm font-medium text-slate-600">
                 <input type="checkbox" class="h-4 w-4 rounded border-slate-300" @bind="_showSettledClients"/>
-                Show settled / zero-balance clients
+                @DashboardLocalizer["ShowSettledClients"]
             </label>
         </div>
     </div>
@@ -28,15 +28,15 @@
     @if (allItems.Count == 0)
     {
         <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6">
-            <p class="text-sm font-medium text-slate-700">No client balances yet</p>
-            <p class="mt-1 text-sm text-slate-500">Billable work and client payments will appear here after they are recorded.</p>
+            <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["NoClientBalancesYet"]</p>
+            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["ClientBalancesTableBlock_NoBalancesDescription"]</p>
         </div>
     }
     else if (items.Count == 0)
     {
         <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6">
-            <p class="text-sm font-medium text-slate-700">No open client balances</p>
-            <p class="mt-1 text-sm text-slate-500">All clients are settled. Turn on settled clients to review zero-balance rows.</p>
+            <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["NoOpenClientBalances"]</p>
+            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["ClientBalancesTableBlock_NoOpenBalancesDescription"]</p>
         </div>
     }
     else
@@ -45,12 +45,12 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     <tr>
-                        <th class="px-4 py-3 text-left">Client</th>
-                        <th class="px-4 py-3 text-right">Hours</th>
-                        <th class="px-4 py-3 text-right">Earned</th>
-                        <th class="px-4 py-3 text-right">Received</th>
-                        <th class="px-4 py-3 text-right">Balance</th>
-                        <th class="px-4 py-3 text-left">Status</th>
+                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Client"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Hours"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Earned"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Received"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Balance"]</th>
+                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Status"]</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -58,19 +58,19 @@
                     {
                         var status = GetClientStatus(item.Outstanding);
                         <tr class="hover:bg-slate-50/50">
-                            <td class="px-4 py-3 font-medium text-slate-800">@(item.Client?.Name ?? "No client")</td>
+                            <td class="px-4 py-3 font-medium text-slate-800">@(item.Client?.Name ?? DashboardLocalizer["NoClient"].Value)</td>
                             <td class="px-4 py-3 text-right text-slate-600">@item.Duration.ToReadableShortString()</td>
                             <td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.Earned"/></td>
                             <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@item.Received"/></td>
                             <td class="px-4 py-3 text-right font-semibold @GetBalanceTextClass(item.Outstanding)">
                                 @if (item.Outstanding == 0)
                                 {
-                                    <span>Settled</span>
+                                    <span>@DashboardLocalizer["Settled"]</span>
                                 }
                                 else
                                 {
                                     <AmountDisplay Amount="@Math.Abs(item.Outstanding)"/>
-                                    <span title="@(item.Outstanding > 0 ? DueTooltip : CreditTooltip)">@(item.Outstanding > 0 ? "due" : "credit")</span>
+                                    <span title="@(item.Outstanding > 0 ? DueTooltip : CreditTooltip)">@(item.Outstanding > 0 ? DashboardLocalizer["Due"].Value : DashboardLocalizer["Credit"].Value)</span>
                                 }
                             </td>
                             <td class="px-4 py-3">
@@ -79,7 +79,7 @@
                         </tr>
                     }
                     <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
-                        <td class="px-4 py-3">Total</td>
+                        <td class="px-4 py-3">@DashboardLocalizer["Total"]</td>
                         <td class="px-4 py-3 text-right">@items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()</td>
                         <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.Earned)"/></td>
                         <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@items.Sum(i => i.Received)"/></td>
@@ -98,9 +98,9 @@
     [Parameter]
     public string? Class { get; set; }
 
-    private const string DueTooltip = "Client earned is greater than payments received. This amount is currently due.";
+    private string DueTooltip => DashboardLocalizer["ClientBalancesTableBlock_DueTooltip"].Value;
 
-    private const string CreditTooltip = "Payments received are greater than client earned. This client has a credit balance.";
+    private string CreditTooltip => DashboardLocalizer["ClientBalancesTableBlock_CreditTooltip"].Value;
 
     private bool _showSettledClients;
 
@@ -111,10 +111,10 @@
         return "text-emerald-700";
     }
 
-    private static (string Text, string Class, string Tooltip) GetClientStatus(decimal balance)
+    private (string Text, string Class, string Tooltip) GetClientStatus(decimal balance)
     {
-        if (balance > 0) return ("Due", "bg-red-100 text-red-700", DueTooltip);
-        if (balance < 0) return ("Credit", "bg-blue-100 text-blue-700", CreditTooltip);
-        return ("Settled", "bg-emerald-100 text-emerald-700", "Client earned equals payments received.");
+        if (balance > 0) return (DashboardLocalizer["Due"].Value, "bg-red-100 text-red-700", DueTooltip);
+        if (balance < 0) return (DashboardLocalizer["Credit"].Value, "bg-blue-100 text-blue-700", CreditTooltip);
+        return (DashboardLocalizer["Settled"].Value, "bg-emerald-100 text-emerald-700", DashboardLocalizer["ClientBalancesTableBlock_SettledTooltip"].Value);
     }
 }

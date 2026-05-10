@@ -9,7 +9,7 @@
             <div>
                 <ProjectsDropDown
                     Type="DropDownType.Select"
-                    Label="Projects"
+                    Label="@DashboardLocalizer["Projects"].Value"
                     Clearable="true"
                     FullWidth="true"
                     IsGroupByClient="true"
@@ -19,7 +19,7 @@
             <div>
                 <MembersDropDown
                     Type="DropDownType.Select"
-                    Label="Member"
+                    Label="@DashboardLocalizer["Member"].Value"
                     FullWidth="true"
                     Clearable="true"
                     UserId="@_state.Value.Filter.UserId"
@@ -28,7 +28,7 @@
             <div>
                 <BooleanDropDown
                     SelectType="DropDownType.Select"
-                    Label="Billable"
+                    Label="@DashboardLocalizer["Billable"].Value"
                     FullWidth="true"
                     Clearable="true"
                     Value="@_state.Value.Filter.IsBillable"
@@ -37,7 +37,7 @@
             <div>
                 <LumexDatebox
                     TValue="DateTime?"
-                    Label="Date from"
+                    Label="@DashboardLocalizer["DateFrom"].Value"
                     Value="@_state.Value.Filter.DateFrom"
                     ValueChanged="OnChangeDateFrom"
                     Clearable="true"
@@ -48,7 +48,7 @@
             <div>
                 <LumexDatebox
                     TValue="DateTime?"
-                    Label="Date to"
+                    Label="@DashboardLocalizer["DateTo"].Value"
                     Value="@_state.Value.Filter.DateTo"
                     ValueChanged="OnChangeDateTo"
                     Clearable="true"
@@ -60,8 +60,8 @@
         <div class="mt-4">
             <LumexTextbox
                 TValue="string"
-                Label="Search"
-                Placeholder="Search by description..."
+                Label="@DashboardLocalizer["Search"].Value"
+                Placeholder="@DashboardLocalizer["SearchByDescription"].Value"
                 Value="@_state.Value.Filter.Search"
                 ValueChanged="OnChangeSearch"
                 FullWidth="true"

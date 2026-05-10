@@ -60,10 +60,12 @@ public partial class UpdateTaskForm: IDisposable
 
     private string _attachmentAcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
     private ICollection<StoredFileDto> TaskAttachments => _task?.Attachments ?? new List<StoredFileDto>();
-    private string EstimateInputLabel => _task.ExternalSourceType == ExternalSourceType.Jira ? "Original estimate" : "Planned time";
+    private string EstimateInputLabel => _task.ExternalSourceType == ExternalSourceType.Jira
+        ? DashboardLocalizer["OriginalEstimate"].Value
+        : DashboardLocalizer["UpdateTaskForm_PlannedTime"].Value;
     private string EstimateInputHint => _task.ExternalSourceType == ExternalSourceType.Jira
-        ? "Task was imported from Jira. 1d = 8h, 1w = 5d."
-        : "Supports Jira-like input. 1d = 8h, 1w = 5d.";
+        ? DashboardLocalizer["UpdateTaskForm_JiraEstimateHint"].Value
+        : DashboardLocalizer["UpdateTaskForm_ManualEstimateHint"].Value;
     
     protected override async Task OnInitializedAsync()
     {
@@ -190,7 +192,7 @@ public partial class UpdateTaskForm: IDisposable
                 );
                 if (uploadedFile == null)
                 {
-                    ToastService.ShowError("Attachment upload error");
+                    ToastService.ShowError(DashboardLocalizer["UpdateTaskForm_AttachmentUploadError"].Value);
                     continue;
                 }
 

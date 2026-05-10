@@ -20,11 +20,11 @@
                     Class="@(FullWidth ? "w-100" : "")">
                     @if (Value.HasValue)
                     {
-                        @(Value.Value ? "Yes" : "No")
+                        @(Value.Value ? DashboardLocalizer["Yes"] : DashboardLocalizer["No"])
                     }
                     else
                     {
-                        @Placeholder
+                    @(string.IsNullOrWhiteSpace(Placeholder) ? DashboardLocalizer["Select"] : Placeholder)
                     }
                 </LumexButton>
             </LumexDropdownTrigger>
@@ -39,13 +39,13 @@
                         <ChildContent>
                             <span class="flex items-center gap-2">
                                 <i class="fa-solid fa-xmark text-xs"></i>
-                                None
+                                @DashboardLocalizer["None"]
                             </span>
                         </ChildContent>
                     </LumexDropdownItem>
                 }
-                <LumexDropdownItem OnClick="@(() => OnItemSelected(true))">Yes</LumexDropdownItem>
-                <LumexDropdownItem OnClick="@(() => OnItemSelected(false))">No</LumexDropdownItem>
+                <LumexDropdownItem OnClick="@(() => OnItemSelected(true))">@DashboardLocalizer["Yes"]</LumexDropdownItem>
+                <LumexDropdownItem OnClick="@(() => OnItemSelected(false))">@DashboardLocalizer["No"]</LumexDropdownItem>
             </LumexDropdownMenu>
         </LumexDropdown>
     }
@@ -54,7 +54,7 @@
         <LumexSelect
             TValue="bool?"
             Label="@Label"
-            Placeholder="@Placeholder"
+            Placeholder="@(string.IsNullOrWhiteSpace(Placeholder) ? DashboardLocalizer["Select"].Value : Placeholder)"
             LabelPlacement="LabelPlacement.Outside"
             Variant="InputVariant.Outlined"
             Color="ThemeColor.Default"
@@ -63,13 +63,13 @@
             ValueChanged="OnSelectValueChanged"
             Value="Value">
             <ChildContent>
-                <LumexSelectItem Value="@((bool?)true)" TextValue="Yes">Yes</LumexSelectItem>
-                <LumexSelectItem Value="@((bool?)false)" TextValue="No">No</LumexSelectItem>
+                <LumexSelectItem Value="@((bool?)true)" TextValue="@DashboardLocalizer["Yes"].Value">@DashboardLocalizer["Yes"]</LumexSelectItem>
+                <LumexSelectItem Value="@((bool?)false)" TextValue="@DashboardLocalizer["No"].Value">@DashboardLocalizer["No"]</LumexSelectItem>
             </ChildContent>
             <ValueContent>
                 @if (context.HasValue)
                 {
-                    <span>@(context.Value ? "Yes" : "No")</span>
+                    <span>@(context.Value ? DashboardLocalizer["Yes"] : DashboardLocalizer["No"])</span>
                 }
             </ValueContent>
         </LumexSelect>

@@ -55,7 +55,7 @@ public partial class AddWorkspaceModal
             if (workspace != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
-                ToastService.ShowInfo("Task list has been added");
+                ToastService.ShowInfo(DashboardLocalizer["AddWorkspaceModal_WorkspaceCreated"].Value);
                 IsOpened = false;
                 model = new AddRequest();
                 await OnAdded.InvokeAsync(workspace);
@@ -66,7 +66,7 @@ public partial class AddWorkspaceModal
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            ToastService.ShowError("Task list adding error");
+            ToastService.ShowError(DashboardLocalizer["AddWorkspaceModal_WorkspaceAddingError"].Value);
         }
         finally
         {

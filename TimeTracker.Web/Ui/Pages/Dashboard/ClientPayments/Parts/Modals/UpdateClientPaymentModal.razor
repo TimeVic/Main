@@ -14,8 +14,8 @@
                 <i class="fa-regular fa-pen-to-square"></i>
             </div>
             <div>
-                <h2 class="mt-2 text-xl font-semibold text-slate-900">Edit client payment</h2>
-                <p class="mt-1 text-sm text-slate-600">Update the amount, date, client, project, or note.</p>
+                <h2 class="mt-2 text-xl font-semibold text-slate-900">@DashboardLocalizer["EditClientPayment"]</h2>
+                <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["EditClientPaymentHelper"]</p>
             </div>
         </LumexModalHeader>
         <LumexModalBody>
@@ -36,7 +36,7 @@
                     </div>
                     <div>
                         <ProjectsDropDown
-                            Label="Project"
+                            Label="@DashboardLocalizer["Project"].Value"
                             ClientId="model.ClientId"
                             Value="model.ProjectId"
                             ValueExpression="() => model.ProjectId"
@@ -48,7 +48,7 @@
                             Size="Size.Small"
                             Required="true"
                             @bind-Value="@model.PaymentTime"
-                            Label="Payment Date"/>
+                            Label="@DashboardLocalizer["PaymentDate"].Value"/>
                         <CustomValidationMessage For="@(() => model.PaymentTime)"/>
                     </div>
                     <div>
@@ -57,15 +57,15 @@
                             Size="Size.Small"
                             Required="true"
                             @bind-Value="@model.Amount"
-                            Label="Amount"/>
+                            Label="@DashboardLocalizer["Amount"].Value"/>
                         <CustomValidationMessage For="@(() => model.Amount)"/>
                     </div>
                     <div class="md:col-span-2">
-                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">Note / Reference</label>
+                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["PaymentNoteReference"]</label>
                         <InputTextArea
                             @bind-Value="model.Description"
                             class="min-h-[120px] w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"
-                            placeholder="Optional payment note or reference"/>
+                            placeholder="@DashboardLocalizer["OptionalPaymentNoteReference"]"/>
                     </div>
                 </div>
 
@@ -79,7 +79,7 @@
                 IsLoading="_state.Value.IsListLoading"
                 Color="@ThemeColor.Primary"
                 Radius="@Radius.Full">
-                Update
+                @DashboardLocalizer["Update"]
             </CustomButton>
         </LumexModalFooter>
     </LumexModalContent>

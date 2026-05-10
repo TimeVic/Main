@@ -9,27 +9,27 @@
 <section class="grid gap-4 md:grid-cols-3 @Class">
     <LumexCard>
         <LumexCardBody>
-            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Total Earned</p>
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["TotalEarned"]</p>
             <p class="mt-2 text-3xl font-semibold text-slate-900">
                 <AmountDisplay Amount="@_totalEarned"/>
             </p>
-            <p class="mt-1 text-sm text-slate-500">@EarnedCaption</p>
+            <p class="mt-1 text-sm text-slate-500">@_earnedCaption</p>
         </LumexCardBody>
     </LumexCard>
 
     <LumexCard>
         <LumexCardBody>
-            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Total Received</p>
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["TotalReceived"]</p>
             <p class="mt-2 text-3xl font-semibold text-emerald-700">
                 <AmountDisplay Amount="@_totalPaid"/>
             </p>
-            <p class="mt-1 text-sm text-slate-500">@PaidCaption</p>
+            <p class="mt-1 text-sm text-slate-500">@_paidCaption</p>
         </LumexCardBody>
     </LumexCard>
 
     <LumexCard Class="@(_outstandingBalance > 0 ? "border-red-200 bg-red-50/40" : "border-emerald-200 bg-emerald-50/30")">
         <LumexCardBody>
-            <p class="text-xs font-semibold uppercase tracking-wide @(_outstandingBalance > 0 ? "text-red-600" : "text-emerald-700")">Outstanding Balance</p>
+            <p class="text-xs font-semibold uppercase tracking-wide @(_outstandingBalance > 0 ? "text-red-600" : "text-emerald-700")">@DashboardLocalizer["OutstandingBalance"]</p>
             <p class="mt-2 text-3xl font-semibold @(_outstandingBalance > 0 ? "text-red-700" : "text-emerald-700")">
                 <AmountDisplay Amount="@_outstandingBalance"/>
             </p>
@@ -40,16 +40,16 @@
 
 @code {
     [Parameter]
-    public string EarnedCaption { get; set; } = "Billable value of tracked work";
+    public string EarnedCaption { get; set; } = string.Empty;
 
     [Parameter]
-    public string PaidCaption { get; set; } = "Payments recorded from clients";
+    public string PaidCaption { get; set; } = string.Empty;
 
     [Parameter]
-    public string OutstandingCaptionWhenPositive { get; set; } = "Needs collection";
+    public string OutstandingCaptionWhenPositive { get; set; } = string.Empty;
 
     [Parameter]
-    public string OutstandingCaptionWhenZero { get; set; } = "No unpaid balance";
+    public string OutstandingCaptionWhenZero { get; set; } = string.Empty;
 
     [Parameter]
     public string Class { get; set; } = string.Empty;
@@ -81,6 +81,16 @@
 
     private string _outstandingCaption
     {
-        get => _outstandingBalance > 0 ? OutstandingCaptionWhenPositive : OutstandingCaptionWhenZero;
+        get => _outstandingBalance > 0
+            ? (string.IsNullOrWhiteSpace(OutstandingCaptionWhenPositive) ? DashboardLocalizer["NeedsCollection"].Value : OutstandingCaptionWhenPositive)
+            : (string.IsNullOrWhiteSpace(OutstandingCaptionWhenZero) ? DashboardLocalizer["NoUnpaidBalance"].Value : OutstandingCaptionWhenZero);
     }
+
+    private string _earnedCaption => string.IsNullOrWhiteSpace(EarnedCaption)
+        ? DashboardLocalizer["BillableValueTrackedWork"].Value
+        : EarnedCaption;
+
+    private string _paidCaption => string.IsNullOrWhiteSpace(PaidCaption)
+        ? DashboardLocalizer["PaymentsRecordedFromClients"].Value
+        : PaidCaption;
 }

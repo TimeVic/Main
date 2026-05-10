@@ -14,8 +14,14 @@ public class LocalizationUrlService : ILocalizationUrlService
         => IsUkrainianPath(path) ? ILocalizationUrlService.UkrainianCultureName : ILocalizationUrlService.EnglishCultureName;
 
     public void ApplyCultureFromPath(string path)
+        => ApplyCulture(GetCurrentCultureName(path));
+
+    public void ApplyCulture(string cultureName)
     {
-        var culture = new CultureInfo(GetCurrentCultureName(path));
+        var normalizedCultureName = cultureName == ILocalizationUrlService.UkrainianCultureName
+            ? ILocalizationUrlService.UkrainianCultureName
+            : ILocalizationUrlService.EnglishCultureName;
+        var culture = new CultureInfo(normalizedCultureName);
         CultureInfo.DefaultThreadCurrentCulture = culture;
         CultureInfo.DefaultThreadCurrentUICulture = culture;
     }

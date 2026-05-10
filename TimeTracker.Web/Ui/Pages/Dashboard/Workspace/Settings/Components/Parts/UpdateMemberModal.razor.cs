@@ -78,9 +78,9 @@ public partial class UpdateMemberModal
         return ProjectState.Value.List.FirstOrDefault(p => p.Id == projectId);
     }
 
-    private static string GetClientGroupName(ProjectDto? project)
+    private string GetClientGroupName(ProjectDto? project)
     {
-        return project?.Client?.Name ?? "No client";
+        return project?.Client?.Name ?? DashboardLocalizer["NoClient"].Value;
     }
 
     private async Task Submit()
@@ -105,13 +105,13 @@ public partial class UpdateMemberModal
             if (result != null)
             {
                 Dispatcher.Dispatch(new LoadListAction(true));
-                ToastService.ShowInfo("Member access has been updated");
+                ToastService.ShowInfo(DashboardLocalizer["UpdateMemberModal_MemberAccessUpdated"].Value);
                 await OnCloseModal();
             }
         }
         catch (Exception)
         {
-            ToastService.ShowError("Member update error");
+            ToastService.ShowError(DashboardLocalizer["UpdateMemberModal_MemberUpdateError"].Value);
         }
         finally
         {
@@ -126,7 +126,6 @@ public partial class UpdateMemberModal
         IsOpened = false;
     }
 }
-
 
 
 

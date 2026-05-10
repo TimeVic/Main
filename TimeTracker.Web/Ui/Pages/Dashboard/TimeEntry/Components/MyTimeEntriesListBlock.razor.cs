@@ -9,8 +9,6 @@ namespace TimeTracker.Web.Ui.Pages.Dashboard.TimeEntry.Components;
 
 public partial class MyTimeEntriesListBlock
 {
-    private const string NoClientLabel = "No client";
-
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
     
@@ -19,6 +17,7 @@ public partial class MyTimeEntriesListBlock
     
     private IEnumerable<IGrouping<DateTime, TimeEntryDto>> _groupedList => _state.Value.ListToShow.GroupBy(item => item.StartTimeOffset.Date);
     private bool _isLoading => _state.Value.IsListLoading;
+    private string NoClientLabel => DashboardLocalizer["NoClient"].Value;
     private TimeEntryDto? _timeEntryToEdit { get; set; }
     private TimeEntryDto? _timeEntryToDelete { get; set; }
     private TaskDto? _taskToEdit { get; set; }

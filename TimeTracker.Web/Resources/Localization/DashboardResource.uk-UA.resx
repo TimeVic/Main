@@ -1,0 +1,588 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Workspace" xml:space="preserve"><value>Робочий простір</value></data>
+  <data name="Workspaces" xml:space="preserve"><value>Робочі простори</value></data>
+  <data name="WorkspacePages" xml:space="preserve"><value>Сторінки робочого простору</value></data>
+  <data name="WorkspacePagesDescription" xml:space="preserve"><value>Перемикайте розділи, не втрачаючи активний таймер з поля зору.</value></data>
+  <data name="TimeWorkspace" xml:space="preserve"><value>Облік часу</value></data>
+  <data name="WorkspaceHeaderDescription" xml:space="preserve"><value>Активний таймер завжди поруч, а робочий простір залишається під рукою.</value></data>
+  <data name="CurrentWorkspace" xml:space="preserve"><value>Поточний робочий простір</value></data>
+  <data name="NewWorkspace" xml:space="preserve"><value>Новий робочий простір</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>Дашборд</value></data>
+  <data name="Summary" xml:space="preserve"><value>Зведення</value></data>
+  <data name="Reports" xml:space="preserve"><value>Звіти</value></data>
+  <data name="TimeEntries" xml:space="preserve"><value>Записи часу</value></data>
+  <data name="TimeEntriesReport" xml:space="preserve"><value>Звіт по записах часу</value></data>
+  <data name="Projects" xml:space="preserve"><value>Проєкти</value></data>
+  <data name="Tasks" xml:space="preserve"><value>Задачі</value></data>
+  <data name="Clients" xml:space="preserve"><value>Клієнти</value></data>
+  <data name="Payments" xml:space="preserve"><value>Оплати</value></data>
+  <data name="MemberPayments" xml:space="preserve"><value>Оплати учасникам</value></data>
+  <data name="ClientPayments" xml:space="preserve"><value>Оплати клієнтів</value></data>
+  <data name="PaymentsReport" xml:space="preserve"><value>Звіт по оплатах</value></data>
+  <data name="Money" xml:space="preserve"><value>Гроші</value></data>
+  <data name="WorkspaceMoney" xml:space="preserve"><value>Гроші workspace</value></data>
+  <data name="Settings" xml:space="preserve"><value>Налаштування</value></data>
+  <data name="HelpSupport" xml:space="preserve"><value>Допомога та підтримка</value></data>
+  <data name="LogOut" xml:space="preserve"><value>Вийти</value></data>
+  <data name="Language" xml:space="preserve"><value>Мова</value></data>
+  <data name="English" xml:space="preserve"><value>English</value></data>
+  <data name="Ukrainian" xml:space="preserve"><value>Українська</value></data>
+  <data name="SignedInAs" xml:space="preserve"><value>Ви увійшли як</value></data>
+  <data name="CurrentLanguage" xml:space="preserve"><value>Поточна мова</value></data>
+  <data name="Save" xml:space="preserve"><value>Зберегти</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Скасувати</value></data>
+  <data name="Delete" xml:space="preserve"><value>Видалити</value></data>
+  <data name="Edit" xml:space="preserve"><value>Редагувати</value></data>
+  <data name="Create" xml:space="preserve"><value>Створити</value></data>
+  <data name="Add" xml:space="preserve"><value>Додати</value></data>
+  <data name="Update" xml:space="preserve"><value>Оновити</value></data>
+  <data name="Search" xml:space="preserve"><value>Пошук</value></data>
+  <data name="Filter" xml:space="preserve"><value>Фільтр</value></data>
+  <data name="Filters" xml:space="preserve"><value>Фільтри</value></data>
+  <data name="Apply" xml:space="preserve"><value>Застосувати</value></data>
+  <data name="Reset" xml:space="preserve"><value>Скинути</value></data>
+  <data name="Clear" xml:space="preserve"><value>Очистити</value></data>
+  <data name="Close" xml:space="preserve"><value>Закрити</value></data>
+  <data name="Back" xml:space="preserve"><value>Назад</value></data>
+  <data name="Loading" xml:space="preserve"><value>Завантаження</value></data>
+  <data name="NoData" xml:space="preserve"><value>Немає даних</value></data>
+  <data name="None" xml:space="preserve"><value>Немає</value></data>
+  <data name="SelectProject" xml:space="preserve"><value>Виберіть проєкт</value></data>
+  <data name="SelectClient" xml:space="preserve"><value>Виберіть клієнта</value></data>
+  <data name="SelectWorkspace" xml:space="preserve"><value>Виберіть робочий простір</value></data>
+  <data name="Total" xml:space="preserve"><value>Усього</value></data>
+  <data name="TotalDuration" xml:space="preserve"><value>Загальна тривалість</value></data>
+  <data name="TotalEarned" xml:space="preserve"><value>Усього зароблено</value></data>
+  <data name="TotalPaid" xml:space="preserve"><value>Усього оплачено</value></data>
+  <data name="TotalReceived" xml:space="preserve"><value>Усього отримано</value></data>
+  <data name="OutstandingBalance" xml:space="preserve"><value>Неоплачений залишок</value></data>
+  <data name="TrackedTime" xml:space="preserve"><value>Затреканий час</value></data>
+  <data name="BillableTime" xml:space="preserve"><value>Оплачуваний час</value></data>
+  <data name="NonBillableTime" xml:space="preserve"><value>Неоплачуваний час</value></data>
+  <data name="ThisMonth" xml:space="preserve"><value>Цього місяця</value></data>
+  <data name="ThisWeek" xml:space="preserve"><value>Цього тижня</value></data>
+  <data name="Today" xml:space="preserve"><value>Сьогодні</value></data>
+  <data name="Last7Days" xml:space="preserve"><value>Останні 7 днів</value></data>
+  <data name="Last30Days" xml:space="preserve"><value>Останні 30 днів</value></data>
+  <data name="CustomPeriod" xml:space="preserve"><value>Власний період</value></data>
+  <data name="Earned" xml:space="preserve"><value>Зароблено</value></data>
+  <data name="Paid" xml:space="preserve"><value>Оплачено</value></data>
+  <data name="Received" xml:space="preserve"><value>Отримано</value></data>
+  <data name="Outstanding" xml:space="preserve"><value>Не оплачено</value></data>
+  <data name="Balance" xml:space="preserve"><value>Залишок</value></data>
+  <data name="Amount" xml:space="preserve"><value>Сума</value></data>
+  <data name="Currency" xml:space="preserve"><value>Валюта</value></data>
+  <data name="HourlyRate" xml:space="preserve"><value>Погодинна ставка</value></data>
+  <data name="EffectiveHourlyRate" xml:space="preserve"><value>Ефективна погодинна ставка</value></data>
+  <data name="Start" xml:space="preserve"><value>Старт</value></data>
+  <data name="Stop" xml:space="preserve"><value>Стоп</value></data>
+  <data name="StartTimer" xml:space="preserve"><value>Запустити таймер</value></data>
+  <data name="StopTimer" xml:space="preserve"><value>Зупинити таймер</value></data>
+  <data name="Timer" xml:space="preserve"><value>Таймер</value></data>
+  <data name="AddTime" xml:space="preserve"><value>Додати час</value></data>
+  <data name="AddTimeEntry" xml:space="preserve"><value>Додати запис часу</value></data>
+  <data name="EditTimeEntry" xml:space="preserve"><value>Редагувати запис часу</value></data>
+  <data name="DeleteTimeEntry" xml:space="preserve"><value>Видалити запис часу</value></data>
+  <data name="StartTime" xml:space="preserve"><value>Час початку</value></data>
+  <data name="EndTime" xml:space="preserve"><value>Час завершення</value></data>
+  <data name="Duration" xml:space="preserve"><value>Тривалість</value></data>
+  <data name="Description" xml:space="preserve"><value>Опис</value></data>
+  <data name="Task" xml:space="preserve"><value>Задача</value></data>
+  <data name="Project" xml:space="preserve"><value>Проєкт</value></data>
+  <data name="Client" xml:space="preserve"><value>Клієнт</value></data>
+  <data name="NoProject" xml:space="preserve"><value>Проєкт не вибрано</value></data>
+  <data name="NoTaskSelected" xml:space="preserve"><value>Задачу не вибрано</value></data>
+  <data name="WhatAreYouWorkingOn" xml:space="preserve"><value>Над чим працюєте?</value></data>
+  <data name="AddProject" xml:space="preserve"><value>Додати проєкт</value></data>
+  <data name="CreateProject" xml:space="preserve"><value>Створити проєкт</value></data>
+  <data name="EditProject" xml:space="preserve"><value>Редагувати проєкт</value></data>
+  <data name="DeleteProject" xml:space="preserve"><value>Видалити проєкт</value></data>
+  <data name="ProjectName" xml:space="preserve"><value>Назва проєкту</value></data>
+  <data name="ProjectRate" xml:space="preserve"><value>Ставка проєкту</value></data>
+  <data name="DefaultHourlyRate" xml:space="preserve"><value>Погодинна ставка за замовчуванням</value></data>
+  <data name="ProjectClient" xml:space="preserve"><value>Клієнт проєкту</value></data>
+  <data name="BillableByDefault" xml:space="preserve"><value>Оплачуваний за замовчуванням</value></data>
+  <data name="AddClient" xml:space="preserve"><value>Додати клієнта</value></data>
+  <data name="AddFirstClient" xml:space="preserve"><value>Додати першого клієнта</value></data>
+  <data name="CreateClient" xml:space="preserve"><value>Створити клієнта</value></data>
+  <data name="EditClient" xml:space="preserve"><value>Редагувати клієнта</value></data>
+  <data name="DeleteClient" xml:space="preserve"><value>Видалити клієнта</value></data>
+  <data name="ClientName" xml:space="preserve"><value>Назва клієнта</value></data>
+  <data name="ClientEmail" xml:space="preserve"><value>Email клієнта</value></data>
+  <data name="ClientDetails" xml:space="preserve"><value>Дані клієнта</value></data>
+  <data name="ClientBalance" xml:space="preserve"><value>Баланс клієнта</value></data>
+  <data name="ClientPaymentsTitle" xml:space="preserve"><value>Оплати клієнта</value></data>
+  <data name="AddTask" xml:space="preserve"><value>Додати задачу</value></data>
+  <data name="CreateTask" xml:space="preserve"><value>Створити задачу</value></data>
+  <data name="EditTask" xml:space="preserve"><value>Редагувати задачу</value></data>
+  <data name="DeleteTask" xml:space="preserve"><value>Видалити задачу</value></data>
+  <data name="TaskName" xml:space="preserve"><value>Назва задачі</value></data>
+  <data name="TaskDescription" xml:space="preserve"><value>Опис задачі</value></data>
+  <data name="ExternalTaskId" xml:space="preserve"><value>Зовнішній ID задачі</value></data>
+  <data name="JiraIssue" xml:space="preserve"><value>Jira issue</value></data>
+  <data name="OriginalEstimate" xml:space="preserve"><value>Початкова оцінка</value></data>
+  <data name="Tracked" xml:space="preserve"><value>Затрекано</value></data>
+  <data name="Estimate" xml:space="preserve"><value>Оцінка</value></data>
+  <data name="OverEstimate" xml:space="preserve"><value>Понад оцінку</value></data>
+  <data name="WithinEstimate" xml:space="preserve"><value>У межах оцінки</value></data>
+  <data name="Status" xml:space="preserve"><value>Статус</value></data>
+  <data name="Priority" xml:space="preserve"><value>Пріоритет</value></data>
+  <data name="Assignee" xml:space="preserve"><value>Виконавець</value></data>
+  <data name="Actions" xml:space="preserve"><value>Дії</value></data>
+  <data name="Archive" xml:space="preserve"><value>Архівувати</value></data>
+  <data name="Restore" xml:space="preserve"><value>Відновити</value></data>
+  <data name="AddPayment" xml:space="preserve"><value>Додати оплату</value></data>
+  <data name="AddClientPayment" xml:space="preserve"><value>Додати оплату клієнта</value></data>
+  <data name="EditPayment" xml:space="preserve"><value>Редагувати оплату</value></data>
+  <data name="DeletePayment" xml:space="preserve"><value>Видалити оплату</value></data>
+  <data name="PaymentDate" xml:space="preserve"><value>Дата оплати</value></data>
+  <data name="PaymentAmount" xml:space="preserve"><value>Сума оплати</value></data>
+  <data name="PaymentMethod" xml:space="preserve"><value>Спосіб оплати</value></data>
+  <data name="PaymentNote" xml:space="preserve"><value>Примітка до оплати</value></data>
+  <data name="ClientPayment" xml:space="preserve"><value>Оплата клієнта</value></data>
+  <data name="ReceivedPayment" xml:space="preserve"><value>Отримана оплата</value></data>
+  <data name="PaidAmount" xml:space="preserve"><value>Оплачена сума</value></data>
+  <data name="UnpaidAmount" xml:space="preserve"><value>Неоплачена сума</value></data>
+  <data name="PaymentNoteReference" xml:space="preserve"><value>Примітка / референс</value></data>
+  <data name="OptionalPaymentNoteReference" xml:space="preserve"><value>Необовʼязкова примітка або референс оплати</value></data>
+  <data name="SummaryReport" xml:space="preserve"><value>Зведений звіт</value></data>
+  <data name="SummaryReportParameters" xml:space="preserve"><value>Параметри зведеного звіту</value></data>
+  <data name="TimeEntriesReportTitle" xml:space="preserve"><value>Звіт по записах часу</value></data>
+  <data name="PaymentsReportTitle" xml:space="preserve"><value>Звіт по оплатах</value></data>
+  <data name="ClientReport" xml:space="preserve"><value>Звіт по клієнту</value></data>
+  <data name="ProjectReport" xml:space="preserve"><value>Звіт по проєкту</value></data>
+  <data name="ReportPeriod" xml:space="preserve"><value>Період звіту</value></data>
+  <data name="Export" xml:space="preserve"><value>Експорт</value></data>
+  <data name="ExportCsv" xml:space="preserve"><value>Експорт CSV</value></data>
+  <data name="ExportPdf" xml:space="preserve"><value>Експорт PDF</value></data>
+  <data name="GroupBy" xml:space="preserve"><value>Групувати за</value></data>
+  <data name="Period" xml:space="preserve"><value>Період</value></data>
+  <data name="DateFrom" xml:space="preserve"><value>Дата з</value></data>
+  <data name="DateTo" xml:space="preserve"><value>Дата до</value></data>
+  <data name="Date" xml:space="preserve"><value>Дата</value></data>
+  <data name="Month" xml:space="preserve"><value>Місяць</value></data>
+  <data name="Week" xml:space="preserve"><value>Тиждень</value></data>
+  <data name="User" xml:space="preserve"><value>Користувач</value></data>
+  <data name="Table" xml:space="preserve"><value>Таблиця</value></data>
+  <data name="Chart" xml:space="preserve"><value>Графік</value></data>
+  <data name="GroupedSummary" xml:space="preserve"><value>Зведення з групуванням</value></data>
+  <data name="MoneyOverview" xml:space="preserve"><value>Огляд грошей</value></data>
+  <data name="SelectedPeriod" xml:space="preserve"><value>Вибраний період</value></data>
+  <data name="NoClientsYet" xml:space="preserve"><value>Клієнтів ще немає</value></data>
+  <data name="NoProjectsYet" xml:space="preserve"><value>Проєктів ще немає</value></data>
+  <data name="NoTimeEntriesYet" xml:space="preserve"><value>Записів часу ще немає</value></data>
+  <data name="NoPaymentsYet" xml:space="preserve"><value>Оплат ще немає</value></data>
+  <data name="NoClientPaymentsYet" xml:space="preserve"><value>Оплат клієнтів ще немає</value></data>
+  <data name="CreateFirstClient" xml:space="preserve"><value>Створіть першого клієнта</value></data>
+  <data name="CreateFirstProject" xml:space="preserve"><value>Створіть перший проєкт</value></data>
+  <data name="StartTrackingTime" xml:space="preserve"><value>Почніть облік часу</value></data>
+  <data name="AddFirstPayment" xml:space="preserve"><value>Додайте першу оплату</value></data>
+  <data name="EmptyDashboardMessage" xml:space="preserve"><value>Додайте клієнта, створіть проєкт і почніть трекати час, щоб побачити зароблені гроші та неоплачені суми.</value></data>
+  <data name="YouHaveUnpaidWork" xml:space="preserve"><value>У вас є неоплачена робота</value></data>
+  <data name="ClientStillOwesYou" xml:space="preserve"><value>Цей клієнт ще має неоплачений залишок</value></data>
+  <data name="NoUnpaidBalance" xml:space="preserve"><value>Неоплачених сум немає</value></data>
+  <data name="AllTrackedWorkIsPaid" xml:space="preserve"><value>Уся затрекана робота оплачена</value></data>
+  <data name="AreYouSure" xml:space="preserve"><value>Ви впевнені?</value></data>
+  <data name="ActionCannotBeUndone" xml:space="preserve"><value>Цю дію не можна скасувати</value></data>
+  <data name="ConfirmAction" xml:space="preserve"><value>Підтвердити дію</value></data>
+  <data name="ConfirmActionSubtitle" xml:space="preserve"><value>Перевірте дію перед продовженням.</value></data>
+  <data name="Confirm" xml:space="preserve"><value>Підтвердити</value></data>
+  <data name="SavedSuccessfully" xml:space="preserve"><value>Збережено</value></data>
+  <data name="UpdatedSuccessfully" xml:space="preserve"><value>Оновлено</value></data>
+  <data name="DeletedSuccessfully" xml:space="preserve"><value>Видалено</value></data>
+  <data name="PaymentAdded" xml:space="preserve"><value>Оплату додано</value></data>
+  <data name="TimeEntryAdded" xml:space="preserve"><value>Запис часу додано</value></data>
+  <data name="ProjectCreated" xml:space="preserve"><value>Проєкт створено</value></data>
+  <data name="ClientCreated" xml:space="preserve"><value>Клієнта створено</value></data>
+  <data name="SomethingWentWrong" xml:space="preserve"><value>Щось пішло не так</value></data>
+  <data name="TryAgain" xml:space="preserve"><value>Спробуйте ще раз</value></data>
+  <data name="DemoBannerTitle" xml:space="preserve"><value>Це демо. Почніть трекати власний дохід</value></data>
+  <data name="StartTrackingIncomeFree" xml:space="preserve"><value>Почати безкоштовно</value></data>
+  <data name="ClientsAndProjects" xml:space="preserve"><value>Клієнти та проєкти</value></data>
+  <data name="Members" xml:space="preserve"><value>Учасники</value></data>
+  <data name="Integrations" xml:space="preserve"><value>Інтеграції</value></data>
+  <data name="Name" xml:space="preserve"><value>Назва</value></data>
+  <data name="Member" xml:space="preserve"><value>Учасник</value></data>
+  <data name="NoAssignee" xml:space="preserve"><value>Без виконавця</value></data>
+  <data name="NoClient" xml:space="preserve"><value>Без клієнта</value></data>
+  <data name="InvalidNumberFormat" xml:space="preserve"><value>Некоректний формат числа</value></data>
+  <data name="FirstPage" xml:space="preserve"><value>Перша сторінка</value></data>
+  <data name="PreviousPage" xml:space="preserve"><value>Попередня сторінка</value></data>
+  <data name="NextPage" xml:space="preserve"><value>Наступна сторінка</value></data>
+  <data name="LastPage" xml:space="preserve"><value>Остання сторінка</value></data>
+  <data name="Page" xml:space="preserve"><value>Сторінка {0}</value></data>
+  <data name="PageOf" xml:space="preserve"><value>Сторінка {0} з {1}</value></data>
+  <data name="ItemsPageOf" xml:space="preserve"><value>{0} {1} | сторінка {2} з {3}</value></data>
+  <data name="Items" xml:space="preserve"><value>записів</value></data>
+  <data name="TimeWorkspaceDescription" xml:space="preserve"><value>Активний таймер завжди під рукою, поки ви працюєте з рештою workspace.</value></data>
+  <data name="SummaryEmptyMessage" xml:space="preserve"><value>Почніть трекати час, щоб побачити записи.</value></data>
+  <data name="ReportFilterHelper" xml:space="preserve"><value>Змініть групування або період, щоб оновити графік і таблицю.</value></data>
+  <data name="SearchByDescription" xml:space="preserve"><value>Пошук за описом...</value></data>
+  <data name="NoTimeEntriesFilterMessage" xml:space="preserve"><value>Записів часу не знайдено. Спробуйте змінити фільтри.</value></data>
+  <data name="Billable" xml:space="preserve"><value>Оплачуваний</value></data>
+  <data name="MoneyOverviewHelper" xml:space="preserve"><value>Фінансова картина по всій затреканій роботі.</value></data>
+  <data name="OutstandingFormula" xml:space="preserve"><value>Неоплачений залишок = усього зароблено - усього отримано.</value></data>
+  <data name="TotalEarnedHelper" xml:space="preserve"><value>Оплачувана робота за весь час</value></data>
+  <data name="TotalReceivedHelper" xml:space="preserve"><value>Отримані оплати клієнтів</value></data>
+  <data name="OutstandingBalanceHelper" xml:space="preserve"><value>Ще не оплачено клієнтами</value></data>
+  <data name="ViewUnpaidByClient" xml:space="preserve"><value>Переглянути борги по клієнтах</value></data>
+  <data name="WorkRecordedNoPaymentsYet" xml:space="preserve"><value>Робота вже затрекана, але оплат ще немає.</value></data>
+  <data name="SelectedPeriodHelper" xml:space="preserve"><value>Показники за поточними фільтрами.</value></data>
+  <data name="DurationSelectedPeriodHelper" xml:space="preserve"><value>Відпрацьовано за вибраний період</value></data>
+  <data name="EarnedSelectedPeriod" xml:space="preserve"><value>Зароблено за вибраний період</value></data>
+  <data name="EarnedSelectedPeriodHelper" xml:space="preserve"><value>Оплачувана сума за вибраний період</value></data>
+  <data name="EffectiveHourlyRateHelper" xml:space="preserve"><value>Середня зароблена сума за затрекану годину</value></data>
+  <data name="NoActivitySelectedPeriod" xml:space="preserve"><value>За вибраний період немає помітної активності.</value></data>
+  <data name="BillableValueIncludedWork" xml:space="preserve"><value>Оплачувана сума по вибраній роботі</value></data>
+  <data name="PaymentsCollectedFromClients" xml:space="preserve"><value>Оплати, отримані від клієнтів</value></data>
+  <data name="StillUnpaidRequiresAttention" xml:space="preserve"><value>Ще не оплачено і потребує уваги</value></data>
+  <data name="SummaryBy" xml:space="preserve"><value>Зведення за {0}</value></data>
+  <data name="SummaryChartHelper" xml:space="preserve"><value>Тривалість і зароблена сума за кожен день вибраного періоду.</value></data>
+  <data name="NoSignificantActivityPeriod" xml:space="preserve"><value>За цей період немає помітної активності</value></data>
+  <data name="StartTrackingEarnings" xml:space="preserve"><value>Почніть трекати час, щоб побачити зароблені гроші.</value></data>
+  <data name="OneDayTracked" xml:space="preserve"><value>1 день затрекано</value></data>
+  <data name="DaysTracked" xml:space="preserve"><value>{0} днів затрекано</value></data>
+  <data name="DetailedRowsSelectedGrouping" xml:space="preserve"><value>Детальні рядки за вибраним групуванням.</value></data>
+  <data name="ClientPaymentsDescription" xml:space="preserve"><value>Фіксуйте оплати від клієнтів і тримайте баланс workspace актуальним.</value></data>
+  <data name="PaymentsMatchingCurrentFilters" xml:space="preserve"><value>Оплати за поточними фільтрами</value></data>
+  <data name="ClientsPaid" xml:space="preserve"><value>Клієнтів оплатили</value></data>
+  <data name="UniqueClientsFilteredList" xml:space="preserve"><value>Унікальні клієнти у відфільтрованому списку</value></data>
+  <data name="NotTracked" xml:space="preserve"><value>Не рахується</value></data>
+  <data name="ClientPaymentsRecordedSeparately" xml:space="preserve"><value>Оплати клієнтів ведуться окремо від оплачуваних сум</value></data>
+  <data name="PaymentsFiltersHelper" xml:space="preserve"><value>Звузьте список за клієнтом, проєктом або текстом.</value></data>
+  <data name="ClientProjectNoteReference" xml:space="preserve"><value>Клієнт, проєкт, примітка, референс</value></data>
+  <data name="ReceivedClientPayments" xml:space="preserve"><value>Отримані оплати клієнтів</value></data>
+  <data name="ReceivedClientPaymentsHelper" xml:space="preserve"><value>Прості записи доходу по клієнтській роботі в цьому workspace.</value></data>
+  <data name="NoClientPaymentsHelper" xml:space="preserve"><value>Додайте першу оплату клієнта, щоб бачити отриманий дохід і неоплачені суми.</value></data>
+  <data name="AddedBy" xml:space="preserve"><value>Додав</value></data>
+  <data name="NoNote" xml:space="preserve"><value>Без примітки</value></data>
+  <data name="RecordMoneyReceivedClient" xml:space="preserve"><value>Зафіксуйте гроші, отримані від клієнта.</value></data>
+  <data name="EditClientPayment" xml:space="preserve"><value>Редагувати оплату клієнта</value></data>
+  <data name="EditClientPaymentHelper" xml:space="preserve"><value>Оновіть суму, дату, клієнта, проєкт або примітку.</value></data>
+  <data name="SavedCurrentWorkspace" xml:space="preserve"><value>Збережено для поточного workspace</value></data>
+  <data name="MemberPaymentsDescription" xml:space="preserve"><value>Фіксуйте оплати за виконану роботу по проєктах workspace.</value></data>
+  <data name="NoPaymentsAddedHelper" xml:space="preserve"><value>Оплат ще немає. Натисніть додати, щоб створити першу оплату.</value></data>
+  <data name="Report" xml:space="preserve"><value>Звіт</value></data>
+  <data name="BillableValueTrackedWork" xml:space="preserve"><value>Оплачувана сума затреканої роботи</value></data>
+  <data name="PaymentsRecordedFromClients" xml:space="preserve"><value>Оплати, зафіксовані від клієнтів</value></data>
+  <data name="NeedsCollection" xml:space="preserve"><value>Потрібно отримати оплату</value></data>
+  <data name="UnnamedProject" xml:space="preserve"><value>Проєкт без назви</value></data>
+  <data name="OneProject" xml:space="preserve"><value>1 проєкт</value></data>
+  <data name="ProjectCount" xml:space="preserve"><value>{0} проєктів</value></data>
+  <data name="PaymentsSummaryReport" xml:space="preserve"><value>Зведення по оплатах</value></data>
+  <data name="PaymentsSummaryReportHelper" xml:space="preserve"><value>Перегляд зароблених сум, отриманих оплат і залишків, які ще треба закрити.</value></data>
+  <data name="DateEnd" xml:space="preserve"><value>Дата завершення</value></data>
+  <data name="SynchronizedExternalService" xml:space="preserve"><value>Синхронізовано із зовнішнім сервісом (Jira / Redmine).</value></data>
+  <data name="CalculatedTimeEntryValue" xml:space="preserve"><value>Розрахована сума для цього запису часу.</value></data>
+  <data name="HourlyRateNotSet" xml:space="preserve"><value>Погодинну ставку не вказано.</value></data>
+  <data name="Rate" xml:space="preserve"><value>Ставка</value></data>
+  <data name="Duplicate" xml:space="preserve"><value>Дублювати</value></data>
+  <data name="AddPaymentList" xml:space="preserve"><value>Додати оплату</value></data>
+  <data name="OptionalPaymentNote" xml:space="preserve"><value>Необовʼязкова примітка до оплати</value></data>
+  <data name="EditPaymentHelper" xml:space="preserve"><value>Оновіть отриману суму, дату, проєкт або примітку.</value></data>
+  <data name="AccessRestricted" xml:space="preserve"><value>Доступ обмежено</value></data>
+  <data name="WorkspaceMoneyDescription" xml:space="preserve"><value>Перегляд балансів клієнтів, виплат учасникам і маржі workspace для власника.</value></data>
+  <data name="NoTrackedWorkYet" xml:space="preserve"><value>Затреканої роботи ще немає</value></data>
+  <data name="NeedsAttention" xml:space="preserve"><value>Потребує уваги</value></data>
+  <data name="NoClientBalancesYet" xml:space="preserve"><value>Балансів клієнтів ще немає</value></data>
+  <data name="NoOpenClientBalances" xml:space="preserve"><value>Відкритих балансів клієнтів немає</value></data>
+  <data name="ShowSettledClients" xml:space="preserve"><value>Показати клієнтів без боргу</value></data>
+  <data name="Hours" xml:space="preserve"><value>Години</value></data>
+  <data name="Settled" xml:space="preserve"><value>Закрито</value></data>
+  <data name="Due" xml:space="preserve"><value>до оплати</value></data>
+  <data name="Credit" xml:space="preserve"><value>переплата</value></data>
+  <data name="UnpaidClients" xml:space="preserve"><value>Клієнти з боргом</value></data>
+  <data name="NoUnpaidClients" xml:space="preserve"><value>Клієнтів з боргом немає</value></data>
+  <data name="LastPayment" xml:space="preserve"><value>Остання оплата</value></data>
+  <data name="PartiallyPaid" xml:space="preserve"><value>Частково оплачено</value></data>
+  <data name="MembersToPay" xml:space="preserve"><value>Виплати учасникам</value></data>
+  <data name="NoMembersToPay" xml:space="preserve"><value>Немає виплат учасникам</value></data>
+  <data name="LastPayout" xml:space="preserve"><value>Остання виплата</value></data>
+  <data name="NoPayoutsRecorded" xml:space="preserve"><value>Виплат ще не було</value></data>
+  <data name="Owed" xml:space="preserve"><value>борг</value></data>
+  <data name="WorkspaceFinancialSummaryPage_AccessRestrictedDescription" xml:space="preserve"><value>Цей звіт доступний лише власникам і адміністраторам workspace.</value></data>
+  <data name="WorkspaceFinancialSummaryPage_CurrentBalancesDescription" xml:space="preserve"><value>Поточні баланси по всій затреканій роботі та оплатах. Розрахунок за весь час.</value></data>
+  <data name="WorkspaceFinancialSummaryPage_NoTrackedWorkDescription" xml:space="preserve"><value>Трекайте оплачувану роботу або фіксуйте оплати, щоб бачити баланси workspace.</value></data>
+  <data name="WorkspaceFinancialSummaryPage_ClientsNeedFollowUp" xml:space="preserve"><value>{0} клієнтів потребують нагадування</value></data>
+  <data name="WorkspaceFinancialSummaryPage_AmountDue" xml:space="preserve"><value>{0} до оплати</value></data>
+  <data name="WorkspaceFinancialSummaryPage_MembersNeedPayout" xml:space="preserve"><value>{0} учасників очікують виплату</value></data>
+  <data name="WorkspaceFinancialSummaryPage_AmountOwed" xml:space="preserve"><value>{0} борг</value></data>
+  <data name="ClientBalancesTableBlock_Title" xml:space="preserve"><value>Баланси клієнтів</value></data>
+  <data name="ClientBalancesTableBlock_Description" xml:space="preserve"><value>Показує, скільки виставлено клієнту, скільки він оплатив і який залишок ще відкритий.</value></data>
+  <data name="ClientBalancesTableBlock_NoBalancesDescription" xml:space="preserve"><value>Оплачувана робота та оплати клієнтів зʼявляться тут після додавання.</value></data>
+  <data name="ClientBalancesTableBlock_NoOpenBalancesDescription" xml:space="preserve"><value>Усі клієнти закриті. Увімкніть клієнтів без боргу, щоб переглянути нульові баланси.</value></data>
+  <data name="ClientBalancesTableBlock_DueTooltip" xml:space="preserve"><value>Зароблена сума більша за отримані оплати. Цей залишок ще треба оплатити.</value></data>
+  <data name="ClientBalancesTableBlock_CreditTooltip" xml:space="preserve"><value>Отримані оплати більші за зароблену суму. У клієнта є переплата.</value></data>
+  <data name="ClientBalancesTableBlock_SettledTooltip" xml:space="preserve"><value>Зароблена сума дорівнює отриманим оплатам.</value></data>
+  <data name="UnpaidClientsBlock_NoUnpaidDescription" xml:space="preserve"><value>Тут зʼявляться клієнти з відкритим залишком за весь час.</value></data>
+  <data name="MembersToPayBlock_NoMembersDescription" xml:space="preserve"><value>Тут зʼявляться учасники з відкритим залишком до виплати за весь час.</value></data>
+  <data name="MemberBalancesTableBlock_Title" xml:space="preserve"><value>Заробіток і виплати учасникам</value></data>
+  <data name="MemberBalancesTableBlock_Description" xml:space="preserve"><value>Показує, скільки учасники заробили за ставкою, скільки вже виплачено і що ще лишилось.</value></data>
+  <data name="MemberBalancesTableBlock_NoEarningsTitle" xml:space="preserve"><value>Заробітку учасників ще немає</value></data>
+  <data name="MemberBalancesTableBlock_NoEarningsDescription" xml:space="preserve"><value>Заробіток і виплати учасникам зʼявляться тут після затреканої командної роботи.</value></data>
+  <data name="MemberBalancesTableBlock_EarnedByRate" xml:space="preserve"><value>Зароблено за ставкою</value></data>
+  <data name="MemberBalancesTableBlock_PaidOut" xml:space="preserve"><value>Виплачено</value></data>
+  <data name="MemberBalancesTableBlock_Overpaid" xml:space="preserve"><value>переплата</value></data>
+  <data name="ProjectProfitabilityTableBlock_Title" xml:space="preserve"><value>Прибутковість проєктів</value></data>
+  <data name="ProjectProfitabilityTableBlock_Description" xml:space="preserve"><value>Порівнює суму, яку оплачує клієнт, із заробітком учасників по кожному проєкту.</value></data>
+  <data name="ProjectProfitabilityTableBlock_RateDifferenceHint" xml:space="preserve"><value>Прибутковість проєкту зʼявляється, коли ставки учасників відрізняються від ставки для клієнта.</value></data>
+  <data name="ProjectProfitabilityTableBlock_NoProfitabilityTitle" xml:space="preserve"><value>Прибутковості по проєктах ще немає</value></data>
+  <data name="ProjectProfitabilityTableBlock_NoProfitabilityDescription" xml:space="preserve"><value>Оплачувана робота по проєктах зʼявиться тут після обліку часу.</value></data>
+  <data name="ProjectProfitabilityTableBlock_ClientEarned" xml:space="preserve"><value>Клієнтська сума</value></data>
+  <data name="ProjectProfitabilityTableBlock_MemberEarnings" xml:space="preserve"><value>Заробіток учасників</value></data>
+  <data name="ProjectProfitabilityTableBlock_EstimatedMargin" xml:space="preserve"><value>Орієнтовна маржа</value></data>
+  <data name="ProjectProfitabilityTableBlock_MarginPercent" xml:space="preserve"><value>Маржа %</value></data>
+  <data name="MoneyOverviewBlock_ClientEarned" xml:space="preserve"><value>Зароблено з клієнтів</value></data>
+  <data name="MoneyOverviewBlock_ClientReceived" xml:space="preserve"><value>Отримано від клієнтів</value></data>
+  <data name="MoneyOverviewBlock_UnpaidByClients" xml:space="preserve"><value>Не оплачено клієнтами</value></data>
+  <data name="MoneyOverviewBlock_OwnerRevenue" xml:space="preserve"><value>Дохід власника</value></data>
+  <data name="MoneyOverviewBlock_OwnerRevenueHelper" xml:space="preserve"><value>Отримано від клієнтів мінус виплати учасникам.</value></data>
+  <data name="MoneyOverviewBlock_OwnerRevenueTooltip" xml:space="preserve"><value>Дохід власника = отримано від клієнтів мінус виплачено учасникам.</value></data>
+  <data name="MoneyOverviewBlock_NegativeRevenueWarning" xml:space="preserve"><value>Виплати учасникам більші за отримані оплати клієнтів. Перевірте оплати клієнтів або виплати учасникам.</value></data>
+  <data name="MoneyOverviewBlock_MemberPayouts" xml:space="preserve"><value>Виплати учасникам</value></data>
+  <data name="MoneyOverviewBlock_MemberEarningsTooltip" xml:space="preserve"><value>Заробіток учасників рахується із затреканої роботи за ставками учасників.</value></data>
+  <data name="MoneyOverviewBlock_PaidToMembers" xml:space="preserve"><value>Виплачено учасникам</value></data>
+  <data name="MoneyOverviewBlock_OwedToMembers" xml:space="preserve"><value>Борг учасникам</value></data>
+  <data name="MoneyOverviewBlock_NoClientPayments" xml:space="preserve"><value>Оплат клієнтів ще не зафіксовано.</value></data>
+  <data name="MoneyOverviewBlock_NoMemberPayouts" xml:space="preserve"><value>Виплат учасникам ще не зафіксовано.</value></data>
+  <data name="MemberPaymentReportPage_EmptyTitle" xml:space="preserve"><value>Почніть трекати час, щоб бачити зароблені гроші.</value></data>
+  <data name="MemberPaymentReportPage_EmptyDescription" xml:space="preserve"><value>Додайте першого клієнта, щоб вести облік оплат.</value></data>
+  <data name="MemberPaymentReportPage_ClientPaymentStatus" xml:space="preserve"><value>Статус оплат клієнтів</value></data>
+  <data name="MemberPaymentReportPage_ClientPaymentStatusDescription" xml:space="preserve"><value>Клієнти з неоплаченим залишком показані першими.</value></data>
+  <data name="MemberPaymentReportPage_OtherProjects" xml:space="preserve"><value>Інші проєкти</value></data>
+  <data name="TasksBlock_DeleteTaskListTitle" xml:space="preserve"><value>Видалити список задач</value></data>
+  <data name="TasksBlock_DeleteTaskListSubtitle" xml:space="preserve"><value>Видалити цей список задач?</value></data>
+  <data name="TasksBlock_TaskListDescription" xml:space="preserve"><value>Задачі не обовʼязкові й потрібні переважно для обліку часу.</value></data>
+  <data name="TasksBlock_EditTaskList" xml:space="preserve"><value>Редагувати список задач</value></data>
+  <data name="TasksBoardBlock_Todo" xml:space="preserve"><value>До роботи</value></data>
+  <data name="TasksBoardBlock_TodoDescription" xml:space="preserve"><value>Робочі задачі, до яких можна привʼязувати час.</value></data>
+  <data name="TasksBoardBlock_Backlog" xml:space="preserve"><value>Беклог</value></data>
+  <data name="TasksBoardBlock_BacklogDescription" xml:space="preserve"><value>Менш пріоритетні задачі поза основним потоком роботи.</value></data>
+  <data name="TasksBoardBlock_NoTodoTasks" xml:space="preserve"><value>Задач до роботи за поточними фільтрами немає.</value></data>
+  <data name="TasksBoardBlock_NoBacklogTasks" xml:space="preserve"><value>Задач у беклозі за поточними фільтрами немає.</value></data>
+  <data name="TasksListBlock_Title" xml:space="preserve"><value>Списки задач</value></data>
+  <data name="TasksListBlock_Description" xml:space="preserve"><value>Виберіть проєкт і відкрийте потрібний список задач.</value></data>
+  <data name="TasksListBlock_SearchPlaceholder" xml:space="preserve"><value>Пошук списків задач...</value></data>
+  <data name="TasksListBlock_SelectProjectEmpty" xml:space="preserve"><value>Виберіть проєкт, щоб завантажити списки задач.</value></data>
+  <data name="TasksListBlock_NoMatches" xml:space="preserve"><value>Списків задач за “{0}” не знайдено.</value></data>
+  <data name="TasksListBlock_ListIsEmpty" xml:space="preserve"><value>Список порожній</value></data>
+  <data name="TasksTableBlock_SelectedCount" xml:space="preserve"><value>Вибрано: {0}</value></data>
+  <data name="TasksTableBlock_NoTasksFound" xml:space="preserve"><value>Задач не знайдено.</value></data>
+  <data name="TasksTableBlock_ArchiveThisTask" xml:space="preserve"><value>Архівувати цю задачу</value></data>
+  <data name="AddTasksListModalForm_Title" xml:space="preserve"><value>Додати список задач</value></data>
+  <data name="AddTasksListModalForm_NamePlaceholder" xml:space="preserve"><value>Введіть назву списку</value></data>
+  <data name="AddTaskModal_Title" xml:space="preserve"><value>Додати задачу</value></data>
+  <data name="AddTaskModal_Description" xml:space="preserve"><value>Виберіть список задач і заповніть назву або зовнішній ID задачі. Можна вказати обидва поля.</value></data>
+  <data name="AddTaskModal_TaskWillBeAddedTo" xml:space="preserve"><value>Задачу буде додано до:</value></data>
+  <data name="AddTaskModal_TaskTitlePlaceholder" xml:space="preserve"><value>Назва задачі</value></data>
+  <data name="AddTaskModal_ExternalTaskIdPlaceholder" xml:space="preserve"><value>Наприклад: JIRA-154 або RM-982</value></data>
+  <data name="AddTaskModal_ExternalTaskHelp" xml:space="preserve"><value>Використовуйте це, якщо задача вже існує в Jira, ClickUp або Redmine.</value></data>
+  <data name="AddTaskModal_TitleOrExternalIdRequired" xml:space="preserve"><value>Потрібна назва або зовнішній ID задачі.</value></data>
+  <data name="AddTaskModal_TitleOrExternalIdRequiredDescription" xml:space="preserve"><value>Можна заповнити обидва поля, але принаймні одне має бути вказано.</value></data>
+  <data name="UpdateTaskListModal_Title" xml:space="preserve"><value>Редагувати список задач</value></data>
+  <data name="UpdateTaskListModal_NamePlaceholder" xml:space="preserve"><value>Назва списку задач</value></data>
+  <data name="SettingsPage_ClientsAndProjectsTab" xml:space="preserve"><value>Клієнти та проєкти</value></data>
+  <data name="ProjectsBlock_WorkspaceProjectsTitle" xml:space="preserve"><value>Проєкти workspace</value></data>
+  <data name="ProjectsBlock_Description" xml:space="preserve"><value>Проєкти показують свого клієнта, але наявні привʼязки до клієнтів тут тільки для перегляду.</value></data>
+  <data name="ClientsBlock_ProjectDirectoryTitle" xml:space="preserve"><value>Клієнти та їхні проєкти</value></data>
+  <data name="ClientsBlock_Description" xml:space="preserve"><value>Створюйте клієнтів, додавайте проєкти й переносіть проєкти між клієнтами в одному розділі workspace.</value></data>
+  <data name="ClientsBlock_Empty" xml:space="preserve"><value>Додайте першого клієнта, щоб почати організовувати проєкти workspace.</value></data>
+  <data name="SettingsBlock_General" xml:space="preserve"><value>Загальне</value></data>
+  <data name="SettingsBlock_WorkspaceProfileTitle" xml:space="preserve"><value>Профіль workspace</value></data>
+  <data name="SettingsBlock_Description" xml:space="preserve"><value>Оновіть базову інформацію workspace і збережіть зміни тут.</value></data>
+  <data name="SettingsBlock_DefaultWorkspace" xml:space="preserve"><value>За замовчуванням</value></data>
+  <data name="MembersBlock_WorkspaceMembersTitle" xml:space="preserve"><value>Учасники workspace</value></data>
+  <data name="MembersBlock_Description" xml:space="preserve"><value>Запрошуйте людей email-ом. Нові користувачі отримають посилання для підтвердження і встановлення пароля.</value></data>
+  <data name="MembersBlock_InviteMember" xml:space="preserve"><value>Запросити учасника</value></data>
+  <data name="MembersBlock_Access" xml:space="preserve"><value>Доступ</value></data>
+  <data name="TagsBlock_DeleteTagTitle" xml:space="preserve"><value>Видалити тег</value></data>
+  <data name="TagsBlock_DeleteTagSubtitle" xml:space="preserve"><value>Видалити тег “{0}”?</value></data>
+  <data name="TagsBlock_WorkspaceTagsTitle" xml:space="preserve"><value>Теги workspace</value></data>
+  <data name="TagsBlock_Description" xml:space="preserve"><value>Теги допомагають шукати записи часу і візуально групувати їх кольором.</value></data>
+  <data name="TagsBlock_AddTag" xml:space="preserve"><value>Додати тег</value></data>
+  <data name="TagsBlock_NoColor" xml:space="preserve"><value>Без кольору</value></data>
+  <data name="Color" xml:space="preserve"><value>Колір</value></data>
+  <data name="Email" xml:space="preserve"><value>Email</value></data>
+  <data name="Yes" xml:space="preserve"><value>Так</value></data>
+  <data name="No" xml:space="preserve"><value>Ні</value></data>
+  <data name="SelectColor" xml:space="preserve"><value>Виберіть колір</value></data>
+  <data name="SelectTaskList" xml:space="preserve"><value>Виберіть список задач</value></data>
+  <data name="SelectUser" xml:space="preserve"><value>Виберіть користувача</value></data>
+  <data name="CustomValidationSummary_FixHighlightedFields" xml:space="preserve"><value>Виправте підсвічені поля перед збереженням.</value></data>
+  <data name="Select" xml:space="preserve"><value>Вибрати</value></data>
+  <data name="NotSet" xml:space="preserve"><value>Не вказано</value></data>
+  <data name="RequiredField" xml:space="preserve"><value>Це поле обовʼязкове</value></data>
+  <data name="Submit" xml:space="preserve"><value>Надіслати</value></data>
+  <data name="End" xml:space="preserve"><value>Завершення</value></data>
+  <data name="Tag" xml:space="preserve"><value>Тег</value></data>
+  <data name="Tags" xml:space="preserve"><value>Теги</value></data>
+  <data name="TagName" xml:space="preserve"><value>Назва тегу</value></data>
+  <data name="TagAdded" xml:space="preserve"><value>Тег додано</value></data>
+  <data name="TagUpdated" xml:space="preserve"><value>Тег оновлено</value></data>
+  <data name="TaskList" xml:space="preserve"><value>Список задач</value></data>
+  <data name="TaskId" xml:space="preserve"><value>ID задачі</value></data>
+  <data name="Attachments" xml:space="preserve"><value>Вкладення</value></data>
+  <data name="NoEstimate" xml:space="preserve"><value>Без оцінки</value></data>
+  <data name="SelectCurrency" xml:space="preserve"><value>Виберіть валюту</value></data>
+  <data name="SelectTags" xml:space="preserve"><value>Виберіть теги</value></data>
+  <data name="DurationInput_InvalidFormat" xml:space="preserve"><value>Використовуйте формат на кшталт 1h 30m, 2d, 1w або 01:30</value></data>
+  <data name="AttachmentsBlock_DeleteAttachment" xml:space="preserve"><value>Видалити вкладення</value></data>
+  <data name="FileUploader_Uploading" xml:space="preserve"><value>Завантаження...</value></data>
+  <data name="FileUploader_SelectFiles" xml:space="preserve"><value>Вибрати файли</value></data>
+  <data name="ProjectsDropDown_AddFirstClient" xml:space="preserve"><value>Додати першого клієнта</value></data>
+  <data name="TaskStatus_Backlog" xml:space="preserve"><value>Беклог</value></data>
+  <data name="TaskStatus_ToDo" xml:space="preserve"><value>До роботи</value></data>
+  <data name="TaskStatus_InProgress" xml:space="preserve"><value>В роботі</value></data>
+  <data name="TaskStatus_Done" xml:space="preserve"><value>Готово</value></data>
+  <data name="TaskPriority_Urgent" xml:space="preserve"><value>Терміново</value></data>
+  <data name="TaskPriority_High" xml:space="preserve"><value>Високий</value></data>
+  <data name="TaskPriority_Medium" xml:space="preserve"><value>Середній</value></data>
+  <data name="TaskPriority_Low" xml:space="preserve"><value>Низький</value></data>
+  <data name="MembershipAccessType_User" xml:space="preserve"><value>Користувач</value></data>
+  <data name="MembershipAccessType_Manager" xml:space="preserve"><value>Менеджер</value></data>
+  <data name="MembershipAccessType_Owner" xml:space="preserve"><value>Власник</value></data>
+  <data name="IntegrationServiceHeader_Service" xml:space="preserve"><value>Сервіс</value></data>
+  <data name="IntegrationServiceHeader_Active" xml:space="preserve"><value>Активна</value></data>
+  <data name="IntegrationServiceHeader_Inactive" xml:space="preserve"><value>Неактивна</value></data>
+  <data name="IntegrationServiceHeader_HowToConnect" xml:space="preserve"><value>Як підключити {0}</value></data>
+  <data name="IntegrationsBlock_ConnectionTitle" xml:space="preserve"><value>Підключення {0}</value></data>
+  <data name="IntegrationsBlock_ConnectionCheckNotice" xml:space="preserve"><value>Після збереження TimeVic перевіряє підключення до сервісу. Інтеграція стане активною тільки якщо зовнішній API прийме вказані доступи.</value></data>
+  <data name="IntegrationsBlock_HeaderKicker" xml:space="preserve"><value>Інтеграції</value></data>
+  <data name="IntegrationsBlock_Title" xml:space="preserve"><value>Зовнішні сервіси задач</value></data>
+  <data name="IntegrationsBlock_Description" xml:space="preserve"><value>Після підключення активного сервісу задачі можна додавати за ID із цього сервісу. Потім час трекається в TimeVic і синхронізується назад у сервіс.</value></data>
+  <data name="IntegrationsBlock_Loading" xml:space="preserve"><value>Завантаження налаштувань інтеграцій</value></data>
+  <data name="IntegrationsBlock_ApiToken" xml:space="preserve"><value>API token</value></data>
+  <data name="IntegrationsBlock_TeamId" xml:space="preserve"><value>Team ID</value></data>
+  <data name="IntegrationsBlock_UseCustomTaskIds" xml:space="preserve"><value>Використовувати custom task IDs</value></data>
+  <data name="IntegrationsBlock_UseCustomTaskIdsDescription" xml:space="preserve"><value>Зіставляти задачі за custom IDs, налаштованими в ClickUp.</value></data>
+  <data name="IntegrationsBlock_FillEntriesFromTaskDetails" xml:space="preserve"><value>Заповнювати записи з даних задачі</value></data>
+  <data name="IntegrationsBlock_FillEntriesFromTaskDetailsDescription" xml:space="preserve"><value>Використовувати дані підключеної задачі під час створення записів часу.</value></data>
+  <data name="IntegrationsBlock_SaveService" xml:space="preserve"><value>Зберегти {0}</value></data>
+  <data name="IntegrationsBlock_RedmineUrl" xml:space="preserve"><value>Redmine URL</value></data>
+  <data name="IntegrationsBlock_ApiKey" xml:space="preserve"><value>API key</value></data>
+  <data name="IntegrationsBlock_ApiAccessKeyPlaceholder" xml:space="preserve"><value>API access key</value></data>
+  <data name="IntegrationsBlock_UserId" xml:space="preserve"><value>User ID</value></data>
+  <data name="IntegrationsBlock_ActivityId" xml:space="preserve"><value>Activity ID</value></data>
+  <data name="IntegrationsBlock_JiraUrl" xml:space="preserve"><value>Jira URL</value></data>
+  <data name="IntegrationsBlock_UserEmail" xml:space="preserve"><value>Email користувача</value></data>
+  <data name="IntegrationsBlock_AtlassianApiTokenPlaceholder" xml:space="preserve"><value>Atlassian API token</value></data>
+  <data name="IntegrationsBlock_LoadingError" xml:space="preserve"><value>Не вдалося завантажити налаштування інтеграцій</value></data>
+  <data name="IntegrationsBlock_SettingsSaved" xml:space="preserve"><value>Налаштування {0} збережено</value></data>
+  <data name="IntegrationsBlock_IntegrationActive" xml:space="preserve"><value>Інтеграція {0} активна</value></data>
+  <data name="IntegrationsBlock_IntegrationInactive" xml:space="preserve"><value>Інтеграція {0} неактивна. Перевірте налаштування підключення.</value></data>
+  <data name="IntegrationsBlock_SettingsSavingError" xml:space="preserve"><value>Не вдалося зберегти налаштування {0}</value></data>
+  <data name="IntegrationsBlock_ClickUpHelpSummary" xml:space="preserve"><value>Підключіть workspace ClickUp через personal API token і team ID.</value></data>
+  <data name="IntegrationsBlock_ClickUpHelpTokenInstruction" xml:space="preserve"><value>Створіть або скопіюйте personal API token у ClickUp в розділі Apps/API налаштувань.</value></data>
+  <data name="IntegrationsBlock_ClickUpHelpFieldsInstruction" xml:space="preserve"><value>Вкажіть team ID того workspace ClickUp, де лежать задачі. Custom task IDs вмикайте тільки якщо вони налаштовані в ClickUp.</value></data>
+  <data name="IntegrationsBlock_RedmineHelpSummary" xml:space="preserve"><value>Підключіть Redmine через URL сайту, API key, user ID і activity ID для записів часу.</value></data>
+  <data name="IntegrationsBlock_RedmineHelpTokenInstruction" xml:space="preserve"><value>Увімкніть REST API в адміністративних налаштуваннях Redmine, а потім скопіюйте API access key зі сторінки акаунта користувача.</value></data>
+  <data name="IntegrationsBlock_RedmineHelpFieldsInstruction" xml:space="preserve"><value>Вкажіть числовий Redmine user ID акаунта, від якого створюються записи часу, і числовий activity ID для синхронізації часу.</value></data>
+  <data name="IntegrationsBlock_JiraHelpSummary" xml:space="preserve"><value>Підключіть Jira Cloud через URL сайту, email акаунта й Atlassian API token.</value></data>
+  <data name="IntegrationsBlock_JiraHelpTokenInstruction" xml:space="preserve"><value>Створіть Atlassian API token на сторінці безпеки Atlassian акаунта й використайте email цього акаунта.</value></data>
+  <data name="IntegrationsBlock_JiraHelpFieldsInstruction" xml:space="preserve"><value>Вкажіть URL сайту Jira з потрібним проєктом, наприклад https://company.atlassian.net.</value></data>
+  <data name="UpdateWorkspaceForm_WorkspaceName" xml:space="preserve"><value>Назва робочого простору</value></data>
+  <data name="UpdateWorkspaceForm_TimeZone" xml:space="preserve"><value>Часовий пояс</value></data>
+  <data name="UpdateWorkspaceForm_SaveSettings" xml:space="preserve"><value>Зберегти налаштування</value></data>
+  <data name="UpdateProjectModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>
+  <data name="UpdateProjectModal_Description" xml:space="preserve"><value>Оновіть назву проєкту або перенесіть його до іншого клієнта, якщо потрібно.</value></data>
+  <data name="UpdateProjectModal_BillHourlyByDefault" xml:space="preserve"><value>Оплачуваний за замовчуванням</value></data>
+  <data name="UpdateProjectModal_BillHourlyByDefaultDescription" xml:space="preserve"><value>Автоматично використовувати погодинну ставку проєкту для нових записів часу.</value></data>
+  <data name="UpdateProjectModal_RateCurrencyHint" xml:space="preserve"><value>Зберігається у {0} і застосовується, коли проєкт оплачуваний за замовчуванням.</value></data>
+  <data name="AddMemberModal_Title" xml:space="preserve"><value>Запросити учасника</value></data>
+  <data name="AddMemberModal_Description" xml:space="preserve"><value>Надішліть запрошення до workspace на email.</value></data>
+  <data name="AddMemberModal_MemberEmail" xml:space="preserve"><value>Email учасника</value></data>
+  <data name="AddMemberModal_InviteMember" xml:space="preserve"><value>Запросити учасника</value></data>
+  <data name="UpdateMemberModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>
+  <data name="UpdateMemberModal_Description" xml:space="preserve"><value>Змініть рівень доступу і налаштуйте доступ до проєктів для цього учасника.</value></data>
+  <data name="UpdateMemberModal_AccessLevel" xml:space="preserve"><value>Рівень доступу</value></data>
+  <data name="UpdateMemberModal_ProjectAccess" xml:space="preserve"><value>Доступ до проєктів</value></data>
+  <data name="UpdateMemberModal_HasAccess" xml:space="preserve"><value>Є доступ</value></data>
+  <data name="UpdateMemberModal_MemberAccessUpdated" xml:space="preserve"><value>Доступ учасника оновлено</value></data>
+  <data name="UpdateMemberModal_MemberUpdateError" xml:space="preserve"><value>Не вдалося оновити учасника</value></data>
+  <data name="UpdateTagModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>
+  <data name="UpdateTagModal_Description" xml:space="preserve"><value>Оновіть назву тегу й колір для записів часу в workspace.</value></data>
+  <data name="ClientProjectsGroupBlock_ProjectsWithoutClient" xml:space="preserve"><value>Проєкти без клієнта</value></data>
+  <data name="ClientProjectsGroupBlock_ProjectsWithoutClientDescription" xml:space="preserve"><value>Привʼяжіть ці проєкти до клієнта, якщо їх потрібно вести в групі клієнта.</value></data>
+  <data name="ClientProjectsGroupBlock_SaveClient" xml:space="preserve"><value>Зберегти клієнта</value></data>
+  <data name="ClientProjectsGroupBlock_BillableByDefault" xml:space="preserve"><value>Оплачуваний за замовчуванням</value></data>
+  <data name="ClientProjectsGroupBlock_ClientHasNoProjects" xml:space="preserve"><value>У цього клієнта ще немає проєктів.</value></data>
+  <data name="AddWorkspaceModal_Kicker" xml:space="preserve"><value>Новий workspace</value></data>
+  <data name="AddWorkspaceModal_Title" xml:space="preserve"><value>Додати workspace</value></data>
+  <data name="AddWorkspaceModal_Description" xml:space="preserve"><value>Після створення застосунок автоматично переключиться на нього.</value></data>
+  <data name="AddWorkspaceModal_WorkspaceCreated" xml:space="preserve"><value>Workspace створено</value></data>
+  <data name="AddWorkspaceModal_WorkspaceAddingError" xml:space="preserve"><value>Не вдалося створити workspace</value></data>
+  <data name="AddTagModal_Description" xml:space="preserve"><value>Вкажіть назву тегу й виберіть колір.</value></data>
+  <data name="AddClientModal_Description" xml:space="preserve"><value>Вкажіть назву клієнта.</value></data>
+  <data name="AddProjectModal_Description" xml:space="preserve"><value>Виберіть клієнта і введіть назву проєкту.</value></data>
+  <data name="TaskEstimateSummaryBlock_PlannedVsTracked" xml:space="preserve"><value>Оцінка і затреканий час</value></data>
+  <data name="TaskEstimateSummaryBlock_Planned" xml:space="preserve"><value>План</value></data>
+  <data name="TaskEstimateSummaryBlock_RemainingOverBy" xml:space="preserve"><value>Залишилось / понад оцінку</value></data>
+  <data name="TaskEstimateSummaryBlock_TrackedText" xml:space="preserve"><value>Затрекано {0}</value></data>
+  <data name="TaskEstimateSummaryBlock_NoEstimateTracked" xml:space="preserve"><value>Без оцінки · затрекано {0}</value></data>
+  <data name="TaskEstimateSummaryBlock_Over" xml:space="preserve"><value>{0} понад оцінку</value></data>
+  <data name="TaskEstimateSummaryBlock_Remaining" xml:space="preserve"><value>Залишилось {0}</value></data>
+  <data name="TaskEstimateSummaryBlock_JiraEstimateDescription" xml:space="preserve"><value>Початкова оцінка прийшла з Jira. Затреканий час порівнюється з нею.</value></data>
+  <data name="TaskEstimateSummaryBlock_ManualEstimateDescription" xml:space="preserve"><value>Затреканий час порівнюється з плановим часом, вказаним у TimeVic.</value></data>
+  <data name="TaskEstimateStatus_NoEstimate" xml:space="preserve"><value>Без оцінки</value></data>
+  <data name="TaskEstimateStatus_OnTrack" xml:space="preserve"><value>У межах оцінки</value></data>
+  <data name="TaskEstimateStatus_NearEstimate" xml:space="preserve"><value>Близько до оцінки</value></data>
+  <data name="TaskEstimateStatus_OverEstimate" xml:space="preserve"><value>Понад оцінку</value></data>
+  <data name="TaskEstimateStatus_HighOverrun" xml:space="preserve"><value>Сильно понад оцінку</value></data>
+  <data name="UpdateTaskForm_Assigned" xml:space="preserve"><value>Виконавець</value></data>
+  <data name="UpdateTaskForm_AttachmentsHint" xml:space="preserve"><value>Вставляйте зображення або перетягуйте файли в цю форму, щоб прикріпити їх.</value></data>
+  <data name="UpdateTaskForm_PlannedTime" xml:space="preserve"><value>Плановий час</value></data>
+  <data name="UpdateTaskForm_JiraEstimateHint" xml:space="preserve"><value>Задача імпортована з Jira. 1d = 8h, 1w = 5d.</value></data>
+  <data name="UpdateTaskForm_ManualEstimateHint" xml:space="preserve"><value>Підтримується формат як у Jira: 1d = 8h, 1w = 5d.</value></data>
+  <data name="UpdateTaskForm_AttachmentUploadError" xml:space="preserve"><value>Не вдалося завантажити вкладення</value></data>
+  <data name="AddTasksListModalForm_TaskListAdded" xml:space="preserve"><value>Список задач додано</value></data>
+  <data name="AddTasksListModalForm_TaskListAddingError" xml:space="preserve"><value>Не вдалося додати список задач</value></data>
+  <data name="UpdateTaskListModal_TaskListUpdated" xml:space="preserve"><value>Список задач оновлено</value></data>
+  <data name="AddTaskModal_TaskListRequired" xml:space="preserve"><value>Виберіть список задач.</value></data>
+  <data name="EditTimeEntryModal_Title" xml:space="preserve"><value>Дані запису часу</value></data>
+  <data name="EditTimeEntryModal_AttachedTask" xml:space="preserve"><value>Привʼязана задача: {0}</value></data>
+  <data name="EditTimeEntryModal_AttachedTaskDescription" xml:space="preserve"><value>Цей запис привʼязаний до задачі, тому проєкт підтягується з неї автоматично.</value></data>
+  <data name="EditTimeEntryModal_Pricing" xml:space="preserve"><value>Оплата</value></data>
+  <data name="BillableIndicator_ActiveEntryValue" xml:space="preserve"><value>Поточна сума для активного запису часу.</value></data>
+  <data name="BillableIndicator_CalculatedEntryValue" xml:space="preserve"><value>Розрахована сума для цього запису часу.</value></data>
+  <data name="BillableIndicator_Rate" xml:space="preserve"><value>Ставка</value></data>
+  <data name="BillableIndicator_HourlyRateNotSet" xml:space="preserve"><value>Погодинну ставку для цього запису часу ще не вказано.</value></data>
+  <data name="NotificationCenter_ReadAll" xml:space="preserve"><value>Позначити всі як прочитані</value></data>
+  <data name="Reminder" xml:space="preserve"><value>Нагадування</value></data>
+  <data name="ReminderCard_DueTime" xml:space="preserve"><value>Час нагадування</value></data>
+  <data name="EmojiPicker_EmojiLibrary" xml:space="preserve"><value>Бібліотека emoji</value></data>
+  <data name="EmojiPicker_ChooseEmoji" xml:space="preserve"><value>Виберіть emoji</value></data>
+  <data name="EmojiPicker_Description" xml:space="preserve"><value>Шукайте за назвою, категорією або HTML-кодом і додавайте emoji до назви workspace.</value></data>
+  <data name="EmojiPicker_SearchEmoji" xml:space="preserve"><value>Пошук emoji</value></data>
+  <data name="EmojiPicker_SearchPlaceholder" xml:space="preserve"><value>Наприклад: rocket, fire, heart, 🚀 або &amp;#x1F680;</value></data>
+  <data name="EmojiPicker_Found" xml:space="preserve"><value>Знайдено</value></data>
+  <data name="EmojiPicker_NoMatchesFound" xml:space="preserve"><value>Нічого не знайдено</value></data>
+  <data name="EmojiPicker_NoMatchesDescription" xml:space="preserve"><value>Спробуйте інший пошук або змініть категорію.</value></data>
+  <data name="EmojiPicker_CopiedToClipboard" xml:space="preserve"><value>Emoji скопійовано</value></data>
+  <data name="EmojiCategory_All" xml:space="preserve"><value>Усі</value></data>
+  <data name="EmojiCategory_Activities" xml:space="preserve"><value>Активності</value></data>
+  <data name="EmojiCategory_Animals" xml:space="preserve"><value>Тварини</value></data>
+  <data name="EmojiCategory_Business" xml:space="preserve"><value>Робота</value></data>
+  <data name="EmojiCategory_Celebration" xml:space="preserve"><value>Свята</value></data>
+  <data name="EmojiCategory_Food" xml:space="preserve"><value>Їжа</value></data>
+  <data name="EmojiCategory_Hearts" xml:space="preserve"><value>Серця</value></data>
+  <data name="EmojiCategory_Nature" xml:space="preserve"><value>Природа</value></data>
+  <data name="EmojiCategory_Objects" xml:space="preserve"><value>Обʼєкти</value></data>
+  <data name="EmojiCategory_People" xml:space="preserve"><value>Люди</value></data>
+  <data name="EmojiCategory_Smileys" xml:space="preserve"><value>Смайли</value></data>
+  <data name="EmojiCategory_Symbols" xml:space="preserve"><value>Символи</value></data>
+  <data name="EmojiCategory_Travel" xml:space="preserve"><value>Подорожі</value></data>
+  <data name="TagsList_RemoveTagConfirmation" xml:space="preserve"><value>Видалити цей тег?</value></data>
+</root>

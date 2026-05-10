@@ -23,27 +23,6 @@ public partial class IntegrationsBlock
     private IntegrationServiceType? _savingService;
     private IntegrationHelpInfo? _helpInfo;
 
-    private static readonly IntegrationHelpInfo ClickUpHelpInfo = new(
-        "ClickUp",
-        "Connect a ClickUp workspace by using a personal API token and team ID.",
-        "Create or copy a personal API token in ClickUp from the Apps/API section of your ClickUp settings.",
-        "Use the ClickUp team ID for the workspace that contains tasks. Enable custom task IDs only when tasks are configured to use them in ClickUp."
-    );
-
-    private static readonly IntegrationHelpInfo RedmineHelpInfo = new(
-        "Redmine",
-        "Connect a Redmine instance by using the site URL, API key, user ID, and time entry activity ID.",
-        "Enable REST API in Redmine administration, then copy the API access key from the user account page.",
-        "Use the numeric Redmine user ID for the account that owns time entries and the numeric activity ID used for synced time."
-    );
-
-    private static readonly IntegrationHelpInfo JiraHelpInfo = new(
-        "Jira",
-        "Connect a Jira Cloud site by using the site URL, account email, and Atlassian API token.",
-        "Create an Atlassian API token from the Atlassian account security page and use the email address for that account.",
-        "Use the Jira site URL that contains the target project, for example https://company.atlassian.net."
-    );
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -57,7 +36,7 @@ public partial class IntegrationsBlock
         catch (Exception e)
         {
             Logger.LogError(e, e.Message);
-            ToastService.ShowError("Integration settings loading error");
+            ToastService.ShowError(DashboardLocalizer["IntegrationsBlock_LoadingError"].Value);
         }
         finally
         {
@@ -148,20 +127,20 @@ public partial class IntegrationsBlock
         try
         {
             var isActive = await saveAction();
-            ToastService.ShowSuccess($"{serviceName} settings have been saved");
+            ToastService.ShowSuccess(string.Format(DashboardLocalizer["IntegrationsBlock_SettingsSaved"].Value, serviceName));
             if (isActive)
             {
-                ToastService.ShowSuccess($"{serviceName} integration is active");
+                ToastService.ShowSuccess(string.Format(DashboardLocalizer["IntegrationsBlock_IntegrationActive"].Value, serviceName));
             }
             else
             {
-                ToastService.ShowWarning($"{serviceName} integration is inactive. Check the connection settings.");
+                ToastService.ShowWarning(string.Format(DashboardLocalizer["IntegrationsBlock_IntegrationInactive"].Value, serviceName));
             }
         }
         catch (Exception e)
         {
             Logger.LogError(e, e.Message);
-            ToastService.ShowError($"{serviceName} settings saving error");
+            ToastService.ShowError(string.Format(DashboardLocalizer["IntegrationsBlock_SettingsSavingError"].Value, serviceName));
         }
         finally
         {
@@ -217,6 +196,27 @@ public partial class IntegrationsBlock
     {
         _helpInfo = helpInfo;
     }
+
+    private IntegrationHelpInfo ClickUpHelpInfo => new(
+        "ClickUp",
+        DashboardLocalizer["IntegrationsBlock_ClickUpHelpSummary"].Value,
+        DashboardLocalizer["IntegrationsBlock_ClickUpHelpTokenInstruction"].Value,
+        DashboardLocalizer["IntegrationsBlock_ClickUpHelpFieldsInstruction"].Value
+    );
+
+    private IntegrationHelpInfo RedmineHelpInfo => new(
+        "Redmine",
+        DashboardLocalizer["IntegrationsBlock_RedmineHelpSummary"].Value,
+        DashboardLocalizer["IntegrationsBlock_RedmineHelpTokenInstruction"].Value,
+        DashboardLocalizer["IntegrationsBlock_RedmineHelpFieldsInstruction"].Value
+    );
+
+    private IntegrationHelpInfo JiraHelpInfo => new(
+        "Jira",
+        DashboardLocalizer["IntegrationsBlock_JiraHelpSummary"].Value,
+        DashboardLocalizer["IntegrationsBlock_JiraHelpTokenInstruction"].Value,
+        DashboardLocalizer["IntegrationsBlock_JiraHelpFieldsInstruction"].Value
+    );
 
     private void CloseHelpModal()
     {

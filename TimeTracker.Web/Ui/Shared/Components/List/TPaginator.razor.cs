@@ -21,7 +21,7 @@ public partial class TPaginator
     public bool IsLoading { get; set; }
 
     [Parameter]
-    public string ItemsLabel { get; set; } = "items";
+    public string ItemsLabel { get; set; } = string.Empty;
     
     [Parameter]
     public string SummaryText { get; set; } = string.Empty;
@@ -92,8 +92,14 @@ public partial class TPaginator
             }
 
             return TotalItems.HasValue
-                ? $"{TotalItems.Value} {ItemsLabel} | Page {SafeCurrentPage} of {SafeTotalPages}"
-                : $"Page {SafeCurrentPage} of {SafeTotalPages}";
+                ? string.Format(
+                    DashboardLocalizer["ItemsPageOf"].Value,
+                    TotalItems.Value,
+                    string.IsNullOrWhiteSpace(ItemsLabel) ? DashboardLocalizer["Items"].Value : ItemsLabel,
+                    SafeCurrentPage,
+                    SafeTotalPages
+                )
+                : string.Format(DashboardLocalizer["PageOf"].Value, SafeCurrentPage, SafeTotalPages);
         }
     }
 

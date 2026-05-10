@@ -15,9 +15,13 @@
             <a href="@NavPricingUrl" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">@SharedLocalizer["Nav_Pricing"]</a>
             <a href="@NavFaqUrl" class="text-sm font-medium text-slate-600 transition hover:text-slate-900">@SharedLocalizer["Nav_FAQ"]</a>
             <div class="flex items-center gap-1 border-l border-slate-200 pl-4 text-sm font-medium">
-                <button @onclick="SwitchToEnglish" class="@(!IsUkrainianLocale ? "font-semibold text-slate-900" : "text-slate-400 hover:text-slate-600") transition">EN</button>
+                <button @onclick="SwitchToEnglish" class="@(!IsUkrainianLocale ? "font-semibold text-slate-900" : "text-slate-400 hover:text-slate-600") inline-flex items-center gap-1 transition">
+                    <span>🇬🇧</span><span>EN</span>
+                </button>
                 <span class="text-slate-300">|</span>
-                <button @onclick="SwitchToUkrainian" class="@(IsUkrainianLocale ? "font-semibold text-slate-900" : "text-slate-400 hover:text-slate-600") transition">UK</button>
+                <button @onclick="SwitchToUkrainian" class="@(IsUkrainianLocale ? "font-semibold text-slate-900" : "text-slate-400 hover:text-slate-600") inline-flex items-center gap-1 transition">
+                    <span>🇺🇦</span><span>UK</span>
+                </button>
             </div>
             @if (AuthState.Value.IsLoggedIn)
             {

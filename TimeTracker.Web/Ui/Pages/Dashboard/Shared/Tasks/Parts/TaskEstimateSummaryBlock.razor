@@ -21,7 +21,7 @@ else
     <div class="@($"rounded-2xl border border-slate-200 bg-slate-50/60 p-4 {Class}")">
         <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
             <div>
-                <h4 class="text-sm font-semibold text-slate-900">Planned vs tracked</h4>
+                <h4 class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TaskEstimateSummaryBlock_PlannedVsTracked"]</h4>
                 <p class="mt-1 text-xs text-slate-500">@SectionDescription</p>
             </div>
             <span class="@($"inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold {StatusBadgeClass}")">
@@ -31,15 +31,15 @@ else
 
         <div class="mt-4 grid gap-3 sm:grid-cols-3">
             <div class="rounded-xl border border-slate-200 bg-white px-3 py-3">
-                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">Planned</p>
+                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["TaskEstimateSummaryBlock_Planned"]</p>
                 <p class="mt-1 text-sm font-semibold text-slate-900">@PlannedDurationText</p>
             </div>
             <div class="rounded-xl border border-slate-200 bg-white px-3 py-3">
-                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">Remaining / Over by</p>
+                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["TaskEstimateSummaryBlock_RemainingOverBy"]</p>
                 <p class="mt-1 text-sm font-semibold @RemainingOrOverTextClass">@RemainingOrOverText</p>
             </div>
             <div class="rounded-xl border border-slate-200 bg-white px-3 py-3">
-                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">Status</p>
+                <p class="text-[11px] font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Status"]</p>
                 <p class="mt-1 text-sm font-semibold @StatusTextClass">@StatusLabel</p>
             </div>
         </div>
@@ -48,7 +48,7 @@ else
         {
             <div class="mt-4">
                 <div class="flex items-center justify-between gap-3 text-xs">
-                    <span class="font-medium text-slate-600">@TrackedDurationText tracked</span>
+                    <span class="font-medium text-slate-600">@string.Format(DashboardLocalizer["TaskEstimateSummaryBlock_TrackedText"], TrackedDurationText)</span>
                     <span class="font-semibold @StatusTextClass">@ProgressPercentText</span>
                 </div>
                 <TaskEstimateProgressBlock

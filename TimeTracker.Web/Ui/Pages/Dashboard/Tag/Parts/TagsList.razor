@@ -14,31 +14,31 @@
     LoadingProgressColor="Color.Info">
 
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Clients</MudText>
+        <MudText Typo="Typo.h6">@DashboardLocalizer["Tags"]</MudText>
         <MudSpacer/>
         <MudButton
             OnClick="@OnAdd"
             Disabled="@(!AuthState.Value.IsRoleAdmin)"
             StartIcon="@Icons.Material.Filled.Add">
-            Add
+            @DashboardLocalizer["Add"]
         </MudButton>
     </ToolBarContent>
 
     <HeaderContent>
-        <MudTh>Name</MudTh>
-        <MudTh>Color</MudTh>
+        <MudTh>@DashboardLocalizer["Name"]</MudTh>
+        <MudTh>@DashboardLocalizer["Color"]</MudTh>
         <MudTh></MudTh>
     </HeaderContent>
 
     <RowTemplate>
-        <MudTd DataLabel="Name">@context?.Name</MudTd>
-        <MudTd DataLabel="Color">
+        <MudTd DataLabel="@DashboardLocalizer["Name"]">@context?.Name</MudTd>
+        <MudTd DataLabel="@DashboardLocalizer["Color"]">
             <MudColorPicker
                 Disabled="true"
                 ColorPickerView="ColorPickerView.Palette"
                 Value="@GetMudColor(context.Color)"/>
         </MudTd>
-        <MudTd DataLabel="Actions">
+        <MudTd DataLabel="@DashboardLocalizer["Actions"]">
             <MudIconButton
                 OnClick="@(() => OnEdit(context))"
                 Icon="@Icons.Material.Filled.Edit"

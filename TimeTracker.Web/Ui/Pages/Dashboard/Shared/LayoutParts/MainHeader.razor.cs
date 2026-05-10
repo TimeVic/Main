@@ -1,7 +1,10 @@
+using System.Globalization;
 using System.Timers;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.Workspace;
 using TimeTracker.Web.Store.Auth;
@@ -26,6 +29,9 @@ public partial class MainHeader: IDisposable
     private bool _isShowAddWorkspaceModal = false;
     private System.Timers.Timer _timer;
     private DateTimeOffset _currentTime;
+    private string CurrentLanguageKey => CultureInfo.CurrentUICulture.Name == ILocalizationUrlService.UkrainianCultureName
+        ? "Ukrainian"
+        : "English";
     
     protected override async Task OnInitializedAsync()
     {
@@ -61,6 +67,12 @@ public partial class MainHeader: IDisposable
     {
         Dispatcher.Dispatch(new LogoutAction());
         return Task.CompletedTask;
+    }
+    
+    private async Task OnSelectLanguage(string cultureName)
+    {
+        await Js.InvokeVoidAsync("localStorage.setItem", "timevic.locale", cultureName);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
     public void Dispose()

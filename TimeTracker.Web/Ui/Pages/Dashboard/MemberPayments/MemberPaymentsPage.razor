@@ -15,24 +15,24 @@
 
 <LumexCard Class="mt-6">
     <LumexCardBody>
-        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Payments</p>
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["Payments"]</p>
         <p class="mt-2 text-2xl font-semibold text-slate-900">@_state.Value.TotalCount</p>
-        <p class="mt-1 text-sm text-slate-500">Saved for the current workspace</p>
+        <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["SavedCurrentWorkspace"]</p>
     </LumexCardBody>
 </LumexCard>
 
 <LumexCard Class="mt-6 overflow-x-auto pb-2">
     <LumexCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <p class="text-sm font-semibold text-slate-900">Payments</p>
-            <p class="text-sm text-slate-500">Track payments received from clients for completed work on workspace projects.</p>
+            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Payments"]</p>
+            <p class="text-sm text-slate-500">@DashboardLocalizer["MemberPaymentsDescription"]</p>
         </div>
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
             @if (CanManageOtherMemberPayments)
             {
                 <MembersDropDown
                     Class="min-w-56"
-                    Label="Member"
+                    Label="@DashboardLocalizer["Member"].Value"
                     Type="DropDownType.Select"
                     Clearable="true"
                     Value="_memberFilterId"
@@ -43,7 +43,7 @@
                     <i class="fa-solid fa-plus"></i>    
                 </StartContent>
                 <ChildContent>
-                    Add payment
+                    @DashboardLocalizer["AddPayment"]
                 </ChildContent>
             </CustomButton>
         </div>
@@ -51,7 +51,7 @@
     <LumexCardBody>
         @if (_state.Value.TotalCount == 0)
         {
-            <div class="px-4 py-8 text-center text-sm text-slate-500">No payments added yet. Use the add button to create the first payment.</div>
+            <div class="px-4 py-8 text-center text-sm text-slate-500">@DashboardLocalizer["NoPaymentsAddedHelper"]</div>
         }
         else
         {

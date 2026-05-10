@@ -4,16 +4,16 @@
     Class="@Class"
     Disabled="@Disabled"
     Dense="true"
-    Placeholder="@Placeholder"
+    Placeholder="@LocalizedPlaceholder"
     EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
     Value="@Value"
     Clearable="true"
     ValueChanged="OnValueChanged"
     ToStringFunc="ToStringFunc"
-    RequiredError="Task list is required"
+    RequiredError="@DashboardLocalizer["RequiredField"]"
     Variant="MudBlazor.Variant.Text"
     AnchorOrigin="Origin.BottomCenter">
-    @foreach (var item in _listItems)
+    @foreach (var item in ListItems)
     {
         <MudSelectItem Value="@item.Value">
             <div>@item.Name</div>

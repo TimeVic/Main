@@ -65,7 +65,7 @@ public partial class AddTaskModal
         }
         if (_selectedTaskList == null)
         {
-            ToastService.ShowError("Task list is required.");
+            ToastService.ShowError(DashboardLocalizer["AddTaskModal_TaskListRequired"].Value);
             return;
         }
 

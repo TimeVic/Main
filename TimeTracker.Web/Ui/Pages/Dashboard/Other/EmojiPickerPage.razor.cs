@@ -43,8 +43,14 @@ public partial class EmojiPickerPage
     {
         if (await _helperService.CopyToClipboard(emoji))
         {
-            _toastService.ShowSuccess("Emoji copied to clipboard!");
+            _toastService.ShowSuccess(DashboardLocalizer["EmojiPicker_CopiedToClipboard"].Value);
         }
+    }
+
+    private string DisplayCategory(string category)
+    {
+        var localized = DashboardLocalizer[$"EmojiCategory_{category}"];
+        return localized.ResourceNotFound ? category : localized.Value;
     }
     
     private string searchText = string.Empty;

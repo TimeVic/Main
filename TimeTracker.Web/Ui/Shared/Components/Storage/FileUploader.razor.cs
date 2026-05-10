@@ -58,10 +58,10 @@ public partial class FileUploader
         {
             if (_isLoading)
             {
-                return "Uploading...";
+                return DashboardLocalizer["FileUploader_Uploading"].Value;
             }
 
-            return "Select files";
+            return DashboardLocalizer["FileUploader_SelectFiles"].Value;
         }
     }
 

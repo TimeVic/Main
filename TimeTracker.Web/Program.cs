@@ -23,6 +23,7 @@ using LumexUI.Extensions;
 using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.UI.Modal;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 var currentAssembly = typeof(Program).Assembly;
 var defaultCulture = new CultureInfo("en");
@@ -124,6 +125,26 @@ var host = builder.Build();
 // Detect culture from URL path and apply it — /uk or /uk/* = uk-UA, otherwise = en
 var navigationManager = host.Services.GetRequiredService<NavigationManager>();
 var currentPath = new Uri(navigationManager.Uri).AbsolutePath;
-host.Services.GetRequiredService<ILocalizationUrlService>().ApplyCultureFromPath(currentPath);
+var localizationUrlService = host.Services.GetRequiredService<ILocalizationUrlService>();
+if (localizationUrlService.IsUkrainianPath(currentPath))
+{
+    localizationUrlService.ApplyCultureFromPath(currentPath);
+}
+else
+{
+    var storedCultureName = ILocalizationUrlService.EnglishCultureName;
+    try
+    {
+        storedCultureName = await host.Services
+            .GetRequiredService<IJSRuntime>()
+            .InvokeAsync<string?>("localStorage.getItem", "timevic.locale") ?? ILocalizationUrlService.EnglishCultureName;
+    }
+    catch (Exception)
+    {
+        storedCultureName = ILocalizationUrlService.EnglishCultureName;
+    }
+
+    localizationUrlService.ApplyCulture(storedCultureName);
+}
 
 await host.RunAsync();
