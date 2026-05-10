@@ -7,6 +7,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
         <WarningsAsErrors>CS0168,CS8602,CS0169,CS1998</WarningsAsErrors>
+        <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Production' ">

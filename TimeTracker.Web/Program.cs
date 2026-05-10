@@ -22,6 +22,8 @@ using ToastService = TimeTracker.Web.Services.UI.ToastService;
 using LumexUI.Extensions;
 using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.UI.Modal;
+using TimeTracker.Web.Services;
+using Microsoft.AspNetCore.Components;
 
 var currentAssembly = typeof(Program).Assembly;
 var defaultCulture = new CultureInfo("en");
@@ -97,6 +99,7 @@ builder.Services.AddScoped<FcmService>();
 builder.Services.AddScoped<MessagingWebSocketClientService>();
 builder.Services.AddScoped<ModalDialogService>();
 builder.Services.AddScoped<UserDateTimeProviderService>();
+builder.Services.AddScoped<ILocalizationUrlService, LocalizationUrlService>();
 
 // Lumex UI
 builder.Services.AddLumexServices();
@@ -117,4 +120,10 @@ builder.Logging.AddBrowserConsole()
 #endif
 
 var host = builder.Build();
+
+// Detect culture from URL path and apply it — /uk or /uk/* = uk-UA, otherwise = en
+var navigationManager = host.Services.GetRequiredService<NavigationManager>();
+var currentPath = new Uri(navigationManager.Uri).AbsolutePath;
+host.Services.GetRequiredService<ILocalizationUrlService>().ApplyCultureFromPath(currentPath);
+
 await host.RunAsync();
