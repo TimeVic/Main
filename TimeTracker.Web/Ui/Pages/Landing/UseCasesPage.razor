@@ -5,10 +5,12 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
+@inject IStringLocalizer<PublicLandingResource> SharedLocalizer
+@inject IStringLocalizer<UseCasesPage> Localizer
 <SeoHead
-    Title="@SiteMetadata.UseCasesTitle"
-    Description="@SiteMetadata.UseCasesDescription"
-    Keywords="@SiteMetadata.UseCasesKeywords"
+    Title="@Localizer["Meta_Title"]"
+    Description="@Localizer["Meta_Description"]"
+    Keywords="@Localizer["Meta_Keywords"]"
     Robots="@SiteMetadata.IndexRobots"
     CanonicalUrl="@SiteMetadata.ToAbsoluteUrl(SiteUrl.UseCases)" />
 
@@ -24,16 +26,15 @@
                     Color="@ThemeColor.Primary"
                     Radius="@Radius.Full"
                     Class="border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm">
-                    For freelance developers with multiple clients
+                    @Localizer["Content_ForFreelanceDevelopersWithMultipleClients"]
                 </LumexChip>
 
                 <h1 class="mt-6 text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl lg:text-6xl">
-                    For freelance developers working with multiple clients
+                    @Localizer["Content_ForFreelanceDevelopersWorkingWithMultipleClients"]
                 </h1>
-                <p class="mt-3 text-xl font-semibold text-slate-700">Stop guessing your income.</p>
+                <p class="mt-3 text-xl font-semibold text-slate-700">@Localizer["Content_StopGuessingYourIncome"]</p>
                 <p class="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
-                    Track time, see how much you've <span class="font-semibold text-emerald-700">earned</span>,
-                    and know exactly <span class="font-semibold text-slate-800">who owes you</span>.
+                    @Localizer["Content_TrackTimeSeeHowMuchYouVe"] <span class="font-semibold text-emerald-700">@Localizer["Content_Earned"]</span>@Localizer["Content_AndKnowExactly"] <span class="font-semibold text-slate-800">@Localizer["Content_WhoOwesYou"]</span>.
                 </p>
 
                 <div class="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -46,31 +47,31 @@
                         <StartContent>
                             <i class="fa-solid fa-wallet"></i>
                         </StartContent>
-                        <ChildContent>Start tracking income</ChildContent>
+                        <ChildContent>@SharedLocalizer["CTA_StartTrackingIncome"]</ChildContent>
                     </LumexButton>
 
                     <a href="#use-cases" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50">
                         <i class="fa-regular fa-eye"></i>
-                        <span>Explore use cases</span>
+                        <span>@Localizer["Content_ExploreUseCases"]</span>
                     </a>
                 </div>
-                <p class="mt-3 text-sm text-slate-500">No setup. No spreadsheets. Start in 30 seconds.</p>
+                <p class="mt-3 text-sm text-slate-500">@Localizer["Content_NoSetupNoSpreadsheetsStartIn30Seconds"]</p>
 
                 <div class="mt-10 grid gap-4 sm:grid-cols-3">
                     <div class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500">Track</p>
-                        <p class="mt-3 text-lg font-semibold text-slate-900">Client work in one place</p>
-                        <p class="mt-2 text-sm leading-6 text-slate-600">Hours stay attached to the right client, project, and rate.</p>
+                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-500">@Localizer["Content_Track"]</p>
+                        <p class="mt-3 text-lg font-semibold text-slate-900">@Localizer["Content_ClientWorkInOnePlace"]</p>
+                        <p class="mt-2 text-sm leading-6 text-slate-600">@Localizer["Content_HoursStayAttachedToTheRightClientProjectAndRate"]</p>
                     </div>
                     <div class="rounded-3xl border border-emerald-200 bg-emerald-50/60 p-5 shadow-sm">
-                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-700">Earn</p>
-                        <p class="mt-3 text-lg font-semibold text-slate-900">See money as you work</p>
-                        <p class="mt-2 text-sm leading-6 text-slate-700">Tracked time turns into earned income automatically.</p>
+                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-700">@Localizer["Content_Earn"]</p>
+                        <p class="mt-3 text-lg font-semibold text-slate-900">@Localizer["Content_SeeMoneyAsYouWork"]</p>
+                        <p class="mt-2 text-sm leading-6 text-slate-700">@Localizer["Content_TrackedTimeTurnsIntoEarnedIncomeAutomatically"]</p>
                     </div>
                     <div class="rounded-3xl border border-red-200 bg-red-50/70 p-5 shadow-sm">
-                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-red-700">Outstanding</p>
-                        <p class="mt-3 text-lg font-semibold text-slate-900">Spot unpaid work fast</p>
-                        <p class="mt-2 text-sm leading-6 text-slate-700">You can see which client balance still needs follow-up.</p>
+                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-red-700">@Localizer["Content_Outstanding"]</p>
+                        <p class="mt-3 text-lg font-semibold text-slate-900">@Localizer["Content_SpotUnpaidWorkFast"]</p>
+                        <p class="mt-2 text-sm leading-6 text-slate-700">@Localizer["Content_YouCanSeeWhichClientBalanceStillNeedsFollowUp"]</p>
                     </div>
                 </div>
             </section>
@@ -83,8 +84,8 @@
                     <LumexCardHeader Class="border-b border-white/10 px-6 py-5">
                         <div class="flex w-full items-start justify-between gap-4">
                             <div>
-                                <p class="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-200">Financial summary</p>
-                                <h2 class="mt-2 text-2xl font-semibold">One glance at what matters</h2>
+                                <p class="text-xs font-semibold uppercase tracking-[0.28em] text-emerald-200">@Localizer["Content_FinancialSummary"]</p>
+                                <h2 class="mt-2 text-2xl font-semibold">@Localizer["Content_OneGlanceAtWhatMatters"]</h2>
                             </div>
                             <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-emerald-200">
                                 <i class="fa-solid fa-chart-pie text-xl"></i>
@@ -95,37 +96,37 @@
                     <LumexCardBody Class="gap-4 px-6 py-6">
                         <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
                             <div class="flex items-center justify-between gap-4">
-                                <span class="text-sm text-slate-300">Total Earned</span>
+                                <span class="text-sm text-slate-300">@Localizer["Content_TotalEarned"]</span>
                                 <span class="text-2xl font-semibold text-emerald-300">$6,480</span>
                             </div>
-                            <p class="mt-2 text-sm text-slate-400">Across 4 active clients this month</p>
+                            <p class="mt-2 text-sm text-slate-400">@Localizer["Content_Across4ActiveClientsThisMonth"]</p>
                         </div>
 
                         <div class="rounded-3xl border border-emerald-500/20 bg-emerald-500/10 p-5">
                             <div class="flex items-center justify-between gap-4">
-                                <span class="text-sm text-emerald-100">Paid</span>
+                                <span class="text-sm text-emerald-100">@Localizer["Content_Paid"]</span>
                                 <span class="text-2xl font-semibold text-emerald-200">$4,900</span>
                             </div>
-                            <p class="mt-2 text-sm text-emerald-100/80">Payouts already logged from clients</p>
+                            <p class="mt-2 text-sm text-emerald-100/80">@Localizer["Content_PayoutsAlreadyLoggedFromClients"]</p>
                         </div>
 
                         <div class="rounded-3xl border border-red-500/30 bg-red-500/15 p-5 shadow-lg shadow-red-950/10">
                             <div class="flex items-center justify-between gap-4">
-                                <span class="text-sm font-semibold text-red-100">Outstanding</span>
+                                <span class="text-sm font-semibold text-red-100">@Localizer["Content_Outstanding"]</span>
                                 <span class="text-3xl font-semibold text-red-200">$1,580</span>
                             </div>
-                            <p class="mt-2 text-sm text-red-100/85">This is the amount still unpaid by clients.</p>
+                            <p class="mt-2 text-sm text-red-100/85">@Localizer["Content_ThisIsTheAmountStillUnpaidByClients"]</p>
                         </div>
 
                         <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
                             <div class="flex items-center justify-between gap-3 text-sm">
-                                <span class="text-slate-300">Client owing the most</span>
-                                <span class="font-semibold text-white">Northline Studio</span>
+                                <span class="text-slate-300">@Localizer["Content_ClientOwingTheMost"]</span>
+                                <span class="font-semibold text-white">@Localizer["Content_NorthlineStudio"]</span>
                             </div>
                             <div class="mt-4 h-2 rounded-full bg-white/10">
                                 <div class="h-2 w-[62%] rounded-full bg-red-400"></div>
                             </div>
-                            <p class="mt-3 text-sm text-slate-300">Outstanding balance needs attention before it gets buried in next week’s work.</p>
+                            <p class="mt-3 text-sm text-slate-300">@Localizer["Content_OutstandingBalanceNeedsAttentionBeforeItGetsBuriedInNext"]</p>
                         </div>
                     </LumexCardBody>
                 </LumexCard>
@@ -136,12 +137,12 @@
     <section id="use-cases" class="border-b border-slate-200 bg-white">
         <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
             <div class="max-w-3xl">
-                <p class="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-600">Use cases</p>
+                <p class="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-600">@SharedLocalizer["Nav_UseCases"]</p>
                 <h2 class="mt-4 text-3xl font-semibold text-slate-950 sm:text-4xl">
-                    Situations freelance developers run into every month
+                    @Localizer["Content_SituationsFreelanceDevelopersRunIntoEveryMonth"]
                 </h2>
                 <p class="mt-4 text-base leading-7 text-slate-600">
-                    This page is not about generic productivity. It is about client work, rates, payments, and the money behind your hours.
+                    @Localizer["Content_ThisPageIsNotAboutGenericProductivityItIsAbout"]
                 </p>
             </div>
 
@@ -157,7 +158,7 @@
                                 Color="@ThemeColor.Info"
                                 Radius="@Radius.Full"
                                 Class="bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-blue-700">
-                                Use case 01
+                                @Localizer["Content_UseCase01"]
                             </LumexChip>
                             <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-sm">
                                 <i class="fa-solid fa-code-branch"></i>
@@ -165,30 +166,30 @@
                         </div>
 
                         <div>
-                            <h3 class="text-2xl font-semibold text-slate-950">Multiple clients, different rates</h3>
+                            <h3 class="text-2xl font-semibold text-slate-950">@Localizer["Content_MultipleClientsDifferentRates"]</h3>
                             <p class="mt-3 text-sm leading-6 text-slate-600">
-                                You're working with several clients and projects at the same time.
+                                @Localizer["Content_YouReWorkingWithSeveralClientsAndProjectsAtThe"]
                             </p>
                         </div>
 
                         <div class="rounded-3xl border border-slate-200 bg-white p-5">
-                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Problem</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">@Localizer["Content_Problem"]</p>
                             <p class="mt-3 text-sm leading-6 text-slate-700">
-                                At the end of the month, you're guessing: how much time you spent and how much each client should pay.
+                                @Localizer["Content_AtTheEndOfTheMonthYouReGuessingHow"]
                             </p>
                         </div>
 
                         <div class="rounded-3xl border border-blue-200 bg-blue-50/70 p-5">
-                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-blue-700">How TimeVic helps</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-blue-700">@Localizer["Content_HowTimevicHelps"]</p>
                             <p class="mt-3 text-sm leading-6 text-slate-700">
-                                Track time per client and project. Set hourly rates once — TimeVic converts time into money automatically.
+                                @Localizer["Content_TrackTimePerClientAndProjectSetHourlyRatesOnce"]
                             </p>
                         </div>
 
                         <div class="mt-auto rounded-3xl border border-emerald-200 bg-emerald-50/70 p-5">
-                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">Result</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">@Localizer["Content_Result"]</p>
                             <p class="mt-3 text-sm leading-6 text-slate-800">
-                                You instantly see how much each client owes you — no manual calculations.
+                                @Localizer["Content_YouInstantlySeeHowMuchEachClientOwesYouNo"]
                             </p>
                         </div>
                     </LumexCardBody>
@@ -206,9 +207,9 @@
                                     Color="@ThemeColor.Danger"
                                     Radius="@Radius.Full"
                                     Class="bg-red-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-red-700">
-                                    Most important use case
+                                    @Localizer["Content_MostImportantUseCase"]
                                 </LumexChip>
-                                <h3 class="mt-4 text-2xl font-semibold text-slate-950">Unpaid work visibility</h3>
+                                <h3 class="mt-4 text-2xl font-semibold text-slate-950">@Localizer["Content_UnpaidWorkVisibility"]</h3>
                             </div>
                             <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-600 text-white shadow-sm">
                                 <i class="fa-solid fa-file-invoice-dollar"></i>
@@ -219,44 +220,44 @@
                     <LumexCardBody Class="h-full gap-6 px-7 py-7">
                         <div>
                             <p class="text-sm leading-6 text-slate-700">
-                                Some clients have paid. Others haven't.
+                                @Localizer["Content_SomeClientsHavePaidOthersHavenT"]
                             </p>
                         </div>
 
                         <div class="rounded-3xl border border-red-200 bg-white p-5">
-                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-red-700">Problem</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-red-700">@Localizer["Content_Problem"]</p>
                             <p class="mt-3 text-sm leading-6 text-slate-700">
-                                When time tracking and payments are separated, you lose visibility of unpaid work.
+                                @Localizer["Content_WhenTimeTrackingAndPaymentsAreSeparatedYouLoseVisibility"]
                             </p>
                         </div>
 
                         <div class="rounded-3xl border border-emerald-200 bg-emerald-50/80 p-5">
-                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">How TimeVic helps</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">@Localizer["Content_HowTimevicHelps_2"]</p>
                             <p class="mt-3 text-sm leading-6 text-slate-700">
-                                Log payments and compare them directly with earned amounts.
+                                @Localizer["Content_LogPaymentsAndCompareThemDirectlyWithEarnedAmounts"]
                             </p>
                         </div>
 
                         <div class="rounded-[1.75rem] border border-slate-200 bg-slate-950 p-5 text-white">
-                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-300">Result</p>
-                            <p class="mt-3 text-sm leading-6 text-slate-300">You always see:</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-300">@Localizer["Content_Result"]</p>
+                            <p class="mt-3 text-sm leading-6 text-slate-300">@Localizer["Content_YouAlwaysSee"]</p>
 
                             <div class="mt-4 grid gap-3">
                                 <div class="flex items-center justify-between rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3">
-                                    <span class="text-sm text-emerald-100">Paid</span>
+                                    <span class="text-sm text-emerald-100">@Localizer["Content_Paid"]</span>
                                     <span class="text-lg font-semibold text-emerald-200">$3,400</span>
                                 </div>
                                 <div class="flex items-center justify-between rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3">
-                                    <span class="text-sm text-red-100">Unpaid</span>
+                                    <span class="text-sm text-red-100">@Localizer["Content_Unpaid"]</span>
                                     <span class="text-lg font-semibold text-red-200">$1,120</span>
                                 </div>
                                 <div class="flex items-center justify-between rounded-2xl border border-red-500/30 bg-red-500/15 px-4 py-3">
-                                    <span class="text-sm font-semibold text-red-100">Who owes you</span>
+                                    <span class="text-sm font-semibold text-red-100">@Localizer["Content_WhoOwesYou_2"]</span>
                                     <span class="text-xl font-semibold text-red-200">$1,120</span>
                                 </div>
                             </div>
 
-                            <p class="mt-4 text-xs font-semibold text-slate-400">Outstanding is not a guess anymore.</p>
+                            <p class="mt-4 text-xs font-semibold text-slate-400">@Localizer["Content_OutstandingIsNotAGuessAnymore"]</p>
                         </div>
                     </LumexCardBody>
                 </LumexCard>
@@ -272,7 +273,7 @@
                                 Color="@ThemeColor.Warning"
                                 Radius="@Radius.Full"
                                 Class="bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">
-                                Use case 03
+                                @Localizer["Content_UseCase03"]
                             </LumexChip>
                             <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-500 text-white shadow-sm">
                                 <i class="fa-solid fa-gauge-high"></i>
@@ -280,30 +281,30 @@
                         </div>
 
                         <div>
-                            <h3 class="text-2xl font-semibold text-slate-950">Real hourly rate</h3>
+                            <h3 class="text-2xl font-semibold text-slate-950">@Localizer["Content_RealHourlyRate"]</h3>
                             <p class="mt-3 text-sm leading-6 text-slate-600">
-                                You charge hourly, but not all work is visible.
+                                @Localizer["Content_YouChargeHourlyButNotAllWorkIsVisible"]
                             </p>
                         </div>
 
                         <div class="rounded-3xl border border-slate-200 bg-white p-5">
-                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Problem</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">@Localizer["Content_Problem"]</p>
                             <p class="mt-3 text-sm leading-6 text-slate-700">
-                                Meetings, context switching, quick fixes — they reduce your real hourly rate, but you don't see it.
+                                @Localizer["Content_MeetingsContextSwitchingQuickFixesTheyReduceYourRealHourly"]
                             </p>
                         </div>
 
                         <div class="rounded-3xl border border-amber-200 bg-amber-50/80 p-5">
-                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">How TimeVic helps</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">@Localizer["Content_HowTimevicHelps_3"]</p>
                             <p class="mt-3 text-sm leading-6 text-slate-700">
-                                Track all work related to a client and compare time vs earned money.
+                                @Localizer["Content_TrackAllWorkRelatedToAClientAndCompareTime"]
                             </p>
                         </div>
 
                         <div class="mt-auto rounded-3xl border border-emerald-200 bg-emerald-50/70 p-5">
-                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">Result</p>
+                            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">@Localizer["Content_Result"]</p>
                             <p class="mt-3 text-sm leading-6 text-slate-800">
-                                You understand your real effective hourly rate — not just the nominal one.
+                                @Localizer["Content_YouUnderstandYourRealEffectiveHourlyRateNotJustThe"]
                             </p>
                         </div>
                     </LumexCardBody>
@@ -323,18 +324,18 @@
                         <i class="fa-solid fa-ban"></i>
                     </div>
                     <div>
-                        <p class="text-sm font-semibold uppercase tracking-[0.28em] text-slate-500">Anti-positioning</p>
-                        <h2 class="mt-4 text-3xl font-semibold text-slate-950 sm:text-4xl">Not another task manager</h2>
+                        <p class="text-sm font-semibold uppercase tracking-[0.28em] text-slate-500">@Localizer["Content_AntiPositioning"]</p>
+                        <h2 class="mt-4 text-3xl font-semibold text-slate-950 sm:text-4xl">@Localizer["Content_NotAnotherTaskManager"]</h2>
                     </div>
                     <div class="mx-auto max-w-3xl space-y-4 text-base leading-7 text-slate-600">
                         <p>
-                            TimeVic doesn't replace Jira, ClickUp, or your workflow.
+                            @Localizer["Content_TimevicDoesnTReplaceJiraClickUpOrYourWorkflow"]
                         </p>
                         <p class="font-medium text-slate-900">
-                            It focuses on one thing:
+                            @Localizer["Content_ItFocusesOnOneThing"]
                         </p>
                         <p class="text-lg font-semibold text-slate-950 sm:text-xl">
-                            How much you earned, how much was paid,<br class="hidden sm:block" /> and who still owes you.
+                            @Localizer["Content_HowMuchYouEarnedHowMuchWasPaid"]<br class="hidden sm:block" /> @Localizer["Content_AndWhoStillOwesYou"]
                         </p>
                     </div>
                 </LumexCardBody>
@@ -350,19 +351,19 @@
                 Class="rounded-[2rem] border border-slate-200 bg-slate-950 text-white shadow-2xl">
                 <LumexCardBody Class="gap-8 p-8 sm:p-10 lg:p-12">
                     <div class="max-w-3xl">
-                        <p class="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-200">Start now</p>
+                        <p class="text-sm font-semibold uppercase tracking-[0.28em] text-emerald-200">@Localizer["Content_StartNow"]</p>
                         <h2 class="mt-4 text-3xl font-semibold leading-tight sm:text-4xl">
-                            Start tracking income in minutes
+                            @Localizer["Content_StartTrackingIncomeInMinutes"]
                         </h2>
                         <p class="mt-4 text-base leading-7 text-slate-300">
-                            Add a client, set your rate, and start tracking time.
+                            @Localizer["Content_AddAClientSetYourRateAndStartTrackingTime"]
                         </p>
                     </div>
 
                     <div class="grid gap-4 sm:grid-cols-3">
-                        <div class="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200">Add a client</div>
-                        <div class="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200">Set your hourly rate</div>
-                        <div class="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200">Track time and payments</div>
+                        <div class="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200">@Localizer["Content_AddAClient"]</div>
+                        <div class="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200">@Localizer["Content_SetYourHourlyRate"]</div>
+                        <div class="rounded-3xl border border-white/10 bg-white/5 p-4 text-sm text-slate-200">@Localizer["Content_TrackTimeAndPayments"]</div>
                     </div>
 
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -375,15 +376,15 @@
                             <StartContent>
                                 <i class="fa-solid fa-user-plus"></i>
                             </StartContent>
-                            <ChildContent>Start free</ChildContent>
+                            <ChildContent>@SharedLocalizer["CTA_StartFree"]</ChildContent>
                         </LumexButton>
 
                         <a href="@SiteUrl.LoginAsDemo" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">
                             <i class="fa-solid fa-flask"></i>
-                            <span>Preview demo</span>
+                            <span>@SharedLocalizer["CTA_PreviewDemo"]</span>
                         </a>
 
-                        <p class="text-sm text-slate-400 sm:ml-2">No setup. No spreadsheets.</p>
+                        <p class="text-sm text-slate-400 sm:ml-2">@SharedLocalizer["CTA_NoSetupNoSpreadsheets"]</p>
                     </div>
                 </LumexCardBody>
             </LumexCard>

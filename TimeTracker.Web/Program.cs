@@ -1,3 +1,4 @@
+using System.Globalization;
 using Blazored.LocalStorage;
 using Fluxor;
 using Majorsoft.Blazor.WebAssembly.Logging.Console;
@@ -22,7 +23,11 @@ using LumexUI.Extensions;
 using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.UI.Modal;
 
-var currentAssembly = typeof(Program).Assembly;    
+var currentAssembly = typeof(Program).Assembly;
+var defaultCulture = new CultureInfo("en");
+CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 var environment = builder.HostEnvironment.Environment;
@@ -59,6 +64,7 @@ builder.Configuration.AddJsonStream(stream);
 builder.Services.AddHttpClientInterceptor();
 // Init local storage
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 // // MudBlazor
 // builder.Services.AddMudServices(config =>

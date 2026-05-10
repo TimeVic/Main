@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>TimeVic - Magic Link Sign-In</value>
+  </data>
+  <data name="Content_Auth" xml:space="preserve">
+    <value>Auth</value>
+  </data>
+  <data name="Content_MagicLinkSignIn" xml:space="preserve">
+    <value>Magic link sign-in</value>
+  </data>
+  <data name="Content_VerifyingYourOneTimeLoginLink" xml:space="preserve">
+    <value>Verifying your one-time login link…</value>
+  </data>
+  <data name="Content_SigningYouInPleaseWait" xml:space="preserve">
+    <value>Signing you in, please wait…</value>
+  </data>
+  <data name="Content_InvalidOrExpiredLink" xml:space="preserve">
+    <value>Invalid or expired link</value>
+  </data>
+  <data name="Content_ThisMagicLinkIsNoLongerValidPleaseRequestA" xml:space="preserve">
+    <value>This magic link is no longer valid. Please request a new one.</value>
+  </data>
+</root>

@@ -1,0 +1,228 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>TimeVic Use Cases - Income Tracking for Freelance Developers</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>See how TimeVic helps freelance developers with multiple clients track earnings, compare payments, and spot unpaid work before it gets missed.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>freelance developer use cases, client payment tracking, unpaid work visibility, hourly rate tracker, freelance income tracker</value>
+  </data>
+  <data name="Content_ForFreelanceDevelopersWithMultipleClients" xml:space="preserve">
+    <value>For freelance developers with multiple clients</value>
+  </data>
+  <data name="Content_ForFreelanceDevelopersWorkingWithMultipleClients" xml:space="preserve">
+    <value>For freelance developers working with multiple clients</value>
+  </data>
+  <data name="Content_StopGuessingYourIncome" xml:space="preserve">
+    <value>Stop guessing your income.</value>
+  </data>
+  <data name="Content_TrackTimeSeeHowMuchYouVe" xml:space="preserve">
+    <value>Track time, see how much you've</value>
+  </data>
+  <data name="Content_Earned" xml:space="preserve">
+    <value>earned</value>
+  </data>
+  <data name="Content_AndKnowExactly" xml:space="preserve">
+    <value>, and know exactly</value>
+  </data>
+  <data name="Content_WhoOwesYou" xml:space="preserve">
+    <value>who owes you</value>
+  </data>
+  <data name="Content_ExploreUseCases" xml:space="preserve">
+    <value>Explore use cases</value>
+  </data>
+  <data name="Content_NoSetupNoSpreadsheetsStartIn30Seconds" xml:space="preserve">
+    <value>No setup. No spreadsheets. Start in 30 seconds.</value>
+  </data>
+  <data name="Content_Track" xml:space="preserve">
+    <value>Track</value>
+  </data>
+  <data name="Content_ClientWorkInOnePlace" xml:space="preserve">
+    <value>Client work in one place</value>
+  </data>
+  <data name="Content_HoursStayAttachedToTheRightClientProjectAndRate" xml:space="preserve">
+    <value>Hours stay attached to the right client, project, and rate.</value>
+  </data>
+  <data name="Content_Earn" xml:space="preserve">
+    <value>Earn</value>
+  </data>
+  <data name="Content_SeeMoneyAsYouWork" xml:space="preserve">
+    <value>See money as you work</value>
+  </data>
+  <data name="Content_TrackedTimeTurnsIntoEarnedIncomeAutomatically" xml:space="preserve">
+    <value>Tracked time turns into earned income automatically.</value>
+  </data>
+  <data name="Content_Outstanding" xml:space="preserve">
+    <value>Outstanding</value>
+  </data>
+  <data name="Content_SpotUnpaidWorkFast" xml:space="preserve">
+    <value>Spot unpaid work fast</value>
+  </data>
+  <data name="Content_YouCanSeeWhichClientBalanceStillNeedsFollowUp" xml:space="preserve">
+    <value>You can see which client balance still needs follow-up.</value>
+  </data>
+  <data name="Content_FinancialSummary" xml:space="preserve">
+    <value>Financial summary</value>
+  </data>
+  <data name="Content_OneGlanceAtWhatMatters" xml:space="preserve">
+    <value>One glance at what matters</value>
+  </data>
+  <data name="Content_TotalEarned" xml:space="preserve">
+    <value>Total Earned</value>
+  </data>
+  <data name="Content_Across4ActiveClientsThisMonth" xml:space="preserve">
+    <value>Across 4 active clients this month</value>
+  </data>
+  <data name="Content_Paid" xml:space="preserve">
+    <value>Paid</value>
+  </data>
+  <data name="Content_PayoutsAlreadyLoggedFromClients" xml:space="preserve">
+    <value>Payouts already logged from clients</value>
+  </data>
+  <data name="Content_ThisIsTheAmountStillUnpaidByClients" xml:space="preserve">
+    <value>This is the amount still unpaid by clients.</value>
+  </data>
+  <data name="Content_ClientOwingTheMost" xml:space="preserve">
+    <value>Client owing the most</value>
+  </data>
+  <data name="Content_NorthlineStudio" xml:space="preserve">
+    <value>Northline Studio</value>
+  </data>
+  <data name="Content_OutstandingBalanceNeedsAttentionBeforeItGetsBuriedInNext" xml:space="preserve">
+    <value>Outstanding balance needs attention before it gets buried in next week’s work.</value>
+  </data>
+  <data name="Content_SituationsFreelanceDevelopersRunIntoEveryMonth" xml:space="preserve">
+    <value>Situations freelance developers run into every month</value>
+  </data>
+  <data name="Content_ThisPageIsNotAboutGenericProductivityItIsAbout" xml:space="preserve">
+    <value>This page is not about generic productivity. It is about client work, rates, payments, and the money behind your hours.</value>
+  </data>
+  <data name="Content_UseCase01" xml:space="preserve">
+    <value>Use case 01</value>
+  </data>
+  <data name="Content_MultipleClientsDifferentRates" xml:space="preserve">
+    <value>Multiple clients, different rates</value>
+  </data>
+  <data name="Content_YouReWorkingWithSeveralClientsAndProjectsAtThe" xml:space="preserve">
+    <value>You're working with several clients and projects at the same time.</value>
+  </data>
+  <data name="Content_Problem" xml:space="preserve">
+    <value>Problem</value>
+  </data>
+  <data name="Content_AtTheEndOfTheMonthYouReGuessingHow" xml:space="preserve">
+    <value>At the end of the month, you're guessing: how much time you spent and how much each client should pay.</value>
+  </data>
+  <data name="Content_HowTimevicHelps" xml:space="preserve">
+    <value>How TimeVic helps</value>
+  </data>
+  <data name="Content_TrackTimePerClientAndProjectSetHourlyRatesOnce" xml:space="preserve">
+    <value>Track time per client and project. Set hourly rates once — TimeVic converts time into money automatically.</value>
+  </data>
+  <data name="Content_Result" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="Content_YouInstantlySeeHowMuchEachClientOwesYouNo" xml:space="preserve">
+    <value>You instantly see how much each client owes you — no manual calculations.</value>
+  </data>
+  <data name="Content_MostImportantUseCase" xml:space="preserve">
+    <value>Most important use case</value>
+  </data>
+  <data name="Content_UnpaidWorkVisibility" xml:space="preserve">
+    <value>Unpaid work visibility</value>
+  </data>
+  <data name="Content_SomeClientsHavePaidOthersHavenT" xml:space="preserve">
+    <value>Some clients have paid. Others haven't.</value>
+  </data>
+  <data name="Content_WhenTimeTrackingAndPaymentsAreSeparatedYouLoseVisibility" xml:space="preserve">
+    <value>When time tracking and payments are separated, you lose visibility of unpaid work.</value>
+  </data>
+  <data name="Content_HowTimevicHelps_2" xml:space="preserve">
+    <value>How TimeVic helps</value>
+  </data>
+  <data name="Content_LogPaymentsAndCompareThemDirectlyWithEarnedAmounts" xml:space="preserve">
+    <value>Log payments and compare them directly with earned amounts.</value>
+  </data>
+  <data name="Content_YouAlwaysSee" xml:space="preserve">
+    <value>You always see:</value>
+  </data>
+  <data name="Content_Unpaid" xml:space="preserve">
+    <value>Unpaid</value>
+  </data>
+  <data name="Content_WhoOwesYou_2" xml:space="preserve">
+    <value>Who owes you</value>
+  </data>
+  <data name="Content_OutstandingIsNotAGuessAnymore" xml:space="preserve">
+    <value>Outstanding is not a guess anymore.</value>
+  </data>
+  <data name="Content_UseCase03" xml:space="preserve">
+    <value>Use case 03</value>
+  </data>
+  <data name="Content_RealHourlyRate" xml:space="preserve">
+    <value>Real hourly rate</value>
+  </data>
+  <data name="Content_YouChargeHourlyButNotAllWorkIsVisible" xml:space="preserve">
+    <value>You charge hourly, but not all work is visible.</value>
+  </data>
+  <data name="Content_MeetingsContextSwitchingQuickFixesTheyReduceYourRealHourly" xml:space="preserve">
+    <value>Meetings, context switching, quick fixes — they reduce your real hourly rate, but you don't see it.</value>
+  </data>
+  <data name="Content_HowTimevicHelps_3" xml:space="preserve">
+    <value>How TimeVic helps</value>
+  </data>
+  <data name="Content_TrackAllWorkRelatedToAClientAndCompareTime" xml:space="preserve">
+    <value>Track all work related to a client and compare time vs earned money.</value>
+  </data>
+  <data name="Content_YouUnderstandYourRealEffectiveHourlyRateNotJustThe" xml:space="preserve">
+    <value>You understand your real effective hourly rate — not just the nominal one.</value>
+  </data>
+  <data name="Content_AntiPositioning" xml:space="preserve">
+    <value>Anti-positioning</value>
+  </data>
+  <data name="Content_NotAnotherTaskManager" xml:space="preserve">
+    <value>Not another task manager</value>
+  </data>
+  <data name="Content_TimevicDoesnTReplaceJiraClickUpOrYourWorkflow" xml:space="preserve">
+    <value>TimeVic doesn't replace Jira, ClickUp, or your workflow.</value>
+  </data>
+  <data name="Content_ItFocusesOnOneThing" xml:space="preserve">
+    <value>It focuses on one thing:</value>
+  </data>
+  <data name="Content_HowMuchYouEarnedHowMuchWasPaid" xml:space="preserve">
+    <value>How much you earned, how much was paid,</value>
+  </data>
+  <data name="Content_AndWhoStillOwesYou" xml:space="preserve">
+    <value>and who still owes you.</value>
+  </data>
+  <data name="Content_StartNow" xml:space="preserve">
+    <value>Start now</value>
+  </data>
+  <data name="Content_StartTrackingIncomeInMinutes" xml:space="preserve">
+    <value>Start tracking income in minutes</value>
+  </data>
+  <data name="Content_AddAClientSetYourRateAndStartTrackingTime" xml:space="preserve">
+    <value>Add a client, set your rate, and start tracking time.</value>
+  </data>
+  <data name="Content_AddAClient" xml:space="preserve">
+    <value>Add a client</value>
+  </data>
+  <data name="Content_SetYourHourlyRate" xml:space="preserve">
+    <value>Set your hourly rate</value>
+  </data>
+  <data name="Content_TrackTimeAndPayments" xml:space="preserve">
+    <value>Track time and payments</value>
+  </data>
+</root>

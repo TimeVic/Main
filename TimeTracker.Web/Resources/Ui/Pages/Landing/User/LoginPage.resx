@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>TimeVic - Login</value>
+  </data>
+  <data name="Content_WorkspaceDemoAccess" xml:space="preserve">
+    <value>Workspace demo access</value>
+  </data>
+  <data name="Content_SignInToTheTimevicWorkspace" xml:space="preserve">
+    <value>Sign in to the TimeVic workspace</value>
+  </data>
+  <data name="Content_AfterSigningInTheUserLandsOnTheDashboardOr" xml:space="preserve">
+    <value>After signing in, the user lands on the dashboard or returns to chat if that page was opened before authentication.</value>
+  </data>
+  <data name="Content_SingleSignIn" xml:space="preserve">
+    <value>Single sign-in</value>
+  </data>
+  <data name="Content_AuthenticationStateIsStoredLocallyForABackendFreePreview" xml:space="preserve">
+    <value>Authentication state is stored locally for a backend-free preview.</value>
+  </data>
+  <data name="Content_ProtectedPages" xml:space="preserve">
+    <value>Protected pages</value>
+  </data>
+  <data name="Content_DashboardChatAndWorkspacePagesOpenOnlyAfterSignIn" xml:space="preserve">
+    <value>Dashboard, chat, and workspace pages open only after sign-in.</value>
+  </data>
+  <data name="Content_QuickStart" xml:space="preserve">
+    <value>Quick start</value>
+  </data>
+  <data name="Content_EnterAnyValidEmailAndPasswordToAccessThePreview" xml:space="preserve">
+    <value>Enter any valid email and password to access the preview workspace.</value>
+  </data>
+  <data name="Content_Auth" xml:space="preserve">
+    <value>Auth</value>
+  </data>
+  <data name="Content_UserSignIn" xml:space="preserve">
+    <value>User sign-in</value>
+  </data>
+  <data name="Content_RememberThisSession" xml:space="preserve">
+    <value>Remember this session</value>
+  </data>
+  <data name="Content_SignInAndOpenWorkspace" xml:space="preserve">
+    <value>Sign in and open workspace</value>
+  </data>
+  <data name="Content_NoAccountYet" xml:space="preserve">
+    <value>No account yet?</value>
+  </data>
+  <data name="Content_CreateOne" xml:space="preserve">
+    <value>Create one</value>
+  </data>
+  <data name="Content_SignInWithAMagicLink" xml:space="preserve">
+    <value>Sign in with a magic link</value>
+  </data>
+  <data name="Content_WeLlSendAOneTimeLoginLinkToYour" xml:space="preserve">
+    <value>We'll send a one-time login link to your email.</value>
+  </data>
+  <data name="Content_SendMagicLink" xml:space="preserve">
+    <value>Send magic link</value>
+  </data>
+  <data name="Content_MagicLinkSent" xml:space="preserve">
+    <value>Magic link sent</value>
+  </data>
+  <data name="Content_CheckYourInboxAndClickTheLinkToSignIn" xml:space="preserve">
+    <value>Check your inbox and click the link to sign in.</value>
+  </data>
+  <data name="Toast_IncorrectEmailOrPassword" xml:space="preserve">
+    <value>Incorrect email or password</value>
+  </data>
+  <data name="Toast_FailedToSendMagicLink" xml:space="preserve">
+    <value>Failed to send magic link</value>
+  </data>
+</root>

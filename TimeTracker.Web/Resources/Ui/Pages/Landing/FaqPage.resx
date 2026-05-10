@@ -1,0 +1,282 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>TimeVic FAQ - Income Tracking for Freelance Developers</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Answers about using TimeVic to track time, calculate earnings, record client payments, and see unpaid balances for freelance development work.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>TimeVic FAQ, freelance developer income tracker, unpaid client balance tracker, payment tracking for freelancers, time tracking earnings</value>
+  </data>
+  <data name="Title_WhatIsTimevic" xml:space="preserve">
+    <value>What is TimeVic?</value>
+  </data>
+  <data name="Title_IsTimevicJustATimeTracker" xml:space="preserve">
+    <value>Is TimeVic just a time tracker?</value>
+  </data>
+  <data name="Title_WhoIsTimevicFor" xml:space="preserve">
+    <value>Who is TimeVic for?</value>
+  </data>
+  <data name="Title_WhyNotJustUseATimeTrackerAndASpreadsheet" xml:space="preserve">
+    <value>Why not just use a time tracker and a spreadsheet?</value>
+  </data>
+  <data name="Title_HowDoesTimevicCalculateEarnings" xml:space="preserve">
+    <value>How does TimeVic calculate earnings?</value>
+  </data>
+  <data name="Title_CanITrackPaymentsFromClients" xml:space="preserve">
+    <value>Can I track payments from clients?</value>
+  </data>
+  <data name="Title_WhatHappensIfAClientHasnTPaidYet" xml:space="preserve">
+    <value>What happens if a client hasn’t paid yet?</value>
+  </data>
+  <data name="Title_CanISeePaidVsUnpaidWorkPerClient" xml:space="preserve">
+    <value>Can I see paid vs unpaid work per client?</value>
+  </data>
+  <data name="Title_CanISeeWhoOwesMeMoney" xml:space="preserve">
+    <value>Can I see who owes me money?</value>
+  </data>
+  <data name="Title_DoesTimevicReplaceInvoicingTools" xml:space="preserve">
+    <value>Does TimeVic replace invoicing tools?</value>
+  </data>
+  <data name="Title_DoINeedToTrackEveryMinute" xml:space="preserve">
+    <value>Do I need to track every minute?</value>
+  </data>
+  <data name="Title_CanIManageMultipleClients" xml:space="preserve">
+    <value>Can I manage multiple clients?</value>
+  </data>
+  <data name="Title_DoesTimevicReplaceJiraOrTaskManagers" xml:space="preserve">
+    <value>Does TimeVic replace Jira or task managers?</value>
+  </data>
+  <data name="Title_CanIAttachTimeToTasks" xml:space="preserve">
+    <value>Can I attach time to tasks?</value>
+  </data>
+  <data name="Title_IsTimevicFree" xml:space="preserve">
+    <value>Is TimeVic free?</value>
+  </data>
+  <data name="Title_DoINeedToInstallAnything" xml:space="preserve">
+    <value>Do I need to install anything?</value>
+  </data>
+  <data name="Title_HowDoIStart" xml:space="preserve">
+    <value>How do I start?</value>
+  </data>
+  <data name="Title_HowLongDoesItTakeToSeeValue" xml:space="preserve">
+    <value>How long does it take to see value?</value>
+  </data>
+  <data name="Content_ForFreelanceDevelopersWorkingWithMultipleClients" xml:space="preserve">
+    <value>For freelance developers working with multiple clients</value>
+  </data>
+  <data name="Content_EverythingAboutTrackingYourIncomeAndClientPayments" xml:space="preserve">
+    <value>Everything about tracking your income and client payments</value>
+  </data>
+  <data name="Content_LearnHowTimevicHelpsFreelanceDevelopersTrackEarningsPaymentsAnd" xml:space="preserve">
+    <value>Learn how TimeVic helps freelance developers track earnings, payments, and unpaid work.</value>
+  </data>
+  <data name="Content_MostToolsTrackTimeTimevicHelpsYouUnderstandYourIncome" xml:space="preserve">
+    <value>Most tools track time. TimeVic helps you understand your income.</value>
+  </data>
+  <data name="Content_QuickExample" xml:space="preserve">
+    <value>Quick example</value>
+  </data>
+  <data name="Content_TrackTheWorkSeeTheMoneyImmediately" xml:space="preserve">
+    <value>Track the work. See the money immediately.</value>
+  </data>
+  <data name="Content_YouWorked30HoursThatEarned1500TheClient" xml:space="preserve">
+    <value>You worked 30 hours. That earned $1,500. The client paid $500. TimeVic shows the remaining $1,000 instantly.</value>
+  </data>
+  <data name="Content_TrackedWork" xml:space="preserve">
+    <value>Tracked work</value>
+  </data>
+  <data name="Content_30Hours" xml:space="preserve">
+    <value>30 hours</value>
+  </data>
+  <data name="Content_Earned" xml:space="preserve">
+    <value>Earned</value>
+  </data>
+  <data name="Content_Paid" xml:space="preserve">
+    <value>Paid</value>
+  </data>
+  <data name="Content_Outstanding" xml:space="preserve">
+    <value>Outstanding</value>
+  </data>
+  <data name="Content_TimevicShowsThisInstantly" xml:space="preserve">
+    <value>TimeVic shows this instantly.</value>
+  </data>
+  <data name="Content_Section1" xml:space="preserve">
+    <value>Section 1</value>
+  </data>
+  <data name="Content_ProductBasics" xml:space="preserve">
+    <value>Product Basics</value>
+  </data>
+  <data name="Content_StartHereIfYouWantTheShortVersionOfWhat" xml:space="preserve">
+    <value>Start here if you want the short version of what TimeVic does and who it is built for.</value>
+  </data>
+  <data name="Content_TimevicIsAnIncomeTrackingToolForFreelanceDevelopersWho" xml:space="preserve">
+    <value>TimeVic is an income tracking tool for freelance developers who bill clients by the hour.</value>
+  </data>
+  <data name="Content_ItTurnsTrackedWorkIntoClearNumbersHowMuchYou" xml:space="preserve">
+    <value>It turns tracked work into clear numbers: how much you earned, what was paid, and what is still unpaid.</value>
+  </data>
+  <data name="Content_TheGoalIsSimpleFinancialClarityFromClientWork" xml:space="preserve">
+    <value>The goal is simple: financial clarity from client work.</value>
+  </data>
+  <data name="Content_No" xml:space="preserve">
+    <value>No.</value>
+  </data>
+  <data name="Content_TimeTrackingIsOnlyTheInput" xml:space="preserve">
+    <value>Time tracking is only the input.</value>
+  </data>
+  <data name="Content_TheOutputIsIncomeVisibilityEarnedMoneyPaidMoneyAnd" xml:space="preserve">
+    <value>The output is income visibility: earned money, paid money, and unpaid work.</value>
+  </data>
+  <data name="Content_TimevicIsForFreelanceDevelopersWhoWorkWithMultipleClients" xml:space="preserve">
+    <value>TimeVic is for freelance developers who work with multiple clients, track hourly work, and need a clean view of payments and outstanding balances.</value>
+  </data>
+  <data name="Content_IfYouNeedToKnowWhatEachClientOwesYou" xml:space="preserve">
+    <value>If you need to know what each client owes you, this is the workflow it is built for.</value>
+  </data>
+  <data name="Content_YouCanButThenYouDoTheMoneyWorkManually" xml:space="preserve">
+    <value>You can, but then you do the money work manually.</value>
+  </data>
+  <data name="Content_YouHaveToCalculateEarningsLogPaymentsSomewhereElseAnd" xml:space="preserve">
+    <value>You have to calculate earnings, log payments somewhere else, and reconcile what was paid vs what is still unpaid.</value>
+  </data>
+  <data name="Content_TimevicKeepsThatInOnePlaceSoYourTrackedWork" xml:space="preserve">
+    <value>TimeVic keeps that in one place, so your tracked work already connects to your money.</value>
+  </data>
+  <data name="Content_MostImportantSection" xml:space="preserve">
+    <value>Most important section</value>
+  </data>
+  <data name="Content_Section2" xml:space="preserve">
+    <value>Section 2</value>
+  </data>
+  <data name="Content_MoneyPayments" xml:space="preserve">
+    <value>Money &amp; payments</value>
+  </data>
+  <data name="Content_ThisIsWhereTimevicBecomesMoreThanATimeTracker" xml:space="preserve">
+    <value>This is where TimeVic becomes more than a time tracker. It shows the money behind the hours.</value>
+  </data>
+  <data name="Content_YouSetAnHourlyRateForTheWorkYouTrack" xml:space="preserve">
+    <value>You set an hourly rate for the work you track.</value>
+  </data>
+  <data name="Content_TimevicConvertsThoseHoursIntoEarnedIncomeAutomaticallySoYou" xml:space="preserve">
+    <value>TimeVic converts those hours into earned income automatically, so you can see the value of completed work without doing the math yourself.</value>
+  </data>
+  <data name="Content_Yes" xml:space="preserve">
+    <value>Yes.</value>
+  </data>
+  <data name="Content_YouCanRecordClientPaymentsAndCompareThemDirectlyAgainst" xml:space="preserve">
+    <value>You can record client payments and compare them directly against what you earned.</value>
+  </data>
+  <data name="Content_ThatGivesYouAClearSplitBetweenPaidWorkAnd" xml:space="preserve">
+    <value>That gives you a clear split between paid work and unpaid work.</value>
+  </data>
+  <data name="Content_TimevicHighlightsTheUnpaidWorkAndTheOutstandingBalance" xml:space="preserve">
+    <value>TimeVic highlights the unpaid work and the outstanding balance.</value>
+  </data>
+  <data name="Content_YouAlwaysKnowWhichClientStillOwesYouMoneyAnd" xml:space="preserve">
+    <value>You always know which client still owes you money and how much is still open.</value>
+  </data>
+  <data name="Content_TimevicHelpsYouReviewEarnedPaidAndOutstandingAmountsFor" xml:space="preserve">
+    <value>TimeVic helps you review earned, paid, and outstanding amounts for each client and project.</value>
+  </data>
+  <data name="Content_ThePlatformMakesUnpaidBalancesVisibleSoYouCanSee" xml:space="preserve">
+    <value>The platform makes unpaid balances visible, so you can see where follow-up is needed without digging through notes or spreadsheets.</value>
+  </data>
+  <data name="Content_TimevicIsFocusedOnEarningsPaymentsAndOutstandingBalancesIt" xml:space="preserve">
+    <value>TimeVic is focused on earnings, payments, and outstanding balances. It is not an invoicing system.</value>
+  </data>
+  <data name="Content_Section3" xml:space="preserve">
+    <value>Section 3</value>
+  </data>
+  <data name="Content_FeaturesUsage" xml:space="preserve">
+    <value>Features &amp; Usage</value>
+  </data>
+  <data name="Content_TheProductStaysFocusedFeaturesSupportIncomeTrackingInsteadOf" xml:space="preserve">
+    <value>The product stays focused. Features support income tracking instead of turning into a project management suite.</value>
+  </data>
+  <data name="Content_YouCanTrackAsMuchOrAsLittleAsYou" xml:space="preserve">
+    <value>You can track as much or as little as you want. Even partial tracking helps you understand your earnings better than disconnected notes.</value>
+  </data>
+  <data name="Content_YesTimevicIsBuiltForMultipleClientsMultipleProjectsAnd" xml:space="preserve">
+    <value>Yes. TimeVic is built for multiple clients, multiple projects, and different hourly rates.</value>
+  </data>
+  <data name="Content_TimevicIsNotATaskManager" xml:space="preserve">
+    <value>TimeVic is not a task manager.</value>
+  </data>
+  <data name="Content_TasksAreSimpleOptionalAndOnlyExistToSupportTime" xml:space="preserve">
+    <value>Tasks are simple, optional, and only exist to support time tracking.</value>
+  </data>
+  <data name="Content_YesYouCanAttachTimeEntriesToTasksWhenYou" xml:space="preserve">
+    <value>Yes. You can attach time entries to tasks when you want more context, but tasks stay secondary to work, money, and payments.</value>
+  </data>
+  <data name="Content_Section4" xml:space="preserve">
+    <value>Section 4</value>
+  </data>
+  <data name="Content_PricingAccess" xml:space="preserve">
+    <value>Pricing &amp; Access</value>
+  </data>
+  <data name="Content_KeepSetupFrictionLowSoYouCanStartTrackingClients" xml:space="preserve">
+    <value>Keep setup friction low so you can start tracking clients and money quickly.</value>
+  </data>
+  <data name="Content_YesTimevicIsFreeToUse" xml:space="preserve">
+    <value>Yes. TimeVic is free to use.</value>
+  </data>
+  <data name="Content_NoTimevicWorksInYourBrowser" xml:space="preserve">
+    <value>No. TimeVic works in your browser.</value>
+  </data>
+  <data name="Content_Section5" xml:space="preserve">
+    <value>Section 5</value>
+  </data>
+  <data name="Content_GettingStarted" xml:space="preserve">
+    <value>Getting Started</value>
+  </data>
+  <data name="Content_TheFirstSetupIsShortAddTheClientSetThe" xml:space="preserve">
+    <value>The first setup is short. Add the client, set the rate, and start tracking.</value>
+  </data>
+  <data name="Content_AddAClient" xml:space="preserve">
+    <value>Add a client</value>
+  </data>
+  <data name="Content_CreateAProject" xml:space="preserve">
+    <value>Create a project</value>
+  </data>
+  <data name="Content_SetAnHourlyRate" xml:space="preserve">
+    <value>Set an hourly rate</value>
+  </data>
+  <data name="Content_TrackTime" xml:space="preserve">
+    <value>Track time</value>
+  </data>
+  <data name="Content_YouWillImmediatelySeeHowMuchYouEarnedFromThe" xml:space="preserve">
+    <value>You will immediately see how much you earned from the tracked work.</value>
+  </data>
+  <data name="Content_About2Minutes" xml:space="preserve">
+    <value>About 2 minutes.</value>
+  </data>
+  <data name="Content_AsSoonAsYouAddAClientSetARate" xml:space="preserve">
+    <value>As soon as you add a client, set a rate, and track your first entry, you can see earned income and unpaid balance.</value>
+  </data>
+  <data name="Content_IncomeClarity" xml:space="preserve">
+    <value>Income clarity</value>
+  </data>
+  <data name="Content_StartTrackingYourIncomeNotJustTime" xml:space="preserve">
+    <value>Start tracking your income, not just time</value>
+  </data>
+  <data name="Content_KnowHowMuchYouEarnedAndWhoStillOwesYou" xml:space="preserve">
+    <value>Know how much you earned — and who still owes you</value>
+  </data>
+  <data name="Content_NoSetupComplexityJustAddAClientSetARate" xml:space="preserve">
+    <value>No setup complexity. Just add a client, set a rate, and track time.</value>
+  </data>
+</root>

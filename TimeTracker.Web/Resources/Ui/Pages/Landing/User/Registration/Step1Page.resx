@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Create a TimeVic Account — Freelance Time and Income Tracker</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Create a TimeVic account to track hours, calculate earnings, review client balances, and record payments for freelance client work.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>create freelance time tracker account, income tracking app, client balance tracker, paid unpaid work tracker, project time tracking</value>
+  </data>
+  <data name="Content_Registration" xml:space="preserve">
+    <value>Registration</value>
+  </data>
+  <data name="Content_CreateAccount" xml:space="preserve">
+    <value>"Create account"</value>
+  </data>
+  <data name="Content_Step1Of2StartWithYourEmailAddress" xml:space="preserve">
+    <value>"Step 1 of 2 — start with your email address."</value>
+  </data>
+  <data name="Content_SendVerificationEmail" xml:space="preserve">
+    <value>Send verification email</value>
+  </data>
+  <data name="Content_VerificationEmailSent" xml:space="preserve">
+    <value>Verification email sent</value>
+  </data>
+  <data name="Content_WeVeSentYouAnEmailPleaseFollowTheLink" xml:space="preserve">
+    <value>We've sent you an email. Please follow the link inside to continue your registration.</value>
+  </data>
+  <data name="Toast_RegistrationEmailSent" xml:space="preserve">
+    <value>Registration email is sent</value>
+  </data>
+  <data name="Toast_RegistrationError" xml:space="preserve">
+    <value>Registration error</value>
+  </data>
+</root>

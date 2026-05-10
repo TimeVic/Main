@@ -4,10 +4,12 @@
 
 @layout Layout
 
+@inject IStringLocalizer<PublicLandingResource> SharedLocalizer
+@inject IStringLocalizer<FaqPage> Localizer
 <SeoHead
-    Title="@SiteMetadata.FaqTitle"
-    Description="@SiteMetadata.FaqDescription"
-    Keywords="@SiteMetadata.FaqKeywords"
+    Title="@Localizer["Meta_Title"]"
+    Description="@Localizer["Meta_Description"]"
+    Keywords="@Localizer["Meta_Keywords"]"
     Robots="@SiteMetadata.IndexRobots"
     CanonicalUrl="@SiteMetadata.ToAbsoluteUrl(SiteUrl.Faq)" />
 
@@ -18,51 +20,51 @@
             <div class="relative text-center">
                 <div class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm">
                     <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-                    <span>For freelance developers working with multiple clients</span>
+                    <span>@Localizer["Content_ForFreelanceDevelopersWorkingWithMultipleClients"]</span>
                 </div>
                 <h1 class="mx-auto mt-6 max-w-3xl text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl">
-                    Everything about tracking your income and client payments
+                    @Localizer["Content_EverythingAboutTrackingYourIncomeAndClientPayments"]
                 </h1>
                 <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
-                    Learn how TimeVic helps freelance developers track earnings, payments, and unpaid work.
+                    @Localizer["Content_LearnHowTimevicHelpsFreelanceDevelopersTrackEarningsPaymentsAnd"]
                 </p>
                 <p class="mx-auto mt-4 max-w-2xl text-sm font-medium leading-6 text-slate-700 sm:text-base">
-                    Most tools track time. TimeVic helps you understand your income.
+                    @Localizer["Content_MostToolsTrackTimeTimevicHelpsYouUnderstandYourIncome"]
                 </p>
             </div>
 
             <div class="relative mt-10 rounded-[2rem] border border-slate-200 bg-slate-950 p-6 text-white shadow-xl sm:p-8">
                 <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                     <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-200">Quick example</p>
+                        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-blue-200">@Localizer["Content_QuickExample"]</p>
                         <h2 class="mt-3 text-2xl font-semibold leading-tight sm:text-3xl">
-                            Track the work. See the money immediately.
+                            @Localizer["Content_TrackTheWorkSeeTheMoneyImmediately"]
                         </h2>
                         <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
-                            You worked 30 hours. That earned $1,500. The client paid $500. TimeVic shows the remaining $1,000 instantly.
+                            @Localizer["Content_YouWorked30HoursThatEarned1500TheClient"]
                         </p>
                     </div>
 
                     <div class="rounded-[1.75rem] border border-white/10 bg-white/5 p-5 sm:min-w-[280px]">
                         <div class="space-y-4">
                             <div class="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                                <span class="text-sm text-slate-300">Tracked work</span>
-                                <span class="text-base font-semibold text-white">30 hours</span>
+                                <span class="text-sm text-slate-300">@Localizer["Content_TrackedWork"]</span>
+                                <span class="text-base font-semibold text-white">@Localizer["Content_30Hours"]</span>
                             </div>
                             <div class="flex items-center justify-between gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3">
-                                <span class="text-sm text-emerald-100">Earned</span>
+                                <span class="text-sm text-emerald-100">@Localizer["Content_Earned"]</span>
                                 <span class="text-base font-semibold text-white">$1,500</span>
                             </div>
                             <div class="flex items-center justify-between gap-4 rounded-2xl border border-blue-500/20 bg-blue-500/10 px-4 py-3">
-                                <span class="text-sm text-blue-100">Paid</span>
+                                <span class="text-sm text-blue-100">@Localizer["Content_Paid"]</span>
                                 <span class="text-base font-semibold text-white">$500</span>
                             </div>
                             <div class="flex items-center justify-between gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3">
-                                <span class="text-sm text-amber-100">Outstanding</span>
+                                <span class="text-sm text-amber-100">@Localizer["Content_Outstanding"]</span>
                                 <span class="text-base font-semibold text-white">$1,000</span>
                             </div>
                         </div>
-                        <p class="mt-4 text-sm font-medium text-slate-200">TimeVic shows this instantly.</p>
+                        <p class="mt-4 text-sm font-medium text-slate-200">@Localizer["Content_TimevicShowsThisInstantly"]</p>
                     </div>
                 </div>
             </div>
@@ -74,10 +76,10 @@
             <div class="space-y-14">
                 <section aria-labelledby="faq-product-basics" class="scroll-mt-24">
                     <div class="mb-5">
-                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">Section 1</p>
-                        <h2 id="faq-product-basics" class="mt-2 text-2xl font-semibold text-slate-950">Product Basics</h2>
+                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-blue-600">@Localizer["Content_Section1"]</p>
+                        <h2 id="faq-product-basics" class="mt-2 text-2xl font-semibold text-slate-950">@Localizer["Content_ProductBasics"]</h2>
                         <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-                            Start here if you want the short version of what TimeVic does and who it is built for.
+                            @Localizer["Content_StartHereIfYouWantTheShortVersionOfWhat"]
                         </p>
                     </div>
 
@@ -86,46 +88,46 @@
                         SelectionMode="@SelectionMode.Multiple"
                         ShowDividers="@false"
                         ItemClasses="@FaqItemClasses">
-                        <LumexAccordionItem Id="product-what" Title="What is TimeVic?" Expanded="true">
+                        <LumexAccordionItem Id="product-what" Title="@Localizer["Title_WhatIsTimevic"]" Expanded="true">
                             <p>
-                                TimeVic is an income tracking tool for freelance developers who bill clients by the hour.
+                                @Localizer["Content_TimevicIsAnIncomeTrackingToolForFreelanceDevelopersWho"]
                             </p>
                             <p class="mt-3">
-                                It turns tracked work into clear numbers: how much you earned, what was paid, and what is still unpaid.
+                                @Localizer["Content_ItTurnsTrackedWorkIntoClearNumbersHowMuchYou"]
                             </p>
                             <p class="mt-3">
-                                The goal is simple: financial clarity from client work.
+                                @Localizer["Content_TheGoalIsSimpleFinancialClarityFromClientWork"]
                             </p>
                         </LumexAccordionItem>
 
-                        <LumexAccordionItem Id="product-time-tracker" Title="Is TimeVic just a time tracker?" Expanded="true">
-                            <p>No.</p>
+                        <LumexAccordionItem Id="product-time-tracker" Title="@Localizer["Title_IsTimevicJustATimeTracker"]" Expanded="true">
+                            <p>@Localizer["Content_No"]</p>
                             <p class="mt-3">
-                                Time tracking is only the input.
+                                @Localizer["Content_TimeTrackingIsOnlyTheInput"]
                             </p>
                             <p class="mt-3">
-                                The output is income visibility: earned money, paid money, and unpaid work.
+                                @Localizer["Content_TheOutputIsIncomeVisibilityEarnedMoneyPaidMoneyAnd"]
                             </p>
                         </LumexAccordionItem>
 
-                        <LumexAccordionItem Id="product-for" Title="Who is TimeVic for?">
+                        <LumexAccordionItem Id="product-for" Title="@Localizer["Title_WhoIsTimevicFor"]">
                             <p>
-                                TimeVic is for freelance developers who work with multiple clients, track hourly work, and need a clean view of payments and outstanding balances.
+                                @Localizer["Content_TimevicIsForFreelanceDevelopersWhoWorkWithMultipleClients"]
                             </p>
                             <p class="mt-3">
-                                If you need to know what each client owes you, this is the workflow it is built for.
+                                @Localizer["Content_IfYouNeedToKnowWhatEachClientOwesYou"]
                             </p>
                         </LumexAccordionItem>
 
-                        <LumexAccordionItem Id="product-spreadsheet" Title="Why not just use a time tracker and a spreadsheet?">
+                        <LumexAccordionItem Id="product-spreadsheet" Title="@Localizer["Title_WhyNotJustUseATimeTrackerAndASpreadsheet"]">
                             <p>
-                                You can, but then you do the money work manually.
+                                @Localizer["Content_YouCanButThenYouDoTheMoneyWorkManually"]
                             </p>
                             <p class="mt-3">
-                                You have to calculate earnings, log payments somewhere else, and reconcile what was paid vs what is still unpaid.
+                                @Localizer["Content_YouHaveToCalculateEarningsLogPaymentsSomewhereElseAnd"]
                             </p>
                             <p class="mt-3">
-                                TimeVic keeps that in one place, so your tracked work already connects to your money.
+                                @Localizer["Content_TimevicKeepsThatInOnePlaceSoYourTrackedWork"]
                             </p>
                         </LumexAccordionItem>
                     </LumexAccordion>
@@ -136,12 +138,12 @@
                         <div class="mb-6">
                             <div class="inline-flex items-center gap-3 rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm">
                                 <i class="fa-solid fa-wallet"></i>
-                                <span>Most important section</span>
+                                <span>@Localizer["Content_MostImportantSection"]</span>
                             </div>
-                            <p class="mt-5 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">Section 2</p>
-                            <h2 id="faq-money-payments" class="mt-2 text-2xl font-semibold text-slate-950">Money &amp; payments</h2>
+                            <p class="mt-5 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">@Localizer["Content_Section2"]</p>
+                            <h2 id="faq-money-payments" class="mt-2 text-2xl font-semibold text-slate-950">@Localizer["Content_MoneyPayments"]</h2>
                             <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-700 sm:text-base">
-                                This is where TimeVic becomes more than a time tracker. It shows the money behind the hours.
+                                @Localizer["Content_ThisIsWhereTimevicBecomesMoreThanATimeTracker"]
                             </p>
                         </div>
 
@@ -150,60 +152,60 @@
                             SelectionMode="@SelectionMode.Multiple"
                             ShowDividers="@false"
                             ItemClasses="@FaqItemClasses">
-                            <LumexAccordionItem Id="money-calculate" Title="How does TimeVic calculate earnings?">
+                            <LumexAccordionItem Id="money-calculate" Title="@Localizer["Title_HowDoesTimevicCalculateEarnings"]">
                                 <p>
-                                    You set an hourly rate for the work you track.
+                                    @Localizer["Content_YouSetAnHourlyRateForTheWorkYouTrack"]
                                 </p>
                                 <p class="mt-3">
-                                    TimeVic converts those hours into earned income automatically, so you can see the value of completed work without doing the math yourself.
+                                    @Localizer["Content_TimevicConvertsThoseHoursIntoEarnedIncomeAutomaticallySoYou"]
                                 </p>
                             </LumexAccordionItem>
 
-                            <LumexAccordionItem Id="money-payments" Title="Can I track payments from clients?">
+                            <LumexAccordionItem Id="money-payments" Title="@Localizer["Title_CanITrackPaymentsFromClients"]">
                                 <p>
-                                    Yes.
+                                    @Localizer["Content_Yes"]
                                 </p>
                                 <p class="mt-3">
-                                    You can record client payments and compare them directly against what you earned.
+                                    @Localizer["Content_YouCanRecordClientPaymentsAndCompareThemDirectlyAgainst"]
                                 </p>
                                 <p class="mt-3">
-                                    That gives you a clear split between paid work and unpaid work.
+                                    @Localizer["Content_ThatGivesYouAClearSplitBetweenPaidWorkAnd"]
                                 </p>
                             </LumexAccordionItem>
 
-                            <LumexAccordionItem Id="money-unpaid" Title="What happens if a client hasn’t paid yet?">
+                            <LumexAccordionItem Id="money-unpaid" Title="@Localizer["Title_WhatHappensIfAClientHasnTPaidYet"]">
                                 <p>
-                                    TimeVic highlights the unpaid work and the outstanding balance.
+                                    @Localizer["Content_TimevicHighlightsTheUnpaidWorkAndTheOutstandingBalance"]
                                 </p>
                                 <p class="mt-3">
-                                    You always know which client still owes you money and how much is still open.
+                                    @Localizer["Content_YouAlwaysKnowWhichClientStillOwesYouMoneyAnd"]
                                 </p>
                             </LumexAccordionItem>
 
-                            <LumexAccordionItem Id="money-paid-unpaid-client" Title="Can I see paid vs unpaid work per client?">
+                            <LumexAccordionItem Id="money-paid-unpaid-client" Title="@Localizer["Title_CanISeePaidVsUnpaidWorkPerClient"]">
                                 <p>
-                                    Yes.
+                                    @Localizer["Content_Yes"]
                                 </p>
                                 <p class="mt-3">
-                                    TimeVic helps you review earned, paid, and outstanding amounts for each client and project.
+                                    @Localizer["Content_TimevicHelpsYouReviewEarnedPaidAndOutstandingAmountsFor"]
                                 </p>
                             </LumexAccordionItem>
 
-                            <LumexAccordionItem Id="money-owes" Title="Can I see who owes me money?">
+                            <LumexAccordionItem Id="money-owes" Title="@Localizer["Title_CanISeeWhoOwesMeMoney"]">
                                 <p>
-                                    Yes.
+                                    @Localizer["Content_Yes"]
                                 </p>
                                 <p class="mt-3">
-                                    The platform makes unpaid balances visible, so you can see where follow-up is needed without digging through notes or spreadsheets.
+                                    @Localizer["Content_ThePlatformMakesUnpaidBalancesVisibleSoYouCanSee"]
                                 </p>
                             </LumexAccordionItem>
 
-                            <LumexAccordionItem Id="money-invoicing" Title="Does TimeVic replace invoicing tools?">
+                            <LumexAccordionItem Id="money-invoicing" Title="@Localizer["Title_DoesTimevicReplaceInvoicingTools"]">
                                 <p>
-                                    No.
+                                    @Localizer["Content_No"]
                                 </p>
                                 <p class="mt-3">
-                                    TimeVic is focused on earnings, payments, and outstanding balances. It is not an invoicing system.
+                                    @Localizer["Content_TimevicIsFocusedOnEarningsPaymentsAndOutstandingBalancesIt"]
                                 </p>
                             </LumexAccordionItem>
                         </LumexAccordion>
@@ -212,10 +214,10 @@
 
                 <section aria-labelledby="faq-features-usage" class="scroll-mt-24">
                     <div class="mb-5">
-                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-violet-600">Section 3</p>
-                        <h2 id="faq-features-usage" class="mt-2 text-2xl font-semibold text-slate-950">Features &amp; Usage</h2>
+                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-violet-600">@Localizer["Content_Section3"]</p>
+                        <h2 id="faq-features-usage" class="mt-2 text-2xl font-semibold text-slate-950">@Localizer["Content_FeaturesUsage"]</h2>
                         <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-                            The product stays focused. Features support income tracking instead of turning into a project management suite.
+                            @Localizer["Content_TheProductStaysFocusedFeaturesSupportIncomeTrackingInsteadOf"]
                         </p>
                     </div>
 
@@ -224,35 +226,32 @@
                         SelectionMode="@SelectionMode.Multiple"
                         ShowDividers="@false"
                         ItemClasses="@FaqItemClasses">
-                        <LumexAccordionItem Id="usage-every-minute" Title="Do I need to track every minute?">
-                            <p>No.</p>
+                        <LumexAccordionItem Id="usage-every-minute" Title="@Localizer["Title_DoINeedToTrackEveryMinute"]">
+                            <p>@Localizer["Content_No"]</p>
                             <p class="mt-3">
-                                You can track as much or as little as you want.
-                                Even partial tracking helps you understand your earnings better than disconnected notes.
+                                @Localizer["Content_YouCanTrackAsMuchOrAsLittleAsYou"]
                             </p>
                         </LumexAccordionItem>
 
-                        <LumexAccordionItem Id="usage-multiple-clients" Title="Can I manage multiple clients?">
+                        <LumexAccordionItem Id="usage-multiple-clients" Title="@Localizer["Title_CanIManageMultipleClients"]">
                             <p>
-                                Yes.
-                                TimeVic is built for multiple clients, multiple projects, and different hourly rates.
+                                @Localizer["Content_YesTimevicIsBuiltForMultipleClientsMultipleProjectsAnd"]
                             </p>
                         </LumexAccordionItem>
 
-                        <LumexAccordionItem Id="usage-task-managers" Title="Does TimeVic replace Jira or task managers?">
-                            <p>No.</p>
+                        <LumexAccordionItem Id="usage-task-managers" Title="@Localizer["Title_DoesTimevicReplaceJiraOrTaskManagers"]">
+                            <p>@Localizer["Content_No"]</p>
                             <p class="mt-3">
-                                TimeVic is not a task manager.
+                                @Localizer["Content_TimevicIsNotATaskManager"]
                             </p>
                             <p class="mt-3">
-                                Tasks are simple, optional, and only exist to support time tracking.
+                                @Localizer["Content_TasksAreSimpleOptionalAndOnlyExistToSupportTime"]
                             </p>
                         </LumexAccordionItem>
 
-                        <LumexAccordionItem Id="usage-attach-time" Title="Can I attach time to tasks?">
+                        <LumexAccordionItem Id="usage-attach-time" Title="@Localizer["Title_CanIAttachTimeToTasks"]">
                             <p>
-                                Yes.
-                                You can attach time entries to tasks when you want more context, but tasks stay secondary to work, money, and payments.
+                                @Localizer["Content_YesYouCanAttachTimeEntriesToTasksWhenYou"]
                             </p>
                         </LumexAccordionItem>
                     </LumexAccordion>
@@ -260,10 +259,10 @@
 
                 <section aria-labelledby="faq-pricing-access" class="scroll-mt-24">
                     <div class="mb-5">
-                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-amber-600">Section 4</p>
-                        <h2 id="faq-pricing-access" class="mt-2 text-2xl font-semibold text-slate-950">Pricing &amp; Access</h2>
+                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-amber-600">@Localizer["Content_Section4"]</p>
+                        <h2 id="faq-pricing-access" class="mt-2 text-2xl font-semibold text-slate-950">@Localizer["Content_PricingAccess"]</h2>
                         <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-                            Keep setup friction low so you can start tracking clients and money quickly.
+                            @Localizer["Content_KeepSetupFrictionLowSoYouCanStartTrackingClients"]
                         </p>
                     </div>
 
@@ -272,17 +271,15 @@
                         SelectionMode="@SelectionMode.Multiple"
                         ShowDividers="@false"
                         ItemClasses="@FaqItemClasses">
-                        <LumexAccordionItem Id="pricing-free" Title="Is TimeVic free?">
+                        <LumexAccordionItem Id="pricing-free" Title="@Localizer["Title_IsTimevicFree"]">
                             <p>
-                                Yes.
-                                TimeVic is free to use.
+                                @Localizer["Content_YesTimevicIsFreeToUse"]
                             </p>
                         </LumexAccordionItem>
 
-                        <LumexAccordionItem Id="pricing-install" Title="Do I need to install anything?">
+                        <LumexAccordionItem Id="pricing-install" Title="@Localizer["Title_DoINeedToInstallAnything"]">
                             <p>
-                                No.
-                                TimeVic works in your browser.
+                                @Localizer["Content_NoTimevicWorksInYourBrowser"]
                             </p>
                         </LumexAccordionItem>
                     </LumexAccordion>
@@ -290,10 +287,10 @@
 
                 <section aria-labelledby="faq-getting-started" class="scroll-mt-24">
                     <div class="mb-5">
-                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Section 5</p>
-                        <h2 id="faq-getting-started" class="mt-2 text-2xl font-semibold text-slate-950">Getting Started</h2>
+                        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">@Localizer["Content_Section5"]</p>
+                        <h2 id="faq-getting-started" class="mt-2 text-2xl font-semibold text-slate-950">@Localizer["Content_GettingStarted"]</h2>
                         <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-                            The first setup is short. Add the client, set the rate, and start tracking.
+                            @Localizer["Content_TheFirstSetupIsShortAddTheClientSetThe"]
                         </p>
                     </div>
 
@@ -302,22 +299,22 @@
                         SelectionMode="@SelectionMode.Multiple"
                         ShowDividers="@false"
                         ItemClasses="@FaqItemClasses">
-                        <LumexAccordionItem Id="getting-started-how" Title="How do I start?">
+                        <LumexAccordionItem Id="getting-started-how" Title="@Localizer["Title_HowDoIStart"]">
                             <ol class="list-decimal space-y-1 pl-5">
-                                <li>Add a client</li>
-                                <li>Create a project</li>
-                                <li>Set an hourly rate</li>
-                                <li>Track time</li>
+                                <li>@Localizer["Content_AddAClient"]</li>
+                                <li>@Localizer["Content_CreateAProject"]</li>
+                                <li>@Localizer["Content_SetAnHourlyRate"]</li>
+                                <li>@Localizer["Content_TrackTime"]</li>
                             </ol>
-                            <p class="mt-3">You will immediately see how much you earned from the tracked work.</p>
+                            <p class="mt-3">@Localizer["Content_YouWillImmediatelySeeHowMuchYouEarnedFromThe"]</p>
                         </LumexAccordionItem>
 
-                        <LumexAccordionItem Id="getting-started-value" Title="How long does it take to see value?">
+                        <LumexAccordionItem Id="getting-started-value" Title="@Localizer["Title_HowLongDoesItTakeToSeeValue"]">
                             <p>
-                                About 2 minutes.
+                                @Localizer["Content_About2Minutes"]
                             </p>
                             <p class="mt-3">
-                                As soon as you add a client, set a rate, and track your first entry, you can see earned income and unpaid balance.
+                                @Localizer["Content_AsSoonAsYouAddAClientSetARate"]
                             </p>
                         </LumexAccordionItem>
                     </LumexAccordion>
@@ -328,21 +325,21 @@
 
     <section class="bg-slate-950 text-white">
         <div class="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:py-20">
-            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-blue-200">Income clarity</p>
+            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-blue-200">@Localizer["Content_IncomeClarity"]</p>
             <h2 class="mt-4 text-3xl font-semibold leading-tight sm:text-4xl">
-                Start tracking your income, not just time
+                @Localizer["Content_StartTrackingYourIncomeNotJustTime"]
             </h2>
             <p class="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-300">
-                Know how much you earned &mdash; and who still owes you
+                @Localizer["Content_KnowHowMuchYouEarnedAndWhoStillOwesYou"]
             </p>
             <div class="mt-8">
                 <a href="@SiteUrl.Registration_Step1" class="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                     <i class="fa-solid fa-arrow-right"></i>
-                    <span>Get Started Free</span>
+                    <span>@SharedLocalizer["CTA_GetStartedFree"]</span>
                 </a>
             </div>
             <p class="mx-auto mt-4 max-w-2xl text-sm leading-6 text-slate-400">
-                No setup complexity. Just add a client, set a rate, and track time.
+                @Localizer["Content_NoSetupComplexityJustAddAClientSetARate"]
             </p>
         </div>
     </section>

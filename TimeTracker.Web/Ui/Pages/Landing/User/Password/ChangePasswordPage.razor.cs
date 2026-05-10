@@ -60,13 +60,13 @@ public partial class ChangePasswordPage
             if (isSuccess)
             {
                 _isCompleted = true;
-                _toastService.ShowInfo("Your password has been changed");
+                _toastService.ShowInfo(Localizer["Toast_PasswordChanged"]);
                 NavigationManager.NavigateTo("/");
             }
         }
         catch (Exception)
         {
-            ToastService.ShowError("Incorrect email or password");
+            ToastService.ShowError(Localizer["Toast_IncorrectEmailOrPassword"]);
         }
         finally
         {

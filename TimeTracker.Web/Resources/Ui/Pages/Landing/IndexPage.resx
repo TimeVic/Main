@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>TimeVic — Time and Income Tracker for Freelance Developers</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>TimeVic helps freelance developers track hours, calculate earnings, and see paid and unpaid balances across all clients and projects.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>freelance developer time tracker, income tracker, client billing tracker, paid unpaid work tracker, project time tracking, timesheet app, Jira time tracking</value>
+  </data>
+  <data name="Content_ForFreelanceDevelopersWorkingWithMultipleClients" xml:space="preserve">
+    <value>For freelance developers working with multiple clients</value>
+  </data>
+  <data name="Content_TrackTimeSeeMoneyKnowWhoOwesYou" xml:space="preserve">
+    <value>Track time. See money. Know who owes you.</value>
+  </data>
+  <data name="Content_TimevicHelpsFreelanceDevelopersTrackHoursCalculateEarningsAndSee" xml:space="preserve">
+    <value>TimeVic helps freelance developers track hours, calculate earnings, and see unpaid balances across all clients.</value>
+  </data>
+  <data name="Content_Track" xml:space="preserve">
+    <value>Track</value>
+  </data>
+  <data name="Content_HoursByClientAndProject" xml:space="preserve">
+    <value>Hours by client and project</value>
+  </data>
+  <data name="Content_LogBillableWorkAgainstTheRightClientProjectAndTask" xml:space="preserve">
+    <value>Log billable work against the right client, project, and task without scattered notes.</value>
+  </data>
+  <data name="Content_Earn" xml:space="preserve">
+    <value>Earn</value>
+  </data>
+  <data name="Content_EarningsCalculatedFromRates" xml:space="preserve">
+    <value>Earnings calculated from rates</value>
+  </data>
+  <data name="Content_SetHourlyRatesAndLetTimevicTurnTrackedHoursInto" xml:space="preserve">
+    <value>Set hourly rates and let TimeVic turn tracked hours into income totals.</value>
+  </data>
+  <data name="Content_Monetize" xml:space="preserve">
+    <value>Monetize</value>
+  </data>
+  <data name="Content_PaidAndUnpaidWork" xml:space="preserve">
+    <value>Paid and unpaid work</value>
+  </data>
+  <data name="Content_SeeWhatWasPaidWhatIsUnpaidAndWhichClient" xml:space="preserve">
+    <value>See what was paid, what is unpaid, and which client balance needs attention.</value>
+  </data>
+  <data name="Content_IncomeClarity" xml:space="preserve">
+    <value>Income clarity</value>
+  </data>
+  <data name="Content_WorkEarningsAndPaymentsInOneView" xml:space="preserve">
+    <value>Work, earnings, and payments in one view</value>
+  </data>
+  <data name="Content_TrackTimeAcrossClientsAndProjects" xml:space="preserve">
+    <value>Track time across clients and projects</value>
+  </data>
+  <data name="Content_RecordBillableHoursWhereTheyBelongWhetherYouUseA" xml:space="preserve">
+    <value>Record billable hours where they belong, whether you use a live timer or add time manually.</value>
+  </data>
+  <data name="Content_ConnectTasksToTimeEntries" xml:space="preserve">
+    <value>Connect tasks to time entries</value>
+  </data>
+  <data name="Content_KeepTaskTrackingSimpleAndLinkEachPieceOfWork" xml:space="preserve">
+    <value>Keep task tracking simple and link each piece of work to the hours it generated.</value>
+  </data>
+  <data name="Content_ClientBalancesYouCanTrust" xml:space="preserve">
+    <value>Client balances you can trust</value>
+  </data>
+  <data name="Content_SeeTotalEarnedTotalPaidAndTheOutstandingBalanceFor" xml:space="preserve">
+    <value>See total earned, total paid, and the outstanding balance for every client.</value>
+  </data>
+  <data name="Content_Features" xml:space="preserve">
+    <value>Features</value>
+  </data>
+  <data name="Content_TurnTrackedTimeIntoIncomeInsights" xml:space="preserve">
+    <value>Turn tracked time into income insights</value>
+  </data>
+  <data name="Content_TrackWorkMoneyAndPaymentsInOnePlaceSoYou" xml:space="preserve">
+    <value>Track work, money, and payments in one place so you always know what each client owes you.</value>
+  </data>
+  <data name="Content_TrackTimeAcrossMultipleClientsAndProjects" xml:space="preserve">
+    <value>Track time across multiple clients and projects</value>
+  </data>
+  <data name="Content_CaptureBillableHoursInRealTimeOrAddThemLater" xml:space="preserve">
+    <value>Capture billable hours in real time or add them later with the right client and project attached.</value>
+  </data>
+  <data name="Content_SetHourlyRatesAndAutomaticallyCalculateEarnings" xml:space="preserve">
+    <value>Set hourly rates and automatically calculate earnings</value>
+  </data>
+  <data name="Content_AssignRatesToYourWorkAndSeeHowEveryEntry" xml:space="preserve">
+    <value>Assign rates to your work and see how every entry adds to your income.</value>
+  </data>
+  <data name="Content_SeePaidVsUnpaidWorkPerClient" xml:space="preserve">
+    <value>See paid vs unpaid work per client</value>
+  </data>
+  <data name="Content_CompareEarnedTotalsWithPaymentsReceivedAndSpotOutstandingBalances" xml:space="preserve">
+    <value>Compare earned totals with payments received and spot outstanding balances quickly.</value>
+  </data>
+  <data name="Content_GetClearSummariesOfYourIncome" xml:space="preserve">
+    <value>Get clear summaries of your income</value>
+  </data>
+  <data name="Content_ReviewEarningsByClientProjectDateOrTaskBeforeInvoicing" xml:space="preserve">
+    <value>Review earnings by client, project, date, or task before invoicing.</value>
+  </data>
+  <data name="Content_ClientAndProjectView" xml:space="preserve">
+    <value>Client and project view</value>
+  </data>
+  <data name="Content_SeeExactlyHowMuchEachClientOwesYou" xml:space="preserve">
+    <value>See exactly how much each client owes you</value>
+  </data>
+  <data name="Content_TimevicConnectsTrackedHoursHourlyRatesAndReceivedPaymentsSo" xml:space="preserve">
+    <value>TimeVic connects tracked hours, hourly rates, and received payments so every client balance is clear before you invoice or follow up.</value>
+  </data>
+  <data name="Content_TotalEarned" xml:space="preserve">
+    <value>Total earned</value>
+  </data>
+  <data name="Content_KnowHowMuchBillableWorkYouHaveCompletedForEach" xml:space="preserve">
+    <value>Know how much billable work you have completed for each client and project.</value>
+  </data>
+  <data name="Content_TotalPaid" xml:space="preserve">
+    <value>Total paid</value>
+  </data>
+  <data name="Content_RecordReceivedPaymentsAndCompareThemAgainstYourEarnedTotals" xml:space="preserve">
+    <value>Record received payments and compare them against your earned totals.</value>
+  </data>
+  <data name="Content_OutstandingBalance" xml:space="preserve">
+    <value>Outstanding balance</value>
+  </data>
+  <data name="Content_SeeExactlyHowMuchEachClientHasPaidAndWhat" xml:space="preserve">
+    <value>See exactly how much each client has paid and what is still outstanding.</value>
+  </data>
+  <data name="Content_InvoiceReadyDetail" xml:space="preserve">
+    <value>Invoice-ready detail</value>
+  </data>
+  <data name="Content_OpenAClientOrProjectAndReviewTheWorkMoney" xml:space="preserve">
+    <value>Open a client or project and review the work, money, and payments behind the balance.</value>
+  </data>
+  <data name="Content_TasksAndIntegrations" xml:space="preserve">
+    <value>Tasks and integrations</value>
+  </data>
+  <data name="Content_SimpleTaskTrackingConnectedToYourTimeEntries" xml:space="preserve">
+    <value>Simple task tracking connected to your time entries</value>
+  </data>
+  <data name="Content_KeepTasksLightweightConnectThemToBillableHoursAndLink" xml:space="preserve">
+    <value>Keep tasks lightweight, connect them to billable hours, and link TimeVic entries to Jira when your client work already lives there.</value>
+  </data>
+  <data name="Content_TasksWithoutProjectManagementOverhead" xml:space="preserve">
+    <value>Tasks without project management overhead</value>
+  </data>
+  <data name="Content_SimpleTaskTrackingConnectedToYourTimeEntriesWithoutThe" xml:space="preserve">
+    <value>Simple task tracking connected to your time entries without the complexity of full project management tools.</value>
+  </data>
+  <data name="Content_JiraLinksWhenYouNeedThem" xml:space="preserve">
+    <value>Jira links when you need them</value>
+  </data>
+  <data name="Content_TrackTimeInTimevicAndLinkItToYourJira" xml:space="preserve">
+    <value>Track time in TimeVic and link it to your Jira tasks.</value>
+  </data>
+  <data name="Content_OptionalSyncForClientWorkflows" xml:space="preserve">
+    <value>Optional sync for client workflows</value>
+  </data>
+  <data name="Content_UseTimevicForTimeEarningsAndPaymentClarityWhileKeeping" xml:space="preserve">
+    <value>Use TimeVic for time, earnings, and payment clarity while keeping Jira as the place where detailed development work happens.</value>
+  </data>
+  <data name="Content_ReadyToSeeYourNumbers" xml:space="preserve">
+    <value>Ready to see your numbers</value>
+  </data>
+  <data name="Content_StartTrackingWorkMoneyAndPaymentsInOnePlace" xml:space="preserve">
+    <value>Start tracking work, money, and payments in one place</value>
+  </data>
+  <data name="Content_UseTimevicToTurnBillableHoursIntoClearClientBalances" xml:space="preserve">
+    <value>Use TimeVic to turn billable hours into clear client balances, income summaries, and payment follow-ups.</value>
+  </data>
+  <data name="Content_AlreadyHaveAnAccount" xml:space="preserve">
+    <value>Already have an account?</value>
+  </data>
+  <data name="Content_WhatIsTimevic" xml:space="preserve">
+    <value>What is TimeVic?</value>
+  </data>
+  <data name="Content_AFocusedTimeIncomeAndPaymentTrackerForFreelanceDevelopers" xml:space="preserve">
+    <value>A focused time, income, and payment tracker for freelance developers with multiple clients.</value>
+  </data>
+  <data name="Content_WhyUseIt" xml:space="preserve">
+    <value>Why use it?</value>
+  </data>
+  <data name="Content_ItShowsHowMuchYouEarnedHowMuchWasPaid" xml:space="preserve">
+    <value>It shows how much you earned, how much was paid, and what each client still owes.</value>
+  </data>
+  <data name="Content_WhyKeepTasksHere" xml:space="preserve">
+    <value>Why keep tasks here?</value>
+  </data>
+  <data name="Content_BecauseLightweightTasksKeepTimeEntriesConnectedToRealWork" xml:space="preserve">
+    <value>Because lightweight tasks keep time entries connected to real work without replacing Jira or ClickUp.</value>
+  </data>
+</root>

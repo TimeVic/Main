@@ -67,7 +67,7 @@ public partial class Step2Page
         }
         catch (Exception)
         {
-            ToastService.ShowError("Registration error");
+            ToastService.ShowError(Localizer["Toast_RegistrationError"]);
         }
         finally
         {

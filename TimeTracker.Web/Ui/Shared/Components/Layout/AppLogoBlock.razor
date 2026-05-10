@@ -1,3 +1,4 @@
+@inject IStringLocalizer<PublicLandingResource> SharedLocalizer
 <a href="/" class="flex items-center gap-3">
     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
         <i class="fa-regular fa-clock text-lg"></i>
@@ -9,7 +10,7 @@
         }
         <div class="mt-1 flex items-center gap-2">
             <p class="text-2xl font-semibold text-slate-900">TimeVic</p>
-            <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-700">Beta</span>
+            <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-700">@SharedLocalizer["AppLogo_BetaBadge"]</span>
         </div>
     </div>
 </a>

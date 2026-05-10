@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>TimeVic Pricing — Free Time and Income Tracker for Freelancers</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>TimeVic is free. Track billable hours, calculate earnings, record client payments, and see outstanding balances — no credit card required.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>TimeVic pricing, free time tracker, freelance income tracker free, client payment tracker free, no credit card time tracking</value>
+  </data>
+  <data name="Content_TrackYourWork" xml:space="preserve">
+    <value>Track your work.</value>
+  </data>
+  <data name="Content_UnderstandYourMoney" xml:space="preserve">
+    <value>Understand your money.</value>
+  </data>
+  <data name="Content_SeeHowMuchYouVeEarnedWhatSBeenPaid" xml:space="preserve">
+    <value>See how much you've earned, what's been paid, and who still owes you — without spreadsheets.</value>
+  </data>
+  <data name="Content_SeeHowItWorks" xml:space="preserve">
+    <value>See how it works</value>
+  </data>
+  <data name="Content_Free0" xml:space="preserve">
+    <value>Free — $0</value>
+  </data>
+  <data name="Content_Month" xml:space="preserve">
+    <value>/month</value>
+  </data>
+  <data name="Content_FromHoursToMoneyClarity" xml:space="preserve">
+    <value>From hours to money clarity</value>
+  </data>
+  <data name="Content_TrackWork" xml:space="preserve">
+    <value>Track work</value>
+  </data>
+  <data name="Content_LogTimeByClientProjectAndTask" xml:space="preserve">
+    <value>Log time by client, project, and task.</value>
+  </data>
+  <data name="Content_TurnTimeIntoMoney" xml:space="preserve">
+    <value>Turn time into money</value>
+  </data>
+  <data name="Content_AutomaticallyCalculateEarningsUsingHourlyRates" xml:space="preserve">
+    <value>Automatically calculate earnings using hourly rates.</value>
+  </data>
+  <data name="Content_Earned" xml:space="preserve">
+    <value>earned</value>
+  </data>
+  <data name="Content_TrackPayments" xml:space="preserve">
+    <value>Track payments</value>
+  </data>
+  <data name="Content_RecordWhatClientsHavePaidYou" xml:space="preserve">
+    <value>Record what clients have paid you.</value>
+  </data>
+  <data name="Content_Paid" xml:space="preserve">
+    <value>paid</value>
+  </data>
+  <data name="Content_SeeWhatSMissing" xml:space="preserve">
+    <value>See what's missing</value>
+  </data>
+  <data name="Content_InstantlySeeUnpaidWorkAndOutstandingBalances" xml:space="preserve">
+    <value>Instantly see unpaid work and outstanding balances.</value>
+  </data>
+  <data name="Content_Unpaid" xml:space="preserve">
+    <value>unpaid</value>
+  </data>
+  <data name="Content_WhatYouCanDoWithTimevic" xml:space="preserve">
+    <value>What you can do with TimeVic</value>
+  </data>
+  <data name="Content_SimpleAndTransparent" xml:space="preserve">
+    <value>Simple and transparent</value>
+  </data>
+  <data name="Content_TimevicIsFreeToUseTheFocusIsOnHelping" xml:space="preserve">
+    <value>TimeVic is free to use. The focus is on helping freelancers understand their income, not just track time.</value>
+  </data>
+  <data name="Content_StartTrackingYourTimeAndIncome" xml:space="preserve">
+    <value>Start tracking your time and income</value>
+  </data>
+  <data name="Capability_TimeTrackingPerClientAndProject" xml:space="preserve">
+    <value>Time tracking per client and project</value>
+  </data>
+  <data name="Capability_HourlyRatesAutomaticEarningsCalculation" xml:space="preserve">
+    <value>Hourly rates → automatic earnings calculation</value>
+  </data>
+  <data name="Capability_PaymentTracking" xml:space="preserve">
+    <value>Payment tracking</value>
+  </data>
+  <data name="Capability_PaidVsUnpaidOverview" xml:space="preserve">
+    <value>Paid vs unpaid overview</value>
+  </data>
+  <data name="Capability_ClientLevelSummaries" xml:space="preserve">
+    <value>Client-level summaries</value>
+  </data>
+</root>
