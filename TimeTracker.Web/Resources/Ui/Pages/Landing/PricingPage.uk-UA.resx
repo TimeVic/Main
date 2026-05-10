@@ -13,22 +13,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Meta_Title" xml:space="preserve">
-    <value>Ціни TimeVic — безкоштовно на старті</value>
+    <value>Ціни TimeVic — безкоштовний трекер часу і доходів для фрилансерів</value>
   </data>
   <data name="Meta_Description" xml:space="preserve">
-    <value>TimeVic зараз доступний безкоштовно. Використовуй облік часу, клієнтів, проєктів, оплат і звітів без складного тарифного плану.</value>
+    <value>TimeVic безкоштовний. Відстежуй час, рахуй дохід, фіксуй оплати клієнтів і контролюй неоплачені суми — без банківської картки.</value>
   </data>
   <data name="Meta_Keywords" xml:space="preserve">
     <value>ціни TimeVic, безкоштовний облік часу, облік оплат клієнтів, фриланс дохід, безкоштовний трекер для фрилансерів</value>
   </data>
   <data name="Content_TrackYourWork" xml:space="preserve">
-    <value>Простий старт</value>
+    <value>Відстежуй роботу.</value>
   </data>
   <data name="Content_UnderstandYourMoney" xml:space="preserve">
-    <value>без складних тарифів</value>
+    <value>Розумій свій дохід.</value>
   </data>
   <data name="Content_SeeHowMuchYouVeEarnedWhatSBeenPaid" xml:space="preserve">
-    <value>TimeVic зараз можна використовувати безкоштовно, поки продукт розвивається і ми збираємо зворотний звʼязок від перших користувачів.</value>
+    <value>Дивись, скільки зароблено, що оплачено і хто ще не розрахувався — без таблиць.</value>
   </data>
   <data name="Content_SeeHowItWorks" xml:space="preserve">
     <value>Подивитись сценарії</value>
@@ -37,10 +37,10 @@
     <value>Free — $0</value>
   </data>
   <data name="Content_Month" xml:space="preserve">
-    <value> на старті</value>
+    <value>/місяць</value>
   </data>
   <data name="Content_FromHoursToMoneyClarity" xml:space="preserve">
-    <value>Що доступно безкоштовно</value>
+    <value>Від годин до ясності у фінансах</value>
   </data>
   <data name="Content_TrackWork" xml:space="preserve">
     <value>Облік часу</value>
@@ -76,13 +76,37 @@
     <value>неоплачено</value>
   </data>
   <data name="Content_WhatYouCanDoWithTimevic" xml:space="preserve">
-    <value>Що входить у стартовий доступ</value>
+    <value>Що можна робити з TimeVic</value>
   </data>
-  <data name="Content_SimpleAndTransparent" xml:space="preserve">
-    <value>Просто і прозоро</value>
+  <data name="Content_BuiltForRealFreelanceWork" xml:space="preserve">
+    <value>Створено для реальної фриланс-роботи</value>
   </data>
-  <data name="Content_TimevicIsFreeToUseTheFocusIsOnHelping" xml:space="preserve">
-    <value>У майбутньому можуть зʼявитися платні плани, але базова цінність продукту зараз доступна безкоштовно.</value>
+  <data name="Content_CreatedFromASimpleProblem" xml:space="preserve">
+    <value>TimeVic зʼявився через просту проблему: фриланс-робота швидко стає хаотичною, коли час, оплати та клієнти розкидані по таблицях і різних сервісах.</value>
+  </data>
+  <data name="Content_SoWeBuiltSomethingSimpler" xml:space="preserve">
+    <value>Тому ми зробили простіший інструмент для себе.</value>
+  </data>
+  <data name="Content_APlaceTo" xml:space="preserve">
+    <value>Місце, де можна:</value>
+  </data>
+  <data name="Content_ListItem_TrackWork" xml:space="preserve">
+    <value>трекати роботу</value>
+  </data>
+  <data name="Content_ListItem_UnderstandEarnings" xml:space="preserve">
+    <value>розуміти свій дохід</value>
+  </data>
+  <data name="Content_ListItem_RecordPayments" xml:space="preserve">
+    <value>фіксувати оплати</value>
+  </data>
+  <data name="Content_ListItem_SeeUnpaidBalances" xml:space="preserve">
+    <value>бачити неоплачену роботу</value>
+  </data>
+  <data name="Content_IfItsUsefulForYouToo" xml:space="preserve">
+    <value>Якщо це корисно і вам — користуйтесь.</value>
+  </data>
+  <data name="Content_FreeNoCreditCard" xml:space="preserve">
+    <value>Безкоштовно. Без банківської картки.</value>
   </data>
   <data name="Content_StartTrackingYourTimeAndIncome" xml:space="preserve">
     <value>Почни безкоштовно вести час, дохід і оплати</value>

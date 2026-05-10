@@ -78,11 +78,35 @@
   <data name="Content_WhatYouCanDoWithTimevic" xml:space="preserve">
     <value>What you can do with TimeVic</value>
   </data>
-  <data name="Content_SimpleAndTransparent" xml:space="preserve">
-    <value>Simple and transparent</value>
+  <data name="Content_BuiltForRealFreelanceWork" xml:space="preserve">
+    <value>Built for real freelance work</value>
   </data>
-  <data name="Content_TimevicIsFreeToUseTheFocusIsOnHelping" xml:space="preserve">
-    <value>TimeVic is free to use. The focus is on helping freelancers understand their income, not just track time.</value>
+  <data name="Content_CreatedFromASimpleProblem" xml:space="preserve">
+    <value>TimeVic was created from a simple problem: freelance work becomes messy when time, payments, and clients are spread across spreadsheets and different tools.</value>
+  </data>
+  <data name="Content_SoWeBuiltSomethingSimpler" xml:space="preserve">
+    <value>So we built something simpler for ourselves.</value>
+  </data>
+  <data name="Content_APlaceTo" xml:space="preserve">
+    <value>A place to:</value>
+  </data>
+  <data name="Content_ListItem_TrackWork" xml:space="preserve">
+    <value>track work</value>
+  </data>
+  <data name="Content_ListItem_UnderstandEarnings" xml:space="preserve">
+    <value>understand earnings</value>
+  </data>
+  <data name="Content_ListItem_RecordPayments" xml:space="preserve">
+    <value>record payments</value>
+  </data>
+  <data name="Content_ListItem_SeeUnpaidBalances" xml:space="preserve">
+    <value>see unpaid balances</value>
+  </data>
+  <data name="Content_IfItsUsefulForYouToo" xml:space="preserve">
+    <value>If it's useful for you too — use it.</value>
+  </data>
+  <data name="Content_FreeNoCreditCard" xml:space="preserve">
+    <value>Free. No credit card required.</value>
   </data>
   <data name="Content_StartTrackingYourTimeAndIncome" xml:space="preserve">
     <value>Start tracking your time and income</value>
