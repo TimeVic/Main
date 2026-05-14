@@ -29,16 +29,20 @@ public class GetListTest: BaseTest
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IDataFactory<TaskListEntity> _taskListFactory;
     private readonly ITaskListSeeder _taskListSeeder;
+    private readonly ITaskSeeder _taskSeeder;
     private readonly ProjectEntity _project;
     private readonly ITaskListDao _taskListDao;
+    private readonly ITaskDao _taskDao;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _taskListFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskListEntity>>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
+        _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _taskListDao = ServiceProvider.GetRequiredService<ITaskListDao>();
+        _taskDao = ServiceProvider.GetRequiredService<ITaskDao>();
         
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _project = _projectSeeder.CreateAsync(_defaultWorkspace).Result;
@@ -74,6 +78,27 @@ public class GetListTest: BaseTest
             Assert.NotNull(item.Project);
             Assert.Equal(_project.Id, item.Project.Id);
         });
+    }
+
+    [Fact]
+    public async Task ShouldReceiveTasksCountForEachTaskList()
+    {
+        var firstTaskList = await _taskListSeeder.CreateAsync(_project);
+        var secondTaskList = await _taskListSeeder.CreateAsync(_project);
+        var emptyTaskList = await _taskListSeeder.CreateAsync(_project);
+        await _taskSeeder.CreateSeveralAsync(firstTaskList, 3, _user);
+        await _taskSeeder.CreateSeveralAsync(secondTaskList, 2, _user);
+        await _taskDao.AddTaskAsync(secondTaskList, _user, "Archived task", isArchived: true);
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(3, actualDto.Items.Single(item => item.Id == firstTaskList.Id).TasksCount);
+        Assert.Equal(2, actualDto.Items.Single(item => item.Id == secondTaskList.Id).TasksCount);
+        Assert.Equal(0, actualDto.Items.Single(item => item.Id == emptyTaskList.Id).TasksCount);
     }
     
     [Fact]

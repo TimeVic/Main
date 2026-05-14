@@ -379,6 +379,8 @@
   <data name="TasksListBlock_SelectProjectEmpty" xml:space="preserve"><value>Виберіть проєкт, щоб завантажити списки задач.</value></data>
   <data name="TasksListBlock_NoMatches" xml:space="preserve"><value>Списків задач за “{0}” не знайдено.</value></data>
   <data name="TasksListBlock_ListIsEmpty" xml:space="preserve"><value>Список порожній</value></data>
+  <data name="TasksListBlock_TaskCount" xml:space="preserve"><value>{0} задача</value></data>
+  <data name="TasksListBlock_TasksCount" xml:space="preserve"><value>Задач: {0}</value></data>
   <data name="TasksTableBlock_SelectedCount" xml:space="preserve"><value>Вибрано: {0}</value></data>
   <data name="TasksTableBlock_NoTasksFound" xml:space="preserve"><value>Задач не знайдено.</value></data>
   <data name="TasksTableBlock_ArchiveThisTask" xml:space="preserve"><value>Архівувати цю задачу</value></data>

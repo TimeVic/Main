@@ -62,4 +62,6 @@ public interface ITaskDao: IDomainService
     Task<ICollection<TaskEntity>> GetTasksToRemind();
 
     Task<IDictionary<Guid, TimeSpan>> GetTrackedDurationByTaskIds(ICollection<Guid> taskIds);
+
+    Task<IDictionary<Guid, int>> GetTasksCountByTaskListIds(ICollection<TaskListEntity> taskLists);
 }

@@ -111,6 +111,19 @@ public partial class TasksListBlock: IDisposable
             ? "flex w-full items-center justify-between rounded-2xl border border-blue-200 bg-blue-50 px-3 py-3 text-left"
             : "flex w-full items-center justify-between rounded-2xl border border-slate-200 px-3 py-3 text-left transition hover:border-slate-300 hover:bg-slate-50";
     }
+
+    private string GetTasksCountText(TaskListDto taskList)
+    {
+        var tasksCount = taskList is TaskListForListDto taskListWithCounter
+            ? taskListWithCounter.TasksCount
+            : 0;
+
+        var key = tasksCount == 1
+            ? "TasksListBlock_TaskCount"
+            : "TasksListBlock_TasksCount";
+
+        return string.Format(DashboardLocalizer[key].Value, tasksCount);
+    }
     
     private void OnTasksListStateChanged(object? sender, EventArgs e)
     {

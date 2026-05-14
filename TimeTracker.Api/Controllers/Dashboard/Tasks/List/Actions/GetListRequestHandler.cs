@@ -20,6 +20,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly ITaskListDao _taskListDao;
+        private readonly ITaskDao _taskDao;
         private readonly IWorkspaceAccessService _workspaceAccessService;
 
         public GetListRequestHandler(
@@ -28,6 +29,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
             IUserDao userDao,
             ISecurityManager securityManager,
             ITaskListDao taskListDao,
+            ITaskDao taskDao,
             IWorkspaceAccessService workspaceAccessService
         )
         {
@@ -36,6 +38,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
             _userDao = userDao;
             _securityManager = securityManager;
             _taskListDao = taskListDao;
+            _taskDao = taskDao;
             _workspaceAccessService = workspaceAccessService;
         }
     
@@ -56,8 +59,18 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
                 userAccess,
                 listRequest.ProjectId
             );
+            var items = _mapper.Map<ICollection<TaskListForListDto>>(taskLists.Items);
+            // Load counters in one grouped query to avoid per-list task count queries.
+            var tasksCountMap = await _taskDao.GetTasksCountByTaskListIds(taskLists.Items.ToList());
+            foreach (var item in items)
+            {
+                item.TasksCount = tasksCountMap.TryGetValue(item.Id, out var tasksCount)
+                    ? tasksCount
+                    : 0;
+            }
+
             return new GetListResponse(
-                _mapper.Map<ICollection<TaskListDto>>(taskLists.Items),
+                items,
                 taskLists.TotalCount
             );
         }

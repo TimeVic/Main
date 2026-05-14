@@ -323,4 +323,26 @@ public class TaskDao: ITaskDao
             item => TimeSpan.FromSeconds(item.TrackedSeconds)
         );
     }
+
+    public async Task<IDictionary<Guid, int>> GetTasksCountByTaskListIds(ICollection<TaskListEntity> taskLists)
+    {
+        if (!taskLists.Any())
+        {
+            return new Dictionary<Guid, int>();
+        }
+
+        var uniqueTaskListIds = taskLists.Select(item => item.Id).Distinct().ToList();
+        var items = await _sessionProvider.CurrentSession.Query<TaskEntity>()
+            .Where(item => uniqueTaskListIds.Contains(item.TaskList.Id))
+            .Where(item => !item.IsArchived)
+            .GroupBy(item => item.TaskList.Id)
+            .Select(group => new
+            {
+                TaskListId = group.Key,
+                TasksCount = group.Count()
+            })
+            .ToListAsync();
+
+        return items.ToDictionary(item => item.TaskListId, item => item.TasksCount);
+    }
 }

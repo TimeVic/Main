@@ -1,15 +1,14 @@
 ﻿using Fluxor;
-using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Web.Core.Helpers;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 
 namespace TimeTracker.Web.Store.TasksList;
 
 public class TasksListReducers
 {
     [ReducerMethod]
-    public static TasksListState SetProjectListItemsActionReducer(TasksListState state, SetListItemsAction action)
+    public static TasksListState Reducer(TasksListState state, SetListItemsAction action)
     {
-        var list = action.Response.Items.ToList();
+        var list = action.Response.Items.Cast<TaskListDto>().ToList();
         var selectedTaskListId = list.Any(item => item.Id == state.SelectedTaskListId)
             ? state.SelectedTaskListId
             : null;
@@ -27,7 +26,7 @@ public class TasksListReducers
     }
     
     [ReducerMethod]
-    public static TasksListState SetListItemActionReducer(TasksListState state, SetListItemAction action)
+    public static TasksListState Reducer(TasksListState state, SetListItemAction action)
     {
         var list = state.List.Select(item =>
         {
@@ -50,7 +49,7 @@ public class TasksListReducers
     }
     
     [ReducerMethod]
-    public static TasksListState RemoveListItemsActionReducer(TasksListState state, RemoveListItemsAction action)
+    public static TasksListState Reducer(TasksListState state, RemoveListItemsAction action)
     {
         var list = state.List.Where(item => item.Id != action.TaskListId).ToList();
         return state with
@@ -63,7 +62,7 @@ public class TasksListReducers
     }
 
     [ReducerMethod]
-    public static TasksListState SetProjectIsListLoadingReducer(TasksListState state, SetIsListLoadingAction action)
+    public static TasksListState Reducer(TasksListState state, SetIsListLoadingAction action)
     {
         return state with
         {
@@ -72,7 +71,7 @@ public class TasksListReducers
     }
     
     [ReducerMethod]
-    public static TasksListState SetSelectedReducer(TasksListState state, SetSelectedAction action)
+    public static TasksListState Reducer(TasksListState state, SetSelectedAction action)
     {
         return state with
         {

@@ -29,7 +29,7 @@ public class LoadListEffect: Effect<LoadListAction>
         {
             if (!action.ProjectId.HasValue)
             {
-                dispatcher.Dispatch(new SetListItemsAction(new GetListResponse(new List<TaskListDto>(), 0)));
+                dispatcher.Dispatch(new SetListItemsAction(new GetListResponse(new List<TaskListForListDto>(), 0)));
                 return;
             }
 
@@ -40,7 +40,7 @@ public class LoadListEffect: Effect<LoadListAction>
             });
             if (response == null)
             {
-                dispatcher.Dispatch(new SetListItemsAction(new GetListResponse(new List<TaskListDto>(), 0), action.ProjectId));
+                dispatcher.Dispatch(new SetListItemsAction(new GetListResponse(new List<TaskListForListDto>(), 0), action.ProjectId));
                 return;
             }
 
