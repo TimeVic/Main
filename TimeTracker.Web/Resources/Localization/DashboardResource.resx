@@ -379,6 +379,8 @@
   <data name="TasksListBlock_SelectProjectEmpty" xml:space="preserve"><value>Select a project to load task lists.</value></data>
   <data name="TasksListBlock_NoMatches" xml:space="preserve"><value>No task lists match “{0}”.</value></data>
   <data name="TasksListBlock_ListIsEmpty" xml:space="preserve"><value>List is empty</value></data>
+  <data name="TasksListBlock_TaskCount" xml:space="preserve"><value>{0} task</value></data>
+  <data name="TasksListBlock_TasksCount" xml:space="preserve"><value>{0} tasks</value></data>
   <data name="TasksTableBlock_SelectedCount" xml:space="preserve"><value>{0} selected</value></data>
   <data name="TasksTableBlock_NoTasksFound" xml:space="preserve"><value>No tasks found.</value></data>
   <data name="TasksTableBlock_ArchiveThisTask" xml:space="preserve"><value>Archive this task</value></data>

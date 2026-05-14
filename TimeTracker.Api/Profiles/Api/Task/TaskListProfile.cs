@@ -9,5 +9,8 @@ public class TaskListProfile : Profile
     public TaskListProfile()
     {
         CreateMap<TaskListEntity, TaskListDto>();
+        CreateMap<TaskListEntity, TaskListForListDto>()
+            .IncludeBase<TaskListEntity, TaskListDto>()
+            .ForMember(destination => destination.TasksCount, options => options.Ignore());
     }
 }
