@@ -84,7 +84,7 @@
                                     Disabled="true">
                                     @_currentTime.ToString("yyyy-MM-dd HH:mm:ss zzz");
                                 </LumexDropdownItem>
-                                <LumexDropdownItem Disabled="true">
+                                <LumexDropdownItem OnClick="@OnNavigateToUserSettings">
                                     @DashboardLocalizer["Settings"]
                                 </LumexDropdownItem>
                                 <LumexDropdownItem Disabled="true">@DashboardLocalizer["HelpSupport"]</LumexDropdownItem>
