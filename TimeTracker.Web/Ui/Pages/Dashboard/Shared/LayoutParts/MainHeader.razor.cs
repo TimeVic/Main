@@ -4,6 +4,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Web.Constants;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.DateTimes;
 using TimeTracker.Web.Services.Workspace;
@@ -67,6 +68,11 @@ public partial class MainHeader: IDisposable
     {
         Dispatcher.Dispatch(new LogoutAction());
         return Task.CompletedTask;
+    }
+
+    private void OnNavigateToUserSettings()
+    {
+        NavigationManager.NavigateTo(SiteUrl.Dashboard_User_Settings);
     }
     
     private async Task OnSelectLanguage(string cultureName)

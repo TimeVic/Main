@@ -98,6 +98,12 @@ public partial class MainMenu: IDisposable
         var basePath = SiteUrl.Dashboard_TimeEntry;
         if (item.Url != basePath)
         {
+            // Also activate the workspace settings icon when the user settings page is open
+            if (item.Url == SiteUrl.Dashboard_Workspace_Settings
+                && path.StartsWith(SiteUrl.Dashboard_User_Settings))
+            {
+                return true;
+            }
             return path.StartsWith(item.Url);
         }
         return item.Url == path;

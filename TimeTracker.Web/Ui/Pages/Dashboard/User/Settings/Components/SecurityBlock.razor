@@ -1,0 +1,56 @@
+@using LumexUI.Common
+
+@inherits BaseReactiveComponent
+
+@if (_isShowPasswordModal)
+{
+    <LumexModal Open="true" OnClose="@(() => _isShowPasswordModal = false)" Size="ModalSize.Small">
+        <LumexModalContent>
+            <LumexModalHeader>
+                <div>
+                    <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["UserSettings_ChangePasswordModalTitle"]</h2>
+                </div>
+            </LumexModalHeader>
+            <LumexModalBody>
+                <p class="text-sm leading-6 text-slate-600">@DashboardLocalizer["UserSettings_ChangePasswordModalDescription"]</p>
+            </LumexModalBody>
+            <LumexModalFooter>
+                <CustomButton
+                    FullWidth="true"
+                    OnClick="@(() => _isShowPasswordModal = false)"
+                    Color="ThemeColor.Default"
+                    Variant="Variant.Outlined">
+                    @DashboardLocalizer["Cancel"]
+                </CustomButton>
+            </LumexModalFooter>
+        </LumexModalContent>
+    </LumexModal>
+}
+
+<LumexCard>
+    <LumexCardHeader>
+        <div>
+            <h2 class="text-lg font-semibold text-slate-900">@DashboardLocalizer["UserSettings_SecuritySection"]</h2>
+            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserSettings_SecuritySectionDescription"]</p>
+        </div>
+    </LumexCardHeader>
+    <LumexCardBody>
+        <div class="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+            <div>
+                <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["UserSettings_PasswordTitle"]</p>
+                <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["UserSettings_ChangePasswordDescription"]</p>
+            </div>
+            @* TODO: Wire to password change API *@
+            <CustomButton
+                Color="ThemeColor.Default"
+                Variant="Variant.Outlined"
+                OnClick="@(() => _isShowPasswordModal = true)">
+                <StartContent>
+                    <i class="fa-solid fa-lock"></i>
+                </StartContent>
+                <ChildContent>@DashboardLocalizer["UserSettings_ChangePassword"]</ChildContent>
+            </CustomButton>
+        </div>
+    </LumexCardBody>
+</LumexCard>
+

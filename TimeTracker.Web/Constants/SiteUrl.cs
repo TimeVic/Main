@@ -41,6 +41,7 @@ public static class SiteUrl
     public static readonly string Dashboard_Members = "/board/members";
     public static readonly string Dashboard_Integrations = "/board/integrations";
     public static readonly string Dashboard_Workspace_Settings = "/board/workspace/settings";
+    public static readonly string Dashboard_User_Settings = "/board/user/settings";
     public static readonly string Dashboard_Emoji = "/board/emoji";
     
     public static readonly string Dashboard_Reports_Summary = "/board/report/summary";
