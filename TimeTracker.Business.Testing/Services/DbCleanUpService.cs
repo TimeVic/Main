@@ -34,6 +34,7 @@ public class DbCleanUpService: IDbCleanUpService
             "task_history_items",
             "task_stored_files",
             "task_stored_files",
+            "user_stored_files",
             "task_tags",
             "time_entry_tags",
             "user_magic_tokens",

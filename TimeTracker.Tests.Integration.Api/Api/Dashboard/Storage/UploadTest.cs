@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
+using SixLabors.ImageSharp;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
@@ -149,5 +150,43 @@ public class UploadTest: BaseTest
         var actualUploadedFile = await DbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(actualData.Id);
         Assert.NotNull(actualUploadedFile);
         Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath!);
+    }
+    
+    [Fact]
+    public async Task ShouldUploadUserAvatar()
+    {
+        var response = await PostMultipartFormDataRequestAsync(
+            Url,
+            _jwtToken,
+            new Dictionary<string, object>()
+            {
+                { "WorkspaceId", _workspace.Id },
+                { "EntityId", _user.Id },
+                { "EntityType", StorageEntityType.User },
+                { "FileType", StoredFileType.Avatar },
+            },
+            CreateFormFile("image.jpg")
+        );
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<StoredFileDto>();
+        Assert.Equal(StoredFileType.Avatar, actualData.Type);
+        Assert.Equal("image/png", actualData.MimeType);
+        
+        await FlushDbChanges(true);
+        var actualUploadedFile = await DbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(actualData.Id);
+        Assert.NotNull(actualUploadedFile);
+        Assert.Equal("png", actualUploadedFile.Extension);
+        Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath!);
+        
+        var actualUser = await DbSessionProvider.CurrentSession.GetAsync<UserEntity>(_user.Id);
+        Assert.Single(actualUser.Avatars);
+
+        var fileResponse = await GetRequestAsync(actualData.Url, _jwtToken);
+        fileResponse.EnsureSuccessStatusCode();
+        await using var imageStream = await fileResponse.Content.ReadAsStreamAsync();
+        using var image = await Image.LoadAsync(imageStream);
+        Assert.Equal(256, image.Width);
+        Assert.Equal(256, image.Height);
     }
 }

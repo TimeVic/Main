@@ -55,5 +55,13 @@ public class UserMapping: BaseGuidMappings<UserEntity>
             .Fetch.Select()
             .Cascade.SaveUpdate()
             .AsSet();
+        
+        HasManyToMany(x => x.Avatars)
+            .Table("user_stored_files")
+            .ParentKeyColumn("user_id")
+            .ChildKeyColumn("stored_file_id")
+            .FetchType.Select()
+            .LazyLoad()
+            .Cascade.None();
     }
 }

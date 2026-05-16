@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Persistence.Transactions.Behaviors;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
@@ -22,6 +23,8 @@ public partial class FileStorage: IFileStorage
     public const int MaxFileSize = 1024 * 1024 * 50; // 15Mb
     private const int Thumb_MaxWidth = 256;
     private const int Thumb_MaxHeight = 256;
+    private const int Avatar_MaxWidth = 256;
+    private const int Avatar_MaxHeight = 256;
     
     private readonly IDbSessionProvider _dbSessionProvider;
     private readonly ILogger<IFileStorage> _logger;
@@ -56,7 +59,10 @@ public partial class FileStorage: IFileStorage
     {
         var fileExtension = Path.GetExtension(fileName).Replace(".", "");
         var mimeType = MimeTypeHelper.GetMimeTypeByExtension(fileExtension);
-        var cloudFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath(fileExtension)}";
+        if (fileType == StoredFileType.Avatar && !IsImageMimeType(mimeType))
+        {
+            throw new IncorrectFileException("Incorrect file type");
+        }
 
         if (IsImageMimeType(mimeType))
         {
@@ -65,6 +71,16 @@ public partial class FileStorage: IFileStorage
                 throw new IncorrectFileException("Provided file content is not image");
             }
         }
+
+        if (fileType == StoredFileType.Avatar)
+        {
+            // Avatar uploads are cropped before cloud upload so profile images are stored in a consistent square size.
+            fileData = await CropAvatarFileDataAsync(fileData, cancellationToken);
+            fileExtension = "png";
+            mimeType = "image/png";
+        }
+
+        var cloudFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath(fileExtension)}";
 
         var storedFile = new StoredFileEntity()
         {
@@ -81,6 +97,21 @@ public partial class FileStorage: IFileStorage
         await _dbSessionProvider.CurrentSession.SaveAsync(storedFile, cancellationToken);
         await _relationshipService.AddFileRelationship(entity, storedFile);
         return storedFile;
+    }
+
+    private async Task<byte[]> CropAvatarFileDataAsync(byte[] fileData, CancellationToken cancellationToken)
+    {
+        using var sourceStream = new MemoryStream(fileData);
+        using var avatarImage = await ImageHelper.ResizeImageFromStreamAsync(
+            sourceStream,
+            Avatar_MaxWidth,
+            Avatar_MaxHeight,
+            ResizeMode.Crop,
+            isGrayscale: false
+        );
+        using var avatarStream = new MemoryStream();
+        await avatarImage.SaveAsPngAsync(avatarStream, cancellationToken: cancellationToken);
+        return avatarStream.ToArray();
     }
 
     public async Task<StoredFileEntity> PutFileAsync<TEntity>(

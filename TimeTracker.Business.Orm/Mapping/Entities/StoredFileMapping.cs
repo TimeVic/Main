@@ -38,5 +38,13 @@ public class StoredFileMapping: BaseGuidMappings<StoredFileEntity>
             .FetchType.Select()
             .LazyLoad()
             .Cascade.None();
+        
+        HasManyToMany(x => x.Users)
+            .Table("user_stored_files")
+            .ParentKeyColumn("stored_file_id")
+            .ChildKeyColumn("user_id")
+            .FetchType.Select()
+            .LazyLoad()
+            .Cascade.None();
     }
 }

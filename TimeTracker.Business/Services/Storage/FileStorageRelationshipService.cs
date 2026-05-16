@@ -62,9 +62,9 @@ public class FileStorageRelationshipService: IFileStorageRelationshipService
         StoredFileEntity file
     ) where TEntity: IEntity
     {
-        if (entity is UserEntity)
+        if (entity is UserEntity userEntity)
         {
-            // TODO: Add relationship
+            userEntity.Avatars.Add(file);
         }
         if (entity is TaskEntity taskEntity)
         {

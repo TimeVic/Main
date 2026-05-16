@@ -94,8 +94,17 @@ public class SecurityManager: ISecurityManager
         {
             return await HasAccessToMessagingChannel(accessLevel, user, messagingChannelEntity);
         }
+        if (entity is UserEntity userEntity)
+        {
+            return HasAccessToUser(user, userEntity);
+        }
 
         throw new NotImplementedException($"Security checking not implemented for {entity?.GetTypeName()}");
+    }
+
+    private bool HasAccessToUser(UserEntity user, UserEntity entity)
+    {
+        return user.Id == entity.Id;
     }
 
     private async Task<bool> HasAccessToWorkspace(AccessLevel accessLevel, UserEntity user, WorkspaceEntity workspace)
