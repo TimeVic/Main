@@ -65,16 +65,16 @@ public partial class FilesList
         // }
     }
 
-    private string GetFullUrl(string url)
+    private string GetFullUrl(StoredFileDto file)
     {
-        return _urlService.GetStorageUrl(url);
+        return _urlService.GetStorageFileUrl(file);
     }
 
     private async Task OnClickDownload(StoredFileDto storedFile)
     {
         await _uiHelperService.OpenFileInNewTab(
             storedFile.OriginalFileName,
-            GetFullUrl(storedFile.Url)
+            GetFullUrl(storedFile)
         );
     }
     

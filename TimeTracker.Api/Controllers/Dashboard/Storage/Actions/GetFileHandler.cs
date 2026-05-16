@@ -2,13 +2,9 @@
 using AspNetCore.ApiControllers.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Dto.RequestsAndResponses.Storage;
-using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
-using TimeTracker.Business.Common.Constants;
-using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Storage;
@@ -23,6 +19,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
         private readonly ISecurityManager _securityManager;
         private readonly IFileStorage _fileStorage;
         private readonly IFileStorageRelationshipService _fileStorageRelationshipService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public GetFileHandler(
             IMapper mapper,
@@ -30,7 +27,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
             IUserDao userDao,
             ISecurityManager securityManager,
             IFileStorage fileStorage,
-            IFileStorageRelationshipService fileStorageRelationshipService
+            IFileStorageRelationshipService fileStorageRelationshipService,
+            IHttpContextAccessor httpContextAccessor
         )
         {
             _mapper = mapper;
@@ -39,6 +37,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
             _securityManager = securityManager;
             _fileStorage = fileStorage;
             _fileStorageRelationshipService = fileStorageRelationshipService;
+            _httpContextAccessor = httpContextAccessor;
         }
     
         public async Task<FileResponse> ExecuteAsync(GetFileRequest request)
@@ -46,8 +45,16 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
             var user = await _apiRequestService.GetCurrentUser();
 
             var (file, fileStream, mimeType) = await _fileStorage.GetFileStream(user, request.FileId, request.ImageSize);
+            SetUpImageFileHeaders(file);
             fileStream.PrepareToCopy();
             return new FileResponse(fileStream, mimeType);
+        }
+        
+        private void SetUpImageFileHeaders(StoredFileEntity file)
+        {
+            _httpContextAccessor.HttpContext?.Response.Headers["Cache-Control"] = "public,max-age=31536000,immutable";
+            var lastModifiedTime = file.UpdatedAt ?? file.CreatedAt;
+            _httpContextAccessor.HttpContext?.Response.Headers["Last-Modified"] = lastModifiedTime.ToString("R");
         }
     }
 }

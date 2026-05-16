@@ -17,3 +17,5 @@ public record struct LoginAction(
 public record struct SetWorkspaceAction(WorkspaceDto Workspace);
 
 public record struct UpdateUserAction(UserDto User);
+
+public record struct LoadCurrentUserAction();

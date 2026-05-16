@@ -72,7 +72,7 @@ public partial class BaseLayout
             }
         };
         ReCaptchaService.IsShowChanged += OnReCaptchaShowChanged;
-        Dispatcher.Dispatch(new LoadPersistedDataAction());
+        Dispatcher.Dispatch(new InitializeAppAction());
     }
 
     public void Dispose()

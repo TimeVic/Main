@@ -2,7 +2,6 @@
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common;
 
 namespace TimeTracker.Web.Store.Workspace.Effects;
 
@@ -10,19 +9,16 @@ public class UpdateEffect: Effect<UpdateWorkspaceAction>
 {
     private readonly ApiService _apiService;
     private readonly ILogger<UpdateEffect> _logger;
-    private readonly IState<AuthState> _authState;
     private readonly ToastService _toastService;
 
     public UpdateEffect(
         ApiService apiService,
         ILogger<UpdateEffect> logger,
-        IState<AuthState> authState,
         ToastService toastService
     )
     {
         _apiService = apiService;
         _logger = logger;
-        _authState = authState;
         _toastService = toastService;
     }
 
@@ -37,7 +33,6 @@ public class UpdateEffect: Effect<UpdateWorkspaceAction>
             {
                 dispatcher.Dispatch(new SetListItemAction(response));
                 dispatcher.Dispatch(new SetWorkspaceAction(response));
-                dispatcher.Dispatch(new PersistDataAction());
                 _toastService.ShowInfo($"Workspace updated.");
             }
         }

@@ -1,19 +1,29 @@
 using System.Globalization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
+using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Web.Services;
+using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.User.Settings.Components;
 
 public partial class ProfileBlock
 {
+    [Inject]
+    public UrlService UrlService { get; set; } = null!;
+
     private string _name = string.Empty;
     private string _email = string.Empty;
     private string _selectedLanguage = string.Empty;
     private bool _isUploadingAvatar;
     private bool _isDeletingAvatar;
+    private string _avatarRenderKey => AuthState.Value.User?.Avatar?.Id.ToString() ?? "avatar-empty";
+    private string? _avatarSrc => AuthState.Value.User?.Avatar == null
+        ? null
+        : UrlService.GetStorageImageUrl(AuthState.Value.User.Avatar, StorageImageSize.S_256);
 
     protected override Task OnInitializedAsync()
     {
@@ -57,7 +67,7 @@ public partial class ProfileBlock
 
         try
         {
-            // Delete the existing avatar before uploading a new one
+            // Delete the existing avatar before uploading a new one.
             var existingAvatarId = AuthState.Value.User?.Avatar?.Id;
             if (existingAvatarId.HasValue)
             {
@@ -72,8 +82,13 @@ public partial class ProfileBlock
             );
             if (avatarDto != null)
             {
-                await RefreshCurrentUserAsync();
+                UpdateCurrentUserAvatar(avatarDto);
+                Dispatcher.Dispatch(new LoadCurrentUserAction());
             }
+        }
+        catch (Exception)
+        {
+            ToastService.ShowError(DashboardLocalizer["UserSettings_AvatarUploadError"].Value);
         }
         finally
         {
@@ -96,7 +111,12 @@ public partial class ProfileBlock
         try
         {
             await ApiService.StorageDeleteFileAsync(avatarId.Value);
-            await RefreshCurrentUserAsync();
+            UpdateCurrentUserAvatar(null);
+            Dispatcher.Dispatch(new LoadCurrentUserAction());
+        }
+        catch (Exception)
+        {
+            ToastService.ShowError(DashboardLocalizer["UserSettings_AvatarDeleteError"].Value);
         }
         finally
         {
@@ -105,16 +125,23 @@ public partial class ProfileBlock
         }
     }
 
-    private async Task RefreshCurrentUserAsync()
+    private void UpdateCurrentUserAvatar(StoredFileDto? avatar)
     {
-        var user = await ApiService.UserGetCurrentAsync();
+        var user = AuthState.Value.User;
         if (user == null)
         {
             return;
         }
 
-        // Refresh user data so avatar metadata comes from the committed profile state after upload/delete.
-        Dispatcher.Dispatch(new UpdateUserAction(user));
-        Dispatcher.Dispatch(new PersistDataAction());
+        // Keep the profile and header avatars in sync immediately after upload/delete.
+        Dispatcher.Dispatch(new UpdateUserAction(new UserDto
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            Email = user.Email,
+            Timezone = user.Timezone,
+            DefaultWorkspace = user.DefaultWorkspace,
+            Avatar = avatar
+        }));
     }
 }

@@ -47,6 +47,7 @@ public class WorkspaceInitializationService
     public async Task AfterInit(bool isReload = false)
     {
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(false));
+        _dispatcher.Dispatch(new LoadCurrentUserAction());
         await LoadWorkspacePermissionsAsync();
         _dispatcher.Dispatch(new TimeTracker.Web.Store.WorkspaceMembers.LoadListAction(isReload));
         _dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadListAction(isReload));
@@ -117,7 +118,6 @@ public class WorkspaceInitializationService
             return;
         }
         _dispatcher.Dispatch(new SetWorkspaceAction(workspace));
-        _dispatcher.Dispatch(new PersistDataAction());
         _navigationManager.ReloadPage();
     }
 }

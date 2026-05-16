@@ -102,12 +102,12 @@ public partial class AttachmentsBlock
 
     private string GetAttachmentUrl(StoredFileDto attachment)
     {
-        return _urlService.GetStorageUrl(attachment.Url);
+        return _urlService.GetStorageFileUrl(attachment);
     }
 
     private string GetAttachmentPreviewUrl(StoredFileDto attachment)
     {
-        return _urlService.GetStorageUrl(attachment.Url);
+        return _urlService.GetStorageImageUrl(attachment, StorageImageSize.S_256);
     }
 
     private string GetAttachmentExtension(StoredFileDto attachment)

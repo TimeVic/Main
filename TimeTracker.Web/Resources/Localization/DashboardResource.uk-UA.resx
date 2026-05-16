@@ -509,6 +509,8 @@
   <data name="UserSettings_ChangeAvatar" xml:space="preserve"><value>Змінити аватар</value></data>
   <data name="UserSettings_RemoveAvatar" xml:space="preserve"><value>Видалити</value></data>
   <data name="UserSettings_AvatarHelper" xml:space="preserve"><value>JPG або PNG. До 2 MB.</value></data>
+  <data name="UserSettings_AvatarUploadError" xml:space="preserve"><value>Не вдалося завантажити аватар</value></data>
+  <data name="UserSettings_AvatarDeleteError" xml:space="preserve"><value>Не вдалося видалити аватар</value></data>
   <data name="UserSettings_NameHelper" xml:space="preserve"><value>Ім'я буде показуватись у вашому профілі.</value></data>
   <data name="UserSettings_InterfaceLanguageSection" xml:space="preserve"><value>Мова інтерфейсу</value></data>
   <data name="UserSettings_InterfaceLanguageSectionDescription" xml:space="preserve"><value>Оберіть мову інтерфейсу.</value></data>
