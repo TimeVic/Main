@@ -22,6 +22,7 @@ public class RegistrationService: IRegistrationService
     private readonly IWorkspaceDao _workspaceDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IPasswordService _passwordService;
+    private readonly ILanguageDao _languageDao;
     private readonly string _frontendUrl = string.Empty;
 
     public RegistrationService(
@@ -30,7 +31,8 @@ public class RegistrationService: IRegistrationService
         IConfiguration configuration,
         IWorkspaceDao workspaceDao,
         IWorkspaceAccessService workspaceAccessService,
-        IPasswordService passwordService
+        IPasswordService passwordService,
+        ILanguageDao languageDao
     )
     {
         _userDao = userDao;
@@ -38,10 +40,11 @@ public class RegistrationService: IRegistrationService
         _workspaceDao = workspaceDao;
         _workspaceAccessService = workspaceAccessService;
         _passwordService = passwordService;
+        _languageDao = languageDao;
         _frontendUrl = configuration.GetValue<string>("App:FrontendUrl")!;
     }
 
-    public async Task<UserEntity> CreatePendingUser(string email)
+    public async Task<UserEntity> CreatePendingUser(string email, string? languageCode = null)
     {
         var existsUser = await _userDao.GetByEmail(email);
         if (existsUser is { IsActivated: true })
@@ -50,9 +53,22 @@ public class RegistrationService: IRegistrationService
         }
         var user = existsUser ?? await _userDao.CreatePendingUser(email);
 
+        await ApplyRegistrationLanguageAsync(user, languageCode);
         await EnsureDefaultWorkspaceAsync(user);
         await SendRegistrationNotificationAsync(user);
         return user;
+    }
+
+    private async Task ApplyRegistrationLanguageAsync(UserEntity user, string? languageCode)
+    {
+        if (string.IsNullOrWhiteSpace(languageCode))
+        {
+            return;
+        }
+
+        var language = await _languageDao.GetByCodeAsync(languageCode) ?? await _languageDao.GetDefaultAsync();
+        user.Language = language;
+        user.UpdatedAt = DateTime.UtcNow;
     }
 
     private async Task EnsureDefaultWorkspaceAsync(UserEntity user)
