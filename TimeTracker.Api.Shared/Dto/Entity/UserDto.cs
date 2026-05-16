@@ -22,4 +22,6 @@ public class UserDto: BaseDto
     }
     
     public WorkspaceDto? DefaultWorkspace { get; set; }
+    
+    public StoredFileDto? Avatar { get; set; }
 }

@@ -63,7 +63,7 @@
                             <LumexDropdownTrigger>
                                 <LumexAvatar
                                     Name="@AuthState.Value.User.Initials"
-                                    Src="https://images.unsplash.com/broken"/>
+                                    Src="@AuthState.Value.User?.Avatar?.GetImageUrl(TimeTracker.Business.Common.Constants.Storage.StorageImageSize.S_256)"/>
                             </LumexDropdownTrigger>
                             <LumexDropdownMenu Class="p-3">
                                 <LumexDropdownItem
@@ -72,10 +72,10 @@
                                     <div class="flex items-center gap-2">
                                         <LumexAvatar Size="@Size.Small"
                                                      Name="@AuthState.Value.User.Initials"
-                                                     Src="https://i.pravatar.cc/150?img=2"/>
+                                                     Src="@AuthState.Value.User?.Avatar?.GetImageUrl(TimeTracker.Business.Common.Constants.Storage.StorageImageSize.S_256)"/>
                                         <div class="inline-flex flex-col items-start">
-                                            <span class="text-small text-default-600">@AuthState.Value.User.Name</span>
-                                            <span class="text-tiny text-default-500">@AuthState.Value.User.Email</span>
+                                            <span class="text-small text-default-600">@AuthState.Value.User?.Name</span>
+                                            <span class="text-tiny text-default-500">@AuthState.Value.User?.Email</span>
                                         </div>
                                     </div>
                                 </LumexDropdownItem>

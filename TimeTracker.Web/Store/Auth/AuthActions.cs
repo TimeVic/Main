@@ -16,3 +16,5 @@ public record struct LoginAction(
 }
 
 public record struct SetWorkspaceAction(WorkspaceDto Workspace);
+
+public record struct UpdateUserAvatarAction(StoredFileDto? Avatar);

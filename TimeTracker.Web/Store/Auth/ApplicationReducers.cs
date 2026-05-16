@@ -30,4 +30,15 @@ public class AuthReducers
             Workspace = action.Workspace
         };
     }
+    
+    [ReducerMethod]
+    public static AuthState UpdateUserAvatarActionReducer(AuthState state, UpdateUserAvatarAction action)
+    {
+        if (state.User == null)
+        {
+            return state;
+        }
+        state.User.Avatar = action.Avatar;
+        return state with { };
+    }
 }

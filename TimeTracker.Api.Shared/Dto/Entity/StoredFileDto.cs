@@ -21,7 +21,7 @@ public class StoredFileDto: BaseDto
     
     public string Url { get; set; } = string.Empty;
     
-    public string ThumbUrl { get; set; } = string.Empty;
-    
     public string Name => string.IsNullOrEmpty(Title) ? OriginalFileName : Title;
+    
+    public string GetImageUrl(StorageImageSize imageSize) => $"/dashboard/storage/file/{Id}?imageSize={imageSize}";
 }

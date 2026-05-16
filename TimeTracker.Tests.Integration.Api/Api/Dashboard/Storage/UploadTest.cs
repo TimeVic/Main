@@ -84,7 +84,7 @@ public class UploadTest: BaseTest
         var actualData = await response.GetJsonDataAsync<StoredFileDto>();
         Assert.NotEqual(Guid.Empty, actualData.Id);
         Assert.NotEmpty(actualData.Url);
-        Assert.NotEmpty(actualData.ThumbUrl);
+        Assert.NotEmpty(actualData.GetImageUrl(TimeTracker.Business.Common.Constants.Storage.StorageImageSize.S_256));
 
         await FlushDbChanges(true);
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
@@ -141,7 +141,7 @@ public class UploadTest: BaseTest
         var actualData = await response.GetJsonDataAsync<StoredFileDto>();
         Assert.NotEqual(Guid.Empty, actualData.Id);
         Assert.NotEmpty(actualData.Url);
-        Assert.NotEmpty(actualData.ThumbUrl);
+        Assert.NotEmpty(actualData.GetImageUrl(TimeTracker.Business.Common.Constants.Storage.StorageImageSize.S_256));
 
         await FlushDbChanges(true);
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);

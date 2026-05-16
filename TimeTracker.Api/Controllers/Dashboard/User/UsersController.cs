@@ -17,6 +17,6 @@ public class UsersController(ILifetimeScope scope) : MainApiControllerBase(scope
     [HttpPost("set-notification-token")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> UpdateTask([FromBody] SetNotificationTokenRequest request)
+    public Task<IActionResult> SetNotificationToken([FromBody] SetNotificationTokenRequest request)
         => this.RequestAsync(request);
 }
