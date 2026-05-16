@@ -57,7 +57,7 @@ public partial class ProfileBlock
             }
 
             Dispatcher.Dispatch(new UpdateUserAction(user));
-            await Js.InvokeVoidAsync("localStorage.setItem", "timevic.locale", user.Language?.Code ?? _selectedLanguage);
+            await Js.InvokeVoidAsync("localStorage.setItem", ILocalizationUrlService.LocalStorageKey, user.Language?.Code ?? _selectedLanguage);
 
             var currentCulture = CultureInfo.CurrentUICulture.Name == ILocalizationUrlService.UkrainianCultureName
                 ? ILocalizationUrlService.UkrainianCultureName

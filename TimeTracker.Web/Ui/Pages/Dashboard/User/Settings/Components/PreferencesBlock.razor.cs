@@ -18,7 +18,7 @@ public partial class PreferencesBlock
 
     private async Task OnSave()
     {
-        await Js.InvokeVoidAsync("localStorage.setItem", "timevic.locale", _selectedLanguage);
+        await Js.InvokeVoidAsync("localStorage.setItem", ILocalizationUrlService.LocalStorageKey, _selectedLanguage);
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }
