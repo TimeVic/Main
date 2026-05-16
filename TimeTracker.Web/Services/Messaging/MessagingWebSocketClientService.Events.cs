@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using TimeTracker.Api.Shared.Constants.Messaging;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
-using TimeTracker.Business.Extensions;
-using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Services.Http.Auth;
 
 namespace TimeTracker.Web.Services.Messaging;
 

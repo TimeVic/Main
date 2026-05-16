@@ -1,13 +1,14 @@
 ﻿using System.Collections.Specialized;
 using System.Web;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Services.UI;
 
 public class UrlService
 {
     private readonly IConfiguration _configuration;
-    private readonly IState<AuthState> _authState;
     private readonly NavigationManager _navigationManager;
 
     private readonly string _apiUrl;
