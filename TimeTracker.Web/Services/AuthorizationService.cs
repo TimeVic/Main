@@ -35,54 +35,39 @@ namespace TimeTracker.Web.Services
             await Task.CompletedTask;
         }
 
-        public string? GetJwt()
-        {
-            var store = _serviceProvider.GetService<IState<AuthState>>();
-            return store?.Value.JwtToken?.Trim();
-        }
-        
-        public string? GetAccessToken()
-        {
-            var store = _serviceProvider.GetService<IState<AuthState>>();
-            return store?.Value.AccessToken?.Trim();
-        }
-        
         public async Task<bool> LoginAsync(LoginRequest model)
         {
             var loginData = await _apiService.LoginAsync(model);
             if (loginData != null)
             {
-                Login(loginData?.AccessToken, loginData?.JwtToken, loginData?.User);
+                Login(loginData.User);
                 return true;
             }
 
             return false;
         }
-        
+
         public void Login(string accessToken, string jwtToken, UserDto user)
         {
-            if (!string.IsNullOrEmpty(jwtToken))
+            Login(user);
+        }
+
+        public void Login(UserDto user)
+        {
+            if (user.Id != Guid.Empty)
             {
                 user.DefaultWorkspace!.CurrentUserAccess = MembershipAccessType.Owner;
-                _dispatcher.Dispatch(new LoginAction(accessToken, jwtToken, user, user.DefaultWorkspace));
+                _dispatcher.Dispatch(new LoginAction(user, user.DefaultWorkspace));
                 _dispatcher.Dispatch(new PersistDataAction());
             }
         }
-        
-        public void SetJwt(string jwtToken)
-        {
-            if (!string.IsNullOrEmpty(jwtToken))
-            {
-                _dispatcher.Dispatch(new SetJwtAction(jwtToken));
-                _dispatcher.Dispatch(new PersistDataAction());
-            }
-        }
-        
+
         public async Task<bool> IsHasJwtAsync()
         {
-            return await Task.FromResult(!string.IsNullOrEmpty(GetJwt()));
+            var store = _serviceProvider.GetService<IState<AuthState>>();
+            return await Task.FromResult(store?.Value.IsLoggedIn == true);
         }
-        
+
         public async Task<bool> CheckIsLoggedInAsync()
         {
             bool isValidJwt = false;
@@ -90,7 +75,7 @@ namespace TimeTracker.Web.Services
             {
                 try
                 {
-                    isValidJwt = await _apiService.CheckIsLoggedInAsync(GetJwt());
+                    isValidJwt = await _apiService.CheckIsLoggedInAsync();
                     if (!isValidJwt)
                     {
                         await LogoutAsync();

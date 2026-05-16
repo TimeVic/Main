@@ -61,11 +61,8 @@ public partial class LoginPage
             {
                 throw new Exception("Login error");
             }
-            if (!string.IsNullOrEmpty(loginResponse.JwtToken))
-            {
-                _authorizationService.Login(loginResponse.AccessToken, loginResponse.JwtToken, loginResponse.User);
-                _navigationManager.NavigateTo(SiteUrl.DashboardBase);
-            }
+            _authorizationService.Login(loginResponse.User);
+            _navigationManager.NavigateTo(SiteUrl.DashboardBase);
         }
         catch (Exception)
         {

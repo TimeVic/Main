@@ -7,11 +7,7 @@ namespace TimeTracker.Web.Store.Auth;
 [FeatureState]
 public record AuthState
 {
-    public bool IsLoggedIn => !string.IsNullOrEmpty(JwtToken);
-
-    public string AccessToken { get; set; }
-    
-    public string JwtToken { get; set; }
+    public bool IsLoggedIn => User != null && User.Id != Guid.Empty;
     
     public UserDto User { get; set; }
     

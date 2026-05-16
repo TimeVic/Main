@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Newtonsoft.Json;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Helpers;
@@ -42,6 +43,7 @@ public class CustomHttpClient
     {   
         // create request object
         var request = new HttpRequestMessage(httpMethod, $"{_apiUrl}/{requestUri}");
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
         if (
             httpMethod == HttpMethod.Post
             || httpMethod == HttpMethod.Put
@@ -67,6 +69,7 @@ public class CustomHttpClient
     )
     {   
         var request = new HttpRequestMessage(HttpMethod.Post, $"{_apiUrl}/{requestUri}");
+        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
         using var multipartFormContent = new MultipartFormDataContent();
         if (data != null)
         {

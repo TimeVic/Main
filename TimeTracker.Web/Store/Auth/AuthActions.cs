@@ -6,17 +6,13 @@ namespace TimeTracker.Web.Store.Auth;
 public record struct LogoutAction();
 
 public record struct LoginAction(
-    string AccessToken,
-    string Jwt,
     UserDto User,
     WorkspaceDto Workspace
 )
 {
-    public LoginAction(AuthState state) : this(state.AccessToken, state.JwtToken, state.User, state.Workspace)
+    public LoginAction(AuthState state) : this(state.User, state.Workspace)
     {
     }
 }
 
 public record struct SetWorkspaceAction(WorkspaceDto Workspace);
-
-public record struct SetJwtAction(string Jwt);

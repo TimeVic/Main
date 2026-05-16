@@ -37,11 +37,11 @@ namespace TimeTracker.Web.Services.Http
             return await PostAsync<LoginResponseDto?>(ApiUrl.LoginMagicVerify, model);
         }
         
-        public async Task<bool> CheckIsLoggedInAsync(string token)
+        public async Task<bool> CheckIsLoggedInAsync()
         {
             try
             {
-                await GetAsync(ApiUrl.UserCheckIsLoggedIn, token);
+                await GetAsync<object>(ApiUrl.UserCheckIsLoggedIn);
                 return true;
             }
             catch (Exception)

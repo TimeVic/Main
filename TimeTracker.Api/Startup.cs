@@ -76,6 +76,7 @@ public class Startup
         );
         
         app.UseMiddleware<CommitPerformerMiddleware>();
+        app.UseMiddleware<JwtRefreshMiddleware>();
         app.UseAuthentication();
         app.UseAuthorization();
         

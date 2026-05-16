@@ -25,7 +25,7 @@ public class JwtRefreshMiddleware
     {
         _next = next;
         _logger = logger;
-        _jwtExpirationDelay = TimeSpan.FromMinutes(configuration.GetValue<int>("App:Auth:JwtRefreshDelay"));
+        _jwtExpirationDelay = TimeSpan.FromMinutes(configuration.GetValue("App:Auth:JwtRefreshDelay", 30));
     }
 
     public async Task InvokeAsync(HttpContext context, ILifetimeScope scope)

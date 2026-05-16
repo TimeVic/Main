@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Auth;
+using TimeTracker.Business.Services.Http;
 
 namespace TimeTracker.Api.Controllers.Public.User.Actions
 {
@@ -12,26 +13,26 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserDao _userDao;
+        private readonly IHttpCookiesService _cookiesService;
 
         public RefreshTokenRequestHandler(
             IMapper mapper,
             IAuthorizationService authorizationService,
-            IUserDao userDao
+            IUserDao userDao,
+            IHttpCookiesService cookiesService
         )
         {
             _mapper = mapper;
             _authorizationService = authorizationService;
             _userDao = userDao;
+            _cookiesService = cookiesService;
         }
     
         public async Task<RefreshTokenResponseDto> ExecuteAsync(RefreshTokenRequest request)
         {
             var loginResponse = await _authorizationService.GenerateNewJwtToken(request.AccessToken, request.JwtToken);
-            return new RefreshTokenResponseDto()
-            {
-                JwtToken = loginResponse.JwtToken,
-                AccessToken = loginResponse.JwtToken
-            };
+            _cookiesService.AppendAuthCookies(loginResponse.AccessToken, loginResponse.JwtToken);
+            return new RefreshTokenResponseDto();
         }
     }
 }
