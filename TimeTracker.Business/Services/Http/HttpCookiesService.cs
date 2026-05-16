@@ -19,9 +19,9 @@ public class HttpCookiesService: IHttpCookiesService
     )
     {
         _httpContextAccessor = httpContextAccessor;
-        _cookieDomains = configuration.GetSection("App:Auth:CookieDomains").Get<string[]>()!;
+        _cookieDomains = configuration.GetSection("App:Auth:CookieDomains").Get<string[]>() ?? [];
         _jwtTokenLifeTime = configuration.GetValue<int>("App:Auth:JwtLifetime")!;
-        _cookieKeyPostfix = configuration.GetValue<string>("App:Auth:CookieKeyPostfix")!;
+        _cookieKeyPostfix = configuration.GetValue<string>("App:Auth:CookieKeyPostfix") ?? string.Empty;
         _accessTokenLifeTime = configuration.GetValue<int>("App:Auth:AccessTokenLifetime")!;
     }
     
@@ -62,11 +62,12 @@ public class HttpCookiesService: IHttpCookiesService
     public void Append(HttpContext context, string name, string value, DateTimeOffset? expires = null)
     {
         name = PrepareName(name);
-        foreach (var cookieDomain in _cookieDomains)
+        var cookieDomains = _cookieDomains.Length == 0 ? [string.Empty] : _cookieDomains;
+        foreach (var cookieDomain in cookieDomains)
         {
             var cookieOptions = new CookieOptions
             {
-                Domain = cookieDomain,
+                Domain = string.IsNullOrEmpty(cookieDomain) ? null : cookieDomain,
                 HttpOnly = false,
                 Secure = true,
                 SameSite = SameSiteMode.None,

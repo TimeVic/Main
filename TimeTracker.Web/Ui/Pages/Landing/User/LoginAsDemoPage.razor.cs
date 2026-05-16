@@ -30,11 +30,11 @@ public partial class LoginAsDemoPage
         try
         {
             var response = await _apiService.LoginAsDemoAsync();
-            if (response == null || string.IsNullOrEmpty(response.JwtToken))
+            if (response == null || response.User.Id == Guid.Empty)
             {
                 throw new Exception("Empty demo response");
             }
-            _authorizationService.Login(response.AccessToken, response.JwtToken, response.User);
+            _authorizationService.Login(response.User);
             _navigationManager.NavigateTo(SiteUrl.DashboardBase);
         }
         catch (Exception)
@@ -44,4 +44,3 @@ public partial class LoginAsDemoPage
         }
     }
 }
-

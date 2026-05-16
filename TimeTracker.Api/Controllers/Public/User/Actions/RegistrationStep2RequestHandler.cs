@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Auth;
+using TimeTracker.Business.Services.Http;
 
 namespace TimeTracker.Api.Controllers.Public.User.Actions
 {
@@ -15,13 +16,15 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
         private readonly IAuthorizationService _authorizationService;
         private readonly IMapper _mapper;
         private readonly IUserDao _userDao;
+        private readonly IHttpCookiesService _cookiesService;
 
         public RegistrationStep2RequestHandler(
             IRegistrationService registrationService,
             IJwtAuthService jwtAuthService,
             IAuthorizationService authorizationService,
             IMapper mapper,
-            IUserDao userDao
+            IUserDao userDao,
+            IHttpCookiesService cookiesService
         )
         {
             _registrationService = registrationService;
@@ -29,6 +32,7 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
             _authorizationService = authorizationService;
             _mapper = mapper;
             _userDao = userDao;
+            _cookiesService = cookiesService;
         }
     
         public async Task<RegistrationStep2ResponseDto> ExecuteAsync(RegistrationStep2Request request)
@@ -39,10 +43,9 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
             var loginResponse = await _authorizationService.Login(user);
             var userDto = _mapper.Map<UserDto>(loginResponse.User);
             userDto.DefaultWorkspace = _mapper.Map<WorkspaceDto>(defaultWorkspace);
+            _cookiesService.AppendAuthCookies(loginResponse.AccessToken, loginResponse.JwtToken);
             return new RegistrationStep2ResponseDto()
             {
-                JwtToken = loginResponse.JwtToken,
-                AccessToken = loginResponse.AccessToken,
                 User = userDto
             };
         }

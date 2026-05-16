@@ -38,7 +38,7 @@ public partial class MagicLoginPage
                 _isError = true;
                 return;
             }
-            _authorizationService.Login(loginResponse.AccessToken, loginResponse.JwtToken, loginResponse.User);
+            _authorizationService.Login(loginResponse.User);
             _navigationManager.NavigateTo(SiteUrl.DashboardBase);
         }
         catch (Exception)

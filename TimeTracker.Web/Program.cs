@@ -83,7 +83,6 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 
 // Custom services
 builder.Services.AddScoped<ApiService>();
-builder.Services.AddScoped<RefreshJwtTokenService>();
 builder.Services.AddScoped<HttpInterceptorService>();
 builder.Services.AddScoped<CustomHttpClient>();
 builder.Services.AddScoped<IReCaptchaService, ReCaptchaService>();

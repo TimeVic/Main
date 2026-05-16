@@ -1,11 +1,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Business.Common.Constants.Http;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Auth;
+using TimeTracker.Business.Testing.Extensions;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Public.User;
@@ -66,16 +68,20 @@ public class LoginMagicTest : BaseTest
         });
         response.EnsureSuccessStatusCode();
         var responseData = await response.GetJsonDataAsync<LoginResponseDto>();
+        var jwtToken = response.GetSetCookieValue(HttpCookieKeyEnum.JwtToken.GetKey());
+        var accessToken = response.GetSetCookieValue(HttpCookieKeyEnum.AccessToken.GetKey());
 
-        Assert.True(_jwtService.IsValidJwt(responseData.JwtToken));
-        Assert.NotEmpty(responseData.AccessToken);
+        Assert.True(_jwtService.IsValidJwt(jwtToken!));
+        Assert.NotEmpty(accessToken);
+        Assert.Empty(responseData.JwtToken);
+        Assert.Empty(responseData.AccessToken);
         Assert.NotEqual(Guid.Empty, responseData.User.Id);
         Assert.Equal(_user.Email, responseData.User.Email);
         Assert.NotNull(responseData.User.DefaultWorkspace);
 
-        var actualAccessToken = await _accessTokenDao.GetByToken(responseData.AccessToken);
+        var actualAccessToken = await _accessTokenDao.GetByToken(accessToken!);
         Assert.NotNull(actualAccessToken);
-        Assert.Contains(actualAccessToken.JwtTokens, item => item.Token == responseData.JwtToken);
+        Assert.Contains(actualAccessToken.JwtTokens, item => item.Token == jwtToken);
     }
 
     [Fact]

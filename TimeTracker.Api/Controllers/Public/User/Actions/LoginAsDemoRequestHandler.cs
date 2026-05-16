@@ -13,6 +13,7 @@ using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Auth;
+using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
@@ -35,6 +36,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
     private readonly ICurrencyDao _currencyDao;
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IPasswordService _passwordService;
+    private readonly IHttpCookiesService _cookiesService;
 
     public LoginAsDemoRequestHandler(
         IMapper mapper,
@@ -49,7 +51,8 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         IMemberPaymentDao paymentDao,
         ICurrencyDao currencyDao,
         IWorkspaceAccessService workspaceAccessService,
-        IPasswordService passwordService
+        IPasswordService passwordService,
+        IHttpCookiesService cookiesService
     )
     {
         _mapper = mapper;
@@ -65,6 +68,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         _currencyDao = currencyDao;
         _workspaceAccessService = workspaceAccessService;
         _passwordService = passwordService;
+        _cookiesService = cookiesService;
     }
 
     public async Task<LoginResponseDto> ExecuteAsync(LoginAsDemoRequest request)
@@ -75,11 +79,10 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         var userDto = _mapper.Map<UserDto>(loginResponse.User);
         var defaultWorkspace = await _userDao.GetDefaultWorkspace(demoUser);
         userDto.DefaultWorkspace = _mapper.Map<WorkspaceDto>(defaultWorkspace);
+        _cookiesService.AppendAuthCookies(loginResponse.AccessToken, loginResponse.JwtToken);
 
         return new LoginResponseDto
         {
-            JwtToken = loginResponse.JwtToken,
-            AccessToken = loginResponse.AccessToken,
             User = userDto
         };
     }

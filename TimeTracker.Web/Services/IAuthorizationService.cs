@@ -7,10 +7,8 @@ namespace TimeTracker.Web.Services
     {
         Task<bool> LoginAsync(LoginRequest model);
         void Login(string accessToken, string jwtToken, UserDto user);
+        void Login(UserDto user);
         Task LogoutAsync();
         Task<bool> CheckIsLoggedInAsync();
-        string? GetJwt();
-        string? GetAccessToken();
-        void SetJwt(string jwtToken);
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Web;
-using Fluxor;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.WebUtilities;
-using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Services.UI;
 
@@ -16,16 +13,12 @@ public class UrlService
     private readonly string _apiUrl;
     private readonly string _baseUrl;
 
-    private string _jwtToken => _authState?.Value.JwtToken ?? string.Empty;
-
     public UrlService(
         IConfiguration configuration,
-        IState<AuthState> authState,
         NavigationManager navigationManager
     )
     {
         _configuration = configuration;
-        _authState = authState;
         _navigationManager = navigationManager;
 
         _apiUrl = _configuration.GetValue<string>("ApiUrl") ?? string.Empty;
@@ -45,11 +38,7 @@ public class UrlService
 
     public string GetStorageUrl(string url)
     {
-        var query = new Dictionary<string, string>
-        {
-            { "api_token", _jwtToken }
-        };
-        var uri = new Uri(QueryHelpers.AddQueryString($"{_apiUrl}{url}", query));
+        var uri = new Uri($"{_apiUrl}{url}");
         return uri.ToString();
     }
     

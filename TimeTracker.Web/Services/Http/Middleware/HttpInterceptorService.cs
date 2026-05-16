@@ -1,10 +1,7 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
-using TimeTracker.Business.Common.Constants.Http;
 using TimeTracker.Web.Constants;
-using TimeTracker.Web.Services.Http.Auth;
 using TimeTracker.Web.Store.Auth;
 using Toolbelt.Blazor;
 
@@ -14,7 +11,6 @@ public class HttpInterceptorService
 {
     private readonly HttpClientInterceptor _interceptor;
     private readonly IConfiguration _configuration;
-    private readonly RefreshJwtTokenService _refreshJwtTokenService;
     private readonly ILogger<HttpInterceptorService> _logger;
     private readonly NavigationManager _navigationManager;
     private readonly IDispatcher _dispatcher;
@@ -25,7 +21,6 @@ public class HttpInterceptorService
     public HttpInterceptorService(
         HttpClientInterceptor interceptor,
         IConfiguration configuration,
-        RefreshJwtTokenService refreshJwtTokenService,
         ILogger<HttpInterceptorService> logger,
         NavigationManager navigationManager,
         IDispatcher dispatcher,
@@ -34,7 +29,6 @@ public class HttpInterceptorService
     {
         _interceptor = interceptor;
         _configuration = configuration;
-        _refreshJwtTokenService = refreshJwtTokenService;
         _logger = logger;
         _navigationManager = navigationManager;
         _dispatcher = dispatcher;
@@ -64,21 +58,14 @@ public class HttpInterceptorService
                 e.Request.Headers.Remove(AuthConstants.WorkspaceIdHeaderName);
                 e.Request.Headers.Add(AuthConstants.WorkspaceIdHeaderName, _authState.Value.Workspace.Id.ToString());
             }
-
-            var jwtToken = await _refreshJwtTokenService.TryRefreshToken();
-            if(!string.IsNullOrEmpty(jwtToken))
-            {
-                e.Request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
-            }
         }
     }
-    
+
     private async Task CheckResponseAsync(object sender, HttpClientInterceptorEventArgs e)
     {
         if (e.Response.StatusCode == HttpStatusCode.Unauthorized)
         {
-            var accessToken = await _refreshJwtTokenService.GetAccessToken();
-            if (accessToken != null)
+            if (_authState.Value.IsLoggedIn)
             {
                 _dispatcher.Dispatch(new LogoutAction());
             }
@@ -87,5 +74,6 @@ public class HttpInterceptorService
                 _navigationManager.NavigateTo(SiteUrl.Login);
             }
         }
+        await Task.CompletedTask;
     }
 }

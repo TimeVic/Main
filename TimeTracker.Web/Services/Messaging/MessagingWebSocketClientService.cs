@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Services.Http.Auth;
 
 namespace TimeTracker.Web.Services.Messaging;
 
@@ -9,7 +8,6 @@ public partial class MessagingWebSocketClientService: IDisposable
 {
     private readonly ILogger<MessagingWebSocketClientService> _logger;
     private readonly IConfiguration _configuration;
-    private readonly RefreshJwtTokenService _refreshJwtTokenService;
     private HubConnection? _hubConnection;
     private readonly string _apiUrl;
     private bool _isConnected = false;
@@ -17,13 +15,11 @@ public partial class MessagingWebSocketClientService: IDisposable
 
     public MessagingWebSocketClientService(
         ILogger<MessagingWebSocketClientService> logger,
-        IConfiguration configuration,
-        RefreshJwtTokenService refreshJwtTokenService
+        IConfiguration configuration
     )
     {
         _logger = logger;
         _configuration = configuration;
-        _refreshJwtTokenService = refreshJwtTokenService;
         _apiUrl = (configuration.GetValue<string>("ApiUrl")!).EnsureTrailingSlash()!;
         _hubUrl = $"{_apiUrl}websocket/messaging";
     }
@@ -32,14 +28,7 @@ public partial class MessagingWebSocketClientService: IDisposable
     {
         Debug.Log($"Connecting to Hub: {_hubUrl}");
         _hubConnection = new HubConnectionBuilder()
-            .WithUrl(_hubUrl, options =>
-            {
-                options.AccessTokenProvider = async () =>
-                {
-                    var token = await _refreshJwtTokenService.TryRefreshToken();
-                    return token ?? string.Empty;
-                };
-            })
+            .WithUrl(_hubUrl)
             .WithAutomaticReconnect()
             .Build();
 

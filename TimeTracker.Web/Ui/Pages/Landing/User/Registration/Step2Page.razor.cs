@@ -58,11 +58,7 @@ public partial class Step2Page
             var registrationResponse = await _apiService.RegistrationStep2Async(model);
             if (registrationResponse == null)
                 throw new Exception("Login error");
-            _authorizationService.Login(
-                registrationResponse.AccessToken,
-                registrationResponse.JwtToken,
-                registrationResponse.User
-            );
+            _authorizationService.Login(registrationResponse.User);
             _navigationManager.NavigateTo(SiteUrl.DashboardBase);
         }
         catch (Exception)
