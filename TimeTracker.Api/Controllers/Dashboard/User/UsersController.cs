@@ -28,4 +28,20 @@ public class UsersController(ILifetimeScope scope) : MainApiControllerBase(scope
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> SetNotificationToken([FromBody] SetNotificationTokenRequest request)
         => this.RequestAsync(request);
+
+    [HttpPost("select-workspace")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> SelectWorkspace([FromBody] SelectWorkspaceRequest request)
+        => this.RequestAsync()
+            .For<UserDto>()
+            .With(request);
+
+    [HttpPost("update-settings")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> UpdateSettings([FromBody] UpdateSettingsRequest request)
+        => this.RequestAsync()
+            .For<UserDto>()
+            .With(request);
 }

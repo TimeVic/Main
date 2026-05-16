@@ -1,7 +1,6 @@
 using Api.Requests.Abstractions;
-using AutoMapper;
 using Persistence.Transactions.Behaviors;
-using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Services.Users;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Task;
@@ -23,7 +22,6 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
 {
     private static readonly TimeSpan DemoUserMaxAge = TimeSpan.FromDays(7);
 
-    private readonly IMapper _mapper;
     private readonly IAuthorizationService _authorizationService;
     private readonly IUserDao _userDao;
     private readonly IWorkspaceDao _workspaceDao;
@@ -37,9 +35,9 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IPasswordService _passwordService;
     private readonly IHttpCookiesService _cookiesService;
+    private readonly IUserDtoBuilder _userDtoBuilder;
 
     public LoginAsDemoRequestHandler(
-        IMapper mapper,
         IAuthorizationService authorizationService,
         IUserDao userDao,
         IWorkspaceDao workspaceDao,
@@ -52,10 +50,10 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         ICurrencyDao currencyDao,
         IWorkspaceAccessService workspaceAccessService,
         IPasswordService passwordService,
-        IHttpCookiesService cookiesService
+        IHttpCookiesService cookiesService,
+        IUserDtoBuilder userDtoBuilder
     )
     {
-        _mapper = mapper;
         _authorizationService = authorizationService;
         _userDao = userDao;
         _workspaceDao = workspaceDao;
@@ -69,6 +67,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         _workspaceAccessService = workspaceAccessService;
         _passwordService = passwordService;
         _cookiesService = cookiesService;
+        _userDtoBuilder = userDtoBuilder;
     }
 
     public async Task<LoginResponseDto> ExecuteAsync(LoginAsDemoRequest request)
@@ -76,9 +75,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         var demoUser = await GetOrCreateDemoUserAsync();
 
         var loginResponse = await _authorizationService.Login(demoUser);
-        var userDto = _mapper.Map<UserDto>(loginResponse.User);
-        var defaultWorkspace = await _userDao.GetDefaultWorkspace(demoUser);
-        userDto.DefaultWorkspace = _mapper.Map<WorkspaceDto>(defaultWorkspace);
+        var userDto = await _userDtoBuilder.BuildAsync(loginResponse.User);
         _cookiesService.AppendAuthCookies(loginResponse.AccessToken, loginResponse.JwtToken);
 
         return new LoginResponseDto

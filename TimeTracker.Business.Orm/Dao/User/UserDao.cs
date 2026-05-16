@@ -13,8 +13,14 @@ namespace TimeTracker.Business.Orm.Dao.User;
 
 public class UserDao: BaseDao, IUserDao
 {
-    public UserDao(ILifetimeScope scope): base(scope)
+    private readonly TimeTracker.Business.Orm.Dao.ILanguageDao _languageDao;
+
+    public UserDao(
+        ILifetimeScope scope,
+        TimeTracker.Business.Orm.Dao.ILanguageDao languageDao
+    ): base(scope)
     {
+        _languageDao = languageDao;
     }
 
     public async Task<UserEntity?> GetExistsByUserName(string userName)
@@ -56,7 +62,8 @@ public class UserDao: BaseDao, IUserDao
             PasswordSalt = [],
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            Timezone = TimeZoneInfo.Utc.Id
+            Timezone = TimeZoneInfo.Utc.Id,
+            Language = await _languageDao.GetDefaultAsync()
         };
         await Session.SaveAsync(user);
         return user;
@@ -74,6 +81,39 @@ public class UserDao: BaseDao, IUserDao
     {
         var allWorkspaces = await GetUsersWorkspaces(user);
         return allWorkspaces.First(item => item.IsDefault);
+    }
+
+    public async Task<WorkspaceEntity> GetSelectedWorkspaceAsync(UserEntity user)
+    {
+        var allWorkspaces = await GetUsersWorkspaces(user);
+        var selectedWorkspaceId = user.SelectedWorkspace?.Id;
+        if (selectedWorkspaceId.HasValue)
+        {
+            var selectedWorkspace = allWorkspaces.FirstOrDefault(item => item.Id == selectedWorkspaceId.Value);
+            if (selectedWorkspace != null)
+            {
+                return selectedWorkspace;
+            }
+        }
+
+        return allWorkspaces.First(item => item.IsDefault);
+    }
+
+    public async Task<UserEntity> SelectWorkspaceAsync(UserEntity user, WorkspaceEntity workspace)
+    {
+        user.SelectedWorkspace = workspace;
+        user.UpdatedAt = DateTime.UtcNow;
+        await Session.SaveAsync(user);
+        return user;
+    }
+
+    public async Task<UserEntity> UpdateSettingsAsync(UserEntity user, string? userName, LanguageEntity language)
+    {
+        user.UserName = string.IsNullOrWhiteSpace(userName) ? null : userName.Trim();
+        user.Language = language;
+        user.UpdatedAt = DateTime.UtcNow;
+        await Session.SaveAsync(user);
+        return user;
     }
     
     public async Task<ICollection<WorkspaceEntity>> GetUsersWorkspaces(UserEntity user, MembershipAccessType? accessType = null)

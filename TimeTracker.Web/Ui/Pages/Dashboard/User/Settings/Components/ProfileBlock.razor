@@ -15,10 +15,35 @@
             <div>
                 <p class="mb-3 text-sm font-medium text-slate-700">@DashboardLocalizer["UserSettings_Avatar"]</p>
                 <div class="flex flex-wrap items-center gap-4">
-                    <LumexAvatar
-                        Name="@(AuthState.Value.User?.Initials ?? string.Empty)"
-                        Src="@(AuthState.Value.User?.Avatar?.GetImageUrl(TimeTracker.Business.Common.Constants.Storage.StorageImageSize.S_256))"
-                        Size="Size.Large" />
+                    <div class="avatar-preview">
+                        <LumexAvatar
+                            @key="_avatarRenderKey"
+                            Name="@(AuthState.Value.User?.Initials ?? string.Empty)"
+                            Src="@_avatarSrc"
+                            Size="Size.Large" />
+                        @if (_isUploadingAvatar || _isDeletingAvatar)
+                        {
+                            <div class="avatar-preview__loader" aria-hidden="true">
+                                <svg
+                                    class="h-5 w-5 animate-spin"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24">
+                                    <circle
+                                        class="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        stroke-width="4"></circle>
+                                    <path
+                                        class="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                            </div>
+                        }
+                    </div>
                     <div class="flex flex-wrap items-center gap-2">
                         <InputFile
                             id="avatar-file-input"
@@ -29,6 +54,7 @@
                             Color="ThemeColor.Default"
                             Variant="Variant.Outlined"
                             IsLoading="@_isUploadingAvatar"
+                            Disabled="@_isDeletingAvatar"
                             OnClick="@OnClickChangeAvatar">
                             <StartContent>
                                 <i class="fa-solid fa-arrow-up-from-bracket"></i>
@@ -41,6 +67,7 @@
                                 Color="ThemeColor.Danger"
                                 Variant="Variant.Light"
                                 IsLoading="@_isDeletingAvatar"
+                                Disabled="@_isUploadingAvatar"
                                 OnClick="@OnClickRemoveAvatar">
                                 @DashboardLocalizer["UserSettings_RemoveAvatar"]
                             </CustomButton>
@@ -101,10 +128,10 @@
         </div>
 
         <div class="mt-6 flex justify-end border-t border-slate-100 pt-5">
-            @* TODO: Wire to user profile update API and persist language preference *@
             <CustomButton
                 Color="ThemeColor.Primary"
                 Variant="Variant.Solid"
+                IsLoading="@_isSaving"
                 OnClick="@OnSave">
                 <StartContent>
                     <i class="fa-regular fa-floppy-disk"></i>

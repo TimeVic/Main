@@ -2,10 +2,8 @@ using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Common.Constants;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common;
 
 namespace TimeTracker.Web.Services
 {
@@ -13,19 +11,16 @@ namespace TimeTracker.Web.Services
     {   
         private readonly ApiService _apiService;
         private readonly IDispatcher _dispatcher;
-        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<AuthorizationService> _logger;
 
         public AuthorizationService(
             ApiService apiService, 
             IDispatcher dispatcher,
-            IServiceProvider serviceProvider,
             ILogger<AuthorizationService> logger
         )
         {
             _apiService = apiService;
             _dispatcher = dispatcher;
-            _serviceProvider = serviceProvider;
             _logger = logger;
         }
 
@@ -56,37 +51,31 @@ namespace TimeTracker.Web.Services
         {
             if (user.Id != Guid.Empty)
             {
-                user.DefaultWorkspace!.CurrentUserAccess = MembershipAccessType.Owner;
-                _dispatcher.Dispatch(new LoginAction(user, user.DefaultWorkspace));
-                _dispatcher.Dispatch(new PersistDataAction());
+                var workspace = user.SelectedWorkspace ?? user.DefaultWorkspace;
+                if (workspace != null)
+                {
+                    _dispatcher.Dispatch(new LoginAction(user, workspace));
+                }
             }
-        }
-
-        public async Task<bool> IsHasJwtAsync()
-        {
-            var store = _serviceProvider.GetService<IState<AuthState>>();
-            return await Task.FromResult(store?.Value.IsLoggedIn == true);
         }
 
         public async Task<bool> CheckIsLoggedInAsync()
         {
-            bool isValidJwt = false;
-            if (await IsHasJwtAsync())
+            try
             {
-                try
+                var isLoggedIn = await _apiService.CheckIsLoggedInAsync();
+                if (!isLoggedIn)
                 {
-                    isValidJwt = await _apiService.CheckIsLoggedInAsync();
-                    if (!isValidJwt)
-                    {
-                        await LogoutAsync();
-                    }
+                    await LogoutAsync();
                 }
-                catch (Exception)
-                {
-                    _logger.LogDebug(@"CheckIsLoggedIn returned: false");
-                }
+
+                return isLoggedIn;
             }
-            return isValidJwt;
+            catch (Exception e)
+            {
+                _logger.LogDebug(e, "CheckIsLoggedIn returned: false");
+                return false;
+            }
         }
     }
 }

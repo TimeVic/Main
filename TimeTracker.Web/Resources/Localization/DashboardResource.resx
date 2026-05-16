@@ -509,6 +509,8 @@
   <data name="UserSettings_ChangeAvatar" xml:space="preserve"><value>Change avatar</value></data>
   <data name="UserSettings_RemoveAvatar" xml:space="preserve"><value>Remove</value></data>
   <data name="UserSettings_AvatarHelper" xml:space="preserve"><value>JPG or PNG. Max 2 MB.</value></data>
+  <data name="UserSettings_AvatarUploadError" xml:space="preserve"><value>Avatar upload error</value></data>
+  <data name="UserSettings_AvatarDeleteError" xml:space="preserve"><value>Avatar delete error</value></data>
   <data name="UserSettings_NameHelper" xml:space="preserve"><value>Your name will appear in your profile.</value></data>
   <data name="UserSettings_InterfaceLanguageSection" xml:space="preserve"><value>Interface language</value></data>
   <data name="UserSettings_InterfaceLanguageSectionDescription" xml:space="preserve"><value>Choose your preferred interface language.</value></data>
@@ -526,6 +528,7 @@
   <data name="UserSettings_RequestDeletionConfirmTitle" xml:space="preserve"><value>Request account deletion</value></data>
   <data name="UserSettings_RequestDeletionConfirmMessage" xml:space="preserve"><value>Are you sure you want to request the deletion of your account? This action cannot be undone.</value></data>
   <data name="UserSettings_SaveChanges" xml:space="preserve"><value>Save changes</value></data>
+  <data name="UserSettings_SaveError" xml:space="preserve"><value>Could not save account settings</value></data>
   <data name="UpdateProjectModal_Title" xml:space="preserve"><value>Edit "{0}"</value></data>
   <data name="UpdateProjectModal_Description" xml:space="preserve"><value>Update the project name and reassign it to another client if needed.</value></data>
   <data name="UpdateProjectModal_BillHourlyByDefault" xml:space="preserve"><value>Bill hourly by default</value></data>

@@ -62,8 +62,9 @@
                             Radius="@Radius.Small">
                             <LumexDropdownTrigger>
                                 <LumexAvatar
+                                    @key="UserAvatarKey"
                                     Name="@AuthState.Value.User.Initials"
-                                    Src="@AuthState.Value.User?.Avatar?.GetImageUrl(TimeTracker.Business.Common.Constants.Storage.StorageImageSize.S_256)"/>
+                                    Src="@UserAvatarSrc"/>
                             </LumexDropdownTrigger>
                             <LumexDropdownMenu Class="p-3">
                                 <LumexDropdownItem
@@ -71,8 +72,9 @@
                                     Class="h-14 gap-2 opacity-100">
                                     <div class="flex items-center gap-2">
                                         <LumexAvatar Size="@Size.Small"
+                                                     @key="UserAvatarKey"
                                                      Name="@AuthState.Value.User.Initials"
-                                                     Src="@AuthState.Value.User?.Avatar?.GetImageUrl(TimeTracker.Business.Common.Constants.Storage.StorageImageSize.S_256)"/>
+                                                     Src="@UserAvatarSrc"/>
                                         <div class="inline-flex flex-col items-start">
                                             <span class="text-small text-default-600">@AuthState.Value.User?.Name</span>
                                             <span class="text-tiny text-default-500">@AuthState.Value.User?.Email</span>

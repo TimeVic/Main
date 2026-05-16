@@ -1,9 +1,13 @@
 using System.Net;
+using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Extensions;
+using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
+using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.User;
@@ -16,10 +20,16 @@ public class GetCurrentTest : BaseTest
     private readonly string _jwtToken;
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
+    private readonly IWorkspaceSeeder _workspaceSeeder;
+    private readonly IUserDao _userDao;
+    private readonly IWorkspaceAccessService _workspaceAccessService;
 
     public GetCurrentTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _workspaceSeeder = ServiceProvider.GetRequiredService<IWorkspaceSeeder>();
+        _userDao = ServiceProvider.GetRequiredService<IUserDao>();
+        _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
     }
 
     [Fact]
@@ -43,7 +53,43 @@ public class GetCurrentTest : BaseTest
         Assert.Equal(_user.Timezone, actualUser.Timezone);
         Assert.NotNull(actualUser.DefaultWorkspace);
         Assert.Equal(_workspace.Id, actualUser.DefaultWorkspace.Id);
+        Assert.NotNull(actualUser.SelectedWorkspace);
+        Assert.Equal(_workspace.Id, actualUser.SelectedWorkspace.Id);
+        Assert.NotNull(actualUser.Language);
+        Assert.Equal("en", actualUser.Language.Code);
         Assert.Null(actualUser.Avatar);
+    }
+
+    [Fact]
+    public async Task ShouldReturnSelectedWorkspace()
+    {
+        var selectedWorkspace = (await _workspaceSeeder.CreateSeveralAsync(_user)).First();
+        await _userDao.SelectWorkspaceAsync(_user, selectedWorkspace);
+
+        var response = await GetRequestAsync(Url, _jwtToken);
+        response.EnsureSuccessStatusCode();
+
+        var actualUser = await response.GetJsonDataAsync<UserDto>();
+        Assert.NotNull(actualUser.SelectedWorkspace);
+        Assert.Equal(selectedWorkspace.Id, actualUser.SelectedWorkspace.Id);
+    }
+
+    [Fact]
+    public async Task ShouldReturnDefaultWorkspaceIfSelectedWorkspaceAccessWasRemoved()
+    {
+        var selectedWorkspace = (await _workspaceSeeder.CreateSeveralAsync(_user)).First();
+        await _userDao.SelectWorkspaceAsync(_user, selectedWorkspace);
+        await FlushDbChanges();
+
+        var member = selectedWorkspace.Members.First(item => item.User.Id == _user.Id);
+        await _workspaceAccessService.RemoveAccessAsync(member.Id);
+
+        var response = await GetRequestAsync(Url, _jwtToken);
+        response.EnsureSuccessStatusCode();
+
+        var actualUser = await response.GetJsonDataAsync<UserDto>();
+        Assert.NotNull(actualUser.SelectedWorkspace);
+        Assert.Equal(_workspace.Id, actualUser.SelectedWorkspace.Id);
     }
 
     [Fact]

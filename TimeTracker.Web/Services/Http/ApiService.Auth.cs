@@ -55,6 +55,24 @@ namespace TimeTracker.Web.Services.Http
         {
             return await GetAsync<UserDto?>(ApiUrl.UserCurrent);
         }
+
+        public async Task LogoutAsync()
+        {
+            await PostAsync<object>(ApiUrl.Logout);
+        }
+
+        public async Task<UserDto?> UserSelectWorkspaceAsync(Guid workspaceId)
+        {
+            return await PostAsync<UserDto?>(ApiUrl.UserSelectWorkspace, new SelectWorkspaceRequest
+            {
+                WorkspaceId = workspaceId
+            });
+        }
+
+        public async Task<UserDto?> UserUpdateSettingsAsync(UpdateSettingsRequest request)
+        {
+            return await PostAsync<UserDto?>(ApiUrl.UserUpdateSettings, request);
+        }
         
         public async Task<bool> RegistrationStep1Async(RegistrationStep1Request model)
         {

@@ -47,6 +47,10 @@ public class LoginTest: BaseTest
         Assert.NotEmpty(responseData.User.Email);
         Assert.NotNull(responseData.User.DefaultWorkspace);
         Assert.True(responseData.User.DefaultWorkspace.IsDefault);
+        Assert.NotNull(responseData.User.SelectedWorkspace);
+        Assert.Equal(responseData.User.DefaultWorkspace.Id, responseData.User.SelectedWorkspace.Id);
+        Assert.NotNull(responseData.User.Language);
+        Assert.Equal("en", responseData.User.Language.Code);
 
         var actualAccessToken = await _accessTokenDao.GetByToken(accessToken!);
         Assert.NotNull(actualAccessToken);

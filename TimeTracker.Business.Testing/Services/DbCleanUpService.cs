@@ -16,6 +16,10 @@ public class DbCleanUpService: IDbCleanUpService
 
     public async Task CleanUp()
     {
+        await _sessionProvider.CurrentSession
+            .CreateSQLQuery("update users set selected_workspace_id = null where selected_workspace_id is not null;")
+            .ExecuteUpdateAsync();
+
         var tables = new List<string>()
         {
             "messaging.activities",
