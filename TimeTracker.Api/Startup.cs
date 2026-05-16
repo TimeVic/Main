@@ -37,7 +37,7 @@ public class Startup
                     policy.WithOrigins(
                         // API
                         "https://dev.timevic.com",
-                        "https://api.dev.timevic.com",
+                        "https://dev-api.timevic.com",
                         "https://localhost:7108",
                         "http://localhost:5265",
                         
