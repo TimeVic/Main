@@ -12,7 +12,6 @@ using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Services.Workspace;
-using TimeTracker.Web.Services.Http.Auth;
 using TimeTracker.Web.Services.Http.Client;
 using TimeTracker.Web.Services.Http.Middleware;
 using Toolbelt.Blazor.Extensions.DependencyInjection;

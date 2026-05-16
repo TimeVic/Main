@@ -26,6 +26,9 @@ public class JwtRefreshMiddlewareTest: BaseTest
         var loginResponse = await _authorizationService.Login(user);
         await FlushDbChanges();
 
+        // Wait 1+ second so the refreshed JWT has a different NotBefore/Expires timestamp
+        await Task.Delay(1100);
+
         var request = new HttpRequestMessage(HttpMethod.Get, Url);
         request.Headers.Add(
             "Cookie",
