@@ -6,7 +6,7 @@ namespace TimeTracker.Web.Store.Common;
 public class CommonReducers
 {
     [ReducerMethod]
-    public static CommonState SetIsAppInitializedActionReducer(CommonState state, SetIsAppInitializedAction action)
+    public static CommonState Reducer(CommonState state, SetIsAppInitializedAction action)
     {
         return state with
         {
@@ -15,7 +15,7 @@ public class CommonReducers
     }
     
     [ReducerMethod]
-    public static CommonState SetIsWorkspaceInitializedActionReducer(CommonState state, SetIsWorkspaceInitializedAction action)
+    public static CommonState Reducer(CommonState state, SetIsWorkspaceInitializedAction action)
     {
         return state with
         {

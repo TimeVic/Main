@@ -41,6 +41,7 @@ public class CreatePendingUserTest: BaseTest
         Assert.NotEqual(Guid.Empty, user.Id);
         Assert.False(user.IsActivated);
         Assert.Equal(expectedEmail.ToLower(), user.Email);
+        Assert.Equal("en", user.Language.Code);
 
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
@@ -49,6 +50,16 @@ public class CreatePendingUserTest: BaseTest
         var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
         Assert.NotNull(actualEmail);
         Assert.Contains(user.Email, actualEmail.To);
+    }
+
+    [Fact]
+    public async Task ShouldCreateWithRequestedLanguage()
+    {
+        var expectedEmail = _userFactory.Generate().Email;
+
+        var user = await _authService.CreatePendingUser(expectedEmail, "uk-UA");
+
+        Assert.Equal("uk-UA", user.Language.Code);
     }
 
     [Fact]

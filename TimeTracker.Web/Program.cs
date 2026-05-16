@@ -98,6 +98,7 @@ builder.Services.AddScoped<MessagingWebSocketClientService>();
 builder.Services.AddScoped<ModalDialogService>();
 builder.Services.AddScoped<UserDateTimeProviderService>();
 builder.Services.AddScoped<ILocalizationUrlService, LocalizationUrlService>();
+builder.Services.AddScoped<UserLocaleService>();
 builder.Services.AddScoped<ISeoUrlService, SeoUrlService>();
 
 // Lumex UI
@@ -135,7 +136,7 @@ else
     {
         storedCultureName = await host.Services
             .GetRequiredService<IJSRuntime>()
-            .InvokeAsync<string?>("localStorage.getItem", "timevic.locale") ?? ILocalizationUrlService.EnglishCultureName;
+            .InvokeAsync<string?>("localStorage.getItem", ILocalizationUrlService.LocalStorageKey) ?? ILocalizationUrlService.EnglishCultureName;
     }
     catch (Exception)
     {

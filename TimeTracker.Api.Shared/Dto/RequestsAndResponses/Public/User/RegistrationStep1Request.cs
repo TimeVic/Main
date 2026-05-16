@@ -13,5 +13,8 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
         [Required]
         [IsReCaptcha]
         public string ReCaptcha { get; set; } = string.Empty;
+
+        [StringLength(10, MinimumLength = 2)]
+        public string? LanguageCode { get; set; }
     }
 }

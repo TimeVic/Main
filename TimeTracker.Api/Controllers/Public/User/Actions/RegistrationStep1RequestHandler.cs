@@ -17,7 +17,7 @@ namespace TimeTracker.Api.Controllers.Public.User.Actions
     
         public async Task ExecuteAsync(RegistrationStep1Request request)
         {
-            await _registrationService.CreatePendingUser(request.Email);
+            await _registrationService.CreatePendingUser(request.Email, request.LanguageCode);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Fluxor;
+using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Store.Auth;
 
@@ -9,16 +10,19 @@ public class InitializeAppEffect: Effect<InitializeAppAction>
     private readonly ILogger<InitializeAppEffect> _logger;
     private readonly IState<CommonState> _state;
     private readonly ApiService _apiService;
+    private readonly UserLocaleService _userLocaleService;
 
     public InitializeAppEffect(
         ILogger<InitializeAppEffect> logger,
         IState<CommonState> state,
-        ApiService apiService
+        ApiService apiService,
+        UserLocaleService userLocaleService
     )
     {
         _logger = logger;
         _state = state;
         _apiService = apiService;
+        _userLocaleService = userLocaleService;
     }
 
     public override async Task HandleAsync(InitializeAppAction pageAction, IDispatcher dispatcher)
@@ -39,6 +43,7 @@ public class InitializeAppEffect: Effect<InitializeAppAction>
                 if (user != null)
                 {
                     dispatcher.Dispatch(new UpdateUserAction(user));
+                    await _userLocaleService.ApplyUserLocaleAsync(user);
                 }
             }
         }

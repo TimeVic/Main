@@ -100,7 +100,7 @@ public partial class MainHeader: IDisposable
             }
         }
 
-        await Js.InvokeVoidAsync("localStorage.setItem", "timevic.locale", cultureName);
+        await Js.InvokeVoidAsync("localStorage.setItem", ILocalizationUrlService.LocalStorageKey, cultureName);
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 

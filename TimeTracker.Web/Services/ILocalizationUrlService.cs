@@ -6,6 +6,8 @@ namespace TimeTracker.Web.Services;
 /// </summary>
 public interface ILocalizationUrlService
 {
+    public const string LocalStorageKey = "timevic.locale";
+
     static string UkrainianCultureName => "uk-UA";
     static string EnglishCultureName => "en";
 

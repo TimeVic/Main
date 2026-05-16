@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Http;
 using TimeTracker.Web.Services.Validation;
 
@@ -16,6 +17,9 @@ public partial class Step1Page
 
     [Inject] 
     private IReCaptchaService _reCaptchaService { get; set; }
+
+    [Inject]
+    private ILocalizationUrlService LocalizationUrlService { get; set; }
     
     private RegistrationStep1Request model = new();
     private bool _isLoading;
@@ -45,6 +49,7 @@ public partial class Step1Page
         _isLoading = true;
         try
         {
+            model.LanguageCode = LocalizationUrlService.GetCurrentCultureName(new Uri(NavigationManager.Uri).AbsolutePath);
             var isOk = await _apiService.RegistrationStep1Async(model);
             if (isOk)
             {
