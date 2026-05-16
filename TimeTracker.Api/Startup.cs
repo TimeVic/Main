@@ -6,6 +6,7 @@ using TimeTracker.Api.Middleware;
 using TimeTracker.Api.WebSocket.Hubs;
 using TimeTracker.Business;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Helpers;
 using TimeTracker.Business.Mvc.Middleware;
 
 namespace TimeTracker.Api;
@@ -27,7 +28,37 @@ public class Startup
     public virtual void ConfigureServices(IServiceCollection services)
     {
         var assembly = typeof(ApiAssemblyMarker).Assembly;
-        services.AddCors();
+        services.AddCors(options =>
+        {
+            options.AddPolicy("Cors", policy =>
+            {
+                if (ApplicationHelper.HostingEnvironment == "Development")
+                {
+                    policy.WithOrigins(
+                        // API
+                        "https://dev.timevic.com",
+                        "https://api.dev.timevic.com",
+                        "https://localhost:7108",
+                        "http://localhost:5265",
+                        
+                        // Web
+                        "https://localhost:7230/",
+                        "http://localhost:5254"
+                    );    
+                }
+                else
+                {
+                    policy.WithOrigins(
+                        "https://timevic.com",
+                        "https://api.timevic.com"
+                    );   
+                }
+
+                policy.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
         services.AddAutoMapper(cfg => {}, assembly);
         
         services.Configure<ForwardedHeadersOptions>(options =>
@@ -68,12 +99,7 @@ public class Startup
 
         app.UseForwardedHeaders();
         app.UseRouting();
-        app.UseCors(x => x
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .SetIsOriginAllowed(origin => true) // allow any origin
-            .AllowCredentials()
-        );
+        app.UseCors("Cors");
         
         app.UseMiddleware<CommitPerformerMiddleware>();
         app.UseMiddleware<JwtRefreshMiddleware>();
