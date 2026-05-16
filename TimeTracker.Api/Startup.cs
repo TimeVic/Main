@@ -42,7 +42,7 @@ public class Startup
                         "http://localhost:5265",
                         
                         // Web
-                        "https://localhost:7230/",
+                        "https://localhost:7230",
                         "http://localhost:5254"
                     );    
                 }
