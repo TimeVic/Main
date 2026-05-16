@@ -21,6 +21,8 @@ public partial class FileStorage: IFileStorage
         await _storageClient.Delete(file.CloudFilePath);
         
         file.Tasks.Clear();
+        file.Users.Clear();
+        file.TaskComments.Clear();
         await _dbSessionProvider.CurrentSession.DeleteAsync(file);
     }
 }

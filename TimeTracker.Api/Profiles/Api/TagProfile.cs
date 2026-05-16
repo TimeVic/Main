@@ -12,18 +12,13 @@ public class TagProfile : Profile
     public TagProfile()
     {
         CreateMap<TagEntity, TagDto>()
-            .ForMember(
-                dto => dto.Color,
-                builder => builder.MapFrom(
-                    entity => entity.Color.ToHexString()
-                )
-            )
-            .ForMember(
-                dto => dto.TextColor,
-                builder => builder.MapFrom(
-                    entity => entity.Color.GetTextColorBasedOn().ToHexString()
-                )
-            );
+            .IgnoreAllAndConstructUsing((src, mapper) => new TagDto
+            {
+                Id = src.Id,
+                Name = src.Name,
+                Color = src.Color?.ToHexString(),
+                TextColor = src.Color?.GetTextColorBasedOn().ToHexString() ?? string.Empty
+            });
         CreateMap<UpdateRequest, TagEntity>()
             .ForMember(
                 dto => dto.Color,

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Api.Profiles.Api;
@@ -8,6 +9,18 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        CreateMap<UserEntity, UserDto>();
+        CreateMap<UserEntity, UserDto>()
+            .IgnoreAllAndConstructUsing((src, mapper) =>
+            {
+                var latestAvatar = src.Avatars.OrderByDescending(a => a.CreatedAt).FirstOrDefault();
+                return new UserDto
+                {
+                    Id = src.Id,
+                    UserName = src.UserName,
+                    Email = src.Email,
+                    Timezone = src.Timezone,
+                    Avatar = latestAvatar != null ? mapper.Mapper.Map<StoredFileDto>(latestAvatar) : null
+                };
+            });
     }
 }

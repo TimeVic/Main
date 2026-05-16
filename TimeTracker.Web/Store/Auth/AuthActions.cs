@@ -1,5 +1,4 @@
 ﻿using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 
 namespace TimeTracker.Web.Store.Auth;
 
@@ -16,3 +15,5 @@ public record struct LoginAction(
 }
 
 public record struct SetWorkspaceAction(WorkspaceDto Workspace);
+
+public record struct UpdateUserAction(UserDto User);
