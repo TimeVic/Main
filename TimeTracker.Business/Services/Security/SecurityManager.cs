@@ -96,15 +96,19 @@ public class SecurityManager: ISecurityManager
         }
         if (entity is UserEntity userEntity)
         {
-            return HasAccessToUser(user, userEntity);
+            return HasAccessToUser(accessLevel, user, userEntity);
         }
 
         throw new NotImplementedException($"Security checking not implemented for {entity?.GetTypeName()}");
     }
 
-    private bool HasAccessToUser(UserEntity user, UserEntity entity)
+    private bool HasAccessToUser(AccessLevel accessLevel, UserEntity user, UserEntity entity)
     {
-        return user.Id == entity.Id;
+        return accessLevel == AccessLevel.Read
+            || (
+                accessLevel == AccessLevel.Write
+                && user.Id == entity.Id
+            );
     }
 
     private async Task<bool> HasAccessToWorkspace(AccessLevel accessLevel, UserEntity user, WorkspaceEntity workspace)
