@@ -11,20 +11,35 @@ public static class ImageHelper
         return await ResizeImageFromStreamAsync(fileStream, width, height);
     }
     
-    public static async Task<Image> ResizeImageFromStreamAsync(Stream imageStream, int width, int height)
+    public static Task<Image> ResizeImageFromStreamAsync(Stream imageStream, int width, int height)
+    {
+        return ResizeImageFromStreamAsync(imageStream, width, height, ResizeMode.Max);
+    }
+    
+    public static async Task<Image> ResizeImageFromStreamAsync(
+        Stream imageStream,
+        int width,
+        int height,
+        ResizeMode resizeMode,
+        bool isGrayscale = true
+    )
     {
         var image = await Image.LoadAsync(imageStream);
-        image.Mutate(
-            x => x
-                .AutoOrient()
+        image.Mutate(x =>
+        {
+            x.AutoOrient()
                 .Resize(new ResizeOptions
                 {
-                    Mode = ResizeMode.Max,
+                    Mode = resizeMode,
                     Position = AnchorPositionMode.Center,
                     Size = new Size(width, height)
-                })
-                .Grayscale()
-        );
+                });
+
+            if (isGrayscale)
+            {
+                x.Grayscale();
+            }
+        });
         return image;
     }
     

@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
+using SixLabors.ImageSharp;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
@@ -19,14 +20,14 @@ namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Storage;
 public class UploadTest: BaseTest
 {
     private readonly string Url = "/dashboard/storage/upload";
-    
+
     private readonly UserEntity _user;
     private readonly IDataFactory<TaskEntity> _taskFactory;
     private readonly string _jwtToken;
     private readonly IProjectDao _projectDao;
     private readonly ITaskSeeder _taskSeeder;
     private readonly ITaskListSeeder _taskListSeeder;
-    
+
     private readonly TaskEntity _task;
     private readonly IFileStorage _fileStorage;
     private WorkspaceEntity _workspace;
@@ -59,7 +60,7 @@ public class UploadTest: BaseTest
         );
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
-    
+
     [Fact]
     public async Task ShouldUpload()
     {
@@ -93,13 +94,13 @@ public class UploadTest: BaseTest
         Assert.NotNull(actualUploadedFile);
         Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath!);
     }
-    
+
     [Fact]
     public async Task ShouldUploadIfHasNotAccessToEntity()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
         var task = _taskSeeder.CreateAsync(user: user2).Result;
-        
+
         var response = await PostMultipartFormDataRequestAsync(
             Url,
             _jwtToken,
@@ -116,7 +117,7 @@ public class UploadTest: BaseTest
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
-    
+
     [Fact]
     public async Task ShouldUploadBigJpgFile()
     {
@@ -145,9 +146,85 @@ public class UploadTest: BaseTest
         await FlushDbChanges(true);
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
-        
+
         var actualUploadedFile = await DbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(actualData.Id);
         Assert.NotNull(actualUploadedFile);
         Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath!);
+    }
+
+    [Fact]
+    public async Task ShouldUploadUserAvatar()
+    {
+        var response = await PostMultipartFormDataRequestAsync(
+            Url,
+            _jwtToken,
+            new Dictionary<string, object>()
+            {
+                { "WorkspaceId", _workspace.Id },
+                { "EntityId", _user.Id },
+                { "EntityType", StorageEntityType.User },
+                { "FileType", StoredFileType.Avatar },
+            },
+            CreateFormFile("image.jpg")
+        );
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<StoredFileDto>();
+        Assert.Equal(StoredFileType.Avatar, actualData.Type);
+        Assert.Equal("image/jpeg", actualData.MimeType);
+
+        await FlushDbChanges(true);
+        var actualUploadedFile = await DbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(actualData.Id);
+        Assert.NotNull(actualUploadedFile);
+        Assert.Equal("jpg", actualUploadedFile.Extension);
+        Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath!);
+
+        var actualUser = await DbSessionProvider.CurrentSession.GetAsync<UserEntity>(_user.Id);
+        Assert.Single(actualUser.Avatars);
+
+        var fileResponse = await GetRequestAsync(actualData.Url, _jwtToken);
+        fileResponse.EnsureSuccessStatusCode();
+        await using var imageStream = await fileResponse.Content.ReadAsStreamAsync();
+        using var image = await Image.LoadAsync(imageStream);
+        Assert.NotEqual(0, image.Width);
+        Assert.NotEqual(0, image.Height);
+    }
+
+    [Theory]
+    [InlineData(StorageImageSize.Xxs_64, 64)]
+    [InlineData(StorageImageSize.S_256, 256)]
+    [InlineData(StorageImageSize.M_400, 400)]
+    public async Task ShouldUploadAndDownloadImageWithRequestedSize(StorageImageSize imageSize, int expectedSize)
+    {
+        var response = await PostMultipartFormDataRequestAsync(
+            Url,
+            _jwtToken,
+            new Dictionary<string, object>()
+            {
+                { "WorkspaceId", _workspace.Id },
+                { "EntityId", _task.Id },
+                { "EntityType", StorageEntityType.Task },
+                { "FileType", StoredFileType.Attachment },
+            },
+            CreateFormFile("image.jpg")
+        );
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<StoredFileDto>();
+        var fileResponse = await GetRequestAsync(
+            actualData.Url,
+            _jwtToken,
+            new Dictionary<string, string>()
+            {
+                { "imageSize", imageSize.ToString() }
+            }
+        );
+        fileResponse.EnsureSuccessStatusCode();
+        Assert.Equal("image/png", fileResponse.Content.Headers.ContentType?.MediaType);
+
+        await using var imageStream = await fileResponse.Content.ReadAsStreamAsync();
+        using var image = await Image.LoadAsync(imageStream);
+        Assert.Equal(expectedSize, image.Width);
+        Assert.Equal(expectedSize, image.Height);
     }
 }

@@ -45,9 +45,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
 
-            var (file, fileStream) = await _fileStorage.GetFileStream(user, request.FileId);
+            var (file, fileStream, mimeType) = await _fileStorage.GetFileStream(user, request.FileId, request.ImageSize);
             fileStream.PrepareToCopy();
-            return new FileResponse(fileStream, file.MimeType);
+            return new FileResponse(fileStream, mimeType);
         }
     }
 }
