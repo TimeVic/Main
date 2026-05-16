@@ -26,6 +26,4 @@ public interface IFileStorage: IDomainService
     Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, Guid fileId);
 
     Task DeleteFile(UserEntity user, Guid fileId);
-
-    Task<StoredFileEntity?> UploadFirstPendingToCloud(CancellationToken cancellationToken = default);
 }

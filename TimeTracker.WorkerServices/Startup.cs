@@ -23,7 +23,6 @@ public class Startup
         services.AddHostedService<Services.Queue.NotificationProcessingHostedService>();
         services.AddHostedService<Services.Queue.ExternalClientProcessingHostedService>();
         services.AddHostedService<Services.Tasks.TaskNotificationHostedService>();
-        services.AddHostedService<Services.ImageUploadingHostedService>();
     }
 
     public void ConfigureContainer(ContainerBuilder containerBuilder)

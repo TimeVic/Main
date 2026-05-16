@@ -34,10 +34,8 @@ public class PutFileTest: BaseTest
         Assert.NotEmpty(actualFile.CloudFilePath);
         Assert.NotNull(actualFile.Extension);
         Assert.NotEmpty(actualFile.OriginalFileName);
-        Assert.NotNull(actualFile.DataToUpload);
         Assert.True(actualFile.Size > 0);
         Assert.Equal(StoredFileType.Attachment, actualFile.Type);
-        Assert.Equal(StoredFileStatus.Pending, actualFile.Status);
     }
     
     [Fact]

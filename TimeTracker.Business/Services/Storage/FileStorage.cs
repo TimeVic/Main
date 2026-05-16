@@ -1,21 +1,14 @@
-﻿using System.Net;
-using Amazon.Runtime;
-using Amazon.S3;
-using Amazon.S3.Model;
-using Domain.Abstractions;
+﻿using Domain.Abstractions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Persistence.Transactions.Behaviors;
 using SixLabors.ImageSharp;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
-using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Helpers;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -34,7 +27,6 @@ public partial class FileStorage: IFileStorage
     private readonly ILogger<IFileStorage> _logger;
     private readonly IFileStorageRelationshipService _relationshipService;
     private readonly ISecurityManager _securityManager;
-    private readonly IStoredFilesDao _storedFilesDao;
     private readonly IFileStorageGarageClient _storageClient;
     
     public FileStorage(
@@ -42,18 +34,16 @@ public partial class FileStorage: IFileStorage
         ILogger<IFileStorage> logger,
         IFileStorageRelationshipService relationshipService,
         ISecurityManager securityManager,
-        IStoredFilesDao storedFilesDao,
-        IFileStorageGarageClient storageGoogleClient
+        IFileStorageGarageClient storageGarageClient
     )
     {
         _dbSessionProvider = dbSessionProvider;
         _logger = logger;
         _relationshipService = relationshipService;
         _securityManager = securityManager;
-        _storedFilesDao = storedFilesDao;
         
-        // Google Client selected by default
-        _storageClient = storageGoogleClient;
+        // Garage client selected by default.
+        _storageClient = storageGarageClient;
     }
 
     public async Task<StoredFileEntity> PutFileAsync<TEntity>(
@@ -84,11 +74,10 @@ public partial class FileStorage: IFileStorage
             OriginalFileName = fileName,
             Type = fileType,
             Size = fileData.Length,
-            DataToUpload = fileData,
-            Status = StoredFileStatus.Pending,
             CreatedAt = DateTime.UtcNow
         };
 
+        await UploadFileDataAsync(entity, storedFile, fileData, cancellationToken);
         await _dbSessionProvider.CurrentSession.SaveAsync(storedFile, cancellationToken);
         await _relationshipService.AddFileRelationship(entity, storedFile);
         return storedFile;
@@ -141,6 +130,59 @@ public partial class FileStorage: IFileStorage
             return "task_comment";
         }
         return "common";
+    }
+
+    private async Task UploadFileDataAsync<TEntity>(
+        TEntity entity,
+        StoredFileEntity storedFile,
+        byte[] fileData,
+        CancellationToken cancellationToken
+    ) where TEntity: IEntity
+    {
+        using var fileStream = new MemoryStream(fileData);
+
+        _logger.LogDebug($"S3 file uploading started: {storedFile.CloudFilePath}");
+        var cloudFile = await _storageClient.Upload(storedFile.CloudFilePath, fileStream, cancellationToken);
+        if (cloudFile == null)
+        {
+            throw new Exception($"File was not uploaded to cloud: {storedFile.CloudFilePath}");
+        }
+        _logger.LogDebug($"S3 file uploading finished: {storedFile.CloudFilePath}");
+
+        if (!IsImageMimeType(storedFile.MimeType))
+        {
+            return;
+        }
+
+        fileStream.PrepareToCopy();
+        try
+        {
+            var thumbImage = await ImageHelper.ResizeImageFromStreamAsync(
+                fileStream,
+                Thumb_MaxWidth,
+                Thumb_MaxHeight
+            );
+            using var thumbStream = new MemoryStream();
+            await thumbImage.SaveAsPngAsync(thumbStream, cancellationToken: cancellationToken);
+            thumbStream.PrepareToCopy();
+            var cloudThumbFileName = $"{GetParentDir(entity)}/{storedFile.Type.GetFilePath("png")}";
+
+            _logger.LogDebug($"S3 file thumb uploading started: {cloudThumbFileName}");
+            var cloudThumbResponse = await _storageClient.Upload(
+                cloudThumbFileName,
+                thumbStream,
+                cancellationToken: cancellationToken
+            );
+            if (cloudThumbResponse != null)
+            {
+                _logger.LogDebug($"S3 file thumb uploading finished: {cloudThumbFileName}");
+                storedFile.ThumbCloudFilePath = cloudThumbFileName;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+        }
     }
 
     private bool IsImageMimeType(string mimeType)

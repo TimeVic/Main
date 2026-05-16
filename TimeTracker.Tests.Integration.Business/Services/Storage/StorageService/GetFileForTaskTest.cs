@@ -22,17 +22,14 @@ public class GetFileForTaskTest: BaseTest
     
     private readonly TaskEntity _task;
     private readonly UserEntity _user;
-    private readonly IStoredFilesDao _storedFilesDao;
 
     public GetFileForTaskTest(): base()
     {
         _fileStorage = Scope.Resolve<IFileStorage>();
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
-        _storedFilesDao = Scope.Resolve<IStoredFilesDao>();
         _user = _userSeeder.CreateActivatedAsync().Result;
 
-        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         _task = _taskSeeder.CreateAsync(user: _user).Result;
     }
 
@@ -41,9 +38,6 @@ public class GetFileForTaskTest: BaseTest
     {
         var actualFile = await _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment);
         
-        await FlushDbChanges();
-        await _fileStorage.UploadFirstPendingToCloud();
-
         await FlushDbChanges(true);
         var (expectedFile, fileStream) = await _fileStorage.GetFileStream(_user, actualFile.Id);
 

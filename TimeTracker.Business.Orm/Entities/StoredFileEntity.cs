@@ -8,7 +8,6 @@ namespace TimeTracker.Business.Orm.Entities
     public class StoredFileEntity: AEntity
     {   
         public virtual StoredFileType Type { get; set; }
-        public virtual StoredFileStatus Status { get; set; }
         public virtual required string CloudFilePath { get; set; }
         public virtual string? ThumbCloudFilePath { get; set; }
         public virtual string? Extension { get; set; }
@@ -17,8 +16,6 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual string? Title { get; set; }
         public virtual string? Description { get; set; }
         public virtual long? Size { get; set; }
-        public virtual byte[]? DataToUpload { get; set; }
-        public virtual string? UploadingError { get; set; }
         public virtual ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
         public virtual ICollection<TaskCommentEntity> TaskComments { get; set; } = new List<TaskCommentEntity>();
         

@@ -1,5 +1,4 @@
-﻿using System.Timers;
-using Fluxor;
+﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
@@ -9,7 +8,7 @@ using TimeTracker.Web.Store.Auth;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Storage;
 
-public partial class FilesList: IDisposable
+public partial class FilesList
 {
     [Parameter]
     public ICollection<StoredFileDto> Files { get; set; }
@@ -43,37 +42,6 @@ public partial class FilesList: IDisposable
     
     [Inject]
     protected IState<AuthState> _authState { get; set; }
-    
-    private System.Timers.Timer _timer;
-
-    private bool _isReloadFiles
-    {
-        get
-        {
-            var isHasPending = Files.Any(item => item.Status == StoredFileStatus.Pending);
-            return isHasPending && EntityId.HasValue && EntityType.HasValue;
-        }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        _timer = new System.Timers.Timer();
-        _timer.Interval = 3000;
-        _timer.Elapsed += OnTimerTick;
-        _timer.Start();
-    }
-
-    private void OnTimerTick(object? sender, ElapsedEventArgs e)
-    {
-        if (!_isReloadFiles)
-        {
-            return;
-        }
-
-        InvokeAsync(async () => await ReloadList());
-    }
-
     private async Task OnCLickDelete(StoredFileDto file)
     {
         // var isOk = await _dialogProvider.ShowDeleteConfirmationDialog(
@@ -113,29 +81,5 @@ public partial class FilesList: IDisposable
     private async Task OnClickView(StoredFileDto storedFile)
     {
         // await _dialogProvider.ShowFileView(storedFile);
-    }
-    
-    private async Task ReloadList()
-    {
-        try
-        {
-            var files = await _apiService.StorageGetListAsync(
-                EntityId.Value,
-                EntityType.Value
-            );
-            if (files != null)
-            {
-                await InvokeAsync(() => ListUpdated.InvokeAsync(files.Items));
-            }
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, e.Message);
-        }
-    }
-    
-    public void Dispose()
-    {
-        _timer.Dispose();
     }
 }

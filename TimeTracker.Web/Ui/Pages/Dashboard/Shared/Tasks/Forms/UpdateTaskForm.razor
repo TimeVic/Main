@@ -96,8 +96,7 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                     EntityId="@TaskId"
                     EntityType="@StorageEntityType.Task"
                     Files="@TaskAttachments"
-                    FilesChanged="@OnAttachmentsChanged"
-                    UploadingFiles="@_uploadingAttachments" />
+                    FilesChanged="@OnAttachmentsChanged" />
             </div>
             
             <div class="rounded-2xl border border-slate-200 p-4 mt-3">

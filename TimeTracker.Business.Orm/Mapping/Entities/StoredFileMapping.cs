@@ -1,4 +1,3 @@
-using System.Drawing;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Extensions;
@@ -13,7 +12,6 @@ public class StoredFileMapping: BaseGuidMappings<StoredFileEntity>
         Table("stored_files");
         
         Map(x => x.Type).Enum<StoredFileType>();
-        Map(x => x.Status).Enum<StoredFileStatus>();
         Map(x => x.CloudFilePath);
         Map(x => x.ThumbCloudFilePath).Nullable();
         Map(x => x.Extension).Nullable();
@@ -22,8 +20,6 @@ public class StoredFileMapping: BaseGuidMappings<StoredFileEntity>
         Map(x => x.Title).Nullable();
         Map(x => x.Description).Nullable();
         Map(x => x.Size).Nullable();
-        Map(x => x.DataToUpload).Nullable();
-        Map(x => x.UploadingError).Nullable();
         
         Map(x => x.CreatedAt).DateTime();
         
