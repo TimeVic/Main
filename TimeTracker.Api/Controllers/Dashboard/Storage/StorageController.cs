@@ -8,6 +8,7 @@ using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Dto.RequestsAndResponses.Storage;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Storage;
+using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Mvc.Controllers;
 using TimeTracker.Business.Services.Storage;
 
@@ -39,10 +40,14 @@ public class StorageController(ILifetimeScope scope) : MainApiControllerBase(sco
     [HttpGet("file/{FileId:Guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> GetFile([FromRoute] GetFileRequest request)
+    public Task<IActionResult> GetFile([FromRoute] Guid fileId, [FromQuery] StorageImageSize? imageSize)
         => this.RequestAsync()
             .For<FileResponse>()
-            .With(request);
+            .With(new GetFileRequest()
+            {
+                FileId = fileId,
+                ImageSize = imageSize
+            });
     
     [HttpPost("delete")]
     [ProducesResponseType(StatusCodes.Status200OK)]

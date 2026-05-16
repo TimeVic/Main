@@ -21,17 +21,13 @@ namespace TimeTracker.Business.Services.Storage;
 public partial class FileStorage: IFileStorage
 {
     public const int MaxFileSize = 1024 * 1024 * 50; // 15Mb
-    private const int Thumb_MaxWidth = 256;
-    private const int Thumb_MaxHeight = 256;
-    private const int Avatar_MaxWidth = 256;
-    private const int Avatar_MaxHeight = 256;
-    
+
     private readonly IDbSessionProvider _dbSessionProvider;
     private readonly ILogger<IFileStorage> _logger;
     private readonly IFileStorageRelationshipService _relationshipService;
     private readonly ISecurityManager _securityManager;
     private readonly IFileStorageGarageClient _storageClient;
-    
+
     public FileStorage(
         IDbSessionProvider dbSessionProvider,
         ILogger<IFileStorage> logger,
@@ -44,7 +40,7 @@ public partial class FileStorage: IFileStorage
         _logger = logger;
         _relationshipService = relationshipService;
         _securityManager = securityManager;
-        
+
         // Garage client selected by default.
         _storageClient = storageGarageClient;
     }
@@ -59,10 +55,6 @@ public partial class FileStorage: IFileStorage
     {
         var fileExtension = Path.GetExtension(fileName).Replace(".", "");
         var mimeType = MimeTypeHelper.GetMimeTypeByExtension(fileExtension);
-        if (fileType == StoredFileType.Avatar && !IsImageMimeType(mimeType))
-        {
-            throw new IncorrectFileException("Incorrect file type");
-        }
 
         if (IsImageMimeType(mimeType))
         {
@@ -70,14 +62,6 @@ public partial class FileStorage: IFileStorage
             {
                 throw new IncorrectFileException("Provided file content is not image");
             }
-        }
-
-        if (fileType == StoredFileType.Avatar)
-        {
-            // Avatar uploads are cropped before cloud upload so profile images are stored in a consistent square size.
-            fileData = await CropAvatarFileDataAsync(fileData, cancellationToken);
-            fileExtension = "png";
-            mimeType = "image/png";
         }
 
         var cloudFileName = $"{GetParentDir(entity)}/{fileType.GetFilePath(fileExtension)}";
@@ -99,21 +83,6 @@ public partial class FileStorage: IFileStorage
         return storedFile;
     }
 
-    private async Task<byte[]> CropAvatarFileDataAsync(byte[] fileData, CancellationToken cancellationToken)
-    {
-        using var sourceStream = new MemoryStream(fileData);
-        using var avatarImage = await ImageHelper.ResizeImageFromStreamAsync(
-            sourceStream,
-            Avatar_MaxWidth,
-            Avatar_MaxHeight,
-            ResizeMode.Crop,
-            isGrayscale: false
-        );
-        using var avatarStream = new MemoryStream();
-        await avatarImage.SaveAsPngAsync(avatarStream, cancellationToken: cancellationToken);
-        return avatarStream.ToArray();
-    }
-
     public async Task<StoredFileEntity> PutFileAsync<TEntity>(
         TEntity entity,
         IFormFile formFile,
@@ -126,7 +95,7 @@ public partial class FileStorage: IFileStorage
         await formFile.CopyToAsync(fileStream, cancellationToken);
         return await PutFileAsync(entity, fileStream.ToArray(), formFile.FileName, fileType, cancellationToken);
     }
-    
+
     private void ValidateFileType(IFormFile file, StoredFileType fileType)
     {
         if (file.Length > MaxFileSize)
@@ -185,35 +154,87 @@ public partial class FileStorage: IFileStorage
             return;
         }
 
-        fileStream.PrepareToCopy();
         try
         {
-            var thumbImage = await ImageHelper.ResizeImageFromStreamAsync(
-                fileStream,
-                Thumb_MaxWidth,
-                Thumb_MaxHeight
-            );
-            using var thumbStream = new MemoryStream();
-            await thumbImage.SaveAsPngAsync(thumbStream, cancellationToken: cancellationToken);
-            thumbStream.PrepareToCopy();
-            var cloudThumbFileName = $"{GetParentDir(entity)}/{storedFile.Type.GetFilePath("png")}";
-
-            _logger.LogDebug($"S3 file thumb uploading started: {cloudThumbFileName}");
-            var cloudThumbResponse = await _storageClient.Upload(
-                cloudThumbFileName,
-                thumbStream,
-                cancellationToken: cancellationToken
-            );
-            if (cloudThumbResponse != null)
-            {
-                _logger.LogDebug($"S3 file thumb uploading finished: {cloudThumbFileName}");
-                storedFile.ThumbCloudFilePath = cloudThumbFileName;
-            }
+            await UploadCroppedImagesAsync(storedFile, fileData, cancellationToken);
         }
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
         }
+    }
+
+    private async Task UploadCroppedImagesAsync(
+        StoredFileEntity storedFile,
+        byte[] fileData,
+        CancellationToken cancellationToken
+    )
+    {
+        var uploadTasks = Enum.GetValues<StorageImageSize>()
+            .Select(imageSize => UploadCroppedImageAsync(storedFile, fileData, imageSize, cancellationToken))
+            .ToArray();
+
+        var croppedImages = await Task.WhenAll(uploadTasks);
+        var defaultThumbPath = croppedImages
+            .FirstOrDefault(item => item.Size == StorageImageSize.S_256 && item.IsUploaded)
+            .FilePath;
+        if (!string.IsNullOrEmpty(defaultThumbPath))
+        {
+            storedFile.ThumbCloudFilePath = defaultThumbPath;
+        }
+    }
+
+    private async Task<(StorageImageSize Size, string FilePath, bool IsUploaded)> UploadCroppedImageAsync(
+        StoredFileEntity storedFile,
+        byte[] fileData,
+        StorageImageSize imageSize,
+        CancellationToken cancellationToken
+    )
+    {
+        var cloudFilePath = GetCroppedImageFilePath(storedFile, imageSize);
+        try
+        {
+            using var sourceStream = new MemoryStream(fileData);
+            using var croppedImage = await ImageHelper.ResizeImageFromStreamAsync(
+                sourceStream,
+                (int)imageSize,
+                (int)imageSize,
+                ResizeMode.Crop,
+                isGrayscale: false
+            );
+            using var croppedStream = new MemoryStream();
+            await croppedImage.SaveAsPngAsync(croppedStream, cancellationToken: cancellationToken);
+            croppedStream.PrepareToCopy();
+
+            _logger.LogDebug($"S3 cropped image uploading started: {cloudFilePath}");
+            var cloudResponse = await _storageClient.Upload(
+                cloudFilePath,
+                croppedStream,
+                cancellationToken: cancellationToken
+            );
+            if (cloudResponse == null)
+            {
+                return (imageSize, cloudFilePath, false);
+            }
+
+            _logger.LogDebug($"S3 cropped image uploading finished: {cloudFilePath}");
+            return (imageSize, cloudFilePath, true);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            return (imageSize, cloudFilePath, false);
+        }
+    }
+
+    private string GetCroppedImageFilePath(StoredFileEntity storedFile, StorageImageSize imageSize)
+    {
+        var directory = Path.GetDirectoryName(storedFile.CloudFilePath)?.Replace("\\", "/");
+        var fileName = Path.GetFileNameWithoutExtension(storedFile.CloudFilePath);
+        var croppedFileName = $"{fileName}_{(int)imageSize}.png";
+        return string.IsNullOrEmpty(directory)
+            ? croppedFileName
+            : $"{directory}/{croppedFileName}";
     }
 
     private bool IsImageMimeType(string mimeType)

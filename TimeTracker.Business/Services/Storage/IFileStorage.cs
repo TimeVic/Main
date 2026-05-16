@@ -25,5 +25,11 @@ public interface IFileStorage: IDomainService
 
     Task<(StoredFileEntity, Stream)> GetFileStream(UserEntity user, Guid fileId);
 
+    Task<(StoredFileEntity File, Stream FileStream, string MimeType)> GetFileStream(
+        UserEntity user,
+        Guid fileId,
+        StorageImageSize? imageSize
+    );
+
     Task DeleteFile(UserEntity user, Guid fileId);
 }
