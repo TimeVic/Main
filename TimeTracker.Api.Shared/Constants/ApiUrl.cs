@@ -13,8 +13,11 @@ public class ApiUrl
     public const string RegistrationStep2 = "user/registration/step2";
     public const string ResetPasswordStep1 = "user/password/reset";
     public const string ResetPasswordStep2 = "user/password/change";
+    public const string Logout = "user/logout";
     public const string UserCurrent = "dashboard/user/current";
     public const string SetNotificationToken = "dashboard/user/set-notification-token";
+    public const string UserSelectWorkspace = "dashboard/user/select-workspace";
+    public const string UserUpdateSettings = "dashboard/user/update-settings";
     #endregion
     
     #region Time Entry

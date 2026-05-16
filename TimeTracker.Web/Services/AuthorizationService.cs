@@ -51,8 +51,11 @@ namespace TimeTracker.Web.Services
         {
             if (user.Id != Guid.Empty)
             {
-                user.DefaultWorkspace!.CurrentUserAccess = MembershipAccessType.Owner;
-                _dispatcher.Dispatch(new LoginAction(user, user.DefaultWorkspace));
+                var workspace = user.SelectedWorkspace ?? user.DefaultWorkspace;
+                if (workspace != null)
+                {
+                    _dispatcher.Dispatch(new LoginAction(user, workspace));
+                }
             }
         }
 

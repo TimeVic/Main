@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.UI;
@@ -18,6 +19,7 @@ public partial class ProfileBlock
     private string _name = string.Empty;
     private string _email = string.Empty;
     private string _selectedLanguage = string.Empty;
+    private bool _isSaving;
     private bool _isUploadingAvatar;
     private bool _isDeletingAvatar;
     private string _avatarRenderKey => AuthState.Value.User?.Avatar?.Id.ToString() ?? "avatar-empty";
@@ -30,17 +32,50 @@ public partial class ProfileBlock
         var user = AuthState.Value.User;
         _name = user?.UserName ?? string.Empty;
         _email = user?.Email ?? string.Empty;
-        _selectedLanguage = CultureInfo.CurrentUICulture.Name == ILocalizationUrlService.UkrainianCultureName
-            ? ILocalizationUrlService.UkrainianCultureName
-            : ILocalizationUrlService.EnglishCultureName;
+        _selectedLanguage = user?.Language?.Code
+            ?? (CultureInfo.CurrentUICulture.Name == ILocalizationUrlService.UkrainianCultureName
+                ? ILocalizationUrlService.UkrainianCultureName
+                : ILocalizationUrlService.EnglishCultureName);
         return base.OnInitializedAsync();
     }
 
     private async Task OnSave()
     {
-        // TODO: Wire to user profile update API
-        await Js.InvokeVoidAsync("localStorage.setItem", "timevic.locale", _selectedLanguage);
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        _isSaving = true;
+        StateHasChanged();
+
+        try
+        {
+            var user = await ApiService.UserUpdateSettingsAsync(new UpdateSettingsRequest
+            {
+                UserName = _name,
+                LanguageCode = _selectedLanguage
+            });
+            if (user == null)
+            {
+                return;
+            }
+
+            Dispatcher.Dispatch(new UpdateUserAction(user));
+            await Js.InvokeVoidAsync("localStorage.setItem", "timevic.locale", user.Language?.Code ?? _selectedLanguage);
+
+            var currentCulture = CultureInfo.CurrentUICulture.Name == ILocalizationUrlService.UkrainianCultureName
+                ? ILocalizationUrlService.UkrainianCultureName
+                : ILocalizationUrlService.EnglishCultureName;
+            if (!string.Equals(currentCulture, user.Language?.Code, StringComparison.OrdinalIgnoreCase))
+            {
+                NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+            }
+        }
+        catch (Exception)
+        {
+            ToastService.ShowError(DashboardLocalizer["UserSettings_SaveError"].Value);
+        }
+        finally
+        {
+            _isSaving = false;
+            StateHasChanged();
+        }
     }
 
     private async Task OnClickChangeAvatar()
@@ -141,6 +176,8 @@ public partial class ProfileBlock
             Email = user.Email,
             Timezone = user.Timezone,
             DefaultWorkspace = user.DefaultWorkspace,
+            SelectedWorkspace = user.SelectedWorkspace,
+            Language = user.Language,
             Avatar = avatar
         }));
     }

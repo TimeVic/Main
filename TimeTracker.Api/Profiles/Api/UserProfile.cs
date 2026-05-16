@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.Entity.List;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities.User;
 
@@ -19,6 +20,7 @@ public class UserProfile : Profile
                     UserName = src.UserName,
                     Email = src.Email,
                     Timezone = src.Timezone,
+                    Language = mapper.Mapper.Map<LanguageDto>(src.Language),
                     Avatar = latestAvatar != null ? mapper.Mapper.Map<StoredFileDto>(latestAvatar) : null
                 };
             });

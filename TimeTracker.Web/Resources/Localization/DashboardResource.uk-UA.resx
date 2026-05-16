@@ -528,6 +528,7 @@
   <data name="UserSettings_RequestDeletionConfirmTitle" xml:space="preserve"><value>Запросити видалення акаунта</value></data>
   <data name="UserSettings_RequestDeletionConfirmMessage" xml:space="preserve"><value>Ви впевнені, що хочете запросити видалення акаунта? Цю дію неможливо скасувати.</value></data>
   <data name="UserSettings_SaveChanges" xml:space="preserve"><value>Зберегти зміни</value></data>
+  <data name="UserSettings_SaveError" xml:space="preserve"><value>Не вдалося зберегти налаштування акаунта</value></data>
   <data name="UpdateProjectModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>
   <data name="UpdateProjectModal_Description" xml:space="preserve"><value>Оновіть назву проєкту або перенесіть його до іншого клієнта, якщо потрібно.</value></data>
   <data name="UpdateProjectModal_BillHourlyByDefault" xml:space="preserve"><value>Оплачуваний за замовчуванням</value></data>

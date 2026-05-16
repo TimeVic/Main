@@ -56,6 +56,12 @@ public class UserController : MainApiControllerBase
         => this.RequestAsync()
             .For<RefreshTokenResponseDto>()
             .With(request);
+
+    [HttpPost("logout")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Logout([FromBody] LogoutRequest request)
+        => this.RequestAsync(request);
     
     [HttpPost("registration/step1")]
     [ProducesResponseType(StatusCodes.Status200OK)]

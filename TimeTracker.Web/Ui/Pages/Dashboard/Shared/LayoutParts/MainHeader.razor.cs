@@ -4,6 +4,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Services;
@@ -35,7 +36,7 @@ public partial class MainHeader: IDisposable
     private bool _isShowAddWorkspaceModal = false;
     private System.Timers.Timer _timer;
     private DateTimeOffset _currentTime;
-    private string CurrentLanguageKey => CultureInfo.CurrentUICulture.Name == ILocalizationUrlService.UkrainianCultureName
+    private string CurrentLanguageKey => (AuthState.Value.User?.Language?.Code ?? CultureInfo.CurrentUICulture.Name) == ILocalizationUrlService.UkrainianCultureName
         ? "Ukrainian"
         : "English";
     private string? UserAvatarSrc => AuthState.Value.User?.Avatar == null
@@ -86,6 +87,19 @@ public partial class MainHeader: IDisposable
     
     private async Task OnSelectLanguage(string cultureName)
     {
+        if (AuthState.Value.User?.Id != Guid.Empty)
+        {
+            var user = await ApiService.UserUpdateSettingsAsync(new UpdateSettingsRequest
+            {
+                UserName = AuthState.Value.User?.UserName,
+                LanguageCode = cultureName
+            });
+            if (user != null)
+            {
+                Dispatcher.Dispatch(new UpdateUserAction(user));
+            }
+        }
+
         await Js.InvokeVoidAsync("localStorage.setItem", "timevic.locale", cultureName);
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }

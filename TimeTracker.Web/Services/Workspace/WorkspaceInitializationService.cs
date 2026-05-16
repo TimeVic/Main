@@ -117,7 +117,6 @@ public class WorkspaceInitializationService
         {
             return;
         }
-        _dispatcher.Dispatch(new SetWorkspaceAction(workspace));
-        _navigationManager.ReloadPage();
+        _dispatcher.Dispatch(new SelectWorkspaceAction(workspace));
     }
 }

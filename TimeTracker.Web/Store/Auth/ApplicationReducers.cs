@@ -5,13 +5,13 @@ namespace TimeTracker.Web.Store.Auth;
 public class AuthReducers
 {
     [ReducerMethod(typeof(LogoutAction))]
-    public static AuthState ReduceLogoutActionActionReducer(AuthState state)
+    public static AuthState Reducer(AuthState state)
     {
         return new AuthState();
     }
     
     [ReducerMethod]
-    public static AuthState ReduceLoginActionActionReducer(AuthState state, LoginAction action)
+    public static AuthState Reducer(AuthState state, LoginAction action)
     {
         return new AuthState()
         {
@@ -21,7 +21,7 @@ public class AuthReducers
     }
     
     [ReducerMethod]
-    public static AuthState SetWorkspaceActionReducer(AuthState state, SetWorkspaceAction action)
+    public static AuthState Reducer(AuthState state, SetWorkspaceAction action)
     {
         return state with
         {
@@ -30,12 +30,12 @@ public class AuthReducers
     }
 
     [ReducerMethod]
-    public static AuthState UpdateUserActionReducer(AuthState state, UpdateUserAction action)
+    public static AuthState Reducer(AuthState state, UpdateUserAction action)
     {
         return state with
         {
             User = action.User,
-            Workspace = state.Workspace ?? action.User.DefaultWorkspace
+            Workspace = action.User.SelectedWorkspace ?? state.Workspace ?? action.User.DefaultWorkspace
         };
     }
 }

@@ -19,6 +19,19 @@ public class UserMapping: BaseGuidMappings<UserEntity>
         Map(x => x.PasswordHash);
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
+
+        References(x => x.SelectedWorkspace)
+            .Column("selected_workspace_id")
+            .Fetch.Select()
+            .LazyLoad()
+            .Nullable()
+            .Cascade.None();
+
+        References(x => x.Language)
+            .Column("language_id")
+            .Fetch.Select()
+            .LazyLoad()
+            .Cascade.None();
         
         HasMany(x => x.CreatedWorkspaces)
             .KeyColumn("created_user_id")

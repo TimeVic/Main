@@ -1,4 +1,5 @@
 ﻿using TimeTracker.Api.Shared.Dto.Entity.Common;
+using TimeTracker.Api.Shared.Dto.Entity.List;
 using TimeTracker.Business.Extensions;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
@@ -22,6 +23,10 @@ public class UserDto: BaseDto
     }
     
     public WorkspaceDto? DefaultWorkspace { get; set; }
+
+    public WorkspaceDto? SelectedWorkspace { get; set; }
+
+    public LanguageDto? Language { get; set; }
     
     public StoredFileDto? Avatar { get; set; }
 }

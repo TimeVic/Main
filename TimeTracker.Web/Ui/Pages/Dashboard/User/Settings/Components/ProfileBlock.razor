@@ -128,10 +128,10 @@
         </div>
 
         <div class="mt-6 flex justify-end border-t border-slate-100 pt-5">
-            @* TODO: Wire to user profile update API and persist language preference *@
             <CustomButton
                 Color="ThemeColor.Primary"
                 Variant="Variant.Solid"
+                IsLoading="@_isSaving"
                 OnClick="@OnSave">
                 <StartContent>
                     <i class="fa-regular fa-floppy-disk"></i>

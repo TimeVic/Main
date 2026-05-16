@@ -13,7 +13,10 @@ public static class HttpResponseMessageExtensionsExtensions
         }
         return setCookieValues
             .Select(cookieValue => SetCookieHeaderValue.Parse(cookieValue))
-            .Where(item => item.Name.Equals(key, StringComparison.InvariantCultureIgnoreCase))
+            .Where(item =>
+                item.Name.Equals(key, StringComparison.InvariantCultureIgnoreCase)
+                || item.Name.ToString().StartsWith($"{key}_", StringComparison.InvariantCultureIgnoreCase)
+            )
             .Where(item => item.Value != null)
             .Select(item => WebUtility.UrlDecode(item.Value.Value))
             .FirstOrDefault();

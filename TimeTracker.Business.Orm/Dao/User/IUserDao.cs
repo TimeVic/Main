@@ -24,5 +24,11 @@ public interface IUserDao: IDomainService
 
     Task<WorkspaceEntity> GetDefaultWorkspace(UserEntity user);
 
+    Task<WorkspaceEntity> GetSelectedWorkspaceAsync(UserEntity user);
+
+    Task<UserEntity> SelectWorkspaceAsync(UserEntity user, WorkspaceEntity workspace);
+
+    Task<UserEntity> UpdateSettingsAsync(UserEntity user, string? userName, LanguageEntity language);
+
     Task<UserEntity?> GetLastDemoUserAsync();
 }

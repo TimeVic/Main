@@ -19,5 +19,16 @@ public class ListProfile : Profile
                     Symbol = src.Symbol,
                 };
             });
+
+        CreateMap<LanguageEntity, LanguageDto>()
+            .IgnoreAllAndConstructUsing((src, mapper) =>
+            {
+                return new LanguageDto
+                {
+                    Id = src.Id,
+                    Name = src.Name,
+                    Code = src.Code,
+                };
+            });
     }
 }
