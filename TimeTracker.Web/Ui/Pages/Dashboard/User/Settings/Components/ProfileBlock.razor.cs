@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.Common;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.User.Settings.Components;
 
@@ -71,7 +72,7 @@ public partial class ProfileBlock
             );
             if (avatarDto != null)
             {
-                Dispatcher.Dispatch(new UpdateUserAvatarAction(avatarDto));
+                await RefreshCurrentUserAsync();
             }
         }
         finally
@@ -95,12 +96,25 @@ public partial class ProfileBlock
         try
         {
             await ApiService.StorageDeleteFileAsync(avatarId.Value);
-            Dispatcher.Dispatch(new UpdateUserAvatarAction(null));
+            await RefreshCurrentUserAsync();
         }
         finally
         {
             _isDeletingAvatar = false;
             StateHasChanged();
         }
+    }
+
+    private async Task RefreshCurrentUserAsync()
+    {
+        var user = await ApiService.UserGetCurrentAsync();
+        if (user == null)
+        {
+            return;
+        }
+
+        // Refresh user data so avatar metadata comes from the committed profile state after upload/delete.
+        Dispatcher.Dispatch(new UpdateUserAction(user));
+        Dispatcher.Dispatch(new PersistDataAction());
     }
 }

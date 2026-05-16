@@ -1,6 +1,4 @@
 ﻿using Fluxor;
-using TimeTracker.Business.Common.Constants;
-using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Store.Auth;
 
@@ -30,15 +28,14 @@ public class AuthReducers
             Workspace = action.Workspace
         };
     }
-    
+
     [ReducerMethod]
-    public static AuthState UpdateUserAvatarActionReducer(AuthState state, UpdateUserAvatarAction action)
+    public static AuthState UpdateUserActionReducer(AuthState state, UpdateUserAction action)
     {
-        if (state.User == null)
+        return state with
         {
-            return state;
-        }
-        state.User.Avatar = action.Avatar;
-        return state with { };
+            User = action.User,
+            Workspace = state.Workspace ?? action.User.DefaultWorkspace
+        };
     }
 }
