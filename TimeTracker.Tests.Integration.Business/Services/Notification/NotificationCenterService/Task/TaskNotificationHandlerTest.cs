@@ -1,5 +1,4 @@
 using Autofac;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -22,7 +21,6 @@ public partial class TaskNotificationHandlerTest: BaseTest
     
     private readonly TaskEntity _task;
     private readonly UserEntity _user;
-    private readonly IStoredFilesDao _storedFilesDao;
     private readonly IGcmNotificationService _gcmNotificationService;
     private readonly IUserNotificationTokenDao _userNotificationTokenDao;
     private readonly ITaskNotificationService _notificationBgJobService;
@@ -33,7 +31,6 @@ public partial class TaskNotificationHandlerTest: BaseTest
     {
         _fileStorage = Scope.Resolve<IFileStorage>();
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
-        _storedFilesDao = Scope.Resolve<IStoredFilesDao>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _userNotificationTokenDao = Scope.Resolve<IUserNotificationTokenDao>();
         _notificationBgJobService = Scope.Resolve<ITaskNotificationService>();
@@ -42,7 +39,6 @@ public partial class TaskNotificationHandlerTest: BaseTest
         _queueService = Scope.Resolve<IQueueService>();
         _user = _userSeeder.CreateActivatedAsync().Result;
 
-        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         _task = _taskSeeder.CreateAsync(user: _user).Result;
     }
 }

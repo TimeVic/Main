@@ -1,7 +1,6 @@
 using Autofac;
 using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Common.Constants;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -21,7 +20,6 @@ public class SendTaskReminderNotificationTest: BaseTest
     
     private readonly TaskEntity _task;
     private readonly UserEntity _user;
-    private readonly IStoredFilesDao _storedFilesDao;
     private readonly IGcmNotificationService _gcmNotificationService;
     private readonly IUserNotificationTokenDao _userNotificationTokenDao;
 
@@ -29,13 +27,11 @@ public class SendTaskReminderNotificationTest: BaseTest
     {
         _fileStorage = Scope.Resolve<IFileStorage>();
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
-        _storedFilesDao = Scope.Resolve<IStoredFilesDao>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _userNotificationTokenDao = Scope.Resolve<IUserNotificationTokenDao>();
         _gcmNotificationService = Scope.Resolve<IGcmNotificationService>();
         _user = _userSeeder.CreateActivatedAsync().Result;
 
-        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         _task = _taskSeeder.CreateAsync(user: _user).Result;
     }
 

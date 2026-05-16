@@ -13,24 +13,6 @@
             <label class="mb-3 block text-xs font-medium uppercase tracking-wide text-slate-500">@LocalizedTitle</label>
         }
         <div class="@ListClass">
-            @foreach (var attachment in UploadingFiles)
-            {
-                <div class="@PreviewItemClass">
-                    <div class="absolute inset-0 flex items-center justify-center bg-white/75">
-                        <LumexSpinner Size="@Size.Medium" />
-                    </div>
-                    @if (attachment.IsImage)
-                    {
-                        <i class="fa-regular fa-image text-3xl text-slate-300"></i>
-                    }
-                    else
-                    {
-                        <div class="flex h-16 w-14 items-center justify-center rounded-lg border border-slate-300 bg-white text-xs font-semibold uppercase text-slate-600">
-                            @attachment.Extension
-                        </div>
-                    }
-                </div>
-            }
             @foreach (var attachment in Files)
             {
                 <div class="@PreviewItemClass group hover:border-blue-400 hover:shadow-sm">
@@ -39,22 +21,18 @@
                         target="_blank"
                         class="flex h-full w-full items-center justify-center"
                         title="@attachment.Name">
-                        @if (IsAttachmentPending(attachment) || IsAttachmentDeleting(attachment))
+                        @if (IsAttachmentDeleting(attachment))
                         {
                             <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/75">
                                 <LumexSpinner Size="@Size.Medium" />
                             </div>
                         }
-                        @if (IsImageAttachment(attachment) && !IsAttachmentPending(attachment))
+                        @if (IsImageAttachment(attachment))
                         {
                             <img
                                 src="@GetAttachmentPreviewUrl(attachment)"
                                 alt="@attachment.Name"
                                 class="h-full w-full object-cover" />
-                        }
-                        else if (IsImageAttachment(attachment))
-                        {
-                            <i class="fa-regular fa-image text-3xl text-slate-300"></i>
                         }
                         else
                         {

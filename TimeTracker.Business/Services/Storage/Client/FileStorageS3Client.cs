@@ -45,14 +45,6 @@ public partial class FileStorageS3S3Client: IFileStorageS3Client
         _s3Client = new AmazonS3Client(options, config);
     }
     
-    
-    public async Task<UploadedFileDto?> Upload(StoredFileEntity fileToUpload, CancellationToken cancellationToken = default)
-    {
-        using var fileStream = new MemoryStream();
-        fileStream.Write(fileToUpload.DataToUpload);
-        return await Upload(fileToUpload.CloudFilePath, fileStream, cancellationToken);
-    }
-    
     public async Task<UploadedFileDto?> Upload(
         string filePath,
         Stream fileStream,

@@ -5,18 +5,13 @@ using TimeTracker.Web.Services.UI;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Storage;
 
-public partial class AttachmentsBlock: IDisposable
+public partial class AttachmentsBlock
 {
-    private const int AttachmentsReloadIntervalMs = 3000;
-
     [Parameter]
     public ICollection<StoredFileDto> Files { get; set; } = new List<StoredFileDto>();
 
     [Parameter]
     public EventCallback<ICollection<StoredFileDto>> FilesChanged { get; set; }
-
-    [Parameter]
-    public ICollection<AttachmentUploadPreviewModel> UploadingFiles { get; set; } = new List<AttachmentUploadPreviewModel>();
 
     [Parameter]
     public Guid? EntityId { get; set; }
@@ -26,9 +21,6 @@ public partial class AttachmentsBlock: IDisposable
 
     [Parameter]
     public bool AllowDelete { get; set; } = true;
-
-    [Parameter]
-    public bool AutoReloadPending { get; set; } = true;
 
     [Parameter]
     public bool HideWhenEmpty { get; set; } = true;
@@ -52,18 +44,11 @@ public partial class AttachmentsBlock: IDisposable
     public ILogger<AttachmentsBlock> _logger { get; set; }
 
     private readonly HashSet<Guid> _deletingAttachmentIds = new();
-    private System.Timers.Timer? _attachmentsReloadTimer;
 
-    private bool IsVisible => !HideWhenEmpty || Files.Any() || UploadingFiles.Any();
+    private bool IsVisible => !HideWhenEmpty || Files.Any();
 
     private string LocalizedTitle =>
         string.IsNullOrWhiteSpace(Title) ? DashboardLocalizer["Attachments"].Value : Title;
-
-    protected override Task OnInitializedAsync()
-    {
-        StartAttachmentsReloadTimer();
-        return base.OnInitializedAsync();
-    }
 
     private bool IsImageAttachment(StoredFileDto attachment)
     {
@@ -79,11 +64,6 @@ public partial class AttachmentsBlock: IDisposable
 
         var extension = GetExtension(fileName);
         return extension is "jpg" or "jpeg" or "png" or "gif" or "bmp" or "webp";
-    }
-
-    private bool IsAttachmentPending(StoredFileDto attachment)
-    {
-        return attachment.Status is StoredFileStatus.Pending or StoredFileStatus.Uploading;
     }
 
     private bool IsAttachmentDeleting(StoredFileDto attachment)
@@ -146,51 +126,4 @@ public partial class AttachmentsBlock: IDisposable
         return string.IsNullOrWhiteSpace(extension) ? "FILE" : extension.ToLowerInvariant();
     }
 
-    private void StartAttachmentsReloadTimer()
-    {
-        if (!AutoReloadPending)
-        {
-            return;
-        }
-
-        _attachmentsReloadTimer = new System.Timers.Timer(AttachmentsReloadIntervalMs);
-        _attachmentsReloadTimer.Elapsed += OnAttachmentsReloadTimerTick;
-        _attachmentsReloadTimer.Start();
-    }
-
-    private void OnAttachmentsReloadTimerTick(object? sender, System.Timers.ElapsedEventArgs e)
-    {
-        if (!EntityId.HasValue || !EntityType.HasValue || !Files.Any(IsAttachmentPending))
-        {
-            return;
-        }
-
-        InvokeAsync(ReloadAttachments);
-    }
-
-    private async Task ReloadAttachments()
-    {
-        try
-        {
-            var files = await ApiService.StorageGetListAsync(
-                EntityId!.Value,
-                EntityType!.Value
-            );
-            if (files != null)
-            {
-                Files = files.Items;
-                await FilesChanged.InvokeAsync(files.Items);
-                await InvokeAsync(StateHasChanged);
-            }
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, e.Message);
-        }
-    }
-
-    public void Dispose()
-    {
-        _attachmentsReloadTimer?.Dispose();
-    }
 }

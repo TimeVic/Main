@@ -5,6 +5,7 @@ using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -27,7 +28,6 @@ public class UploadTest: BaseTest
     private readonly ITaskListSeeder _taskListSeeder;
     
     private readonly TaskEntity _task;
-    private readonly IStoredFilesDao _storedFilesDao;
     private readonly IFileStorage _fileStorage;
     private WorkspaceEntity _workspace;
 
@@ -36,11 +36,9 @@ public class UploadTest: BaseTest
         _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
-        _storedFilesDao = ServiceProvider.GetRequiredService<IStoredFilesDao>();
         _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
 
-        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _task = _taskSeeder.CreateAsync(user: _user).Result;
     }
@@ -91,9 +89,8 @@ public class UploadTest: BaseTest
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
 
-        var actualUploadedFile = await _fileStorage.UploadFirstPendingToCloud();
+        var actualUploadedFile = await DbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(actualData.Id);
         Assert.NotNull(actualUploadedFile);
-        Assert.Equal(actualData.Id, actualUploadedFile.Id);
         Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath!);
     }
     
@@ -149,9 +146,8 @@ public class UploadTest: BaseTest
         var actualTask = await DbSessionProvider.CurrentSession.GetAsync<TaskEntity>(_task.Id);
         Assert.Equal(1, actualTask.Attachments.Count);
         
-        var actualUploadedFile = await _fileStorage.UploadFirstPendingToCloud();
+        var actualUploadedFile = await DbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(actualData.Id);
         Assert.NotNull(actualUploadedFile);
-        Assert.Equal(actualData.Id, actualUploadedFile.Id);
         Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath!);
     }
 }

@@ -17,21 +17,6 @@ public class StoredFilesDao: IStoredFilesDao
         _sessionProvider = sessionProvider;
     }
 
-    public async Task<StoredFileEntity?> GetFirstToUpload()
-    {
-        var storedFile = await _sessionProvider.CurrentSession.Query<StoredFileEntity>()
-            .Where(item => item.Status == StoredFileStatus.Pending)
-            .OrderBy(item => item.CreatedAt)
-            .FirstOrDefaultAsync();
-        if (storedFile == null)
-        {
-            return null;
-        }
-        storedFile.Status = StoredFileStatus.Uploading;
-        await _sessionProvider.CurrentSession.SaveAsync(storedFile);
-        return storedFile;
-    }
-    
     public async Task<ICollection<StoredFileEntity>> GetListByEntity(Guid entityId, StorageEntityType entityType)
     {
         TaskEntity taskAlias = null!;
@@ -43,14 +28,5 @@ public class StoredFilesDao: IStoredFilesDao
         }
         query = query.OrderBy(item => item.CreatedAt).Desc;
         return await query.ListAsync();
-    }
-    
-    /*
-     * Only for testing purposes
-     */
-    public async Task MarkAsUploadedAllPending()
-    {
-        await _sessionProvider.CurrentSession.CreateQuery(@"update StoredFileEntity set Status = 2")
-            .ExecuteUpdateAsync();
     }
 }

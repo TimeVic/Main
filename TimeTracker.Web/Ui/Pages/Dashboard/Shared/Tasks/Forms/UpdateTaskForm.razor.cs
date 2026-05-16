@@ -13,7 +13,6 @@ using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Store.Tasks;
 using TimeTracker.Web.Store.WorkspaceMembers;
-using TimeTracker.Web.Ui.Shared.Components.Storage;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms;
@@ -55,7 +54,6 @@ public partial class UpdateTaskForm: IDisposable
     private string? _attachmentInteropId;
     private bool _isAttachmentInteropInitialized;
     private bool _isDragActive;
-    private readonly ICollection<AttachmentUploadPreviewModel> _uploadingAttachments = new List<AttachmentUploadPreviewModel>();
     public TaskFullDto _task { get; set; } = new();
 
     private string _attachmentAcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
@@ -170,18 +168,8 @@ public partial class UpdateTaskForm: IDisposable
             return;
         }
 
-        var files = eventArguments.GetMultipleFiles(eventArguments.FileCount).ToList();
-        var uploadStates = files.Select(AttachmentUploadPreviewModel.FromFile).ToList();
-        foreach (var uploadState in uploadStates)
+        foreach (var file in eventArguments.GetMultipleFiles(eventArguments.FileCount))
         {
-            _uploadingAttachments.Add(uploadState);
-        }
-        await InvokeAsync(StateHasChanged);
-
-        for (var fileIndex = 0; fileIndex < files.Count; fileIndex++)
-        {
-            var file = files[fileIndex];
-            var uploadState = uploadStates[fileIndex];
             try
             {
                 var uploadedFile = await ApiService.StorageUploadFileAsync(
@@ -197,16 +185,12 @@ public partial class UpdateTaskForm: IDisposable
                 }
 
                 _task.Attachments.Add(uploadedFile);
+                await InvokeAsync(StateHasChanged);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
                 ToastService.ShowError(e.Message);
-            }
-            finally
-            {
-                _uploadingAttachments.Remove(uploadState);
-                await InvokeAsync(StateHasChanged);
             }
         }
     }

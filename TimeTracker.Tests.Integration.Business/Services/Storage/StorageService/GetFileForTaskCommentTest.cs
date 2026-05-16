@@ -22,7 +22,6 @@ public class GetFileForTaskCommentTest: BaseTest
     
     private readonly TaskCommentEntity _taskComment;
     private readonly UserEntity _user;
-    private readonly IStoredFilesDao _storedFilesDao;
     private readonly ITaskCommentSeeder _taskCommentSeeder;
     private readonly TaskEntity _task;
 
@@ -31,11 +30,9 @@ public class GetFileForTaskCommentTest: BaseTest
         _fileStorage = Scope.Resolve<IFileStorage>();
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
-        _storedFilesDao = Scope.Resolve<IStoredFilesDao>();
         _user = _userSeeder.CreateActivatedAsync().Result;
         _taskCommentSeeder = Scope.Resolve<ITaskCommentSeeder>();
 
-        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         _taskComment = _taskCommentSeeder.CreateAsync(_task).Result;
     }
@@ -45,7 +42,6 @@ public class GetFileForTaskCommentTest: BaseTest
     {
         var actualFile = await _fileStorage.PutFileAsync(_taskComment, CreateFormFile(), StoredFileType.Attachment);
         await FlushDbChanges(true);
-        await _fileStorage.UploadFirstPendingToCloud();
 
         await FlushDbChanges();
         var (expectedFile, fileStream) = await _fileStorage.GetFileStream(_user, actualFile.Id);

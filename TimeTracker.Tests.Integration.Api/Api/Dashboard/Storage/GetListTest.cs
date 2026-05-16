@@ -26,21 +26,17 @@ public class GetListTest: BaseTest
     private readonly TaskEntity _task;
     private readonly IFileStorage _fileStorage;
     private readonly StoredFileEntity _uploadedFile = null!;
-    private readonly IStoredFilesDao _storedFilesDao;
     private WorkspaceEntity _workspace;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
-        _storedFilesDao = ServiceProvider.GetRequiredService<IStoredFilesDao>();
         _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
 
-        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
-        _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Wait();
-        _uploadedFile = _fileStorage.UploadFirstPendingToCloud().Result!;
+        _uploadedFile = _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Result;
     }
 
     [Fact]

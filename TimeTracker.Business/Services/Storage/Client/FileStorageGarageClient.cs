@@ -48,14 +48,6 @@ public partial class FileStorageGarageClient: IFileStorageGarageClient
         _s3Client = new AmazonS3Client(accessKey, secretKey, config);
     }
     
-    
-    public async Task<UploadedFileDto?> Upload(StoredFileEntity fileToUpload, CancellationToken cancellationToken = default)
-    {
-        using var fileStream = new MemoryStream();
-        fileStream.Write(fileToUpload.DataToUpload);
-        return await Upload(fileToUpload.CloudFilePath, fileStream, cancellationToken);
-    }
-    
     public async Task<UploadedFileDto?> Upload(
         string filePath,
         Stream fileStream,

@@ -6,9 +6,5 @@ namespace TimeTracker.Business.Orm.Dao;
 
 public interface IStoredFilesDao: IDomainService
 {
-    Task<StoredFileEntity?> GetFirstToUpload();
-
-    Task MarkAsUploadedAllPending();
-
     Task<ICollection<StoredFileEntity>> GetListByEntity(Guid entityId, StorageEntityType entityType);
 }

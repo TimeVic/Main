@@ -8,9 +8,7 @@ namespace TimeTracker.Api.Shared.Dto.Entity;
 public class StoredFileDto: BaseDto
 {
     public StoredFileType Type { get; set; }
-    
-    public StoredFileStatus Status { get; set; }
-    
+
     public string? Extension { get; set; }
     
     public string? MimeType { get; set; }

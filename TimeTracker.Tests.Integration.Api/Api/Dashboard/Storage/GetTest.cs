@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -24,21 +23,17 @@ public class GetTest: BaseTest
     private readonly TaskEntity _task;
     private readonly IFileStorage _fileStorage;
     private readonly StoredFileEntity _uploadedFile;
-    private readonly IStoredFilesDao _storedFilesDao;
 
     public GetTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
-        _storedFilesDao = ServiceProvider.GetRequiredService<IStoredFilesDao>();
         _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
 
-        _storedFilesDao.MarkAsUploadedAllPending().Wait();
         (_jwtToken, _user, var workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _task = _taskSeeder.CreateAsync(user: _user).Result;
         
-        _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Wait();
+        _uploadedFile = _fileStorage.PutFileAsync(_task, CreateFormFile(), StoredFileType.Attachment).Result;
         FlushDbChanges().Wait();
-        _uploadedFile = (_fileStorage.UploadFirstPendingToCloud().Result)!;
     }
 
     [Fact]
