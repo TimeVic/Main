@@ -141,7 +141,7 @@
                         </td>
                         <td class="border-t border-slate-200 px-2 py-3 align-top">
                             <div class="flex items-center gap-3">
-                                <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold uppercase text-white">@(task.User?.Initials ?? "?")</span>
+                                <UserAvatarBlock User="@task.User" />
                                 <div class="min-w-0">
                                     <div class="truncate text-sm font-medium text-slate-800">@(task.User?.Name ?? "")</div>
                                     <div class="truncate text-xs text-slate-500">@(task.User?.Email ?? DashboardLocalizer["NoAssignee"].Value)</div>

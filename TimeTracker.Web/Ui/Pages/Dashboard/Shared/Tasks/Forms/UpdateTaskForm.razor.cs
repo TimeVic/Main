@@ -148,6 +148,18 @@ public partial class UpdateTaskForm: IDisposable
         _model.Priority = priority.Value;
         SubmitForm();
     }
+
+    private void OnTaskListChanged(TaskListDto? taskList)
+    {
+        if (taskList == null || taskList.Id == _model.TaskListId)
+        {
+            return;
+        }
+
+        _model.TaskListId = taskList.Id;
+        _task.TaskList = taskList;
+        SubmitForm();
+    }
     
     private Task OnTagsChanged(IEnumerable<Guid> tagIds)
     {
