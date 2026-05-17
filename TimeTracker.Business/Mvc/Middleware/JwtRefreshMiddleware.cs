@@ -15,7 +15,7 @@ public class JwtRefreshMiddleware
 
     private readonly ILogger<JwtRefreshMiddleware> _logger;
 
-    private readonly TimeSpan _jwtExpirationDelay = TimeSpan.FromMinutes(30);
+    private readonly TimeSpan _jwtExpirationDelay = TimeSpan.FromMinutes(60);
     
     public JwtRefreshMiddleware(
         RequestDelegate next,
