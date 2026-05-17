@@ -25,13 +25,20 @@ public class HttpCookiesService: IHttpCookiesService
         _accessTokenLifeTime = configuration.GetValue<int>("App:Auth:AccessTokenLifetime")!;
     }
     
-    public void AppendAuthCookies(string accessToken, string jwtToken)
+    public void AppendAuthCookies(
+        string accessToken,
+        string jwtToken,
+        bool isJwtOnly = false
+    )
     {
         var jwtTimeSpan = DateTimeOffset.UtcNow.AddMinutes(_jwtTokenLifeTime);
-        var accessTokenTimeSpan = DateTimeOffset.UtcNow.AddDays(_accessTokenLifeTime);
-        
-        Append(HttpCookieKeyEnum.AccessToken, accessToken, accessTokenTimeSpan);
         Append(HttpCookieKeyEnum.JwtToken, jwtToken, jwtTimeSpan);
+
+        if (!isJwtOnly)
+        {
+            var accessTokenTimeSpan = DateTimeOffset.UtcNow.AddDays(_accessTokenLifeTime);
+            Append(HttpCookieKeyEnum.AccessToken, accessToken, accessTokenTimeSpan);
+        }
     }
     
     public void CleanUpAuthCookies()

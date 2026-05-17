@@ -20,7 +20,11 @@ public interface IHttpCookiesService: IScopedDomainService
     
     string? Get(HttpCookieKeyEnum key);
     
-    void AppendAuthCookies(string accessToken, string jwtToken);
+    void AppendAuthCookies(
+        string accessToken,
+        string jwtToken,
+        bool isJwtOnly = false
+    );
 
     void CleanUpAuthCookies();
 }
