@@ -7,8 +7,13 @@ namespace TimeTracker.Web.Ui.Shared.Components.Storage;
 
 public partial class AttachmentsBlock
 {
+    public sealed record UploadingAttachment(Guid Id, string FileName, string? MimeType);
+
     [Parameter]
     public ICollection<StoredFileDto> Files { get; set; } = new List<StoredFileDto>();
+
+    [Parameter]
+    public IReadOnlyCollection<UploadingAttachment> UploadingFiles { get; set; } = new List<UploadingAttachment>();
 
     [Parameter]
     public EventCallback<ICollection<StoredFileDto>> FilesChanged { get; set; }
@@ -45,7 +50,7 @@ public partial class AttachmentsBlock
 
     private readonly HashSet<Guid> _deletingAttachmentIds = new();
 
-    private bool IsVisible => !HideWhenEmpty || Files.Any();
+    private bool IsVisible => !HideWhenEmpty || Files.Any() || UploadingFiles.Any();
 
     private string LocalizedTitle =>
         string.IsNullOrWhiteSpace(Title) ? DashboardLocalizer["Attachments"].Value : Title;
@@ -69,6 +74,11 @@ public partial class AttachmentsBlock
     private bool IsAttachmentDeleting(StoredFileDto attachment)
     {
         return _deletingAttachmentIds.Contains(attachment.Id);
+    }
+
+    private string GetUploadingAttachmentExtension(UploadingAttachment attachment)
+    {
+        return GetExtension(attachment.FileName).ToUpperInvariant();
     }
 
     private async Task OnDeleteAttachment(StoredFileDto attachment)

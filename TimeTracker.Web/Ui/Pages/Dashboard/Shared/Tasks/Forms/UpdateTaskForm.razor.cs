@@ -13,6 +13,7 @@ using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Store.Tasks;
 using TimeTracker.Web.Store.WorkspaceMembers;
+using TimeTracker.Web.Ui.Shared.Components.Storage;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms;
@@ -54,6 +55,7 @@ public partial class UpdateTaskForm: IDisposable
     private string? _attachmentInteropId;
     private bool _isAttachmentInteropInitialized;
     private bool _isDragActive;
+    private readonly List<AttachmentsBlock.UploadingAttachment> _uploadingAttachments = new();
     public TaskFullDto _task { get; set; } = new();
 
     private string _attachmentAcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
@@ -168,7 +170,18 @@ public partial class UpdateTaskForm: IDisposable
             return;
         }
 
-        foreach (var file in eventArguments.GetMultipleFiles(eventArguments.FileCount))
+        var files = eventArguments
+            .GetMultipleFiles(eventArguments.FileCount)
+            .ToList();
+        var uploadingAttachments = files
+            .Select(file => new AttachmentsBlock.UploadingAttachment(Guid.NewGuid(), file.Name, file.ContentType))
+            .ToList();
+
+        // Show all selected attachments immediately while their uploads are still running.
+        _uploadingAttachments.AddRange(uploadingAttachments);
+        await InvokeAsync(StateHasChanged);
+
+        foreach (var fileInfo in files.Zip(uploadingAttachments))
         {
             try
             {
@@ -176,7 +189,7 @@ public partial class UpdateTaskForm: IDisposable
                     _task.Id,
                     StorageEntityType.Task,
                     StoredFileType.Attachment,
-                    file
+                    fileInfo.First
                 );
                 if (uploadedFile == null)
                 {
@@ -185,12 +198,16 @@ public partial class UpdateTaskForm: IDisposable
                 }
 
                 _task.Attachments.Add(uploadedFile);
-                await InvokeAsync(StateHasChanged);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
                 ToastService.ShowError(e.Message);
+            }
+            finally
+            {
+                _uploadingAttachments.Remove(fileInfo.Second);
+                await InvokeAsync(StateHasChanged);
             }
         }
     }

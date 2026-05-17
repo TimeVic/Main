@@ -62,6 +62,19 @@
                     }
                 </div>
             }
+            @foreach (var attachment in UploadingFiles)
+            {
+                <div @key="attachment.Id" class="@PreviewItemClass group" title="@attachment.FileName" aria-busy="true">
+                    <div class="flex h-full w-full items-center justify-center">
+                        <div class="flex h-16 w-14 items-center justify-center rounded-lg border border-slate-300 bg-white text-xs font-semibold uppercase text-slate-600">
+                            @GetUploadingAttachmentExtension(attachment)
+                        </div>
+                    </div>
+                    <div class="absolute inset-0 z-10 flex items-center justify-center bg-white/75">
+                        <LumexSpinner Size="@Size.Medium" />
+                    </div>
+                </div>
+            }
         </div>
     </div>
 }
