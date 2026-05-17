@@ -28,7 +28,7 @@ public class HttpCookiesService: IHttpCookiesService
     public void AppendAuthCookies(string accessToken, string jwtToken)
     {
         var jwtTimeSpan = DateTimeOffset.UtcNow.AddMinutes(_jwtTokenLifeTime);
-        var accessTokenTimeSpan = DateTimeOffset.UtcNow.AddMinutes(_accessTokenLifeTime);
+        var accessTokenTimeSpan = DateTimeOffset.UtcNow.AddDays(_accessTokenLifeTime);
         
         Append(HttpCookieKeyEnum.AccessToken, accessToken, accessTokenTimeSpan);
         Append(HttpCookieKeyEnum.JwtToken, jwtToken, jwtTimeSpan);
