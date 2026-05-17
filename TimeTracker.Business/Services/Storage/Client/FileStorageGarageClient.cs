@@ -60,7 +60,7 @@ public partial class FileStorageGarageClient: IFileStorageGarageClient
             Key = filePath,
             InputStream = fileStream,
             AutoCloseStream = false,
-            DisablePayloadSigning = true,
+            DisableDefaultChecksumValidation = true,
             StreamTransferProgress = (sender, args) =>
             {
                 _logger.LogTrace($"S3 file uploading progress: {args.PercentDone}%");
