@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
-using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Web.Constants;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.DateTimes;
@@ -26,9 +25,6 @@ public partial class MainHeader: IDisposable
     
     [Inject]
     public WorkspaceInitializationService _workspaceInitialization { get; set; }
-
-    [Inject]
-    public UrlService UrlService { get; set; } = null!;
     
     [Inject]
     public UserDateTimeProviderService _dateTimeProviderService { get; set; }
@@ -39,10 +35,6 @@ public partial class MainHeader: IDisposable
     private string CurrentLanguageKey => (AuthState.Value.User?.Language?.Code ?? CultureInfo.CurrentUICulture.Name) == ILocalizationUrlService.UkrainianCultureName
         ? "Ukrainian"
         : "English";
-    private string? UserAvatarSrc => AuthState.Value.User?.Avatar == null
-        ? null
-        : UrlService.GetStorageImageUrl(AuthState.Value.User.Avatar, StorageImageSize.S_256);
-    private string UserAvatarKey => AuthState.Value.User?.Avatar?.Id.ToString() ?? "avatar-empty";
     
     protected override async Task OnInitializedAsync()
     {
