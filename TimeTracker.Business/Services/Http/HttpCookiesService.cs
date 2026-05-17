@@ -9,7 +9,6 @@ public class HttpCookiesService: IHttpCookiesService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly string[] _cookieDomains;
-    private readonly int _jwtTokenLifeTime;
     private readonly int _accessTokenLifeTime;
     private readonly string _cookieKeyPostfix;
 
@@ -20,7 +19,6 @@ public class HttpCookiesService: IHttpCookiesService
     {
         _httpContextAccessor = httpContextAccessor;
         _cookieDomains = configuration.GetSection("App:Auth:CookieDomains").Get<string[]>() ?? [];
-        _jwtTokenLifeTime = configuration.GetValue<int>("App:Auth:JwtLifetime")!;
         _cookieKeyPostfix = configuration.GetValue<string>("App:Auth:CookieKeyPostfix") ?? string.Empty;
         _accessTokenLifeTime = configuration.GetValue<int>("App:Auth:AccessTokenLifetime")!;
     }
@@ -31,13 +29,12 @@ public class HttpCookiesService: IHttpCookiesService
         bool isJwtOnly = false
     )
     {
-        var jwtTimeSpan = DateTimeOffset.UtcNow.AddMinutes(_jwtTokenLifeTime);
-        Append(HttpCookieKeyEnum.JwtToken, jwtToken, jwtTimeSpan);
+        var cookieExpiration = DateTimeOffset.UtcNow.AddDays(_accessTokenLifeTime);
+        Append(HttpCookieKeyEnum.JwtToken, jwtToken, cookieExpiration);
 
         if (!isJwtOnly)
         {
-            var accessTokenTimeSpan = DateTimeOffset.UtcNow.AddDays(_accessTokenLifeTime);
-            Append(HttpCookieKeyEnum.AccessToken, accessToken, accessTokenTimeSpan);
+            Append(HttpCookieKeyEnum.AccessToken, accessToken, cookieExpiration);
         }
     }
     
