@@ -12,6 +12,8 @@ public record struct SetListItemsAction(GetListResponse Response);
 
 public record struct SetListItemAction(TaskDto Task);
 
+public record struct RemoveListItemAction(Guid TaskId);
+
 public record struct SetListFilterAction(GetListFilterRequest Filter);
 
 public record struct SetIsListLoading(bool IsLoading);

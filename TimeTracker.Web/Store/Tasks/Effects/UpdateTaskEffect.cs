@@ -36,10 +36,25 @@ public class UpdateTaskEffect: Effect<UpdateTaskAction>
             dispatcher.Dispatch(new SetIsTaskSavingAction(true));
 
             var response = await _apiService.TasksUpdateAsync(action.UpdateRequest);
+            if (response == null)
+            {
+                return;
+            }
+
             if (action.IsUpdateState)
             {
                 dispatcher.Dispatch(new SetOverdueTasksListItemAction(response));
-                dispatcher.Dispatch(new SetListItemAction(response));
+                var selectedTaskListId = _tasksListState.Value.SelectedTaskListId;
+                // Keep the current task list view accurate when a task is moved to another task list.
+                if (selectedTaskListId.HasValue && response.TaskList.Id != selectedTaskListId.Value)
+                {
+                    dispatcher.Dispatch(new RemoveListItemAction(response.Id));
+                }
+                else
+                {
+                    dispatcher.Dispatch(new SetListItemAction(response));
+                }
+
                 if (action.IsShowToast)
                 {
                     _toastService.ShowInfo($"Task {response.FormattedId} updated.");

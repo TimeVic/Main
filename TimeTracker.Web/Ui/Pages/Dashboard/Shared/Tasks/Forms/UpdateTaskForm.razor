@@ -116,10 +116,15 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                         </div>
                     </div>
                     <div class="min-w-0">
-                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["TaskList"]</label>
-                        <div class="flex min-h-[42px] min-w-0 items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm leading-5 text-slate-700">
-                            <span class="break-words">@_task.TaskList.Name</span>
-                        </div>
+                        <TaskListDropDown
+                            Label="@DashboardLocalizer["TaskList"]"
+                            Variant="InputVariant.Outlined"
+                            LabelPlacement="LabelPlacement.Outside"
+                            ProjectId="@_task.TaskList.Project.Id"
+                            Value="@_model.TaskListId"
+                            Disabled="@_tasksState.Value.IsTaskSaving"
+                            FullWidth="true"
+                            SelectedItemChanged="@OnTaskListChanged" />
                     </div>
                     @if (!string.IsNullOrWhiteSpace(_task?.FormattedId))
                     {

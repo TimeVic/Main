@@ -40,6 +40,17 @@ public class TasksReducers
             List = list
         };
     }
+
+    [ReducerMethod]
+    public static TasksState RemoveListItemActionReducer(TasksState state, RemoveListItemAction action)
+    {
+        return state with
+        {
+            List = state.List
+                .Where(item => item.Id != action.TaskId)
+                .ToList()
+        };
+    }
     
     [ReducerMethod]
     public static TasksState UpdateListItemsActionReducer(TasksState state, UpdateListItemsAction action)
