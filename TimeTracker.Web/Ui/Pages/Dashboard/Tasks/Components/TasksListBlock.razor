@@ -1,5 +1,8 @@
+@using LumexUI
 @using LumexUI.Common
+@using TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 @using TimeTracker.Web.Ui.Pages.Dashboard.Tasks.Parts.TasksList
+@using TimeTracker.Web.Ui.Shared.Components.Dialogs
 @inherits BaseReactiveComponent
 
 <aside>
@@ -7,6 +10,22 @@
         Project="_selectedProject"
         OnAdded="@OnTasksListAdded"
         @bind-IsOpened="_isAddTaskListModalOpened"/>
+
+    @if (_selectedTaskList != null)
+    {
+        <UpdateTaskListModal
+            @bind-IsOpened="_isShowUpdateTaskListModal"
+            TaskList="@_selectedTaskList"/>
+    }
+
+    @if (_isShowDeleteTaskListConfirmation)
+    {
+        <ConfirmationModal
+            Title="@DashboardLocalizer["TasksBlock_DeleteTaskListTitle"].Value"
+            Subtitle="@DashboardLocalizer["TasksBlock_DeleteTaskListSubtitle"].Value"
+            OnClose="@(() => _isShowDeleteTaskListConfirmation = false)"
+            OnConfirm="@OnDeleteTaskList"/>
+    }
     
     <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
         <div class="flex items-center justify-between gap-3">
@@ -14,19 +33,38 @@
                 <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksListBlock_Title"]</p>
                 <p class="text-xs text-slate-500">@DashboardLocalizer["TasksListBlock_Description"]</p>
             </div>
-            <CustomButton
-                IconOnly="true"
-                Color="ThemeColor.Info"
-                Variant="Variant.Outlined"
-                Disabled="@(_selectedProject == null)"
-                OnClick="@(() => _isAddTaskListModalOpened = true)">
-                <StartContent>
-                    <i class="fa-solid fa-plus"></i>
-                </StartContent>
-            </CustomButton>
-            @* <button type="button" @onclick="AddTaskList" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition hover:border-blue-500 hover:text-blue-600"> *@
-            @*     <i class="fa-solid fa-plus"></i> *@
-            @* </button> *@
+            <LumexDropdown>
+                <LumexDropdownTrigger>
+                    <LumexButton
+                        IconOnly="true"
+                        Size="Size.Small"
+                        Variant="@Variant.Outlined">
+                        <i class="fa-solid fa-ellipsis-h"></i>
+                    </LumexButton>
+                </LumexDropdownTrigger>
+                <LumexDropdownMenu>
+                    <LumexDropdownItem
+                        Disabled="@(_selectedProject == null)"
+                        OnClick="@(() => _isAddTaskListModalOpened = true)">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-plus w-4 text-xs"></i>
+                            @DashboardLocalizer["AddTasksListModalForm_Title"]
+                        </span>
+                    </LumexDropdownItem>
+                    <LumexDropdownItem
+                        Disabled="@(_selectedTaskList == null)"
+                        OnClick="@OnEditTaskList">
+                        @DashboardLocalizer["TasksBlock_EditTaskList"]
+                    </LumexDropdownItem>
+                    <LumexDropdownItem
+                        OnClick="@(() => _isShowDeleteTaskListConfirmation = true)"
+                        Disabled="@(_selectedTaskList == null)"
+                        Color="@ThemeColor.Danger"
+                        Class="text-danger">
+                        @DashboardLocalizer["TasksBlock_DeleteTaskListTitle"]
+                    </LumexDropdownItem>
+                </LumexDropdownMenu>
+            </LumexDropdown>
         </div>
 
         <div class="mt-4 space-y-3">
@@ -56,7 +94,7 @@
                 </InputTextField>
             </div>
 
-            <div class="max-h-[60vh] space-y-2 overflow-auto pr-1">
+            <div class="space-y-2">
                 @foreach (var taskList in _filteredTaskLists)
                 {
                     <button type="button" @onclick="@(() => OnTasksListSelected(taskList.Id))" class="@GetTaskListClass(taskList)">
@@ -83,7 +121,21 @@
                         }
                         else
                         {
-                            <text>@DashboardLocalizer["TasksListBlock_ListIsEmpty"]</text>
+                            <div class="space-y-3">
+                                <p>@DashboardLocalizer["TasksListBlock_ListIsEmpty"]</p>
+                                <CustomButton
+                                    FullWidth="true"
+                                    Color="ThemeColor.Info"
+                                    Variant="Variant.Outlined"
+                                    OnClick="@(() => _isAddTaskListModalOpened = true)">
+                                    <StartContent>
+                                        <i class="fa-solid fa-plus"></i>
+                                    </StartContent>
+                                    <ChildContent>
+                                        @DashboardLocalizer["AddTasksListModalForm_Title"]
+                                    </ChildContent>
+                                </CustomButton>
+                            </div>
                         }
                     </div>
                 }

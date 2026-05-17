@@ -3,4 +3,45 @@
     .w-time-inputs {
         width: 130px;
     }
+
+    // Stack timer controls on narrow mobile screens to avoid mixed-row wrapping.
+    @media (max-width: 480px) {
+        .w-time-form__content,
+        .w-time-form__controls,
+        .w-time-form__project-control {
+            align-items: stretch;
+        }
+
+        .w-time-form__controls,
+        .w-time-form__project-control {
+            flex-direction: column;
+            flex-wrap: nowrap;
+            width: 100%;
+        }
+
+        .w-time-form__description,
+        .w-time-form__project-select,
+        .w-time-form__control,
+        .w-time-form__task-chip {
+            min-width: 0;
+            width: 100%;
+        }
+
+        .w-time-form__project-select ::deep button,
+        .w-time-form__control ::deep button,
+        .w-time-form__control ::deep .w-time-form__wide-button,
+        .w-time-form__task-chip {
+            width: 100%;
+        }
+
+        .w-time-form__counter ::deep .w-time-counter,
+        .w-time-form__counter ::deep .w-time-counter > div {
+            width: 100%;
+        }
+
+        .w-time-form__control ::deep .w-time-form__responsive-label,
+        .w-time-form__project-control ::deep .w-time-form__responsive-label {
+            display: inline !important;
+        }
+    }
 }

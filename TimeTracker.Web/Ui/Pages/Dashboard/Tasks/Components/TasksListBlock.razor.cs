@@ -35,9 +35,9 @@ public partial class TasksListBlock: IDisposable
     
     private Guid? _taskListId = null;
     private string? _taskListSearch = null;
-    private bool _isTaskListsMenuOpened = false;
-    private bool _isTaskListMenuOpened = false;
     private bool _isAddTaskListModalOpened = false;
+    private bool _isShowUpdateTaskListModal = false;
+    private bool _isShowDeleteTaskListConfirmation = false;
     private ProjectDto? _selectedProject => _projectState.Value.Selected;
 
     public TaskListDto? _selectedTaskList
@@ -176,6 +176,29 @@ public partial class TasksListBlock: IDisposable
     private Task OnTasksListAdded(TaskListDto arg)
     {
         OnTasksListSelected(arg.Id);
+        return Task.CompletedTask;
+    }
+
+    private Task OnEditTaskList()
+    {
+        if (_selectedTaskList == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        _isShowUpdateTaskListModal = true;
+        return Task.CompletedTask;
+    }
+
+    private Task OnDeleteTaskList()
+    {
+        if (_selectedTaskList == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        Dispatcher.Dispatch(new ArchiveTaskListAction(_selectedTaskList));
+        _isShowDeleteTaskListConfirmation = false;
         return Task.CompletedTask;
     }
 
