@@ -131,6 +131,8 @@
   <data name="DeleteTask" xml:space="preserve"><value>Видалити задачу</value></data>
   <data name="TaskName" xml:space="preserve"><value>Назва задачі</value></data>
   <data name="TaskDescription" xml:space="preserve"><value>Опис задачі</value></data>
+  <data name="MarkdownEdit_Supports" xml:space="preserve"><value>Підтримує</value></data>
+  <data name="MarkdownEdit_Markdown" xml:space="preserve"><value>Markdown</value></data>
   <data name="ExternalTaskId" xml:space="preserve"><value>Зовнішній ID задачі</value></data>
   <data name="JiraIssue" xml:space="preserve"><value>Jira issue</value></data>
   <data name="OriginalEstimate" xml:space="preserve"><value>Початкова оцінка</value></data>

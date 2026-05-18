@@ -1,18 +1,104 @@
 ﻿.w-markdown-editor {
+    width: 100%;
+
+    ::deep .w-markdown-editor-input {
+        display: block;
+        max-width: none;
+        min-height: 180px;
+        width: 100%;
+    }
 
     ::deep .w-view {
         cursor: pointer;
-        min-height: 30px;
-        padding: 1px;
+        min-height: 48px;
+        max-width: none;
         overflow-y: auto;
+        width: 100%;
+        line-height: 1.6;
 
         &:hover {
-            background-color: var(--rz-base-100);
-            border-radius: 3px;
+            background-color: rgb(248 250 252);
         }
     }
-    
-    
+
+    ::deep .w-view p,
+    ::deep .w-view ul,
+    ::deep .w-view ol,
+    ::deep .w-view blockquote,
+    ::deep .w-view pre {
+        margin-bottom: 0.75rem;
+    }
+
+    ::deep .w-view > *:last-child {
+        margin-bottom: 0;
+    }
+
+    ::deep .w-view h1,
+    ::deep .w-view h2,
+    ::deep .w-view h3 {
+        margin: 0.9rem 0 0.45rem;
+        font-weight: 700;
+        color: rgb(15 23 42);
+    }
+
+    ::deep .w-view h1 {
+        font-size: 1.25rem;
+    }
+
+    ::deep .w-view h2 {
+        font-size: 1.1rem;
+    }
+
+    ::deep .w-view h3 {
+        font-size: 1rem;
+    }
+
+    ::deep .w-view ul,
+    ::deep .w-view ol {
+        padding-left: 1.25rem;
+    }
+
+    ::deep .w-view ul {
+        list-style: disc;
+    }
+
+    ::deep .w-view ol {
+        list-style: decimal;
+    }
+
+    ::deep .w-view a {
+        color: rgb(37 99 235);
+        text-decoration: underline;
+    }
+
+    ::deep .w-view blockquote {
+        border-left: 3px solid rgb(203 213 225);
+        color: rgb(71 85 105);
+        padding-left: 0.75rem;
+    }
+
+    ::deep .w-view code {
+        background-color: rgb(241 245 249);
+        border-radius: 0.35rem;
+        color: rgb(15 23 42);
+        font-size: 0.9em;
+        padding: 0.1rem 0.3rem;
+    }
+
+    ::deep .w-view pre {
+        background-color: rgb(15 23 42);
+        border-radius: 0.75rem;
+        color: rgb(248 250 252);
+        overflow-x: auto;
+        padding: 0.75rem;
+    }
+
+    ::deep .w-view pre code {
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+
     .w-support {
         font-size: 12px;
     }

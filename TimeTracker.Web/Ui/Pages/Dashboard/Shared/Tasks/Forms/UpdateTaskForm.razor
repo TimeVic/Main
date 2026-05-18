@@ -87,17 +87,26 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
             
             <div class="rounded-2xl border border-slate-200 p-4 mt-3">
                 <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Description"]</label>
-                <InputTextArea @bind-Value="_model.Description" class="min-h-[180px] w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" />
-                <p class="mt-2 text-sm text-slate-500">@DashboardLocalizer["UpdateTaskForm_AttachmentsHint"]</p>
-                <AttachmentsBlock
-                    Class="mt-4"
-                    ListClass="flex flex-wrap gap-3"
-                    PreviewItemClass="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition"
-                    EntityId="@TaskId"
-                    EntityType="@StorageEntityType.Task"
-                    Files="@TaskAttachments"
-                    UploadingFiles="@_uploadingAttachments"
-                    FilesChanged="@OnAttachmentsChanged" />
+                <MarkdownEdit
+                    Value="@_model.Description"
+                    ValueChanged="@OnDescriptionChanged"
+                    Placeholder="@DashboardLocalizer["TaskDescription"].Value"
+                    RowsMin="8" />
+                <div class="mt-5 border-t border-slate-200 pt-4">
+                    <p class="flex items-center gap-2 text-sm text-slate-500">
+                        <i class="fa-solid fa-paperclip text-xs text-slate-400"></i>
+                        <span>@DashboardLocalizer["UpdateTaskForm_AttachmentsHint"]</span>
+                    </p>
+                    <AttachmentsBlock
+                        Class="mt-4"
+                        ListClass="flex flex-wrap gap-3"
+                        PreviewItemClass="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition"
+                        EntityId="@TaskId"
+                        EntityType="@StorageEntityType.Task"
+                        Files="@TaskAttachments"
+                        UploadingFiles="@_uploadingAttachments"
+                        FilesChanged="@OnAttachmentsChanged" />
+                </div>
             </div>
             
             <div class="rounded-2xl border border-slate-200 p-4 mt-3">

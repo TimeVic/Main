@@ -160,6 +160,13 @@ public partial class UpdateTaskForm: IDisposable
         _task.TaskList = taskList;
         SubmitForm();
     }
+
+    private Task OnDescriptionChanged(string description)
+    {
+        _model.Description = description;
+        SubmitForm();
+        return Task.CompletedTask;
+    }
     
     private Task OnTagsChanged(IEnumerable<Guid> tagIds)
     {

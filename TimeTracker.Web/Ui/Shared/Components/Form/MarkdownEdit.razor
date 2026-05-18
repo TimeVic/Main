@@ -1,93 +1,84 @@
 ﻿@using TimeTracker.Web.Services.UI
 @using TimeTracker.Web.Core.Helpers
+@using LumexUI.Common
 
-<div class="@($"{Class} w-markdown-editor w-100")">
+<div class="@($"{Class} w-markdown-editor w-full")">
 
-    @* @if (string.IsNullOrEmpty(Label)) *@
-    @* { *@
-    @*     <FluentLabel>@Label</FluentLabel> *@
-    @* } *@
-    @* @if (_isShowEditBox) *@
-    @* { *@
-    @*     <div @onclick="OnEditTextClicked" class="w-100"> *@
-    @*         <FluentTextArea *@
-    @*             T="string" *@
-    @*             Placeholder="@Placeholder" *@
-    @*             Value="@_editValue" *@
-    @*             Immediate="true"  *@
-    @*             ImmediateDelay="0"  *@
-    @*             ValueChanged="@OnChangeValue" *@
-    @*             Class="w-100" *@
-    @*             Rows="@_textAreaRows"/> *@
-    @*         <p class="w-support mt-2"> *@
-    @*             Supports <a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown</a> *@
-    @*         </p> *@
-    @* *@
-    @*     </div> *@
-    @*     if (_isActionButtonsEnabled) *@
-    @*     { *@
-    @*         <FluentStack *@
-    @*             Class="mt-2 w-100" *@
-    @*             Orientation="Orientation.Horizontal"> *@
-    @* *@
-    @*             <FluentButton *@
-    @*                 Class="mr-3" *@
-    @*                 OnClick="@OnClickCancel"> *@
-    @*                 Cancel *@
-    @*             </FluentButton> *@
-    @*              *@
-    @*             <FluentButton *@
-    @*                 IconEnd="@(new Icons.Regular.Size24.Save())" *@
-    @*                 Class="mr-3" *@
-    @*                 Appearance="Appearance.Accent" *@
-    @*                 OnClick="@OnClickSave"> *@
-    @*                 Save *@
-    @*             </FluentButton> *@
-    @*         </FluentStack> *@
-    @*     } *@
-    @* } *@
-    @* else *@
-    @* { *@
-    @*     <FluentCard *@
-    @*         Class="w-view p-2" *@
-    @*         Style="width: calc(100% - 2px)" *@
-    @*         MinimalStyle="true" *@
-    @*         @onclick="@OnClickView"> *@
-    @*         @MarkdownHtml *@
-    @*     </FluentCard> *@
-    @* } *@
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@Label</label>
+    }
+    @if (_isShowEditBox)
+    {
+        <div class="w-full">
+            <textarea
+                name="@TextAreaName"
+                placeholder="@Placeholder"
+                value="@_editValue"
+                maxlength="@MaxLength"
+                rows="@_textAreaRows"
+                @oninput="@OnChangeValue"
+                class="w-markdown-editor-input w-full resize-y rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"></textarea>
+            <p class="w-support mt-2 text-slate-500">
+                @DashboardLocalizer["MarkdownEdit_Supports"]
+                <a class="text-blue-600 hover:text-blue-700" href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer">
+                    @DashboardLocalizer["MarkdownEdit_Markdown"]
+                </a>
+            </p>
+
+        </div>
+        if (_isActionButtonsEnabled)
+        {
+            <div class="mt-3 flex items-center gap-2">
+                <CustomButton
+                    Size="Size.Small"
+                    Variant="Variant.Outlined"
+                    Color="ThemeColor.Default"
+                    OnClick="@OnClickCancel">
+                    @DashboardLocalizer["Cancel"]
+                </CustomButton>
+                
+                <CustomButton
+                    Size="Size.Small"
+                    Color="ThemeColor.Primary"
+                    OnClick="@OnClickSave">
+                    <StartContent>
+                        <i class="fa-regular fa-floppy-disk text-xs"></i>
+                    </StartContent>
+                    <ChildContent>@DashboardLocalizer["Save"]</ChildContent>
+                </CustomButton>
+            </div>
+        }
+    }
+    else
+    {
+        <div
+            class="w-view w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700"
+            @onclick="@OnClickView">
+            @MarkdownHtml
+        </div>
+    }
 </div>
 
 @code
 {
     [Parameter]
-    public string Class { get; set; }
+    public string Class { get; set; } = string.Empty;
 
     [Parameter]
-    public string Label { get; set; }
+    public string Label { get; set; } = string.Empty;
 
     [Parameter]
-    public string Placeholder { get; set; }
+    public string Placeholder { get; set; } = string.Empty;
 
     [Parameter]
-    public string TextAreaName { get; set; }
+    public string TextAreaName { get; set; } = string.Empty;
 
     [Parameter]
     public int MaxLength { get; set; } = 10000;
 
     [Parameter]
-    public string Value
-    {
-        set
-        {
-            _value = value;
-            if (!_isInitialized && !string.IsNullOrWhiteSpace(_value))
-            {
-                _editValue = value;
-                _isInitialized = true;
-            }
-        }
-    }
+    public string? Value { get; set; }
 
     [Parameter]
     public int RowsMin { get; set; } = 6;
@@ -114,20 +105,23 @@
     private int _textAreaRows = 3;
     private string _value = string.Empty;
     private string _editValue = string.Empty;
-    private bool _isActionButtonsEnabled = false;
-    private bool _isInitialized = false;
+    private bool _isActionButtonsEnabled;
+    private bool _isInitialized;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
-        _isShowEditBox = string.IsNullOrWhiteSpace(_editValue);
+        var value = Value ?? string.Empty;
+        if (_isInitialized && (_isActionButtonsEnabled || _value == value))
+        {
+            return;
+        }
+
+        _value = value;
+        _editValue = value;
+        _isShowEditBox = string.IsNullOrWhiteSpace(_value);
         _isActionButtonsEnabled = false;
+        _isInitialized = true;
         ResizeEditBox(_editValue);
-    }
-
-    private void ResizeEditBox(ChangeEventArgs elementEvent)
-    {
-        var description = (string) (elementEvent.Value ?? string.Empty);
-        ResizeEditBox(description);
     }
 
     private void ResizeEditBox(string? description)
@@ -138,10 +132,11 @@
         _textAreaRows = Math.Min(_textAreaRows, _textAreaRowsMax);
     }
 
-    private void OnChangeValue(string value)
+    private void OnChangeValue(ChangeEventArgs elementEvent)
     {
-        _editValue = value;
-        ResizeEditBox(value);
+        _editValue = elementEvent.Value?.ToString() ?? string.Empty;
+        _isActionButtonsEnabled = _isActionButtonsEnabled || _editValue != _value;
+        ResizeEditBox(_editValue);
     }
 
     private async Task OnClickView()
@@ -156,12 +151,17 @@
         StateHasChanged();
     }
 
-    private void OnClickSave()
+    private async Task OnClickSave()
     {
-        _isShowEditBox = string.IsNullOrWhiteSpace(_editValue);
+        var isChanged = _value != _editValue;
+        _value = _editValue;
+        _isShowEditBox = string.IsNullOrWhiteSpace(_value);
         _isActionButtonsEnabled = false;
-        ValueChanged.InvokeAsync(_editValue);
-        Changed.InvokeAsync(_editValue);
+        if (isChanged)
+        {
+            await ValueChanged.InvokeAsync(_value);
+            await Changed.InvokeAsync(_value);
+        }
     }
 
     private void OnClickCancel()
@@ -169,14 +169,6 @@
         _isShowEditBox = string.IsNullOrWhiteSpace(_value);
         _editValue = _value;
         _isActionButtonsEnabled = false;
-        _isInitialized = false;
-    }
-
-    private void OnEditTextClicked()
-    {
-        if (!_isActionButtonsEnabled && _isShowEditBox)
-        {
-            _isActionButtonsEnabled = true;    
-        }
+        ResizeEditBox(_editValue);
     }
 }
