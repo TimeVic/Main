@@ -131,6 +131,8 @@
   <data name="DeleteTask" xml:space="preserve"><value>Delete task</value></data>
   <data name="TaskName" xml:space="preserve"><value>Task name</value></data>
   <data name="TaskDescription" xml:space="preserve"><value>Task description</value></data>
+  <data name="MarkdownEdit_Supports" xml:space="preserve"><value>Supports</value></data>
+  <data name="MarkdownEdit_Markdown" xml:space="preserve"><value>Markdown</value></data>
   <data name="ExternalTaskId" xml:space="preserve"><value>External task ID</value></data>
   <data name="JiraIssue" xml:space="preserve"><value>Jira issue</value></data>
   <data name="OriginalEstimate" xml:space="preserve"><value>Original estimate</value></data>
