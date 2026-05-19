@@ -23,7 +23,7 @@
         TaskId="@Task.Id"
         Project="@Task.TaskList.Project" />
 
-    <div class="mt-5">
+    <div class="mt-5 border-t border-slate-200 pt-5">
         @if (_isLoading && !_comments.Any())
         {
             <div class="flex justify-center py-6">

@@ -54,7 +54,7 @@ public partial class EditCommentForm: IDisposable
         ? DashboardLocalizer["TaskComment_AddComment"].Value
         : DashboardLocalizer["Save"].Value;
     private string ContainerClass => _isNewComment
-        ? "rounded-2xl border border-slate-200 bg-slate-50 p-4"
+        ? "pb-1"
         : "border-t border-slate-200 py-4 first:border-t-0 first:pt-0 last:pb-0";
     private bool _isSubscribersSelectAvailable =>
         Project != null &&
