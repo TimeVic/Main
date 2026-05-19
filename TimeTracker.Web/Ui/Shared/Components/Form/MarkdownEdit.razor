@@ -27,7 +27,7 @@
             </p>
 
         </div>
-        if (_isActionButtonsEnabled)
+        if (IsInlineActionsEnabled && _isActionButtonsEnabled)
         {
             <div class="mt-3 flex items-center gap-2">
                 <CustomButton
@@ -91,6 +91,12 @@
 
     [Parameter]
     public EventCallback OnClickedToView { get; set; }
+    
+    [Parameter]
+    public bool IsEditMode { get; set; }
+    
+    [Parameter]
+    public bool IsInlineActionsEnabled { get; set; } = true;
 
     [Inject]
     public MarkdownService MarkdownService { get; set; }
@@ -111,14 +117,15 @@
     protected override void OnParametersSet()
     {
         var value = Value ?? string.Empty;
-        if (_isInitialized && (_isActionButtonsEnabled || _value == value))
+        var isDesiredEditBox = IsEditMode || string.IsNullOrWhiteSpace(value);
+        if (_isInitialized && (IsInlineActionsEnabled && _isActionButtonsEnabled || _value == value && _isShowEditBox == isDesiredEditBox))
         {
             return;
         }
 
         _value = value;
         _editValue = value;
-        _isShowEditBox = string.IsNullOrWhiteSpace(_value);
+        _isShowEditBox = isDesiredEditBox;
         _isActionButtonsEnabled = false;
         _isInitialized = true;
         ResizeEditBox(_editValue);
@@ -132,11 +139,20 @@
         _textAreaRows = Math.Min(_textAreaRows, _textAreaRowsMax);
     }
 
-    private void OnChangeValue(ChangeEventArgs elementEvent)
+    private async Task OnChangeValue(ChangeEventArgs elementEvent)
     {
         _editValue = elementEvent.Value?.ToString() ?? string.Empty;
-        _isActionButtonsEnabled = _isActionButtonsEnabled || _editValue != _value;
         ResizeEditBox(_editValue);
+
+        if (!IsInlineActionsEnabled)
+        {
+            _value = _editValue;
+            await ValueChanged.InvokeAsync(_value);
+            await Changed.InvokeAsync(_value);
+            return;
+        }
+
+        _isActionButtonsEnabled = _isActionButtonsEnabled || _editValue != _value;
     }
 
     private async Task OnClickView()
@@ -147,7 +163,7 @@
         }
 
         _isShowEditBox = true;
-        _isActionButtonsEnabled = true;
+        _isActionButtonsEnabled = IsInlineActionsEnabled;
         StateHasChanged();
     }
 

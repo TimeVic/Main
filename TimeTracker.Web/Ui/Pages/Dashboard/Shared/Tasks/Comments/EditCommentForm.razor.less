@@ -1,15 +1,48 @@
-﻿.w-comment-edit-form {
-    border-bottom: 1px lightgray solid;
-    
-    .w-circle {
-        font-size: 6px; 
-        color: var(--rz-base-400);
-        margin: 0 4px;
+﻿.task-comment-markdown {
+    ::deep p {
+        margin: 0 0 0.75rem;
     }
 
-    ::deep .w-view {
+    ::deep p:last-child {
+        margin-bottom: 0;
+    }
+
+    ::deep ul,
+    ::deep ol {
+        margin: 0.5rem 0 0.75rem 1.25rem;
+    }
+
+    ::deep ul {
+        list-style: disc;
+    }
+
+    ::deep ol {
+        list-style: decimal;
+    }
+
+    ::deep a {
+        color: rgb(37 99 235);
+        text-decoration: underline;
+    }
+
+    ::deep pre {
+        margin: 0.75rem 0;
         overflow-x: auto;
-        max-width: 574px;
+        border-radius: 0.75rem;
+        background: rgb(15 23 42);
+        padding: 0.75rem;
+        color: white;
+    }
+
+    ::deep code {
+        border-radius: 0.375rem;
+        background: rgb(241 245 249);
+        padding: 0.125rem 0.25rem;
+        font-size: 0.85em;
+    }
+
+    ::deep pre code {
+        background: transparent;
+        padding: 0;
     }
 }
-

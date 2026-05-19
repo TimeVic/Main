@@ -1,26 +1,73 @@
-﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
+﻿@using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity.Task
 
 @inherits BaseReactiveComponent
 
-<EditCommentForm 
-    OnSaved="OnCommentSaved"
-    Comment="@(new TaskCommentDto { Task = Task })"></EditCommentForm>
-@foreach (var comment in _comments)
-{
+<section class="rounded-2xl border border-slate-200 p-4">
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <h4 class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TaskComments_Title"]</h4>
+            <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["TaskComments_Subtitle"]</p>
+        </div>
+        @if (_comments.Any())
+        {
+            <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
+                @_comments.Count()
+            </span>
+        }
+    </div>
+
     <EditCommentForm
-        @key="comment"
         OnSaved="OnCommentSaved"
-        OnDeleted="OnCommentDeleted"
-        Comment="@comment"/>
-}
-@if (_isHasMore)
-{
-    <div class="d-flex justify-content-center">
-        @* <FluentButton *@
-        @*     IconStart="@(new Icons.Filled.Size24.MoreCircle())" *@
-        @*     Appearance="Appearance.Neutral" *@
-        @*     Disabled="@_isLoading" *@
-        @*     OnClick="@LoadMore"/> *@
-    </div>    
-}
+        Comment="@(new TaskCommentDto { Task = Task })"
+        TaskId="@Task.Id"
+        Project="@Task.TaskList.Project" />
+
+    <div class="mt-5">
+        @if (_isLoading && !_comments.Any())
+        {
+            <div class="flex justify-center py-6">
+                <LumexSpinner Size="@Size.Medium" />
+            </div>
+        }
+        else if (!_comments.Any())
+        {
+            <div class="rounded-2xl border border-dashed border-slate-200 px-4 py-6 text-center">
+                <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["TaskComments_EmptyTitle"]</p>
+                <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["TaskComments_EmptySubtitle"]</p>
+            </div>
+        }
+        else
+        {
+            <div class="divide-y divide-slate-200">
+                @foreach (var comment in _comments)
+                {
+                    <EditCommentForm
+                        @key="comment.Id"
+                        OnSaved="OnCommentSaved"
+                        OnDeleted="OnCommentDeleted"
+                        Comment="@comment"
+                        TaskId="@Task.Id"
+                        Project="@Task.TaskList.Project" />
+                }
+            </div>
+        }
+
+        @if (_isHasMore)
+        {
+            <div class="mt-4 flex justify-center">
+                <CustomButton
+                    Size="Size.Small"
+                    Variant="Variant.Outlined"
+                    Color="ThemeColor.Default"
+                    IsLoading="@_isLoading"
+                    OnClick="@LoadMore">
+                    <StartContent>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </StartContent>
+                    <ChildContent>@DashboardLocalizer["TaskComments_LoadMore"]</ChildContent>
+                </CustomButton>
+            </div>
+        }
+    </div>
+</section>

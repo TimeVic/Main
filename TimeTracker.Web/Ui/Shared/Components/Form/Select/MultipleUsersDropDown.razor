@@ -1,41 +1,62 @@
-﻿@using TimeTracker.Api.Shared.Dto.Entity
-@using TimeTracker.Business.Common.Constants
+﻿@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity
 
 @inherits BaseReactiveComponent
 
-@* <FluentAutocomplete *@
-@*     TOption="UserDto" *@
-@*     AutoComplete="off" *@
-@*     Multiple="true" *@
-@*     Label="@Label" *@
-@*     Class="@Class" *@
-@*     Disabled="@Disabled" *@
-@*     Placeholder="@Placeholder" *@
-@*     MaxAutoHeight="200px" *@
-@*     Items="@_list.ToArray()" *@
-@*     OptionValue="@(dto => dto?.Id.ToString())" *@
-@*     OptionText="@(item => item.Name)" *@
-@*     OptionSelected="@(dto => _selectedIds.Contains(dto.Id))" *@
-@*     SelectedOptions="@_selectedItems" *@
-@*     SelectedOptionsChanged="@(OnValueChanged)"/> *@
-@* *@
-@* <MudSelect *@
-@*     T="long" *@
-@*     Class="@Class" *@
-@*     Disabled="@Disabled" *@
-@*     Dense="true" *@
-@*     MultiSelection="true" *@
-@*     Placeholder="@Placeholder" *@
-@*     SelectedValues="@Value" *@
-@*     SelectedValuesChanged="OnValueChanged" *@
-@*     Variant="MudBlazor.Variant.Text" *@
-@*     ToStringFunc="ToStringFunc" *@
-@*     SelectAll="true" *@
-@*     AnchorOrigin="Origin.BottomCenter"> *@
-@*     @foreach (var user in _list) *@
-@*     { *@
-@*         <MudSelectItem Value="@user.Id"> *@
-@*             @user.Name *@
-@*         </MudSelectItem> *@
-@*     } *@
-@* </MudSelect> *@
+<div class="@($"{Class} w-full")">
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@Label</label>
+    }
+    <LumexDropdown
+        Open="@_isOpen"
+        OpenChanged="@OnOpenChanged">
+        <LumexDropdownTrigger>
+            <LumexButton
+                FullWidth="true"
+                Color="ThemeColor.Default"
+                Variant="Variant.Outlined"
+                Disabled="@(Disabled || !_list.Any())">
+                <span class="flex min-w-0 flex-1 items-center justify-between gap-2">
+                    <span class="truncate text-left">@SelectedText</span>
+                    <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+                </span>
+            </LumexButton>
+        </LumexDropdownTrigger>
+        <LumexDropdownMenu
+            Color="ThemeColor.Default"
+            Variant="MenuVariant.Outlined"
+            Class="min-w-72">
+            @if (Clearable && _selectedIds.Any())
+            {
+                <LumexDropdownItem OnClick="@ClearSelection" Class="text-slate-400">
+                    <ChildContent>
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                            @DashboardLocalizer["Clear"]
+                        </span>
+                    </ChildContent>
+                </LumexDropdownItem>
+            }
+            @foreach (var user in _list)
+            {
+                var isSelected = _selectedIds.Contains(user.Id);
+                <LumexDropdownItem @key="user.Id" OnClick="@(() => ToggleUser(user))">
+                    <ChildContent>
+                        <span class="flex min-w-0 items-center gap-2">
+                            <span class="@GetCheckboxClass(isSelected)">
+                                @if (isSelected)
+                                {
+                                    <i class="fa-solid fa-check text-[10px]"></i>
+                                }
+                            </span>
+                            <UserAvatarBlock User="@user" SizeClass="h-6 w-6" Class="text-[10px]" />
+                            <span class="min-w-0 truncate">@user.Name</span>
+                        </span>
+                    </ChildContent>
+                </LumexDropdownItem>
+            }
+        </LumexDropdownMenu>
+    </LumexDropdown>
+</div>

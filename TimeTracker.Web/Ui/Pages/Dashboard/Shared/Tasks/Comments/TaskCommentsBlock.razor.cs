@@ -1,19 +1,15 @@
-﻿using Fluxor;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Comments;
 
 public partial class TaskCommentsBlock
 {
     [Parameter]
-    public TaskDto Task { get; set; }
+    public TaskDto Task { get; set; } = null!;
 
-    [Inject]
-    public IState<AuthState> AuthState { get; set; }
-    
-    private IEnumerable<TaskCommentDto> _comments { get; set; } = new List<TaskCommentDto>();
+    private ICollection<TaskCommentDto> _comments { get; set; } = new List<TaskCommentDto>();
     private bool _isLoading { get; set; } = false;
     private int _page { get; set; } = 1;
     private bool _isHasMore { get; set; } = false;
@@ -21,6 +17,7 @@ public partial class TaskCommentsBlock
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        Dispatcher.Dispatch(new LoadListAction());
         await LoadItems(true);
     }
 
@@ -39,7 +36,7 @@ public partial class TaskCommentsBlock
         var response = await ApiService.TaskCommentsGetListAsync(Task.Id, _page);
         if (response != null)
         {
-            _comments = _comments.Concat(response.Items);
+            _comments = _comments.Concat(response.Items).ToList();
             _isHasMore = response.IsHasMore;
         }
         _isLoading = false;
@@ -59,11 +56,11 @@ public partial class TaskCommentsBlock
                     }
 
                     return item;
-                });
+                }).ToList();
             }
             else
             {
-                _comments = _comments.Prepend(comment);
+                _comments = _comments.Prepend(comment).ToList();
             }
             StateHasChanged();
         });
