@@ -1,104 +1,137 @@
-﻿@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
+﻿@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments
 @using TimeTracker.Business.Extensions
-@using TimeTracker.Web.Core.Helpers
+@using TimeTracker.Web.Ui.Shared.Components.Dialogs
 
 @inherits BaseReactiveComponent
 
-@* <FluentCard *@
-@*     Class="w-comment-edit-form pb-2 mb-2" *@
-@*     MinimalStyle="true"> *@
-@*      *@
-@*     <EditForm *@
-@*         @ref="_form" *@
-@*         Model="model"> *@
-@* *@
-@*         <FluentStack Orientation="Orientation.Vertical"> *@
-@* *@
-@*             @if (!_isNewComment) *@
-@*             { *@
-@*                 <FluentStack Orientation="Orientation.Horizontal"> *@
-@*                     <FluentPersona *@
-@*                         Initials="@_userName.FirstChar().ToUpper()" *@
-@*                         StatusSize="PresenceBadgeSize.Small" *@
-@*                         StatusTitle="@_userName" *@
-@*                         Image="@(new Icons.Regular.Size48.Person().ToDataUri(size: "25px", color: "white"))" *@
-@*                         ImageSize="50px"> *@
-@*                     </FluentPersona> *@
-@* *@
-@*                     @if (!_isNewComment && Comment.UpdatedAt != null) *@
-@*                     { *@
-@*                         <div class="pt-3"> *@
-@*                             <b>@_userName</b> *@
-@*                             @Comment.UpdatedAt?.TimeAgo(DateTimeKind.Local) *@
-@*                         </div> *@
-@*                     } *@
-@*                 </FluentStack> *@
-@*             } *@
-@* *@
-@*             @if (_isEditMode || _isNewComment) *@
-@*             { *@
-@*                 <div class="w-100" @onclick="OnFocusOnEditField"> *@
-@*                     <FluentTextArea *@
-@*                         @ref="_commentField" *@
-@*                         @bind-Value="@model.Comment" *@
-@*                         Class="w-100" *@
-@*                         Resize="TextAreaResize.Vertical" *@
-@*                         Rows="@(_commentLinesCount)" *@
-@*                         Placeholder="Your comment..."/> *@
-@*                 </div> *@
-@*             } *@
-@*             else *@
-@*             { *@
-@*                 <div class="w-view w-100"> *@
-@*                     @CommentHtml *@
-@*                 </div> *@
-@*             } *@
-@* *@
-@*             @if (_isEditMode) *@
-@*             { *@
-@*                 <MultipleUsersDropDown *@
-@*                     Class="w-100" *@
-@*                     Project="@Comment.Task.TaskList.Project" *@
-@*                     Placeholder="Select watchers" *@
-@*                     @bind-Value="@model.WatcherIds"/> *@
-@*             } *@
-@* *@
-@*             <FluentStack *@
-@*                 Orientation="Orientation.Horizontal"> *@
-@*                 @if (_isEditMode) *@
-@*                 { *@
-@*                     <FluentButton *@
-@*                         Appearance="Appearance.Accent" *@
-@*                         Disabled="@_isLoading" *@
-@*                         OnClick="@Submit"> *@
-@*                         Save *@
-@*                     </FluentButton> *@
-@* *@
-@*                     <FluentButton *@
-@*                         Appearance="Appearance.Neutral" *@
-@*                         Disabled="@_isLoading" *@
-@*                         OnClick="@ResetForm"> *@
-@*                         Cancel *@
-@*                     </FluentButton> *@
-@*                 } *@
-@*                 else if (!_isNewComment && _canEdit) *@
-@*                 { *@
-@*                     <a *@
-@*                         href="#" *@
-@*                         @onclick:preventDefault="true" *@
-@*                         @onclick="OnClickEdit"> *@
-@*                         <b>Edit</b> *@
-@*                     </a> *@
-@*                     <div class="fw-bold ml-1 mr-1"> - </div> *@
-@*                     <a *@
-@*                         href="#" *@
-@*                         @onclick:preventDefault="true" *@
-@*                         @onclick="OnClickDelete"> *@
-@*                         <b>Delete</b> *@
-@*                     </a> *@
-@*                 } *@
-@*             </FluentStack> *@
-@*         </FluentStack> *@
-@*     </EditForm> *@
-@*      *@
-@* </FluentCard> *@
+@if (_isDeleteConfirmationOpen)
+{
+    <ConfirmationModal
+        Title="@DashboardLocalizer["TaskComment_DeleteTitle"].Value"
+        Subtitle="@DashboardLocalizer["TaskComment_DeleteSubtitle"].Value"
+        ConfirmText="@DashboardLocalizer["Delete"].Value"
+        OnClose="@CloseDeleteConfirmation"
+        OnCancel="@CloseDeleteConfirmation"
+        OnConfirm="@OnConfirmDelete" />
+}
+
+<article class="@ContainerClass">
+    @if (!_isNewComment)
+    {
+        <div class="flex gap-3">
+            <UserAvatarBlock User="@Comment.User" SizeClass="h-9 w-9" />
+            <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <p class="truncate text-sm font-semibold text-slate-900">@AuthorName</p>
+                    <span class="text-xs text-slate-400">@FormattedCreatedAt</span>
+                </div>
+
+                @if (IsEditorVisible)
+                {
+                    @EditFormContent
+                }
+                else
+                {
+                    <div class="task-comment-markdown mt-2 text-sm leading-6 text-slate-700">
+                        @CommentHtml
+                    </div>
+                    @if (Comment.Watchers.Any())
+                    {
+                        <div class="mt-3 flex flex-wrap items-center gap-1.5">
+                            <span class="text-xs text-slate-400">@DashboardLocalizer["TaskComment_Subscribers"]:</span>
+                            @foreach (var watcher in Comment.Watchers)
+                            {
+                                <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
+                                    <UserAvatarBlock User="@watcher" SizeClass="h-4 w-4" Class="text-[8px]" />
+                                    @watcher.Name
+                                </span>
+                            }
+                        </div>
+                    }
+                    @if (_canEdit)
+                    {
+                        <div class="mt-3 flex items-center gap-2">
+                            <button
+                                type="button"
+                                class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 transition hover:text-blue-700"
+                                @onclick="OnClickEdit">
+                                <i class="fa-regular fa-pen-to-square"></i>
+                                @DashboardLocalizer["Edit"]
+                            </button>
+                            <button
+                                type="button"
+                                class="inline-flex items-center gap-1.5 text-xs font-semibold text-red-600 transition hover:text-red-700"
+                                @onclick="OpenDeleteConfirmation">
+                                <i class="fa-regular fa-trash-can"></i>
+                                @DashboardLocalizer["Delete"]
+                            </button>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="flex gap-3">
+            <UserAvatarBlock User="@AuthState.Value.User" SizeClass="h-9 w-9" />
+            <div class="min-w-0 flex-1">
+                @EditFormContent
+            </div>
+        </div>
+    }
+</article>
+
+@code
+{
+    private RenderFragment EditFormContent => @<EditForm
+        @ref="_form"
+        EditContext="_editContext"
+        novalidate>
+        <DataAnnotationsValidator />
+
+        <MarkdownEdit
+            IsEditMode="true"
+            IsInlineActionsEnabled="false"
+            Value="@_model.Comment"
+            ValueChanged="@OnCommentChanged"
+            Placeholder="@DashboardLocalizer["TaskComment_Placeholder"].Value"
+            RowsMin="@(_isNewComment ? 4 : 3)" />
+        
+        @if (_isSubscribersSelectAvailable)
+        {
+            <MultipleUsersDropDown
+                Class="mt-3"
+                Label="@DashboardLocalizer["TaskComment_Subscribers"].Value"
+                Placeholder="@DashboardLocalizer["TaskComment_SelectSubscribers"].Value"
+                Project="@Project"
+                @bind-Value="@_model.WatcherIds" />
+        }
+
+        <div class="mt-3 flex flex-wrap items-center gap-2">
+            <CustomButton
+                Size="Size.Small"
+                Color="ThemeColor.Primary"
+                IsLoading="@_isLoading"
+                Disabled="@IsCommentEmpty"
+                OnClick="@Submit">
+                <StartContent>
+                    <i class="fa-regular fa-floppy-disk text-xs"></i>
+                </StartContent>
+                <ChildContent>@SubmitButtonText</ChildContent>
+            </CustomButton>
+            @if (!_isNewComment)
+            {
+                <CustomButton
+                    Size="Size.Small"
+                    Variant="Variant.Outlined"
+                    Color="ThemeColor.Default"
+                    Disabled="@_isLoading"
+                    OnClick="@ResetForm">
+                    @DashboardLocalizer["Cancel"]
+                </CustomButton>
+            }
+        </div>
+    </EditForm>;
+}

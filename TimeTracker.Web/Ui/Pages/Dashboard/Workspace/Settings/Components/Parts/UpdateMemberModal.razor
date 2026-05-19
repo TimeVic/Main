@@ -3,11 +3,13 @@
 
 @inherits BaseReactiveComponent
 
-<LumexModal
-    Open="IsOpened"
-    OnClose="@OnCloseModal"
-    Size="ModalSize.Large">
-    <LumexModalContent>
+<div class="update-member-modal">
+    <LumexModal
+        Open="IsOpened"
+        OnClose="@OnCloseModal"
+        Size="ModalSize.Large"
+        ScrollBehavior="ScrollBehavior.Inside">
+        <LumexModalContent>
         <LumexModalHeader Class="flex items-center gap-3">
             <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
@@ -91,5 +93,6 @@
                 @DashboardLocalizer["Save"]
             </CustomButton>
         </LumexModalFooter>
-    </LumexModalContent>
-</LumexModal>
+        </LumexModalContent>
+    </LumexModal>
+</div>

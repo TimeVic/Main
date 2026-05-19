@@ -1,18 +1,21 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Services.UI;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Web.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Comments;
 
-public partial class EditCommentForm
+public partial class EditCommentForm: IDisposable
 {
     [Parameter]
-    public TaskCommentDto Comment { get; set; }
+    public TaskCommentDto Comment { get; set; } = null!;
     
     [Parameter]
     public EventCallback<TaskCommentDto> OnSaved { get; set; }
@@ -20,82 +23,131 @@ public partial class EditCommentForm
     [Parameter]
     public EventCallback<TaskCommentDto> OnDeleted { get; set; }
     
-    [Inject]
-    public IState<AuthState> AuthState { get; set; }
+    [Parameter]
+    public ProjectDto? Project { get; set; }
+    
+    [Parameter]
+    public Guid TaskId { get; set; }
     
     [Inject]
-    public MarkdownService _markdownService { get; set; }
+    public MarkdownService MarkdownService { get; set; } = null!;
+
+    [Inject]
+    private IState<WorkspaceMembersState> WorkspaceMembersState { get; set; } = null!;
     
-    public IEnumerable<long> WatcherIds { get; set; } = new List<long>();
+    [Inject]
+    private ISecurityManager SecurityManager { get; set; } = null!;
     
-    private AddRequest model = new();
-    private bool _isLoading = false;
-    private bool _isEditMode = false;
+    private AddRequest _model = new();
+    private bool _isLoading;
+    private bool _isEditMode;
+    private bool _isDeleteConfirmationOpen;
     private EditForm? _form;
-    private bool _isValid = false;
+    private EditContext _editContext = null!;
+    private Guid? _loadedCommentId;
     private bool _isNewComment => Comment.Id == Guid.Empty;
+    private bool _canEdit => Comment.User?.Id == AuthState.Value.User?.Id;
+    private bool IsEditorVisible => _isNewComment || _isEditMode;
+    private bool IsCommentEmpty => string.IsNullOrWhiteSpace(_model.Comment);
+    private string AuthorName => Comment.User?.Name ?? DashboardLocalizer["User"].Value;
+    private string SubmitButtonText => _isNewComment
+        ? DashboardLocalizer["TaskComment_AddComment"].Value
+        : DashboardLocalizer["Save"].Value;
+    private string ContainerClass => _isNewComment
+        ? "pb-1"
+        : "border-t border-slate-200 py-4 first:border-t-0 first:pt-0 last:pb-0";
+    private bool _isSubscribersSelectAvailable =>
+        Project != null &&
+        SecurityManager.GetMembersWhichHaveAccessToProject(Project)
+            .Any(member => member.Access != MembershipAccessType.Owner);
+    private MarkupString CommentHtml => (MarkupString) MarkdownService.ToHtml(Comment.Comment);
+    private string FormattedCreatedAt => Comment.CreatedAt == default
+        ? string.Empty
+        : Comment.CreatedAt.ToLocalTime().TimeAgo(DateTimeKind.Local);
 
-    private string _userName => _isNewComment ? AuthState.Value.User.Name : Comment.User.Name;
-
-    private bool _canEdit => Comment.User?.Id == AuthState.Value.User.Id;
-
-    public MarkupString CommentHtml => (MarkupString) _markdownService.ToHtml(model.Comment);
-
-    private int _commentLinesCount
+    protected override void OnInitialized()
     {
-        get
-        {
-            var lines = $"{model.Comment}".CountLines();
-            return lines > 3 ? lines : 3;
-        }
+        base.OnInitialized();
+        WorkspaceMembersState.StateChanged += OnWorkspaceMembersStateChanged;
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnParametersSet()
     {
-        RunAfterRendered(() => _form?.EditContext!.NotifyValidationStateChanged());
-        
-        await base.OnInitializedAsync();
-        model.Fill(Comment);
+        if (_loadedCommentId == Comment.Id && _isEditMode)
+        {
+            return;
+        }
+
+        FillFormFromComment();
+    }
+
+    public void Dispose()
+    {
+        WorkspaceMembersState.StateChanged -= OnWorkspaceMembersStateChanged;
+    }
+
+    private void OnWorkspaceMembersStateChanged(object? sender, EventArgs args)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void FillFormFromComment()
+    {
+        _model = new AddRequest
+        {
+            TaskId = TaskId != Guid.Empty ? TaskId : Comment.Task?.Id ?? Guid.Empty,
+            Comment = Comment.Comment ?? string.Empty,
+            WatcherIds = Comment.Watchers?.Select(item => item.Id).ToList() ?? new List<Guid>()
+        };
+        _editContext = new EditContext(_model);
+        _loadedCommentId = Comment.Id;
     }
     
-    private void Submit()
+    private Task OnCommentChanged(string comment)
     {
-        if (!_form!.EditContext!.Validate())
+        _model.Comment = comment;
+        _editContext.NotifyFieldChanged(new FieldIdentifier(_model, nameof(_model.Comment)));
+        return Task.CompletedTask;
+    }
+
+    private async Task Submit()
+    {
+        if (_form?.EditContext == null || !_form.EditContext.Validate() || IsCommentEmpty)
         {
             return;
         }
         
-        InvokeAsync(async () =>
+        _isLoading = true;
+        try
         {
-            _isLoading = true;
-            try
+            TaskCommentDto? responseDto;
+            if (_isNewComment)
             {
-                TaskCommentDto? responseDto = null;
-                if (_isNewComment)
-                {
-                    responseDto = await ApiService.TaskCommentAddAsync(model);
-                }
-                else
-                {
-                    var updateModel = new UpdateRequest(Comment.Id, model);
-                    responseDto = await ApiService.TaskCommentUpdateAsync(updateModel);
-                }
-                await InvokeAsync(async () => await OnSaved.InvokeAsync(responseDto));
-                ResetForm();
+                responseDto = await ApiService.TaskCommentAddAsync(_model);
             }
-            catch (Exception e)
+            else
             {
-                ToastService.ShowError(e.Message);
+                responseDto = await ApiService.TaskCommentUpdateAsync(new UpdateRequest(Comment.Id, _model));
             }
-            finally
+
+            if (responseDto != null)
             {
-                _isLoading = false;
+                await OnSaved.InvokeAsync(responseDto);
             }
-            StateHasChanged();    
-        });
+
+            ResetForm();
+        }
+        catch (Exception e)
+        {
+            ToastService.ShowError(e.Message);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
     }
 
-    private void OnClickEditComment()
+    private void OnClickEdit()
     {
         _isEditMode = true;
     }
@@ -103,51 +155,35 @@ public partial class EditCommentForm
     private void ResetForm()
     {
         _isEditMode = false;
-        model.Fill(Comment);
-        // _form?.ResetValidation();
+        FillFormFromComment();
     }
 
-
-    private void OnClickEdit()
+    private void OpenDeleteConfirmation()
     {
-        _isEditMode = true;
+        _isDeleteConfirmationOpen = true;
     }
 
-    private void OnFocusOnEditField()
+    private void CloseDeleteConfirmation()
     {
-        if (!_isEditMode)
+        _isDeleteConfirmationOpen = false;
+    }
+
+    private async Task OnConfirmDelete()
+    {
+        _isDeleteConfirmationOpen = false;
+        _isLoading = true;
+        try
         {
-            _isEditMode = true;    
+            await ApiService.TaskCommentDeleteAsync(Comment.Id);
+            await OnDeleted.InvokeAsync(Comment);
         }
-    }
-
-    private async Task OnClickDelete()
-    {
-        // var isOk = await _dialogService.ShowDeleteConfirmationDialog(
-        //     "Are you sure you want to remove this comment?"
-        // );
-        // if (!isOk.HasValue || !isOk.Value)
-        // {
-        //     return;
-        // }
-        // await InvokeAsync(async () =>
-        // {
-        //     _isLoading = true;
-        //     try
-        //     {
-        //         await ApiService.TaskCommentDeleteAsync(Comment.Id);
-        //         await OnDeleted.InvokeAsync(Comment);
-        //         ResetForm();
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         ToastService.ShowError(e.Message);
-        //     }
-        //     finally
-        //     {
-        //         _isLoading = false;
-        //     }
-        //     StateHasChanged();    
-        // });
+        catch (Exception e)
+        {
+            ToastService.ShowError(e.Message);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
     }
 }

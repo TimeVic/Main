@@ -6,7 +6,7 @@ using TimeTracker.Web.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 
-public partial class MultipleUsersDropDown
+public partial class MultipleUsersDropDown: IDisposable
 {
     [Parameter] 
     public string Label { get; set; }
@@ -67,29 +67,68 @@ public partial class MultipleUsersDropDown
     private IEnumerable<Guid> _allowedIds { get; set; } = new List<Guid>();
     private IEnumerable<Guid> _selectedIds = new List<Guid>();
     private ICollection<UserDto> _list = new List<UserDto>();
+    private bool _isOpen;
+    private string SelectedText => _selectedItems.Any()
+        ? string.Join(", ", _selectedItems.Select(item => item.Name))
+        : LocalizedPlaceholder;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        _state.StateChanged += (sender, args) =>
-        {
-            UpdateList();
-        };
+        _state.StateChanged += OnWorkspaceMembersChanged;
         UpdateList();
     }
     
-    private void OnValueChanged(IEnumerable<UserDto> selectedUsers)
+    public void Dispose()
     {
-        _selectedIds = selectedUsers.Select(item => item.Id).ToList();
-        SelectedItemChanged.InvokeAsync(_selectedItems);
-        ValueChanged.InvokeAsync(_selectedIds);
+        _state.StateChanged -= OnWorkspaceMembersChanged;
     }
 
-    private string ToStringFunc(Guid userId)
+    private void OnWorkspaceMembersChanged(object? sender, EventArgs args)
     {
-        var item = _list.FirstOrDefault(item => item.Id == userId);
-        return item?.Name ?? string.Empty;
+        UpdateList();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private Task OnOpenChanged(bool isOpen)
+    {
+        _isOpen = isOpen;
+        return Task.CompletedTask;
+    }
+
+    private async Task ToggleUser(UserDto user)
+    {
+        var selectedIds = _selectedIds.ToHashSet();
+        if (!selectedIds.Add(user.Id))
+        {
+            selectedIds.Remove(user.Id);
+        }
+
+        await OnValueChanged(_list.Where(item => selectedIds.Contains(item.Id)));
+    }
+
+    private async Task ClearSelection()
+    {
+        await OnValueChanged(Array.Empty<UserDto>());
+    }
+
+    private async Task OnValueChanged(IEnumerable<UserDto> selectedUsers)
+    {
+        _selectedIds = selectedUsers.Select(item => item.Id).ToList();
+        await SelectedItemChanged.InvokeAsync(_selectedItems);
+        await ValueChanged.InvokeAsync(_selectedIds);
+    }
+
+    private string GetCheckboxClass(bool isSelected)
+    {
+        return string.Join(
+            " ",
+            "flex h-4 w-4 shrink-0 items-center justify-center rounded border text-white",
+            isSelected
+                ? "border-blue-600 bg-blue-600"
+                : "border-slate-300 bg-white"
+        );
     }
     
     private void UpdateList()
@@ -102,9 +141,11 @@ public partial class MultipleUsersDropDown
                     item => _allowedIds.Any(allowedId => allowedId == item.Id)
                 ) 
                 .ToList();
+            _selectedIds = _selectedIds.Where(id => _list.Any(item => item.Id == id)).ToList();
             return;
         }
 
         _list = _state.Value.List.Select(item => item.User).ToList();
+        _selectedIds = _selectedIds.Where(id => _list.Any(item => item.Id == id)).ToList();
     }
 }
