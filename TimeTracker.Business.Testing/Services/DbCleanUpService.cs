@@ -30,6 +30,8 @@ public class DbCleanUpService: IDbCleanUpService
             "messaging.channels",
             
             "notifications",
+            "note_links",
+            "note_nodes",
             "client_payments",
             "member_payments",
             "queues",
