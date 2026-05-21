@@ -1,4 +1,5 @@
 ﻿using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
@@ -8,6 +9,7 @@ using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.GoalsTracker;
 using TimeTracker.Business.Orm.Entities.Messaging;
+using TimeTracker.Business.Orm.Entities.Notes;
 using TimeTracker.Business.Orm.Entities.Notifications;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -81,6 +83,10 @@ public class SecurityManager: ISecurityManager
         if (entity is TaskCommentEntity taskCommentEntity)
         {
             return await HasAccessToTaskComment(accessLevel, user, taskCommentEntity);
+        }
+        if (entity is NoteNodeEntity noteNodeEntity)
+        {
+            return await HasAccessToNoteNode(accessLevel, user, noteNodeEntity);
         }
         if (entity is GoalsTrackerEntity goalsTrackerEntity)
         {
@@ -220,6 +226,18 @@ public class SecurityManager: ISecurityManager
     private async Task<bool> HasAccessToTaskList(UserEntity user, TaskListEntity taskList)
     {
         return await HasAccessToProject(AccessLevel.Read, user, taskList.Project);
+    }
+
+    private async Task<bool> HasAccessToNoteNode(AccessLevel accessLevel, UserEntity user, NoteNodeEntity noteNode)
+    {
+        var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, noteNode.Workspace);
+        if (accessType is not MembershipAccessType.Owner and not MembershipAccessType.Manager)
+        {
+            return false;
+        }
+
+        return noteNode.Visibility == NoteVisibility.Workspace
+            || noteNode.CreatedByUser.Id == user.Id;
     }
     
     private async Task<bool> HasAccessToGoalsTracker(AccessLevel accessLevel, UserEntity user, GoalsTrackerEntity goalsTrackerEntity)
