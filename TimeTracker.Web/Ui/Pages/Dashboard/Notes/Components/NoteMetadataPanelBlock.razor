@@ -1,14 +1,14 @@
 @using TimeTracker.Api.Shared.Dto.Entity.Notes
 
-<section class="min-h-[720px] rounded-2xl border border-slate-200 bg-white shadow-sm">
+<section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
     <div class="border-b border-slate-200 p-4">
         <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Details"]</p>
         <p class="text-xs text-slate-500">@DashboardLocalizer["Notes_MetadataDescription"]</p>
     </div>
-    <div class="space-y-4 p-4 text-sm">
+    <div class="grid gap-4 p-4 text-sm sm:grid-cols-2 xl:grid-cols-4">
         @if (Document == null)
         {
-            <p class="text-slate-400">@DashboardLocalizer["Notes_NoMetadata"]</p>
+            <p class="text-slate-400 sm:col-span-2 xl:col-span-4">@DashboardLocalizer["Notes_NoMetadata"]</p>
         }
         else
         {
@@ -27,7 +27,7 @@
                     <p class="mt-1 text-slate-700">@Document.UpdatedAt.Value.ToString("g")</p>
                 </div>
             }
-            <div>
+            <div class="sm:col-span-2 xl:col-span-1">
                 <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">@DashboardLocalizer["LinkedEntities"]</p>
                 @if (Document.Links.Any())
                 {
