@@ -50,8 +50,8 @@ public partial class NotesTreeNodeBlock
     private string ChildEmptyIndentStyle => $"padding-left: {Math.Min((Level + 1) * 1.25 + 2, 8):0.##}rem;";
 
     private string RowClass => SelectedNoteId == TreeNode.Node.Id
-        ? "group flex items-center gap-1 rounded-xl border border-blue-200 bg-blue-50 px-2 py-2 text-sm font-medium text-blue-900"
-        : "group flex items-center gap-1 rounded-xl border border-transparent px-2 py-2 text-sm text-slate-700 hover:border-slate-200 hover:bg-slate-50";
+        ? "group flex items-center gap-1 rounded-xl border border-blue-200 bg-blue-50 px-1.5 py-1.5 text-sm font-medium text-blue-900"
+        : "group flex items-center gap-1 rounded-xl border border-transparent px-1.5 py-1.5 text-sm text-slate-700 hover:border-slate-200 hover:bg-slate-50";
 
     private async Task OnToggleExpanded()
     {

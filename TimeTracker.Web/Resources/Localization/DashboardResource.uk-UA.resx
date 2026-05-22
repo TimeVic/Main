@@ -644,8 +644,10 @@
   <data name="Title" xml:space="preserve"><value>Назва</value></data>
   <data name="Markdown" xml:space="preserve"><value>Markdown</value></data>
   <data name="Preview" xml:space="preserve"><value>Перегляд</value></data>
+  <data name="Details" xml:space="preserve"><value>Деталі</value></data>
   <data name="Visibility" xml:space="preserve"><value>Видимість</value></data>
   <data name="Private" xml:space="preserve"><value>Приватна</value></data>
+  <data name="Created" xml:space="preserve"><value>Створено</value></data>
   <data name="Updated" xml:space="preserve"><value>Оновлено</value></data>
   <data name="LinkedEntities" xml:space="preserve"><value>Привʼязані сутності</value></data>
   <data name="ProjectNotes" xml:space="preserve"><value>Нотатки проєкту</value></data>

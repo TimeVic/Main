@@ -79,7 +79,7 @@
         </div>
     }
 
-    <div class="grid gap-5 xl:grid-cols-[320px_minmax(0,1fr)_360px]">
+    <div class="grid gap-5 xl:grid-cols-[320px_minmax(0,1fr)_300px]">
         <NotesTreeBlock
             TreeNodes="@_treeNodes"
             ExpandedNodeIds="@_expandedNodeIds"
@@ -107,9 +107,6 @@
             VisibilityChanged="@OnVisibilityChanged"
             OnSave="@SaveDocument"/>
 
-        <div class="space-y-5">
-            <NotePreviewBlock MarkdownContent="@_editorMarkdown"/>
-            <NoteMetadataPanelBlock Document="@_currentDocument"/>
-        </div>
+        <NoteMetadataPanelBlock Document="@_currentDocument"/>
     </div>
 </section>

@@ -3,7 +3,7 @@
 
 @inherits BaseReactiveComponent
 
-<aside class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+<aside class="min-h-[720px] rounded-2xl border border-slate-200 bg-white shadow-sm">
     <div class="border-b border-slate-200 p-4">
         <div class="flex items-center justify-between gap-3">
             <div>
@@ -32,6 +32,9 @@
                 <LumexSkeleton Class="h-9 w-full rounded-xl"/>
                 <LumexSkeleton Class="h-9 w-10/12 rounded-xl"/>
                 <LumexSkeleton Class="h-9 w-11/12 rounded-xl"/>
+                <LumexSkeleton Class="h-9 w-9/12 rounded-xl"/>
+                <LumexSkeleton Class="h-9 w-full rounded-xl"/>
+                <LumexSkeleton Class="h-9 w-8/12 rounded-xl"/>
             </div>
         }
         else if (!TreeNodes.Any())

@@ -1,8 +1,8 @@
 @using TimeTracker.Api.Shared.Dto.Entity.Notes
 
-<section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+<section class="min-h-[720px] rounded-2xl border border-slate-200 bg-white shadow-sm">
     <div class="border-b border-slate-200 p-4">
-        <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["LinkedEntities"]</p>
+        <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Details"]</p>
         <p class="text-xs text-slate-500">@DashboardLocalizer["Notes_MetadataDescription"]</p>
     </div>
     <div class="space-y-4 p-4 text-sm">
@@ -15,6 +15,10 @@
             <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">@DashboardLocalizer["Visibility"]</p>
                 <p class="mt-1 text-slate-700">@DashboardLocalizer[$"NoteVisibility_{Document.Visibility}"]</p>
+            </div>
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">@DashboardLocalizer["Created"]</p>
+                <p class="mt-1 text-slate-700">@Document.CreatedAt.ToString("g")</p>
             </div>
             @if (Document.UpdatedAt.HasValue)
             {
