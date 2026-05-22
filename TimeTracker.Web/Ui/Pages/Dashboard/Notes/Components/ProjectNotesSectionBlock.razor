@@ -1,0 +1,66 @@
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Api.Shared.Dto.Entity.Notes
+
+@inherits BaseReactiveComponent
+
+<section class="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["ProjectNotes"]</p>
+            <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["ProjectNotes_Description"]</p>
+        </div>
+        <CustomButton
+            Size="Size.Small"
+            Color="@ThemeColor.Primary"
+            Radius="@Radius.Full"
+            IsLoading="_isCreatingNote"
+            OnClick="@CreateProjectNote">
+            <StartContent>
+                <i class="fa-solid fa-plus"></i>
+            </StartContent>
+            <ChildContent>@DashboardLocalizer["NewProjectNote"]</ChildContent>
+        </CustomButton>
+    </div>
+
+    <div class="mt-4">
+        @if (_isLoading)
+        {
+            <div class="space-y-2">
+                <LumexSkeleton Class="h-10 w-full rounded-xl"/>
+                <LumexSkeleton Class="h-10 w-10/12 rounded-xl"/>
+            </div>
+        }
+        else if (!string.IsNullOrWhiteSpace(_loadError))
+        {
+            <p class="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">@_loadError</p>
+        }
+        else if (!_notes.Any())
+        {
+            <div class="rounded-xl border border-dashed border-slate-200 bg-white px-3 py-4 text-sm text-slate-600">
+                <p>@DashboardLocalizer["NoProjectNotes"]</p>
+            </div>
+        }
+        else
+        {
+            <div class="space-y-2">
+                @foreach (var note in _notes)
+                {
+                    <button
+                        type="button"
+                        class="flex w-full items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2 text-left text-sm transition hover:border-blue-200 hover:bg-blue-50"
+                        @onclick="@(() => NavigateToNote(note.Id))">
+                        <span class="min-w-0">
+                            <span class="block truncate font-medium text-slate-800">@note.Title</span>
+                            @if (note.UpdatedAt.HasValue)
+                            {
+                                <span class="mt-0.5 block text-xs text-slate-400">@note.UpdatedAt.Value.ToString("g")</span>
+                            }
+                        </span>
+                        <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i>
+                    </button>
+                }
+            </div>
+        }
+    </div>
+</section>

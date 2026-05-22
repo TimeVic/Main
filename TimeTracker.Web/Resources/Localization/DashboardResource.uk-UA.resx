@@ -631,4 +631,61 @@
   <data name="EmojiCategory_Symbols" xml:space="preserve"><value>Символи</value></data>
   <data name="EmojiCategory_Travel" xml:space="preserve"><value>Подорожі</value></data>
   <data name="TagsList_RemoveTagConfirmation" xml:space="preserve"><value>Видалити цей тег?</value></data>
+  <data name="Notes" xml:space="preserve"><value>Нотатки</value></data>
+  <data name="NewNote" xml:space="preserve"><value>Нова нотатка</value></data>
+  <data name="NewFolder" xml:space="preserve"><value>Нова папка</value></data>
+  <data name="CreateNote" xml:space="preserve"><value>Створити нотатку</value></data>
+  <data name="CreateFolder" xml:space="preserve"><value>Створити папку</value></data>
+  <data name="Rename" xml:space="preserve"><value>Перейменувати</value></data>
+  <data name="Saved" xml:space="preserve"><value>Збережено</value></data>
+  <data name="Saving" xml:space="preserve"><value>Збереження</value></data>
+  <data name="UnsavedChanges" xml:space="preserve"><value>Є незбережені зміни</value></data>
+  <data name="ErrorSaving" xml:space="preserve"><value>Помилка збереження</value></data>
+  <data name="Title" xml:space="preserve"><value>Назва</value></data>
+  <data name="Markdown" xml:space="preserve"><value>Markdown</value></data>
+  <data name="Preview" xml:space="preserve"><value>Перегляд</value></data>
+  <data name="Visibility" xml:space="preserve"><value>Видимість</value></data>
+  <data name="Private" xml:space="preserve"><value>Приватна</value></data>
+  <data name="Updated" xml:space="preserve"><value>Оновлено</value></data>
+  <data name="LinkedEntities" xml:space="preserve"><value>Привʼязані сутності</value></data>
+  <data name="ProjectNotes" xml:space="preserve"><value>Нотатки проєкту</value></data>
+  <data name="ClientNotes" xml:space="preserve"><value>Нотатки клієнта</value></data>
+  <data name="NewProjectNote" xml:space="preserve"><value>Нова нотатка проєкту</value></data>
+  <data name="NewClientNote" xml:space="preserve"><value>Нова нотатка клієнта</value></data>
+  <data name="NoProjectNotes" xml:space="preserve"><value>До цього проєкту ще не привʼязано нотаток.</value></data>
+  <data name="NoClientNotes" xml:space="preserve"><value>До цього клієнта ще не привʼязано нотаток.</value></data>
+  <data name="Notes_PageSubtitle" xml:space="preserve"><value>Зберігайте деталі проєктів, домовленості з клієнтами, посилання, фрагменти й контекст оплат в одному workspace.</value></data>
+  <data name="Notes_TreeDescription" xml:space="preserve"><value>Папки й документи</value></data>
+  <data name="Notes_EmptyDescription" xml:space="preserve"><value>Створіть першу нотатку, щоб зберігати деталі проєктів, домовленості з клієнтами, посилання, фрагменти або контекст оплат.</value></data>
+  <data name="Notes_EmptyFolder" xml:space="preserve"><value>Ця папка порожня.</value></data>
+  <data name="Notes_NoSelectedNote" xml:space="preserve"><value>Виберіть нотатку або створіть нову.</value></data>
+  <data name="Notes_EmptyPreview" xml:space="preserve"><value>Тут зʼявиться перегляд Markdown.</value></data>
+  <data name="Notes_PreviewDescription" xml:space="preserve"><value>Відрендерений Markdown</value></data>
+  <data name="Notes_MetadataDescription" xml:space="preserve"><value>Видимість, дати й привʼязані записи</value></data>
+  <data name="Notes_NoMetadata" xml:space="preserve"><value>Виберіть нотатку, щоб переглянути метадані.</value></data>
+  <data name="Notes_NoLinkedEntities" xml:space="preserve"><value>Привʼязаних сутностей ще немає.</value></data>
+  <data name="Notes_MarkdownPlaceholder" xml:space="preserve"><value>Пишіть вміст у Markdown...</value></data>
+  <data name="Notes_FolderTitlePlaceholder" xml:space="preserve"><value>Назва папки</value></data>
+  <data name="Notes_NoteTitlePlaceholder" xml:space="preserve"><value>Назва нотатки</value></data>
+  <data name="Notes_CreateFolderDescription" xml:space="preserve"><value>Створіть папку, щоб групувати нотатки за клієнтом, проєктом або робочим процесом.</value></data>
+  <data name="Notes_CreateNoteDescription" xml:space="preserve"><value>Створіть Markdown-нотатку для контексту проєкту, посилань або деталей оплати.</value></data>
+  <data name="Notes_RenameDescription" xml:space="preserve"><value>Оновіть назву, яка відображається в дереві нотаток.</value></data>
+  <data name="Notes_ArchiveConfirmTitle" xml:space="preserve"><value>Архівувати елемент нотаток?</value></data>
+  <data name="Notes_ArchiveConfirmSubtitle" xml:space="preserve"><value>Елемент буде прибрано з активного дерева нотаток.</value></data>
+  <data name="Notes_LoadTreeError" xml:space="preserve"><value>Не вдалося завантажити дерево нотаток</value></data>
+  <data name="Notes_LoadDocumentError" xml:space="preserve"><value>Не вдалося завантажити нотатку</value></data>
+  <data name="Notes_SaveDocumentError" xml:space="preserve"><value>Не вдалося зберегти нотатку</value></data>
+  <data name="Notes_CreateFolderError" xml:space="preserve"><value>Не вдалося створити папку</value></data>
+  <data name="Notes_CreateNoteError" xml:space="preserve"><value>Не вдалося створити нотатку</value></data>
+  <data name="Notes_RenameNodeError" xml:space="preserve"><value>Не вдалося перейменувати елемент нотаток</value></data>
+  <data name="Notes_ArchiveNodeError" xml:space="preserve"><value>Не вдалося архівувати елемент нотаток</value></data>
+  <data name="Notes_LoadLinkedNotesError" xml:space="preserve"><value>Не вдалося завантажити привʼязані нотатки</value></data>
+  <data name="Notes_CreateProjectNoteError" xml:space="preserve"><value>Не вдалося створити нотатку проєкту</value></data>
+  <data name="Notes_ProjectNoteDefaultTitle" xml:space="preserve"><value>Нотатка: {0}</value></data>
+  <data name="ProjectNotes_Description" xml:space="preserve"><value>Нотатки, привʼязані до проєкту: скоуп, оплати й робочий контекст.</value></data>
+  <data name="NoteVisibility_Private" xml:space="preserve"><value>Приватна</value></data>
+  <data name="NoteVisibility_Workspace" xml:space="preserve"><value>Workspace</value></data>
+  <data name="NoteLinkEntityType_Client" xml:space="preserve"><value>Клієнт</value></data>
+  <data name="NoteLinkEntityType_Project" xml:space="preserve"><value>Проєкт</value></data>
+  <data name="NoteLinkEntityType_Task" xml:space="preserve"><value>Задача</value></data>
 </root>

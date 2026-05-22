@@ -140,6 +140,22 @@ public class ApiUrl
     
     #endregion
 
+    #region Notes
+
+    public const string NotesGetTree = "dashboard/notes/get-tree";
+    public const string NotesGetDocument = "dashboard/notes/get-document";
+    public const string NotesCreateFolder = "dashboard/notes/create-folder";
+    public const string NotesCreateDocument = "dashboard/notes/create-document";
+    public const string NotesUpdateDocument = "dashboard/notes/update-document";
+    public const string NotesRenameNode = "dashboard/notes/rename-node";
+    public const string NotesMoveNode = "dashboard/notes/move-node";
+    public const string NotesArchiveNode = "dashboard/notes/archive-node";
+    public const string NotesGetLinkedNotes = "dashboard/notes/get-linked-notes";
+    public const string NotesCreateLink = "dashboard/notes/create-link";
+    public const string NotesDeleteLink = "dashboard/notes/delete-link";
+
+    #endregion
+
     #region Storage
 
     public const string StorageUpload = "dashboard/storage/upload";

@@ -1,0 +1,74 @@
+@using LumexUI.Common
+@using TimeTracker.Web.Ui.Pages.Dashboard.Notes.Models
+
+@inherits BaseReactiveComponent
+
+<aside class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="border-b border-slate-200 p-4">
+        <div class="flex items-center justify-between gap-3">
+            <div>
+                <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Notes"]</p>
+                <p class="text-xs text-slate-500">@DashboardLocalizer["Notes_TreeDescription"]</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span title="@DashboardLocalizer["NewFolder"].Value">
+                    <CustomButton IconOnly="true" Size="Size.Small" Variant="Variant.Outlined" OnClick="@(() => CreateFolderRequested.InvokeAsync(null))">
+                        <i class="fa-regular fa-folder"></i>
+                    </CustomButton>
+                </span>
+                <span title="@DashboardLocalizer["NewNote"].Value">
+                    <CustomButton IconOnly="true" Size="Size.Small" Color="@ThemeColor.Primary" OnClick="@(() => CreateNoteRequested.InvokeAsync(null))">
+                        <i class="fa-regular fa-note-sticky"></i>
+                    </CustomButton>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-3">
+        @if (IsLoading)
+        {
+            <div class="space-y-3">
+                <LumexSkeleton Class="h-9 w-full rounded-xl"/>
+                <LumexSkeleton Class="h-9 w-10/12 rounded-xl"/>
+                <LumexSkeleton Class="h-9 w-11/12 rounded-xl"/>
+            </div>
+        }
+        else if (!TreeNodes.Any())
+        {
+            <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                <p>@DashboardLocalizer["Notes_EmptyDescription"]</p>
+                <CustomButton
+                    Class="mt-3"
+                    Size="Size.Small"
+                    Color="@ThemeColor.Primary"
+                    OnClick="@(() => CreateNoteRequested.InvokeAsync(null))">
+                    <StartContent>
+                        <i class="fa-solid fa-plus"></i>
+                    </StartContent>
+                    <ChildContent>@DashboardLocalizer["CreateNote"]</ChildContent>
+                </CustomButton>
+            </div>
+        }
+        else
+        {
+            <div class="space-y-1">
+                @foreach (var treeNode in TreeNodes)
+                {
+                    <NotesTreeNodeBlock
+                        @key="treeNode.Node.Id"
+                        TreeNode="@treeNode"
+                        Level="0"
+                        ExpandedNodeIds="@ExpandedNodeIds"
+                        SelectedNoteId="@SelectedNoteId"
+                        ToggleExpandedRequested="@ToggleExpandedRequested"
+                        SelectNodeRequested="@SelectNodeRequested"
+                        CreateFolderRequested="@CreateFolderRequested"
+                        CreateNoteRequested="@CreateNoteRequested"
+                        RenameRequested="@RenameRequested"
+                        ArchiveRequested="@ArchiveRequested"/>
+                }
+            </div>
+        }
+    </div>
+</aside>

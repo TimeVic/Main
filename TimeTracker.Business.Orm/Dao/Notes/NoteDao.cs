@@ -70,6 +70,8 @@ public class NoteDao : INoteDao
         var items = await _sessionProvider.CurrentSession.Query<NoteNodeEntity>()
             .Where(item => item.Workspace.Id == workspace.Id)
             .Where(item => isIncludeArchived || item.ArchivedAt == null)
+            .Fetch(item => item.Parent)
+            .Fetch(item => item.CreatedByUser)
             .ToListAsync();
 
         return items
