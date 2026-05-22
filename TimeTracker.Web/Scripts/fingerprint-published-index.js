@@ -27,6 +27,8 @@ for (const endpoint of manifest.Endpoints || []) {
 const assets = [
     { url: "/img/logo/black/clock-64.png", label: "img/logo/black/clock-64.png" },
     { url: "css/app.min.css", label: "css/app.min.css" },
+    { url: "vendor/github-markdown/github-markdown.min.css", label: "vendor/github-markdown/github-markdown.min.css" },
+    { url: "vendor/github-markdown/timevic-markdown-theme.css", label: "vendor/github-markdown/timevic-markdown-theme.css" },
     { url: "TimeTracker.Web.styles.css", label: "TimeTracker.Web.styles.css" },
     { url: "_content/LumexUI/js/LumexUI.js", label: "_content/LumexUI/js/LumexUI.js" },
 ];
