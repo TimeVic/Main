@@ -79,7 +79,7 @@
         </div>
     }
 
-    <div class="grid gap-5 xl:grid-cols-[320px_minmax(0,1fr)_300px]">
+    <div class="grid gap-5 xl:grid-cols-[320px_minmax(0,1fr)]">
         <NotesTreeBlock
             TreeNodes="@_treeNodes"
             ExpandedNodeIds="@_expandedNodeIds"
@@ -92,21 +92,23 @@
             RenameRequested="@OpenRenameModal"
             ArchiveRequested="@OpenArchiveConfirmation"/>
 
-        <NoteEditorBlock
-            Document="@_currentDocument"
-            Title="@_editorTitle"
-            MarkdownContent="@_editorMarkdown"
-            Visibility="@_editorVisibility"
-            IsLoading="_loadingDocument"
-            IsSaving="_savingDocument"
-            IsDirty="@IsDocumentDirty"
-            SaveStateLabel="@SaveStateLabel"
-            SaveStateClass="@SaveStateClass"
-            TitleChanged="@OnTitleChanged"
-            MarkdownContentChanged="@OnMarkdownChanged"
-            VisibilityChanged="@OnVisibilityChanged"
-            OnSave="@SaveDocument"/>
+        <div class="space-y-5">
+            <NoteEditorBlock
+                Document="@_currentDocument"
+                Title="@_editorTitle"
+                MarkdownContent="@_editorMarkdown"
+                Visibility="@_editorVisibility"
+                IsLoading="_loadingDocument"
+                IsSaving="_savingDocument"
+                IsDirty="@IsDocumentDirty"
+                SaveStateLabel="@SaveStateLabel"
+                SaveStateClass="@SaveStateClass"
+                TitleChanged="@OnTitleChanged"
+                MarkdownContentChanged="@OnMarkdownChanged"
+                VisibilityChanged="@OnVisibilityChanged"
+                OnSave="@SaveDocument"/>
 
-        <NoteMetadataPanelBlock Document="@_currentDocument"/>
+            <NoteMetadataPanelBlock Document="@_currentDocument"/>
+        </div>
     </div>
 </section>
