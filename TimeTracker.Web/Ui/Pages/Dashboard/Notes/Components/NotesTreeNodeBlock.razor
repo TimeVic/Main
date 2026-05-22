@@ -3,79 +3,95 @@
 
 @inherits BaseReactiveComponent
 
-<div>
-    <div class="@RowClass" style="@IndentStyle">
-        <button
-            type="button"
-            class="flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-slate-400 hover:bg-slate-100"
-            disabled="@(!IsFolder)"
-            @onclick="@OnToggleExpanded">
-            @if (IsFolder)
-            {
+<div class="notes-tree-node">
+    <div
+        class="@RowClass"
+        role="treeitem"
+        tabindex="0"
+        aria-level="@(Level + 1)"
+        aria-expanded="@(IsFolder ? IsExpanded : null)"
+        @onclick="@OnSelect"
+        @onkeydown="@OnRowKeyDown">
+        @if (IsFolder)
+        {
+            <button
+                type="button"
+                class="flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-slate-400 hover:bg-slate-100"
+                @onclick="@OnToggleExpanded"
+                @onclick:stopPropagation="true"
+                @onkeydown:stopPropagation="true">
                 <i class="fa-solid @(IsExpanded ? "fa-chevron-down" : "fa-chevron-right") text-[10px]"></i>
-            }
-        </button>
-        <button type="button" class="flex min-w-0 flex-1 items-center gap-2 text-left" @onclick="@OnSelect">
+            </button>
+        }
+        else
+        {
+            <span class="h-5 w-5 shrink-0"></span>
+        }
+        <div class="flex min-w-0 flex-1 items-center gap-2 text-left">
             <i class="@IconClass"></i>
             <span class="truncate">@TreeNode.Node.Title</span>
-        </button>
-        <LumexDropdown>
-            <LumexDropdownTrigger>
-                <LumexButton IconOnly="true" Size="Size.Small" Variant="@Variant.Light">
-                    <i class="fa-solid fa-ellipsis-h"></i>
-                </LumexButton>
-            </LumexDropdownTrigger>
-            <LumexDropdownMenu>
-                @if (IsFolder)
-                {
-                    <LumexDropdownItem OnClick="@(() => CreateFolderRequested.InvokeAsync(TreeNode.Node.Id))">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-regular fa-folder w-4 text-xs"></i>
-                            @DashboardLocalizer["NewFolder"]
-                        </span>
+        </div>
+        <div @onclick:stopPropagation="true" @onkeydown:stopPropagation="true">
+            <LumexDropdown>
+                <LumexDropdownTrigger>
+                    <LumexButton IconOnly="true" Size="Size.Small" Variant="@Variant.Light">
+                        <i class="fa-solid fa-ellipsis-h"></i>
+                    </LumexButton>
+                </LumexDropdownTrigger>
+                <LumexDropdownMenu>
+                    @if (IsFolder)
+                    {
+                        <LumexDropdownItem OnClick="@(() => CreateFolderRequested.InvokeAsync(TreeNode.Node.Id))">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-regular fa-folder w-4 text-xs"></i>
+                                @DashboardLocalizer["NewFolder"]
+                            </span>
+                        </LumexDropdownItem>
+                        <LumexDropdownItem OnClick="@(() => CreateNoteRequested.InvokeAsync(TreeNode.Node.Id))">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-regular fa-note-sticky w-4 text-xs"></i>
+                                @DashboardLocalizer["NewNote"]
+                            </span>
+                        </LumexDropdownItem>
+                    }
+                    <LumexDropdownItem OnClick="@(() => RenameRequested.InvokeAsync(TreeNode.Node))">
+                        @DashboardLocalizer["Rename"]
                     </LumexDropdownItem>
-                    <LumexDropdownItem OnClick="@(() => CreateNoteRequested.InvokeAsync(TreeNode.Node.Id))">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-regular fa-note-sticky w-4 text-xs"></i>
-                            @DashboardLocalizer["NewNote"]
-                        </span>
+                    <LumexDropdownItem Color="@ThemeColor.Danger" OnClick="@(() => ArchiveRequested.InvokeAsync(TreeNode.Node))">
+                        @DashboardLocalizer["Archive"]
                     </LumexDropdownItem>
-                }
-                <LumexDropdownItem OnClick="@(() => RenameRequested.InvokeAsync(TreeNode.Node))">
-                    @DashboardLocalizer["Rename"]
-                </LumexDropdownItem>
-                <LumexDropdownItem Color="@ThemeColor.Danger" OnClick="@(() => ArchiveRequested.InvokeAsync(TreeNode.Node))">
-                    @DashboardLocalizer["Archive"]
-                </LumexDropdownItem>
-            </LumexDropdownMenu>
-        </LumexDropdown>
+                </LumexDropdownMenu>
+            </LumexDropdown>
+        </div>
     </div>
 
     @if (IsFolder && IsExpanded)
     {
-        @if (TreeNode.Children.Any())
-        {
-            @foreach (var child in TreeNode.Children)
+        <div class="notes-tree-node-children" role="group">
+            @if (TreeNode.Children.Any())
             {
-                <NotesTreeNodeBlock
-                    @key="child.Node.Id"
-                    TreeNode="@child"
-                    Level="@(Level + 1)"
-                    ExpandedNodeIds="@ExpandedNodeIds"
-                    SelectedNoteId="@SelectedNoteId"
-                    ToggleExpandedRequested="@ToggleExpandedRequested"
-                    SelectNodeRequested="@SelectNodeRequested"
-                    CreateFolderRequested="@CreateFolderRequested"
-                    CreateNoteRequested="@CreateNoteRequested"
-                    RenameRequested="@RenameRequested"
-                    ArchiveRequested="@ArchiveRequested"/>
+                @foreach (var child in TreeNode.Children)
+                {
+                    <NotesTreeNodeBlock
+                        @key="child.Node.Id"
+                        TreeNode="@child"
+                        Level="@(Level + 1)"
+                        ExpandedNodeIds="@ExpandedNodeIds"
+                        SelectedNoteId="@SelectedNoteId"
+                        ToggleExpandedRequested="@ToggleExpandedRequested"
+                        SelectNodeRequested="@SelectNodeRequested"
+                        CreateFolderRequested="@CreateFolderRequested"
+                        CreateNoteRequested="@CreateNoteRequested"
+                        RenameRequested="@RenameRequested"
+                        ArchiveRequested="@ArchiveRequested"/>
+                }
             }
-        }
-        else
-        {
-            <div class="py-2 text-xs text-slate-400" style="@ChildEmptyIndentStyle">
-                @DashboardLocalizer["Notes_EmptyFolder"]
-            </div>
-        }
+            else
+            {
+                <div class="notes-tree-node-empty py-2 text-xs text-slate-400">
+                    @DashboardLocalizer["Notes_EmptyFolder"]
+                </div>
+            }
+        </div>
     }
 </div>
