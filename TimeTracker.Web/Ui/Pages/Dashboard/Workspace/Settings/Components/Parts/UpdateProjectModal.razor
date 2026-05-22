@@ -1,6 +1,7 @@
 @using LumexUI
 @using LumexUI.Common
 @using LumexUI.Shared.Icons
+@using TimeTracker.Web.Ui.Pages.Dashboard.Notes.Components
 
 @inherits BaseReactiveComponent
 
@@ -75,6 +76,8 @@
                     }
                 </div>
             </EditForm>
+
+            <ProjectNotesSectionBlock Project="@Project"/>
         </LumexModalBody>
         <LumexModalFooter>
             <CustomButton

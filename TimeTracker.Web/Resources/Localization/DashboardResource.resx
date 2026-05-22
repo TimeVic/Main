@@ -631,4 +631,63 @@
   <data name="EmojiCategory_Symbols" xml:space="preserve"><value>Symbols</value></data>
   <data name="EmojiCategory_Travel" xml:space="preserve"><value>Travel</value></data>
   <data name="TagsList_RemoveTagConfirmation" xml:space="preserve"><value>Are you sure you want to remove this tag?</value></data>
+  <data name="Notes" xml:space="preserve"><value>Notes</value></data>
+  <data name="NewNote" xml:space="preserve"><value>New note</value></data>
+  <data name="NewFolder" xml:space="preserve"><value>New folder</value></data>
+  <data name="CreateNote" xml:space="preserve"><value>Create note</value></data>
+  <data name="CreateFolder" xml:space="preserve"><value>Create folder</value></data>
+  <data name="Rename" xml:space="preserve"><value>Rename</value></data>
+  <data name="Saved" xml:space="preserve"><value>Saved</value></data>
+  <data name="Saving" xml:space="preserve"><value>Saving</value></data>
+  <data name="UnsavedChanges" xml:space="preserve"><value>Unsaved changes</value></data>
+  <data name="ErrorSaving" xml:space="preserve"><value>Error saving</value></data>
+  <data name="Title" xml:space="preserve"><value>Title</value></data>
+  <data name="Markdown" xml:space="preserve"><value>Markdown</value></data>
+  <data name="Preview" xml:space="preserve"><value>Preview</value></data>
+  <data name="Details" xml:space="preserve"><value>Details</value></data>
+  <data name="Visibility" xml:space="preserve"><value>Visibility</value></data>
+  <data name="Private" xml:space="preserve"><value>Private</value></data>
+  <data name="Created" xml:space="preserve"><value>Created</value></data>
+  <data name="Updated" xml:space="preserve"><value>Updated</value></data>
+  <data name="LinkedEntities" xml:space="preserve"><value>Linked entities</value></data>
+  <data name="ProjectNotes" xml:space="preserve"><value>Project notes</value></data>
+  <data name="ClientNotes" xml:space="preserve"><value>Client notes</value></data>
+  <data name="NewProjectNote" xml:space="preserve"><value>New project note</value></data>
+  <data name="NewClientNote" xml:space="preserve"><value>New client note</value></data>
+  <data name="NoProjectNotes" xml:space="preserve"><value>No notes linked to this project yet.</value></data>
+  <data name="NoClientNotes" xml:space="preserve"><value>No notes linked to this client yet.</value></data>
+  <data name="Notes_PageSubtitle" xml:space="preserve"><value>Keep project details, client agreements, links, snippets and billing context in one workspace.</value></data>
+  <data name="Notes_TreeDescription" xml:space="preserve"><value>Folders and documents</value></data>
+  <data name="Notes_EmptyDescription" xml:space="preserve"><value>Create your first note to store project details, client agreements, links, snippets or billing context.</value></data>
+  <data name="Notes_EmptyFolder" xml:space="preserve"><value>This folder is empty.</value></data>
+  <data name="Notes_NoSelectedNote" xml:space="preserve"><value>Select a note or create a new one.</value></data>
+  <data name="Notes_EmptyPreview" xml:space="preserve"><value>Markdown preview will appear here.</value></data>
+  <data name="Notes_PreviewDescription" xml:space="preserve"><value>Rendered Markdown output</value></data>
+  <data name="Notes_MetadataDescription" xml:space="preserve"><value>Visibility, dates and linked records</value></data>
+  <data name="Notes_NoMetadata" xml:space="preserve"><value>Select a note to view metadata.</value></data>
+  <data name="Notes_NoLinkedEntities" xml:space="preserve"><value>No linked entities yet.</value></data>
+  <data name="Notes_MarkdownPlaceholder" xml:space="preserve"><value>Write Markdown content...</value></data>
+  <data name="Notes_FolderTitlePlaceholder" xml:space="preserve"><value>Folder name</value></data>
+  <data name="Notes_NoteTitlePlaceholder" xml:space="preserve"><value>Note title</value></data>
+  <data name="Notes_CreateFolderDescription" xml:space="preserve"><value>Create a folder to organize notes by client, project or workflow.</value></data>
+  <data name="Notes_CreateNoteDescription" xml:space="preserve"><value>Create a Markdown note for project context, links or billing details.</value></data>
+  <data name="Notes_RenameDescription" xml:space="preserve"><value>Update the name shown in the notes tree.</value></data>
+  <data name="Notes_ArchiveConfirmTitle" xml:space="preserve"><value>Archive note item?</value></data>
+  <data name="Notes_ArchiveConfirmSubtitle" xml:space="preserve"><value>This item will be removed from the active notes tree.</value></data>
+  <data name="Notes_LoadTreeError" xml:space="preserve"><value>Failed to load notes tree</value></data>
+  <data name="Notes_LoadDocumentError" xml:space="preserve"><value>Failed to load note</value></data>
+  <data name="Notes_SaveDocumentError" xml:space="preserve"><value>Failed to save note</value></data>
+  <data name="Notes_CreateFolderError" xml:space="preserve"><value>Failed to create folder</value></data>
+  <data name="Notes_CreateNoteError" xml:space="preserve"><value>Failed to create note</value></data>
+  <data name="Notes_RenameNodeError" xml:space="preserve"><value>Failed to rename note item</value></data>
+  <data name="Notes_ArchiveNodeError" xml:space="preserve"><value>Failed to archive note item</value></data>
+  <data name="Notes_LoadLinkedNotesError" xml:space="preserve"><value>Failed to load linked notes</value></data>
+  <data name="Notes_CreateProjectNoteError" xml:space="preserve"><value>Failed to create project note</value></data>
+  <data name="Notes_ProjectNoteDefaultTitle" xml:space="preserve"><value>{0} note</value></data>
+  <data name="ProjectNotes_Description" xml:space="preserve"><value>Notes linked to this project for scope, billing and delivery context.</value></data>
+  <data name="NoteVisibility_Private" xml:space="preserve"><value>Private</value></data>
+  <data name="NoteVisibility_Workspace" xml:space="preserve"><value>Workspace</value></data>
+  <data name="NoteLinkEntityType_Client" xml:space="preserve"><value>Client</value></data>
+  <data name="NoteLinkEntityType_Project" xml:space="preserve"><value>Project</value></data>
+  <data name="NoteLinkEntityType_Task" xml:space="preserve"><value>Task</value></data>
 </root>

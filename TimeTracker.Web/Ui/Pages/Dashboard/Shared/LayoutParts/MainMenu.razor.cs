@@ -40,6 +40,7 @@ public partial class MainMenu: IDisposable
             WorkspacePermission.ReadWorkspaceFinancialSummary
         ),
         new(Text("Tasks"), "fa-regular fa-square-check", SiteUrl.Dashboard_Tasks_Main),
+        new(Text("Notes"), "fa-regular fa-note-sticky", SiteUrl.Dashboard_Notes),
         new(
             Text("MemberPayments"),
             "fa-regular fa-credit-card",
