@@ -7,7 +7,7 @@
         <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Preview"]</p>
         <p class="text-xs text-slate-500">@DashboardLocalizer["Notes_PreviewDescription"]</p>
     </div>
-    <div class="prose prose-sm max-w-none p-4 text-slate-700">
+    <div class="max-w-none p-4 text-slate-700">
         @if (string.IsNullOrWhiteSpace(MarkdownContent))
         {
             <p class="text-sm text-slate-400">@DashboardLocalizer["Notes_EmptyPreview"]</p>
