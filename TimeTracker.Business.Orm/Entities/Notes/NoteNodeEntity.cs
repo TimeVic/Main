@@ -22,6 +22,7 @@ public class NoteNodeEntity : AEntity
     public virtual UserEntity? UpdatedByUser { get; set; }
     public virtual ICollection<NoteNodeEntity> Children { get; set; } = new List<NoteNodeEntity>();
     public virtual ICollection<NoteLinkEntity> Links { get; set; } = new List<NoteLinkEntity>();
+    public virtual ICollection<NoteNodeHistoryEntity> History { get; set; } = new List<NoteNodeHistoryEntity>();
 
     #endregion
 

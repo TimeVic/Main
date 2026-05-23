@@ -41,5 +41,16 @@ public class NoteProfile : Profile
                 EntityType = src.EntityType,
                 EntityId = src.EntityId
             });
+
+        CreateMap<NoteNodeHistoryEntity, NoteNodeHistoryDto>()
+            .IgnoreAllAndConstructUsing((src, mapper) => new NoteNodeHistoryDto
+            {
+                Id = src.Id,
+                NoteId = src.NoteNode.Id,
+                Title = src.Title,
+                MarkdownContent = src.MarkdownContent ?? string.Empty,
+                SortOrder = src.SortOrder,
+                CreatedAt = src.CreatedAt
+            });
     }
 }
