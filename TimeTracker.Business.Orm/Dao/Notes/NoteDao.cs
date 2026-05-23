@@ -44,6 +44,7 @@ public class NoteDao : INoteDao
         };
 
         await _sessionProvider.CurrentSession.SaveAsync(node);
+        await CreateHistoryAsync(node);
         return node;
     }
 
@@ -101,6 +102,15 @@ public class NoteDao : INoteDao
     public async Task SaveNodeAsync(NoteNodeEntity node)
     {
         await _sessionProvider.CurrentSession.SaveOrUpdateAsync(node);
+        await CreateHistoryAsync(node);
+    }
+
+    public async Task<ICollection<NoteNodeHistoryEntity>> GetHistoryAsync(NoteNodeEntity noteNode)
+    {
+        return await _sessionProvider.CurrentSession.Query<NoteNodeHistoryEntity>()
+            .Where(item => item.NoteNode.Id == noteNode.Id)
+            .OrderBy(item => item.CreatedAt)
+            .ToListAsync();
     }
 
     public async Task<ICollection<NoteNodeEntity>> GetWorkspaceNodesAsync(WorkspaceEntity workspace)
@@ -187,5 +197,25 @@ public class NoteDao : INoteDao
     public async Task DeleteLinkAsync(NoteLinkEntity link)
     {
         await _sessionProvider.CurrentSession.DeleteAsync(link);
+    }
+
+    private async Task CreateHistoryAsync(NoteNodeEntity node)
+    {
+        if (node.Type != NoteNodeType.Document)
+        {
+            return;
+        }
+
+        var history = new NoteNodeHistoryEntity
+        {
+            NoteNode = node,
+            Title = node.Title,
+            MarkdownContent = node.MarkdownContent,
+            SortOrder = node.SortOrder,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        node.History.Add(history);
+        await _sessionProvider.CurrentSession.SaveAsync(history);
     }
 }

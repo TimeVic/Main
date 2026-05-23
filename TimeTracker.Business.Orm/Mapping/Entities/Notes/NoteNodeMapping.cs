@@ -59,5 +59,12 @@ public class NoteNodeMapping : BaseGuidMappings<NoteNodeEntity>
             .LazyLoad()
             .Cascade.AllDeleteOrphan()
             .Inverse();
+
+        HasMany(x => x.History)
+            .KeyColumn("note_node_id")
+            .Fetch.Select()
+            .LazyLoad()
+            .Cascade.AllDeleteOrphan()
+            .Inverse();
     }
 }

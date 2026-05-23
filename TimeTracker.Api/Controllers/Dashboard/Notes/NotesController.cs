@@ -25,6 +25,12 @@ public class NotesController(ILifetimeScope scope) : MainApiControllerBase(scope
             .For<NoteDocumentDto>()
             .With(request);
 
+    [HttpPost("get-history")]
+    public Task<IActionResult> GetHistory([FromBody] GetNoteNodeHistoryRequest request)
+        => this.RequestAsync()
+            .For<GetNoteNodeHistoryResponse>()
+            .With(request);
+
     [HttpPost("create-folder")]
     public Task<IActionResult> CreateFolder([FromBody] CreateNoteFolderRequest request)
         => this.RequestAsync()
