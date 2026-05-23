@@ -60,6 +60,7 @@ Handlers implement `IAsyncRequestHandler<TRequest, TResponse>` and are auto-regi
 - **Transactions**: `CommitPerformerMiddleware` wraps each request in a transaction (commit on success, rollback on exception). Do not manually commit in handlers.
 - When adding or changing DAO list methods, check for potential N+1 queries caused by lazy-loaded relationships used by DTO mapping or response construction; use explicit eager fetching/projections for those relationships.
 - Run migrations: `dotnet run --project ./TimeTracker.Migrations`
+- Init DateTime fields with DateTime.UtcNow by default 
 
 ---
 
@@ -149,6 +150,7 @@ dotnet test ./TimeTracker.Tests.Unit.Business
 
 ## Database
  - Create migrations using FluentMigrator mechanism(classes, helpers, etc.) if it's possible
+ - Use 'timestamp' column type for date/time fields by default for migrations
 
 ## API requests and handlers
  - Use exception which implemets IDomainException to return correct error code from the API request(TimeTracker.Business.Common/Exceptions/Api). sHow example: RecordNotFoundException.ThrowIfNull - use if record not found.
