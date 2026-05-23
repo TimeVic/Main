@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using NHibernate.Linq;
 using TimeTracker.Api.Controllers.Dashboard.Notes;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
@@ -11,6 +12,7 @@ using TimeTracker.Business.Common.Constants.Http;
 using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Notes;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -24,6 +26,7 @@ public class NotesTest : BaseTest
 {
     private const string GetTreeUrl = "/dashboard/notes/get-tree";
     private const string GetDocumentUrl = "/dashboard/notes/get-document";
+    private const string GetHistoryUrl = "/dashboard/notes/get-history";
     private const string CreateFolderUrl = "/dashboard/notes/create-folder";
     private const string CreateDocumentUrl = "/dashboard/notes/create-document";
     private const string UpdateDocumentUrl = "/dashboard/notes/update-document";
@@ -171,6 +174,68 @@ public class NotesTest : BaseTest
         Assert.Equal("Deploy updated.md", actual.Title);
         Assert.Equal("# Updated", actual.MarkdownContent);
         Assert.NotNull(actual.UpdatedAt);
+    }
+
+    [Fact]
+    public async Task GetHistoryReturnsDocumentSnapshots()
+    {
+        var document = await CreateDocumentAsync("Deploy.md", "# Deploy");
+        await UpdateDocumentAsync(document.Id, "Deploy updated.md", "# Updated", NoteVisibility.Workspace);
+        var response = await PostRequestAsync(MoveNodeUrl, _jwtToken, new MoveNoteNodeRequest
+        {
+            NoteId = document.Id,
+            SortOrder = 250
+        }, _workspace.Id);
+        response.EnsureSuccessStatusCode();
+        var history = await GetHistoryAsync(document.Id);
+
+        Assert.Equal(3, history.History.Count);
+        Assert.Collection(
+            history.History,
+            item =>
+            {
+                Assert.Equal("Deploy.md", item.Title);
+                Assert.Equal("# Deploy", item.MarkdownContent);
+                Assert.Equal(1000, item.SortOrder);
+            },
+            item =>
+            {
+                Assert.Equal("Deploy updated.md", item.Title);
+                Assert.Equal("# Updated", item.MarkdownContent);
+                Assert.Equal(1000, item.SortOrder);
+            },
+            item =>
+            {
+                Assert.Equal("Deploy updated.md", item.Title);
+                Assert.Equal("# Updated", item.MarkdownContent);
+                Assert.Equal(250, item.SortOrder);
+            }
+        );
+    }
+
+    [Fact]
+    public async Task GetHistoryRejectsFolder()
+    {
+        var folder = await CreateFolderAsync("Folder");
+        var response = await PostRequestAsync(GetHistoryUrl, _jwtToken, new GetNoteNodeHistoryRequest
+        {
+            NoteId = folder.Id
+        }, _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task SavingFolderDoesNotCreateHistory()
+    {
+        var folder = await CreateFolderAsync("Folder");
+        await RenameNodeAsync(folder.Id, "Renamed folder");
+        await FlushDbChanges(isClearSession: true);
+        var historyCount = await DbSessionProvider.CurrentSession
+            .Query<NoteNodeHistoryEntity>()
+            .CountAsync();
+
+        Assert.Equal(0, historyCount);
     }
 
     [Fact]
@@ -489,6 +554,33 @@ public class NotesTest : BaseTest
         }, _workspace.Id);
         response.EnsureSuccessStatusCode();
         return await response.GetJsonDataAsync<NoteDocumentDto>();
+    }
+
+    private async Task<GetNoteNodeHistoryResponse> GetHistoryAsync(Guid noteId)
+    {
+        var response = await PostRequestAsync(GetHistoryUrl, _jwtToken, new GetNoteNodeHistoryRequest
+        {
+            NoteId = noteId
+        }, _workspace.Id);
+        response.EnsureSuccessStatusCode();
+        return await response.GetJsonDataAsync<GetNoteNodeHistoryResponse>();
+    }
+
+    private async Task UpdateDocumentAsync(
+        Guid noteId,
+        string title,
+        string markdownContent,
+        NoteVisibility visibility
+    )
+    {
+        var response = await PostRequestAsync(UpdateDocumentUrl, _jwtToken, new UpdateNoteDocumentRequest
+        {
+            NoteId = noteId,
+            Title = title,
+            MarkdownContent = markdownContent,
+            Visibility = visibility
+        }, _workspace.Id);
+        response.EnsureSuccessStatusCode();
     }
 
     private async System.Threading.Tasks.Task RenameNodeAsync(Guid noteId, string title)

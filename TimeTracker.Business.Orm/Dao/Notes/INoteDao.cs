@@ -27,6 +27,8 @@ public interface INoteDao : IDomainService
 
     Task SaveNodeAsync(NoteNodeEntity node);
 
+    Task<ICollection<NoteNodeHistoryEntity>> GetHistoryAsync(NoteNodeEntity noteNode);
+
     Task<ICollection<NoteNodeEntity>> GetWorkspaceNodesAsync(WorkspaceEntity workspace);
 
     Task<NoteLinkEntity> CreateLinkAsync(
