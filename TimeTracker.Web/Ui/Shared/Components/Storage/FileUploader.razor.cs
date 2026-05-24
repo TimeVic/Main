@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Extensions;
-using TimeTracker.Web.Services.Http;
+using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Web.Services.UI;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Storage;
 

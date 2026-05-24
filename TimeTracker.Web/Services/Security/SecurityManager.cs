@@ -2,11 +2,10 @@
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants;
-using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Permissions;
-using TimeTracker.Web.Store.Project;
-using TimeTracker.Web.Store.WorkspaceMembers;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Permissions;
+using TimeTracker.Client.Core.Store.Project;
+using TimeTracker.Client.Core.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Services.Security;
 

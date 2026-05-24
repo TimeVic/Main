@@ -3,7 +3,7 @@ using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client;
-using TimeTracker.Web.Store.Client;
+using TimeTracker.Client.Core.Store.Client;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Clients;
 

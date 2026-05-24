@@ -1,7 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Web.Store.Tag;
+using TimeTracker.Client.Core.Store.Tag;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Tag.Parts;
 

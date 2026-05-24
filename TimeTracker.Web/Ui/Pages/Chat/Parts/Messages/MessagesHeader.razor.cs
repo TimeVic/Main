@@ -1,8 +1,8 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Messaging.Channels;
-using TimeTracker.Web.Store.Messaging.Messages;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Messaging.Channels;
+using TimeTracker.Client.Core.Store.Messaging.Messages;
 
 namespace TimeTracker.Web.Ui.Pages.Chat.Parts.Messages;
 

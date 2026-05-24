@@ -1,4 +1,4 @@
-﻿using TimeTracker.Web.Store.TimeEntry;
+﻿using TimeTracker.Client.Core.Store.TimeEntry;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Report.TimeEntry;
 

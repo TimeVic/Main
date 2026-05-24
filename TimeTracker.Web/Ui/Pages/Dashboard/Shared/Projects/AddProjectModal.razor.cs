@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
-using TimeTracker.Web.Store.Project;
+using TimeTracker.Client.Core.Store.Project;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Projects;
 

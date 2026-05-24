@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Services.Security;
-using TimeTracker.Web.Store.MemberPayments;
-using WorkspaceMemberActions = TimeTracker.Web.Store.WorkspaceMembers;
+using TimeTracker.Client.Core.Store.MemberPayments;
+using WorkspaceMemberActions = TimeTracker.Client.Core.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.MemberPayments;
 

@@ -2,8 +2,8 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Report;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Report;
 using TimeTracker.Web.Services.Security;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Report.WorkspaceFinancialSummary;

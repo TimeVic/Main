@@ -8,7 +8,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Web.Services.Security;
 using TimeTracker.Web.Services.UI;
-using TimeTracker.Web.Store.WorkspaceMembers;
+using TimeTracker.Client.Core.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Comments;
 

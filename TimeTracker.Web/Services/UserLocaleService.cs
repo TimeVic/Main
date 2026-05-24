@@ -2,10 +2,11 @@ using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Client.Core.Services;
 
 namespace TimeTracker.Web.Services;
 
-public class UserLocaleService
+public class UserLocaleService : IUserLocaleService
 {
     private readonly IJSRuntime _js;
     private readonly ILocalizationUrlService _localizationUrlService;

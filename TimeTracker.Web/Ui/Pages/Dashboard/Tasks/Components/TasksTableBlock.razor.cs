@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Task;
-using TimeTracker.Web.Store.Tasks;
-using TimeTracker.Web.Store.TimeEntry;
+using TimeTracker.Client.Core.Store.Tasks;
+using TimeTracker.Client.Core.Store.TimeEntry;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Tasks.Components;

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
-using TimeTracker.Web.Store.Tasks;
+using TimeTracker.Client.Core.Store.Tasks;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals;
 
@@ -32,7 +32,7 @@ public partial class AddTaskModal
     public Guid? TimeEntryId { get; set; }
 
     [Inject]
-    private IState<TimeTracker.Web.Store.TasksList.TasksListState> _tasksListState { get; set; }
+    private IState<TimeTracker.Client.Core.Store.TasksList.TasksListState> _tasksListState { get; set; }
     
     private AddRequest model = new();
     private bool _isLoading = false;

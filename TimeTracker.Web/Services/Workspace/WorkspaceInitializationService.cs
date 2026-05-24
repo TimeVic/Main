@@ -4,14 +4,14 @@ using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Security;
 using TimeTracker.Business.Common.Constants;
-using TimeTracker.Web.Constants;
+using TimeTracker.Client.Core.Constants;
 using TimeTracker.Web.Core.Extensions;
-using TimeTracker.Web.Services.Http;
+using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Web.Services.Notification;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common;
-using TimeTracker.Web.Store.Permissions;
-using TimeTracker.Web.Store.Workspace;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Common;
+using TimeTracker.Client.Core.Store.Permissions;
+using TimeTracker.Client.Core.Store.Workspace;
 
 namespace TimeTracker.Web.Services.Workspace;
 
@@ -49,17 +49,17 @@ public class WorkspaceInitializationService
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(false));
         _dispatcher.Dispatch(new LoadCurrentUserAction());
         await LoadWorkspacePermissionsAsync();
-        _dispatcher.Dispatch(new TimeTracker.Web.Store.WorkspaceMembers.LoadListAction(isReload));
-        _dispatcher.Dispatch(new TimeTracker.Web.Store.Project.LoadListAction(isReload));
-        _dispatcher.Dispatch(new TimeTracker.Web.Store.Client.LoadListAction(isReload));
-        _dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.LoadListAction(isReload));
+        _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.WorkspaceMembers.LoadListAction(isReload));
+        _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.LoadListAction(isReload));
+        _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Client.LoadListAction(isReload));
+        _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.LoadListAction(isReload));
         if (!_navigationManager.GetPath().Equals(SiteUrl.DashboardBase))
         {
-            _dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.SetSelectedPageAction(1));
-            _dispatcher.Dispatch(new TimeTracker.Web.Store.TimeEntry.LoadListAction());
+            _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TimeEntry.SetSelectedPageAction(1));
+            _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TimeEntry.LoadListAction());
         }
         
-        _dispatcher.Dispatch(new TimeTracker.Web.Store.Tag.LoadListAction());
+        _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tag.LoadListAction());
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(true));
         // Task.Run(() => _fcmService.SetNotificationToken());
     }

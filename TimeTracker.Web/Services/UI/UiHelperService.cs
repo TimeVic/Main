@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Services.UI;
 

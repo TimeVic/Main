@@ -5,9 +5,9 @@ using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.Validation;
 using TimeTracker.Web.Services.Workspace;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Common;
-using TimeTracker.Web.Store.TimeEntry;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Common;
+using TimeTracker.Client.Core.Store.TimeEntry;
 
 namespace TimeTracker.Web.Ui.Shared;
 

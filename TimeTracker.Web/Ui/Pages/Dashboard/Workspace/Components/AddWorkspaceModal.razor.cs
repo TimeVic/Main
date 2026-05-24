@@ -6,7 +6,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Web.Services.Workspace;
-using TimeTracker.Web.Store.Project;
+using TimeTracker.Client.Core.Store.Project;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Components;
 

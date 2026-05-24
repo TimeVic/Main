@@ -5,13 +5,12 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Messaging;
 using TimeTracker.Web.Services.UI;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Messaging.Channels;
-using TimeTracker.Web.Store.Messaging.Messages;
-using LoadListAction = TimeTracker.Web.Store.Messaging.Messages.LoadListAction;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Messaging.Channels;
+using TimeTracker.Client.Core.Store.Messaging.Messages;
+using LoadListAction = TimeTracker.Client.Core.Store.Messaging.Messages.LoadListAction;
 
 namespace TimeTracker.Web.Ui.Pages.Chat.Parts.Messages;
 
@@ -90,7 +89,7 @@ public partial class MessagesListBlock: IDisposable
             );
         });
         
-        ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Messaging.Messages.SetListAction>(this, async (action) =>
+        ActionSubscriber.SubscribeToAction<TimeTracker.Client.Core.Store.Messaging.Messages.SetListAction>(this, async (action) =>
         {
             var listState = GetListState();
             if (listState != null)
@@ -103,7 +102,7 @@ public partial class MessagesListBlock: IDisposable
                 LoadList();
             }
         });
-        ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Messaging.Channels.SetSelectedAction>(this, async (action) =>
+        ActionSubscriber.SubscribeToAction<TimeTracker.Client.Core.Store.Messaging.Channels.SetSelectedAction>(this, async (action) =>
         {
             LoadList(true);
             var listState = GetListState();
@@ -115,7 +114,7 @@ public partial class MessagesListBlock: IDisposable
             _isNeedsScrollToBottom = true;
             StateHasChanged();
         });
-        ActionSubscriber.SubscribeToAction<TimeTracker.Web.Store.Messaging.Messages.AddMessageAction>(this, async (action) =>
+        ActionSubscriber.SubscribeToAction<TimeTracker.Client.Core.Store.Messaging.Messages.AddMessageAction>(this, async (action) =>
         {
             var listState = GetListState();
             if (listState != null)

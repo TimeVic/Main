@@ -4,8 +4,8 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
 using TimeTracker.Business.Common.Constants;
-using TimeTracker.Web.Store.Project;
-using LoadListAction = TimeTracker.Web.Store.WorkspaceMembers.LoadListAction;
+using TimeTracker.Client.Core.Store.Project;
+using LoadListAction = TimeTracker.Client.Core.Store.WorkspaceMembers.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Members.Parts;
 

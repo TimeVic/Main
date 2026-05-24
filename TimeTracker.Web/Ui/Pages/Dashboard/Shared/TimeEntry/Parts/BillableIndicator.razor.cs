@@ -4,10 +4,9 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Services.DateTimes;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.TimeEntry;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.TimeEntry;
+using TimeTracker.Client.Core.Services.DateTimes;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Parts;
 

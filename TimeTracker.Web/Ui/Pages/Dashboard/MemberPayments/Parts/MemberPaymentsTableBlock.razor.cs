@@ -2,7 +2,7 @@ using Fluxor;
 using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Web.Store.MemberPayments;
+using TimeTracker.Client.Core.Store.MemberPayments;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.MemberPayments.Parts;
 

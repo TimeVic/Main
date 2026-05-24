@@ -9,10 +9,9 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Common.Constants.Task;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
-using TimeTracker.Web.Store.Tasks;
-using TimeTracker.Web.Store.WorkspaceMembers;
+using TimeTracker.Client.Core.Store.Tasks;
+using TimeTracker.Client.Core.Store.WorkspaceMembers;
 using TimeTracker.Web.Ui.Shared.Components.Storage;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
@@ -77,7 +76,7 @@ public partial class UpdateTaskForm: IDisposable
         {
             _model.Fill(_task);
         }
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Tag.LoadListAction());
+        Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tag.LoadListAction());
         await base.OnInitializedAsync();
         _editContext.OnFieldChanged += OnFormFieldChanged;
         _isLoading = false;

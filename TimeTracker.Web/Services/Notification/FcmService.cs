@@ -1,7 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.JSInterop;
-using TimeTracker.Web.Services.Http;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Client.Core.Services.Http;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Web.Services.Notification;
 

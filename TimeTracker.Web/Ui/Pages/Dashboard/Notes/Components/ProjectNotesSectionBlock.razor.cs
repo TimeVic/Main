@@ -3,7 +3,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants.Notes;
-using TimeTracker.Web.Constants;
+using TimeTracker.Client.Core.Constants;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Notes.Components;
 

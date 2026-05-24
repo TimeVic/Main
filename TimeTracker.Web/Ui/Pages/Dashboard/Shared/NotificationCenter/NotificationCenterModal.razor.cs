@@ -1,7 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Web.Store.NotificationCenter;
+using TimeTracker.Client.Core.Store.NotificationCenter;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.NotificationCenter;
 

@@ -1,8 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Store.List.Currency;
+using TimeTracker.Client.Core.Store.List.Currency;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 

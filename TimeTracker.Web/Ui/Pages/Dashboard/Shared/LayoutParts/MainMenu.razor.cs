@@ -2,11 +2,10 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using TimeTracker.Api.Shared.Constants;
-using TimeTracker.Web.Constants;
+using TimeTracker.Client.Core.Constants;
 using TimeTracker.Web.Core.Extensions;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Services.Security;
-using TimeTracker.Web.Store.Permissions;
+using TimeTracker.Client.Core.Store.Permissions;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.LayoutParts;
 

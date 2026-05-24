@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
-using TimeTracker.Web.Constants;
+using TimeTracker.Client.Core.Constants;
 using TimeTracker.Web.Services;
-using TimeTracker.Web.Services.Http;
+using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Web.Services.Validation;
 
 namespace TimeTracker.Web.Ui.Pages.Landing.User.Registration;

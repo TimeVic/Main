@@ -2,7 +2,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
 using TimeTracker.Web.Services.Messaging;
-using TimeTracker.Web.Store.Messaging.Channels;
+using TimeTracker.Client.Core.Store.Messaging.Channels;
 
 namespace TimeTracker.Web.Ui.Pages.Chat.Parts;
 

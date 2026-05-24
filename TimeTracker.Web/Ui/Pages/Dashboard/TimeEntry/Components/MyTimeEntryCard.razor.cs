@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Client.Core.Store.Auth;
 using Fluxor;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.TimeEntry.Components;

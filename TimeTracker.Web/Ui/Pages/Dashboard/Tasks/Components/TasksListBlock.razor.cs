@@ -2,9 +2,9 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Web.Store.Common;
-using TimeTracker.Web.Store.Project;
-using TimeTracker.Web.Store.TasksList;
+using TimeTracker.Client.Core.Store.Common;
+using TimeTracker.Client.Core.Store.Project;
+using TimeTracker.Client.Core.Store.TasksList;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Tasks.Components;
 
@@ -61,7 +61,7 @@ public partial class TasksListBlock: IDisposable
         LoadSelectedProjectTaskLists();
         if (TaskListId == null)
         {
-            Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction());
         }
     }
 
@@ -81,11 +81,11 @@ public partial class TasksListBlock: IDisposable
         var taskList = _tasksListState.Value.List.FirstOrDefault(item => item.Id == taskListId.Value);
         if (taskList?.Project != null)
         {
-            Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.SetSelectedAction(taskList.Project));
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.SetSelectedAction(taskList.Project));
         }
 
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.SetSelectedAction(taskListId));
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
+        Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetSelectedAction(taskListId));
+        Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction());
     }
     
     private void OnSelectedProject(ProjectDto? project)
@@ -95,12 +95,12 @@ public partial class TasksListBlock: IDisposable
             return;
         }
 
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.SetSelectedAction(project));
+        Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.SetSelectedAction(project));
 
         if (_tasksListState.Value.SelectedTaskList?.Project?.Id != project.Id)
         {
-            Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.SetSelectedAction(null));
-            Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetSelectedAction(null));
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction());
         }
     }
     
@@ -142,7 +142,7 @@ public partial class TasksListBlock: IDisposable
     {
         if (_projectState.Value.Selected == null && _tasksListState.Value.SelectedTaskList?.Project != null)
         {
-            Dispatcher.Dispatch(new TimeTracker.Web.Store.Project.SetSelectedAction(_tasksListState.Value.SelectedTaskList.Project));
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.SetSelectedAction(_tasksListState.Value.SelectedTaskList.Project));
             return;
         }
 
@@ -161,15 +161,15 @@ public partial class TasksListBlock: IDisposable
         var firstProjectTaskList = _tasksListState.Value.List.FirstOrDefault(item => item.Project.Id == selectedProjectId.Value);
         if (firstProjectTaskList != null)
         {
-            Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.SetSelectedAction(firstProjectTaskList.Id));
-            Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetSelectedAction(firstProjectTaskList.Id));
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction());
             return;
         }
 
         if (_tasksListState.Value.SelectedTaskListId != null)
         {
-            Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.SetSelectedAction(null));
-            Dispatcher.Dispatch(new TimeTracker.Web.Store.Tasks.LoadListAction());
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetSelectedAction(null));
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction());
         }
     }
     
@@ -209,7 +209,7 @@ public partial class TasksListBlock: IDisposable
         {
             if (_tasksListState.Value.List.Any() || _tasksListState.Value.SelectedProjectId.HasValue)
             {
-                Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.LoadListAction(ProjectId: null));
+                Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.LoadListAction(ProjectId: null));
             }
 
             return;
@@ -227,6 +227,6 @@ public partial class TasksListBlock: IDisposable
             return;
         }
 
-        Dispatcher.Dispatch(new TimeTracker.Web.Store.TasksList.LoadListAction(ProjectId: selectedProjectId.Value));
+        Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.LoadListAction(ProjectId: selectedProjectId.Value));
     }
 }

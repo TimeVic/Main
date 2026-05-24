@@ -3,7 +3,7 @@ using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
-using TimeTracker.Web.Store.Tag;
+using TimeTracker.Client.Core.Store.Tag;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tags;
 

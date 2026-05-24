@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Web.Store.WorkspaceMembers;
+using TimeTracker.Client.Core.Store.WorkspaceMembers;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Comments;
 

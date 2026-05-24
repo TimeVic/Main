@@ -1,0 +1,52 @@
+﻿using Fluxor;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Project;
+using TimeTracker.Business.Common.Utils;
+using TimeTracker.Client.Core.Services.Http;
+using TimeTracker.Client.Core.Store.Auth;
+
+namespace TimeTracker.Client.Core.Store.Project.Effects;
+
+public class LoadListEffect: Effect<LoadListAction>
+{
+    private readonly IState<AuthState> _authState;
+    private readonly IState<ProjectState> _state;
+    private readonly IApiService _apiService;
+    private readonly ILogger<LoadListEffect> _logger;
+
+    public LoadListEffect(
+        IApiService apiService,
+        IState<AuthState> authState,
+        IState<ProjectState> state,
+        ILogger<LoadListEffect> logger
+    )
+    {
+        _apiService = apiService;
+        _authState = authState;
+        _state = state;
+        _logger = logger;
+    }
+
+    public override async Task HandleAsync(LoadListAction action, IDispatcher dispatcher)
+    {
+        try
+        {
+            var isLoad = action.IsReload || !action.IsReload && !_state.Value.IsLoaded;
+            if (!isLoad)
+            {
+                return;
+            }
+
+            dispatcher.Dispatch(new SetProjectIsListLoading(true));
+            var response = await _apiService.ProjectGetListAsync(new GetListRequest());
+            dispatcher.Dispatch(new SetListItemsAction(response));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message, e);
+        }
+        finally
+        {
+            dispatcher.Dispatch(new SetProjectIsListLoading(false));
+        }
+    }
+}

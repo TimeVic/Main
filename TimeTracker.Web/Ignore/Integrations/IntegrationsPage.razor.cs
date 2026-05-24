@@ -1,7 +1,7 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Web.Pages.Dashboard.Integrations;
 

@@ -1,5 +1,5 @@
 using System.Globalization;
-using TimeTracker.Web.Constants;
+using TimeTracker.Client.Core.Constants;
 
 namespace TimeTracker.Web.Services;
 

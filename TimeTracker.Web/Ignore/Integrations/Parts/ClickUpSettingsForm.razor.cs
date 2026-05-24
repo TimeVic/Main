@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
-using TimeTracker.Web.Constants;
-using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Client.Core.Constants;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Web.Pages.Dashboard.Integrations.Parts;
 

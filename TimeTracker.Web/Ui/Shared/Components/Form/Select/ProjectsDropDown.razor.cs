@@ -5,9 +5,9 @@ using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants.Ui;
 using TimeTracker.Web.Services.Security;
-using TimeTracker.Web.Store.Client;
-using TimeTracker.Web.Store.Permissions;
-using TimeTracker.Web.Store.Project;
+using TimeTracker.Client.Core.Store.Client;
+using TimeTracker.Client.Core.Store.Permissions;
+using TimeTracker.Client.Core.Store.Project;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 

@@ -3,11 +3,10 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
 using TimeTracker.Business.Common.Constants;
-using TimeTracker.Web.Core.Helpers;
 using TimeTracker.Web.Shared.Components.Form;
-using TimeTracker.Web.Store.Project;
-using TimeTracker.Web.Store.WorkspaceMembers;
-using LoadListAction = TimeTracker.Web.Store.WorkspaceMembers.LoadListAction;
+using TimeTracker.Client.Core.Store.Project;
+using TimeTracker.Client.Core.Store.WorkspaceMembers;
+using LoadListAction = TimeTracker.Client.Core.Store.WorkspaceMembers.LoadListAction;
 
 namespace TimeTracker.Web.Pages.Dashboard.Members.Parts.List
 {

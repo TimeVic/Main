@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Web.Store.TimeEntry;
+using TimeTracker.Client.Core.Store.TimeEntry;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Report.TimeEntry.Parts;
 

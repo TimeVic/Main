@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
-using TimeTracker.Web.Constants;
+using TimeTracker.Client.Core.Constants;
 using TimeTracker.Web.Services;
-using TimeTracker.Web.Services.Http;
+using TimeTracker.Client.Core.Services.Http;
 
 namespace TimeTracker.Web.Ui.Pages.Landing.User;
 

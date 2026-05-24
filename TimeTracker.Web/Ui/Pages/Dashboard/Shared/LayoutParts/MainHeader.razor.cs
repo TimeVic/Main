@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
-using TimeTracker.Web.Constants;
+using TimeTracker.Client.Core.Constants;
 using TimeTracker.Web.Services;
-using TimeTracker.Web.Services.DateTimes;
+using TimeTracker.Client.Core.Services.DateTimes;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Workspace;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Workspace;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Workspace;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.LayoutParts;
 

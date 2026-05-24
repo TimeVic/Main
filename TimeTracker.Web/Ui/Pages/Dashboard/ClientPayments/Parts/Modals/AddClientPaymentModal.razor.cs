@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.ClientPayment;
-using TimeTracker.Web.Services.DateTimes;
-using TimeTracker.Web.Store.ClientPayments;
+using TimeTracker.Client.Core.Store.ClientPayments;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.ClientPayments.Parts.Modals;
 

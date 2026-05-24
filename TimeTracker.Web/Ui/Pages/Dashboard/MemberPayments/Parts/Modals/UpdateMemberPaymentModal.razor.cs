@@ -6,7 +6,7 @@ using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
 using TimeTracker.Web.Services.Security;
-using TimeTracker.Web.Store.MemberPayments;
+using TimeTracker.Client.Core.Store.MemberPayments;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.MemberPayments.Parts.Modals;
 

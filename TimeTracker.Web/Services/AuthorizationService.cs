@@ -2,8 +2,8 @@ using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Business.Common.Constants;
-using TimeTracker.Web.Services.Http;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Client.Core.Services.Http;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Web.Services
 {

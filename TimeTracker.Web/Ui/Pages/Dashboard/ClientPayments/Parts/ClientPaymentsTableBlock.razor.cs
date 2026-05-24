@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Services.Security;
-using TimeTracker.Web.Store.ClientPayments;
+using TimeTracker.Client.Core.Store.ClientPayments;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.ClientPayments.Parts;
 

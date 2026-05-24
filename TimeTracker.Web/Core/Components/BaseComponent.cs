@@ -1,10 +1,10 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using TimeTracker.Web.Services.DateTimes;
-using TimeTracker.Web.Services.Http;
+using TimeTracker.Client.Core.Services.DateTimes;
+using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Web.Services.UI;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Web.Core.Components;
 

@@ -4,8 +4,8 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Web.Store.Tasks;
-using TimeTracker.Web.Store.TasksList;
+using TimeTracker.Client.Core.Store.Tasks;
+using TimeTracker.Client.Core.Store.TasksList;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Tasks.Components;

@@ -3,7 +3,7 @@ using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Web.Constants.Ui;
-using TimeTracker.Web.Store.Client;
+using TimeTracker.Client.Core.Store.Client;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 

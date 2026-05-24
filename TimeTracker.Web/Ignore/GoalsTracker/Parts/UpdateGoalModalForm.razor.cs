@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.GoalsTracker;
-using TimeTracker.Web.Store.GoalsTracker;
+using TimeTracker.Client.Core.Store.GoalsTracker;
 
 namespace TimeTracker.Web.Pages.Dashboard.GoalsTracker.Parts;
 

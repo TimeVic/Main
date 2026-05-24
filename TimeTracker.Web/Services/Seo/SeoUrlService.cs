@@ -1,4 +1,4 @@
-using TimeTracker.Web.Constants;
+using TimeTracker.Client.Core.Constants;
 using TimeTracker.Web.Services.UI;
 
 namespace TimeTracker.Web.Services;

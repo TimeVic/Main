@@ -2,7 +2,6 @@
 using LumexUI;
 using LumexUI.Common;
 using TimeTracker.Web.Constants.Ui;
-using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Ui.Shared.Components.Form.Select;
 

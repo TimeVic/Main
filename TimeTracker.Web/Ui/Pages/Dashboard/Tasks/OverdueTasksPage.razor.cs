@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Web.Services.UI;
-using TimeTracker.Web.Store.Tasks;
+using TimeTracker.Client.Core.Store.Tasks;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Tasks;
 

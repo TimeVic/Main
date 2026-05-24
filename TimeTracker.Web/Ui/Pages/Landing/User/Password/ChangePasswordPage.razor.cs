@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Web.Services;
-using TimeTracker.Web.Services.Http;
+using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Web.Services.UI;
 using TimeTracker.Web.Services.Validation;
 

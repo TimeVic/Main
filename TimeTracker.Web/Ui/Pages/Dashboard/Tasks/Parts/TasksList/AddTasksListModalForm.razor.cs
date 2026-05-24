@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
-using TimeTracker.Web.Constants;
-using TimeTracker.Web.Store.Project;
-using LoadListAction = TimeTracker.Web.Store.TasksList.LoadListAction;
+using TimeTracker.Client.Core.Constants;
+using TimeTracker.Client.Core.Store.Project;
+using LoadListAction = TimeTracker.Client.Core.Store.TasksList.LoadListAction;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Tasks.Parts.TasksList;
 

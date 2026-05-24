@@ -7,7 +7,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Web.Services;
 using TimeTracker.Web.Services.UI;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.User.Settings.Components;
 

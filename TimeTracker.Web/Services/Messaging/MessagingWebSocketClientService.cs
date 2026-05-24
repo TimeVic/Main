@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Web.Core.Helpers;
 
 namespace TimeTracker.Web.Services.Messaging;
 

@@ -1,6 +1,8 @@
-﻿namespace TimeTracker.Web.Services.UI;
+﻿using TimeTracker.Client.Core.Services.UI;
 
-public class ToastService
+namespace TimeTracker.Web.Services.UI;
+
+public class ToastService : IToastService
 {
     private readonly int _timeout = 3000;
     public readonly string ToasterId = "tv-toaster-rich-colors-id";

@@ -4,8 +4,8 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Web.Services.UI;
-using TimeTracker.Web.Store.Tasks;
-using TimeTracker.Web.Store.TasksList;
+using TimeTracker.Client.Core.Store.Tasks;
+using TimeTracker.Client.Core.Store.TasksList;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks;

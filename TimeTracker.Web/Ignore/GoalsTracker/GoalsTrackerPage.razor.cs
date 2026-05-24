@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using TimeTracker.Web.Store.GoalsTracker;
+using TimeTracker.Client.Core.Store.GoalsTracker;
 
 namespace TimeTracker.Web.Pages.Dashboard.GoalsTracker;
 

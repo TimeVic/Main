@@ -1,8 +1,7 @@
 ﻿using System.Timers;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Business.Common.Services.Format;
-using TimeTracker.Web.Core.Helpers;
-using TimeTracker.Web.Services.DateTimes;
+using TimeTracker.Client.Core.Services.DateTimes;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.TimeEntry.Parts;
 

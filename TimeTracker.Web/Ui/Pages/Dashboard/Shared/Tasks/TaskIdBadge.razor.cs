@@ -1,8 +1,8 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Tasks;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Tasks;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks;
 

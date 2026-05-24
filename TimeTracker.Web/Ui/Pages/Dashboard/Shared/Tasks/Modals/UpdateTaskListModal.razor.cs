@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
-using TimeTracker.Web.Store.TasksList;
+using TimeTracker.Client.Core.Store.TasksList;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals;
 

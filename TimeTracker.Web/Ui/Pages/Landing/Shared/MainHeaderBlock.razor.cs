@@ -1,9 +1,9 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
-using TimeTracker.Web.Constants;
+using TimeTracker.Client.Core.Constants;
 using TimeTracker.Web.Core.Extensions;
 using TimeTracker.Web.Services;
-using TimeTracker.Web.Store.Auth;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Web.Ui.Pages.Landing.Shared;
 

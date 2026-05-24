@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using TimeTracker.Web.Store.Common;
+using TimeTracker.Client.Core.Store.Common;
 
 namespace TimeTracker.Web.Ui.Pages.Chat.Shared;
 

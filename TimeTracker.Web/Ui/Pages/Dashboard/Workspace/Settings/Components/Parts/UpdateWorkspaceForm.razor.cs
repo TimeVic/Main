@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.List;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Workspace;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Workspace;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts;
 

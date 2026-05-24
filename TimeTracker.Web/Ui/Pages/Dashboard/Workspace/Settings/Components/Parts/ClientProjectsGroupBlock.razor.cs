@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Web.Store.Client;
-using ClientUpdateAction = TimeTracker.Web.Store.Client.UpdateAction;
+using TimeTracker.Client.Core.Store.Client;
+using ClientUpdateAction = TimeTracker.Client.Core.Store.Client.UpdateAction;
 
 namespace TimeTracker.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts;
 

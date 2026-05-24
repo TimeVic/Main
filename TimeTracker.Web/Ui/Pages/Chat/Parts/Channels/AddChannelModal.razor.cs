@@ -3,8 +3,8 @@ using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Messaging.Channel;
-using TimeTracker.Web.Store.Auth;
-using TimeTracker.Web.Store.Messaging.Channels;
+using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Messaging.Channels;
 
 namespace TimeTracker.Web.Ui.Pages.Chat.Parts.Channels;
 
