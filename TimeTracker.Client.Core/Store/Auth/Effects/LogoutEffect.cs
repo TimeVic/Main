@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Core.Services.Http;
+using TimeTracker.Client.Core.Services.Http.Cookies;
 
 namespace TimeTracker.Client.Core.Store.Auth.Effects;
 
@@ -9,16 +10,19 @@ public class LogoutEffect: Effect<LogoutAction>
 {
     private readonly NavigationManager _navigationManager;
     private readonly IApiService _apiService;
+    private readonly IAuthCookieConfigurator _authCookieConfigurator;
     private readonly ILogger<LogoutEffect> _logger;
 
     public LogoutEffect(
         NavigationManager navigationManager,
         IApiService apiService,
+        IAuthCookieConfigurator authCookieConfigurator,
         ILogger<LogoutEffect> logger
     )
     {
         _navigationManager = navigationManager;
         _apiService = apiService;
+        _authCookieConfigurator = authCookieConfigurator;
         _logger = logger;
     }
 
@@ -31,6 +35,10 @@ public class LogoutEffect: Effect<LogoutAction>
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
+        }
+        finally
+        {
+            await _authCookieConfigurator.ClearAsync();
         }
 
         _navigationManager.NavigateTo(ClientSiteUrl.Login, forceLoad: true);

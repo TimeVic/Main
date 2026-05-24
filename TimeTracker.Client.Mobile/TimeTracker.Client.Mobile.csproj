@@ -64,4 +64,8 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\TimeTracker.Client.Core\TimeTracker.Client.Core.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Newtonsoft.Json;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Client.Core.Converters.Json;
 using TimeTracker.Client.Core.Services.DateTimes;
+using TimeTracker.Client.Core.Services.Http.Cookies;
 using TimeTracker.Client.Core.Services.Http.Dto;
 
 namespace TimeTracker.Client.Core.Services.Http.Client;
@@ -16,17 +16,20 @@ public class CustomHttpClient
     
     private readonly HttpClient _httpClient;
     private readonly UserDateTimeProviderService _dateTimeProviderService;
+    private readonly IAuthCookieConfigurator _authCookieConfigurator;
     private readonly ILogger<CustomHttpClient> _logger;
 
     public CustomHttpClient(
         HttpClient httpClient,
         IConfiguration configuration,
         UserDateTimeProviderService dateTimeProviderService,
+        IAuthCookieConfigurator authCookieConfigurator,
         ILogger<CustomHttpClient> logger
     )
     {
         _httpClient = httpClient;
         _dateTimeProviderService = dateTimeProviderService;
+        _authCookieConfigurator = authCookieConfigurator;
         _logger = logger;
 
         _apiUrl = configuration.GetValue<string>("ApiUrl")!;
@@ -43,7 +46,7 @@ public class CustomHttpClient
     {   
         // create request object
         var request = new HttpRequestMessage(httpMethod, $"{_apiUrl}/{requestUri}");
-        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        await _authCookieConfigurator.ConfigureRequestAsync(request);
         if (
             httpMethod == HttpMethod.Post
             || httpMethod == HttpMethod.Put
@@ -59,6 +62,7 @@ public class CustomHttpClient
 
         // send request
         var response = await _httpClient.SendAsync(request);
+        await _authCookieConfigurator.ProcessResponseAsync(response);
         return await HandleHttpResponse(response);
     }
     
@@ -69,7 +73,7 @@ public class CustomHttpClient
     )
     {   
         var request = new HttpRequestMessage(HttpMethod.Post, $"{_apiUrl}/{requestUri}");
-        request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        await _authCookieConfigurator.ConfigureRequestAsync(request);
         using var multipartFormContent = new MultipartFormDataContent();
         if (data != null)
         {
@@ -93,6 +97,7 @@ public class CustomHttpClient
         
         // send request
         var response = await _httpClient.SendAsync(request);
+        await _authCookieConfigurator.ProcessResponseAsync(response);
         var responseString = await HandleHttpResponse(response);
         return Deserialize<TResponse>(responseString);
     }
