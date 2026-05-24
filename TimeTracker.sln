@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Business.Client
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Mobile", "TimeTracker.Mobile\TimeTracker.Mobile.csproj", "{FBB33B3E-BC0F-435B-A1F0-7CF842957A2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Client.Core", "TimeTracker.Client.Core\TimeTracker.Client.Core.csproj", "{D5A8EA70-EF0B-4958-8F78-B69CA5550C44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -150,6 +152,10 @@ Global
 		{FBB33B3E-BC0F-435B-A1F0-7CF842957A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBB33B3E-BC0F-435B-A1F0-7CF842957A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBB33B3E-BC0F-435B-A1F0-7CF842957A2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5A8EA70-EF0B-4958-8F78-B69CA5550C44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5A8EA70-EF0B-4958-8F78-B69CA5550C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5A8EA70-EF0B-4958-8F78-B69CA5550C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5A8EA70-EF0B-4958-8F78-B69CA5550C44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A0B3A29D-0064-4CA1-8B54-E2F74A1AECE7} = {EEEB1AA4-B6FE-4153-9CCB-565250FC147E}
