@@ -1,0 +1,79 @@
+@using TimeTracker.Client.Web.Ui.Shared.Components
+
+@inherits BaseReactiveComponent
+
+<div class="grid gap-3 sm:grid-cols-3 lg:min-w-[560px]">
+    <div class="h-full rounded-xl border border-slate-200 bg-white px-3 py-2">
+        <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["Earned"]</p>
+        <p class="mt-1 text-xl font-semibold leading-tight text-slate-900 tabular-nums">
+            <AmountDisplay Amount="@Earned"/>
+        </p>
+    </div>
+
+    <div class="@ReceivedClass">
+        <p class="@ReceivedLabelClass">@DashboardLocalizer["Received"]</p>
+        <p class="@ReceivedValueClass">
+            <AmountDisplay Amount="@Received"/>
+        </p>
+    </div>
+
+    <div class="@OutstandingClass">
+        <p class="@OutstandingLabelClass">@DashboardLocalizer["Outstanding"]</p>
+        <p class="@OutstandingValueClass">
+            <AmountDisplay Amount="@Outstanding"/>
+        </p>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public decimal Earned { get; set; }
+
+    [Parameter]
+    public decimal Received { get; set; }
+
+    [Parameter]
+    public decimal Outstanding { get; set; }
+
+    private string ReceivedClass
+    {
+        get => Received > 0
+            ? "h-full rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2"
+            : "h-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2";
+    }
+
+    private string ReceivedLabelClass
+    {
+        get => Received > 0
+            ? "text-[11px] font-semibold uppercase tracking-wide text-emerald-700"
+            : "text-[11px] font-semibold uppercase tracking-wide text-slate-500";
+    }
+
+    private string ReceivedValueClass
+    {
+        get => Received > 0
+            ? "mt-1 text-xl font-semibold leading-tight text-emerald-700 tabular-nums"
+            : "mt-1 text-xl font-semibold leading-tight text-slate-500 tabular-nums";
+    }
+
+    private string OutstandingClass
+    {
+        get => Outstanding > 0
+            ? "h-full rounded-xl border border-red-200 bg-red-50 px-3 py-2"
+            : "h-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2";
+    }
+
+    private string OutstandingLabelClass
+    {
+        get => Outstanding > 0
+            ? "text-[11px] font-semibold uppercase tracking-wide text-red-600"
+            : "text-[11px] font-semibold uppercase tracking-wide text-slate-500";
+    }
+
+    private string OutstandingValueClass
+    {
+        get => Outstanding > 0
+            ? "mt-1 text-xl font-semibold leading-tight text-red-700 tabular-nums"
+            : "mt-1 text-xl font-semibold leading-tight text-slate-500 tabular-nums";
+    }
+}

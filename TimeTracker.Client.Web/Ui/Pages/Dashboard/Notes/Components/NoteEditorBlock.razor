@@ -1,0 +1,110 @@
+@using LumexUI.Common
+@using TimeTracker.Business.Common.Constants.Notes
+@using TimeTracker.Client.Core.Constants.Ui
+@using TimeTracker.Client.Web.Services.UI
+@inject MarkdownService MarkdownService
+@inherits BaseReactiveComponent
+
+<section class="flex min-h-[720px] flex-col rounded-2xl border border-slate-200 bg-white shadow-sm">
+    @if (IsLoading)
+    {
+        <div class="flex flex-1 flex-col">
+            <div class="border-b border-slate-200 p-4">
+                <LumexSkeleton Class="h-12 w-full rounded-xl"/>
+                <div class="mt-3 flex justify-end gap-2">
+                    <LumexSkeleton Class="h-8 w-24 rounded-full"/>
+                    <LumexSkeleton Class="h-8 w-28 rounded-full"/>
+                </div>
+            </div>
+            <div class="grid flex-1 xl:grid-cols-2">
+                <div class="flex min-h-0 flex-1 flex-col p-4">
+                    <div class="mb-2 flex items-center justify-between gap-2">
+                        <LumexSkeleton Class="h-4 w-24 rounded-full"/>
+                        <LumexSkeleton Class="h-6 w-28 rounded-full"/>
+                    </div>
+                    <LumexSkeleton Class="min-h-[560px] flex-1 w-full rounded-xl"/>
+                </div>
+                <div class="flex min-h-0 flex-1 flex-col border-t border-slate-200 p-4 xl:border-l xl:border-t-0">
+                    <div class="mb-2">
+                        <LumexSkeleton Class="h-4 w-24 rounded-full"/>
+                    </div>
+                    <LumexSkeleton Class="min-h-[560px] flex-1 w-full rounded-xl"/>
+                </div>
+            </div>
+        </div>
+    }
+    else if (Document == null)
+    {
+        <div class="flex min-h-[360px] items-center justify-center p-6 text-center">
+            <div>
+                <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
+                    <i class="fa-regular fa-note-sticky"></i>
+                </div>
+                <p class="mt-4 text-sm font-medium text-slate-700">@DashboardLocalizer["Notes_NoSelectedNote"]</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="border-b border-slate-200 p-4">
+            <div class="flex flex-col gap-3 xl:flex-row xl:items-center">
+                <input
+                    class="min-w-0 flex-1 rounded-xl border border-slate-200 px-4 py-3 text-lg font-semibold text-slate-900 outline-none transition focus:border-blue-500"
+                    maxlength="200"
+                    value="@Title"
+                    placeholder="@DashboardLocalizer["Title"].Value"
+                    @oninput="@OnTitleInput"/>
+                <div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
+                    <EnumDropDown
+                        TItem="NoteVisibility"
+                        SelectType="@DropDownType.DropDown"
+                        Size="Size.Small"
+                        Value="@Visibility"
+                        ValueChanged="@OnVisibilityChanged"/>
+                    <CustomButton
+                        Size="Size.Small"
+                        Color="@ThemeColor.Primary"
+                        Radius="@Radius.Full"
+                        IsLoading="IsSaving"
+                        Disabled="@(!IsDirty)"
+                        OnClick="@OnSave">
+                        <StartContent>
+                            <i class="fa-regular fa-floppy-disk"></i>
+                        </StartContent>
+                        <ChildContent>@DashboardLocalizer["Save"]</ChildContent>
+                    </CustomButton>
+                </div>
+            </div>
+        </div>
+        <div class="grid flex-1 xl:grid-cols-2">
+            <div class="flex min-h-0 flex-1 flex-col p-4">
+                <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
+                    <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">@DashboardLocalizer["Markdown"]</label>
+                    <span class="@SaveStateClass">@SaveStateLabel</span>
+                </div>
+                <textarea
+                    class="min-h-[560px] flex-1 w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 font-mono text-sm leading-6 text-slate-800 outline-none transition focus:border-blue-500"
+                    maxlength="5000000"
+                    value="@MarkdownContent"
+                    placeholder="@DashboardLocalizer["Notes_MarkdownPlaceholder"].Value"
+                    @oninput="@OnMarkdownInput"></textarea>
+            </div>
+            <div class="flex min-h-0 flex-1 flex-col border-t border-slate-200 p-4 xl:border-l xl:border-t-0">
+                <div class="mb-2">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">@DashboardLocalizer["Preview"]</p>
+                    <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["Notes_PreviewDescription"]</p>
+                </div>
+                <div class="min-h-[560px] flex-1 overflow-auto rounded-xl bg-white text-slate-700">
+                    @if (string.IsNullOrWhiteSpace(MarkdownContent))
+                    {
+                        <p class="text-sm text-slate-400">@DashboardLocalizer["Notes_EmptyPreview"]</p>
+                    }
+                    else
+                    {
+                        @((MarkupString)MarkdownService.ToHtml(MarkdownContent))
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</section>

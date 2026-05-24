@@ -1,0 +1,26 @@
+﻿@page "/board/report/summary"
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Summary.Parts
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+<FilterForm/>
+
+@if (!_state.Value.IsLoading)
+{
+    var grouppedByString = @_state.Value.SummaryReportFilter.PeriodType.GetDisplayName();
+
+    @* <MoneyOverviewSection/> *@
+    <PeriodAnalyticsSection/>
+    <SummaryChartSection Items="@_byDateItems" PeriodLabel="@grouppedByString"/>
+    <GroupedSummaryTableSection ReportData="@_state.Value.SummaryReportData" PeriodLabel="@grouppedByString"/>
+}
+else
+{
+    <div class="h-100 flex items-center justify-center">
+        <LumexSpinner />    
+    </div>
+}

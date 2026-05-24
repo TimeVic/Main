@@ -1,0 +1,85 @@
+@using LumexUI.Common
+@using InputDateType = LumexUI.Common.InputDateType
+
+@inherits InputBase<DateTime>
+
+<div class="flex items-center gap-2">
+    <LumexDatebox 
+        TValue="DateTime?"
+        Label="@Label"
+        @bind-Value="CurrentValueNullable"
+        Class="@Class"
+        Placeholder="@Placeholder"
+        Type="@Type"
+        Invalid="@HasError"
+        Disabled="Disabled"
+        FullWidth="FullWidth"
+        Required="@Required"
+        Variant="Variant"
+        Color="Color"
+        Size="Size"
+        Clearable="Clearable"
+        ErrorMessage="@FirstError"/>
+</div>
+
+@code {
+    [Parameter]
+    public bool Required { get; set; }
+    
+    [Parameter]
+    public bool Disabled { get; set; }
+    
+    [Parameter]
+    public InputVariant Variant { get; set; } = InputVariant.Outlined;
+
+    [Parameter]
+    public ThemeColor Color { get; set; } = ThemeColor.Default;
+    
+    [Parameter]
+    public bool FullWidth { get; set; }
+    
+    [Parameter]
+    public string Placeholder { get; set; } = string.Empty;
+    
+    [Parameter]
+    public string Label { get; set; } = string.Empty;
+    
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+    
+    [Parameter]
+    public Size Size { get; set; } = Size.Medium;
+    
+    [Parameter]
+    public InputDateType Type { get; set; } = InputDateType.Date;
+
+    [Parameter]
+    public bool Clearable { get; set; } = false;
+    
+    private bool HasError => EditContext?.GetValidationMessages(FieldIdentifier).Any() ?? false;
+
+    private string FirstError =>
+        EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault() ?? string.Empty;
+
+    public bool _isShowEmojiModal { get; set; } = false;
+    
+    // Bridge between InputBase<DateTime> (non-nullable) and LumexDatebox<DateTime?> (nullable).
+    // Without this, @bind-Value would generate EventCallback<DateTime> which cannot be
+    // assigned to LumexDatebox's ValueChanged: EventCallback<DateTime?>.
+    private DateTime? CurrentValueNullable
+    {
+        get => CurrentValue == default ? null : CurrentValue;
+        set => CurrentValue = value ?? default;
+    }
+
+    protected override bool TryParseValueFromString(
+        string? value,
+        out DateTime result,
+        out string? validationErrorMessage
+    )
+    {
+        DateTime.TryParse(value, out result);
+        validationErrorMessage = null;
+        return true;
+    }
+}

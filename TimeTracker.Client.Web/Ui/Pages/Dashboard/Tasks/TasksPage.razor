@@ -1,0 +1,15 @@
+﻿@page "/board/tasks/{TaskListId:guid}"
+@page "/board/tasks"
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Components
+
+@inherits BaseComponent
+@layout Layout
+
+<CascadingValue Name="TaskListId" Value="@TaskListId">
+    <section class="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+        <TasksListBlock></TasksListBlock>
+        <TasksBlock></TasksBlock>
+    </section>
+</CascadingValue>

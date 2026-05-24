@@ -46,13 +46,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Tests.Unit.Busi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.WorkerServices", "TimeTracker.WorkerServices\TimeTracker.WorkerServices.csproj", "{E5798432-71B3-4B8F-8F0A-E405F873B91D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Web", "TimeTracker.Web\TimeTracker.Web.csproj", "{5FAEEFCE-623F-465B-B789-5B532F6365C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Client.Web", "TimeTracker.Client.Web\TimeTracker.Client.Web.csproj", "{5FAEEFCE-623F-465B-B789-5B532F6365C2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Business.Clients", "TimeTracker.Business.Clients\TimeTracker.Business.Clients.csproj", "{F4034357-EED2-4AC8-A181-C40457D0411F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Mobile", "TimeTracker.Mobile\TimeTracker.Mobile.csproj", "{FBB33B3E-BC0F-435B-A1F0-7CF842957A2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Client.Mobile", "TimeTracker.Client.Mobile\TimeTracker.Client.Mobile.csproj", "{FBB33B3E-BC0F-435B-A1F0-7CF842957A2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Client.Core", "TimeTracker.Client.Core\TimeTracker.Client.Core.csproj", "{D5A8EA70-EF0B-4958-8F78-B69CA5550C44}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{12A82251-4AB9-4C08-B5C3-FCA01C22BB45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -175,5 +177,8 @@ Global
 		{B7629112-B6B2-41BA-AA12-5538B0482136} = {5E30EE13-E6A0-41D8-B90F-1A52666978ED}
 		{8455D35E-F8AD-46A4-86F3-77EDBF360487} = {89355D2D-34BA-406F-8B6E-96ECB3B361A4}
 		{F4034357-EED2-4AC8-A181-C40457D0411F} = {5E30EE13-E6A0-41D8-B90F-1A52666978ED}
+		{D5A8EA70-EF0B-4958-8F78-B69CA5550C44} = {12A82251-4AB9-4C08-B5C3-FCA01C22BB45}
+		{FBB33B3E-BC0F-435B-A1F0-7CF842957A2B} = {12A82251-4AB9-4C08-B5C3-FCA01C22BB45}
+		{5FAEEFCE-623F-465B-B789-5B532F6365C2} = {12A82251-4AB9-4C08-B5C3-FCA01C22BB45}
 	EndGlobalSection
 EndGlobal

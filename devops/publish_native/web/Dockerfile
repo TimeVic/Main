@@ -12,7 +12,7 @@ ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 COPY . /app
-WORKDIR /app/TimeTracker.Web
+WORKDIR /app/TimeTracker.Client.Web
 
 RUN apt update
 RUN apt install -y apt-transport-https wget ca-certificates curl

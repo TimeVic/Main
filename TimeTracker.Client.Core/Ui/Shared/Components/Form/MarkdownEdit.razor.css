@@ -1,0 +1,19 @@
+.w-markdown-editor {
+  width: 100%;
+}
+.w-markdown-editor ::deep .w-markdown-editor-input {
+  display: block;
+  max-width: none;
+  min-height: 180px;
+  width: 100%;
+}
+.w-markdown-editor ::deep .w-view {
+  cursor: pointer;
+  min-height: 48px;
+  max-width: none;
+  overflow-y: auto;
+  width: 100%;
+}
+.w-markdown-editor .w-support {
+  font-size: 12px;
+}

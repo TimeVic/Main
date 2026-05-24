@@ -1,0 +1,75 @@
+@page "/signup"
+@page "/uk/signup"
+@page "/registration/step1"
+@page "/uk/registration/step1"
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Client.Web.Ui.Pages.Landing.User.Registration.Shared
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
+@using Layout = TimeTracker.Client.Web.Ui.Pages.Landing.Shared.LandingLayout
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+@inject IStringLocalizer<PublicLandingResource> SharedLocalizer
+@inject IStringLocalizer<Step1Page> Localizer
+@inject TimeTracker.Client.Core.Services.UI.UrlService UrlService
+<SeoHead
+    Title="@Localizer["Meta_Title"]"
+    Description="@Localizer["Meta_Description"]"
+    Keywords="@Localizer["Meta_Keywords"]"
+    Robots="@SiteMetadata.IndexRobots"
+    CanonicalUrl="@UrlService.ToAbsoluteUrl(SiteUrl.Registration_Step1)" />
+
+<RegistrationCntainerBlock>
+    <ChildContent>
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-emerald-600">@Localizer["Content_Registration"]</p>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-900">@Localizer["Content_CreateAccount"]</h2>
+                <p class="mt-2 text-sm text-slate-500">@Localizer["Content_Step1Of2StartWithYourEmailAddress"]</p>
+            </div>
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-sm">
+                <i class="@($"fa-solid fa-user-plus text-lg")"></i>
+            </div>
+        </div>
+        
+        <EditForm
+            Model="model"
+            @ref="_form"
+            class="mt-6 space-y-4">
+            <DataAnnotationsValidator />
+            <CustomValidationSummary/>
+
+            <div>
+                <InputTextField 
+                    @bind-Value="@model.Email"
+                    Label="@SharedLocalizer["Form_EmailLabel"]"
+                    FullWidth="true"
+                    Type="InputType.Email" 
+                    Placeholder="@SharedLocalizer["Form_YourEmailPlaceholder"]" />
+            </div>
+            @* <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600"> *@
+            @*     @statusMessage *@
+            @* </div> *@
+            
+            <CustomButton
+                Color="@ThemeColor.Warning"
+                Class="w-full gap-2 rounded-2xl bg-emerald-600 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                IsLoading="_isLoading"
+                OnClick="@Submit">
+                @Localizer["Content_SendVerificationEmail"]
+            </CustomButton>
+        </EditForm>
+
+        @if (_isSent)
+        {
+            <div class="mt-6 rounded-3xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
+                <p class="font-semibold">@Localizer["Content_VerificationEmailSent"]</p>
+                <p class="mt-2 text-emerald-700">@Localizer["Content_WeVeSentYouAnEmailPleaseFollowTheLink"]</p>
+            </div>
+        }
+
+    </ChildContent>
+</RegistrationCntainerBlock>

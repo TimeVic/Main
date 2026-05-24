@@ -1,0 +1,48 @@
+﻿@using LumexUI
+@using TimeTracker.Business.Common.Constants
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts
+@using TimeTracker.Client.Web.Ui.Shared
+@using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
+@using TimeTracker.Client.Web.Ui.Shared.Components.Helper.Portal
+@using TimeTracker.Client.Web.Ui.Shared.Components.Layout
+@inherits TimeTracker.Client.Web.Ui.Shared.BaseLayout
+
+<SeoHead
+    Title="@($"TimeVic - {DashboardLocalizer["Workspace"]}")"
+    Robots="@SiteMetadata.NoIndexRobots" />
+
+<div class="min-h-screen flex flex-col bg-white text-slate-800">
+    @if (CommonState.Value.IsInitialized)
+    {
+        <InitializationContainer>
+            <MainHeader></MainHeader>
+            <MainMenu></MainMenu>
+            <main class="px-4 py-6 sm:px-6 lg:px-8">
+                @if (AuthState.Value.User != null && DemoAccountConstants.IsDemoEmail(AuthState.Value.User.Email))
+                {
+                    <div class="mb-6 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-blue-950 shadow-sm sm:flex sm:items-center sm:justify-between sm:gap-4">
+                        <p class="text-sm font-semibold">@DashboardLocalizer["DemoBannerTitle"]</p>
+                        <a href="@SiteUrl.Registration_Step1" class="mt-3 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 sm:mt-0">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>@DashboardLocalizer["StartTrackingIncomeFree"]</span>
+                        </a>
+                    </div>
+                }
+                @Body
+            </main>
+        </InitializationContainer>
+    }
+    @if (!IsShowReCaptcha)
+    {
+        <style>
+            .grecaptcha-badge {
+                visibility: hidden;
+            }
+        </style>
+    }
+    
+    <LayoutFooterBlock/>
+</div>
+<LumexToastProvider RichColors="@true" Id="tv-toaster-rich-colors-id" />
+<BaseModalDialogRenderBlock/>
+<PortalHostComponent/>
