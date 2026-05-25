@@ -62,6 +62,344 @@ h1:focus {
     display: none;
 }
 
+html,
+body {
+    min-height: 100%;
+    margin: 0;
+    background: #eef2f7;
+    color: #172033;
+    font-family: OpenSansRegular, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+.mobile-preloader-page,
+.mobile-login-page,
+.mobile-board-page {
+    min-height: 100vh;
+    min-height: 100dvh;
+    box-sizing: border-box;
+    padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+}
+
+.mobile-preloader-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef2f7;
+}
+
+.mobile-preloader-card {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    color: #475569;
+    text-align: center;
+}
+
+.mobile-preloader-card p {
+    margin: 10px 0 0;
+    color: #172033;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.mobile-preloader-card span {
+    font-size: 13px;
+}
+
+.mobile-preloader-spinner {
+    width: 42px;
+    height: 42px;
+    border: 4px solid #cbd5e1;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: mobile-spin 0.8s linear infinite;
+}
+
+@keyframes mobile-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.mobile-login-page {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background:
+        linear-gradient(145deg, rgba(37, 99, 235, 0.15), rgba(16, 185, 129, 0.12) 44%, rgba(245, 158, 11, 0.12)),
+        #eef2f7;
+}
+
+.mobile-login-hero,
+.mobile-login-form-panel,
+.mobile-board-placeholder {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 16px 38px rgba(15, 23, 42, 0.12);
+}
+
+.mobile-login-hero {
+    padding: 24px;
+    background: #111827;
+    color: #f8fafc;
+}
+
+.mobile-login-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.mobile-login-brand-mark {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #fff;
+}
+
+.mobile-login-kicker,
+.mobile-login-form-heading p,
+.mobile-board-header p {
+    margin: 0;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.mobile-login-kicker {
+    margin-top: 28px;
+    color: #93c5fd;
+}
+
+.mobile-login-hero h1,
+.mobile-login-form-heading h2,
+.mobile-board-header h1,
+.mobile-board-placeholder h2 {
+    margin: 0;
+    letter-spacing: 0;
+}
+
+.mobile-login-hero h1 {
+    margin-top: 10px;
+    font-size: 30px;
+    line-height: 1.08;
+}
+
+.mobile-login-copy {
+    margin: 14px 0 0;
+    color: #cbd5e1;
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+.mobile-login-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.mobile-login-metrics div {
+    min-width: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.mobile-login-metrics strong,
+.mobile-login-metrics span {
+    display: block;
+}
+
+.mobile-login-metrics strong {
+    color: #fff;
+    font-size: 14px;
+}
+
+.mobile-login-metrics span {
+    margin-top: 6px;
+    color: #cbd5e1;
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+.mobile-login-form-panel {
+    padding: 22px;
+}
+
+.mobile-login-form-heading h2 {
+    margin-top: 4px;
+    color: #111827;
+    font-size: 24px;
+}
+
+.mobile-login-form {
+    display: grid;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.mobile-login-form .validation-errors {
+    margin: 0;
+    padding-left: 18px;
+    color: #b91c1c;
+    font-size: 13px;
+}
+
+.mobile-field {
+    display: grid;
+    gap: 7px;
+}
+
+.mobile-field label {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.mobile-input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0 14px;
+    background: #fff;
+    color: #111827;
+    outline: none;
+}
+
+.mobile-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+}
+
+.mobile-checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: #475569;
+    font-size: 14px;
+}
+
+.mobile-checkbox-row input {
+    width: 18px;
+    height: 18px;
+    accent-color: #2563eb;
+}
+
+.mobile-primary-button {
+    width: 100%;
+    min-height: 50px;
+    border: 0;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.mobile-primary-button:disabled {
+    background: #94a3b8;
+}
+
+.mobile-alert-error {
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px;
+    background: #fef2f2;
+    color: #991b1b;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.mobile-board-page {
+    background: #eef2f7;
+}
+
+.mobile-board-header {
+    display: flex;
+    max-width: 520px;
+    margin: 0 auto 18px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.mobile-board-header h1 {
+    margin-top: 4px;
+    color: #111827;
+    font-size: 30px;
+}
+
+.mobile-board-avatar {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #111827;
+    color: #fff;
+    font-weight: 800;
+}
+
+.mobile-board-placeholder {
+    padding: 24px;
+}
+
+.mobile-board-user {
+    margin: 0 0 12px;
+    color: #2563eb;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.mobile-board-placeholder h2 {
+    color: #111827;
+    font-size: 24px;
+}
+
+.mobile-board-placeholder p:last-child {
+    margin: 12px 0 0;
+    color: #475569;
+    line-height: 1.55;
+}
+
+@media (min-width: 720px) {
+    .mobile-login-page {
+        justify-content: center;
+        padding-right: 32px;
+        padding-left: 32px;
+    }
+
+    .mobile-login-hero,
+    .mobile-login-form-panel {
+        max-width: 620px;
+    }
+}
+
 @supports (-webkit-touch-callout: none) {
     .status-bar-safe-area {
         display: flex;

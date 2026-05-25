@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Header_Kicker" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+  <data name="Header_Title" xml:space="preserve">
+    <value>Board</value>
+  </data>
+  <data name="Greeting_User" xml:space="preserve">
+    <value>Welcome, {0}</value>
+  </data>
+  <data name="Greeting_DefaultUser" xml:space="preserve">
+    <value>freelancer</value>
+  </data>
+  <data name="Placeholder_Title" xml:space="preserve">
+    <value>Your mobile board is coming soon.</value>
+  </data>
+  <data name="Placeholder_Description" xml:space="preserve">
+    <value>This placeholder keeps the signed-in flow ready while the time entry and project board is being built.</value>
+  </data>
+</root>

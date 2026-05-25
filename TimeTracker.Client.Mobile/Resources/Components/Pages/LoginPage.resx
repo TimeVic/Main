@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Brand_Name" xml:space="preserve">
+    <value>TimeVic</value>
+  </data>
+  <data name="Hero_Kicker" xml:space="preserve">
+    <value>Freelance time tracker</value>
+  </data>
+  <data name="Hero_Title" xml:space="preserve">
+    <value>Track time, earned income, and payments in one workspace.</value>
+  </data>
+  <data name="Hero_Subtitle" xml:space="preserve">
+    <value>Sign in to continue working with your clients, projects, time entries, and outstanding balances.</value>
+  </data>
+  <data name="Metrics_Label" xml:space="preserve">
+    <value>TimeVic highlights</value>
+  </data>
+  <data name="Metric_Time" xml:space="preserve">
+    <value>Time entries</value>
+  </data>
+  <data name="Metric_TimeDescription" xml:space="preserve">
+    <value>Keep billable work organized</value>
+  </data>
+  <data name="Metric_Income" xml:space="preserve">
+    <value>Payments</value>
+  </data>
+  <data name="Metric_IncomeDescription" xml:space="preserve">
+    <value>See paid and outstanding income</value>
+  </data>
+  <data name="Form_Kicker" xml:space="preserve">
+    <value>Secure access</value>
+  </data>
+  <data name="Form_Title" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Form_EmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Form_EmailPlaceholder" xml:space="preserve">
+    <value>name@example.com</value>
+  </data>
+  <data name="Form_PasswordLabel" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Form_PasswordPlaceholder" xml:space="preserve">
+    <value>Enter password</value>
+  </data>
+  <data name="Form_RememberSession" xml:space="preserve">
+    <value>Remember this session</value>
+  </data>
+  <data name="Button_SignIn" xml:space="preserve">
+    <value>Sign in and open board</value>
+  </data>
+  <data name="Button_SigningIn" xml:space="preserve">
+    <value>Signing in...</value>
+  </data>
+  <data name="Error_InvalidCredentials" xml:space="preserve">
+    <value>Incorrect email or password.</value>
+  </data>
+</root>

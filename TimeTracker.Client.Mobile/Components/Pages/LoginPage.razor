@@ -1,0 +1,76 @@
+@page "/login"
+@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User
+@using TimeTracker.Client.Core.Core.Components
+@inherits BaseReactiveComponent
+
+@inject IStringLocalizer<LoginPage> Localizer
+
+<main class="mobile-login-page">
+    <section class="mobile-login-hero">
+        <div class="mobile-login-brand">
+            <span class="mobile-login-brand-mark">T</span>
+            <span>@Localizer["Brand_Name"]</span>
+        </div>
+        <p class="mobile-login-kicker">@Localizer["Hero_Kicker"]</p>
+        <h1>@Localizer["Hero_Title"]</h1>
+        <p class="mobile-login-copy">@Localizer["Hero_Subtitle"]</p>
+        <div class="mobile-login-metrics" aria-label="@Localizer["Metrics_Label"]">
+            <div>
+                <strong>@Localizer["Metric_Time"]</strong>
+                <span>@Localizer["Metric_TimeDescription"]</span>
+            </div>
+            <div>
+                <strong>@Localizer["Metric_Income"]</strong>
+                <span>@Localizer["Metric_IncomeDescription"]</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="mobile-login-form-panel">
+        <div class="mobile-login-form-heading">
+            <p>@Localizer["Form_Kicker"]</p>
+            <h2>@Localizer["Form_Title"]</h2>
+        </div>
+
+        <EditForm Model="@_model" @ref="_form" OnValidSubmit="SubmitAsync" FormName="MobileLoginForm" class="mobile-login-form">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            @if (!string.IsNullOrWhiteSpace(_errorMessage))
+            {
+                <div class="mobile-alert-error" role="alert">@_errorMessage</div>
+            }
+
+            <div class="mobile-field">
+                <label for="login-email">@Localizer["Form_EmailLabel"]</label>
+                <InputText
+                    id="login-email"
+                    class="mobile-input"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="@Localizer["Form_EmailPlaceholder"]"
+                    @bind-Value="_model.Email" />
+            </div>
+
+            <div class="mobile-field">
+                <label for="login-password">@Localizer["Form_PasswordLabel"]</label>
+                <InputText
+                    id="login-password"
+                    class="mobile-input"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="@Localizer["Form_PasswordPlaceholder"]"
+                    @bind-Value="_model.Password" />
+            </div>
+
+            <label class="mobile-checkbox-row">
+                <InputCheckbox @bind-Value="_model.IsRememberMe" />
+                <span>@Localizer["Form_RememberSession"]</span>
+            </label>
+
+            <button class="mobile-primary-button" type="submit" disabled="@_isLoading">
+                @(_isLoading ? Localizer["Button_SigningIn"] : Localizer["Button_SignIn"])
+            </button>
+        </EditForm>
+    </section>
+</main>
