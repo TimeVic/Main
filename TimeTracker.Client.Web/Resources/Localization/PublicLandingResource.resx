@@ -30,6 +30,12 @@
   <data name="Nav_FAQ" xml:space="preserve">
     <value>FAQ</value>
   </data>
+  <data name="Nav_PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="Nav_TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
   <data name="CTA_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>

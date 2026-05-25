@@ -1,0 +1,372 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Privacy Policy | TimeVic</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Privacy Policy for TimeVic, a time tracking and income tracking app for freelancers and small teams.</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>Last updated: May 25, 2026</value>
+  </data>
+  <data name="Intro_1" xml:space="preserve">
+    <value>TimeVic (&#x201c;TimeVic&#x201d;, &#x201c;we&#x201d;, &#x201c;our&#x201d;, or &#x201c;us&#x201d;) provides a time tracking and work management service that helps freelancers, developers, and small teams track work hours, organize clients and projects, record payments, and understand earned, paid, and outstanding income.</value>
+  </data>
+  <data name="Intro_2" xml:space="preserve">
+    <value>This Privacy Policy explains what information we collect, how we use it, how we protect it, and what choices you have.</value>
+  </data>
+  <data name="InformationWeCollect_Title" xml:space="preserve">
+    <value>1. Information We Collect</value>
+  </data>
+  <data name="InformationWeCollect_Text" xml:space="preserve">
+    <value>We collect information that you provide directly, information generated when you use TimeVic, and limited information from third-party services when you choose to connect them.</value>
+  </data>
+  <data name="AccountInformation_Title" xml:space="preserve">
+    <value>Account Information</value>
+  </data>
+  <data name="AccountInformation_Text" xml:space="preserve">
+    <value>When you create or use an account, we may collect:</value>
+  </data>
+  <data name="AccountInformation_Item_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="AccountInformation_Item_Email" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="AccountInformation_Item_ProfileImage" xml:space="preserve">
+    <value>Profile/avatar image</value>
+  </data>
+  <data name="AccountInformation_Item_AuthenticationProvider" xml:space="preserve">
+    <value>Authentication provider information</value>
+  </data>
+  <data name="AccountInformation_Item_Settings" xml:space="preserve">
+    <value>Account settings, such as language or preferences</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Title" xml:space="preserve">
+    <value>Workspace and Productivity Data</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Text" xml:space="preserve">
+    <value>When you use TimeVic, you may create or store information such as:</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Item_Workspaces" xml:space="preserve">
+    <value>Workspaces</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Item_Clients" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Item_Projects" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Item_Tasks" xml:space="preserve">
+    <value>Tasks or work items</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Item_TimeEntries" xml:space="preserve">
+    <value>Time entries</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Item_HourlyRates" xml:space="preserve">
+    <value>Hourly rates</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Item_Reports" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Item_PaymentRecords" xml:space="preserve">
+    <value>Payment records, such as paid/unpaid status, payment dates, amounts, and notes</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_Item_NotesMessages" xml:space="preserve">
+    <value>Workspace notes or messages, if these features are used</value>
+  </data>
+  <data name="WorkspaceAndProductivityData_CoreUse" xml:space="preserve">
+    <value>This information is used to provide the core TimeVic functionality: tracking time, calculating earned amounts, showing paid and unpaid balances, and generating reports.</value>
+  </data>
+  <data name="GoogleAccountData_Title" xml:space="preserve">
+    <value>Google Account Data</value>
+  </data>
+  <data name="GoogleAccountData_Text" xml:space="preserve">
+    <value>If you sign in with Google, TimeVic may receive basic Google account information, depending on the permissions you approve, such as:</value>
+  </data>
+  <data name="GoogleAccountData_Item_GoogleAccountId" xml:space="preserve">
+    <value>Google account ID</value>
+  </data>
+  <data name="GoogleAccountData_Item_Email" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="GoogleAccountData_Item_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GoogleAccountData_Item_ProfilePicture" xml:space="preserve">
+    <value>Profile picture</value>
+  </data>
+  <data name="GoogleAccountData_Use" xml:space="preserve">
+    <value>We use this information only to authenticate you, create or access your TimeVic account, and display your profile information inside the application.</value>
+  </data>
+  <data name="GoogleAccountData_NoAdsNoSale" xml:space="preserve">
+    <value>TimeVic does not use Google user data for advertising. TimeVic does not sell Google user data.</value>
+  </data>
+  <data name="GoogleAccountData_LimitedUse" xml:space="preserve">
+    <value>TimeVic&#x2019;s use and transfer of information received from Google APIs will adhere to the Google API Services User Data Policy, including the Limited Use requirements.</value>
+  </data>
+  <data name="TechnicalAndUsageData_Title" xml:space="preserve">
+    <value>Technical and Usage Data</value>
+  </data>
+  <data name="TechnicalAndUsageData_Text" xml:space="preserve">
+    <value>We may collect technical information necessary to operate, secure, and improve the service, such as:</value>
+  </data>
+  <data name="TechnicalAndUsageData_Item_IpAddress" xml:space="preserve">
+    <value>IP address</value>
+  </data>
+  <data name="TechnicalAndUsageData_Item_Browser" xml:space="preserve">
+    <value>Browser type and version</value>
+  </data>
+  <data name="TechnicalAndUsageData_Item_Device" xml:space="preserve">
+    <value>Device and operating system information</value>
+  </data>
+  <data name="TechnicalAndUsageData_Item_LogData" xml:space="preserve">
+    <value>Log data</value>
+  </data>
+  <data name="TechnicalAndUsageData_Item_ErrorDiagnostics" xml:space="preserve">
+    <value>Error diagnostics</value>
+  </data>
+  <data name="TechnicalAndUsageData_Item_SecurityEvents" xml:space="preserve">
+    <value>Security events</value>
+  </data>
+  <data name="TechnicalAndUsageData_Item_ApproximateLocation" xml:space="preserve">
+    <value>Approximate location derived from IP address</value>
+  </data>
+  <data name="TechnicalAndUsageData_Item_AccessTime" xml:space="preserve">
+    <value>Date and time of access</value>
+  </data>
+  <data name="TechnicalAndUsageData_Use" xml:space="preserve">
+    <value>We use this information for security, troubleshooting, analytics, abuse prevention, and service improvement.</value>
+  </data>
+  <data name="HowWeUseInformation_Title" xml:space="preserve">
+    <value>2. How We Use Information</value>
+  </data>
+  <data name="HowWeUseInformation_Text" xml:space="preserve">
+    <value>We use collected information to:</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Provide" xml:space="preserve">
+    <value>Provide and operate TimeVic</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Authenticate" xml:space="preserve">
+    <value>Authenticate users</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Manage" xml:space="preserve">
+    <value>Manage accounts and workspaces</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Track" xml:space="preserve">
+    <value>Track time entries</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Calculate" xml:space="preserve">
+    <value>Calculate earned, paid, and outstanding amounts</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Generate" xml:space="preserve">
+    <value>Generate reports</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Save" xml:space="preserve">
+    <value>Save user preferences</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Support" xml:space="preserve">
+    <value>Provide customer support</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Improve" xml:space="preserve">
+    <value>Improve reliability, usability, and performance</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Detect" xml:space="preserve">
+    <value>Detect, prevent, and investigate abuse, fraud, or security issues</value>
+  </data>
+  <data name="HowWeUseInformation_Item_Comply" xml:space="preserve">
+    <value>Comply with legal obligations</value>
+  </data>
+  <data name="HowWeShareInformation_Title" xml:space="preserve">
+    <value>3. How We Share Information</value>
+  </data>
+  <data name="HowWeShareInformation_NoSale" xml:space="preserve">
+    <value>We do not sell personal information.</value>
+  </data>
+  <data name="HowWeShareInformation_Text" xml:space="preserve">
+    <value>We may share information only in the following limited cases:</value>
+  </data>
+  <data name="ServiceProviders_Title" xml:space="preserve">
+    <value>Service Providers</value>
+  </data>
+  <data name="ServiceProviders_Text" xml:space="preserve">
+    <value>We may use trusted third-party service providers to host, operate, secure, or monitor TimeVic. These providers may process information only as needed to provide services to us.</value>
+  </data>
+  <data name="ThirdPartyIntegrations_Title" xml:space="preserve">
+    <value>Third-Party Integrations</value>
+  </data>
+  <data name="ThirdPartyIntegrations_Text" xml:space="preserve">
+    <value>If you connect TimeVic to a third-party service, such as Google authentication or another integration, information may be exchanged with that service only as necessary to provide the integration you requested.</value>
+  </data>
+  <data name="ThirdPartyIntegrations_Policies" xml:space="preserve">
+    <value>Third-party services have their own privacy policies and terms.</value>
+  </data>
+  <data name="LegalAndSafetyRequirements_Title" xml:space="preserve">
+    <value>Legal and Safety Requirements</value>
+  </data>
+  <data name="LegalAndSafetyRequirements_Text" xml:space="preserve">
+    <value>We may disclose information if required to:</value>
+  </data>
+  <data name="LegalAndSafetyRequirements_Item_Law" xml:space="preserve">
+    <value>Comply with applicable law</value>
+  </data>
+  <data name="LegalAndSafetyRequirements_Item_Requests" xml:space="preserve">
+    <value>Respond to lawful requests</value>
+  </data>
+  <data name="LegalAndSafetyRequirements_Item_Protect" xml:space="preserve">
+    <value>Protect the rights, safety, and property of TimeVic, users, or others</value>
+  </data>
+  <data name="LegalAndSafetyRequirements_Item_Investigate" xml:space="preserve">
+    <value>Investigate abuse, fraud, or security incidents</value>
+  </data>
+  <data name="DataStorageAndSecurity_Title" xml:space="preserve">
+    <value>4. Data Storage and Security</value>
+  </data>
+  <data name="DataStorageAndSecurity_Text" xml:space="preserve">
+    <value>We use reasonable technical and organizational measures designed to protect user data from unauthorized access, loss, misuse, or alteration.</value>
+  </data>
+  <data name="DataStorageAndSecurity_MeasuresIntro" xml:space="preserve">
+    <value>These measures may include:</value>
+  </data>
+  <data name="DataStorageAndSecurity_Item_Https" xml:space="preserve">
+    <value>HTTPS encryption for production traffic</value>
+  </data>
+  <data name="DataStorageAndSecurity_Item_AccessControls" xml:space="preserve">
+    <value>Access controls</value>
+  </data>
+  <data name="DataStorageAndSecurity_Item_AdminAccess" xml:space="preserve">
+    <value>Restricted administrative access</value>
+  </data>
+  <data name="DataStorageAndSecurity_Item_Logging" xml:space="preserve">
+    <value>Logging and monitoring</value>
+  </data>
+  <data name="DataStorageAndSecurity_Item_Database" xml:space="preserve">
+    <value>Database and infrastructure security practices</value>
+  </data>
+  <data name="DataStorageAndSecurity_Item_Review" xml:space="preserve">
+    <value>Regular review of application security</value>
+  </data>
+  <data name="DataStorageAndSecurity_NoGuarantee" xml:space="preserve">
+    <value>No online service can guarantee absolute security, but we work to protect user data using appropriate safeguards.</value>
+  </data>
+  <data name="DataRetention_Title" xml:space="preserve">
+    <value>5. Data Retention</value>
+  </data>
+  <data name="DataRetention_Text" xml:space="preserve">
+    <value>We retain account and workspace data for as long as your account is active or as needed to provide the service.</value>
+  </data>
+  <data name="DataRetention_LongRetentionIntro" xml:space="preserve">
+    <value>We may retain certain information for a longer period when necessary to:</value>
+  </data>
+  <data name="DataRetention_Item_Legal" xml:space="preserve">
+    <value>Comply with legal obligations</value>
+  </data>
+  <data name="DataRetention_Item_Disputes" xml:space="preserve">
+    <value>Resolve disputes</value>
+  </data>
+  <data name="DataRetention_Item_Agreements" xml:space="preserve">
+    <value>Enforce our agreements</value>
+  </data>
+  <data name="DataRetention_Item_Backups" xml:space="preserve">
+    <value>Maintain backups</value>
+  </data>
+  <data name="DataRetention_Item_PreventAbuse" xml:space="preserve">
+    <value>Prevent abuse or security incidents</value>
+  </data>
+  <data name="DataRetention_Deletion" xml:space="preserve">
+    <value>If you request account deletion, we will delete or anonymize personal information where reasonably possible, unless retention is required by law, security, backup, or legitimate business purposes.</value>
+  </data>
+  <data name="UserChoicesAndRights_Title" xml:space="preserve">
+    <value>6. User Choices and Rights</value>
+  </data>
+  <data name="UserChoicesAndRights_Text" xml:space="preserve">
+    <value>Depending on your location, you may have rights to:</value>
+  </data>
+  <data name="UserChoicesAndRights_Item_Access" xml:space="preserve">
+    <value>Access your personal information</value>
+  </data>
+  <data name="UserChoicesAndRights_Item_Correct" xml:space="preserve">
+    <value>Correct inaccurate information</value>
+  </data>
+  <data name="UserChoicesAndRights_Item_Delete" xml:space="preserve">
+    <value>Delete your account or data</value>
+  </data>
+  <data name="UserChoicesAndRights_Item_Object" xml:space="preserve">
+    <value>Object to or restrict certain processing</value>
+  </data>
+  <data name="UserChoicesAndRights_Item_Copy" xml:space="preserve">
+    <value>Request a copy of your data</value>
+  </data>
+  <data name="UserChoicesAndRights_Item_Withdraw" xml:space="preserve">
+    <value>Withdraw consent where processing is based on consent</value>
+  </data>
+  <data name="UserChoicesAndRights_Request" xml:space="preserve">
+    <value>To make a request, contact us at:</value>
+  </data>
+  <data name="Cookies_Title" xml:space="preserve">
+    <value>7. Cookies and Similar Technologies</value>
+  </data>
+  <data name="Cookies_Text" xml:space="preserve">
+    <value>TimeVic may use cookies or similar technologies to:</value>
+  </data>
+  <data name="Cookies_Item_SignedIn" xml:space="preserve">
+    <value>Keep users signed in</value>
+  </data>
+  <data name="Cookies_Item_Sessions" xml:space="preserve">
+    <value>Maintain sessions</value>
+  </data>
+  <data name="Cookies_Item_Preferences" xml:space="preserve">
+    <value>Remember preferences</value>
+  </data>
+  <data name="Cookies_Item_Security" xml:space="preserve">
+    <value>Improve security</value>
+  </data>
+  <data name="Cookies_Item_Analyze" xml:space="preserve">
+    <value>Analyze usage and performance</value>
+  </data>
+  <data name="Cookies_BrowserSettings" xml:space="preserve">
+    <value>You can control cookies through your browser settings, but disabling certain cookies may affect the functionality of the service.</value>
+  </data>
+  <data name="ChildrensPrivacy_Title" xml:space="preserve">
+    <value>8. Children&#x2019;s Privacy</value>
+  </data>
+  <data name="ChildrensPrivacy_Text" xml:space="preserve">
+    <value>TimeVic is not intended for children under 13 years old. We do not knowingly collect personal information from children under 13. If you believe that a child has provided us personal information, contact us and we will take appropriate action.</value>
+  </data>
+  <data name="InternationalUsers_Title" xml:space="preserve">
+    <value>9. International Users</value>
+  </data>
+  <data name="InternationalUsers_Text" xml:space="preserve">
+    <value>TimeVic may process and store information in countries other than your country of residence. By using TimeVic, you understand that your information may be processed where our systems, service providers, or infrastructure are located.</value>
+  </data>
+  <data name="Changes_Title" xml:space="preserve">
+    <value>10. Changes to This Privacy Policy</value>
+  </data>
+  <data name="Changes_Text" xml:space="preserve">
+    <value>We may update this Privacy Policy from time to time. If we make material changes, we will update the &#x201c;Last updated&#x201d; date and, where appropriate, provide additional notice.</value>
+  </data>
+  <data name="Changes_ContinuedUse" xml:space="preserve">
+    <value>Your continued use of TimeVic after changes become effective means you accept the updated Privacy Policy.</value>
+  </data>
+  <data name="ContactUs_Title" xml:space="preserve">
+    <value>11. Contact Us</value>
+  </data>
+  <data name="ContactUs_Text" xml:space="preserve">
+    <value>If you have questions about this Privacy Policy or how TimeVic handles your data, contact us at:</value>
+  </data>
+</root>

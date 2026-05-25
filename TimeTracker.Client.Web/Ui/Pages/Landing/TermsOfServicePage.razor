@@ -1,0 +1,204 @@
+@page "/terms-of-service"
+@page "/uk/terms-of-service"
+
+@using Layout = TimeTracker.Client.Web.Ui.Pages.Landing.Shared.LandingLayout
+
+@layout Layout
+
+@inject IStringLocalizer<TermsOfServicePage> Localizer
+
+<SeoHead
+    Title="@Localizer["Meta_Title"]"
+    Description="@Localizer["Meta_Description"]"
+    Robots="@SiteMetadata.IndexRobots"
+    PublicPagePath="@SiteUrl.TermsOfService" />
+
+<main class="bg-white text-slate-950">
+    <article class="mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:py-20">
+        <header class="border-b border-slate-200 pb-10">
+            <h1 class="text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl">@Localizer["Title"]</h1>
+            <p class="mt-4 text-sm font-medium text-slate-500">@Localizer["LastUpdated"]</p>
+            <div class="mt-6 space-y-4 text-base leading-8 text-slate-600 sm:text-lg">
+                <p>@Localizer["Intro_1"]</p>
+                <p>@Localizer["Intro_2"]</p>
+            </div>
+        </header>
+
+        <div class="space-y-12 py-12">
+            <section aria-labelledby="terms-what-timevic-provides">
+                <h2 id="terms-what-timevic-provides" class="@SectionHeadingClass">@Localizer["WhatTimeVicProvides_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["WhatTimeVicProvides_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["WhatTimeVicProvides_ListIntro"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["WhatTimeVicProvides_Item_Workspaces"]</li>
+                    <li>@Localizer["WhatTimeVicProvides_Item_ClientsProjects"]</li>
+                    <li>@Localizer["WhatTimeVicProvides_Item_TrackTime"]</li>
+                    <li>@Localizer["WhatTimeVicProvides_Item_Tasks"]</li>
+                    <li>@Localizer["WhatTimeVicProvides_Item_Rates"]</li>
+                    <li>@Localizer["WhatTimeVicProvides_Item_Reports"]</li>
+                    <li>@Localizer["WhatTimeVicProvides_Item_Payments"]</li>
+                    <li>@Localizer["WhatTimeVicProvides_Item_Amounts"]</li>
+                    <li>@Localizer["WhatTimeVicProvides_Item_ThirdParty"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["WhatTimeVicProvides_Disclaimer"]</p>
+            </section>
+
+            <section aria-labelledby="terms-accounts">
+                <h2 id="terms-accounts" class="@SectionHeadingClass">@Localizer["Accounts_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["Accounts_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["Accounts_ResponsibilitiesIntro"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["Accounts_Item_Accurate"]</li>
+                    <li>@Localizer["Accounts_Item_Secure"]</li>
+                    <li>@Localizer["Accounts_Item_Control"]</li>
+                    <li>@Localizer["Accounts_Item_Activity"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["Accounts_Notify"]</p>
+            </section>
+
+            <section aria-labelledby="terms-acceptable-use">
+                <h2 id="terms-acceptable-use" class="@SectionHeadingClass">@Localizer["AcceptableUse_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["AcceptableUse_Text"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["AcceptableUse_Item_Law"]</li>
+                    <li>@Localizer["AcceptableUse_Item_Rights"]</li>
+                    <li>@Localizer["AcceptableUse_Item_Malicious"]</li>
+                    <li>@Localizer["AcceptableUse_Item_Unauthorized"]</li>
+                    <li>@Localizer["AcceptableUse_Item_Interfere"]</li>
+                    <li>@Localizer["AcceptableUse_Item_Abuse"]</li>
+                    <li>@Localizer["AcceptableUse_Item_Fraud"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["AcceptableUse_Suspension"]</p>
+            </section>
+
+            <section aria-labelledby="terms-user-content-workspace-data">
+                <h2 id="terms-user-content-workspace-data" class="@SectionHeadingClass">@Localizer["UserContentAndWorkspaceData_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["UserContentAndWorkspaceData_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["UserContentAndWorkspaceData_LicenseIntro"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["UserContentAndWorkspaceData_Item_Provide"]</li>
+                    <li>@Localizer["UserContentAndWorkspaceData_Item_Store"]</li>
+                    <li>@Localizer["UserContentAndWorkspaceData_Item_Reports"]</li>
+                    <li>@Localizer["UserContentAndWorkspaceData_Item_Maintain"]</li>
+                    <li>@Localizer["UserContentAndWorkspaceData_Item_Support"]</li>
+                    <li>@Localizer["UserContentAndWorkspaceData_Item_Secure"]</li>
+                    <li>@Localizer["UserContentAndWorkspaceData_Item_Comply"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["UserContentAndWorkspaceData_Responsibility"]</p>
+            </section>
+
+            <section aria-labelledby="terms-payments-financial-records">
+                <h2 id="terms-payments-financial-records" class="@SectionHeadingClass">@Localizer["PaymentsAndFinancialRecords_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["PaymentsAndFinancialRecords_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["PaymentsAndFinancialRecords_NoProcessing"]</p>
+                <p class="@ParagraphClass">@Localizer["PaymentsAndFinancialRecords_Responsibility"]</p>
+            </section>
+
+            <section aria-labelledby="terms-third-party-services">
+                <h2 id="terms-third-party-services" class="@SectionHeadingClass">@Localizer["ThirdPartyServices_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["ThirdPartyServices_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["ThirdPartyServices_Policies"]</p>
+                <p class="@ParagraphClass">@Localizer["ThirdPartyServices_Disconnect"]</p>
+            </section>
+
+            <section aria-labelledby="terms-google-sign-in">
+                <h2 id="terms-google-sign-in" class="@SectionHeadingClass">@Localizer["GoogleSignIn_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["GoogleSignIn_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["GoogleSignIn_Use"]</p>
+                <p class="@ParagraphClass">@Localizer["GoogleSignIn_GoogleTerms"]</p>
+            </section>
+
+            <section aria-labelledby="terms-service-availability">
+                <h2 id="terms-service-availability" class="@SectionHeadingClass">@Localizer["ServiceAvailability_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["ServiceAvailability_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["ServiceAvailability_Modify"]</p>
+            </section>
+
+            <section aria-labelledby="terms-free-paid-features">
+                <h2 id="terms-free-paid-features" class="@SectionHeadingClass">@Localizer["FreeAndPaidFeatures_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["FreeAndPaidFeatures_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["FreeAndPaidFeatures_Charges"]</p>
+                <p class="@ParagraphClass">@Localizer["FreeAndPaidFeatures_AdditionalTerms"]</p>
+            </section>
+
+            <section aria-labelledby="terms-intellectual-property">
+                <h2 id="terms-intellectual-property" class="@SectionHeadingClass">@Localizer["IntellectualProperty_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["IntellectualProperty_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["IntellectualProperty_NoOwnership"]</p>
+                <p class="@ParagraphClass">@Localizer["IntellectualProperty_Restrictions"]</p>
+            </section>
+
+            <section aria-labelledby="terms-feedback">
+                <h2 id="terms-feedback" class="@SectionHeadingClass">@Localizer["Feedback_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["Feedback_Text"]</p>
+            </section>
+
+            <section aria-labelledby="terms-suspension-termination">
+                <h2 id="terms-suspension-termination" class="@SectionHeadingClass">@Localizer["AccountSuspensionAndTermination_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["AccountSuspensionAndTermination_Stop"]</p>
+                <p class="@ParagraphClass">@Localizer["AccountSuspensionAndTermination_MaySuspend"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["AccountSuspensionAndTermination_Item_Violate"]</li>
+                    <li>@Localizer["AccountSuspensionAndTermination_Item_Risk"]</li>
+                    <li>@Localizer["AccountSuspensionAndTermination_Item_Law"]</li>
+                    <li>@Localizer["AccountSuspensionAndTermination_Item_Discontinued"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["AccountSuspensionAndTermination_Data"]</p>
+            </section>
+
+            <section aria-labelledby="terms-disclaimers">
+                <h2 id="terms-disclaimers" class="@SectionHeadingClass">@Localizer["Disclaimers_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["Disclaimers_AsIs"]</p>
+                <p class="@ParagraphClass">@Localizer["Disclaimers_Warranties"]</p>
+                <p class="@ParagraphClass">@Localizer["Disclaimers_Calculations"]</p>
+            </section>
+
+            <section aria-labelledby="terms-limitation-liability">
+                <h2 id="terms-limitation-liability" class="@SectionHeadingClass">@Localizer["LimitationOfLiability_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["LimitationOfLiability_Damages"]</p>
+                <p class="@ParagraphClass">@Localizer["LimitationOfLiability_Total"]</p>
+            </section>
+
+            <section aria-labelledby="terms-indemnification">
+                <h2 id="terms-indemnification" class="@SectionHeadingClass">@Localizer["Indemnification_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["Indemnification_Text"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["Indemnification_Item_Use"]</li>
+                    <li>@Localizer["Indemnification_Item_Terms"]</li>
+                    <li>@Localizer["Indemnification_Item_Law"]</li>
+                    <li>@Localizer["Indemnification_Item_Data"]</li>
+                    <li>@Localizer["Indemnification_Item_Disputes"]</li>
+                </ul>
+            </section>
+
+            <section aria-labelledby="terms-changes">
+                <h2 id="terms-changes" class="@SectionHeadingClass">@Localizer["Changes_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["Changes_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["Changes_ContinuedUse"]</p>
+            </section>
+
+            <section aria-labelledby="terms-governing-law">
+                <h2 id="terms-governing-law" class="@SectionHeadingClass">@Localizer["GoverningLaw_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["GoverningLaw_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["GoverningLaw_Replace"]</p>
+            </section>
+
+            <section aria-labelledby="terms-contact">
+                <h2 id="terms-contact" class="@SectionHeadingClass">@Localizer["ContactUs_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["ContactUs_Text"]</p>
+                <p class="@ParagraphClass">
+                    <a href="@SupportEmailHref" class="@EmailLinkClass">@SiteMetadata.SupportEmail</a>
+                </p>
+            </section>
+        </div>
+    </article>
+</main>
+
+@code {
+    private const string SectionHeadingClass = "text-2xl font-semibold text-slate-950";
+    private const string ParagraphClass = "mt-4 leading-8 text-slate-600";
+    private const string ListClass = "mt-5 list-disc space-y-3 pl-6 leading-8 text-slate-600";
+    private const string EmailLinkClass = "font-semibold text-blue-700 underline underline-offset-4 transition hover:text-blue-900";
+
+    private string SupportEmailHref => $"mailto:{SiteMetadata.SupportEmail}";
+}

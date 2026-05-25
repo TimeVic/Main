@@ -4,6 +4,7 @@ public static class SiteMetadata
 {
     public const string IndexRobots = "index, follow";
     public const string NoIndexRobots = "noindex, nofollow, noarchive";
+    public const string SupportEmail = "support@timevic.com";
 
     public const string HomeTitle = "TimeVic — Time and Income Tracker for Freelance Developers";
     public const string HomeDescription =

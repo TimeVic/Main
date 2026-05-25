@@ -49,6 +49,8 @@ public partial class BaseLayout
                 || normalizedPath.StartsWith(SiteUrl.UseCases)
                 || normalizedPath.StartsWith(SiteUrl.Faq)
                 || normalizedPath.StartsWith(SiteUrl.Pricing)
+                || normalizedPath.StartsWith(SiteUrl.PrivacyPolicy)
+                || normalizedPath.StartsWith(SiteUrl.TermsOfService)
                 || normalizedPath.StartsWith(SiteUrl.Login)
                 || normalizedPath.StartsWith(SiteUrl.LoginAsDemo)
                 || normalizedPath.StartsWith(SiteUrl.Registration_Step1)

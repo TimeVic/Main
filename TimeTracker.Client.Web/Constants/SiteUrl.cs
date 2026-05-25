@@ -11,6 +11,8 @@ public static class SiteUrl
     public static readonly string UseCases = "/use-cases";
     public static readonly string Faq = "/faq";
     public static readonly string Pricing = "/pricing";
+    public static readonly string PrivacyPolicy = "/privacy-policy";
+    public static readonly string TermsOfService = "/terms-of-service";
     
     public static readonly string Registration_Step1 = "/signup";
     public static readonly string Registration_Step2 = "/registration/step2";

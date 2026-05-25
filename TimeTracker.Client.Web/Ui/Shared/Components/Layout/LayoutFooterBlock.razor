@@ -16,13 +16,15 @@
             <a href="@LocalizedUrl(SiteUrl.UseCases)" class="transition hover:text-slate-900 hover:underline">@SharedLocalizer["Nav_UseCases"]</a>
             <a href="@LocalizedUrl(SiteUrl.Pricing)" class="transition hover:text-slate-900 hover:underline">@SharedLocalizer["Nav_Pricing"]</a>
             <a href="@LocalizedUrl(SiteUrl.Faq)" class="transition hover:text-slate-900 hover:underline">@SharedLocalizer["Nav_FAQ"]</a>
+            <a href="@SiteUrl.PrivacyPolicy" class="transition hover:text-slate-900 hover:underline">@SharedLocalizer["Nav_PrivacyPolicy"]</a>
+            <a href="@SiteUrl.TermsOfService" class="transition hover:text-slate-900 hover:underline">@SharedLocalizer["Nav_TermsOfService"]</a>
         </nav>
     </div>
     <div class="border-t border-slate-200/70">
         <div class="mx-auto w-full max-w-7xl px-4 py-4 text-center text-xs text-slate-400 sm:px-6 lg:px-8">
             <p>
                 @SharedLocalizer["Footer_Copyright"]
-                <a href="mailto:support@timevic.com" class="font-medium text-slate-500 transition hover:text-slate-700 hover:underline">@SharedLocalizer["Footer_AuthorName"]</a>
+                <a href="@SupportEmailHref" class="font-medium text-slate-500 transition hover:text-slate-700 hover:underline">@SharedLocalizer["Footer_AuthorName"]</a>
                 @SharedLocalizer["Footer_License"]
             </p>
         </div>
@@ -35,4 +37,6 @@
     private string CurrentCulture => LocalizationUrlService.GetCurrentCultureName(CurrentPath);
 
     private string LocalizedUrl(string path) => LocalizationUrlService.GetLocalizedUrl(path, CurrentCulture);
+
+    private string SupportEmailHref => $"mailto:{SiteMetadata.SupportEmail}";
 }

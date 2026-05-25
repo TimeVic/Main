@@ -1,0 +1,218 @@
+@page "/privacy-policy"
+@page "/uk/privacy-policy"
+
+@using Layout = TimeTracker.Client.Web.Ui.Pages.Landing.Shared.LandingLayout
+
+@layout Layout
+
+@inject IStringLocalizer<PrivacyPolicyPage> Localizer
+
+<SeoHead
+    Title="@Localizer["Meta_Title"]"
+    Description="@Localizer["Meta_Description"]"
+    Robots="@SiteMetadata.IndexRobots"
+    PublicPagePath="@SiteUrl.PrivacyPolicy" />
+
+<main class="bg-white text-slate-950">
+    <article class="mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:py-20">
+        <header class="border-b border-slate-200 pb-10">
+            <h1 class="text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl">@Localizer["Title"]</h1>
+            <p class="mt-4 text-sm font-medium text-slate-500">@Localizer["LastUpdated"]</p>
+            <div class="mt-6 space-y-4 text-base leading-8 text-slate-600 sm:text-lg">
+                <p>@Localizer["Intro_1"]</p>
+                <p>@Localizer["Intro_2"]</p>
+            </div>
+        </header>
+
+        <div class="space-y-12 py-12">
+            <section aria-labelledby="privacy-information-we-collect">
+                <h2 id="privacy-information-we-collect" class="@SectionHeadingClass">@Localizer["InformationWeCollect_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["InformationWeCollect_Text"]</p>
+
+                <h3 class="@SubsectionHeadingClass">@Localizer["AccountInformation_Title"]</h3>
+                <p class="@ParagraphClass">@Localizer["AccountInformation_Text"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["AccountInformation_Item_Name"]</li>
+                    <li>@Localizer["AccountInformation_Item_Email"]</li>
+                    <li>@Localizer["AccountInformation_Item_ProfileImage"]</li>
+                    <li>@Localizer["AccountInformation_Item_AuthenticationProvider"]</li>
+                    <li>@Localizer["AccountInformation_Item_Settings"]</li>
+                </ul>
+
+                <h3 class="@SubsectionHeadingClass">@Localizer["WorkspaceAndProductivityData_Title"]</h3>
+                <p class="@ParagraphClass">@Localizer["WorkspaceAndProductivityData_Text"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["WorkspaceAndProductivityData_Item_Workspaces"]</li>
+                    <li>@Localizer["WorkspaceAndProductivityData_Item_Clients"]</li>
+                    <li>@Localizer["WorkspaceAndProductivityData_Item_Projects"]</li>
+                    <li>@Localizer["WorkspaceAndProductivityData_Item_Tasks"]</li>
+                    <li>@Localizer["WorkspaceAndProductivityData_Item_TimeEntries"]</li>
+                    <li>@Localizer["WorkspaceAndProductivityData_Item_HourlyRates"]</li>
+                    <li>@Localizer["WorkspaceAndProductivityData_Item_Reports"]</li>
+                    <li>@Localizer["WorkspaceAndProductivityData_Item_PaymentRecords"]</li>
+                    <li>@Localizer["WorkspaceAndProductivityData_Item_NotesMessages"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["WorkspaceAndProductivityData_CoreUse"]</p>
+
+                <h3 class="@SubsectionHeadingClass">@Localizer["GoogleAccountData_Title"]</h3>
+                <p class="@ParagraphClass">@Localizer["GoogleAccountData_Text"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["GoogleAccountData_Item_GoogleAccountId"]</li>
+                    <li>@Localizer["GoogleAccountData_Item_Email"]</li>
+                    <li>@Localizer["GoogleAccountData_Item_Name"]</li>
+                    <li>@Localizer["GoogleAccountData_Item_ProfilePicture"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["GoogleAccountData_Use"]</p>
+                <p class="@ParagraphClass">@Localizer["GoogleAccountData_NoAdsNoSale"]</p>
+                <p class="@ParagraphClass">@Localizer["GoogleAccountData_LimitedUse"]</p>
+
+                <h3 class="@SubsectionHeadingClass">@Localizer["TechnicalAndUsageData_Title"]</h3>
+                <p class="@ParagraphClass">@Localizer["TechnicalAndUsageData_Text"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["TechnicalAndUsageData_Item_IpAddress"]</li>
+                    <li>@Localizer["TechnicalAndUsageData_Item_Browser"]</li>
+                    <li>@Localizer["TechnicalAndUsageData_Item_Device"]</li>
+                    <li>@Localizer["TechnicalAndUsageData_Item_LogData"]</li>
+                    <li>@Localizer["TechnicalAndUsageData_Item_ErrorDiagnostics"]</li>
+                    <li>@Localizer["TechnicalAndUsageData_Item_SecurityEvents"]</li>
+                    <li>@Localizer["TechnicalAndUsageData_Item_ApproximateLocation"]</li>
+                    <li>@Localizer["TechnicalAndUsageData_Item_AccessTime"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["TechnicalAndUsageData_Use"]</p>
+            </section>
+
+            <section aria-labelledby="privacy-how-we-use-information">
+                <h2 id="privacy-how-we-use-information" class="@SectionHeadingClass">@Localizer["HowWeUseInformation_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["HowWeUseInformation_Text"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["HowWeUseInformation_Item_Provide"]</li>
+                    <li>@Localizer["HowWeUseInformation_Item_Authenticate"]</li>
+                    <li>@Localizer["HowWeUseInformation_Item_Manage"]</li>
+                    <li>@Localizer["HowWeUseInformation_Item_Track"]</li>
+                    <li>@Localizer["HowWeUseInformation_Item_Calculate"]</li>
+                    <li>@Localizer["HowWeUseInformation_Item_Generate"]</li>
+                    <li>@Localizer["HowWeUseInformation_Item_Save"]</li>
+                    <li>@Localizer["HowWeUseInformation_Item_Support"]</li>
+                    <li>@Localizer["HowWeUseInformation_Item_Improve"]</li>
+                    <li>@Localizer["HowWeUseInformation_Item_Detect"]</li>
+                    <li>@Localizer["HowWeUseInformation_Item_Comply"]</li>
+                </ul>
+            </section>
+
+            <section aria-labelledby="privacy-how-we-share-information">
+                <h2 id="privacy-how-we-share-information" class="@SectionHeadingClass">@Localizer["HowWeShareInformation_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["HowWeShareInformation_NoSale"]</p>
+                <p class="@ParagraphClass">@Localizer["HowWeShareInformation_Text"]</p>
+
+                <h3 class="@SubsectionHeadingClass">@Localizer["ServiceProviders_Title"]</h3>
+                <p class="@ParagraphClass">@Localizer["ServiceProviders_Text"]</p>
+
+                <h3 class="@SubsectionHeadingClass">@Localizer["ThirdPartyIntegrations_Title"]</h3>
+                <p class="@ParagraphClass">@Localizer["ThirdPartyIntegrations_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["ThirdPartyIntegrations_Policies"]</p>
+
+                <h3 class="@SubsectionHeadingClass">@Localizer["LegalAndSafetyRequirements_Title"]</h3>
+                <p class="@ParagraphClass">@Localizer["LegalAndSafetyRequirements_Text"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["LegalAndSafetyRequirements_Item_Law"]</li>
+                    <li>@Localizer["LegalAndSafetyRequirements_Item_Requests"]</li>
+                    <li>@Localizer["LegalAndSafetyRequirements_Item_Protect"]</li>
+                    <li>@Localizer["LegalAndSafetyRequirements_Item_Investigate"]</li>
+                </ul>
+            </section>
+
+            <section aria-labelledby="privacy-data-storage-security">
+                <h2 id="privacy-data-storage-security" class="@SectionHeadingClass">@Localizer["DataStorageAndSecurity_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["DataStorageAndSecurity_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["DataStorageAndSecurity_MeasuresIntro"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["DataStorageAndSecurity_Item_Https"]</li>
+                    <li>@Localizer["DataStorageAndSecurity_Item_AccessControls"]</li>
+                    <li>@Localizer["DataStorageAndSecurity_Item_AdminAccess"]</li>
+                    <li>@Localizer["DataStorageAndSecurity_Item_Logging"]</li>
+                    <li>@Localizer["DataStorageAndSecurity_Item_Database"]</li>
+                    <li>@Localizer["DataStorageAndSecurity_Item_Review"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["DataStorageAndSecurity_NoGuarantee"]</p>
+            </section>
+
+            <section aria-labelledby="privacy-data-retention">
+                <h2 id="privacy-data-retention" class="@SectionHeadingClass">@Localizer["DataRetention_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["DataRetention_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["DataRetention_LongRetentionIntro"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["DataRetention_Item_Legal"]</li>
+                    <li>@Localizer["DataRetention_Item_Disputes"]</li>
+                    <li>@Localizer["DataRetention_Item_Agreements"]</li>
+                    <li>@Localizer["DataRetention_Item_Backups"]</li>
+                    <li>@Localizer["DataRetention_Item_PreventAbuse"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["DataRetention_Deletion"]</p>
+            </section>
+
+            <section aria-labelledby="privacy-user-choices-rights">
+                <h2 id="privacy-user-choices-rights" class="@SectionHeadingClass">@Localizer["UserChoicesAndRights_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["UserChoicesAndRights_Text"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["UserChoicesAndRights_Item_Access"]</li>
+                    <li>@Localizer["UserChoicesAndRights_Item_Correct"]</li>
+                    <li>@Localizer["UserChoicesAndRights_Item_Delete"]</li>
+                    <li>@Localizer["UserChoicesAndRights_Item_Object"]</li>
+                    <li>@Localizer["UserChoicesAndRights_Item_Copy"]</li>
+                    <li>@Localizer["UserChoicesAndRights_Item_Withdraw"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["UserChoicesAndRights_Request"]</p>
+                <p class="@ParagraphClass">
+                    <a href="@SupportEmailHref" class="@EmailLinkClass">@SiteMetadata.SupportEmail</a>
+                </p>
+            </section>
+
+            <section aria-labelledby="privacy-cookies">
+                <h2 id="privacy-cookies" class="@SectionHeadingClass">@Localizer["Cookies_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["Cookies_Text"]</p>
+                <ul class="@ListClass">
+                    <li>@Localizer["Cookies_Item_SignedIn"]</li>
+                    <li>@Localizer["Cookies_Item_Sessions"]</li>
+                    <li>@Localizer["Cookies_Item_Preferences"]</li>
+                    <li>@Localizer["Cookies_Item_Security"]</li>
+                    <li>@Localizer["Cookies_Item_Analyze"]</li>
+                </ul>
+                <p class="@ParagraphClass">@Localizer["Cookies_BrowserSettings"]</p>
+            </section>
+
+            <section aria-labelledby="privacy-children">
+                <h2 id="privacy-children" class="@SectionHeadingClass">@Localizer["ChildrensPrivacy_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["ChildrensPrivacy_Text"]</p>
+            </section>
+
+            <section aria-labelledby="privacy-international-users">
+                <h2 id="privacy-international-users" class="@SectionHeadingClass">@Localizer["InternationalUsers_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["InternationalUsers_Text"]</p>
+            </section>
+
+            <section aria-labelledby="privacy-changes">
+                <h2 id="privacy-changes" class="@SectionHeadingClass">@Localizer["Changes_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["Changes_Text"]</p>
+                <p class="@ParagraphClass">@Localizer["Changes_ContinuedUse"]</p>
+            </section>
+
+            <section aria-labelledby="privacy-contact">
+                <h2 id="privacy-contact" class="@SectionHeadingClass">@Localizer["ContactUs_Title"]</h2>
+                <p class="@ParagraphClass">@Localizer["ContactUs_Text"]</p>
+                <p class="@ParagraphClass">
+                    <a href="@SupportEmailHref" class="@EmailLinkClass">@SiteMetadata.SupportEmail</a>
+                </p>
+            </section>
+        </div>
+    </article>
+</main>
+
+@code {
+    private const string SectionHeadingClass = "text-2xl font-semibold text-slate-950";
+    private const string SubsectionHeadingClass = "mt-8 text-xl font-semibold text-slate-900";
+    private const string ParagraphClass = "mt-4 leading-8 text-slate-600";
+    private const string ListClass = "mt-5 list-disc space-y-3 pl-6 leading-8 text-slate-600";
+    private const string EmailLinkClass = "font-semibold text-blue-700 underline underline-offset-4 transition hover:text-blue-900";
+
+    private string SupportEmailHref => $"mailto:{SiteMetadata.SupportEmail}";
+}
