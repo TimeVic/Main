@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="TimeVic light app icon">
+  <title>TimeVic light app icon</title>
+  <rect x="1" y="1" width="118" height="118" rx="26" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+  <path d="M30 58 L52 80 L90 36" fill="none" stroke="#1E3A8A" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="47" cy="52" r="7.5" fill="#22C55E"/>
+</svg>

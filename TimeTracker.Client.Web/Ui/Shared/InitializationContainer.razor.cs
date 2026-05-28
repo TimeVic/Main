@@ -44,10 +44,10 @@ public partial class InitializationContainer
     {
         TimeEntryState.StateChanged += async (sender, args) =>
         {
-            var faviconName = "black/clock-64.png";
+            var faviconName = "/favicon.svg";
             if (TimeEntryState.Value.HasActiveEntry)
             {
-                faviconName = "play_1/play-64.png";
+                faviconName = "/assets/brand/timevic-app-icon.svg";
             }
 
             await Js.InvokeAsync<object>("window.setFavicon", faviconName);

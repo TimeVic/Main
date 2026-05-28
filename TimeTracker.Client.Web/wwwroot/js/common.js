@@ -25,7 +25,7 @@ window.getReCaptchaToken = function (siteKey) {
 
 window.setFavicon = function (fileName) {
     const element = document.querySelectorAll('[rel=icon]')[0];
-    element.setAttribute('href', `/img/logo/${fileName}`)
+    element.setAttribute('href', fileName)
 };
 
 window.setDocumentLanguage = function (language) {

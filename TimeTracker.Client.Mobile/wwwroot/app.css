@@ -157,20 +157,16 @@ input {
 .mobile-login-brand {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 15px;
-    font-weight: 800;
+    max-width: 210px;
+    border-radius: 8px;
+    padding: 8px 10px;
+    background: #fff;
 }
 
-.mobile-login-brand-mark {
-    display: inline-flex;
-    width: 34px;
-    height: 34px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    background: #2563eb;
-    color: #fff;
+.mobile-login-brand img {
+    display: block;
+    width: 160px;
+    height: auto;
 }
 
 .mobile-login-kicker,
@@ -344,6 +340,19 @@ input {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+}
+
+.mobile-board-title {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+}
+
+.mobile-board-title img {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
 }
 
 .mobile-board-header h1 {

@@ -25,7 +25,12 @@ for (const endpoint of manifest.Endpoints || []) {
 }
 
 const assets = [
-    { url: "/img/logo/black/clock-64.png", label: "img/logo/black/clock-64.png" },
+    { url: "/favicon.ico", label: "favicon.ico" },
+    { url: "/favicon.svg", label: "favicon.svg" },
+    { url: "/apple-touch-icon.png", label: "apple-touch-icon.png" },
+    { url: "/android-chrome-192x192.png", label: "android-chrome-192x192.png" },
+    { url: "/android-chrome-512x512.png", label: "android-chrome-512x512.png" },
+    { url: "/site.webmanifest", label: "site.webmanifest" },
     { url: "css/app.min.css", label: "css/app.min.css" },
     { url: "vendor/github-markdown/github-markdown.min.css", label: "vendor/github-markdown/github-markdown.min.css" },
     { url: "vendor/github-markdown/timevic-markdown-theme.css", label: "vendor/github-markdown/timevic-markdown-theme.css" },
