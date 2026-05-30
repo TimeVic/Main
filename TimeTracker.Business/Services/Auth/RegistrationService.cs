@@ -59,6 +59,25 @@ public class RegistrationService: IRegistrationService
         return user;
     }
 
+    public async Task<UserEntity> CreateActivatedUserForSocialLogin(string email, string? userName = null, string? languageCode = null)
+    {
+        var existsUser = await _userDao.GetByEmail(email);
+        var user = existsUser ?? await _userDao.CreatePendingUser(email);
+
+        if (string.IsNullOrWhiteSpace(user.UserName) && !string.IsNullOrWhiteSpace(userName))
+        {
+            user.UserName = userName.Trim();
+        }
+
+        user.VerificationTime ??= DateTime.UtcNow;
+        user.VerificationToken = null;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await ApplyRegistrationLanguageAsync(user, languageCode);
+        await EnsureDefaultWorkspaceAsync(user);
+        return user;
+    }
+
     private async Task ApplyRegistrationLanguageAsync(UserEntity user, string? languageCode)
     {
         if (string.IsNullOrWhiteSpace(languageCode))

@@ -24,6 +24,7 @@ namespace TimeTracker.Business.Orm.Entities.User
         public virtual ICollection<UserNotificationTokenEntity> NotificationTokens { get; set; } = new List<UserNotificationTokenEntity>();
         public virtual ISet<MessagingCounterEntity> MessageCounters { get; set; } = new HashSet<MessagingCounterEntity>();
         public virtual ICollection<StoredFileEntity> Avatars { get; set; } = new List<StoredFileEntity>();
+        public virtual UserSocialLoginEntity? SocialLoginInfo { get; set; }
         public virtual WorkspaceEntity? SelectedWorkspace { get; set; }
         public virtual LanguageEntity Language { get; set; } = null!;
 

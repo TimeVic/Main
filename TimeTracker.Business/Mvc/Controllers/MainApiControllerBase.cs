@@ -1,4 +1,5 @@
-﻿using Api.Requests.Abstractions;
+﻿using System.Net;
+using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Abstractions;
 using Autofac;
 using Microsoft.AspNetCore.Http;
@@ -47,4 +48,18 @@ public class MainApiControllerBase: ApiControllerBase
             new JsonCommonResponse { Status = HttpResponseStatus.Ok }
         );
     };
+    
+    protected JsonResult JsonSuccess(object? data = null, HttpStatusCode code = HttpStatusCode.OK, string message = null)
+    {
+        var response = new JsonResult(
+            new JsonCommonResponse()
+            {
+                Status = HttpResponseStatus.Ok,
+                Message = message,
+                Data = data ?? new { }
+            }
+        );
+        response.StatusCode = (int)code;
+        return response;
+    }
 }

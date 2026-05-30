@@ -60,6 +60,12 @@ public class UserMapping: BaseGuidMappings<UserEntity>
             .LazyLoad()
             .Cascade.SaveUpdate()
             .Inverse();
+
+        HasOne(x => x.SocialLoginInfo)
+            .PropertyRef("User")
+            .Fetch.Select()
+            .LazyLoad()
+            .Cascade.SaveUpdate();
         
         HasMany(x => x.MessageCounters)
             .KeyColumn("user_id")
