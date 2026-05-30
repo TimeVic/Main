@@ -1,0 +1,87 @@
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.MemberPayments.Parts.Modals
+@using TimeTracker.Client.Web.Ui.Shared.Components
+@using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
+@inherits BaseReactiveComponent
+
+@if (_paymentToUpdate != null)
+{
+    <UpdateMemberPaymentModal
+        MemberPayment="_paymentToUpdate"
+        IsOpened="true"
+        IsOpenedChanged="isOpened => _paymentToUpdate = isOpened ? _paymentToUpdate : null"/>
+}
+
+@if (_paymentToDelete != null)
+{
+    <ConfirmationModal
+        OnClose="@(() => _paymentToDelete = null)"
+        OnConfirm="OnDeleteMemberPayment"/>
+}
+
+<LumexDataGrid
+    T="MemberPaymentDto"
+    Class="min-w-full divide-y divide-slate-200"
+    Data="@_state.Value.List.AsQueryable()"
+    Hoverable="true"
+    OnRowClick="@OnRowClickHandler"
+    Loading="_isLoading">
+    <LumexUI.PropertyColumn Title="#" Property="@(p => p.PaymentTime.ToShortDateString())"/>
+    <LumexUI.PropertyColumn Title="@DashboardLocalizer["Project"].Value" Property="@(p => p.Project)">
+        <Content>
+            <div class="font-medium text-slate-900">
+                @context.Project?.Name
+            </div>
+            @if (context.Client != null)
+            {
+                <div class="mt-1 max-w-xl text-slate-500">@context.Client?.Name</div>
+            }
+        </Content>
+    </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn 
+        Title="@DashboardLocalizer["Received"].Value"
+        Property="@(p => p.Amount)"
+        Sortable="@true">
+        <Content>
+            <span class="font-semibold text-emerald-700">
+                <AmountDisplay Amount="@context.Amount"></AmountDisplay>
+            </span>
+        </Content>
+    </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn
+        Title="@DashboardLocalizer["Member"].Value"
+        Property="@(p => p.Member)">
+        <Content>
+            <div class="font-medium text-slate-900">
+                @context.Member?.User.Name
+            </div>
+        </Content>
+    </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn 
+        Title="@DashboardLocalizer["Description"].Value"
+        Property="@(p => p.Description)"
+        Sortable="@true">
+        <Content>
+            @context.Description
+        </Content>
+    </LumexUI.PropertyColumn>
+    <LumexUI.PropertyColumn
+        Title="@DashboardLocalizer["Actions"].Value"
+        Property="@(p => p.Id)">
+        <Content>
+            <div @onclick:stopPropagation="true">
+                <CustomButton
+                    Variant="Variant.Outlined"
+                    Color="ThemeColor.Danger"
+                    OnClick="() => _paymentToDelete = context"
+                    IconOnly="true"
+                    Size="Size.Small">
+                    <StartContent>
+                        <i class="fa-regular fa-trash-can"></i>
+                    </StartContent>
+                </CustomButton>
+            </div>
+        </Content>
+    </LumexUI.PropertyColumn>
+</LumexDataGrid>

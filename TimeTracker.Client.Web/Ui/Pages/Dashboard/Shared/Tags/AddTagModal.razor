@@ -1,0 +1,69 @@
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Client.Core.Constants.Ui
+@using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
+
+@inherits BaseReactiveComponent
+
+<LumexModal
+    Open="IsOpened"
+    OnClose="@OnCloseModal"
+    Size="ModalSize.Large"
+    @ref="modal">
+    <LumexModalContent>
+        <LumexModalHeader Class="flex items-center gap-3">
+            <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <i class="fa-solid fa-tag"></i>
+                </div>
+                <div>
+                    <h2 class="mt-2 text-xl font-semibold text-slate-900">@DashboardLocalizer["TagsBlock_AddTag"]</h2>
+                    <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["AddTagModal_Description"]</p>
+                </div>
+            </div>
+        </LumexModalHeader>
+        <LumexModalBody>
+            <EditForm
+                Context="form"
+                @ref="_form"
+                Model="@model"
+                novalidate>
+                <DataAnnotationsValidator/>
+
+                <div>
+                    <div class="mt-1">
+                        <InputTextField
+                            FullWidth="true"
+                            Label="@DashboardLocalizer["Tag"]"
+                            Placeholder="@DashboardLocalizer["TagName"]"
+                            Variant="InputVariant.Outlined"
+                            IsShowEmojiButton="true"
+                            @bind-Value="model.Name"/>
+                        <CustomValidationMessage For="@(() => model.Name)"/>
+                    </div>
+
+                    <div class="pt-8">
+                        <ColorDropDown
+                            Label="@DashboardLocalizer["Color"]"
+                            Type="DropDownType.Select"
+                            Clearable="true"
+                            @bind-Value="model.Color"/>
+                        <CustomValidationMessage For="@(() => model.Color)"/>
+                    </div>
+                </div>
+
+                <CustomValidationSummary/>
+            </EditForm>
+        </LumexModalBody>
+        <LumexModalFooter>
+            <CustomButton
+                FullWidth="@true"
+                OnClick="@Submit"
+                IsLoading="_state.Value.IsSaving"
+                Color="@ThemeColor.Primary"
+                Radius="@Radius.Full">
+                @DashboardLocalizer["Add"]
+            </CustomButton>
+        </LumexModalFooter>
+    </LumexModalContent>
+</LumexModal>

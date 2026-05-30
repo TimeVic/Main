@@ -1,0 +1,51 @@
+﻿@page "/board/workspaces"
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Common.Constants
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+@* <MudTable *@
+@*     Class="mt-2 w-100" *@
+@*     Items="@_state.Value.List" *@
+@*     Hover="true" *@
+@*     Dense="true" *@
+@*     Outlined="true" *@
+@*     Breakpoint="Breakpoint.Sm" *@
+@*     Loading="@_state.Value.IsListLoading" *@
+@*     LoadingProgressColor="Color.Info"> *@
+@* *@
+@*     <ToolBarContent> *@
+@*         <MudText Typo="Typo.h6">Manage workspaces</MudText> *@
+@*         <MudSpacer/> *@
+@*         <MudButton *@
+@*             OnClick="@OnAdd" *@
+@*             Disabled="@(!AuthState.Value.IsRoleAdmin || true)" *@
+@*             StartIcon="@Icons.Material.Filled.Add"> *@
+@*             Add *@
+@*         </MudButton> *@
+@*     </ToolBarContent> *@
+@* *@
+@*     <HeaderContent> *@
+@*         <MudTh>Name</MudTh> *@
+@*         <MudTh></MudTh> *@
+@*     </HeaderContent> *@
+@* *@
+@*     <RowTemplate> *@
+@*         <MudTd DataLabel="Name">@context?.Name</MudTd> *@
+@*         <MudTd DataLabel="Actions"> *@
+@*             <MudIconButton *@
+@*                 OnClick="@(() => OnEdit(context))" *@
+@*                 Icon="@Icons.Material.Filled.Edit" *@
+@*                 Disabled="@(!AuthState.Value.IsRoleAdmin || true)" *@
+@*                 Size="Size.Small"/> *@
+@*             <MudIconButton *@
+@*                 OnClick="@(() => OnDelete(context))" *@
+@*                 Icon="@Icons.Material.Filled.Delete" *@
+@*                 Disabled="@(!AuthState.Value.IsRoleAdmin || true)" *@
+@*                 Color="Color.Error" *@
+@*                 Size="Size.Small"/> *@
+@*         </MudTd> *@
+@*     </RowTemplate> *@
+@* </MudTable> *@

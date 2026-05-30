@@ -1,0 +1,64 @@
+@using Fluxor
+@using TimeTracker.Api.Shared.Dto.Model.Report.WorkspaceFinancialSummary
+@using TimeTracker.Client.Core.Store.Report
+@using TimeTracker.Client.Web.Ui.Shared.Components
+
+@inherits BaseReactiveComponent
+@inject IState<ReportsState> ReportsState
+
+<section class="@Class">
+    <h2 class="mb-4 text-base font-semibold text-slate-700">@DashboardLocalizer["MembersToPay"]</h2>
+    @{
+        var items = (ReportsState.Value.WorkspaceFinancialSummaryData?.MemberBalances ?? [])
+            .Where(m => m.Owed > 0)
+            .OrderByDescending(m => m.Owed)
+            .ToList();
+    }
+    @if (items.Count == 0)
+    {
+        <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center">
+            <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["NoMembersToPay"]</p>
+            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["MembersToPayBlock_NoMembersDescription"]</p>
+        </div>
+    }
+    else
+    {
+        <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+            <table class="min-w-full text-sm">
+                <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    <tr>
+                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Member"]</th>
+                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Balance"]</th>
+                        <th class="px-4 py-3 text-left">@DashboardLocalizer["LastPayout"]</th>
+                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Status"]</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    @foreach (var item in items)
+                    {
+                        <tr class="hover:bg-slate-50/50">
+                            <td class="px-4 py-3 font-medium text-slate-800">@item.User.Name</td>
+                            <td class="px-4 py-3 text-right font-semibold text-red-700">
+                                <AmountDisplay Amount="@item.Owed"/>
+                                <span>@DashboardLocalizer["Owed"]</span>
+                            </td>
+                            <td class="px-4 py-3 text-slate-500">
+                                @(item.LastPayoutDate.HasValue ? item.LastPayoutDate.Value.ToString("MMM d, yyyy") : DashboardLocalizer["NoPayoutsRecorded"].Value)
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
+                                    @DashboardLocalizer["Owed"]
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+@code {
+    [Parameter]
+    public string? Class { get; set; }
+}

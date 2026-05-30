@@ -1,0 +1,34 @@
+﻿@page "/board/integrations"
+
+@using TimeTracker.Client.Web.Pages.Dashboard.Shared
+@using TimeTracker.Client.Web.Pages.Dashboard.Integrations.Parts
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+<MudPaper Class="w-100">
+    @if (_isLoading)
+    {
+        <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+    }
+    else
+    {
+        <MudTabs Outlined="true">
+            <MudTabPanel 
+                Text="ClickUp"
+                Icon="@(GetIcon(_settings.IntegrationClickUp is { IsActive: true }))">
+                <ClickUpSettingsForm @bind-Value="_settings.IntegrationClickUp"/>
+            </MudTabPanel>
+            <MudTabPanel 
+                Text="Redmine"
+                Icon="@(GetIcon(_settings.IntegrationRedmine is { IsActive: true }))">
+                <RedmineSettingsForm @bind-Value="_settings.IntegrationRedmine"/>
+            </MudTabPanel>
+            <MudTabPanel 
+                Text="Jira"
+                Icon="@(GetIcon(_settings.IntegrationJira is { IsActive: true }))">
+                <JiraSettingsForm @bind-Value="_settings.IntegrationJira"/>
+            </MudTabPanel>
+        </MudTabs>
+    }
+</MudPaper>

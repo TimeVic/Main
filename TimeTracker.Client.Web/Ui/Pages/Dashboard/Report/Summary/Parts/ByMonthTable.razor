@@ -1,0 +1,53 @@
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Model.Report
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Client.Web.Ui.Shared.Components
+@using System.Globalization
+
+@code {
+    [Parameter]
+    public ICollection<SummaryByMonthsReportItemDto> Items { get; set; } = new List<SummaryByMonthsReportItemDto>();
+
+    private string GetName(int month, int year)
+    {
+        return new DateTime(year, month, 1).ToString("MMM", CultureInfo.CurrentUICulture);
+    }
+
+    private static decimal GetEffectiveHourlyRate(decimal amount, TimeSpan duration)
+    {
+        if (duration.TotalHours <= 0)
+        {
+            return 0;
+        }
+
+        return Math.Round(amount / (decimal)duration.TotalHours, 2);
+    }
+}
+
+<LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
+    <PropertyColumn Title="@DashboardLocalizer["Month"].Value" Property="@(p => p.Month)">
+        <Content>
+            @GetName(context.Month, context.Year)
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="@DashboardLocalizer["Duration"].Value" Property="@(p => p.Duration)">
+        <Content>
+            @context.Duration.ToReadableShortString()
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="@DashboardLocalizer["Earned"].Value" Property="@(p => p.Amount)">
+        <Content>
+            <AmountDisplay Amount="@context.Amount"/>
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="@DashboardLocalizer["Outstanding"].Value" Property="@(p => p.Amount)">
+        <Content>
+            <span class="text-slate-400">-</span>
+        </Content>
+    </PropertyColumn>
+    <PropertyColumn Title="@DashboardLocalizer["EffectiveHourlyRate"].Value" Property="@(p => p.Amount)">
+        <Content>
+            <AmountDisplay Amount="@GetEffectiveHourlyRate(context.Amount, context.Duration)"/>/h
+        </Content>
+    </PropertyColumn>
+</LumexDataGrid>

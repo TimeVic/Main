@@ -1,0 +1,19 @@
+@using TimeTracker.Client.Web.Services.UI.Modal
+
+@code {
+    [Inject]    
+    public ModalDialogService ModalDialogService { get; set; }      
+    
+    protected override void OnInitialized()
+    {
+        ModalDialogService.OnChange += StateHasChanged;
+    }
+}
+
+
+
+@foreach (var modal in ModalDialogService.Modals)
+{
+    @modal.Fragment
+}
+

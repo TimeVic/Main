@@ -8,5 +8,7 @@ public interface IRegistrationService: IDomainService
 {
     Task<UserEntity> CreatePendingUser(string email, string? languageCode = null);
 
+    Task<UserEntity> CreateActivatedUserForSocialLogin(string email, string? userName = null, string? languageCode = null);
+
     Task<UserEntity> ActivateUser(string verificationToken, string password);
 }

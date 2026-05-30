@@ -1,0 +1,21 @@
+@page "/board"
+@inject IStringLocalizer<BoardPage> Localizer
+
+<main class="mobile-board-page">
+    <header class="mobile-board-header">
+        <div class="mobile-board-title">
+            <img src="/assets/brand/timevic-mark.svg" alt="" aria-hidden="true" />
+            <div>
+                <p>@Localizer["Header_Kicker"]</p>
+                <h1>@Localizer["Header_Title"]</h1>
+            </div>
+        </div>
+        <div class="mobile-board-avatar" aria-hidden="true">@UserInitials</div>
+    </header>
+
+    <section class="mobile-board-placeholder">
+        <p class="mobile-board-user">@Greeting</p>
+        <h2>@Localizer["Placeholder_Title"]</h2>
+        <p>@Localizer["Placeholder_Description"]</p>
+    </section>
+</main>

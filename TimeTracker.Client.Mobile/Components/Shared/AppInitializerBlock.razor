@@ -1,0 +1,14 @@
+@if (IsContentReady)
+{
+    @ChildContent
+}
+else
+{
+    <main class="mobile-preloader-page">
+        <div class="mobile-preloader-card">
+            <div class="mobile-preloader-spinner" aria-hidden="true"></div>
+            <p>@Localizer["Preloader_Title"]</p>
+            <span>@Localizer["Preloader_Subtitle"]</span>
+        </div>
+    </main>
+}

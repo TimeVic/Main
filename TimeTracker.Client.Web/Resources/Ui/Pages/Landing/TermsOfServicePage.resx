@@ -1,0 +1,324 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Terms of Service | TimeVic</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Terms of Service for TimeVic, a time tracking and income tracking app for freelancers and small teams.</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>Last updated: May 25, 2026</value>
+  </data>
+  <data name="Intro_1" xml:space="preserve">
+    <value>These Terms of Service (&#x201c;Terms&#x201d;) govern your access to and use of TimeVic (&#x201c;TimeVic&#x201d;, &#x201c;we&#x201d;, &#x201c;our&#x201d;, or &#x201c;us&#x201d;).</value>
+  </data>
+  <data name="Intro_2" xml:space="preserve">
+    <value>By accessing or using TimeVic, you agree to these Terms. If you do not agree, do not use the service.</value>
+  </data>
+  <data name="WhatTimeVicProvides_Title" xml:space="preserve">
+    <value>1. What TimeVic Provides</value>
+  </data>
+  <data name="WhatTimeVicProvides_Text" xml:space="preserve">
+    <value>TimeVic is a time tracking and work management service for freelancers, developers, and small teams.</value>
+  </data>
+  <data name="WhatTimeVicProvides_ListIntro" xml:space="preserve">
+    <value>TimeVic may allow users to:</value>
+  </data>
+  <data name="WhatTimeVicProvides_Item_Workspaces" xml:space="preserve">
+    <value>Create workspaces</value>
+  </data>
+  <data name="WhatTimeVicProvides_Item_ClientsProjects" xml:space="preserve">
+    <value>Manage clients and projects</value>
+  </data>
+  <data name="WhatTimeVicProvides_Item_TrackTime" xml:space="preserve">
+    <value>Track work time</value>
+  </data>
+  <data name="WhatTimeVicProvides_Item_Tasks" xml:space="preserve">
+    <value>Organize tasks or work items</value>
+  </data>
+  <data name="WhatTimeVicProvides_Item_Rates" xml:space="preserve">
+    <value>Set hourly rates</value>
+  </data>
+  <data name="WhatTimeVicProvides_Item_Reports" xml:space="preserve">
+    <value>Generate reports</value>
+  </data>
+  <data name="WhatTimeVicProvides_Item_Payments" xml:space="preserve">
+    <value>Record payments</value>
+  </data>
+  <data name="WhatTimeVicProvides_Item_Amounts" xml:space="preserve">
+    <value>View earned, paid, and outstanding amounts</value>
+  </data>
+  <data name="WhatTimeVicProvides_Item_ThirdParty" xml:space="preserve">
+    <value>Use supported third-party authentication or integrations</value>
+  </data>
+  <data name="WhatTimeVicProvides_Disclaimer" xml:space="preserve">
+    <value>TimeVic is designed to help users understand their work activity and income status. It is not accounting, tax, legal, or financial advice.</value>
+  </data>
+  <data name="Accounts_Title" xml:space="preserve">
+    <value>2. Accounts</value>
+  </data>
+  <data name="Accounts_Text" xml:space="preserve">
+    <value>To use certain features, you must create an account or sign in using a supported authentication provider, such as Google.</value>
+  </data>
+  <data name="Accounts_ResponsibilitiesIntro" xml:space="preserve">
+    <value>You are responsible for:</value>
+  </data>
+  <data name="Accounts_Item_Accurate" xml:space="preserve">
+    <value>Providing accurate account information</value>
+  </data>
+  <data name="Accounts_Item_Secure" xml:space="preserve">
+    <value>Keeping your login credentials secure</value>
+  </data>
+  <data name="Accounts_Item_Control" xml:space="preserve">
+    <value>Maintaining control over your account</value>
+  </data>
+  <data name="Accounts_Item_Activity" xml:space="preserve">
+    <value>All activity that occurs under your account</value>
+  </data>
+  <data name="Accounts_Notify" xml:space="preserve">
+    <value>You must notify us if you believe your account has been accessed without authorization.</value>
+  </data>
+  <data name="AcceptableUse_Title" xml:space="preserve">
+    <value>3. Acceptable Use</value>
+  </data>
+  <data name="AcceptableUse_Text" xml:space="preserve">
+    <value>You agree not to use TimeVic to:</value>
+  </data>
+  <data name="AcceptableUse_Item_Law" xml:space="preserve">
+    <value>Violate any applicable law or regulation</value>
+  </data>
+  <data name="AcceptableUse_Item_Rights" xml:space="preserve">
+    <value>Infringe the rights of others</value>
+  </data>
+  <data name="AcceptableUse_Item_Malicious" xml:space="preserve">
+    <value>Upload malicious code or harmful content</value>
+  </data>
+  <data name="AcceptableUse_Item_Unauthorized" xml:space="preserve">
+    <value>Attempt to gain unauthorized access to TimeVic or related systems</value>
+  </data>
+  <data name="AcceptableUse_Item_Interfere" xml:space="preserve">
+    <value>Interfere with the operation, security, or performance of the service</value>
+  </data>
+  <data name="AcceptableUse_Item_Abuse" xml:space="preserve">
+    <value>Abuse, overload, scrape, or reverse engineer the service</value>
+  </data>
+  <data name="AcceptableUse_Item_Fraud" xml:space="preserve">
+    <value>Use TimeVic for fraudulent, deceptive, or unlawful purposes</value>
+  </data>
+  <data name="AcceptableUse_Suspension" xml:space="preserve">
+    <value>We may suspend or terminate access if we believe these Terms are violated or if use of the service creates risk for TimeVic, users, or third parties.</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_Title" xml:space="preserve">
+    <value>4. User Content and Workspace Data</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_Text" xml:space="preserve">
+    <value>You retain ownership of the information you create or upload to TimeVic, such as clients, projects, tasks, time entries, payment records, notes, and reports.</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_LicenseIntro" xml:space="preserve">
+    <value>You grant TimeVic a limited right to process this information only as necessary to:</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_Item_Provide" xml:space="preserve">
+    <value>Provide the service</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_Item_Store" xml:space="preserve">
+    <value>Store and display your data</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_Item_Reports" xml:space="preserve">
+    <value>Generate reports</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_Item_Maintain" xml:space="preserve">
+    <value>Maintain and improve functionality</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_Item_Support" xml:space="preserve">
+    <value>Provide support</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_Item_Secure" xml:space="preserve">
+    <value>Secure the service</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_Item_Comply" xml:space="preserve">
+    <value>Comply with legal obligations</value>
+  </data>
+  <data name="UserContentAndWorkspaceData_Responsibility" xml:space="preserve">
+    <value>You are responsible for the accuracy, legality, and appropriateness of the data you add to TimeVic.</value>
+  </data>
+  <data name="PaymentsAndFinancialRecords_Title" xml:space="preserve">
+    <value>5. Payments and Financial Records</value>
+  </data>
+  <data name="PaymentsAndFinancialRecords_Text" xml:space="preserve">
+    <value>TimeVic may allow you to record payment-related information, such as amounts paid by clients, unpaid balances, payment dates, and notes.</value>
+  </data>
+  <data name="PaymentsAndFinancialRecords_NoProcessing" xml:space="preserve">
+    <value>Unless explicitly stated otherwise, TimeVic does not process payments between you and your clients. Payment records inside TimeVic are for tracking and reporting purposes only.</value>
+  </data>
+  <data name="PaymentsAndFinancialRecords_Responsibility" xml:space="preserve">
+    <value>You are responsible for verifying all financial records and for complying with tax, accounting, invoicing, and legal requirements applicable to you.</value>
+  </data>
+  <data name="ThirdPartyServices_Title" xml:space="preserve">
+    <value>6. Third-Party Services</value>
+  </data>
+  <data name="ThirdPartyServices_Text" xml:space="preserve">
+    <value>TimeVic may support third-party services, such as Google Sign-In or external work management integrations.</value>
+  </data>
+  <data name="ThirdPartyServices_Policies" xml:space="preserve">
+    <value>Your use of third-party services is subject to their own terms and privacy policies. TimeVic is not responsible for third-party services, their availability, or their handling of your data.</value>
+  </data>
+  <data name="ThirdPartyServices_Disconnect" xml:space="preserve">
+    <value>You may disconnect third-party integrations where the service provides that option.</value>
+  </data>
+  <data name="GoogleSignIn_Title" xml:space="preserve">
+    <value>7. Google Sign-In</value>
+  </data>
+  <data name="GoogleSignIn_Text" xml:space="preserve">
+    <value>If you use Google Sign-In, TimeVic may receive basic Google account information, such as your email address, name, profile picture, and Google account ID.</value>
+  </data>
+  <data name="GoogleSignIn_Use" xml:space="preserve">
+    <value>This information is used to authenticate you and provide access to your TimeVic account.</value>
+  </data>
+  <data name="GoogleSignIn_GoogleTerms" xml:space="preserve">
+    <value>Your use of Google services remains subject to Google&#x2019;s own terms and policies.</value>
+  </data>
+  <data name="ServiceAvailability_Title" xml:space="preserve">
+    <value>8. Service Availability</value>
+  </data>
+  <data name="ServiceAvailability_Text" xml:space="preserve">
+    <value>We aim to keep TimeVic available and reliable, but we do not guarantee that the service will always be uninterrupted, error-free, secure, or available at any particular time.</value>
+  </data>
+  <data name="ServiceAvailability_Modify" xml:space="preserve">
+    <value>We may modify, suspend, or discontinue parts of the service at any time, including for maintenance, security, legal, or operational reasons.</value>
+  </data>
+  <data name="FreeAndPaidFeatures_Title" xml:space="preserve">
+    <value>9. Free and Paid Features</value>
+  </data>
+  <data name="FreeAndPaidFeatures_Text" xml:space="preserve">
+    <value>TimeVic may offer free functionality. We may introduce paid features, paid plans, usage limits, or subscriptions in the future.</value>
+  </data>
+  <data name="FreeAndPaidFeatures_Charges" xml:space="preserve">
+    <value>You will not be charged unless you explicitly choose a paid option and provide required payment information through an approved payment flow.</value>
+  </data>
+  <data name="FreeAndPaidFeatures_AdditionalTerms" xml:space="preserve">
+    <value>If paid features are introduced, additional payment terms may apply.</value>
+  </data>
+  <data name="IntellectualProperty_Title" xml:space="preserve">
+    <value>10. Intellectual Property</value>
+  </data>
+  <data name="IntellectualProperty_Text" xml:space="preserve">
+    <value>TimeVic, including its software, design, branding, and related materials, is owned by TimeVic or its licensors and is protected by intellectual property laws.</value>
+  </data>
+  <data name="IntellectualProperty_NoOwnership" xml:space="preserve">
+    <value>These Terms do not grant you ownership of TimeVic or its software.</value>
+  </data>
+  <data name="IntellectualProperty_Restrictions" xml:space="preserve">
+    <value>You may not copy, modify, distribute, sell, lease, or create derivative works based on TimeVic unless permitted by law or authorized by us in writing.</value>
+  </data>
+  <data name="Feedback_Title" xml:space="preserve">
+    <value>11. Feedback</value>
+  </data>
+  <data name="Feedback_Text" xml:space="preserve">
+    <value>If you provide feedback, ideas, or suggestions, you allow us to use them without restriction or compensation to you.</value>
+  </data>
+  <data name="AccountSuspensionAndTermination_Title" xml:space="preserve">
+    <value>12. Account Suspension and Termination</value>
+  </data>
+  <data name="AccountSuspensionAndTermination_Stop" xml:space="preserve">
+    <value>You may stop using TimeVic at any time.</value>
+  </data>
+  <data name="AccountSuspensionAndTermination_MaySuspend" xml:space="preserve">
+    <value>We may suspend or terminate your access if:</value>
+  </data>
+  <data name="AccountSuspensionAndTermination_Item_Violate" xml:space="preserve">
+    <value>You violate these Terms</value>
+  </data>
+  <data name="AccountSuspensionAndTermination_Item_Risk" xml:space="preserve">
+    <value>Your use creates security, legal, or operational risk</value>
+  </data>
+  <data name="AccountSuspensionAndTermination_Item_Law" xml:space="preserve">
+    <value>We are required to do so by law</value>
+  </data>
+  <data name="AccountSuspensionAndTermination_Item_Discontinued" xml:space="preserve">
+    <value>The service or part of the service is discontinued</value>
+  </data>
+  <data name="AccountSuspensionAndTermination_Data" xml:space="preserve">
+    <value>After termination, we may delete or retain data as described in our Privacy Policy.</value>
+  </data>
+  <data name="Disclaimers_Title" xml:space="preserve">
+    <value>13. Disclaimers</value>
+  </data>
+  <data name="Disclaimers_AsIs" xml:space="preserve">
+    <value>TimeVic is provided &#x201c;as is&#x201d; and &#x201c;as available&#x201d;.</value>
+  </data>
+  <data name="Disclaimers_Warranties" xml:space="preserve">
+    <value>To the maximum extent permitted by law, we disclaim all warranties, whether express, implied, or statutory, including warranties of merchantability, fitness for a particular purpose, reliability, availability, accuracy, and non-infringement.</value>
+  </data>
+  <data name="Disclaimers_Calculations" xml:space="preserve">
+    <value>TimeVic reports and calculations may contain errors or depend on user-entered data. You are responsible for reviewing and verifying all time, payment, income, and report data.</value>
+  </data>
+  <data name="LimitationOfLiability_Title" xml:space="preserve">
+    <value>14. Limitation of Liability</value>
+  </data>
+  <data name="LimitationOfLiability_Damages" xml:space="preserve">
+    <value>To the maximum extent permitted by law, TimeVic will not be liable for indirect, incidental, special, consequential, exemplary, or punitive damages, including loss of profits, revenue, data, business, or goodwill.</value>
+  </data>
+  <data name="LimitationOfLiability_Total" xml:space="preserve">
+    <value>To the maximum extent permitted by law, TimeVic&#x2019;s total liability for any claim related to the service will not exceed the amount you paid to TimeVic for the service in the 12 months before the claim arose, or 100 USD if you have not paid TimeVic.</value>
+  </data>
+  <data name="Indemnification_Title" xml:space="preserve">
+    <value>15. Indemnification</value>
+  </data>
+  <data name="Indemnification_Text" xml:space="preserve">
+    <value>You agree to defend, indemnify, and hold harmless TimeVic from claims, damages, liabilities, losses, and expenses arising from:</value>
+  </data>
+  <data name="Indemnification_Item_Use" xml:space="preserve">
+    <value>Your use of the service</value>
+  </data>
+  <data name="Indemnification_Item_Terms" xml:space="preserve">
+    <value>Your violation of these Terms</value>
+  </data>
+  <data name="Indemnification_Item_Law" xml:space="preserve">
+    <value>Your violation of applicable law</value>
+  </data>
+  <data name="Indemnification_Item_Data" xml:space="preserve">
+    <value>Your content or workspace data</value>
+  </data>
+  <data name="Indemnification_Item_Disputes" xml:space="preserve">
+    <value>Your disputes with clients, team members, or third parties</value>
+  </data>
+  <data name="Changes_Title" xml:space="preserve">
+    <value>16. Changes to These Terms</value>
+  </data>
+  <data name="Changes_Text" xml:space="preserve">
+    <value>We may update these Terms from time to time. If we make material changes, we will update the &#x201c;Last updated&#x201d; date and, where appropriate, provide additional notice.</value>
+  </data>
+  <data name="Changes_ContinuedUse" xml:space="preserve">
+    <value>Your continued use of TimeVic after changes become effective means you accept the updated Terms.</value>
+  </data>
+  <data name="GoverningLaw_Title" xml:space="preserve">
+    <value>17. Governing Law</value>
+  </data>
+  <data name="GoverningLaw_Text" xml:space="preserve">
+    <value>These Terms are governed by applicable law, without regard to conflict of law principles.</value>
+  </data>
+  <data name="GoverningLaw_Replace" xml:space="preserve">
+    <value>If you operate TimeVic through a specific legal entity or jurisdiction, replace this section with the correct governing law and venue before publishing.</value>
+  </data>
+  <data name="ContactUs_Title" xml:space="preserve">
+    <value>18. Contact Us</value>
+  </data>
+  <data name="ContactUs_Text" xml:space="preserve">
+    <value>If you have questions about these Terms, contact us at:</value>
+  </data>
+</root>

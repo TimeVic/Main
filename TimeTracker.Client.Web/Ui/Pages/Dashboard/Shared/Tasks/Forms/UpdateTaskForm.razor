@@ -1,0 +1,171 @@
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Business.Common.Constants.Task
+@using TimeTracker.Business.Common.Constants.Storage
+@using TimeTracker.Client.Core.Constants.Ui
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Comments
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
+@using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+
+@inherits BaseReactiveComponent
+
+@if (_isLoading)
+{
+    <LumexSpinner Size="@Size.Large" />
+}
+else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
+{
+    <div
+        @ref="_attachmentDropZone"
+        class="relative rounded-2xl transition @(_isDragActive ? "bg-blue-50/60 ring-2 ring-blue-500 ring-offset-2" : null)">
+        <InputFile
+            @ref="_attachmentInput"
+            class="hidden"
+            OnChange="@OnAttachmentsInputFileChange"
+            multiple
+            accept="@_attachmentAcceptTypes" />
+        @if (_isDragActive)
+        {
+            <div class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-2xl border-2 border-dashed border-blue-500 bg-blue-50/80 text-blue-600">
+                <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+            </div>
+        }
+
+        <EditForm
+            @ref="_form"
+            EditContext="_editContext"
+            novalidate>
+            <DataAnnotationsValidator/>
+
+            <div class="rounded-2xl border border-slate-200 p-4">
+                <div class="flex items-end gap-3">
+                    <div class="flex-1 min-w-0">
+                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["TaskName"]</label>
+                        <InputTextField 
+                            FullWidth="true"
+                            Size="Size.Large"
+                            @bind-Value="_model.Title"/>
+                    </div>
+                    <div class="w-40 shrink-0">
+                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@EstimateInputLabel</label>
+                        <DurationInput
+                            Placeholder="1h 30m"
+                            FullWidth="true"
+                            Size="Size.Large"
+                            @bind-Value="_model.OriginalEstimate"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-slate-200 p-4 mt-3">
+                <div class="grid gap-4 lg:grid-cols-[repeat(3,minmax(0,1fr))] lg:items-end">
+                    <div>
+                        <EnumDropDown
+                            TItem="TaskStatus"
+                            Label="@DashboardLocalizer["Status"]"
+                            Value="_model.Status"
+                            ValueChanged="OnStatusChanged"
+                        />
+                    </div>
+                    <div>
+                        <EnumDropDown
+                            TItem="TaskPriority"
+                            Label="@DashboardLocalizer["Priority"]"
+                            Value="_model.Priority"
+                            ValueChanged="OnPriorityChanged"
+                        />
+                    </div>
+                    <div>
+                        <MembersDropDown
+                            Type="DropDownType.Select"
+                            Label="@DashboardLocalizer["UpdateTaskForm_Assigned"]"
+                            UserId="_model.UserId"
+                            SelectedItemChanged="OnAssignedChanged"
+                            AllowedIds="_allowedUserIds"/>
+                    </div>
+                </div>
+            </div>
+            
+            <TaskEstimateSummaryBlock
+                Class="mt-3"
+                PlannedDuration="_model.OriginalEstimate"
+                TrackedDuration="_task.TrackedDuration"
+                ExternalSourceType="_task.ExternalSourceType" />
+
+            <div class="rounded-2xl border border-slate-200 p-4 mt-3">
+                <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Description"]</label>
+                <MarkdownEdit
+                    Value="@_model.Description"
+                    ValueChanged="@OnDescriptionChanged"
+                    Placeholder="@DashboardLocalizer["TaskDescription"].Value"
+                    RowsMin="8" />
+                <div class="mt-5 border-t border-slate-200 pt-4">
+                    <p class="flex items-center gap-2 text-sm text-slate-500">
+                        <i class="fa-solid fa-paperclip text-xs text-slate-400"></i>
+                        <span>@DashboardLocalizer["UpdateTaskForm_AttachmentsHint"]</span>
+                    </p>
+                    <AttachmentsBlock
+                        Class="mt-4"
+                        ListClass="flex flex-wrap gap-3"
+                        PreviewItemClass="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition"
+                        EntityId="@TaskId"
+                        EntityType="@StorageEntityType.Task"
+                        Files="@TaskAttachments"
+                        UploadingFiles="@_uploadingAttachments"
+                        FilesChanged="@OnAttachmentsChanged" />
+                </div>
+            </div>
+            
+            <div class="rounded-2xl border border-slate-200 p-4 mt-3">
+                <div class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(12rem,1fr))]">
+                    <div class="min-w-0">
+                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Project"]</label>
+                        <div class="flex min-h-[42px] min-w-0 items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm leading-5 text-slate-700">
+                            <span class="break-words">@_task.TaskList.Project.Name</span>
+                        </div>
+                    </div>
+                    <div class="min-w-0">
+                        <TaskListDropDown
+                            Label="@DashboardLocalizer["TaskList"]"
+                            Variant="InputVariant.Outlined"
+                            LabelPlacement="LabelPlacement.Outside"
+                            ProjectId="@_task.TaskList.Project.Id"
+                            Value="@_model.TaskListId"
+                            Disabled="@_tasksState.Value.IsTaskSaving"
+                            FullWidth="true"
+                            SelectedItemChanged="@OnTaskListChanged" />
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(_task?.FormattedId))
+                    {
+                        <div class="min-w-0">
+                            <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">
+                                @if (!string.IsNullOrWhiteSpace(_task?.ExternalTaskId))
+                                {
+                                    <text>@DashboardLocalizer["ExternalTaskId"]</text>
+                                }
+                                else
+                                {
+                                    <text>@DashboardLocalizer["TaskId"]</text>
+                                }
+                            </label>
+                            <div class="flex min-h-[42px] min-w-0 items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm leading-5 text-slate-700">
+                                <span class="break-words">@_task?.FormattedId</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="mt-6 pt-1">
+                    <TagsDropDown
+                        Label="@DashboardLocalizer["Tags"]"
+                        Value="_model.TagIds"
+                        ValueChanged="OnTagsChanged" />
+                </div>
+            </div>
+
+        </EditForm>
+
+        <div class="mt-3">
+            <TaskCommentsBlock Task="@_task" />
+        </div>
+    </div>
+}

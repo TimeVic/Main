@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-white dark:bg-gray-950 scheme-light dark:scheme-dark">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>TimeVic</title>
+    <base href="/"/>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#1E3A8A">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/app.min.css" />
+    <link rel="stylesheet" href="vendor/github-markdown/github-markdown.min.css" />
+    <link rel="stylesheet" href="vendor/github-markdown/timevic-markdown-theme.css" />
+    <link href="TimeTracker.Client.Web.styles.css" rel="stylesheet"/>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BH3T02NNZ8"></script>
+    <script>
+        document.documentElement.lang = location.pathname === "/uk" || location.pathname.startsWith("/uk/") ? "uk-UA" : "en";
+
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        gtag('config', 'G-BH3T02NNZ8');
+    </script>
+    <script type="importmap"></script>
+</head>
+<body class="w-full bg-gray-100">
+    <div id="app" class="w-full h-full">
+        <div class="fixed inset-0 flex items-center justify-center bg-white/70 backdrop-blur z-50">
+            <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent"></div>
+        </div>
+    </div>
+    <script src="_content/LumexUI/js/LumexUI.js" type="module"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LerVNUhAAAAAKZSPljJNpjJhR6PIraWTUbzBHHS"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
+    <script type="module" src="js/messaging#[.{fingerprint}].js"></script>
+    <script src="js/common#[.{fingerprint}].js"></script>
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+</body>
+</html>
