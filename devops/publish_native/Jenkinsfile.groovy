@@ -161,6 +161,9 @@ node('build-node') {
         withCredentials([string(credentialsId: "timevic_${environmentKey}_user_jwt", variable: 'AUTH_SECRET')]) {
             envVariables.put('App__Auth__SymmetricSecurityKey', AUTH_SECRET)
         }
+        withCredentials([string(credentialsId: "timevic_social_login_google_secret", variable: 'AUTH_SECRET')]) {
+            envVariables.put('SocialLogin__Google__ClientSecret', AUTH_SECRET)
+        }
         
         // withCredentials([string(credentialsId: "timevic_${environmentKey}_google__storage_project_id", variable: 'AUTH_SECRET')]) {
         //     envVariables.put('Google__Storage__ProjectId', AUTH_SECRET)
