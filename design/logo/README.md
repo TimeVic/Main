@@ -8,15 +8,17 @@ Variant: minimal V / verified value.
 - `svg/timevic-app-icon.svg` — rounded dark app/favicon icon.
 - `svg/timevic-app-icon-light.svg` — light app icon variant.
 - `svg/timevic-logo-horizontal.svg` — horizontal logo lockup.
-- `png/mark/*` — transparent PNG mark exports.
-- `png/app-icon/*` — PNG app/favicon exports.
+- `png/mark/*` — transparent PNG mark exports, including 1024x1024.
+- `png/app-icon/*` — PNG app/favicon exports, including 1024x1024.
 - `png/logo/*` — horizontal logo PNG previews.
 - `favicon/favicon.ico` — ICO containing 16x16, 32x32, 48x48.
 - `favicon/favicon.svg` — SVG favicon.
 - `favicon/apple-touch-icon.png` — 180x180.
 - `favicon/android-chrome-192x192.png` — 192x192.
 - `favicon/android-chrome-512x512.png` — 512x512.
+- `favicon/android-chrome-1024x1024.png` — 1024x1024.
 - `favicon/timevic-icon-120x120.png` — requested 120x120 PNG.
+- `favicon/timevic-icon-1024x1024.png` — 1024x1024 PNG.
 - `favicon/site.webmanifest` — minimal PWA/browser manifest.
 
 ## HTML snippet
