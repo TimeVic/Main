@@ -43,7 +43,8 @@ public class AppleSocialLoginProviderService : ASocialLoginProvider, IAppleSocia
         var keyFilePath = Path.Combine(AssemblyUtils.GetAssemblyPath(), credentialsDirectory + keyFileName);
         if (!File.Exists(keyFilePath))
         {
-            throw new Exception($"Apple OAuth Login provider key file not found: {keyFilePath}");
+            _logger.LogError($"Apple OAuth Login provider key file not found: {keyFilePath}");
+            return;
         }
         
         logger.LogInformation($"Apple OAuth key initialization: {keyFilePath}");
