@@ -1,0 +1,27 @@
+@namespace TimeTracker.Client.Web.Ui.Pages.Landing.User.Shared
+
+<div class="@ContainerClass">
+    <div class="flex items-center gap-3">
+        <div class="h-px flex-1 bg-slate-200"></div>
+        <span class="text-xs font-medium uppercase tracking-widest text-slate-400">@Localizer["Separator_Or"]</span>
+        <div class="h-px flex-1 bg-slate-200"></div>
+    </div>
+
+    <div class="space-y-2">
+        <a href="@GoogleLoginUrl"
+           class="relative flex h-12 w-full items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-300 hover:bg-slate-50">
+            <span class="absolute left-4 flex h-6 w-6 items-center justify-center">
+                <i class="fa-brands fa-google text-lg" style="color: #4285f4"></i>
+            </span>
+            <span>@Localizer["Button_ContinueWithGoogle"]</span>
+        </a>
+
+        <a href="@FacebookLoginUrl"
+           class="relative flex h-12 w-full items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-300 hover:bg-slate-50">
+            <span class="absolute left-4 flex h-6 w-6 items-center justify-center rounded-full bg-[#1877f2] text-white">
+                <i class="fa-brands fa-facebook-f text-sm"></i>
+            </span>
+            <span>@Localizer["Button_ContinueWithFacebook"]</span>
+        </a>
+    </div>
+</div>

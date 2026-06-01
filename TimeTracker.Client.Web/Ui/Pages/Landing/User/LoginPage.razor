@@ -6,6 +6,7 @@
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 @using TimeTracker.Client.Web.Services
+@using TimeTracker.Client.Web.Ui.Pages.Landing.User.Shared
 @using Layout = TimeTracker.Client.Web.Ui.Pages.Landing.Shared.LandingLayout
 
 @inherits BaseReactiveComponent
@@ -103,22 +104,14 @@
                     </StartContent>
                     <ChildContent>@Localizer["Content_SignInAndOpenWorkspace"]</ChildContent>
                 </CustomButton>
+
                 <div class="text-center text-sm text-slate-600">
                     <span>@Localizer["Content_NoAccountYet"]</span>
                     <a href="@RegistrationUrl" class="ml-2 font-semibold text-blue-600 transition hover:text-blue-700 hover:underline">@Localizer["Content_CreateOne"]</a>
                 </div>
 
-                <div class="my-6 flex items-center gap-3">
-                    <div class="h-px flex-1 bg-slate-200"></div>
-                    <span class="text-xs font-medium text-slate-400 uppercase tracking-widest">@SharedLocalizer["Form_OrSeparator"]</span>
-                    <div class="h-px flex-1 bg-slate-200"></div>
-                </div>
+                <SocialLoginButtonsBlock Class="mt-5" />
 
-                <a href="@DemoUrl"
-                   class="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100">
-                    <i class="fa-regular fa-eye text-blue-500"></i>
-                    <span>@SharedLocalizer["CTA_DemoDashboard"]</span>
-                </a>
             </EditForm>
 
             <div class="my-6 flex items-center gap-3">
@@ -162,6 +155,18 @@
                     </div>
                 }
             </EditForm>
+
+            <div class="my-6 flex items-center gap-3">
+                <div class="h-px flex-1 bg-slate-200"></div>
+                <span class="text-xs font-medium text-slate-400 uppercase tracking-widest">@SharedLocalizer["Form_OrSeparator"]</span>
+                <div class="h-px flex-1 bg-slate-200"></div>
+            </div>
+
+            <a href="@DemoUrl"
+               class="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100">
+                <i class="fa-regular fa-eye text-blue-500"></i>
+                <span>@SharedLocalizer["CTA_DemoDashboard"]</span>
+            </a>
         </section>
         </div>
     </div>
