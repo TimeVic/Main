@@ -16,27 +16,29 @@
         {
             <button
                 type="button"
-                class="flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-slate-400 hover:bg-slate-100"
+                class="flex h-4 w-4 shrink-0 items-center justify-center rounded text-slate-400 hover:bg-slate-100"
                 @onclick="@OnToggleExpanded"
                 @onclick:stopPropagation="true"
                 @onkeydown:stopPropagation="true">
-                <i class="fa-solid @(IsExpanded ? "fa-chevron-down" : "fa-chevron-right") text-[10px]"></i>
+                <i class="fa-solid @(IsExpanded ? "fa-chevron-down" : "fa-chevron-right") text-[9px]"></i>
             </button>
         }
         else
         {
-            <span class="h-5 w-5 shrink-0"></span>
+            <span class="h-4 w-4 shrink-0"></span>
         }
-        <div class="flex min-w-0 flex-1 items-center gap-2 text-left">
+        <div class="flex min-w-0 flex-1 items-center gap-1.5 text-left">
             <i class="@IconClass"></i>
             <span class="truncate">@TreeNode.Node.Title</span>
         </div>
         <div @onclick:stopPropagation="true" @onkeydown:stopPropagation="true">
             <LumexDropdown>
                 <LumexDropdownTrigger>
-                    <LumexButton IconOnly="true" Size="Size.Small" Variant="@Variant.Light">
+                    <button
+                        type="button"
+                        class="flex h-6 w-6 items-center justify-center rounded-md text-xs text-slate-500 hover:bg-slate-100">
                         <i class="fa-solid fa-ellipsis-h"></i>
-                    </LumexButton>
+                    </button>
                 </LumexDropdownTrigger>
                 <LumexDropdownMenu>
                     @if (IsFolder)
