@@ -69,6 +69,8 @@
                 <div>
                     <InputTextField
                         @bind-Value="@model.Email"
+                        name="username"
+                        autocomplete="username"
                         Label="@SharedLocalizer["Form_EmailLabel"]"
                         FullWidth="true"
                         Type="InputType.Email"
@@ -76,6 +78,8 @@
 
                     <InputTextField
                         @bind-Value="@model.Password"
+                        name="password"
+                        autocomplete="current-password"
                         Class="mt-4"
                         Label="@SharedLocalizer["Form_PasswordLabel"]"
                         FullWidth="true"
@@ -98,7 +102,7 @@
                     Color="@ThemeColor.Primary"
                     Class="font-semibold w-full"
                     IsLoading="_isLoading"
-                    OnClick="@Submit">
+                    Type="@ButtonType.Submit">
                     <StartContent>
                         <UserIcon></UserIcon>
                     </StartContent>
