@@ -16,6 +16,15 @@ public class MarkdownHelper
             styleDictionary: StyleDictionary.DefaultDark
         )
         .Build();
+
+    private static readonly MarkdownPipeline MBuilderPipelineWithLineBreaks = new MarkdownPipelineBuilder()
+        .UseAdvancedExtensions()
+        .UseSoftlineBreakAsHardlineBreak()
+        .UseColorCode(
+            HtmlFormatterType.Css,
+            styleDictionary: StyleDictionary.DefaultDark
+        )
+        .Build();
     
     private static readonly ReverseMarkdown.Converter HtmlToMarkdownBuilder = new(new () {
         // Include the unknown tag completely in the result (default as well)
@@ -28,9 +37,13 @@ public class MarkdownHelper
         SmartHrefHandling = true
     });
     
-    public static string ToHtml(string markdown)
+    public static string ToHtml(string markdown, bool isPreserveLineBreaks = false)
     {
-        return Markdig.Markdown.ToHtml($"{markdown}", MBuilderPipeline);
+        var pipeline = isPreserveLineBreaks
+            ? MBuilderPipelineWithLineBreaks
+            : MBuilderPipeline;
+
+        return Markdig.Markdown.ToHtml($"{markdown}", pipeline);
     }
     
     public static string ToMarkdown(string html)

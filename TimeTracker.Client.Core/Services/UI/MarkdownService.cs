@@ -9,7 +9,7 @@ public class MarkdownService
 
     public string ToHtml(string markdown)
     {
-        var html = MarkdownHelper.ToHtml($"{markdown}");
+        var html = MarkdownHelper.ToHtml($"{markdown}", isPreserveLineBreaks: true);
         html = AnchorOpeningTagRegex.Replace(html, AddReadonlyLinkAttributes);
         return $"""<div class="markdown-body">{html}</div>""";
     }

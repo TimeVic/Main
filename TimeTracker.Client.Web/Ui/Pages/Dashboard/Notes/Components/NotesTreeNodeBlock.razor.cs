@@ -47,8 +47,8 @@ public partial class NotesTreeNodeBlock
         : "fa-regular fa-note-sticky text-slate-500";
 
     private string RowClass => SelectedNoteId == TreeNode.Node.Id
-        ? "notes-tree-node-row group flex items-center gap-1 rounded-xl border border-blue-200 bg-blue-50 px-1.5 py-1.5 text-sm font-medium text-blue-900"
-        : "notes-tree-node-row group flex items-center gap-1 rounded-xl border border-transparent px-1.5 py-1.5 text-sm text-slate-700 hover:border-slate-200 hover:bg-slate-50";
+        ? "notes-tree-node-row group flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-sm font-medium text-blue-900"
+        : "notes-tree-node-row group flex items-center gap-1 rounded-lg border border-transparent px-1.5 py-0.5 text-sm text-slate-700 hover:border-slate-200 hover:bg-slate-50";
 
     private async Task OnToggleExpanded()
     {
