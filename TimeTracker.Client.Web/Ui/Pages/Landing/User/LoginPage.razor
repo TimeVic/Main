@@ -62,11 +62,11 @@
                 </div>
             </div>
 
-            <EditForm Model="@model" @ref="_form" OnValidSubmit="Submit" FormName="LoginForm" class="mt-6 space-y-4">
+            <EditForm Model="@model" @ref="_form" OnValidSubmit="Submit" FormName="LoginForm" class="mt-6 grid gap-4">
                 <DataAnnotationsValidator/>
                 <CustomValidationSummary/>
 
-                <div>
+                <div class="grid gap-4">
                     <InputTextField
                         @bind-Value="@model.Email"
                         name="username"
@@ -80,7 +80,6 @@
                         @bind-Value="@model.Password"
                         name="password"
                         autocomplete="current-password"
-                        Class="mt-4"
                         Label="@SharedLocalizer["Form_PasswordLabel"]"
                         FullWidth="true"
                         Type="InputType.Password"
@@ -124,16 +123,17 @@
                 <div class="h-px flex-1 bg-slate-200"></div>
             </div>
 
-            <EditForm Model="@_magicModel" @ref="_magicForm" FormName="MagicLoginForm" class="space-y-4">
+            <EditForm Model="@_magicModel" @ref="_magicForm" FormName="MagicLoginForm" class="grid gap-4">
                 <DataAnnotationsValidator/>
                 <CustomValidationSummary/>
 
-                <div>
-                    <p class="mb-1 text-sm font-medium text-slate-700">@Localizer["Content_SignInWithAMagicLink"]</p>
-                    <p class="mb-3 text-xs text-slate-400">@Localizer["Content_WeLlSendAOneTimeLoginLinkToYour"]</p>
+                <div class="grid gap-2">
+                    <div>
+                        <p class="mb-1 text-sm font-medium text-slate-700">@Localizer["Content_SignInWithAMagicLink"]</p>
+                        <p class="text-xs text-slate-400">@Localizer["Content_WeLlSendAOneTimeLoginLinkToYour"]</p>
+                    </div>
                     <InputTextField
                         @bind-Value="@_magicModel.Email"
-                        Class="mt-2"
                         Label="@SharedLocalizer["Form_EmailLabel"]"
                         FullWidth="true"
                         Type="InputType.Email"
