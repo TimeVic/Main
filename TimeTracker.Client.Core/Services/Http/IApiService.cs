@@ -3,7 +3,9 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
 using TimeTracker.Api.Shared.Dto.Entity.List;
 using TimeTracker.Api.Shared.Dto.Entity.Messaging;
+using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Business.Common.Dto;
@@ -115,6 +117,28 @@ public interface IApiService
     Task NotificationCenterMarkAllAsRead(Guid workspaceId);
 
     Task NotificationCenterMarkAsRead(Guid notificationId);
+
+    Task<GetNotesTreeResponse?> NotesGetTreeAsync(GetNotesTreeRequest model);
+
+    Task<NoteDocumentDto?> NotesGetDocumentAsync(GetNoteDocumentRequest model);
+
+    Task<NoteTreeNodeDto?> NotesCreateFolderAsync(CreateNoteFolderRequest model);
+
+    Task<NoteDocumentDto?> NotesCreateDocumentAsync(CreateNoteDocumentRequest model);
+
+    Task<NoteDocumentDto?> NotesUpdateDocumentAsync(UpdateNoteDocumentRequest model);
+
+    Task<NoteTreeNodeDto?> NotesRenameNodeAsync(RenameNoteNodeRequest model);
+
+    Task<NoteTreeNodeDto?> NotesMoveNodeAsync(MoveNoteNodeRequest model);
+
+    Task<NoteTreeNodeDto?> NotesArchiveNodeAsync(ArchiveNoteNodeRequest model);
+
+    Task<GetLinkedNotesResponse?> NotesGetLinkedNotesAsync(GetLinkedNotesRequest model);
+
+    Task<NoteLinkDto?> NotesCreateLinkAsync(CreateNoteLinkRequest model);
+
+    Task NotesDeleteLinkAsync(DeleteNoteLinkRequest model);
 
     Task<ProjectDto?> ProjectAddAsync(ProjectAddRequest model);
 
