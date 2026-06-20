@@ -40,8 +40,8 @@ public partial class SelectEmojiButton : IDisposable
             "popupPortal.getPanelStyle",
             [
                 _triggerElement,
-                340,
-                420,
+                288,
+                360,
                 8,
                 12
             ]);
