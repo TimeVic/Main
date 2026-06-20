@@ -1,5 +1,7 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Web.Services;
@@ -37,7 +39,26 @@ public partial class MainHeaderBlock
 
     protected string UkrainianUrl => LocalizationUrlService.GetUkrainianUrl(CurrentPath);
 
-    protected void SwitchToEnglish() => NavigationManager.NavigateTo(EnglishUrl, forceLoad: true);
+    protected Task SwitchToEnglish() => SwitchLanguageAsync(ILocalizationUrlService.EnglishCultureName, EnglishUrl);
 
-    protected void SwitchToUkrainian() => NavigationManager.NavigateTo(UkrainianUrl, forceLoad: true);
+    protected Task SwitchToUkrainian() => SwitchLanguageAsync(ILocalizationUrlService.UkrainianCultureName, UkrainianUrl);
+
+    private async Task SwitchLanguageAsync(string cultureName, string targetUrl)
+    {
+        if (AuthState.Value.IsLoggedIn)
+        {
+            var user = await ApiService.UserUpdateSettingsAsync(new UpdateSettingsRequest
+            {
+                UserName = AuthState.Value.User?.UserName,
+                LanguageCode = cultureName
+            });
+            if (user != null)
+            {
+                Dispatcher.Dispatch(new UpdateUserAction(user));
+            }
+        }
+
+        await Js.InvokeVoidAsync("localStorage.setItem", ILocalizationUrlService.LocalStorageKey, cultureName);
+        NavigationManager.NavigateTo(targetUrl, forceLoad: true);
+    }
 }
