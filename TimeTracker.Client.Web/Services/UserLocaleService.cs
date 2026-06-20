@@ -36,11 +36,16 @@ public class UserLocaleService : IUserLocaleService
 
         try
         {
-            var storedLocale = await _js.InvokeAsync<string?>("localStorage.getItem", ILocalizationUrlService.LocalStorageKey);
-            if (!string.Equals(NormalizeCultureName(storedLocale), userLocale, StringComparison.OrdinalIgnoreCase))
+            var currentPath = new Uri(_navigationManager.Uri).AbsolutePath;
+            if (_localizationUrlService.IsUkrainianPath(currentPath))
             {
-                await _js.InvokeVoidAsync("localStorage.setItem", ILocalizationUrlService.LocalStorageKey, userLocale);
+                // Prevent reload loops when a public localized URL conflicts with the saved user language.
+                await StoreLocaleAsync(ILocalizationUrlService.UkrainianCultureName);
+                _localizationUrlService.ApplyCulture(ILocalizationUrlService.UkrainianCultureName);
+                return;
             }
+
+            await StoreLocaleAsync(userLocale);
 
             var currentLocale = NormalizeCultureName(CultureInfo.CurrentUICulture.Name);
             if (string.Equals(currentLocale, userLocale, StringComparison.OrdinalIgnoreCase))
@@ -50,6 +55,22 @@ public class UserLocaleService : IUserLocaleService
 
             _localizationUrlService.ApplyCulture(userLocale);
             _navigationManager.NavigateTo(_navigationManager.Uri, forceLoad: true);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+        }
+    }
+
+    private async Task StoreLocaleAsync(string locale)
+    {
+        try
+        {
+            var storedLocale = await _js.InvokeAsync<string?>("localStorage.getItem", ILocalizationUrlService.LocalStorageKey);
+            if (!string.Equals(NormalizeCultureName(storedLocale), locale, StringComparison.OrdinalIgnoreCase))
+            {
+                await _js.InvokeVoidAsync("localStorage.setItem", ILocalizationUrlService.LocalStorageKey, locale);
+            }
         }
         catch (Exception e)
         {
