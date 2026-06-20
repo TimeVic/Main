@@ -3,20 +3,23 @@
 @inject ILocalizationUrlService LocalizationUrlService
 @inject NavigationManager NavigationManager
 
-<a href="@HomeUrl" class="flex items-center gap-3">
+<a href="@HomeUrl" class="@LinkClass">
     <div class="min-w-0">
         @if (!string.IsNullOrWhiteSpace(Eyebrow))
         {
             <p class="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">@Eyebrow</p>
         }
-        <div class="mt-1 flex items-center gap-2">
+        <div class="@LogoWrapClass">
             <img
                 src="/assets/brand/timevic-logo-horizontal.svg"
                 alt="TimeVic"
-                class="h-10 w-auto"
-                width="160"
-                height="40" />
-            <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-700">@SharedLocalizer["AppLogo_BetaBadge"]</span>
+                class="@LogoClass"
+                width="@LogoWidth"
+                height="@LogoHeight" />
+            @if (IsShowBeta)
+            {
+                <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-700">@SharedLocalizer["AppLogo_BetaBadge"]</span>
+            }
         </div>
     </div>
 </a>
@@ -24,6 +27,24 @@
 @code {
     [Parameter]
     public string Eyebrow { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool IsShowBeta { get; set; } = true;
+
+    [Parameter]
+    public string LinkClass { get; set; } = "flex items-center gap-3";
+
+    [Parameter]
+    public string LogoWrapClass { get; set; } = "mt-1 flex items-center gap-2";
+
+    [Parameter]
+    public string LogoClass { get; set; } = "h-10 w-auto";
+
+    [Parameter]
+    public int LogoWidth { get; set; } = 185;
+
+    [Parameter]
+    public int LogoHeight { get; set; } = 40;
 
     private string CurrentPath => new Uri(NavigationManager.Uri).AbsolutePath;
 

@@ -5,7 +5,7 @@
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.TimeEntry.Parts
 @inherits BaseReactiveComponent
 
-<div class="w-time-form @Class">
+<div class="w-time-form @(IsShort ? "w-time-form--short" : "") @Class">
     @if (_isEditModalOpened)
     {
         <EditTimeEntryModal 
@@ -32,11 +32,35 @@
             OnClose="@(() => _isUpdateTaskModalOpened = false)"/>
     }
 
-    <section class="w-full rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
-        <div class="w-time-form__content flex flex-col gap-2 sm:flex-row sm:items-center">
+    @{
+        var shellClass = IsShort
+            ? "w-time-form__shell w-full"
+            : "w-time-form__shell w-full rounded-2xl border border-slate-200 bg-white p-3 shadow-sm";
+        var contentClass = IsShort
+            ? "w-time-form__content flex min-w-0 flex-col gap-2 lg:flex-row lg:items-center"
+            : "w-time-form__content flex flex-col gap-2 sm:flex-row sm:items-center";
+        var descriptionClass = IsShort
+            ? "w-time-form__description min-w-[220px] flex-1"
+            : "w-time-form__description min-w-0 flex-1";
+        var descriptionInputClass = IsShort
+            ? "w-time-form__description-input h-11 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-700 placeholder-slate-400 shadow-sm focus:border-blue-300 focus:outline-none"
+            : "w-full bg-transparent px-1 py-1 text-sm text-slate-700 placeholder-slate-400 focus:outline-none";
+        var controlsClass = IsShort
+            ? "w-time-form__controls flex shrink-0 flex-wrap items-center gap-2"
+            : "w-time-form__controls flex shrink-0 flex-wrap items-center gap-2";
+        var projectSelectClass = IsShort
+            ? "w-time-form__project-select min-w-[170px]"
+            : "w-time-form__project-select min-w-[180px]";
+        var counterClass = IsShort
+            ? "w-time-form__compact-counter"
+            : string.Empty;
+    }
+
+    <section class="@shellClass">
+        <div class="@contentClass">
 
             @* Description — full width on mobile, flex-1 on desktop *@
-            <div class="w-time-form__description min-w-0 flex-1">
+            <div class="@descriptionClass">
                 <input
                     type="text"
                     placeholder="@DashboardLocalizer["WhatAreYouWorkingOn"]"
@@ -44,11 +68,11 @@
                     @onchange="@OnDescriptionChanged"
                     @onclick="@OnDescriptionClick"
                     readonly="@(!_hasActiveEntry)"
-                    class="w-full bg-transparent px-1 py-1 text-sm text-slate-700 placeholder-slate-400 focus:outline-none @(!_hasActiveEntry ? "cursor-pointer opacity-40" : "")"/>
+                    class="@descriptionInputClass @(!_hasActiveEntry ? "cursor-pointer opacity-40" : "")"/>
             </div>
 
             @* Right-side controls *@
-            <div class="w-time-form__controls flex shrink-0 flex-wrap items-center gap-2">
+            <div class="@controlsClass">
 
                 @* Project / Task chip *@
                 @if (_activeEntry?.Task != null)
@@ -64,7 +88,7 @@
                 else
                 {
                     <div class="w-time-form__project-control flex items-center gap-2">
-                        <div class="w-time-form__project-select min-w-[180px] @(!_hasActiveEntry ? "cursor-pointer" : "")" @onclick="@OnProjectAreaClick">
+                        <div class="@projectSelectClass @(!_hasActiveEntry ? "cursor-pointer" : "")" @onclick="@OnProjectAreaClick">
                             <div class="@(!_hasActiveEntry ? "pointer-events-none" : "")">
                                 <ProjectsDropDown
                                     Value="@(_activeEntry?.Project?.Id ?? Guid.Empty)"
@@ -103,6 +127,7 @@
 
                 <div class="w-time-form__control w-time-form__counter">
                     <TimeCounterField
+                        Class="@counterClass"
                         Value="@_activeEntry?.StartTimeOffset"
                         IsActive="@_hasActiveEntry"/>
                 </div>
