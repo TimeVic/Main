@@ -98,6 +98,7 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                     Value="@_model.Description"
                     ValueChanged="@OnDescriptionChanged"
                     Placeholder="@DashboardLocalizer["TaskDescription"].Value"
+                    IsInlineActionsEnabled="false"
                     RowsMin="8" />
                 <div class="mt-5 border-t border-slate-200 pt-4">
                     <p class="flex items-center gap-2 text-sm text-slate-500">

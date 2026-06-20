@@ -17,8 +17,8 @@ public partial class UpdateTaskModal
     
     [Parameter]
     public virtual EventCallback OnClose { get; set; }
-    
-    private LumexModal modal;
+
+    private LumexModal modal = null!;
     
     private async Task OnCloseModal()
     {

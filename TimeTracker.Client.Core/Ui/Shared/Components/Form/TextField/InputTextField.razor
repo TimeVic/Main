@@ -90,7 +90,7 @@
 
     private void OnEmojiSelected(EmojiList.EmojiOptionModel emoji)
     {
-        CurrentValue += emoji.Symbol;
+        CurrentValue = string.Concat(CurrentValue, emoji.Symbol);
     }
 
     protected override bool TryParseValueFromString(

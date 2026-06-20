@@ -1,0 +1,47 @@
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity.Task
+
+@inherits BaseReactiveComponent
+
+<span class="@Class" title="@ButtonTitle">
+    @if (IsCurrentTaskTimerActive)
+    {
+        <CustomButton
+            Variant="@Variant"
+            Color="ThemeColor.Default"
+            IconOnly="@IconOnly"
+            Size="@Size"
+            Disabled="@IsDisabled"
+            OnClick="@StopTimeEntry">
+            <StartContent>
+                <i class="fa-solid fa-stop text-xs"></i>
+            </StartContent>
+            <ChildContent>
+                @if (!IconOnly)
+                {
+                    @DashboardLocalizer["StopTimer"]
+                }
+            </ChildContent>
+        </CustomButton>
+    }
+    else
+    {
+        <CustomButton
+            Variant="@Variant"
+            Color="ThemeColor.Info"
+            IconOnly="@IconOnly"
+            Size="@Size"
+            Disabled="@IsDisabled"
+            OnClick="@StartTimeEntry">
+            <StartContent>
+                <i class="fa-solid fa-play text-xs"></i>
+            </StartContent>
+            <ChildContent>
+                @if (!IconOnly)
+                {
+                    @DashboardLocalizer["StartTimer"]
+                }
+            </ChildContent>
+        </CustomButton>
+    }
+</span>
