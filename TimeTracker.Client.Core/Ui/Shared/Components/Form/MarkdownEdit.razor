@@ -14,10 +14,11 @@
             <textarea
                 name="@TextAreaName"
                 placeholder="@Placeholder"
-                value="@_editValue"
+                @bind="@_editValue"
+                @bind:event="oninput"
+                @bind:after="@OnEditValueChanged"
                 maxlength="@MaxLength"
                 rows="@_textAreaRows"
-                @oninput="@OnChangeValue"
                 class="w-markdown-editor-input w-full resize-y rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"></textarea>
             <p class="w-support mt-2 text-slate-500">
                 @DashboardLocalizer["MarkdownEdit_Supports"]
@@ -27,7 +28,7 @@
             </p>
 
         </div>
-        if (IsInlineActionsEnabled && _isActionButtonsEnabled)
+        @if (IsInlineActionsEnabled && _isActionButtonsEnabled)
         {
             <div class="mt-3 flex items-center gap-2">
                 <CustomButton
@@ -111,13 +112,33 @@
     private int _textAreaRows = 3;
     private string _value = string.Empty;
     private string _editValue = string.Empty;
+    private string _lastParameterValue = string.Empty;
+    private string _lastSubmittedValue = string.Empty;
     private bool _isActionButtonsEnabled;
     private bool _isInitialized;
+    private bool _isAwaitingSubmittedValue;
 
     protected override void OnParametersSet()
     {
         var value = Value ?? string.Empty;
+        if (_isInitialized && _isAwaitingSubmittedValue)
+        {
+            if (value == _lastSubmittedValue)
+            {
+                _isAwaitingSubmittedValue = false;
+            }
+            else if (value == _lastParameterValue)
+            {
+                return;
+            }
+            else
+            {
+                _isAwaitingSubmittedValue = false;
+            }
+        }
+
         var isDesiredEditBox = IsEditMode || string.IsNullOrWhiteSpace(value);
+        _lastParameterValue = value;
         if (_isInitialized && (IsInlineActionsEnabled && _isActionButtonsEnabled || _value == value && _isShowEditBox == isDesiredEditBox))
         {
             return;
@@ -139,14 +160,14 @@
         _textAreaRows = Math.Min(_textAreaRows, _textAreaRowsMax);
     }
 
-    private async Task OnChangeValue(ChangeEventArgs elementEvent)
+    private async Task OnEditValueChanged()
     {
-        _editValue = elementEvent.Value?.ToString() ?? string.Empty;
         ResizeEditBox(_editValue);
 
         if (!IsInlineActionsEnabled)
         {
             _value = _editValue;
+            TrackSubmittedValue(_value);
             await ValueChanged.InvokeAsync(_value);
             await Changed.InvokeAsync(_value);
             return;
@@ -169,12 +190,18 @@
 
     private async Task OnClickSave()
     {
+        await SaveEditValue();
+    }
+
+    private async Task SaveEditValue()
+    {
         var isChanged = _value != _editValue;
         _value = _editValue;
         _isShowEditBox = string.IsNullOrWhiteSpace(_value);
         _isActionButtonsEnabled = false;
         if (isChanged)
         {
+            TrackSubmittedValue(_value);
             await ValueChanged.InvokeAsync(_value);
             await Changed.InvokeAsync(_value);
         }
@@ -186,5 +213,11 @@
         _editValue = _value;
         _isActionButtonsEnabled = false;
         ResizeEditBox(_editValue);
+    }
+
+    private void TrackSubmittedValue(string value)
+    {
+        _lastSubmittedValue = value;
+        _isAwaitingSubmittedValue = true;
     }
 }
