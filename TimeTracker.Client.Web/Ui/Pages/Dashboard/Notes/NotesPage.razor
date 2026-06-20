@@ -101,11 +101,13 @@
                 IsLoading="_loadingDocument"
                 IsSaving="_savingDocument"
                 IsDirty="@IsDocumentDirty"
+                IsEditing="_isEditingDocument"
                 SaveStateLabel="@SaveStateLabel"
                 SaveStateClass="@SaveStateClass"
                 TitleChanged="@OnTitleChanged"
                 MarkdownContentChanged="@OnMarkdownChanged"
                 VisibilityChanged="@OnVisibilityChanged"
+                OnEdit="@StartDocumentEditing"
                 OnSave="@SaveDocument"/>
 
             <NoteMetadataPanelBlock Document="@_currentDocument"/>

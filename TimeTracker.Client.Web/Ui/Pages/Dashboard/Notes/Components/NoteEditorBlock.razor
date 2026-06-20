@@ -48,35 +48,63 @@
     {
         <div class="border-b border-slate-200 p-4">
             <div class="flex flex-col gap-3 xl:flex-row xl:items-center">
-                <input
-                    class="min-w-0 flex-1 rounded-xl border border-slate-200 px-4 py-3 text-lg font-semibold text-slate-900 outline-none transition focus:border-blue-500"
-                    maxlength="200"
-                    value="@Title"
-                    placeholder="@DashboardLocalizer["Title"].Value"
-                    @oninput="@OnTitleInput"/>
+                @if (IsEditing)
+                {
+                    <input
+                        class="min-w-0 flex-1 rounded-xl border border-slate-200 px-4 py-3 text-lg font-semibold text-slate-900 outline-none transition focus:border-blue-500"
+                        maxlength="200"
+                        value="@Title"
+                        placeholder="@DashboardLocalizer["Title"].Value"
+                        @oninput="@OnTitleInput"/>
+                }
+                else
+                {
+                    <div class="min-w-0 flex-1">
+                        <h2 class="truncate text-xl font-semibold text-slate-900">@Title</h2>
+                    </div>
+                }
                 <div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
-                    <EnumDropDown
-                        TItem="NoteVisibility"
-                        SelectType="@DropDownType.DropDown"
-                        Size="Size.Small"
-                        Value="@Visibility"
-                        ValueChanged="@OnVisibilityChanged"/>
-                    <CustomButton
-                        Size="Size.Small"
-                        Color="@ThemeColor.Primary"
-                        Radius="@Radius.Full"
-                        IsLoading="IsSaving"
-                        Disabled="@(!IsDirty)"
-                        OnClick="@OnSave">
-                        <StartContent>
-                            <i class="fa-regular fa-floppy-disk"></i>
-                        </StartContent>
-                        <ChildContent>@DashboardLocalizer["Save"]</ChildContent>
-                    </CustomButton>
+                    @if (IsEditing)
+                    {
+                        <EnumDropDown
+                            TItem="NoteVisibility"
+                            SelectType="@DropDownType.DropDown"
+                            Size="Size.Small"
+                            Value="@Visibility"
+                            ValueChanged="@OnVisibilityChanged"/>
+                        <CustomButton
+                            Size="Size.Small"
+                            Color="@ThemeColor.Primary"
+                            Radius="@Radius.Full"
+                            IsLoading="IsSaving"
+                            OnClick="@OnSave">
+                            <StartContent>
+                                <i class="fa-regular fa-floppy-disk"></i>
+                            </StartContent>
+                            <ChildContent>@DashboardLocalizer["Save"]</ChildContent>
+                        </CustomButton>
+                    }
+                    else
+                    {
+                        <span class="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600">
+                            @GetVisibilityLabel()
+                        </span>
+                        <CustomButton
+                            Size="Size.Small"
+                            Color="@ThemeColor.Primary"
+                            Radius="@Radius.Full"
+                            OnClick="@OnEditClick">
+                            <StartContent>
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </StartContent>
+                            <ChildContent>@DashboardLocalizer["Edit"]</ChildContent>
+                        </CustomButton>
+                    }
                 </div>
             </div>
         </div>
-        <div class="grid flex-1 xl:grid-cols-2">
+        @if (IsEditing)
+        {
             <div class="flex min-h-0 flex-1 flex-col p-4">
                 <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
                     <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">@DashboardLocalizer["Markdown"]</label>
@@ -89,7 +117,10 @@
                     placeholder="@DashboardLocalizer["Notes_MarkdownPlaceholder"].Value"
                     @oninput="@OnMarkdownInput"></textarea>
             </div>
-            <div class="flex min-h-0 flex-1 flex-col border-t border-slate-200 p-4 xl:border-l xl:border-t-0">
+        }
+        else
+        {
+            <div class="flex min-h-0 flex-1 flex-col p-4">
                 <div class="mb-2">
                     <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">@DashboardLocalizer["Preview"]</p>
                     <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["Notes_PreviewDescription"]</p>
@@ -105,6 +136,6 @@
                     }
                 </div>
             </div>
-        </div>
+        }
     }
 </section>
