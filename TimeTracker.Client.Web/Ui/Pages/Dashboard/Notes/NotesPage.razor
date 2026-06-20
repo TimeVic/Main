@@ -14,34 +14,34 @@
     Robots="@SiteMetadata.NoIndexRobots" />
 
 <CreateFolderModal
-    IsOpened="_isCreateFolderModalOpened"
-    IsSaving="_isCreatingNode"
-    ParentId="_activeParentId"
+    IsOpened="State.IsCreateFolderModalOpened"
+    IsSaving="State.IsCreatingNode"
+    ParentId="State.ActiveParentId"
     IsOpenedChanged="@OnCreateFolderModalChanged"
     OnSubmit="@CreateFolder"/>
 
 <CreateNoteModal
-    IsOpened="_isCreateNoteModalOpened"
-    IsSaving="_isCreatingNode"
-    ParentId="_activeParentId"
+    IsOpened="State.IsCreateNoteModalOpened"
+    IsSaving="State.IsCreatingNode"
+    ParentId="State.ActiveParentId"
     IsOpenedChanged="@OnCreateNoteModalChanged"
     OnSubmit="@CreateDocument"/>
 
 <RenameNoteNodeModal
-    IsOpened="@(_nodeToRename != null)"
-    IsSaving="_isRenamingNode"
-    Node="_nodeToRename"
+    IsOpened="@(State.NodeToRename != null)"
+    IsSaving="State.IsRenamingNode"
+    Node="State.NodeToRename"
     IsOpenedChanged="@OnRenameModalChanged"
     OnSubmit="@RenameNode"/>
 
-@if (_nodeToArchive != null)
+@if (State.NodeToArchive != null)
 {
     <ConfirmationModal
         Title="@DashboardLocalizer["Notes_ArchiveConfirmTitle"].Value"
         Subtitle="@DashboardLocalizer["Notes_ArchiveConfirmSubtitle"].Value"
         ConfirmText="@DashboardLocalizer["Archive"].Value"
-        OnClose="@(() => _nodeToArchive = null)"
-        OnCancel="@(() => _nodeToArchive = null)"
+        OnClose="@CloseArchiveConfirmation"
+        OnCancel="@CloseArchiveConfirmation"
         OnConfirm="@ArchiveNode"/>
 }
 
@@ -72,19 +72,19 @@
         </div>
     </div>
 
-    @if (!string.IsNullOrWhiteSpace(_treeError))
+    @if (!string.IsNullOrWhiteSpace(TreeError))
     {
         <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            @_treeError
+            @TreeError
         </div>
     }
 
     <div class="grid gap-5 xl:grid-cols-[320px_minmax(0,1fr)]">
         <NotesTreeBlock
-            TreeNodes="@_treeNodes"
-            ExpandedNodeIds="@_expandedNodeIds"
-            SelectedNoteId="@_selectedNoteId"
-            IsLoading="_loadingTree"
+            TreeNodes="@TreeNodes"
+            ExpandedNodeIds="@State.ExpandedNodeIds"
+            SelectedNoteId="@State.SelectedNoteId"
+            IsLoading="State.IsTreeLoading"
             ToggleExpandedRequested="@ToggleExpanded"
             SelectNodeRequested="@SelectDocument"
             CreateFolderRequested="@OpenCreateFolderModal"
@@ -94,14 +94,14 @@
 
         <div class="space-y-5">
             <NoteEditorBlock
-                Document="@_currentDocument"
-                Title="@_editorTitle"
-                MarkdownContent="@_editorMarkdown"
-                Visibility="@_editorVisibility"
-                IsLoading="_loadingDocument"
-                IsSaving="_savingDocument"
+                Document="@State.CurrentDocument"
+                Title="@State.EditorTitle"
+                MarkdownContent="@State.EditorMarkdown"
+                Visibility="@State.EditorVisibility"
+                IsLoading="State.IsDocumentLoading"
+                IsSaving="State.IsDocumentSaving"
                 IsDirty="@IsDocumentDirty"
-                IsEditing="_isEditingDocument"
+                IsEditing="State.IsEditingDocument"
                 SaveStateLabel="@SaveStateLabel"
                 SaveStateClass="@SaveStateClass"
                 TitleChanged="@OnTitleChanged"
@@ -110,7 +110,7 @@
                 OnEdit="@StartDocumentEditing"
                 OnSave="@SaveDocument"/>
 
-            <NoteMetadataPanelBlock Document="@_currentDocument"/>
+            <NoteMetadataPanelBlock Document="@State.CurrentDocument"/>
         </div>
     </div>
 </section>
