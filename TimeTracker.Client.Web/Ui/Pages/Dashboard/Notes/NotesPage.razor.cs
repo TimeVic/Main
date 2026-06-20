@@ -24,6 +24,7 @@ public partial class NotesPage
     private bool _loadingTree;
     private bool _loadingDocument;
     private bool _savingDocument;
+    private bool _isEditingDocument;
     private bool _isCreatingNode;
     private bool _isRenamingNode;
     private bool _isSaveError;
@@ -138,6 +139,8 @@ public partial class NotesPage
             _editorTitle = document?.Title ?? string.Empty;
             _editorMarkdown = document?.MarkdownContent ?? string.Empty;
             _editorVisibility = document?.Visibility ?? NoteVisibility.Workspace;
+            // Empty documents should open in edit mode so users can start writing immediately.
+            _isEditingDocument = string.IsNullOrWhiteSpace(document?.MarkdownContent);
             ExpandParents(node);
         }
         catch (Exception e)
@@ -173,10 +176,27 @@ public partial class NotesPage
         return Task.CompletedTask;
     }
 
+    private Task StartDocumentEditing()
+    {
+        if (_currentDocument != null)
+        {
+            _isEditingDocument = true;
+        }
+
+        return Task.CompletedTask;
+    }
+
     private async Task SaveDocument()
     {
-        if (_currentDocument == null || !IsDocumentDirty)
+        if (_currentDocument == null)
         {
+            return;
+        }
+
+        // Saving from edit mode should always return the document to view mode.
+        if (!IsDocumentDirty)
+        {
+            _isEditingDocument = false;
             return;
         }
 
@@ -201,6 +221,7 @@ public partial class NotesPage
             _editorMarkdown = document.MarkdownContent;
             _editorVisibility = document.Visibility;
             UpdateFlatNode(document);
+            _isEditingDocument = false;
             ToastService.ShowSuccess(DashboardLocalizer["SavedSuccessfully"].Value);
         }
         catch (Exception e)
@@ -435,5 +456,6 @@ public partial class NotesPage
         _editorTitle = string.Empty;
         _editorMarkdown = string.Empty;
         _editorVisibility = NoteVisibility.Workspace;
+        _isEditingDocument = false;
     }
 }

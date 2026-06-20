@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Timers;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -7,7 +6,6 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Web.Services;
-using TimeTracker.Client.Core.Services.DateTimes;
 using TimeTracker.Client.Web.Services.UI;
 using TimeTracker.Client.Web.Services.Workspace;
 using TimeTracker.Client.Core.Store.Auth;
@@ -15,7 +13,7 @@ using TimeTracker.Client.Core.Store.Workspace;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts;
 
-public partial class MainHeader: IDisposable
+public partial class MainHeader
 {
     [Inject]
     public IState<AuthState> AuthState { get; set; }
@@ -26,30 +24,10 @@ public partial class MainHeader: IDisposable
     [Inject]
     public WorkspaceInitializationService _workspaceInitialization { get; set; }
     
-    [Inject]
-    public UserDateTimeProviderService _dateTimeProviderService { get; set; }
-    
     private bool _isShowAddWorkspaceModal = false;
-    private System.Timers.Timer _timer;
-    private DateTimeOffset _currentTime;
     private string CurrentLanguageKey => (AuthState.Value.User?.Language?.Code ?? CultureInfo.CurrentUICulture.Name) == ILocalizationUrlService.UkrainianCultureName
         ? "Ukrainian"
         : "English";
-    
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        _timer = new System.Timers.Timer();
-        _timer.Interval = 1000;
-        _timer.Elapsed += OnTimerTick;
-        _timer.Start();
-    }
-
-    private void OnTimerTick(object? sender, ElapsedEventArgs e)
-    {
-        _currentTime = _dateTimeProviderService.GetCurrentTime();
-        StateHasChanged();
-    }
 
     private void OnSelectWorkspace(WorkspaceDto? workspace)
     {
@@ -94,10 +72,5 @@ public partial class MainHeader: IDisposable
 
         await Js.InvokeVoidAsync("localStorage.setItem", ILocalizationUrlService.LocalStorageKey, cultureName);
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-    }
-
-    public void Dispose()
-    {
-        _timer?.Stop();
     }
 }

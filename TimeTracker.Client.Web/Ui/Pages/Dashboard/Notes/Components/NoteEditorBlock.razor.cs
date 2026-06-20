@@ -28,6 +28,9 @@ public partial class NoteEditorBlock
     public bool IsDirty { get; set; }
 
     [Parameter]
+    public bool IsEditing { get; set; }
+
+    [Parameter]
     public string SaveStateLabel { get; set; } = string.Empty;
 
     [Parameter]
@@ -41,6 +44,9 @@ public partial class NoteEditorBlock
 
     [Parameter]
     public EventCallback<NoteVisibility> VisibilityChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnEdit { get; set; }
 
     [Parameter]
     public EventCallback OnSave { get; set; }
@@ -58,5 +64,17 @@ public partial class NoteEditorBlock
     private async Task OnVisibilityChanged(NoteVisibility? visibility)
     {
         await VisibilityChanged.InvokeAsync(visibility ?? NoteVisibility.Workspace);
+    }
+
+    private async Task OnEditClick()
+    {
+        await OnEdit.InvokeAsync();
+    }
+
+    private string GetVisibilityLabel()
+    {
+        var key = $"{nameof(NoteVisibility)}_{Visibility}";
+        var localized = DashboardLocalizer[key];
+        return localized.ResourceNotFound ? Visibility.ToString() : localized.Value;
     }
 }
