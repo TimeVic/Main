@@ -73,7 +73,12 @@ public partial class EditCommentForm: IDisposable
 
     protected override void OnParametersSet()
     {
-        if (_loadedCommentId == Comment.Id && _isEditMode)
+        if (_loadedCommentId == Comment.Id && (_isNewComment || _isEditMode))
+        {
+            return;
+        }
+
+        if (_loadedCommentId == Comment.Id && _model.Comment == (Comment.Comment ?? string.Empty))
         {
             return;
         }

@@ -4,7 +4,6 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Client.Core.Store.Tasks;
-using TimeTracker.Client.Core.Store.TimeEntry;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Components;
@@ -20,11 +19,7 @@ public partial class TasksTableBlock
     [Parameter]
     public bool IsLoading { get; set; }
 
-    [Inject]
-    public IState<TimeEntryState> TimeEntryState { get; set; }
-
     private readonly HashSet<Guid> _selectedTaskIds = [];
-    private bool _isDisabledButtons => TimeEntryState.Value.IsTimeEntryProcessing;
     private TaskDto? _taskToUpdate = null;
 
     private static readonly IReadOnlyList<TaskStatus> taskStatusOptions = Enum.GetValues<TaskStatus>();
@@ -125,17 +120,6 @@ public partial class TasksTableBlock
     private void OpenTaskEditor(TaskDto task)
     {
         _taskToUpdate = task;
-    }
-
-    private void StartTimeEntry(TaskDto task)
-    {
-        Dispatcher.Dispatch(new StartTimeEntryAction(InternalTask: task));
-    }
-
-    private void StopTimeEntry()
-    {
-        if (TimeEntryState.Value.HasActiveEntry)
-            Dispatcher.Dispatch(new StopActiveTimeEntryAction());
     }
 
     private bool IsTaskBoardSelected(Guid id) => _selectedTaskIds.Contains(id);

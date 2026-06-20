@@ -40,8 +40,8 @@ public partial class SelectEmojiButton : IDisposable
             "popupPortal.getPanelStyle",
             [
                 _triggerElement,
-                340,
-                420,
+                288,
+                360,
                 8,
                 12
             ]);
@@ -58,6 +58,8 @@ public partial class SelectEmojiButton : IDisposable
     private async Task SelectEmoji(EmojiList.EmojiOptionModel emoji)
     {
         await OnSelected.InvokeAsync(emoji);
+        ClosePicker();
+        await InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()

@@ -150,41 +150,13 @@
                         </td>
                         <td class="border-t border-slate-200 px-4 py-3 align-top text-right">
                             <div class="flex items-center justify-end gap-2">
-                                @if (TimeEntryState.Value.ActiveEntry?.Task?.Id == task.Id)
-                                {
-                                    <CustomButton
-                                        Variant="Variant.Outlined"
-                                        Color="ThemeColor.Default"
-                                        IconOnly="true"
-                                        Size="Size.Small"
-                                        Disabled="_isDisabledButtons"
-                                        OnClick="@(() => StopTimeEntry())">
-                                        <StartContent>
-                                            <i class="fa-solid fa-stop text-xs"></i>
-                                        </StartContent>
-                                    </CustomButton>
-                                }
-                                else
-                                {
-                                    <CustomButton
-                                        Variant="Variant.Outlined"
-                                        Color="ThemeColor.Info"
-                                        IconOnly="true"
-                                        Size="Size.Small"
-                                        Disabled="_isDisabledButtons"
-                                        OnClick="@(() => StartTimeEntry(task))">
-                                        <StartContent>
-                                            <i class="fa-solid fa-play text-xs"></i>
-                                        </StartContent>
-                                    </CustomButton>
-                                }
+                                <TaskTimeTrackerButton Task="@task" />
                                 <LumexDropdown>
                                     <LumexDropdownTrigger>
                                         <LumexButton
                                             Class="ml-1"
                                             IconOnly="true"
                                             Size="Size.Small"
-                                            Disabled="_isDisabledButtons"
                                             Variant="@Variant.Outlined">
                                             <i class="fa-solid fa-ellipsis-h"></i>
                                         </LumexButton>
