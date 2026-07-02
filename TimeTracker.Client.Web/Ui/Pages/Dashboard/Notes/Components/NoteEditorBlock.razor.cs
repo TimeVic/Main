@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using LumexUI;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Business.Common.Constants.Notes;
 
@@ -6,6 +7,22 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components;
 
 public partial class NoteEditorBlock
 {
+    private const int MarkdownTextareaMinRows = 24;
+    private const int MarkdownTextareaMaxRows = int.MaxValue;
+
+    private static readonly IReadOnlyDictionary<string, object> MarkdownTextareaAttributes =
+        new Dictionary<string, object>
+        {
+            ["maxlength"] = 5000000
+        };
+
+    private static readonly InputFieldSlots MarkdownTextareaClasses = new()
+    {
+        InputWrapper = "min-h-[560px] border-slate-200 bg-white shadow-none transition focus-within:border-blue-500",
+        InnerWrapper = "items-start",
+        Input = "min-h-[560px] resize-none overflow-hidden font-mono text-sm leading-6 text-slate-800 placeholder-slate-400"
+    };
+
     [Parameter]
     public NoteDocumentDto? Document { get; set; }
 
@@ -56,9 +73,9 @@ public partial class NoteEditorBlock
         await TitleChanged.InvokeAsync(args.Value?.ToString() ?? string.Empty);
     }
 
-    private async Task OnMarkdownInput(ChangeEventArgs args)
+    private async Task OnMarkdownChanged(string value)
     {
-        await MarkdownContentChanged.InvokeAsync(args.Value?.ToString() ?? string.Empty);
+        await MarkdownContentChanged.InvokeAsync(value);
     }
 
     private async Task OnVisibilityChanged(NoteVisibility? visibility)
