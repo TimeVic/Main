@@ -305,4 +305,4 @@ appsettings.Local.json
 # Build directory
 build/*
 
-
+.credentials/

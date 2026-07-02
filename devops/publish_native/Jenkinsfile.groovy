@@ -164,15 +164,7 @@ node('build-node') {
         withCredentials([string(credentialsId: "timevic_social_login_google_secret", variable: 'AUTH_SECRET')]) {
             envVariables.put('SocialLogin__Google__ClientSecret', AUTH_SECRET)
         }
-        
-        // withCredentials([string(credentialsId: "timevic_${environmentKey}_google__storage_project_id", variable: 'AUTH_SECRET')]) {
-        //     envVariables.put('Google__Storage__ProjectId', AUTH_SECRET)
-        // }
-
-        // withCredentials([string(credentialsId: "timevic_${environmentKey}_google__storage_bucket_name", variable: 'AUTH_SECRET')]) {
-        //     envVariables.put('Google__Storage__BucketName', AUTH_SECRET)
-        // }
-        
+                
         withCredentials([
             usernamePassword(credentialsId: "timevic_${environmentKey}_aws_s3_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
         ]) {
@@ -211,8 +203,6 @@ node('build-node') {
             withCredentials([sshUserPrivateKey(credentialsId: gitCredentials, keyFileVariable: 'key')]) {
                 sh '''
                     git config core.sshCommand 'ssh -i ${key}'
-                    git config user.email "lampego@gmail.com"
-                    git config user.name "lampego"
                     git tag "${VERSION_INCREMENT}"
                     git push --tags
                 '''
