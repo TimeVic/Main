@@ -1,3 +1,4 @@
+@using LumexUI
 @using LumexUI.Common
 @inherits BaseReactiveComponent
 
@@ -13,100 +14,148 @@
     var settingsItem = availableNavItems.FirstOrDefault(item => string.IsNullOrEmpty(item.Name));
 }
 
-<nav class="flex min-w-0 flex-wrap items-center gap-2 max-[420px]:justify-between">
+@if (IsMobile)
+{
     @foreach (var item in primaryItems)
     {
-        <CustomButton
-            Class="shrink-0"
-            Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
-            Variant="@(IsMenuItemSelected(item) ? Variant.Solid : Variant.Outlined)"
-            Size="@Size.Medium"
-            OnClick="@(() => OnMenuItemSelected(item.Url))">
-            <StartContent>
+        <LumexNavbarMenuItem>
+            <LumexLink
+                Href="@item.Url"
+                Class="@GetMobileMenuLinkClass(item)"
+                Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
+                Underline="@Underline.None">
                 <i class="@item.Icon"></i>
-            </StartContent>
-            <ChildContent>
-                <span class="hidden sm:inline">@item.Name</span>
-            </ChildContent>
-        </CustomButton>
+                <span>@item.Name</span>
+            </LumexLink>
+        </LumexNavbarMenuItem>
     }
-    @if (groupedItems.Any())
+
+    @foreach (var group in groupedItems)
     {
-        <LumexDropdown ShowArrow="@true"
-                       Radius="@Radius.Small">
-            <LumexDropdownTrigger>
-                <LumexButton
-                    Class="shrink-0"
-                    Variant="@Variant.Outlined"
-                    IconOnly="true"
-                    Size="@Size.Medium">
-                    <StartContent>
-                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                    </StartContent>
-                </LumexButton>
-            </LumexDropdownTrigger>
-            <LumexDropdownMenu Class="p-3">
-                @foreach (var group in groupedItems.Where(g => string.IsNullOrEmpty(g.Key)))
-                {
-                    foreach (var item in group)
-                    {
-                        <LumexDropdownItem
-                            Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
-                            Variant="@(IsMenuItemSelected(item) ? MenuVariant.Solid : MenuVariant.Outlined)"
-                            OnClick="@(() => OnMenuItemSelected(item.Url))">
-                            <StartContent>
-                                <span class="flex items-center gap-2">
-                                    <i class="@item.Icon"></i>
-                                </span>
-                            </StartContent>
-                            <ChildContent>
-                                @item.Name
-                            </ChildContent>
-                        </LumexDropdownItem>
-                    }
-                }
-                @foreach (var group in groupedItems.Where(g => !string.IsNullOrEmpty(g.Key)))
-                {
-                    <LumexDropdownItem
-                        ShowDivider="true"
-                        Disabled="true">
-                        @group.Key
-                    </LumexDropdownItem>
-                    foreach (var item in group)
-                    {
-                        <LumexDropdownItem
-                            Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
-                            Variant="@(IsMenuItemSelected(item) ? MenuVariant.Solid : MenuVariant.Outlined)"
-                            OnClick="@(() => OnMenuItemSelected(item.Url))">
-                            <StartContent>
-                                <span class="flex items-center gap-2">
-                                    <i class="@item.Icon"></i>
-                                </span>
-                            </StartContent>
-                            <ChildContent>
-                                @item.Name
-                            </ChildContent>
-                        </LumexDropdownItem>
-                    }
-                }
-            </LumexDropdownMenu>
-        </LumexDropdown>
+        <LumexNavbarMenuItem>
+            <div class="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+                @(string.IsNullOrEmpty(group.Key) ? DashboardLocalizer["Payments"] : group.Key)
+            </div>
+        </LumexNavbarMenuItem>
+
+        foreach (var item in group)
+        {
+            <LumexNavbarMenuItem>
+                <LumexLink
+                    Href="@item.Url"
+                    Class="@GetMobileMenuLinkClass(item)"
+                    Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
+                    Underline="@Underline.None">
+                    <i class="@item.Icon"></i>
+                    <span>@item.Name</span>
+                </LumexLink>
+            </LumexNavbarMenuItem>
+        }
     }
 
     @if (settingsItem != null)
     {
-        <CustomButton
-            Class="shrink-0"
-            Color="@(IsMenuItemSelected(settingsItem) ? ThemeColor.Primary : ThemeColor.Default)"
-            Variant="@(IsMenuItemSelected(settingsItem) ? Variant.Solid : Variant.Outlined)"
-            Size="@Size.Medium"
-            IconOnly="true"
-            OnClick="@(() => OnMenuItemSelected(settingsItem.Url))">
-            <StartContent>
-                <span class="flex items-center gap-2">
-                    <i class="@settingsItem.Icon"></i>
-                </span>
-            </StartContent>
-        </CustomButton>
+        <LumexNavbarMenuItem>
+            <LumexLink
+                Href="@settingsItem.Url"
+                Class="@GetMobileMenuLinkClass(settingsItem)"
+                Color="@(IsMenuItemSelected(settingsItem) ? ThemeColor.Primary : ThemeColor.Default)"
+                Underline="@Underline.None">
+                <i class="@settingsItem.Icon"></i>
+                <span>@DashboardLocalizer["Settings"]</span>
+            </LumexLink>
+        </LumexNavbarMenuItem>
     }
-</nav>
+}
+else
+{
+    @foreach (var item in primaryItems)
+    {
+        <LumexNavbarItem>
+            <LumexLink
+                Href="@item.Url"
+                Class="@GetMenuLinkClass(item)"
+                Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
+                Underline="@Underline.None">
+                <i class="@item.Icon"></i>
+                <span class="hidden sm:inline">@item.Name</span>
+            </LumexLink>
+        </LumexNavbarItem>
+    }
+
+    @if (groupedItems.Any())
+    {
+        <LumexNavbarItem>
+            <LumexDropdown ShowArrow="@true"
+                           Radius="@Radius.Small">
+                <LumexDropdownTrigger>
+                    <span class="inline-flex h-10 shrink-0 cursor-pointer items-center gap-2 rounded-lg px-3 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200"
+                          role="button"
+                          tabindex="0">
+                        <i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i>
+                        <span class="hidden sm:inline">@DashboardLocalizer["Payments"]</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400" aria-hidden="true"></i>
+                    </span>
+                </LumexDropdownTrigger>
+                <LumexDropdownMenu Class="p-3">
+                    @foreach (var group in groupedItems.Where(g => string.IsNullOrEmpty(g.Key)))
+                    {
+                        foreach (var item in group)
+                        {
+                            <LumexDropdownItem
+                                Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
+                                Variant="@(IsMenuItemSelected(item) ? MenuVariant.Solid : MenuVariant.Outlined)"
+                                OnClick="@(() => OnMenuItemSelected(item.Url))">
+                                <StartContent>
+                                    <span class="flex items-center gap-2">
+                                        <i class="@item.Icon"></i>
+                                    </span>
+                                </StartContent>
+                                <ChildContent>
+                                    @item.Name
+                                </ChildContent>
+                            </LumexDropdownItem>
+                        }
+                    }
+                    @foreach (var group in groupedItems.Where(g => !string.IsNullOrEmpty(g.Key)))
+                    {
+                        <LumexDropdownItem
+                            ShowDivider="true"
+                            Disabled="true">
+                            @group.Key
+                        </LumexDropdownItem>
+                        foreach (var item in group)
+                        {
+                            <LumexDropdownItem
+                                Color="@(IsMenuItemSelected(item) ? ThemeColor.Primary : ThemeColor.Default)"
+                                Variant="@(IsMenuItemSelected(item) ? MenuVariant.Solid : MenuVariant.Outlined)"
+                                OnClick="@(() => OnMenuItemSelected(item.Url))">
+                                <StartContent>
+                                    <span class="flex items-center gap-2">
+                                        <i class="@item.Icon"></i>
+                                    </span>
+                                </StartContent>
+                                <ChildContent>
+                                    @item.Name
+                                </ChildContent>
+                            </LumexDropdownItem>
+                        }
+                    }
+                </LumexDropdownMenu>
+            </LumexDropdown>
+        </LumexNavbarItem>
+    }
+
+    @if (settingsItem != null)
+    {
+        <LumexNavbarItem>
+            <LumexLink
+                Href="@settingsItem.Url"
+                Class="@GetMenuLinkClass(settingsItem)"
+                Color="@(IsMenuItemSelected(settingsItem) ? ThemeColor.Primary : ThemeColor.Default)"
+                Underline="@Underline.None">
+                <i class="@settingsItem.Icon"></i>
+            </LumexLink>
+        </LumexNavbarItem>
+    }
+}

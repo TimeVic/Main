@@ -1,0 +1,37 @@
+<div
+    class="@ContainerClass"
+    style="@StyleAttribute">
+    <div class="resizable-split-block__pane resizable-split-block__pane--start" data-resizable-split-start>
+        @StartContent
+    </div>
+
+    <button
+        type="button"
+        class="resizable-split-block__separator"
+        data-resizable-split-handle
+        role="separator"
+        aria-label="@HandleLabel"
+        aria-orientation="vertical"
+        aria-valuemin="@MinStartPaneWidth"
+        aria-valuemax="@MaxStartPaneWidth"
+        aria-valuenow="@_startPaneWidth"
+        @onpointerdown="@OnResizePointerDown"
+        @onpointerdown:preventDefault="true"
+        @onkeydown="@OnResizeHandleKeyDown"
+        @onkeydown:preventDefault="true">
+    </button>
+
+    <div class="resizable-split-block__pane resizable-split-block__pane--end">
+        @EndContent
+    </div>
+
+    @if (_isResizing)
+    {
+        <div
+            class="resizable-split-block__drag-overlay"
+            @onpointermove="@OnResizePointerMove"
+            @onpointerup="@OnResizePointerUp"
+            @onpointercancel="@OnResizePointerUp">
+        </div>
+    }
+</div>

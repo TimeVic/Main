@@ -658,6 +658,7 @@
   <data name="NoClientNotes" xml:space="preserve"><value>No notes linked to this client yet.</value></data>
   <data name="Notes_PageSubtitle" xml:space="preserve"><value>Keep project details, client agreements, links, snippets and billing context in one workspace.</value></data>
   <data name="Notes_TreeDescription" xml:space="preserve"><value>Folders and documents</value></data>
+  <data name="Notes_ResizeTreePanel" xml:space="preserve"><value>Resize notes tree panel</value></data>
   <data name="Notes_EmptyDescription" xml:space="preserve"><value>Create your first note to store project details, client agreements, links, snippets or billing context.</value></data>
   <data name="Notes_EmptyFolder" xml:space="preserve"><value>This folder is empty.</value></data>
   <data name="Notes_NoSelectedNote" xml:space="preserve"><value>Select a note or create a new one.</value></data>

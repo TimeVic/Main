@@ -12,124 +12,144 @@
     IsOpenedChanged="@((isOpened) => _isShowAddWorkspaceModal = isOpened)"/>
 
 <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
-    <div class="px-4 py-3 sm:px-6 lg:px-8">
-        <div class="flex flex-col gap-3">
-            <div class="flex flex-wrap items-center gap-3">
-                <div class="order-1 shrink-0">
-                    <AppLogoBlock
-                        IsShowBeta="false"
-                        LogoWrapClass="flex items-center"
-                        LogoClass="h-8 w-auto"
-                        LogoWidth="148"
-                        LogoHeight="32" />
-                </div>
+    <LumexNavbar
+        Height="4.5rem"
+        MaxWidth="@MaxWidth.Full"
+        Blurred="false"
+        Classes="@NavbarClasses">
+        <LumexNavbarContent Class="lg:hidden gap-3">
+            <LumexNavbarMenuToggle />
+            <LumexNavbarBrand>
+                <AppLogoBlock
+                    IsShowBeta="false"
+                    LogoWrapClass="flex items-center"
+                    LogoClass="h-8 w-auto"
+                    LogoWidth="148"
+                    LogoHeight="32" />
+            </LumexNavbarBrand>
+        </LumexNavbarContent>
 
-                <div class="order-3 min-w-0 basis-full lg:order-2 lg:basis-auto lg:flex-1">
-                    <MainMenu />
-                </div>
+        <LumexNavbarBrand Class="hidden shrink-0 lg:flex">
+            <AppLogoBlock
+                IsShowBeta="false"
+                LogoWrapClass="flex items-center"
+                LogoClass="h-8 w-auto"
+                LogoWidth="148"
+                LogoHeight="32" />
+        </LumexNavbarBrand>
 
-                <div class="order-2 ml-auto shrink-0 lg:order-3">
-                    <LumexDropdown>
-                        <LumexDropdownTrigger>
-                            <LumexButton
-                                Class="min-w-[180px] justify-start max-[420px]:min-w-0"
-                                Variant="@Variant.Outlined">
-                                <ChildContent>
-                                    <span class="inline-flex min-w-0 flex-1 items-center gap-3">
-                                        <span class="min-w-0 text-left">
-                                            <span class="block max-w-[120px] truncate font-semibold">@AuthState.Value.Workspace?.Name</span>
-                                            <span class="block max-w-[120px] truncate text-xs text-slate-400">@AuthState.Value.User?.Name</span>
-                                        </span>
-                                        <UserAvatarBlock User="@AuthState.Value.User" SizeClass="h-8 w-8" />
+        <LumexNavbarContent Class="hidden min-w-0 flex-1 gap-2 overflow-x-auto lg:flex">
+            <MainMenu />
+        </LumexNavbarContent>
+
+        <LumexNavbarContent Align="@Align.End" Class="shrink-0 gap-2">
+            <LumexNavbarItem>
+                <LumexDropdown>
+                    <LumexDropdownTrigger>
+                        <LumexButton
+                            Class="min-w-[180px] justify-start max-[420px]:min-w-0"
+                            Variant="@Variant.Outlined">
+                            <ChildContent>
+                                <span class="inline-flex min-w-0 flex-1 items-center gap-3">
+                                    <span class="min-w-0 text-left">
+                                        <span class="block max-w-[120px] truncate font-semibold">@AuthState.Value.Workspace?.Name</span>
+                                        <span class="block max-w-[120px] truncate text-xs text-slate-400">@AuthState.Value.User?.Name</span>
                                     </span>
-                                </ChildContent>
-                                <EndContent>
-                                    <i class="fa-solid fa-chevron-down text-xs text-slate-500"></i>
-                                </EndContent>
-                            </LumexButton>
-                        </LumexDropdownTrigger>
-                        <LumexDropdownMenu Class="p-3">
-                            <LumexDropdownItem
-                                Disabled="@true"
-                                Class="h-14 gap-2 opacity-100">
-                                <div class="flex items-center gap-2">
-                                    <UserAvatarBlock User="@AuthState.Value.User" SizeClass="h-8 w-8" Class="text-[11px]" />
-                                    <div class="inline-flex flex-col items-start">
-                                        <span class="text-small text-default-600">@AuthState.Value.User?.Name</span>
-                                        <span class="text-tiny text-default-500">@AuthState.Value.User?.Email</span>
-                                    </div>
+                                    <UserAvatarBlock User="@AuthState.Value.User" SizeClass="h-8 w-8" />
+                                </span>
+                            </ChildContent>
+                            <EndContent>
+                                <i class="fa-solid fa-chevron-down text-xs text-slate-500"></i>
+                            </EndContent>
+                        </LumexButton>
+                    </LumexDropdownTrigger>
+                    <LumexDropdownMenu Class="p-3">
+                        <LumexDropdownItem
+                            Disabled="@true"
+                            Class="h-14 gap-2 opacity-100">
+                            <div class="flex items-center gap-2">
+                                <UserAvatarBlock User="@AuthState.Value.User" SizeClass="h-8 w-8" Class="text-[11px]" />
+                                <div class="inline-flex flex-col items-start">
+                                    <span class="text-small text-default-600">@AuthState.Value.User?.Name</span>
+                                    <span class="text-tiny text-default-500">@AuthState.Value.User?.Email</span>
                                 </div>
-                            </LumexDropdownItem>
+                            </div>
+                        </LumexDropdownItem>
+                        <LumexDropdownItem
+                            ShowDivider="true"
+                            Disabled="true">
+                            @DashboardLocalizer["Workspace"]
+                        </LumexDropdownItem>
+                        @foreach (var workspace in WorkspaceState.Value.List)
+                        {
                             <LumexDropdownItem
-                                ShowDivider="true"
-                                Disabled="true">
-                                @DashboardLocalizer["Workspace"]
-                            </LumexDropdownItem>
-                            @foreach (var workspace in WorkspaceState.Value.List)
-                            {
-                                <LumexDropdownItem
-                                    Description="@(workspace.Id == AuthState.Value.Workspace?.Id ? DashboardLocalizer["CurrentWorkspace"].Value : null)"
-                                    OnClick="@(() => OnSelectWorkspace(workspace))">
-                                    <StartContent>
-                                        @if (workspace.Id == AuthState.Value.Workspace?.Id)
-                                        {
-                                            <i class="fa-solid fa-check text-blue-600"></i>
-                                        }
-                                    </StartContent>
-                                    <ChildContent>
-                                        @workspace.Name
-                                    </ChildContent>
-                                </LumexDropdownItem>
-                            }
-                            <LumexDropdownItem
-                                Color="ThemeColor.Info"
-                                OnClick="@(() => _isShowAddWorkspaceModal = true)"
-                                ShowDivider="true">
+                                Description="@(workspace.Id == AuthState.Value.Workspace?.Id ? DashboardLocalizer["CurrentWorkspace"].Value : null)"
+                                OnClick="@(() => OnSelectWorkspace(workspace))">
                                 <StartContent>
-                                    <SquarePlusIcon Size="18" class="text-default-500 shrink-0"/>
+                                    @if (workspace.Id == AuthState.Value.Workspace?.Id)
+                                    {
+                                        <i class="fa-solid fa-check text-blue-600"></i>
+                                    }
                                 </StartContent>
-                                <ChildContent>@DashboardLocalizer["NewWorkspace"]</ChildContent>
-                            </LumexDropdownItem>
-                            <LumexDropdownItem
-                                ShowDivider="true"
-                                OnClick="@OnNavigateToUserSettings">
-                                @DashboardLocalizer["Settings"]
-                            </LumexDropdownItem>
-                            <LumexDropdownItem
-                                ShowDivider="true"
-                                Disabled="true">
-                                @DashboardLocalizer["Language"]: @DashboardLocalizer[CurrentLanguageKey]
-                            </LumexDropdownItem>
-                            <LumexDropdownItem OnClick="@(() => OnSelectLanguage(TimeTracker.Client.Web.Services.ILocalizationUrlService.EnglishCultureName))">
-                                <span class="inline-flex items-center gap-2">
-                                    <span aria-hidden="true">🇺🇸</span>
-                                    <span>@DashboardLocalizer["English"]</span>
-                                </span>
-                            </LumexDropdownItem>
-                            <LumexDropdownItem 
-                                OnClick="@(() => OnSelectLanguage(TimeTracker.Client.Web.Services.ILocalizationUrlService.UkrainianCultureName))"
-                                ShowDivider="true">
-                                <span class="inline-flex items-center gap-2">
-                                    <span aria-hidden="true">🇺🇦</span>
-                                    <span>@DashboardLocalizer["Ukrainian"]</span>
-                                </span>
-                            </LumexDropdownItem>
-                            <LumexDropdownItem OnClick="@OnClickLogout">
                                 <ChildContent>
-                                    @DashboardLocalizer["LogOut"]
+                                    @workspace.Name
                                 </ChildContent>
-                                <EndContent>
-                                    <LogoutIcon Size="16"/>
-                                </EndContent>
                             </LumexDropdownItem>
-                        </LumexDropdownMenu>
-                    </LumexDropdown>
-                </div>
-            </div>
+                        }
+                        <LumexDropdownItem
+                            Color="ThemeColor.Info"
+                            OnClick="@(() => _isShowAddWorkspaceModal = true)"
+                            ShowDivider="true">
+                            <StartContent>
+                                <SquarePlusIcon Size="18" class="text-default-500 shrink-0"/>
+                            </StartContent>
+                            <ChildContent>@DashboardLocalizer["NewWorkspace"]</ChildContent>
+                        </LumexDropdownItem>
+                        <LumexDropdownItem
+                            ShowDivider="true"
+                            OnClick="@OnNavigateToUserSettings">
+                            @DashboardLocalizer["Settings"]
+                        </LumexDropdownItem>
+                        <LumexDropdownItem
+                            ShowDivider="true"
+                            Disabled="true">
+                            @DashboardLocalizer["Language"]: @DashboardLocalizer[CurrentLanguageKey]
+                        </LumexDropdownItem>
+                        <LumexDropdownItem OnClick="@(() => OnSelectLanguage(TimeTracker.Client.Web.Services.ILocalizationUrlService.EnglishCultureName))">
+                            <span class="inline-flex items-center gap-2">
+                                <span aria-hidden="true">🇺🇸</span>
+                                <span>@DashboardLocalizer["English"]</span>
+                            </span>
+                        </LumexDropdownItem>
+                        <LumexDropdownItem
+                            OnClick="@(() => OnSelectLanguage(TimeTracker.Client.Web.Services.ILocalizationUrlService.UkrainianCultureName))"
+                            ShowDivider="true">
+                            <span class="inline-flex items-center gap-2">
+                                <span aria-hidden="true">🇺🇦</span>
+                                <span>@DashboardLocalizer["Ukrainian"]</span>
+                            </span>
+                        </LumexDropdownItem>
+                        <LumexDropdownItem OnClick="@OnClickLogout">
+                            <ChildContent>
+                                @DashboardLocalizer["LogOut"]
+                            </ChildContent>
+                            <EndContent>
+                                <LogoutIcon Size="16"/>
+                            </EndContent>
+                        </LumexDropdownItem>
+                    </LumexDropdownMenu>
+                </LumexDropdown>
+            </LumexNavbarItem>
+        </LumexNavbarContent>
 
-            <div class="min-w-0">
-                <TimeEntryForm IsShort="true" />
-            </div>
+        <LumexNavbarMenu Class="lg:hidden border-t border-slate-200 bg-white px-4 pb-6 pt-3">
+            <MainMenu IsMobile="true" />
+        </LumexNavbarMenu>
+    </LumexNavbar>
+
+    <div class="px-4 pb-3 sm:px-6 lg:px-8">
+        <div class="min-w-0">
+            <TimeEntryForm IsShort="true" />
         </div>
     </div>
 </header>

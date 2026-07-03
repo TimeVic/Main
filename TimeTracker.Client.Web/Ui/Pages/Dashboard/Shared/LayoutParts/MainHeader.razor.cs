@@ -1,5 +1,6 @@
 using System.Globalization;
 using Fluxor;
+using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -15,6 +16,15 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts;
 
 public partial class MainHeader
 {
+    private static readonly NavbarSlots NavbarClasses = new()
+    {
+        Base = "bg-white/95",
+        Wrapper = "max-w-none px-4 sm:px-6 lg:px-8 gap-3",
+        Content = "gap-2",
+        Item = "shrink-0",
+        Menu = "gap-1"
+    };
+
     [Inject]
     public IState<AuthState> AuthState { get; set; }
     
@@ -37,11 +47,6 @@ public partial class MainHeader
             return;
         }
         _workspaceInitialization.ChangeWorkspace(workspace);
-    }
-
-    private void ToggleProfileMenu()
-    {
-        
     }
 
     private Task OnClickLogout()

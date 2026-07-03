@@ -19,6 +19,9 @@ public partial class NotesTreeBlock
     public bool IsLoading { get; set; }
 
     [Parameter]
+    public bool IsEmbedded { get; set; }
+
+    [Parameter]
     public EventCallback<Guid> ToggleExpandedRequested { get; set; }
 
     [Parameter]
@@ -35,4 +38,8 @@ public partial class NotesTreeBlock
 
     [Parameter]
     public EventCallback<NoteTreeNodeDto> ArchiveRequested { get; set; }
+
+    private string ContainerClass => IsEmbedded
+        ? "flex min-h-[720px] w-full flex-col bg-white"
+        : "min-h-[720px] rounded-2xl border border-slate-200 bg-white shadow-sm";
 }
