@@ -13,6 +13,13 @@
 .resizable-split-block__pane {
     display: flex;
     min-width: 0;
+    align-self: stretch;
+    align-items: stretch;
+}
+
+.resizable-split-block__pane ::deep > * {
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .resizable-split-block__pane--end {
