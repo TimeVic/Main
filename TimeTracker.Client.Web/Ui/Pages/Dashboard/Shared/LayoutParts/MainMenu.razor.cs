@@ -26,6 +26,9 @@ public partial class MainMenu: IDisposable
 
     [Inject]
     public IState<WorkspacePermissionsState> WorkspacePermissionsState { get; set; } = null!;
+
+    [Parameter]
+    public bool IsMobile { get; set; }
     
     private IReadOnlyCollection<MenuItemModel> NavItems => new List<MenuItemModel>
     {
@@ -35,7 +38,7 @@ public partial class MainMenu: IDisposable
             Text("Money"),
             "fa-solid fa-chart-pie",
             SiteUrl.Dashboard_WorkspaceMoney,
-            null,
+            "",
             WorkspacePermission.ReadWorkspaceFinancialSummary
         ),
         new(Text("Tasks"), "fa-regular fa-square-check", SiteUrl.Dashboard_Tasks_Main),
@@ -107,6 +110,24 @@ public partial class MainMenu: IDisposable
             return path.StartsWith(item.Url);
         }
         return item.Url == path;
+    }
+
+    private string GetMenuLinkClass(MenuItemModel item)
+    {
+        var stateClass = IsMenuItemSelected(item)
+            ? "bg-blue-50 text-blue-700"
+            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900";
+
+        return $"inline-flex h-10 shrink-0 items-center gap-2 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200 {stateClass}";
+    }
+
+    private string GetMobileMenuLinkClass(MenuItemModel item)
+    {
+        var stateClass = IsMenuItemSelected(item)
+            ? "bg-blue-50 text-blue-700"
+            : "text-slate-700 hover:bg-slate-100";
+
+        return $"flex w-full items-center gap-3 rounded-lg px-3 py-3 text-base font-medium transition-colors {stateClass}";
     }
 
     private bool HasMenuItemAccess(MenuItemModel item)
