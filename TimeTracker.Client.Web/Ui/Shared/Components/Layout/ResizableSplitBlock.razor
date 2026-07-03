@@ -1,5 +1,4 @@
 <div
-    @ref="_rootElement"
     class="@ContainerClass"
     style="@StyleAttribute">
     <div class="resizable-split-block__pane resizable-split-block__pane--start" data-resizable-split-start>
@@ -15,10 +14,24 @@
         aria-orientation="vertical"
         aria-valuemin="@MinStartPaneWidth"
         aria-valuemax="@MaxStartPaneWidth"
-        aria-valuenow="@DefaultStartPaneWidth">
+        aria-valuenow="@_startPaneWidth"
+        @onpointerdown="@OnResizePointerDown"
+        @onpointerdown:preventDefault="true"
+        @onkeydown="@OnResizeHandleKeyDown"
+        @onkeydown:preventDefault="true">
     </button>
 
     <div class="resizable-split-block__pane resizable-split-block__pane--end">
         @EndContent
     </div>
+
+    @if (_isResizing)
+    {
+        <div
+            class="resizable-split-block__drag-overlay"
+            @onpointermove="@OnResizePointerMove"
+            @onpointerup="@OnResizePointerUp"
+            @onpointercancel="@OnResizePointerUp">
+        </div>
+    }
 </div>

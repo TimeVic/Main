@@ -72,7 +72,7 @@ public partial class NoteEditorBlock
     public EventCallback OnSave { get; set; }
 
     private string ContainerClass => IsEmbedded
-        ? "flex min-h-[720px] flex-col bg-white"
+        ? "flex h-full min-h-[720px] w-full flex-col bg-white"
         : "flex min-h-[720px] flex-col rounded-2xl border border-slate-200 bg-white shadow-sm";
 
     private async Task OnTitleInput(ChangeEventArgs args)

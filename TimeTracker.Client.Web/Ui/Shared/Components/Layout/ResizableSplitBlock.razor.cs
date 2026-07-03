@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace TimeTracker.Client.Web.Ui.Shared.Components.Layout;
 
-public partial class ResizableSplitBlock : IAsyncDisposable
+public partial class ResizableSplitBlock
 {
-    private const string JsModulePath = "./js/resizableSplitBlock.js";
+    private const int KeyboardResizeStep = 16;
 
-    private ElementReference _rootElement;
-    private IJSObjectReference? _module;
-
-    [Inject]
-    private IJSRuntime Js { get; set; } = null!;
+    private bool _isInitialized;
+    private bool _isResizing;
+    private double _resizeStartClientX;
+    private int _resizeStartPaneWidth;
+    private int _startPaneWidth;
 
     [Parameter]
     public string? Class { get; set; }
@@ -26,9 +26,6 @@ public partial class ResizableSplitBlock : IAsyncDisposable
     public int MaxStartPaneWidth { get; set; } = 560;
 
     [Parameter]
-    public string DesktopMediaQuery { get; set; } = "(min-width: 1280px)";
-
-    [Parameter]
     public string HandleLabel { get; set; } = string.Empty;
 
     [Parameter, EditorRequired]
@@ -37,40 +34,87 @@ public partial class ResizableSplitBlock : IAsyncDisposable
     [Parameter, EditorRequired]
     public RenderFragment EndContent { get; set; } = null!;
 
-    private string ContainerClass => string.IsNullOrWhiteSpace(Class)
-        ? "resizable-split-block"
-        : $"resizable-split-block {Class}";
+    private string ContainerClass
+    {
+        get
+        {
+            var baseClass = _isResizing
+                ? "resizable-split-block is-resizing"
+                : "resizable-split-block";
+
+            return string.IsNullOrWhiteSpace(Class)
+                ? baseClass
+                : $"{baseClass} {Class}";
+        }
+    }
 
     private string StyleAttribute =>
-        $"--resizable-split-start-width: {DefaultStartPaneWidth}px; " +
+        $"--resizable-split-start-width: {_startPaneWidth}px; " +
         $"--resizable-split-start-min-width: {MinStartPaneWidth}px; " +
         $"--resizable-split-start-max-width: {MaxStartPaneWidth}px;";
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnParametersSet()
     {
-        if (!firstRender)
+        if (!_isInitialized)
         {
+            _startPaneWidth = ClampWidth(DefaultStartPaneWidth);
+            _isInitialized = true;
             return;
         }
 
-        _module = await Js.InvokeAsync<IJSObjectReference>("import", JsModulePath);
-        await _module.InvokeVoidAsync("initialize", _rootElement, new
-        {
-            defaultStartPaneWidth = DefaultStartPaneWidth,
-            minStartPaneWidth = MinStartPaneWidth,
-            maxStartPaneWidth = MaxStartPaneWidth,
-            desktopMediaQuery = DesktopMediaQuery
-        });
+        _startPaneWidth = ClampWidth(_startPaneWidth);
     }
 
-    public async ValueTask DisposeAsync()
+    private void OnResizePointerDown(PointerEventArgs args)
     {
-        if (_module == null)
+        if (args.Button != 0)
         {
             return;
         }
 
-        await _module.InvokeVoidAsync("dispose", _rootElement);
-        await _module.DisposeAsync();
+        _isResizing = true;
+        _resizeStartClientX = args.ClientX;
+        _resizeStartPaneWidth = _startPaneWidth;
+    }
+
+    private void OnResizePointerMove(PointerEventArgs args)
+    {
+        if (!_isResizing)
+        {
+            return;
+        }
+
+        var delta = args.ClientX - _resizeStartClientX;
+        _startPaneWidth = ClampWidth((int)Math.Round(_resizeStartPaneWidth + delta));
+    }
+
+    private void OnResizePointerUp()
+    {
+        _isResizing = false;
+    }
+
+    private void OnResizeHandleKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "ArrowLeft")
+        {
+            _startPaneWidth = ClampWidth(_startPaneWidth - KeyboardResizeStep);
+        }
+        else if (args.Key == "ArrowRight")
+        {
+            _startPaneWidth = ClampWidth(_startPaneWidth + KeyboardResizeStep);
+        }
+        else if (args.Key == "Home")
+        {
+            _startPaneWidth = ClampWidth(MinStartPaneWidth);
+        }
+        else if (args.Key == "End")
+        {
+            _startPaneWidth = ClampWidth(MaxStartPaneWidth);
+        }
+    }
+
+    private int ClampWidth(int width)
+    {
+        return Math.Min(Math.Max(width, MinStartPaneWidth), MaxStartPaneWidth);
     }
 }

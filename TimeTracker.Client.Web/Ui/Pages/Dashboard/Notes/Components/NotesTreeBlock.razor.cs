@@ -40,6 +40,6 @@ public partial class NotesTreeBlock
     public EventCallback<NoteTreeNodeDto> ArchiveRequested { get; set; }
 
     private string ContainerClass => IsEmbedded
-        ? "min-h-[720px] bg-white"
+        ? "h-full min-h-[720px] w-full bg-white"
         : "min-h-[720px] rounded-2xl border border-slate-200 bg-white shadow-sm";
 }
