@@ -5,7 +5,7 @@
 @inject MarkdownService MarkdownService
 @inherits BaseReactiveComponent
 
-<section class="flex min-h-[720px] flex-col rounded-2xl border border-slate-200 bg-white shadow-sm">
+<section class="@ContainerClass">
     @if (IsLoading)
     {
         <div class="flex flex-1 flex-col">

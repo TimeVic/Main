@@ -11,6 +11,10 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes;
 
 public partial class NotesPage
 {
+    private const int DefaultTreeWidth = 320;
+    private const int MinTreeWidth = DefaultTreeWidth - 80;
+    private const int MaxTreeWidth = DefaultTreeWidth + 240;
+
     [Inject]
     private ILogger<NotesPage> Logger { get; set; } = null!;
 

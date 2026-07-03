@@ -1,0 +1,24 @@
+<div
+    @ref="_rootElement"
+    class="@ContainerClass"
+    style="@StyleAttribute">
+    <div class="resizable-split-block__pane resizable-split-block__pane--start" data-resizable-split-start>
+        @StartContent
+    </div>
+
+    <button
+        type="button"
+        class="resizable-split-block__separator"
+        data-resizable-split-handle
+        role="separator"
+        aria-label="@HandleLabel"
+        aria-orientation="vertical"
+        aria-valuemin="@MinStartPaneWidth"
+        aria-valuemax="@MaxStartPaneWidth"
+        aria-valuenow="@DefaultStartPaneWidth">
+    </button>
+
+    <div class="resizable-split-block__pane resizable-split-block__pane--end">
+        @EndContent
+    </div>
+</div>

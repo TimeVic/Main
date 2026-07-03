@@ -79,38 +79,49 @@
         </div>
     }
 
-    <div class="grid gap-5 xl:grid-cols-[320px_minmax(0,1fr)]">
-        <NotesTreeBlock
-            TreeNodes="@TreeNodes"
-            ExpandedNodeIds="@State.ExpandedNodeIds"
-            SelectedNoteId="@State.SelectedNoteId"
-            IsLoading="State.IsTreeLoading"
-            ToggleExpandedRequested="@ToggleExpanded"
-            SelectNodeRequested="@SelectDocument"
-            CreateFolderRequested="@OpenCreateFolderModal"
-            CreateNoteRequested="@OpenCreateNoteModal"
-            RenameRequested="@OpenRenameModal"
-            ArchiveRequested="@OpenArchiveConfirmation"/>
+    <LumexCard Class="overflow-hidden border-slate-200 bg-white shadow-sm">
+        <LumexCardBody Class="p-0">
+            <ResizableSplitBlock
+                DefaultStartPaneWidth="@DefaultTreeWidth"
+                MinStartPaneWidth="@MinTreeWidth"
+                MaxStartPaneWidth="@MaxTreeWidth"
+                HandleLabel="@DashboardLocalizer["Notes_ResizeTreePanel"].Value">
+                <StartContent>
+                    <NotesTreeBlock
+                        TreeNodes="@TreeNodes"
+                        ExpandedNodeIds="@State.ExpandedNodeIds"
+                        SelectedNoteId="@State.SelectedNoteId"
+                        IsLoading="State.IsTreeLoading"
+                        IsEmbedded="true"
+                        ToggleExpandedRequested="@ToggleExpanded"
+                        SelectNodeRequested="@SelectDocument"
+                        CreateFolderRequested="@OpenCreateFolderModal"
+                        CreateNoteRequested="@OpenCreateNoteModal"
+                        RenameRequested="@OpenRenameModal"
+                        ArchiveRequested="@OpenArchiveConfirmation"/>
+                </StartContent>
+                <EndContent>
+                    <NoteEditorBlock
+                        Document="@State.CurrentDocument"
+                        Title="@State.EditorTitle"
+                        MarkdownContent="@State.EditorMarkdown"
+                        Visibility="@State.EditorVisibility"
+                        IsLoading="State.IsDocumentLoading"
+                        IsSaving="State.IsDocumentSaving"
+                        IsDirty="@IsDocumentDirty"
+                        IsEditing="State.IsEditingDocument"
+                        IsEmbedded="true"
+                        SaveStateLabel="@SaveStateLabel"
+                        SaveStateClass="@SaveStateClass"
+                        TitleChanged="@OnTitleChanged"
+                        MarkdownContentChanged="@OnMarkdownChanged"
+                        VisibilityChanged="@OnVisibilityChanged"
+                        OnEdit="@StartDocumentEditing"
+                        OnSave="@SaveDocument"/>
+                </EndContent>
+            </ResizableSplitBlock>
+        </LumexCardBody>
+    </LumexCard>
 
-        <div class="space-y-5">
-            <NoteEditorBlock
-                Document="@State.CurrentDocument"
-                Title="@State.EditorTitle"
-                MarkdownContent="@State.EditorMarkdown"
-                Visibility="@State.EditorVisibility"
-                IsLoading="State.IsDocumentLoading"
-                IsSaving="State.IsDocumentSaving"
-                IsDirty="@IsDocumentDirty"
-                IsEditing="State.IsEditingDocument"
-                SaveStateLabel="@SaveStateLabel"
-                SaveStateClass="@SaveStateClass"
-                TitleChanged="@OnTitleChanged"
-                MarkdownContentChanged="@OnMarkdownChanged"
-                VisibilityChanged="@OnVisibilityChanged"
-                OnEdit="@StartDocumentEditing"
-                OnSave="@SaveDocument"/>
-
-            <NoteMetadataPanelBlock Document="@State.CurrentDocument"/>
-        </div>
-    </div>
+    <NoteMetadataPanelBlock Document="@State.CurrentDocument"/>
 </section>

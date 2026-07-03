@@ -658,6 +658,7 @@
   <data name="NoClientNotes" xml:space="preserve"><value>До цього клієнта ще не привʼязано нотаток.</value></data>
   <data name="Notes_PageSubtitle" xml:space="preserve"><value>Зберігайте деталі проєктів, домовленості з клієнтами, посилання, фрагменти й контекст оплат в одному workspace.</value></data>
   <data name="Notes_TreeDescription" xml:space="preserve"><value>Папки й документи</value></data>
+  <data name="Notes_ResizeTreePanel" xml:space="preserve"><value>Змінити ширину дерева нотаток</value></data>
   <data name="Notes_EmptyDescription" xml:space="preserve"><value>Створіть першу нотатку, щоб зберігати деталі проєктів, домовленості з клієнтами, посилання, фрагменти або контекст оплат.</value></data>
   <data name="Notes_EmptyFolder" xml:space="preserve"><value>Ця папка порожня.</value></data>
   <data name="Notes_NoSelectedNote" xml:space="preserve"><value>Виберіть нотатку або створіть нову.</value></data>
