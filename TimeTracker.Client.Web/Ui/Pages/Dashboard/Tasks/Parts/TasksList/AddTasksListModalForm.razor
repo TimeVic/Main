@@ -12,7 +12,7 @@
             </div>
             @DashboardLocalizer["AddTasksListModalForm_Title"]
         </LumexModalHeader>
-        <LumexModalBody>
+        <LumexModalBody Class="pt-3">
             <EditForm
                 Context="form"
                 @ref="_form"
@@ -28,7 +28,7 @@
                         <p class="mt-1 text-sm font-semibold text-slate-900">@Project?.Name</p>
                     </div>
 
-                    <div>
+                    <div class="pt-1">
                         <InputTextField
                             FullWidth="true"
                             Label="@DashboardLocalizer["Name"].Value"

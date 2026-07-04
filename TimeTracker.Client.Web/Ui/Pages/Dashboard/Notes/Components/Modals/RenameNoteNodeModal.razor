@@ -17,7 +17,7 @@
                     <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["Notes_RenameDescription"]</p>
                 </div>
             </LumexModalHeader>
-            <LumexModalBody>
+            <LumexModalBody Class="pt-3">
                 <EditForm Context="form" @ref="_form" Model="@_model" OnSubmit="@SubmitForm" novalidate>
                     <DataAnnotationsValidator/>
                     <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Submit"]</button>
