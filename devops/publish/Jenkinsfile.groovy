@@ -146,6 +146,19 @@ node('build-node') {
             envVariables.put('Smtp__UserName', USER_NAME)
             envVariables.put('Smtp__Password', PASSWORD)
         }
+        withCredentials([string(credentialsId: "timevic_production_smtp_server", variable: 'AUTH_SECRET')]) {
+            envVariables.put('Smtp__Server', AUTH_SECRET)
+        }
+        withCredentials([string(credentialsId: "timevic_production_smtp_port", variable: 'AUTH_SECRET')]) {
+            envVariables.put('Smtp__Port', AUTH_SECRET)
+        }
+        withCredentials([string(credentialsId: "timevic_production_smtp_from_name", variable: 'AUTH_SECRET')]) {
+            envVariables.put('Smtp__From__Name', AUTH_SECRET)
+        }
+        withCredentials([string(credentialsId: "timevic_production_smtp_from_email", variable: 'AUTH_SECRET')]) {
+            envVariables.put('Smtp__From__Email', AUTH_SECRET)
+        }
+
         withCredentials([string(credentialsId: "timevic_production_recaptcha_secret", variable: 'AUTH_SECRET')]) {
             envVariables.put('ReCaptcha__Secret', AUTH_SECRET)
         }
@@ -164,6 +177,12 @@ node('build-node') {
         withCredentials([string(credentialsId: "timevic_social_login_google_secret", variable: 'AUTH_SECRET')]) {
             envVariables.put('SocialLogin__Google__ClientSecret', AUTH_SECRET)
         }
+        withCredentials([string(credentialsId: "timevic_social_login_google_client_id", variable: 'AUTH_SECRET')]) {
+            envVariables.put('SocialLogin__Google__ClientId', AUTH_SECRET)
+        }
+        withCredentials([string(credentialsId: "timevic_social_login_google_valid_audiences", variable: 'AUTH_SECRET')]) {
+            envVariables.put('SocialLogin__Google__ValidAudiences__0', AUTH_SECRET)
+        }
                 
         withCredentials([
             usernamePassword(credentialsId: "timevic_${environmentKey}_aws_s3_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
@@ -178,6 +197,9 @@ node('build-node') {
         ]) {
             envVariables.put('Garage__AccessKey', USER_NAME)
             envVariables.put('Garage__SecretKey', PASSWORD)
+        }
+        withCredentials([string(credentialsId: "timevic_${environmentKey}_garage_bucket_name", variable: 'AUTH_SECRET')]) {
+            envVariables.put('Garage__BucketName', AUTH_SECRET)
         }
     }
 

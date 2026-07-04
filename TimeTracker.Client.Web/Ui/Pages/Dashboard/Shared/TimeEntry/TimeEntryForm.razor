@@ -98,73 +98,83 @@
                                     SelectedItemChanged="@OnChangeProject"/>
                             </div>
                         </div>
-                        @if (_activeEntry?.Project != null)
+                    </div>
+                }
+
+                @if ((_activeEntry?.Task == null && _activeEntry?.Project != null) || _activeEntry?.IsBillable == true)
+                {
+                    <div class="w-time-form__secondary-actions flex items-center gap-2">
+                        @if (_activeEntry?.Task == null && _activeEntry?.Project != null)
                         {
-                            <CustomButton
-                                OnClick="@OpenAddTaskModal"
-                                Class="w-time-form__wide-button"
-                                Variant="Variant.Outlined"
-                                Size="Size.Medium"
-                                Color="ThemeColor.Info"
-                                Disabled="@(!_hasActiveEntry)">
-                                <StartContent>
-                                    <i class="fa-solid fa-plus"></i>
-                                </StartContent>
-                                <ChildContent>
-                                    <span class="w-time-form__responsive-label hidden sm:inline">@DashboardLocalizer["Task"]</span>
-                                </ChildContent>
-                            </CustomButton>
+                            <div class="w-time-form__add-task-control">
+                                <CustomButton
+                                    OnClick="@OpenAddTaskModal"
+                                    Class="w-time-form__wide-button"
+                                    Variant="Variant.Outlined"
+                                    Size="Size.Medium"
+                                    Color="ThemeColor.Info"
+                                    Disabled="@(!_hasActiveEntry)">
+                                    <StartContent>
+                                        <i class="fa-solid fa-plus"></i>
+                                    </StartContent>
+                                    <ChildContent>
+                                        <span class="w-time-form__responsive-label hidden sm:inline">@DashboardLocalizer["Task"]</span>
+                                    </ChildContent>
+                                </CustomButton>
+                            </div>
+                        }
+
+                        @if (_activeEntry?.IsBillable == true)
+                        {
+                            <div class="w-time-form__control w-time-form__billing-control">
+                                <BillableIndicator />
+                            </div>
                         }
                     </div>
                 }
 
-                @if (_activeEntry?.IsBillable == true)
-                {
-                    <div class="w-time-form__control">
-                        <BillableIndicator />
+                <div class="w-time-form__timer-actions flex items-center gap-2">
+                    <div class="w-time-form__control w-time-form__counter">
+                        <TimeCounterField
+                            Class="@counterClass"
+                            Value="@_activeEntry?.StartTimeOffset"
+                            IsActive="@_hasActiveEntry"/>
                     </div>
-                }
 
-                <div class="w-time-form__control w-time-form__counter">
-                    <TimeCounterField
-                        Class="@counterClass"
-                        Value="@_activeEntry?.StartTimeOffset"
-                        IsActive="@_hasActiveEntry"/>
-                </div>
-
-                <div class="w-time-form__control">
-                    <CustomButton
-                        OnClick="@(() => ToggleTimeEntry())"
-                        Class="w-time-form__wide-button"
-                        Variant="Variant.Solid"
-                        Color="@(_hasActiveEntry ? ThemeColor.Default : ThemeColor.Primary)"
-                        Disabled="@_state.Value.IsTimeEntryProcessing">
-                        <StartContent>
-                            <i class="fa-solid @(_hasActiveEntry ? "fa-stop" : "fa-play")"></i>
-                        </StartContent>
-                        <ChildContent>
-                            <span class="w-time-form__responsive-label hidden sm:inline">@(_hasActiveEntry ? DashboardLocalizer["Stop"] : DashboardLocalizer["Start"])</span>
-                        </ChildContent>
-                    </CustomButton>
-                </div>
-
-                @if (_activeEntry != null)
-                {
-                    <div class="w-time-form__control">
+                    <div class="w-time-form__control w-time-form__timer-button">
                         <CustomButton
-                            OnClick="@(() => _isEditModalOpened = true)"
+                            OnClick="@(() => ToggleTimeEntry())"
                             Class="w-time-form__wide-button"
-                            Variant="Variant.Outlined"
-                            Size="Size.Medium"
-                            Radius="Radius.Full"
-                            IconOnly="true"
-                            Color="ThemeColor.Default">
+                            Variant="Variant.Solid"
+                            Color="@(_hasActiveEntry ? ThemeColor.Default : ThemeColor.Primary)"
+                            Disabled="@_state.Value.IsTimeEntryProcessing">
                             <StartContent>
-                                <i class="fa-solid fa-pencil"></i>
+                                <i class="fa-solid @(_hasActiveEntry ? "fa-stop" : "fa-play")"></i>
                             </StartContent>
+                            <ChildContent>
+                                <span class="w-time-form__responsive-label hidden sm:inline">@(_hasActiveEntry ? DashboardLocalizer["Stop"] : DashboardLocalizer["Start"])</span>
+                            </ChildContent>
                         </CustomButton>
                     </div>
-                }
+
+                    @if (_activeEntry != null)
+                    {
+                        <div class="w-time-form__control w-time-form__timer-button">
+                            <CustomButton
+                                OnClick="@(() => _isEditModalOpened = true)"
+                                Class="w-time-form__wide-button"
+                                Variant="Variant.Outlined"
+                                Size="Size.Medium"
+                                Radius="Radius.Full"
+                                IconOnly="true"
+                                Color="ThemeColor.Default">
+                                <StartContent>
+                                    <i class="fa-solid fa-pencil"></i>
+                                </StartContent>
+                            </CustomButton>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </section>

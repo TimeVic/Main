@@ -4,15 +4,22 @@
         width: 130px;
     }
 
-    // Stack timer controls on narrow mobile screens to avoid mixed-row wrapping.
+    // Keep timer action buttons on one mobile row while full-width fields still stack.
     @media (max-width: 480px) {
         .w-time-form__content,
         .w-time-form__controls,
-        .w-time-form__project-control {
+        .w-time-form__project-control,
+        .w-time-form__secondary-actions,
+        .w-time-form__timer-actions {
             align-items: stretch;
         }
 
-        .w-time-form__controls,
+        .w-time-form__controls {
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
         .w-time-form__project-control {
             flex-direction: column;
             flex-wrap: nowrap;
@@ -21,17 +28,39 @@
 
         .w-time-form__description,
         .w-time-form__project-select,
-        .w-time-form__control,
-        .w-time-form__task-chip {
+        .w-time-form__task-chip,
+        .w-time-form__secondary-actions,
+        .w-time-form__timer-actions {
             min-width: 0;
             width: 100%;
         }
 
+        .w-time-form__control {
+            min-width: 0;
+        }
+
+        .w-time-form__counter {
+            width: 100%;
+        }
+
         .w-time-form__project-select ::deep button,
-        .w-time-form__control ::deep button,
-        .w-time-form__control ::deep .w-time-form__wide-button,
+        .w-time-form__add-task-control ::deep .w-time-form__wide-button,
         .w-time-form__task-chip {
             width: 100%;
+        }
+
+        .w-time-form__add-task-control,
+        .w-time-form__timer-actions .w-time-form__counter {
+            flex: 1 1 0;
+        }
+
+        .w-time-form__timer-actions .w-time-form__counter {
+            width: auto;
+        }
+
+        .w-time-form__billing-control,
+        .w-time-form__timer-button {
+            flex: 0 0 auto;
         }
 
         .w-time-form__counter ::deep .w-time-counter,
@@ -68,9 +97,32 @@
             .w-time-form__controls,
             .w-time-form__project-control,
             .w-time-form__project-select,
-            .w-time-form__control {
+            .w-time-form__secondary-actions,
+            .w-time-form__timer-actions {
                 min-width: 0;
                 width: 100%;
+            }
+
+            .w-time-form__control {
+                min-width: 0;
+            }
+
+            .w-time-form__counter {
+                width: 100%;
+            }
+
+            .w-time-form__add-task-control,
+            .w-time-form__timer-actions .w-time-form__counter {
+                flex: 1 1 0;
+            }
+
+            .w-time-form__timer-actions .w-time-form__counter {
+                width: auto;
+            }
+
+            .w-time-form__billing-control,
+            .w-time-form__timer-button {
+                flex: 0 0 auto;
             }
 
             .w-time-form__project-control {
