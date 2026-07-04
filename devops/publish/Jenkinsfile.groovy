@@ -201,6 +201,9 @@ node('build-node') {
         withCredentials([string(credentialsId: "timevic_${environmentKey}_garage_bucket_name", variable: 'AUTH_SECRET')]) {
             envVariables.put('Garage__BucketName', AUTH_SECRET)
         }
+        withCredentials([string(credentialsId: "timevic_garage_url", variable: 'AUTH_SECRET')]) {
+            envVariables.put('Garage__Url', AUTH_SECRET)
+        }
     }
 
     stage('Build main image') {
