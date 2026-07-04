@@ -28,6 +28,6 @@ RUN ["dotnet", "build", "--verbosity=q", "TimeTracker.Api/TimeTracker.Api.csproj
 RUN ["dotnet", "build", "--verbosity=q", "TimeTracker.Migrations/TimeTracker.Migrations.csproj"]
 RUN ["dotnet", "build", "--verbosity=q", "TimeTracker.WorkerServices/TimeTracker.WorkerServices.csproj"]
 
-COPY ./devops/publish_native/common/boot.sh /usr/local/bin/php_boot
+COPY ./devops/publish/common/boot.sh /usr/local/bin/php_boot
 
 CMD ["sh", "/usr/local/bin/php_boot"]
