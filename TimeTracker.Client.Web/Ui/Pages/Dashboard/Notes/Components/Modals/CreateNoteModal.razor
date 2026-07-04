@@ -17,11 +17,11 @@
                     <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["Notes_CreateNoteDescription"]</p>
                 </div>
             </LumexModalHeader>
-            <LumexModalBody>
+            <LumexModalBody Class="pt-3">
                 <EditForm Context="form" @ref="_form" Model="@_model" OnSubmit="@SubmitForm" novalidate>
                     <DataAnnotationsValidator/>
                     <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Submit"]</button>
-                    <div class="grid min-w-0 gap-4">
+                    <div class="grid min-w-0 gap-6">
                         <div class="min-w-0">
                             <InputTextField
                                 Class="min-w-0 max-w-full"

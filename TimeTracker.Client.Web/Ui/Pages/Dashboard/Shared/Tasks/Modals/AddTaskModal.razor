@@ -19,12 +19,13 @@
                 <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["AddTaskModal_Description"]</p>
             </div>
         </LumexModalHeader>
-        <LumexModalBody>
+        <LumexModalBody Class="pt-3">
             <EditForm
                 Context="form"
                 @ref="_form"
                 Model="@model"
                 OnValidSubmit="@Submit"
+                class="space-y-4"
                 novalidate>
                 <DataAnnotationsValidator/>
                 <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Create"]</button>
@@ -32,7 +33,7 @@
                 <div>
                     @if (TaskList != null || TaskListId.HasValue)
                     {
-                        <p class="mt-2 text-xs text-slate-500">
+                        <p class="text-xs text-slate-500">
                             @DashboardLocalizer["AddTaskModal_TaskWillBeAddedTo"]
                             <span class="font-semibold text-slate-700">@_selectedTaskList?.Name</span>
                         </p>
@@ -46,13 +47,13 @@
                             ProjectId="@ProjectId"
                             Value="@(_selectedTaskList?.Id ?? Guid.Empty)"
                             Disabled="@_isLoading"
-                            Class="mb-3 w-full"
+                            Class="w-full"
                             FullWidth="true"
                             SelectedItemChanged="@OnTaskListSelected"/>
                     }
                 </div>
                 
-                <div class="mt-1">
+                <div>
                     <InputTextField
                         FullWidth="true"
                         Label="@DashboardLocalizer["TaskName"].Value"
@@ -61,7 +62,7 @@
                         @bind-Value="model.Title"/>
                 </div>
 
-                <div class="space-y-2 mt-3">
+                <div>
                     <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
                         <InputTextField
                             Class="lg:max-w-sm"
@@ -73,7 +74,7 @@
                     </div>
                 </div>
 
-                <div class="rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-900 mt-3">
+                <div class="rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-900">
                     <div class="font-semibold">@DashboardLocalizer["AddTaskModal_TitleOrExternalIdRequired"]</div>
                     <p class="mt-1 text-blue-800">@DashboardLocalizer["AddTaskModal_TitleOrExternalIdRequiredDescription"]</p>
                 </div>

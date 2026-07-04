@@ -17,12 +17,12 @@
                     <i class="fa-solid fa-tag"></i>
                 </div>
                 <div>
-                    <h2 class="mt-2 text-xl font-semibold text-slate-900">@DashboardLocalizer["TagsBlock_AddTag"]</h2>
+                    <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["TagsBlock_AddTag"]</h2>
                     <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["AddTagModal_Description"]</p>
                 </div>
             </div>
         </LumexModalHeader>
-        <LumexModalBody>
+        <LumexModalBody Class="pt-3">
             <EditForm
                 Context="form"
                 @ref="_form"
@@ -30,8 +30,8 @@
                 novalidate>
                 <DataAnnotationsValidator/>
 
-                <div>
-                    <div class="mt-1">
+                <div class="grid gap-5">
+                    <div>
                         <InputTextField
                             FullWidth="true"
                             Label="@DashboardLocalizer["Tag"]"
@@ -42,7 +42,7 @@
                         <CustomValidationMessage For="@(() => model.Name)"/>
                     </div>
 
-                    <div class="pt-8">
+                    <div class="pt-1">
                         <ColorDropDown
                             Label="@DashboardLocalizer["Color"]"
                             Type="DropDownType.Select"

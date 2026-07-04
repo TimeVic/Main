@@ -17,12 +17,12 @@
                     <i class="fa-regular fa-pen-to-square"></i>
                 </div>
                 <div>
-                    <h2 class="mt-2 text-xl font-semibold text-slate-900">@string.Format(DashboardLocalizer["UpdateProjectModal_Title"], model.Name)</h2>
+                    <h2 class="text-xl font-semibold text-slate-900">@string.Format(DashboardLocalizer["UpdateProjectModal_Title"], model.Name)</h2>
                     <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["UpdateProjectModal_Description"]</p>
                 </div>
             </div>
         </LumexModalHeader>
-        <LumexModalBody>
+        <LumexModalBody Class="pt-3">
             <EditForm
                 Context="form"
                 @ref="_form"
@@ -31,7 +31,7 @@
                 <DataAnnotationsValidator/>
 
                 <div class="space-y-5">
-                    <div class="mt-1">
+                    <div>
                         <InputTextField
                             FullWidth="true"
                             Label="@DashboardLocalizer["Project"]"
@@ -40,7 +40,7 @@
                             @bind-Value="model.Name"/>
                     </div>
 
-                    <div class="mt-1">
+                    <div class="pt-1">
                         <ClientsDropDown
                             Value="@model.ClientId"
                             Clearable="true"
@@ -61,7 +61,7 @@
                     
                     @if (model.IsBillableByDefault)
                     {
-                        <div>
+                        <div class="pt-1">
                             <InputNumericNullableField 
                                 TItem="decimal"
                                 Label="@DashboardLocalizer["HourlyRate"]"

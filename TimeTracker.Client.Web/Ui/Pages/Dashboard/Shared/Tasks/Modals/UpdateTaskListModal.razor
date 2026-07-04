@@ -17,7 +17,7 @@
                 <p class="mt-1 text-sm text-slate-500">@TaskList.Project.Name</p>
             </div>
         </LumexModalHeader>
-        <LumexModalBody>
+        <LumexModalBody Class="pt-3">
             <EditForm
                 Context="form"
                 @ref="_form"
@@ -27,7 +27,7 @@
                 <DataAnnotationsValidator/>
                 <button type="submit" class="sr-only" tabindex="-1" aria-hidden="true">@DashboardLocalizer["Update"]</button>
 
-                <div class="mt-1">
+                <div class="pt-1">
                     <InputTextField
                         FullWidth="true"
                         Label="@DashboardLocalizer["Name"].Value"

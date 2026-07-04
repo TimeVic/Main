@@ -15,12 +15,12 @@
                     <i class="fa-solid fa-user-plus"></i>
                 </div>
                 <div>
-                    <h2 class="mt-2 text-xl font-semibold text-slate-900">@DashboardLocalizer["AddMemberModal_Title"]</h2>
+                    <h2 class="text-xl font-semibold text-slate-900">@DashboardLocalizer["AddMemberModal_Title"]</h2>
                     <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["AddMemberModal_Description"]</p>
                 </div>
             </div>
         </LumexModalHeader>
-        <LumexModalBody>
+        <LumexModalBody Class="pt-3">
             <EditForm
                 Context="form"
                 @ref="_form"
@@ -28,7 +28,7 @@
                 novalidate>
                 <DataAnnotationsValidator/>
 
-                <div class="mt-1">
+                <div class="pt-1">
                     <InputTextField
                         FullWidth="true"
                         Label="@DashboardLocalizer["AddMemberModal_MemberEmail"]"
