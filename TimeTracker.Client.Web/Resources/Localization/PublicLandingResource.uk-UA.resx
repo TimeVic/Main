@@ -132,4 +132,10 @@
   <data name="Footer_License" xml:space="preserve">
     <value>Apache License Version 2.0</value>
   </data>
+  <data name="Footer_GitHubAriaLabel" xml:space="preserve">
+    <value>TimeVic на GitHub</value>
+  </data>
+  <data name="Footer_DiscordAriaLabel" xml:space="preserve">
+    <value>TimeVic у Discord</value>
+  </data>
 </root>

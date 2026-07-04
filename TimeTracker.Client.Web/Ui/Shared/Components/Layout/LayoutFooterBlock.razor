@@ -2,6 +2,7 @@
 @inject IStringLocalizer<PublicLandingResource> SharedLocalizer
 @inject ILocalizationUrlService LocalizationUrlService
 @inject NavigationManager NavigationManager
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 <footer class="mt-auto border-t border-slate-200/70 bg-white/70">
     <div class="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 text-sm text-slate-500 sm:px-6 md:grid-cols-[minmax(0,1fr)_auto] lg:px-8">
@@ -21,12 +22,30 @@
         </nav>
     </div>
     <div class="border-t border-slate-200/70">
-        <div class="mx-auto w-full max-w-7xl px-4 py-4 text-center text-xs text-slate-400 sm:px-6 lg:px-8">
+        <div class="mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-3 px-4 py-4 text-center text-xs text-slate-400 sm:px-6 lg:px-8">
             <p>
                 @SharedLocalizer["Footer_Copyright"]
                 <a href="@SupportEmailHref" class="font-medium text-slate-500 transition hover:text-slate-700 hover:underline">@SharedLocalizer["Footer_AuthorName"]</a>
                 @SharedLocalizer["Footer_License"]
             </p>
+            <div class="flex items-center justify-center gap-3 text-base text-slate-500">
+                <a href="@GitHubUrl"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="@SharedLocalizer["Footer_GitHubAriaLabel"]"
+                   title="@SharedLocalizer["Footer_GitHubAriaLabel"]"
+                   class="transition hover:text-slate-900">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="@DiscordUrl"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="@SharedLocalizer["Footer_DiscordAriaLabel"]"
+                   title="@SharedLocalizer["Footer_DiscordAriaLabel"]"
+                   class="transition hover:text-slate-900">
+                    <i class="fa-brands fa-discord"></i>
+                </a>
+            </div>
         </div>
     </div>
 </footer>
@@ -39,4 +58,8 @@
     private string LocalizedUrl(string path) => LocalizationUrlService.GetLocalizedUrl(path, CurrentCulture);
 
     private string SupportEmailHref => $"mailto:{SiteMetadata.SupportEmail}";
+
+    private string GitHubUrl => Configuration["SocialLinks:GitHub"] ?? string.Empty;
+
+    private string DiscordUrl => Configuration["SocialLinks:Discord"] ?? string.Empty;
 }
