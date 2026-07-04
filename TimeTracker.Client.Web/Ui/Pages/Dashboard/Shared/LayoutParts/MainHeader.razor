@@ -142,7 +142,8 @@
             </LumexNavbarItem>
         </LumexNavbarContent>
 
-        <LumexNavbarMenu Class="lg:hidden border-t border-slate-200 bg-white px-4 pb-6 pt-3">
+        @* Keep the mobile menu stretched across the viewport because the dashboard header also renders the timer form below the navbar. *@
+        <LumexNavbarMenu Class="lg:hidden !fixed !inset-x-0 !top-[var(--navbar-height)] !bottom-auto !z-50 h-[calc(100dvh-var(--navbar-height))] overflow-y-auto border-t border-slate-200 bg-white px-4 pb-6 pt-3">
             <MainMenu IsMobile="true" />
         </LumexNavbarMenu>
     </LumexNavbar>
