@@ -1,0 +1,82 @@
+@using Microsoft.AspNetCore.Components.Web
+@using TimeTracker.Client.Web
+
+<!DOCTYPE html>
+<html lang="en" class="bg-white dark:bg-gray-950 scheme-light dark:scheme-dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>TimeVic</title>
+    <base href="/" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#1E3A8A" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@fortawesome/fontawesome-free@6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/app.min.css" />
+    <link rel="stylesheet" href="vendor/github-markdown/github-markdown.min.css" />
+    <link rel="stylesheet" href="vendor/github-markdown/timevic-markdown-theme.css" />
+    <link href="TimeTracker.Client.Web.styles.css" rel="stylesheet" />
+    <HeadOutlet @rendermode="PageRenderMode" />
+</head>
+
+<body class="w-full bg-gray-100">
+@if (IsStaticServerPage)
+{
+    <StaticServerRoutes />
+}
+else
+{
+    <div id="app">
+        <TimeTracker.Client.Web.App @rendermode="PageRenderMode" />
+    </div>
+}
+@if (!IsStaticServerPage)
+{
+    <script src="_content/LumexUI/js/LumexUI.js" type="module"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LerVNUhAAAAAKZSPljJNpjJhR6PIraWTUbzBHHS"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
+    <script type="module" src="js/messaging.js"></script>
+    <script src="js/common.js"></script>
+    <script src="_framework/blazor.web.js"></script>
+}
+</body>
+</html>
+
+@code {
+    private static readonly HashSet<string> StaticServerPaths = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "/",
+        "/uk",
+        "/faq",
+        "/uk/faq",
+        "/use-cases",
+        "/uk/use-cases",
+        "/pricing",
+        "/uk/pricing",
+        "/privacy-policy",
+        "/uk/privacy-policy",
+        "/terms-of-service",
+        "/uk/terms-of-service"
+    };
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private bool IsStaticServerPage
+    {
+        get
+        {
+            var path = HttpContext.Request.Path.HasValue ? HttpContext.Request.Path.Value! : "/";
+            var normalizedPath = path.Length > 1 ? path.TrimEnd('/') : path;
+            return StaticServerPaths.Contains(normalizedPath);
+        }
+    }
+
+    private IComponentRenderMode? PageRenderMode
+        => IsStaticServerPage
+            ? null
+            : new InteractiveWebAssemblyRenderMode(prerender: false);
+}

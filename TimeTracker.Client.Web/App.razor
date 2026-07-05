@@ -1,5 +1,11 @@
 ﻿@using TimeTracker.Client.Web.Ui.Shared
-<Fluxor.Blazor.Web.StoreInitializer/>
+@using Fluxor
+@inject IServiceProvider ServiceProvider
+
+@if (ServiceProvider.GetService(typeof(IStore)) is not null)
+{
+    <Fluxor.Blazor.Web.StoreInitializer/>
+}
 
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">

@@ -1,14 +1,16 @@
 @page "/"
 @page "/uk"
+@attribute [Microsoft.AspNetCore.Components.ExcludeFromInteractiveRouting]
 
 @using TimeTracker.Client.Web.Services
-@using Layout = TimeTracker.Client.Web.Ui.Pages.Landing.Shared.LandingLayout
-@inherits BaseReactiveComponent
+@using Layout = TimeTracker.Client.Web.Server.Shared.StaticLandingLayout
+@namespace TimeTracker.Client.Web.Ui.Pages.Landing
 @layout Layout
 
 @inject IStringLocalizer<PublicLandingResource> SharedLocalizer
 @inject IStringLocalizer<IndexPage> Localizer
 @inject ILocalizationUrlService LocalizationUrlService
+@inject NavigationManager NavigationManager
 <SeoHead
     Title="@Localizer["Meta_Title"]"
     Description="@Localizer["Meta_Description"]"
