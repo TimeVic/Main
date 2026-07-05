@@ -132,6 +132,21 @@ public class NotesReducers
     }
 
     [ReducerMethod]
+    public static NotesState CancelNoteDocumentEditingReducer(NotesState state, CancelNoteDocumentEditingAction action)
+    {
+        return state.CurrentDocument == null
+            ? state
+            : state with
+            {
+                EditorTitle = state.CurrentDocument.Title,
+                EditorMarkdown = state.CurrentDocument.MarkdownContent,
+                EditorVisibility = state.CurrentDocument.Visibility,
+                IsEditingDocument = false,
+                IsSaveError = false
+            };
+    }
+
+    [ReducerMethod]
     public static NotesState SetNoteDocumentSavingReducer(NotesState state, SetNoteDocumentSavingAction action)
     {
         return state with

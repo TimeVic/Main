@@ -75,6 +75,18 @@
                             ValueChanged="@OnVisibilityChanged"/>
                         <CustomButton
                             Size="Size.Small"
+                            Color="@ThemeColor.Default"
+                            Variant="Variant.Outlined"
+                            Radius="@Radius.Full"
+                            Disabled="IsSaving"
+                            OnClick="@OnCancelClick">
+                            <StartContent>
+                                <i class="fa-solid fa-xmark"></i>
+                            </StartContent>
+                            <ChildContent>@DashboardLocalizer["Cancel"]</ChildContent>
+                        </CustomButton>
+                        <CustomButton
+                            Size="Size.Small"
                             Color="@ThemeColor.Primary"
                             Radius="@Radius.Full"
                             IsLoading="IsSaving"

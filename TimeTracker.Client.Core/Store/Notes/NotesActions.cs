@@ -30,6 +30,8 @@ public record struct SetNoteEditorVisibilityAction(NoteVisibility Visibility);
 
 public record struct StartNoteDocumentEditingAction;
 
+public record struct CancelNoteDocumentEditingAction;
+
 public record struct SaveNoteDocumentAction;
 
 public record struct SetNoteDocumentSavingAction(bool IsSaving);
