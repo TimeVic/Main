@@ -46,6 +46,22 @@ else
 </html>
 
 @code {
+    private static readonly HashSet<string> StaticServerPaths = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "/",
+        "/uk",
+        "/faq",
+        "/uk/faq",
+        "/use-cases",
+        "/uk/use-cases",
+        "/pricing",
+        "/uk/pricing",
+        "/privacy-policy",
+        "/uk/privacy-policy",
+        "/terms-of-service",
+        "/uk/terms-of-service"
+    };
+
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
 
@@ -54,7 +70,8 @@ else
         get
         {
             var path = HttpContext.Request.Path.HasValue ? HttpContext.Request.Path.Value! : "/";
-            return path == "/" || path == "/uk";
+            var normalizedPath = path.Length > 1 ? path.TrimEnd('/') : path;
+            return StaticServerPaths.Contains(normalizedPath);
         }
     }
 

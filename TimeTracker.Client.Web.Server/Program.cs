@@ -2,6 +2,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Server;
+using LumexUI.Extensions;
 using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Web.Services;
 using TimeTracker.Client.Web.Server.Components;
@@ -20,6 +21,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddScoped<ILocalizationUrlService, LocalizationUrlService>();
 builder.Services.AddScoped<ISeoUrlService, SeoUrlService>();
 builder.Services.AddScoped<UrlService>();
+builder.Services.AddLumexServices();
 
 var app = builder.Build();
 

@@ -1,15 +1,17 @@
 @page "/use-cases"
 @page "/uk/use-cases"
+@attribute [Microsoft.AspNetCore.Components.ExcludeFromInteractiveRouting]
 
 @using LumexUI.Common
 @using TimeTracker.Client.Web.Services
-@using Layout = TimeTracker.Client.Web.Ui.Pages.Landing.Shared.LandingLayout
-@inherits BaseReactiveComponent
+@using Layout = TimeTracker.Client.Web.Server.Shared.StaticLandingLayout
+@namespace TimeTracker.Client.Web.Ui.Pages.Landing
 @layout Layout
 
 @inject IStringLocalizer<PublicLandingResource> SharedLocalizer
 @inject IStringLocalizer<UseCasesPage> Localizer
 @inject ILocalizationUrlService LocalizationUrlService
+@inject NavigationManager NavigationManager
 <SeoHead
     Title="@Localizer["Meta_Title"]"
     Description="@Localizer["Meta_Description"]"

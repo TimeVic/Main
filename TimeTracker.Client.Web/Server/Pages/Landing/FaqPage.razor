@@ -1,8 +1,10 @@
 @page "/faq"
 @page "/uk/faq"
+@attribute [Microsoft.AspNetCore.Components.ExcludeFromInteractiveRouting]
 @using LumexUI.Common
 @using TimeTracker.Client.Web.Services
-@using Layout = TimeTracker.Client.Web.Ui.Pages.Landing.Shared.LandingLayout
+@using Layout = TimeTracker.Client.Web.Server.Shared.StaticLandingLayout
+@namespace TimeTracker.Client.Web.Ui.Pages.Landing
 
 @layout Layout
 
