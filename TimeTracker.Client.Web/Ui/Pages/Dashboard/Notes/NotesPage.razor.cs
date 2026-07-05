@@ -124,6 +124,12 @@ public partial class NotesPage
         return Task.CompletedTask;
     }
 
+    private Task CancelDocumentEditing()
+    {
+        Dispatcher.Dispatch(new CancelNoteDocumentEditingAction());
+        return Task.CompletedTask;
+    }
+
     private Task SaveDocument()
     {
         Dispatcher.Dispatch(new SaveNoteDocumentAction());

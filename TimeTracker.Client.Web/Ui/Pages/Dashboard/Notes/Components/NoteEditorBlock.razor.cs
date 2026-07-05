@@ -69,6 +69,9 @@ public partial class NoteEditorBlock
     public EventCallback OnEdit { get; set; }
 
     [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
     public EventCallback OnSave { get; set; }
 
     private string ContainerClass => IsEmbedded
@@ -93,6 +96,11 @@ public partial class NoteEditorBlock
     private async Task OnEditClick()
     {
         await OnEdit.InvokeAsync();
+    }
+
+    private async Task OnCancelClick()
+    {
+        await OnCancel.InvokeAsync();
     }
 
     private string GetVisibilityLabel()
