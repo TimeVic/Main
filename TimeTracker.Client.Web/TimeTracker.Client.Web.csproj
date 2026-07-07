@@ -25,7 +25,7 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
         <DefineConstants>TRACE;IS_WEB_APP</DefineConstants>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="Blazor-ApexCharts" Version="6.1.0" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
