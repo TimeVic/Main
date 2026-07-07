@@ -2,10 +2,8 @@ using System.Globalization;
 using Blazored.LocalStorage;
 using Fluxor;
 using Majorsoft.Blazor.WebAssembly.Logging.Console;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using TimeTracker.Business.Common.Services.Format;
-using TimeTracker.Client.Web;
 using TimeTracker.Client.Core.Services;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Services.UI;
@@ -38,10 +36,6 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 var environment = builder.HostEnvironment.Environment;
 Console.WriteLine($"Environment: {environment}");
-
-// System services
-builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
 
 var apiUrl = builder.Configuration.GetValue<string>("ApiUrl");
 builder.Services.AddScoped(sp => new HttpClient()
