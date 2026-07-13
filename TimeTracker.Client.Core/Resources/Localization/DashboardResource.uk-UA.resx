@@ -673,6 +673,13 @@
   <data name="Notes_CreateFolderDescription" xml:space="preserve"><value>Створіть папку, щоб групувати нотатки за клієнтом, проєктом або робочим процесом.</value></data>
   <data name="Notes_CreateNoteDescription" xml:space="preserve"><value>Створіть Markdown-нотатку для контексту проєкту, посилань або деталей оплати.</value></data>
   <data name="Notes_RenameDescription" xml:space="preserve"><value>Оновіть назву, яка відображається в дереві нотаток.</value></data>
+  <data name="Notes_Move" xml:space="preserve"><value>Перемістити</value></data>
+  <data name="Notes_MoveTitle" xml:space="preserve"><value>Перемістити нотатку</value></data>
+  <data name="Notes_MoveDescription" xml:space="preserve"><value>Виберіть папку, у якій має зберігатися ця нотатка.</value></data>
+  <data name="Notes_MoveParent" xml:space="preserve"><value>Папка</value></data>
+  <data name="Notes_MoveBack" xml:space="preserve"><value>Назад</value></data>
+  <data name="Notes_MovePath" xml:space="preserve"><value>Шлях до вибраної папки</value></data>
+  <data name="Notes_RootFolder" xml:space="preserve"><value>Коренева папка</value></data>
   <data name="Notes_ArchiveConfirmTitle" xml:space="preserve"><value>Архівувати елемент нотаток?</value></data>
   <data name="Notes_ArchiveConfirmSubtitle" xml:space="preserve"><value>Елемент буде прибрано з активного дерева нотаток.</value></data>
   <data name="Notes_LoadTreeError" xml:space="preserve"><value>Не вдалося завантажити дерево нотаток</value></data>
@@ -681,6 +688,7 @@
   <data name="Notes_CreateFolderError" xml:space="preserve"><value>Не вдалося створити папку</value></data>
   <data name="Notes_CreateNoteError" xml:space="preserve"><value>Не вдалося створити нотатку</value></data>
   <data name="Notes_RenameNodeError" xml:space="preserve"><value>Не вдалося перейменувати елемент нотаток</value></data>
+  <data name="Notes_MoveNodeError" xml:space="preserve"><value>Не вдалося перемістити нотатку</value></data>
   <data name="Notes_ArchiveNodeError" xml:space="preserve"><value>Не вдалося архівувати елемент нотаток</value></data>
   <data name="Notes_LoadLinkedNotesError" xml:space="preserve"><value>Не вдалося завантажити привʼязані нотатки</value></data>
   <data name="Notes_CreateProjectNoteError" xml:space="preserve"><value>Не вдалося створити нотатку проєкту</value></data>

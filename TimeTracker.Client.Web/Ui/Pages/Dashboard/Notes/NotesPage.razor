@@ -34,6 +34,14 @@
     IsOpenedChanged="@OnRenameModalChanged"
     OnSubmit="@RenameNode"/>
 
+<MoveNoteNodeModal
+    IsOpened="@(State.NodeToMove != null)"
+    IsSaving="State.IsMovingNode"
+    Node="State.NodeToMove"
+    Nodes="State.FlatNodes"
+    IsOpenedChanged="@OnMoveModalChanged"
+    OnSubmit="@MoveNode"/>
+
 @if (State.NodeToArchive != null)
 {
     <ConfirmationModal
@@ -99,6 +107,7 @@
                         CreateFolderRequested="@OpenCreateFolderModal"
                         CreateNoteRequested="@OpenCreateNoteModal"
                         RenameRequested="@OpenRenameModal"
+                        MoveRequested="@OpenMoveModal"
                         ArchiveRequested="@OpenArchiveConfirmation"/>
                 </StartContent>
                 <EndContent>

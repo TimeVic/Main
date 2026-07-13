@@ -57,10 +57,25 @@
                         </LumexDropdownItem>
                     }
                     <LumexDropdownItem OnClick="@(() => RenameRequested.InvokeAsync(TreeNode.Node))">
-                        @DashboardLocalizer["Rename"]
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-pen w-4 text-xs"></i>
+                            @DashboardLocalizer["Rename"]
+                        </span>
                     </LumexDropdownItem>
+                    @if (!IsFolder)
+                    {
+                        <LumexDropdownItem OnClick="@(() => MoveRequested.InvokeAsync(TreeNode.Node))">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-folder-tree w-4 text-xs"></i>
+                                @DashboardLocalizer["Notes_Move"]
+                            </span>
+                        </LumexDropdownItem>
+                    }
                     <LumexDropdownItem Color="@ThemeColor.Danger" OnClick="@(() => ArchiveRequested.InvokeAsync(TreeNode.Node))">
-                        @DashboardLocalizer["Archive"]
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-box-archive w-4 text-xs"></i>
+                            @DashboardLocalizer["Archive"]
+                        </span>
                     </LumexDropdownItem>
                 </LumexDropdownMenu>
             </LumexDropdown>
@@ -85,6 +100,7 @@
                         CreateFolderRequested="@CreateFolderRequested"
                         CreateNoteRequested="@CreateNoteRequested"
                         RenameRequested="@RenameRequested"
+                        MoveRequested="@MoveRequested"
                         ArchiveRequested="@ArchiveRequested"/>
                 }
             }
