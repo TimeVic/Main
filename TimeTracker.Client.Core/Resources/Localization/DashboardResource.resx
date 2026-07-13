@@ -673,6 +673,13 @@
   <data name="Notes_CreateFolderDescription" xml:space="preserve"><value>Create a folder to organize notes by client, project or workflow.</value></data>
   <data name="Notes_CreateNoteDescription" xml:space="preserve"><value>Create a Markdown note for project context, links or billing details.</value></data>
   <data name="Notes_RenameDescription" xml:space="preserve"><value>Update the name shown in the notes tree.</value></data>
+  <data name="Notes_Move" xml:space="preserve"><value>Move</value></data>
+  <data name="Notes_MoveTitle" xml:space="preserve"><value>Move note</value></data>
+  <data name="Notes_MoveDescription" xml:space="preserve"><value>Choose the folder where this note should be stored.</value></data>
+  <data name="Notes_MoveParent" xml:space="preserve"><value>Folder</value></data>
+  <data name="Notes_MoveBack" xml:space="preserve"><value>Back</value></data>
+  <data name="Notes_MovePath" xml:space="preserve"><value>Selected folder path</value></data>
+  <data name="Notes_RootFolder" xml:space="preserve"><value>Root</value></data>
   <data name="Notes_ArchiveConfirmTitle" xml:space="preserve"><value>Archive note item?</value></data>
   <data name="Notes_ArchiveConfirmSubtitle" xml:space="preserve"><value>This item will be removed from the active notes tree.</value></data>
   <data name="Notes_LoadTreeError" xml:space="preserve"><value>Failed to load notes tree</value></data>
@@ -681,6 +688,7 @@
   <data name="Notes_CreateFolderError" xml:space="preserve"><value>Failed to create folder</value></data>
   <data name="Notes_CreateNoteError" xml:space="preserve"><value>Failed to create note</value></data>
   <data name="Notes_RenameNodeError" xml:space="preserve"><value>Failed to rename note item</value></data>
+  <data name="Notes_MoveNodeError" xml:space="preserve"><value>Failed to move note</value></data>
   <data name="Notes_ArchiveNodeError" xml:space="preserve"><value>Failed to archive note item</value></data>
   <data name="Notes_LoadLinkedNotesError" xml:space="preserve"><value>Failed to load linked notes</value></data>
   <data name="Notes_CreateProjectNoteError" xml:space="preserve"><value>Failed to create project note</value></data>

@@ -62,6 +62,14 @@ public record struct RenameNoteNodeAction(RenameNoteNodeRequest Request);
 
 public record struct SetNotesNodeRenamingAction(bool IsRenaming);
 
+public record struct OpenMoveNoteNodeModalAction(NoteTreeNodeDto Node);
+
+public record struct SetMoveNoteNodeModalOpenedAction(bool IsOpened);
+
+public record struct MoveNoteNodeAction(MoveNoteNodeRequest Request);
+
+public record struct SetNotesNodeMovingAction(bool IsMoving);
+
 public record struct OpenArchiveNoteNodeConfirmationAction(NoteTreeNodeDto Node);
 
 public record struct SetArchiveNoteNodeConfirmationOpenedAction(bool IsOpened);

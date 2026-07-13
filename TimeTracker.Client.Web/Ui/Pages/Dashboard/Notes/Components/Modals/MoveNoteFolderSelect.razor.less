@@ -1,0 +1,76 @@
+.notes-folder-select {
+  display: grid;
+  gap: 12px;
+}
+
+.notes-folder-select-header {
+  display: flex;
+  min-height: 28px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notes-folder-select-back {
+  display: inline-flex;
+  height: 28px;
+  width: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #475569;
+
+  &:hover {
+    background: #f8fafc;
+  }
+}
+
+.notes-folder-select-list {
+  min-height: 176px;
+  max-height: 264px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+.notes-folder-select-item {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 20px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  padding: 8px;
+  color: #334155;
+  text-align: left;
+
+  &:hover {
+    background: #eff6ff;
+    color: #1d4ed8;
+  }
+}
+
+.notes-folder-select-empty {
+  padding: 12px;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.notes-folder-select-path {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  color: #475569;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.notes-folder-select-path-item {
+  overflow: hidden;
+  max-width: 160px;
+  text-overflow: ellipsis;
+}

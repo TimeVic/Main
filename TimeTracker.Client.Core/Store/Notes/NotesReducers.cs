@@ -256,6 +256,33 @@ public class NotesReducers
     }
 
     [ReducerMethod]
+    public static NotesState OpenMoveNoteNodeModalReducer(NotesState state, OpenMoveNoteNodeModalAction action)
+    {
+        return state with
+        {
+            NodeToMove = action.Node
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState SetMoveNoteNodeModalOpenedReducer(NotesState state, SetMoveNoteNodeModalOpenedAction action)
+    {
+        return state with
+        {
+            NodeToMove = action.IsOpened ? state.NodeToMove : null
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState SetNotesNodeMovingReducer(NotesState state, SetNotesNodeMovingAction action)
+    {
+        return state with
+        {
+            IsMovingNode = action.IsMoving
+        };
+    }
+
+    [ReducerMethod]
     public static NotesState OpenArchiveNoteNodeConfirmationReducer(NotesState state, OpenArchiveNoteNodeConfirmationAction action)
     {
         return state with
@@ -284,7 +311,7 @@ public class NotesReducers
             currentDocument = new NoteDocumentDto
             {
                 Id = currentDocument.Id,
-                ParentId = currentDocument.ParentId,
+                ParentId = action.Node.ParentId,
                 Title = action.Node.Title,
                 MarkdownContent = currentDocument.MarkdownContent,
                 Visibility = currentDocument.Visibility,

@@ -35,6 +35,8 @@ public record NotesState
 
     public bool IsRenamingNode { get; init; }
 
+    public bool IsMovingNode { get; init; }
+
     public bool IsSaveError { get; init; }
 
     public string? TreeErrorLocalizationKey { get; init; }
@@ -46,6 +48,8 @@ public record NotesState
     public Guid? ActiveParentId { get; init; }
 
     public NoteTreeNodeDto? NodeToRename { get; init; }
+
+    public NoteTreeNodeDto? NodeToMove { get; init; }
 
     public NoteTreeNodeDto? NodeToArchive { get; init; }
 

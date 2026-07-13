@@ -37,6 +37,9 @@ public partial class NotesTreeBlock
     public EventCallback<NoteTreeNodeDto> RenameRequested { get; set; }
 
     [Parameter]
+    public EventCallback<NoteTreeNodeDto> MoveRequested { get; set; }
+
+    [Parameter]
     public EventCallback<NoteTreeNodeDto> ArchiveRequested { get; set; }
 
     private string ContainerClass => IsEmbedded

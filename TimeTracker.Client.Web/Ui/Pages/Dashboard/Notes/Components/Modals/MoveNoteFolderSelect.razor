@@ -1,0 +1,53 @@
+@using TimeTracker.Api.Shared.Dto.Entity.Notes
+
+@inherits BaseReactiveComponent
+
+<div class="notes-folder-select">
+    <div class="notes-folder-select-header">
+        <span class="text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Notes_MoveParent"]</span>
+        @if (SelectedFolderId.HasValue)
+        {
+            <button
+                type="button"
+                class="notes-folder-select-back"
+                title="@DashboardLocalizer["Notes_MoveBack"].Value"
+                aria-label="@DashboardLocalizer["Notes_MoveBack"].Value"
+                @onclick="@GoBack">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+        }
+    </div>
+
+    <div class="notes-folder-select-list" role="listbox" aria-label="@DashboardLocalizer["Notes_MoveParent"].Value">
+        @if (Folders.Any())
+        {
+            @foreach (var folder in Folders)
+            {
+                <button
+                    type="button"
+                    class="notes-folder-select-item"
+                    @key="folder.Id"
+                    @onclick="@(() => OpenFolder(folder.Id))">
+                    <i class="fa-regular fa-folder text-amber-500"></i>
+                    <span class="truncate">@folder.Title</span>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                </button>
+            }
+        }
+        else
+        {
+            <div class="notes-folder-select-empty">@DashboardLocalizer["Notes_EmptyFolder"]</div>
+        }
+    </div>
+
+    <div class="notes-folder-select-path" aria-label="@DashboardLocalizer["Notes_MovePath"].Value">
+        @for (var index = 0; index < Path.Count; index++)
+        {
+            <span class="notes-folder-select-path-item">@Path[index]</span>
+            @if (index < Path.Count - 1)
+            {
+                <i class="fa-solid fa-chevron-right text-[10px] text-slate-400"></i>
+            }
+        }
+    </div>
+</div>

@@ -172,6 +172,18 @@ public partial class NotesPage
         return Task.CompletedTask;
     }
 
+    private Task OpenMoveModal(NoteTreeNodeDto node)
+    {
+        Dispatcher.Dispatch(new OpenMoveNoteNodeModalAction(node));
+        return Task.CompletedTask;
+    }
+
+    private Task MoveNode(MoveNoteNodeRequest request)
+    {
+        Dispatcher.Dispatch(new MoveNoteNodeAction(request));
+        return Task.CompletedTask;
+    }
+
     private Task OpenArchiveConfirmation(NoteTreeNodeDto node)
     {
         Dispatcher.Dispatch(new OpenArchiveNoteNodeConfirmationAction(node));
@@ -199,6 +211,12 @@ public partial class NotesPage
     private Task OnRenameModalChanged(bool isOpened)
     {
         Dispatcher.Dispatch(new SetRenameNoteNodeModalOpenedAction(isOpened));
+        return Task.CompletedTask;
+    }
+
+    private Task OnMoveModalChanged(bool isOpened)
+    {
+        Dispatcher.Dispatch(new SetMoveNoteNodeModalOpenedAction(isOpened));
         return Task.CompletedTask;
     }
 
