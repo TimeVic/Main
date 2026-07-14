@@ -1,5 +1,6 @@
 using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Business.Orm.Core;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
@@ -20,6 +21,7 @@ public class NoteNodeEntity : AEntity
     public virtual required UserEntity CreatedByUser { get; set; }
     public virtual UserEntity? UpdatedByUser { get; set; }
     public virtual NoteContentEntity? LastContent { get; set; }
+    public virtual ICollection<StoredFileEntity> Attachments { get; set; } = new List<StoredFileEntity>();
     public virtual ICollection<NoteNodeEntity> Children { get; set; } = new List<NoteNodeEntity>();
     public virtual ICollection<NoteLinkEntity> Links { get; set; } = new List<NoteLinkEntity>();
     public virtual ICollection<NoteNodeHistoryEntity> History { get; set; } = new List<NoteNodeHistoryEntity>();

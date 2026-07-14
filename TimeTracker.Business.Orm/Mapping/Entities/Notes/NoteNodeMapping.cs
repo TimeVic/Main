@@ -52,6 +52,14 @@ public class NoteNodeMapping : BaseGuidMappings<NoteNodeEntity>
             .Nullable()
             .Cascade.None();
 
+        HasManyToMany(x => x.Attachments)
+            .Table("note_node_stored_files")
+            .ParentKeyColumn("note_node_id")
+            .ChildKeyColumn("stored_file_id")
+            .FetchType.Select()
+            .LazyLoad()
+            .Cascade.None();
+
         HasMany(x => x.Children)
             .KeyColumn("parent_id")
             .Fetch.Select()

@@ -167,7 +167,7 @@ window.scrollHelper = {
     }
 };
 
-window.taskAttachmentInput = (() => {
+window.attachmentInput = (() => {
     const instances = new Map();
     let nextId = 0;
 
@@ -228,7 +228,7 @@ window.taskAttachmentInput = (() => {
             return null;
         }
 
-        const id = `task-attachment-input-${++nextId}`;
+        const id = `attachment-input-${++nextId}`;
         let dragDepth = 0;
 
         const setDragActive = (isActive) => {

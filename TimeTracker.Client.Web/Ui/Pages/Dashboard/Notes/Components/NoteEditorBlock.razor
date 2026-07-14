@@ -1,11 +1,25 @@
 @using LumexUI.Common
 @using TimeTracker.Business.Common.Constants.Notes
+@using TimeTracker.Business.Common.Constants.Storage
 @using TimeTracker.Client.Core.Constants.Ui
+@using TimeTracker.Client.Web.Ui.Shared.Components.Storage
 @using TimeTracker.Client.Web.Services.UI
 @inject MarkdownService MarkdownService
 @inherits BaseReactiveComponent
 
-<section class="@ContainerClass">
+<section @ref="_attachmentDropZone" class="@ContainerClass relative transition @(_isDragActive ? "ring-2 ring-blue-500 ring-inset" : null)">
+    <InputFile
+        @ref="_attachmentInput"
+        class="hidden"
+        OnChange="@OnAttachmentsInputFileChange"
+        multiple
+        accept="@AttachmentAcceptTypes" />
+    @if (_isDragActive && Document != null)
+    {
+        <div class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-2xl border-2 border-dashed border-blue-500 bg-blue-50/80 text-blue-600">
+            <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+        </div>
+    }
     @if (IsLoading)
     {
         <div class="flex flex-1 flex-col">
@@ -153,6 +167,21 @@
                     {
                         @((MarkupString)MarkdownService.ToHtml(MarkdownContent))
                     }
+                </div>
+                <div class="mt-5 border-t border-slate-200 pt-4">
+                    <p class="flex items-center gap-2 text-sm text-slate-500">
+                        <i class="fa-solid fa-paperclip text-xs text-slate-400"></i>
+                        <span>@DashboardLocalizer["Notes_AttachmentsHint"]</span>
+                    </p>
+                    <AttachmentsBlock
+                        Class="mt-4"
+                        ListClass="flex flex-wrap gap-3"
+                        PreviewItemClass="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition"
+                        EntityId="@Document.Id"
+                        EntityType="@StorageEntityType.NoteNode"
+                        Files="@Document.Attachments"
+                        UploadingFiles="@_uploadingAttachments"
+                        FilesChanged="@AttachmentsChanged" />
                 </div>
             </div>
         }

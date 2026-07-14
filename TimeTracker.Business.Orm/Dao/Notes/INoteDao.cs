@@ -21,6 +21,8 @@ public interface INoteDao : IDomainService
 
     Task<NoteNodeEntity?> GetNodeByIdAsync(WorkspaceEntity workspace, Guid? noteId, bool isIncludeArchived = false);
 
+    Task<NoteNodeEntity?> GetNodeByIdAsync(Guid noteId);
+
     Task<ICollection<NoteNodeEntity>> GetTreeAsync(WorkspaceEntity workspace, bool isIncludeArchived);
 
     Task<int> GetNextSortOrderAsync(WorkspaceEntity workspace, NoteNodeEntity? parent);

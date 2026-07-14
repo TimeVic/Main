@@ -1,6 +1,7 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Client.Core.Store.Notes;
@@ -109,6 +110,12 @@ public partial class NotesPage
     private Task OnMarkdownChanged(string markdown)
     {
         Dispatcher.Dispatch(new SetNoteEditorMarkdownAction(markdown));
+        return Task.CompletedTask;
+    }
+
+    private Task OnAttachmentsChanged(ICollection<StoredFileDto> attachments)
+    {
+        Dispatcher.Dispatch(new SetNoteDocumentAttachmentsAction(attachments));
         return Task.CompletedTask;
     }
 

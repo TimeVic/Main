@@ -67,6 +67,15 @@ public class NoteDao : INoteDao
             .Where(item => item.Workspace.Id == workspace.Id)
             .Where(item => item.Id == noteId.Value)
             .Where(item => isIncludeArchived || item.ArchivedAt == null)
+            .FetchMany(item => item.Attachments)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<NoteNodeEntity?> GetNodeByIdAsync(Guid noteId)
+    {
+        return await _sessionProvider.CurrentSession.Query<NoteNodeEntity>()
+            .Where(item => item.Id == noteId)
+            .Where(item => item.ArchivedAt == null)
             .FirstOrDefaultAsync();
     }
 
