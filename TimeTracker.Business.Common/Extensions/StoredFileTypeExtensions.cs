@@ -35,6 +35,7 @@ public static class StoredFileTypeExtensions
                 "image/bmp",
                 "image/gif",
                 "text/plain",
+                "text/markdown",
                 "application/xml",
                 "text/css",
                 "text/csv",

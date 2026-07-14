@@ -137,6 +137,39 @@ public class UploadTest: BaseTest
     }
 
     [Fact]
+    public async Task ShouldUploadMarkdownAttachmentToNote()
+    {
+        var note = await _noteDao.CreateNodeAsync(
+            _workspace,
+            null,
+            _user,
+            NoteNodeType.Document,
+            "Markdown.md",
+            string.Empty,
+            NoteVisibility.Workspace,
+            1000
+        );
+        var response = await PostMultipartFormDataRequestAsync(
+            Url,
+            _jwtToken,
+            new Dictionary<string, object>
+            {
+                { "WorkspaceId", _workspace.Id },
+                { "EntityId", note.Id },
+                { "EntityType", StorageEntityType.NoteNode },
+                { "FileType", StoredFileType.Attachment }
+            },
+            CreateFormFile("deployment.md")
+        );
+        response.EnsureSuccessStatusCode();
+
+        var uploadedFile = await response.GetJsonDataAsync<StoredFileDto>();
+
+        Assert.Equal("md", uploadedFile.Extension);
+        Assert.Equal("text/markdown", uploadedFile.MimeType);
+    }
+
+    [Fact]
     public async Task ShouldUploadIfHasNotAccessToEntity()
     {
         var (otherToken, user2, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
