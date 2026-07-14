@@ -42,7 +42,21 @@ public class SelectDocumentEffect : Effect<SelectNoteDocumentAction>
                 throw new InvalidOperationException("Notes document response is empty.");
             }
 
-            dispatcher.Dispatch(new SetNoteDocumentAction(document, string.IsNullOrWhiteSpace(document.MarkdownContent)));
+            if (!document.LastContentId.HasValue)
+            {
+                throw new InvalidOperationException("Notes document has no current content.");
+            }
+
+            var content = await _apiService.NotesGetContentAsync(new GetNoteContentRequest
+            {
+                ContentId = document.LastContentId.Value
+            });
+            if (content == null)
+            {
+                throw new InvalidOperationException("Notes content response is empty.");
+            }
+
+            dispatcher.Dispatch(new SetNoteDocumentAction(document, content, string.IsNullOrWhiteSpace(content.MarkdownContent)));
             dispatcher.Dispatch(new ExpandNoteParentsAction(action.NoteId));
         }
         catch (Exception e)

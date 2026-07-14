@@ -14,7 +14,7 @@ public interface INoteDao : IDomainService
         UserEntity createdByUser,
         NoteNodeType type,
         string title,
-        string? markdownContent,
+        string? initialMarkdownContent,
         NoteVisibility visibility,
         int sortOrder
     );
@@ -26,6 +26,10 @@ public interface INoteDao : IDomainService
     Task<int> GetNextSortOrderAsync(WorkspaceEntity workspace, NoteNodeEntity? parent);
 
     Task SaveNodeAsync(NoteNodeEntity node);
+
+    Task<NoteContentEntity> CreateContentAsync(NoteNodeEntity noteNode, string markdownContent, DateTime? createdAt = null);
+
+    Task<NoteContentEntity?> GetContentByIdAsync(WorkspaceEntity workspace, Guid contentId);
 
     Task<ICollection<NoteNodeHistoryEntity>> GetHistoryAsync(NoteNodeEntity noteNode);
 

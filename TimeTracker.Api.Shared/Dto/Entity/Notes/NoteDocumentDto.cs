@@ -11,7 +11,7 @@ public class NoteDocumentDto : IResponse
 
     public string Title { get; set; } = string.Empty;
 
-    public string MarkdownContent { get; set; } = string.Empty;
+    public Guid? LastContentId { get; set; }
 
     public NoteVisibility Visibility { get; set; }
 

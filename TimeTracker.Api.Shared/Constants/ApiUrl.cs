@@ -144,9 +144,11 @@ public class ApiUrl
 
     public const string NotesGetTree = "dashboard/notes/get-tree";
     public const string NotesGetDocument = "dashboard/notes/get-document";
+    public const string NotesGetContent = "dashboard/notes/get-content";
     public const string NotesCreateFolder = "dashboard/notes/create-folder";
     public const string NotesCreateDocument = "dashboard/notes/create-document";
     public const string NotesUpdateDocument = "dashboard/notes/update-document";
+    public const string NotesUpdateContent = "dashboard/notes/update-content";
     public const string NotesRenameNode = "dashboard/notes/rename-node";
     public const string NotesMoveNode = "dashboard/notes/move-node";
     public const string NotesArchiveNode = "dashboard/notes/archive-node";

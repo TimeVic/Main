@@ -1,6 +1,7 @@
 using Fluxor;
 using Microsoft.Extensions.Localization;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Client.Core.Localization;
 using TimeTracker.Client.Core.Services.Http;
@@ -39,16 +40,31 @@ public class CreateDocumentEffect : Effect<CreateNoteDocumentAction>
                 throw new InvalidOperationException("Notes create response is empty.");
             }
 
+            if (!document.LastContentId.HasValue)
+            {
+                throw new InvalidOperationException("New notes document has no current content.");
+            }
+
+            var content = await _apiService.NotesGetContentAsync(new GetNoteContentRequest
+            {
+                ContentId = document.LastContentId.Value
+            });
+            if (content == null)
+            {
+                throw new InvalidOperationException("New notes content response is empty.");
+            }
+
             dispatcher.Dispatch(new ReplaceNoteTreeNodeAction(new NoteTreeNodeDto
             {
                 Id = document.Id,
                 ParentId = document.ParentId,
                 Type = NoteNodeType.Document,
                 Title = document.Title,
+                LastContentId = document.LastContentId,
                 Visibility = document.Visibility,
                 UpdatedAt = document.UpdatedAt
             }));
-            dispatcher.Dispatch(new SetNoteDocumentAction(document, true));
+            dispatcher.Dispatch(new SetNoteDocumentAction(document, content, true));
             dispatcher.Dispatch(new ExpandNoteParentsAction(document.Id));
             dispatcher.Dispatch(new LoadNotesTreeAction(true));
             dispatcher.Dispatch(new SetCreateNoteDocumentModalOpenedAction(false));

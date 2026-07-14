@@ -25,6 +25,12 @@ public class NotesController(ILifetimeScope scope) : MainApiControllerBase(scope
             .For<NoteDocumentDto>()
             .With(request);
 
+    [HttpPost("get-content")]
+    public Task<IActionResult> GetContent([FromBody] GetNoteContentRequest request)
+        => this.RequestAsync()
+            .For<NoteContentDto>()
+            .With(request);
+
     [HttpPost("get-history")]
     public Task<IActionResult> GetHistory([FromBody] GetNoteNodeHistoryRequest request)
         => this.RequestAsync()
@@ -47,6 +53,12 @@ public class NotesController(ILifetimeScope scope) : MainApiControllerBase(scope
     public Task<IActionResult> UpdateDocument([FromBody] UpdateNoteDocumentRequest request)
         => this.RequestAsync()
             .For<NoteDocumentDto>()
+            .With(request);
+
+    [HttpPost("update-content")]
+    public Task<IActionResult> UpdateContent([FromBody] UpdateNoteContentRequest request)
+        => this.RequestAsync()
+            .For<NoteContentDto>()
             .With(request);
 
     [HttpPost("rename-node")]

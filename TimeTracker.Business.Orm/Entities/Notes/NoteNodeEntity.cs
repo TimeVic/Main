@@ -9,7 +9,6 @@ public class NoteNodeEntity : AEntity
 {
     public virtual NoteNodeType Type { get; set; }
     public virtual required string Title { get; set; }
-    public virtual string? MarkdownContent { get; set; }
     public virtual int SortOrder { get; set; }
     public virtual NoteVisibility Visibility { get; set; }
     public virtual DateTime? ArchivedAt { get; set; }
@@ -20,6 +19,7 @@ public class NoteNodeEntity : AEntity
     public virtual NoteNodeEntity? Parent { get; set; }
     public virtual required UserEntity CreatedByUser { get; set; }
     public virtual UserEntity? UpdatedByUser { get; set; }
+    public virtual NoteContentEntity? LastContent { get; set; }
     public virtual ICollection<NoteNodeEntity> Children { get; set; } = new List<NoteNodeEntity>();
     public virtual ICollection<NoteLinkEntity> Links { get; set; } = new List<NoteLinkEntity>();
     public virtual ICollection<NoteNodeHistoryEntity> History { get; set; } = new List<NoteNodeHistoryEntity>();

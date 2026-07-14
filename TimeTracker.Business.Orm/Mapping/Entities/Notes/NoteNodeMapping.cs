@@ -13,7 +13,6 @@ public class NoteNodeMapping : BaseGuidMappings<NoteNodeEntity>
 
         Map(x => x.Type).Enum<NoteNodeType>();
         Map(x => x.Title);
-        Map(x => x.MarkdownContent).Length(5_000_000).Nullable();
         Map(x => x.SortOrder);
         Map(x => x.Visibility).Enum<NoteVisibility>();
         Map(x => x.ArchivedAt).DateTimeNullable();
@@ -45,6 +44,13 @@ public class NoteNodeMapping : BaseGuidMappings<NoteNodeEntity>
             .LazyLoad()
             .Nullable()
             .Cascade.SaveUpdate();
+
+        References(x => x.LastContent)
+            .Column("last_content_id")
+            .Fetch.Select()
+            .LazyLoad()
+            .Nullable()
+            .Cascade.None();
 
         HasMany(x => x.Children)
             .KeyColumn("parent_id")

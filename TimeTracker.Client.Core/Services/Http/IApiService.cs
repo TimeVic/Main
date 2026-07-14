@@ -122,11 +122,15 @@ public interface IApiService
 
     Task<NoteDocumentDto?> NotesGetDocumentAsync(GetNoteDocumentRequest model);
 
+    Task<NoteContentDto?> NotesGetContentAsync(GetNoteContentRequest model);
+
     Task<NoteTreeNodeDto?> NotesCreateFolderAsync(CreateNoteFolderRequest model);
 
     Task<NoteDocumentDto?> NotesCreateDocumentAsync(CreateNoteDocumentRequest model);
 
     Task<NoteDocumentDto?> NotesUpdateDocumentAsync(UpdateNoteDocumentRequest model);
+
+    Task<NoteContentDto?> NotesUpdateContentAsync(UpdateNoteContentRequest model);
 
     Task<NoteTreeNodeDto?> NotesRenameNodeAsync(RenameNoteNodeRequest model);
 

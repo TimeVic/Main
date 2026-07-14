@@ -25,7 +25,6 @@ public partial class CreateNoteModal
 
     private readonly CreateNoteDocumentRequest _model = new()
     {
-        MarkdownContent = string.Empty,
         Visibility = NoteVisibility.Workspace
     };
 
@@ -70,7 +69,6 @@ public partial class CreateNoteModal
     {
         _model.ParentId = ParentId;
         _model.Title = string.Empty;
-        _model.MarkdownContent = string.Empty;
         _model.Visibility = NoteVisibility.Workspace;
         _model.SortOrder = null;
         _model.Links = null;

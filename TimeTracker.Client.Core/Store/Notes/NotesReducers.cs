@@ -73,8 +73,9 @@ public class NotesReducers
         {
             SelectedNoteId = action.Document.Id,
             CurrentDocument = action.Document,
+            CurrentContent = action.Content,
             EditorTitle = action.Document.Title,
-            EditorMarkdown = action.Document.MarkdownContent,
+            EditorMarkdown = action.Content.MarkdownContent,
             EditorVisibility = action.Document.Visibility,
             IsEditingDocument = action.IsEditing,
             IsSaveError = false
@@ -139,7 +140,7 @@ public class NotesReducers
             : state with
             {
                 EditorTitle = state.CurrentDocument.Title,
-                EditorMarkdown = state.CurrentDocument.MarkdownContent,
+                EditorMarkdown = state.CurrentContent?.MarkdownContent ?? string.Empty,
                 EditorVisibility = state.CurrentDocument.Visibility,
                 IsEditingDocument = false,
                 IsSaveError = false
@@ -171,6 +172,7 @@ public class NotesReducers
         {
             SelectedNoteId = null,
             CurrentDocument = null,
+            CurrentContent = null,
             EditorTitle = string.Empty,
             EditorMarkdown = string.Empty,
             EditorVisibility = NoteVisibility.Workspace,
@@ -313,7 +315,7 @@ public class NotesReducers
                 Id = currentDocument.Id,
                 ParentId = action.Node.ParentId,
                 Title = action.Node.Title,
-                MarkdownContent = currentDocument.MarkdownContent,
+                LastContentId = currentDocument.LastContentId,
                 Visibility = currentDocument.Visibility,
                 CreatedAt = currentDocument.CreatedAt,
                 UpdatedAt = currentDocument.UpdatedAt,
@@ -346,6 +348,7 @@ public class NotesReducers
             ParentId = existingNode.ParentId,
             Type = existingNode.Type,
             Title = action.Document.Title,
+            LastContentId = action.Document.LastContentId,
             Visibility = action.Document.Visibility,
             SortOrder = existingNode.SortOrder,
             UpdatedAt = action.Document.UpdatedAt

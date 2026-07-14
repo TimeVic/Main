@@ -45,7 +45,7 @@ public class CreateDocumentRequestHandler : NoteRequestHandlerBase, IAsyncReques
             context.User,
             NoteNodeType.Document,
             NormalizeTitle(request.Title),
-            NormalizeMarkdown(request.MarkdownContent),
+            string.Empty,
             request.Visibility,
             await ResolveSortOrderAsync(context.Workspace, parent, request.SortOrder)
         );

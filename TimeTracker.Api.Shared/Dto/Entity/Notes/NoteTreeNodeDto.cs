@@ -13,6 +13,8 @@ public class NoteTreeNodeDto : IResponse
 
     public string Title { get; set; } = string.Empty;
 
+    public Guid? LastContentId { get; set; }
+
     public NoteVisibility Visibility { get; set; }
 
     public int SortOrder { get; set; }
