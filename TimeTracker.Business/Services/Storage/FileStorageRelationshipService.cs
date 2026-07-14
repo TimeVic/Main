@@ -6,6 +6,8 @@ using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Dao.Notes;
+using TimeTracker.Business.Orm.Entities.Notes;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 
@@ -16,18 +18,21 @@ public class FileStorageRelationshipService: IFileStorageRelationshipService
     private readonly IUserDao _userDao;
     private readonly ITaskDao _taskDao;
     private readonly ITaskCommentDao _taskCommentDao;
+    private readonly INoteDao _noteDao;
     private readonly IDbSessionProvider _sessionProvider;
 
     public FileStorageRelationshipService(
         IUserDao userDao,
         ITaskDao taskDao,
         ITaskCommentDao taskCommentDao,
+        INoteDao noteDao,
         IDbSessionProvider sessionProvider
     )
     {
         _userDao = userDao;
         _taskDao = taskDao;
         _taskCommentDao = taskCommentDao;
+        _noteDao = noteDao;
         _sessionProvider = sessionProvider;
     }
     
@@ -48,6 +53,10 @@ public class FileStorageRelationshipService: IFileStorageRelationshipService
         if (entityType == StorageEntityType.TaskComment)
         {
             entity = await _taskCommentDao.GetById(entityId);
+        }
+        if (entityType == StorageEntityType.NoteNode)
+        {
+            entity = await _noteDao.GetNodeByIdAsync(entityId);
         }
         if (entity == null)
         {
@@ -73,6 +82,10 @@ public class FileStorageRelationshipService: IFileStorageRelationshipService
         if (entity is TaskCommentEntity taskCommentEntity)
         {
             taskCommentEntity.Attachments.Add(file);
+        }
+        if (entity is NoteNodeEntity noteNodeEntity)
+        {
+            noteNodeEntity.Attachments.Add(file);
         }
         await _sessionProvider.CurrentSession.SaveAsync(entity);
     }

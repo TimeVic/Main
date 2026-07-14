@@ -12,6 +12,8 @@ using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
+using TimeTracker.Business.Orm.Dao.Notes;
+using TimeTracker.Business.Orm.Entities.Notes;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
@@ -27,18 +29,21 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
         private readonly IApiRequestService _apiRequestService;
         private readonly ISecurityManager _securityManager;
         private readonly ITaskDao _taskDao;
+        private readonly INoteDao _noteDao;
 
         public GetListHandler(
             IMapper mapper,
             IApiRequestService apiRequestService,
             ISecurityManager securityManager,
-            ITaskDao taskDao
+            ITaskDao taskDao,
+            INoteDao noteDao
         )
         {
             _mapper = mapper;
             _apiRequestService = apiRequestService;
             _securityManager = securityManager;
             _taskDao = taskDao;
+            _noteDao = noteDao;
         }
     
         public async Task<GetListResponse> ExecuteAsync(GetListRequest request)
@@ -56,6 +61,19 @@ namespace TimeTracker.Api.Controllers.Dashboard.Storage.Actions
                 return new GetListResponse(
                     _mapper.Map<ICollection<StoredFileDto>>(task.Attachments),
                     task.Attachments.Count
+                );
+            }
+            if (request.EntityType == StorageEntityType.NoteNode)
+            {
+                var note = await _noteDao.GetNodeByIdAsync(request.EntityId);
+                RecordNotFoundException.ThrowIfNull(note);
+                if (!await _securityManager.HasAccess(AccessLevel.Read, user, note))
+                {
+                    throw new HasNoAccessException();
+                }
+                return new GetListResponse(
+                    _mapper.Map<ICollection<StoredFileDto>>(note.Attachments),
+                    note.Attachments.Count
                 );
             }
             throw new ValidationException("Incorrect entity type");

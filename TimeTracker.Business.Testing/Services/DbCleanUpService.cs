@@ -37,6 +37,7 @@ public class DbCleanUpService: IDbCleanUpService
             "note_links",
             "note_node_history",
             "note_contents",
+            "note_node_stored_files",
             "note_nodes",
             "client_payments",
             "member_payments",

@@ -1,11 +1,17 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
 using LumexUI;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Business.Common.Constants.Notes;
+using TimeTracker.Business.Common.Constants.Storage;
+using TimeTracker.Business.Common.Extensions;
+using TimeTracker.Client.Web.Ui.Shared.Components.Storage;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components;
 
-public partial class NoteEditorBlock
+public partial class NoteEditorBlock : IDisposable
 {
     private const int MarkdownTextareaMinRows = 24;
     private const int MarkdownTextareaMaxRows = int.MaxValue;
@@ -74,9 +80,106 @@ public partial class NoteEditorBlock
     [Parameter]
     public EventCallback OnSave { get; set; }
 
+    [Parameter]
+    public EventCallback<ICollection<StoredFileDto>> AttachmentsChanged { get; set; }
+
+    [Inject]
+    private ILogger<NoteEditorBlock> Logger { get; set; } = null!;
+
+    private InputFile? _attachmentInput;
+    private ElementReference _attachmentDropZone;
+    private DotNetObjectReference<NoteEditorBlock>? _dotNetObjectReference;
+    private string? _attachmentInteropId;
+    private bool _isAttachmentInteropInitialized;
+    private bool _isDragActive;
+    private readonly List<AttachmentsBlock.UploadingAttachment> _uploadingAttachments = new();
+
     private string ContainerClass => IsEmbedded
         ? "flex min-h-[720px] w-full flex-col bg-white"
         : "flex min-h-[720px] flex-col rounded-2xl border border-slate-200 bg-white shadow-sm";
+
+    private string AttachmentAcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (_isAttachmentInteropInitialized || _attachmentInput == null)
+        {
+            return;
+        }
+
+        _dotNetObjectReference = DotNetObjectReference.Create(this);
+        _attachmentInteropId = await Js.InvokeAsync<string>(
+            "attachmentInput.attach",
+            _attachmentDropZone,
+            _attachmentInput.Element.Value,
+            _dotNetObjectReference
+        );
+        _isAttachmentInteropInitialized = true;
+    }
+
+    public void Dispose()
+    {
+        if (!string.IsNullOrWhiteSpace(_attachmentInteropId))
+        {
+            _ = Js.InvokeVoidAsync("attachmentInput.detach", _attachmentInteropId);
+        }
+
+        _dotNetObjectReference?.Dispose();
+    }
+
+    [JSInvokable]
+    public Task SetAttachmentDragActive(bool isActive)
+    {
+        _isDragActive = isActive;
+        return InvokeAsync(StateHasChanged);
+    }
+
+    private async Task OnAttachmentsInputFileChange(InputFileChangeEventArgs eventArguments)
+    {
+        if (Document == null || eventArguments.FileCount == 0)
+        {
+            return;
+        }
+
+        var files = eventArguments.GetMultipleFiles(eventArguments.FileCount).ToList();
+        var uploadingAttachments = files
+            .Select(file => new AttachmentsBlock.UploadingAttachment(Guid.NewGuid(), file.Name, file.ContentType))
+            .ToList();
+        _uploadingAttachments.AddRange(uploadingAttachments);
+        await InvokeAsync(StateHasChanged);
+
+        foreach (var fileInfo in files.Zip(uploadingAttachments))
+        {
+            try
+            {
+                var uploadedFile = await ApiService.StorageUploadFileAsync(
+                    Document.Id,
+                    StorageEntityType.NoteNode,
+                    StoredFileType.Attachment,
+                    fileInfo.First
+                );
+                if (uploadedFile == null)
+                {
+                    ToastService.ShowError(DashboardLocalizer["Notes_AttachmentUploadError"].Value);
+                    continue;
+                }
+
+                Document.Attachments.Add(uploadedFile);
+                await AttachmentsChanged.InvokeAsync(Document.Attachments.ToList());
+            }
+            catch (Exception exception)
+            {
+                Logger.LogError(exception, "Failed to upload note attachment");
+                ToastService.ShowError(exception.Message);
+            }
+            finally
+            {
+                _uploadingAttachments.Remove(fileInfo.Second);
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
 
     private async Task OnTitleInput(ChangeEventArgs args)
     {

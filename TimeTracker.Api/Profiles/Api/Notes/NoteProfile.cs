@@ -1,4 +1,5 @@
 using AutoMapper;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Entities.Notes;
@@ -32,7 +33,8 @@ public class NoteProfile : Profile
                 Visibility = src.Visibility,
                 CreatedAt = src.CreatedAt,
                 UpdatedAt = src.UpdatedAt,
-                Links = mapper.Mapper.Map<ICollection<NoteLinkDto>>(src.Links.ToList())
+                Links = mapper.Mapper.Map<ICollection<NoteLinkDto>>(src.Links.ToList()),
+                Attachments = mapper.Mapper.Map<ICollection<StoredFileDto>>(src.Attachments.ToList())
             });
 
         CreateMap<NoteContentEntity, NoteContentDto>()

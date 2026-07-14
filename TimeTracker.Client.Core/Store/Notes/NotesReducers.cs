@@ -83,6 +83,35 @@ public class NotesReducers
     }
 
     [ReducerMethod]
+    public static NotesState SetNoteDocumentAttachmentsReducer(
+        NotesState state,
+        SetNoteDocumentAttachmentsAction action
+    )
+    {
+        if (state.CurrentDocument == null)
+        {
+            return state;
+        }
+
+        var document = state.CurrentDocument;
+        return state with
+        {
+            CurrentDocument = new NoteDocumentDto
+            {
+                Id = document.Id,
+                ParentId = document.ParentId,
+                Title = document.Title,
+                LastContentId = document.LastContentId,
+                Visibility = document.Visibility,
+                CreatedAt = document.CreatedAt,
+                UpdatedAt = document.UpdatedAt,
+                Links = document.Links,
+                Attachments = action.Attachments
+            }
+        };
+    }
+
+    [ReducerMethod]
     public static NotesState SetNoteDocumentLoadingReducer(NotesState state, SetNoteDocumentLoadingAction action)
     {
         return state with

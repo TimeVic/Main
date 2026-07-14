@@ -23,6 +23,7 @@ public partial class FileStorage: IFileStorage
         file.Tasks.Clear();
         file.Users.Clear();
         file.TaskComments.Clear();
+        file.NoteNodes.Clear();
         await _dbSessionProvider.CurrentSession.DeleteAsync(file);
     }
 }

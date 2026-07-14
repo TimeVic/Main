@@ -1,4 +1,5 @@
 using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Notes;
 
 namespace TimeTracker.Api.Shared.Dto.Entity.Notes;
@@ -20,4 +21,6 @@ public class NoteDocumentDto : IResponse
     public DateTime? UpdatedAt { get; set; }
 
     public ICollection<NoteLinkDto> Links { get; set; } = new List<NoteLinkDto>();
+
+    public ICollection<StoredFileDto> Attachments { get; set; } = new List<StoredFileDto>();
 }

@@ -4,5 +4,6 @@ public enum StorageEntityType
 {
     User = 1,
     Task,
-    TaskComment
+    TaskComment,
+    NoteNode
 }

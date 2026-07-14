@@ -2,6 +2,7 @@ using Domain.Abstractions;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.Notes;
 using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Orm.Entities
@@ -19,6 +20,7 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual long? Size { get; set; }
         public virtual ICollection<TaskEntity> Tasks { get; set; } = new List<TaskEntity>();
         public virtual ICollection<TaskCommentEntity> TaskComments { get; set; } = new List<TaskCommentEntity>();
+        public virtual ICollection<NoteNodeEntity> NoteNodes { get; set; } = new List<NoteNodeEntity>();
         public virtual ICollection<UserEntity> Users { get; set; } = new List<UserEntity>();
         
         #region Calculated
@@ -34,6 +36,10 @@ namespace TimeTracker.Business.Orm.Entities
                 if (TaskComments.Any())
                 {
                     return TaskComments.First();
+                }
+                if (NoteNodes.Any())
+                {
+                    return NoteNodes.First();
                 }
                 if (Users.Any())
                 {

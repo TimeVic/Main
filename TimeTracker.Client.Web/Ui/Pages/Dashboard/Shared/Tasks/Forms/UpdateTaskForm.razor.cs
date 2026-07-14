@@ -92,7 +92,7 @@ public partial class UpdateTaskForm: IDisposable
 
         _dotNetObjectReference = DotNetObjectReference.Create(this);
         _attachmentInteropId = await Js.InvokeAsync<string>(
-            "taskAttachmentInput.attach",
+            "attachmentInput.attach",
             _attachmentDropZone,
             _attachmentInput.Element.Value,
             _dotNetObjectReference
@@ -105,7 +105,7 @@ public partial class UpdateTaskForm: IDisposable
         _editContext?.OnFieldChanged -= OnFormFieldChanged;
         if (!string.IsNullOrWhiteSpace(_attachmentInteropId))
         {
-            _ = Js.InvokeVoidAsync("taskAttachmentInput.detach", _attachmentInteropId);
+            _ = Js.InvokeVoidAsync("attachmentInput.detach", _attachmentInteropId);
         }
         _dotNetObjectReference?.Dispose();
     }

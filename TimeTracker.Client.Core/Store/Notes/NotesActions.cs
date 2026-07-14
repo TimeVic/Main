@@ -1,4 +1,5 @@
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants.Notes;
 
@@ -19,6 +20,8 @@ public record struct ExpandNoteParentsAction(Guid NoteId);
 public record struct SelectNoteDocumentAction(Guid NoteId);
 
 public record struct SetNoteDocumentAction(NoteDocumentDto Document, NoteContentDto Content, bool IsEditing);
+
+public record struct SetNoteDocumentAttachmentsAction(ICollection<StoredFileDto> Attachments);
 
 public record struct SetNoteDocumentLoadingAction(bool IsLoading);
 

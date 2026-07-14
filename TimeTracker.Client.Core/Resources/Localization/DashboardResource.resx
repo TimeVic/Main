@@ -593,6 +593,8 @@
   <data name="UpdateTaskForm_JiraEstimateHint" xml:space="preserve"><value>Task was imported from Jira. 1d = 8h, 1w = 5d.</value></data>
   <data name="UpdateTaskForm_ManualEstimateHint" xml:space="preserve"><value>Supports Jira-like input. 1d = 8h, 1w = 5d.</value></data>
   <data name="UpdateTaskForm_AttachmentUploadError" xml:space="preserve"><value>Attachment upload error</value></data>
+  <data name="Notes_AttachmentsHint" xml:space="preserve"><value>Drag files here or paste images to attach them.</value></data>
+  <data name="Notes_AttachmentUploadError" xml:space="preserve"><value>Attachment upload error</value></data>
   <data name="AddTasksListModalForm_TaskListAdded" xml:space="preserve"><value>Task list has been added</value></data>
   <data name="AddTasksListModalForm_TaskListAddingError" xml:space="preserve"><value>Task list adding error</value></data>
   <data name="UpdateTaskListModal_TaskListUpdated" xml:space="preserve"><value>Task list was updated</value></data>
