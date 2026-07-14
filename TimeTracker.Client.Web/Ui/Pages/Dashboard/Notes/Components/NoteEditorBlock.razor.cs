@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
 using LumexUI;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
@@ -11,7 +10,7 @@ using TimeTracker.Client.Web.Ui.Shared.Components.Storage;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components;
 
-public partial class NoteEditorBlock : IDisposable
+public partial class NoteEditorBlock
 {
     private const int MarkdownTextareaMinRows = 24;
     private const int MarkdownTextareaMaxRows = int.MaxValue;
@@ -86,12 +85,6 @@ public partial class NoteEditorBlock : IDisposable
     [Inject]
     private ILogger<NoteEditorBlock> Logger { get; set; } = null!;
 
-    private InputFile? _attachmentInput;
-    private ElementReference _attachmentDropZone;
-    private DotNetObjectReference<NoteEditorBlock>? _dotNetObjectReference;
-    private string? _attachmentInteropId;
-    private bool _isAttachmentInteropInitialized;
-    private bool _isDragActive;
     private readonly List<AttachmentsBlock.UploadingAttachment> _uploadingAttachments = new();
 
     private string ContainerClass => IsEmbedded
@@ -99,41 +92,6 @@ public partial class NoteEditorBlock : IDisposable
         : "flex min-h-[720px] flex-col rounded-2xl border border-slate-200 bg-white shadow-sm";
 
     private string AttachmentAcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await base.OnAfterRenderAsync(firstRender);
-        if (_isAttachmentInteropInitialized || _attachmentInput == null)
-        {
-            return;
-        }
-
-        _dotNetObjectReference = DotNetObjectReference.Create(this);
-        _attachmentInteropId = await Js.InvokeAsync<string>(
-            "attachmentInput.attach",
-            _attachmentDropZone,
-            _attachmentInput.Element.Value,
-            _dotNetObjectReference
-        );
-        _isAttachmentInteropInitialized = true;
-    }
-
-    public void Dispose()
-    {
-        if (!string.IsNullOrWhiteSpace(_attachmentInteropId))
-        {
-            _ = Js.InvokeVoidAsync("attachmentInput.detach", _attachmentInteropId);
-        }
-
-        _dotNetObjectReference?.Dispose();
-    }
-
-    [JSInvokable]
-    public Task SetAttachmentDragActive(bool isActive)
-    {
-        _isDragActive = isActive;
-        return InvokeAsync(StateHasChanged);
-    }
 
     private async Task OnAttachmentsInputFileChange(InputFileChangeEventArgs eventArguments)
     {

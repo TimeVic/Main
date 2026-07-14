@@ -7,19 +7,7 @@
 @inject MarkdownService MarkdownService
 @inherits BaseReactiveComponent
 
-<section @ref="_attachmentDropZone" class="@ContainerClass relative transition @(_isDragActive ? "ring-2 ring-blue-500 ring-inset" : null)">
-    <InputFile
-        @ref="_attachmentInput"
-        class="hidden"
-        OnChange="@OnAttachmentsInputFileChange"
-        multiple
-        accept="@AttachmentAcceptTypes" />
-    @if (_isDragActive && Document != null)
-    {
-        <div class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-2xl border-2 border-dashed border-blue-500 bg-blue-50/80 text-blue-600">
-            <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
-        </div>
-    }
+<section class="@ContainerClass">
     @if (IsLoading)
     {
         <div class="flex flex-1 flex-col">
@@ -169,10 +157,17 @@
                     }
                 </div>
                 <div class="mt-5 border-t border-slate-200 pt-4">
-                    <p class="flex items-center gap-2 text-sm text-slate-500">
-                        <i class="fa-solid fa-paperclip text-xs text-slate-400"></i>
-                        <span>@DashboardLocalizer["Notes_AttachmentsHint"]</span>
-                    </p>
+                    <div class="relative flex min-h-24 items-center justify-center overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 text-center text-sm text-slate-500 transition hover:border-blue-400 hover:bg-blue-50">
+                        <InputFile
+                            class="absolute inset-0 z-10 h-full w-full cursor-copy opacity-0"
+                            OnChange="@OnAttachmentsInputFileChange"
+                            multiple
+                            accept="@AttachmentAcceptTypes" />
+                        <div class="pointer-events-none flex items-center gap-2">
+                            <i class="fa-solid fa-cloud-arrow-up text-base text-slate-400"></i>
+                            <span>@DashboardLocalizer["Notes_AttachmentsHint"]</span>
+                        </div>
+                    </div>
                     <AttachmentsBlock
                         Class="mt-4"
                         ListClass="flex flex-wrap gap-3"
