@@ -18,7 +18,7 @@ public record struct ExpandNoteParentsAction(Guid NoteId);
 
 public record struct SelectNoteDocumentAction(Guid NoteId);
 
-public record struct SetNoteDocumentAction(NoteDocumentDto Document, bool IsEditing);
+public record struct SetNoteDocumentAction(NoteDocumentDto Document, NoteContentDto Content, bool IsEditing);
 
 public record struct SetNoteDocumentLoadingAction(bool IsLoading);
 

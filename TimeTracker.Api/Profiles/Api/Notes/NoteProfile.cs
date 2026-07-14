@@ -16,6 +16,7 @@ public class NoteProfile : Profile
                 ParentId = src.Parent?.Id,
                 Type = src.Type,
                 Title = src.Title,
+                LastContentId = src.LastContent?.Id,
                 Visibility = src.Visibility,
                 SortOrder = src.SortOrder,
                 UpdatedAt = src.UpdatedAt
@@ -27,11 +28,20 @@ public class NoteProfile : Profile
                 Id = src.Id,
                 ParentId = src.Parent?.Id,
                 Title = src.Title,
-                MarkdownContent = src.MarkdownContent ?? string.Empty,
+                LastContentId = src.LastContent?.Id,
                 Visibility = src.Visibility,
                 CreatedAt = src.CreatedAt,
                 UpdatedAt = src.UpdatedAt,
                 Links = mapper.Mapper.Map<ICollection<NoteLinkDto>>(src.Links.ToList())
+            });
+
+        CreateMap<NoteContentEntity, NoteContentDto>()
+            .IgnoreAllAndConstructUsing((src, mapper) => new NoteContentDto
+            {
+                Id = src.Id,
+                NoteId = src.NoteNode.Id,
+                MarkdownContent = src.MarkdownContent,
+                CreatedAt = src.CreatedAt
             });
 
         CreateMap<NoteLinkEntity, NoteLinkDto>()
@@ -48,7 +58,7 @@ public class NoteProfile : Profile
                 Id = src.Id,
                 NoteId = src.NoteNode.Id,
                 Title = src.Title,
-                MarkdownContent = src.MarkdownContent ?? string.Empty,
+                MarkdownContent = src.Content.MarkdownContent,
                 SortOrder = src.SortOrder,
                 CreatedAt = src.CreatedAt
             });

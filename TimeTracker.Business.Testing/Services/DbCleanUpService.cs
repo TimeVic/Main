@@ -20,6 +20,10 @@ public class DbCleanUpService: IDbCleanUpService
             .CreateSQLQuery("update users set selected_workspace_id = null where selected_workspace_id is not null;")
             .ExecuteUpdateAsync();
 
+        await _sessionProvider.CurrentSession
+            .CreateSQLQuery("update note_nodes set last_content_id = null where last_content_id is not null;")
+            .ExecuteUpdateAsync();
+
         var tables = new List<string>()
         {
             "messaging.activities",
@@ -32,6 +36,7 @@ public class DbCleanUpService: IDbCleanUpService
             "notifications",
             "note_links",
             "note_node_history",
+            "note_contents",
             "note_nodes",
             "client_payments",
             "member_payments",

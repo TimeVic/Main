@@ -15,6 +15,8 @@ public record NotesState
 
     public NoteDocumentDto? CurrentDocument { get; init; }
 
+    public NoteContentDto? CurrentContent { get; init; }
+
     public string EditorTitle { get; init; } = string.Empty;
 
     public string EditorMarkdown { get; init; } = string.Empty;
@@ -55,7 +57,8 @@ public record NotesState
 
     public bool IsDocumentDirty =>
         CurrentDocument != null
+        && CurrentContent != null
         && (EditorTitle != CurrentDocument.Title
-            || EditorMarkdown != CurrentDocument.MarkdownContent
+            || EditorMarkdown != CurrentContent.MarkdownContent
             || EditorVisibility != CurrentDocument.Visibility);
 }

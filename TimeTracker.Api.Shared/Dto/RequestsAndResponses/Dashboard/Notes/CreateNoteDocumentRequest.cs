@@ -13,9 +13,6 @@ public class CreateNoteDocumentRequest : IRequest<NoteDocumentDto>
     [StringLength(200, MinimumLength = 1)]
     public string Title { get; set; } = string.Empty;
 
-    [StringLength(5_000_000)]
-    public string? MarkdownContent { get; set; }
-
     [Required]
     public NoteVisibility Visibility { get; set; }
 

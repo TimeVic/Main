@@ -33,14 +33,15 @@ public class SaveDocumentEffect : Effect<SaveNoteDocumentAction>
     public override async Task HandleAsync(SaveNoteDocumentAction action, IDispatcher dispatcher)
     {
         var currentDocument = _state.Value.CurrentDocument;
-        if (currentDocument == null)
+        var currentContent = _state.Value.CurrentContent;
+        if (currentDocument == null || currentContent == null)
         {
             return;
         }
 
         if (!_state.Value.IsDocumentDirty)
         {
-            dispatcher.Dispatch(new SetNoteDocumentAction(currentDocument, false));
+            dispatcher.Dispatch(new SetNoteDocumentAction(currentDocument, currentContent, false));
             return;
         }
 
@@ -48,19 +49,33 @@ public class SaveDocumentEffect : Effect<SaveNoteDocumentAction>
         dispatcher.Dispatch(new SetNoteSaveErrorAction(false));
         try
         {
-            var document = await _apiService.NotesUpdateDocumentAsync(new UpdateNoteDocumentRequest
+            var document = currentDocument;
+            var content = currentContent;
+            var isMetadataChanged = _state.Value.EditorTitle != currentDocument.Title
+                || _state.Value.EditorVisibility != currentDocument.Visibility;
+            if (isMetadataChanged)
             {
-                NoteId = currentDocument.Id,
-                Title = _state.Value.EditorTitle,
-                MarkdownContent = _state.Value.EditorMarkdown,
-                Visibility = _state.Value.EditorVisibility
-            });
-            if (document == null)
-            {
-                throw new InvalidOperationException("Notes update response is empty.");
+                document = await _apiService.NotesUpdateDocumentAsync(new UpdateNoteDocumentRequest
+                {
+                    NoteId = currentDocument.Id,
+                    Title = _state.Value.EditorTitle,
+                    Visibility = _state.Value.EditorVisibility
+                }) ?? throw new InvalidOperationException("Notes update response is empty.");
             }
 
-            dispatcher.Dispatch(new SetNoteDocumentAction(document, false));
+            if (_state.Value.EditorMarkdown != currentContent.MarkdownContent)
+            {
+                content = await _apiService.NotesUpdateContentAsync(new UpdateNoteContentRequest
+                {
+                    NoteId = currentDocument.Id,
+                    MarkdownContent = _state.Value.EditorMarkdown
+                }) ?? throw new InvalidOperationException("Notes content update response is empty.");
+
+                document.LastContentId = content.Id;
+                document.UpdatedAt = content.CreatedAt;
+            }
+
+            dispatcher.Dispatch(new SetNoteDocumentAction(document, content, false));
             dispatcher.Dispatch(new UpdateNoteTreeNodeFromDocumentAction(document));
             _toastService.ShowSuccess(_localizer["SavedSuccessfully"].Value);
         }

@@ -69,7 +69,6 @@ public partial class ProjectNotesSectionBlock
             var document = await ApiService.NotesCreateDocumentAsync(new CreateNoteDocumentRequest
             {
                 Title = string.Format(DashboardLocalizer["Notes_ProjectNoteDefaultTitle"].Value, Project.Name),
-                MarkdownContent = string.Empty,
                 Visibility = NoteVisibility.Workspace,
                 Links =
                 [

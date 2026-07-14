@@ -22,7 +22,7 @@ public class NoteDao : INoteDao
         UserEntity createdByUser,
         NoteNodeType type,
         string title,
-        string? markdownContent,
+        string? initialMarkdownContent,
         NoteVisibility visibility,
         int sortOrder
     )
@@ -34,7 +34,6 @@ public class NoteDao : INoteDao
             Parent = parent,
             Type = type,
             Title = title,
-            MarkdownContent = markdownContent,
             Visibility = visibility,
             SortOrder = sortOrder,
             CreatedByUser = createdByUser,
@@ -44,7 +43,12 @@ public class NoteDao : INoteDao
         };
 
         await _sessionProvider.CurrentSession.SaveAsync(node);
-        await CreateHistoryAsync(node);
+        if (type == NoteNodeType.Document)
+        {
+            await CreateContentAsync(node, initialMarkdownContent ?? string.Empty);
+            await SaveNodeAsync(node);
+        }
+
         return node;
     }
 
@@ -105,10 +109,39 @@ public class NoteDao : INoteDao
         await CreateHistoryAsync(node);
     }
 
+    public async Task<NoteContentEntity> CreateContentAsync(
+        NoteNodeEntity noteNode,
+        string markdownContent,
+        DateTime? createdAt = null
+    )
+    {
+        var content = new NoteContentEntity
+        {
+            NoteNode = noteNode,
+            MarkdownContent = markdownContent,
+            CreatedAt = createdAt ?? DateTime.UtcNow
+        };
+
+        await _sessionProvider.CurrentSession.SaveAsync(content);
+        noteNode.LastContent = content;
+        return content;
+    }
+
+    public async Task<NoteContentEntity?> GetContentByIdAsync(WorkspaceEntity workspace, Guid contentId)
+    {
+        return await _sessionProvider.CurrentSession.Query<NoteContentEntity>()
+            .Where(item => item.Id == contentId)
+            .Where(item => item.NoteNode.Workspace.Id == workspace.Id)
+            .Where(item => item.NoteNode.ArchivedAt == null)
+            .Fetch(item => item.NoteNode)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<ICollection<NoteNodeHistoryEntity>> GetHistoryAsync(NoteNodeEntity noteNode)
     {
         return await _sessionProvider.CurrentSession.Query<NoteNodeHistoryEntity>()
             .Where(item => item.NoteNode.Id == noteNode.Id)
+            .Fetch(item => item.Content)
             .OrderBy(item => item.CreatedAt)
             .ToListAsync();
     }
@@ -209,8 +242,8 @@ public class NoteDao : INoteDao
         var history = new NoteNodeHistoryEntity
         {
             NoteNode = node,
+            Content = node.LastContent!,
             Title = node.Title,
-            MarkdownContent = node.MarkdownContent,
             SortOrder = node.SortOrder,
             CreatedAt = DateTime.UtcNow
         };

@@ -99,7 +99,7 @@ public class HasAccessToNoteTest : BaseTest
 
     private async Task<NoteNodeEntity> CreateNoteAsync(NoteVisibility visibility, UserEntity createdByUser)
     {
-        return await _noteDao.CreateNodeAsync(
+        var note = await _noteDao.CreateNodeAsync(
             _workspace,
             null,
             createdByUser,
@@ -109,5 +109,6 @@ public class HasAccessToNoteTest : BaseTest
             visibility,
             1000
         );
+        return note;
     }
 }

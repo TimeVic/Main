@@ -12,9 +12,9 @@ using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Notes.Actions;
 
-public class UpdateDocumentRequestHandler : NoteRequestHandlerBase, IAsyncRequestHandler<UpdateNoteDocumentRequest, NoteDocumentDto>
+public class UpdateContentRequestHandler : NoteRequestHandlerBase, IAsyncRequestHandler<UpdateNoteContentRequest, NoteContentDto>
 {
-    public UpdateDocumentRequestHandler(
+    public UpdateContentRequestHandler(
         IMapper mapper,
         IApiRequestService apiRequestService,
         IUserDao userDao,
@@ -27,17 +27,17 @@ public class UpdateDocumentRequestHandler : NoteRequestHandlerBase, IAsyncReques
     {
     }
 
-    public async Task<NoteDocumentDto> ExecuteAsync(UpdateNoteDocumentRequest request)
+    public async Task<NoteContentDto> ExecuteAsync(UpdateNoteContentRequest request)
     {
         var context = await GetWorkspaceContextAsync();
         var note = await GetNoteAsync(context.Workspace, context.User, request.NoteId, AccessLevel.Write);
         EnsureDocument(note);
 
-        note.Title = NormalizeTitle(request.Title);
-        note.Visibility = request.Visibility;
-        SetUpdatedBy(note, context.User);
+        var now = DateTime.UtcNow;
+        var content = await NoteDao.CreateContentAsync(note, NormalizeMarkdown(request.MarkdownContent), now);
+        SetUpdatedBy(note, context.User, now);
         await NoteDao.SaveNodeAsync(note);
 
-        return Mapper.Map<NoteDocumentDto>(note);
+        return Mapper.Map<NoteContentDto>(content);
     }
 }

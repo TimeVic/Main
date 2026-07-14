@@ -16,6 +16,11 @@ public partial class ApiService
         return await PostAsync<NoteDocumentDto?>(ApiUrl.NotesGetDocument, model);
     }
 
+    public async Task<NoteContentDto?> NotesGetContentAsync(GetNoteContentRequest model)
+    {
+        return await PostAsync<NoteContentDto?>(ApiUrl.NotesGetContent, model);
+    }
+
     public async Task<NoteTreeNodeDto?> NotesCreateFolderAsync(CreateNoteFolderRequest model)
     {
         return await PostAsync<NoteTreeNodeDto?>(ApiUrl.NotesCreateFolder, model);
@@ -29,6 +34,11 @@ public partial class ApiService
     public async Task<NoteDocumentDto?> NotesUpdateDocumentAsync(UpdateNoteDocumentRequest model)
     {
         return await PostAsync<NoteDocumentDto?>(ApiUrl.NotesUpdateDocument, model);
+    }
+
+    public async Task<NoteContentDto?> NotesUpdateContentAsync(UpdateNoteContentRequest model)
+    {
+        return await PostAsync<NoteContentDto?>(ApiUrl.NotesUpdateContent, model);
     }
 
     public async Task<NoteTreeNodeDto?> NotesRenameNodeAsync(RenameNoteNodeRequest model)

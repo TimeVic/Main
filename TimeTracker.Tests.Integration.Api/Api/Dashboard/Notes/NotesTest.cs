@@ -26,10 +26,12 @@ public class NotesTest : BaseTest
 {
     private const string GetTreeUrl = "/dashboard/notes/get-tree";
     private const string GetDocumentUrl = "/dashboard/notes/get-document";
+    private const string GetContentUrl = "/dashboard/notes/get-content";
     private const string GetHistoryUrl = "/dashboard/notes/get-history";
     private const string CreateFolderUrl = "/dashboard/notes/create-folder";
     private const string CreateDocumentUrl = "/dashboard/notes/create-document";
     private const string UpdateDocumentUrl = "/dashboard/notes/update-document";
+    private const string UpdateContentUrl = "/dashboard/notes/update-content";
     private const string RenameNodeUrl = "/dashboard/notes/rename-node";
     private const string MoveNodeUrl = "/dashboard/notes/move-node";
     private const string ArchiveNodeUrl = "/dashboard/notes/archive-node";
@@ -103,11 +105,11 @@ public class NotesTest : BaseTest
         {
             ParentId = null,
             Title = "Deploy.md",
-            MarkdownContent = "# Deploy notes",
             Visibility = NoteVisibility.Private
         }, _workspace.Id);
         response.EnsureSuccessStatusCode();
         var document = await response.GetJsonDataAsync<NoteDocumentDto>();
+        await UpdateContentAsync(document.Id, "# Deploy notes");
         var treeResponse = await PostRequestAsync(GetTreeUrl, _jwtToken, new GetNotesTreeRequest(), _workspace.Id);
         var rawTreeJson = await treeResponse.GetDataAsStringAsync();
         treeResponse.EnsureSuccessStatusCode();
@@ -116,7 +118,9 @@ public class NotesTest : BaseTest
 
         Assert.Contains(tree.Nodes, item => item.Id == document.Id && item.Type == NoteNodeType.Document);
         Assert.DoesNotContain("markdownContent", rawTreeJson);
-        Assert.Equal("# Deploy notes", loadedDocument.MarkdownContent);
+        Assert.NotNull(loadedDocument.LastContentId);
+        var loadedContent = await GetContentAsync(loadedDocument.LastContentId!.Value);
+        Assert.Equal("# Deploy notes", loadedContent.MarkdownContent);
     }
 
     [Fact]
@@ -137,7 +141,6 @@ public class NotesTest : BaseTest
         {
             ParentId = document.Id,
             Title = "Child.md",
-            MarkdownContent = "# Child",
             Visibility = NoteVisibility.Private
         }, _workspace.Id);
 
@@ -158,21 +161,23 @@ public class NotesTest : BaseTest
     }
 
     [Fact]
-    public async Task UpdateDocumentUpdatesTitleAndMarkdown()
+    public async Task UpdateDocumentAndContentAreUpdatedSeparately()
     {
         var document = await CreateDocumentAsync("Deploy.md", "# Deploy");
         var response = await PostRequestAsync(UpdateDocumentUrl, _jwtToken, new UpdateNoteDocumentRequest
         {
             NoteId = document.Id,
             Title = "Deploy updated.md",
-            MarkdownContent = "# Updated",
             Visibility = NoteVisibility.Workspace
         }, _workspace.Id);
         response.EnsureSuccessStatusCode();
+        await UpdateContentAsync(document.Id, "# Updated");
         var actual = await GetDocumentAsync(document.Id);
 
         Assert.Equal("Deploy updated.md", actual.Title);
-        Assert.Equal("# Updated", actual.MarkdownContent);
+        Assert.NotNull(actual.LastContentId);
+        var content = await GetContentAsync(actual.LastContentId!.Value);
+        Assert.Equal("# Updated", content.MarkdownContent);
         Assert.NotNull(actual.UpdatedAt);
     }
 
@@ -189,12 +194,24 @@ public class NotesTest : BaseTest
         response.EnsureSuccessStatusCode();
         var history = await GetHistoryAsync(document.Id);
 
-        Assert.Equal(3, history.History.Count);
+        Assert.Equal(5, history.History.Count);
         Assert.Collection(
             history.History,
             item =>
             {
                 Assert.Equal("Deploy.md", item.Title);
+                Assert.Equal(string.Empty, item.MarkdownContent);
+                Assert.Equal(1000, item.SortOrder);
+            },
+            item =>
+            {
+                Assert.Equal("Deploy.md", item.Title);
+                Assert.Equal("# Deploy", item.MarkdownContent);
+                Assert.Equal(1000, item.SortOrder);
+            },
+            item =>
+            {
+                Assert.Equal("Deploy updated.md", item.Title);
                 Assert.Equal("# Deploy", item.MarkdownContent);
                 Assert.Equal(1000, item.SortOrder);
             },
@@ -246,7 +263,6 @@ public class NotesTest : BaseTest
         {
             NoteId = folder.Id,
             Title = "Folder",
-            MarkdownContent = "# Invalid",
             Visibility = NoteVisibility.Private
         }, _workspace.Id);
 
@@ -463,7 +479,6 @@ public class NotesTest : BaseTest
         var response = await PostRequestAsync(CreateDocumentUrl, _jwtToken, new CreateNoteDocumentRequest
         {
             Title = "Linked.md",
-            MarkdownContent = "# Linked",
             Visibility = NoteVisibility.Workspace,
             Links =
             [
@@ -529,11 +544,12 @@ public class NotesTest : BaseTest
         {
             ParentId = parentId,
             Title = title,
-            MarkdownContent = markdownContent,
             Visibility = visibility
         }, workspaceId ?? _workspace.Id);
         response.EnsureSuccessStatusCode();
-        return await response.GetJsonDataAsync<NoteDocumentDto>();
+        var document = await response.GetJsonDataAsync<NoteDocumentDto>();
+        await UpdateContentAsync(document.Id, markdownContent, token, workspaceId);
+        return await GetDocumentAsync(document.Id, token, workspaceId);
     }
 
     private async Task<GetNotesTreeResponse> GetTreeAsync(string? token = null, Guid? workspaceId = null)
@@ -546,14 +562,24 @@ public class NotesTest : BaseTest
         return await response.GetJsonDataAsync<GetNotesTreeResponse>();
     }
 
-    private async Task<NoteDocumentDto> GetDocumentAsync(Guid noteId)
+    private async Task<NoteDocumentDto> GetDocumentAsync(Guid noteId, string? token = null, Guid? workspaceId = null)
     {
-        var response = await PostRequestAsync(GetDocumentUrl, _jwtToken, new GetNoteDocumentRequest
+        var response = await PostRequestAsync(GetDocumentUrl, token ?? _jwtToken, new GetNoteDocumentRequest
         {
             NoteId = noteId
-        }, _workspace.Id);
+        }, workspaceId ?? _workspace.Id);
         response.EnsureSuccessStatusCode();
         return await response.GetJsonDataAsync<NoteDocumentDto>();
+    }
+
+    private async Task<NoteContentDto> GetContentAsync(Guid contentId)
+    {
+        var response = await PostRequestAsync(GetContentUrl, _jwtToken, new GetNoteContentRequest
+        {
+            ContentId = contentId
+        }, _workspace.Id);
+        response.EnsureSuccessStatusCode();
+        return await response.GetJsonDataAsync<NoteContentDto>();
     }
 
     private async Task<GetNoteNodeHistoryResponse> GetHistoryAsync(Guid noteId)
@@ -577,10 +603,26 @@ public class NotesTest : BaseTest
         {
             NoteId = noteId,
             Title = title,
-            MarkdownContent = markdownContent,
             Visibility = visibility
         }, _workspace.Id);
         response.EnsureSuccessStatusCode();
+        await UpdateContentAsync(noteId, markdownContent);
+    }
+
+    private async Task<NoteContentDto> UpdateContentAsync(
+        Guid noteId,
+        string markdownContent,
+        string? token = null,
+        Guid? workspaceId = null
+    )
+    {
+        var response = await PostRequestAsync(UpdateContentUrl, token ?? _jwtToken, new UpdateNoteContentRequest
+        {
+            NoteId = noteId,
+            MarkdownContent = markdownContent
+        }, workspaceId ?? _workspace.Id);
+        response.EnsureSuccessStatusCode();
+        return await response.GetJsonDataAsync<NoteContentDto>();
     }
 
     private async System.Threading.Tasks.Task RenameNodeAsync(Guid noteId, string title)
