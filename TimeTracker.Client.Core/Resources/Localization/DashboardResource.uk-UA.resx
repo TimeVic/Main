@@ -593,7 +593,7 @@
   <data name="UpdateTaskForm_JiraEstimateHint" xml:space="preserve"><value>Задача імпортована з Jira. 1d = 8h, 1w = 5d.</value></data>
   <data name="UpdateTaskForm_ManualEstimateHint" xml:space="preserve"><value>Підтримується формат як у Jira: 1d = 8h, 1w = 5d.</value></data>
   <data name="UpdateTaskForm_AttachmentUploadError" xml:space="preserve"><value>Не вдалося завантажити вкладення</value></data>
-  <data name="Notes_AttachmentsHint" xml:space="preserve"><value>Перетягуйте файли сюди або вставляйте зображення, щоб додати вкладення.</value></data>
+  <data name="Notes_AttachmentsHint" xml:space="preserve"><value>Перетягуйте файли сюди або вибирайте їх, щоб додати вкладення.</value></data>
   <data name="Notes_AttachmentUploadError" xml:space="preserve"><value>Не вдалося завантажити вкладення</value></data>
   <data name="AddTasksListModalForm_TaskListAdded" xml:space="preserve"><value>Список задач додано</value></data>
   <data name="AddTasksListModalForm_TaskListAddingError" xml:space="preserve"><value>Не вдалося додати список задач</value></data>

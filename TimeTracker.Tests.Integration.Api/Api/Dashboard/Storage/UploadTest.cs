@@ -3,10 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using SixLabors.ImageSharp;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
+using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dao.Notes;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Notes;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -25,6 +28,7 @@ public class UploadTest: BaseTest
     private readonly IDataFactory<TaskEntity> _taskFactory;
     private readonly string _jwtToken;
     private readonly IProjectDao _projectDao;
+    private readonly INoteDao _noteDao;
     private readonly ITaskSeeder _taskSeeder;
     private readonly ITaskListSeeder _taskListSeeder;
 
@@ -36,6 +40,7 @@ public class UploadTest: BaseTest
     {
         _taskFactory = ServiceProvider.GetRequiredService<IDataFactory<TaskEntity>>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectDao>();
+        _noteDao = ServiceProvider.GetRequiredService<INoteDao>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         _fileStorage = ServiceProvider.GetRequiredService<IFileStorage>();
         _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
@@ -93,6 +98,42 @@ public class UploadTest: BaseTest
         var actualUploadedFile = await DbSessionProvider.CurrentSession.GetAsync<StoredFileEntity>(actualData.Id);
         Assert.NotNull(actualUploadedFile);
         Assert.NotEmpty(actualUploadedFile.ThumbCloudFilePath!);
+    }
+
+    [Fact]
+    public async Task ShouldUploadAttachmentToNote()
+    {
+        var note = await _noteDao.CreateNodeAsync(
+            _workspace,
+            null,
+            _user,
+            NoteNodeType.Document,
+            "Upload.md",
+            string.Empty,
+            NoteVisibility.Workspace,
+            1000
+        );
+        var response = await PostMultipartFormDataRequestAsync(
+            Url,
+            _jwtToken,
+            new Dictionary<string, object>
+            {
+                { "WorkspaceId", _workspace.Id },
+                { "EntityId", note.Id },
+                { "EntityType", StorageEntityType.NoteNode },
+                { "FileType", StoredFileType.Attachment }
+            },
+            CreateFormFile("image.jpg")
+        );
+        response.EnsureSuccessStatusCode();
+
+        var uploadedFile = await response.GetJsonDataAsync<StoredFileDto>();
+        await FlushDbChanges(true);
+        var actualNote = await DbSessionProvider.CurrentSession.GetAsync<NoteNodeEntity>(note.Id);
+
+        Assert.NotEqual(Guid.Empty, uploadedFile.Id);
+        Assert.Single(actualNote.Attachments);
+        Assert.Equal(uploadedFile.Id, actualNote.Attachments.Single().Id);
     }
 
     [Fact]
