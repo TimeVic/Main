@@ -47,8 +47,8 @@ public class ChangePasswordTest : BaseTest
         });
 
         var data = await response.GetJsonResponseAsync<object>();
-        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        Assert.Equal(new UserNotAuthorizedException().GetTypeName(), data.ErrorCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(new IncorrectPasswordException().GetTypeName(), data.ErrorCode);
     }
 
     [Fact]

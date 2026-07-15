@@ -6,11 +6,13 @@ public partial class SecurityBlock
 {
     private bool _isShowPasswordModal = false;
     private bool _isSaving;
+    private string? _errorMessage;
     private readonly ChangePasswordModel _model = new();
 
     private void CloseModal()
     {
         _isShowPasswordModal = false;
+        _errorMessage = null;
         _model.Clear();
     }
 
@@ -20,11 +22,12 @@ public partial class SecurityBlock
             || string.IsNullOrWhiteSpace(_model.NewPassword)
             || _model.NewPassword != _model.ConfirmPassword)
         {
-            ToastService.ShowError(DashboardLocalizer["UserSettings_PasswordMismatch"].Value);
+            _errorMessage = DashboardLocalizer["UserSettings_PasswordMismatch"].Value;
             return;
         }
 
         _isSaving = true;
+        _errorMessage = null;
         try
         {
             await ApiService.UserChangePasswordAsync(new ChangePasswordRequest
@@ -37,7 +40,7 @@ public partial class SecurityBlock
         }
         catch (Exception)
         {
-            ToastService.ShowError(DashboardLocalizer["UserSettings_PasswordChangeError"].Value);
+            _errorMessage = DashboardLocalizer["UserSettings_PasswordChangeError"].Value;
         }
         finally
         {

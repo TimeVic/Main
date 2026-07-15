@@ -13,6 +13,12 @@
             </LumexModalHeader>
             <LumexModalBody Class="pt-3">
                 <p class="mb-4 text-sm leading-6 text-slate-600">@DashboardLocalizer["UserSettings_ChangePasswordModalDescription"]</p>
+                @if (!string.IsNullOrWhiteSpace(_errorMessage))
+                {
+                    <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+                        @_errorMessage
+                    </div>
+                }
                 <EditForm Model="_model" Context="passwordFormContext">
                     <DataAnnotationsValidator />
                     <div class="space-y-4">
@@ -28,7 +34,7 @@
                                       Type="InputType.Password"
                                       Label="@DashboardLocalizer["UserSettings_ConfirmPassword"].Value"
                                       FullWidth="true" />
-                        <ValidationMessage For="@(() => _model.ConfirmPassword)" />
+                        <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-sm text-red-600" />
                     </div>
                     <div class="mt-5 flex gap-2">
                         <CustomButton FullWidth="true" IsLoading="@_isSaving" Type="@ButtonType.Submit" OnClick="@OnChangePassword">
