@@ -44,4 +44,10 @@ public class UsersController(ILifetimeScope scope) : MainApiControllerBase(scope
         => this.RequestAsync()
             .For<UserDto>()
             .With(request);
+
+    [HttpPost("change-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        => this.RequestAsync(request);
 }

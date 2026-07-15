@@ -70,6 +70,11 @@ namespace TimeTracker.Client.Core.Services.Http
         {
             return await PostAsync<UserDto?>(ApiUrl.UserUpdateSettings, request);
         }
+
+        public async Task UserChangePasswordAsync(ChangePasswordRequest request)
+        {
+            await PostAsync<object>(ApiUrl.UserChangePassword, request);
+        }
         
         public async Task<bool> RegistrationStep1Async(RegistrationStep1Request model)
         {
