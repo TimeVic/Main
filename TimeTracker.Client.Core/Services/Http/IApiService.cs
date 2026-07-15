@@ -6,6 +6,7 @@ using TimeTracker.Api.Shared.Dto.Entity.Messaging;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Business.Common.Dto;
@@ -59,6 +60,8 @@ public interface IApiService
     Task<bool> CheckIsLoggedInAsync();
 
     Task<UserDto?> UserGetCurrentAsync();
+
+    Task UserChangePasswordAsync(ChangePasswordRequest request);
 
     Task LogoutAsync();
 

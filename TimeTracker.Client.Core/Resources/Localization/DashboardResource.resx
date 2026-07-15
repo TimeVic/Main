@@ -533,7 +533,14 @@
   <data name="UserSettings_ChangePassword" xml:space="preserve"><value>Change password</value></data>
   <data name="UserSettings_ChangePasswordDescription" xml:space="preserve"><value>Update your login password to keep your account secure.</value></data>
   <data name="UserSettings_ChangePasswordModalTitle" xml:space="preserve"><value>Change password</value></data>
-  <data name="UserSettings_ChangePasswordModalDescription" xml:space="preserve"><value>Password change is not yet available. This feature is coming soon.</value></data>
+  <data name="UserSettings_ChangePasswordModalDescription" xml:space="preserve"><value>Enter your current password and choose a new one.</value></data>
+  <data name="UserSettings_CurrentPassword" xml:space="preserve"><value>Current password</value></data>
+  <data name="UserSettings_NewPassword" xml:space="preserve"><value>New password</value></data>
+  <data name="UserSettings_ConfirmPassword" xml:space="preserve"><value>Confirm new password</value></data>
+  <data name="UserSettings_SavePassword" xml:space="preserve"><value>Save password</value></data>
+  <data name="UserSettings_PasswordChanged" xml:space="preserve"><value>Password changed successfully</value></data>
+  <data name="UserSettings_PasswordChangeError" xml:space="preserve"><value>Could not change password. Check your current password.</value></data>
+  <data name="UserSettings_PasswordMismatch" xml:space="preserve"><value>Passwords are required and must match.</value></data>
   <data name="UserSettings_AccountDeletionSection" xml:space="preserve"><value>Account deletion</value></data>
   <data name="UserSettings_AccountDeletionSectionDescription" xml:space="preserve"><value>Irreversible and destructive actions.</value></data>
   <data name="UserSettings_RequestDeletion" xml:space="preserve"><value>Request account deletion</value></data>

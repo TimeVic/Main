@@ -12,17 +12,35 @@
                 </div>
             </LumexModalHeader>
             <LumexModalBody Class="pt-3">
-                <p class="text-sm leading-6 text-slate-600">@DashboardLocalizer["UserSettings_ChangePasswordModalDescription"]</p>
+                <p class="mb-4 text-sm leading-6 text-slate-600">@DashboardLocalizer["UserSettings_ChangePasswordModalDescription"]</p>
+                <EditForm Model="_model" Context="passwordFormContext">
+                    <DataAnnotationsValidator />
+                    <div class="space-y-4">
+                        <LumexTextbox @bind-Value="_model.CurrentPassword"
+                                      Type="InputType.Password"
+                                      Label="@DashboardLocalizer["UserSettings_CurrentPassword"].Value"
+                                      FullWidth="true" />
+                        <LumexTextbox @bind-Value="_model.NewPassword"
+                                      Type="InputType.Password"
+                                      Label="@DashboardLocalizer["UserSettings_NewPassword"].Value"
+                                      FullWidth="true" />
+                        <LumexTextbox @bind-Value="_model.ConfirmPassword"
+                                      Type="InputType.Password"
+                                      Label="@DashboardLocalizer["UserSettings_ConfirmPassword"].Value"
+                                      FullWidth="true" />
+                        <ValidationMessage For="@(() => _model.ConfirmPassword)" />
+                    </div>
+                    <div class="mt-5 flex gap-2">
+                        <CustomButton FullWidth="true" IsLoading="@_isSaving" Type="@ButtonType.Submit" OnClick="@OnChangePassword">
+                            @DashboardLocalizer["UserSettings_SavePassword"]
+                        </CustomButton>
+                        <CustomButton FullWidth="true" Disabled="@_isSaving" OnClick="@CloseModal"
+                                      Color="ThemeColor.Default" Variant="Variant.Outlined">
+                            @DashboardLocalizer["Cancel"]
+                        </CustomButton>
+                    </div>
+                </EditForm>
             </LumexModalBody>
-            <LumexModalFooter>
-                <CustomButton
-                    FullWidth="true"
-                    OnClick="@(() => _isShowPasswordModal = false)"
-                    Color="ThemeColor.Default"
-                    Variant="Variant.Outlined">
-                    @DashboardLocalizer["Cancel"]
-                </CustomButton>
-            </LumexModalFooter>
         </LumexModalContent>
     </LumexModal>
 }
@@ -40,7 +58,6 @@
                 <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["UserSettings_PasswordTitle"]</p>
                 <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["UserSettings_ChangePasswordDescription"]</p>
             </div>
-            @* TODO: Wire to password change API *@
             <CustomButton
                 Color="ThemeColor.Default"
                 Variant="Variant.Outlined"
@@ -53,4 +70,3 @@
         </div>
     </LumexCardBody>
 </LumexCard>
-

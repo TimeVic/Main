@@ -18,6 +18,7 @@ public class ApiUrl
     public const string SetNotificationToken = "dashboard/user/set-notification-token";
     public const string UserSelectWorkspace = "dashboard/user/select-workspace";
     public const string UserUpdateSettings = "dashboard/user/update-settings";
+    public const string UserChangePassword = "dashboard/user/change-password";
     #endregion
     
     #region Time Entry

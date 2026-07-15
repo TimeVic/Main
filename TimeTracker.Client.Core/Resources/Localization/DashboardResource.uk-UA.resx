@@ -533,7 +533,14 @@
   <data name="UserSettings_ChangePassword" xml:space="preserve"><value>Змінити пароль</value></data>
   <data name="UserSettings_ChangePasswordDescription" xml:space="preserve"><value>Змініть пароль для захисту акаунта.</value></data>
   <data name="UserSettings_ChangePasswordModalTitle" xml:space="preserve"><value>Змінити пароль</value></data>
-  <data name="UserSettings_ChangePasswordModalDescription" xml:space="preserve"><value>Зміна пароля ще недоступна. Ця функція незабаром з'явиться.</value></data>
+  <data name="UserSettings_ChangePasswordModalDescription" xml:space="preserve"><value>Введіть поточний пароль і задайте новий.</value></data>
+  <data name="UserSettings_CurrentPassword" xml:space="preserve"><value>Поточний пароль</value></data>
+  <data name="UserSettings_NewPassword" xml:space="preserve"><value>Новий пароль</value></data>
+  <data name="UserSettings_ConfirmPassword" xml:space="preserve"><value>Підтвердіть новий пароль</value></data>
+  <data name="UserSettings_SavePassword" xml:space="preserve"><value>Зберегти пароль</value></data>
+  <data name="UserSettings_PasswordChanged" xml:space="preserve"><value>Пароль успішно змінено</value></data>
+  <data name="UserSettings_PasswordChangeError" xml:space="preserve"><value>Не вдалося змінити пароль. Перевірте поточний пароль.</value></data>
+  <data name="UserSettings_PasswordMismatch" xml:space="preserve"><value>Введіть паролі та переконайтеся, що вони збігаються.</value></data>
   <data name="UserSettings_AccountDeletionSection" xml:space="preserve"><value>Видалення акаунта</value></data>
   <data name="UserSettings_AccountDeletionSectionDescription" xml:space="preserve"><value>Незворотні та деструктивні дії.</value></data>
   <data name="UserSettings_RequestDeletion" xml:space="preserve"><value>Запросити видалення акаунта</value></data>
