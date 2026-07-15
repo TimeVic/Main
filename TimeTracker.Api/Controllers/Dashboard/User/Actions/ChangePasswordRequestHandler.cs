@@ -28,7 +28,7 @@ public class ChangePasswordRequestHandler : IAsyncRequestHandler<ChangePasswordR
         var user = await _apiRequestService.GetCurrentUser();
         if (!_passwordService.ValidatePassword(user, request.CurrentPassword))
         {
-            throw new UserNotAuthorizedException();
+            throw new IncorrectPasswordException();
         }
 
         user = _passwordService.SetUserPassword(user, request.NewPassword);
