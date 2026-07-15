@@ -40,6 +40,16 @@ public partial class LoginPage
         await UpdateReCaptchaAsync();
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (AuthState.Value.IsLoggedIn)
+        {
+            NavigationManager.NavigateTo(SiteUrl.DashboardBase, replace: true);
+        }
+    }
+
     private async Task UpdateReCaptchaAsync()
     {
         var token = await _reCaptchaService.GetReCaptchaTokenAsync();

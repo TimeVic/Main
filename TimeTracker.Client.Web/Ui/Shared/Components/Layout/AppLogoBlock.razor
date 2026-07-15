@@ -3,7 +3,7 @@
 @inject ILocalizationUrlService LocalizationUrlService
 @inject NavigationManager NavigationManager
 
-<a href="@HomeUrl" class="@LinkClass">
+<a href="@LogoUrl" class="@LinkClass">
     <div class="min-w-0">
         @if (!string.IsNullOrWhiteSpace(Eyebrow))
         {
@@ -46,9 +46,14 @@
     [Parameter]
     public int LogoHeight { get; set; } = 40;
 
+    [Parameter]
+    public string? Url { get; set; }
+
     private string CurrentPath => new Uri(NavigationManager.Uri).AbsolutePath;
 
     private string CurrentCulture => LocalizationUrlService.GetCurrentCultureName(CurrentPath);
 
-    private string HomeUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.Main, CurrentCulture);
+    private string LogoUrl => string.IsNullOrWhiteSpace(Url)
+        ? LocalizationUrlService.GetLocalizedUrl(SiteUrl.Main, CurrentCulture)
+        : Url;
 }

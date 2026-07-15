@@ -32,8 +32,8 @@ public partial class MainMenu: IDisposable
     
     private IReadOnlyCollection<MenuItemModel> NavItems => new List<MenuItemModel>
     {
-        new(Text("TimeEntries"), "fa-regular fa-clock", SiteUrl.Dashboard_TimeEntry),
         new(Text("Summary"), "fa-regular fa-bar-chart", SiteUrl.Dashboard_Reports_Summary),
+        new(Text("TimeEntries"), "fa-regular fa-clock", SiteUrl.Dashboard_TimeEntry),
         new(
             Text("Money"),
             "fa-solid fa-chart-pie",

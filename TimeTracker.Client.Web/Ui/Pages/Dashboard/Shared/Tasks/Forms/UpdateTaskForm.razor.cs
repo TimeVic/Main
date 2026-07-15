@@ -55,6 +55,7 @@ public partial class UpdateTaskForm: IDisposable
     private bool _isAttachmentInteropInitialized;
     private bool _isDragActive;
     private readonly List<AttachmentsBlock.UploadingAttachment> _uploadingAttachments = new();
+    private readonly HashSet<string> _uploadingAttachmentKeys = new();
     public TaskFullDto _task { get; set; } = new();
 
     private string _attachmentAcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
@@ -190,7 +191,13 @@ public partial class UpdateTaskForm: IDisposable
 
         var files = eventArguments
             .GetMultipleFiles(eventArguments.FileCount)
+            // Prevent the same drag event from uploading an attachment twice.
+            .Where(file => _uploadingAttachmentKeys.Add(GetAttachmentKey(file)))
             .ToList();
+        if (files.Count == 0)
+        {
+            return;
+        }
         var uploadingAttachments = files
             .Select(file => new AttachmentsBlock.UploadingAttachment(Guid.NewGuid(), file.Name, file.ContentType))
             .ToList();
@@ -224,11 +231,15 @@ public partial class UpdateTaskForm: IDisposable
             }
             finally
             {
+                _uploadingAttachmentKeys.Remove(GetAttachmentKey(fileInfo.First));
                 _uploadingAttachments.Remove(fileInfo.Second);
                 await InvokeAsync(StateHasChanged);
             }
         }
     }
+
+    private static string GetAttachmentKey(IBrowserFile file) =>
+        $"{file.Name}|{file.Size}|{file.LastModified.ToUnixTimeMilliseconds()}";
 
     private Task OnAttachmentsChanged(ICollection<StoredFileDto> attachments)
     {

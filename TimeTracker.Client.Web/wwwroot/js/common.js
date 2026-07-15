@@ -228,6 +228,12 @@ window.attachmentInput = (() => {
             return null;
         }
 
+        const existingInstance = Array.from(instances.values())
+            .find((instance) => instance.root === root && instance.input === input);
+        if (existingInstance) {
+            detach(existingInstance.id);
+        }
+
         const id = `attachment-input-${++nextId}`;
         let dragDepth = 0;
 
@@ -299,7 +305,9 @@ window.attachmentInput = (() => {
         document.addEventListener("paste", onPaste, true);
 
         instances.set(id, {
+            id,
             root,
+            input,
             onDragEnter,
             onDragOver,
             onDragLeave,
