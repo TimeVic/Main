@@ -36,17 +36,28 @@
                                       FullWidth="true" />
                         <ValidationMessage For="@(() => _model.ConfirmPassword)" class="text-sm text-red-600" />
                     </div>
-                    <div class="mt-5 flex gap-2">
-                        <CustomButton FullWidth="true" IsLoading="@_isSaving" Type="@ButtonType.Submit" OnClick="@OnChangePassword">
-                            @DashboardLocalizer["UserSettings_SavePassword"]
-                        </CustomButton>
-                        <CustomButton FullWidth="true" Disabled="@_isSaving" OnClick="@CloseModal"
-                                      Color="ThemeColor.Default" Variant="Variant.Outlined">
-                            @DashboardLocalizer["Cancel"]
-                        </CustomButton>
-                    </div>
                 </EditForm>
             </LumexModalBody>
+            <LumexModalFooter>
+                <CustomButton
+                    FullWidth="true"
+                    Disabled="@_isSaving"
+                    OnClick="@CloseModal"
+                    Color="@ThemeColor.Default"
+                    Variant="Variant.Outlined"
+                    Radius="@Radius.Medium">
+                    @DashboardLocalizer["Cancel"]
+                </CustomButton>
+                <CustomButton
+                    FullWidth="true"
+                    IsLoading="@_isSaving"
+                    OnClick="@OnChangePassword"
+                    Color="@ThemeColor.Primary"
+                    Variant="Variant.Solid"
+                    Radius="@Radius.Medium">
+                    @DashboardLocalizer["UserSettings_SavePassword"]
+                </CustomButton>
+            </LumexModalFooter>
         </LumexModalContent>
     </LumexModal>
 }
