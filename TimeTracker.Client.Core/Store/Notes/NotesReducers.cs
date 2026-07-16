@@ -1,11 +1,18 @@
 using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Business.Common.Constants.Notes;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Client.Core.Store.Notes;
 
 public class NotesReducers
 {
+    [ReducerMethod(typeof(SetWorkspaceAction))]
+    public static NotesState ReducerOnWorkspaceChanged(NotesState state)
+    {
+        return new NotesState();
+    }
+
     [ReducerMethod]
     public static NotesState SetNotesTreeReducer(NotesState state, SetNotesTreeAction action)
     {
