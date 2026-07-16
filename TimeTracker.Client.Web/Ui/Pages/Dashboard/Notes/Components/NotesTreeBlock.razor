@@ -10,18 +10,30 @@
                 <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Notes"]</p>
                 <p class="text-xs text-slate-500">@DashboardLocalizer["Notes_TreeDescription"]</p>
             </div>
-            <div class="flex items-center gap-2">
-                <span title="@DashboardLocalizer["NewFolder"].Value">
-                    <CustomButton IconOnly="true" Size="Size.Small" Variant="Variant.Outlined" OnClick="@(() => CreateFolderRequested.InvokeAsync(null))">
-                        <i class="fa-regular fa-folder"></i>
-                    </CustomButton>
-                </span>
-                <span title="@DashboardLocalizer["NewNote"].Value">
-                    <CustomButton IconOnly="true" Size="Size.Small" Color="@ThemeColor.Primary" OnClick="@(() => CreateNoteRequested.InvokeAsync(null))">
-                        <i class="fa-regular fa-note-sticky"></i>
-                    </CustomButton>
-                </span>
-            </div>
+            <LumexDropdown>
+                <LumexDropdownTrigger>
+                    <LumexButton
+                        IconOnly="true"
+                        Size="Size.Small"
+                        Variant="@Variant.Outlined">
+                        <i class="fa-solid fa-ellipsis-h"></i>
+                    </LumexButton>
+                </LumexDropdownTrigger>
+                <LumexDropdownMenu>
+                    <LumexDropdownItem OnClick="@(() => CreateFolderRequested.InvokeAsync(null))">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-regular fa-folder w-4 text-xs"></i>
+                            @DashboardLocalizer["NewFolder"]
+                        </span>
+                    </LumexDropdownItem>
+                    <LumexDropdownItem OnClick="@(() => CreateNoteRequested.InvokeAsync(null))">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-regular fa-note-sticky w-4 text-xs"></i>
+                            @DashboardLocalizer["NewNote"]
+                        </span>
+                    </LumexDropdownItem>
+                </LumexDropdownMenu>
+            </LumexDropdown>
         </div>
     </div>
 
