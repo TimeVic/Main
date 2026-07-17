@@ -97,7 +97,8 @@
             Value="@_model.Comment"
             ValueChanged="@OnCommentChanged"
             Placeholder="@DashboardLocalizer["TaskComment_Placeholder"].Value"
-            RowsMin="@(_isNewComment ? 2 : 3)" />
+            RowsMin="@(_isNewComment ? 2 : 3)"
+            MinHeight="90" />
         
         @if (_isSubscribersSelectAvailable)
         {

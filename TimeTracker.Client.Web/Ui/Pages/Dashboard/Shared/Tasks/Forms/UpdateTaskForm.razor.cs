@@ -72,7 +72,6 @@ public partial class UpdateTaskForm: IDisposable
     private bool _isAttachmentInteropInitialized;
     private bool _isDragActive;
     private bool _isTitleEditing;
-    private bool _isDescriptionEditing;
     private TimeEntryDto? _timeEntryToEdit;
     private bool _isTaskTimeEntriesLoading;
     private ICollection<TimeEntryDto> _taskTimeEntries = [];
@@ -98,7 +97,7 @@ public partial class UpdateTaskForm: IDisposable
     private async Task OnTabSelected(TaskDetailTab tab)
     {
         _activeTab = tab;
-        if (tab == TaskDetailTab.TimeEntries && !_taskTimeEntries.Any())
+        if (tab == TaskDetailTab.TimeEntries)
         {
             _isTaskTimeEntriesLoading = true;
             try

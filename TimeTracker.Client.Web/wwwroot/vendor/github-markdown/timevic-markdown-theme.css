@@ -1,6 +1,8 @@
 /* Fixes GitHub Markdown CSS following the OS dark mode while TimeVic dashboard uses a light theme. */
 .markdown-body {
     color-scheme: light;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
     --fgColor-default: #1f2328;
     --fgColor-muted: #59636e;
     --fgColor-accent: #0969da;

@@ -57,7 +57,7 @@
 }
 
 <div class="overflow-hidden">
-    <table class="w-full max-w-[1200px] table-fixed border-separate border-spacing-0">
+    <table class="w-full table-fixed border-separate border-spacing-0">
         <colgroup>
             <col class="w-12" />
             <col />
@@ -116,7 +116,7 @@
                                         </button>
                                     </div>
                                     <TaskEstimateSummaryBlock
-                                        Class="mt-1 max-w-[42rem]"
+                                        Class="mt-1 max-w-[38rem]"
                                         IsCompact="true"
                                         PlannedDuration="task.OriginalEstimate"
                                         TrackedDuration="task.TrackedDuration" />
@@ -152,12 +152,12 @@
                             </div>
                         </td>
                         <td class="border-t border-slate-200 px-4 py-3 align-top text-right">
-                            <div class="flex items-center justify-end gap-2">
+                            <div class="flex items-center justify-end gap-1.5">
                                 <TaskTimeTrackerButton Task="@task" />
                                 <LumexDropdown>
                                     <LumexDropdownTrigger>
                                         <LumexButton
-                                            Class="ml-1"
+                                            Class="ml-0.5"
                                             IconOnly="true"
                                             Size="Size.Small"
                                             Variant="@Variant.Outlined">

@@ -3,8 +3,8 @@
 
 @inherits BaseReactiveComponent
 
-<div class="mt-5 flex flex-col gap-5">
-    <div class="rounded-2xl border border-slate-200">
+<div class="mt-5 flex w-full max-w-[1200px] flex-col gap-5 xl:mx-auto">
+    <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
         <div class="border-b border-slate-200 px-4 py-4">
             <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_Todo"]</p>
             <p class="text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_TodoDescription"]</p>
@@ -15,7 +15,7 @@
             EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoTodoTasks"].Value" />
     </div>
 
-    <div class="rounded-2xl border border-slate-200">
+    <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
         <div class="border-b border-slate-200 px-4 py-4">
             <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_Backlog"]</p>
             <p class="text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_BacklogDescription"]</p>
