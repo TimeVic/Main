@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/refs/heads/master/packages/app-builder-lib/scheme.json",
+  "compression": "maximum",
+  "linux": {
+    "target": [
+      "AppImage",
+      "deb",
+      "rpm"
+    ],
+    "category": "Office",
+    "icon": "bin/wwwroot/assets/brand/timevic-app-icon-512x512.png",
+    "maintainer": "TimeVic <support@timevic.com>",
+    "artifactName": "${name}-${version}-${arch}.${ext}"
+  },
+  "deb": {
+    "synopsis": "Time and income tracking for freelancers",
+    "category": "Office"
+  },
+  "rpm": {
+    "synopsis": "Time and income tracking for freelancers",
+    "category": "Office"
+  }
+}

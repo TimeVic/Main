@@ -6,14 +6,20 @@
         <LangVersion>14</LangVersion>
         <TargetFramework>net10.0</TargetFramework>
         <WarningsAsErrors>CS0168,CS8602,CS0169,CS1998</WarningsAsErrors>
+        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+        <Title>TimeVic</Title>
+        <Description>Time and income tracking for freelancers</Description>
+        <Company>TimeVic</Company>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="ElectronNET.Core" Version="0.5.1" />
+        <PackageReference Include="ElectronNET.Core.AspNet" Version="0.5.0" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.9" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\TimeTracker.Client.Web\TimeTracker.Client.Web.csproj" />
+        <ProjectReference Include="..\TimeTracker.Client.Web\TimeTracker.Client.Web.csproj" GlobalPropertiesToRemove="RuntimeIdentifier" />
         <ProjectReference Include="..\TimeTracker.Client.Core\TimeTracker.Client.Core.csproj" />
         <ProjectReference Include="..\TimeTracker.Api.Shared\TimeTracker.Api.Shared.csproj" />
         <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />

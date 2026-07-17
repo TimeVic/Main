@@ -1,4 +1,7 @@
 using System.Globalization;
+using ElectronNET;
+using ElectronNET.API;
+using ElectronNET.API.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Server;
@@ -22,6 +25,24 @@ builder.Services.AddScoped<ILocalizationUrlService, LocalizationUrlService>();
 builder.Services.AddScoped<ISeoUrlService, SeoUrlService>();
 builder.Services.AddScoped<UrlService>();
 builder.Services.AddLumexServices();
+builder.Services.AddElectron();
+
+builder.UseElectron(args, async () =>
+{
+    var options = new BrowserWindowOptions
+    {
+        Show = false,
+        IsRunningBlazor = true
+    };
+
+    if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
+    {
+        options.AutoHideMenuBar = true;
+    }
+
+    var browserWindow = await Electron.WindowManager.CreateWindowAsync(options);
+    browserWindow.OnReadyToShow += () => browserWindow.Show();
+});
 
 var app = builder.Build();
 
@@ -44,7 +65,7 @@ app.Use(async (httpContext, next) =>
     await next();
 });
 
-app.MapRazorComponents<App>()
+app.MapRazorComponents<TimeTracker.Client.Web.Server.Components.App>()
     .AddAdditionalAssemblies(typeof(TimeTracker.Client.Web.App).Assembly)
     .AddInteractiveWebAssemblyRenderMode();
 
