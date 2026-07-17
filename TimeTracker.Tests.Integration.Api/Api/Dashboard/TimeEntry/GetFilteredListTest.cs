@@ -4,10 +4,12 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.TimeEntry;
@@ -23,6 +25,8 @@ public class GetFilteredListTest: BaseTest
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IProjectSeeder _projectSeeder;
     private readonly IUserSeeder _userSeeder;
+    private readonly ITaskListSeeder _taskListSeeder;
+    private readonly ITaskSeeder _taskSeeder;
 
     public GetFilteredListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
@@ -30,6 +34,8 @@ public class GetFilteredListTest: BaseTest
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
+        _taskListSeeder = ServiceProvider.GetRequiredService<ITaskListSeeder>();
+        _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
@@ -100,5 +106,36 @@ public class GetFilteredListTest: BaseTest
         {
             Assert.True(item.User.Id == _user.Id || item.User.Id == otherUser.Id);
         });
+    }
+
+    [Fact]
+    public async Task ShouldReceiveOnlyEntriesForRequestedTask()
+    {
+        var project = await _projectSeeder.CreateAsync(_defaultWorkspace);
+        var taskList = await _taskListSeeder.CreateAsync(project);
+        var requestedTask = await _taskSeeder.CreateAsync(taskList, _user);
+        var otherTask = await _taskSeeder.CreateAsync(taskList, _user);
+        var requestedEntry = await _timeEntryDao.SetAsync(_user, _defaultWorkspace, new TimeEntryCreationDto { StartTime = DateTime.UtcNow.AddHours(-2), EndTime = DateTime.UtcNow.AddHours(-1) }, project);
+        requestedEntry.Task = requestedTask;
+        var otherEntry = await _timeEntryDao.SetAsync(_user, _defaultWorkspace, new TimeEntryCreationDto { StartTime = DateTime.UtcNow.AddHours(-4), EndTime = DateTime.UtcNow.AddHours(-3) }, project);
+        otherEntry.Task = otherTask;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetFilteredListRequest { Page = 1, TaskId = requestedTask.Id });
+        response.EnsureSuccessStatusCode();
+        var result = await response.GetJsonDataAsync<GetFilteredListResponse>();
+        Assert.Single(result.Items);
+        Assert.Equal(requestedEntry.Id, result.Items.Single().Id);
+    }
+
+    [Fact]
+    public async Task ShouldNotAllowReadingEntriesForTaskOutsideCurrentWorkspace()
+    {
+        var (_, otherUser, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();
+        var project = await _projectSeeder.CreateAsync(otherWorkspace);
+        var task = await _taskSeeder.CreateAsync(await _taskListSeeder.CreateAsync(project), otherUser);
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetFilteredListRequest { Page = 1, TaskId = task.Id });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 }

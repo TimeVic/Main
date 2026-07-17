@@ -54,4 +54,5 @@ public interface ITimeEntryDao: IDomainService
         UserEntity user,
         int page
     );
+
 }

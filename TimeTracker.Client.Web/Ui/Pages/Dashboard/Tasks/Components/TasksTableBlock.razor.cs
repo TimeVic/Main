@@ -21,6 +21,7 @@ public partial class TasksTableBlock
 
     private readonly HashSet<Guid> _selectedTaskIds = [];
     private TaskDto? _taskToUpdate = null;
+    private Guid? _selectedTaskId;
 
     private static readonly IReadOnlyList<TaskStatus> taskStatusOptions = Enum.GetValues<TaskStatus>();
 
@@ -119,8 +120,13 @@ public partial class TasksTableBlock
 
     private void OpenTaskEditor(TaskDto task)
     {
+        _selectedTaskId = task.Id;
         _taskToUpdate = task;
     }
+
+    private string GetSelectedTaskClass(Guid taskId) => _selectedTaskId == taskId
+        ? "border-l-2 border-l-blue-500 bg-blue-50/40"
+        : string.Empty;
 
     private bool IsTaskBoardSelected(Guid id) => _selectedTaskIds.Contains(id);
 

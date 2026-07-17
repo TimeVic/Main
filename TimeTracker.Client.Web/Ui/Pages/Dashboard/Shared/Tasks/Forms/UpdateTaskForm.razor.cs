@@ -11,6 +11,8 @@ using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Store.Tasks;
+using TimeTracker.Client.Core.Store.TimeEntry;
+using TimeEntryGetFilteredListRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetFilteredListRequest;
 using TimeTracker.Client.Core.Store.WorkspaceMembers;
 using TimeTracker.Client.Web.Ui.Shared.Components.Storage;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
@@ -19,8 +21,20 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms;
 
 public partial class UpdateTaskForm: IDisposable
 {
+    private sealed record TaskDetailTab(string ResourceKey)
+    {
+        public static readonly TaskDetailTab Overview = new("TaskDetail_Overview");
+        public static readonly TaskDetailTab Comments = new("TaskDetail_Comments");
+        public static readonly TaskDetailTab TimeEntries = new("TaskDetail_TimeEntries");
+        public static readonly TaskDetailTab Files = new("TaskDetail_Files");
+        public static readonly IReadOnlyList<TaskDetailTab> All = [Overview, Comments, TimeEntries, Files];
+    }
+
     [Parameter]
     public required Guid TaskId { get; set; }
+
+    [Parameter]
+    public EventCallback<TaskStatus> StatusChanged { get; set; }
     
     [Inject]
     public IState<TasksState> _tasksState { get; set; }
@@ -33,6 +47,9 @@ public partial class UpdateTaskForm: IDisposable
     
     [Inject]
     public ILogger<UpdateTaskForm> _logger { get; set; }
+
+    [Inject]
+    private IState<TimeEntryState> _timeEntryState { get; set; } = null!;
     
     private ICollection<Guid> _allowedUserIds
     {
@@ -54,18 +71,54 @@ public partial class UpdateTaskForm: IDisposable
     private string? _attachmentInteropId;
     private bool _isAttachmentInteropInitialized;
     private bool _isDragActive;
+    private bool _isTitleEditing;
+    private bool _isDescriptionEditing;
+    private TimeEntryDto? _timeEntryToEdit;
+    private bool _isTaskTimeEntriesLoading;
+    private ICollection<TimeEntryDto> _taskTimeEntries = [];
+    private TaskDetailTab _activeTab = TaskDetailTab.Overview;
     private readonly List<AttachmentsBlock.UploadingAttachment> _uploadingAttachments = new();
     private readonly HashSet<string> _uploadingAttachmentKeys = new();
     public TaskFullDto _task { get; set; } = new();
 
     private string _attachmentAcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
     private ICollection<StoredFileDto> TaskAttachments => _task?.Attachments ?? new List<StoredFileDto>();
+    private IEnumerable<TimeEntryDto> TaskTimeEntries => _taskTimeEntries;
     private string EstimateInputLabel => _task.ExternalSourceType == ExternalSourceType.Jira
         ? DashboardLocalizer["OriginalEstimate"].Value
         : DashboardLocalizer["UpdateTaskForm_PlannedTime"].Value;
     private string EstimateInputHint => _task.ExternalSourceType == ExternalSourceType.Jira
         ? DashboardLocalizer["UpdateTaskForm_JiraEstimateHint"].Value
         : DashboardLocalizer["UpdateTaskForm_ManualEstimateHint"].Value;
+
+    private string GetTabClass(TaskDetailTab tab) => tab == _activeTab
+        ? "border-blue-600 text-blue-700"
+        : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700";
+
+    private async Task OnTabSelected(TaskDetailTab tab)
+    {
+        _activeTab = tab;
+        if (tab == TaskDetailTab.TimeEntries && !_taskTimeEntries.Any())
+        {
+            _isTaskTimeEntriesLoading = true;
+            try
+            {
+                var response = await ApiService.TimeEntryGetFilteredListAsync(new TimeEntryGetFilteredListRequest { Page = 1, TaskId = TaskId });
+                _taskTimeEntries = response?.Items ?? [];
+            }
+            finally
+            {
+                _isTaskTimeEntriesLoading = false;
+            }
+        }
+    }
+
+    private Task OnTitleEditCompleted()
+    {
+        SubmitForm();
+        _isTitleEditing = false;
+        return Task.CompletedTask;
+    }
     
     protected override async Task OnInitializedAsync()
     {
@@ -139,6 +192,7 @@ public partial class UpdateTaskForm: IDisposable
             return;
         _model.Status = status.Value;
         SubmitForm();
+        StatusChanged.InvokeAsync(status.Value);
     }
 
     private void OnPriorityChanged(TaskPriority? priority)

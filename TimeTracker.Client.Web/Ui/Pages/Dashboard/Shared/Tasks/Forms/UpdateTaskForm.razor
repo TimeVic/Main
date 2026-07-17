@@ -2,170 +2,137 @@
 @using LumexUI.Common
 @using TimeTracker.Business.Common.Constants.Task
 @using TimeTracker.Business.Common.Constants.Storage
+@using TimeTracker.Business.Common.Constants
+@using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Core.Constants.Ui
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Comments
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 @inherits BaseReactiveComponent
 
 @if (_isLoading)
 {
-    <LumexSpinner Size="@Size.Large" />
+    <div class="flex justify-center py-12"><LumexSpinner Size="@Size.Large" /></div>
 }
 else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
 {
-    <div
-        @ref="_attachmentDropZone"
-        class="relative rounded-2xl transition @(_isDragActive ? "bg-blue-50/60 ring-2 ring-blue-500 ring-offset-2" : null)">
-        <InputFile
-            @ref="_attachmentInput"
-            class="hidden"
-            OnChange="@OnAttachmentsInputFileChange"
-            multiple
-            accept="@_attachmentAcceptTypes" />
+    <div @ref="_attachmentDropZone" class="task-detail-workspace relative">
+        @if (_timeEntryToEdit != null)
+        {
+            <EditTimeEntryModal Entry="@_timeEntryToEdit" OnClose="@(() => _timeEntryToEdit = null)" />
+        }
         @if (_isDragActive)
         {
-            <div class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-2xl border-2 border-dashed border-blue-500 bg-blue-50/80 text-blue-600">
+            <div class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center rounded-lg border-2 border-dashed border-blue-500 bg-blue-50/80 text-blue-600">
                 <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
             </div>
         }
 
-        <EditForm
-            @ref="_form"
-            EditContext="_editContext"
-            novalidate>
-            <DataAnnotationsValidator/>
-
-            <div class="rounded-2xl border border-slate-200 p-4">
-                <div class="flex items-end gap-3">
-                    <div class="flex-1 min-w-0">
-                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["TaskName"]</label>
-                        <InputTextField 
-                            FullWidth="true"
-                            Size="Size.Large"
-                            @bind-Value="_model.Title"/>
-                    </div>
-                    <div class="w-40 shrink-0">
-                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@EstimateInputLabel</label>
-                        <DurationInput
-                            Placeholder="1h 30m"
-                            FullWidth="true"
-                            Size="Size.Large"
-                            @bind-Value="_model.OriginalEstimate"/>
-                    </div>
-                </div>
-            </div>
-
-            <div class="rounded-2xl border border-slate-200 p-4 mt-3">
-                <div class="grid gap-4 lg:grid-cols-[repeat(3,minmax(0,1fr))] lg:items-end">
-                    <div>
-                        <EnumDropDown
-                            TItem="TaskStatus"
-                            Label="@DashboardLocalizer["Status"]"
-                            Value="_model.Status"
-                            ValueChanged="OnStatusChanged"
-                        />
-                    </div>
-                    <div>
-                        <EnumDropDown
-                            TItem="TaskPriority"
-                            Label="@DashboardLocalizer["Priority"]"
-                            Value="_model.Priority"
-                            ValueChanged="OnPriorityChanged"
-                        />
-                    </div>
-                    <div>
-                        <MembersDropDown
-                            Type="DropDownType.Select"
-                            Label="@DashboardLocalizer["UpdateTaskForm_Assigned"]"
-                            UserId="_model.UserId"
-                            SelectedItemChanged="OnAssignedChanged"
-                            AllowedIds="_allowedUserIds"/>
-                    </div>
-                </div>
-            </div>
-            
-            <TaskEstimateSummaryBlock
-                Class="mt-3"
-                PlannedDuration="_model.OriginalEstimate"
-                TrackedDuration="_task.TrackedDuration"
-                ExternalSourceType="_task.ExternalSourceType" />
-
-            <div class="rounded-2xl border border-slate-200 p-4 mt-3">
-                <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Description"]</label>
-                <MarkdownEdit
-                    Value="@_model.Description"
-                    ValueChanged="@OnDescriptionChanged"
-                    Placeholder="@DashboardLocalizer["TaskDescription"].Value"
-                    RowsMin="8" />
-                <div class="mt-5 border-t border-slate-200 pt-4">
-                    <p class="flex items-center gap-2 text-sm text-slate-500">
-                        <i class="fa-solid fa-paperclip text-xs text-slate-400"></i>
-                        <span>@DashboardLocalizer["UpdateTaskForm_AttachmentsHint"]</span>
-                    </p>
-                    <AttachmentsBlock
-                        Class="mt-4"
-                        ListClass="flex flex-wrap gap-3"
-                        PreviewItemClass="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition"
-                        EntityId="@TaskId"
-                        EntityType="@StorageEntityType.Task"
-                        Files="@TaskAttachments"
-                        UploadingFiles="@_uploadingAttachments"
-                        FilesChanged="@OnAttachmentsChanged" />
-                </div>
-            </div>
-            
-            <div class="rounded-2xl border border-slate-200 p-4 mt-3">
-                <div class="grid gap-4 grid-cols-[repeat(auto-fit,minmax(12rem,1fr))]">
-                    <div class="min-w-0">
-                        <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Project"]</label>
-                        <div class="flex min-h-[42px] min-w-0 items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm leading-5 text-slate-700">
-                            <span class="break-words">@_task.TaskList.Project.Name</span>
-                        </div>
-                    </div>
-                    <div class="min-w-0">
-                        <TaskListDropDown
-                            Label="@DashboardLocalizer["TaskList"]"
-                            Variant="InputVariant.Outlined"
-                            LabelPlacement="LabelPlacement.Outside"
-                            ProjectId="@_task.TaskList.Project.Id"
-                            Value="@_model.TaskListId"
-                            Disabled="@_tasksState.Value.IsTaskSaving"
-                            FullWidth="true"
-                            SelectedItemChanged="@OnTaskListChanged" />
-                    </div>
-                    @if (!string.IsNullOrWhiteSpace(_task?.FormattedId))
+        <EditForm @ref="_form" EditContext="_editContext" novalidate>
+            <DataAnnotationsValidator />
+            <div class="border-b border-slate-200 px-1">
+                <nav class="flex gap-1 overflow-x-auto" aria-label="@DashboardLocalizer["TaskDetail_Tabs"]">
+                    @foreach (var tab in TaskDetailTab.All)
                     {
-                        <div class="min-w-0">
-                            <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">
-                                @if (!string.IsNullOrWhiteSpace(_task?.ExternalTaskId))
+                        <button type="button" @onclick="@(() => OnTabSelected(tab))" class="shrink-0 border-b-2 px-3 py-3 text-sm font-medium transition @GetTabClass(tab)">
+                            @DashboardLocalizer[tab.ResourceKey]
+                        </button>
+                    }
+                </nav>
+            </div>
+
+            <div class="grid min-h-[30rem] lg:grid-cols-[minmax(0,1fr)_15rem]">
+                <main class="task-detail-tab-content min-w-0 px-1 py-5 lg:pr-6">
+                    @if (_activeTab == TaskDetailTab.Overview)
+                    {
+                        <section>
+                            <div class="flex min-h-[3.5rem] items-start gap-2">
+                                @if (_isTitleEditing)
                                 {
-                                    <text>@DashboardLocalizer["ExternalTaskId"]</text>
+                                    <textarea rows="2" @bind="_model.Title" @onblur="@OnTitleEditCompleted" class="min-h-[3.5rem] w-full resize-none rounded-lg border border-slate-300 px-3 py-2 text-xl font-semibold leading-6 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"></textarea>
                                 }
                                 else
                                 {
-                                    <text>@DashboardLocalizer["TaskId"]</text>
+                                    <h2 class="min-w-0 flex-1 break-words text-xl font-semibold text-slate-900">@_model.Title</h2>
+                                    <button type="button" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-blue-600" @onclick="@(() => _isTitleEditing = true)" title="@DashboardLocalizer["Edit"]"><i class="fa-solid fa-pen"></i></button>
                                 }
-                            </label>
-                            <div class="flex min-h-[42px] min-w-0 items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm leading-5 text-slate-700">
-                                <span class="break-words">@_task?.FormattedId</span>
                             </div>
-                        </div>
+                            <div class="mt-5 border-y border-slate-100 py-4">
+                                <TaskEstimateSummaryBlock IsCompact="true" PlannedDuration="_model.OriginalEstimate" TrackedDuration="_task.TrackedDuration" ExternalSourceType="_task.ExternalSourceType" />
+                            </div>
+                        </section>
+                        <section class="mt-6">
+                            <div class="mb-2 flex items-center justify-between">
+                                <label class="text-sm font-semibold text-slate-800">@DashboardLocalizer["Description"]</label>
+                                @if (!_isDescriptionEditing && !string.IsNullOrWhiteSpace(_model.Description))
+                                {
+                                    <button type="button" class="text-xs font-medium text-blue-600 hover:text-blue-700" @onclick="@(() => _isDescriptionEditing = true)">@DashboardLocalizer["Edit"]</button>
+                                }
+                            </div>
+                            @if (_isDescriptionEditing)
+                            {
+                                <MarkdownEdit Value="@_model.Description" ValueChanged="@OnDescriptionChanged" Placeholder="@DashboardLocalizer["TaskDescription"].Value" RowsMin="5" />
+                            }
+                            else if (string.IsNullOrWhiteSpace(_model.Description))
+                            {
+                                <MarkdownEdit IsEditMode="true" Value="@_model.Description" ValueChanged="@OnDescriptionChanged" Placeholder="@DashboardLocalizer["TaskDescription"].Value" RowsMin="4" />
+                            }
+                            else
+                            {
+                                <div class="whitespace-pre-wrap text-sm leading-6 text-slate-700">@_model.Description</div>
+                            }
+                        </section>
                     }
-                </div>
-                <div class="mt-6 pt-1">
-                    <TagsDropDown
-                        Label="@DashboardLocalizer["Tags"]"
-                        Value="_model.TagIds"
-                        ValueChanged="OnTagsChanged" />
-                </div>
+                    else if (_activeTab == TaskDetailTab.Comments)
+                    {
+                        <TaskCommentsBlock Task="@_task" />
+                    }
+                    else if (_activeTab == TaskDetailTab.TimeEntries)
+                    {
+                        <section>
+                            @if (_isTaskTimeEntriesLoading)
+                            {
+                                <div class="flex justify-center py-10"><LumexSpinner Size="@Size.Medium" /></div>
+                            }
+                            else if (TaskTimeEntries.Any())
+                            {
+                                <div class="divide-y divide-slate-200 border-y border-slate-200">
+                                    @foreach (var entry in TaskTimeEntries)
+                                    {
+                                        <div class="flex items-center justify-between gap-4 py-3">
+                                            <div class="min-w-0"><p class="text-sm font-medium text-slate-800">@entry.StartTimeOffset.ToString("MMM d, yyyy")</p><p class="mt-1 truncate text-xs text-slate-500">@(entry.Project?.Name ?? _task.TaskList.Project.Name)</p></div>
+                                            <div class="flex shrink-0 items-center gap-3"><span class="text-sm font-semibold text-slate-700">@entry.Duration.ToReadableShortString()</span><button type="button" class="text-xs font-medium text-blue-600" @onclick="@(() => _timeEntryToEdit = entry)">@DashboardLocalizer["Edit"]</button></div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            else { <TaskDetailEmptyState Title="@DashboardLocalizer["TaskDetail_NoTimeEntries"].Value" /> }
+                        </section>
+                    }
+                    else
+                    {
+                        <section><AttachmentsUploadBlock EntityId="@TaskId" EntityType="@StorageEntityType.Task" Files="@TaskAttachments" FilesChanged="@OnAttachmentsChanged" Hint="@DashboardLocalizer["Notes_AttachmentsHint"].Value" /></section>
+                    }
+                </main>
+
+                <aside class="space-y-0 border-t border-slate-200 bg-slate-50/60 px-4 py-5 lg:border-l lg:border-t-0">
+                    <h3 class="text-xs font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["TaskDetail_Details"]</h3>
+                    <div class="mt-4 flex flex-col gap-5">
+                        <EnumDropDown TItem="TaskStatus" Label="@DashboardLocalizer["Status"]" Value="_model.Status" ValueChanged="OnStatusChanged" />
+                        <EnumDropDown TItem="TaskPriority" Label="@DashboardLocalizer["Priority"]" Value="_model.Priority" ValueChanged="OnPriorityChanged" />
+                        <MembersDropDown Type="DropDownType.Select" Label="@DashboardLocalizer["UpdateTaskForm_Assigned"]" UserId="_model.UserId" SelectedItemChanged="OnAssignedChanged" AllowedIds="_allowedUserIds" />
+                        <div><p class="text-xs font-medium text-slate-500">@DashboardLocalizer["Project"]</p><p class="mt-1 text-sm text-slate-800">@_task.TaskList.Project.Name</p></div>
+                        <TaskListDropDown Label="@DashboardLocalizer["TaskList"]" Variant="InputVariant.Outlined" LabelPlacement="LabelPlacement.Outside" ProjectId="@_task.TaskList.Project.Id" Value="@_model.TaskListId" Disabled="@_tasksState.Value.IsTaskSaving" FullWidth="true" SelectedItemChanged="@OnTaskListChanged" />
+                        <TagsDropDown Label="@DashboardLocalizer["Tags"]" Value="_model.TagIds" ValueChanged="OnTagsChanged" />
+                        <div><p class="text-xs font-medium text-slate-500">@DashboardLocalizer["TaskId"]</p><p class="mt-1 text-sm text-slate-800">@_task.FormattedId</p></div>
+                    </div>
+                    <h3 class="mt-6 text-xs font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["TaskDetail_Tracking"]</h3>
+                    <div class="mt-4 flex flex-col gap-4"><DurationInput Label="@EstimateInputLabel" Placeholder="1h 30m" FullWidth="true" @bind-Value="_model.OriginalEstimate" /><TaskEstimateSummaryBlock IsCompact="true" PlannedDuration="_model.OriginalEstimate" TrackedDuration="_task.TrackedDuration" /></div>
+                    @if (_task.ExternalSourceType == ExternalSourceType.Jira) { <div class="mt-6 border-t border-slate-200 pt-4"><h3 class="text-xs font-semibold uppercase tracking-wide text-slate-500">@DashboardLocalizer["TaskDetail_Integrations"]</h3><p class="mt-2 text-sm text-slate-700"><i class="fa-brands fa-jira mr-1 text-blue-600"></i>@DashboardLocalizer["TaskDetail_JiraSynced"]</p></div> }
+                </aside>
             </div>
-
         </EditForm>
-
-        <div class="mt-3">
-            <TaskCommentsBlock Task="@_task" />
-        </div>
     </div>
 }

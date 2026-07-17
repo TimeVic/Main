@@ -14,6 +14,8 @@ public class GetFilteredListRequest: IRequest<GetFilteredListResponse>
     
     public Guid? ProjectId { get; set; }
 
+    public Guid? TaskId { get; set; }
+
     public Guid? MemberId { get; set; }
     
     [StringLength(255)]

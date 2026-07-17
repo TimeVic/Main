@@ -158,27 +158,6 @@
                 </div>
             </div>
         }
-        <div class="mx-4 mb-4 border-t border-slate-200 pt-4">
-            <div class="relative flex min-h-24 items-center justify-center overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 text-center text-sm text-slate-500 transition hover:border-blue-400 hover:bg-blue-50">
-                <InputFile
-                    class="absolute inset-0 z-10 h-full w-full cursor-copy opacity-0"
-                    OnChange="@OnAttachmentsInputFileChange"
-                    multiple
-                    accept="@AttachmentAcceptTypes" />
-                <div class="pointer-events-none flex items-center gap-2">
-                    <i class="fa-solid fa-cloud-arrow-up text-base text-slate-400"></i>
-                    <span>@DashboardLocalizer["Notes_AttachmentsHint"]</span>
-                </div>
-            </div>
-            <AttachmentsBlock
-                Class="mt-4"
-                ListClass="flex flex-wrap gap-3"
-                PreviewItemClass="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 transition"
-                EntityId="@Document.Id"
-                EntityType="@StorageEntityType.NoteNode"
-                Files="@Document.Attachments"
-                UploadingFiles="@_uploadingAttachments"
-                FilesChanged="@AttachmentsChanged" />
-        </div>
+        <AttachmentsUploadBlock Class="mx-4 mb-4 border-t border-slate-200 pt-4" EntityId="@Document.Id" EntityType="@StorageEntityType.NoteNode" Files="@Document.Attachments" FilesChanged="@AttachmentsChanged" Hint="@DashboardLocalizer["Notes_AttachmentsHint"].Value" />
     }
 </section>
