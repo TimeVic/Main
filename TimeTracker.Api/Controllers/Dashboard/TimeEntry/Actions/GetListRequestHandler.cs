@@ -60,5 +60,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 ActiveTimeEntry = _mapper.Map<TimeEntryDto>(activeTimeEntry)
             };
         }
+
     }
 }

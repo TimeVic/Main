@@ -708,4 +708,19 @@
   <data name="NoteLinkEntityType_Client" xml:space="preserve"><value>Клієнт</value></data>
   <data name="NoteLinkEntityType_Project" xml:space="preserve"><value>Проєкт</value></data>
   <data name="NoteLinkEntityType_Task" xml:space="preserve"><value>Задача</value></data>
+  <data name="TaskDetail_Tabs" xml:space="preserve"><value>Вкладки деталей завдання</value></data>
+  <data name="TaskDetail_Overview" xml:space="preserve"><value>Огляд</value></data>
+  <data name="TaskDetail_Comments" xml:space="preserve"><value>Коментарі</value></data>
+  <data name="TaskDetail_TimeEntries" xml:space="preserve"><value>Записи часу</value></data>
+  <data name="TaskDetail_Activity" xml:space="preserve"><value>Активність</value></data>
+  <data name="TaskDetail_Files" xml:space="preserve"><value>Файли</value></data>
+  <data name="TaskDetail_Details" xml:space="preserve"><value>Деталі</value></data>
+  <data name="TaskDetail_Tracking" xml:space="preserve"><value>Облік часу</value></data>
+  <data name="TaskDetail_Integrations" xml:space="preserve"><value>Інтеграції</value></data>
+  <data name="TaskDetail_AddDescription" xml:space="preserve"><value>Додати опис</value></data>
+  <data name="TaskDetail_NoTimeEntries" xml:space="preserve"><value>До цього завдання ще не прив'язано записів часу.</value></data>
+  <data name="TaskDetail_Created" xml:space="preserve"><value>Завдання створено</value></data>
+  <data name="TaskDetail_Updated" xml:space="preserve"><value>Завдання оновлено</value></data>
+  <data name="TaskDetail_JiraSynced" xml:space="preserve"><value>Синхронізовано з Jira</value></data>
+  <data name="TaskDetail_OpenFullPage" xml:space="preserve"><value>Відкрити завдання на весь екран</value></data>
 </root>

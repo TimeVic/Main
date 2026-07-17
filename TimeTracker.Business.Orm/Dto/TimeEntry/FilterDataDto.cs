@@ -6,6 +6,8 @@ public class FilterDataDto
     
     public Guid? ProjectId { get; set; }
 
+    public Guid? TaskId { get; set; }
+
     public string? Search { get; set; }
     
     public bool? IsBillable { get; set; }

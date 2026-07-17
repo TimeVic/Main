@@ -53,10 +53,12 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         ProjectEntity rootProjectAlias = null!;
         ClientEntity rootClientAlias = null!;
         UserEntity rootUserAlias = null!;
+        TaskEntity rootTaskAlias = null!;
         var query = Session.QueryOver<TimeEntryEntity>()
             .Inner.JoinAlias(item => item.User, () => rootUserAlias)
             .Left.JoinAlias(item => item.Project, () => rootProjectAlias)
             .Left.JoinAlias(() => rootProjectAlias!.Client, () => rootClientAlias)
+            .Left.JoinAlias(item => item.Task, () => rootTaskAlias)
             .OrderBy(item => item.StartTime).Desc
             .Where(item => item.Workspace.Id == workspace.Id && item.IsMarkedToDelete == false);
         
@@ -69,6 +71,10 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             if (filter.ProjectId.HasValue)
             {
                 query = query.And(() => rootProjectAlias!.Id == filter.ProjectId);
+            }
+            if (filter.TaskId.HasValue)
+            {
+                query = query.And(() => rootTaskAlias!.Id == filter.TaskId);
             }
             if (filter.IsBillable.HasValue)
             {
@@ -195,6 +201,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
 
         return new ListDto<TimeEntryEntity>(items, totalCount);
     }
+
     
     public async Task<TimeEntryEntity> StartNewAsync(
         UserEntity user,

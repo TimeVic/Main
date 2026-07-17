@@ -57,18 +57,18 @@
 }
 
 <div class="overflow-hidden">
-    <table class="w-full table-fixed border-separate border-spacing-0">
+    <table class="w-full max-w-[1200px] table-fixed border-separate border-spacing-0">
         <colgroup>
-            <col class="w-14" />
+            <col class="w-12" />
             <col />
-            <col class="w-32" />
-            <col class="w-32" />
-            <col class="w-56" />
-            <col class="w-36" />
+            <col class="w-28" />
+            <col class="w-24" />
+            <col class="w-44" />
+            <col class="w-28" />
         </colgroup>
         <thead class="bg-slate-50/80 sticky top-0 z-10">
             <tr class="text-left text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                <th class="w-14 px-4 py-3"></th>
+                <th class="w-12 px-3 py-3"></th>
                 <th class="px-2 py-3">@DashboardLocalizer["Task"]</th>
                 <th class="px-2 py-3 text-center">@DashboardLocalizer["Status"]</th>
                 <th class="px-2 py-3 text-center">@DashboardLocalizer["Priority"]</th>
@@ -99,14 +99,14 @@
                         @ondragover="@(() => OnDragOver(task))"
                         @ondrop="@(() => OnDrop(task))"
                         @ondragend="@OnDragEnd">
-                        <td class="border-t border-slate-200 px-4 py-3 align-top">
+                        <td class="border-t border-slate-200 px-3 py-3 align-top">
                             <div class="flex flex-col items-center gap-2">
                                 <LumexCheckbox
                                     Value="IsTaskBoardSelected(task.Id)"
                                     ValueChanged="@(() => ToggleTaskBoardSelection(task.Id))"/>
                             </div>
                         </td>
-                        <td class="border-t border-slate-200 px-2 py-3 align-top">
+                        <td class="border-t border-slate-200 px-2 py-3 align-top @GetSelectedTaskClass(task.Id)">
                             <div class="flex gap-3">
                                 <div class="flex-1 min-w-0 space-y-2">
                                     <div class="flex min-w-0 items-center gap-2">
@@ -116,7 +116,7 @@
                                         </button>
                                     </div>
                                     <TaskEstimateSummaryBlock
-                                        Class="mt-2"
+                                        Class="mt-1 max-w-[42rem]"
                                         IsCompact="true"
                                         PlannedDuration="task.OriginalEstimate"
                                         TrackedDuration="task.TrackedDuration" />
@@ -127,7 +127,7 @@
                             <EnumDropDown
                                 TItem="TaskStatus"
                                 DropDownColor="@task.Status.GetThemeColor()"
-                                DropDownVariant="Variant.Solid"
+                                DropDownVariant="Variant.Light"
                                 SelectType="DropDownType.DropDown"
                                 Size="Size.Small"
                                 Value="@task.Status"
@@ -137,18 +137,17 @@
                             <EnumDropDown
                                 TItem="TaskPriority"
                                 DropDownColor="@task.Priority.GetThemeColor()"
-                                DropDownVariant="Variant.Solid"
+                                DropDownVariant="Variant.Light"
                                 SelectType="DropDownType.DropDown"
                                 Size="Size.Small"
                                 Value="@task.Priority"
                                 ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                         </td>
                         <td class="border-t border-slate-200 px-2 py-3 align-top">
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2" title="@task.User?.Email">
                                 <UserAvatarBlock User="@task.User" />
                                 <div class="min-w-0">
                                     <div class="truncate text-sm font-medium text-slate-800">@(task.User?.Name ?? "")</div>
-                                    <div class="truncate text-xs text-slate-500">@(task.User?.Email ?? DashboardLocalizer["NoAssignee"].Value)</div>
                                 </div>
                             </div>
                         </td>
