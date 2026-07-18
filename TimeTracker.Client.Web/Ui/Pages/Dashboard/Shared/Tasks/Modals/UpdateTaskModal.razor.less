@@ -18,10 +18,6 @@
   scrollbar-gutter: stable;
 }
 
-.update-task-modal ::deep [data-slot="close-button"] {
-  z-index: 2;
-}
-
 @media (max-width: 767px) {
   .update-task-modal ::deep dialog {
     width: 100vw;
@@ -33,5 +29,9 @@
 
   .update-task-modal ::deep .task-detail-tab-content {
     max-height: calc(100dvh - 13rem);
+  }
+
+  .update-task-modal ::deep .task-tracker-button-text {
+    display: none;
   }
 }

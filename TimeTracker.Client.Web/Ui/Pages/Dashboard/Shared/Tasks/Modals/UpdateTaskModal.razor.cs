@@ -1,12 +1,14 @@
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals;
 
 public partial class UpdateTaskModal
 {
+    private UpdateTaskForm? _taskForm;
+
     [Parameter]
     public required TaskDto Task { get; set; }
     
@@ -19,23 +21,15 @@ public partial class UpdateTaskModal
     [Parameter]
     public virtual EventCallback OnClose { get; set; }
 
-    private LumexModal modal = null!;
-    private bool _isFullScreen;
-    private TaskStatus _status;
-
-    protected override void OnParametersSet()
-    {
-        _status = Task.Status;
-    }
-
-    private void ToggleFullScreen()
-    {
-        _isFullScreen = !_isFullScreen;
-    }
-
     private Task OnStatusChanged(TaskStatus status)
     {
-        _status = status;
+        Task.Status = status;
+        return System.Threading.Tasks.Task.CompletedTask;
+    }
+
+    private Task OnTitleChanged(string title)
+    {
+        _taskForm?.SetTitle(title);
         return System.Threading.Tasks.Task.CompletedTask;
     }
     

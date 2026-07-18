@@ -124,6 +124,13 @@ public partial class TasksTableBlock
         _taskToUpdate = task;
     }
 
+    private static string GetTaskUrl(TaskDto task) => string.Format(SiteUrl.Dashboard_Task, task.Id);
+
+    private static string GetTaskListTitle(string title)
+    {
+        return title.Split('\n', 2)[0].TrimEnd('\r');
+    }
+
     private string GetSelectedTaskClass(Guid taskId) => _selectedTaskId == taskId
         ? "border-l-2 border-l-blue-500 bg-blue-50/40"
         : string.Empty;

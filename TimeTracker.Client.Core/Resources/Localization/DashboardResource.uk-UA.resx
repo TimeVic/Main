@@ -440,6 +440,7 @@
   <data name="Select" xml:space="preserve"><value>Вибрати</value></data>
   <data name="NotSet" xml:space="preserve"><value>Не вказано</value></data>
   <data name="RequiredField" xml:space="preserve"><value>Це поле обовʼязкове</value></data>
+  <data name="TaskDetail_TitleSaveFailed" xml:space="preserve"><value>Не вдалося зберегти назву завдання.</value></data>
   <data name="Submit" xml:space="preserve"><value>Надіслати</value></data>
   <data name="End" xml:space="preserve"><value>Завершення</value></data>
   <data name="Tag" xml:space="preserve"><value>Тег</value></data>
@@ -723,4 +724,5 @@
   <data name="TaskDetail_Updated" xml:space="preserve"><value>Завдання оновлено</value></data>
   <data name="TaskDetail_JiraSynced" xml:space="preserve"><value>Синхронізовано з Jira</value></data>
   <data name="TaskDetail_OpenFullPage" xml:space="preserve"><value>Відкрити завдання на весь екран</value></data>
+  <data name="TaskDetail_BackToTasks" xml:space="preserve"><value>Назад до завдань</value></data>
 </root>

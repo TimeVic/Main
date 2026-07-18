@@ -19,6 +19,7 @@
     ClientId="@ClientId"
     IsExtendedInfo="@IsExtendedInfo"
     LabelPlacement="@LabelPlacement"
+    Size="Size"
     Variant="@Variant" />
 
 @code {
@@ -66,6 +67,9 @@
 
     [Parameter]
     public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
+
+    [Parameter]
+    public Size Size { get; set; } = Size.Medium;
 
     [Parameter]
     public InputVariant Variant { get; set; } = InputVariant.Outlined;

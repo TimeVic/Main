@@ -3,8 +3,8 @@
 
 @inherits BaseReactiveComponent
 
-<section class="rounded-2xl border border-slate-200 p-4">
-    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+<section class="min-w-0">
+    <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
             <h4 class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TaskComments_Title"]</h4>
             <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["TaskComments_Subtitle"]</p>
@@ -17,57 +17,34 @@
         }
     </div>
 
-    <EditCommentForm
-        OnSaved="OnCommentSaved"
-        Comment="@(new TaskCommentDto { Task = Task })"
-        TaskId="@Task.Id"
-        Project="@Task.TaskList.Project" />
+    <div class="mt-4">
+        <EditCommentForm
+            OnSaved="OnCommentSaved"
+            Comment="@(new TaskCommentDto { Task = Task })"
+            TaskId="@Task.Id"
+            Project="@Task.TaskList.Project" />
+    </div>
 
-    <div class="mt-5 border-t border-slate-200 pt-5">
-        @if (_isLoading && !_comments.Any())
-        {
-            <div class="flex justify-center py-6">
-                <LumexSpinner Size="@Size.Medium" />
-            </div>
-        }
-        else if (!_comments.Any())
-        {
-            <div class="rounded-2xl border border-dashed border-slate-200 px-4 py-6 text-center">
+    <PaginatedItemsListBlock
+        Items="@_comments"
+        IsLoading="@_isLoading"
+        IsHasMore="@_isHasMore"
+        OnLoadMore="LoadMore"
+        LoadMoreText="@DashboardLocalizer["TaskComments_LoadMore"].Value">
+        <EmptyContent>
+            <div class="py-10 text-center">
                 <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["TaskComments_EmptyTitle"]</p>
                 <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["TaskComments_EmptySubtitle"]</p>
             </div>
-        }
-        else
-        {
-            <div class="divide-y divide-slate-200">
-                @foreach (var comment in _comments)
-                {
-                    <EditCommentForm
-                        @key="comment.Id"
-                        OnSaved="OnCommentSaved"
-                        OnDeleted="OnCommentDeleted"
-                        Comment="@comment"
-                        TaskId="@Task.Id"
-                        Project="@Task.TaskList.Project" />
-                }
-            </div>
-        }
-
-        @if (_isHasMore)
-        {
-            <div class="mt-4 flex justify-center">
-                <CustomButton
-                    Size="Size.Small"
-                    Variant="Variant.Outlined"
-                    Color="ThemeColor.Default"
-                    IsLoading="@_isLoading"
-                    OnClick="@LoadMore">
-                    <StartContent>
-                        <i class="fa-solid fa-chevron-down text-xs"></i>
-                    </StartContent>
-                    <ChildContent>@DashboardLocalizer["TaskComments_LoadMore"]</ChildContent>
-                </CustomButton>
-            </div>
-        }
-    </div>
+        </EmptyContent>
+        <ItemTemplate Context="comment">
+            <EditCommentForm
+                @key="comment.Id"
+                OnSaved="OnCommentSaved"
+                OnDeleted="OnCommentDeleted"
+                Comment="@comment"
+                TaskId="@Task.Id"
+                Project="@Task.TaskList.Project" />
+        </ItemTemplate>
+    </PaginatedItemsListBlock>
 </section>

@@ -19,6 +19,7 @@
                 @bind:after="@OnEditValueChanged"
                 maxlength="@MaxLength"
                 rows="@_textAreaRows"
+                style="min-height: @(MinHeight)px"
                 class="w-markdown-editor-input w-full resize-y rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-blue-500 focus:outline-none"></textarea>
             <p class="w-support mt-2 text-slate-500">
                 @DashboardLocalizer["MarkdownEdit_Supports"]
@@ -83,6 +84,9 @@
 
     [Parameter]
     public int RowsMin { get; set; } = 6;
+
+    [Parameter]
+    public int MinHeight { get; set; } = 180;
 
     [Parameter]
     public EventCallback<string> ValueChanged { get; set; }

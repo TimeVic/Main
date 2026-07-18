@@ -9,6 +9,9 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
 public partial class TagsDropDown
 {
+    [Parameter]
+    public Size Size { get; set; } = Size.Medium;
+
     [Parameter] 
     public string? Label { get; set; }
     
