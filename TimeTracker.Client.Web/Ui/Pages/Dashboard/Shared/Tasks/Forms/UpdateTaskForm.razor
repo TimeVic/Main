@@ -19,6 +19,12 @@
 else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
 {
     <div @ref="_attachmentDropZone" class="task-detail-workspace relative">
+        <InputFile
+            @ref="_attachmentInput"
+            class="hidden"
+            OnChange="OnAttachmentsInputFileChange"
+            multiple
+            accept="@_attachmentAcceptTypes" />
         @if (_timeEntryToEdit != null)
         {
             <EditTimeEntryModal
@@ -71,6 +77,15 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                                 ValueChanged="@OnDescriptionChanged"
                                 Placeholder="@DashboardLocalizer["TaskDescription"].Value"
                                 RowsMin="4" />
+                            <AttachmentsBlock
+                                Class="mt-4"
+                                ListClass="flex flex-wrap gap-3"
+                                PreviewItemClass="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
+                                EntityId="@TaskId"
+                                EntityType="@StorageEntityType.Task"
+                                Files="@TaskAttachments"
+                                UploadingFiles="@_uploadingAttachments"
+                                FilesChanged="@OnAttachmentsChanged" />
                         </section>
                     }
                     else if (_activeTab == TaskDetailTab.Comments)

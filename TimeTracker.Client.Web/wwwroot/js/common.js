@@ -186,39 +186,13 @@ window.attachmentInput = (() => {
         input.dispatchEvent(new Event("change", { bubbles: true }));
     };
 
-    const getImageExtension = (mimeType) => {
-        switch (mimeType) {
-            case "image/jpeg":
-                return "jpg";
-            case "image/png":
-                return "png";
-            case "image/gif":
-                return "gif";
-            case "image/bmp":
-                return "bmp";
-            case "image/webp":
-                return "webp";
-            default:
-                return "png";
-        }
-    };
-
-    const getClipboardImageFiles = (clipboardData) => {
+    const getClipboardFiles = (clipboardData) => {
         const items = Array.from(clipboardData?.items || []);
         return items
-            .filter((item) => item.kind === "file" && item.type.startsWith("image/"))
-            .map((item, index) => {
+            .filter((item) => item.kind === "file")
+            .map((item) => {
                 const file = item.getAsFile();
-                if (!file) {
-                    return null;
-                }
-
-                const extension = getImageExtension(file.type);
-                return new File(
-                    [file],
-                    file.name || `clipboard-image-${Date.now()}-${index + 1}.${extension}`,
-                    { type: file.type }
-                );
+                return file;
             })
             .filter(Boolean);
     };
@@ -289,13 +263,13 @@ window.attachmentInput = (() => {
                 return;
             }
 
-            const imageFiles = getClipboardImageFiles(event.clipboardData);
-            if (!imageFiles.length) {
+            const files = getClipboardFiles(event.clipboardData);
+            if (!files.length) {
                 return;
             }
 
             event.preventDefault();
-            setInputFiles(input, imageFiles);
+            setInputFiles(input, files);
         };
 
         root.addEventListener("dragenter", onDragEnter);
