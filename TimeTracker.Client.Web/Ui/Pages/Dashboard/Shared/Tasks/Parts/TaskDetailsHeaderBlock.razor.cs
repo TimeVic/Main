@@ -16,7 +16,9 @@ public partial class TaskDetailsHeaderBlock
     [Parameter]
     public EventCallback<string> TitleChanged { get; set; }
 
-    private string TaskUrl => string.Format(SiteUrl.Dashboard_Task, Task.Id);
+    private string TaskUrl => UrlService.GetDashboardUrl($"task/{Task.Id}", Task.TaskList.WorkspaceId);
+
+    private string TaskListUrl => UrlService.GetDashboardUrl($"tasks/{Task.TaskList.Id}", Task.TaskList.WorkspaceId);
 
     private async Task SaveTitleAsync(string title)
     {

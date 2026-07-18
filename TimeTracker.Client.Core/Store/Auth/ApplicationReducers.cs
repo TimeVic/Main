@@ -35,7 +35,7 @@ public class AuthReducers
         return state with
         {
             User = action.User,
-            Workspace = action.User.SelectedWorkspace ?? state.Workspace ?? action.User.DefaultWorkspace
+            Workspace = state.Workspace ?? action.User.SelectedWorkspace ?? action.User.DefaultWorkspace
         };
     }
 }

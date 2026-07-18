@@ -11,6 +11,9 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
         public Dictionary<string, string?> ChangeSet { get; set; } = null!;
 
         public Guid TaskId { get; set; }
+
+        // Task notification URLs must remain bound to the task workspace.
+        public Guid WorkspaceId { get; set; }
         
         public string TaskTitle { get; set; } = string.Empty;
         

@@ -43,6 +43,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             var user = await _apiRequestService.GetCurrentUser();
             var task = await _taskDao.GetById(request.TaskId);
             RecordNotFoundException.ThrowIfNull(task);
+            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
+            if (workspace?.Id != task.TaskList.Project.Client.Workspace.Id)
+            {
+                throw new HasNoAccessException();
+            }
+
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
             {
                 throw new HasNoAccessException();

@@ -57,7 +57,7 @@ public partial class MainHeader
 
     private void OnNavigateToUserSettings()
     {
-        NavigationManager.NavigateTo(SiteUrl.Dashboard_User_Settings);
+        NavigationManager.NavigateTo(UrlService.GetDashboardUrl("user/settings"));
     }
     
     private async Task OnSelectLanguage(string cultureName)

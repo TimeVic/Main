@@ -14,6 +14,7 @@ public class TaskListProfile : Profile
             {
                 Id = src.Id,
                 Name = src.Name,
+                WorkspaceId = src.Project.Client.Workspace.Id,
                 Project = mapper.Mapper.Map<TimeTracker.Api.Shared.Dto.Entity.ProjectDto>(src.Project)
             });
         CreateMap<TaskListEntity, TaskListForListDto>()
@@ -21,6 +22,7 @@ public class TaskListProfile : Profile
             {
                 Id = src.Id,
                 Name = src.Name,
+                WorkspaceId = src.Project.Client.Workspace.Id,
                 Project = mapper.Mapper.Map<TimeTracker.Api.Shared.Dto.Entity.ProjectDto>(src.Project),
                 TasksCount = 0
             })

@@ -77,6 +77,7 @@ public partial class NotificationBgJobService
                 UserName = historyItem.User.Name,
                 ToAddress = receiverEmail,
                 TaskId = historyItem.Task.Id,
+                WorkspaceId = historyItem.Task.Workspace.Id,
                 TaskTitle = historyItem.Task.Title,
                 ChangeSet = changeSet
             });    

@@ -5,7 +5,7 @@ using TimeTracker.Client.Core.Store.TasksList;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks;
 
-public partial class TasksPage
+public partial class TasksPage: IDisposable
 {
     [Parameter]
     public Guid? TaskListId { get; set; }
@@ -21,13 +21,27 @@ public partial class TasksPage
     protected override void OnInitialized()
     {
         base.OnInitialized();
+        _tasksListState.StateChanged += OnTasksListStateChanged;
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
         if (TaskListId.HasValue)
         {
             Dispatcher.Dispatch(new SetSelectedAction(TaskListId));
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction());
         }
-        _tasksListState.StateChanged += (sender, args) =>
-        {   
-            StateHasChanged();
-        };
+    }
+
+    public void Dispose()
+    {
+        _tasksListState.StateChanged -= OnTasksListStateChanged;
+    }
+
+    private void OnTasksListStateChanged(object? sender, EventArgs args)
+    {
+        InvokeAsync(StateHasChanged);
     }
 }

@@ -1,6 +1,7 @@
 using Autofac;
 using TimeTracker.Business.Notifications.Senders;
 using TimeTracker.Business.Notifications.Senders.Tasks;
+using TimeTracker.Business.Notifications.Senders.Tasks.Comments;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
@@ -86,6 +87,7 @@ public class ProcessNotificationTest: BaseTest
                 { "test", "test" }
             },
             TaskId = task.Id,
+            WorkspaceId = task.Workspace.Id,
             TaskTitle = "Task title",
             UserName = expectedUser.Name
         };
@@ -99,5 +101,31 @@ public class ProcessNotificationTest: BaseTest
         var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
         Assert.NotNull(actualEmail);
         Assert.Contains(testContext.ToAddress, actualEmail.To);
+        Assert.Contains($"/board/{task.Workspace.Id}/task/{task.Id}", actualEmail.Body);
+    }
+
+    [Fact]
+    public async Task ShouldProcessTaskCommentNotificationWithWorkspaceUrl()
+    {
+        var task = await _taskSeeder.CreateAsync();
+        var expectedUser = await _userSeeder.CreateActivatedAsync();
+        var testContext = new SetCommentNotificationContext()
+        {
+            ToAddress = expectedUser.Email,
+            Comment = "Test comment",
+            TaskId = task.Id,
+            WorkspaceId = task.Workspace.Id,
+            OwnerName = expectedUser.Name
+        };
+
+        await _queueService.PushNotificationAsync(testContext);
+
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
+        Assert.True(actualProcessedCounter > 0);
+
+        var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
+        Assert.NotNull(actualEmail);
+        Assert.Contains(testContext.ToAddress, actualEmail.To);
+        Assert.Contains($"/board/{task.Workspace.Id}/task/{task.Id}", actualEmail.Body);
     }
 }

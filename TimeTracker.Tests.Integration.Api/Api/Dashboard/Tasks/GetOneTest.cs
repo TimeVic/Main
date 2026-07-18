@@ -167,4 +167,17 @@ public class GetOneTest: BaseTest
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
+
+    [Fact]
+    public async Task ShouldNotReceiveIfWorkspaceDoesNotMatch()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new GetOneRequest
+        {
+            TaskId = _task.Id
+        }, Guid.NewGuid());
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
+    }
 }

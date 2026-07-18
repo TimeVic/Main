@@ -99,6 +99,6 @@ public partial class ProjectNotesSectionBlock
 
     private void NavigateToNote(Guid noteId)
     {
-        NavigationManager.NavigateTo($"{SiteUrl.Dashboard_Notes}?noteId={noteId}");
+        NavigationManager.NavigateTo($"{UrlService.GetDashboardUrl("notes")}?noteId={noteId}");
     }
 }

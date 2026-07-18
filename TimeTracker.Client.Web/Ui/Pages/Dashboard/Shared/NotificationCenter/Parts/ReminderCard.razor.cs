@@ -18,6 +18,8 @@ public partial class ReminderCard
     {
         Dispatcher.Dispatch(new MarkAsReadAction(Notification.Id));
         MudDialog.Close();
-        Microsoft.AspNetCore.Components.NavigationManager.NavigateTo(string.Format(SiteUrl.Dashboard_Task, Notification.Task!.Id));
+        Microsoft.AspNetCore.Components.NavigationManager.NavigateTo(
+            UrlService.GetDashboardUrl($"task/{Notification.Task!.Id}", Notification.Task.TaskList.WorkspaceId)
+        );
     }
 }

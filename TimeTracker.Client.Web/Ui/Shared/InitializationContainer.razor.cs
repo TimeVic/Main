@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TimeTracker.Client.Core.Core.Extensions;
+using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Web.Services;
 using TimeTracker.Client.Web.Services.Validation;
 using TimeTracker.Client.Web.Services.Workspace;
@@ -36,6 +37,9 @@ public partial class InitializationContainer
     
     [Inject]
     protected WorkspaceInitializationService WorkspaceInitializationService { get; set; }
+
+    [Inject]
+    protected UrlService UrlService { get; set; }
     
     [Inject]
     protected IState<CommonState> CommonState { get; set; }
@@ -54,8 +58,23 @@ public partial class InitializationContainer
         };
         if (!NavigationManager.GetPath().StartsWith("/board-change/"))
         {
+            var workspaceId = UrlService.GetWorkspaceIdFromDashboardUrl();
+            if (!await WorkspaceInitializationService.EnsureWorkspaceAsync(workspaceId))
+            {
+                NavigationManager.NavigateTo(SiteUrl.Error403, replace: true);
+                return;
+            }
+
             WorkspaceInitializationService.Init();
             await WorkspaceInitializationService.AfterInit();
+
+            if (!workspaceId.HasValue && AuthState.Value.Workspace != null)
+            {
+                NavigationManager.NavigateTo(
+                    UrlService.GetDashboardUrlForCurrentPath(AuthState.Value.Workspace.Id),
+                    replace: true
+                );
+            }
         }
     }
 }

@@ -32,28 +32,28 @@ public partial class MainMenu: IDisposable
     
     private IReadOnlyCollection<MenuItemModel> NavItems => new List<MenuItemModel>
     {
-        new(Text("Summary"), "fa-regular fa-bar-chart", SiteUrl.Dashboard_Reports_Summary),
-        new(Text("TimeEntries"), "fa-regular fa-clock", SiteUrl.Dashboard_TimeEntry),
+        new(Text("Summary"), "fa-regular fa-bar-chart", UrlService.GetDashboardUrl("report/summary")),
+        new(Text("TimeEntries"), "fa-regular fa-clock", UrlService.GetDashboardUrl()),
         new(
             Text("Money"),
             "fa-solid fa-chart-pie",
-            SiteUrl.Dashboard_WorkspaceMoney,
+            UrlService.GetDashboardUrl("money"),
             "",
             WorkspacePermission.ReadWorkspaceFinancialSummary
         ),
-        new(Text("Tasks"), "fa-regular fa-square-check", SiteUrl.Dashboard_Tasks_Main),
-        new(Text("Notes"), "fa-regular fa-note-sticky", SiteUrl.Dashboard_Notes),
+        new(Text("Tasks"), "fa-regular fa-square-check", UrlService.GetDashboardUrl("tasks")),
+        new(Text("Notes"), "fa-regular fa-note-sticky", UrlService.GetDashboardUrl("notes")),
         new(
             Text("MemberPayments"),
             "fa-regular fa-credit-card",
-            SiteUrl.Dashboard_MemberPayments,
+            UrlService.GetDashboardUrl("member-payments"),
             "",
             WorkspacePermission.ReadMemberPayment
         ),
         new(
             Text("ClientPayments"),
             "fa-solid fa-money-bill-transfer",
-            SiteUrl.Dashboard_ClientPayments,
+            UrlService.GetDashboardUrl("client-payments"),
             "",
             WorkspacePermission.ReadClientPayment,
             WorkspacePermission.ReadWorkspaceFinancialSummary
@@ -61,15 +61,15 @@ public partial class MainMenu: IDisposable
         new(
             Text("PaymentsReportTitle"),
             "fa-regular fa-credit-card",
-            SiteUrl.Dashboard_Reports_MemberPayments,
+            UrlService.GetDashboardUrl("report/member-payments"),
             Text("Reports"),
             WorkspacePermission.ReadMemberPayment
         ),
-        new(Text("TimeEntriesReportTitle"), "fa-regular fa-clock", SiteUrl.Dashboard_Reports_TimeEntries, Text("Reports")),
+        new(Text("TimeEntriesReportTitle"), "fa-regular fa-clock", UrlService.GetDashboardUrl("report/time-entries"), Text("Reports")),
         new(
             string.Empty,
             "fa-solid fa-sliders",
-            SiteUrl.Dashboard_Workspace_Settings,
+            UrlService.GetDashboardUrl("workspace/settings"),
             null,
             WorkspacePermission.UpdateWorkspaceSettings
         ),
@@ -98,12 +98,12 @@ public partial class MainMenu: IDisposable
     private bool IsMenuItemSelected(MenuItemModel item)
     {
         var path = NavigationManager.GetPath();
-        var basePath = SiteUrl.Dashboard_TimeEntry;
+        var basePath = UrlService.GetDashboardUrl();
         if (item.Url != basePath)
         {
             // Also activate the workspace settings icon when the user settings page is open
-            if (item.Url == SiteUrl.Dashboard_Workspace_Settings
-                && path.StartsWith(SiteUrl.Dashboard_User_Settings))
+            if (item.Url == UrlService.GetDashboardUrl("workspace/settings")
+                && path.StartsWith(UrlService.GetDashboardUrl("user/settings")))
             {
                 return true;
             }

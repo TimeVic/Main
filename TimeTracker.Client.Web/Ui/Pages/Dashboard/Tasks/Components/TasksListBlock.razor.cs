@@ -14,11 +14,7 @@ public partial class TasksListBlock: IDisposable
     public Guid? TaskListId
     {
         get => _taskListId;
-        set
-        {
-            _taskListId = value;
-            OnTasksListSelected(_taskListId);
-        }
+        set => _taskListId = value;
     }
 
     [Inject]
@@ -71,21 +67,14 @@ public partial class TasksListBlock: IDisposable
         _tasksListState.StateChanged -= OnTasksListStateChanged;
     }
     
-    private void OnTasksListSelected(Guid? taskListId)
+    private void OnTasksListSelected(Guid taskListId)
     {
-        if (!taskListId.HasValue)
+        if (TaskListId == taskListId)
         {
             return;
         }
 
-        var taskList = _tasksListState.Value.List.FirstOrDefault(item => item.Id == taskListId.Value);
-        if (taskList?.Project != null)
-        {
-            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.SetSelectedAction(taskList.Project));
-        }
-
-        Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetSelectedAction(taskListId));
-        Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction());
+        NavigationManager.NavigateTo(UrlService.GetDashboardUrl($"tasks/{taskListId}"));
     }
     
     private void OnSelectedProject(ProjectDto? project)
@@ -140,6 +129,23 @@ public partial class TasksListBlock: IDisposable
 
     private void SetDefaultTaskList()
     {
+        if (TaskListId.HasValue)
+        {
+            if (_tasksListState.Value.SelectedTaskListId != TaskListId)
+            {
+                Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetSelectedAction(TaskListId));
+            }
+
+            var routedTaskList = _tasksListState.Value.SelectedTaskList;
+            if (routedTaskList?.Project != null
+                && routedTaskList.Project.Id != _projectState.Value.Selected?.Id)
+            {
+                Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.SetSelectedAction(routedTaskList.Project));
+            }
+
+            return;
+        }
+
         if (_projectState.Value.Selected == null && _tasksListState.Value.SelectedTaskList?.Project != null)
         {
             Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.SetSelectedAction(_tasksListState.Value.SelectedTaskList.Project));

@@ -43,6 +43,12 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             var user = await _apiRequestService.GetCurrentUser();
             var taskList = await _taskListDao.GetById(request.TaskListId);
             RecordNotFoundException.ThrowIfNull(taskList);
+
+            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
+            if (workspace?.Id != taskList.Project.Client.Workspace.Id)
+            {
+                throw new HasNoAccessException();
+            }
             
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList.Project))
             {
@@ -62,7 +68,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 
             return new GetListResponse(
                 items,
-                taskLists.TotalCount
+                taskLists.TotalCount,
+                _mapper.Map<TaskListDto>(taskList)
             );
         }
     }

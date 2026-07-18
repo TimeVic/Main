@@ -124,7 +124,7 @@ public partial class TasksTableBlock
         _taskToUpdate = task;
     }
 
-    private static string GetTaskUrl(TaskDto task) => string.Format(SiteUrl.Dashboard_Task, task.Id);
+    private string GetTaskUrl(TaskDto task) => UrlService.GetDashboardUrl($"task/{task.Id}", task.TaskList.WorkspaceId);
 
     private static string GetTaskListTitle(string title)
     {
