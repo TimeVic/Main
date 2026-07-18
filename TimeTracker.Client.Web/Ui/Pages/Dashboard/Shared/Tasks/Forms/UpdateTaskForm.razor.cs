@@ -35,6 +35,9 @@ public partial class UpdateTaskForm: IDisposable
 
     [Parameter]
     public EventCallback<TaskStatus> StatusChanged { get; set; }
+
+    [Parameter]
+    public bool IsFullPage { get; set; }
     
     [Inject]
     public IState<TasksState> _tasksState { get; set; }
@@ -88,6 +91,13 @@ public partial class UpdateTaskForm: IDisposable
     private string EstimateInputHint => _task.ExternalSourceType == ExternalSourceType.Jira
         ? DashboardLocalizer["UpdateTaskForm_JiraEstimateHint"].Value
         : DashboardLocalizer["UpdateTaskForm_ManualEstimateHint"].Value;
+    private string TabsContainerClass => IsFullPage ? "px-5 lg:px-7" : "px-1";
+    private string MainContentClass => IsFullPage
+        ? "task-detail-tab-content min-w-0 px-5 py-6 lg:px-7"
+        : "task-detail-tab-content min-w-0 px-1 py-5 lg:pr-6";
+    private string SidebarClass => IsFullPage
+        ? "border-t border-slate-200 bg-slate-50/50 px-5 py-6 lg:border-l lg:border-t-0"
+        : "border-t border-slate-200 bg-slate-50/50 px-4 py-5 lg:border-l lg:border-t-0";
 
     private string GetTabClass(TaskDetailTab tab) => tab == _activeTab
         ? "border-blue-600 text-blue-700"
@@ -102,7 +112,11 @@ public partial class UpdateTaskForm: IDisposable
             try
             {
                 var response = await ApiService.TimeEntryGetFilteredListAsync(new TimeEntryGetFilteredListRequest { Page = 1, TaskId = TaskId });
-                _taskTimeEntries = response?.Items ?? [];
+                var activeEntryId = _timeEntryState.Value.ActiveEntry?.Id;
+                _taskTimeEntries = (response?.Items ?? [])
+                    // The active timer is controlled from the task header and must not be duplicated in the entries history.
+                    .Where(entry => !entry.IsActive && entry.Id != activeEntryId)
+                    .ToList();
             }
             finally
             {

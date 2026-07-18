@@ -9,6 +9,9 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 public partial class TaskListsDropDown: IDisposable
 { 
     [Parameter]
+    public Size Size { get; set; } = Size.Medium;
+
+    [Parameter]
     public Guid? ProjectId
     {
         get => _projectId;

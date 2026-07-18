@@ -9,6 +9,9 @@ namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 public partial class MembersDropDown
 {
     [Parameter]
+    public Size Size { get; set; } = Size.Medium;
+
+    [Parameter]
     public Guid? UserId
     {
         get => _userId;
