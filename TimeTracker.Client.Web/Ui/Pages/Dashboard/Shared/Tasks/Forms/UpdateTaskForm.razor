@@ -79,25 +79,28 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                     }
                     else if (_activeTab == TaskDetailTab.TimeEntries)
                     {
-                        <section>
-                            @if (_isTaskTimeEntriesLoading)
-                            {
-                                <div class="flex justify-center py-10"><LumexSpinner Size="@Size.Medium" /></div>
-                            }
-                            else if (TaskTimeEntries.Any())
-                            {
-                                <div class="divide-y divide-slate-200 border-y border-slate-200">
-                                    @foreach (var entry in TaskTimeEntries)
-                                    {
-                                        <div class="flex items-center justify-between gap-4 py-3">
-                                            <div class="min-w-0"><p class="text-sm font-medium text-slate-800">@entry.StartTimeOffset.ToString("MMM d, yyyy")</p><p class="mt-1 truncate text-xs text-slate-500">@(entry.Project?.Name ?? _task.TaskList.Project.Name)</p></div>
-                                            <div class="flex shrink-0 items-center gap-3"><span class="text-sm font-semibold text-slate-700">@entry.Duration.ToReadableShortString()</span><button type="button" class="text-xs font-medium text-blue-600" @onclick="@(() => _timeEntryToEdit = entry)">@DashboardLocalizer["Edit"]</button></div>
-                                        </div>
-                                    }
+                        <PaginatedItemsListBlock
+                            Items="@TaskTimeEntries"
+                            IsLoading="@_isTaskTimeEntriesLoading"
+                            IsHasMore="@_isTaskTimeEntriesHasMore"
+                            OnLoadMore="LoadMoreTaskTimeEntries"
+                            LoadMoreText="@DashboardLocalizer["TaskComments_LoadMore"].Value">
+                            <EmptyContent>
+                                <TaskDetailEmptyState Title="@DashboardLocalizer["TaskDetail_NoTimeEntries"].Value" />
+                            </EmptyContent>
+                            <ItemTemplate Context="entry">
+                                <div class="flex items-center justify-between gap-4 py-3">
+                                    <div class="min-w-0">
+                                        <p class="text-sm font-medium text-slate-800">@entry.StartTimeOffset.ToString("MMM d, yyyy")</p>
+                                        <p class="mt-1 truncate text-xs text-slate-500">@(entry.Project?.Name ?? _task.TaskList.Project.Name)</p>
+                                    </div>
+                                    <div class="flex shrink-0 items-center gap-3">
+                                        <span class="text-sm font-semibold text-slate-700">@entry.Duration.ToReadableShortString()</span>
+                                        <button type="button" class="text-xs font-medium text-blue-600" @onclick="@(() => _timeEntryToEdit = entry)">@DashboardLocalizer["Edit"]</button>
+                                    </div>
                                 </div>
-                            }
-                            else { <TaskDetailEmptyState Title="@DashboardLocalizer["TaskDetail_NoTimeEntries"].Value" /> }
-                        </section>
+                            </ItemTemplate>
+                        </PaginatedItemsListBlock>
                     }
                     else
                     {

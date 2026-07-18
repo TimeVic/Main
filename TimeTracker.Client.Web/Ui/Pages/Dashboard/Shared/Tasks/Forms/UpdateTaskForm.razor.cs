@@ -76,6 +76,8 @@ public partial class UpdateTaskForm: IDisposable
     private bool _isDragActive;
     private TimeEntryDto? _timeEntryToEdit;
     private bool _isTaskTimeEntriesLoading;
+    private bool _isTaskTimeEntriesHasMore;
+    private int _taskTimeEntriesPage = 1;
     private ICollection<TimeEntryDto> _taskTimeEntries = [];
     private TaskDetailTab _activeTab = TaskDetailTab.Overview;
     private readonly List<AttachmentsBlock.UploadingAttachment> _uploadingAttachments = new();
@@ -108,20 +110,40 @@ public partial class UpdateTaskForm: IDisposable
         _activeTab = tab;
         if (tab == TaskDetailTab.TimeEntries)
         {
-            _isTaskTimeEntriesLoading = true;
-            try
-            {
-                var response = await ApiService.TimeEntryGetFilteredListAsync(new TimeEntryGetFilteredListRequest { Page = 1, TaskId = TaskId });
-                var activeEntryId = _timeEntryState.Value.ActiveEntry?.Id;
-                _taskTimeEntries = (response?.Items ?? [])
-                    // The active timer is controlled from the task header and must not be duplicated in the entries history.
-                    .Where(entry => !entry.IsActive && entry.Id != activeEntryId)
-                    .ToList();
-            }
-            finally
-            {
-                _isTaskTimeEntriesLoading = false;
-            }
+            await LoadTaskTimeEntries(true);
+        }
+    }
+
+    private async Task LoadMoreTaskTimeEntries()
+    {
+        await LoadTaskTimeEntries(false);
+    }
+
+    private async Task LoadTaskTimeEntries(bool isReset)
+    {
+        if (_isTaskTimeEntriesLoading)
+        {
+            return;
+        }
+
+        _isTaskTimeEntriesLoading = true;
+        try
+        {
+            var page = isReset ? 1 : _taskTimeEntriesPage + 1;
+            var response = await ApiService.TimeEntryGetFilteredListAsync(new TimeEntryGetFilteredListRequest { Page = page, TaskId = TaskId });
+            var activeEntryId = _timeEntryState.Value.ActiveEntry?.Id;
+            var entries = (response?.Items ?? [])
+                // The active timer is controlled from the task header and must not be duplicated in the entries history.
+                .Where(entry => !entry.IsActive && entry.Id != activeEntryId)
+                .ToList();
+
+            _taskTimeEntries = isReset ? entries : _taskTimeEntries.Concat(entries).ToList();
+            _taskTimeEntriesPage = page;
+            _isTaskTimeEntriesHasMore = response?.IsHasMore ?? false;
+        }
+        finally
+        {
+            _isTaskTimeEntriesLoading = false;
         }
     }
 
