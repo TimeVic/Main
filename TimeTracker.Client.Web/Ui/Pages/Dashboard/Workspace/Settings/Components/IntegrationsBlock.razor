@@ -89,6 +89,7 @@
                         Context="clickUpFormContext"
                         @ref="_clickUpForm"
                         Model="@_clickUpModel"
+                        autocomplete="off"
                         novalidate>
                         <DataAnnotationsValidator/>
 
@@ -99,6 +100,7 @@
                                 Label="@DashboardLocalizer["IntegrationsBlock_ApiToken"]"
                                 Placeholder="pk_..."
                                 Type="InputType.Password"
+                                autocomplete="new-password"
                                 @bind-Value="_clickUpModel.SecurityKey"/>
 
                             <InputTextField
@@ -106,6 +108,7 @@
                                 Required="true"
                                 Label="@DashboardLocalizer["IntegrationsBlock_TeamId"]"
                                 Placeholder="123456"
+                                autocomplete="off"
                                 @bind-Value="_clickUpModel.TeamId"/>
 
                             <div class="space-y-3 rounded-3xl border border-slate-200 bg-slate-50 p-4">
@@ -164,6 +167,7 @@
                         Context="redmineFormContext"
                         @ref="_redmineForm"
                         Model="@_redmineModel"
+                        autocomplete="off"
                         novalidate>
                         <DataAnnotationsValidator/>
 
@@ -174,6 +178,7 @@
                                 Label="@DashboardLocalizer["IntegrationsBlock_RedmineUrl"]"
                                 Placeholder="https://redmine.example.com"
                                 Type="InputType.Url"
+                                autocomplete="off"
                                 @bind-Value="_redmineModel.Url"/>
 
                             <InputTextField
@@ -182,6 +187,7 @@
                                 Label="@DashboardLocalizer["IntegrationsBlock_ApiKey"]"
                                 Placeholder="@DashboardLocalizer["IntegrationsBlock_ApiAccessKeyPlaceholder"]"
                                 Type="InputType.Password"
+                                autocomplete="new-password"
                                 @bind-Value="_redmineModel.ApiKey"/>
 
                             <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
@@ -237,6 +243,7 @@
                         Context="jiraFormContext"
                         @ref="_jiraForm"
                         Model="@_jiraModel"
+                        autocomplete="off"
                         novalidate>
                         <DataAnnotationsValidator/>
 
@@ -247,6 +254,7 @@
                                 Label="@DashboardLocalizer["IntegrationsBlock_JiraUrl"]"
                                 Placeholder="https://company.atlassian.net"
                                 Type="InputType.Url"
+                                autocomplete="off"
                                 @bind-Value="_jiraModel.Url"/>
 
                             <InputTextField
@@ -254,6 +262,7 @@
                                 Required="true"
                                 Label="@DashboardLocalizer["IntegrationsBlock_UserEmail"]"
                                 Placeholder="name@company.com"
+                                autocomplete="new-password"
                                 @bind-Value="_jiraModel.UserName"/>
 
                             <InputTextField
@@ -262,6 +271,7 @@
                                 Label="@DashboardLocalizer["IntegrationsBlock_ApiToken"]"
                                 Placeholder="@DashboardLocalizer["IntegrationsBlock_AtlassianApiTokenPlaceholder"]"
                                 Type="InputType.Password"
+                                autocomplete="new-password"
                                 @bind-Value="_jiraModel.ApiKey"/>
 
                             <CustomValidationSummary/>
