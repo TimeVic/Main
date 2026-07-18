@@ -440,6 +440,7 @@
   <data name="Select" xml:space="preserve"><value>Select</value></data>
   <data name="NotSet" xml:space="preserve"><value>Not set</value></data>
   <data name="RequiredField" xml:space="preserve"><value>This field is required</value></data>
+  <data name="TaskDetail_TitleSaveFailed" xml:space="preserve"><value>Unable to save the task title.</value></data>
   <data name="Submit" xml:space="preserve"><value>Submit</value></data>
   <data name="End" xml:space="preserve"><value>End</value></data>
   <data name="Tag" xml:space="preserve"><value>Tag</value></data>
@@ -723,4 +724,5 @@
   <data name="TaskDetail_Updated" xml:space="preserve"><value>Task updated</value></data>
   <data name="TaskDetail_JiraSynced" xml:space="preserve"><value>Synced with Jira</value></data>
   <data name="TaskDetail_OpenFullPage" xml:space="preserve"><value>Open task in full page</value></data>
+  <data name="TaskDetail_BackToTasks" xml:space="preserve"><value>Back to tasks</value></data>
 </root>

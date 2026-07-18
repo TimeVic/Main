@@ -1,40 +1,29 @@
 @using LumexUI
 @using LumexUI.Common
-@using TimeTracker.Business.Extensions
-@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
 
 @inherits BaseReactiveComponent
 
-<div class="update-task-modal @(_isFullScreen ? "is-full-screen" : string.Empty)">
+<div class="update-task-modal">
     <LumexModal 
         Open="IsOpened" 
         OnClose="@OnCloseModal"
         Placement="ModalPlacement.Auto"
-        Size="@(_isFullScreen ? ModalSize.Full : ModalSize.Large)"
+        Size="ModalSize.Large"
         ScrollBehavior="ScrollBehavior.Inside"
-        OpenChanged="@OnOpenChanged"
-        @ref="modal">
+        OpenChanged="@OnOpenChanged">
         <LumexModalContent>
-            <LumexModalHeader Class="flex items-center gap-3 pr-14">
-                <div class="flex w-full min-w-0 items-start justify-between gap-3">
-                    <div class="flex min-w-0 items-center gap-3">
-                        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
-                            <i class="fa-solid fa-list-check"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <h3 class="truncate text-lg font-semibold text-slate-900">@Task.Title</h3>
-                            <div class="mt-1 flex items-center gap-2"><p class="truncate text-sm text-slate-500">@Task.TaskList.Project.Name · @Task.TaskList.Name · @Task.FormattedId</p><span class="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">@_status</span></div>
-                        </div>
-                    </div>
-                    <div class="flex shrink-0 items-center gap-2">
-                        <TaskTimeTrackerButton Task="@Task" IconOnly="false" />
-                        <LumexButton IconOnly="true" Size="Size.Small" Variant="Variant.Light" title="@DashboardLocalizer["TaskDetail_OpenFullPage"]" OnClick="@ToggleFullScreen"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></LumexButton>
-                    </div>
-                </div>
+            <LumexModalHeader Class="pr-14">
+                <TaskDetailsHeaderBlock
+                    Task="@Task"
+                    IsFullPage="false"
+                    TitleChanged="OnTitleChanged" />
             </LumexModalHeader>
             <LumexModalBody Class="pt-3">
-                <TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms.UpdateTaskForm TaskId="Task.Id" StatusChanged="@OnStatusChanged" />
+                <TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms.UpdateTaskForm
+                    @ref="_taskForm"
+                    TaskId="Task.Id"
+                    StatusChanged="@OnStatusChanged" />
             </LumexModalBody>
         </LumexModalContent>
     </LumexModal>

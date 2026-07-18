@@ -71,7 +71,6 @@ public partial class UpdateTaskForm: IDisposable
     private string? _attachmentInteropId;
     private bool _isAttachmentInteropInitialized;
     private bool _isDragActive;
-    private bool _isTitleEditing;
     private TimeEntryDto? _timeEntryToEdit;
     private bool _isTaskTimeEntriesLoading;
     private ICollection<TimeEntryDto> _taskTimeEntries = [];
@@ -112,11 +111,11 @@ public partial class UpdateTaskForm: IDisposable
         }
     }
 
-    private Task OnTitleEditCompleted()
+    public void SetTitle(string title)
     {
-        SubmitForm();
-        _isTitleEditing = false;
-        return Task.CompletedTask;
+        // Keep later field updates from submitting the title value that was loaded before an inline edit.
+        _model.Title = title;
+        _task.Title = title;
     }
     
     protected override async Task OnInitializedAsync()

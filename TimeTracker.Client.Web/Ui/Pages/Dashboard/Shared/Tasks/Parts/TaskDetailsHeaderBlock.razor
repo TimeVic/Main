@@ -1,0 +1,51 @@
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity.Task
+@using TimeTracker.Business.Extensions
+
+@inherits BaseReactiveComponent
+
+@if (IsFullPage)
+{
+    <a href="@SiteUrl.Dashboard_Tasks_Main" class="mb-4 inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-blue-700">
+        <i class="fa-solid fa-arrow-left text-xs"></i>
+        @DashboardLocalizer["TaskDetail_BackToTasks"]
+    </a>
+}
+
+<div class="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div class="flex min-w-0 flex-1 items-start gap-3">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+            <i class="fa-solid fa-list-check"></i>
+        </div>
+        <div class="min-w-0 flex-1">
+            <InlineTextEdit
+                Value="@Task.Title"
+                OnSave="SaveTitleAsync"
+                Placeholder="@DashboardLocalizer["AddTaskModal_TaskTitlePlaceholder"]"
+                Multiline="true"
+                HeadingLevel="1"
+                ViewClassName="min-h-14 cursor-text whitespace-pre-wrap break-words rounded px-1 -mx-1 text-xl font-semibold leading-7 text-slate-900 transition hover:bg-slate-100"
+                InputClassName="block min-h-14 w-full resize-none rounded-lg border border-blue-400 bg-white px-2 py-1 text-xl font-semibold leading-7 text-slate-900 outline-none ring-2 ring-blue-100" />
+            <div class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-500">
+                <span>@Task.TaskList.Project.Name</span>
+                <span aria-hidden="true">·</span>
+                <span>@Task.TaskList.Name</span>
+                <span aria-hidden="true">·</span>
+                <span>@Task.FormattedId</span>
+                <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">@Task.Status.GetDisplayName()</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex shrink-0 items-center gap-2">
+        <TaskTimeTrackerButton
+            Task="@Task"
+            IconOnly="false" />
+        @if (!IsFullPage)
+        {
+            <a href="@TaskUrl" target="_blank" rel="noopener" title="@DashboardLocalizer["TaskDetail_OpenFullPage"]" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-600 transition hover:bg-slate-100 hover:text-blue-700">
+                <i class="fa-solid fa-up-right-from-square text-sm"></i>
+            </a>
+        }
+    </div>
+</div>

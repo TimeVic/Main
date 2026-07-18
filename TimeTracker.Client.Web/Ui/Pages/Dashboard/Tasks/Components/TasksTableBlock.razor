@@ -83,7 +83,12 @@
             }
             else if (_localTasks.Any())
             {
-                <Virtualize Items="_localTasks" ItemSize="84" SpacerElement="tr" OverscanCount="5" Context="task">
+                <Virtualize
+                    Items="_localTasks"
+                    ItemSize="84"
+                    SpacerElement="tr"
+                    OverscanCount="5"
+                    Context="task">
                     @if (IsDropTarget(task))
                     {
                         <tr class="pointer-events-none">
@@ -106,14 +111,14 @@
                                     ValueChanged="@(() => ToggleTaskBoardSelection(task.Id))"/>
                             </div>
                         </td>
-                        <td class="border-t border-slate-200 px-2 py-3 align-top @GetSelectedTaskClass(task.Id)">
+                        <td class="cursor-pointer border-t border-slate-200 px-2 py-3 align-top @GetSelectedTaskClass(task.Id)" @onclick="@(() => OpenTaskEditor(task))">
                             <div class="flex gap-3">
                                 <div class="flex-1 min-w-0 space-y-2">
                                     <div class="flex min-w-0 items-center gap-2">
                                         <span class="shrink-0 rounded-md bg-slate-100 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-600">@task.FormattedId</span>
-                                        <button type="button" title="@task.Title" @onclick="@(() => OpenTaskEditor(task))" class="min-w-0 flex-1 truncate text-left font-semibold cursor-pointer text-slate-900 transition group-hover:text-blue-700 hover:text-blue-700 @GetTaskTitleClass(task)">
-                                            @task.Title
-                                        </button>
+                                        <a href="@GetTaskUrl(task)" title="@task.Title" @onclick:preventDefault="true" class="min-w-0 flex-1 truncate text-left font-semibold text-slate-900 transition group-hover:text-blue-700 hover:text-blue-700 @GetTaskTitleClass(task)">
+                                            @GetTaskListTitle(task.Title)
+                                        </a>
                                     </div>
                                     <TaskEstimateSummaryBlock
                                         Class="mt-1 max-w-[38rem]"

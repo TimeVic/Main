@@ -3,8 +3,8 @@
 
 @inherits BaseReactiveComponent
 
-<section class="rounded-2xl border border-slate-200 p-4">
-    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+<section class="min-w-0">
+    <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
             <h4 class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TaskComments_Title"]</h4>
             <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["TaskComments_Subtitle"]</p>
@@ -17,13 +17,15 @@
         }
     </div>
 
-    <EditCommentForm
-        OnSaved="OnCommentSaved"
-        Comment="@(new TaskCommentDto { Task = Task })"
-        TaskId="@Task.Id"
-        Project="@Task.TaskList.Project" />
+    <div class="mt-4">
+        <EditCommentForm
+            OnSaved="OnCommentSaved"
+            Comment="@(new TaskCommentDto { Task = Task })"
+            TaskId="@Task.Id"
+            Project="@Task.TaskList.Project" />
+    </div>
 
-    <div class="mt-5 border-t border-slate-200 pt-5">
+    <div class="mt-5 border-t border-slate-200 pt-1">
         @if (_isLoading && !_comments.Any())
         {
             <div class="flex justify-center py-6">
@@ -32,7 +34,7 @@
         }
         else if (!_comments.Any())
         {
-            <div class="rounded-2xl border border-dashed border-slate-200 px-4 py-6 text-center">
+            <div class="py-10 text-center">
                 <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["TaskComments_EmptyTitle"]</p>
                 <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["TaskComments_EmptySubtitle"]</p>
             </div>

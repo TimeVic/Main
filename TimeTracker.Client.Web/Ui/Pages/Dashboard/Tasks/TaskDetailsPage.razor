@@ -1,0 +1,32 @@
+@page "/board/task/{TaskId:guid}"
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Forms
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Parts
+@using Layout = TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+@if (_isLoading)
+{
+    <div class="flex justify-center py-16">
+        <LumexSpinner Size="@Size.Large" />
+    </div>
+}
+else if (_task != null)
+{
+    <section class="mx-auto max-w-[1400px]">
+        <TaskDetailsHeaderBlock
+            Task="@_task"
+            IsFullPage="true"
+            TitleChanged="OnTitleChanged" />
+        <div class="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+            <UpdateTaskForm
+                @ref="_taskForm"
+                TaskId="TaskId"
+                StatusChanged="OnStatusChanged" />
+        </div>
+    </section>
+}

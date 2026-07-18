@@ -1,0 +1,68 @@
+@if (_isEditing)
+{
+    <div class="@Class">
+        @if (Multiline)
+        {
+            <textarea @ref="_editor"
+                      @bind="_draft"
+                      @bind:event="oninput"
+                      @onkeydown="OnKeyDown"
+                      @onblur="OnBlur"
+                      placeholder="@Placeholder"
+                      disabled="@(_isSaving || Disabled)"
+                      class="@InputClassName"></textarea>
+        }
+        else
+        {
+            <input @ref="_editor"
+                   @bind="_draft"
+                   @bind:event="oninput"
+                   @onkeydown="OnKeyDown"
+                   @onblur="OnBlur"
+                   placeholder="@Placeholder"
+                   disabled="@(_isSaving || Disabled)"
+                   class="@InputClassName" />
+        }
+        <div class="mt-2 flex items-center gap-1">
+            <button type="button"
+                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-blue-600 text-sm text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    disabled="@(_isSaving || Disabled || !IsDirty)"
+                    @onclick="SaveAsync"
+                    title="@DashboardLocalizer["Save"]"
+                    aria-label="@DashboardLocalizer["Save"]">
+                @if (_isSaving)
+                {
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                }
+                else
+                {
+                    <i class="fa-solid fa-check"></i>
+                }
+            </button>
+            <button type="button"
+                    class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-sm text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                    disabled="@_isSaving"
+                    @onclick="Cancel"
+                    title="@DashboardLocalizer["Cancel"]"
+                    aria-label="@DashboardLocalizer["Cancel"]">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(_error))
+        {
+            <p class="mt-1 text-xs text-red-600">@_error</p>
+        }
+    </div>
+}
+else if (HeadingLevel == 1)
+{
+    <h1 class="@ViewClassName" title="@Value" @onclick="BeginEditing">@DisplayValue</h1>
+}
+else if (HeadingLevel == 2)
+{
+    <h2 class="@ViewClassName" title="@Value" @onclick="BeginEditing">@DisplayValue</h2>
+}
+else
+{
+    <span class="@ViewClassName" title="@Value" @onclick="BeginEditing">@DisplayValue</span>
+}

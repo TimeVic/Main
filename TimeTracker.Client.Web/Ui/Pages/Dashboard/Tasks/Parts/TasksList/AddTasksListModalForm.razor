@@ -4,7 +4,10 @@
 
 @inherits BaseReactiveComponent
 
-<LumexModal Open="IsOpened" OnClose="@OnCloseModal" @ref="modal">
+<LumexModal
+    Open="IsOpened"
+    OnClose="@OnCloseModal"
+    @ref="modal">
     <LumexModalContent>
         <LumexModalHeader Class="flex items-center gap-3">
             <div class="size-10 flex items-center justify-center bg-default-100 rounded-full">

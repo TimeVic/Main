@@ -55,7 +55,7 @@ public partial class EditCommentForm: IDisposable
         : DashboardLocalizer["Save"].Value;
     private string ContainerClass => _isNewComment
         ? "pb-1"
-        : "border-t border-slate-200 py-4 first:border-t-0 first:pt-0 last:pb-0";
+        : "py-4 first:pt-0 last:pb-0";
     private bool _isSubscribersSelectAvailable =>
         Project != null &&
         SecurityManager.GetMembersWhichHaveAccessToProject(Project)
