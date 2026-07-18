@@ -62,7 +62,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 
             return new GetListResponse(
                 items,
-                taskLists.TotalCount
+                taskLists.TotalCount,
+                _mapper.Map<TaskListDto>(taskList)
             );
         }
     }
