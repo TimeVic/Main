@@ -243,12 +243,45 @@ public class TaskDao: ITaskDao
                 .ThenBy(item => item.UpdatedAt).Desc;
         }
 
-        var items = await query
+        var totalCount = await query.RowCountAsync();
+        var taskIds = await query
+            .Select(item => item.Id)
             .Take(1000)
-            .ListAsync<TaskEntity>();
+            .ListAsync<Guid>();
+        if (!taskIds.Any())
+        {
+            return new ListDto<TaskEntity>(new List<TaskEntity>(), totalCount);
+        }
+
+        // Load profile relationships in bounded queries to prevent per-task lazy loads.
+        var tasks = await _sessionProvider.CurrentSession.Query<TaskEntity>()
+            .Where(item => taskIds.Contains(item.Id))
+            .Fetch(item => item.TaskList)
+            .ThenFetch(taskList => taskList.Project)
+            .ThenFetch(project => project.Client)
+            .ThenFetch(client => client.Workspace)
+            .Fetch(item => item.User)
+            .ThenFetch(user => user.Language)
+            .FetchMany(item => item.Tags)
+            .ToListAsync();
+        var userIds = tasks
+            .Select(item => item.User.Id)
+            .Distinct()
+            .ToList();
+        await _sessionProvider.CurrentSession.Query<UserEntity>()
+            .Where(item => userIds.Contains(item.Id))
+            .FetchMany(item => item.Avatars)
+            .ToListAsync();
+        var tasksById = tasks
+            .GroupBy(item => item.Id)
+            .ToDictionary(group => group.Key, group => group.First());
+        var items = taskIds
+            .Select(taskId => tasksById[taskId])
+            .ToList();
+
         return new ListDto<TaskEntity>(
             items,
-            await query.RowCountAsync()
+            totalCount
         );
     }
 

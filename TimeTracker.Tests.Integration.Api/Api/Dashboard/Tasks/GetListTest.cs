@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Constants.Task;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
@@ -77,6 +78,9 @@ public class GetListTest: BaseTest
 
         var actualDto = await response.GetJsonDataAsync<GetListResponse>();
         Assert.Equal(expectedCounter, actualDto.TotalCount);
+        Assert.NotNull(actualDto.TaskList);
+        Assert.Equal(_taskList.Id, actualDto.TaskList.Id);
+        Assert.Equal(_defaultWorkspace.Id, actualDto.TaskList.WorkspaceId);
         
         Assert.All(actualDto.Items, item =>
         {
@@ -86,7 +90,21 @@ public class GetListTest: BaseTest
             Assert.NotEmpty(item.Description!);
             Assert.Equal(TaskPriority.Medium, item.Priority);
             Assert.Equal(_taskList.Id, item.TaskList.Id);
+            Assert.Equal(_defaultWorkspace.Id, item.TaskList.WorkspaceId);
         });
+    }
+
+    [Fact]
+    public async Task ShouldNotReceiveListIfWorkspaceDoesNotMatch()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest
+        {
+            TaskListId = _taskList.Id
+        }, Guid.NewGuid());
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 
     [Fact]

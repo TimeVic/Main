@@ -43,6 +43,32 @@ public class WorkspaceInitializationService
     {
         _dispatcher.Dispatch(new LoadListAction(isReload));
     }
+
+    public async Task<bool> EnsureWorkspaceAsync(Guid? workspaceId)
+    {
+        if (!workspaceId.HasValue || _authState.Value.Workspace?.Id == workspaceId)
+        {
+            return _authState.Value.Workspace != null;
+        }
+
+        try
+        {
+            var workspaces = await _apiService.WorkspaceGetListAsync();
+            var workspace = workspaces?.Items.FirstOrDefault(item => item.Id == workspaceId.Value);
+            if (workspace == null)
+            {
+                return false;
+            }
+
+            _dispatcher.Dispatch(new SetWorkspaceAction(workspace));
+            return true;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to resolve workspace from URL: {WorkspaceId}", workspaceId);
+            return false;
+        }
+    }
     
     public async Task AfterInit(bool isReload = false)
     {

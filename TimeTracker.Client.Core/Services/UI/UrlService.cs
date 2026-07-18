@@ -1,22 +1,27 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Fluxor;
+using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Client.Core.Services.UI;
 
 public class UrlService
 {
     private readonly NavigationManager _navigationManager;
+    private readonly IState<AuthState> _authState;
 
     private readonly string _apiUrl;
     private readonly string _baseUrl;
 
     public UrlService(
         IConfiguration configuration,
-        NavigationManager navigationManager
+        NavigationManager navigationManager,
+        IState<AuthState> authState
     )
     {
         _navigationManager = navigationManager;
+        _authState = authState;
 
         _apiUrl = (configuration.GetValue<string>("ApiUrl") ?? string.Empty).TrimEnd('/');
         _baseUrl = (configuration.GetValue<string>("BaseUrl") ?? _navigationManager.BaseUri).TrimEnd('/');
@@ -83,5 +88,65 @@ public class UrlService
     {
         subUrl = subUrl.StartsWith("/") ? subUrl : $"/{subUrl}";
         _navigationManager.NavigateTo($"/board-change/{workspaceId}{subUrl}", replace: true);
+    }
+
+    public string GetDashboardUrl(string path = "", Guid? workspaceId = null)
+    {
+        var normalizedPath = path.Trim('/');
+        var selectedWorkspaceId = workspaceId is { } id && id != Guid.Empty
+            ? id
+            : GetWorkspaceIdFromDashboardUrl() ?? _authState.Value.Workspace?.Id;
+        if (!selectedWorkspaceId.HasValue)
+        {
+            return string.IsNullOrEmpty(normalizedPath)
+                ? "/board"
+                : $"/board/{normalizedPath}";
+        }
+
+        return string.IsNullOrEmpty(normalizedPath)
+            ? $"/board/{selectedWorkspaceId}"
+            : $"/board/{selectedWorkspaceId}/{normalizedPath}";
+    }
+
+    public Guid? GetWorkspaceIdFromDashboardUrl(string? url = null)
+    {
+        var path = new Uri(url ?? _navigationManager.Uri).AbsolutePath.Trim('/');
+        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var boardSegmentIndex = Array.FindIndex(segments, segment => segment.Equals("board", StringComparison.OrdinalIgnoreCase));
+        if (boardSegmentIndex < 0 || segments.Length <= boardSegmentIndex + 1)
+        {
+            return null;
+        }
+
+        return Guid.TryParse(segments[boardSegmentIndex + 1], out var workspaceId)
+            ? workspaceId
+            : null;
+    }
+
+    public string GetDashboardUrlForCurrentPath(Guid workspaceId)
+    {
+        var currentUri = new Uri(_navigationManager.Uri);
+        var segments = currentUri.AbsolutePath.Trim('/').Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var boardSegmentIndex = Array.FindIndex(segments, segment => segment.Equals("board", StringComparison.OrdinalIgnoreCase));
+        if (boardSegmentIndex < 0)
+        {
+            if (segments.Length == 2
+                && segments[0].Equals("dashboard", StringComparison.OrdinalIgnoreCase)
+                && segments[1].Equals("notes", StringComparison.OrdinalIgnoreCase))
+            {
+                return $"{GetDashboardUrl("notes", workspaceId)}{currentUri.Query}";
+            }
+
+            return GetDashboardUrl(workspaceId: workspaceId);
+        }
+
+        var pathStartIndex = boardSegmentIndex + 1;
+        if (segments.Length > pathStartIndex && Guid.TryParse(segments[pathStartIndex], out _))
+        {
+            pathStartIndex++;
+        }
+
+        var path = string.Join('/', segments.Skip(pathStartIndex));
+        return $"{GetDashboardUrl(path, workspaceId)}{currentUri.Query}";
     }
 }

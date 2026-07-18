@@ -81,6 +81,8 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
         
         var offset = PaginationUtils.CalculateOffset(page);
         var items = await query
+            .Fetch(item => item.User)
+            .ThenFetch(item => item.Language)
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
             .OrderByDescending(item => item.Id)

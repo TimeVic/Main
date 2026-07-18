@@ -141,13 +141,17 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         }
 
         var offset = PaginationUtils.CalculateOffset(page);
-        var items = await query
+        var totalCount = await query.RowCountAsync();
+        var entryIds = await query
+            .Select(item => item.Id)
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize * 2)
-            .ListAsync();
+            .ListAsync<Guid>();
+        var items = await LoadListItemsForProfileAsync(entryIds);
+
         return new ListDto<TimeEntryEntity>(
             items,
-            await query.RowCountAsync()
+            totalCount
         );
     }
 
@@ -187,19 +191,66 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             return new ListDto<TimeEntryEntity>(new List<TimeEntryEntity>(), totalCount);
         }
 
-        var items = await Session.Query<TimeEntryEntity>()
-            .Where(item => pageItemIds.Contains(item.Id))
-            .Fetch(item => item.User)
-            .Fetch(item => item.Project)
-            .ThenFetch(project => project!.Client)
-            .Fetch(item => item.Task)
-            .ToListAsync();
+        var items = await LoadListItemsForProfileAsync(pageItemIds);
 
         items = items
             .OrderByDescending(item => item.StartTime)
             .ToList();
 
         return new ListDto<TimeEntryEntity>(items, totalCount);
+    }
+
+    private async Task<List<TimeEntryEntity>> LoadListItemsForProfileAsync(ICollection<Guid> entryIds)
+    {
+        if (!entryIds.Any())
+        {
+            return new List<TimeEntryEntity>();
+        }
+
+        var entries = await Session.Query<TimeEntryEntity>()
+            .Where(item => entryIds.Contains(item.Id))
+            .Fetch(item => item.User)
+            .ThenFetch(user => user.Language)
+            .Fetch(item => item.Project)
+            .ThenFetch(project => project!.Client)
+            .Fetch(item => item.Task)
+            .ThenFetch(task => task!.TaskList)
+            .ThenFetch(taskList => taskList.Project)
+            .ThenFetch(project => project.Client)
+            .ThenFetch(client => client.Workspace)
+            .Fetch(item => item.Task)
+            .ThenFetch(task => task!.User)
+            .ThenFetch(user => user.Language)
+            .ToListAsync();
+        var taskIds = entries
+            .Where(item => item.Task != null)
+            .Select(item => item.Task!.Id)
+            .Distinct()
+            .ToList();
+        if (taskIds.Any())
+        {
+            await Session.Query<TaskEntity>()
+                .Where(item => taskIds.Contains(item.Id))
+                .FetchMany(item => item.Tags)
+                .ToListAsync();
+        }
+
+        var userIds = entries
+            .Select(item => item.User.Id)
+            .Concat(entries
+                .Where(item => item.Task != null)
+                .Select(item => item.Task!.User.Id))
+            .Distinct()
+            .ToList();
+        await Session.Query<UserEntity>()
+            .Where(item => userIds.Contains(item.Id))
+            .FetchMany(item => item.Avatars)
+            .ToListAsync();
+
+        var entriesById = entries.ToDictionary(item => item.Id);
+        return entryIds
+            .Select(entryId => entriesById[entryId])
+            .ToList();
     }
 
     

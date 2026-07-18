@@ -120,6 +120,7 @@ public class UserDao: BaseDao, IUserDao
     {
         var query = Session.Query<WorkspaceMemberEntity>()
             .Fetch(item => item.Workspace)
+            .ThenFetch(item => item.Currency)
             .Where(item => item.User.Id == user.Id);
         if (accessType != null)
         {

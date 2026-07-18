@@ -22,7 +22,7 @@
             <LumexNavbarBrand>
                 <AppLogoBlock
                     IsShowBeta="false"
-                    Url="@SiteUrl.Dashboard_Reports_Summary"
+                    Url='@UrlService.GetDashboardUrl("report/summary")'
                     LogoWrapClass="flex items-center"
                     LogoClass="h-8 w-auto"
                     LogoWidth="148"
@@ -33,7 +33,7 @@
         <LumexNavbarBrand Class="hidden shrink-0 lg:flex">
             <AppLogoBlock
                 IsShowBeta="false"
-                Url="@SiteUrl.Dashboard_Reports_Summary"
+                Url='@UrlService.GetDashboardUrl("report/summary")'
                 LogoWrapClass="flex items-center"
                 LogoClass="h-8 w-auto"
                 LogoWidth="148"

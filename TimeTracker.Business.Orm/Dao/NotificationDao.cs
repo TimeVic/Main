@@ -69,14 +69,94 @@ public class NotificationDao : INotificationDao
             .Where(item => workspaceAlias!.Id == workspace.Id);
 
         var offset = PaginationUtils.CalculateOffset(page);
-        var items = await query
+        var totalCount = await query.RowCountAsync();
+        var notificationIds = await query
+            .Select(item => item.Id)
             .OrderBy(item => item.CreatedAt).Desc()
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
-            .ListAsync();
+            .ListAsync<Guid>();
+        if (!notificationIds.Any())
+        {
+            return new ListDto<NotificationEntity>(new List<NotificationEntity>(), totalCount);
+        }
+
+        var notifications = await _sessionProvider.CurrentSession.Query<NotificationEntity>()
+            .Where(item => notificationIds.Contains(item.Id))
+            .Fetch(item => item.PerformedUser)
+            .ThenFetch(user => user.Language)
+            .Fetch(item => item.ReceiverUser)
+            .ThenFetch(user => user.Language)
+            .Fetch(item => item.Task)
+            .ThenFetch(task => task!.TaskList)
+            .ThenFetch(taskList => taskList.Project)
+            .ThenFetch(project => project.Client)
+            .ThenFetch(client => client.Workspace)
+            .Fetch(item => item.Task)
+            .ThenFetch(task => task!.User)
+            .ThenFetch(user => user.Language)
+            .Fetch(item => item.TaskComment)
+            .ThenFetch(comment => comment!.User)
+            .ThenFetch(user => user!.Language)
+            .ToListAsync();
+
+        var taskIds = notifications
+            .Select(item => item.Task?.Id)
+            .Where(item => item.HasValue)
+            .Select(item => item!.Value)
+            .Distinct()
+            .ToList();
+        if (taskIds.Any())
+        {
+            await _sessionProvider.CurrentSession.Query<TaskEntity>()
+                .Where(item => taskIds.Contains(item.Id))
+                .FetchMany(item => item.Tags)
+                .ToListAsync();
+        }
+
+        var taskCommentIds = notifications
+            .Where(item => item.TaskComment != null)
+            .Select(item => item.TaskComment!.Id)
+            .Distinct()
+            .ToList();
+        if (taskCommentIds.Any())
+        {
+            await _sessionProvider.CurrentSession.Query<TaskCommentEntity>()
+                .Where(item => taskCommentIds.Contains(item.Id))
+                .FetchMany(item => item.Attachments)
+                .ToListAsync();
+            await _sessionProvider.CurrentSession.Query<TaskCommentEntity>()
+                .Where(item => taskCommentIds.Contains(item.Id))
+                .FetchMany(item => item.Watchers)
+                .ToListAsync();
+        }
+
+        var userIds = notifications
+            .SelectMany(item => new[]
+            {
+                item.PerformedUser.Id,
+                item.ReceiverUser.Id,
+                item.Task?.User.Id,
+                item.TaskComment?.User?.Id
+            }
+            .Concat(item.TaskComment?.Watchers.Select(watcher => (Guid?)watcher.Id) ?? []))
+            .Where(item => item.HasValue)
+            .Select(item => item!.Value)
+            .Distinct()
+            .ToList();
+        await _sessionProvider.CurrentSession.Query<UserEntity>()
+            .Where(item => userIds.Contains(item.Id))
+            .FetchMany(item => item.Avatars)
+            .ToListAsync();
+
+        var notificationsById = notifications.ToDictionary(item => item.Id);
+        var items = notificationIds
+            .Select(notificationId => notificationsById[notificationId])
+            .ToList();
+
         return new ListDto<NotificationEntity>(
             items,
-            await query.RowCountAsync()
+            totalCount
         );
     }
 }

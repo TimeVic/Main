@@ -95,14 +95,49 @@ public class TaskCommentDao: ITaskCommentDao
             .Where(item => item.IsArchived == false);
 
         var offset = PaginationUtils.CalculateOffset(page);
-        var items = await query
+        var totalCount = await query.RowCountAsync();
+        var commentIds = await query
+            .Select(item => item.Id)
             .OrderBy(item => item.CreatedAt).Desc()
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
-            .ListAsync<TaskCommentEntity>();
+            .ListAsync<Guid>();
+        if (!commentIds.Any())
+        {
+            return new ListDto<TaskCommentEntity>(new List<TaskCommentEntity>(), totalCount);
+        }
+
+        var comments = await _sessionProvider.CurrentSession.Query<TaskCommentEntity>()
+            .Where(item => commentIds.Contains(item.Id))
+            .Fetch(item => item.User)
+            .ThenFetch(user => user!.Language)
+            .FetchMany(item => item.Attachments)
+            .ToListAsync();
+        await _sessionProvider.CurrentSession.Query<TaskCommentEntity>()
+            .Where(item => commentIds.Contains(item.Id))
+            .FetchMany(item => item.Watchers)
+            .ToListAsync();
+
+        var userIds = comments
+            .SelectMany(item => new[] { item.User!.Id }
+                .Concat(item.Watchers.Select(watcher => watcher.Id)))
+            .Distinct()
+            .ToList();
+        await _sessionProvider.CurrentSession.Query<UserEntity>()
+            .Where(item => userIds.Contains(item.Id))
+            .FetchMany(item => item.Avatars)
+            .ToListAsync();
+
+        var commentsById = comments
+            .GroupBy(item => item.Id)
+            .ToDictionary(group => group.Key, group => group.First());
+        var items = commentIds
+            .Select(commentId => commentsById[commentId])
+            .ToList();
+
         return new ListDto<TaskCommentEntity>(
             items,
-            await query.RowCountAsync()
+            totalCount
         );
     }
 }

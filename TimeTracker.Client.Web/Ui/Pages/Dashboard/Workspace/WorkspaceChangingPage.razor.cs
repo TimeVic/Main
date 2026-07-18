@@ -12,9 +12,6 @@ public partial class WorkspaceChangingPage
     [Parameter]
     public string? PageRoute { get; set; }
     
-    [Parameter]
-    public Guid WorkspaceId { get; set; }
-
     [Inject]
     private WorkspaceInitializationService _workspaceInitializationService { get; set; }
     
@@ -61,9 +58,12 @@ public partial class WorkspaceChangingPage
 
     private void NavigateTo()
     {
-        _navigationManager.NavigateTo(
-            string.IsNullOrEmpty(PageRoute) ? SiteUrl.DashboardBase : PageRoute,
-            replace: true
-        );
+        var pageRoute = PageRoute?.TrimStart('/') ?? string.Empty;
+        if (pageRoute.StartsWith("board/", StringComparison.OrdinalIgnoreCase))
+        {
+            pageRoute = pageRoute["board/".Length..];
+        }
+
+        _navigationManager.NavigateTo(UrlService.GetDashboardUrl(pageRoute, WorkspaceId), replace: true);
     }
 }

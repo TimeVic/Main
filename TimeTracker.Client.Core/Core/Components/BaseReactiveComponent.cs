@@ -12,6 +12,9 @@ public class BaseReactiveComponent: Fluxor.Blazor.Web.Components.FluxorComponent
 {
     [Parameter]
     public string? Locale { get; set; }
+
+    [Parameter]
+    public Guid WorkspaceId { get; set; }
     
     [Inject]
     protected IDispatcher Dispatcher { get; set; }
@@ -24,6 +27,9 @@ public class BaseReactiveComponent: Fluxor.Blazor.Web.Components.FluxorComponent
     
     [Inject]
     protected NavigationManager NavigationManager { get; set; }
+
+    [Inject]
+    protected UrlService UrlService { get; set; }
 
     [Inject]
     protected IState<AuthState> AuthState { get; set; }

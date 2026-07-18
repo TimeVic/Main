@@ -3,6 +3,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Business.Common.Constants.Http;
 using TimeTracker.Client.Core.Constants;
+using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Core.Store.Auth;
 using Toolbelt.Blazor;
 
@@ -16,6 +17,7 @@ public class HttpInterceptorService
     private readonly NavigationManager _navigationManager;
     private readonly IDispatcher _dispatcher;
     private readonly IState<AuthState> _authState;
+    private readonly UrlService _urlService;
 
     private string[] ExcludedUrls => _configuration.GetSection("Auth:ExcludedApiUrls").Get<string[]>() ?? [];
 
@@ -25,7 +27,8 @@ public class HttpInterceptorService
         ILogger<HttpInterceptorService> logger,
         NavigationManager navigationManager,
         IDispatcher dispatcher,
-        IState<AuthState> authState
+        IState<AuthState> authState,
+        UrlService urlService
     )
     {
         _interceptor = interceptor;
@@ -34,6 +37,7 @@ public class HttpInterceptorService
         _navigationManager = navigationManager;
         _dispatcher = dispatcher;
         _authState = authState;
+        _urlService = urlService;
     }
 
     public void Register()
@@ -54,10 +58,12 @@ public class HttpInterceptorService
         var isExcludedUrl = ExcludedUrls.Any(excludedUrl => absPath.StartsWith(excludedUrl));
         if (!isExcludedUrl)
         {
-            if (_authState.Value.Workspace != null)
+            var workspaceId = _urlService.GetWorkspaceIdFromDashboardUrl()
+                ?? _authState.Value.Workspace?.Id;
+            if (workspaceId.HasValue)
             {
                 e.Request.Headers.Remove(AuthConstants.WorkspaceIdHeaderName);
-                e.Request.Headers.Add(AuthConstants.WorkspaceIdHeaderName, _authState.Value.Workspace.Id.ToString());
+                e.Request.Headers.Add(AuthConstants.WorkspaceIdHeaderName, workspaceId.Value.ToString());
             }
         }
     }

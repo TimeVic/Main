@@ -6,6 +6,8 @@ namespace TimeTracker.Api.Shared.Dto.Entity.Task;
 public class TaskListDto: BaseDto
 {   
     public string Name { get; set; } = string.Empty;
+
+    public Guid WorkspaceId { get; set; }
     
     public ProjectDto Project { get; set; } = null!;
     

@@ -74,7 +74,7 @@ public partial class TasksListBlock: IDisposable
             return;
         }
 
-        NavigationManager.NavigateTo(string.Format(SiteUrl.Dashboard_Tasks, taskListId));
+        NavigationManager.NavigateTo(UrlService.GetDashboardUrl($"tasks/{taskListId}"));
     }
     
     private void OnSelectedProject(ProjectDto? project)

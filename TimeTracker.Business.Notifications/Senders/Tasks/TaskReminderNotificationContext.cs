@@ -10,9 +10,9 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
 
         public ICollection<string> GcmTokens { get; set; } = new List<string>();
 
-        public long TaskId { get; set; }
+        public Guid TaskId { get; set; }
         
-        public long WorkspaceId { get; set; }
+        public Guid WorkspaceId { get; set; }
         
         public string TaskTitle { get; set; } = string.Empty;
         

@@ -94,6 +94,7 @@ public class ClientPaymentDao: IClientPaymentDao
         var items = await query
             .Fetch(item => item.Client)
             .Fetch(item => item.Project)
+            .ThenFetch(project => project!.Client)
             .OrderByDescending(item => item.PaymentTime)
             .Skip(offset)
             .Take(PaginationUtils.DefaultPageSize)

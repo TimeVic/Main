@@ -40,7 +40,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("TaskReminderNotification.htm");
             emailBuilder.AddPlaceholder("userName", context.UserName);
-            emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl}/board/task/{context.WorkspaceId}/{context.TaskId}");
+            emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl?.TrimEnd('/')}/board/{context.WorkspaceId}/task/{context.TaskId}");
             emailBuilder.AddPlaceholder("taskTitle", context.TaskTitle);
             _smtpClientService.SendEmail(context.ToEmailAddress, emailBuilder, null);
         }
@@ -49,7 +49,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
         {
             var emailBuilder = _emailFactory.GetEmailBuilder("TaskReminderNotification.htm");
             emailBuilder.AddPlaceholder("userName", context.UserName);
-            emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl}/board/task/{context.WorkspaceId}/{context.TaskId}");
+            emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl?.TrimEnd('/')}/board/{context.WorkspaceId}/task/{context.TaskId}");
             emailBuilder.AddPlaceholder("taskTitle", context.TaskTitle);
             _smtpClientService.SendEmail(context.ToEmailAddress, emailBuilder, null);
         }

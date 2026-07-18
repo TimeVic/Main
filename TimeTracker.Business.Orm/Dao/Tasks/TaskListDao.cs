@@ -111,6 +111,7 @@ public class TaskListDao: ITaskListDao
         var taskLists = await _sessionProvider.CurrentSession.Query<TaskListEntity>()
             .Fetch(item => item.Project)
             .ThenFetch(project => project.Client)
+            .ThenFetch(client => client.Workspace)
             .Where(item => taskListIds.Contains(item.Id))
             .OrderByDescending(item => item.Name)
             .ToListAsync();

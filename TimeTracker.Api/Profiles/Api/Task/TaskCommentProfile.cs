@@ -15,7 +15,6 @@ public class TaskCommentProfile : Profile
             {
                 var user = mapper.Mapper.Map<UserDto>(src.User);
                 var attachments = mapper.Mapper.Map<List<StoredFileDto>>(src.Attachments.ToList());
-                var task = mapper.Mapper.Map<TaskDto>(src.Task);
                 var watchers = mapper.Mapper.Map<List<UserDto>>(src.Watchers.ToList());
                 return new TaskCommentDto
                 {
@@ -26,7 +25,10 @@ public class TaskCommentProfile : Profile
                     User = user,
                     Attachments = attachments,
                     Watchers = watchers,
-                    Task = task 
+                    Task = new TaskDto
+                    {
+                        Id = src.Task.Id
+                    }
                 };
             });
     }
