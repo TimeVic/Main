@@ -18,6 +18,8 @@ public partial class TaskDetailsHeaderBlock
 
     private string TaskUrl => string.Format(SiteUrl.Dashboard_Task, Task.Id);
 
+    private string TaskListUrl => string.Format(SiteUrl.Dashboard_Tasks, Task.TaskList.Id);
+
     private async Task SaveTitleAsync(string title)
     {
         var request = new UpdateRequest();

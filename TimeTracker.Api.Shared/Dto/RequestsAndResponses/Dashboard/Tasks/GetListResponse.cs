@@ -6,10 +6,14 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 
 public class GetListResponse: PaginatedListDto<TaskDto>
 {
+    public TaskListDto? TaskList { get; set; }
+
     public GetListResponse(
         ICollection<TaskDto> responseList,
-        int totalItems
+        int totalItems,
+        TaskListDto? taskList = null
     ) : base(responseList, totalItems)
     {
+        TaskList = taskList;
     }
 }

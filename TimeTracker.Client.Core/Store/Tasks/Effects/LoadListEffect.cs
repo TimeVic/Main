@@ -47,10 +47,9 @@ public class LoadListEffect: Effect<LoadListAction>
                     return;
                 }
 
-                var selectedTaskList = _tasksListState.Value.SelectedTaskList;
-                if (selectedTaskList == null && response.Items.Any())
+                if (response.TaskList != null)
                 {
-                    dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetListItemAction(response.Items.First().TaskList));
+                    dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetListItemAction(response.TaskList));
                 }
 
                 dispatcher.Dispatch(new SetListItemsAction(response));
