@@ -26,7 +26,7 @@ builder.Services.AddScoped<UrlService>();
 builder.Services.AddLumexServices();
 builder.Services.AddFluxor(options =>
 {
-    options.ScanAssemblies(typeof(ClientCoreAssemblyMarker).Assembly);
+    options.ScanTypes(ClientCoreAssemblyMarker.ServerFluxorStateType);
 });
 
 var app = builder.Build();
