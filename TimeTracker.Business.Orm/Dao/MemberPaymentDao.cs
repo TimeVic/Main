@@ -164,6 +164,7 @@ public class MemberPaymentDao: IMemberPaymentDao
             .Fetch(item => item.Project)
             .ThenFetch(item => item.Client)
             .Fetch(item => item.Member)
-            .ThenFetch(item => item.User);
+            .ThenFetch(item => item.User)
+            .ThenFetch(item => item.Language);
     }
 }

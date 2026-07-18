@@ -86,6 +86,7 @@ public class ProjectDao: IProjectDao
             .ToListAsync();
         var projects = await _sessionProvider.CurrentSession.Query<ProjectEntity>()
             .Where(item => projectIds.Contains(item.Id))
+            .Fetch(item => item.Client)
             .OrderByDescending(item => item.Name)
             .ToListAsync();
         
