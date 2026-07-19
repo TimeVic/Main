@@ -26,7 +26,7 @@ public class GoalsTrackerItemController(ILifetimeScope scope) : MainApiControlle
     [HttpPost("update")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Create([FromBody] UpdateItemRequest request)
+    public Task<IActionResult> Update([FromBody] UpdateItemRequest request)
         => this.RequestAsync()
             .For<GoalsTrackerItemDto>()
             .With(request);
@@ -34,7 +34,7 @@ public class GoalsTrackerItemController(ILifetimeScope scope) : MainApiControlle
     [HttpPost("delete")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> Create([FromBody] DeleteItemRequest request)
+    public Task<IActionResult> Delete([FromBody] DeleteItemRequest request)
         => this.RequestAsync(request);
     
     [HttpPost("set-completion")]
