@@ -94,6 +94,7 @@ node('build-node') {
 
             runStage(Stage.BUILD) {
                 sh 'echo "{}" > appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Api/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
