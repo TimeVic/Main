@@ -19,20 +19,17 @@ public class StoredFilesDao: IStoredFilesDao
 
     public async Task<ICollection<StoredFileEntity>> GetListByEntity(Guid entityId, StorageEntityType entityType)
     {
-        TaskEntity taskAlias = null!;
-        UserEntity userAlias = null!;
-        var query = _sessionProvider.CurrentSession.QueryOver<StoredFileEntity>()
-            .Left.JoinAlias(item => item.Tasks, () => taskAlias)
-            .Left.JoinAlias(item => item.Users, () => userAlias);
+        var query = _sessionProvider.CurrentSession.Query<StoredFileEntity>();
         if (entityType == StorageEntityType.Task)
         {
-            query = query.Where(() => taskAlias!.Id == entityId);
+            query = query.Where(item => item.Tasks.Any(task => task.Id == entityId));
         }
         if (entityType == StorageEntityType.User)
         {
-            query = query.Where(() => userAlias!.Id == entityId);
+            query = query.Where(item => item.Users.Any(user => user.Id == entityId));
         }
-        query = query.OrderBy(item => item.CreatedAt).Desc;
-        return await query.ListAsync();
+        return await query
+            .OrderByDescending(item => item.CreatedAt)
+            .ToListAsync();
     }
 }

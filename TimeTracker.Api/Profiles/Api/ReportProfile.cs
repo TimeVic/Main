@@ -65,7 +65,7 @@ public class ReportProfile : Profile
             .IgnoreAllAndConstructUsing((src, mapper) => new SummaryByUsersReportItemDto
             {
                 UserId = src.UserId ?? Guid.Empty,
-                UserName = src.UserName ?? string.Empty,
+                UserName = src.UserName,
                 Email = src.Email,
                 Duration = src.Duration,
                 Amount = src.Amount

@@ -86,7 +86,7 @@ public class DbCleanUpService: IDbCleanUpService
 
         foreach (var table in tables)
         {
-            await _sessionProvider.CurrentSession.CreateSQLQuery($"delete from {table} where 1=1;").ExecuteUpdateAsync();    
+            await _sessionProvider.CurrentSession.CreateSQLQuery($"delete from {table} where 1=1;").ExecuteUpdateAsync();
         }
         _sessionProvider.CurrentSession.Clear();
     }
