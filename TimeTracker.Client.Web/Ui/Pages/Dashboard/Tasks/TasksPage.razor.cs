@@ -40,7 +40,6 @@ public partial class TasksPage: IDisposable
             return;
         }
 
-        await NavigateToLastOpenedTaskListAsync();
     }
 
     public void Dispose()
@@ -51,27 +50,6 @@ public partial class TasksPage: IDisposable
     private void OnTasksListStateChanged(object? sender, EventArgs args)
     {
         InvokeAsync(StateHasChanged);
-    }
-
-    private async Task NavigateToLastOpenedTaskListAsync()
-    {
-        var workspaceId = GetCurrentWorkspaceId();
-        if (!workspaceId.HasValue)
-        {
-            return;
-        }
-
-        var taskListId = await _lastOpenedEntityService.GetLastOpenedIdAsync(
-            workspaceId.Value,
-            LastOpenedEntityType.TaskList
-        );
-        if (taskListId.HasValue && TaskListId == null)
-        {
-            NavigationManager.NavigateTo(
-                UrlService.GetDashboardUrl($"tasks/{taskListId.Value}", workspaceId.Value),
-                replace: true
-            );
-        }
     }
 
     private Task SaveLastOpenedTaskListAsync(Guid taskListId)
