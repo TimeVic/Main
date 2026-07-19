@@ -27,7 +27,7 @@
             OnConfirm="@OnDeleteTaskList"/>
     }
     
-    <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div class="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
         <div class="flex items-center justify-between gap-3">
             <div>
                 <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksListBlock_Title"]</p>
@@ -67,7 +67,7 @@
             </LumexDropdown>
         </div>
 
-        <div class="mt-4 space-y-3">
+        <div class="mt-3 space-y-3">
             <div>
                 <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Project"]</label>
                 <ProjectsDropDown
@@ -79,7 +79,7 @@
                 @* <p class="mt-1 text-xs text-slate-500">Grouped by client; projects without a client appear under “No client”.</p> *@
             </div>
 
-            <div class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
+            <div class="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2 py-1">
                 <InputTextField
                     @bind-Value="_taskListSearch"
                     Placeholder="@DashboardLocalizer["TasksListBlock_SearchPlaceholder"].Value"
@@ -94,23 +94,22 @@
                 </InputTextField>
             </div>
 
-            <div class="space-y-2">
+            <div class="space-y-1">
                 @foreach (var taskList in _filteredTaskLists)
                 {
                     <button type="button" @onclick="@(() => OnTasksListSelected(taskList.Id))" class="@GetTaskListClass(taskList)">
-                        <span>
-                            <span class="block font-medium text-slate-800">@taskList.Name</span>
-                            <span class="text-xs text-slate-500">
-                                @GetTasksCountText(taskList)
-                            </span>
+                        <span class="min-w-0 flex-1">
+                            <span class="block break-words text-sm font-medium leading-5 text-slate-800">@taskList.Name</span>
                         </span>
-                        <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                        <span class="ml-2 shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+                            @GetTasksCountText(taskList)
+                        </span>
                     </button>
                 }
 
                 @if (!_filteredTaskLists.Any())
                 {
-                    <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+                    <div class="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
                         @if (_selectedProject == null)
                         {
                             <text>@DashboardLocalizer["TasksListBlock_SelectProjectEmpty"]</text>
@@ -121,11 +120,11 @@
                         }
                         else
                         {
-                            <div class="space-y-3">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
                                 <p>@DashboardLocalizer["TasksListBlock_ListIsEmpty"]</p>
                                 <CustomButton
-                                    FullWidth="true"
                                     Color="ThemeColor.Info"
+                                    Size="Size.Small"
                                     Variant="Variant.Outlined"
                                     OnClick="@(() => _isAddTaskListModalOpened = true)">
                                     <StartContent>

@@ -20,7 +20,7 @@
 
 @if (_localTasks.Any())
 {
-    <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+    <div class="flex items-center justify-between border-b border-slate-200 px-4 py-2.5">
         <div class="flex items-center gap-2">
             <LumexCheckbox
                 OnClick="@SelectAllTasks"
@@ -56,24 +56,24 @@
     </div>
 }
 
-<div class="overflow-hidden">
+<div class="overflow-x-auto">
     <table class="w-full table-fixed border-separate border-spacing-0">
         <colgroup>
-            <col class="w-12" />
+            <col class="w-11" />
             <col />
-            <col class="w-28" />
-            <col class="w-24" />
-            <col class="w-44" />
-            <col class="w-28" />
+            <col class="hidden lg:table-column lg:w-28" />
+            <col class="hidden lg:table-column lg:w-24" />
+            <col class="hidden lg:table-column lg:w-36" />
+            <col class="w-20" />
         </colgroup>
         <thead class="bg-slate-50/80 sticky top-0 z-10">
             <tr class="text-left text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                <th class="w-12 px-3 py-3"></th>
-                <th class="px-2 py-3">@DashboardLocalizer["Task"]</th>
-                <th class="px-2 py-3 text-center">@DashboardLocalizer["Status"]</th>
-                <th class="px-2 py-3 text-center">@DashboardLocalizer["Priority"]</th>
-                <th class="px-2 py-3">@DashboardLocalizer["Assignee"]</th>
-                <th class="px-4 py-3 text-right">@DashboardLocalizer["Actions"]</th>
+                <th class="w-11 px-3 py-2.5"></th>
+                <th class="px-2 py-2.5">@DashboardLocalizer["Task"]</th>
+                <th class="hidden px-2 py-2.5 text-left lg:table-cell">@DashboardLocalizer["Status"]</th>
+                <th class="hidden px-2 py-2.5 text-left lg:table-cell">@DashboardLocalizer["Priority"]</th>
+                <th class="hidden px-2 py-2.5 lg:table-cell">@DashboardLocalizer["Assignee"]</th>
+                <th class="px-2 py-2.5 text-right">@DashboardLocalizer["Actions"]</th>
             </tr>
         </thead>
         <tbody class="text-sm">
@@ -85,7 +85,7 @@
             {
                 <Virtualize
                     Items="_localTasks"
-                    ItemSize="84"
+                    ItemSize="72"
                     SpacerElement="tr"
                     OverscanCount="5"
                     Context="task">
@@ -104,33 +104,58 @@
                         @ondragover="@(() => OnDragOver(task))"
                         @ondrop="@(() => OnDrop(task))"
                         @ondragend="@OnDragEnd">
-                        <td class="border-t border-slate-200 px-3 py-3 align-top">
-                            <div class="flex flex-col items-center gap-2">
+                        <td class="border-t border-slate-200 px-3 py-2.5 align-top">
+                            <div class="flex flex-col items-center">
                                 <LumexCheckbox
                                     Value="IsTaskBoardSelected(task.Id)"
                                     ValueChanged="@(() => ToggleTaskBoardSelection(task.Id))"/>
                             </div>
                         </td>
-                        <td class="cursor-pointer border-t border-slate-200 px-2 py-3 align-top @GetSelectedTaskClass(task.Id)" @onclick="@(() => OpenTaskEditor(task))">
-                            <div class="flex gap-3">
-                                <div class="flex-1 min-w-0 space-y-2">
-                                    <div class="flex min-w-0 items-center gap-2">
-                                        <span class="shrink-0 rounded-md bg-slate-100 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-600">@task.FormattedId</span>
-                                        <a href="@GetTaskUrl(task)" title="@task.Title" @onclick:preventDefault="true" class="min-w-0 flex-1 truncate text-left font-semibold text-slate-900 transition group-hover:text-blue-700 hover:text-blue-700 @GetTaskTitleClass(task)">
+                        <td class="cursor-pointer border-t border-slate-200 px-2 py-2.5 align-top @GetSelectedTaskClass(task.Id)" @onclick="@(() => OpenTaskEditor(task))">
+                            <div class="flex">
+                                <div class="min-w-0 flex-1 space-y-1.5">
+                                    <div class="flex min-w-0 items-start gap-2">
+                                        <span class="mt-0.5 shrink-0 rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-600">@task.FormattedId</span>
+                                        <a href="@GetTaskUrl(task)" title="@task.Title" @onclick:preventDefault="true" class="min-w-0 flex-1 break-words text-left text-sm font-semibold leading-5 text-slate-900 transition group-hover:text-blue-700 hover:text-blue-700 @GetTaskTitleClass(task)">
                                             @GetTaskListTitle(task.Title)
                                         </a>
                                     </div>
                                     <TaskEstimateSummaryBlock
-                                        Class="mt-1 max-w-[38rem]"
+                                        Class="max-w-[42rem]"
                                         IsCompact="true"
                                         PlannedDuration="task.OriginalEstimate"
                                         TrackedDuration="task.TrackedDuration" />
+                                    <div class="flex flex-wrap items-center gap-1.5 lg:hidden" @onclick:stopPropagation="true">
+                                        <EnumDropDown
+                                            TItem="TaskStatus"
+                                            Class="shrink-0"
+                                            DropDownColor="@task.Status.GetThemeColor()"
+                                            DropDownVariant="Variant.Light"
+                                            SelectType="DropDownType.DropDown"
+                                            Size="Size.Small"
+                                            Value="@task.Status"
+                                            ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
+                                        <EnumDropDown
+                                            TItem="TaskPriority"
+                                            Class="shrink-0"
+                                            DropDownColor="@task.Priority.GetThemeColor()"
+                                            DropDownVariant="Variant.Light"
+                                            SelectType="DropDownType.DropDown"
+                                            Size="Size.Small"
+                                            Value="@task.Priority"
+                                            ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
+                                        <UserAvatarBlock
+                                            User="@task.User"
+                                            SizeClass="h-6 w-6"
+                                            Class="text-[10px]" />
+                                    </div>
                                 </div>
                             </div>
                         </td>
-                        <td class="border-t border-slate-200 px-2 py-3 align-top">
+                        <td class="hidden border-t border-slate-200 px-2 py-2.5 align-top lg:table-cell">
                             <EnumDropDown
                                 TItem="TaskStatus"
+                                Class="whitespace-nowrap"
                                 DropDownColor="@task.Status.GetThemeColor()"
                                 DropDownVariant="Variant.Light"
                                 SelectType="DropDownType.DropDown"
@@ -138,9 +163,10 @@
                                 Value="@task.Status"
                                 ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
                         </td>
-                        <td class="border-t border-slate-200 px-2 py-3 align-top">
+                        <td class="hidden border-t border-slate-200 px-2 py-2.5 align-top lg:table-cell">
                             <EnumDropDown
                                 TItem="TaskPriority"
+                                Class="whitespace-nowrap"
                                 DropDownColor="@task.Priority.GetThemeColor()"
                                 DropDownVariant="Variant.Light"
                                 SelectType="DropDownType.DropDown"
@@ -148,21 +174,23 @@
                                 Value="@task.Priority"
                                 ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                         </td>
-                        <td class="border-t border-slate-200 px-2 py-3 align-top">
+                        <td class="hidden border-t border-slate-200 px-2 py-2.5 align-top lg:table-cell">
                             <div class="flex items-center gap-2" title="@task.User?.Email">
-                                <UserAvatarBlock User="@task.User" />
+                                <UserAvatarBlock
+                                    User="@task.User"
+                                    SizeClass="h-7 w-7"
+                                    Class="text-[10px]" />
                                 <div class="min-w-0">
-                                    <div class="truncate text-sm font-medium text-slate-800">@(task.User?.Name ?? "")</div>
+                                    <div class="truncate text-xs font-medium text-slate-800">@(task.User?.Name ?? "")</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="border-t border-slate-200 px-4 py-3 align-top text-right">
-                            <div class="flex items-center justify-end gap-1.5">
+                        <td class="border-t border-slate-200 px-2 py-2.5 align-top text-right">
+                            <div class="flex items-center justify-end gap-1">
                                 <TaskTimeTrackerButton Task="@task" />
                                 <LumexDropdown>
                                     <LumexDropdownTrigger>
                                         <LumexButton
-                                            Class="ml-0.5"
                                             IconOnly="true"
                                             Size="Size.Small"
                                             Variant="@Variant.Outlined">
@@ -185,7 +213,7 @@
             else
             {
                 <tr>
-                    <td colspan="6" class="px-4 py-8 text-center text-sm text-slate-500">@(string.IsNullOrWhiteSpace(EmptyMessage) ? DashboardLocalizer["TasksTableBlock_NoTasksFound"] : EmptyMessage)</td>
+                    <td colspan="6" class="px-4 py-4 text-sm text-slate-500">@(string.IsNullOrWhiteSpace(EmptyMessage) ? DashboardLocalizer["TasksTableBlock_NoTasksFound"] : EmptyMessage)</td>
                 </tr>
             }
         </tbody>
