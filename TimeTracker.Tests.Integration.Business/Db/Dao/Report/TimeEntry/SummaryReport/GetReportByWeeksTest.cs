@@ -44,6 +44,7 @@ public class GetReportByWeeksTest: BaseTest
     [Fact]
     public async Task ShouldReceiveReportForOwnerOrManager()
     {
+        var baseDate = new DateTime(2026, 7, 19, 0, 0, 0, DateTimeKind.Utc);
         var projects = await _projectSeederSeeder.CreateSeveralAsync(_workspace, 2);
         await FlushDbChanges();
         var project1 = projects.First();
@@ -51,8 +52,8 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddDays(-7).AddHours(10),
-                EndTime = DateTime.UtcNow.AddDays(-7).AddHours(15),
+                StartTime = baseDate.AddDays(-7).AddHours(10),
+                EndTime = baseDate.AddDays(-7).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -63,8 +64,8 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddDays(-14).AddHours(1),
-                EndTime = DateTime.UtcNow.AddDays(-14).AddHours(5),
+                StartTime = baseDate.AddDays(-14).AddHours(1),
+                EndTime = baseDate.AddDays(-14).AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -74,8 +75,8 @@ public class GetReportByWeeksTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddDays(-21).AddHours(5),
-                EndTime = DateTime.UtcNow.AddDays(-21).AddHours(11),
+                StartTime = baseDate.AddDays(-21).AddHours(5),
+                EndTime = baseDate.AddDays(-21).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -85,8 +86,8 @@ public class GetReportByWeeksTest: BaseTest
         
         var result = await _reportsDao.GetReportByWeekForOwnerOrManagerAsync(
             _workspace.Id,
-            DateTime.UtcNow.AddMonths(-21),
-            DateTime.UtcNow
+            baseDate.AddMonths(-21),
+            baseDate
         );
         Assert.Equal(3, result.Count);
         
@@ -105,8 +106,8 @@ public class GetReportByWeeksTest: BaseTest
         await FlushDbChanges();
         result = await _reportsDao.GetReportByWeekForOwnerOrManagerAsync(
             _workspace.Id,
-            DateTime.UtcNow.AddMonths(-3),
-            DateTime.UtcNow
+            baseDate.AddMonths(-3),
+            baseDate
         );
         Assert.Equal(3, result.Count);
         

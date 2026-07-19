@@ -40,7 +40,7 @@ select
 from projects p
          inner join relevant_projects rp on rp.ProjectId = p.id
          left join earned_by_project e on e.ProjectId = p.id
-         left join clients c on c.id = p.client_id
+         left join clients c on c.id = p.client_id and c.workspace_id = :workspaceId
          left join member_earnings_by_project tc on tc.ProjectId = p.id
-where c.workspace_id = :workspaceId
+where c.id is not null or p.client_id is null
 order by p.name

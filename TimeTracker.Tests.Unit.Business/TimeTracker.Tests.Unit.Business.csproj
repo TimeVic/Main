@@ -30,6 +30,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="xunit.runner.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="stubs\markdown\actual_1.htm">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>

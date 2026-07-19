@@ -88,6 +88,9 @@ public class DbCleanUpService: IDbCleanUpService
         {
             await _sessionProvider.CurrentSession.CreateSQLQuery($"delete from {table} where 1=1;").ExecuteUpdateAsync();    
         }
-        _sessionProvider.CurrentSession.Clear();
+
+        // Ensure the cleanup deletes are applied before the NHibernate session is disposed.
+        await _sessionProvider.CurrentSession.FlushAsync();
+        _sessionProvider.CloseCurrentSession();
     }
 }

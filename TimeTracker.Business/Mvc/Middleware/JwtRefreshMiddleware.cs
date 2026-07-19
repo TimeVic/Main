@@ -35,31 +35,40 @@ public class JwtRefreshMiddleware
             var jwtAuthService = scope.Resolve<IJwtAuthService>();
             var authorizationService = scope.Resolve<IAuthorizationService>();
             var apiRequestService = scope.Resolve<IApiRequestService>();
+            var cookiesService = scope.Resolve<IHttpCookiesService>();
 
-            var jwt = apiRequestService.GetApiToken();
+            var jwt = apiRequestService.GetApiToken()
+                      ?? cookiesService.Get(context, HttpCookieKeyEnum.JwtToken.GetKey());
             if (!string.IsNullOrEmpty(jwt) && jwtAuthService.IsJwt(jwt))
             {
-                var accessToken = apiRequestService.GetAccessToken();
-                
-                if (!string.IsNullOrEmpty(accessToken) && jwtAuthService.IsValidJwt(jwt, false))
+                var accessToken = apiRequestService.GetAccessToken()
+                                  ?? cookiesService.Get(context, HttpCookieKeyEnum.AccessToken.GetKey());
+
+                if (jwtAuthService.IsValidJwt(jwt, false))
                 {
+                    context.Request.Headers.Authorization = $"Bearer {jwt}";
+
                     if (jwtAuthService.IsTokenExpired(jwt, _jwtExpirationDelay))
                     {
                         _logger.LogDebug("Refresh JWT token...");
-                        var loginResult = await authorizationService.GenerateNewJwtToken(accessToken, jwt);
-                        var cookiesService = scope.Resolve<IHttpCookiesService>();
-                        var httpHeadersService = scope.Resolve<IHttpHeadersService>();
+                        if (!string.IsNullOrEmpty(accessToken))
+                        {
+                            var loginResult = await authorizationService.GenerateNewJwtToken(accessToken, jwt);
+                            var refreshedJwt = loginResult.JwtToken;
+
+                            var httpHeadersService = scope.Resolve<IHttpHeadersService>();
                 
-                        _logger.LogDebug($"Cookie with JWT token was refreshed. Expiration time: {jwtAuthService.GetTokenExpirationTime(loginResult.JwtToken)}");
-                        context.Request.Headers.Authorization = $"Bearer {loginResult.JwtToken}";
+                            _logger.LogDebug($"Cookie with JWT token was refreshed. Expiration time: {jwtAuthService.GetTokenExpirationTime(refreshedJwt)}");
+                            context.Request.Headers.Authorization = $"Bearer {refreshedJwt}";
                 
-                        cookiesService.Append(
-                            context,
-                            HttpCookieKeyEnum.JwtToken, 
-                            loginResult.JwtToken, 
-                            DateTimeOffset.UtcNow.AddDays(30)
-                        );
-                        httpHeadersService.Append(HttpHeaderKeyEnum.JwtToken, loginResult.JwtToken);
+                            cookiesService.Append(
+                                context,
+                                HttpCookieKeyEnum.JwtToken, 
+                                refreshedJwt, 
+                                DateTimeOffset.UtcNow.AddDays(30)
+                            );
+                            httpHeadersService.Append(HttpHeaderKeyEnum.JwtToken, refreshedJwt);
+                        }
                     }
                 }
             }
@@ -72,6 +81,10 @@ public class JwtRefreshMiddleware
         {
             _logger.LogTrace(e.Message);
         }
+        catch (ExpiredJwtTokenException e)
+        {
+            _logger.LogTrace(e.Message);
+        }
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
@@ -81,4 +94,5 @@ public class JwtRefreshMiddleware
             await _next(context);
         }
     }
+
 }

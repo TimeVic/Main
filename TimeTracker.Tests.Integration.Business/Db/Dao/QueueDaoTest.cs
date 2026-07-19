@@ -1,7 +1,5 @@
-using Autofac;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Db.Dao;
@@ -13,11 +11,8 @@ record struct TestContext(
 
 public class QueueDaoTest: BaseTest
 {
-    private new readonly IQueueDao _queueDao;
-
     public QueueDaoTest(): base()
     {
-        _queueDao = Scope.Resolve<IQueueDao>();
     }
 
     [Fact]
