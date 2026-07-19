@@ -70,7 +70,7 @@ public class GenerateNewJwtTokenTest: BaseTest
         accessToken.ExpirationTime = DateTime.UtcNow.AddSeconds(-1);
         await FlushDbChanges();
         
-        await Assert.ThrowsAsync<IncorrectAccessTokenException>(async () =>
+        await Assert.ThrowsAsync<ExpiredJwtTokenException>(async () =>
         {
             await _authService.GenerateNewJwtToken(
                 loginResponse.AccessToken,
