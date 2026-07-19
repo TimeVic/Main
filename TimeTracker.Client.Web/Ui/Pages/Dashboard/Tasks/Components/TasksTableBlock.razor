@@ -97,7 +97,8 @@
                             </td>
                         </tr>
                     }
-                    <tr class="@GetTaskBoardRowClass(task.Id) @GetDragRowClass(task) transition-colors"
+                    <tr @key="task.Id"
+                        class="@GetTaskBoardRowClass(task.Id) @GetDragRowClass(task) transition-colors"
                         draggable="true"
                         @ondragstart="@(() => OnDragStart(task))"
                         @ondragover:preventDefault="true"

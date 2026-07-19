@@ -10,7 +10,7 @@
             <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_TodoDescription"]</p>
         </div>
         <TasksTableBlock 
-            Tasks="@TodoTasks"
+            Tasks="@_todoTasks"
             IsLoading="@TasksState.Value.IsListLoading" 
             EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoTodoTasks"].Value" />
     </div>
@@ -21,7 +21,7 @@
             <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_BacklogDescription"]</p>
         </div>
         <TasksTableBlock 
-            Tasks="@BacklogTasks"
+            Tasks="@_backlogTasks"
             IsLoading="@TasksState.Value.IsListLoading" 
             EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoBacklogTasks"].Value" />
     </div>
