@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
 using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Web.Services;
 using TimeTracker.Client.Core.Services.Http;
+using TimeTracker.Client.Core.Store.Common;
 using TimeTracker.Client.Web.Services.Validation;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Landing.User;
@@ -22,6 +23,9 @@ public partial class LoginPage
     
     [Inject] 
     private IAuthorizationService _authorizationService { get; set; }
+
+    [Inject]
+    private IState<CommonState> CommonState { get; set; }
     
     private LoginRequest model = new();
     private LoginMagicRequest _magicModel = new();
@@ -44,7 +48,7 @@ public partial class LoginPage
     {
         await base.OnAfterRenderAsync(firstRender);
 
-        if (AuthState.Value.IsLoggedIn)
+        if (CommonState.Value.IsInitialized && AuthState.Value.IsLoggedIn)
         {
             NavigationManager.NavigateTo(SiteUrl.DashboardBase, replace: true);
         }
