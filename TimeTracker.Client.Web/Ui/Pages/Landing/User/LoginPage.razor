@@ -18,6 +18,14 @@
     Title="@Localizer["Meta_Title"]"
     Robots="@SiteMetadata.NoIndexRobots" />
 
+@if (!CommonState.Value.IsInitialized)
+{
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-100" aria-busy="true">
+        <LumexSpinner Size="@Size.Large" />
+    </div>
+}
+else
+{
 <div class="min-h-screen bg-slate-100 text-slate-900">
     <div class="px-4 py-10 sm:px-6 lg:px-8">
         <div class="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(360px,440px)]">
@@ -175,6 +183,7 @@
         </div>
     </div>
 </div>
+}
 
 @code {
     [Inject]
