@@ -42,7 +42,8 @@ public class QueueDao: IQueueDao
                 Priority = priority ?? QueuePriority.Normal,
                 ContextType = typeString,
                 ContextData = JsonHelper.SerializeToString(context),
-                ProcessAt = processAt ?? DateTime.UtcNow,
+                // Account for small clock drift between the application and database hosts.
+                ProcessAt = processAt ?? DateTime.UtcNow.AddSeconds(-1),
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };

@@ -2,6 +2,7 @@ using Autofac;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Business.Core;
 
@@ -37,9 +38,7 @@ public class ConnectionTest: BaseTest
         var user = _userFactory.Generate();
         user.PasswordHash = Array.Empty<byte>();
         user.PasswordSalt = Array.Empty<byte>();
-
         user.Language = await _languageDao.GetDefaultAsync();
-
         var expectedTime = DateTime.UtcNow;
         user.CreatedAt = expectedTime;
         user.UpdatedAt = expectedTime;
