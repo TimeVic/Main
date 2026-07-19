@@ -7,7 +7,7 @@ using TimeTracker.Client.Core.Store.Tag;
 
 namespace TimeTracker.Client.Core.Ui.Shared.Components.Form.Select;
 
-public partial class TagsDropDown
+public partial class TagsDropDown : IDisposable
 {
     [Parameter]
     public Size Size { get; set; } = Size.Medium;
@@ -68,11 +68,13 @@ public partial class TagsDropDown
     {
         base.OnInitialized();
 
-        _state.StateChanged += (sender, args) =>
-        {
-            UpdateList();
-        };
+        _state.StateChanged += OnTagStateChanged;
         UpdateList();
+    }
+
+    public void Dispose()
+    {
+        _state.StateChanged -= OnTagStateChanged;
     }
     
     private void OnValueChanged(ICollection<TagDto> selectedTags)
@@ -89,6 +91,11 @@ public partial class TagsDropDown
     {
         _list = _state.Value.List.ToList();
         StateHasChanged();
+    }
+
+    private void OnTagStateChanged(object? sender, EventArgs args)
+    {
+        UpdateList();
     }
 
     private static string GetColorStyle(TagDto? tag)

@@ -1,5 +1,3 @@
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
@@ -16,28 +14,16 @@ public partial class TasksBoardBlock : IDisposable
     [Inject]
     public IState<TasksState> TasksState { get; set; }
 
-    private readonly Subject<ICollection<TaskDto>> _tasksSubject = new();
-    private IReadOnlyList<TaskDto> _tasks = [];
-
-    private IReadOnlyList<TaskDto> TodoTasks => _tasks.Where(t => t.Status != TaskStatus.Backlog).ToList();
-    private IReadOnlyList<TaskDto> BacklogTasks => _tasks.Where(t => t.Status == TaskStatus.Backlog).ToList();
+    private ICollection<TaskDto>? _tasksSource;
+    private IReadOnlyList<TaskDto> _todoTasks = [];
+    private IReadOnlyList<TaskDto> _backlogTasks = [];
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
         TasksState.StateChanged += OnTaskStateChanged;
-
-        _tasksSubject
-            .Select(items => items
-                .OrderBy(t => t.PositionIndex)
-                .ThenBy(t => t.CreatedAt)
-                .ToList())
-            .Subscribe(results =>
-            {
-                _tasks = results;
-                StateHasChanged();
-            });
+        UpdateTaskSections(TasksState.Value.List, false);
 
         ActionSubscriber.SubscribeToAction<SetIsListLoading>(this, _ => StateHasChanged());
     }
@@ -46,11 +32,37 @@ public partial class TasksBoardBlock : IDisposable
     {
         TasksState.StateChanged -= OnTaskStateChanged;
         ActionSubscriber.UnsubscribeFromAllActions(this);
-        _tasksSubject.Dispose();
     }
 
     private void OnTaskStateChanged(object? sender, EventArgs e)
     {
-        _tasksSubject.OnNext(TasksState.Value.List);
+        if (ReferenceEquals(_tasksSource, TasksState.Value.List))
+        {
+            return;
+        }
+
+        UpdateTaskSections(TasksState.Value.List, true);
+    }
+
+    private void UpdateTaskSections(ICollection<TaskDto> tasks, bool isRenderRequired)
+    {
+        _tasksSource = tasks;
+
+        var orderedTasks = tasks
+            .OrderBy(task => task.PositionIndex)
+            .ThenBy(task => task.CreatedAt)
+            .ToList();
+
+        _todoTasks = orderedTasks
+            .Where(task => task.Status != TaskStatus.Backlog)
+            .ToList();
+        _backlogTasks = orderedTasks
+            .Where(task => task.Status == TaskStatus.Backlog)
+            .ToList();
+
+        if (isRenderRequired)
+        {
+            StateHasChanged();
+        }
     }
 }

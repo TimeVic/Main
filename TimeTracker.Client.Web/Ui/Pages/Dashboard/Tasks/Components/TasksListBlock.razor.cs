@@ -97,8 +97,8 @@ public partial class TasksListBlock: IDisposable
     {
         var selected = _selectedTaskList == taskList;
         return selected
-            ? "flex w-full items-center justify-between rounded-2xl border border-blue-200 bg-blue-50 px-3 py-3 text-left"
-            : "flex w-full items-center justify-between rounded-2xl border border-slate-200 px-3 py-3 text-left transition hover:border-slate-300 hover:bg-slate-50";
+            ? "flex w-full items-center justify-between rounded-lg border-l-2 border-blue-500 bg-blue-50 px-3 py-2 text-left"
+            : "flex w-full items-center justify-between rounded-lg border-l-2 border-transparent px-3 py-2 text-left transition hover:bg-slate-50";
     }
 
     private string GetTasksCountText(TaskListDto taskList)

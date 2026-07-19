@@ -27,6 +27,7 @@ public partial class TasksTableBlock
 
     // Drag-and-drop state
     private List<TaskDto> _localTasks = [];
+    private IReadOnlyList<TaskDto>? _tasksSource;
     private TaskDto? _draggingTask = null;
     private Guid _dragOverTaskId = Guid.Empty;
     private bool _isDragging = false;
@@ -43,11 +44,17 @@ public partial class TasksTableBlock
 
     protected override void OnParametersSet()
     {
-        if (!_isDragging)
-            _localTasks = Tasks
-                .OrderBy(t => t.PositionIndex)
-                .ThenBy(t => t.CreatedAt)
-                .ToList();
+        // Avoid replacing Virtualize items when only unrelated task state (for example, saving) changes.
+        if (_isDragging || ReferenceEquals(_tasksSource, Tasks))
+        {
+            return;
+        }
+
+        _tasksSource = Tasks;
+        _localTasks = Tasks
+            .OrderBy(t => t.PositionIndex)
+            .ThenBy(t => t.CreatedAt)
+            .ToList();
     }
 
     private void OnDragStart(TaskDto task)

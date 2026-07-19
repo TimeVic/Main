@@ -30,7 +30,7 @@ public record struct SetIsOverdueTasksListLoadingAction(bool IsLoading);
 public record struct UpdateTaskAction(
     UpdateRequest UpdateRequest,
     bool IsUpdateState = true,
-    bool IsShowToast = true
+    bool IsShowToast = false
 );
 
 public record struct UpdatePositionsAction(
