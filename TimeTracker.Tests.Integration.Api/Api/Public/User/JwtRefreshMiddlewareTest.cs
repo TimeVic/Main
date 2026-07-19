@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using TimeTracker.Business.Common.Constants.Http;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Testing.Extensions;
@@ -12,11 +13,13 @@ public class JwtRefreshMiddlewareTest: BaseTest
 
     private readonly IAuthorizationService _authorizationService;
     private readonly IJwtAuthService _jwtService;
+    private readonly string _cookieKeyPostfix;
 
     public JwtRefreshMiddlewareTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _authorizationService = ServiceProvider.GetRequiredService<IAuthorizationService>();
         _jwtService = ServiceProvider.GetRequiredService<IJwtAuthService>();
+        _cookieKeyPostfix = ServiceProvider.GetRequiredService<IConfiguration>().GetValue<string>("App:Auth:CookieKeyPostfix") ?? string.Empty;
     }
 
     [Fact]
@@ -30,10 +33,12 @@ public class JwtRefreshMiddlewareTest: BaseTest
         await Task.Delay(1100);
 
         var request = new HttpRequestMessage(HttpMethod.Get, Url);
+        var jwtCookieName = PrepareCookieName(HttpCookieKeyEnum.JwtToken.GetKey());
+        var accessTokenCookieName = PrepareCookieName(HttpCookieKeyEnum.AccessToken.GetKey());
         request.Headers.Add(
             "Cookie",
-            $"{HttpCookieKeyEnum.JwtToken.GetKey()}={loginResponse.JwtToken}; " +
-            $"{HttpCookieKeyEnum.AccessToken.GetKey()}={loginResponse.AccessToken}"
+            $"{jwtCookieName}={loginResponse.JwtToken}; " +
+            $"{accessTokenCookieName}={loginResponse.AccessToken}"
         );
 
         var response = await HttpClient.SendAsync(request);
@@ -44,5 +49,15 @@ public class JwtRefreshMiddlewareTest: BaseTest
         Assert.NotEqual(loginResponse.JwtToken, refreshedJwtToken);
         Assert.True(_jwtService.IsValidJwt(refreshedJwtToken!));
         Assert.Equal(user.Id, _jwtService.GetUserId(refreshedJwtToken!));
+    }
+
+    private string PrepareCookieName(string baseName)
+    {
+        if (string.IsNullOrEmpty(_cookieKeyPostfix))
+        {
+            return baseName;
+        }
+
+        return $"{baseName}_{_cookieKeyPostfix}";
     }
 }

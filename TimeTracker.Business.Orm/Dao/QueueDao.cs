@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Linq;
-using NHibernate.Transform;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Orm.Constants;
@@ -12,10 +11,14 @@ namespace TimeTracker.Business.Orm.Dao;
 public class QueueDao: IQueueDao
 {
     private readonly ILogger<IQueueDao> _logger;
+    private readonly IDbSessionProvider _sessionProvider;
     private readonly ISession _session;
+
+    private ISession Session => _session;
 
     public QueueDao(IDbSessionProvider sessionProvider, ILogger<IQueueDao> logger)
     {
+        _sessionProvider = sessionProvider;
         _logger = logger;
         _session = sessionProvider.CreateSession(FlushMode.Manual);
     }
@@ -44,7 +47,7 @@ public class QueueDao: IQueueDao
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
-            await _session.SaveAsync(queueItem, cancellationToken);
+            await Session.SaveAsync(queueItem, cancellationToken);
         }
         catch (Exception e)
         {
@@ -57,7 +60,7 @@ public class QueueDao: IQueueDao
         CancellationToken cancellationToken = default
     )
     {
-        var query = _session.Query<QueueEntity>()
+        var query = Session.Query<QueueEntity>()
             .Where(item => item.Id == id);
         return await query
             .OrderBy(item => item.CreatedAt)
@@ -71,20 +74,26 @@ public class QueueDao: IQueueDao
     {
         try
         {
-            var result = await _session.CreateSQLQuery(@"SELECT * FROM fn_queue_get_top(:channel)")
-                .AddEntity(typeof(QueueEntity))
-                .SetParameter("channel", channel ?? QueueChannel.Default)
-                .SetResultTransformer(new RootEntityResultTransformer())
+            using var session = _sessionProvider.CreateSession(FlushMode.Manual);
+
+            var result = await session.CreateSQLQuery(@"SELECT queue.* FROM fn_queue_get_top(:channel) queue")
+                .AddEntity("queue", typeof(QueueEntity))
+                .SetParameter("channel", (int)(channel ?? QueueChannel.Default))
                 .ListAsync<QueueEntity>(cancellationToken);
-            var entity = result?.FirstOrDefault();
-            if (entity != null)
-                await _session.RefreshAsync(entity, cancellationToken);
-            return entity;
+
+            var queueItem = result.FirstOrDefault();
+            if (queueItem == null)
+            {
+                return null;
+            }
+
+            return Session.Merge(queueItem);
         }
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
         }
+
         return null;
     }
 
@@ -94,6 +103,8 @@ public class QueueDao: IQueueDao
         CancellationToken cancellationToken = default
     )
     {
+        ArgumentNullException.ThrowIfNull(item);
+
         if (item.Status != QueueStatus.InProcess)
         {
             throw new Exception("This item already processed");
@@ -108,12 +119,13 @@ public class QueueDao: IQueueDao
             item.Error = error;
             item.Status = QueueStatus.Fail;
         }
-        await _session.SaveAsync(item, cancellationToken);
+        Session.Merge(item);
+        await Session.FlushAsync(cancellationToken);
     }
 
     public async Task<int> CompleteAllPending(CancellationToken cancellationToken = default)
     {
-        return await _session.Query<QueueEntity>()
+        return await Session.Query<QueueEntity>()
             .UpdateBuilder()
             .Set(x => x.Status, QueueStatus.Success)
             .UpdateAsync(cancellationToken);
@@ -121,7 +133,7 @@ public class QueueDao: IQueueDao
     
     public async Task UpdateProcessAtForPending()
     {
-        await _session.Query<QueueEntity>()
+        await Session.Query<QueueEntity>()
             .Where(x => x.Status == QueueStatus.Pending)
             .UpdateBuilder()
             .Set(x => x.ProcessAt, DateTime.UtcNow.AddSeconds(-1))
@@ -131,12 +143,11 @@ public class QueueDao: IQueueDao
     
     public void Clear()
     {
-        _session.Clear();
+        Session.Clear();
     }
     
     public void Dispose()
     {
-        Flush().Wait();
         if (_session.IsOpen)
         {
             _session.Dispose();
@@ -145,6 +156,6 @@ public class QueueDao: IQueueDao
     
     public async Task Flush()
     {
-        await _session.FlushAsync();
+        await Session.FlushAsync();
     }
 }

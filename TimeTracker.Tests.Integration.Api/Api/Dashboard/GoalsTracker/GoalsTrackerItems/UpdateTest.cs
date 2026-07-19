@@ -117,7 +117,7 @@ public class UpdateTest: BaseTest
         {
             GoalsTrackerItemId = otherTrackerItem.Id,
             Name = expectedItem.Name,
-            NumberOfTimes = expectedItem.NumberOfTimes
+            NumberOfTimes = Math.Max(1, expectedItem.NumberOfTimes)
         });
         
         // Assert

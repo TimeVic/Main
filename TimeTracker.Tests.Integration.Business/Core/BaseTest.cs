@@ -29,7 +29,7 @@ public abstract class BaseTest: IDisposable
     
     private readonly IContainer _serviceProvider;
     protected readonly IQueueDao _queueDao;
-    private readonly IQueueService _queueService;
+    protected readonly IQueueService _queueService;
 
     protected bool IsFakeIntegrations = true;
     private readonly IDbCleanUpService _dbCleanUpService;

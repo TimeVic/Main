@@ -13,7 +13,8 @@ namespace TimeTracker.Business.Common.Utils
         private static readonly int HASH_ITERATIONS = 300;
         
         private static readonly object TimeBasedRandomizerLock = new {};
-        private static readonly Random Randomizer = new Random();
+        private static long LastTokenTicks;
+        private static long TokenSequence;
 
         public static byte[] GenerateSalt(int? size = null)
         {
@@ -79,7 +80,18 @@ namespace TimeTracker.Business.Common.Utils
         {
             lock (TimeBasedRandomizerLock)
             {
-                IEnumerable<byte> ticksBytes = BitConverter.GetBytes(DateTime.UtcNow.Ticks);
+                var nowTicks = DateTime.UtcNow.Ticks;
+                if (nowTicks == LastTokenTicks)
+                {
+                    TokenSequence++;
+                }
+                else
+                {
+                    LastTokenTicks = nowTicks;
+                    TokenSequence = 0;
+                }
+
+                IEnumerable<byte> ticksBytes = BitConverter.GetBytes(nowTicks);
                 if (isShort)
                 {
                     var guidBytes = Guid.NewGuid().ToByteArray();
@@ -87,14 +99,15 @@ namespace TimeTracker.Business.Common.Utils
                 }
                 else
                 {
-                    ticksBytes = ticksBytes.Concat(BitConverter.GetBytes(Randomizer.NextInt64(0, 1000_000)));
+                    // Prevent collisions when multiple tokens are generated within the same tick.
+                    ticksBytes = ticksBytes.Concat(BitConverter.GetBytes(TokenSequence));
                 }
 
                 return Convert.ToBase64String(ticksBytes.ToArray())
-                    .Replace('+', 'H')
-                    .Replace('/', 'k')
-                    .Replace('#', 's')
-                    .Replace('=', 'i');
+                    .TrimEnd('=')
+                    .Replace('+', '-')
+                    .Replace('/', '_')
+                    .Replace('#', 's');
             }
         }
     }

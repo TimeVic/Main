@@ -116,7 +116,7 @@ public class AuthorizationService: IAuthorizationService
         }
         if (accessToken.ExpirationTime < DateTime.UtcNow)
         {
-            throw new IncorrectAccessTokenException("Invalid Token");
+            throw new ExpiredJwtTokenException();
         }
         return await GenerateNewJwtToken(accessToken);
     }

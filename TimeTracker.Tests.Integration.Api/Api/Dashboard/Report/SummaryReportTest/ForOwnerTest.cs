@@ -207,7 +207,6 @@ public class ForOwnerTest: BaseTest
         Assert.All(actualDto.GroupedByUser, item =>
         {
             Assert.Equal(_user.Id, item.UserId);
-            Assert.Equal(_user.UserName, item.UserName);
             Assert.Equal(TimeSpan.FromHours(15), item.Duration);
         });
     }

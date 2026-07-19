@@ -6,8 +6,8 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Tasks;
-using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
@@ -17,15 +17,15 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     {
         private readonly IMapper _mapper;
         private readonly IApiRequestService _apiRequestService;
-        private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly ITaskDao _taskDao;
+        private readonly IWorkspaceDao _workspaceDao;
 
         public GetOneRequestHandler(
             IMapper mapper,
             IApiRequestService apiRequestService,
-            IUserDao userDao,
             ISecurityManager securityManager,
+            IWorkspaceDao workspaceDao,
             ITaskListDao taskListDao,
             ITaskDao taskDao,
             IDbSessionProvider dbSessionProvider
@@ -33,9 +33,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         {
             _mapper = mapper;
             _apiRequestService = apiRequestService;
-            _userDao = userDao;
             _securityManager = securityManager;
             _taskDao = taskDao;
+            _workspaceDao = workspaceDao;
         }
     
         public async Task<TaskFullDto> ExecuteAsync(GetOneRequest request)
@@ -43,10 +43,14 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             var user = await _apiRequestService.GetCurrentUser();
             var task = await _taskDao.GetById(request.TaskId);
             RecordNotFoundException.ThrowIfNull(task);
-            var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
-            if (workspace?.Id != task.TaskList.Project.Client.Workspace.Id)
+            var requestedWorkspaceId = _apiRequestService.GetCurrentWorkspaceId();
+            if (requestedWorkspaceId.HasValue)
             {
-                throw new HasNoAccessException();
+                var requestedWorkspace = await _workspaceDao.GetById(requestedWorkspaceId.Value);
+                if (requestedWorkspace == null)
+                {
+                    throw new HasNoAccessException();
+                }
             }
 
             if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
