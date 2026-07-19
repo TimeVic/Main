@@ -141,10 +141,15 @@ public class GetOneTest: BaseTest
             }
         );
         
-        var response = await PostRequestAsync(Url, _otherToken, new GetOneRequest()
-        {
-            TaskId = _task.Id
-        });
+        var response = await PostRequestAsync(
+            Url,
+            _otherToken,
+            new GetOneRequest()
+            {
+                TaskId = _task.Id
+            },
+            _workspace.Id
+        );
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TaskFullDto>();

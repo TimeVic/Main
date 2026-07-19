@@ -43,6 +43,7 @@ public class GetReportByProjectTest: BaseTest
     [Fact]
     public async Task ShouldReceiveReportForOwnerOrManager()
     {
+        var currentDate = DateTime.UtcNow.Date;
         var projects = await _projectSeeder.CreateSeveralAsync(_workspace, 2);
         await FlushDbChanges();
         var project1 = projects.First();
@@ -50,8 +51,8 @@ public class GetReportByProjectTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddDays(-1).AddHours(10),
-                EndTime = DateTime.UtcNow.AddDays(-1).AddHours(15),
+                StartTime = currentDate.AddDays(-1).AddHours(10),
+                EndTime = currentDate.AddDays(-1).AddHours(15),
                 IsBillable = true,
                 HourlyRate = 12
             }, project1);
@@ -62,8 +63,8 @@ public class GetReportByProjectTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddHours(1),
-                EndTime = DateTime.UtcNow.AddHours(5),
+                StartTime = currentDate.AddHours(1),
+                EndTime = currentDate.AddHours(5),
                 IsBillable = true,
                 HourlyRate = 10
             }, project2);
@@ -73,8 +74,8 @@ public class GetReportByProjectTest: BaseTest
         {
             await _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
             {
-                StartTime = DateTime.UtcNow.AddDays(1).AddHours(5),
-                EndTime = DateTime.UtcNow.AddDays(1).AddHours(11),
+                StartTime = currentDate.AddDays(1).AddHours(5),
+                EndTime = currentDate.AddDays(1).AddHours(11),
                 IsBillable = true,
                 HourlyRate = 15
             });
@@ -83,8 +84,8 @@ public class GetReportByProjectTest: BaseTest
         await FlushDbChanges();
         var result = await _reportsDao.GetReportByProjectForOwnerOrManagerAsync(
             _workspace.Id,
-            DateTime.UtcNow.AddDays(-1),
-            DateTime.UtcNow.AddDays(1)
+            currentDate.AddDays(-1),
+            currentDate.AddDays(1)
         );
         Assert.Equal(3, result.Count);
         
@@ -102,8 +103,8 @@ public class GetReportByProjectTest: BaseTest
         await FlushDbChanges();
         result = await _reportsDao.GetReportByProjectForOwnerOrManagerAsync(
             _workspace.Id,
-            DateTime.UtcNow.AddDays(-1),
-            DateTime.UtcNow.AddDays(1)
+            currentDate.AddDays(-1),
+            currentDate.AddDays(1)
         );
         Assert.Equal(3, result.Count);
         
@@ -194,4 +195,3 @@ public class GetReportByProjectTest: BaseTest
     }
 
 }
-

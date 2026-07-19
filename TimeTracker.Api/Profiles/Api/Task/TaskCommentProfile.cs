@@ -27,7 +27,8 @@ public class TaskCommentProfile : Profile
                     Watchers = watchers,
                     Task = new TaskDto
                     {
-                        Id = src.Task.Id
+                        Id = src.Task.Id,
+                        TaskId = src.Task.TaskId
                     }
                 };
             });

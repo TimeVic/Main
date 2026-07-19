@@ -83,9 +83,9 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
         var items = await query
             .Fetch(item => item.User)
             .ThenFetch(item => item.Language)
+            .OrderByDescending(item => item.Id)
             .Skip(offset)
             .Take(GlobalConstants.ListPageSize)
-            .OrderByDescending(item => item.Id)
             .ToListAsync();
         return new ListDto<WorkspaceMemberEntity>(
             items,
