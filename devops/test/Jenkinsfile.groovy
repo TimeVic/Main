@@ -77,7 +77,7 @@ node('build-node') {
                 containerEnvVars.put('Garage__SecretKey', PASSWORD)
             }
             withCredentials([string(credentialsId: "timevic_garage_url", variable: 'AUTH_SECRET')]) {
-                envVariables.put('Garage__Url', AUTH_SECRET)
+                containerEnvVars.put('Garage__Url', AUTH_SECRET)
             }
             withCredentials([string(credentialsId: "timevic_testing_garage_bucket_name", variable: 'AUTH_SECRET')]) {
                 containerEnvVars.put('AWS__S3__BucketName', AUTH_SECRET)
