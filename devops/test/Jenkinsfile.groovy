@@ -97,9 +97,14 @@ node('build-node') {
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Migrations/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.Tests.Integration.Business/appsettings.Local.json'
-                sh 'echo "{}" > TimeTracker.Tests.Integration.Api/appsettings.Local.json'
+                sh 'echo "{}" > TimeTracker.Tests.Unit.Business/appsettings.Local.json'
                 sh 'echo "{}" > TimeTracker.WorkerServices/appsettings.Local.json'
-                sh 'dotnet build --'
+                sh '''
+                    dotnet build ./TimeTracker.Migrations/TimeTracker.Migrations.csproj
+                    dotnet build ./TimeTracker.Tests.Integration.Api/TimeTracker.Tests.Integration.Api.csproj
+                    dotnet build ./TimeTracker.Tests.Integration.Business/TimeTracker.Tests.Integration.Business.csproj
+                    dotnet build ./TimeTracker.Tests.Unit.Business/TimeTracker.Tests.Unit.Business.csproj
+                '''
             }
 
             // runStage(Stage.ASSIGN_PERMISSIONS) {
@@ -141,7 +146,15 @@ node('build-node') {
             }
 
             runStage(Stage.RUN_API_UNIT_TESTS) {
-                sh 'dotnet test --logger trx --verbosity=normal --results-directory /tmp/test ./TimeTracker.Tests.Integration.Api'
+                sh "dotnet test ${testScriptParameters} --verbosity=normal ./TimeTracker.Tests.Integration.Api"
+            }
+
+            runStage(Stage.RUN_BUSINESS_LOGIC_UNIT_TESTS) {
+                sh "dotnet test ${testScriptParameters} --verbosity=normal ./TimeTracker.Tests.Integration.Business"
+            }
+
+            runStage(Stage.RUN_BUSINESS_UNIT_TESTS) {
+                sh "dotnet test ${testScriptParameters} --verbosity=normal ./TimeTracker.Tests.Unit.Business"
             }
         }
     } as Closure<String>))
@@ -159,8 +172,9 @@ enum Stage {
     INIT_DB('Init DB'),
     INIT_REDIS('Init Redis'),
     RUN_MIGRATIONS('Run migrations'),
-    RUN_API_UNIT_TESTS('Run API unit tests'),
-    RUN_BUSINESS_LOGIC_UNIT_TESTS('Run Business logic unit tests'),
+    RUN_API_UNIT_TESTS('Run API integration tests'),
+    RUN_BUSINESS_LOGIC_UNIT_TESTS('Run Business integration tests'),
+    RUN_BUSINESS_UNIT_TESTS('Run Business unit tests'),
 
 //    SAVE_ARTIFACTS('Save artifacts'),
 
