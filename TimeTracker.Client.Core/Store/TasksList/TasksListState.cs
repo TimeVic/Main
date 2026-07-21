@@ -10,6 +10,8 @@ public record TasksListState
     public Guid? SelectedTaskListId { get; set; }
     
     public ICollection<TaskListDto> List { get; set; } = new List<TaskListDto>();
+
+    public ICollection<TaskListDto> DropDownList { get; set; } = new List<TaskListDto>();
     
     public int TotalCount { get; set; }
     
@@ -22,6 +24,8 @@ public record TasksListState
     public bool IsLoaded { get; set; } = false;
 
     public Guid? SelectedProjectId { get; set; }
+
+    public Guid? DropDownProjectId { get; set; }
     
     public TaskListDto? SelectedTaskList => List.FirstOrDefault(item => item.Id == SelectedTaskListId);
 }

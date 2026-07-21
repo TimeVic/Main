@@ -3,43 +3,79 @@
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Parts.TasksList
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 @using TaskPriority = TimeTracker.Business.Common.Constants.Task.TaskPriority;
 
 @inherits BaseReactiveComponent
 
-<section class="space-y-4">
-    
+<section class="@ContainerClass">
+    @if (ContextProject != null)
+    {
+        <AddTasksListModalForm
+            Project="ContextProject"
+            OnAdded="OnTaskListAdded"
+            @bind-IsOpened="_isShowAddTaskListModal" />
+    }
+
     @if (_taskList != null)
     {
         <AddTaskModal
             @bind-IsOpened="_isShowAddTaskModal"
-            TaskList="@_taskList"></AddTaskModal>
-    }
-    
-    <div class="flex flex-col gap-3 px-1 sm:flex-row sm:items-center sm:justify-between">
-        <div class="min-w-0">
-            <p class="break-words text-sm font-semibold text-slate-900">@_taskList?.Name</p>
-            <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBlock_TaskListDescription"]</p>
-        </div>
-        <div class="flex shrink-0 flex-wrap items-center gap-2">
-            @if (_taskList != null)
-            {
-                <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">@_taskList.Project.Name</span>
-            }
+            TaskList="_taskList" />
 
+        <div class="@HeaderClass">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="min-w-0">
+                    <p class="truncate text-sm font-semibold text-slate-900" title="@_taskList.Name">@_taskList.Name</p>
+                    <p class="mt-0.5 truncate text-sm text-slate-500">@GetTaskListContext()</p>
+                </div>
+                <div class="flex shrink-0 flex-wrap items-center gap-2">
+                    <CustomButton
+                        Variant="Variant.Outlined"
+                        Color="ThemeColor.Info"
+                        OnClick="@(() => _isShowAddTaskModal = true)">
+                        <StartContent>
+                            <i class="fa-solid fa-plus"></i>
+                        </StartContent>
+                        <ChildContent>@DashboardLocalizer["AddTask"]</ChildContent>
+                    </CustomButton>
+                </div>
+            </div>
+        </div>
+
+        <div class="@BoardClass">
+            <TasksBoardBlock />
+        </div>
+    }
+    else if (ContextProject != null)
+    {
+        <div class="@EmptyStateClass">
+            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBlock_ProjectEmptyTitle"]</p>
+            <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["TasksBlock_ProjectEmptyDescription"]</p>
             <CustomButton
+                Class="mt-4"
                 Variant="Variant.Outlined"
                 Color="ThemeColor.Info"
-                Disabled="@(_taskList == null)"
-                OnClick="@(() => _isShowAddTaskModal = true)">
+                OnClick="@(() => _isShowAddTaskListModal = true)">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>
                 </StartContent>
-                <ChildContent>@DashboardLocalizer["AddTask"]</ChildContent>
+                <ChildContent>@DashboardLocalizer["AddTasksListModalForm_Title"]</ChildContent>
             </CustomButton>
         </div>
-    </div>
-
-    <TasksBoardBlock></TasksBoardBlock>
+    }
+    else if (ContextClient != null)
+    {
+        <div class="@EmptyStateClass">
+            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBlock_ClientEmptyTitle"]</p>
+            <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["TasksBlock_ClientEmptyDescription"]</p>
+        </div>
+    }
+    else
+    {
+        <div class="@EmptyStateClass">
+            <p class="text-sm text-slate-600">@DashboardLocalizer["TasksBlock_SelectTaskList"]</p>
+        </div>
+    }
 </section>

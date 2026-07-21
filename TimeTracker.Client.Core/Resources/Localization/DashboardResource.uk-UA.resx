@@ -387,13 +387,22 @@
   <data name="TasksBoardBlock_NoTodoTasks" xml:space="preserve"><value>Задач до роботи за поточними фільтрами немає.</value></data>
   <data name="TasksBoardBlock_NoBacklogTasks" xml:space="preserve"><value>Задач у беклозі за поточними фільтрами немає.</value></data>
   <data name="TasksListBlock_Title" xml:space="preserve"><value>Списки задач</value></data>
-  <data name="TasksListBlock_Description" xml:space="preserve"><value>Виберіть проєкт і відкрийте потрібний список задач.</value></data>
-  <data name="TasksListBlock_SearchPlaceholder" xml:space="preserve"><value>Пошук списків задач...</value></data>
+  <data name="TasksListBlock_Description" xml:space="preserve"><value>Переглядайте списки задач за клієнтами та проєктами.</value></data>
+  <data name="TasksListBlock_SearchPlaceholder" xml:space="preserve"><value>Пошук клієнтів, проєктів або списків задач...</value></data>
   <data name="TasksListBlock_SelectProjectEmpty" xml:space="preserve"><value>Виберіть проєкт, щоб завантажити списки задач.</value></data>
   <data name="TasksListBlock_NoMatches" xml:space="preserve"><value>Списків задач за “{0}” не знайдено.</value></data>
-  <data name="TasksListBlock_ListIsEmpty" xml:space="preserve"><value>Список порожній</value></data>
+  <data name="TasksListBlock_ListIsEmpty" xml:space="preserve"><value>Списків задач ще немає</value></data>
+  <data name="TasksListBlock_ClientHasNoProjects" xml:space="preserve"><value>У цього клієнта ще немає проєктів.</value></data>
+  <data name="TasksListBlock_NoClients" xml:space="preserve"><value>Клієнтів ще немає</value></data>
   <data name="TasksListBlock_TaskCount" xml:space="preserve"><value>{0} задача</value></data>
   <data name="TasksListBlock_TasksCount" xml:space="preserve"><value>Задач: {0}</value></data>
+  <data name="TasksListBlock_TaskListCount" xml:space="preserve"><value>{0} список задач</value></data>
+  <data name="TasksListBlock_TaskListsCount" xml:space="preserve"><value>{0} списків задач</value></data>
+  <data name="TasksBlock_ProjectEmptyTitle" xml:space="preserve"><value>У цьому проєкті ще немає списків задач</value></data>
+  <data name="TasksBlock_ProjectEmptyDescription" xml:space="preserve"><value>Створіть список задач, щоб організувати роботу над цим проєктом.</value></data>
+  <data name="TasksBlock_ClientEmptyTitle" xml:space="preserve"><value>У цього клієнта ще немає проєктів</value></data>
+  <data name="TasksBlock_ClientEmptyDescription" xml:space="preserve"><value>Створіть проєкт перед додаванням списків задач.</value></data>
+  <data name="TasksBlock_SelectTaskList" xml:space="preserve"><value>Виберіть список задач, щоб переглянути його задачі.</value></data>
   <data name="TasksTableBlock_SelectedCount" xml:space="preserve"><value>Вибрано: {0}</value></data>
   <data name="TasksTableBlock_NoTasksFound" xml:space="preserve"><value>Задач не знайдено.</value></data>
   <data name="TasksTableBlock_ArchiveThisTask" xml:space="preserve"><value>Архівувати цю задачу</value></data>
@@ -669,6 +678,7 @@
   <data name="Notes_PageSubtitle" xml:space="preserve"><value>Зберігайте деталі проєктів, домовленості з клієнтами, посилання, фрагменти й контекст оплат в одному workspace.</value></data>
   <data name="Notes_TreeDescription" xml:space="preserve"><value>Папки й документи</value></data>
   <data name="Notes_ResizeTreePanel" xml:space="preserve"><value>Змінити ширину дерева нотаток</value></data>
+  <data name="Tasks_ResizeTaskListsPanel" xml:space="preserve"><value>Змінити ширину панелі списків задач</value></data>
   <data name="Notes_EmptyDescription" xml:space="preserve"><value>Створіть першу нотатку, щоб зберігати деталі проєктів, домовленості з клієнтами, посилання, фрагменти або контекст оплат.</value></data>
   <data name="Notes_EmptyFolder" xml:space="preserve"><value>Ця папка порожня.</value></data>
   <data name="Notes_NoSelectedNote" xml:space="preserve"><value>Виберіть нотатку або створіть нову.</value></data>

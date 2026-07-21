@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Store.Auth;
-using TimeTracker.Client.Core.Store.Project;
 
 namespace TimeTracker.Client.Core.Store.TasksList.Effects;
 
@@ -11,21 +10,18 @@ public class ArchiveEffect: Effect<ArchiveTaskListAction>
 {
     private readonly IApiService _apiService;
     private readonly IState<TasksListState> _taskListState;
-    private readonly IState<ProjectState> _projectState;
     private readonly ILogger<ArchiveEffect> _logger;
     private readonly NavigationManager _navigationManager;
 
     public ArchiveEffect(
         IApiService apiService,
         IState<TasksListState> taskListState,
-        IState<ProjectState> projectState,
         ILogger<ArchiveEffect> logger,
         NavigationManager navigationManager
     )
     {
         _apiService = apiService;
         _taskListState = taskListState;
-        _projectState = projectState;
         _logger = logger;
         _navigationManager = navigationManager;
     }
@@ -44,7 +40,7 @@ public class ArchiveEffect: Effect<ArchiveTaskListAction>
             {
                 dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetSelectedAction(selectedTaskList.Id));
             }
-            dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction());
+            dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction(_taskListState.Value.SelectedTaskListId));
         }
         catch (Exception e)
         {

@@ -4,7 +4,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 
 namespace TimeTracker.Client.Core.Store.Tasks;
 
-public record struct LoadListAction();
+public record struct LoadListAction(Guid? TaskListId);
 
 public record struct LoadOverdueTasksListAction();
 

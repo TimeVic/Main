@@ -12,8 +12,26 @@
 <CascadingValue
     Name="TaskListId"
     Value="@TaskListId">
-    <section class="grid gap-4 xl:grid-cols-[248px_minmax(0,1fr)]">
-        <TasksListBlock></TasksListBlock>
-        <TasksBlock></TasksBlock>
-    </section>
+    <LumexCard Class="overflow-hidden border-slate-200 bg-white shadow-sm">
+        <LumexCardBody Class="p-0">
+            <ResizableSplitBlock
+                Class="min-h-[720px]"
+                DefaultStartPaneWidth="@DefaultTaskListsWidth"
+                MinStartPaneWidth="@MinTaskListsWidth"
+                MaxStartPaneWidth="@MaxTaskListsWidth"
+                HandleLabel="@DashboardLocalizer["Tasks_ResizeTaskListsPanel"].Value">
+                <StartContent>
+                    <TasksListBlock
+                        IsEmbedded="true"
+                        OnContextChanged="OnTaskListsContextChanged" />
+                </StartContent>
+                <EndContent>
+                    <TasksBlock
+                        IsEmbedded="true"
+                        ContextClient="_selectedClient"
+                        ContextProject="_selectedProject" />
+                </EndContent>
+            </ResizableSplitBlock>
+        </LumexCardBody>
+    </LumexCard>
 </CascadingValue>

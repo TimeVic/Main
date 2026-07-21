@@ -74,12 +74,17 @@ public partial class TaskListsDropDown: IDisposable
             return;
         }
 
-        Dispatcher.Dispatch(new LoadListAction(ProjectId: ProjectId));
+        if (_state.Value.DropDownProjectId == ProjectId)
+        {
+            return;
+        }
+
+        Dispatcher.Dispatch(new LoadDropDownListAction(ProjectId));
     }
     
     private void UpdateList()
     {
-        _list = _state.Value.List.ToList();
+        _list = _state.Value.DropDownList.ToList();
         if (ProjectId.HasValue)
         {
             _list = _list.Where(item => item.Project?.Id == ProjectId).ToList();
