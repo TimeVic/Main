@@ -19,9 +19,19 @@ public class TasksListReducers
             TotalCount = list.Count,
             TotalPages = action.Response.TotalPages,
             HasMoreItems = action.Response.IsHasMore,
-            IsLoaded = action.ProjectId.HasValue,
+            IsLoaded = true,
             SelectedProjectId = action.ProjectId,
             SelectedTaskListId = selectedTaskListId
+        };
+    }
+
+    [ReducerMethod]
+    public static TasksListState Reducer(TasksListState state, SetDropDownListItemsAction action)
+    {
+        return state with
+        {
+            DropDownList = action.Response.Items.Cast<TaskListDto>().ToList(),
+            DropDownProjectId = action.ProjectId
         };
     }
     

@@ -30,28 +30,37 @@ public class LoadListEffect: Effect<LoadListAction>
 
     public override async Task HandleAsync(LoadListAction action, IDispatcher dispatcher)
     {
+        var taskListId = action.TaskListId;
         try
         {
-            var tasksListId = _tasksListState.Value.SelectedTaskListId;
-            if (tasksListId.HasValue)
+            // Each action targets the list selected by the route when it was dispatched.
+            if (_tasksListState.Value.SelectedTaskListId != taskListId)
+            {
+                return;
+            }
+
+            if (taskListId.HasValue)
             {
                 dispatcher.Dispatch(new SetIsListLoading(true));
                 var response = await _apiService.TasksGetListAsync(new GetListRequest()
                 {
-                    TaskListId = tasksListId.Value,
+                    TaskListId = taskListId.Value,
                     Filter = _state.Value.Filter
                 });
+
+                // Ignore a response for a list that was deselected while its request was in flight.
+                if (_tasksListState.Value.SelectedTaskListId != taskListId)
+                {
+                    return;
+                }
+
                 if (response == null)
                 {
                     dispatcher.Dispatch(new SetListItemsAction(new GetListResponse(new List<TaskDto>(), 0)));
                     return;
                 }
 
-                if (response.TaskList != null)
-                {
-                    dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetListItemAction(response.TaskList));
-                }
-
+                // Keep the task-list counters loaded by the task-list endpoint.
                 dispatcher.Dispatch(new SetListItemsAction(response));
             }
             else
@@ -69,7 +78,10 @@ public class LoadListEffect: Effect<LoadListAction>
         }
         finally
         {
-            dispatcher.Dispatch(new SetIsListLoading(false));
+            if (_tasksListState.Value.SelectedTaskListId == taskListId)
+            {
+                dispatcher.Dispatch(new SetIsListLoading(false));
+            }
         }
     }
 }

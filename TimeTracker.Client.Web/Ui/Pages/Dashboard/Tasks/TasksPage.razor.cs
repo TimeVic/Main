@@ -1,13 +1,19 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Client.Core.Store.TasksList;
 using TimeTracker.Client.Web.Services.LastOpenedEntity;
+using TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Components;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks;
 
 public partial class TasksPage: IDisposable
 {
+    private const int DefaultTaskListsWidth = 320;
+    private const int MinTaskListsWidth = DefaultTaskListsWidth - 80;
+    private const int MaxTaskListsWidth = DefaultTaskListsWidth + 240;
+
     [Parameter]
     public Guid? TaskListId { get; set; }
     
@@ -22,6 +28,9 @@ public partial class TasksPage: IDisposable
         get => _tasksListState.Value.SelectedTaskList;
     }
 
+    private ClientDto? _selectedClient;
+    private ProjectDto? _selectedProject;
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -35,7 +44,7 @@ public partial class TasksPage: IDisposable
         if (TaskListId.HasValue)
         {
             Dispatcher.Dispatch(new SetSelectedAction(TaskListId));
-            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction());
+            Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tasks.LoadListAction(TaskListId));
             await SaveLastOpenedTaskListAsync(TaskListId.Value);
             return;
         }
@@ -50,6 +59,18 @@ public partial class TasksPage: IDisposable
     private void OnTasksListStateChanged(object? sender, EventArgs args)
     {
         InvokeAsync(StateHasChanged);
+    }
+
+    private Task OnTaskListsContextChanged(TaskListsNavigationContext context)
+    {
+        if (_selectedClient?.Id == context.Client?.Id && _selectedProject?.Id == context.Project?.Id)
+        {
+            return Task.CompletedTask;
+        }
+
+        _selectedClient = context.Client;
+        _selectedProject = context.Project;
+        return InvokeAsync(StateHasChanged);
     }
 
     private Task SaveLastOpenedTaskListAsync(Guid taskListId)

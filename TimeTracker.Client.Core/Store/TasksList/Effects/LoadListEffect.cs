@@ -27,16 +27,10 @@ public class LoadListEffect: Effect<LoadListAction>
     {
         try
         {
-            if (!action.ProjectId.HasValue)
-            {
-                dispatcher.Dispatch(new SetListItemsAction(new GetListResponse(new List<TaskListForListDto>(), 0)));
-                return;
-            }
-
             dispatcher.Dispatch(new SetIsListLoadingAction(true));
             var response = await _apiService.TaskListGetListAsync(new GetListRequest()
             {
-                ProjectId = action.ProjectId.Value
+                ProjectId = action.ProjectId
             });
             if (response == null)
             {

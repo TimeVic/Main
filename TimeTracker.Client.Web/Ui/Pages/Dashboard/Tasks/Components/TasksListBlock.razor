@@ -5,17 +5,17 @@
 @using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
 @inherits BaseReactiveComponent
 
-<aside>
-    <AddTasksListModalForm 
+<aside class="@ContainerClass">
+    <AddTasksListModalForm
         Project="_selectedProject"
-        OnAdded="@OnTasksListAdded"
-        @bind-IsOpened="_isAddTaskListModalOpened"/>
+        OnAdded="OnTasksListAdded"
+        @bind-IsOpened="_isAddTaskListModalOpened" />
 
-    @if (_selectedTaskList != null)
+    @if (_taskListToManage != null)
     {
         <UpdateTaskListModal
             @bind-IsOpened="_isShowUpdateTaskListModal"
-            TaskList="@_selectedTaskList"/>
+            TaskList="_taskListToManage" />
     }
 
     @if (_isShowDeleteTaskListConfirmation)
@@ -24,82 +24,44 @@
             Title="@DashboardLocalizer["TasksBlock_DeleteTaskListTitle"].Value"
             Subtitle="@DashboardLocalizer["TasksBlock_DeleteTaskListSubtitle"].Value"
             OnClose="@(() => _isShowDeleteTaskListConfirmation = false)"
-            OnConfirm="@OnDeleteTaskList"/>
+            OnConfirm="OnDeleteTaskList" />
     }
-    
-    <div class="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
-        <div class="flex items-center justify-between gap-3">
-            <div>
+
+    <div class="flex min-h-0 flex-1 flex-col">
+        <div class="border-b border-slate-200 p-4">
+            <div class="min-w-0">
                 <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksListBlock_Title"]</p>
                 <p class="text-xs text-slate-500">@DashboardLocalizer["TasksListBlock_Description"]</p>
             </div>
-            <LumexDropdown>
-                <LumexDropdownTrigger>
-                    <LumexButton
-                        IconOnly="true"
-                        Size="Size.Small"
-                        Variant="@Variant.Outlined">
-                        <i class="fa-solid fa-ellipsis-h"></i>
-                    </LumexButton>
-                </LumexDropdownTrigger>
-                <LumexDropdownMenu>
-                    <LumexDropdownItem
-                        Disabled="@(_selectedProject == null)"
-                        OnClick="@(() => _isAddTaskListModalOpened = true)">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-plus w-4 text-xs"></i>
-                            @DashboardLocalizer["AddTasksListModalForm_Title"]
-                        </span>
-                    </LumexDropdownItem>
-                    <LumexDropdownItem
-                        Disabled="@(_selectedTaskList == null)"
-                        OnClick="@OnEditTaskList">
-                        @DashboardLocalizer["TasksBlock_EditTaskList"]
-                    </LumexDropdownItem>
-                    <LumexDropdownItem
-                        OnClick="@(() => _isShowDeleteTaskListConfirmation = true)"
-                        Disabled="@(_selectedTaskList == null)"
-                        Color="@ThemeColor.Danger"
-                        Class="text-danger">
-                        @DashboardLocalizer["TasksBlock_DeleteTaskListTitle"]
-                    </LumexDropdownItem>
-                </LumexDropdownMenu>
-            </LumexDropdown>
         </div>
 
-        <div class="mt-3 space-y-3">
-            <div>
-                <label class="mb-1 block text-xs font-medium uppercase tracking-wide text-slate-500">@DashboardLocalizer["Project"]</label>
-                <ProjectsDropDown
-                    Value="@(_selectedProject?.Id ?? Guid.Empty)"
-                    FullWidth="false"
-                    IsGroupByClient="true"
-                    SelectedItemChanged="OnSelectedProject">
-                </ProjectsDropDown>
-                @* <p class="mt-1 text-xs text-slate-500">Grouped by client; projects without a client appear under “No client”.</p> *@
-            </div>
+        <div class="border-b border-slate-200 px-4 py-3">
+            <InputTextField
+                @bind-Value="_taskListSearch"
+                Placeholder="@DashboardLocalizer["TasksListBlock_SearchPlaceholder"].Value"
+                FullWidth="true"
+                Size="Size.Small"
+                Clearable="true"
+                Variant="InputVariant.Underlined"
+                Color="ThemeColor.Default">
+                <StartContent>
+                    <i class="fa-solid fa-magnifying-glass text-xs text-slate-400"></i>
+                </StartContent>
+            </InputTextField>
+        </div>
 
-            <div class="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2 py-1">
-                <InputTextField
-                    @bind-Value="_taskListSearch"
-                    Placeholder="@DashboardLocalizer["TasksListBlock_SearchPlaceholder"].Value"
-                    FullWidth="true"
-                    Size="Size.Small"
-                    Clearable="true"
-                    Variant="InputVariant.Underlined"
-                    Color="ThemeColor.Default">
-                    <StartContent>
-                        <i class="fa-solid fa-magnifying-glass text-xs text-slate-400"></i>
-                    </StartContent>
-                </InputTextField>
-            </div>
-
-            <div class="space-y-1">
-                @foreach (var taskList in _filteredTaskLists)
+        <div class="min-h-0 flex-1 space-y-2 overflow-y-auto p-2">
+            @if (IsSearching)
+            {
+                @foreach (var taskList in _searchResults)
                 {
-                    <button type="button" @onclick="@(() => OnTasksListSelected(taskList.Id))" class="@GetTaskListClass(taskList)">
+                    <button
+                        type="button"
+                        class="@GetTaskListClass(taskList)"
+                        @onclick="@(() => OnTasksListSelected(taskList))">
                         <span class="min-w-0 flex-1">
-                            <span class="block break-words text-sm font-medium leading-5 text-slate-800">@taskList.Name</span>
+                            <span class="block truncate text-sm font-medium leading-5 text-slate-800">@taskList.Name</span>
+                            <span class="mt-0.5 block truncate text-xs text-slate-500">@GetTaskListContext(taskList)</span>
                         </span>
                         <span class="ml-2 shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
                             @GetTasksCountText(taskList)
@@ -107,38 +69,143 @@
                     </button>
                 }
 
-                @if (!_filteredTaskLists.Any())
+                @if (!_searchResults.Any())
                 {
-                    <div class="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600">
-                        @if (_selectedProject == null)
+                    <p class="px-3 py-2 text-sm text-slate-600">@string.Format(DashboardLocalizer["TasksListBlock_NoMatches"].Value, _taskListSearch)</p>
+                }
+            }
+            else
+            {
+                @foreach (var client in _clients)
+                {
+                    var isClientExpanded = IsClientExpanded(client);
+                    <div @key="client.Id">
+                        <button
+                            type="button"
+                            class="@GetClientClass(client)"
+                            @onclick="@(() => OnClientSelected(client))">
+                            <i class="fa-solid @(isClientExpanded ? "fa-chevron-down" : "fa-chevron-right") w-3 text-[10px] text-slate-400"></i>
+                            <span class="min-w-0 truncate text-[11px] font-semibold uppercase tracking-wide">@client.Name</span>
+                        </button>
+
+                        @if (isClientExpanded)
                         {
-                            <text>@DashboardLocalizer["TasksListBlock_SelectProjectEmpty"]</text>
-                        }
-                        else if (!string.IsNullOrWhiteSpace(_taskListSearch))
-                        {
-                            <text>@string.Format(DashboardLocalizer["TasksListBlock_NoMatches"].Value, _taskListSearch)</text>
-                        }
-                        else
-                        {
-                            <div class="flex flex-wrap items-center justify-between gap-2">
-                                <p>@DashboardLocalizer["TasksListBlock_ListIsEmpty"]</p>
-                                <CustomButton
-                                    Color="ThemeColor.Info"
-                                    Size="Size.Small"
-                                    Variant="Variant.Outlined"
-                                    OnClick="@(() => _isAddTaskListModalOpened = true)">
-                                    <StartContent>
-                                        <i class="fa-solid fa-plus"></i>
-                                    </StartContent>
-                                    <ChildContent>
-                                        @DashboardLocalizer["AddTasksListModalForm_Title"]
-                                    </ChildContent>
-                                </CustomButton>
-                            </div>
+                            var projects = GetClientProjects(client).ToList();
+                            if (!projects.Any())
+                            {
+                                <p class="ml-5 px-3 py-2 text-xs text-slate-500">@DashboardLocalizer["TasksListBlock_ClientHasNoProjects"]</p>
+                            }
+
+                            @foreach (var project in projects)
+                            {
+                                var isProjectExpanded = IsProjectExpanded(project);
+                                <div class="ml-3 border-t border-slate-100 pt-1 first:border-t-0" @key="project.Id">
+                                    <div class="group flex items-center gap-1">
+                                        <button
+                                            type="button"
+                                            class="@GetProjectClass(project)"
+                                            title="@project.Name"
+                                            @onclick="@(() => OnProjectSelected(project))">
+                                            <i class="fa-solid @(isProjectExpanded ? "fa-chevron-down" : "fa-chevron-right") w-3 text-[10px] text-slate-400"></i>
+                                            <span class="min-w-0 flex-1 truncate text-sm font-medium">@project.Name</span>
+                                            <span class="shrink-0 text-[10px] font-medium text-slate-400">@GetProjectTaskListsCountText(project)</span>
+                                        </button>
+                                        <LumexDropdown>
+                                            <LumexDropdownTrigger>
+                                                <LumexButton
+                                                    IconOnly="true"
+                                                    Size="Size.Small"
+                                                    Variant="@Variant.Light"
+                                                    Class="text-slate-500">
+                                                    <i class="fa-solid fa-ellipsis-h text-xs"></i>
+                                                </LumexButton>
+                                            </LumexDropdownTrigger>
+                                            <LumexDropdownMenu>
+                                                <LumexDropdownItem OnClick="@(() => OpenAddTaskListModal(project))">
+                                                    <span class="flex items-center gap-2">
+                                                        <i class="fa-solid fa-plus w-4 text-xs"></i>
+                                                        @DashboardLocalizer["AddTasksListModalForm_Title"]
+                                                    </span>
+                                                </LumexDropdownItem>
+                                            </LumexDropdownMenu>
+                                        </LumexDropdown>
+                                    </div>
+
+                                    @if (isProjectExpanded)
+                                    {
+                                        var taskLists = GetProjectTaskLists(project).ToList();
+                                        if (taskLists.Any())
+                                        {
+                                            <div class="ml-5 space-y-1 pb-1">
+                                                @foreach (var taskList in taskLists)
+                                                {
+                                                    <div class="group flex items-center gap-1">
+                                                        <button
+                                                            type="button"
+                                                            class="@GetTaskListClass(taskList)"
+                                                            title="@taskList.Name"
+                                                            @onclick="@(() => OnTasksListSelected(taskList))">
+                                                            <span class="min-w-0 flex-1 truncate text-sm font-medium leading-5 text-slate-800">@taskList.Name</span>
+                                                            <span class="ml-2 shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+                                                                @GetTasksCountText(taskList)
+                                                            </span>
+                                                        </button>
+                                                        <LumexDropdown>
+                                                            <LumexDropdownTrigger>
+                                                                <LumexButton
+                                                                    IconOnly="true"
+                                                                    Size="Size.Small"
+                                                                    Variant="@Variant.Light"
+                                                                    Class="text-slate-500">
+                                                                    <i class="fa-solid fa-ellipsis-h text-xs"></i>
+                                                                </LumexButton>
+                                                            </LumexDropdownTrigger>
+                                                            <LumexDropdownMenu>
+                                                                <LumexDropdownItem OnClick="@(() => OpenEditTaskList(taskList))">
+                                                                    <span class="flex items-center gap-2">
+                                                                        <i class="fa-solid fa-pen w-4 text-xs"></i>
+                                                                        @DashboardLocalizer["TasksBlock_EditTaskList"]
+                                                                    </span>
+                                                                </LumexDropdownItem>
+                                                                <LumexDropdownItem
+                                                                    Color="@ThemeColor.Danger"
+                                                                    Class="text-danger"
+                                                                    OnClick="@(() => OpenDeleteTaskListConfirmation(taskList))">
+                                                                    <span class="flex items-center gap-2">
+                                                                        <i class="fa-solid fa-trash w-4 text-xs"></i>
+                                                                        @DashboardLocalizer["TasksBlock_DeleteTaskListTitle"]
+                                                                    </span>
+                                                                </LumexDropdownItem>
+                                                            </LumexDropdownMenu>
+                                                        </LumexDropdown>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="ml-5 px-3 py-2">
+                                                <p class="text-xs text-slate-500">@DashboardLocalizer["TasksListBlock_ListIsEmpty"]</p>
+                                                <button
+                                                    type="button"
+                                                    class="mt-1 text-xs font-medium text-blue-600 hover:text-blue-700"
+                                                    @onclick="@(() => OpenAddTaskListModal(project))">
+                                                    <i class="fa-solid fa-plus mr-1 text-[10px]"></i>@DashboardLocalizer["AddTasksListModalForm_Title"]
+                                                </button>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            }
                         }
                     </div>
                 }
-            </div>
+
+                @if (!_clients.Any() && !_projectState.Value.IsListLoading && !_clientState.Value.IsListLoading)
+                {
+                    <p class="px-3 py-2 text-sm text-slate-600">@DashboardLocalizer["TasksListBlock_NoClients"]</p>
+                }
+            }
         </div>
     </div>
 </aside>

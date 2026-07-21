@@ -7,6 +7,10 @@ public record struct LoadListAction(bool IsReload = false, Guid? ProjectId = nul
 
 public record struct SetListItemsAction(GetListResponse Response, Guid? ProjectId = null);
 
+public record struct LoadDropDownListAction(Guid? ProjectId);
+
+public record struct SetDropDownListItemsAction(GetListResponse Response, Guid? ProjectId);
+
 public record struct RemoveListItemsAction(Guid TaskListId);
 
 public record struct SetListItemAction(TaskListDto TaskList);
