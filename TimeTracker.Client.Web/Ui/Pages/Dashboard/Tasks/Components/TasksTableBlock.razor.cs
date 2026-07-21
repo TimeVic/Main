@@ -11,7 +11,10 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Components;
 public partial class TasksTableBlock
 {
     [Parameter]
-    public IReadOnlyList<TaskDto> Tasks { get; set; } = [];
+    public IList<TaskDto> Tasks { get; set; } = [];
+
+    [Parameter]
+    public long Version { get; set; }
 
     [Parameter]
     public string EmptyMessage { get; set; } = string.Empty;
@@ -26,12 +29,13 @@ public partial class TasksTableBlock
     private static readonly IReadOnlyList<TaskStatus> taskStatusOptions = Enum.GetValues<TaskStatus>();
 
     // Drag-and-drop state
-    private List<TaskDto> _localTasks = [];
-    private IReadOnlyList<TaskDto>? _tasksSource;
     private TaskDto? _draggingTask = null;
     private Guid _dragOverTaskId = Guid.Empty;
     private bool _isDragging = false;
     private bool _dragRenderPending = false;
+    private long _renderedTasksVersion = -1;
+    private bool _isVirtualizeRefreshRequired;
+    private Microsoft.AspNetCore.Components.Web.Virtualization.Virtualize<TaskDto>? _virtualize;
 
     // ondragover fires hundreds of times per second — block re-renders unless something actually changed
     protected override bool ShouldRender()
@@ -44,17 +48,26 @@ public partial class TasksTableBlock
 
     protected override void OnParametersSet()
     {
-        // Avoid replacing Virtualize items when only unrelated task state (for example, saving) changes.
-        if (_isDragging || ReferenceEquals(_tasksSource, Tasks))
+        if (_isDragging || _renderedTasksVersion == Version)
         {
             return;
         }
 
-        _tasksSource = Tasks;
-        _localTasks = Tasks
-            .OrderBy(t => t.PositionIndex)
-            .ThenBy(t => t.CreatedAt)
-            .ToList();
+        _renderedTasksVersion = Version;
+        _isVirtualizeRefreshRequired = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!_isVirtualizeRefreshRequired || _virtualize == null)
+        {
+            return;
+        }
+
+        _isVirtualizeRefreshRequired = false;
+        await _virtualize.RefreshDataAsync();
     }
 
     private void OnDragStart(TaskDto task)
@@ -83,8 +96,8 @@ public partial class TasksTableBlock
             return;
         }
 
-        var fromIndex = _localTasks.IndexOf(_draggingTask);
-        var toIndex = _localTasks.IndexOf(targetTask);
+        var fromIndex = Tasks.IndexOf(_draggingTask);
+        var toIndex = Tasks.IndexOf(targetTask);
 
         if (fromIndex < 0 || toIndex < 0)
         {
@@ -92,20 +105,22 @@ public partial class TasksTableBlock
             return;
         }
 
-        _localTasks.RemoveAt(fromIndex);
-        _localTasks.Insert(toIndex, _draggingTask);
+        Tasks.RemoveAt(fromIndex);
+        Tasks.Insert(toIndex, _draggingTask);
 
-        for (var i = 0; i < _localTasks.Count; i++)
-            _localTasks[i].PositionIndex = i;
+        for (var i = 0; i < Tasks.Count; i++)
+            Tasks[i].PositionIndex = i;
 
         ResetDragState();
-        Dispatcher.Dispatch(new UpdatePositionsAction(_localTasks));
+        _isVirtualizeRefreshRequired = true;
+        Dispatcher.Dispatch(new UpdatePositionsAction(Tasks));
     }
 
     private void OnDragEnd()
     {
         _isDragging = false;
         _dragRenderPending = true;
+        _isVirtualizeRefreshRequired = true;
         ResetDragState();
     }
 
@@ -152,7 +167,7 @@ public partial class TasksTableBlock
 
     private void SelectAllTasks()
     {
-        if (_selectedTaskIds.Any() && _selectedTaskIds.Count == _localTasks.Count)
+        if (_selectedTaskIds.Any() && _selectedTaskIds.Count == Tasks.Count)
         {
             _selectedTaskIds.Clear();
             return;
@@ -179,7 +194,7 @@ public partial class TasksTableBlock
     {
         foreach (var id in _selectedTaskIds.ToList())
         {
-            var task = _localTasks.FirstOrDefault(t => t.Id == id);
+            var task = Tasks.FirstOrDefault(t => t.Id == id);
             if (task == null) continue;
             var updateModel = GetUpdateRequest(task);
             updateModel.IsArchived = isArchived;
