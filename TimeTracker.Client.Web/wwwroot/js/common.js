@@ -46,6 +46,19 @@ window.isTextSelected = function () {
     return window.getSelection().toString().length > 0;
 };
 
+window.getTextAreaState = function (editor) {
+    return {
+        value: editor.value,
+        selectionStart: editor.selectionStart,
+        selectionEnd: editor.selectionEnd
+    };
+};
+
+window.setTextAreaSelection = function (editor, selectionStart, selectionEnd) {
+    editor.focus();
+    editor.setSelectionRange(selectionStart, selectionEnd);
+};
+
 window.popupPortal = {
     showPopover: function (element) {
         if (!element || typeof element.showPopover !== "function" || element.matches(":popover-open")) {
