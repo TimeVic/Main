@@ -36,10 +36,13 @@ public partial class TasksListBlock : IDisposable
     private readonly HashSet<Guid> _expandedClientIds = [];
     private readonly HashSet<Guid> _expandedProjectIds = [];
     private string? _taskListSearch;
+    private bool _isAddClientModalOpened;
+    private bool _isAddProjectModalOpened;
     private bool _isAddTaskListModalOpened;
     private bool _isShowUpdateTaskListModal;
     private bool _isShowDeleteTaskListConfirmation;
     private ClientDto? _selectedClient;
+    private ClientDto? _clientForNewProject;
     private ProjectDto? _selectedProject;
     private TaskListDto? _taskListToManage;
 
@@ -142,6 +145,30 @@ public partial class TasksListBlock : IDisposable
         Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.SetSelectedAction(project));
         _isAddTaskListModalOpened = true;
         return NotifyContextChanged();
+    }
+
+    private Task OpenAddClientModal()
+    {
+        _isAddClientModalOpened = true;
+        return Task.CompletedTask;
+    }
+
+    private Task OpenAddProjectModal(ClientDto client)
+    {
+        _clientForNewProject = client;
+        _isAddProjectModalOpened = true;
+        return Task.CompletedTask;
+    }
+
+    private Task OnAddProjectModalOpenedChanged(bool isOpened)
+    {
+        _isAddProjectModalOpened = isOpened;
+        if (!isOpened)
+        {
+            _clientForNewProject = null;
+        }
+
+        return Task.CompletedTask;
     }
 
     private string GetClientClass(ClientDto client) => _selectedClient?.Id == client.Id && _selectedProject == null

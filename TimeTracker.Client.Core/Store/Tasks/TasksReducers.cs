@@ -1,4 +1,5 @@
 ﻿using Fluxor;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 
 namespace TimeTracker.Client.Core.Store.Tasks;
 
@@ -21,15 +22,14 @@ public class TasksReducers
     [ReducerMethod]
     public static TasksState SetListItemActionReducer(TasksState state, SetListItemAction action)
     {
-        var list = state.List.Select(item =>
+        var list = GetMutableList(state.List);
+        var taskIndex = list.FindIndex(item => item.TaskId == action.Task.TaskId);
+
+        if (taskIndex >= 0)
         {
-            if (item.TaskId == action.Task.TaskId)
-            {
-                return action.Task;
-            }
-            return item;
-        }).ToList();
-        if (list.All(item => item.TaskId != action.Task.TaskId))
+            list[taskIndex] = action.Task;
+        }
+        else
         {
             list.Insert(0, action.Task);
         }
@@ -43,26 +43,33 @@ public class TasksReducers
     [ReducerMethod]
     public static TasksState RemoveListItemActionReducer(TasksState state, RemoveListItemAction action)
     {
+        var list = GetMutableList(state.List);
+        var taskIndex = list.FindIndex(item => item.Id == action.TaskId);
+        if (taskIndex >= 0)
+        {
+            list.RemoveAt(taskIndex);
+        }
+
         return state with
         {
-            List = state.List
-                .Where(item => item.Id != action.TaskId)
-                .ToList()
+            List = list
         };
     }
     
     [ReducerMethod]
     public static TasksState UpdateListItemsActionReducer(TasksState state, UpdateListItemsAction action)
     {
-        var list = state.List.Select(item =>
+        var updatedTasks = action.Tasks.ToDictionary(task => task.TaskId);
+        var list = GetMutableList(state.List);
+
+        for (var index = 0; index < list.Count; index++)
         {
-            var updatedItem = action.Tasks.FirstOrDefault(x => x.TaskId == item.TaskId);
-            if (updatedItem != null)
+            if (updatedTasks.TryGetValue(list[index].TaskId, out var updatedTask))
             {
-                return updatedItem;
+                list[index] = updatedTask;
             }
-            return item;
-        }).ToList();
+        }
+
         return state with
         {
             List = list
@@ -135,4 +142,7 @@ public class TasksReducers
             IsTaskSaving = action.IsSaving
         };
     }
+
+    private static List<TaskDto> GetMutableList(ICollection<TaskDto> tasks) =>
+        tasks as List<TaskDto> ?? tasks.ToList();
 }

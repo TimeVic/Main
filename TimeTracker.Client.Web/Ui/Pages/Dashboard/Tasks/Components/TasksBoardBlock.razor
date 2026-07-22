@@ -11,6 +11,7 @@
         </div>
         <TasksTableBlock 
             Tasks="@_todoTasks"
+            Version="@_todoTasksVersion"
             IsLoading="@TasksState.Value.IsListLoading" 
             EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoTodoTasks"].Value" />
     </div>
@@ -22,6 +23,7 @@
         </div>
         <TasksTableBlock 
             Tasks="@_backlogTasks"
+            Version="@_backlogTasksVersion"
             IsLoading="@TasksState.Value.IsListLoading" 
             EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoBacklogTasks"].Value" />
     </div>

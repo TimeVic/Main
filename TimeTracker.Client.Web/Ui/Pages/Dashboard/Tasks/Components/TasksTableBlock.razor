@@ -18,13 +18,13 @@
     />
 }
 
-@if (_localTasks.Any())
+@if (Tasks.Any())
 {
     <div class="flex items-center justify-between border-b border-slate-200 px-3 py-2">
         <div class="flex items-center gap-2">
             <LumexCheckbox
                 OnClick="@SelectAllTasks"
-                Value="@(_selectedTaskIds.Any() && _selectedTaskIds.Count == _localTasks.Count)"
+                Value="@(_selectedTaskIds.Any() && _selectedTaskIds.Count == Tasks.Count)"
                 ValueChanged="@(SelectAllTasks)"/>
             <span class="text-sm text-slate-600">@string.Format(DashboardLocalizer["TasksTableBlock_SelectedCount"].Value, _selectedTaskIds.Count)</span>
         </div>
@@ -81,10 +81,11 @@
             {
                 <TasksTableSkeletonBlock/>
             }
-            else if (_localTasks.Any())
+            else if (Tasks.Any())
             {
                 <Virtualize
-                    Items="_localTasks"
+                    @ref="_virtualize"
+                    Items="Tasks"
                     ItemSize="72"
                     SpacerElement="tr"
                     OverscanCount="5"
