@@ -56,7 +56,8 @@
     </div>
 }
 
-<div class="overflow-x-auto">
+@* Avoid a nested scroll container: overflow-x-auto also computes overflow-y as auto and breaks Virtualize's scroll root. *@
+<div class="w-full">
     <table class="w-full table-fixed border-separate border-spacing-0">
         <colgroup>
             <col class="w-11" />
@@ -86,7 +87,7 @@
                 <Virtualize
                     @ref="_virtualize"
                     Items="Tasks"
-                    ItemSize="72"
+                    ItemSize="84"
                     SpacerElement="tr"
                     OverscanCount="5"
                     Context="task">

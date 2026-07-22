@@ -17,6 +17,9 @@ public partial class ResizableSplitBlock
     public string? Class { get; set; }
 
     [Parameter]
+    public bool IsContentOverflowVisible { get; set; }
+
+    [Parameter]
     public int DefaultStartPaneWidth { get; set; } = 320;
 
     [Parameter]
@@ -41,6 +44,11 @@ public partial class ResizableSplitBlock
             var baseClass = _isResizing
                 ? "resizable-split-block is-resizing"
                 : "resizable-split-block";
+
+            if (IsContentOverflowVisible)
+            {
+                baseClass += " is-content-overflow-visible";
+            }
 
             return string.IsNullOrWhiteSpace(Class)
                 ? baseClass
