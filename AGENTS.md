@@ -2,14 +2,13 @@
 
 ## Architecture Overview
 
-**TimeVic** is an ASP.NET Core time-tracking platform (.NET 7+, `global.json` pins SDK with `rollForward: latestMajor`). Key runnable projects:
+**TimeVic** is an ASP.NET Core time-tracking platform (.NET 10, `global.json` pins SDK with `rollForward: latestMajor`). Key runnable projects:
 
 | Project | Role |
 |---|---|
 | `TimeTracker.Api` | REST API + SignalR WebSocket host |
 | `TimeTracker.WorkerServices` | Background queue processors (hosted services) |
 | `TimeTracker.Migrations` | FluentMigrator console app (PostgreSQL) |
-| `TimeTracker.Console.FileStorage.Sync` | One-off file sync tool |
 
 Solution folders in `TimeTracker.sln`: **Infrastructure** (reusable cross-cutting libs), **Business**, **Tests**.
 
