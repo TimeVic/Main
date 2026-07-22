@@ -12,10 +12,13 @@
 <CascadingValue
     Name="TaskListId"
     Value="@TaskListId">
-    <LumexCard Class="overflow-hidden border-slate-200 bg-white shadow-sm">
+    <LumexCard
+        Class="border-slate-200 bg-white shadow-sm"
+        Style="overflow: visible;">
         <LumexCardBody Class="p-0">
             <ResizableSplitBlock
                 Class="min-h-[720px]"
+                IsContentOverflowVisible="true"
                 DefaultStartPaneWidth="@DefaultTaskListsWidth"
                 MinStartPaneWidth="@MinTaskListsWidth"
                 MaxStartPaneWidth="@MaxTaskListsWidth"
