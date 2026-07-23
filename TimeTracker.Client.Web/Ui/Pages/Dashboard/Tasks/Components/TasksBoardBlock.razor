@@ -1,54 +1,60 @@
 @using TimeTracker.Api.Shared.Dto.Entity.Task
+@using LumexUI.Common
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 @inherits BaseReactiveComponent
 
-<div class="flex w-full flex-col gap-3">
-    <div class="rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 px-3 py-2.5">
-            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_InProgress"]</p>
-            <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_InProgressDescription"]</p>
-        </div>
+<LumexAccordion
+    Class="flex w-full flex-col gap-3"
+    Variant="@AccordionVariant.Light"
+    SelectionMode="@SelectionMode.Multiple"
+    ShowDividers="@false"
+    ItemClasses="@TaskStatusBlockClasses">
+    <LumexAccordionItem
+        Id="in-progress"
+        Title="@DashboardLocalizer["TasksBoardBlock_InProgress"]"
+        Subtitle="@DashboardLocalizer["TasksBoardBlock_InProgressDescription"]"
+        @bind-Expanded="_isInProgressExpanded">
         <TasksTableBlock
             Tasks="@_inProgressTasks"
             Version="@_inProgressTasksVersion"
             IsLoading="@TasksState.Value.IsListLoading"
             EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoInProgressTasks"].Value" />
-    </div>
+    </LumexAccordionItem>
 
-    <div class="rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 px-3 py-2.5">
-            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_Todo"]</p>
-            <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_TodoDescription"]</p>
-        </div>
-        <TasksTableBlock 
+    <LumexAccordionItem
+        Id="todo"
+        Title="@DashboardLocalizer["TasksBoardBlock_Todo"]"
+        Subtitle="@DashboardLocalizer["TasksBoardBlock_TodoDescription"]"
+        @bind-Expanded="_isTodoExpanded">
+        <TasksTableBlock
             Tasks="@_todoTasks"
             Version="@_todoTasksVersion"
-            IsLoading="@TasksState.Value.IsListLoading" 
+            IsLoading="@TasksState.Value.IsListLoading"
             EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoTodoTasks"].Value" />
-    </div>
+    </LumexAccordionItem>
 
-    <div class="rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 px-3 py-2.5">
-            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_Backlog"]</p>
-            <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_BacklogDescription"]</p>
-        </div>
-        <TasksTableBlock 
+    <LumexAccordionItem
+        Id="backlog"
+        Title="@DashboardLocalizer["TasksBoardBlock_Backlog"]"
+        Subtitle="@DashboardLocalizer["TasksBoardBlock_BacklogDescription"]"
+        @bind-Expanded="_isBacklogExpanded">
+        <TasksTableBlock
             Tasks="@_backlogTasks"
             Version="@_backlogTasksVersion"
-            IsLoading="@TasksState.Value.IsListLoading" 
+            IsLoading="@TasksState.Value.IsListLoading"
             EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoBacklogTasks"].Value" />
-    </div>
+    </LumexAccordionItem>
 
-    <div class="rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 px-3 py-2.5">
-            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_Done"]</p>
-            <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_DoneDescription"]</p>
-        </div>
+    <LumexAccordionItem
+        Id="done"
+        Title="@DashboardLocalizer["TasksBoardBlock_Done"]"
+        Subtitle="@DashboardLocalizer["TasksBoardBlock_DoneDescription"]"
+        @bind-Expanded="_isDoneExpanded">
         <TasksTableBlock
             Tasks="@_doneTasks"
             Version="@_doneTasksVersion"
             IsLoading="@TasksState.Value.IsListLoading"
             EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoDoneTasks"].Value" />
-    </div>
-</div>
+    </LumexAccordionItem>
+</LumexAccordion>
