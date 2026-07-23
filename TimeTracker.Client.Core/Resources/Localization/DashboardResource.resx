@@ -131,6 +131,7 @@
   <data name="DeleteTask" xml:space="preserve"><value>Delete task</value></data>
   <data name="TaskName" xml:space="preserve"><value>Task name</value></data>
   <data name="TaskDescription" xml:space="preserve"><value>Task description</value></data>
+  <data name="TaskDescription_Empty" xml:space="preserve"><value>No description yet</value></data>
   <data name="MarkdownEdit_Supports" xml:space="preserve"><value>Supports</value></data>
   <data name="MarkdownEdit_Markdown" xml:space="preserve"><value>Markdown</value></data>
   <data name="MarkdownEdit_Modes" xml:space="preserve"><value>Editor modes</value></data>

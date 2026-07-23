@@ -1,0 +1,15 @@
+@namespace TimeTracker.Client.Core.Ui.Shared.Components.Form
+
+<div
+    class="@ContainerClass"
+    style="@MinHeightStyle"
+    @onclick="OnContentClicked">
+    @if (IsEmpty)
+    {
+        <p class="markdown-content-placeholder">@EmptyText</p>
+    }
+    else
+    {
+        @MarkdownHtml
+    }
+</div>

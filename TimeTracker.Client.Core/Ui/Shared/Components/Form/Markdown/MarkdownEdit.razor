@@ -1,6 +1,7 @@
 ﻿@using TimeTracker.Client.Core.Services.UI
 @using TimeTracker.Client.Core.Core.Helpers
 @using LumexUI.Common
+@namespace TimeTracker.Client.Core.Ui.Shared.Components.Form
 
 <div class="@($"{Class} w-markdown-editor w-full")">
 
@@ -77,9 +78,10 @@
             }
             else
             {
-                <div class="w-markdown-editor-preview" style="min-height: @(PreviewMinHeight)px">
-                    @PreviewMarkdownHtml
-                </div>
+                <MarkdownContent
+                    Class="w-markdown-editor-preview"
+                    Content="@_editValue"
+                    MinHeight="@PreviewMinHeight" />
             }
 
         </div>
@@ -108,11 +110,11 @@
     }
     else
     {
-        <div
-            class="w-view w-full text-sm text-slate-700"
-            @onclick="@OnClickView">
-            @MarkdownHtml
-        </div>
+        <MarkdownContent
+            Class="w-view"
+            Content="@_value"
+            EmptyText="@EmptyText"
+            OnClick="@OnClickView" />
     }
 </div>
 
@@ -155,6 +157,9 @@
     public string? Value { get; set; }
 
     [Parameter]
+    public string EmptyText { get; set; } = string.Empty;
+
+    [Parameter]
     public int RowsMin { get; set; } = 6;
 
     [Parameter]
@@ -176,14 +181,8 @@
     public bool IsInlineActionsEnabled { get; set; } = true;
 
     [Inject]
-    public MarkdownService MarkdownService { get; set; }
-
-    [Inject]
     public UiHelperService UiHelperService { get; set; }
     
-    public MarkupString MarkdownHtml => (MarkupString) MarkdownService.ToHtml(_value);
-    private MarkupString PreviewMarkdownHtml => (MarkupString) MarkdownService.ToHtml(_editValue);
-
     private enum MarkdownEditorMode
     {
         Edit,
@@ -227,7 +226,7 @@
             }
         }
 
-        var isDesiredEditBox = IsEditMode || string.IsNullOrWhiteSpace(value);
+        var isDesiredEditBox = IsEditMode;
         _lastParameterValue = value;
         if (_isInitialized && (IsInlineActionsEnabled && _isActionButtonsEnabled || _value == value && _isShowEditBox == isDesiredEditBox))
         {
@@ -372,7 +371,7 @@
     {
         var isChanged = _value != _editValue;
         _value = _editValue;
-        _isShowEditBox = string.IsNullOrWhiteSpace(_value);
+        _isShowEditBox = IsEditMode;
         _isActionButtonsEnabled = false;
         if (isChanged)
         {
@@ -384,7 +383,7 @@
 
     private void OnClickCancel()
     {
-        _isShowEditBox = string.IsNullOrWhiteSpace(_value);
+        _isShowEditBox = IsEditMode;
         _editorMode = MarkdownEditorMode.Edit;
         _editValue = _value;
         _isActionButtonsEnabled = false;

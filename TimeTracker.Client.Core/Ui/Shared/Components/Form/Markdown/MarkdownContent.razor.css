@@ -1,0 +1,132 @@
+.markdown-content {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: #334155;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: 14px 16px;
+}
+.markdown-content.is-interactive {
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.markdown-content.is-interactive:hover {
+  border-color: #bfdbfe;
+}
+.markdown-content.is-interactive:focus-within {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px #dbeafe;
+}
+.markdown-content .markdown-content-placeholder {
+  color: #94a3b8;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.5rem;
+  margin: 0;
+}
+.markdown-content ::deep .markdown-body {
+  background: transparent;
+  color: inherit;
+  font-size: 14px;
+  line-height: 1.5rem;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.markdown-content ::deep .markdown-body h1,
+.markdown-content ::deep .markdown-body h2,
+.markdown-content ::deep .markdown-body h3,
+.markdown-content ::deep .markdown-body h4,
+.markdown-content ::deep .markdown-body h5,
+.markdown-content ::deep .markdown-body h6 {
+  color: #1e293b;
+  line-height: 1.35;
+  margin: 1rem 0 0.5rem;
+  padding: 0;
+}
+.markdown-content ::deep .markdown-body h1 {
+  font-size: 1.125rem;
+}
+.markdown-content ::deep .markdown-body h2 {
+  border: 0;
+  font-size: 1.0625rem;
+}
+.markdown-content ::deep .markdown-body h3 {
+  font-size: 1rem;
+}
+.markdown-content ::deep .markdown-body h4 {
+  font-size: 0.9375rem;
+}
+.markdown-content ::deep .markdown-body h5,
+.markdown-content ::deep .markdown-body h6 {
+  font-size: 0.875rem;
+}
+.markdown-content ::deep .markdown-body p {
+  margin: 0 0 0.625rem;
+}
+.markdown-content ::deep .markdown-body ul,
+.markdown-content ::deep .markdown-body ol {
+  margin: 0 0 0.625rem;
+  padding-left: 1.35rem;
+}
+.markdown-content ::deep .markdown-body li + li {
+  margin-top: 0.1875rem;
+}
+.markdown-content ::deep .markdown-body blockquote {
+  background: #f8fafc;
+  border-left: 3px solid #93c5fd;
+  color: #475569;
+  margin: 0.75rem 0;
+  padding: 0.5rem 0.75rem;
+}
+.markdown-content ::deep .markdown-body code {
+  background: #f1f5f9;
+  border-radius: 4px;
+  color: #334155;
+  overflow-wrap: anywhere;
+  padding: 0.125rem 0.3125rem;
+  white-space: break-spaces;
+}
+.markdown-content ::deep .markdown-body pre {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  margin: 0.75rem 0;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 0.75rem;
+}
+.markdown-content ::deep .markdown-body pre code {
+  background: transparent;
+  overflow-wrap: normal;
+  padding: 0;
+  white-space: pre;
+}
+.markdown-content ::deep .markdown-body a {
+  color: #2563eb;
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.markdown-content ::deep .markdown-body table {
+  display: block;
+  margin: 0.75rem 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.markdown-content ::deep .markdown-body th,
+.markdown-content ::deep .markdown-body td {
+  padding: 0.375rem 0.625rem;
+}
+.markdown-content ::deep .markdown-body hr {
+  background: #e2e8f0;
+  height: 1px;
+  margin: 0.875rem 0;
+}
+.markdown-content ::deep .markdown-body img {
+  height: auto;
+  max-width: 100%;
+}
