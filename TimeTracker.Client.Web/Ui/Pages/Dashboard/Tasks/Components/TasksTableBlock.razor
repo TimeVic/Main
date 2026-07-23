@@ -9,16 +9,24 @@
 
 @inherits BaseReactiveComponent
 
-<section class="rounded-lg border border-slate-200/80 bg-white">
+<section class="tasks-table-block tasks-table-block--@GetStatusCssClass() @(!_isExpanded ? "tasks-table-block--collapsed" : null) rounded-lg border border-slate-200/80 bg-white">
     <button
         type="button"
-        class="flex min-h-13 w-full items-center justify-between px-4 py-2 text-left hover:bg-slate-50"
+        aria-expanded="@_isExpanded.ToString().ToLowerInvariant()"
+        class="tasks-table-block__header flex min-h-13 w-full items-center justify-between px-4 py-2 text-left"
         @onclick="ToggleExpanded">
         <span class="flex items-center gap-2">
+            <span
+                aria-hidden="true"
+                class="tasks-table-block__icon flex h-7 w-7 shrink-0 items-center justify-center rounded-md">
+                <i class="@GetStatusIconClass() text-xs"></i>
+            </span>
             <span class="text-sm font-semibold text-slate-900">@Title</span>
-            <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-600">@Tasks.Count</span>
+            <span class="tasks-table-block__count rounded-full px-2 py-0.5 text-[11px] font-semibold">@Tasks.Count</span>
         </span>
-        <i class="fa-solid @(_isExpanded ? "fa-chevron-down" : "fa-chevron-right") text-xs text-slate-400"></i>
+        <i
+            aria-hidden="true"
+            class="fa-solid @(_isExpanded ? "fa-chevron-down" : "fa-chevron-right") text-xs text-slate-400"></i>
     </button>
 
     <div class="@TableContentClass">

@@ -1,0 +1,62 @@
+.tasks-table-block {
+  --task-status-accent: #2563eb;
+  --task-status-border: #93c5fd;
+  --task-status-background: #eff6ff;
+  --task-status-hover: #dbeafe;
+
+  border-left-color: var(--task-status-border);
+  border-left-width: 3px;
+}
+
+.tasks-table-block__header {
+  background-color: var(--task-status-background);
+  border-radius: .5rem .5rem 0 0;
+  transition: background-color 150ms ease;
+}
+
+.tasks-table-block--collapsed .tasks-table-block__header {
+  border-radius: .5rem;
+}
+
+.tasks-table-block__header:hover {
+  background-color: var(--task-status-hover);
+}
+
+.tasks-table-block__header:focus-visible {
+  outline: 2px solid var(--task-status-accent);
+  outline-offset: -2px;
+}
+
+.tasks-table-block__icon,
+.tasks-table-block__count {
+  background-color: var(--task-status-hover);
+  color: var(--task-status-accent);
+}
+
+.tasks-table-block--in-progress {
+  --task-status-accent: #d97706;
+  --task-status-border: #fcd34d;
+  --task-status-background: #fffbeb;
+  --task-status-hover: #fef3c7;
+}
+
+.tasks-table-block--todo {
+  --task-status-accent: #2563eb;
+  --task-status-border: #93c5fd;
+  --task-status-background: #eff6ff;
+  --task-status-hover: #dbeafe;
+}
+
+.tasks-table-block--backlog {
+  --task-status-accent: #64748b;
+  --task-status-border: #cbd5e1;
+  --task-status-background: #f8fafc;
+  --task-status-hover: #f1f5f9;
+}
+
+.tasks-table-block--done {
+  --task-status-accent: #059669;
+  --task-status-border: #6ee7b7;
+  --task-status-background: #ecfdf5;
+  --task-status-hover: #d1fae5;
+}
