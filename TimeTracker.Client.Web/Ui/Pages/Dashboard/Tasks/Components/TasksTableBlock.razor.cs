@@ -13,6 +13,9 @@ public partial class TasksTableBlock
     [Parameter]
     public string Title { get; set; } = string.Empty;
 
+    [Parameter, EditorRequired]
+    public TaskStatus Status { get; set; }
+
     [Parameter]
     public IList<TaskDto> Tasks { get; set; } = [];
 
@@ -44,6 +47,24 @@ public partial class TasksTableBlock
     private string TableContentClass => _isExpanded
         ? "border-t border-slate-200/80"
         : "hidden";
+
+    private string GetStatusCssClass() => Status switch
+    {
+        TaskStatus.InProgress => "in-progress",
+        TaskStatus.ToDo => "todo",
+        TaskStatus.Backlog => "backlog",
+        TaskStatus.Done => "done",
+        _ => throw new ArgumentOutOfRangeException(nameof(Status), Status, null)
+    };
+
+    private string GetStatusIconClass() => Status switch
+    {
+        TaskStatus.InProgress => "fa-solid fa-circle-play",
+        TaskStatus.ToDo => "fa-solid fa-list-check",
+        TaskStatus.Backlog => "fa-solid fa-layer-group",
+        TaskStatus.Done => "fa-solid fa-circle-check",
+        _ => throw new ArgumentOutOfRangeException(nameof(Status), Status, null)
+    };
 
     // ondragover fires hundreds of times per second — block re-renders unless something actually changed
     protected override bool ShouldRender()
