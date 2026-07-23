@@ -11,6 +11,9 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Tasks.Components;
 public partial class TasksTableBlock
 {
     [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
     public IList<TaskDto> Tasks { get; set; } = [];
 
     [Parameter]
@@ -36,6 +39,11 @@ public partial class TasksTableBlock
     private long _renderedTasksVersion = -1;
     private bool _isVirtualizeRefreshRequired;
     private Microsoft.AspNetCore.Components.Web.Virtualization.Virtualize<TaskDto>? _virtualize;
+    private bool _isExpanded = true;
+
+    private string TableContentClass => _isExpanded
+        ? "border-t border-slate-200/80"
+        : "hidden";
 
     // ondragover fires hundreds of times per second — block re-renders unless something actually changed
     protected override bool ShouldRender()
@@ -75,6 +83,12 @@ public partial class TasksTableBlock
         _isDragging = true;
         _draggingTask = task;
         _dragRenderPending = true;
+    }
+
+    private void ToggleExpanded()
+    {
+        _isExpanded = !_isExpanded;
+        _isVirtualizeRefreshRequired |= _isExpanded;
     }
 
     private void OnDragOver(TaskDto task)

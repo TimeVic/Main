@@ -56,6 +56,7 @@ public partial class AddTasksListModalForm
             var taskList = await ApiService.TaskListAddAsync(model);
             if (taskList != null)
             {
+                Dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.SetListItemAction(taskList));
                 Dispatcher.Dispatch(new LoadListAction(true));
                 ToastService.ShowInfo(DashboardLocalizer["AddTasksListModalForm_TaskListAdded"].Value);
                 IsOpened = false;

@@ -38,23 +38,20 @@ public class TasksListReducers
     [ReducerMethod]
     public static TasksListState Reducer(TasksListState state, SetListItemAction action)
     {
-        var list = state.List.Select(item =>
+        var list = UpsertTaskList(state.List, action.TaskList);
+        var dropDownList = state.DropDownList
+            .Where(item => item.Id != action.TaskList.Id)
+            .ToList();
+        if (state.DropDownProjectId == action.TaskList.Project.Id)
         {
-            if (item.Id == action.TaskList.Id)
-            {
-                return action.TaskList;
-            }
-
-            return item;
-        }).ToList();
-        if (list.All(item => item.Id != action.TaskList.Id))
-        {
-            list.Insert(0, action.TaskList);
+            dropDownList.Insert(0, action.TaskList);
         }
 
         return state with
         {
-            List = list
+            List = list,
+            DropDownList = dropDownList,
+            TotalCount = list.Count
         };
     }
     
@@ -65,6 +62,10 @@ public class TasksListReducers
         return state with
         {
             List = list,
+            DropDownList = state.DropDownList
+                .Where(item => item.Id != action.TaskListId)
+                .ToList(),
+            TotalCount = list.Count,
             SelectedTaskListId = state.SelectedTaskListId == action.TaskListId
                 ? null
                 : state.SelectedTaskListId
@@ -87,5 +88,17 @@ public class TasksListReducers
         {
             SelectedTaskListId = action.TaskListId
         };
+    }
+
+    private static List<TaskListDto> UpsertTaskList(
+        IEnumerable<TaskListDto> taskLists,
+        TaskListDto taskList
+    )
+    {
+        var list = taskLists
+            .Where(item => item.Id != taskList.Id)
+            .ToList();
+        list.Insert(0, taskList);
+        return list;
     }
 }

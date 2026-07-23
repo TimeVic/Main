@@ -1,5 +1,4 @@
 using Fluxor;
-using LumexUI;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Client.Core.Store.Tasks;
@@ -24,21 +23,7 @@ public partial class TasksBoardBlock : IDisposable
     private long _todoTasksVersion;
     private long _backlogTasksVersion;
     private long _doneTasksVersion;
-    private bool _isInProgressExpanded = true;
-    private bool _isTodoExpanded = true;
-    private bool _isBacklogExpanded = true;
-    private bool _isDoneExpanded = true;
     private bool _isRenderPending = true;
-
-    private static readonly AccordionItemSlots TaskStatusBlockClasses = new()
-    {
-        Base = "rounded-lg border border-slate-200 bg-white",
-        Trigger = "border-b border-slate-200 px-3 py-2.5",
-        Title = "text-sm font-semibold text-slate-900",
-        Subtitle = "mt-0.5 text-sm text-slate-500",
-        Content = "p-0",
-        Indicator = "text-slate-400 transition-transform duration-200"
-    };
 
     protected override void OnInitialized()
     {

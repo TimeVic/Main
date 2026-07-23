@@ -1,60 +1,31 @@
 @using TimeTracker.Api.Shared.Dto.Entity.Task
-@using LumexUI.Common
 @using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 @inherits BaseReactiveComponent
 
-<LumexAccordion
-    Class="flex w-full flex-col gap-3"
-    Variant="@AccordionVariant.Light"
-    SelectionMode="@SelectionMode.Multiple"
-    ShowDividers="@false"
-    ItemClasses="@TaskStatusBlockClasses">
-    <LumexAccordionItem
-        Id="in-progress"
-        Title="@DashboardLocalizer["TasksBoardBlock_InProgress"]"
-        Subtitle="@DashboardLocalizer["TasksBoardBlock_InProgressDescription"]"
-        @bind-Expanded="_isInProgressExpanded">
-        <TasksTableBlock
-            Tasks="@_inProgressTasks"
-            Version="@_inProgressTasksVersion"
-            IsLoading="@TasksState.Value.IsListLoading"
-            EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoInProgressTasks"].Value" />
-    </LumexAccordionItem>
-
-    <LumexAccordionItem
-        Id="todo"
-        Title="@DashboardLocalizer["TasksBoardBlock_Todo"]"
-        Subtitle="@DashboardLocalizer["TasksBoardBlock_TodoDescription"]"
-        @bind-Expanded="_isTodoExpanded">
-        <TasksTableBlock
-            Tasks="@_todoTasks"
-            Version="@_todoTasksVersion"
-            IsLoading="@TasksState.Value.IsListLoading"
-            EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoTodoTasks"].Value" />
-    </LumexAccordionItem>
-
-    <LumexAccordionItem
-        Id="backlog"
-        Title="@DashboardLocalizer["TasksBoardBlock_Backlog"]"
-        Subtitle="@DashboardLocalizer["TasksBoardBlock_BacklogDescription"]"
-        @bind-Expanded="_isBacklogExpanded">
-        <TasksTableBlock
-            Tasks="@_backlogTasks"
-            Version="@_backlogTasksVersion"
-            IsLoading="@TasksState.Value.IsListLoading"
-            EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoBacklogTasks"].Value" />
-    </LumexAccordionItem>
-
-    <LumexAccordionItem
-        Id="done"
-        Title="@DashboardLocalizer["TasksBoardBlock_Done"]"
-        Subtitle="@DashboardLocalizer["TasksBoardBlock_DoneDescription"]"
-        @bind-Expanded="_isDoneExpanded">
-        <TasksTableBlock
-            Tasks="@_doneTasks"
-            Version="@_doneTasksVersion"
-            IsLoading="@TasksState.Value.IsListLoading"
-            EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoDoneTasks"].Value" />
-    </LumexAccordionItem>
-</LumexAccordion>
+<div class="flex w-full flex-col gap-2">
+    <TasksTableBlock
+        Title="@DashboardLocalizer["TasksBoardBlock_InProgress"].Value"
+        Tasks="@_inProgressTasks"
+        Version="@_inProgressTasksVersion"
+        IsLoading="@TasksState.Value.IsListLoading"
+        EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoInProgressTasks"].Value" />
+    <TasksTableBlock
+        Title="@DashboardLocalizer["TasksBoardBlock_Todo"].Value"
+        Tasks="@_todoTasks"
+        Version="@_todoTasksVersion"
+        IsLoading="@TasksState.Value.IsListLoading"
+        EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoTodoTasks"].Value" />
+    <TasksTableBlock
+        Title="@DashboardLocalizer["TasksBoardBlock_Backlog"].Value"
+        Tasks="@_backlogTasks"
+        Version="@_backlogTasksVersion"
+        IsLoading="@TasksState.Value.IsListLoading"
+        EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoBacklogTasks"].Value" />
+    <TasksTableBlock
+        Title="@DashboardLocalizer["TasksBoardBlock_Done"].Value"
+        Tasks="@_doneTasks"
+        Version="@_doneTasksVersion"
+        IsLoading="@TasksState.Value.IsListLoading"
+        EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoDoneTasks"].Value" />
+</div>
