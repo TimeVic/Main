@@ -15,10 +15,14 @@ public partial class TasksBoardBlock : IDisposable
     public IState<TasksState> TasksState { get; set; }
 
     // Keep these instances stable so task updates do not reset Virtualize's cached item range.
+    private readonly List<TaskDto> _inProgressTasks = [];
     private readonly List<TaskDto> _todoTasks = [];
     private readonly List<TaskDto> _backlogTasks = [];
+    private readonly List<TaskDto> _doneTasks = [];
+    private long _inProgressTasksVersion;
     private long _todoTasksVersion;
     private long _backlogTasksVersion;
+    private long _doneTasksVersion;
     private bool _isRenderPending = true;
 
     protected override void OnInitialized()
@@ -82,16 +86,20 @@ public partial class TasksBoardBlock : IDisposable
             .OrderBy(task => task.PositionIndex)
             .ThenBy(task => task.CreatedAt);
 
-        _todoTasks.Clear();
-        _backlogTasks.Clear();
+        foreach (var taskSection in GetTaskSections())
+        {
+            taskSection.Clear();
+        }
 
         foreach (var task in orderedTasks)
         {
             GetTaskSection(task).Add(task);
         }
 
+        _inProgressTasksVersion++;
         _todoTasksVersion++;
         _backlogTasksVersion++;
+        _doneTasksVersion++;
     }
 
     private bool UpdateTask(TaskDto task)
@@ -141,20 +149,27 @@ public partial class TasksBoardBlock : IDisposable
         return true;
     }
 
-    private List<TaskDto> GetTaskSection(TaskDto task) => task.Status == TaskStatus.Backlog
-        ? _backlogTasks
-        : _todoTasks;
+    private List<TaskDto> GetTaskSection(TaskDto task) => task.Status switch
+    {
+        TaskStatus.InProgress => _inProgressTasks,
+        TaskStatus.Backlog => _backlogTasks,
+        TaskStatus.Done => _doneTasks,
+        _ => _todoTasks
+    };
 
     private List<TaskDto>? FindTaskSection(Guid taskId, out int taskIndex)
     {
-        taskIndex = _todoTasks.FindIndex(task => task.Id == taskId);
-        if (taskIndex >= 0)
+        foreach (var taskSection in GetTaskSections())
         {
-            return _todoTasks;
+            taskIndex = taskSection.FindIndex(task => task.Id == taskId);
+            if (taskIndex >= 0)
+            {
+                return taskSection;
+            }
         }
 
-        taskIndex = _backlogTasks.FindIndex(task => task.Id == taskId);
-        return taskIndex >= 0 ? _backlogTasks : null;
+        taskIndex = -1;
+        return null;
     }
 
     private static void InsertTask(List<TaskDto> tasks, TaskDto task)
@@ -165,13 +180,33 @@ public partial class TasksBoardBlock : IDisposable
 
     private void IncrementVersion(List<TaskDto> tasks)
     {
+        if (ReferenceEquals(tasks, _inProgressTasks))
+        {
+            _inProgressTasksVersion++;
+            return;
+        }
+
         if (ReferenceEquals(tasks, _todoTasks))
         {
             _todoTasksVersion++;
             return;
         }
 
-        _backlogTasksVersion++;
+        if (ReferenceEquals(tasks, _backlogTasks))
+        {
+            _backlogTasksVersion++;
+            return;
+        }
+
+        _doneTasksVersion++;
+    }
+
+    private IEnumerable<List<TaskDto>> GetTaskSections()
+    {
+        yield return _inProgressTasks;
+        yield return _todoTasks;
+        yield return _backlogTasks;
+        yield return _doneTasks;
     }
 
     private void RequestRender()

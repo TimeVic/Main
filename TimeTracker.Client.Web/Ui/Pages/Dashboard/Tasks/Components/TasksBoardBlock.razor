@@ -3,28 +3,29 @@
 
 @inherits BaseReactiveComponent
 
-<div class="flex w-full flex-col gap-3">
-    <div class="rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 px-3 py-2.5">
-            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_Todo"]</p>
-            <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_TodoDescription"]</p>
-        </div>
-        <TasksTableBlock 
-            Tasks="@_todoTasks"
-            Version="@_todoTasksVersion"
-            IsLoading="@TasksState.Value.IsListLoading" 
-            EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoTodoTasks"].Value" />
-    </div>
-
-    <div class="rounded-lg border border-slate-200 bg-white">
-        <div class="border-b border-slate-200 px-3 py-2.5">
-            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_Backlog"]</p>
-            <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_BacklogDescription"]</p>
-        </div>
-        <TasksTableBlock 
-            Tasks="@_backlogTasks"
-            Version="@_backlogTasksVersion"
-            IsLoading="@TasksState.Value.IsListLoading" 
-            EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoBacklogTasks"].Value" />
-    </div>
+<div class="flex w-full flex-col gap-2">
+    <TasksTableBlock
+        Title="@DashboardLocalizer["TasksBoardBlock_InProgress"].Value"
+        Tasks="@_inProgressTasks"
+        Version="@_inProgressTasksVersion"
+        IsLoading="@TasksState.Value.IsListLoading"
+        EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoInProgressTasks"].Value" />
+    <TasksTableBlock
+        Title="@DashboardLocalizer["TasksBoardBlock_Todo"].Value"
+        Tasks="@_todoTasks"
+        Version="@_todoTasksVersion"
+        IsLoading="@TasksState.Value.IsListLoading"
+        EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoTodoTasks"].Value" />
+    <TasksTableBlock
+        Title="@DashboardLocalizer["TasksBoardBlock_Backlog"].Value"
+        Tasks="@_backlogTasks"
+        Version="@_backlogTasksVersion"
+        IsLoading="@TasksState.Value.IsListLoading"
+        EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoBacklogTasks"].Value" />
+    <TasksTableBlock
+        Title="@DashboardLocalizer["TasksBoardBlock_Done"].Value"
+        Tasks="@_doneTasks"
+        Version="@_doneTasksVersion"
+        IsLoading="@TasksState.Value.IsListLoading"
+        EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoDoneTasks"].Value" />
 </div>

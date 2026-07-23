@@ -9,56 +9,69 @@
 
 @inherits BaseReactiveComponent
 
-@if (_taskToUpdate != null)
-{
-    <TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals.UpdateTaskModal
-        IsOpened="true"
-        Task="_taskToUpdate"
-        OnClose="@(() => _taskToUpdate = null)"
-    />
-}
+<section class="rounded-lg border border-slate-200/80 bg-white">
+    <button
+        type="button"
+        class="flex min-h-13 w-full items-center justify-between px-4 py-2 text-left hover:bg-slate-50"
+        @onclick="ToggleExpanded">
+        <span class="flex items-center gap-2">
+            <span class="text-sm font-semibold text-slate-900">@Title</span>
+            <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-600">@Tasks.Count</span>
+        </span>
+        <i class="fa-solid @(_isExpanded ? "fa-chevron-down" : "fa-chevron-right") text-xs text-slate-400"></i>
+    </button>
 
-@if (Tasks.Any())
-{
-    <div class="flex items-center justify-between border-b border-slate-200 px-3 py-2">
-        <div class="flex items-center gap-2">
-            <LumexCheckbox
-                OnClick="@SelectAllTasks"
-                Value="@(_selectedTaskIds.Any() && _selectedTaskIds.Count == Tasks.Count)"
-                ValueChanged="@(SelectAllTasks)"/>
-            <span class="text-sm text-slate-600">@string.Format(DashboardLocalizer["TasksTableBlock_SelectedCount"].Value, _selectedTaskIds.Count)</span>
-        </div>
-        @if (_selectedTaskIds.Count > 0)
+    <div class="@TableContentClass">
+        @if (_taskToUpdate != null)
         {
-            <div class="flex items-center gap-2">
-                <CustomButton
-                    Color="ThemeColor.Warning"
-                    Variant="Variant.Light"
-                    Size="Size.Small"
-                    OnClick="@(() => OnSetArchivedSelectedTasks(true))">
-                    <StartContent>
-                        <i class="fa-solid fa-box-archive text-xs"></i>
-                    </StartContent>
-                    <ChildContent>@DashboardLocalizer["Archive"]</ChildContent>
-                </CustomButton>
-                <CustomButton
-                    Color="ThemeColor.Success"
-                    Variant="Variant.Light"
-                    Size="Size.Small"
-                    OnClick="@(() => OnSetArchivedSelectedTasks(false))">
-                    <StartContent>
-                        <i class="fa-solid fa-rotate-left text-xs"></i>
-                    </StartContent>
-                    <ChildContent>@DashboardLocalizer["Restore"]</ChildContent>
-                </CustomButton>
+            <TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals.UpdateTaskModal
+                IsOpened="true"
+                Task="_taskToUpdate"
+                OnClose="@(() => _taskToUpdate = null)"
+            />
+        }
+
+        @if (Tasks.Any())
+        {
+            <div class="flex items-center justify-between border-b border-slate-200 px-3 py-2">
+                <div class="flex items-center gap-2">
+                    <LumexCheckbox
+                        OnClick="@SelectAllTasks"
+                        Value="@(_selectedTaskIds.Any() && _selectedTaskIds.Count == Tasks.Count)"
+                        ValueChanged="@(SelectAllTasks)"/>
+                    <span class="text-sm text-slate-600">@string.Format(DashboardLocalizer["TasksTableBlock_SelectedCount"].Value, _selectedTaskIds.Count)</span>
+                </div>
+                @if (_selectedTaskIds.Count > 0)
+                {
+                    <div class="flex items-center gap-2">
+                        <CustomButton
+                            Color="ThemeColor.Warning"
+                            Variant="Variant.Light"
+                            Size="Size.Small"
+                            OnClick="@(() => OnSetArchivedSelectedTasks(true))">
+                            <StartContent>
+                                <i class="fa-solid fa-box-archive text-xs"></i>
+                            </StartContent>
+                            <ChildContent>@DashboardLocalizer["Archive"]</ChildContent>
+                        </CustomButton>
+                        <CustomButton
+                            Color="ThemeColor.Success"
+                            Variant="Variant.Light"
+                            Size="Size.Small"
+                            OnClick="@(() => OnSetArchivedSelectedTasks(false))">
+                            <StartContent>
+                                <i class="fa-solid fa-rotate-left text-xs"></i>
+                            </StartContent>
+                            <ChildContent>@DashboardLocalizer["Restore"]</ChildContent>
+                        </CustomButton>
+                    </div>
+                }
             </div>
         }
-    </div>
-}
 
-@* Avoid a nested scroll container: overflow-x-auto also computes overflow-y as auto and breaks Virtualize's scroll root. *@
-<div class="w-full">
-    <table class="w-full table-fixed border-separate border-spacing-0">
+        @* Avoid a nested scroll container: overflow-x-auto also computes overflow-y as auto and breaks Virtualize's scroll root. *@
+        <div class="w-full">
+            <table class="w-full table-fixed border-separate border-spacing-0">
         <colgroup>
             <col class="w-11" />
             <col />
@@ -220,5 +233,7 @@
                 </tr>
             }
         </tbody>
-    </table>
-</div>
+            </table>
+        </div>
+    </div>
+</section>

@@ -41,11 +41,11 @@ public partial class TasksBlock: IDisposable
         : "space-y-4";
 
     private string HeaderClass => IsEmbedded
-        ? "border-b border-slate-200 p-4"
-        : "px-1";
+        ? "px-4 py-3"
+        : "px-1 py-3";
 
     private string BoardClass => IsEmbedded
-        ? "min-h-0 flex-1 p-4"
+        ? "min-h-0 flex-1 p-3 sm:p-4"
         : string.Empty;
 
     private string EmptyStateClass => IsEmbedded
