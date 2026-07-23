@@ -397,12 +397,18 @@
   <data name="TasksBlock_DeleteTaskListSubtitle" xml:space="preserve"><value>Видалити цей список задач?</value></data>
   <data name="TasksBlock_TaskListDescription" xml:space="preserve"><value>Задачі не обовʼязкові й потрібні переважно для обліку часу.</value></data>
   <data name="TasksBlock_EditTaskList" xml:space="preserve"><value>Редагувати список задач</value></data>
+  <data name="TasksBoardBlock_InProgress" xml:space="preserve"><value>У роботі</value></data>
+  <data name="TasksBoardBlock_InProgressDescription" xml:space="preserve"><value>Задачі, над якими зараз працюють.</value></data>
   <data name="TasksBoardBlock_Todo" xml:space="preserve"><value>До роботи</value></data>
   <data name="TasksBoardBlock_TodoDescription" xml:space="preserve"><value>Робочі задачі, до яких можна привʼязувати час.</value></data>
   <data name="TasksBoardBlock_Backlog" xml:space="preserve"><value>Беклог</value></data>
   <data name="TasksBoardBlock_BacklogDescription" xml:space="preserve"><value>Менш пріоритетні задачі поза основним потоком роботи.</value></data>
+  <data name="TasksBoardBlock_Done" xml:space="preserve"><value>Виконано</value></data>
+  <data name="TasksBoardBlock_DoneDescription" xml:space="preserve"><value>Завершені задачі, збережені для довідки.</value></data>
+  <data name="TasksBoardBlock_NoInProgressTasks" xml:space="preserve"><value>Задач у роботі за поточними фільтрами немає.</value></data>
   <data name="TasksBoardBlock_NoTodoTasks" xml:space="preserve"><value>Задач до роботи за поточними фільтрами немає.</value></data>
   <data name="TasksBoardBlock_NoBacklogTasks" xml:space="preserve"><value>Задач у беклозі за поточними фільтрами немає.</value></data>
+  <data name="TasksBoardBlock_NoDoneTasks" xml:space="preserve"><value>Виконаних задач за поточними фільтрами немає.</value></data>
   <data name="TasksListBlock_Title" xml:space="preserve"><value>Списки задач</value></data>
   <data name="TasksListBlock_Description" xml:space="preserve"><value>Переглядайте списки задач за клієнтами та проєктами.</value></data>
   <data name="TasksListBlock_SearchPlaceholder" xml:space="preserve"><value>Пошук клієнтів, проєктів або списків задач...</value></data>

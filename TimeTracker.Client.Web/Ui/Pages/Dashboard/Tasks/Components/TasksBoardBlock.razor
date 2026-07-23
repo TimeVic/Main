@@ -6,6 +6,18 @@
 <div class="flex w-full flex-col gap-3">
     <div class="rounded-lg border border-slate-200 bg-white">
         <div class="border-b border-slate-200 px-3 py-2.5">
+            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_InProgress"]</p>
+            <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_InProgressDescription"]</p>
+        </div>
+        <TasksTableBlock
+            Tasks="@_inProgressTasks"
+            Version="@_inProgressTasksVersion"
+            IsLoading="@TasksState.Value.IsListLoading"
+            EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoInProgressTasks"].Value" />
+    </div>
+
+    <div class="rounded-lg border border-slate-200 bg-white">
+        <div class="border-b border-slate-200 px-3 py-2.5">
             <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_Todo"]</p>
             <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_TodoDescription"]</p>
         </div>
@@ -26,5 +38,17 @@
             Version="@_backlogTasksVersion"
             IsLoading="@TasksState.Value.IsListLoading" 
             EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoBacklogTasks"].Value" />
+    </div>
+
+    <div class="rounded-lg border border-slate-200 bg-white">
+        <div class="border-b border-slate-200 px-3 py-2.5">
+            <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TasksBoardBlock_Done"]</p>
+            <p class="mt-0.5 text-sm text-slate-500">@DashboardLocalizer["TasksBoardBlock_DoneDescription"]</p>
+        </div>
+        <TasksTableBlock
+            Tasks="@_doneTasks"
+            Version="@_doneTasksVersion"
+            IsLoading="@TasksState.Value.IsListLoading"
+            EmptyMessage="@DashboardLocalizer["TasksBoardBlock_NoDoneTasks"].Value" />
     </div>
 </div>

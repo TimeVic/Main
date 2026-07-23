@@ -397,12 +397,18 @@
   <data name="TasksBlock_DeleteTaskListSubtitle" xml:space="preserve"><value>Are you sure you want to delete this task list?</value></data>
   <data name="TasksBlock_TaskListDescription" xml:space="preserve"><value>Tasks are optional and mainly used for tracking time.</value></data>
   <data name="TasksBlock_EditTaskList" xml:space="preserve"><value>Edit task list</value></data>
+  <data name="TasksBoardBlock_InProgress" xml:space="preserve"><value>In progress</value></data>
+  <data name="TasksBoardBlock_InProgressDescription" xml:space="preserve"><value>Tasks currently being worked on.</value></data>
   <data name="TasksBoardBlock_Todo" xml:space="preserve"><value>To do</value></data>
   <data name="TasksBoardBlock_TodoDescription" xml:space="preserve"><value>Optional work items available for time tracking.</value></data>
   <data name="TasksBoardBlock_Backlog" xml:space="preserve"><value>Backlog</value></data>
   <data name="TasksBoardBlock_BacklogDescription" xml:space="preserve"><value>Lower-priority items kept out of the main tracking flow.</value></data>
+  <data name="TasksBoardBlock_Done" xml:space="preserve"><value>Done</value></data>
+  <data name="TasksBoardBlock_DoneDescription" xml:space="preserve"><value>Completed tasks kept for reference.</value></data>
+  <data name="TasksBoardBlock_NoInProgressTasks" xml:space="preserve"><value>No in-progress tasks match the current filters.</value></data>
   <data name="TasksBoardBlock_NoTodoTasks" xml:space="preserve"><value>No todo tasks match the current filters.</value></data>
   <data name="TasksBoardBlock_NoBacklogTasks" xml:space="preserve"><value>No backlog tasks match the current filters.</value></data>
+  <data name="TasksBoardBlock_NoDoneTasks" xml:space="preserve"><value>No completed tasks match the current filters.</value></data>
   <data name="TasksListBlock_Title" xml:space="preserve"><value>Task lists</value></data>
   <data name="TasksListBlock_Description" xml:space="preserve"><value>Browse task lists by client and project.</value></data>
   <data name="TasksListBlock_SearchPlaceholder" xml:space="preserve"><value>Search clients, projects, or task lists...</value></data>
