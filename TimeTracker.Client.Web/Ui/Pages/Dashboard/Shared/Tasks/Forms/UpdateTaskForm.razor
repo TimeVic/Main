@@ -72,9 +72,10 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                                 <label class="text-sm font-semibold text-slate-800">@DashboardLocalizer["Description"]</label>
                             </div>
                             <MarkdownEdit
-                                IsEditMode="@string.IsNullOrWhiteSpace(_model.Description)"
+                                IsEditMode="false"
                                 Value="@_model.Description"
                                 ValueChanged="@OnDescriptionChanged"
+                                EmptyText="@DashboardLocalizer["TaskDescription_Empty"].Value"
                                 Placeholder="@DashboardLocalizer["TaskDescription"].Value"
                                 RowsMin="4" />
                             <AttachmentsBlock

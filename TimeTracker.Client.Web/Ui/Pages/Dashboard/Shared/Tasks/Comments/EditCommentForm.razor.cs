@@ -7,7 +7,6 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.Comments;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Client.Core.Services.Security;
-using TimeTracker.Client.Web.Services.UI;
 using TimeTracker.Client.Core.Store.WorkspaceMembers;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Comments;
@@ -30,9 +29,6 @@ public partial class EditCommentForm: IDisposable
     public Guid TaskId { get; set; }
     
     [Inject]
-    public MarkdownService MarkdownService { get; set; } = null!;
-
-    [Inject]
     private IState<WorkspaceMembersState> WorkspaceMembersState { get; set; } = null!;
     
     [Inject]
@@ -54,13 +50,12 @@ public partial class EditCommentForm: IDisposable
         ? DashboardLocalizer["TaskComment_AddComment"].Value
         : DashboardLocalizer["Save"].Value;
     private string ContainerClass => _isNewComment
-        ? "pb-1"
-        : "py-4 first:pt-0 last:pb-0";
+        ? "task-comment-form rounded-md border border-slate-200 bg-slate-50/70 p-3"
+        : "task-comment-item border-l-2 border-slate-200 py-1 pl-3";
     private bool _isSubscribersSelectAvailable =>
         Project != null &&
         SecurityManager.GetMembersWhichHaveAccessToProject(Project)
             .Any(member => member.Access != MembershipAccessType.Owner);
-    private MarkupString CommentHtml => (MarkupString) MarkdownService.ToHtml(Comment.Comment);
     private string FormattedCreatedAt => Comment.CreatedAt == default
         ? string.Empty
         : Comment.CreatedAt.ToLocalTime().TimeAgo(DateTimeKind.Local);
