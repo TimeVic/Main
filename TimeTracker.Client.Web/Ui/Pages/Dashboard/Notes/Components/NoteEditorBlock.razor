@@ -125,19 +125,18 @@
                     <label class="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">@DashboardLocalizer["Markdown"]</label>
                     <span class="@SaveStateClass">@SaveStateLabel</span>
                 </div>
-                <LumexTextarea
+                <MarkdownEdit
+                    Class="flex-1"
+                    IsEditMode="true"
+                    IsInlineActionsEnabled="false"
+                    IsModeTabsVisible="false"
                     Value="@MarkdownContent"
                     ValueChanged="@OnMarkdownChanged"
-                    Behavior="InputBehavior.OnInput"
-                    Variant="InputVariant.Outlined"
-                    Radius="Radius.Large"
-                    FullWidth="true"
-                    MinRows="@MarkdownTextareaMinRows"
-                    MaxRows="@MarkdownTextareaMaxRows"
+                    MaxLength="5000000"
+                    RowsMin="24"
+                    MinHeight="560"
                     Placeholder="@DashboardLocalizer["Notes_MarkdownPlaceholder"].Value"
-                    AdditionalAttributes="@MarkdownTextareaAttributes"
-                    Classes="@MarkdownTextareaClasses"
-                    Class="flex-1"/>
+                    TextAreaName="note-markdown-content" />
             </div>
         }
         else
