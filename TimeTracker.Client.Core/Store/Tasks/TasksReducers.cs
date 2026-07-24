@@ -143,6 +143,21 @@ public class TasksReducers
         };
     }
 
+    [ReducerMethod]
+    public static TasksState ToggleStatusExpansionReducer(TasksState state, ToggleStatusExpansionAction action)
+    {
+        var expandedStatuses = state.ExpandedStatuses.ToHashSet();
+        if (!expandedStatuses.Add(action.Status))
+        {
+            expandedStatuses.Remove(action.Status);
+        }
+
+        return state with
+        {
+            ExpandedStatuses = expandedStatuses
+        };
+    }
+
     private static List<TaskDto> GetMutableList(ICollection<TaskDto> tasks) =>
         tasks as List<TaskDto> ?? tasks.ToList();
 }
