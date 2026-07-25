@@ -10,7 +10,6 @@ namespace TimeTracker.Client.Core.Store.TimeEntry.Effects;
 
 public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
 {
-    private readonly IState<AuthState> _authState;
     private readonly IState<TimeEntryState> _timeEntryState;
     private readonly IState<ProjectState> _projectState;
     private readonly IApiService _apiService;
@@ -18,14 +17,12 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
 
     public StartTimeEntryEffect(
         IApiService apiService,
-        IState<AuthState> authState,
         IState<TimeEntryState> timeEntryState,
         IState<ProjectState> projectState,
         ILogger<StartTimeEntryEffect> logger
     )
     {
         _apiService = apiService;
-        _authState = authState;
         _timeEntryState = timeEntryState;
         _projectState = projectState;
         _logger = logger;
@@ -35,22 +32,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
     {
         try
         {
-            var isWasStopped = false;
             dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(true));
-            if (_timeEntryState.Value.HasActiveEntry)
-            {
-                var stoppedTimeEntry = await _apiService.TimeEntryStopAsync(new StopRequest()
-                {
-                    EndTime = DateTime.UtcNow
-                });
-                if (stoppedTimeEntry?.Task != null)
-                {
-                    dispatcher.Dispatch(new UpdateListItemsAction(new[] { stoppedTimeEntry.Task }));
-                }
-
-                isWasStopped = true;
-            }
-
             var project = _projectState.Value.List.FirstOrDefault(
                 item => item.Id == action.Project?.Id
             );
@@ -68,11 +50,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 InternalTaskId = action.InternalTask?.Id
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(response));
-            if (isWasStopped)
-            {
-                dispatcher.Dispatch(new SetSelectedPageAction(1));
-                dispatcher.Dispatch(new LoadListAction());
-            }
+            ReloadListIfVisible(dispatcher);
         }
         catch (Exception e)
         {
@@ -82,5 +60,16 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
         {
             dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(false));
         }
+    }
+
+    private void ReloadListIfVisible(IDispatcher dispatcher)
+    {
+        if (!_timeEntryState.Value.IsTimeEntryListVisible)
+        {
+            return;
+        }
+
+        dispatcher.Dispatch(new SetSelectedPageAction(1));
+        dispatcher.Dispatch(new LoadListAction());
     }
 }

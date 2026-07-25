@@ -1,5 +1,4 @@
 ﻿using Fluxor;
-using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Security;
@@ -18,14 +17,12 @@ namespace TimeTracker.Client.Web.Services.Workspace;
 public class WorkspaceInitializationService
 {
     private readonly IDispatcher _dispatcher;
-    private readonly NavigationManager _navigationManager;
     private readonly IState<AuthState> _authState;
     private readonly ApiService _apiService;
     private readonly ILogger<WorkspaceInitializationService> _logger;
 
     public WorkspaceInitializationService(
         IDispatcher dispatcher,
-        NavigationManager navigationManager,
         FcmService fcmService,
         IState<AuthState> authState,
         ApiService apiService,
@@ -33,7 +30,6 @@ public class WorkspaceInitializationService
     )
     {
         _dispatcher = dispatcher;
-        _navigationManager = navigationManager;
         _authState = authState;
         _apiService = apiService;
         _logger = logger;
@@ -79,11 +75,7 @@ public class WorkspaceInitializationService
         _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.LoadListAction(isReload));
         _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Client.LoadListAction(isReload));
         _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TasksList.LoadListAction(isReload));
-        if (!_navigationManager.GetPath().Equals(SiteUrl.DashboardBase))
-        {
-            _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TimeEntry.SetSelectedPageAction(1));
-            _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TimeEntry.LoadListAction());
-        }
+        _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.TimeEntry.LoadActiveTimeEntryAction());
         
         _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tag.LoadListAction());
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(true));

@@ -50,8 +50,7 @@ public class TimeEntryReducers
             List = action.Response.List.Items,
             TotalCount = action.Response.List.TotalCount,
             TotalPages = action.Response.List.TotalPages,
-            HasMoreItems = action.Response.List.IsHasMore,
-            ActiveEntry = action.Response.ActiveTimeEntry
+            HasMoreItems = action.Response.List.IsHasMore
         };
     }
     
@@ -61,6 +60,15 @@ public class TimeEntryReducers
         return state with
         {
             IsListLoading = action.IsLoading
+        };
+    }
+
+    [ReducerMethod]
+    public static TimeEntryState SetIsTimeEntryListVisibleReducer(TimeEntryState state, SetIsTimeEntryListVisibleAction action)
+    {
+        return state with
+        {
+            IsTimeEntryListVisible = action.IsVisible
         };
     }
     

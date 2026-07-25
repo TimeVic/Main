@@ -10,10 +10,15 @@ namespace TimeTracker.Client.Core.Services.Http
         {
             return await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryStart, model);
         }
-        
+
         public async Task<TimeEntryDto?> TimeEntryStopAsync(StopRequest model)
         {
             return await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryStop, model);
+        }
+
+        public async Task<GetActiveResponse?> TimeEntryGetActiveAsync()
+        {
+            return await PostAsync<GetActiveResponse>(ApiUrl.TimeEntryGetActive, new GetActiveRequest());
         }
         
         public async Task<TimeEntryDto?> TimeEntrySetAsync(SetRequest model)

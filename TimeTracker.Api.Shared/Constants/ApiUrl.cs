@@ -25,6 +25,7 @@ public class ApiUrl
     
     public const string TimeEntryStart = "dashboard/time-entry/start";
     public const string TimeEntryStop = "dashboard/time-entry/stop";
+    public const string TimeEntryGetActive = "dashboard/time-entry/get-active";
     public const string TimeEntrySet = "dashboard/time-entry/set";
     public const string TimeEntryGetList = "dashboard/time-entry/list";
     public const string TimeEntryGetFilteredList = "dashboard/time-entry/filtered-list";

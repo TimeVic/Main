@@ -43,6 +43,7 @@ using TasksUpdatePositionsRequest = TimeTracker.Api.Shared.Dto.RequestsAndRespon
 using TasksUpdateRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.UpdateRequest;
 using TimeEntryGetFilteredListResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetFilteredListResponse;
 using TimeEntryGetFilteredListRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetFilteredListRequest;
+using TimeEntryGetActiveResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetActiveResponse;
 using TimeEntryGetListRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetListRequest;
 using TimeEntryGetListResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetListResponse;
 using TimeEntrySetRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.SetRequest;
@@ -191,6 +192,8 @@ public interface IApiService
     Task<TimeEntryDto?> TimeEntryStartAsync(TimeEntryStartRequest model);
 
     Task<TimeEntryDto?> TimeEntryStopAsync(TimeEntryStopRequest model);
+
+    Task<TimeEntryGetActiveResponse?> TimeEntryGetActiveAsync();
 
     Task<TimeEntryDto?> TimeEntrySetAsync(TimeEntrySetRequest model);
 

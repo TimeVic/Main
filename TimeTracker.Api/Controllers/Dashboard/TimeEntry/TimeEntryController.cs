@@ -30,6 +30,14 @@ public class TimeEntryController(ILifetimeScope scope) : MainApiControllerBase(s
         => this.RequestAsync()
             .For<TimeEntryDto>()
             .With(request);
+
+    [HttpPost("get-active")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Active([FromBody] GetActiveRequest request)
+        => this.RequestAsync()
+            .For<GetActiveResponse>()
+            .With(request);
     
     [HttpPost("set")]
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -28,6 +28,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         private readonly IProjectService _projectService;
         private readonly IWorkspaceAccessService _workspaceAccessService;
         private readonly ITaskDao _taskDao;
+        private readonly ITimeEntryService _timeEntryService;
 
         public StartRequestHandler(
             IMapper mapper,
@@ -39,7 +40,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             ISecurityManager securityManager,
             IProjectService projectService,
             IWorkspaceAccessService workspaceAccessService,
-            ITaskDao taskDao
+            ITaskDao taskDao,
+            ITimeEntryService timeEntryService
         )
         {
             _mapper = mapper;
@@ -52,6 +54,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _projectService = projectService;
             _workspaceAccessService = workspaceAccessService;
             _taskDao = taskDao;
+            _timeEntryService = timeEntryService;
         }
     
         public async Task<TimeEntryDto> ExecuteAsync(StartRequest request)
@@ -77,6 +80,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             {
                 throw new HasNoAccessException();
             }
+
+            // Stops the current entry and starts the new one in the request transaction.
+            await _timeEntryService.StopActiveAsync(workspace, user, request.StartTime);
 
             var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
             var userProjects = await _projectDao.GetAvailableForUserListAsync(workspace, user, userAccess);
