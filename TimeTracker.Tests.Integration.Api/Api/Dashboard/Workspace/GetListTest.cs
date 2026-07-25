@@ -56,6 +56,7 @@ public class GetListTest: BaseTest
         {
             Assert.NotEqual(Guid.Empty, item.Id);
             Assert.NotNull(item.Name);
+            Assert.True(item.IsCreatedByCurrentUser);
         });
     }
     
@@ -89,15 +90,21 @@ public class GetListTest: BaseTest
 
         Assert.Contains(actualDto.Items, item =>
         {
-            return item.Id == _workspace.Id && item.CurrentUserAccess == MembershipAccessType.Owner;
+            return item.Id == _workspace.Id
+                && item.CurrentUserAccess == MembershipAccessType.Owner
+                && item.IsCreatedByCurrentUser;
         });
         Assert.Contains(actualDto.Items, item =>
         {
-            return item.Id == workspaceWithUserAccess.Id && item.CurrentUserAccess == MembershipAccessType.User;
+            return item.Id == workspaceWithUserAccess.Id
+                && item.CurrentUserAccess == MembershipAccessType.User
+                && item.IsCreatedByCurrentUser == false;
         });
         Assert.Contains(actualDto.Items, item =>
         {
-            return item.Id == workspaceWithManagerAccess.Id && item.CurrentUserAccess == MembershipAccessType.Manager;
+            return item.Id == workspaceWithManagerAccess.Id
+                && item.CurrentUserAccess == MembershipAccessType.Manager
+                && item.IsCreatedByCurrentUser == false;
         });
     }
 }

@@ -44,6 +44,11 @@ namespace TimeTracker.Business.Common.Constants
         /// The maximum number of users who will be given access
         /// </summary>
         public const int ApplicationMaxShares = 20;
+
+        /// <summary>
+        /// The maximum number of active non-default workspaces a user can create
+        /// </summary>
+        public const int MaxActiveCreatedWorkspaces = 5;
         
         public static readonly TimeSpan EndOfDay = TimeSpan.FromHours(23)
             .Add(TimeSpan.FromMinutes(59))

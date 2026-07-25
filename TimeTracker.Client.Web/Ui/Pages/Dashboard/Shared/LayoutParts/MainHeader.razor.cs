@@ -1,12 +1,9 @@
-using System.Globalization;
 using Fluxor;
 using LumexUI;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Constants;
-using TimeTracker.Client.Web.Services;
 using TimeTracker.Client.Web.Services.UI;
 using TimeTracker.Client.Web.Services.Workspace;
 using TimeTracker.Client.Core.Store.Auth;
@@ -35,9 +32,9 @@ public partial class MainHeader
     public WorkspaceInitializationService _workspaceInitialization { get; set; }
     
     private bool _isShowAddWorkspaceModal = false;
-    private string CurrentLanguageKey => (AuthState.Value.User?.Language?.Code ?? CultureInfo.CurrentUICulture.Name) == ILocalizationUrlService.UkrainianCultureName
-        ? "Ukrainian"
-        : "English";
+    private bool IsWorkspaceCreationAvailable => WorkspaceState.Value.IsLoaded
+        && WorkspaceState.Value.List.Count(item => item.IsCreatedByCurrentUser && item.IsDefault == false)
+            < GlobalConstants.MaxActiveCreatedWorkspaces;
 
     private void OnSelectWorkspace(WorkspaceDto? workspace)
     {
@@ -58,24 +55,5 @@ public partial class MainHeader
     private void OnNavigateToUserSettings()
     {
         NavigationManager.NavigateTo(UrlService.GetDashboardUrl("user/settings"));
-    }
-    
-    private async Task OnSelectLanguage(string cultureName)
-    {
-        if (AuthState.Value.User?.Id != Guid.Empty)
-        {
-            var user = await ApiService.UserUpdateSettingsAsync(new UpdateSettingsRequest
-            {
-                UserName = AuthState.Value.User?.UserName,
-                LanguageCode = cultureName
-            });
-            if (user != null)
-            {
-                Dispatcher.Dispatch(new UpdateUserAction(user));
-            }
-        }
-
-        await Js.InvokeVoidAsync("localStorage.setItem", ILocalizationUrlService.LocalStorageKey, cultureName);
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }

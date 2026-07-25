@@ -40,6 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
             {
                 var workspace = allWorkspaces.First(item => item.Id == workspaceDto.Id);
                 workspaceDto.CurrentUserAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+                workspaceDto.IsCreatedByCurrentUser = workspace.CreatedUser.Id == user.Id;
             }
             return new PaginatedListDto<WorkspaceDto>(
                 responseList,

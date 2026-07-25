@@ -45,6 +45,14 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
         return await Session.Query<WorkspaceEntity>()
             .FirstOrDefaultAsync(item => item.Id == id && item.DeletedAt != null);
     }
+
+    public async Task<int> GetActiveCreatedWorkspacesCountAsync(UserEntity user)
+    {
+        return await Session.Query<WorkspaceEntity>()
+            .Where(item => item.CreatedUser.Id == user.Id)
+            .Where(item => item.IsDefault == false && item.DeletedAt == null)
+            .CountAsync();
+    }
     
     public async Task<WorkspaceEntity> CreateWorkspaceAsync(UserEntity user, string name, bool isDefault = false)
     {
