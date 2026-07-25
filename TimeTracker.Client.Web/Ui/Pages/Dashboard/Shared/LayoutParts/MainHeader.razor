@@ -7,9 +7,12 @@
 @using TimeTracker.Client.Web.Ui.Shared.Components.Layout
 @inherits BaseReactiveComponent
 
-<AddWorkspaceModal
-    IsOpened="_isShowAddWorkspaceModal"
-    IsOpenedChanged="@((isOpened) => _isShowAddWorkspaceModal = isOpened)"/>
+@if (IsWorkspaceCreationAvailable)
+{
+    <AddWorkspaceModal
+        IsOpened="_isShowAddWorkspaceModal"
+        IsOpenedChanged="@((isOpened) => _isShowAddWorkspaceModal = isOpened)"/>
+}
 
 <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
     <LumexNavbar
@@ -98,38 +101,22 @@
                                 </ChildContent>
                             </LumexDropdownItem>
                         }
-                        <LumexDropdownItem
-                            Color="ThemeColor.Info"
-                            OnClick="@(() => _isShowAddWorkspaceModal = true)"
-                            ShowDivider="true">
-                            <StartContent>
-                                <SquarePlusIcon Size="18" class="text-default-500 shrink-0"/>
-                            </StartContent>
-                            <ChildContent>@DashboardLocalizer["NewWorkspace"]</ChildContent>
-                        </LumexDropdownItem>
+                        @if (IsWorkspaceCreationAvailable)
+                        {
+                            <LumexDropdownItem
+                                Color="ThemeColor.Info"
+                                OnClick="@(() => _isShowAddWorkspaceModal = true)"
+                                ShowDivider="true">
+                                <StartContent>
+                                    <SquarePlusIcon Size="18" class="text-default-500 shrink-0"/>
+                                </StartContent>
+                                <ChildContent>@DashboardLocalizer["NewWorkspace"]</ChildContent>
+                            </LumexDropdownItem>
+                        }
                         <LumexDropdownItem
                             ShowDivider="true"
                             OnClick="@OnNavigateToUserSettings">
                             @DashboardLocalizer["Settings"]
-                        </LumexDropdownItem>
-                        <LumexDropdownItem
-                            ShowDivider="true"
-                            Disabled="true">
-                            @DashboardLocalizer["Language"]: @DashboardLocalizer[CurrentLanguageKey]
-                        </LumexDropdownItem>
-                        <LumexDropdownItem OnClick="@(() => OnSelectLanguage(TimeTracker.Client.Web.Services.ILocalizationUrlService.EnglishCultureName))">
-                            <span class="inline-flex items-center gap-2">
-                                <span aria-hidden="true">🇺🇸</span>
-                                <span>@DashboardLocalizer["English"]</span>
-                            </span>
-                        </LumexDropdownItem>
-                        <LumexDropdownItem
-                            OnClick="@(() => OnSelectLanguage(TimeTracker.Client.Web.Services.ILocalizationUrlService.UkrainianCultureName))"
-                            ShowDivider="true">
-                            <span class="inline-flex items-center gap-2">
-                                <span aria-hidden="true">🇺🇦</span>
-                                <span>@DashboardLocalizer["Ukrainian"]</span>
-                            </span>
                         </LumexDropdownItem>
                         <LumexDropdownItem OnClick="@OnClickLogout">
                             <ChildContent>

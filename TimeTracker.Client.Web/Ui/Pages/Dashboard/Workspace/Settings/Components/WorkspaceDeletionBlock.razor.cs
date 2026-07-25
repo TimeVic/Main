@@ -50,13 +50,24 @@ public partial class WorkspaceDeletionBlock
                 ConfirmationName = _confirmationName
             });
             ToastService.ShowSuccess(DashboardLocalizer["WorkspaceDeletionBlock_Deleted"].Value);
-            Dispatcher.Dispatch(new LoadCurrentUserAction());
+            var user = await ApiService.UserGetCurrentAsync();
+            var defaultWorkspace = user?.DefaultWorkspace;
+
+            if (user != null)
+            {
+                Dispatcher.Dispatch(new UpdateUserAction(user));
+            }
+
+            if (defaultWorkspace != null)
+            {
+                Dispatcher.Dispatch(new SetWorkspaceAction(defaultWorkspace));
+            }
+
             Dispatcher.Dispatch(new LoadListAction(true));
 
-            var defaultWorkspaceId = AuthState.Value.User.DefaultWorkspace?.Id;
-            if (defaultWorkspaceId.HasValue)
+            if (defaultWorkspace != null)
             {
-                NavigationManager.NavigateTo(UrlService.GetDashboardUrl(string.Empty, defaultWorkspaceId.Value), true);
+                NavigationManager.NavigateTo(UrlService.GetDashboardUrl(string.Empty, defaultWorkspace.Id), true);
             }
         }
         catch (Exception exception)

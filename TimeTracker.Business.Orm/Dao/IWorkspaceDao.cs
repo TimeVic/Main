@@ -14,6 +14,8 @@ public interface IWorkspaceDao: IDomainService
     Task<IReadOnlyCollection<WorkspaceEntity>> GetDeletedBeforeAsync(DateTime deletedBefore);
 
     Task<WorkspaceEntity?> GetDeletedByIdAsync(Guid id);
+
+    Task<int> GetActiveCreatedWorkspacesCountAsync(UserEntity user);
     
     Task<WorkspaceEntity> CreateWorkspaceAsync(UserEntity user, string name, bool isDefault = false);
 
