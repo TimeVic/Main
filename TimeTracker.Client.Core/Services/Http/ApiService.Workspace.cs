@@ -24,5 +24,10 @@ namespace TimeTracker.Client.Core.Services.Http
         {
             return await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceUpdate, model);
         }
+
+        public async Task WorkspaceDeleteAsync(DeleteRequest request)
+        {
+            await PostAsync<object>(ApiUrl.WorkspaceDelete, request);
+        }
     }
 }

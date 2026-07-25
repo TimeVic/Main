@@ -52,6 +52,7 @@ using WorkspaceMemberGetListRequest = TimeTracker.Api.Shared.Dto.RequestsAndResp
 using WorkspaceMemberGetListResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember.GetListResponse;
 using WorkspaceMemberUpdateRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember.UpdateRequest;
 using WorkspaceUpdateRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace.UpdateRequest;
+using WorkspaceDeleteRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace.DeleteRequest;
 
 namespace TimeTracker.Client.Core.Services.Http;
 
@@ -202,6 +203,8 @@ public interface IApiService
     Task<PaginatedListDto<WorkspaceDto>?> WorkspaceGetListAsync();
 
     Task<WorkspaceDto?> WorkspaceUpdateAsync(WorkspaceUpdateRequest model);
+
+    Task WorkspaceDeleteAsync(WorkspaceDeleteRequest request);
 
     Task<WorkspaceMemberDto?> WorkspaceMemberAddAsync(Guid workspaceId, string email);
 

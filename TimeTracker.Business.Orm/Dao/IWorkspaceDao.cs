@@ -10,6 +10,10 @@ namespace TimeTracker.Business.Orm.Dao;
 public interface IWorkspaceDao: IDomainService
 {
     Task<WorkspaceEntity?> GetById(Guid? id);
+
+    Task<IReadOnlyCollection<WorkspaceEntity>> GetDeletedBeforeAsync(DateTime deletedBefore);
+
+    Task<WorkspaceEntity?> GetDeletedByIdAsync(Guid id);
     
     Task<WorkspaceEntity> CreateWorkspaceAsync(UserEntity user, string name, bool isDefault = false);
 

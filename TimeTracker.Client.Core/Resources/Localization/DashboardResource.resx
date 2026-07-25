@@ -557,6 +557,15 @@
   <data name="UserSettings_AvatarHelper" xml:space="preserve"><value>JPG or PNG. Max 2 MB.</value></data>
   <data name="UserSettings_AvatarUploadError" xml:space="preserve"><value>Avatar upload error</value></data>
   <data name="UserSettings_AvatarDeleteError" xml:space="preserve"><value>Avatar delete error</value></data>
+  <data name="WorkspaceDeletionBlock_DangerZone" xml:space="preserve"><value>Danger zone</value></data>
+  <data name="WorkspaceDeletionBlock_Title" xml:space="preserve"><value>Delete workspace</value></data>
+  <data name="WorkspaceDeletionBlock_Description" xml:space="preserve"><value>Workspace data will become unavailable immediately and will be permanently deleted after 30 days.</value></data>
+  <data name="WorkspaceDeletionBlock_DeleteWorkspace" xml:space="preserve"><value>Delete workspace</value></data>
+  <data name="WorkspaceDeletionBlock_ConfirmTitle" xml:space="preserve"><value>Delete this workspace?</value></data>
+  <data name="WorkspaceDeletionBlock_ConfirmSubtitle" xml:space="preserve"><value>Enter the workspace name to confirm this action.</value></data>
+  <data name="WorkspaceDeletionBlock_ConfirmationLabel" xml:space="preserve"><value>Workspace name</value></data>
+  <data name="WorkspaceDeletionBlock_ConfirmationError" xml:space="preserve"><value>The workspace name does not match.</value></data>
+  <data name="WorkspaceDeletionBlock_Deleted" xml:space="preserve"><value>Workspace has been deleted.</value></data>
   <data name="UserSettings_NameHelper" xml:space="preserve"><value>Your name will appear in your profile.</value></data>
   <data name="UserSettings_InterfaceLanguageSection" xml:space="preserve"><value>Interface language</value></data>
   <data name="UserSettings_InterfaceLanguageSectionDescription" xml:space="preserve"><value>Choose your preferred interface language.</value></data>

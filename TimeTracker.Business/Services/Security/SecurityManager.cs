@@ -270,6 +270,7 @@ public class SecurityManager: ISecurityManager
     
     private async Task<bool> HasAccessToMessagingChannel(AccessLevel accessLevel, UserEntity user, MessagingChannelEntity messagingChannelEntity)
     {
-        return messagingChannelEntity.ActiveMembers.Any(m => m.Member.Id == user.Id);
+        return messagingChannelEntity.Workspace.DeletedAt == null
+            && messagingChannelEntity.ActiveMembers.Any(m => m.Member.Id == user.Id);
     }
 }

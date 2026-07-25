@@ -16,6 +16,7 @@ public class WorkspaceMapping: BaseGuidMappings<WorkspaceEntity>
         Map(x => x.IsDefault);
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
+        Map(x => x.DeletedAt).DateTimeNullable();
         
         References(x => x.Currency)
             .Fetch.Select()

@@ -40,6 +40,12 @@ public class WorkspaceController(ILifetimeScope scope) : MainApiControllerBase(s
         => this.RequestAsync()
             .For<WorkspaceDto>()
             .With(request);
+
+    [HttpPost("delete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Delete([FromBody] DeleteRequest request)
+        => this.RequestAsync(request);
     
     [HttpPost("settings/integrations/get")]
     [ProducesResponseType(StatusCodes.Status200OK)]

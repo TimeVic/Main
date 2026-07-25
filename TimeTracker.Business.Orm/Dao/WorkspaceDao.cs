@@ -29,7 +29,21 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
             return null;
 
         return await Session.Query<WorkspaceEntity>()
-            .FirstOrDefaultAsync(item => item.Id == id);
+            .FirstOrDefaultAsync(item => item.Id == id && item.DeletedAt == null);
+    }
+
+    public async Task<IReadOnlyCollection<WorkspaceEntity>> GetDeletedBeforeAsync(DateTime deletedBefore)
+    {
+        return await Session.Query<WorkspaceEntity>()
+            .Where(item => item.DeletedAt != null && item.DeletedAt <= deletedBefore)
+            .OrderBy(item => item.DeletedAt)
+            .ToListAsync();
+    }
+
+    public async Task<WorkspaceEntity?> GetDeletedByIdAsync(Guid id)
+    {
+        return await Session.Query<WorkspaceEntity>()
+            .FirstOrDefaultAsync(item => item.Id == id && item.DeletedAt != null);
     }
     
     public async Task<WorkspaceEntity> CreateWorkspaceAsync(UserEntity user, string name, bool isDefault = false)
