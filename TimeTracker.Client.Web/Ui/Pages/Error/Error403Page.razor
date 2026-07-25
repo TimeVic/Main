@@ -27,17 +27,6 @@
                             Open dashboard
                         </ChildContent>
                     </CustomButton>
-                    <CustomButton
-                        Color="ThemeColor.Default"
-                        Variant="Variant.Outlined"
-                        OnClick="@GoToWorkspaces">
-                        <StartContent>
-                            <i class="fa-regular fa-building"></i>
-                        </StartContent>
-                        <ChildContent>
-                            Open workspaces
-                        </ChildContent>
-                    </CustomButton>
                 </div>
             </div>
         </div>
@@ -53,8 +42,4 @@
         NavigationManager.NavigateTo(SiteUrl.Dashboard_TimeEntry);
     }
 
-    private void GoToWorkspaces()
-    {
-        NavigationManager.NavigateTo(SiteUrl.Workspace_List);
-    }
 }
