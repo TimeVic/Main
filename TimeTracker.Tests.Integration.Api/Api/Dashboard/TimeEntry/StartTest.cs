@@ -87,7 +87,33 @@ public partial class StartTest: BaseTest
             .CountAsync();
         Assert.Equal(1, activeRecordsCount);
     }
-    
+
+    [Fact]
+    public async Task ShouldStopCurrentEntryAndReturnNewActiveEntry()
+    {
+        var currentEntry = await _timeEntryDao.StartNewAsync(
+            _user,
+            _defaultWorkspace,
+            DateTime.UtcNow.AddMinutes(-1)
+        );
+        var newStartTime = DateTime.UtcNow;
+
+        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest
+        {
+            Description = "New active entry",
+            StartTime = newStartTime
+        });
+        response.EnsureSuccessStatusCode();
+
+        var activeEntry = await response.GetJsonDataAsync<TimeEntryDto>();
+        await FlushAndRefreshEntity(currentEntry);
+
+        Assert.NotEqual(currentEntry.Id, activeEntry.Id);
+        Assert.Equal("New active entry", activeEntry.Description);
+        Assert.Null(activeEntry.EndTime);
+        Assert.True((currentEntry.EndTime!.Value - newStartTime).Duration() < TimeSpan.FromMicroseconds(1));
+    }
+
     [Fact]
     public async Task ShouldStartFilled()
     {

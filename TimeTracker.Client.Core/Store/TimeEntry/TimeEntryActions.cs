@@ -15,7 +15,9 @@ public record struct StartTimeEntryAction(
 
 public record struct StopActiveTimeEntryAction();
 
-public record struct SetActiveTimeEntryAction(TimeEntryDto TimeEntry);
+public record struct SetActiveTimeEntryAction(TimeEntryDto? TimeEntry);
+
+public record struct LoadActiveTimeEntryAction();
 
 public record struct LoadListAction();
 
@@ -26,6 +28,8 @@ public record struct SaveTimeEntryAction(TimeEntryDto TimeEntry, bool IsSetProje
 public record struct UpdateTimeEntryAction(TimeEntryDto TimeEntry);
 
 public record struct SetTimeEntryIsListLoading(bool IsLoading);
+
+public record struct SetIsTimeEntryListVisibleAction(bool IsVisible);
 
 public record struct DeleteTimeEntryAction(Guid EntryId);
 

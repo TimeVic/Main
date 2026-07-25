@@ -486,7 +486,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .Where(entry => entry.User.Id == user.Id)
             .FirstOrDefaultAsync();
     }
-    
+
     public async Task<ICollection<TimeEntryEntity>> GetActiveEntriesAsync(WorkspaceEntity workspace)
     {
         return await Session.Query<TimeEntryEntity>()

@@ -9,18 +9,18 @@ namespace TimeTracker.Client.Core.Store.TimeEntry.Effects;
 
 public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
 {
-    private readonly IState<AuthState> _authState;
+    private readonly IState<TimeEntryState> _timeEntryState;
     private readonly IApiService _apiService;
     private readonly ILogger<StopTimeEntryEffect> _logger;
 
     public StopTimeEntryEffect(
         IApiService apiService,
-        IState<AuthState> authState,
+        IState<TimeEntryState> timeEntryState,
         ILogger<StopTimeEntryEffect> logger
     )
     {
         _apiService = apiService;
-        _authState = authState;
+        _timeEntryState = timeEntryState;
         _logger = logger;
     }
 
@@ -39,8 +39,7 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
             }
 
             dispatcher.Dispatch(new SetActiveTimeEntryAction(null));
-            dispatcher.Dispatch(new SetSelectedPageAction(1));
-            dispatcher.Dispatch(new LoadListAction());
+            ReloadListIfVisible(dispatcher);
         }
         catch (Exception e)
         {
@@ -50,5 +49,16 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
         {
             dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(false));
         }
+    }
+
+    private void ReloadListIfVisible(IDispatcher dispatcher)
+    {
+        if (!_timeEntryState.Value.IsTimeEntryListVisible)
+        {
+            return;
+        }
+
+        dispatcher.Dispatch(new SetSelectedPageAction(1));
+        dispatcher.Dispatch(new LoadListAction());
     }
 }
