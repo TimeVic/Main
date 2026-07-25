@@ -9,10 +9,10 @@
 
 @inherits BaseReactiveComponent
 
-<section class="tasks-table-block tasks-table-block--@GetStatusCssClass() @(!_isExpanded ? "tasks-table-block--collapsed" : null) rounded-lg border border-slate-200/80 bg-white">
+<section class="tasks-table-block tasks-table-block--@GetStatusCssClass() @(!IsExpanded ? "tasks-table-block--collapsed" : null) rounded-lg border border-slate-200/80 bg-white">
     <button
         type="button"
-        aria-expanded="@_isExpanded.ToString().ToLowerInvariant()"
+        aria-expanded="@IsExpanded.ToString().ToLowerInvariant()"
         class="tasks-table-block__header flex min-h-13 w-full items-center justify-between px-4 py-2 text-left"
         @onclick="ToggleExpanded">
         <span class="flex items-center gap-2">
@@ -26,7 +26,7 @@
         </span>
         <i
             aria-hidden="true"
-            class="fa-solid @(_isExpanded ? "fa-chevron-down" : "fa-chevron-right") text-xs text-slate-400"></i>
+            class="fa-solid @(IsExpanded ? "fa-chevron-down" : "fa-chevron-right") text-xs text-slate-400"></i>
     </button>
 
     <div class="@TableContentClass">

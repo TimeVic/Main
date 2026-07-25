@@ -2,6 +2,8 @@
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks;
 
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
+
 namespace TimeTracker.Client.Core.Store.Tasks;
 
 public record struct LoadListAction(Guid? TaskListId);
@@ -19,6 +21,8 @@ public record struct SetListFilterAction(GetListFilterRequest Filter);
 public record struct SetIsListLoading(bool IsLoading);
 
 public record struct SetIsTaskSavingAction(bool IsSaving);
+
+public record struct ToggleStatusExpansionAction(TaskStatus Status);
 
 public record struct SetOverdueTasksListItemsAction(GetListResponse Response);
 

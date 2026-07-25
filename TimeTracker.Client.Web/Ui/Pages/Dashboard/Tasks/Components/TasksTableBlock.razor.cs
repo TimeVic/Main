@@ -42,9 +42,13 @@ public partial class TasksTableBlock
     private long _renderedTasksVersion = -1;
     private bool _isVirtualizeRefreshRequired;
     private Microsoft.AspNetCore.Components.Web.Virtualization.Virtualize<TaskDto>? _virtualize;
-    private bool _isExpanded = true;
 
-    private string TableContentClass => _isExpanded
+    [Inject]
+    public IState<TasksState> TasksState { get; set; }
+
+    private bool IsExpanded => TasksState.Value.ExpandedStatuses.Contains(Status);
+
+    private string TableContentClass => IsExpanded
         ? "border-t border-slate-200/80"
         : "hidden";
 
@@ -108,8 +112,9 @@ public partial class TasksTableBlock
 
     private void ToggleExpanded()
     {
-        _isExpanded = !_isExpanded;
-        _isVirtualizeRefreshRequired |= _isExpanded;
+        var isExpanding = !IsExpanded;
+        Dispatcher.Dispatch(new ToggleStatusExpansionAction(Status));
+        _isVirtualizeRefreshRequired |= isExpanding;
     }
 
     private void OnDragOver(TaskDto task)
