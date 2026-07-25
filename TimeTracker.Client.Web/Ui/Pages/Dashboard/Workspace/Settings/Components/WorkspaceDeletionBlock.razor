@@ -1,0 +1,49 @@
+@using LumexUI.Common
+@using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
+
+@inherits BaseReactiveComponent
+
+@if (IsDeletionAvailable)
+{
+    @if (_isConfirmationOpened)
+    {
+        <ConfirmationModal
+            Title="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmTitle"].Value"
+            Subtitle="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmSubtitle"].Value"
+            ConfirmText="@DashboardLocalizer["Delete"].Value"
+            OnClose="@CloseConfirmation"
+            OnCancel="@CloseConfirmation"
+            OnConfirm="@DeleteWorkspaceAsync">
+            <ChildContent>
+                <InputTextField
+                    FullWidth="true"
+                    Label="@DashboardLocalizer["WorkspaceDeletionBlock_ConfirmationLabel"]"
+                    Placeholder="@Workspace!.Name"
+                    @bind-Value="_confirmationName"/>
+            </ChildContent>
+        </ConfirmationModal>
+    }
+
+    <LumexCard>
+        <LumexCardHeader>
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.25em] text-red-700">@DashboardLocalizer["WorkspaceDeletionBlock_DangerZone"]</p>
+                <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["WorkspaceDeletionBlock_Title"]</h2>
+                <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["WorkspaceDeletionBlock_Description"]</p>
+            </div>
+        </LumexCardHeader>
+        <LumexCardFooter>
+            <CustomButton
+                Color="ThemeColor.Danger"
+                Variant="Variant.Outlined"
+                OnClick="@OpenConfirmation">
+                <StartContent>
+                    <i class="fa-regular fa-trash-can"></i>
+                </StartContent>
+                <ChildContent>
+                    @DashboardLocalizer["WorkspaceDeletionBlock_DeleteWorkspace"]
+                </ChildContent>
+            </CustomButton>
+        </LumexCardFooter>
+    </LumexCard>
+}

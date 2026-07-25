@@ -121,7 +121,8 @@ public class UserDao: BaseDao, IUserDao
         var query = Session.Query<WorkspaceMemberEntity>()
             .Fetch(item => item.Workspace)
             .ThenFetch(item => item.Currency)
-            .Where(item => item.User.Id == user.Id);
+            .Where(item => item.User.Id == user.Id)
+            .Where(item => item.Workspace.DeletedAt == null);
         if (accessType != null)
         {
             query = query.Where(item => item.Access == accessType);

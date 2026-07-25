@@ -91,6 +91,7 @@ public class ApiUrl
     public const string WorkspaceList = "dashboard/workspace/list";
     public const string WorkspaceAdd = "dashboard/workspace/add";
     public const string WorkspaceUpdate = "dashboard/workspace/update";
+    public const string WorkspaceDelete = "dashboard/workspace/delete";
     
     #endregion
 

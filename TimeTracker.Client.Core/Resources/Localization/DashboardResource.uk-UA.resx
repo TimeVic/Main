@@ -557,6 +557,15 @@
   <data name="UserSettings_AvatarHelper" xml:space="preserve"><value>JPG або PNG. До 2 MB.</value></data>
   <data name="UserSettings_AvatarUploadError" xml:space="preserve"><value>Не вдалося завантажити аватар</value></data>
   <data name="UserSettings_AvatarDeleteError" xml:space="preserve"><value>Не вдалося видалити аватар</value></data>
+  <data name="WorkspaceDeletionBlock_DangerZone" xml:space="preserve"><value>Небезпечна зона</value></data>
+  <data name="WorkspaceDeletionBlock_Title" xml:space="preserve"><value>Видалити робочий простір</value></data>
+  <data name="WorkspaceDeletionBlock_Description" xml:space="preserve"><value>Дані робочого простору одразу стануть недоступними та будуть остаточно видалені через 30 днів.</value></data>
+  <data name="WorkspaceDeletionBlock_DeleteWorkspace" xml:space="preserve"><value>Видалити робочий простір</value></data>
+  <data name="WorkspaceDeletionBlock_ConfirmTitle" xml:space="preserve"><value>Видалити цей робочий простір?</value></data>
+  <data name="WorkspaceDeletionBlock_ConfirmSubtitle" xml:space="preserve"><value>Введіть назву робочого простору, щоб підтвердити дію.</value></data>
+  <data name="WorkspaceDeletionBlock_ConfirmationLabel" xml:space="preserve"><value>Назва робочого простору</value></data>
+  <data name="WorkspaceDeletionBlock_ConfirmationError" xml:space="preserve"><value>Назва робочого простору не збігається.</value></data>
+  <data name="WorkspaceDeletionBlock_Deleted" xml:space="preserve"><value>Робочий простір видалено.</value></data>
   <data name="UserSettings_NameHelper" xml:space="preserve"><value>Ім'я буде показуватись у вашому профілі.</value></data>
   <data name="UserSettings_InterfaceLanguageSection" xml:space="preserve"><value>Мова інтерфейсу</value></data>
   <data name="UserSettings_InterfaceLanguageSectionDescription" xml:space="preserve"><value>Оберіть мову інтерфейсу.</value></data>

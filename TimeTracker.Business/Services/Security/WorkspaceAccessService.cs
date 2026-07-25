@@ -83,12 +83,22 @@ public class WorkspaceAccessService: IWorkspaceAccessService
         ProjectEntity? project = null
     )
     {
+        if (workspace.DeletedAt != null)
+        {
+            return null;
+        }
+
         var member = GetMemberAsync(user, workspace);
         return member?.Access;
     }
     
     public async Task<MembershipAccessType?> GetAccessTypeAsync(UserEntity user, ProjectEntity project)
     {
+        if (project.Client.Workspace.DeletedAt != null)
+        {
+            return null;
+        }
+
         var member = GetMemberAsync(user, project.Client.Workspace);
         if (member == null)
         {
