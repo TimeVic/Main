@@ -29,8 +29,6 @@ public record struct UpdateTimeEntryAction(TimeEntryDto TimeEntry);
 
 public record struct SetTimeEntryIsListLoading(bool IsLoading);
 
-public record struct SetIsTimeEntryListVisibleAction(bool IsVisible);
-
 public record struct DeleteTimeEntryAction(Guid EntryId);
 
 public record struct DeleteTimeEntryFromListAction(Guid EntryId);

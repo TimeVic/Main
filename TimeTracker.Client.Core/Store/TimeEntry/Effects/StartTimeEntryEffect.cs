@@ -1,7 +1,10 @@
 ﻿using Fluxor;
+using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.Http;
+using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Project;
 using TimeTracker.Client.Core.Store.Tasks;
@@ -10,21 +13,24 @@ namespace TimeTracker.Client.Core.Store.TimeEntry.Effects;
 
 public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
 {
-    private readonly IState<TimeEntryState> _timeEntryState;
     private readonly IState<ProjectState> _projectState;
     private readonly IApiService _apiService;
+    private readonly NavigationManager _navigationManager;
+    private readonly UrlService _urlService;
     private readonly ILogger<StartTimeEntryEffect> _logger;
 
     public StartTimeEntryEffect(
         IApiService apiService,
-        IState<TimeEntryState> timeEntryState,
         IState<ProjectState> projectState,
+        NavigationManager navigationManager,
+        UrlService urlService,
         ILogger<StartTimeEntryEffect> logger
     )
     {
         _apiService = apiService;
-        _timeEntryState = timeEntryState;
         _projectState = projectState;
+        _navigationManager = navigationManager;
+        _urlService = urlService;
         _logger = logger;
     }
 
@@ -50,7 +56,7 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
                 InternalTaskId = action.InternalTask?.Id
             });
             dispatcher.Dispatch(new SetActiveTimeEntryAction(response));
-            ReloadListIfVisible(dispatcher);
+            ReloadListIfTimeEntriesPageIsOpen(dispatcher);
         }
         catch (Exception e)
         {
@@ -62,9 +68,11 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
         }
     }
 
-    private void ReloadListIfVisible(IDispatcher dispatcher)
+    private void ReloadListIfTimeEntriesPageIsOpen(IDispatcher dispatcher)
     {
-        if (!_timeEntryState.Value.IsTimeEntryListVisible)
+        var currentPath = _navigationManager.GetPath().TrimEnd('/');
+        var timeEntriesPath = _urlService.GetDashboardUrl().TrimEnd('/');
+        if (!string.Equals(currentPath, timeEntriesPath, StringComparison.OrdinalIgnoreCase))
         {
             return;
         }

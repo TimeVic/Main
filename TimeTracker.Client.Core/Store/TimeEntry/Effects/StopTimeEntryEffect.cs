@@ -1,7 +1,10 @@
 ﻿using Fluxor;
+using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.Http;
+using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Tasks;
 
@@ -9,18 +12,21 @@ namespace TimeTracker.Client.Core.Store.TimeEntry.Effects;
 
 public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
 {
-    private readonly IState<TimeEntryState> _timeEntryState;
     private readonly IApiService _apiService;
+    private readonly NavigationManager _navigationManager;
+    private readonly UrlService _urlService;
     private readonly ILogger<StopTimeEntryEffect> _logger;
 
     public StopTimeEntryEffect(
         IApiService apiService,
-        IState<TimeEntryState> timeEntryState,
+        NavigationManager navigationManager,
+        UrlService urlService,
         ILogger<StopTimeEntryEffect> logger
     )
     {
         _apiService = apiService;
-        _timeEntryState = timeEntryState;
+        _navigationManager = navigationManager;
+        _urlService = urlService;
         _logger = logger;
     }
 
@@ -39,7 +45,7 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
             }
 
             dispatcher.Dispatch(new SetActiveTimeEntryAction(null));
-            ReloadListIfVisible(dispatcher);
+            ReloadListIfTimeEntriesPageIsOpen(dispatcher);
         }
         catch (Exception e)
         {
@@ -51,9 +57,11 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
         }
     }
 
-    private void ReloadListIfVisible(IDispatcher dispatcher)
+    private void ReloadListIfTimeEntriesPageIsOpen(IDispatcher dispatcher)
     {
-        if (!_timeEntryState.Value.IsTimeEntryListVisible)
+        var currentPath = _navigationManager.GetPath().TrimEnd('/');
+        var timeEntriesPath = _urlService.GetDashboardUrl().TrimEnd('/');
+        if (!string.Equals(currentPath, timeEntriesPath, StringComparison.OrdinalIgnoreCase))
         {
             return;
         }

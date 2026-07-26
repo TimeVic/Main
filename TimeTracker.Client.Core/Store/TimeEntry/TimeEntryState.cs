@@ -28,8 +28,6 @@ public record TimeEntryState
     
     public bool IsListLoading { get; set; }
 
-    public bool IsTimeEntryListVisible { get; set; }
-    
     public bool IsTimeEntryProcessing { get; set; }
 
     #region Filtered

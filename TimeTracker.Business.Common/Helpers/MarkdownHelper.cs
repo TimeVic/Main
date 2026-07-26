@@ -26,17 +26,6 @@ public class MarkdownHelper
         )
         .Build();
     
-    private static readonly ReverseMarkdown.Converter HtmlToMarkdownBuilder = new(new () {
-        // Include the unknown tag completely in the result (default as well)
-        UnknownTags = Config.UnknownTagsOption.PassThrough,
-        // generate GitHub flavoured markdown, supported for BR, PRE and table tags
-        GithubFlavored = true,
-        // will ignore all comments
-        RemoveComments = true,
-        // remove markdown output for links where appropriate
-        SmartHrefHandling = true
-    });
-    
     public static string ToHtml(string markdown, bool isPreserveLineBreaks = false)
     {
         var pipeline = isPreserveLineBreaks
@@ -52,11 +41,26 @@ public class MarkdownHelper
             .Replace("\\n", "\n")
             .Replace("\\r", "\n")
             .Trim();
-        var markdown = HtmlToMarkdownBuilder.Convert(html);
+        var markdown = CreateHtmlToMarkdownConverter().Convert(html);
         markdown ??= "";
         markdown = markdown.Trim('\r', '\n')
             .Replace("\r\n", "\n")
             .Replace("\r", "\n");
         return markdown;
+    }
+
+    private static ReverseMarkdown.Converter CreateHtmlToMarkdownConverter()
+    {
+        return new ReverseMarkdown.Converter(new Config
+        {
+            // Include the unknown tag completely in the result.
+            UnknownTags = Config.UnknownTagsOption.PassThrough,
+            // Generate GitHub-flavoured markdown, including BR, PRE and table tags.
+            GithubFlavored = true,
+            // Ignore all comments.
+            RemoveComments = true,
+            // Remove markdown output for links where appropriate.
+            SmartHrefHandling = true
+        });
     }
 }

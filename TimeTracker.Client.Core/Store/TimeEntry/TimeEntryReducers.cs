@@ -64,15 +64,6 @@ public class TimeEntryReducers
     }
 
     [ReducerMethod]
-    public static TimeEntryState SetIsTimeEntryListVisibleReducer(TimeEntryState state, SetIsTimeEntryListVisibleAction action)
-    {
-        return state with
-        {
-            IsTimeEntryListVisible = action.IsVisible
-        };
-    }
-    
-    [ReducerMethod]
     public static TimeEntryState UpdateTimeEntryActionReducer(TimeEntryState state, UpdateTimeEntryAction action)
     {
         state.List = state.List.Select(item =>
