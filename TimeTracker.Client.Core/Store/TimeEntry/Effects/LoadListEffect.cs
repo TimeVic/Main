@@ -34,7 +34,7 @@ public class LoadListEffect: Effect<LoadListAction>
             dispatcher.Dispatch(new SetTimeEntryIsListLoading(true));
             var response = await _apiService.TimeEntryGetListAsync(new GetListRequest()
             {
-                Page = _state.Value.SelectedPage
+                Page = Math.Max(1, _state.Value.SelectedPage)
             });
             dispatcher.Dispatch(new SetTimeEntryListItemsAction(response));
         }

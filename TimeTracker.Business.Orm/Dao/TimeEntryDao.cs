@@ -60,7 +60,8 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .Left.JoinAlias(() => rootProjectAlias!.Client, () => rootClientAlias)
             .Left.JoinAlias(item => item.Task, () => rootTaskAlias)
             .OrderBy(item => item.StartTime).Desc
-            .Where(item => item.Workspace.Id == workspace.Id && item.IsMarkedToDelete == false);
+            .Where(item => item.Workspace.Id == workspace.Id && item.IsMarkedToDelete == false)
+            .Where(() => rootProjectAlias!.DeletedAt == null);
         
         if (filter != null)
         {
@@ -167,6 +168,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .Where(item => item.Workspace.Id == workspace.Id)
             .Where(item => item.User.Id == user.Id)
             .Where(item => item.IsMarkedToDelete == false)
+            .Where(item => item.Project == null || item.Project.DeletedAt == null)
             .Select(item => item.StartTime.Date)
             .Distinct()
             .CountAsync();

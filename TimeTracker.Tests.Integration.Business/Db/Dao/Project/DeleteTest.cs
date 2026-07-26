@@ -8,7 +8,6 @@ using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
-using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Business.Core;
 
 namespace TimeTracker.Tests.Integration.Business.Db.Dao.Project;
@@ -21,7 +20,6 @@ public class DeleteTest: BaseTest
     private readonly UserEntity _user;
     private readonly WorkspaceEntity _workspace;
     private readonly IUserDao _userDao;
-    private readonly ITaskListSeeder _taskListSeeder;
 
     public DeleteTest(): base()
     {
@@ -29,27 +27,33 @@ public class DeleteTest: BaseTest
         _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _projectDao = Scope.Resolve<IProjectDao>();
         _userDao = Scope.Resolve<IUserDao>();
-        _taskListSeeder = Scope.Resolve<ITaskListSeeder>();
         
         _user = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _userDao.GetUsersWorkspaces(_user, MembershipAccessType.Owner).Result.First();
     }
 
     [Fact]
-    public async Task ShouldArchiveTasksListWithProject()
+    public async Task ShouldSoftDeleteProject()
     {
         var project = await _projectSeeder.CreateAsync(_workspace);
-        await _taskListSeeder.CreateSeveralAsync(project, 3);
         await FlushDbChanges();
 
-        await _projectDao.ArchiveProject(project);
+        await _projectDao.SoftDeleteAsync(project);
         await FlushDbChanges();
         
-        Assert.True(project.IsArchived);
-        
-        Assert.All(project.TaskLists, item =>
-        {
-            Assert.True(item.IsArchived);
-        });
+        Assert.NotNull(project.DeletedAt);
+    }
+
+    [Fact]
+    public async Task ShouldReceiveSoftDeletedProjectById()
+    {
+        var project = await _projectSeeder.CreateAsync(_workspace);
+        project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        var actualProject = await _projectDao.GetById(project.Id);
+
+        Assert.NotNull(actualProject);
+        Assert.Equal(project.Id, actualProject.Id);
     }
 }

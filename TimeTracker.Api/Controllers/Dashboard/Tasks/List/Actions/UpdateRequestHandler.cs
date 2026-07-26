@@ -49,7 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
         public async Task<TaskListDto> ExecuteAsync(UpdateRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var project = await _projectDao.GetById(request.ProjectId, true);
+            var project = await _projectDao.GetById(request.ProjectId);
             var taskList = await _taskListDao.GetById(request.TaskListId);
             RecordNotFoundException.ThrowIfNull(project);
             RecordNotFoundException.ThrowIfNull(taskList);

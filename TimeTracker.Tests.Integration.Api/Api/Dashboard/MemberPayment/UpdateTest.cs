@@ -165,4 +165,25 @@ public class UpdateTest: BaseTest
         var errorResponse = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
+
+    [Fact]
+    public async Task ShouldNotUpdatePaymentForSoftDeletedProject()
+    {
+        _payment.Project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+        var expectedPayment = _factory.Generate();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest
+        {
+            MemberPaymentId = _payment.Id,
+            Amount = expectedPayment.Amount,
+            Description = expectedPayment.Description,
+            PaymentTime = expectedPayment.PaymentTime,
+            ProjectId = _payment.Project.Id
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);
+    }
 }

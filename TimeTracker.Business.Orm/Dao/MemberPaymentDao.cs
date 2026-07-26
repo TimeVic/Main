@@ -109,7 +109,8 @@ public class MemberPaymentDao: IMemberPaymentDao
     {
         var offset = PaginationUtils.CalculateOffset(page);
         var query = _sessionProvider.CurrentSession.Query<MemberPaymentEntity>()
-            .Where(item => item.Member.Id == member.Id);
+            .Where(item => item.Member.Id == member.Id)
+            .Where(item => item.Project.DeletedAt == null);
         
         var items = await BuildListQuery(query)
             .OrderByDescending(item => item.PaymentTime)
@@ -126,7 +127,8 @@ public class MemberPaymentDao: IMemberPaymentDao
     {
         var offset = PaginationUtils.CalculateOffset(page);
         var query = _sessionProvider.CurrentSession.Query<MemberPaymentEntity>()
-            .Where(item => item.Member.Workspace.Id == workspace.Id);
+            .Where(item => item.Member.Workspace.Id == workspace.Id)
+            .Where(item => item.Project.DeletedAt == null);
 
         var items = await BuildListQuery(query)
             .OrderByDescending(item => item.PaymentTime)

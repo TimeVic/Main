@@ -96,6 +96,21 @@ public class GetListTest: BaseTest
     }
 
     [Fact]
+    public async Task ShouldNotReceivePaymentsForSoftDeletedProject()
+    {
+        await _paymentSeeder.CreateSeveralAsync(_client, _project, 1);
+        _project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest { Page = 1 });
+        response.EnsureSuccessStatusCode();
+
+        var actualResponse = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Empty(actualResponse.Items);
+        Assert.Equal(0, actualResponse.TotalCount);
+    }
+
+    [Fact]
     public async Task ShouldNotReceiveIfHasNoAccess()
     {
         var (otherJwtToken, _, _) = UserSeeder.CreateAuthorizedAsync().Result;

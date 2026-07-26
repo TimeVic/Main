@@ -16,7 +16,9 @@ select
     ) as AmountOriginal
 from time_entries te
          inner join users u on u.id = te.user_id
+         inner join projects p on p.id = te.project_id
 where te.project_id in (:projectIds)
+  and p.deleted_at is null
   and te.end_time is not null
   and cast(te.start_time as date) >= cast(:startDate as date)
   and cast(te.start_time as date) <= cast(:endDate as date)

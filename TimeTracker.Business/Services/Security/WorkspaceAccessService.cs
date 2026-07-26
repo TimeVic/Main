@@ -94,7 +94,7 @@ public class WorkspaceAccessService: IWorkspaceAccessService
     
     public async Task<MembershipAccessType?> GetAccessTypeAsync(UserEntity user, ProjectEntity project)
     {
-        if (project.Client.Workspace.DeletedAt != null)
+        if (project.DeletedAt != null || project.Client.Workspace.DeletedAt != null)
         {
             return null;
         }

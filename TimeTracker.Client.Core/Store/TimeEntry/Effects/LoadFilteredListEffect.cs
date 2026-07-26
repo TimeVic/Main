@@ -34,7 +34,7 @@ public class LoadFilteredListEffect: Effect<LoadTimeEntryFilteredListAction>
             dispatcher.Dispatch(new SetTimeEntryIsListLoading(true));
             var response = await _apiService.TimeEntryGetFilteredListAsync(new GetFilteredListRequest()
             {
-                Page = _state.Value.FilteredSelectedPage,
+                Page = Math.Max(1, _state.Value.FilteredSelectedPage),
                 Search = _state.Value.Filter.Search,
                 ClientId = _state.Value.Filter.ClientId,
                 ProjectId = _state.Value.Filter.ProjectId,

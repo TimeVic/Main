@@ -1,5 +1,6 @@
 using Autofac;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
@@ -20,11 +21,13 @@ public class HasAccessToTimeEntryTest: BaseTest
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
     private readonly ISecurityManager _securityManager;
+    private readonly IProjectSeeder _projectSeeder;
     private IUserDao _userDao;
 
     public HasAccessToTimeEntryTest(): base()
     {
         _timeEntrySeeder = Scope.Resolve<ITimeEntrySeeder>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         _securityManager = Scope.Resolve<ISecurityManager>();
@@ -102,5 +105,19 @@ public class HasAccessToTimeEntryTest: BaseTest
         
         hasAccess = await _securityManager.HasAccess(AccessLevel.Write, otherUser, timeEntry);
         Assert.True(hasAccess);
+    }
+
+    [Fact]
+    public async Task ShouldThrowRecordNotFoundForTimeEntryWithSoftDeletedProject()
+    {
+        var project = await _projectSeeder.CreateAsync(_ownWorkspace);
+        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
+        timeEntry.Project = project;
+        project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        await Assert.ThrowsAsync<RecordNotFoundException>(
+            () => _securityManager.HasAccess(AccessLevel.Read, _owner, timeEntry)
+        );
     }
 }

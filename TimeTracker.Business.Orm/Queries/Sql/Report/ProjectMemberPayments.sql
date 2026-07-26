@@ -16,6 +16,7 @@ with time_entry_amounts as (
              left join clients c on c.id = p.client_id
     where te.workspace_id = :workspaceId
       and te.user_id = :userId
+      and p.deleted_at is null
       and te.is_billable = true
       and te.start_time <= :endDate
     group by p.id, c.id
@@ -32,6 +33,7 @@ report_rows as (
              inner join projects p on p.id = pm.project_id
     where wm.user_id = :userId
       and wm.workspace_id = :workspaceId
+      and p.deleted_at is null
       and pm.payment_time <= :endDate
     group by pm.project_id, p.client_id
 )
@@ -48,6 +50,7 @@ select
                  inner join workspace_members wm on wm.id = pm.member_id
                  inner join projects p on p.id = pm.project_id
         where p.client_id = rr.ClientId
+          and p.deleted_at is null
           and wm.user_id = :userId
           and wm.workspace_id = :workspaceId
           and pm.payment_time <= :endDate
@@ -57,7 +60,9 @@ select
         select sum(pm.amount)
         from member_payments pm
                  inner join workspace_members wm on wm.id = pm.member_id
+                 inner join projects p on p.id = pm.project_id
         where pm.project_id = rr.ProjectId
+          and p.deleted_at is null
           and wm.user_id = :userId
           and wm.workspace_id = :workspaceId
           and pm.payment_time <= :endDate
@@ -69,3 +74,4 @@ from report_rows rr
              and (tea.ClientId = rr.ClientId or (tea.ClientId is null and rr.ClientId is null))
          left join projects p on p.id = rr.ProjectId
          left join clients c on c.id = rr.ClientId
+where p.deleted_at is null

@@ -4,6 +4,7 @@ using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Constants;
+using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities;
@@ -45,6 +46,11 @@ public class SecurityManager: ISecurityManager
     {
         if (entity == null)
             return false;
+
+        if (entity is AEntity entityModel)
+        {
+            ThrowIfDeleted(entityModel);
+        }
         
         if (entity is WorkspaceEntity workspaceEntity)
         {
@@ -143,6 +149,8 @@ public class SecurityManager: ISecurityManager
 
     private async Task<bool> HasAccessToTimeEntry(AccessLevel accessLevel, UserEntity user, TimeEntryEntity timeEntry)
     {
+        ThrowIfDeleted(timeEntry.Project);
+
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, timeEntry.Workspace);
         return accessType == MembershipAccessType.Owner 
             || accessType == MembershipAccessType.Manager
@@ -170,6 +178,8 @@ public class SecurityManager: ISecurityManager
     
     private async Task<bool> HasAccessToProject(AccessLevel accessLevel, UserEntity user, ProjectEntity project)
     {
+        ThrowIfDeleted(project);
+
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, project);
         return accessType == MembershipAccessType.Owner 
             || accessType == MembershipAccessType.Manager
@@ -181,6 +191,8 @@ public class SecurityManager: ISecurityManager
     
     private async Task<bool> HasAccessToMemberPayment(AccessLevel accessLevel, UserEntity user, MemberPaymentEntity payment)
     {
+        ThrowIfDeleted(payment.Project);
+
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, payment.Member.Workspace);
         return accessType is MembershipAccessType.Owner or MembershipAccessType.Manager
             || (
@@ -191,6 +203,8 @@ public class SecurityManager: ISecurityManager
 
     private async Task<bool> HasAccessToClientPayment(AccessLevel accessLevel, UserEntity user, ClientPaymentEntity payment)
     {
+        ThrowIfDeleted(payment.Project);
+
         return await HasAccessToWorkspace(accessLevel, user, payment.Workspace);
     }
     
@@ -272,5 +286,13 @@ public class SecurityManager: ISecurityManager
     {
         return messagingChannelEntity.Workspace.DeletedAt == null
             && messagingChannelEntity.ActiveMembers.Any(m => m.Member.Id == user.Id);
+    }
+
+    private static void ThrowIfDeleted(AEntity? entity)
+    {
+        if (entity?.DeletedAt != null)
+        {
+            throw new RecordNotFoundException();
+        }
     }
 }

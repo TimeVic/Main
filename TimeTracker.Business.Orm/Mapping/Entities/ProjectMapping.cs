@@ -13,7 +13,7 @@ public class ProjectMapping: BaseGuidMappings<ProjectEntity>
         Map(x => x.Name);
         Map(x => x.IsBillableByDefault);
         Map(x => x.DefaultHourlyRate);
-        Map(x => x.IsArchived);
+        Map(x => x.DeletedAt).DateTimeNullable();
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         

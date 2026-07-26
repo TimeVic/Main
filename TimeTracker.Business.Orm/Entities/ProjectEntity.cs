@@ -9,7 +9,6 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual required string Name { get; set; }
         public virtual bool IsBillableByDefault { get; set; } = true;
         public virtual decimal? DefaultHourlyRate { get; set; }
-        public virtual bool IsArchived { get; set; } = false;
 
         #region Relationships
 

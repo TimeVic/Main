@@ -12,6 +12,7 @@ public partial class ProjectsBlock
 
     private bool _isAddProjectModalOpened { get; set; }
     private ProjectDto? _projectToUpdate { get; set; }
+    private ProjectDto? _projectToDelete { get; set; }
 
     private Task OnAdd()
     {
@@ -22,6 +23,29 @@ public partial class ProjectsBlock
     private Task OnEdit(ProjectDto context)
     {
         _projectToUpdate = context;
+        return Task.CompletedTask;
+    }
+
+    private Task OnDeleteClicked(ProjectDto context)
+    {
+        _projectToDelete = context;
+        return Task.CompletedTask;
+    }
+
+    private Task OnConfirmDelete()
+    {
+        if (_projectToDelete != null)
+        {
+            Dispatcher.Dispatch(new DeleteItemAction(_projectToDelete));
+            _projectToDelete = null;
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private Task OnCloseDeleteConfirmation()
+    {
+        _projectToDelete = null;
         return Task.CompletedTask;
     }
 }

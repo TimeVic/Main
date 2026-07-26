@@ -39,7 +39,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
         {
             var user = await _apiRequestService.GetCurrentUser();
 
-            var project = await _projectDao.GetById(request.ProjectId, true);
+            var project = await _projectDao.GetById(request.ProjectId);
             RecordNotFoundException.ThrowIfNull(project);
 
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
@@ -47,7 +47,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Project.Actions
                 throw new HasNoAccessException();
             }
 
-            await _projectDao.ArchiveProject(project);
+            await _projectDao.SoftDeleteAsync(project);
         }
     }
 }

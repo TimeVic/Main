@@ -37,7 +37,9 @@ public class TaskListDao: ITaskListDao
     
     public async Task<TaskListEntity?> GetById(Guid taskListId)
     {
-        return await _sessionProvider.CurrentSession.GetAsync<TaskListEntity>(taskListId);
+        return await _sessionProvider.CurrentSession.Query<TaskListEntity>()
+            .Where(item => item.Id == taskListId)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<ListDto<TaskListEntity>> GetList(WorkspaceEntity workspace)
@@ -50,6 +52,7 @@ public class TaskListDao: ITaskListDao
             .Inner.JoinAlias(() => projectAlias!.Client, () => clientAlias)
             .Inner.JoinAlias(() => clientAlias!.Workspace, () => workspaceAlias)
             .Where(() => workspaceAlias!.Id == workspace.Id)
+            .Where(() => projectAlias!.DeletedAt == null)
             .Where(taskList => taskList.IsArchived == false);
         
         var items = await query
@@ -79,7 +82,7 @@ public class TaskListDao: ITaskListDao
             .Inner.JoinAlias(() => projectAlias!.Client, () => clientAlias)
             .Inner.JoinAlias(() => clientAlias!.Workspace, () => workspaceAlias)
             .Where(() => workspaceAlias!.Id == workspace.Id)
-            .Where(() => !projectAlias!.IsArchived)
+            .Where(() => projectAlias!.DeletedAt == null)
             .Where(taskList => !taskList.IsArchived);
 
         if (projectId.HasValue)

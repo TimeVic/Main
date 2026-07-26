@@ -54,19 +54,17 @@ public class DeleteTest: BaseTest
         response.EnsureSuccessStatusCode();
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_project);
-        Assert.True(_project.IsArchived);
+        Assert.NotNull(_project.DeletedAt);
     }
     
     [Fact]
-    public async Task ShouldNotDeleteIfArchived()
+    public async Task ShouldNotDeleteIfAlreadyDeleted()
     {
-        _project.IsArchived = true;
+        _project.DeletedAt = DateTime.UtcNow;
         await FlushDbChanges();
-        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        var response = await PostRequestAsync(Url, _jwtToken, new DeleteRequest()
         {
-            ProjectId = _project.Id,
-            Name = _project.Name,
-            ClientId = Guid.Empty
+            ProjectId = _project.Id
         });
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);

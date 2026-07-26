@@ -1,5 +1,6 @@
 using Autofac;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
@@ -123,5 +124,19 @@ public class HasAccessToProjectTest: BaseTest
         
         hasAccess = await _securityManager.HasAccess(AccessLevel.Write, otherUser, project);
         Assert.True(hasAccess);
+    }
+
+    [Theory]
+    [InlineData(AccessLevel.Read)]
+    [InlineData(AccessLevel.Write)]
+    public async Task ShouldThrowRecordNotFoundForSoftDeletedProject(AccessLevel accessLevel)
+    {
+        var project = await _projectSeeder.CreateAsync(_ownWorkspace);
+        project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        await Assert.ThrowsAsync<RecordNotFoundException>(
+            () => _securityManager.HasAccess(accessLevel, _owner, project)
+        );
     }
 }

@@ -45,7 +45,7 @@ public class ClientPaymentDao: IClientPaymentDao
             UpdatedAt = DateTime.UtcNow
         };
 
-        var project = client.Projects.FirstOrDefault(item => item.Id == projectId);
+        var project = client.Projects.FirstOrDefault(item => item.Id == projectId && item.DeletedAt == null);
         if (project != null)
         {
             entity.Project = project;
@@ -78,7 +78,7 @@ public class ClientPaymentDao: IClientPaymentDao
             payment.Amount = amount;
             payment.PaymentTime = paymentTime;
             payment.Description = description;
-            payment.Project = client.Projects.FirstOrDefault(item => item.Id == projectId);
+            payment.Project = client.Projects.FirstOrDefault(item => item.Id == projectId && item.DeletedAt == null);
         }
 
         await _sessionProvider.CurrentSession.SaveAsync(payment);
@@ -89,7 +89,8 @@ public class ClientPaymentDao: IClientPaymentDao
     {
         var offset = PaginationUtils.CalculateOffset(page);
         var query = _sessionProvider.CurrentSession.Query<ClientPaymentEntity>()
-            .Where(item => item.Client.Workspace.Id == workspace.Id);
+            .Where(item => item.Client.Workspace.Id == workspace.Id)
+            .Where(item => item.Project == null || item.Project.DeletedAt == null);
 
         var items = await query
             .Fetch(item => item.Client)

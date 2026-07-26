@@ -25,6 +25,7 @@ select
     w.time_zone
     ) as x
 where te.project_id in (:projectIds)
+  and p.deleted_at is null
   and x.day >= cast(:startDate as date)
   and x.day <= cast(:endDate as date)
 group by year, month

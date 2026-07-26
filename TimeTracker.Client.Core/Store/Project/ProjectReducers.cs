@@ -66,4 +66,13 @@ public class ProjectReducers
             List = list
         };
     }
+
+    [ReducerMethod]
+    public static ProjectState Reducer(ProjectState state, DeleteListItemAction action)
+    {
+        return state with
+        {
+            List = state.List.Where(item => item.Id != action.ProjectId).ToList()
+        };
+    }
 }

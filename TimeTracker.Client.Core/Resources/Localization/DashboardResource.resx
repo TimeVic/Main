@@ -110,6 +110,18 @@
   <data name="CreateProject" xml:space="preserve"><value>Create project</value></data>
   <data name="EditProject" xml:space="preserve"><value>Edit project</value></data>
   <data name="DeleteProject" xml:space="preserve"><value>Delete project</value></data>
+  <data name="ProjectsBlock_DeleteProjectTitle" xml:space="preserve"><value>Delete project</value></data>
+  <data name="ProjectsBlock_DeleteProjectSubtitle" xml:space="preserve"><value>Are you sure you want to delete “{0}”?</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableTitle" xml:space="preserve"><value>After deletion, this information will no longer be available:</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableProjects" xml:space="preserve"><value>Project</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableTimeEntries" xml:space="preserve"><value>Time entries</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableTaskLists" xml:space="preserve"><value>Task lists</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableTasks" xml:space="preserve"><value>Tasks</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableClientPayments" xml:space="preserve"><value>Client payments</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableMemberPayments" xml:space="preserve"><value>Member payments</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableReports" xml:space="preserve"><value>Reports</value></data>
+  <data name="ProjectsBlock_DeleteProjectSuccess" xml:space="preserve"><value>Project was deleted</value></data>
+  <data name="ProjectsBlock_DeleteProjectError" xml:space="preserve"><value>Unable to delete project</value></data>
   <data name="ProjectName" xml:space="preserve"><value>Project name</value></data>
   <data name="ProjectRate" xml:space="preserve"><value>Project rate</value></data>
   <data name="DefaultHourlyRate" xml:space="preserve"><value>Default hourly rate</value></data>

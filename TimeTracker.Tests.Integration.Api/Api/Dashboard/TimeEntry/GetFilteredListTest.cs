@@ -129,6 +129,22 @@ public class GetFilteredListTest: BaseTest
     }
 
     [Fact]
+    public async Task ShouldNotReceiveEntriesForSoftDeletedProject()
+    {
+        var project = await _projectSeeder.CreateAsync(_defaultWorkspace);
+        await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, 1, project);
+        project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetFilteredListRequest { Page = 1 });
+        response.EnsureSuccessStatusCode();
+
+        var result = await response.GetJsonDataAsync<GetFilteredListResponse>();
+        Assert.Empty(result.Items);
+        Assert.Equal(0, result.TotalCount);
+    }
+
+    [Fact]
     public async Task ShouldNotAllowReadingEntriesForTaskOutsideCurrentWorkspace()
     {
         var (_, otherUser, otherWorkspace) = await UserSeeder.CreateAuthorizedAsync();

@@ -276,4 +276,19 @@ public class ForOwnerTest : BaseTest
             data.Totals.MemberOutstanding
         );
     }
+
+    [Fact]
+    public async Task ShouldNotIncludeSoftDeletedProjectFinancialData()
+    {
+        _project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest());
+        response.EnsureSuccessStatusCode();
+
+        var data = await response.GetJsonDataAsync<WorkspaceFinancialSummaryReportResponse>();
+        Assert.Empty(data.ProjectProfitability);
+        Assert.Equal(0, data.Totals.ClientEarned);
+        Assert.Equal(0, data.Totals.TeamCost);
+    }
 }

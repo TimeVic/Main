@@ -120,6 +120,22 @@ public class GetListTest: BaseTest
     }
 
     [Fact]
+    public async Task ShouldNotReceiveEntriesForSoftDeletedProject()
+    {
+        var project = await _projectSeeder.CreateAsync(_defaultWorkspace);
+        await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, 1, project);
+        project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest { Page = 1 });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Empty(actualDto.List.Items);
+        Assert.Equal(0, actualDto.List.TotalCount);
+    }
+
+    [Fact]
     public async Task ShouldNotSplitSingleDayBetweenPages()
     {
         var project = await _projectSeeder.CreateAsync(_defaultWorkspace);

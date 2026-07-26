@@ -49,7 +49,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.List.Actions
         public async Task<TaskListDto> ExecuteAsync(AddRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
-            var project = await _projectDao.GetById(request.ProjectId, true);
+            var project = await _projectDao.GetById(request.ProjectId);
             if (!await _securityManager.HasAccess(AccessLevel.Write, user, project))
             {
                 throw new HasNoAccessException();

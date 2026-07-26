@@ -1,9 +1,11 @@
 with filtered as (
     select te.id, te.start_time, cast(te.start_time as date) as day_key
     from time_entries te
+    left join projects p on p.id = te.project_id
     where te.workspace_id = :workspaceId
         and te.user_id = :userId
         and te.is_marked_to_delete = false
+        and p.deleted_at is null
 ),
 ordered_days as (
     select

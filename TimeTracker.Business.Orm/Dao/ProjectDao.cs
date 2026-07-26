@@ -32,30 +32,26 @@ public class ProjectDao: IProjectDao
         return project;
     }
 
-    public async Task<ProjectEntity?> GetById(Guid? projectId, bool isOnlyActive = true)
+    public async Task<ProjectEntity?> GetById(Guid? projectId)
     {
         if (projectId == null)
             return null;
 
         return await _sessionProvider.CurrentSession.Query<ProjectEntity>()
             .Where(item => item.Id == projectId)
-            .Where(item => !isOnlyActive || !item.IsArchived)
             .FirstOrDefaultAsync();
     }
     
-    public async Task ArchiveProject(ProjectEntity project)
+    public async Task SoftDeleteAsync(ProjectEntity project)
     {
-        if (project.IsArchived)
+        if (project.DeletedAt != null)
         {
             throw new DataValidationException();
         }
-        project.IsArchived = true;
+
+        project.DeletedAt = DateTime.UtcNow;
+        project.UpdatedAt = DateTime.UtcNow;
         await _sessionProvider.CurrentSession.SaveAsync(project);
-        foreach (var taskList in project.TaskLists)
-        {
-            taskList.IsArchived = true;
-            await _sessionProvider.CurrentSession.SaveAsync(project);
-        }
     }
     
     public async Task<ListDto<ProjectEntity>> GetAvailableForUserListAsync(
@@ -66,7 +62,7 @@ public class ProjectDao: IProjectDao
     {
         var query = _sessionProvider.CurrentSession.Query<ProjectEntity>()
             .Where(item => item.Client != null && item.Client.Workspace.Id == workspace.Id)
-            .Where(item => !item.IsArchived);
+            .Where(item => item.DeletedAt == null);
 
         if (
             user != null 
@@ -86,6 +82,7 @@ public class ProjectDao: IProjectDao
             .ToListAsync();
         var projects = await _sessionProvider.CurrentSession.Query<ProjectEntity>()
             .Where(item => projectIds.Contains(item.Id))
+            .Where(item => item.DeletedAt == null)
             .Fetch(item => item.Client)
             .OrderByDescending(item => item.Name)
             .ToListAsync();

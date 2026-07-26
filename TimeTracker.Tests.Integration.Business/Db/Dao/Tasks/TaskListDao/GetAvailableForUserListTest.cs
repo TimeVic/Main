@@ -196,13 +196,13 @@ public class GetAvailableForUserListTest: BaseTest
     }
 
     [Fact]
-    public async Task ShouldNotReceiveTaskListsFromArchivedProjects()
+    public async Task ShouldNotReceiveTaskListsFromSoftDeletedProjects()
     {
         var activeProject = await _projectSeeder.CreateAsync(_workspace);
-        var archivedProject = await _projectSeeder.CreateAsync(_workspace);
+        var deletedProject = await _projectSeeder.CreateAsync(_workspace);
         var expectedTaskLists = await _taskListSeeder.CreateSeveralAsync(activeProject, 2);
-        await _taskListSeeder.CreateSeveralAsync(archivedProject, 3);
-        archivedProject.IsArchived = true;
+        await _taskListSeeder.CreateSeveralAsync(deletedProject, 3);
+        deletedProject.DeletedAt = DateTime.UtcNow;
 
         await FlushDbChanges(isClearSession: true);
         var actualList = await _taskListDao.GetAvailableForUserListAsync(
@@ -216,7 +216,7 @@ public class GetAvailableForUserListTest: BaseTest
             expectedTaskLists.Select(item => item.Id).OrderBy(item => item),
             actualList.Items.Select(item => item.Id).OrderBy(item => item)
         );
-        Assert.DoesNotContain(actualList.Items, item => item.Project.Id == archivedProject.Id);
+        Assert.DoesNotContain(actualList.Items, item => item.Project.Id == deletedProject.Id);
     }
 
     [Fact]

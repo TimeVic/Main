@@ -9,10 +9,12 @@ with cost_by_member as (
     from time_entries te
              inner join workspace_members wm on wm.user_id = te.user_id and wm.workspace_id = te.workspace_id
              inner join users u on u.id = wm.user_id
+             left join projects p on p.id = te.project_id
     where te.workspace_id = :workspaceId
       and te.end_time is not null
       and te.is_billable = true
       and te.hourly_rate is not null
+      and p.deleted_at is null
     group by wm.id, u.id, u.user_name, u.email
 ),
 paidout_by_member as (
@@ -22,7 +24,9 @@ paidout_by_member as (
         max(mp.payment_time)                                                                                 as LastPayoutDate
     from member_payments mp
              inner join workspace_members wm on wm.id = mp.member_id
+             inner join projects p on p.id = mp.project_id
     where wm.workspace_id = :workspaceId
+      and p.deleted_at is null
     group by mp.member_id
 ),
 relevant_members as (

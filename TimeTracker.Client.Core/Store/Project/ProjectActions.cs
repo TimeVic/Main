@@ -13,6 +13,10 @@ public record struct SetListItemsAction(GetListResponse Response);
 
 public record struct SetListItemAction(ProjectDto Project);
 
+public record struct DeleteItemAction(ProjectDto Project);
+
+public record struct DeleteListItemAction(Guid ProjectId);
+
 public record struct SetSelectedAction(ProjectDto Project);
 
 public record struct SetIsSavingAction(bool IsSaving);

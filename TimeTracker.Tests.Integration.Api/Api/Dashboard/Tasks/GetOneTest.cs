@@ -174,6 +174,22 @@ public class GetOneTest: BaseTest
     }
 
     [Fact]
+    public async Task ShouldNotReceiveTaskForSoftDeletedProject()
+    {
+        _project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetOneRequest
+        {
+            TaskId = _task.Id
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);
+    }
+
+    [Fact]
     public async Task ShouldNotReceiveIfWorkspaceDoesNotMatch()
     {
         var response = await PostRequestAsync(Url, _jwtToken, new GetOneRequest

@@ -122,4 +122,22 @@ public class MemberPaymentReportTest: BaseTest
         Assert.Equal(125, actualForClient.PaidAmountByProject);
         Assert.Equal(TimeSpan.Zero, actualForClient.TotalDuration);
     }
+
+    [Fact]
+    public async Task ShouldNotIncludeSoftDeletedProjects()
+    {
+        var project = await _projectDao.CreateAsync(_defaultWorkspace);
+        await _paymentDao.CreateAsync(_defaultWorkspace, _user, project, 125, DateTime.UtcNow);
+        project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new MemberPaymentReportRequest
+        {
+            EndDate = DateTime.UtcNow
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<MemberPaymentReportResponse>();
+        Assert.Empty(actualDto.Items);
+    }
 }

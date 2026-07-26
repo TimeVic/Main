@@ -75,6 +75,7 @@ public class TaskDao: ITaskDao
                 item => item.TaskId == workspaceTaskId
                 && workspaceAlias!.Id == workspaceId
             )
+            .Where(() => projectAlias!.DeletedAt == null)
             .SingleOrDefaultAsync();
     }
     
@@ -194,6 +195,8 @@ public class TaskDao: ITaskDao
         {
             query = query.Where(() => workspaceAlias!.Id == workspace!.Id);
         }
+
+        query = query.Where(() => projectAlias!.DeletedAt == null);
 
         if (filter != null)
         {
@@ -315,6 +318,7 @@ public class TaskDao: ITaskDao
             .Inner.JoinAlias(item => item.TaskList, () => taskListAlias)
             .Inner.JoinAlias(item => taskListAlias!.Project, () => projectAlias)
             .Inner.JoinAlias(item => item.User, () => userAlias)
+            .Where(() => projectAlias!.DeletedAt == null)
             .Where(item => item.IsArchived == false)
             .Where(
                 item => item.ReminderTime != null 

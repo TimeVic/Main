@@ -10,9 +10,7 @@ public class ProjectDto : BaseDto
     public bool IsBillableByDefault { get; set; }
     
     public decimal? DefaultHourlyRate { get; set; }
-    
-    public bool IsArchived { get; set; }
-    
+
     public ClientDto? Client { get; set; }
     
 #if IS_WEB_APP

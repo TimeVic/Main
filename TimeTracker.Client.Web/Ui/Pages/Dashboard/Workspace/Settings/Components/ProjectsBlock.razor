@@ -1,5 +1,6 @@
 @using LumexUI.Common
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts
+@using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
 
 @inherits BaseReactiveComponent
 
@@ -13,6 +14,32 @@
         Project="_projectToUpdate"
         IsOpened="_projectToUpdate != null" 
         IsOpenedChanged="isOpened => { _projectToUpdate = isOpened ? _projectToUpdate : null; }"/>
+}
+
+@if (_projectToDelete != null)
+{
+    <ConfirmationModal
+        Title="@DashboardLocalizer["ProjectsBlock_DeleteProjectTitle"].Value"
+        Subtitle="@string.Format(DashboardLocalizer["ProjectsBlock_DeleteProjectSubtitle"].Value, _projectToDelete.Name)"
+        ConfirmText="@DashboardLocalizer["Delete"].Value"
+        OnClose="@OnCloseDeleteConfirmation"
+        OnCancel="@OnCloseDeleteConfirmation"
+        OnConfirm="@OnConfirmDelete">
+        <ChildContent>
+            <p class="text-sm font-medium text-slate-700">
+                @DashboardLocalizer["ProjectsBlock_DeleteProjectUnavailableTitle"]
+            </p>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600">
+                <li>@DashboardLocalizer["ProjectsBlock_DeleteProjectUnavailableProjects"]</li>
+                <li>@DashboardLocalizer["ProjectsBlock_DeleteProjectUnavailableTimeEntries"]</li>
+                <li>@DashboardLocalizer["ProjectsBlock_DeleteProjectUnavailableTaskLists"]</li>
+                <li>@DashboardLocalizer["ProjectsBlock_DeleteProjectUnavailableTasks"]</li>
+                <li>@DashboardLocalizer["ProjectsBlock_DeleteProjectUnavailableClientPayments"]</li>
+                <li>@DashboardLocalizer["ProjectsBlock_DeleteProjectUnavailableMemberPayments"]</li>
+                <li>@DashboardLocalizer["ProjectsBlock_DeleteProjectUnavailableReports"]</li>
+            </ul>
+        </ChildContent>
+    </ConfirmationModal>
 }
 
 <section class="space-y-6">
@@ -61,17 +88,30 @@
             Title="@DashboardLocalizer["Actions"].Value"
             Property="@(p => p.Id)">
             <Content>
-                <CustomButton
-                    Class="inline-flex rounded-full"
-                    OnClick="@(() => OnEdit(context))"
-                    Size="Size.Small"
-                    Color="ThemeColor.Primary"
-                    Variant="Variant.Light"
-                    IconOnly="true">
-                    <ChildContent>
-                        <i class="fa-regular fa-pen-to-square"></i>
-                    </ChildContent>
-                </CustomButton>
+                <div class="inline-flex items-center gap-2">
+                    <CustomButton
+                        Class="inline-flex rounded-full"
+                        OnClick="@(() => OnEdit(context))"
+                        Size="Size.Small"
+                        Color="ThemeColor.Primary"
+                        Variant="Variant.Light"
+                        IconOnly="true">
+                        <ChildContent>
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </ChildContent>
+                    </CustomButton>
+                    <CustomButton
+                        Class="inline-flex rounded-full"
+                        OnClick="@(() => OnDeleteClicked(context))"
+                        Size="Size.Small"
+                        Color="ThemeColor.Danger"
+                        Variant="Variant.Light"
+                        IconOnly="true">
+                        <ChildContent>
+                            <i class="fa-regular fa-trash-can"></i>
+                        </ChildContent>
+                    </CustomButton>
+                </div>
             </Content>
         </LumexUI.PropertyColumn>
     </LumexDataGrid>

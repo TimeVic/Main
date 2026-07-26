@@ -11,6 +11,7 @@ with earned_by_client as (
       and te.is_billable = true
       and te.hourly_rate is not null
       and p.client_id is not null
+      and p.deleted_at is null
     group by p.client_id
 ),
 received_by_client as (
@@ -20,7 +21,9 @@ received_by_client as (
         max(cp.payment_time)                                                                                 as LastPaymentDate
     from client_payments cp
              inner join clients c on c.id = cp.client_id
+             left join projects p on p.id = cp.project_id
     where c.workspace_id = :workspaceId
+      and p.deleted_at is null
     group by cp.client_id
 ),
 relevant_clients as (

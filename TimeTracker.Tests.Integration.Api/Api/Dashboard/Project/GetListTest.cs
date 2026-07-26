@@ -52,4 +52,19 @@ public class GetListTest: BaseTest
             Assert.NotEmpty(item.Name);
         });
     }
+
+    [Fact]
+    public async Task ShouldNotReceiveSoftDeletedProjects()
+    {
+        var project = await _projectSeeder.CreateAsync(_defaultWorkspace);
+        project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest());
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Empty(actualDto.Items);
+        Assert.Equal(0, actualDto.TotalCount);
+    }
 }

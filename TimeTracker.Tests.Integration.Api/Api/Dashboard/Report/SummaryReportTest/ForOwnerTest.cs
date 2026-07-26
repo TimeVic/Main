@@ -210,4 +210,22 @@ public class ForOwnerTest: BaseTest
             Assert.Equal(TimeSpan.FromHours(15), item.Duration);
         });
     }
+
+    [Fact]
+    public async Task ShouldNotIncludeSoftDeletedProjects()
+    {
+        _project.DeletedAt = DateTime.UtcNow;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new SummaryReportRequest
+        {
+            StartTime = DateTime.UtcNow.AddDays(-32),
+            EndTime = DateTime.UtcNow,
+            Type = SummaryReportType.GroupByProject
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<SummaryReportResponse>();
+        Assert.Empty(actualDto.GroupedByProject);
+    }
 }

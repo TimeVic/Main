@@ -11,7 +11,7 @@ public interface IProjectDao: IDomainService
 {
     Task<ProjectEntity> CreateAsync(ClientEntity client, string name);
     
-    Task<ProjectEntity?> GetById(Guid? projectId, bool isOnlyActive = true);
+    Task<ProjectEntity?> GetById(Guid? projectId);
 
     Task<ListDto<ProjectEntity>> GetAvailableForUserListAsync(
         WorkspaceEntity workspace,
@@ -19,5 +19,5 @@ public interface IProjectDao: IDomainService
         MembershipAccessType? accessType = null
     );
 
-    Task ArchiveProject(ProjectEntity project);
+    Task SoftDeleteAsync(ProjectEntity project);
 }

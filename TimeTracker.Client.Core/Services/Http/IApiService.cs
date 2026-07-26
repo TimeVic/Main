@@ -155,6 +155,8 @@ public interface IApiService
 
     Task<ProjectGetListResponse?> ProjectGetListAsync(ProjectGetListRequest model);
 
+    Task ProjectDeleteAsync(Guid projectId);
+
     Task<MemberPaymentReportResponse?> ReportsGetMemberPaymentsReportAsync(Guid workspaceId, DateTime endDate);
 
     Task<SummaryReportResponse?> ReportsGetSummaryReportAsync(

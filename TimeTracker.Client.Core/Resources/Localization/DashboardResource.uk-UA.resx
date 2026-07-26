@@ -110,6 +110,18 @@
   <data name="CreateProject" xml:space="preserve"><value>Створити проєкт</value></data>
   <data name="EditProject" xml:space="preserve"><value>Редагувати проєкт</value></data>
   <data name="DeleteProject" xml:space="preserve"><value>Видалити проєкт</value></data>
+  <data name="ProjectsBlock_DeleteProjectTitle" xml:space="preserve"><value>Видалити проєкт</value></data>
+  <data name="ProjectsBlock_DeleteProjectSubtitle" xml:space="preserve"><value>Видалити проєкт “{0}”?</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableTitle" xml:space="preserve"><value>Після видалення ця інформація буде недоступною:</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableProjects" xml:space="preserve"><value>Проєкт</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableTimeEntries" xml:space="preserve"><value>Записи часу</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableTaskLists" xml:space="preserve"><value>Списки завдань</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableTasks" xml:space="preserve"><value>Завдання</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableClientPayments" xml:space="preserve"><value>Оплати від клієнтів</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableMemberPayments" xml:space="preserve"><value>Виплати учасникам</value></data>
+  <data name="ProjectsBlock_DeleteProjectUnavailableReports" xml:space="preserve"><value>Звіти</value></data>
+  <data name="ProjectsBlock_DeleteProjectSuccess" xml:space="preserve"><value>Проєкт видалено</value></data>
+  <data name="ProjectsBlock_DeleteProjectError" xml:space="preserve"><value>Не вдалося видалити проєкт</value></data>
   <data name="ProjectName" xml:space="preserve"><value>Назва проєкту</value></data>
   <data name="ProjectRate" xml:space="preserve"><value>Ставка проєкту</value></data>
   <data name="DefaultHourlyRate" xml:space="preserve"><value>Погодинна ставка за замовчуванням</value></data>

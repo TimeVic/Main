@@ -20,7 +20,6 @@ public class ProjectProfile : Profile
                     Name = src.Name,
                     IsBillableByDefault = src.IsBillableByDefault,
                     DefaultHourlyRate = src.DefaultHourlyRate,
-                    IsArchived = src.IsArchived,
                     Client = client,
                 };
             });
