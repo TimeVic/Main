@@ -151,6 +151,7 @@ dotnet test ./TimeTracker.Tests.Unit.Business
 ## Database
  - Create migrations using FluentMigrator mechanism(classes, helpers, etc.) if it's possible
  - Use 'timestamp' column type for date/time fields by default for migrations
+ - Do not specify custom names for indexes created with FluentMigrator; use `Create.Index()` default naming. Specify an explicit name for indexes created with raw `CREATE INDEX` SQL.
 
 ## API requests and handlers
  - Use exception which implemets IDomainException to return correct error code from the API request(TimeTracker.Business.Common/Exceptions/Api). sHow example: RecordNotFoundException.ThrowIfNull - use if record not found.
