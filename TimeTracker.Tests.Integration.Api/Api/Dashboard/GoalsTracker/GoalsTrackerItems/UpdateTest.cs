@@ -66,13 +66,14 @@ public class UpdateTest: BaseTest
     {
         // Arrange
         var expectedItem = _factory.Generate();
+        var expectedNumberOfTimes = Math.Max(1, expectedItem.NumberOfTimes);
         
         // Act
         var response = await PostRequestAsync(Url, _jwtToken, new UpdateItemRequest()
         {
             GoalsTrackerItemId = _trackerItem.Id,
             Name = expectedItem.Name,
-            NumberOfTimes = expectedItem.NumberOfTimes
+            NumberOfTimes = expectedNumberOfTimes
         });
         response.EnsureSuccessStatusCode();
 
@@ -80,7 +81,7 @@ public class UpdateTest: BaseTest
         var actualItem = await response.GetJsonDataAsync<GoalsTrackerItemDto>();
         Assert.NotEqual(Guid.Empty, actualItem.Id);
         Assert.Equal(expectedItem.Name, actualItem.Name);
-        Assert.Equal(expectedItem.NumberOfTimes, actualItem.NumberOfTimes);
+        Assert.Equal(expectedNumberOfTimes, actualItem.NumberOfTimes);
     }
     
     [Fact]
