@@ -25,7 +25,13 @@ public class JwtRefreshMiddleware
     {
         _next = next;
         _logger = logger;
-        _jwtExpirationDelay = TimeSpan.FromMinutes(configuration.GetValue("App:Auth:JwtRefreshDelay", 30));
+        var jwtLifetime = TimeSpan.FromMinutes(configuration.GetValue("App:Auth:JwtLifetime", 60));
+        var jwtRefreshDelay = TimeSpan.FromMinutes(configuration.GetValue("App:Auth:JwtRefreshDelay", 5));
+
+        // Do not refresh every request when the configured window exceeds the token lifetime.
+        _jwtExpirationDelay = jwtRefreshDelay < jwtLifetime
+            ? jwtRefreshDelay
+            : TimeSpan.FromTicks(jwtLifetime.Ticks / 2);
     }
 
     public async Task InvokeAsync(HttpContext context, ILifetimeScope scope)

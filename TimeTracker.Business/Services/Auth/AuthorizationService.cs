@@ -108,7 +108,7 @@ public class AuthorizationService: IAuthorizationService
             accessToken == null
             || (
                 !string.IsNullOrWhiteSpace(previousJwtToken)
-                && accessToken.JwtTokens.All(item => item.Token != previousJwtToken)
+                && !await _accessTokenDao.HasJwtToken(accessToken, previousJwtToken)
             )
         )
         {
@@ -131,6 +131,8 @@ public class AuthorizationService: IAuthorizationService
             throw new ExpiredJwtTokenException();
         }
         
+        await _accessTokenDao.DeleteExpiredJwtTokens(accessToken);
+
         var jwtToken = _jwtAuthService.BuildJwt(accessToken.User.Id);
         var jwtTokenEntity = new UserJwtTokenEntity()
         {

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Microsoft.AspNetCore.HttpOverrides;
+using Persistence.Transactions.Behaviors;
 using Serilog;
 using TimeTracker.Api.Di.Autofac.Modules;
 using TimeTracker.Api.Middleware;
@@ -88,6 +89,13 @@ public class Startup
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+        // Build NHibernate metadata during startup so it is not charged to the first request.
+        app.ApplicationServices
+            .GetRequiredService<IDbConnectionFactory>()
+            .GetSessionFactoryAsync()
+            .GetAwaiter()
+            .GetResult();
+
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();

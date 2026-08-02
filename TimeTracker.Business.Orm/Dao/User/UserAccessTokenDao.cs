@@ -41,7 +41,23 @@ public class UserAccessTokenDao: IUserAccessTokenDao
             .Where(item => item.Token == accessToken)
             .FirstOrDefaultAsync();
     }
-    
+
+    public async Task<bool> HasJwtToken(UserAccessTokenEntity accessToken, string jwtToken)
+    {
+        return await _sessionProvider.CurrentSession.Query<UserJwtTokenEntity>()
+            .Where(item => item.AccessToken.Id == accessToken.Id)
+            .Where(item => item.Token == jwtToken)
+            .AnyAsync();
+    }
+
+    public async Task DeleteExpiredJwtTokens(UserAccessTokenEntity accessToken)
+    {
+        await _sessionProvider.CurrentSession.Query<UserJwtTokenEntity>()
+            .Where(item => item.AccessToken.Id == accessToken.Id)
+            .Where(item => item.ExpirationTime < DateTime.UtcNow)
+            .DeleteAsync();
+    }
+
     public async Task Delete(UserAccessTokenEntity accessToken)
     {
         await _sessionProvider.CurrentSession.Query<UserJwtTokenEntity>()
