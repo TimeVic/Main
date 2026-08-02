@@ -13,11 +13,17 @@ namespace TimeTracker.Business.Services.Queue;
 
 public partial class QueueService: IQueueService
 {
+    private static readonly Lazy<IReadOnlyCollection<Type>> QueueItemAssemblyTypes = new(
+        () => AppDomain.CurrentDomain
+            .GetAssemblies()
+            .SelectMany(assembly => assembly.GetTypes())
+            .ToArray()
+    );
+
     private readonly IQueueDao _queueDao;
     private readonly ILogger<QueueService> _logger;
     private readonly ILifetimeScope _scope;
     private readonly IDbSessionProvider _dbSessionProvider;
-    private readonly IEnumerable<Type> _queueItemAssemblyTypes;
 
     public QueueService(
         IQueueDao queueDao,
@@ -30,10 +36,6 @@ public partial class QueueService: IQueueService
         _logger = logger;
         _scope = scope;
         _dbSessionProvider = dbSessionProvider;
-        
-        _queueItemAssemblyTypes = AppDomain.CurrentDomain
-            .GetAssemblies()
-            .SelectMany(a => a.GetTypes());
     }
 
     public async Task PushDefaultAsync(IQueueItemContext itemContext)
@@ -91,7 +93,8 @@ public partial class QueueService: IQueueService
     
     private async Task HandleQueueItem(QueueEntity queueEntity, CancellationToken cancellationToken = default)
     {
-        var queueItemContextType = _queueItemAssemblyTypes.FirstOrDefault(t => t.FullName == queueEntity.ContextType);
+        var queueItemContextType = QueueItemAssemblyTypes.Value
+            .FirstOrDefault(type => type.FullName == queueEntity.ContextType);
         
         if (queueItemContextType == null)
             throw new InvalidOperationException($"Queue item context type {queueEntity.ContextType} not found");

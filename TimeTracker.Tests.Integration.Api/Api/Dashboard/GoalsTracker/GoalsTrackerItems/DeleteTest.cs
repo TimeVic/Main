@@ -34,7 +34,6 @@ public class DeleteTest: BaseTest
         _trackerItem = _goalsTrackerItemsSeeder.CreateAsync(_tracker).Result;
     }
 
-    
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
