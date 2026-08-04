@@ -72,6 +72,28 @@
   margin: 0 0 0.625rem;
   padding-left: 1.35rem;
 }
+/* Restore list markers removed by the global CSS reset. */
+.markdown-content ::deep .markdown-body ul {
+  list-style-type: disc;
+}
+.markdown-content ::deep .markdown-body ol {
+  list-style-type: decimal;
+}
+.markdown-content ::deep .markdown-body ul ul {
+  list-style-type: circle;
+}
+.markdown-content ::deep .markdown-body ul ul ul {
+  list-style-type: square;
+}
+.markdown-content ::deep .markdown-body ol ol {
+  list-style-type: lower-alpha;
+}
+.markdown-content ::deep .markdown-body ol ol ol {
+  list-style-type: lower-roman;
+}
+.markdown-content ::deep .markdown-body .task-list-item {
+  list-style-type: none;
+}
 .markdown-content ::deep .markdown-body li + li {
   margin-top: 0.1875rem;
 }
