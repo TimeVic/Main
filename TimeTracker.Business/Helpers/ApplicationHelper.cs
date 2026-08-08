@@ -28,15 +28,23 @@ namespace TimeTracker.Business.Helpers
             Log.Logger.Information($"Initializing configuration with \"{HostingEnvironment}\" environment");
             var basePath = AssemblyUtils.GetAssemblyPath();
             var isTestingEnvironment = HostingEnvironment == "Testing";
-            return builder.SetBasePath(basePath)
+            builder.SetBasePath(basePath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: !isTestingEnvironment)
 #if DEBUG
                 .AddJsonFile("appsettings.Debug.json", true, !isTestingEnvironment)
 #endif
-                .AddJsonFile($"appsettings.{HostingEnvironment}.json", true, !isTestingEnvironment)
-                .AddJsonFile($"appsettings.Testing.json", optional: true, reloadOnChange: false)
+                .AddJsonFile($"appsettings.{HostingEnvironment}.json", true, !isTestingEnvironment);
+
+            if (isTestingEnvironment)
+            {
+                builder.AddJsonFile("appsettings.Testing.json", optional: true, reloadOnChange: false);
+            }
+
+            builder
                 .AddJsonFile($"appsettings.Local.json", optional: true, reloadOnChange: !isTestingEnvironment)
                 .AddEnvironmentVariables();
+
+            return builder;
         }
     }
 }
