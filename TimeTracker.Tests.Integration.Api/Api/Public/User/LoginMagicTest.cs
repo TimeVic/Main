@@ -41,7 +41,7 @@ public class LoginMagicTest : BaseTest
         });
         response.EnsureSuccessStatusCode();
         await QueueProcess(QueueChannel.Notifications);
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        Assert.Contains(GraylogClient.EmailLogs, item => item.EmailTo == _user.Email);
     }
 
     [Fact]

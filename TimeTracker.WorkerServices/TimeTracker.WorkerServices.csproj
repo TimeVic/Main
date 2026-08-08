@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TimeTracker.Business\TimeTracker.Business.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Logging\TimeTracker.Business.Logging.csproj" />
         <Content Include="..\Shared\appsettings.json" Link="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 </Project>

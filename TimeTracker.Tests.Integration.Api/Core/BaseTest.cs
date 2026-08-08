@@ -8,8 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Clients.Api;
-using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Common.Constants.Http;
+using TimeTracker.Business.Logging.Client.GrayLog;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.User;
@@ -34,7 +34,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
     protected readonly IDbSessionProvider DbSessionProvider;
     protected readonly IUserSeeder UserSeeder;
     protected readonly IDataFactory<UserEntity> UserFactory;
-    protected readonly SmtpClientServiceMock SmtpClientServiceMock;
+    protected readonly GraylogClientMock GraylogClient;
     private readonly IDbCleanUpService _dbCleanUpService;
     protected readonly FirebaseClientServiceMock FirebaseClientService;
     protected readonly IQueueDao _queueDao;
@@ -58,10 +58,11 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _jwtAuthService = ServiceProvider.GetRequiredService<IJwtAuthService>();
         _userDao = ServiceProvider.GetRequiredService<IUserDao>();
-        SmtpClientServiceMock = (ServiceProvider.GetRequiredService<ISmtpClientService>() as SmtpClientServiceMock)!;
+        GraylogClient = (ServiceProvider.GetRequiredService<IGraylogClient>() as GraylogClientMock)!;
         FirebaseClientService = (ServiceProvider.GetRequiredService<IFirebaseClientService>() as FirebaseClientServiceMock)!;
 
         _dbCleanUpService.CleanUp().Wait();
+        GraylogClient.Clear();
     }
 
     public void Dispose()

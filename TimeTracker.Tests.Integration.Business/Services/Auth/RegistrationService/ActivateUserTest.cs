@@ -60,10 +60,9 @@ public class ActivateUserTest: BaseTest
         
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
-        var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
+        var actualEmail = GraylogClient.EmailLogs.FirstOrDefault();
         Assert.NotNull(actualEmail);
-        Assert.Contains(user.Email, actualEmail.To);
+        Assert.Contains(user.Email, actualEmail.EmailTo);
     }
     
     [Fact]

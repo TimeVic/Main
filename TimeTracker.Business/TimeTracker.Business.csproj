@@ -21,17 +21,6 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
       <PackageReference Include="Serilog" Version="4.4.0" />
-      <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
-      <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
-      <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
-      <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
-      <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
-      <PackageReference Include="Serilog.Expressions" Version="5.0.0" />
-      <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.1" />
-      <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
-      <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
-      <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-      <PackageReference Include="Serilog.Sinks.Graylog" Version="3.1.1" />
       <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.21.0" />
     </ItemGroup>
@@ -41,6 +30,7 @@
       <ProjectReference Include="..\TimeTracker.Business.Common\TimeTracker.Business.Common.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Notifications\TimeTracker.Business.Notifications.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Orm\TimeTracker.Business.Orm.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Logging\TimeTracker.Business.Logging.csproj" />
     </ItemGroup>
 
     <ItemGroup>

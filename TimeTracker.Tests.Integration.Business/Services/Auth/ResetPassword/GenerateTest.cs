@@ -82,7 +82,8 @@ public class GenerateTest: BaseTest
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
-        Assert.Contains(SmtpClientServiceMock.SentMessages, item => item.To == _user.Email && item.Body.Contains(newRequest.VerificationToken));
+        Assert.Contains(GraylogClient.EmailLogs, item =>
+            item.EmailTo == _user.Email && item.EmailBody.Contains(newRequest.VerificationToken)
+        );
     }
 }

@@ -120,8 +120,8 @@ builder.Services.AddFluxor(
 #if DEBUG
 // Init logger
 builder.Logging.AddBrowserConsole()
-    .SetMinimumLevel(LogLevel.Debug) //Setting LogLevel is optional
-    .AddFilter("Microsoft", LogLevel.Information); //System logs can be filtered.
+    .SetMinimumLevel(LogLevel.Debug)
+    .AddFilter("Microsoft", LogLevel.Error);
 #endif
 
 var host = builder.Build();

@@ -92,12 +92,11 @@ public class AddTest: BaseTest
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
         Assert.Contains(
-            SmtpClientServiceMock.SentMessages, 
-            item => item.To == _user.Email
-            && item.Body.Contains("added")
-            && item.Body.Contains($"{_task.Id}")
+            GraylogClient.EmailLogs,
+            item => item.EmailTo == _user.Email
+            && item.EmailBody.Contains("added")
+            && item.EmailBody.Contains($"{_task.Id}")
         );
     }
     
@@ -199,10 +198,9 @@ public class AddTest: BaseTest
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
         Assert.Contains(
-            SmtpClientServiceMock.SentMessages, 
-            item => item.To == user2.Email || item.To == user3.Email
+            GraylogClient.EmailLogs,
+            item => item.EmailTo == user2.Email || item.EmailTo == user3.Email
         );
     }
     
