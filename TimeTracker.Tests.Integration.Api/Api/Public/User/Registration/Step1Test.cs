@@ -32,8 +32,11 @@ public class Step1Test: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        await QueueProcess(QueueChannel.Notifications);
-        Assert.Contains(GraylogClient.EmailLogs, item => item.EmailTo == user.Email);
+        var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
+        Assert.True(actualProcessedCounter > 0);
+
+        var actualEmail = Assert.Single(GraylogClient.EmailLogs);
+        Assert.Equal(user.Email.ToLowerInvariant(), actualEmail.EmailTo);
     }
 
     [Fact]
