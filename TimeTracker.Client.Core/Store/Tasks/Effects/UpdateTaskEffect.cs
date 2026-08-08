@@ -1,4 +1,5 @@
 ﻿using Fluxor;
+using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Core.Store.Dashboard;
@@ -45,8 +46,8 @@ public class UpdateTaskEffect: Effect<UpdateTaskAction>
             {
                 dispatcher.Dispatch(new SetOverdueTasksListItemAction(response));
                 var selectedTaskListId = _tasksListState.Value.SelectedTaskListId;
-                // Keep the current task list view accurate when a task is moved to another task list.
-                if (selectedTaskListId.HasValue && response.TaskList.Id != selectedTaskListId.Value)
+                // Keep archive and restore updates aligned with the visible task-list filter.
+                if (!IsIncludedInSelectedTaskList(response, selectedTaskListId))
                 {
                     dispatcher.Dispatch(new RemoveListItemAction(response.Id));
                 }
@@ -70,5 +71,38 @@ public class UpdateTaskEffect: Effect<UpdateTaskAction>
         {
             dispatcher.Dispatch(new SetIsTaskSavingAction(false));
         }
+    }
+
+    private bool IsIncludedInSelectedTaskList(TaskDto task, Guid? selectedTaskListId)
+    {
+        if (!selectedTaskListId.HasValue || task.TaskList.Id != selectedTaskListId.Value)
+        {
+            return false;
+        }
+
+        var filter = _state.Value.Filter;
+        if (filter.IsArchived.HasValue && task.IsArchived != filter.IsArchived.Value)
+        {
+            return false;
+        }
+
+        if (filter.AssignedUserId.HasValue && task.User?.Id != filter.AssignedUserId.Value)
+        {
+            return false;
+        }
+
+        if (filter.Status.HasValue && task.Status != filter.Status.Value)
+        {
+            return false;
+        }
+
+        return string.IsNullOrWhiteSpace(filter.SearchString)
+            || Contains(task.Title, filter.SearchString)
+            || Contains(task.Description, filter.SearchString);
+    }
+
+    private static bool Contains(string? value, string searchString)
+    {
+        return value?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false;
     }
 }

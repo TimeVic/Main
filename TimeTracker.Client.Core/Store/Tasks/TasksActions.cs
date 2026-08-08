@@ -6,7 +6,7 @@ using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Client.Core.Store.Tasks;
 
-public record struct LoadListAction(Guid? TaskListId);
+public record struct LoadListAction(Guid? TaskListId, GetListFilterRequest? Filter = null);
 
 public record struct LoadOverdueTasksListAction();
 

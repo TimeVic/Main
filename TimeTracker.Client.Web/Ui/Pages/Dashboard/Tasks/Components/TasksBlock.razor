@@ -34,6 +34,41 @@
                     <p class="mt-0.5 truncate text-sm text-slate-500">@GetTaskListContext()</p>
                 </div>
                 <div class="flex shrink-0 flex-wrap items-center gap-2">
+                    <div class="w-full sm:w-64">
+                        <InputTextField
+                            @bind-Value="SearchString"
+                            Placeholder="@DashboardLocalizer["TasksBlock_SearchTasksPlaceholder"].Value"
+                            FullWidth="true"
+                            Size="Size.Small"
+                            Clearable="true"
+                            Variant="InputVariant.Underlined"
+                            Color="ThemeColor.Default">
+                            <StartContent>
+                                <i class="fa-solid fa-magnifying-glass text-xs text-slate-400"></i>
+                            </StartContent>
+                        </InputTextField>
+                    </div>
+                    <LumexDropdown>
+                        <LumexDropdownTrigger>
+                            <LumexButton
+                                IconOnly="true"
+                                Size="Size.Small"
+                                Variant="Variant.Outlined"
+                                Class="text-slate-600"
+                                title="@DashboardLocalizer["TasksBlock_Filters"].Value">
+                                <i class="fa-solid fa-filter text-xs"></i>
+                                <span class="sr-only">@DashboardLocalizer["TasksBlock_Filters"]</span>
+                            </LumexButton>
+                        </LumexDropdownTrigger>
+                        <LumexDropdownMenu>
+                            <LumexDropdownItem OnClick="OnToggleShowArchived">
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-solid @(_isShowArchived ? "fa-square-check" : "fa-square") w-4 text-xs"></i>
+                                    <span>@DashboardLocalizer["TasksBlock_ShowArchived"]</span>
+                                </span>
+                            </LumexDropdownItem>
+                        </LumexDropdownMenu>
+                    </LumexDropdown>
                     <CustomButton
                         Variant="Variant.Outlined"
                         Color="ThemeColor.Info"

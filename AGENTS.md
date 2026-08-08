@@ -187,6 +187,7 @@ For English texts:
 - keep wording simple, clear, and product-focused
 - emphasize TimeVic as an income/time/payment tracking tool for freelancers
 - prefer terms like `earned`, `paid`, `outstanding`, `client`, `project`, `time entry`
+- for dashboard UI, prefer the shortest natural label that preserves the meaning; use concise labels such as `Search` instead of explanatory placeholder text when the context already makes the subject clear
 
 For Ukrainian texts:
 - do not use machine-like direct translation
@@ -194,6 +195,7 @@ For Ukrainian texts:
 - use `проєкт`, not `проект`
 - use `облік часу` for formal UI labels
 - `трекати`, `затрекано`, `затреканий` are acceptable in product/contextual text
+- for dashboard UI, prefer the shortest natural label that preserves the meaning; use concise labels such as `Пошук` instead of explanatory placeholder text when the context already makes the subject clear
 - translate key financial terms consistently:
     - `Earned` -> `Зароблено`
     - `Paid` -> `Оплачено`
