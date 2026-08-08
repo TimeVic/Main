@@ -288,6 +288,7 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 .idea
+/.air/
 
 #App config
 appsettings.Local.json

@@ -397,6 +397,9 @@
   <data name="TasksBlock_DeleteTaskListSubtitle" xml:space="preserve"><value>Are you sure you want to delete this task list?</value></data>
   <data name="TasksBlock_TaskListDescription" xml:space="preserve"><value>Tasks are optional and mainly used for tracking time.</value></data>
   <data name="TasksBlock_EditTaskList" xml:space="preserve"><value>Edit task list</value></data>
+  <data name="TasksBlock_SearchTasksPlaceholder" xml:space="preserve"><value>Search</value></data>
+  <data name="TasksBlock_Filters" xml:space="preserve"><value>Filters</value></data>
+  <data name="TasksBlock_ShowArchived" xml:space="preserve"><value>Show archived</value></data>
   <data name="TasksBoardBlock_InProgress" xml:space="preserve"><value>In progress</value></data>
   <data name="TasksBoardBlock_InProgressDescription" xml:space="preserve"><value>Tasks currently being worked on.</value></data>
   <data name="TasksBoardBlock_Todo" xml:space="preserve"><value>To do</value></data>

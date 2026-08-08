@@ -397,6 +397,9 @@
   <data name="TasksBlock_DeleteTaskListSubtitle" xml:space="preserve"><value>Видалити цей список задач?</value></data>
   <data name="TasksBlock_TaskListDescription" xml:space="preserve"><value>Задачі не обовʼязкові й потрібні переважно для обліку часу.</value></data>
   <data name="TasksBlock_EditTaskList" xml:space="preserve"><value>Редагувати список задач</value></data>
+  <data name="TasksBlock_SearchTasksPlaceholder" xml:space="preserve"><value>Пошук</value></data>
+  <data name="TasksBlock_Filters" xml:space="preserve"><value>Фільтри</value></data>
+  <data name="TasksBlock_ShowArchived" xml:space="preserve"><value>Показати архівні задачі</value></data>
   <data name="TasksBoardBlock_InProgress" xml:space="preserve"><value>У роботі</value></data>
   <data name="TasksBoardBlock_InProgressDescription" xml:space="preserve"><value>Задачі, над якими зараз працюють.</value></data>
   <data name="TasksBoardBlock_Todo" xml:space="preserve"><value>До роботи</value></data>

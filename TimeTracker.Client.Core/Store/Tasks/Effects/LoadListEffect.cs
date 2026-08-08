@@ -31,10 +31,11 @@ public class LoadListEffect: Effect<LoadListAction>
     public override async Task HandleAsync(LoadListAction action, IDispatcher dispatcher)
     {
         var taskListId = action.TaskListId;
+        var filter = action.Filter ?? _state.Value.Filter;
         try
         {
-            // Each action targets the list selected by the route when it was dispatched.
-            if (_tasksListState.Value.SelectedTaskListId != taskListId)
+            // Ignore responses for a task list or filter that has been replaced while loading.
+            if (!IsCurrentRequest(taskListId, filter))
             {
                 return;
             }
@@ -45,11 +46,10 @@ public class LoadListEffect: Effect<LoadListAction>
                 var response = await _apiService.TasksGetListAsync(new GetListRequest()
                 {
                     TaskListId = taskListId.Value,
-                    Filter = _state.Value.Filter
+                    Filter = filter
                 });
 
-                // Ignore a response for a list that was deselected while its request was in flight.
-                if (_tasksListState.Value.SelectedTaskListId != taskListId)
+                if (!IsCurrentRequest(taskListId, filter))
                 {
                     return;
                 }
@@ -78,10 +78,24 @@ public class LoadListEffect: Effect<LoadListAction>
         }
         finally
         {
-            if (_tasksListState.Value.SelectedTaskListId == taskListId)
+            if (IsCurrentRequest(taskListId, filter))
             {
                 dispatcher.Dispatch(new SetIsListLoading(false));
             }
         }
+    }
+
+    private bool IsCurrentRequest(Guid? taskListId, GetListFilterRequest filter)
+    {
+        return _tasksListState.Value.SelectedTaskListId == taskListId
+            && HasSameFilterValues(_state.Value.Filter, filter);
+    }
+
+    private static bool HasSameFilterValues(GetListFilterRequest currentFilter, GetListFilterRequest requestFilter)
+    {
+        return currentFilter.AssignedUserId == requestFilter.AssignedUserId
+            && string.Equals(currentFilter.SearchString, requestFilter.SearchString, StringComparison.Ordinal)
+            && currentFilter.IsArchived == requestFilter.IsArchived
+            && currentFilter.Status == requestFilter.Status;
     }
 }
