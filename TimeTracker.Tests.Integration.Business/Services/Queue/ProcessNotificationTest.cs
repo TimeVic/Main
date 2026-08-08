@@ -45,10 +45,9 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
-        var actualEmail = SmtpClientServiceMock.SentMessages.FirstOrDefault();
+        var actualEmail = GraylogClient.EmailLogs.FirstOrDefault();
         Assert.NotNull(actualEmail);
-        Assert.Contains(testContext.ToAddress, actualEmail.To);
+        Assert.Contains(testContext.ToAddress, actualEmail.EmailTo);
     }
     
     [Fact]
@@ -67,11 +66,10 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
-        var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
+        var actualEmail = GraylogClient.EmailLogs.LastOrDefault();
         Assert.NotNull(actualEmail);
-        Assert.Contains(testContext.ToAddress, actualEmail.To);
-        Assert.Contains(expectedUser.VerificationToken!, actualEmail.Body);
+        Assert.Contains(testContext.ToAddress, actualEmail.EmailTo);
+        Assert.Contains(expectedUser.VerificationToken!, actualEmail.EmailBody);
     }
     
     [Fact]
@@ -97,11 +95,10 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
         
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
-        var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
+        var actualEmail = GraylogClient.EmailLogs.LastOrDefault();
         Assert.NotNull(actualEmail);
-        Assert.Contains(testContext.ToAddress, actualEmail.To);
-        Assert.Contains($"/board/{task.Workspace.Id}/task/{task.Id}", actualEmail.Body);
+        Assert.Contains(testContext.ToAddress, actualEmail.EmailTo);
+        Assert.Contains($"/board/{task.Workspace.Id}/task/{task.Id}", actualEmail.EmailBody);
     }
 
     [Fact]
@@ -123,9 +120,9 @@ public class ProcessNotificationTest: BaseTest
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
 
-        var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
+        var actualEmail = GraylogClient.EmailLogs.LastOrDefault();
         Assert.NotNull(actualEmail);
-        Assert.Contains(testContext.ToAddress, actualEmail.To);
-        Assert.Contains($"/board/{task.Workspace.Id}/task/{task.Id}", actualEmail.Body);
+        Assert.Contains(testContext.ToAddress, actualEmail.EmailTo);
+        Assert.Contains($"/board/{task.Workspace.Id}/task/{task.Id}", actualEmail.EmailBody);
     }
 }

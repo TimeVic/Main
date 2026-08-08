@@ -11,6 +11,7 @@
       <ProjectReference Include="..\Domain.Abstractions\Domain.Abstractions.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Common\TimeTracker.Business.Common.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Logging\TimeTracker.Business.Logging.csproj" />
     </ItemGroup>
 
     <ItemGroup>

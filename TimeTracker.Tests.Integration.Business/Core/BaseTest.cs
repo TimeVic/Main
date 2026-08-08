@@ -9,6 +9,7 @@ using TimeTracker.Business;
 using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Helpers;
+using TimeTracker.Business.Logging.Client.GrayLog;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
@@ -23,7 +24,7 @@ namespace TimeTracker.Tests.Integration.Business.Core;
 public abstract class BaseTest: IDisposable
 {
     protected readonly IDbSessionProvider DbSessionProvider;
-    protected readonly SmtpClientServiceMock SmtpClientServiceMock;
+    protected readonly GraylogClientMock GraylogClient;
     protected readonly FirebaseClientServiceMock FirebaseClientService;
     protected readonly ILifetimeScope Scope;
     
@@ -58,6 +59,9 @@ public abstract class BaseTest: IDisposable
         builder.RegisterType<SmtpClientServiceMock>()
             .As<ISmtpClientService>()
             .InstancePerLifetimeScope();
+        builder.RegisterType<GraylogClientMock>()
+            .As<IGraylogClient>()
+            .SingleInstance();
         builder.RegisterType<FirebaseClientServiceMock>()
             .As<IFirebaseClientService>()
             .InstancePerLifetimeScope();
@@ -83,11 +87,11 @@ public abstract class BaseTest: IDisposable
         _queueService = Scope.Resolve<IQueueService>();
         _dbCleanUpService.CleanUp().Wait();
         
-        SmtpClientServiceMock = (Scope.Resolve<ISmtpClientService>() as SmtpClientServiceMock)!;
+        GraylogClient = (Scope.Resolve<IGraylogClient>() as GraylogClientMock)!;
         FirebaseClientService = (Scope.Resolve<IFirebaseClientService>() as FirebaseClientServiceMock)!;
         
         _queueDao = Scope.Resolve<IQueueDao>();
-        SmtpClientServiceMock.Reset();
+        GraylogClient.Clear();
         FirebaseClientService.Reset();
     }
 

@@ -33,7 +33,7 @@ public class Step1Test: BaseTest
         response.EnsureSuccessStatusCode();
 
         await QueueProcess(QueueChannel.Notifications);
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
+        Assert.Contains(GraylogClient.EmailLogs, item => item.EmailTo == user.Email);
     }
 
     [Fact]

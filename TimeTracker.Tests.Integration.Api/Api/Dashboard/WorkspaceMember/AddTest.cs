@@ -95,12 +95,11 @@ public class AddTest: BaseTest
         var actualProcessedCounter = await QueueProcess(QueueChannel.Notifications);
         Assert.True(actualProcessedCounter > 0);
 
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
-        var actualEmail = SmtpClientServiceMock.SentMessages.LastOrDefault();
+        var actualEmail = GraylogClient.EmailLogs.LastOrDefault();
         Assert.NotNull(actualEmail);
-        Assert.Contains(invitedUser.Email, actualEmail.To);
-        Assert.Contains("/registration/verification/", actualEmail.Body);
-        Assert.Contains(invitedUser.VerificationToken!, actualEmail.Body);
+        Assert.Contains(invitedUser.Email, actualEmail.EmailTo);
+        Assert.Contains("/registration/verification/", actualEmail.EmailBody);
+        Assert.Contains(invitedUser.VerificationToken!, actualEmail.EmailBody);
     }
     
     [Fact]

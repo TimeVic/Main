@@ -62,10 +62,9 @@ public class Step2Test: BaseTest
         Assert.True(responseData.User.DefaultWorkspace.IsDefault);
         
         await QueueProcess(QueueChannel.Notifications);
-        Assert.True(SmtpClientServiceMock.IsEmailSent);
-        Assert.Contains(SmtpClientServiceMock.SentMessages, message =>
+        Assert.Contains(GraylogClient.EmailLogs, message =>
         {
-            return message.Body.Contains("is verified");
+            return message.EmailBody.Contains("is verified");
         });
         
         var actualAccessToken = await _accessTokenDao.GetByToken(accessToken!);

@@ -1,7 +1,4 @@
-﻿using NHibernate.Linq;
-using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Orm.Entities.Tasks;
+﻿using Persistence.Transactions.Behaviors;
 
 namespace TimeTracker.Business.Testing.Services;
 
@@ -16,15 +13,7 @@ public class DbCleanUpService: IDbCleanUpService
 
     public async Task CleanUp()
     {
-        await _sessionProvider.CurrentSession
-            .CreateSQLQuery("update users set selected_workspace_id = null where selected_workspace_id is not null;")
-            .ExecuteUpdateAsync();
-
-        await _sessionProvider.CurrentSession
-            .CreateSQLQuery("update note_nodes set last_content_id = null where last_content_id is not null;")
-            .ExecuteUpdateAsync();
-
-        var tables = new List<string>()
+        var tables = new[]
         {
             "messaging.activities",
             "messaging.counters",
@@ -45,7 +34,6 @@ public class DbCleanUpService: IDbCleanUpService
             "task_comment_stored_files",
             "task_comment_watchers",
             "task_history_items",
-            "task_stored_files",
             "task_stored_files",
             "user_stored_files",
             "task_tags",
@@ -84,12 +72,11 @@ public class DbCleanUpService: IDbCleanUpService
             "sequences",
         };
 
-        foreach (var table in tables)
-        {
-            await _sessionProvider.CurrentSession.CreateSQLQuery($"delete from {table} where 1=1;").ExecuteUpdateAsync();
-        }
+        // CASCADE removes dependent records before parent records and avoids foreign key violations during cleanup.
+        await _sessionProvider.CurrentSession
+            .CreateSQLQuery($"truncate table {string.Join(", ", tables)} cascade;")
+            .ExecuteUpdateAsync();
 
-        // Ensure the cleanup deletes are applied before the NHibernate session is disposed.
         await _sessionProvider.CurrentSession.FlushAsync();
         _sessionProvider.CloseCurrentSession();
     }

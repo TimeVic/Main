@@ -117,10 +117,6 @@ node('build-node') {
         webAppContainer.buildVariables.put('ENVIRONMENT', effectiveEnvironment)
         webAppContainer.envVariables.put('ASPNETCORE_ENVIRONMENT', effectiveEnvironment)
 
-        // GrayLog
-        envVariables.put('App__Logging__GrayLog__Host', '192.168.88.30')
-        envVariables.put('App__Logging__GrayLog__Port', '12201')
-
         def dbName = ''
         def dbPort = ''
         def dbHost = ''
@@ -137,6 +133,14 @@ node('build-node') {
             dbName = 'timevic_dev'
             dbPort = '5432'
             dbHost = '192.168.88.42'
+        }
+
+        // Grtaylog
+        withCredentials([string(credentialsId: "timevic_graylog_ip", variable: 'AUTH_SECRET')]) {
+            envVariables.put('App__Logging__GrayLog__Host', AUTH_SECRET)
+        }
+        withCredentials([string(credentialsId: "timevic_graylog_port", variable: 'AUTH_SECRET')]) {
+            envVariables.put('App__Logging__GrayLog__Port', AUTH_SECRET)
         }
 
         // Common
@@ -304,6 +308,7 @@ node('web-node') {
 
         mainContainer.envVariables = envVariables.clone()
         mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Api')
+        mainContainer.envVariables.put('App__Name', 'Api')
         dockerHelper.runContainer(mainContainer)
     }
 
@@ -313,6 +318,7 @@ node('web-node') {
 
         mainContainer.envVariables = envVariables.clone()
         mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerServices')
+        mainContainer.envVariables.put('App__Name', 'Worker')
         dockerHelper.runContainer(mainContainer)
     }
 
@@ -325,6 +331,7 @@ node('web-node') {
         {
             webAppContainer.port = '8216:80';
         }
+        webAppContainer.envVariables.put('App__Name', 'WebClient')
         dockerHelper.runContainer(webAppContainer)
     }
     

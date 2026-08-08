@@ -2,6 +2,7 @@
 using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Common.Services.Web.ReCaptcha;
+using TimeTracker.Business.Logging.Client.GrayLog;
 using TimeTracker.Business.Services.ExternalClients.ClickUp;
 using TimeTracker.Business.Services.ExternalClients.Jira;
 using TimeTracker.Business.Services.ExternalClients.Redmine;
@@ -17,6 +18,7 @@ public static class ContainerBuilderExtensions
             typeof(BusinessTestingAssemblyMarker).Assembly
         );
         builder.RegisterType<FakeReCaptchaService>().As<IReCaptchaService>().InstancePerDependency();
+        builder.RegisterType<GraylogClientMock>().As<IGraylogClient>().SingleInstance();
         builder.RegisterType<SmtpClientServiceMock>().As<ISmtpClientService>().InstancePerLifetimeScope();
         builder.RegisterType<FirebaseClientServiceMock>().As<IFirebaseClientService>().InstancePerLifetimeScope();
         builder.RegisterType<ClickUpClientMock>().As<IClickUpClient>().InstancePerLifetimeScope();
