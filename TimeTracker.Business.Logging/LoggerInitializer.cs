@@ -51,24 +51,17 @@ public static class LoggerInitializer
     private static IConfigurationRoot BuildConfiguration(string environment)
     {
         var isTestingEnvironment = environment == "Testing";
-        var configurationBuilder = new ConfigurationBuilder()
+        return new ConfigurationBuilder()
             .SetBasePath(AppContext.BaseDirectory)
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: !isTestingEnvironment)
 #if DEBUG
             .AddJsonFile("appsettings.Debug.json", optional: true, reloadOnChange: !isTestingEnvironment)
 #endif
-            .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: !isTestingEnvironment);
-
-        if (isTestingEnvironment)
-        {
-            configurationBuilder.AddJsonFile("appsettings.Testing.json", optional: true, reloadOnChange: false);
-        }
-
-        configurationBuilder
+            .AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: !isTestingEnvironment)
+            .AddJsonFile("appsettings.Testing.json", optional: true, reloadOnChange: false)
             .AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: !isTestingEnvironment)
-            .AddEnvironmentVariables();
-
-        return configurationBuilder.Build();
+            .AddEnvironmentVariables()
+            .Build();
     }
 
     private static string GetHostingEnvironment()
