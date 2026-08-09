@@ -6,9 +6,9 @@ namespace TimeTracker.Client.Core.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<TimeEntryDto?> TimeEntryStartAsync(StartRequest model)
+        public async Task<StartResponse?> TimeEntryStartAsync(StartRequest model)
         {
-            return await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryStart, model);
+            return await PostAsync<StartResponse>(ApiUrl.TimeEntryStart, model);
         }
 
         public async Task<TimeEntryDto?> TimeEntryStopAsync(StopRequest model)

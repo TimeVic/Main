@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Client.Core.Core.Extensions;
@@ -46,17 +47,18 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
             {
                 project = action.InternalTask?.TaskList.Project;
             }
+            var startTime = DateTime.UtcNow;
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
             {
-                StartTime = DateTime.UtcNow,
+                StartTime = startTime,
                 IsBillable = project != null ? project.IsBillableByDefault : action.IsBillable,
                 ProjectId = action.Project?.Id,
                 Description = action.Description,
                 HourlyRate = action.HourlyRate,
                 InternalTaskId = action.InternalTask?.Id
             });
-            dispatcher.Dispatch(new SetActiveTimeEntryAction(response));
-            ReloadListIfTimeEntriesPageIsOpen(dispatcher);
+            AddStoppedTimeEntryToListIfTimeEntriesPageIsOpen(response?.StoppedTimeEntry, dispatcher);
+            dispatcher.Dispatch(new SetActiveTimeEntryAction(response?.ActiveTimeEntry));
         }
         catch (Exception e)
         {
@@ -68,8 +70,16 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
         }
     }
 
-    private void ReloadListIfTimeEntriesPageIsOpen(IDispatcher dispatcher)
+    private void AddStoppedTimeEntryToListIfTimeEntriesPageIsOpen(
+        TimeEntryDto? stoppedTimeEntry,
+        IDispatcher dispatcher
+    )
     {
+        if (stoppedTimeEntry == null)
+        {
+            return;
+        }
+
         var currentPath = _navigationManager.GetPath().TrimEnd('/');
         var timeEntriesPath = _urlService.GetDashboardUrl().TrimEnd('/');
         if (!string.Equals(currentPath, timeEntriesPath, StringComparison.OrdinalIgnoreCase))
@@ -77,7 +87,6 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
             return;
         }
 
-        dispatcher.Dispatch(new SetSelectedPageAction(1));
-        dispatcher.Dispatch(new LoadListAction());
+        dispatcher.Dispatch(new AddTimeEntryToListAction(stoppedTimeEntry));
     }
 }

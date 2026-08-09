@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Common.Constants;
 // using TimeTracker.Client.Core.Store.Tasks;
 
 namespace TimeTracker.Client.Core.Store.TimeEntry;
@@ -53,6 +54,35 @@ public class TimeEntryReducers
             HasMoreItems = action.Response.List.IsHasMore
         };
     }
+
+    [ReducerMethod]
+    public static TimeEntryState AddTimeEntryToListActionReducer(TimeEntryState state, AddTimeEntryToListAction action)
+    {
+        var existingEntry = state.List.FirstOrDefault(item => item.Id == action.TimeEntry.Id);
+        if (existingEntry == null && !IsInCurrentPagePeriod(state, action.TimeEntry))
+        {
+            return state;
+        }
+
+        var list = state.List
+            .Where(item => item.Id != action.TimeEntry.Id)
+            .Append(action.TimeEntry)
+            .OrderByDescending(item => item.StartTime)
+            .ToList();
+
+        var isNewDay = existingEntry == null
+            && !state.List.Any(item => item.StartTimeOffset.Date == action.TimeEntry.StartTimeOffset.Date);
+        var totalCount = isNewDay ? state.TotalCount + 1 : state.TotalCount;
+
+        return state with
+        {
+            List = list,
+            TotalCount = totalCount,
+            TotalPages = (int)Math.Ceiling(
+                (decimal)totalCount / GlobalConstants.TimeEntryGroupedByDayPageSize
+            )
+        };
+    }
     
     [ReducerMethod]
     public static TimeEntryState SetTimeEntryIsListLoadingReducer(TimeEntryState state, SetTimeEntryIsListLoading action)
@@ -61,6 +91,26 @@ public class TimeEntryReducers
         {
             IsListLoading = action.IsLoading
         };
+    }
+
+    private static bool IsInCurrentPagePeriod(TimeEntryState state, TimeEntryDto timeEntry)
+    {
+        var currentPageDates = state.List
+            .Select(item => item.StartTimeOffset.Date)
+            .Distinct()
+            .ToList();
+        if (currentPageDates.Contains(timeEntry.StartTimeOffset.Date))
+        {
+            return true;
+        }
+
+        if (!currentPageDates.Any())
+        {
+            return state.SelectedPage == 1;
+        }
+
+        return timeEntry.StartTimeOffset.Date >= currentPageDates.Min()
+            && timeEntry.StartTimeOffset.Date <= currentPageDates.Max();
     }
 
     [ReducerMethod]

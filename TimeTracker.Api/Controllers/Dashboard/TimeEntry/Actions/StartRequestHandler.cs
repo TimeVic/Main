@@ -16,7 +16,7 @@ using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 {
-    public class StartRequestHandler : IAsyncRequestHandler<StartRequest, TimeEntryDto>
+    public class StartRequestHandler : IAsyncRequestHandler<StartRequest, StartResponse>
     {
         private readonly IMapper _mapper;
         private readonly IApiRequestService _apiRequestService;
@@ -57,7 +57,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _timeEntryService = timeEntryService;
         }
     
-        public async Task<TimeEntryDto> ExecuteAsync(StartRequest request)
+        public async Task<StartResponse> ExecuteAsync(StartRequest request)
         {
             var user = await _apiRequestService.GetCurrentUser();
             var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
@@ -82,7 +82,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             }
 
             // Stops the current entry and starts the new one in the request transaction.
-            await _timeEntryService.StopActiveAsync(workspace, user, request.StartTime);
+            var stoppedTimeEntry = (await _timeEntryService.StopActiveAsync(workspace, user, request.StartTime))
+                .FirstOrDefault();
 
             var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
             var userProjects = await _projectDao.GetAvailableForUserListAsync(workspace, user, userAccess);
@@ -104,7 +105,11 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 hourlyRate: request.HourlyRate,
                 internalTask: task
             );
-            return _mapper.Map<TimeEntryDto>(timeEntry);
+            return new StartResponse
+            {
+                ActiveTimeEntry = _mapper.Map<TimeEntryDto>(timeEntry),
+                StoppedTimeEntry = _mapper.Map<TimeEntryDto>(stoppedTimeEntry)
+            };
         }
     }
 }
