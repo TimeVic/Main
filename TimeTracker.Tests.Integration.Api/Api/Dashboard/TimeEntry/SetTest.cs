@@ -87,7 +87,7 @@ public class SetTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        var actualDto = (await response.GetJsonDataAsync<StartResponse>()).ActiveTimeEntry;
         Assert.NotNull(actualDto.Project);
         Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.Equal(endTime, actualDto.EndTime);
@@ -203,7 +203,7 @@ public class SetTest: BaseTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        var actualDto = (await response.GetJsonDataAsync<StartResponse>()).ActiveTimeEntry;
         Assert.Equal(expectedHourlyRate, actualDto.HourlyRate);
     }
 }

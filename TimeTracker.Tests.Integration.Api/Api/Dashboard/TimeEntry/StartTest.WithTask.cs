@@ -25,7 +25,7 @@ public partial class StartTest
         });
         response.EnsureSuccessStatusCode();
 
-        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        var actualDto = (await response.GetJsonDataAsync<StartResponse>()).ActiveTimeEntry;
         Assert.NotEqual(Guid.Empty, actualDto.Id);
         Assert.NotNull(actualDto.Task);
         Assert.True(actualDto.Task.TaskId > 0);
