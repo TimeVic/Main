@@ -192,7 +192,7 @@ public class SetTest: BaseTest
         var project = await _projectSeeder.CreateAsync(_defaultWorkspace);
         project.DefaultHourlyRate = expectedHourlyRate;
 
-        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
+        var response = await PostRequestAsync(Url, _jwtToken, new SetRequest()
         {
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,

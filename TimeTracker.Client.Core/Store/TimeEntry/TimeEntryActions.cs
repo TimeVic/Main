@@ -23,6 +23,8 @@ public record struct LoadListAction();
 
 public record struct SetTimeEntryListItemsAction(GetListResponse Response);
 
+public record struct AddTimeEntryToListAction(TimeEntryDto TimeEntry);
+
 public record struct SaveTimeEntryAction(TimeEntryDto TimeEntry, bool IsSetProjectDefaults = false);
 
 public record struct UpdateTimeEntryAction(TimeEntryDto TimeEntry);

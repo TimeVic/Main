@@ -9,13 +9,24 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.TimeEntry.Components;
 
 public partial class MyTimeEntriesListBlock
 {
+    private abstract record ListItem;
+
+    private sealed record DateHeaderListItem(
+        DateTime Date,
+        TimeSpan TotalDuration,
+        IReadOnlyList<ClientDurationItem> ClientDurations
+    ) : ListItem;
+
+    private sealed record TimeEntryListItem(TimeEntryDto Entry) : ListItem;
+
+    private record ClientDurationItem(string ClientName, TimeSpan Duration);
+
     [Inject] 
     private IState<TimeEntryState> _state { get; set; }
     
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; }
     
-    private IEnumerable<IGrouping<DateTime, TimeEntryDto>> _groupedList => _state.Value.ListToShow.GroupBy(item => item.StartTimeOffset.Date);
     private bool _isLoading => _state.Value.IsListLoading;
     private string NoClientLabel => DashboardLocalizer["NoClient"].Value;
     private TimeEntryDto? _timeEntryToEdit { get; set; }
@@ -38,6 +49,27 @@ public partial class MyTimeEntriesListBlock
             ))
             .OrderBy(item => item.ClientName == NoClientLabel)
             .ThenBy(item => item.ClientName)
+            .ToList();
+    }
+
+    private ICollection<ListItem> GetListItems()
+    {
+        return _state.Value.ListToShow
+            .GroupBy(item => item.StartTimeOffset.Date)
+            .SelectMany(group =>
+            {
+                var entries = group.ToList();
+                var totalDuration = TimeSpan.FromTicks(entries.Sum(item => item.Duration.Ticks));
+                var dateHeader = new DateHeaderListItem(
+                    group.Key,
+                    totalDuration,
+                    GetClientDurationItems(entries)
+                );
+
+                return entries
+                    .Select(entry => (ListItem)new TimeEntryListItem(entry))
+                    .Prepend(dateHeader);
+            })
             .ToList();
     }
     
@@ -86,6 +118,4 @@ public partial class MyTimeEntriesListBlock
         Dispatcher.Dispatch(new SetSelectedPageAction(selectedPage));
         Dispatcher.Dispatch(new LoadListAction());
     }
-
-    private record ClientDurationItem(string ClientName, TimeSpan Duration);
 }

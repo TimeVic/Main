@@ -20,7 +20,7 @@ public class TimeEntryController(ILifetimeScope scope) : MainApiControllerBase(s
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Start([FromBody] StartRequest request)
         => this.RequestAsync()
-            .For<TimeEntryDto>()
+            .For<StartResponse>()
             .With(request);
     
     [HttpPost("stop")]

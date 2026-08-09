@@ -48,6 +48,7 @@ using TimeEntryGetListRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.
 using TimeEntryGetListResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.GetListResponse;
 using TimeEntrySetRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.SetRequest;
 using TimeEntryStartRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.StartRequest;
+using TimeEntryStartResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.StartResponse;
 using TimeEntryStopRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.StopRequest;
 using WorkspaceMemberGetListRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember.GetListRequest;
 using WorkspaceMemberGetListResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember.GetListResponse;
@@ -189,7 +190,7 @@ public interface IApiService
 
     Task<TaskListGetListResponse?> TaskListGetListAsync(TaskListGetListRequest model);
 
-    Task<TimeEntryDto?> TimeEntryStartAsync(TimeEntryStartRequest model);
+    Task<TimeEntryStartResponse?> TimeEntryStartAsync(TimeEntryStartRequest model);
 
     Task<TimeEntryDto?> TimeEntryStopAsync(TimeEntryStopRequest model);
 
