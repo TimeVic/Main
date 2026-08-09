@@ -28,36 +28,41 @@
     />
 }
 
+@{
+    var listItems = GetListItems();
+}
+
 <section class="space-y-3">
-    <div class="space-y-4">
-        @if (_groupedList.Any())
+    <div>
+        @if (listItems.Any())
         {
-            foreach (var groupedItem in _groupedList)
-            {
-                var totalDuration = TimeSpan.FromTicks(
-                    groupedItem.Sum(item => item.Duration.Ticks)
-                );
-                <div class="overflow-hidden rounded-lg border border-slate-200 bg-white">
-                    <div class="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-2">
-                        <span class="text-xs font-semibold text-slate-600">@groupedItem.Key.ToString("ddd, MMM d")</span>
+            <Virtualize
+                Items="@listItems"
+                ItemSize="54"
+                OverscanCount="5"
+                Context="listItem">
+                @if (listItem is DateHeaderListItem dateHeader)
+                {
+                    <div class="flex h-[54px] items-center justify-between border border-slate-200 bg-slate-50 px-4">
+                        <span class="text-xs font-semibold text-slate-600">@dateHeader.Date.ToString("ddd, MMM d")</span>
                         <LumexPopover>
                             <LumexPopoverTrigger>
                                 <button
                                     type="button"
                                     class="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-semibold text-slate-600 hover:bg-slate-100">
                                     <span>@DashboardLocalizer["Total"]:</span>
-                                    <span>@_timeParsingService.TimeSpanToTimeString(totalDuration, true)</span>
+                                    <span>@_timeParsingService.TimeSpanToTimeString(dateHeader.TotalDuration, true)</span>
                                 </button>
                             </LumexPopoverTrigger>
                             <LumexPopoverContent>
                                 <div class="min-w-[240px] space-y-3 p-3">
                                     <div>
                                         <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["TotalDuration"]</p>
-                                        <p class="text-xs text-slate-500">@groupedItem.Key.ToString("ddd, MMM d")</p>
+                                        <p class="text-xs text-slate-500">@dateHeader.Date.ToString("ddd, MMM d")</p>
                                     </div>
 
                                     <div class="space-y-2">
-                                        @foreach (var clientDuration in GetClientDurationItems(groupedItem))
+                                        @foreach (var clientDuration in dateHeader.ClientDurations)
                                         {
                                             <div class="flex items-center justify-between gap-4 text-xs">
                                                 <span class="min-w-0 truncate text-slate-500">@clientDuration.ClientName</span>
@@ -71,22 +76,20 @@
                             </LumexPopoverContent>
                         </LumexPopover>
                     </div>
-
-                    <div class="divide-y divide-slate-100">
-                    @foreach (var entry in groupedItem)
-                    {
-                        <MyTimeEntryCard
-                            CurrentTimeZone="@(AuthState.Value.Workspace?.TimeZone ?? TimeZoneInfo.Local.Id)"
-                            Entry="@entry"
-                            OnEdit="OnEditTimeEntry"
-                            OnClone="OnCloneTimeEntry"
-                            OnOpenTask="(entry) => _taskToEdit = entry.Task"
-                            OnDelete="(entry) => _timeEntryToDelete = entry"
-                        />
-                    }
-                    </div>
-                </div>
-            }
+                }
+                else if (listItem is TimeEntryListItem timeEntry)
+                {
+                    <MyTimeEntryCard
+                        @key="timeEntry.Entry.Id"
+                        CurrentTimeZone="@(AuthState.Value.Workspace?.TimeZone ?? TimeZoneInfo.Local.Id)"
+                        Entry="@timeEntry.Entry"
+                        OnEdit="OnEditTimeEntry"
+                        OnClone="OnCloneTimeEntry"
+                        OnOpenTask="(entry) => _taskToEdit = entry.Task"
+                        OnDelete="(entry) => _timeEntryToDelete = entry"
+                    />
+                }
+            </Virtualize>
             <TPaginator
                 CurrentPage="@_state.Value.SelectedPage"
                 CurrentPageChanged="OnPageChanged"
