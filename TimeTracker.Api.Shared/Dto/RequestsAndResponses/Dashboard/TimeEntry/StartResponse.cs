@@ -8,4 +8,5 @@ public class StartResponse: IResponse
     public TimeEntryDto ActiveTimeEntry { get; set; } = null!;
 
     public TimeEntryDto? StoppedTimeEntry { get; set; }
+    
 }
