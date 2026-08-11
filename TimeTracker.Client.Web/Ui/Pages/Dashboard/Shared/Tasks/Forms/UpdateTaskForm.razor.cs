@@ -82,6 +82,7 @@ public partial class UpdateTaskForm: IDisposable
     private TaskDetailTab _activeTab = TaskDetailTab.Overview;
     private readonly List<AttachmentsBlock.UploadingAttachment> _uploadingAttachments = new();
     private readonly HashSet<string> _uploadingAttachmentKeys = new();
+    private bool _isDisposed;
     public TaskFullDto _task { get; set; } = new();
 
     private string _attachmentAcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
@@ -190,6 +191,8 @@ public partial class UpdateTaskForm: IDisposable
 
     public void Dispose()
     {
+        // Prevent a completed upload from updating a task modal that has already been closed.
+        _isDisposed = true;
         _editContext?.OnFieldChanged -= OnFormFieldChanged;
         if (!string.IsNullOrWhiteSpace(_attachmentInteropId))
         {
@@ -266,6 +269,11 @@ public partial class UpdateTaskForm: IDisposable
     [JSInvokable]
     public Task SetAttachmentDragActive(bool isActive)
     {
+        if (_isDisposed)
+        {
+            return Task.CompletedTask;
+        }
+
         _isDragActive = isActive;
         return InvokeAsync(StateHasChanged);
     }
@@ -304,6 +312,11 @@ public partial class UpdateTaskForm: IDisposable
                     StoredFileType.Attachment,
                     fileInfo.First
                 );
+                if (_isDisposed)
+                {
+                    return;
+                }
+
                 if (uploadedFile == null)
                 {
                     ToastService.ShowError(DashboardLocalizer["UpdateTaskForm_AttachmentUploadError"].Value);
@@ -314,6 +327,11 @@ public partial class UpdateTaskForm: IDisposable
             }
             catch (Exception e)
             {
+                if (_isDisposed)
+                {
+                    return;
+                }
+
                 _logger.LogError(e, e.Message);
                 ToastService.ShowError(e.Message);
             }
@@ -321,7 +339,10 @@ public partial class UpdateTaskForm: IDisposable
             {
                 _uploadingAttachmentKeys.Remove(GetAttachmentKey(fileInfo.First));
                 _uploadingAttachments.Remove(fileInfo.Second);
-                await InvokeAsync(StateHasChanged);
+                if (!_isDisposed)
+                {
+                    await InvokeAsync(StateHasChanged);
+                }
             }
         }
     }
