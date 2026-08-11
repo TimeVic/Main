@@ -144,6 +144,7 @@ node('build-node') {
         }
 
         // Common
+        envVariables.put('Smtp__EnableSsl', 'true')
         withCredentials([
                 usernamePassword(credentialsId: "timevic_production_smtp_credentials", usernameVariable: 'USER_NAME', passwordVariable: 'PASSWORD')
         ]) {

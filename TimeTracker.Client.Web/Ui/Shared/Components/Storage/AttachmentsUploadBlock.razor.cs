@@ -6,7 +6,7 @@ using TimeTracker.Business.Common.Extensions;
 
 namespace TimeTracker.Client.Web.Ui.Shared.Components.Storage;
 
-public partial class AttachmentsUploadBlock
+public partial class AttachmentsUploadBlock : IDisposable
 {
     [Parameter] public Guid EntityId { get; set; }
     [Parameter] public StorageEntityType EntityType { get; set; }
@@ -18,6 +18,7 @@ public partial class AttachmentsUploadBlock
     [Inject] private ILogger<AttachmentsUploadBlock> Logger { get; set; } = null!;
 
     private readonly List<AttachmentsBlock.UploadingAttachment> _uploadingFiles = [];
+    private bool _isDisposed;
     private string AcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
 
     private async Task OnFilesSelected(InputFileChangeEventArgs args)
@@ -30,6 +31,11 @@ public partial class AttachmentsUploadBlock
             try
             {
                 var uploadedFile = await ApiService.StorageUploadFileAsync(EntityId, EntityType, StoredFileType.Attachment, item.First);
+                if (_isDisposed)
+                {
+                    return;
+                }
+
                 if (uploadedFile != null)
                 {
                     Files.Add(uploadedFile);
@@ -38,16 +44,30 @@ public partial class AttachmentsUploadBlock
             }
             catch (Exception exception)
             {
+                if (_isDisposed)
+                {
+                    return;
+                }
+
                 Logger.LogError(exception, "Failed to upload attachment");
                 ToastService.ShowError(exception.Message);
             }
             finally
             {
                 _uploadingFiles.Remove(item.Second);
-                await InvokeAsync(StateHasChanged);
+                if (!_isDisposed)
+                {
+                    await InvokeAsync(StateHasChanged);
+                }
             }
         }
     }
 
     private Task OnFilesChanged(ICollection<StoredFileDto> files) => FilesChanged.InvokeAsync(files);
+
+    public void Dispose()
+    {
+        // Prevent a completed upload from updating a modal that has already been closed.
+        _isDisposed = true;
+    }
 }
