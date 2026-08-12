@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Store.Tag;
 
-namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components;
+namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Tags;
 
 public partial class TagsBlock
 {

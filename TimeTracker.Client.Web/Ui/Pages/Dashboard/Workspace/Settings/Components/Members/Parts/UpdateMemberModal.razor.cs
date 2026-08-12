@@ -7,7 +7,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Store.Project;
 using LoadListAction = TimeTracker.Client.Core.Store.WorkspaceMembers.LoadListAction;
 
-namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts;
+namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members.Parts;
 
 public partial class UpdateMemberModal
 {
