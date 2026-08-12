@@ -6,7 +6,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tag;
 using TimeTracker.Client.Core.Store.Tag;
 
-namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts;
+namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Tags.Parts;
 
 public partial class UpdateTagModal
 {

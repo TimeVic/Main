@@ -1,9 +1,8 @@
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Client.Core.Store.Client;
-using ClientUpdateAction = TimeTracker.Client.Core.Store.Client.UpdateAction;
 
-namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts;
+namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Clients.Parts;
 
 public partial class ClientProjectsGroupBlock
 {
@@ -19,14 +18,15 @@ public partial class ClientProjectsGroupBlock
     [Parameter]
     public EventCallback<ProjectDto> EditProjectRequested { get; set; }
 
-    private Task OnSaveClient()
-    {
-        if (Client != null && !string.IsNullOrWhiteSpace(Client.Name))
-        {
-            Dispatcher.Dispatch(new ClientUpdateAction(Client));
-        }
+    [Parameter]
+    public EventCallback<ClientDto> EditClientRequested { get; set; }
 
-        return Task.CompletedTask;
+    private async Task OnEditClient()
+    {
+        if (Client != null)
+        {
+            await EditClientRequested.InvokeAsync(Client);
+        }
     }
 
     private async Task OnAddProject()

@@ -596,6 +596,15 @@
   <data name="UserSettings_SaveError" xml:space="preserve"><value>Could not save account settings</value></data>
   <data name="UpdateProjectModal_Title" xml:space="preserve"><value>Edit "{0}"</value></data>
   <data name="UpdateProjectModal_Description" xml:space="preserve"><value>Update the project name and reassign it to another client if needed.</value></data>
+  <data name="UpdateClientModal_Title" xml:space="preserve"><value>Edit "{0}"</value></data>
+  <data name="UpdateClientModal_Description" xml:space="preserve"><value>Update client name and details.</value></data>
+  <data name="ClientProjectsGroupBlock_Billable" xml:space="preserve"><value>Billable</value></data>
+  <data name="ClientProjectsGroupBlock_NonBillable" xml:space="preserve"><value>Non-billable</value></data>
+  <data name="ClientProjectsGroupBlock_ProjectsCount" xml:space="preserve"><value>{0} projects</value></data>
+  <data name="ClientProjectsGroupBlock_NoRate" xml:space="preserve"><value>Not set</value></data>
+  <data name="ClientProjectsGroupBlock_NoProjects" xml:space="preserve"><value>No projects for this client yet.</value></data>
+  <data name="SearchClientsAndProjects" xml:space="preserve"><value>Search clients or projects...</value></data>
+  <data name="NoMatchingResults" xml:space="preserve"><value>No matching clients or projects found.</value></data>
   <data name="UpdateProjectModal_BillHourlyByDefault" xml:space="preserve"><value>Bill hourly by default</value></data>
   <data name="UpdateProjectModal_BillHourlyByDefaultDescription" xml:space="preserve"><value>Use the project hourly rate automatically for new time entries.</value></data>
   <data name="UpdateProjectModal_RateCurrencyHint" xml:space="preserve"><value>Saved in {0} and applied when billable by default is enabled.</value></data>

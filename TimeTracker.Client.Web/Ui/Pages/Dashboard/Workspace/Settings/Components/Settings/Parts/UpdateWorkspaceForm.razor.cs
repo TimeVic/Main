@@ -7,7 +7,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
 using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Workspace;
 
-namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Parts;
+namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Settings.Parts;
 
 public partial class UpdateWorkspaceForm
 {

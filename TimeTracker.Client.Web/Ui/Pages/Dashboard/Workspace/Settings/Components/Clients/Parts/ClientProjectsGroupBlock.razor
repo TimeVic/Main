@@ -1,0 +1,102 @@
+@using LumexUI
+@using LumexUI.Common
+
+@inherits BaseReactiveComponent
+
+<LumexCard Class="overflow-hidden border border-slate-200/80 shadow-xs transition-all duration-200 hover:shadow-md">
+    <LumexCardBody Class="p-5">
+        <div class="space-y-4">
+            <div class="flex flex-col gap-4 border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex min-w-0 items-center gap-3">
+                    @if (Client != null)
+                    {
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-lg font-semibold text-blue-600 border border-blue-100/60 shadow-xs">
+                            <i class="fa-regular fa-building"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <h3 class="truncate text-base font-semibold text-slate-900">@Client.Name</h3>
+                                <LumexChip
+                                    Size="Size.Small"
+                                    Variant="ChipVariant.Flat"
+                                    Color="ThemeColor.Primary">
+                                    @string.Format(DashboardLocalizer["ClientProjectsGroupBlock_ProjectsCount"], Projects.Count)
+                                </LumexChip>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-lg font-semibold text-slate-500">
+                            <i class="fa-regular fa-folder-open"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h3 class="text-base font-semibold text-slate-900">@DashboardLocalizer["ClientProjectsGroupBlock_ProjectsWithoutClient"]</h3>
+                            <p class="text-xs text-slate-500">@DashboardLocalizer["ClientProjectsGroupBlock_ProjectsWithoutClientDescription"]</p>
+                        </div>
+                    }
+                </div>
+
+                <div class="flex shrink-0 items-center gap-2">
+                    @if (Client != null)
+                    {
+                        <CustomButton
+                            OnClick="@OnEditClient"
+                            Size="Size.Small"
+                            Color="@ThemeColor.Primary"
+                            Variant="Variant.Light"
+                            Radius="@Radius.Full">
+                            <StartContent>
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </StartContent>
+                            <ChildContent>
+                                @DashboardLocalizer["EditClient"]
+                            </ChildContent>
+                        </CustomButton>
+                    }
+
+                    <CustomButton
+                        OnClick="@OnAddProject"
+                        Size="Size.Small"
+                        Color="@ThemeColor.Primary"
+                        Variant="Variant.Solid"
+                        Radius="@Radius.Full">
+                        <StartContent>
+                            <i class="fa-solid fa-plus"></i>
+                        </StartContent>
+                        <ChildContent>
+                            @DashboardLocalizer["AddProject"]
+                        </ChildContent>
+                    </CustomButton>
+                </div>
+            </div>
+
+            @if (Projects.Any())
+            {
+                <ProjectsGridBlock
+                    Projects="@Projects"
+                    EditRequested="OnEditProject"/>
+            }
+            else
+            {
+                <div class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50/50 p-6 text-center">
+                    <p class="text-sm text-slate-500">@DashboardLocalizer["ClientProjectsGroupBlock_NoProjects"]</p>
+                    <CustomButton
+                        Class="mt-3"
+                        OnClick="@OnAddProject"
+                        Size="Size.Small"
+                        Color="@ThemeColor.Primary"
+                        Variant="Variant.Light"
+                        Radius="@Radius.Full">
+                        <StartContent>
+                            <i class="fa-solid fa-plus"></i>
+                        </StartContent>
+                        <ChildContent>
+                            @DashboardLocalizer["AddProject"]
+                        </ChildContent>
+                    </CustomButton>
+                </div>
+            }
+        </div>
+    </LumexCardBody>
+</LumexCard>

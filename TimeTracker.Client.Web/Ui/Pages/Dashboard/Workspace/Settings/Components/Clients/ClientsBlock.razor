@@ -1,0 +1,145 @@
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Clients.Parts
+
+@inherits BaseReactiveComponent
+
+<AddClientModal
+    IsOpened="_isAddClientModalOpened"
+    IsOpenedChanged="isOpened => _isAddClientModalOpened = isOpened"/>
+
+@if (_clientToUpdate != null)
+{
+    <UpdateClientModal
+        Client="_clientToUpdate"
+        IsOpened="_clientToUpdate != null"
+        IsOpenedChanged="isOpened => { _clientToUpdate = isOpened ? _clientToUpdate : null; }"/>
+}
+
+<AddProjectModal
+    IsOpened="_isAddProjectModalOpened"
+    InitialClientId="_initialProjectClientId"
+    IsOpenedChanged="OnAddProjectModalOpenedChanged"/>
+
+@if (_projectToUpdate != null)
+{
+    <UpdateProjectModal
+        Project="_projectToUpdate"
+        IsOpened="_projectToUpdate != null"
+        IsOpenedChanged="isOpened => { _projectToUpdate = isOpened ? _projectToUpdate : null; }"/>
+}
+
+<section class="space-y-6">
+    <LumexCard Class="border border-slate-200/80 shadow-xs">
+        <LumexCardBody Class="p-5">
+            <div class="space-y-5">
+                <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-blue-700">@DashboardLocalizer["SettingsPage_ClientsAndProjectsTab"]</p>
+                        <h2 class="mt-1 text-xl font-bold text-slate-900">@DashboardLocalizer["ClientsBlock_ProjectDirectoryTitle"]</h2>
+                        <p class="mt-1 text-sm text-slate-600">@DashboardLocalizer["ClientsBlock_Description"]</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <CustomButton
+                            Size="Size.Small"
+                            OnClick="@OnAdd"
+                            Color="@ThemeColor.Primary"
+                            Variant="Variant.Outlined"
+                            Radius="@Radius.Full">
+                            <StartContent>
+                                <i class="fa-solid fa-plus"></i>
+                            </StartContent>
+                            <ChildContent>
+                                @DashboardLocalizer["AddClient"]
+                            </ChildContent>
+                        </CustomButton>
+
+                        <CustomButton
+                            Size="Size.Small"
+                            OnClick="@OnAddProjectTop"
+                            Color="@ThemeColor.Primary"
+                            Variant="Variant.Solid"
+                            Radius="@Radius.Full">
+                            <StartContent>
+                                <i class="fa-solid fa-folder-plus"></i>
+                            </StartContent>
+                            <ChildContent>
+                                @DashboardLocalizer["AddProject"]
+                            </ChildContent>
+                        </CustomButton>
+                    </div>
+                </div>
+
+                @if (_clientState.Value.List.Any() || _projectState.Value.List.Any())
+                {
+                    <div class="pt-2 border-t border-slate-100">
+                        <InputTextField
+                            FullWidth="true"
+                            Placeholder="@DashboardLocalizer["SearchClientsAndProjects"]"
+                            Variant="InputVariant.Outlined"
+                            @bind-Value="_searchQuery"/>
+                    </div>
+                }
+            </div>
+        </LumexCardBody>
+    </LumexCard>
+    
+    @if (_clientState.Value.List.Any() || _projectState.Value.List.Any())
+    {
+        var filteredClients = GetFilteredClients().ToList();
+        var projectsWithoutClient = GetProjectsWithoutClient();
+
+        if (filteredClients.Any() || projectsWithoutClient.Any())
+        {
+            <div class="space-y-5">
+                @foreach (var client in filteredClients)
+                {
+                    <ClientProjectsGroupBlock
+                        @key="client.Id"
+                        Client="@client"
+                        Projects="@GetProjectsByClient(client)"
+                        AddProjectRequested="OnAddProject"
+                        EditClientRequested="OnEditClient"
+                        EditProjectRequested="OnEditProject"/>
+                }
+
+                @if (projectsWithoutClient.Any())
+                {
+                    <ClientProjectsGroupBlock
+                        Projects="@projectsWithoutClient"
+                        AddProjectRequested="OnAddProject"
+                        EditProjectRequested="OnEditProject"/>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/50 py-10 px-4 text-center">
+                <i class="fa-solid fa-magnifying-glass mb-3 text-2xl text-slate-400"></i>
+                <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["NoMatchingResults"]</p>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/50 py-12 px-4 text-center">
+            <i class="fa-regular fa-building mb-3 text-3xl text-slate-400"></i>
+            <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["ClientsBlock_Empty"]</p>
+            <div class="mt-4 flex items-center gap-3">
+                <CustomButton
+                    OnClick="@OnAdd"
+                    Size="Size.Small"
+                    Color="@ThemeColor.Primary"
+                    Radius="@Radius.Full">
+                    <StartContent>
+                        <i class="fa-solid fa-plus"></i>
+                    </StartContent>
+                    <ChildContent>
+                        @DashboardLocalizer["AddClient"]
+                    </ChildContent>
+                </CustomButton>
+            </div>
+        </div>
+    }
+</section>

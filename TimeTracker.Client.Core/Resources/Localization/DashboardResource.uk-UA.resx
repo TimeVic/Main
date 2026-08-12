@@ -517,6 +517,17 @@
   <data name="IntegrationsBlock_Loading" xml:space="preserve"><value>Завантаження налаштувань інтеграцій</value></data>
   <data name="IntegrationsBlock_ApiToken" xml:space="preserve"><value>API token</value></data>
   <data name="IntegrationsBlock_TeamId" xml:space="preserve"><value>Team ID</value></data>
+  <data name="UpdateProjectModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>
+  <data name="UpdateProjectModal_Description" xml:space="preserve"><value>Оновіть назву проєкту та за потреби переназначте його іншому клієнту.</value></data>
+  <data name="UpdateClientModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>
+  <data name="UpdateClientModal_Description" xml:space="preserve"><value>Оновіть назву та деталі клієнта.</value></data>
+  <data name="ClientProjectsGroupBlock_Billable" xml:space="preserve"><value>Оплатний</value></data>
+  <data name="ClientProjectsGroupBlock_NonBillable" xml:space="preserve"><value>Неоплатний</value></data>
+  <data name="ClientProjectsGroupBlock_ProjectsCount" xml:space="preserve"><value>{0} проєктів</value></data>
+  <data name="ClientProjectsGroupBlock_NoRate" xml:space="preserve"><value>Не вказано</value></data>
+  <data name="ClientProjectsGroupBlock_NoProjects" xml:space="preserve"><value>У цього клієнта ще немає проєктів.</value></data>
+  <data name="SearchClientsAndProjects" xml:space="preserve"><value>Пошук клієнтів або проєктів...</value></data>
+  <data name="NoMatchingResults" xml:space="preserve"><value>Клієнтів або проєктів за вашим запитом не знайдено.</value></data>
   <data name="IntegrationsBlock_UseCustomTaskIds" xml:space="preserve"><value>Використовувати custom task IDs</value></data>
   <data name="IntegrationsBlock_UseCustomTaskIdsDescription" xml:space="preserve"><value>Зіставляти задачі за custom IDs, налаштованими в ClickUp.</value></data>
   <data name="IntegrationsBlock_FillEntriesFromTaskDetails" xml:space="preserve"><value>Заповнювати записи з даних задачі</value></data>

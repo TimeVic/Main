@@ -4,7 +4,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Workspace;
 
-namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components;
+namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Settings;
 
 public partial class WorkspaceDeletionBlock
 {

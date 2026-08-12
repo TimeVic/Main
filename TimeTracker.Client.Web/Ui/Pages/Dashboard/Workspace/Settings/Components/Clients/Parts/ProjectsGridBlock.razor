@@ -1,0 +1,74 @@
+@using LumexUI
+@using LumexUI.Common
+
+@inherits BaseReactiveComponent
+
+<LumexDataGrid
+    Data="@Projects.AsQueryable()"
+    Radius="@Radius.Medium"
+    Class="w-full">
+    <LumexUI.PropertyColumn
+        Title="@DashboardLocalizer["Project"]"
+        Property="@(p => p.Name)">
+        <Content>
+            <div class="flex items-center gap-2 py-0.5">
+                <i class="fa-regular fa-folder text-sm text-blue-500"></i>
+                <span class="font-medium text-slate-900">@context.Name</span>
+            </div>
+        </Content>
+    </LumexUI.PropertyColumn>
+
+    <LumexUI.PropertyColumn
+        Title="@DashboardLocalizer["DefaultHourlyRate"]"
+        Property="@(p => p.DefaultHourlyRate)">
+        <Content>
+            <span class="text-sm font-medium text-slate-700">@GetFormattedRate(context.DefaultHourlyRate)</span>
+        </Content>
+    </LumexUI.PropertyColumn>
+
+    <LumexUI.PropertyColumn
+        Title="@DashboardLocalizer["ClientProjectsGroupBlock_BillableByDefault"]"
+        Property="@(p => p.IsBillableByDefault)">
+        <Content>
+            @if (context.IsBillableByDefault)
+            {
+                <LumexChip
+                    Size="Size.Small"
+                    Variant="ChipVariant.Flat"
+                    Color="ThemeColor.Success"
+                    Class="inline-flex items-center gap-1">
+                    <i class="fa-solid fa-dollar-sign text-[10px]"></i>
+                    <span>@DashboardLocalizer["ClientProjectsGroupBlock_Billable"]</span>
+                </LumexChip>
+            }
+            else
+            {
+                <LumexChip
+                    Size="Size.Small"
+                    Variant="ChipVariant.Flat"
+                    Color="ThemeColor.Default"
+                    Class="text-slate-500">
+                    <span>@DashboardLocalizer["ClientProjectsGroupBlock_NonBillable"]</span>
+                </LumexChip>
+            }
+        </Content>
+    </LumexUI.PropertyColumn>
+
+    <LumexUI.PropertyColumn
+        Title="@DashboardLocalizer["Actions"]"
+        Property="@(p => p.Id)">
+        <Content>
+            <CustomButton
+                Class="inline-flex rounded-full"
+                OnClick="@(() => OnEdit(context))"
+                Size="Size.Small"
+                Color="ThemeColor.Primary"
+                Variant="Variant.Light"
+                IconOnly="true">
+                <ChildContent>
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </ChildContent>
+            </CustomButton>
+        </Content>
+    </LumexUI.PropertyColumn>
+</LumexDataGrid>
