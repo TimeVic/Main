@@ -3,6 +3,7 @@
 @attribute [RequireWorkspacePermission(WorkspacePermission.UpdateWorkspaceSettings)]
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Constants
+@using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Settings
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Clients
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Tags
@@ -52,17 +53,20 @@
             <TagsBlock></TagsBlock>
         </ChildContent>
     </LumexTab>
-    <LumexTab>
-        <TitleContent>
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-users"></i>
-                <span>@DashboardLocalizer["Members"]</span>
-            </div>
-        </TitleContent>
-        <ChildContent>
-            <MembersBlock></MembersBlock>
-        </ChildContent>
-    </LumexTab>
+    @if (AuthState.Value.Workspace?.Mode == WorkspaceMode.Team)
+    {
+        <LumexTab>
+            <TitleContent>
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-users"></i>
+                    <span>@DashboardLocalizer["Members"]</span>
+                </div>
+            </TitleContent>
+            <ChildContent>
+                <MembersBlock></MembersBlock>
+            </ChildContent>
+        </LumexTab>
+    }
     <LumexTab>
         <TitleContent>
             <div class="flex items-center space-x-2">

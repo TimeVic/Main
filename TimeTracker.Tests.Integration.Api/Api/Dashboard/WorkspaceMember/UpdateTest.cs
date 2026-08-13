@@ -43,11 +43,15 @@ public class UpdateTest: BaseTest
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
+        var workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        workspaceDao.SetModeAsync(_workspace, WorkspaceMode.Team).Wait();
 
         _newUser = _userFactory.Generate();
 
         (_jwtTokenOtherUser, _otherUser, _otherWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        workspaceDao.SetModeAsync(_otherWorkspace, WorkspaceMode.Team).Wait();
+
         _membership = _workspaceAccessService.ShareAccessAsync(
             _workspace,
             _otherUser,
@@ -60,6 +64,25 @@ public class UpdateTest: BaseTest
             _projectSeeder.CreateAsync(_workspace).Result,
             _projectSeeder.CreateAsync(_workspace).Result
         };
+        FlushDbChanges().Wait();
+    }
+
+    [Fact]
+    public async Task UserCanNotUpdateMemberInSoloWorkspace()
+    {
+        var workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
+        await workspaceDao.SetModeAsync(_workspace, WorkspaceMode.Solo);
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            MemberId = _membership.Id,
+            Access = MembershipAccessType.Manager,
+            ProjectsAccess = {}
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 
     [Fact]

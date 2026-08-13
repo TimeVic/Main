@@ -42,6 +42,8 @@ public class DeleteTest: BaseTest
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _workspace.Mode = WorkspaceMode.Team;
+        DbSessionProvider.CurrentSession.UpdateAsync(_workspace).Wait();
 
         _newUser = _userFactory.Generate();
         (_jwtTokenOtherUser, _otherUser, _) = UserSeeder.CreateAuthorizedAsync().Result;
@@ -59,6 +61,22 @@ public class DeleteTest: BaseTest
             MembershipAccessType.User,
             projectsAccess
         ).Result;
+        FlushDbChanges().Wait();
+    }
+
+    [Fact]
+    public async Task UserCanNotDeleteMemberInSoloWorkspace()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new DeleteRequest()
+        {
+            MemberId = _membership.Id
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 
     [Fact]

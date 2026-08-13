@@ -780,7 +780,8 @@
   <data name="TaskDetail_OpenFullPage" xml:space="preserve"><value>Open task in full page</value></data>
   <data name="TaskDetail_BackToTasks" xml:space="preserve"><value>Back to tasks</value></data>
   <data name="ChooseWorkspaceModePage_Title" xml:space="preserve"><value>Let's set up your workspace!</value></data>
-  <data name="ChooseWorkspaceModePage_Subtitle" xml:space="preserve"><value>Choose your work mode. You can change this at any time in workspace settings.</value></data>
+  <data name="ChooseWorkspaceModePage_Subtitle" xml:space="preserve"><value>Choose your work mode for your workspace.*</value></data>
+  <data name="ChooseWorkspaceModePage_Note" xml:space="preserve"><value>* Workspace mode is set once and cannot be changed for this workspace. If you need a different mode, you can always create a new workspace with the required mode.</value></data>
   <data name="ChooseWorkspaceModePage_SoloTitle" xml:space="preserve"><value>Solo Mode (Solo Developer)</value></data>
   <data name="ChooseWorkspaceModePage_SoloDescription" xml:space="preserve"><value>For freelancers who work independently and want simplicity and focus.</value></data>
   <data name="ChooseWorkspaceModePage_SoloFeature1" xml:space="preserve"><value>Lightweight time and task tracking.</value></data>

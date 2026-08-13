@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AutoMapper;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -40,7 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
             var user = await _apiRequestService.GetCurrentUser();
             var payment = await _paymentDao.GetById(request.MemberPaymentId);
             RecordNotFoundException.ThrowIfNull(payment);
-            if (!await _securityManager.HasAccess(AccessLevel.Write, user, payment))
+            if (payment.Member.Workspace.Mode != WorkspaceMode.Team || !await _securityManager.HasAccess(AccessLevel.Write, user, payment))
             {
                 throw new HasNoAccessException();
             }

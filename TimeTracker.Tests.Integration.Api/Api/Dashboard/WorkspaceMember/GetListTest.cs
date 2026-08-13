@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
+using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Security;
@@ -26,7 +27,25 @@ public class GetListTest: BaseTest
     {
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
+        var workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        workspaceDao.SetModeAsync(_workspace, WorkspaceMode.Team).Wait();
+    }
+
+    [Fact]
+    public async Task UserCanNotGetListInSoloWorkspace()
+    {
+        var workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
+        await workspaceDao.SetModeAsync(_workspace, WorkspaceMode.Solo);
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            Page = 1
+        });
+        
+        var actual = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), actual.ErrorCode);
     }
 
     [Fact]

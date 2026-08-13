@@ -45,7 +45,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions
             var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
             RecordNotFoundException.ThrowIfNull(workspace);
             
-            if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
+            if (workspace.Mode != WorkspaceMode.Team || !await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
             {
                 throw new HasNoAccessException();
             }
