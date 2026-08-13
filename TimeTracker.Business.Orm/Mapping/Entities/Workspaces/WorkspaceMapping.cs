@@ -1,3 +1,4 @@
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Orm.Extensions;
 using TimeTracker.Business.Orm.Mapping.Common;
@@ -14,6 +15,7 @@ public class WorkspaceMapping: BaseGuidMappings<WorkspaceEntity>
         Map(x => x.Description);
         Map(x => x.TimeZone);
         Map(x => x.IsDefault);
+        Map(x => x.Mode).EnumNullable<WorkspaceMode>();
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         Map(x => x.DeletedAt).DateTimeNullable();

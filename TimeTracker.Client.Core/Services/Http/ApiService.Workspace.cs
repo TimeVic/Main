@@ -1,4 +1,4 @@
-﻿using TimeTracker.Api.Shared.Constants;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
@@ -23,6 +23,14 @@ namespace TimeTracker.Client.Core.Services.Http
         public async Task<WorkspaceDto?> WorkspaceUpdateAsync(UpdateRequest model)
         {
             return await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceUpdate, model);
+        }
+
+        public async Task<WorkspaceDto?> WorkspaceSetModeAsync(TimeTracker.Business.Common.Constants.WorkspaceMode mode)
+        {
+            return await PostAsync<WorkspaceDto>(ApiUrl.WorkspaceSetMode, new SetModeRequest
+            {
+                Mode = mode
+            });
         }
 
         public async Task WorkspaceDeleteAsync(DeleteRequest request)

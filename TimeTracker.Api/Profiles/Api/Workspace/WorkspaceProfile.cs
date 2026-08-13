@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.List;
 using TimeTracker.Business.Extensions;
@@ -20,6 +20,7 @@ public class WorkspaceProfile : Profile
                     IsDefault = src.IsDefault,
                     Description = src.Description,
                     TimeZone = src.TimeZone,
+                    Mode = src.Mode,
                     Currency = mapper.Mapper.Map<CurrencyDto>(src.Currency),
                 };
             });

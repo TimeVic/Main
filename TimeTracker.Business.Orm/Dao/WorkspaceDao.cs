@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using NHibernate.Linq;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
@@ -71,6 +71,14 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
         return workspace;
     }
     
+    public async Task<WorkspaceEntity> SetModeAsync(WorkspaceEntity workspace, WorkspaceMode mode)
+    {
+        workspace.Mode = mode;
+        workspace.UpdatedAt = DateTime.UtcNow;
+        await Session.SaveOrUpdateAsync(workspace);
+        return workspace;
+    }
+
     public async Task<WorkspaceEntity> UpdateWorkspaceAsync(
         WorkspaceEntity workspace,
         string name,
@@ -84,7 +92,7 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
         workspace.TimeZone = timeZone;
         workspace.Description = description;
         workspace.UpdatedAt = DateTime.UtcNow;
-        await Session.SaveAsync(workspace);
+        await Session.SaveOrUpdateAsync(workspace);
         return workspace;
     }
     
