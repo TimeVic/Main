@@ -83,21 +83,16 @@ public class WorkspaceDao : BaseDao, IWorkspaceDao
         WorkspaceEntity workspace,
         string name,
         CurrencyEntity currency,
-        string timeZone,
-        string? description,
-        WorkspaceMode? mode = null
+        string timeZone = "UTC",
+        string? description = null
     )
     {
         workspace.Name = name;
         workspace.Currency = currency;
         workspace.TimeZone = timeZone;
         workspace.Description = description;
-        if (mode.HasValue)
-        {
-            workspace.Mode = mode.Value;
-        }
         workspace.UpdatedAt = DateTime.UtcNow;
-        await Session.SaveAsync(workspace);
+        await Session.SaveOrUpdateAsync(workspace);
         return workspace;
     }
 
