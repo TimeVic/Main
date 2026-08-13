@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using NHibernate.Linq;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
@@ -11,14 +11,14 @@ using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao;
 
-public class WorkspaceDao: BaseDao, IWorkspaceDao
+public class WorkspaceDao : BaseDao, IWorkspaceDao
 {
     private readonly ICurrencyDao _currencyDao;
 
     public WorkspaceDao(
         ILifetimeScope scope,
         ICurrencyDao currencyDao
-    ): base(scope)
+    ) : base(scope)
     {
         _currencyDao = currencyDao;
     }
@@ -53,7 +53,7 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
             .Where(item => item.IsDefault == false && item.DeletedAt == null)
             .CountAsync();
     }
-    
+
     public async Task<WorkspaceEntity> CreateWorkspaceAsync(UserEntity user, string name, bool isDefault = false)
     {
         var workspace = new WorkspaceEntity()
@@ -70,13 +70,21 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
         await Session.SaveAsync(workspace);
         return workspace;
     }
-    
+
+    public async Task<WorkspaceEntity> SetModeAsync(WorkspaceEntity workspace, WorkspaceMode mode)
+    {
+        workspace.Mode = mode;
+        workspace.UpdatedAt = DateTime.UtcNow;
+        await Session.SaveOrUpdateAsync(workspace);
+        return workspace;
+    }
+
     public async Task<WorkspaceEntity> UpdateWorkspaceAsync(
         WorkspaceEntity workspace,
         string name,
         CurrencyEntity currency,
-        string timeZone,
-        string? description
+        string timeZone = "UTC",
+        string? description = null
     )
     {
         workspace.Name = name;
@@ -84,10 +92,10 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
         workspace.TimeZone = timeZone;
         workspace.Description = description;
         workspace.UpdatedAt = DateTime.UtcNow;
-        await Session.SaveAsync(workspace);
+        await Session.SaveOrUpdateAsync(workspace);
         return workspace;
     }
-    
+
     public async Task<bool> HasActiveTimeEntriesAsync(WorkspaceEntity workspace)
     {
         return await Session.Query<TimeEntryEntity>()
@@ -95,12 +103,12 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
             .Where(item => item.EndTime == null)
             .AnyAsync();
     }
-    
+
     public async Task<ListDto<WorkspaceMemberEntity>> GetMembersAsync(WorkspaceEntity workspace, int page)
     {
         var query = Session.Query<WorkspaceMemberEntity>()
             .Where(item => item.Workspace.Id == workspace.Id);
-        
+
         var offset = PaginationUtils.CalculateOffset(page);
         var items = await query
             .Fetch(item => item.User)
@@ -114,7 +122,7 @@ public class WorkspaceDao: BaseDao, IWorkspaceDao
             await query.CountAsync()
         );
     }
-    
+
     public async Task<WorkspaceMemberEntity> GetMemberAsync(Guid id)
     {
         return await Session.Query<WorkspaceMemberEntity>()

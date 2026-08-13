@@ -1,4 +1,5 @@
-﻿using Domain.Abstractions;
+using Domain.Abstractions;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
@@ -25,11 +26,13 @@ public interface IWorkspaceDao: IDomainService
 
     Task<WorkspaceMemberEntity> GetMemberAsync(Guid id);
 
+    Task<WorkspaceEntity> SetModeAsync(WorkspaceEntity workspace, WorkspaceMode mode);
+
     Task<WorkspaceEntity> UpdateWorkspaceAsync(
         WorkspaceEntity workspace,
         string name,
         CurrencyEntity currency,
-        string timeZone,
-        string? description
+        string timeZone = "UTC",
+        string? description = null
     );
 }

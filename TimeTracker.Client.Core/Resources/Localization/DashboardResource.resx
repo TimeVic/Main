@@ -779,4 +779,23 @@
   <data name="TaskDetail_JiraSynced" xml:space="preserve"><value>Synced with Jira</value></data>
   <data name="TaskDetail_OpenFullPage" xml:space="preserve"><value>Open task in full page</value></data>
   <data name="TaskDetail_BackToTasks" xml:space="preserve"><value>Back to tasks</value></data>
+  <data name="ChooseWorkspaceModePage_Title" xml:space="preserve"><value>Let's set up your workspace!</value></data>
+  <data name="ChooseWorkspaceModePage_Subtitle" xml:space="preserve"><value>Choose your work mode. You can change this at any time in workspace settings.</value></data>
+  <data name="ChooseWorkspaceModePage_SoloTitle" xml:space="preserve"><value>Solo Mode (Solo Developer)</value></data>
+  <data name="ChooseWorkspaceModePage_SoloDescription" xml:space="preserve"><value>For freelancers who work independently and want simplicity and focus.</value></data>
+  <data name="ChooseWorkspaceModePage_SoloFeature1" xml:space="preserve"><value>Lightweight time and task tracking.</value></data>
+  <data name="ChooseWorkspaceModePage_SoloFeature2" xml:space="preserve"><value>Simple income calculation based on your rates.</value></data>
+  <data name="ChooseWorkspaceModePage_SoloFeature3" xml:space="preserve"><value>Client balance: see "who owes me" at a glance.</value></data>
+  <data name="ChooseWorkspaceModePage_SoloFeature4" xml:space="preserve"><value>No unnecessary team accounting clutter.</value></data>
+  <data name="ChooseWorkspaceModePage_ChooseSolo" xml:space="preserve"><value>Choose Solo Mode</value></data>
+  <data name="ChooseWorkspaceModePage_TeamTitle" xml:space="preserve"><value>Team Mode (Agency Owner)</value></data>
+  <data name="ChooseWorkspaceModePage_TeamDescription" xml:space="preserve"><value>For those who hire other developers and manage a team of subcontractors.</value></data>
+  <data name="ChooseWorkspaceModePage_TeamFeature1" xml:space="preserve"><value>Workspace members and role management.</value></data>
+  <data name="ChooseWorkspaceModePage_TeamFeature2" xml:space="preserve"><value>Calculation of margin and owner net revenue.</value></data>
+  <data name="ChooseWorkspaceModePage_TeamFeature3" xml:space="preserve"><value>Individual payout dashboards for team members (Users).</value></data>
+  <data name="ChooseWorkspaceModePage_TeamFeature4" xml:space="preserve"><value>Tracking client payments and team payouts in one place.</value></data>
+  <data name="ChooseWorkspaceModePage_ChooseTeam" xml:space="preserve"><value>Choose Team Mode</value></data>
+  <data name="WorkspaceMode_Label" xml:space="preserve"><value>Workspace Mode</value></data>
+  <data name="WorkspaceMode_Solo" xml:space="preserve"><value>Solo Mode (Solo Developer)</value></data>
+  <data name="WorkspaceMode_Team" xml:space="preserve"><value>Team Mode (Agency Owner)</value></data>
 </root>

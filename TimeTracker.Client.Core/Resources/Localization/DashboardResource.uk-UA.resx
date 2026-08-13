@@ -781,4 +781,23 @@
   <data name="TaskDetail_JiraSynced" xml:space="preserve"><value>Синхронізовано з Jira</value></data>
   <data name="TaskDetail_OpenFullPage" xml:space="preserve"><value>Відкрити завдання на весь екран</value></data>
   <data name="TaskDetail_BackToTasks" xml:space="preserve"><value>Назад до завдань</value></data>
+  <data name="ChooseWorkspaceModePage_Title" xml:space="preserve"><value>Налаштуймо ваш робочий простір!</value></data>
+  <data name="ChooseWorkspaceModePage_Subtitle" xml:space="preserve"><value>Оберіть режим роботи. Ви зможете змінити його в будь-який момент у налаштуваннях воркспейсу.</value></data>
+  <data name="ChooseWorkspaceModePage_SoloTitle" xml:space="preserve"><value>Solo Mode (Соло-розробник)</value></data>
+  <data name="ChooseWorkspaceModePage_SoloDescription" xml:space="preserve"><value>Для фрилансерів, які працюють самостійно та хочуть простоти й фокусу.</value></data>
+  <data name="ChooseWorkspaceModePage_SoloFeature1" xml:space="preserve"><value>Легкий трекер часу та легковажних задач.</value></data>
+  <data name="ChooseWorkspaceModePage_SoloFeature2" xml:space="preserve"><value>Простий облік доходів за вашим особистим рейтом.</value></data>
+  <data name="ChooseWorkspaceModePage_SoloFeature3" xml:space="preserve"><value>Баланс клієнтів: чітко видно "хто мені винен".</value></data>
+  <data name="ChooseWorkspaceModePage_SoloFeature4" xml:space="preserve"><value>Жодної зайвої командної бухгалтерії.</value></data>
+  <data name="ChooseWorkspaceModePage_ChooseSolo" xml:space="preserve"><value>Обрати Solo Mode</value></data>
+  <data name="ChooseWorkspaceModePage_TeamTitle" xml:space="preserve"><value>Team Mode (Власник компанії)</value></data>
+  <data name="ChooseWorkspaceModePage_TeamDescription" xml:space="preserve"><value>Для тих, хто залучає інших розробників та керує командою фрилансерів.</value></data>
+  <data name="ChooseWorkspaceModePage_TeamFeature1" xml:space="preserve"><value>Керування учасниками воркспейсу та їхніми ролями.</value></data>
+  <data name="ChooseWorkspaceModePage_TeamFeature2" xml:space="preserve"><value>Розрахунок маржинальності та чистого прибутку власника.</value></data>
+  <data name="ChooseWorkspaceModePage_TeamFeature3" xml:space="preserve"><value>Окремі кабінети для учасників (User) з відображенням їхніх виплат.</value></data>
+  <data name="ChooseWorkspaceModePage_TeamFeature4" xml:space="preserve"><value>Контроль оплат клієнтів та виплат субпідрядникам.</value></data>
+  <data name="ChooseWorkspaceModePage_ChooseTeam" xml:space="preserve"><value>Обрати Team Mode</value></data>
+  <data name="WorkspaceMode_Label" xml:space="preserve"><value>Режим воркспейсу</value></data>
+  <data name="WorkspaceMode_Solo" xml:space="preserve"><value>Solo Mode (Соло-розробник)</value></data>
+  <data name="WorkspaceMode_Team" xml:space="preserve"><value>Team Mode (Командний режим)</value></data>
 </root>

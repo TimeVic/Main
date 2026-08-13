@@ -208,6 +208,8 @@ public interface IApiService
 
     Task<WorkspaceDto?> WorkspaceUpdateAsync(WorkspaceUpdateRequest model);
 
+    Task<WorkspaceDto?> WorkspaceSetModeAsync(TimeTracker.Business.Common.Constants.WorkspaceMode mode);
+
     Task WorkspaceDeleteAsync(WorkspaceDeleteRequest request);
 
     Task<WorkspaceMemberDto?> WorkspaceMemberAddAsync(Guid workspaceId, string email);

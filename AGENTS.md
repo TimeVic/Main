@@ -58,7 +58,7 @@ Handlers implement `IAsyncRequestHandler<TRequest, TResponse>` and are auto-regi
 - **`SnakeCaseConvention`** automatically converts `PascalCase` → `snake_case` for table/column names; explicit overrides go in the mapping class.
 - **Transactions**: `CommitPerformerMiddleware` wraps each request in a transaction (commit on success, rollback on exception). Do not manually commit in handlers.
 - When adding or changing DAO list methods, check for potential N+1 queries caused by lazy-loaded relationships used by DTO mapping or response construction; use explicit eager fetching/projections for those relationships.
-- Run migrations: `dotnet run --project ./TimeTracker.Migrations`
+- Run/apply migrations by executing only the `TimeTracker.Migrations` project: `dotnet run --project ./TimeTracker.Migrations`
 - Init DateTime fields with DateTime.UtcNow by default 
 
 ---
@@ -150,6 +150,7 @@ dotnet test ./TimeTracker.Tests.Unit.Business
 
 ## Database
  - Create migrations using FluentMigrator mechanism(classes, helpers, etc.) if it's possible
+ - To apply/execute database migrations, you only need to run the `TimeTracker.Migrations` project: `dotnet run --project ./TimeTracker.Migrations`
  - Use 'timestamp' column type for date/time fields by default for migrations
  - Do not specify custom names for indexes created with FluentMigrator; use `Create.Index()` default naming. Specify an explicit name for indexes created with raw `CREATE INDEX` SQL.
 

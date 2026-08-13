@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Api.Shared.Dto.Entity.List;
 using TimeTracker.Business.Common.Constants;
@@ -12,6 +12,7 @@ public class WorkspaceDto: BaseDto
     public string? Description { get; set; }
     public CurrencyDto Currency { get; set; } = null!;
     public string TimeZone { get; set; } = string.Empty;
+    public WorkspaceMode? Mode { get; set; }
     
     public MembershipAccessType? CurrentUserAccess { get; set; }
 

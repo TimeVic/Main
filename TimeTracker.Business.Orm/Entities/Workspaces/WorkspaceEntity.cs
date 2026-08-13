@@ -1,3 +1,4 @@
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.WorkspaceAccess;
@@ -11,6 +12,7 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
 
         public virtual required string TimeZone { get; set; }
         public virtual string? Description { get; set; }
+        public virtual WorkspaceMode? Mode { get; set; }
         
         #region Relationships
 

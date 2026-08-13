@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Api.Shared.Constants;
+namespace TimeTracker.Api.Shared.Constants;
 
 public class ApiUrl
 {
@@ -92,6 +92,7 @@ public class ApiUrl
     public const string WorkspaceList = "dashboard/workspace/list";
     public const string WorkspaceAdd = "dashboard/workspace/add";
     public const string WorkspaceUpdate = "dashboard/workspace/update";
+    public const string WorkspaceSetMode = "dashboard/workspace/set-mode";
     public const string WorkspaceDelete = "dashboard/workspace/delete";
     
     #endregion

@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Client.Web.Constants;
+namespace TimeTracker.Client.Web.Constants;
 
 public static class SiteUrl
 {
@@ -59,4 +59,5 @@ public static class SiteUrl
     
     public static readonly string Workspace_List = "/board/workspaces";
     public static readonly string Workspace_Change = "/board-change/{0}";
+    public static readonly string Workspace_ChooseMode = "/board/workspace/choose-mode";
 }

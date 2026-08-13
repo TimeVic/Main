@@ -63,18 +63,23 @@ public class WorkspaceFinancialSummaryRequestHandler
         var projectProfitability = await _reportDao.GetProjectProfitabilityAsync(workspace.Id);
 
         var membersPage = await _workspaceDao.GetMembersAsync(workspace, 1);
-        var isTeamWorkspace = membersPage.TotalCount > 1;
+        var isSoloWorkspace = workspace.Mode == WorkspaceMode.Solo;
+        var isTeamWorkspace = workspace.Mode == WorkspaceMode.Team || (workspace.Mode == null && membersPage.TotalCount > 1);
 
-        var totals = BuildTotals(clientBalances, memberBalances);
+        var memberBalancesResult = isSoloWorkspace
+            ? Array.Empty<FinancialMemberBalanceItemDto>()
+            : memberBalances;
+
+        var totals = BuildTotals(clientBalances, memberBalancesResult);
 
         return new WorkspaceFinancialSummaryReportResponse
         {
             IsTeamWorkspace = isTeamWorkspace,
-            HasMemberPayouts = isTeamWorkspace || memberBalances.Any(x => x.PaidOutAmount != 0),
-            HasUsefulProjectProfitability = isTeamWorkspace || projectProfitability.Any(x => x.EstimatedMargin != 0),
+            HasMemberPayouts = !isSoloWorkspace && (isTeamWorkspace || memberBalances.Any(x => x.PaidOutAmount != 0)),
+            HasUsefulProjectProfitability = !isSoloWorkspace && (isTeamWorkspace || projectProfitability.Any(x => x.EstimatedMargin != 0)),
             Totals = totals,
             ClientBalances = MapClientBalances(clientBalances),
-            MemberBalances = MapMemberBalances(memberBalances),
+            MemberBalances = MapMemberBalances(memberBalancesResult),
             ProjectProfitability = MapProjectProfitability(projectProfitability)
         };
     }

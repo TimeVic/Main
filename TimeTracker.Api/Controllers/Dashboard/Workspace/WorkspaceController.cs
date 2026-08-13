@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using AspNetCore.ApiControllers.Extensions;
 using Autofac;
 using Microsoft.AspNetCore.Authorization;
@@ -37,6 +37,14 @@ public class WorkspaceController(ILifetimeScope scope) : MainApiControllerBase(s
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Add([FromBody] UpdateRequest request)
+        => this.RequestAsync()
+            .For<WorkspaceDto>()
+            .With(request);
+
+    [HttpPost("set-mode")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> SetMode([FromBody] SetModeRequest request)
         => this.RequestAsync()
             .For<WorkspaceDto>()
             .With(request);
