@@ -133,14 +133,6 @@ public partial class MainMenu: IDisposable
 
     private bool HasMenuItemAccess(MenuItemModel item)
     {
-        if (AuthState.Value.Workspace?.Mode == TimeTracker.Business.Common.Constants.WorkspaceMode.Solo)
-        {
-            if (item.Url.Contains("member-payments"))
-            {
-                return false;
-            }
-        }
-
         return !WorkspacePermissionsState.Value.IsLoaded
             || item.RequiredPermissions.Length == 0
             || item.RequiredPermissions.All(SecurityManager.HasPermission);

@@ -3,6 +3,7 @@
 @using TimeTracker.Business.Common.Constants.Task
 @using TimeTracker.Business.Common.Constants.Storage
 @using TimeTracker.Business.Common.Constants
+@using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Core.Constants.Ui
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Comments
@@ -149,7 +150,7 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                             Value="_model.Priority"
                             Size="Size.Small"
                             ValueChanged="OnPriorityChanged" />
-                        @if (AuthState.Value.Workspace?.Mode == WorkspaceMode.Team)
+                        @if (_securityManager.HasPermission(WorkspacePermission.ReadWorkspaceMembers))
                         {
                             <MembersDropDown
                                 Type="DropDownType.Select"

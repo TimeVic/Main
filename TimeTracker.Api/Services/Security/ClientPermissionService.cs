@@ -29,6 +29,16 @@ public class ClientPermissionService : IClientPermissionService
             [WorkspacePermission.CreateMemberPaymentForOtherMembers] = AccessLevel.Write
         };
 
+    private static readonly HashSet<WorkspacePermission> MemberPermissions = new()
+    {
+        WorkspacePermission.ReadWorkspaceMembers,
+        WorkspacePermission.UpdateWorkspaceMembers,
+        WorkspacePermission.ReadMemberPayment,
+        WorkspacePermission.CreateMemberPayment,
+        WorkspacePermission.UpdateMemberPayment,
+        WorkspacePermission.CreateMemberPaymentForOtherMembers
+    };
+
     private readonly ISecurityManager _securityManager;
 
     public ClientPermissionService(ISecurityManager securityManager)
@@ -44,6 +54,11 @@ public class ClientPermissionService : IClientPermissionService
         var permissions = new List<WorkspacePermission>();
         foreach (var permissionMapItem in WorkspaceAccessMap)
         {
+            if (workspace.Mode != WorkspaceMode.Team && MemberPermissions.Contains(permissionMapItem.Key))
+            {
+                continue;
+            }
+
             if (await _securityManager.HasAccess(permissionMapItem.Value, user, workspace))
             {
                 permissions.Add(permissionMapItem.Key);
