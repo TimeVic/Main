@@ -1,7 +1,9 @@
-﻿using Fluxor;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Extensions;
+using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Store.TimeEntry;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.TimeEntry.Parts;
@@ -10,6 +12,9 @@ public partial class FilterForm
 {
     [Inject]
     public IState<TimeEntryState> _state { get; set; }
+
+    [Inject]
+    private ISecurityManager _securityManager { get; set; } = null!;
 
     private void OnChangeProject(ProjectDto? project)
     {

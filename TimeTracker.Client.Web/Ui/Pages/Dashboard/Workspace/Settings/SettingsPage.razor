@@ -3,13 +3,13 @@
 @attribute [RequireWorkspacePermission(WorkspacePermission.UpdateWorkspaceSettings)]
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Constants
-@using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Settings
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Clients
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Tags
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Integrations
 @using Layout = TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
+@inject TimeTracker.Client.Core.Services.Security.ISecurityManager SecurityManager
 
 @inherits BaseReactiveComponent
 @layout Layout
@@ -53,7 +53,7 @@
             <TagsBlock></TagsBlock>
         </ChildContent>
     </LumexTab>
-    @if (AuthState.Value.Workspace?.Mode == WorkspaceMode.Team)
+    @if (SecurityManager.HasPermission(WorkspacePermission.ReadWorkspaceMembers))
     {
         <LumexTab>
             <TitleContent>

@@ -23,6 +23,9 @@ public class GetWorkspacePermissionsTest: BaseTest
     {
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         (_jwtToken, _, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _workspace.Mode = WorkspaceMode.Team;
+        DbSessionProvider.CurrentSession.UpdateAsync(_workspace).Wait();
+        FlushDbChanges().Wait();
     }
 
     [Fact]
@@ -148,5 +151,66 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var actual = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new RecordNotFoundException().GetTypeName(), actual.ErrorCode);
+    }
+
+    [Fact]
+    public async Task OwnerShouldNotReceiveMemberPermissionsInSoloWorkspace()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await DbSessionProvider.CurrentSession.UpdateAsync(_workspace);
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetWorkspacePermissionsRequest()
+        {
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
+        var memberPermissions = new[]
+        {
+            WorkspacePermission.ReadWorkspaceMembers,
+            WorkspacePermission.UpdateWorkspaceMembers,
+            WorkspacePermission.ReadMemberPayment,
+            WorkspacePermission.CreateMemberPayment,
+            WorkspacePermission.UpdateMemberPayment,
+            WorkspacePermission.CreateMemberPaymentForOtherMembers
+        };
+        Assert.All(
+            memberPermissions,
+            permission => Assert.DoesNotContain(permission, actual.Permissions)
+        );
+    }
+
+    [Fact]
+    public async Task UserShouldNotReceiveMemberPermissionsInSoloWorkspace()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await DbSessionProvider.CurrentSession.UpdateAsync(_workspace);
+        await FlushDbChanges();
+
+        var (otherJwtToken, _, _) = await _userSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+
+        var response = await PostRequestAsync(Url, otherJwtToken, new GetWorkspacePermissionsRequest()
+        {
+        }, _workspace.Id);
+        response.EnsureSuccessStatusCode();
+
+        var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
+        var memberPermissions = new[]
+        {
+            WorkspacePermission.ReadWorkspaceMembers,
+            WorkspacePermission.UpdateWorkspaceMembers,
+            WorkspacePermission.ReadMemberPayment,
+            WorkspacePermission.CreateMemberPayment,
+            WorkspacePermission.UpdateMemberPayment,
+            WorkspacePermission.CreateMemberPaymentForOtherMembers
+        };
+        Assert.All(
+            memberPermissions,
+            permission => Assert.DoesNotContain(permission, actual.Permissions)
+        );
     }
 }

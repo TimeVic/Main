@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Client.Core.Core.Extensions;
+using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Web.Constants;
 using TimeTracker.Client.Web.Services.Workspace;
@@ -17,6 +19,9 @@ public partial class Layout: IDisposable
 
     [Inject]
     private UrlService _urlService { get; set; } = null!;
+
+    [Inject]
+    private ISecurityManager _securityManager { get; set; } = null!;
 
     private IDisposable? _locationChangingRegistration;
     
@@ -55,7 +60,7 @@ public partial class Layout: IDisposable
                 );
             }
         }
-        else if (workspace != null && workspace.Mode == TimeTracker.Business.Common.Constants.WorkspaceMode.Solo)
+        else if (workspace != null && !_securityManager.HasPermission(WorkspacePermission.ReadMemberPayment))
         {
             var currentPath = (targetLocation ?? _navigationManager.GetPath()).ToLower();
             if (currentPath.Contains("member-payments"))

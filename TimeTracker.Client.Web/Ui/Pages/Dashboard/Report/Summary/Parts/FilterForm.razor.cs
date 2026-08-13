@@ -1,7 +1,9 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Client.Core.Constants;
+using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Store.Report;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Summary.Parts;
@@ -11,6 +13,9 @@ public partial class FilterForm
     [Inject]
     public IState<ReportsState> _reportsState { get; set; }
 
+    [Inject]
+    private ISecurityManager _securityManager { get; set; } = null!;
+
     public SummaryReportFilterState _filterState => _reportsState.Value.SummaryReportFilter;
 
     private ICollection<SummaryReportType> AllowedReportTypes
@@ -18,7 +23,7 @@ public partial class FilterForm
         get
         {
             var values = Enum.GetValues<SummaryReportType>();
-            if (AuthState.Value.Workspace?.Mode == TimeTracker.Business.Common.Constants.WorkspaceMode.Solo)
+            if (!_securityManager.HasPermission(WorkspacePermission.ReadWorkspaceMembers))
             {
                 return values.Where(v => v != SummaryReportType.GroupByUser).ToList();
             }
