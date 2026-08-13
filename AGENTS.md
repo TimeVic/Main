@@ -117,6 +117,8 @@ dotnet test ./TimeTracker.Tests.Unit.Business
 
 **Prerequisites:** PostgreSQL running on port `5433` with credentials from `appsettings.Testing.json`.
 
+Run test projects sequentially only. Do not run test projects in parallel because they share the test database.
+
 ---
 
 ## AutoMapper
