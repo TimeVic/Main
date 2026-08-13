@@ -41,16 +41,27 @@ public partial class Layout: IDisposable
         CheckWorkspaceModeRedirect();
     }
 
-    private void CheckWorkspaceModeRedirect()
+    private void CheckWorkspaceModeRedirect(string? targetLocation = null)
     {
         var workspace = AuthState.Value.Workspace;
         if (workspace != null && !workspace.Mode.HasValue && workspace.IsFullAccess)
         {
-            var currentPath = _navigationManager.GetPath().ToLower();
+            var currentPath = (targetLocation ?? _navigationManager.GetPath()).ToLower();
             if (!currentPath.Contains("choose-mode"))
             {
                 _navigationManager.NavigateTo(
                     SiteUrl.Workspace_ChooseMode,
+                    replace: true
+                );
+            }
+        }
+        else if (workspace != null && workspace.Mode == TimeTracker.Business.Common.Constants.WorkspaceMode.Solo)
+        {
+            var currentPath = (targetLocation ?? _navigationManager.GetPath()).ToLower();
+            if (currentPath.Contains("member-payments"))
+            {
+                _navigationManager.NavigateTo(
+                    SiteUrl.Dashboard_TimeEntry,
                     replace: true
                 );
             }
@@ -62,7 +73,7 @@ public partial class Layout: IDisposable
         var workspaceId = _urlService.GetWorkspaceIdFromDashboardUrl(context.TargetLocation);
         if (!workspaceId.HasValue || workspaceId == AuthState.Value.Workspace?.Id)
         {
-            CheckWorkspaceModeRedirect();
+            CheckWorkspaceModeRedirect(context.TargetLocation);
             return;
         }
 
@@ -70,7 +81,7 @@ public partial class Layout: IDisposable
         {
             _workspaceInitializationService.Init(isReload: true);
             await _workspaceInitializationService.AfterInit(isReload: true);
-            CheckWorkspaceModeRedirect();
+            CheckWorkspaceModeRedirect(context.TargetLocation);
             return;
         }
 

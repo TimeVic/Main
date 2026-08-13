@@ -40,7 +40,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMember.Actions
             var userId = _apiRequestService.GetCurrentUserId();
             var user = await _userDao.GetById(userId);
             var workspace = await _userDao.GetUsersWorkspace(user!, _apiRequestService.GetCurrentWorkspaceId());
-            if (!await _securityManager.HasAccess(AccessLevel.Read, user!, workspace))
+            if (workspace?.Mode != WorkspaceMode.Team || !await _securityManager.HasAccess(AccessLevel.Read, user!, workspace))
             {
                 throw new HasNoAccessException();
             }

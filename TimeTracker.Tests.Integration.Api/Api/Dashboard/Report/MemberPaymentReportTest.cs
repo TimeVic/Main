@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao;
@@ -33,7 +34,9 @@ public class MemberPaymentReportTest: BaseTest
         _paymentDao = ServiceProvider.GetRequiredService<IMemberPaymentDao>();
         _timeEntryReportDao = ServiceProvider.GetRequiredService<ITimeEntryReportsDao>();
         _projectDao = ServiceProvider.GetRequiredService<IProjectSeeder>();
+        var workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        workspaceDao.SetModeAsync(_defaultWorkspace, WorkspaceMode.Team).Wait();
     }
 
     [Fact]

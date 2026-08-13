@@ -42,14 +42,33 @@ public class AddTest: BaseTest
         _userDao = ServiceProvider.GetRequiredService<IUserDao>();
         _queueDao = ServiceProvider.GetRequiredService<IQueueDao>();
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
+        var workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        workspaceDao.SetModeAsync(_workspace, WorkspaceMode.Team).Wait();
 
         _newUserFake = _userFactory.Generate();
         
         (_otherJwtToken, _otherUser, _otherWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        workspaceDao.SetModeAsync(_otherWorkspace, WorkspaceMode.Team).Wait();
         
         // Clear queue
         _queueDao.CompleteAllPending().Wait();
+    }
+
+    [Fact]
+    public async Task UserCanNotAddMemberInSoloWorkspace()
+    {
+        var workspaceDao = ServiceProvider.GetRequiredService<IWorkspaceDao>();
+        await workspaceDao.SetModeAsync(_workspace, WorkspaceMode.Solo);
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            Email = _newUserFake.Email,
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
     }
 
     [Fact]

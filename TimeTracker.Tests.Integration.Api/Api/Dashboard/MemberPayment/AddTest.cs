@@ -35,10 +35,31 @@ public class AddTest: BaseTest
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _workspace.Mode = WorkspaceMode.Team;
+        DbSessionProvider.CurrentSession.UpdateAsync(_workspace).Wait();
 
         _project = _projectSeeder.CreateAsync(_workspace).Result;
         _client = _project.Client;
         FlushDbChanges().Wait();
+    }
+
+    [Fact]
+    public async Task UserCanNotAddPaymentInSoloWorkspace()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await FlushDbChanges();
+
+        var payment = _factory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            Amount = payment.Amount,
+            Description = payment.Description,
+            PaymentTime = DateTime.Now,
+            ProjectId = _project.Id
+        });
+        
+        var responseData = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), responseData.ErrorCode);
     }
 
     [Fact]

@@ -35,10 +35,27 @@ public class GetListTest: BaseTest
         _paymentSeeder = ServiceProvider.GetRequiredService<IMemberPaymentSeeder>();
         _userSeeder = ServiceProvider.GetRequiredService<IUserSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _workspace.Mode = WorkspaceMode.Team;
+        DbSessionProvider.CurrentSession.UpdateAsync(_workspace).Wait();
 
         _project = _projectSeeder.CreateAsync(_workspace).Result;
         _client = _project.Client;
         FlushDbChanges().Wait();
+    }
+
+    [Fact]
+    public async Task UserCanNotGetListInSoloWorkspace()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest()
+        {
+            Page = 1
+        });
+        
+        var actual = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), actual.ErrorCode);
     }
 
     [Fact]

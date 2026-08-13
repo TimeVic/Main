@@ -782,7 +782,8 @@
   <data name="TaskDetail_OpenFullPage" xml:space="preserve"><value>Відкрити завдання на весь екран</value></data>
   <data name="TaskDetail_BackToTasks" xml:space="preserve"><value>Назад до завдань</value></data>
   <data name="ChooseWorkspaceModePage_Title" xml:space="preserve"><value>Налаштуймо ваш робочий простір!</value></data>
-  <data name="ChooseWorkspaceModePage_Subtitle" xml:space="preserve"><value>Оберіть режим роботи. Ви зможете змінити його в будь-який момент у налаштуваннях воркспейсу.</value></data>
+  <data name="ChooseWorkspaceModePage_Subtitle" xml:space="preserve"><value>Оберіть режим роботи для вашого воркспейсу.*</value></data>
+  <data name="ChooseWorkspaceModePage_Note" xml:space="preserve"><value>* Режим обирається один раз і не підлягає зміні для цього воркспейсу. Якщо вам знадобиться інший режим, ви завжди зможете створити новий воркспейс із потрібним типом.</value></data>
   <data name="ChooseWorkspaceModePage_SoloTitle" xml:space="preserve"><value>Solo Mode (Соло-розробник)</value></data>
   <data name="ChooseWorkspaceModePage_SoloDescription" xml:space="preserve"><value>Для фрилансерів, які працюють самостійно та хочуть простоти й фокусу.</value></data>
   <data name="ChooseWorkspaceModePage_SoloFeature1" xml:space="preserve"><value>Легкий трекер часу та легковажних задач.</value></data>

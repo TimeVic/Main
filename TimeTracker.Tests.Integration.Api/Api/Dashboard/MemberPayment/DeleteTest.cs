@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.MemberPayment;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
@@ -28,8 +29,29 @@ public class DeleteTest: BaseTest
         _paymentDao = ServiceProvider.GetRequiredService<IMemberPaymentDao>();
         _paymentSeeder = ServiceProvider.GetRequiredService<IMemberPaymentSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _workspace.Mode = WorkspaceMode.Team;
+        DbSessionProvider.CurrentSession.UpdateAsync(_workspace).Wait();
 
         _payment = _paymentSeeder.CreateSeveralAsync(_user, 1).Result.First();
+        _payment.Member.Workspace.Mode = WorkspaceMode.Team;
+        DbSessionProvider.CurrentSession.UpdateAsync(_payment.Member.Workspace).Wait();
+        FlushDbChanges().Wait();
+    }
+
+    [Fact]
+    public async Task UserCanNotDeletePaymentInSoloWorkspace()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        _payment.Member.Workspace.Mode = WorkspaceMode.Solo;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new DeleteRequest()
+        {
+            MemberPaymentId = _payment.Id
+        });
+        
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
 
     [Fact]

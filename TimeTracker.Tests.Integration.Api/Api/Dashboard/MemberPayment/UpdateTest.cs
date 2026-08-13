@@ -33,12 +33,37 @@ public class UpdateTest: BaseTest
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _paymentSeeder = ServiceProvider.GetRequiredService<IMemberPaymentSeeder>();
         (_jwtToken, _user, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _workspace.Mode = WorkspaceMode.Team;
+        DbSessionProvider.CurrentSession.UpdateAsync(_workspace).Wait();
 
         _payment = _paymentSeeder.CreateSeveralAsync(_user, 1).Result.First();
+        _payment.Member.Workspace.Mode = WorkspaceMode.Team;
+        DbSessionProvider.CurrentSession.UpdateAsync(_payment.Member.Workspace).Wait();
         FlushDbChanges().Wait();
 
         Assert.NotNull(_payment);
         Assert.NotNull(_payment.Project);
+    }
+
+    [Fact]
+    public async Task UserCanNotUpdatePaymentInSoloWorkspace()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        _payment.Member.Workspace.Mode = WorkspaceMode.Solo;
+        await FlushDbChanges();
+
+        var expectMemberPayment = _factory.Generate();
+        var response = await PostRequestAsync(Url, _jwtToken, new UpdateRequest()
+        {
+            MemberPaymentId = _payment.Id,
+            Amount = expectMemberPayment.Amount,
+            Description = expectMemberPayment.Description,
+            PaymentTime = expectMemberPayment.PaymentTime,
+            ProjectId = _payment.Project!.Id,
+        });
+        
+        var errorResponse = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), errorResponse.ErrorCode);
     }
 
     [Fact]

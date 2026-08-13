@@ -149,13 +149,16 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                             Value="_model.Priority"
                             Size="Size.Small"
                             ValueChanged="OnPriorityChanged" />
-                        <MembersDropDown
-                            Type="DropDownType.Select"
-                            Label="@DashboardLocalizer["UpdateTaskForm_Assigned"]"
-                            UserId="_model.UserId"
-                            Size="Size.Small"
-                            SelectedItemChanged="OnAssignedChanged"
-                            AllowedIds="_allowedUserIds" />
+                        @if (AuthState.Value.Workspace?.Mode == WorkspaceMode.Team)
+                        {
+                            <MembersDropDown
+                                Type="DropDownType.Select"
+                                Label="@DashboardLocalizer["UpdateTaskForm_Assigned"]"
+                                UserId="_model.UserId"
+                                Size="Size.Small"
+                                SelectedItemChanged="OnAssignedChanged"
+                                AllowedIds="_allowedUserIds" />
+                        }
                         <div class="border-l border-slate-200 pl-2.5"><p class="text-xs font-medium text-slate-500">@DashboardLocalizer["Project"]</p><p class="mt-1 text-sm font-medium text-slate-800">@_task.TaskList.Project.Name</p></div>
                         <TaskListDropDown
                             Label="@DashboardLocalizer["TaskList"]"

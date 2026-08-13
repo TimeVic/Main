@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Client.Core.Constants;
@@ -12,6 +12,19 @@ public partial class FilterForm
     public IState<ReportsState> _reportsState { get; set; }
 
     public SummaryReportFilterState _filterState => _reportsState.Value.SummaryReportFilter;
+
+    private ICollection<SummaryReportType> AllowedReportTypes
+    {
+        get
+        {
+            var values = Enum.GetValues<SummaryReportType>();
+            if (AuthState.Value.Workspace?.Mode == TimeTracker.Business.Common.Constants.WorkspaceMode.Solo)
+            {
+                return values.Where(v => v != SummaryReportType.GroupByUser).ToList();
+            }
+            return values.ToList();
+        }
+    }
 
     private void OnChangeReportType(SummaryReportType? type)
     {

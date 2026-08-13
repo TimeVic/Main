@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -53,6 +53,7 @@ public partial class EditCommentForm: IDisposable
         ? "task-comment-form rounded-md border border-slate-200 bg-slate-50/70 p-3"
         : "task-comment-item border-l-2 border-slate-200 py-1 pl-3";
     private bool _isSubscribersSelectAvailable =>
+        AuthState.Value.Workspace?.Mode == WorkspaceMode.Team &&
         Project != null &&
         SecurityManager.GetMembersWhichHaveAccessToProject(Project)
             .Any(member => member.Access != MembershipAccessType.Owner);
