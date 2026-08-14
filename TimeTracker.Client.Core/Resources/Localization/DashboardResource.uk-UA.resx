@@ -818,4 +818,10 @@
   <data name="UserPaymentReport_GeneralPayments" xml:space="preserve"><value>Загальні оплати без проєкту</value></data>
   <data name="UserPaymentReport_TotalReceived" xml:space="preserve"><value>Усього отримано оплат</value></data>
   <data name="UserPaymentReport_PaymentHistory" xml:space="preserve"><value>Детальна історія платежів</value></data>
+  <data name="UserPaymentReport_EarnedSubtitle" xml:space="preserve"><value>Нараховано за всю роботу</value></data>
+  <data name="UserPaymentReport_ReceivedSubtitle" xml:space="preserve"><value>Фактично отримано від клієнтів</value></data>
+  <data name="UserPaymentReport_Surplus" xml:space="preserve"><value>Профіцит (переплата)</value></data>
+  <data name="UserPaymentReport_UnpaidDebt" xml:space="preserve"><value>Заборгованість</value></data>
+  <data name="UserPaymentReport_FullySettled" xml:space="preserve"><value>Повністю закрито</value></data>
+  <data name="UserPaymentReport_NoProjects" xml:space="preserve"><value>Немає зафіксованих годин за проєктами</value></data>
 </root>
