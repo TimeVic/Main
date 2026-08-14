@@ -48,11 +48,15 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
         Assert.Equal(_workspace.Id, actual.WorkspaceId);
-        Assert.Equal(Enum.GetValues<WorkspacePermission>().Length, actual.Permissions.Count);
+        var expectedPermissions = Enum.GetValues<WorkspacePermission>()
+            .Where(permission => permission != WorkspacePermission.ReadUserPaymentReport)
+            .ToArray();
+        Assert.Equal(expectedPermissions.Length, actual.Permissions.Count);
         Assert.All(
-            Enum.GetValues<WorkspacePermission>(),
+            expectedPermissions,
             permission => Assert.Contains(permission, actual.Permissions)
         );
+        Assert.DoesNotContain(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
     }
 
     [Fact]
@@ -70,11 +74,15 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
         Assert.Equal(_workspace.Id, actual.WorkspaceId);
-        Assert.Equal(Enum.GetValues<WorkspacePermission>().Length, actual.Permissions.Count);
+        var expectedPermissions = Enum.GetValues<WorkspacePermission>()
+            .Where(permission => permission != WorkspacePermission.ReadUserPaymentReport)
+            .ToArray();
+        Assert.Equal(expectedPermissions.Length, actual.Permissions.Count);
         Assert.All(
-            Enum.GetValues<WorkspacePermission>(),
+            expectedPermissions,
             permission => Assert.Contains(permission, actual.Permissions)
         );
+        Assert.DoesNotContain(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
     }
 
     [Fact]
@@ -179,6 +187,7 @@ public class GetWorkspacePermissionsTest: BaseTest
             memberPermissions,
             permission => Assert.DoesNotContain(permission, actual.Permissions)
         );
+        Assert.Contains(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
     }
 
     [Fact]
@@ -212,5 +221,6 @@ public class GetWorkspacePermissionsTest: BaseTest
             memberPermissions,
             permission => Assert.DoesNotContain(permission, actual.Permissions)
         );
+        Assert.Contains(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
     }
 }

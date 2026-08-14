@@ -1,6 +1,7 @@
 @page "/board/{WorkspaceId:guid}/client-payments"
 @page "/board/client-payments"
 @attribute [RequireWorkspacePermission(WorkspacePermission.ReadClientPayment)]
+@attribute [RequireWorkspacePermission(WorkspacePermission.ReadWorkspaceFinancialSummary)]
 
 @using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.ClientPayments.Parts

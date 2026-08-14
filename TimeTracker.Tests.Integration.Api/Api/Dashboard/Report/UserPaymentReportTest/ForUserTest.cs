@@ -38,6 +38,9 @@ public class ForUserTest : BaseTest
         var (_, owner, workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         (_memberToken, _member, _) = UserSeeder.CreateAuthorizedAsync().Result;
         _workspace = workspace;
+        _workspace.Mode = WorkspaceMode.Solo;
+        DbSessionProvider.CurrentSession.UpdateAsync(_workspace).Wait();
+        FlushDbChanges().Wait();
         _project = projectSeeder.CreateAsync(_workspace).Result;
         _client = _project.Client!;
 
@@ -82,6 +85,18 @@ public class ForUserTest : BaseTest
         var response = await PostRequestAsync(_url, _memberToken, new UserPaymentReportRequest(), _workspace.Id);
 
         response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task ReportCannotBeAccessedInTeamWorkspace()
+    {
+        _workspace.Mode = WorkspaceMode.Team;
+        await DbSessionProvider.CurrentSession.UpdateAsync(_workspace);
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(_url, _memberToken, new UserPaymentReportRequest(), _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]

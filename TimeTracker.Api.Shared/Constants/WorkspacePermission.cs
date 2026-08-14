@@ -17,5 +17,6 @@ public enum WorkspacePermission
     CreateMemberPayment,
     UpdateMemberPayment,
     ReadWorkspaceFinancialSummary,
-    CreateMemberPaymentForOtherMembers
+    CreateMemberPaymentForOtherMembers,
+    ReadUserPaymentReport
 }

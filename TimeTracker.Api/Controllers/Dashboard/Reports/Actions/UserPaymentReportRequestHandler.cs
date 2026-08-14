@@ -36,7 +36,7 @@ public class UserPaymentReportRequestHandler : IAsyncRequestHandler<UserPaymentR
         var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
         RecordNotFoundException.ThrowIfNull(workspace);
 
-        if (!await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
+        if (workspace.Mode != WorkspaceMode.Solo || !await _securityManager.HasAccess(AccessLevel.Read, user, workspace))
         {
             throw new HasNoAccessException();
         }
