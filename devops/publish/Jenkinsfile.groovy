@@ -35,7 +35,21 @@ def gitCredentials="gitea-jenkins-ssh-key"
 
 properties([
     pipelineTriggers([
-        githubPush()
+        [
+            $class: 'GenericTrigger',
+            genericVariables: [
+                [key: 'GIT_REF', value: '$.ref', defaultValue: ''],
+                [key: 'PR_ACTION', value: '$.action', defaultValue: ''],
+                [key: 'IS_PR_MERGED', value: '$.pull_request.merged', defaultValue: '']
+            ],
+            token: 'timevic-publish-development',
+            causeString: 'Generic Webhook triggered for ref: $GIT_REF',
+            printContributedVariables: true,
+            printPostContent: false,
+            silentResponse: false,
+            regexpFilterText: '$GIT_REF',
+            regexpFilterExpression: '^refs/heads/main$'
+        ]
     ]),
     parameters([
         // https://plugins.jenkins.io/git-parameter/
@@ -54,13 +68,6 @@ node('build-node') {
         echo "Tag: ${params.GIT_TAG}"
     }
 
-    if (!params.GIT_TAG?.trim())
-    {
-        stage('Switch to GIT tag') {
-            git branch: "${params.BRANCH}", url: repositoryUrl
-        }    
-    }
-
     stage('Checkout') {
         cleanWs()
         sh """
@@ -69,6 +76,10 @@ node('build-node') {
             git config --global core.compression 0
         """
         checkout scm
+
+        if (params.GIT_TAG?.trim() && params.GIT_TAG != 'NONE' && params.GIT_TAG != 'main') {
+            sh "git checkout ${params.GIT_TAG}"
+        }
     }
 
     stage('Resolve trigger context') {
@@ -346,6 +357,12 @@ node('web-node') {
 }
 
 def resolveBranchName() {
+    if (env.GIT_REF?.trim()) {
+        return env.GIT_REF
+            .replaceFirst(/^refs\/heads\//, '')
+            .replaceFirst(/^refs\/tags\//, '')
+    }
+
     def rawBranchName = env.BRANCH_NAME ?: env.GIT_BRANCH
     if (!rawBranchName?.trim()) {
         rawBranchName = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
@@ -365,6 +382,7 @@ def isAutoTriggeredPushBuild() {
         def causeName = cause.class.simpleName
         return causeName != null && (causeName.contains('GitHubPush')
             || causeName.contains('Gitea')
-            || causeName.contains('SCMTrigger'))
+            || causeName.contains('SCMTrigger')
+            || causeName.contains('GenericCause'))
     }
 }

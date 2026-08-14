@@ -70,12 +70,10 @@ public class HttpInterceptorService
 
     private async Task CheckResponseAsync(object sender, HttpClientInterceptorEventArgs e)
     {
-        if (e.Response.StatusCode == HttpStatusCode.Unauthorized)
+        if (e.Response.StatusCode == HttpStatusCode.Unauthorized && _authState.Value.IsLoggedIn)
         {
-            if (_authState.Value.IsLoggedIn)
-            {
-                _dispatcher.Dispatch(new LogoutAction());
-            }
+            // Keep public pages open when the anonymous session check returns 401.
+            _dispatcher.Dispatch(new LogoutAction());
             if (!_navigationManager.Uri.EndsWith(ClientSiteUrl.Login))
             {
                 _navigationManager.NavigateTo(ClientSiteUrl.Login);
