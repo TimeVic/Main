@@ -816,4 +816,10 @@
   <data name="UserPaymentReport_GeneralPayments" xml:space="preserve"><value>General payments without a project</value></data>
   <data name="UserPaymentReport_TotalReceived" xml:space="preserve"><value>Total payments received</value></data>
   <data name="UserPaymentReport_PaymentHistory" xml:space="preserve"><value>Detailed payment history</value></data>
+  <data name="UserPaymentReport_EarnedSubtitle" xml:space="preserve"><value>Accrued for all tracked work</value></data>
+  <data name="UserPaymentReport_ReceivedSubtitle" xml:space="preserve"><value>Received from clients</value></data>
+  <data name="UserPaymentReport_Surplus" xml:space="preserve"><value>Surplus (advance)</value></data>
+  <data name="UserPaymentReport_UnpaidDebt" xml:space="preserve"><value>Client debt</value></data>
+  <data name="UserPaymentReport_FullySettled" xml:space="preserve"><value>Fully settled</value></data>
+  <data name="UserPaymentReport_NoProjects" xml:space="preserve"><value>No tracked hours for projects</value></data>
 </root>

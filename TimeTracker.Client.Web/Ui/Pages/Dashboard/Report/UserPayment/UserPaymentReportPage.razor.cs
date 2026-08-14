@@ -35,9 +35,31 @@ public partial class UserPaymentReportPage
             : DashboardLocalizer["UserPaymentReport_Paid"].Value;
     }
 
-    private static string GetStatusClass(decimal outstanding)
+    private string GetOutstandingBadgeText(decimal outstanding)
     {
-        return outstanding > 0 ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700";
+        if (outstanding > 0)
+        {
+            return DashboardLocalizer["UserPaymentReport_UnpaidDebt"].Value;
+        }
+
+        if (outstanding < 0)
+        {
+            return DashboardLocalizer["UserPaymentReport_Surplus"].Value;
+        }
+
+        return DashboardLocalizer["UserPaymentReport_FullySettled"].Value;
+    }
+
+    private static string GetStatusBadgeClass(decimal outstanding)
+    {
+        return outstanding > 0
+            ? "bg-red-50 text-red-700 border border-red-200/80"
+            : "bg-emerald-50 text-emerald-700 border border-emerald-200/80";
+    }
+
+    private static string GetStatusDotClass(decimal outstanding)
+    {
+        return outstanding > 0 ? "bg-red-500" : "bg-emerald-500";
     }
 
     private static string GetOutstandingTextClass(decimal outstanding)
@@ -47,6 +69,15 @@ public partial class UserPaymentReportPage
 
     private static string GetOutstandingCardClass(decimal outstanding)
     {
-        return outstanding > 0 ? "border-red-200 bg-red-50" : "border-emerald-100 bg-emerald-50/40";
+        return outstanding > 0
+            ? "border-red-200 bg-red-50/40"
+            : "border-emerald-200 bg-emerald-50/40";
+    }
+
+    private static string GetOutstandingBadgeClass(decimal outstanding)
+    {
+        return outstanding > 0
+            ? "bg-red-100/80 text-red-700 border border-red-200"
+            : "bg-emerald-100/80 text-emerald-700 border border-emerald-200";
     }
 }
