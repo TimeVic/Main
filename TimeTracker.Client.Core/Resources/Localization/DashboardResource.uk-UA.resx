@@ -824,4 +824,37 @@
   <data name="UserPaymentReport_UnpaidDebt" xml:space="preserve"><value>Заборгованість</value></data>
   <data name="UserPaymentReport_FullySettled" xml:space="preserve"><value>Повністю закрито</value></data>
   <data name="UserPaymentReport_NoProjects" xml:space="preserve"><value>Немає зафіксованих годин за проєктами</value></data>
+  <data name="WorkspaceMoney_FunnelClientFlow" xml:space="preserve"><value>Клієнтський потік</value></data>
+  <data name="WorkspaceMoney_FunnelTeamCost" xml:space="preserve"><value>Витрати на команду</value></data>
+  <data name="WorkspaceMoney_FunnelProfit" xml:space="preserve"><value>Дохід власника</value></data>
+  <data name="WorkspaceMoney_ClientBillable" xml:space="preserve"><value>Нараховано клієнтам</value></data>
+  <data name="WorkspaceMoney_ClientReceived" xml:space="preserve"><value>Отримано від клієнтів</value></data>
+  <data name="WorkspaceMoney_ClientDebt" xml:space="preserve"><value>Борг клієнтів</value></data>
+  <data name="WorkspaceMoney_TeamEarnings" xml:space="preserve"><value>Заробіток команди</value></data>
+  <data name="WorkspaceMoney_PaidToMembers" xml:space="preserve"><value>Виплачено учасникам</value></data>
+  <data name="WorkspaceMoney_OwedToMembers" xml:space="preserve"><value>Борг учасникам</value></data>
+  <data name="WorkspaceMoney_ExpectedProfit" xml:space="preserve"><value>Плановий прибуток</value></data>
+  <data name="WorkspaceMoney_CashProfit" xml:space="preserve"><value>Фактичний прибуток</value></data>
+  <data name="WorkspaceMoney_Margin" xml:space="preserve"><value>Рентабельність</value></data>
+  <data name="WorkspaceMoney_ActionCenter" xml:space="preserve"><value>Центр дій</value></data>
+  <data name="WorkspaceMoney_AwaitingPayment" xml:space="preserve"><value>Очікуємо оплату</value></data>
+  <data name="WorkspaceMoney_NeedToPay" xml:space="preserve"><value>Потрібно виплатити</value></data>
+  <data name="WorkspaceMoney_Remind" xml:space="preserve"><value>Нагадати</value></data>
+  <data name="WorkspaceMoney_ReminderCopied" xml:space="preserve"><value>Нагадування про оплату скопійовано в буфер</value></data>
+  <data name="WorkspaceMoney_ReminderTemplate" xml:space="preserve"><value>Вітаємо, {0}! Залишок до оплати становить {1}. Будь ласка, повідомте, коли очікувати оплату. Дякуємо.</value></data>
+  <data name="WorkspaceMoney_PayMember" xml:space="preserve"><value>Виплатити</value></data>
+  <data name="WorkspaceMoney_AllCaughtUp" xml:space="preserve"><value>Усе актуально</value></data>
+  <data name="WorkspaceMoney_NoClientDebt" xml:space="preserve"><value>Немає боргів клієнтів, які потребують нагадування.</value></data>
+  <data name="WorkspaceMoney_NoMemberDebt" xml:space="preserve"><value>Немає виплат учасникам, що очікуються.</value></data>
+  <data name="WorkspaceMoney_ClientBalancesTab" xml:space="preserve"><value>Баланси клієнтів</value></data>
+  <data name="WorkspaceMoney_TeamSettlementsTab" xml:space="preserve"><value>Розрахунки з командою</value></data>
+  <data name="WorkspaceMoney_ProjectProfitabilityTab" xml:space="preserve"><value>Рентабельність проєктів</value></data>
+  <data name="WorkspaceMoney_ProjectBreakdown" xml:space="preserve"><value>Виробіток за проєктами</value></data>
+  <data name="WorkspaceMoney_PaymentSummary" xml:space="preserve"><value>Зведення оплат</value></data>
+  <data name="WorkspaceMoney_TrackedHours" xml:space="preserve"><value>Затрекані години</value></data>
+  <data name="WorkspaceMoney_InternalRate" xml:space="preserve"><value>Внутрішня ставка</value></data>
+  <data name="WorkspaceMoney_ClientRate" xml:space="preserve"><value>Ставка клієнта</value></data>
+  <data name="WorkspaceMoney_Profit" xml:space="preserve"><value>Прибуток</value></data>
+  <data name="WorkspaceMoney_PerHour" xml:space="preserve"><value>/год</value></data>
+  <data name="WorkspaceMoney_NoDetails" xml:space="preserve"><value>У цьому звіті немає роботи за проєктами.</value></data>
 </root>

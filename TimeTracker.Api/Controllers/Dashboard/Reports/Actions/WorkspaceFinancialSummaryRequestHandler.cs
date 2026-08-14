@@ -1,11 +1,9 @@
 using Api.Requests.Abstractions;
-using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Model.Report.WorkspaceFinancialSummary;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
-using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Report;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Dto.Reports.WorkspaceFinancialSummary;
@@ -18,31 +16,22 @@ namespace TimeTracker.Api.Controllers.Dashboard.Reports.Actions;
 public class WorkspaceFinancialSummaryRequestHandler
     : IAsyncRequestHandler<WorkspaceFinancialSummaryReportRequest, WorkspaceFinancialSummaryReportResponse>
 {
-    private readonly IMapper _mapper;
     private readonly IApiRequestService _apiRequestService;
     private readonly IUserDao _userDao;
     private readonly ISecurityManager _securityManager;
-    private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IWorkspaceFinancialSummaryReportDao _reportDao;
-    private readonly IWorkspaceDao _workspaceDao;
 
     public WorkspaceFinancialSummaryRequestHandler(
-        IMapper mapper,
         IApiRequestService apiRequestService,
         IUserDao userDao,
         ISecurityManager securityManager,
-        IWorkspaceAccessService workspaceAccessService,
-        IWorkspaceFinancialSummaryReportDao reportDao,
-        IWorkspaceDao workspaceDao
+        IWorkspaceFinancialSummaryReportDao reportDao
     )
     {
-        _mapper = mapper;
         _apiRequestService = apiRequestService;
         _userDao = userDao;
         _securityManager = securityManager;
-        _workspaceAccessService = workspaceAccessService;
         _reportDao = reportDao;
-        _workspaceDao = workspaceDao;
     }
 
     public async Task<WorkspaceFinancialSummaryReportResponse> ExecuteAsync(
@@ -53,33 +42,26 @@ public class WorkspaceFinancialSummaryRequestHandler
         var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
         RecordNotFoundException.ThrowIfNull(workspace);
 
-        if (!await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
+        if (workspace.Mode != WorkspaceMode.Team || !await _securityManager.HasAccess(AccessLevel.Write, user, workspace))
         {
             throw new HasNoAccessException();
         }
 
         var clientBalances = await _reportDao.GetClientBalancesAsync(workspace.Id);
+        var clientProjects = await _reportDao.GetClientProjectBreakdownAsync(workspace.Id);
         var memberBalances = await _reportDao.GetMemberBalancesAsync(workspace.Id);
+        var memberProjects = await _reportDao.GetMemberProjectBreakdownAsync(workspace.Id);
         var projectProfitability = await _reportDao.GetProjectProfitabilityAsync(workspace.Id);
-
-        var membersPage = await _workspaceDao.GetMembersAsync(workspace, 1);
-        var isSoloWorkspace = workspace.Mode == WorkspaceMode.Solo;
-        var isTeamWorkspace = workspace.Mode == WorkspaceMode.Team || (workspace.Mode == null && membersPage.TotalCount > 1);
-
-        var memberBalancesResult = isSoloWorkspace
-            ? Array.Empty<FinancialMemberBalanceItemDto>()
-            : memberBalances;
-
-        var totals = BuildTotals(clientBalances, memberBalancesResult);
+        var totals = BuildTotals(clientBalances, memberBalances);
 
         return new WorkspaceFinancialSummaryReportResponse
         {
-            IsTeamWorkspace = isTeamWorkspace,
-            HasMemberPayouts = !isSoloWorkspace && (isTeamWorkspace || memberBalances.Any(x => x.PaidOutAmount != 0)),
-            HasUsefulProjectProfitability = !isSoloWorkspace && (isTeamWorkspace || projectProfitability.Any(x => x.EstimatedMargin != 0)),
+            IsTeamWorkspace = true,
+            HasMemberPayouts = true,
+            HasUsefulProjectProfitability = true,
             Totals = totals,
-            ClientBalances = MapClientBalances(clientBalances),
-            MemberBalances = MapMemberBalances(memberBalancesResult),
+            ClientBalances = MapClientBalances(clientBalances, clientProjects),
+            MemberBalances = MapMemberBalances(memberBalances, memberProjects),
             ProjectProfitability = MapProjectProfitability(projectProfitability)
         };
     }
@@ -103,12 +85,14 @@ public class WorkspaceFinancialSummaryRequestHandler
             MemberPaidOut = memberPaidOut,
             MemberOutstanding = teamCost - memberPaidOut,
             EstimatedMargin = clientEarned - teamCost,
-            RealizedMargin = clientReceived - memberPaidOut
+            RealizedMargin = clientReceived - memberPaidOut,
+            MarginPercent = clientEarned == 0 ? null : Math.Round((clientEarned - teamCost) / clientEarned * 100, 1)
         };
     }
 
     private ICollection<WorkspaceFinancialClientBalanceDto> MapClientBalances(
-        ICollection<FinancialClientBalanceItemDto> items
+        ICollection<FinancialClientBalanceItemDto> items,
+        ICollection<FinancialClientProjectItemDto> projects
     )
     {
         return items.Select(item => new WorkspaceFinancialClientBalanceDto
@@ -118,12 +102,22 @@ public class WorkspaceFinancialSummaryRequestHandler
             Earned = item.EarnedAmount,
             Received = item.ReceivedAmount,
             Outstanding = item.OutstandingAmount,
-            LastPaymentDate = item.LastPaymentDate
+            LastPaymentDate = item.LastPaymentDate,
+            Projects = projects
+                .Where(project => project.ClientId == item.ClientId)
+                .Select(project => new WorkspaceFinancialClientProjectDto
+                {
+                    Project = new ProjectDto { Id = project.ProjectId, Name = project.ProjectName },
+                    Duration = project.Duration,
+                    Earned = project.EarnedAmount
+                })
+                .ToList()
         }).ToList();
     }
 
     private ICollection<WorkspaceFinancialMemberBalanceDto> MapMemberBalances(
-        ICollection<FinancialMemberBalanceItemDto> items
+        ICollection<FinancialMemberBalanceItemDto> items,
+        ICollection<FinancialMemberProjectItemDto> projects
     )
     {
         return items.Select(item => new WorkspaceFinancialMemberBalanceDto
@@ -134,7 +128,19 @@ public class WorkspaceFinancialSummaryRequestHandler
             Cost = item.CostAmount,
             PaidOut = item.PaidOutAmount,
             Owed = item.OwedAmount,
-            LastPayoutDate = item.LastPayoutDate
+            LastPayoutDate = item.LastPayoutDate,
+            Projects = projects
+                .Where(project => project.MemberId == item.MemberId)
+                .Select(project => new WorkspaceFinancialMemberProjectDto
+                {
+                    Project = new ProjectDto { Id = project.ProjectId, Name = project.ProjectName },
+                    Client = project.ClientId.HasValue
+                        ? new ClientDto { Id = project.ClientId.Value, Name = project.ClientName ?? string.Empty }
+                        : null,
+                    Duration = project.Duration,
+                    Earned = project.CostAmount
+                })
+                .ToList()
         }).ToList();
     }
 
@@ -151,6 +157,8 @@ public class WorkspaceFinancialSummaryRequestHandler
             Duration = item.Duration,
             ClientEarned = item.EarnedAmount,
             TeamCost = item.TeamCostAmount,
+            ClientHourlyRate = item.ClientHourlyRate,
+            TeamHourlyRate = item.TeamHourlyRate,
             EstimatedMargin = item.EstimatedMargin,
             MarginPercent = item.MarginPercent
         }).ToList();

@@ -55,7 +55,16 @@ public class ClientPermissionService : IClientPermissionService
         var permissions = new List<WorkspacePermission>();
         foreach (var permissionMapItem in WorkspaceAccessMap)
         {
-            if (permissionMapItem.Key == WorkspacePermission.ReadUserPaymentReport && workspace.Mode != WorkspaceMode.Solo)
+            if (permissionMapItem.Key == WorkspacePermission.ReadWorkspaceFinancialSummary && workspace.Mode != WorkspaceMode.Team)
+            {
+                continue;
+            }
+
+            if (
+                permissionMapItem.Key == WorkspacePermission.ReadUserPaymentReport
+                && workspace.Mode == WorkspaceMode.Team
+                && workspace.Members.FirstOrDefault(member => member.User.Id == user.Id)?.Access != MembershipAccessType.User
+            )
             {
                 continue;
             }

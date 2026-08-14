@@ -88,7 +88,7 @@ public class ForUserTest : BaseTest
     }
 
     [Fact]
-    public async Task ReportCannotBeAccessedInTeamWorkspace()
+    public async Task UserCanAccessPersonalPayoutsInTeamWorkspace()
     {
         _workspace.Mode = WorkspaceMode.Team;
         await DbSessionProvider.CurrentSession.UpdateAsync(_workspace);
@@ -96,7 +96,7 @@ public class ForUserTest : BaseTest
 
         var response = await PostRequestAsync(_url, _memberToken, new UserPaymentReportRequest(), _workspace.Id);
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        response.EnsureSuccessStatusCode();
     }
 
     [Fact]

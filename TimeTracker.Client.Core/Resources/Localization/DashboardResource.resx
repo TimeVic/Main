@@ -822,4 +822,37 @@
   <data name="UserPaymentReport_UnpaidDebt" xml:space="preserve"><value>Client debt</value></data>
   <data name="UserPaymentReport_FullySettled" xml:space="preserve"><value>Fully settled</value></data>
   <data name="UserPaymentReport_NoProjects" xml:space="preserve"><value>No tracked hours for projects</value></data>
+  <data name="WorkspaceMoney_FunnelClientFlow" xml:space="preserve"><value>Client money flow</value></data>
+  <data name="WorkspaceMoney_FunnelTeamCost" xml:space="preserve"><value>Team labor cost</value></data>
+  <data name="WorkspaceMoney_FunnelProfit" xml:space="preserve"><value>Owner profitability</value></data>
+  <data name="WorkspaceMoney_ClientBillable" xml:space="preserve"><value>Client billable</value></data>
+  <data name="WorkspaceMoney_ClientReceived" xml:space="preserve"><value>Client received</value></data>
+  <data name="WorkspaceMoney_ClientDebt" xml:space="preserve"><value>Client outstanding debt</value></data>
+  <data name="WorkspaceMoney_TeamEarnings" xml:space="preserve"><value>Team earnings</value></data>
+  <data name="WorkspaceMoney_PaidToMembers" xml:space="preserve"><value>Paid to members</value></data>
+  <data name="WorkspaceMoney_OwedToMembers" xml:space="preserve"><value>Owed to members</value></data>
+  <data name="WorkspaceMoney_ExpectedProfit" xml:space="preserve"><value>Expected profit</value></data>
+  <data name="WorkspaceMoney_CashProfit" xml:space="preserve"><value>Cash profit</value></data>
+  <data name="WorkspaceMoney_Margin" xml:space="preserve"><value>Margin</value></data>
+  <data name="WorkspaceMoney_ActionCenter" xml:space="preserve"><value>Action center</value></data>
+  <data name="WorkspaceMoney_AwaitingPayment" xml:space="preserve"><value>Awaiting payment</value></data>
+  <data name="WorkspaceMoney_NeedToPay" xml:space="preserve"><value>Need to pay</value></data>
+  <data name="WorkspaceMoney_Remind" xml:space="preserve"><value>Remind</value></data>
+  <data name="WorkspaceMoney_ReminderCopied" xml:space="preserve"><value>Payment reminder copied to clipboard</value></data>
+  <data name="WorkspaceMoney_ReminderTemplate" xml:space="preserve"><value>Hello, {0}! A balance of {1} is still outstanding. Please let us know when payment is expected. Thank you.</value></data>
+  <data name="WorkspaceMoney_PayMember" xml:space="preserve"><value>Pay</value></data>
+  <data name="WorkspaceMoney_AllCaughtUp" xml:space="preserve"><value>Everything is up to date</value></data>
+  <data name="WorkspaceMoney_NoClientDebt" xml:space="preserve"><value>There are no client debts to follow up.</value></data>
+  <data name="WorkspaceMoney_NoMemberDebt" xml:space="preserve"><value>There are no member payouts due.</value></data>
+  <data name="WorkspaceMoney_ClientBalancesTab" xml:space="preserve"><value>Client balances</value></data>
+  <data name="WorkspaceMoney_TeamSettlementsTab" xml:space="preserve"><value>Team settlements</value></data>
+  <data name="WorkspaceMoney_ProjectProfitabilityTab" xml:space="preserve"><value>Project profitability</value></data>
+  <data name="WorkspaceMoney_ProjectBreakdown" xml:space="preserve"><value>Project work</value></data>
+  <data name="WorkspaceMoney_PaymentSummary" xml:space="preserve"><value>Payment summary</value></data>
+  <data name="WorkspaceMoney_TrackedHours" xml:space="preserve"><value>Tracked hours</value></data>
+  <data name="WorkspaceMoney_InternalRate" xml:space="preserve"><value>Internal rate</value></data>
+  <data name="WorkspaceMoney_ClientRate" xml:space="preserve"><value>Client rate</value></data>
+  <data name="WorkspaceMoney_Profit" xml:space="preserve"><value>Profit</value></data>
+  <data name="WorkspaceMoney_PerHour" xml:space="preserve"><value>/h</value></data>
+  <data name="WorkspaceMoney_NoDetails" xml:space="preserve"><value>No project work in this report.</value></data>
 </root>

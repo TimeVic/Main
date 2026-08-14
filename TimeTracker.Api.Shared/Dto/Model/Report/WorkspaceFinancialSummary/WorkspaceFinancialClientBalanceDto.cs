@@ -15,4 +15,6 @@ public class WorkspaceFinancialClientBalanceDto
     public decimal Outstanding { get; set; }
 
     public DateTime? LastPaymentDate { get; set; }
+
+    public ICollection<WorkspaceFinancialClientProjectDto> Projects { get; set; } = new List<WorkspaceFinancialClientProjectDto>();
 }

@@ -22,6 +22,14 @@ public class FinancialProjectProfitabilityItemDto
 
     public decimal TeamCostAmount => Convert.ToDecimal(TeamCostAmountOriginal);
 
+    public decimal? ClientHourlyRate => Duration == TimeSpan.Zero
+        ? null
+        : Math.Round(EarnedAmount / (decimal)Duration.TotalHours, 2);
+
+    public decimal? TeamHourlyRate => Duration == TimeSpan.Zero
+        ? null
+        : Math.Round(TeamCostAmount / (decimal)Duration.TotalHours, 2);
+
     public decimal EstimatedMargin => EarnedAmount - TeamCostAmount;
 
     public decimal? MarginPercent => EarnedAmount == 0 ? null : Math.Round(EstimatedMargin / EarnedAmount * 100, 1);

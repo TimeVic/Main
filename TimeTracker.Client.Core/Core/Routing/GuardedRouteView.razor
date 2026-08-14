@@ -4,9 +4,11 @@
 @using TimeTracker.Client.Core.Core.Extensions
 @using TimeTracker.Client.Core.Services.Security
 @using TimeTracker.Client.Core.Store.Permissions
+@using TimeTracker.Client.Core.Store.Auth
 @inject NavigationManager NavigationManager
 @inject ISecurityManager SecurityManager
 @inject IState<WorkspacePermissionsState> WorkspacePermissionsState
+@inject IState<AuthState> AuthState
 @implements IDisposable
 
 @if (_hasAccess)
@@ -53,7 +55,17 @@
         _hasAccess = HasRouteAccess();
         if (!_hasAccess && NavigationManager.GetPath() != ClientSiteUrl.Error403)
         {
-            NavigationManager.NavigateTo(ClientSiteUrl.Error403);
+            var redirectUrl = RouteData.PageType
+                .GetCustomAttributes(typeof(RequireWorkspacePermissionAttribute), true)
+                .Cast<RequireWorkspacePermissionAttribute>()
+                .Select(attribute => attribute.UnauthorizedUserRedirectUrl)
+                .FirstOrDefault(url => !string.IsNullOrWhiteSpace(url));
+
+            NavigationManager.NavigateTo(
+                AuthState.Value.IsRoleUser && !string.IsNullOrWhiteSpace(redirectUrl)
+                    ? $"/board/{redirectUrl}"
+                    : ClientSiteUrl.Error403
+            );
         }
     }
 

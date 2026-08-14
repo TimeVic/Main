@@ -17,4 +17,6 @@ public class WorkspaceFinancialSummaryTotalsDto
     public decimal EstimatedMargin { get; set; }
 
     public decimal RealizedMargin { get; set; }
+
+    public decimal? MarginPercent { get; set; }
 }

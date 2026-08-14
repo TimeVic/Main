@@ -15,7 +15,11 @@ public interface IWorkspaceFinancialSummaryReportDao : IDomainService
 
     Task<ICollection<FinancialClientBalanceItemDto>> GetClientBalancesAsync(Guid workspaceId);
 
+    Task<ICollection<FinancialClientProjectItemDto>> GetClientProjectBreakdownAsync(Guid workspaceId);
+
     Task<ICollection<FinancialMemberBalanceItemDto>> GetMemberBalancesAsync(Guid workspaceId);
+
+    Task<ICollection<FinancialMemberProjectItemDto>> GetMemberProjectBreakdownAsync(Guid workspaceId);
 
     Task<ICollection<FinancialProjectProfitabilityItemDto>> GetProjectProfitabilityAsync(Guid workspaceId);
 }
