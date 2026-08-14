@@ -39,4 +39,12 @@ public class ReportController(ILifetimeScope scope) : MainApiControllerBase(scop
         => this.RequestAsync()
             .For<WorkspaceFinancialSummaryReportResponse>()
             .With(request);
+
+    [HttpPost("user-payment-report")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> UserPaymentReport([FromBody] UserPaymentReportRequest request)
+        => this.RequestAsync()
+            .For<UserPaymentReportResponse>()
+            .With(request);
 }

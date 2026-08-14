@@ -1,0 +1,145 @@
+@page "/board/{WorkspaceId:guid}/report/user-payments"
+@page "/board/report/user-payments"
+@using Fluxor
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Client.Core.Store.Report
+@using TimeTracker.Client.Web.Ui.Shared.Components
+@using Layout = TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
+
+@inherits BaseReactiveComponent
+@inject IState<ReportsState> ReportsState
+@layout Layout
+
+<div class="space-y-6">
+    <section>
+        <h1 class="text-2xl font-bold text-slate-900">@DashboardLocalizer["UserPaymentReport_Title"]</h1>
+        <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserPaymentReport_Description"]</p>
+    </section>
+
+    @if (ReportsState.Value.IsLoading)
+    {
+        <div class="flex justify-center rounded-2xl border border-slate-200 bg-white py-10">
+            <LumexSpinner/>
+        </div>
+    }
+    else if (_report == null || !_report.Clients.Any())
+    {
+        <LumexCard Class="border-dashed border-slate-200 bg-slate-50 shadow-none">
+            <LumexCardBody>
+                <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["UserPaymentReport_EmptyTitle"]</p>
+                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserPaymentReport_EmptyDescription"]</p>
+            </LumexCardBody>
+        </LumexCard>
+    }
+    else
+    {
+        <section class="grid gap-4 md:grid-cols-3">
+            <LumexCard>
+                <LumexCardBody>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["TotalEarned"]</p>
+                    <p class="mt-2 text-3xl font-semibold text-slate-900"><AmountDisplay Amount="@_report.Totals.Earned"/></p>
+                </LumexCardBody>
+            </LumexCard>
+            <LumexCard Class="border-emerald-100 bg-emerald-50/40">
+                <LumexCardBody>
+                    <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">@DashboardLocalizer["TotalReceived"]</p>
+                    <p class="mt-2 text-3xl font-semibold text-emerald-700"><AmountDisplay Amount="@_report.Totals.Received"/></p>
+                </LumexCardBody>
+            </LumexCard>
+            <LumexCard Class="@GetOutstandingCardClass(_report.Totals.Outstanding)">
+                <LumexCardBody>
+                    <p class="text-xs font-semibold uppercase tracking-wide @GetOutstandingTextClass(_report.Totals.Outstanding)">@DashboardLocalizer["OutstandingBalance"]</p>
+                    <p class="mt-2 text-3xl font-semibold @GetOutstandingTextClass(_report.Totals.Outstanding)"><AmountDisplay Amount="@_report.Totals.Outstanding"/></p>
+                </LumexCardBody>
+            </LumexCard>
+        </section>
+
+        <section>
+            <div class="mb-4">
+                <h2 class="text-lg font-semibold text-slate-900">@DashboardLocalizer["UserPaymentReport_ClientBalances"]</h2>
+                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserPaymentReport_ClientBalancesDescription"]</p>
+            </div>
+            <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+                <table class="min-w-full text-sm">
+                    <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        <tr>
+                            <th class="px-4 py-3 text-left">@DashboardLocalizer["Client"]</th>
+                            <th class="px-4 py-3 text-right">@DashboardLocalizer["Hours"]</th>
+                            <th class="px-4 py-3 text-right">@DashboardLocalizer["Earned"]</th>
+                            <th class="px-4 py-3 text-right">@DashboardLocalizer["Received"]</th>
+                            <th class="px-4 py-3 text-right">@DashboardLocalizer["Balance"]</th>
+                            <th class="px-4 py-3 text-left">@DashboardLocalizer["Status"]</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach (var client in _report.Clients)
+                        {
+                            var isExpanded = _expandedClientIds.Contains(client.Id);
+                            <tr class="cursor-pointer hover:bg-slate-50/50" @onclick="() => ToggleClient(client.Id)">
+                                <td class="px-4 py-3 font-medium text-slate-800">
+                                    <i class="fa-solid @(isExpanded ? "fa-chevron-down" : "fa-chevron-right") mr-2 text-xs text-slate-400"></i>@client.Name
+                                </td>
+                                <td class="px-4 py-3 text-right text-slate-600">@client.Duration.ToReadableShortString()</td>
+                                <td class="px-4 py-3 text-right"><AmountDisplay Amount="@client.Earned"/></td>
+                                <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@client.Received"/></td>
+                                <td class="px-4 py-3 text-right font-semibold @GetOutstandingTextClass(client.Outstanding)"><AmountDisplay Amount="@client.Outstanding"/></td>
+                                <td class="px-4 py-3"><span class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold @GetStatusClass(client.Outstanding)">@GetStatus(client.Outstanding)</span></td>
+                            </tr>
+                            @if (isExpanded)
+                            {
+                                <tr class="bg-slate-50/70">
+                                    <td colspan="6" class="px-4 py-5">
+                                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                            <section>
+                                                <h3 class="text-sm font-semibold text-slate-800">@DashboardLocalizer["UserPaymentReport_ProjectWork"]</h3>
+                                                <table class="mt-3 w-full text-sm">
+                                                    <thead class="text-xs uppercase tracking-wide text-slate-500">
+                                                        <tr>
+                                                            <th class="pb-2 text-left">@DashboardLocalizer["Project"]</th>
+                                                            <th class="pb-2 text-right">@DashboardLocalizer["Hours"]</th>
+                                                            <th class="pb-2 text-right">@DashboardLocalizer["Earned"]</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="divide-y divide-slate-200">
+                                                        @foreach (var project in client.Projects)
+                                                        {
+                                                            <tr>
+                                                                <td class="py-2 text-slate-700">@project.Name</td>
+                                                                <td class="py-2 text-right text-slate-600">@project.Duration.ToReadableShortString()</td>
+                                                                <td class="py-2 text-right font-medium"><AmountDisplay Amount="@project.Earned"/></td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr class="font-semibold text-slate-800">
+                                                            <td colspan="2" class="pt-3">@DashboardLocalizer["UserPaymentReport_TotalEarned"]</td>
+                                                            <td class="pt-3 text-right"><AmountDisplay Amount="@client.Earned"/></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </section>
+                                            <section>
+                                                <h3 class="text-sm font-semibold text-slate-800">@DashboardLocalizer["UserPaymentReport_PaymentBalance"]</h3>
+                                                <dl class="mt-3 space-y-3 text-sm">
+                                                    <div class="flex justify-between gap-4"><dt class="text-slate-500">@DashboardLocalizer["UserPaymentReport_WorkAccrued"]</dt><dd class="font-medium text-slate-800"><AmountDisplay Amount="@client.Earned"/></dd></div>
+                                                    <div class="flex justify-between gap-4"><dt class="text-slate-500">@DashboardLocalizer["UserPaymentReport_ProjectPayments"]</dt><dd class="font-medium text-emerald-700"><AmountDisplay Amount="@client.ProjectPayments"/></dd></div>
+                                                    <div class="flex justify-between gap-4"><dt class="text-slate-500">@DashboardLocalizer["UserPaymentReport_GeneralPayments"]</dt><dd class="font-medium text-emerald-700"><AmountDisplay Amount="@client.GeneralPayments"/></dd></div>
+                                                    <div class="flex justify-between gap-4 border-t border-slate-200 pt-3"><dt class="font-semibold text-slate-800">@DashboardLocalizer["UserPaymentReport_TotalReceived"]</dt><dd class="font-semibold text-emerald-700"><AmountDisplay Amount="@client.Received"/></dd></div>
+                                                </dl>
+                                                <a class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-blue-700 hover:text-blue-800" href="@GetClientPaymentsUrl(client.Id)">
+                                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                                    @DashboardLocalizer["UserPaymentReport_PaymentHistory"]
+                                                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                                                </a>
+                                            </section>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+</div>

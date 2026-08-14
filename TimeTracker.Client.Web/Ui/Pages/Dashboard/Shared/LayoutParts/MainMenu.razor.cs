@@ -56,8 +56,7 @@ public partial class MainMenu: IDisposable
             "fa-solid fa-money-bill-transfer",
             UrlService.GetDashboardUrl("client-payments"),
             "",
-            WorkspacePermission.ReadClientPayment,
-            WorkspacePermission.ReadWorkspaceFinancialSummary
+            WorkspacePermission.ReadClientPayment
         ),
         new(
             Text("PaymentsReportTitle"),
@@ -65,6 +64,12 @@ public partial class MainMenu: IDisposable
             UrlService.GetDashboardUrl("report/member-payments"),
             Text("Reports"),
             WorkspacePermission.ReadMemberPayment
+        ),
+        new(
+            Text("UserPaymentReport_Menu"),
+            "fa-solid fa-wallet",
+            UrlService.GetDashboardUrl("report/user-payments"),
+            Text("Reports")
         ),
         new(Text("TimeEntriesReportTitle"), "fa-regular fa-clock", UrlService.GetDashboardUrl("report/time-entries"), Text("Reports")),
         new(

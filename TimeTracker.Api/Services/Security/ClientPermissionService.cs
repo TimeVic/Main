@@ -19,7 +19,7 @@ public class ClientPermissionService : IClientPermissionService
             [WorkspacePermission.UpdateProject] = AccessLevel.Write,
             [WorkspacePermission.CreateClient] = AccessLevel.Write,
             [WorkspacePermission.UpdateClient] = AccessLevel.Write,
-            [WorkspacePermission.ReadClientPayment] = AccessLevel.Write,
+            [WorkspacePermission.ReadClientPayment] = AccessLevel.Read,
             [WorkspacePermission.CreateClientPayment] = AccessLevel.Write,
             [WorkspacePermission.UpdateClientPayment] = AccessLevel.Write,
             [WorkspacePermission.ReadMemberPayment] = AccessLevel.Read,

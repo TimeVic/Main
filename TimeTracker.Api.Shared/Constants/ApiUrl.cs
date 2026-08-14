@@ -76,6 +76,8 @@ public class ApiUrl
 
     public const string ReportWorkspaceFinancialSummary = "dashboard/report/workspace-financial-summary";
 
+    public const string ReportUserPayment = "dashboard/report/user-payment-report";
+
     #endregion
 
     #region Workspace Member

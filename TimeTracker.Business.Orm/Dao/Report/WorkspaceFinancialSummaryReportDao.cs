@@ -2,6 +2,7 @@ using Autofac;
 using NHibernate.Transform;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao.Common;
+using TimeTracker.Business.Orm.Dto.Reports;
 using TimeTracker.Business.Orm.Dto.Reports.WorkspaceFinancialSummary;
 
 namespace TimeTracker.Business.Orm.Dao.Report;
@@ -18,6 +19,28 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
             .SetParameter("workspaceId", workspaceId)
             .SetResultTransformer(Transformers.AliasToBean<FinancialClientBalanceItemDto>())
             .ListAsync<FinancialClientBalanceItemDto>();
+    }
+
+    public async Task<ICollection<UserPaymentReportProjectItemDto>> GetUserPaymentReportProjectEarningsAsync(
+        Guid workspaceId,
+        Guid userId
+    )
+    {
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.UserPaymentReportProjectEarnings"))
+            .SetParameter("workspaceId", workspaceId)
+            .SetParameter("userId", userId)
+            .SetResultTransformer(Transformers.AliasToBean<UserPaymentReportProjectItemDto>())
+            .ListAsync<UserPaymentReportProjectItemDto>();
+    }
+
+    public async Task<ICollection<UserPaymentReportClientPaymentItemDto>> GetUserPaymentReportClientPaymentsAsync(
+        Guid workspaceId
+    )
+    {
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.UserPaymentReportClientPayments"))
+            .SetParameter("workspaceId", workspaceId)
+            .SetResultTransformer(Transformers.AliasToBean<UserPaymentReportClientPaymentItemDto>())
+            .ListAsync<UserPaymentReportClientPaymentItemDto>();
     }
 
     public async Task<ICollection<FinancialMemberBalanceItemDto>> GetMemberBalancesAsync(Guid workspaceId)

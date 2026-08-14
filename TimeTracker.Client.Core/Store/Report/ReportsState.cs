@@ -18,6 +18,8 @@ public record ReportsState
 
     public WorkspaceFinancialSummaryReportResponse? WorkspaceFinancialSummaryData { get; set; }
 
+    public UserPaymentReportResponse? UserPaymentReportData { get; set; }
+
     public bool IsLoading { get; set; }
 
     public SummaryReportFilterState SummaryReportFilter { get; set; } = new(

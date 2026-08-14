@@ -10,6 +10,9 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.ClientPayments;
 
 public partial class ClientPaymentsPage
 {
+    [SupplyParameterFromQuery(Name = "clientId")]
+    public Guid? ClientIdFilter { get; set; }
+
     [Inject]
     public IState<ClientPaymentState> _state { get; set; }
 
@@ -48,6 +51,11 @@ public partial class ClientPaymentsPage
         base.OnInitialized();
         WorkspacePermissionsState.StateChanged += OnWorkspacePermissionsStateChanged;
         _dispatcher.Dispatch(new LoadClientPaymentListAction(true));
+    }
+
+    protected override void OnParametersSet()
+    {
+        SelectedClientId = ClientIdFilter ?? Guid.Empty;
     }
 
     private bool MatchesClient(ClientPaymentDto payment)
