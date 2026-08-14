@@ -35,21 +35,8 @@ def gitCredentials="gitea-jenkins-ssh-key"
 
 properties([
     pipelineTriggers([
-        [
-            $class: 'GenericTrigger',
-            genericVariables: [
-                [key: 'GIT_REF', value: '$.ref', defaultValue: ''],
-                [key: 'PR_ACTION', value: '$.action', defaultValue: ''],
-                [key: 'IS_PR_MERGED', value: '$.pull_request.merged', defaultValue: '']
-            ],
-            token: 'timevic-publish-development',
-            causeString: 'Generic Webhook triggered for ref: $GIT_REF',
-            printContributedVariables: true,
-            printPostContent: false,
-            silentResponse: false,
-            regexpFilterText: '$GIT_REF',
-            regexpFilterExpression: '^refs/heads/main$'
-        ]
+        pollSCM(''),
+        githubPush()
     ]),
     parameters([
         // https://plugins.jenkins.io/git-parameter/
@@ -383,6 +370,8 @@ def isAutoTriggeredPushBuild() {
         return causeName != null && (causeName.contains('GitHubPush')
             || causeName.contains('Gitea')
             || causeName.contains('SCMTrigger')
+            || causeName.contains('RemoteCause')
+            || causeName.contains('BranchIndexingCause')
             || causeName.contains('GenericCause'))
     }
 }
