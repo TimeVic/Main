@@ -42,6 +42,9 @@ public class ForOwnerTest : BaseTest
         _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
 
         (_ownerToken, _owner, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _workspace.Mode = WorkspaceMode.Team;
+        DbSessionProvider.CurrentSession.UpdateAsync(_workspace).Wait();
+        FlushDbChanges().Wait();
         _project = _projectSeeder.CreateAsync(_workspace).Result;
         _client = _project.Client!;
 
@@ -73,6 +76,19 @@ public class ForOwnerTest : BaseTest
 
         var data = await response.GetJsonDataAsync<WorkspaceFinancialSummaryReportResponse>();
         Assert.NotNull(data);
+    }
+
+    [Fact]
+    public async Task ManagerCanAccessReport()
+    {
+        var (managerToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.Manager
+        );
+
+        var response = await PostRequestAsync(_url, managerToken, new WorkspaceFinancialSummaryReportRequest(), _workspace.Id);
+
+        response.EnsureSuccessStatusCode();
     }
 
     [Fact]
@@ -124,29 +140,21 @@ public class ForOwnerTest : BaseTest
     }
 
     [Fact]
-    public async Task SoloWorkspaceIsNotTeamWorkspace()
+    public async Task SoloWorkspaceCannotAccessTeamFinancialReport()
     {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await DbSessionProvider.CurrentSession.UpdateAsync(_workspace);
+        await FlushDbChanges();
+
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
         });
-        response.EnsureSuccessStatusCode();
-
-        var data = await response.GetJsonDataAsync<WorkspaceFinancialSummaryReportResponse>();
-        Assert.NotNull(data);
-        Assert.False(data.IsTeamWorkspace);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
-    public async Task TeamWorkspaceFlagSetWhenMultipleMembers()
+    public async Task TeamWorkspaceFlagIsSet()
     {
-        var (_, member, _) = await UserSeeder.CreateAuthorizedAsync();
-        await _workspaceAccessService.ShareAccessAsync(
-            _workspace,
-            member,
-            MembershipAccessType.User,
-            new List<ProjectAccessModel>()
-        );
-
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
         });
@@ -218,13 +226,47 @@ public class ForOwnerTest : BaseTest
         var data = await response.GetJsonDataAsync<WorkspaceFinancialSummaryReportResponse>();
         Assert.NotNull(data?.Totals);
         Assert.Equal(260, data.Totals.ClientEarned);
-        Assert.Equal(260, data.Totals.TeamCost);
-        Assert.Equal(0, data.Totals.EstimatedMargin);
+        Assert.Equal(0, data.Totals.TeamCost);
+        Assert.Equal(260, data.Totals.EstimatedMargin);
 
         var projectProfitability = Assert.Single(data.ProjectProfitability);
         Assert.Equal(260, projectProfitability.ClientEarned);
-        Assert.Equal(260, projectProfitability.TeamCost);
-        Assert.Equal(0, projectProfitability.EstimatedMargin);
+        Assert.Equal(0, projectProfitability.TeamCost);
+        Assert.Equal(260, projectProfitability.EstimatedMargin);
+    }
+
+    [Fact]
+    public async Task TeamCostUsesMemberInternalProjectRate()
+    {
+        var (_, member, _) = await UserSeeder.CreateAuthorizedAsync();
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            member,
+            MembershipAccessType.User,
+            new List<ProjectAccessModel> { new() { Project = _project, HourlyRate = 40 } }
+        );
+        var startTime = DateTime.UtcNow.StartOfDay().AddHours(12);
+        await _timeEntryDao.SetAsync(member, _workspace, new TimeEntryCreationDto
+        {
+            StartTime = startTime,
+            EndTime = startTime.AddHours(2),
+            IsBillable = true,
+            HourlyRate = 100
+        }, _project);
+
+        var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest());
+        response.EnsureSuccessStatusCode();
+
+        var data = await response.GetJsonDataAsync<WorkspaceFinancialSummaryReportResponse>();
+        Assert.NotNull(data?.Totals);
+        Assert.Equal(400, data.Totals.ClientEarned);
+        Assert.Equal(80, data.Totals.TeamCost);
+        Assert.Equal(320, data.Totals.EstimatedMargin);
+        Assert.Equal(80, data.Totals.MarginPercent);
+        Assert.Equal(80, Assert.Single(data.MemberBalances, item => item.User.Id == member.Id).Cost);
+        var projectProfitability = Assert.Single(data.ProjectProfitability);
+        Assert.Equal(80, projectProfitability.TeamCost);
+        Assert.Equal(80, projectProfitability.MarginPercent);
     }
 
     [Fact]

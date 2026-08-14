@@ -51,6 +51,22 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
             .ListAsync<FinancialMemberBalanceItemDto>();
     }
 
+    public async Task<ICollection<FinancialClientProjectItemDto>> GetClientProjectBreakdownAsync(Guid workspaceId)
+    {
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialClientProjects"))
+            .SetParameter("workspaceId", workspaceId)
+            .SetResultTransformer(Transformers.AliasToBean<FinancialClientProjectItemDto>())
+            .ListAsync<FinancialClientProjectItemDto>();
+    }
+
+    public async Task<ICollection<FinancialMemberProjectItemDto>> GetMemberProjectBreakdownAsync(Guid workspaceId)
+    {
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialMemberProjects"))
+            .SetParameter("workspaceId", workspaceId)
+            .SetResultTransformer(Transformers.AliasToBean<FinancialMemberProjectItemDto>())
+            .ListAsync<FinancialMemberProjectItemDto>();
+    }
+
     public async Task<ICollection<FinancialProjectProfitabilityItemDto>> GetProjectProfitabilityAsync(Guid workspaceId)
     {
         return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialProjectProfitability"))

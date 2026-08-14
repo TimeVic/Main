@@ -17,4 +17,6 @@ public class WorkspaceFinancialMemberBalanceDto
     public decimal Owed { get; set; }
 
     public DateTime? LastPayoutDate { get; set; }
+
+    public ICollection<WorkspaceFinancialMemberProjectDto> Projects { get; set; } = new List<WorkspaceFinancialMemberProjectDto>();
 }

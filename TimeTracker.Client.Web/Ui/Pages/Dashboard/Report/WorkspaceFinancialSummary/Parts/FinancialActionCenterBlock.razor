@@ -1,0 +1,61 @@
+@using Fluxor
+@using TimeTracker.Client.Core.Store.Report
+@using TimeTracker.Client.Web.Ui.Shared.Components
+
+@inherits BaseReactiveComponent
+@inject IState<ReportsState> ReportsState
+
+@{
+    var clientDebts = (ReportsState.Value.WorkspaceFinancialSummaryData?.ClientBalances ?? [])
+        .Where(item => item.Outstanding > 0)
+        .OrderByDescending(item => item.Outstanding)
+        .ToList();
+    var memberDebts = (ReportsState.Value.WorkspaceFinancialSummaryData?.MemberBalances ?? [])
+        .Where(item => item.Owed > 0)
+        .OrderByDescending(item => item.Owed)
+        .ToList();
+}
+
+<section>
+    <h2 class="mb-4 text-base font-semibold text-slate-700">@DashboardLocalizer["WorkspaceMoney_ActionCenter"]</h2>
+    <div class="grid gap-6 xl:grid-cols-2">
+        <article class="rounded-2xl border border-slate-200 bg-white p-5">
+            <h3 class="font-semibold text-slate-800">@DashboardLocalizer["WorkspaceMoney_AwaitingPayment"]</h3>
+            @if (clientDebts.Count == 0)
+            {
+                <p class="mt-4 text-sm text-slate-500">@DashboardLocalizer["WorkspaceMoney_NoClientDebt"]</p>
+            }
+            else
+            {
+                <ul class="mt-4 divide-y divide-slate-100">
+                    @foreach (var item in clientDebts)
+                    {
+                        <li class="flex items-center justify-between gap-4 py-3">
+                            <div><p class="font-medium text-slate-800">@item.Client.Name</p><p class="text-sm font-semibold text-red-700"><AmountDisplay Amount="@item.Outstanding"/></p></div>
+                            <button class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" @onclick="() => CopyReminderAsync(item.Client.Name, item.Outstanding)"><i class="fa-regular fa-copy mr-1"></i>@DashboardLocalizer["WorkspaceMoney_Remind"]</button>
+                        </li>
+                    }
+                </ul>
+            }
+        </article>
+        <article class="rounded-2xl border border-slate-200 bg-white p-5">
+            <h3 class="font-semibold text-slate-800">@DashboardLocalizer["WorkspaceMoney_NeedToPay"]</h3>
+            @if (memberDebts.Count == 0)
+            {
+                <p class="mt-4 text-sm text-slate-500">@DashboardLocalizer["WorkspaceMoney_NoMemberDebt"]</p>
+            }
+            else
+            {
+                <ul class="mt-4 divide-y divide-slate-100">
+                    @foreach (var item in memberDebts)
+                    {
+                        <li class="flex items-center justify-between gap-4 py-3">
+                            <div><p class="font-medium text-slate-800">@item.User.Name</p><p class="text-sm font-semibold text-red-700"><AmountDisplay Amount="@item.Owed"/></p></div>
+                            <button class="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700" @onclick="() => OnPayMember.InvokeAsync(item.MemberId)"><i class="fa-solid fa-plus mr-1"></i>@DashboardLocalizer["WorkspaceMoney_PayMember"]</button>
+                        </li>
+                    }
+                </ul>
+            }
+        </article>
+    </div>
+</section>

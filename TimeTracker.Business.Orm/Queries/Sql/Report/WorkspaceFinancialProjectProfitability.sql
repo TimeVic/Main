@@ -15,8 +15,10 @@ with earned_by_project as (
 member_earnings_by_project as (
     select
         te.project_id                                                                                        as ProjectId,
-        sum(round(te.hourly_rate / 60.0 / 60.0 * extract(epoch from te.end_time - te.start_time), 2))       as TeamCostAmount
+        sum(round(coalesce(wmpa.hourly_rate, 0) / 60.0 / 60.0 * extract(epoch from te.end_time - te.start_time), 2)) as TeamCostAmount
     from time_entries te
+             inner join workspace_members wm on wm.user_id = te.user_id and wm.workspace_id = te.workspace_id
+             left join workspace_member_project_accesses wmpa on wmpa.workspace_member_id = wm.id and wmpa.project_id = te.project_id
     where te.workspace_id = :workspaceId
       and te.end_time is not null
       and te.is_billable = true

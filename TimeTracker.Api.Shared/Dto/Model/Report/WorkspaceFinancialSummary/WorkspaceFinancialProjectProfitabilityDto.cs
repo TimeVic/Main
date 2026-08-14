@@ -14,6 +14,10 @@ public class WorkspaceFinancialProjectProfitabilityDto
 
     public decimal TeamCost { get; set; }
 
+    public decimal? ClientHourlyRate { get; set; }
+
+    public decimal? TeamHourlyRate { get; set; }
+
     public decimal EstimatedMargin { get; set; }
 
     public decimal? MarginPercent { get; set; }

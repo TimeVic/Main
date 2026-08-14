@@ -1,0 +1,31 @@
+@using Fluxor
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Client.Core.Store.Report
+@using TimeTracker.Client.Web.Ui.Shared.Components
+
+@inherits BaseReactiveComponent
+@inject IState<ReportsState> ReportsState
+
+@{
+    var items = ReportsState.Value.WorkspaceFinancialSummaryData?.MemberBalances ?? [];
+}
+
+@if (items.Count == 0)
+{
+    <p class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-sm text-slate-500">@DashboardLocalizer["MemberBalancesTableBlock_NoEarningsDescription"]</p>
+}
+else
+{
+    <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+        <table class="min-w-[760px] w-full text-sm">
+            <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500"><tr><th class="px-4 py-3">@DashboardLocalizer["Member"]</th><th class="px-4 py-3 text-right">@DashboardLocalizer["Hours"]</th><th class="px-4 py-3 text-right">@DashboardLocalizer["WorkspaceMoney_TeamEarnings"]</th><th class="px-4 py-3 text-right">@DashboardLocalizer["WorkspaceMoney_PaidToMembers"]</th><th class="px-4 py-3 text-right">@DashboardLocalizer["WorkspaceMoney_OwedToMembers"]</th></tr></thead>
+            <tbody class="divide-y divide-slate-100">
+                @foreach (var item in items)
+                {
+                    <tr class="hover:bg-slate-50/50"><td class="px-4 py-3 font-medium text-slate-800">@item.User.Name</td><td class="px-4 py-3 text-right text-slate-600">@item.Duration.ToReadableShortString()</td><td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.Cost"/></td><td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@item.PaidOut"/></td><td class="px-4 py-3 text-right font-semibold @(item.Owed > 0 ? "text-red-700" : "text-emerald-700")"><AmountDisplay Amount="@item.Owed"/></td></tr>
+                    <tr><td colspan="5" class="bg-slate-50/70 px-4 pb-3"><details><summary class="cursor-pointer py-2 text-sm font-medium text-blue-700">@DashboardLocalizer["WorkspaceMoney_ProjectBreakdown"]</summary>@if (item.Projects.Count == 0) { <p class="pb-2 text-sm text-slate-500">@DashboardLocalizer["WorkspaceMoney_NoDetails"]</p> } else { <div class="overflow-x-auto rounded-lg border border-slate-200 bg-white"><table class="min-w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="px-3 py-2 text-left">@DashboardLocalizer["Project"]</th><th class="px-3 py-2 text-left">@DashboardLocalizer["Client"]</th><th class="px-3 py-2 text-right">@DashboardLocalizer["Hours"]</th><th class="px-3 py-2 text-right">@DashboardLocalizer["WorkspaceMoney_TeamEarnings"]</th></tr></thead><tbody>@foreach (var project in item.Projects) { <tr class="border-t border-slate-100"><td class="px-3 py-2">@project.Project.Name</td><td class="px-3 py-2">@(project.Client?.Name ?? "—")</td><td class="px-3 py-2 text-right">@project.Duration.ToReadableShortString()</td><td class="px-3 py-2 text-right"><AmountDisplay Amount="@project.Earned"/></td></tr> }</tbody></table></div>}</details></td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

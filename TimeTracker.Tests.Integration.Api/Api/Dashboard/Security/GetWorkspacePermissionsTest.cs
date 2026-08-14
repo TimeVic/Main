@@ -105,7 +105,8 @@ public class GetWorkspacePermissionsTest: BaseTest
         Assert.Contains(WorkspacePermission.ReadMemberPayment, actual.Permissions);
         Assert.Contains(WorkspacePermission.CreateMemberPayment, actual.Permissions);
         Assert.Contains(WorkspacePermission.UpdateMemberPayment, actual.Permissions);
-        Assert.Equal(5, actual.Permissions.Count);
+        Assert.Contains(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
+        Assert.Equal(6, actual.Permissions.Count);
         Assert.DoesNotContain(WorkspacePermission.UpdateWorkspaceMembers, actual.Permissions);
         Assert.DoesNotContain(WorkspacePermission.ReadClientPayment, actual.Permissions);
         Assert.DoesNotContain(WorkspacePermission.CreateClientPayment, actual.Permissions);

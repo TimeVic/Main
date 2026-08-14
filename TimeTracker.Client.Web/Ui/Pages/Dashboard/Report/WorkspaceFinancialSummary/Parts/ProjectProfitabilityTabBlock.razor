@@ -1,0 +1,20 @@
+@using Fluxor
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Client.Core.Store.Report
+@using TimeTracker.Client.Web.Ui.Shared.Components
+
+@inherits BaseReactiveComponent
+@inject IState<ReportsState> ReportsState
+
+@{
+    var items = ReportsState.Value.WorkspaceFinancialSummaryData?.ProjectProfitability ?? [];
+}
+
+@if (items.Count == 0)
+{
+    <p class="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-sm text-slate-500">@DashboardLocalizer["ProjectProfitabilityTableBlock_NoProfitabilityDescription"]</p>
+}
+else
+{
+    <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white"><table class="min-w-[960px] w-full text-sm"><thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500"><tr><th class="px-4 py-3">@DashboardLocalizer["Project"]</th><th class="px-4 py-3">@DashboardLocalizer["Client"]</th><th class="px-4 py-3 text-right">@DashboardLocalizer["Hours"]</th><th class="px-4 py-3 text-right">@DashboardLocalizer["WorkspaceMoney_ClientRate"]</th><th class="px-4 py-3 text-right">@DashboardLocalizer["WorkspaceMoney_InternalRate"]</th><th class="px-4 py-3 text-right">@DashboardLocalizer["WorkspaceMoney_Profit"]</th><th class="px-4 py-3 text-right">@DashboardLocalizer["WorkspaceMoney_Margin"]</th></tr></thead><tbody class="divide-y divide-slate-100">@foreach (var item in items) { <tr class="hover:bg-slate-50/50"><td class="px-4 py-3 font-medium text-slate-800">@item.Project.Name</td><td class="px-4 py-3 text-slate-600">@(item.Client?.Name ?? "—")</td><td class="px-4 py-3 text-right">@item.Duration.ToReadableShortString()</td><td class="px-4 py-3 text-right">@(item.ClientHourlyRate is null ? "—" : $"{item.ClientHourlyRate:0.##}{DashboardLocalizer["WorkspaceMoney_PerHour"]}")</td><td class="px-4 py-3 text-right">@(item.TeamHourlyRate is null ? "—" : $"{item.TeamHourlyRate:0.##}{DashboardLocalizer["WorkspaceMoney_PerHour"]}")</td><td class="px-4 py-3 text-right font-semibold @(item.EstimatedMargin < 0 ? "text-red-700" : "text-emerald-700")"><AmountDisplay Amount="@item.EstimatedMargin"/></td><td class="px-4 py-3 text-right @(item.MarginPercent < 0 ? "text-red-700" : "text-slate-700")">@(item.MarginPercent is null ? "—" : $"{item.MarginPercent:0.#}%")</td></tr> }</tbody></table></div>
+}

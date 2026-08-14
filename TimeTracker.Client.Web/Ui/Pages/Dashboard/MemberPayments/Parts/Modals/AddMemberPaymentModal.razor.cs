@@ -18,6 +18,9 @@ public partial class AddMemberPaymentModal : IDisposable
     
     [Parameter]
     public virtual EventCallback<bool> IsOpenedChanged { get; set; }
+
+    [Parameter]
+    public Guid InitialMemberId { get; set; }
     
     [Inject]
     public ILogger<AddMemberPaymentModal> _logger { get; set; }
@@ -33,6 +36,7 @@ public partial class AddMemberPaymentModal : IDisposable
     private EditForm _form;
     private bool _isValid = false;
     private LumexModal modal;
+    private bool _wasOpened;
     private bool CanCreatePaymentForOtherMembers =>
         SecurityManager.HasPermission(WorkspacePermission.CreateMemberPaymentForOtherMembers);
 
@@ -41,6 +45,21 @@ public partial class AddMemberPaymentModal : IDisposable
         InitModel();
         WorkspaceMembersState.StateChanged += OnWorkspaceMembersStateChanged;
         await base.OnInitializedAsync();
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (IsOpened && !_wasOpened)
+        {
+            InitModel();
+            if (InitialMemberId != Guid.Empty)
+            {
+                model.MemberId = InitialMemberId;
+            }
+        }
+
+        _wasOpened = IsOpened;
+        base.OnParametersSet();
     }
 
     private async Task Submit()

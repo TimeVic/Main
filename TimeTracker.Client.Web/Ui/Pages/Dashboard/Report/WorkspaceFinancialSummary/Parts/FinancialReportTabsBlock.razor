@@ -1,0 +1,17 @@
+@using LumexUI.Common
+
+<LumexTabs
+    Size="Size.Large"
+    Variant="TabVariant.Outlined"
+    Color="ThemeColor.Primary"
+    FullWidth="true">
+    <LumexTab Title="@DashboardLocalizer["WorkspaceMoney_ClientBalancesTab"]">
+        <ClientBalancesTabBlock/>
+    </LumexTab>
+    <LumexTab Title="@DashboardLocalizer["WorkspaceMoney_TeamSettlementsTab"]">
+        <TeamSettlementsTabBlock/>
+    </LumexTab>
+    <LumexTab Title="@DashboardLocalizer["WorkspaceMoney_ProjectProfitabilityTab"]">
+        <ProjectProfitabilityTabBlock/>
+    </LumexTab>
+</LumexTabs>
