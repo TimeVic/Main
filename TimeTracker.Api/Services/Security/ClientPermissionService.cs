@@ -26,7 +26,8 @@ public class ClientPermissionService : IClientPermissionService
             [WorkspacePermission.CreateMemberPayment] = AccessLevel.Read,
             [WorkspacePermission.UpdateMemberPayment] = AccessLevel.Read,
             [WorkspacePermission.ReadWorkspaceFinancialSummary] = AccessLevel.Write,
-            [WorkspacePermission.CreateMemberPaymentForOtherMembers] = AccessLevel.Write
+            [WorkspacePermission.CreateMemberPaymentForOtherMembers] = AccessLevel.Write,
+            [WorkspacePermission.ReadUserPaymentReport] = AccessLevel.Read
         };
 
     private static readonly HashSet<WorkspacePermission> MemberPermissions = new()
@@ -54,6 +55,11 @@ public class ClientPermissionService : IClientPermissionService
         var permissions = new List<WorkspacePermission>();
         foreach (var permissionMapItem in WorkspaceAccessMap)
         {
+            if (permissionMapItem.Key == WorkspacePermission.ReadUserPaymentReport && workspace.Mode != WorkspaceMode.Solo)
+            {
+                continue;
+            }
+
             if (workspace.Mode != WorkspaceMode.Team && MemberPermissions.Contains(permissionMapItem.Key))
             {
                 continue;

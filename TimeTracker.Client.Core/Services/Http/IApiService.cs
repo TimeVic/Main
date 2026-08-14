@@ -167,6 +167,8 @@ public interface IApiService
 
     Task<WorkspaceFinancialSummaryReportResponse?> ReportsGetWorkspaceFinancialSummaryAsync(Guid workspaceId);
 
+    Task<UserPaymentReportResponse?> ReportsGetUserPaymentReportAsync(Guid workspaceId);
+
     Task<TagDto?> TagAddAsync(TagAddRequest model);
 
     Task<TagDto?> TagUpdateAsync(TagUpdateRequest model);

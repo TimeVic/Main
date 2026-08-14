@@ -66,6 +66,13 @@ public partial class MainMenu: IDisposable
             Text("Reports"),
             WorkspacePermission.ReadMemberPayment
         ),
+        new(
+            Text("UserPaymentReport_Menu"),
+            "fa-solid fa-wallet",
+            UrlService.GetDashboardUrl("report/user-payments"),
+            Text("Reports"),
+            WorkspacePermission.ReadUserPaymentReport
+        ),
         new(Text("TimeEntriesReportTitle"), "fa-regular fa-clock", UrlService.GetDashboardUrl("report/time-entries"), Text("Reports")),
         new(
             string.Empty,

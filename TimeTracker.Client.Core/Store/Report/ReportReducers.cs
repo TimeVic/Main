@@ -151,6 +151,15 @@ public class ReportReducers
     }
 
     [ReducerMethod]
+    public static ReportsState Reducer(ReportsState state, ReportSetUserPaymentReportAction action)
+    {
+        return state with
+        {
+            UserPaymentReportData = action.ReportData
+        };
+    }
+
+    [ReducerMethod]
     public static ReportsState Reducer(ReportsState state, ReportSetWorkspaceFinancialSummaryFilterAction action)
     {
         var startDate = action.FilterState.StartDate;

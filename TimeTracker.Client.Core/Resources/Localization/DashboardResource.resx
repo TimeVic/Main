@@ -799,4 +799,21 @@
   <data name="WorkspaceMode_Label" xml:space="preserve"><value>Workspace Mode</value></data>
   <data name="WorkspaceMode_Solo" xml:space="preserve"><value>Solo Mode (Solo Developer)</value></data>
   <data name="WorkspaceMode_Team" xml:space="preserve"><value>Team Mode (Agency Owner)</value></data>
+  <data name="UserPaymentReport_Menu" xml:space="preserve"><value>My payment report</value></data>
+  <data name="UserPaymentReport_Title" xml:space="preserve"><value>My payment report</value></data>
+  <data name="UserPaymentReport_Description" xml:space="preserve"><value>Track your earned income, client payments, and outstanding balances for all time.</value></data>
+  <data name="UserPaymentReport_EmptyTitle" xml:space="preserve"><value>No client financial data yet</value></data>
+  <data name="UserPaymentReport_EmptyDescription" xml:space="preserve"><value>Track billable time or record a client payment to see this report.</value></data>
+  <data name="UserPaymentReport_ClientBalances" xml:space="preserve"><value>Client balances</value></data>
+  <data name="UserPaymentReport_ClientBalancesDescription" xml:space="preserve"><value>Each row combines your billable work and all recorded payments for a client.</value></data>
+  <data name="UserPaymentReport_Debt" xml:space="preserve"><value>Debt</value></data>
+  <data name="UserPaymentReport_Paid" xml:space="preserve"><value>Paid</value></data>
+  <data name="UserPaymentReport_ProjectWork" xml:space="preserve"><value>Project work</value></data>
+  <data name="UserPaymentReport_TotalEarned" xml:space="preserve"><value>Total earned</value></data>
+  <data name="UserPaymentReport_PaymentBalance" xml:space="preserve"><value>Payment balance</value></data>
+  <data name="UserPaymentReport_WorkAccrued" xml:space="preserve"><value>Total accrued for work</value></data>
+  <data name="UserPaymentReport_ProjectPayments" xml:space="preserve"><value>Paid for specific projects</value></data>
+  <data name="UserPaymentReport_GeneralPayments" xml:space="preserve"><value>General payments without a project</value></data>
+  <data name="UserPaymentReport_TotalReceived" xml:space="preserve"><value>Total payments received</value></data>
+  <data name="UserPaymentReport_PaymentHistory" xml:space="preserve"><value>Detailed payment history</value></data>
 </root>
