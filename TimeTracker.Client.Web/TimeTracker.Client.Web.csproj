@@ -183,7 +183,6 @@
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByDateTable.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByMonthTable.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByProjectTable.razor" />
-      <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByUserTable.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\ByWeekTable.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\FilterForm.razor" />
       <_ContentIncludedByDefault Remove="Pages\Dashboard\Report\Summary\Parts\SummaryInfoBlock.razor" />

@@ -16,7 +16,5 @@ public class SummaryReportResponse: IResponse
     public ICollection<SummaryByMonthsReportItemDto>? GroupedByMonth { get; set; }
     
     public ICollection<SummaryByWeeksReportItemDto>? GroupedByWeek { get; set; }
-    
-    public ICollection<SummaryByUsersReportItemDto>? GroupedByUser { get; set; }
 }
 

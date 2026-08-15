@@ -188,26 +188,4 @@ public class ForOwnerTest: BaseTest
         });
     }
     
-    [Fact]
-    public async Task ShouldReceiveGroupedByUsers()
-    {
-        var response = await PostRequestAsync(Url, _jwtToken, new SummaryReportRequest()
-        {
-            StartTime = DateTime.UtcNow.AddDays(-32),
-            EndTime = DateTime.UtcNow,
-            Type = SummaryReportType.GroupByUser
-        });
-        await response.GetJsonDataAsync();
-        response.EnsureSuccessStatusCode();
-
-        var actualDto = await response.GetJsonDataAsync<SummaryReportResponse>();
-
-        Assert.NotNull(actualDto.GroupedByUser);
-        Assert.Equal(1, actualDto.GroupedByUser.Count);
-        Assert.All(actualDto.GroupedByUser, item =>
-        {
-            Assert.Equal(_user.Id, item.UserId);
-            Assert.Equal(TimeSpan.FromHours(15), item.Duration);
-        });
-    }
 }
