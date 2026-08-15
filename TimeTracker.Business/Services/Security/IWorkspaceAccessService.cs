@@ -9,6 +9,9 @@ using TimeTracker.Business.Services.Security.Model;
 
 namespace TimeTracker.Business.Services.Security;
 
+/**
+ * Do not use for server side access control, use it for client side access control only
+ */
 public interface IWorkspaceAccessService: IDomainService
 {
     public Task<WorkspaceMemberEntity> ShareAccessAsync(
