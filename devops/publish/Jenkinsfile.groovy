@@ -345,19 +345,61 @@ node('web-node') {
 
 def resolveBranchName() {
     if (env.GIT_REF?.trim()) {
-        return env.GIT_REF
-            .replaceFirst(/^refs\/heads\//, '')
-            .replaceFirst(/^refs\/tags\//, '')
+        return cleanBranchName(env.GIT_REF)
     }
 
     def rawBranchName = env.BRANCH_NAME ?: env.GIT_BRANCH
-    if (!rawBranchName?.trim()) {
-        rawBranchName = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
+    if (rawBranchName?.trim() && rawBranchName != 'HEAD') {
+        return cleanBranchName(rawBranchName)
     }
 
-    return rawBranchName
+    // When Jenkins checkouts commit directly (detached HEAD), determine branch from git references
+    try {
+        def pointsAt = sh(script: "git for-each-ref --points-at=HEAD --format='%(refname:short)' refs/remotes/origin refs/heads", returnStdout: true).trim()
+        if (pointsAt) {
+            def branches = pointsAt.split('\n').collect { cleanBranchName(it) }
+            if (branches.contains('main')) {
+                return 'main'
+            }
+            if (!branches.isEmpty() && branches[0] != 'HEAD') {
+                return branches[0]
+            }
+        }
+
+        def containsBranches = sh(script: 'git branch -r --contains HEAD', returnStdout: true).trim()
+        if (containsBranches) {
+            def branches = containsBranches.split('\n').collect { cleanBranchName(it) }
+            if (branches.contains('main')) {
+                return 'main'
+            }
+            if (!branches.isEmpty() && branches[0] != 'HEAD') {
+                return branches[0]
+            }
+        }
+    } catch (Exception e) {
+        echo "Failed to resolve branch from git refs: ${e.message}"
+    }
+
+    if (scm?.branches && scm.branches[0]?.name) {
+        def scmBranch = cleanBranchName(scm.branches[0].name)
+        if (scmBranch && scmBranch != 'HEAD') {
+            return scmBranch
+        }
+    }
+
+    def abbrev = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
+    return cleanBranchName(abbrev)
+}
+
+def cleanBranchName(String branch) {
+    if (!branch) return ''
+    return branch
+        .replaceFirst(/^\*\s*/, '')
         .replaceFirst(/^origin\//, '')
+        .replaceFirst(/^refs\/remotes\/origin\//, '')
         .replaceFirst(/^refs\/heads\//, '')
+        .replaceFirst(/^refs\/tags\//, '')
+        .trim()
 }
 
 def isAutoTriggeredPushBuild() {

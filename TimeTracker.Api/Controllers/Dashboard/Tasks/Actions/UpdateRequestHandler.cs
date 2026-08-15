@@ -7,6 +7,7 @@ using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Services.Http;
 using TimeTracker.Business.Services.Security;
 
 namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
@@ -14,6 +15,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     public class UpdateRequestHandler : IAsyncRequestHandler<UpdateRequest, TaskFullDto>
     {
         private readonly IMapper _mapper;
+        private readonly IApiRequestService _apiRequestService;
         private readonly IUserDao _userDao;
         private readonly ISecurityManager _securityManager;
         private readonly ITaskListDao _taskListDao;
@@ -21,6 +23,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
 
         public UpdateRequestHandler(
             IMapper mapper,
+            IApiRequestService apiRequestService,
             IUserDao userDao,
             ISecurityManager securityManager,
             ITaskListDao taskListDao,
@@ -28,6 +31,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
         )
         {
             _mapper = mapper;
+            _apiRequestService = apiRequestService;
             _userDao = userDao;
             _securityManager = securityManager;
             _taskListDao = taskListDao;
@@ -36,8 +40,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
     
         public async Task<TaskFullDto> ExecuteAsync(UpdateRequest request)
         {
-            var user = await _userDao.GetById(request.UserId);
-            RecordNotFoundException.ThrowIfNull(user, "User not found");
+            var currentUser = await _apiRequestService.GetCurrentUser();
+            var assignee = await _userDao.GetById(request.UserId);
+            RecordNotFoundException.ThrowIfNull(assignee, "User not found");
             var taskList = await _taskListDao.GetById(request.TaskListId);
             if (taskList == null)
             {
@@ -47,13 +52,17 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             var task = await _taskDao.GetById(request.TaskId);
             RecordNotFoundException.ThrowIfNull(task);
             
-            if (!await _securityManager.HasAccess(AccessLevel.Read, user, taskList))
+            if (!await _securityManager.HasAccess(AccessLevel.Read, currentUser, taskList))
                 throw new HasNoAccessException("This user has no permissions for provided task list");
             
-            if (!await _securityManager.HasAccess(AccessLevel.Read, user, task))
+            if (!await _securityManager.HasAccess(AccessLevel.Read, currentUser, task))
                 throw new HasNoAccessException("This user has no permissions for task");
             if (taskList.Project.Client.Workspace.Id != task.Workspace.Id)
                 throw new ValidationException("Incorrect TaskListId");
+
+            // Workspace members may be assigned even when they do not have access to this project.
+            if (!await _securityManager.HasAccess(AccessLevel.Read, assignee, task.Workspace))
+                throw new HasNoAccessException("This user has no permissions for task workspace");
             
             task = _mapper.Map(request, task);
             var tags = task.Workspace.Tags.Where(
@@ -62,7 +71,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Actions
             task = await _taskDao.UpdateTaskAsync(
                 task,
                 taskList: taskList,
-                user: user,
+                user: assignee,
                 title: request.Title!,
                 description: request.Description,
                 originalEstimate: request.OriginalEstimate ?? task.OriginalEstimate,
