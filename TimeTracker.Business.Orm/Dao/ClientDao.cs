@@ -4,6 +4,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 
 namespace TimeTracker.Business.Orm.Dao;
@@ -45,10 +46,25 @@ public class ClientDao: IClientDao
         return await query.FirstOrDefaultAsync();
     }
     
-    public async Task<ListDto<ClientEntity>> GetListAsync(WorkspaceEntity workspace, int page)
+    public async Task<ListDto<ClientEntity>> GetListAsync(
+        WorkspaceEntity workspace,
+        int page,
+        UserEntity? user = null,
+        MembershipAccessType? accessType = null
+    )
     {
         var query = _sessionProvider.CurrentSession.Query<ClientEntity>()
             .Where(item => item.Workspace.Id == workspace.Id);
+
+        if (
+            user != null
+            && accessType is not MembershipAccessType.Manager and not MembershipAccessType.Owner
+        )
+        {
+            query = query.Where(client => client.Projects.Any(project =>
+                project.MemberProjectAccess.Any(access => access.WorkspaceMember.User.Id == user.Id)
+            ));
+        }
         
         var offset = PaginationUtils.CalculateOffset(page);
         var items = await query.Skip(offset)

@@ -10,7 +10,9 @@
                 <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["Notes"]</p>
                 <p class="text-xs text-slate-500">@DashboardLocalizer["Notes_TreeDescription"]</p>
             </div>
-            <LumexDropdown>
+            @if (IsEditingAllowed)
+            {
+                <LumexDropdown>
                 <LumexDropdownTrigger>
                     <LumexButton
                         IconOnly="true"
@@ -33,7 +35,8 @@
                         </span>
                     </LumexDropdownItem>
                 </LumexDropdownMenu>
-            </LumexDropdown>
+                </LumexDropdown>
+            }
         </div>
     </div>
 
@@ -53,7 +56,9 @@
         {
             <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
                 <p>@DashboardLocalizer["Notes_EmptyDescription"]</p>
-                <CustomButton
+                @if (IsEditingAllowed)
+                {
+                    <CustomButton
                     Class="mt-3"
                     Size="Size.Small"
                     Color="@ThemeColor.Primary"
@@ -62,7 +67,8 @@
                         <i class="fa-solid fa-plus"></i>
                     </StartContent>
                     <ChildContent>@DashboardLocalizer["CreateNote"]</ChildContent>
-                </CustomButton>
+                    </CustomButton>
+                }
             </div>
         }
         else
@@ -76,6 +82,7 @@
                         Level="0"
                         ExpandedNodeIds="@ExpandedNodeIds"
                         SelectedNoteId="@SelectedNoteId"
+                        IsEditingAllowed="@IsEditingAllowed"
                         ToggleExpandedRequested="@ToggleExpandedRequested"
                         SelectNodeRequested="@SelectNodeRequested"
                         CreateFolderRequested="@CreateFolderRequested"

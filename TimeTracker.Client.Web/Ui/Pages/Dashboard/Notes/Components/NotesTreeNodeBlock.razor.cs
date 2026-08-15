@@ -21,6 +21,9 @@ public partial class NotesTreeNodeBlock
     public Guid? SelectedNoteId { get; set; }
 
     [Parameter]
+    public bool IsEditingAllowed { get; set; }
+
+    [Parameter]
     public EventCallback<Guid> ToggleExpandedRequested { get; set; }
 
     [Parameter]

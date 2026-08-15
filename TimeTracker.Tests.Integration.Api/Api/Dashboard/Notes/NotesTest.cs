@@ -71,17 +71,26 @@ public class NotesTest : BaseTest
     }
 
     [Fact]
-    public async Task GetTreeRejectsWorkspaceUserRole()
+    public async Task GetTreeReturnsSharedNotesAndTheirParentFoldersForWorkspaceUser()
     {
-        await CreateDocumentAsync("Owner.md", "# Owner", visibility: NoteVisibility.Workspace);
+        var folder = await CreateFolderAsync("Shared folder");
+        var document = await CreateDocumentAsync(
+            "Owner.md",
+            "# Owner",
+            folder.Id,
+            NoteVisibility.Workspace
+        );
         var (userToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
             MembershipAccessType.User
         );
 
         var response = await PostRequestAsync(GetTreeUrl, userToken, new GetNotesTreeRequest(), _workspace.Id);
+        response.EnsureSuccessStatusCode();
+        var tree = await response.GetJsonDataAsync<GetNotesTreeResponse>();
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Contains(tree.Nodes, item => item.Id == folder.Id);
+        Assert.Contains(tree.Nodes, item => item.Id == document.Id && item.ParentId == folder.Id);
     }
 
     [Fact]

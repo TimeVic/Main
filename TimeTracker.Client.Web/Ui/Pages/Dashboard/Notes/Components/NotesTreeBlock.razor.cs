@@ -22,6 +22,9 @@ public partial class NotesTreeBlock
     public bool IsEmbedded { get; set; }
 
     [Parameter]
+    public bool IsEditingAllowed { get; set; }
+
+    [Parameter]
     public EventCallback<Guid> ToggleExpandedRequested { get; set; }
 
     [Parameter]

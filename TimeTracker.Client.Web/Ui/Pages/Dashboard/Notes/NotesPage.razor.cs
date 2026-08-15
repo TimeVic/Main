@@ -5,6 +5,8 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Client.Core.Store.Notes;
+using TimeTracker.Client.Core.Services.Security;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Models;
 using TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Services;
 
@@ -22,6 +24,9 @@ public partial class NotesPage
     [Inject]
     private IState<NotesState> NotesState { get; set; } = null!;
 
+    [Inject]
+    private ISecurityManager SecurityManager { get; set; } = null!;
+
     [Parameter]
     [SupplyParameterFromQuery(Name = "noteId")]
     public Guid? InitialNoteId { get; set; }
@@ -38,6 +43,8 @@ public partial class NotesPage
         : DashboardLocalizer[State.TreeErrorLocalizationKey].Value;
 
     private bool IsDocumentDirty => State.IsDocumentDirty;
+
+    private bool CanEditNotes => SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspaceSettings);
 
     private string SaveStateLabel
     {

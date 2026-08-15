@@ -30,7 +30,7 @@ public class GetLinkedNotesRequestHandler : NoteRequestHandlerBase, IAsyncReques
 
     public async Task<GetLinkedNotesResponse> ExecuteAsync(GetLinkedNotesRequest request)
     {
-        var context = await GetWorkspaceContextAsync();
+        var context = await GetWorkspaceContextAsync(AccessLevel.Read);
         await EnsureLinkedEntityExistsAsync(context.Workspace, request.EntityType, request.EntityId);
 
         var links = await NoteDao.GetLinksByEntityAsync(context.Workspace, request.EntityType, request.EntityId);

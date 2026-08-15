@@ -4,6 +4,8 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Client;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
 
@@ -17,10 +19,12 @@ public class GetListTest: BaseTest
     private readonly string _jwtToken;
     private readonly WorkspaceEntity _defaultWorkspace;
     private readonly IClientSeeder _clientSeeder;
+    private readonly IProjectSeeder _projectSeeder;
 
     public GetListTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _clientSeeder = ServiceProvider.GetRequiredService<IClientSeeder>();
+        _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
     }
 
@@ -54,5 +58,31 @@ public class GetListTest: BaseTest
             Assert.NotEqual(Guid.Empty, item.Id);
             Assert.NotEmpty(item.Name);
         });
+    }
+
+    [Fact]
+    public async Task ShouldReceiveOnlyClientsWithSharedProjectsIfWorkspaceUser()
+    {
+        var sharedProject = await _projectSeeder.CreateAsync(_defaultWorkspace);
+        var unsharedProject = await _projectSeeder.CreateAsync(_defaultWorkspace);
+        var (userToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _defaultWorkspace,
+            MembershipAccessType.User,
+            new List<ProjectAccessModel>
+            {
+                new() { Project = sharedProject }
+            }
+        );
+
+        var response = await PostRequestAsync(Url, userToken, new GetListRequest
+        {
+            Page = 1
+        }, _defaultWorkspace.Id);
+        await response.EnsureSuccessStatusCodeWithoutError();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        Assert.Equal(1, actualDto.TotalCount);
+        Assert.Equal(sharedProject.Client.Id, Assert.Single(actualDto.Items).Id);
+        Assert.DoesNotContain(actualDto.Items, item => item.Id == unsharedProject.Client.Id);
     }
 }

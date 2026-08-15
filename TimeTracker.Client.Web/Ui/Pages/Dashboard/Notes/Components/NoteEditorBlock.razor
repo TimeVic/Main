@@ -87,7 +87,9 @@
                             </StartContent>
                             <ChildContent>@DashboardLocalizer["Cancel"]</ChildContent>
                         </CustomButton>
-                        <CustomButton
+                        @if (IsEditingAllowed)
+                        {
+                            <CustomButton
                             Size="Size.Small"
                             Color="@ThemeColor.Primary"
                             Radius="@Radius.Full"
@@ -97,7 +99,8 @@
                                 <i class="fa-regular fa-floppy-disk"></i>
                             </StartContent>
                             <ChildContent>@DashboardLocalizer["Save"]</ChildContent>
-                        </CustomButton>
+                            </CustomButton>
+                        }
                     }
                     else
                     {
@@ -157,6 +160,13 @@
                 </div>
             </div>
         }
-        <AttachmentsUploadBlock Class="mx-4 mb-4 border-t border-slate-200 pt-4" EntityId="@Document.Id" EntityType="@StorageEntityType.NoteNode" Files="@Document.Attachments" FilesChanged="@AttachmentsChanged" Hint="@DashboardLocalizer["Notes_AttachmentsHint"].Value" />
+        @if (IsEditingAllowed)
+        {
+            <AttachmentsUploadBlock Class="mx-4 mb-4 border-t border-slate-200 pt-4" EntityId="@Document.Id" EntityType="@StorageEntityType.NoteNode" Files="@Document.Attachments" FilesChanged="@AttachmentsChanged" Hint="@DashboardLocalizer["Notes_AttachmentsHint"].Value" />
+        }
+        else
+        {
+            <AttachmentsBlock Class="mx-4 mb-4 border-t border-slate-200 pt-4" EntityId="@Document.Id" EntityType="@StorageEntityType.NoteNode" Files="@Document.Attachments" AllowDelete="false" />
+        }
     }
 </section>

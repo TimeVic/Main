@@ -36,6 +36,9 @@ public partial class NoteEditorBlock
     public bool IsEditing { get; set; }
 
     [Parameter]
+    public bool IsEditingAllowed { get; set; }
+
+    [Parameter]
     public bool IsEmbedded { get; set; }
 
     [Parameter]

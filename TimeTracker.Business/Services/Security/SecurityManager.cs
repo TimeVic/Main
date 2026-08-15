@@ -160,12 +160,25 @@ public class SecurityManager: ISecurityManager
     private async Task<bool> HasAccessToClientAsync(AccessLevel accessLevel, UserEntity user, ClientEntity client)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, client.Workspace);
-        return accessType == MembershipAccessType.Owner 
-            || accessType == MembershipAccessType.Manager
-            || (
-                accessLevel == AccessLevel.Read 
-                && accessType == MembershipAccessType.User
-            );
+        if (accessType is MembershipAccessType.Owner or MembershipAccessType.Manager)
+        {
+            return true;
+        }
+
+        if (accessLevel != AccessLevel.Read || accessType != MembershipAccessType.User)
+        {
+            return false;
+        }
+
+        foreach (var project in client.Projects)
+        {
+            if (await HasAccessToProject(AccessLevel.Read, user, project))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
     
     private async Task<bool> HasAccessToProject(AccessLevel accessLevel, UserEntity user, ProjectEntity project)
@@ -184,6 +197,8 @@ public class SecurityManager: ISecurityManager
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, payment.Member.Workspace);
         return accessType is MembershipAccessType.Owner or MembershipAccessType.Manager
             || (
+                accessLevel == AccessLevel.Read
+                &&
                 accessType == MembershipAccessType.User
                 && payment.Member.User.Id == user.Id
             );
@@ -231,13 +246,15 @@ public class SecurityManager: ISecurityManager
     private async Task<bool> HasAccessToNoteNode(AccessLevel accessLevel, UserEntity user, NoteNodeEntity noteNode)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, noteNode.Workspace);
-        if (accessType is not MembershipAccessType.Owner and not MembershipAccessType.Manager)
+        if (accessType is MembershipAccessType.Owner or MembershipAccessType.Manager)
         {
-            return false;
+            return noteNode.Visibility == NoteVisibility.Workspace
+                || noteNode.CreatedByUser.Id == user.Id;
         }
 
-        return noteNode.Visibility == NoteVisibility.Workspace
-            || noteNode.CreatedByUser.Id == user.Id;
+        return accessLevel == AccessLevel.Read
+            && accessType == MembershipAccessType.User
+            && noteNode.Visibility == NoteVisibility.Workspace;
     }
     
     private async Task<bool> HasAccessToGoalsTracker(AccessLevel accessLevel, UserEntity user, GoalsTrackerEntity goalsTrackerEntity)

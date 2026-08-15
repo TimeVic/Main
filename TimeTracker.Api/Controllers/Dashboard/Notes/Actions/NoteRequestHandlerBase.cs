@@ -58,7 +58,7 @@ public abstract class NoteRequestHandlerBase
         TaskDao = taskDao;
     }
 
-    protected async Task<WorkspaceContext> GetWorkspaceContextAsync()
+    protected async Task<WorkspaceContext> GetWorkspaceContextAsync(AccessLevel accessLevel = AccessLevel.Write)
     {
         var user = await ApiRequestService.GetCurrentUser();
         var workspaceId = ApiRequestService.GetCurrentWorkspaceId();
@@ -70,7 +70,7 @@ public abstract class NoteRequestHandlerBase
         var workspace = await UserDao.GetUsersWorkspace(user!, workspaceId);
         RecordNotFoundException.ThrowIfNull(workspace, "Workspace not found");
 
-        if (!await SecurityManager.HasAccess(AccessLevel.Write, user, workspace))
+        if (!await SecurityManager.HasAccess(accessLevel, user, workspace))
         {
             throw new HasNoAccessException();
         }

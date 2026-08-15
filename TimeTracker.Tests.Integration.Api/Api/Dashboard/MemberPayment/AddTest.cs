@@ -101,7 +101,7 @@ public class AddTest: BaseTest
     }
     
     [Fact]
-    public async Task UserWithRoleUserCanAddOwnMemberPayment()
+    public async Task UserWithRoleUserCanNotAddOwnMemberPayment()
     {
         var (otherToken, otherUser, otherWorkspace) = await _userSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
@@ -117,11 +117,8 @@ public class AddTest: BaseTest
             PaymentTime = payment.PaymentTime,
             ProjectId = _project.Id
         }, _workspace.Id);
-        await response.GetJsonDataAsync();
-        response.EnsureSuccessStatusCode();
-
-        var actualMemberPayment = await response.GetJsonDataAsync<MemberPaymentDto>();
-        Assert.NotEqual(Guid.Empty, actualMemberPayment.Id);
+        var responseData = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new HasNoAccessException().GetTypeName(), responseData.ErrorCode);
     }
     
     [Fact]
