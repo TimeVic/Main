@@ -5,6 +5,7 @@
 @using Fluxor
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Core.Store.Report
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Parts
 @using TimeTracker.Client.Web.Ui.Shared.Components
 @using Layout = TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
 
@@ -13,6 +14,10 @@
 @layout Layout
 
 <div class="space-y-6">
+    <MemberPaymentsSummaryHeader
+        EndDate="@_filterState.EndDate"
+        EndDateChanged="OnEndDateChanged"/>
+
     <section>
         <h1 class="text-2xl font-bold tracking-tight text-slate-900">@DashboardLocalizer["UserPaymentReport_Title"]</h1>
         <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserPaymentReport_Description"]</p>
@@ -295,4 +300,3 @@
         </section>
     }
 </div>
-

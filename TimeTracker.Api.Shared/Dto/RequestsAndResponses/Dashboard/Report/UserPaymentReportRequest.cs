@@ -4,4 +4,5 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 
 public class UserPaymentReportRequest : IRequest<UserPaymentReportResponse>
 {
+    public DateTime EndDate { get; set; } = DateTime.UtcNow;
 }

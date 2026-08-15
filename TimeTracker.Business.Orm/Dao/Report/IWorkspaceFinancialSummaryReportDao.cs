@@ -8,10 +8,14 @@ public interface IWorkspaceFinancialSummaryReportDao : IDomainService
 {
     Task<ICollection<UserPaymentReportProjectItemDto>> GetUserPaymentReportProjectEarningsAsync(
         Guid workspaceId,
-        Guid userId
+        Guid userId,
+        DateTime endDate
     );
 
-    Task<ICollection<UserPaymentReportClientPaymentItemDto>> GetUserPaymentReportClientPaymentsAsync(Guid workspaceId);
+    Task<ICollection<UserPaymentReportClientPaymentItemDto>> GetUserPaymentReportClientPaymentsAsync(
+        Guid workspaceId,
+        DateTime endDate
+    );
 
     Task<ICollection<FinancialClientBalanceItemDto>> GetClientBalancesAsync(Guid workspaceId);
 

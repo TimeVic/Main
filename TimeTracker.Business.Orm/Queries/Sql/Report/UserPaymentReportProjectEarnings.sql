@@ -11,6 +11,7 @@ from time_entries te
 where te.workspace_id = :workspaceId
   and te.user_id = :userId
   and te.end_time is not null
+  and te.end_time <= :endDate
   and te.is_billable = true
   and te.hourly_rate is not null
 group by c.id, c.name, p.id, p.name

@@ -38,11 +38,14 @@ namespace TimeTracker.Client.Core.Services.Http
             );
         }
 
-        public async Task<UserPaymentReportResponse?> ReportsGetUserPaymentReportAsync(Guid workspaceId)
+        public async Task<UserPaymentReportResponse?> ReportsGetUserPaymentReportAsync(Guid workspaceId, DateTime endDate)
         {
             return await PostAsync<UserPaymentReportResponse?>(
                 ApiUrl.ReportUserPayment,
-                new UserPaymentReportRequest()
+                new UserPaymentReportRequest
+                {
+                    EndDate = endDate
+                }
             );
         }
     }

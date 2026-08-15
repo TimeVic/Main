@@ -30,6 +30,8 @@ public record struct ReportFetchUserPaymentReportAction();
 
 public record struct ReportSetUserPaymentReportAction(UserPaymentReportResponse ReportData);
 
+public record struct ReportSetUserPaymentReportFilterAction(UserPaymentReportFilterState FilterState);
+
 public record struct ReportSetWorkspaceFinancialSummaryFilterAction(WorkspaceFinancialSummaryFilterState FilterState);
 
 public record struct ReportResetWorkspaceFinancialSummaryFilterAction();

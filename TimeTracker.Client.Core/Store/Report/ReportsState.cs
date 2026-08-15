@@ -20,6 +20,8 @@ public record ReportsState
 
     public UserPaymentReportResponse? UserPaymentReportData { get; set; }
 
+    public UserPaymentReportFilterState UserPaymentReportFilter { get; set; } = new(DateTime.Now);
+
     public bool IsLoading { get; set; }
 
     public SummaryReportFilterState SummaryReportFilter { get; set; } = new(
@@ -48,6 +50,10 @@ public record SummaryReportFilterState(
 );
 
 public record MemberPaymentReportFilterState(
+    DateTime EndDate
+);
+
+public record UserPaymentReportFilterState(
     DateTime EndDate
 );
 

@@ -22,20 +22,24 @@ public class ForUserTest : BaseTest
     private readonly string _url = $"/{ApiUrl.ReportUserPayment}";
     private readonly string _memberToken;
     private readonly UserEntity _member;
+    private readonly UserEntity _owner;
     private readonly WorkspaceEntity _workspace;
     private readonly ProjectEntity _project;
     private readonly ClientEntity _client;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IClientPaymentDao _clientPaymentDao;
+    private readonly IMemberPaymentDao _memberPaymentDao;
 
     public ForUserTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _clientPaymentDao = ServiceProvider.GetRequiredService<IClientPaymentDao>();
+        _memberPaymentDao = ServiceProvider.GetRequiredService<IMemberPaymentDao>();
         var projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         var workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
 
         var (_, owner, workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _owner = owner;
         (_memberToken, _member, _) = UserSeeder.CreateAuthorizedAsync().Result;
         _workspace = workspace;
         _workspace.Mode = WorkspaceMode.Solo;
@@ -59,7 +63,7 @@ public class ForUserTest : BaseTest
             IsBillable = true,
             HourlyRate = 100
         }, _project).Wait();
-        _timeEntryDao.SetAsync(owner, _workspace, new TimeEntryCreationDto
+        _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
         {
             StartTime = startTime,
             EndTime = startTime.AddHours(3),
@@ -110,6 +114,7 @@ public class ForUserTest : BaseTest
         Assert.Equal(200, data.Totals.Earned);
         Assert.Equal(100, data.Totals.Received);
         Assert.Equal(100, data.Totals.Outstanding);
+        Assert.False(data.IsPaymentsFromMembers);
 
         var client = Assert.Single(data.Clients);
         Assert.Equal(_client.Id, client.Id);
@@ -124,5 +129,63 @@ public class ForUserTest : BaseTest
         Assert.Equal(_project.Id, project.Id);
         Assert.Equal(TimeSpan.FromHours(2), project.Duration);
         Assert.Equal(200, project.Earned);
+    }
+
+    [Fact]
+    public async Task TeamWorkspaceReportAggregatesOnlyCurrentUsersMemberPayments()
+    {
+        _workspace.Mode = WorkspaceMode.Team;
+        await DbSessionProvider.CurrentSession.UpdateAsync(_workspace);
+        await FlushDbChanges();
+        await _memberPaymentDao.CreateAsync(_workspace, _member, _project, 75, DateTime.UtcNow);
+        await _memberPaymentDao.CreateAsync(_workspace, _owner, _project, 250, DateTime.UtcNow);
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(
+            _url,
+            _memberToken,
+            new UserPaymentReportRequest { EndDate = DateTime.UtcNow },
+            _workspace.Id
+        );
+        response.EnsureSuccessStatusCode();
+
+        var data = await response.GetJsonDataAsync<UserPaymentReportResponse>();
+        Assert.True(data.IsPaymentsFromMembers);
+        Assert.Equal(200, data.Totals.Earned);
+        Assert.Equal(75, data.Totals.Received);
+        Assert.Equal(125, data.Totals.Outstanding);
+
+        var client = Assert.Single(data.Clients);
+        Assert.Equal(75, client.ProjectPayments);
+        Assert.Equal(0, client.GeneralPayments);
+        Assert.Equal(75, client.Received);
+    }
+
+    [Fact]
+    public async Task SoloWorkspaceReportExcludesWorkAndClientPaymentsAfterEndDate()
+    {
+        var futureStartTime = DateTime.UtcNow.AddDays(1).StartOfDay().AddHours(9);
+        await _timeEntryDao.SetAsync(_member, _workspace, new TimeEntryCreationDto
+        {
+            StartTime = futureStartTime,
+            EndTime = futureStartTime.AddHours(1),
+            IsBillable = true,
+            HourlyRate = 100
+        }, _project);
+        await _clientPaymentDao.CreateAsync(_client, 50, futureStartTime, _project.Id);
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(
+            _url,
+            _memberToken,
+            new UserPaymentReportRequest { EndDate = DateTime.UtcNow },
+            _workspace.Id
+        );
+        response.EnsureSuccessStatusCode();
+
+        var data = await response.GetJsonDataAsync<UserPaymentReportResponse>();
+        Assert.Equal(200, data.Totals.Earned);
+        Assert.Equal(100, data.Totals.Received);
+        Assert.Equal(100, data.Totals.Outstanding);
     }
 }
