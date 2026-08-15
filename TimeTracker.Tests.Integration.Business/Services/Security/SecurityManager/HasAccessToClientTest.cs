@@ -7,6 +7,7 @@ using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.Security;
+using TimeTracker.Business.Services.Security.Model;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Business.Core;
 
@@ -22,6 +23,7 @@ public class HasAccessToClientTest: BaseTest
     private readonly ISecurityManager _securityManager;
     private readonly IClientSeeder _clientSeeder;
     private readonly IUserDao _userDao;
+    private readonly IProjectSeeder _projectSeeder;
 
     public HasAccessToClientTest(): base()
     {
@@ -31,6 +33,7 @@ public class HasAccessToClientTest: BaseTest
         _workspaceAccessService = Scope.Resolve<IWorkspaceAccessService>();
         _securityManager = Scope.Resolve<ISecurityManager>();
         _userDao = Scope.Resolve<IUserDao>();
+        _projectSeeder = Scope.Resolve<IProjectSeeder>();
 
         _owner = _userSeeder.CreateActivatedAsync().Result;
         _ownWorkspace = _userDao.GetUsersWorkspaces(_owner, MembershipAccessType.Owner).Result.First();
@@ -75,7 +78,7 @@ public class HasAccessToClientTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldHasOnlyReadAccessIfClientWasSharedForUser()
+    public async Task ShouldHaveNoAccessIfUserHasNoProjectsSharedForClient()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
         var client = await _clientSeeder.Create(_ownWorkspace);
@@ -88,10 +91,34 @@ public class HasAccessToClientTest: BaseTest
         );
         
         var hasAccess = await _securityManager.HasAccess(AccessLevel.Read, otherUser, client);
-        Assert.True(hasAccess);
+        Assert.False(hasAccess);
         
         hasAccess = await _securityManager.HasAccess(AccessLevel.Write, otherUser, client);
         Assert.False(hasAccess);
+    }
+
+    [Fact]
+    public async Task ShouldHaveOnlyReadAccessIfClientProjectWasSharedForUser()
+    {
+        var otherUser = await _userSeeder.CreateActivatedAsync();
+        var project = await _projectSeeder.CreateAsync(_ownWorkspace);
+        await FlushDbChanges();
+
+        await _workspaceAccessService.ShareAccessAsync(
+            _ownWorkspace,
+            otherUser,
+            MembershipAccessType.User,
+            new List<ProjectAccessModel>
+            {
+                new() { Project = project }
+            }
+        );
+
+        var hasReadAccess = await _securityManager.HasAccess(AccessLevel.Read, otherUser, project.Client);
+        var hasWriteAccess = await _securityManager.HasAccess(AccessLevel.Write, otherUser, project.Client);
+
+        Assert.True(hasReadAccess);
+        Assert.False(hasWriteAccess);
     }
     
     [Fact]

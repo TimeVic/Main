@@ -53,7 +53,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.MemberPayments.Actions
                 workspace == null 
                 || workspace.Mode != WorkspaceMode.Team
                 || project.Client.Workspace.Id != workspace.Id
-                || !await _securityManager.HasAccess(AccessLevel.Read, user, workspace)
+                || !await _securityManager.HasAccess(AccessLevel.Write, user, workspace)
                 || !await _securityManager.HasAccess(AccessLevel.Read, user, project)
             )
             {

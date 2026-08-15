@@ -13,6 +13,8 @@ using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Tests.Integration.Api.Core;
 using AddRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks.List.AddRequest;
 using TimeTracker.Business.Testing.Seeders.Entity;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Services.Security.Model;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Tasks.List;
 
@@ -81,5 +83,30 @@ public class AddTest: BaseTest
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var error = await response.GetJsonResponseAsync<object>();
         Assert.Equal(new HasNoAccessException().GetTypeName(), error.ErrorCode);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ShouldAddIfProjectIsSharedWithWorkspaceUser()
+    {
+        var (userToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User,
+            new List<ProjectAccessModel>
+            {
+                new() { Project = _project }
+            }
+        );
+        var taskList = _taskListFactory.Generate();
+
+        var response = await PostRequestAsync(Url, userToken, new AddRequest
+        {
+            Name = taskList.Name,
+            ProjectId = _project.Id
+        }, _workspace.Id);
+
+        response.EnsureSuccessStatusCode();
+        var actualTaskList = await response.GetJsonDataAsync<TaskListDto>();
+        Assert.Equal(taskList.Name, actualTaskList.Name);
+        Assert.Equal(_project.Id, actualTaskList.Project.Id);
     }
 }

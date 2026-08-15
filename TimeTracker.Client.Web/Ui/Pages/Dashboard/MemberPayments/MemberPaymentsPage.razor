@@ -39,14 +39,17 @@
                     Value="_memberFilterId"
                     SelectedItemChanged="OnMemberFilterChanged"/>
             }
-            <CustomButton OnClick="@(() => _isShowAddMemberPaymentModal = true)">
+            @if (CanCreatePayments)
+            {
+                <CustomButton OnClick="@(() => _isShowAddMemberPaymentModal = true)">
                 <StartContent>
                     <i class="fa-solid fa-plus"></i>    
                 </StartContent>
                 <ChildContent>
                     @DashboardLocalizer["AddPayment"]
                 </ChildContent>
-            </CustomButton>
+                </CustomButton>
+            }
         </div>
     </LumexCardHeader>
     <LumexCardBody>

@@ -31,7 +31,9 @@
             <i class="@IconClass"></i>
             <span class="truncate">@TreeNode.Node.Title</span>
         </div>
-        <div @onclick:stopPropagation="true" @onkeydown:stopPropagation="true">
+        @if (IsEditingAllowed)
+        {
+            <div @onclick:stopPropagation="true" @onkeydown:stopPropagation="true">
             <LumexDropdown>
                 <LumexDropdownTrigger>
                     <button
@@ -79,7 +81,8 @@
                     </LumexDropdownItem>
                 </LumexDropdownMenu>
             </LumexDropdown>
-        </div>
+            </div>
+        }
     </div>
 
     @if (IsFolder && IsExpanded)
@@ -95,6 +98,7 @@
                         Level="@(Level + 1)"
                         ExpandedNodeIds="@ExpandedNodeIds"
                         SelectedNoteId="@SelectedNoteId"
+                        IsEditingAllowed="@IsEditingAllowed"
                         ToggleExpandedRequested="@ToggleExpandedRequested"
                         SelectNodeRequested="@SelectNodeRequested"
                         CreateFolderRequested="@CreateFolderRequested"

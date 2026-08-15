@@ -29,13 +29,25 @@ public class GetTreeRequestHandler : NoteRequestHandlerBase, IAsyncRequestHandle
 
     public async Task<GetNotesTreeResponse> ExecuteAsync(GetNotesTreeRequest request)
     {
-        var context = await GetWorkspaceContextAsync();
+        var context = await GetWorkspaceContextAsync(AccessLevel.Read);
         var nodes = await NoteDao.GetTreeAsync(context.Workspace, request.IncludeArchived);
         var availableNodes = await GetAvailableNotesAsync(context.User, nodes, AccessLevel.Read);
+        var availableNodeIds = availableNodes.Select(item => item.Id).ToHashSet();
+
+        foreach (var availableNode in availableNodes)
+        {
+            var parent = availableNode.Parent;
+            while (parent != null && availableNodeIds.Add(parent.Id))
+            {
+                parent = parent.Parent;
+            }
+        }
 
         return new GetNotesTreeResponse
         {
-            Nodes = Mapper.Map<ICollection<NoteTreeNodeDto>>(availableNodes)
+            Nodes = Mapper.Map<ICollection<NoteTreeNodeDto>>(
+                nodes.Where(item => availableNodeIds.Contains(item.Id))
+            )
         };
     }
 }

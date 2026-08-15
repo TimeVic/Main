@@ -29,7 +29,7 @@ public class GetDocumentRequestHandler : NoteRequestHandlerBase, IAsyncRequestHa
 
     public async Task<NoteDocumentDto> ExecuteAsync(GetNoteDocumentRequest request)
     {
-        var context = await GetWorkspaceContextAsync();
+        var context = await GetWorkspaceContextAsync(AccessLevel.Read);
         var note = await GetNoteAsync(context.Workspace, context.User, request.NoteId, AccessLevel.Read);
         EnsureDocument(note);
         return Mapper.Map<NoteDocumentDto>(note);

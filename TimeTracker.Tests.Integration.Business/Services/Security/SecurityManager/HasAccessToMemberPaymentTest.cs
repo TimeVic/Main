@@ -84,7 +84,7 @@ public class HasAccessToMemberPaymentTest: BaseTest
     }
     
     [Fact]
-    public async Task ShouldHasAccessIfWorkspaceWasSharedForUser()
+    public async Task ShouldHaveReadOnlyAccessIfWorkspaceWasSharedForUser()
     {
         var otherUser = await _userSeeder.CreateActivatedAsync();
 
@@ -101,6 +101,6 @@ public class HasAccessToMemberPaymentTest: BaseTest
         Assert.True(hasAccess);
         
         hasAccess = await _securityManager.HasAccess(AccessLevel.Write, otherUser, payment);
-        Assert.True(hasAccess);
+        Assert.False(hasAccess);
     }
 }

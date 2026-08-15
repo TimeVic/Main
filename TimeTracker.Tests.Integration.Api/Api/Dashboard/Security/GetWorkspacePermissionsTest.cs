@@ -102,15 +102,15 @@ public class GetWorkspacePermissionsTest: BaseTest
         Assert.Equal(_workspace.Id, actual.WorkspaceId);
         Assert.Contains(WorkspacePermission.ReadWorkspaceSettings, actual.Permissions);
         Assert.Contains(WorkspacePermission.ReadWorkspaceMembers, actual.Permissions);
+        Assert.Contains(WorkspacePermission.ReadClientPayment, actual.Permissions);
         Assert.Contains(WorkspacePermission.ReadMemberPayment, actual.Permissions);
-        Assert.Contains(WorkspacePermission.CreateMemberPayment, actual.Permissions);
-        Assert.Contains(WorkspacePermission.UpdateMemberPayment, actual.Permissions);
         Assert.Contains(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
-        Assert.Equal(6, actual.Permissions.Count);
+        Assert.Equal(5, actual.Permissions.Count);
         Assert.DoesNotContain(WorkspacePermission.UpdateWorkspaceMembers, actual.Permissions);
-        Assert.DoesNotContain(WorkspacePermission.ReadClientPayment, actual.Permissions);
         Assert.DoesNotContain(WorkspacePermission.CreateClientPayment, actual.Permissions);
         Assert.DoesNotContain(WorkspacePermission.UpdateClientPayment, actual.Permissions);
+        Assert.DoesNotContain(WorkspacePermission.CreateMemberPayment, actual.Permissions);
+        Assert.DoesNotContain(WorkspacePermission.UpdateMemberPayment, actual.Permissions);
         Assert.DoesNotContain(WorkspacePermission.CreateMemberPaymentForOtherMembers, actual.Permissions);
     }
 
@@ -134,11 +134,12 @@ public class GetWorkspacePermissionsTest: BaseTest
             WorkspacePermission.UpdateWorkspaceMembers,
             WorkspacePermission.CreateProject,
             WorkspacePermission.UpdateProject,
-            WorkspacePermission.ReadClientPayment,
             WorkspacePermission.CreateClient,
             WorkspacePermission.UpdateClient,
             WorkspacePermission.CreateClientPayment,
             WorkspacePermission.UpdateClientPayment,
+            WorkspacePermission.CreateMemberPayment,
+            WorkspacePermission.UpdateMemberPayment,
             WorkspacePermission.ReadWorkspaceFinancialSummary,
             WorkspacePermission.CreateMemberPaymentForOtherMembers
         };

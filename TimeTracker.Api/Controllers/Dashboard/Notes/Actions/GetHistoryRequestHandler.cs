@@ -29,7 +29,7 @@ public class GetHistoryRequestHandler : NoteRequestHandlerBase, IAsyncRequestHan
 
     public async Task<GetNoteNodeHistoryResponse> ExecuteAsync(GetNoteNodeHistoryRequest request)
     {
-        var context = await GetWorkspaceContextAsync();
+        var context = await GetWorkspaceContextAsync(AccessLevel.Read);
         var note = await GetNoteAsync(context.Workspace, context.User, request.NoteId, AccessLevel.Read);
         EnsureDocument(note);
 

@@ -70,6 +70,8 @@
         Title="@DashboardLocalizer["Actions"].Value"
         Property="@(p => p.Id)">
         <Content>
+            @if (CanUpdatePayments)
+            {
             <div @onclick:stopPropagation="true">
                 <CustomButton
                     Variant="Variant.Outlined"
@@ -82,6 +84,7 @@
                     </StartContent>
                 </CustomButton>
             </div>
+            }
         </Content>
     </LumexUI.PropertyColumn>
 </LumexDataGrid>

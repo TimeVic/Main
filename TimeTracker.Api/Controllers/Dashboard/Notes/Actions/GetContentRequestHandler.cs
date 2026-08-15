@@ -30,7 +30,7 @@ public class GetContentRequestHandler : NoteRequestHandlerBase, IAsyncRequestHan
 
     public async Task<NoteContentDto> ExecuteAsync(GetNoteContentRequest request)
     {
-        var context = await GetWorkspaceContextAsync();
+        var context = await GetWorkspaceContextAsync(AccessLevel.Read);
         var content = await NoteDao.GetContentByIdAsync(context.Workspace, request.ContentId);
         RecordNotFoundException.ThrowIfNull(content);
         EnsureDocument(content.NoteNode);

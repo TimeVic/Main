@@ -71,17 +71,17 @@ public class HasAccessToNoteTest : BaseTest
         Assert.False(hasAccess);
     }
 
-    [Theory]
-    [InlineData(AccessLevel.Read)]
-    [InlineData(AccessLevel.Write)]
-    public async Task ShouldHasNoAccessIfUserRoleReadsWorkspaceNote(AccessLevel accessLevel)
+    [Fact]
+    public async Task ShouldHaveReadOnlyAccessIfUserRoleReadsWorkspaceNote()
     {
         var user = await _userSeeder.CreateActivatedAndShareAsync(_workspace, MembershipAccessType.User);
         var note = await CreateNoteAsync(NoteVisibility.Workspace, _owner);
 
-        var hasAccess = await _securityManager.HasAccess(accessLevel, user, note);
+        var hasReadAccess = await _securityManager.HasAccess(AccessLevel.Read, user, note);
+        var hasWriteAccess = await _securityManager.HasAccess(AccessLevel.Write, user, note);
 
-        Assert.False(hasAccess);
+        Assert.True(hasReadAccess);
+        Assert.False(hasWriteAccess);
     }
 
     [Theory]

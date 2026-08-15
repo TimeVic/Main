@@ -24,6 +24,8 @@ public partial class MemberPaymentsPage
     private bool CanManageOtherMemberPayments =>
         SecurityManager.HasPermission(WorkspacePermission.CreateMemberPaymentForOtherMembers);
 
+    private bool CanCreatePayments => SecurityManager.HasPermission(WorkspacePermission.CreateMemberPayment);
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
