@@ -7,7 +7,6 @@ using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao.Common;
 using TimeTracker.Business.Orm.Dto.Reports.Summary;
-using TimeTracker.Business.Orm.Entities;
 
 namespace TimeTracker.Business.Orm.Dao.Report;
 
@@ -17,46 +16,19 @@ public partial class SummaryReportDao: BaseDao, ISummaryReportDao
     {
     }
 
-    private async Task<ICollection<T>> GetReportForOwnerOrManagerAsync<T>(
+    private async Task<ICollection<T>> GetReportAsync<T>(
         string queryPath,
         Guid workspaceId,
+        Guid userId,
         DateTime startDate,
         DateTime endDate
     )
     {
         return await Session.CreateSQLQuery(ReadSqlQuery(queryPath))
             .SetParameter("workspaceId", workspaceId)
-            .SetParameter("startDate", startDate)
-            .SetParameter("endDate", endDate)
-            .SetResultTransformer(Transformers.AliasToBean<T>())
-            .ListAsync<T>();
-    }
-    
-    public async Task<ICollection<T>> GetReportForOtherAsync<T>(
-        string queryPath,
-        DateTime startDate,
-        DateTime endDate,
-        Guid userId,
-        IEnumerable<ProjectEntity>? availableProjectsForUser = null
-    )
-    {
-        if (availableProjectsForUser == null)
-        {
-            throw new ArgumentNullException(nameof(availableProjectsForUser));
-        }
-
-        if (!availableProjectsForUser.Any())
-        {
-            return new List<T>();
-        }
-        return await Session.CreateSQLQuery(ReadSqlQuery(queryPath))
-            .SetParameterList(
-                "projectIds",
-                availableProjectsForUser.Select(item => item.Id).ToArray()
-            )
+            .SetParameter("userId", userId)
             .SetParameter("startDate", startDate.StartOfDay())
             .SetParameter("endDate", endDate.EndOfDay())
-            .SetParameter("userId", userId)
             .SetResultTransformer(Transformers.AliasToBean<T>())
             .ListAsync<T>();
     }

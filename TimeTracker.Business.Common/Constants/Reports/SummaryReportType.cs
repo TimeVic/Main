@@ -10,15 +10,12 @@ public enum SummaryReportType
     [Description("By client")]
     GroupByClient,
     
-    [Description("By user")]
-    GroupByUser,
-    
     [Description("By month")]
-    GroupByMonth,
+    GroupByMonth = 4,
     
     [Description("By week")]
-    GroupByWeek,
+    GroupByWeek = 5,
     
     [Description("By day")]
-    GroupByDay,
+    GroupByDay = 6,
 }

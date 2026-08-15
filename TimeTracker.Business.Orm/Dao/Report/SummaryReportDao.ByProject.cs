@@ -11,33 +11,19 @@ namespace TimeTracker.Business.Orm.Dao.Report;
 
 public partial class SummaryReportDao: ISummaryReportDao
 {
-    public async Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectForOwnerOrManagerAsync(
+    public async Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectAsync(
         Guid workspaceId,
+        Guid userId,
         DateTime startDate,
         DateTime endDate
     )
     {
-        return await GetReportForOwnerOrManagerAsync<ByProjectsReportItemDto>(
-            "Report.SummaryByProjectForOwner",
+        return await GetReportAsync<ByProjectsReportItemDto>(
+            "Report.SummaryByProject",
             workspaceId,
+            userId,
             startDate,
             endDate
-        );
-    }
-    
-    public async Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectForOtherAsync(
-        DateTime startDate,
-        DateTime endDate,
-        Guid userId,
-        IEnumerable<ProjectEntity>? availableProjectsForUser = null
-    )
-    {
-        return await GetReportForOtherAsync<ByProjectsReportItemDto>(
-            "Report.SummaryByProjectForOther",
-            startDate,
-            endDate,
-            userId,
-            availableProjectsForUser
         );
     }
 }

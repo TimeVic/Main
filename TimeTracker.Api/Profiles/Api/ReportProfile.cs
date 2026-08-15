@@ -61,14 +61,5 @@ public class ReportProfile : Profile
                 Duration = src.Duration,
                 Amount = src.Amount
             });
-        CreateMap<ByUsersReportItemDto, SummaryByUsersReportItemDto>()
-            .IgnoreAllAndConstructUsing((src, mapper) => new SummaryByUsersReportItemDto
-            {
-                UserId = src.UserId ?? Guid.Empty,
-                UserName = src.UserName,
-                Email = src.Email,
-                Duration = src.Duration,
-                Amount = src.Amount
-            });
     }
 }

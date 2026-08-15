@@ -65,7 +65,7 @@ public class ForUserTest: BaseTest
             
         for (int i = 0; i < 3; i++)
         {
-            _timeEntryDao.SetAsync(_user, _workspace, new TimeEntryCreationDto()
+            _timeEntryDao.SetAsync(_otherUser, _workspace, new TimeEntryCreationDto()
             {
                 StartTime = DateTime.UtcNow.StartOfDay().AddDays(-32).AddHours(10),
                 EndTime = DateTime.UtcNow.StartOfDay().AddDays(-32).AddHours(15),
@@ -222,26 +222,4 @@ public class ForUserTest: BaseTest
         });
     }
     
-    [Fact]
-    public async Task ShouldReceiveGroupedByUsers()
-    {
-        var response = await PostRequestAsync(Url, _otherJwtToken, new SummaryReportRequest()
-        {
-            StartTime = DateTime.UtcNow.AddDays(-32),
-            EndTime = DateTime.UtcNow,
-            Type = SummaryReportType.GroupByUser
-        }, _workspace.Id);
-        await response.GetJsonDataAsync();
-        response.EnsureSuccessStatusCode();
-
-        var actualDto = await response.GetJsonDataAsync<SummaryReportResponse>();
-
-        Assert.NotNull(actualDto.GroupedByUser);
-        Assert.Equal(1, actualDto.GroupedByUser.Count);
-        Assert.All(actualDto.GroupedByUser, item =>
-        {
-            Assert.Equal(_user.Id, item.UserId);
-            Assert.Equal(TimeSpan.FromHours(15), item.Duration);
-        });
-    }
 }
