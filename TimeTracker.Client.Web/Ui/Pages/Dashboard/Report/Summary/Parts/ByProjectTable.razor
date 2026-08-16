@@ -1,21 +1,11 @@
-@using Fluxor
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Model.Report
 @using TimeTracker.Business.Extensions
-@using TimeTracker.Client.Core.Store.Report
 @using TimeTracker.Client.Web.Ui.Shared.Components
-
-@inject IState<ReportsState> ReportsState
 
 @code {
     [Parameter]
     public ICollection<SummaryByProjectsReportItemDto> Items { get; set; } = new List<SummaryByProjectsReportItemDto>();
-
-    private decimal GetOutstanding(Guid? projectId, decimal earned)
-    {
-        var paid = ReportsState.Value.MemberPaymentReportItems.FirstOrDefault(item => item.ProjectId == projectId)?.PaidAmountByProject ?? 0;
-        return Math.Max(earned - paid, 0);
-    }
 
     private static decimal GetEffectiveHourlyRate(decimal amount, TimeSpan duration)
     {
@@ -42,16 +32,6 @@
     <PropertyColumn Title="@DashboardLocalizer["Earned"].Value" Property="@(p => p.Amount)">
         <Content>
             <AmountDisplay Amount="@context.Amount"/>
-        </Content>
-    </PropertyColumn>
-    <PropertyColumn Title="@DashboardLocalizer["Outstanding"].Value" Property="@(p => p.Amount)">
-        <Content>
-            @{
-                var outstanding = GetOutstanding(context.ProjectId, context.Amount);
-            }
-            <span class="font-semibold @(outstanding > 0 ? "text-red-700" : "text-slate-700")">
-                <AmountDisplay Amount="@outstanding"/>
-            </span>
         </Content>
     </PropertyColumn>
     <PropertyColumn Title="@DashboardLocalizer["EffectiveHourlyRate"].Value" Property="@(p => p.Amount)">

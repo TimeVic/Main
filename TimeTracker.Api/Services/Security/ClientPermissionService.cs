@@ -60,15 +60,6 @@ public class ClientPermissionService : IClientPermissionService
                 continue;
             }
 
-            if (
-                permissionMapItem.Key == WorkspacePermission.ReadUserPaymentReport
-                && workspace.Mode == WorkspaceMode.Team
-                && workspace.Members.FirstOrDefault(member => member.User.Id == user.Id)?.Access != MembershipAccessType.User
-            )
-            {
-                continue;
-            }
-
             if (workspace.Mode != WorkspaceMode.Team && MemberPermissions.Contains(permissionMapItem.Key))
             {
                 continue;

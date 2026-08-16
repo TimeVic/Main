@@ -10,4 +10,5 @@ public interface ITimeEntryReportsDao: IDomainService
         Guid userId,
         DateTime endDate
     );
+
 }

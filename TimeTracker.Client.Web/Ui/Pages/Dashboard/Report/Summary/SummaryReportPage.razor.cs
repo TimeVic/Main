@@ -22,9 +22,7 @@ public partial class SummaryReportPage
     {
         await base.OnInitializedAsync();
         Dispatcher.Dispatch(new ReportResetSummaryReportFilterAction());
-        Dispatcher.Dispatch(new ReportSetMemberPaymentReportFilterAction(new MemberPaymentReportFilterState(_state.Value.SummaryReportFilter.EndDate)));
         Dispatcher.Dispatch(new ReportFetchSummaryReportAction());
-        Dispatcher.Dispatch(new ReportFetchMemberPaymentsReportAction());
     }
     
     private ICollection<SummaryByDaysReportItemDto> FillReportSkippedDays(ICollection<SummaryByDaysReportItemDto> items)

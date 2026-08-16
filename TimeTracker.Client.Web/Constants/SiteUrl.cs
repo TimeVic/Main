@@ -48,7 +48,6 @@ public static class SiteUrl
     public static readonly string Dashboard_Emoji = "/board/emoji";
     
     public static readonly string Dashboard_Reports_Summary = "/board/report/summary";
-    public static readonly string Dashboard_Reports_MemberPayments = "/board/report/member-payments";
     public static readonly string Dashboard_Reports_TimeEntries = "/board/report/time-entries";
     public static readonly string Dashboard_Reports_WorkspaceFinancialSummary = Dashboard_WorkspaceMoney;
     

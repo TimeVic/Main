@@ -1,7 +1,4 @@
 ﻿using Fluxor;
-using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.Model;
-using TimeTracker.Api.Shared.Dto.Model.Report;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Business.Extensions;
@@ -12,13 +9,13 @@ namespace TimeTracker.Client.Core.Store.Report;
 [FeatureState]
 public record ReportsState
 {
-    public ICollection<MemberPaymentsReportItemDto> MemberPaymentReportItems { get; set; } = new List<MemberPaymentsReportItemDto>();
-    
     public SummaryReportResponse? SummaryReportData { get; set; }
 
     public WorkspaceFinancialSummaryReportResponse? WorkspaceFinancialSummaryData { get; set; }
 
     public UserPaymentReportResponse? UserPaymentReportData { get; set; }
+
+    public UserPaymentReportFilterState UserPaymentReportFilter { get; set; } = new(DateTime.Now);
 
     public bool IsLoading { get; set; }
 
@@ -29,10 +26,6 @@ public record ReportsState
         DateTime.Now
     );
     
-    public MemberPaymentReportFilterState MemberPaymentReportFilter { get; set; } = new(
-        DateTime.Now
-    );
-
     public WorkspaceFinancialSummaryFilterState WorkspaceFinancialSummaryFilter { get; set; } = new(
         SummaryReportPeriodType.ThisMonth,
         DateTime.Now.StartOfMonth(),
@@ -47,7 +40,7 @@ public record SummaryReportFilterState(
     DateTime EndDate
 );
 
-public record MemberPaymentReportFilterState(
+public record UserPaymentReportFilterState(
     DateTime EndDate
 );
 

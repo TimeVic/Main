@@ -6,5 +6,6 @@ select
 from clients c
          inner join client_payments cp on cp.client_id = c.id
 where c.workspace_id = :workspaceId
+  and cp.payment_time <= :endDate
 group by c.id, c.name
 order by c.name

@@ -156,8 +156,6 @@ public interface IApiService
 
     Task<ProjectGetListResponse?> ProjectGetListAsync(ProjectGetListRequest model);
 
-    Task<MemberPaymentReportResponse?> ReportsGetMemberPaymentsReportAsync(Guid workspaceId, DateTime endDate);
-
     Task<SummaryReportResponse?> ReportsGetSummaryReportAsync(
         Guid workspaceId,
         DateTime startDate,
@@ -167,7 +165,7 @@ public interface IApiService
 
     Task<WorkspaceFinancialSummaryReportResponse?> ReportsGetWorkspaceFinancialSummaryAsync(Guid workspaceId);
 
-    Task<UserPaymentReportResponse?> ReportsGetUserPaymentReportAsync(Guid workspaceId);
+    Task<UserPaymentReportResponse?> ReportsGetUserPaymentReportAsync(Guid workspaceId, DateTime endDate);
 
     Task<TagDto?> TagAddAsync(TagAddRequest model);
 

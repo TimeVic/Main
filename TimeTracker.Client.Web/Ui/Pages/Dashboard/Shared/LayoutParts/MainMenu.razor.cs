@@ -60,13 +60,6 @@ public partial class MainMenu: IDisposable
             WorkspacePermission.ReadWorkspaceFinancialSummary
         ),
         new(
-            Text("PaymentsReportTitle"),
-            "fa-regular fa-credit-card",
-            UrlService.GetDashboardUrl("report/member-payments"),
-            Text("Reports"),
-            WorkspacePermission.ReadMemberPayment
-        ),
-        new(
             Text("UserPaymentReport_Menu"),
             "fa-solid fa-wallet",
             UrlService.GetDashboardUrl("report/user-payments"),

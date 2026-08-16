@@ -48,15 +48,13 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
         Assert.Equal(_workspace.Id, actual.WorkspaceId);
-        var expectedPermissions = Enum.GetValues<WorkspacePermission>()
-            .Where(permission => permission != WorkspacePermission.ReadUserPaymentReport)
-            .ToArray();
+        var expectedPermissions = Enum.GetValues<WorkspacePermission>();
         Assert.Equal(expectedPermissions.Length, actual.Permissions.Count);
         Assert.All(
             expectedPermissions,
             permission => Assert.Contains(permission, actual.Permissions)
         );
-        Assert.DoesNotContain(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
+        Assert.Contains(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
     }
 
     [Fact]
@@ -74,15 +72,13 @@ public class GetWorkspacePermissionsTest: BaseTest
 
         var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
         Assert.Equal(_workspace.Id, actual.WorkspaceId);
-        var expectedPermissions = Enum.GetValues<WorkspacePermission>()
-            .Where(permission => permission != WorkspacePermission.ReadUserPaymentReport)
-            .ToArray();
+        var expectedPermissions = Enum.GetValues<WorkspacePermission>();
         Assert.Equal(expectedPermissions.Length, actual.Permissions.Count);
         Assert.All(
             expectedPermissions,
             permission => Assert.Contains(permission, actual.Permissions)
         );
-        Assert.DoesNotContain(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
+        Assert.Contains(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
     }
 
     [Fact]

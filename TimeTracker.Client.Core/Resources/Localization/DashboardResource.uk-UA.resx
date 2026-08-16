@@ -388,11 +388,6 @@
   <data name="MoneyOverviewBlock_OwedToMembers" xml:space="preserve"><value>Борг учасникам</value></data>
   <data name="MoneyOverviewBlock_NoClientPayments" xml:space="preserve"><value>Оплат клієнтів ще не зафіксовано.</value></data>
   <data name="MoneyOverviewBlock_NoMemberPayouts" xml:space="preserve"><value>Виплат учасникам ще не зафіксовано.</value></data>
-  <data name="MemberPaymentReportPage_EmptyTitle" xml:space="preserve"><value>Почніть трекати час, щоб бачити зароблені гроші.</value></data>
-  <data name="MemberPaymentReportPage_EmptyDescription" xml:space="preserve"><value>Додайте першого клієнта, щоб вести облік оплат.</value></data>
-  <data name="MemberPaymentReportPage_ClientPaymentStatus" xml:space="preserve"><value>Статус оплат клієнтів</value></data>
-  <data name="MemberPaymentReportPage_ClientPaymentStatusDescription" xml:space="preserve"><value>Клієнти з неоплаченим залишком показані першими.</value></data>
-  <data name="MemberPaymentReportPage_OtherProjects" xml:space="preserve"><value>Інші проєкти</value></data>
   <data name="TasksBlock_DeleteTaskListTitle" xml:space="preserve"><value>Видалити список задач</value></data>
   <data name="TasksBlock_DeleteTaskListSubtitle" xml:space="preserve"><value>Видалити цей список задач?</value></data>
   <data name="TasksBlock_TaskListDescription" xml:space="preserve"><value>Задачі не обовʼязкові й потрібні переважно для обліку часу.</value></data>

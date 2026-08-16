@@ -9,6 +9,8 @@ public partial class UserPaymentReportPage
 
     private UserPaymentReportResponse? _report => ReportsState.Value.UserPaymentReportData;
 
+    private UserPaymentReportFilterState _filterState => ReportsState.Value.UserPaymentReportFilter;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -25,7 +27,23 @@ public partial class UserPaymentReportPage
 
     private string GetClientPaymentsUrl(Guid clientId)
     {
+        if (_report?.IsPaymentsFromMembers == true)
+        {
+            return UrlService.GetDashboardUrl("member-payments");
+        }
+
         return $"{UrlService.GetDashboardUrl("client-payments")}?clientId={clientId}";
+    }
+
+    private void OnEndDateChanged(DateTime? endDate)
+    {
+        if (endDate == null || _filterState.EndDate.Date == endDate.Value.Date)
+        {
+            return;
+        }
+
+        Dispatcher.Dispatch(new ReportSetUserPaymentReportFilterAction(new UserPaymentReportFilterState(endDate.Value)));
+        Dispatcher.Dispatch(new ReportFetchUserPaymentReportAction());
     }
 
     private string GetStatus(decimal outstanding)

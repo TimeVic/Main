@@ -23,22 +23,23 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
 
     public async Task<ICollection<UserPaymentReportProjectItemDto>> GetUserPaymentReportProjectEarningsAsync(
         Guid workspaceId,
-        Guid userId
+        Guid userId,
+        DateTime endDate
     )
     {
         return await Session.CreateSQLQuery(ReadSqlQuery("Report.UserPaymentReportProjectEarnings"))
             .SetParameter("workspaceId", workspaceId)
             .SetParameter("userId", userId)
+            .SetParameter("endDate", endDate)
             .SetResultTransformer(Transformers.AliasToBean<UserPaymentReportProjectItemDto>())
             .ListAsync<UserPaymentReportProjectItemDto>();
     }
 
-    public async Task<ICollection<UserPaymentReportClientPaymentItemDto>> GetUserPaymentReportClientPaymentsAsync(
-        Guid workspaceId
-    )
+    public async Task<ICollection<UserPaymentReportClientPaymentItemDto>> GetUserPaymentReportClientPaymentsAsync(Guid workspaceId, DateTime endDate)
     {
         return await Session.CreateSQLQuery(ReadSqlQuery("Report.UserPaymentReportClientPayments"))
             .SetParameter("workspaceId", workspaceId)
+            .SetParameter("endDate", endDate)
             .SetResultTransformer(Transformers.AliasToBean<UserPaymentReportClientPaymentItemDto>())
             .ListAsync<UserPaymentReportClientPaymentItemDto>();
     }
