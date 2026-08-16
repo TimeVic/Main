@@ -49,6 +49,10 @@
       <EmbeddedResource Include="Queries\Sql\Report\SummaryByProject.sql" />
       <None Remove="Queries\Sql\Report\SummaryByWeek.sql" />
       <EmbeddedResource Include="Queries\Sql\Report\SummaryByWeek.sql" />
+      <None Remove="Queries\Sql\Report\TeamSummaryByDay.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\TeamSummaryByDay.sql" />
+      <None Remove="Queries\Sql\Report\TeamSummaryByMember.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\TeamSummaryByMember.sql" />
       <None Remove="Queries\Sql\Report\WorkspaceFinancialClientBalances.sql" />
       <EmbeddedResource Include="Queries\Sql\Report\WorkspaceFinancialClientBalances.sql" />
       <None Remove="Queries\Sql\Report\WorkspaceFinancialClientProjects.sql" />

@@ -8,7 +8,11 @@ namespace TimeTracker.Client.Core.Store.Report;
 
 public record struct ReportFetchSummaryReportAction();
 
+public record struct ReportFetchTeamSummaryReportAction();
+
 public record struct ReportSetSummaryReportItemsAction(SummaryReportResponse ReportData);
+
+public record struct ReportSetTeamSummaryReportAction(TeamSummaryReportResponse ReportData);
 
 public record struct ReportSetSummaryReportFilterAction(SummaryReportFilterState FilterState);
 

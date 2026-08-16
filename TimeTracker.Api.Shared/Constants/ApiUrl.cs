@@ -70,7 +70,9 @@ public class ApiUrl
     
     #region Report
     
-    public const string ReportSummary = "dashboard/report/summary";
+    public const string ReportSummaryPersonal = "dashboard/report/summary/personal";
+
+    public const string ReportSummaryTeam = "dashboard/report/summary/team";
 
     public const string ReportWorkspaceFinancialSummary = "dashboard/report/workspace-financial-summary";
 

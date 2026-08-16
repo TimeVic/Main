@@ -137,7 +137,8 @@ public class GetWorkspacePermissionsTest: BaseTest
             WorkspacePermission.CreateMemberPayment,
             WorkspacePermission.UpdateMemberPayment,
             WorkspacePermission.ReadWorkspaceFinancialSummary,
-            WorkspacePermission.CreateMemberPaymentForOtherMembers
+            WorkspacePermission.CreateMemberPaymentForOtherMembers,
+            WorkspacePermission.ReadTeamSummaryReport
         };
 
         Assert.All(
@@ -185,6 +186,7 @@ public class GetWorkspacePermissionsTest: BaseTest
             memberPermissions,
             permission => Assert.DoesNotContain(permission, actual.Permissions)
         );
+        Assert.DoesNotContain(WorkspacePermission.ReadTeamSummaryReport, actual.Permissions);
         Assert.Contains(WorkspacePermission.ReadUserPaymentReport, actual.Permissions);
     }
 

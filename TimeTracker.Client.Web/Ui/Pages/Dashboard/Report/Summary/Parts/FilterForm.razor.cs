@@ -59,6 +59,8 @@ public partial class FilterForm
 
     private void LoadReport()
     {
-        Dispatcher.Dispatch(new ReportFetchSummaryReportAction());
+        Dispatcher.Dispatch(IsTeamSummary
+            ? new ReportFetchTeamSummaryReportAction()
+            : new ReportFetchSummaryReportAction());
     }
 }

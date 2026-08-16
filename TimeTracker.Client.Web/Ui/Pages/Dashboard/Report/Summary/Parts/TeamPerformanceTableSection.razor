@@ -1,0 +1,24 @@
+@using LumexUI.Common
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Client.Web.Ui.Shared.Components
+
+<LumexCard Class="mt-10">
+    <LumexCardHeader>
+        <SummarySectionHeader
+            Overline="@DashboardLocalizer["Table"].Value"
+            Title="@DashboardLocalizer["TeamPerformance"].Value"
+            HelperText="@DashboardLocalizer["TeamPerformanceHelper"].Value"/>
+    </LumexCardHeader>
+    <LumexCardBody>
+        <LumexDataGrid Data="@Items.AsQueryable()" Shadow="Shadow.None">
+            <PropertyColumn Title="@DashboardLocalizer["Member"].Value" Property="@(item => item.Name)">
+                <Content><div class="font-medium text-slate-900">@context.Name</div><div class="text-xs text-slate-500">@context.Email</div></Content>
+            </PropertyColumn>
+            <PropertyColumn Title="@DashboardLocalizer["Duration"].Value" Property="@(item => item.Duration)"><Content>@context.Duration.ToReadableShortString()</Content></PropertyColumn>
+            <PropertyColumn Title="@DashboardLocalizer["TeamLaborCost"].Value" Property="@(item => item.TeamLaborCost)"><Content><AmountDisplay Amount="@context.TeamLaborCost"/></Content></PropertyColumn>
+            <PropertyColumn Title="@DashboardLocalizer["ClientBillable"].Value" Property="@(item => item.ClientBillable)"><Content><AmountDisplay Amount="@context.ClientBillable"/></Content></PropertyColumn>
+            <PropertyColumn Title="@DashboardLocalizer["Margin"].Value" Property="@(item => item.GrossProfit)"><Content><span class="@(context.GrossProfit < 0 ? "text-red-600" : "text-emerald-700")"><AmountDisplay Amount="@context.GrossProfit"/></span></Content></PropertyColumn>
+            <PropertyColumn Title="@DashboardLocalizer["MarginPercent"].Value" Property="@(item => item.MarginPercent)"><Content>@(context.MarginPercent?.ToString("0.#") ?? "—")</Content></PropertyColumn>
+        </LumexDataGrid>
+    </LumexCardBody>
+</LumexCard>

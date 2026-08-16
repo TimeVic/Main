@@ -852,4 +852,21 @@
   <data name="WorkspaceMoney_Profit" xml:space="preserve"><value>Прибуток</value></data>
   <data name="WorkspaceMoney_PerHour" xml:space="preserve"><value>/год</value></data>
   <data name="WorkspaceMoney_NoDetails" xml:space="preserve"><value>У цьому звіті немає роботи за проєктами.</value></data>
+  <data name="SummaryTabPersonal" xml:space="preserve"><value>Особисте</value></data>
+  <data name="SummaryTabTeam" xml:space="preserve"><value>Команда</value></data>
+  <data name="TeamSummary" xml:space="preserve"><value>Командне зведення</value></data>
+  <data name="TeamSummaryHelper" xml:space="preserve"><value>Фінансові показники всього робочого простору за обраний період.</value></data>
+  <data name="TeamDurationHelper" xml:space="preserve"><value>Увесь час, затреканий учасниками робочого простору</value></data>
+  <data name="ClientBillable" xml:space="preserve"><value>Виставлено клієнтам</value></data>
+  <data name="ClientBillableHelper" xml:space="preserve"><value>Оплачувана робота за клієнтськими ставками</value></data>
+  <data name="TeamLaborCost" xml:space="preserve"><value>Собівартість команди</value></data>
+  <data name="TeamLaborCostHelper" xml:space="preserve"><value>Вартість виконаної роботи за ставками учасників</value></data>
+  <data name="GrossProfit" xml:space="preserve"><value>Валовий прибуток</value></data>
+  <data name="GrossProfitHelper" xml:space="preserve"><value>Виставлено клієнтам мінус собівартість команди</value></data>
+  <data name="TeamSummaryChartHelper" xml:space="preserve"><value>Виставлено клієнтам і собівартість команди за кожен день.</value></data>
+  <data name="TeamPerformance" xml:space="preserve"><value>Ефективність команди</value></data>
+  <data name="TeamPerformanceHelper" xml:space="preserve"><value>Внесок кожного учасника в маржу робочого простору.</value></data>
+  <data name="Margin" xml:space="preserve"><value>Маржа</value></data>
+  <data name="MarginPercent" xml:space="preserve"><value>Маржа (%)</value></data>
+  <data name="NoTeamActivitySelectedPeriod" xml:space="preserve"><value>За обраний період команда не має активності.</value></data>
 </root>
