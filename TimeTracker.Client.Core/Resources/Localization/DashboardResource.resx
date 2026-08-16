@@ -260,6 +260,7 @@
   <data name="TimeWorkspaceDescription" xml:space="preserve"><value>Keep the active timer in view while the rest of the workspace scrolls under it.</value></data>
   <data name="SummaryEmptyMessage" xml:space="preserve"><value>Start tracking time to see your entries.</value></data>
   <data name="ReportFilterHelper" xml:space="preserve"><value>Change grouping and period to rebuild both the chart and grouped table.</value></data>
+  <data name="TeamSummaryFilterHelper" xml:space="preserve"><value>Change the period to update team financials, the chart, and member performance.</value></data>
   <data name="SearchByDescription" xml:space="preserve"><value>Search by description...</value></data>
   <data name="NoTimeEntriesFilterMessage" xml:space="preserve"><value>No time entries found. Try adjusting the filter settings.</value></data>
   <data name="Billable" xml:space="preserve"><value>Billable</value></data>
