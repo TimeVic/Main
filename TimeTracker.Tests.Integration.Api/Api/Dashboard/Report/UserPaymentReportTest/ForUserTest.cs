@@ -21,6 +21,7 @@ public class ForUserTest : BaseTest
 {
     private readonly string _url = $"/{ApiUrl.ReportUserPayment}";
     private readonly string _memberToken;
+    private readonly string _ownerToken;
     private readonly UserEntity _member;
     private readonly UserEntity _owner;
     private readonly WorkspaceEntity _workspace;
@@ -38,7 +39,8 @@ public class ForUserTest : BaseTest
         var projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         var workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
 
-        var (_, owner, workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        var (ownerToken, owner, workspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _ownerToken = ownerToken;
         _owner = owner;
         (_memberToken, _member, _) = UserSeeder.CreateAuthorizedAsync().Result;
         _workspace = workspace;
@@ -99,6 +101,18 @@ public class ForUserTest : BaseTest
         await FlushDbChanges();
 
         var response = await PostRequestAsync(_url, _memberToken, new UserPaymentReportRequest(), _workspace.Id);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task OwnerCanAccessPersonalPayoutsInTeamWorkspace()
+    {
+        _workspace.Mode = WorkspaceMode.Team;
+        await DbSessionProvider.CurrentSession.UpdateAsync(_workspace);
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(_url, _ownerToken, new UserPaymentReportRequest(), _workspace.Id);
 
         response.EnsureSuccessStatusCode();
     }
