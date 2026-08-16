@@ -59,8 +59,6 @@ public partial class FilterForm
 
     private void LoadReport()
     {
-        Dispatcher.Dispatch(new ReportSetMemberPaymentReportFilterAction(new MemberPaymentReportFilterState(_reportsState.Value.SummaryReportFilter.EndDate)));
         Dispatcher.Dispatch(new ReportFetchSummaryReportAction());
-        Dispatcher.Dispatch(new ReportFetchMemberPaymentsReportAction());
     }
 }

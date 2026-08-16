@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Model.Report;
 using TimeTracker.Business.Extensions;
-using TimeTracker.Business.Orm.Dto.Reports;
 using TimeTracker.Business.Orm.Dto.Reports.Summary;
 
 namespace TimeTracker.Api.Profiles.Api;
@@ -10,18 +9,6 @@ public class ReportProfile : Profile
 {
     public ReportProfile()
     {
-        CreateMap<ProjectMemberPaymentsReportItemDto, MemberPaymentsReportItemDto>()
-            .IgnoreAllAndConstructUsing((src, mapper) => new MemberPaymentsReportItemDto
-            {
-                ProjectId = src.ProjectId,
-                ProjectName = src.ProjectName,
-                ClientId = src.ClientId,
-                ClientName = src.ClientName,
-                Amount = src.Amount,
-                PaidAmountByClient = src.PaidAmountByClient,
-                PaidAmountByProject = src.PaidAmountByProject,
-                TotalDuration = src.TotalDuration
-            });
         CreateMap<ByDaysReportItemDto, SummaryByDaysReportItemDto>()
             .IgnoreAllAndConstructUsing((src, mapper) => new SummaryByDaysReportItemDto
             {

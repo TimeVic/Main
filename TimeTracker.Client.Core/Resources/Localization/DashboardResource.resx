@@ -388,11 +388,6 @@
   <data name="MoneyOverviewBlock_OwedToMembers" xml:space="preserve"><value>Owed to Members</value></data>
   <data name="MoneyOverviewBlock_NoClientPayments" xml:space="preserve"><value>No client payments recorded yet.</value></data>
   <data name="MoneyOverviewBlock_NoMemberPayouts" xml:space="preserve"><value>No member payouts recorded yet.</value></data>
-  <data name="MemberPaymentReportPage_EmptyTitle" xml:space="preserve"><value>Start tracking time to see your earnings.</value></data>
-  <data name="MemberPaymentReportPage_EmptyDescription" xml:space="preserve"><value>Add your first client to track payments.</value></data>
-  <data name="MemberPaymentReportPage_ClientPaymentStatus" xml:space="preserve"><value>Client payment status</value></data>
-  <data name="MemberPaymentReportPage_ClientPaymentStatusDescription" xml:space="preserve"><value>Clients with unpaid balances are sorted first.</value></data>
-  <data name="MemberPaymentReportPage_OtherProjects" xml:space="preserve"><value>Other projects</value></data>
   <data name="TasksBlock_DeleteTaskListTitle" xml:space="preserve"><value>Delete task list</value></data>
   <data name="TasksBlock_DeleteTaskListSubtitle" xml:space="preserve"><value>Are you sure you want to delete this task list?</value></data>
   <data name="TasksBlock_TaskListDescription" xml:space="preserve"><value>Tasks are optional and mainly used for tracking time.</value></data>

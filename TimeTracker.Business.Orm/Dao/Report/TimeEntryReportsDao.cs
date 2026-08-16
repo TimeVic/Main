@@ -27,4 +27,5 @@ public class TimeEntryReportsDao: BaseDao, ITimeEntryReportsDao
             .SetResultTransformer(Transformers.AliasToBean<ProjectMemberPaymentsReportItemDto>())
             .ListAsync<ProjectMemberPaymentsReportItemDto>();
     }
+
 }
