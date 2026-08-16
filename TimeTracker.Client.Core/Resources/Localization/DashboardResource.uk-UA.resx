@@ -23,6 +23,7 @@
   <data name="Dashboard" xml:space="preserve"><value>Дашборд</value></data>
   <data name="Summary" xml:space="preserve"><value>Зведення</value></data>
   <data name="Reports" xml:space="preserve"><value>Звіти</value></data>
+  <data name="Operations" xml:space="preserve"><value>Операції</value></data>
   <data name="TimeEntries" xml:space="preserve"><value>Записи часу</value></data>
   <data name="TimeEntriesReport" xml:space="preserve"><value>Звіт по записах часу</value></data>
   <data name="Projects" xml:space="preserve"><value>Проєкти</value></data>
@@ -35,6 +36,7 @@
   <data name="Money" xml:space="preserve"><value>Гроші</value></data>
   <data name="WorkspaceMoney" xml:space="preserve"><value>Гроші workspace</value></data>
   <data name="Settings" xml:space="preserve"><value>Налаштування</value></data>
+  <data name="MainHeader_InviteTeam" xml:space="preserve"><value>Запросити команду</value></data>
   <data name="HelpSupport" xml:space="preserve"><value>Допомога та підтримка</value></data>
   <data name="LogOut" xml:space="preserve"><value>Вийти</value></data>
   <data name="Language" xml:space="preserve"><value>Мова</value></data>

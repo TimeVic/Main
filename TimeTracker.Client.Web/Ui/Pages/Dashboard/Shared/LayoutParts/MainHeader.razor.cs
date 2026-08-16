@@ -2,12 +2,14 @@ using Fluxor;
 using LumexUI;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Web.Services.UI;
 using TimeTracker.Client.Web.Services.Workspace;
 using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Workspace;
+using TimeTracker.Client.Core.Services.Security;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts;
 
@@ -27,14 +29,24 @@ public partial class MainHeader
     
     [Inject]
     public IState<WorkspaceState> WorkspaceState { get; set; }
-    
+
     [Inject]
     public WorkspaceInitializationService _workspaceInitialization { get; set; }
+
+    [Inject]
+    private ISecurityManager SecurityManager { get; set; } = null!;
     
     private bool _isShowAddWorkspaceModal = false;
+    private bool _isInviteTeamModalOpened;
     private bool IsWorkspaceCreationAvailable => WorkspaceState.Value.IsLoaded
         && WorkspaceState.Value.List.Count(item => item.IsCreatedByCurrentUser && item.IsDefault == false)
             < GlobalConstants.MaxActiveCreatedWorkspaces;
+
+    private bool IsTeamInvitationAvailable => AuthState.Value.Workspace?.Mode == WorkspaceMode.Team
+        && AuthState.Value.IsRoleAdmin
+        && SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspaceMembers);
+
+    private bool IsWorkspaceSettingsAvailable => SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspaceSettings);
 
     private void OnSelectWorkspace(WorkspaceDto? workspace)
     {
@@ -56,4 +68,11 @@ public partial class MainHeader
     {
         NavigationManager.NavigateTo(UrlService.GetDashboardUrl("user/settings"));
     }
+
+    private Task OpenInviteTeamModal()
+    {
+        _isInviteTeamModalOpened = true;
+        return Task.CompletedTask;
+    }
+
 }

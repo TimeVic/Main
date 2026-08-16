@@ -1,13 +1,13 @@
-@page "/board/{WorkspaceId:guid}/workspace/settings"
-@page "/board/workspace/settings"
+@page "/board/{WorkspaceId:guid}/workspace/settings/tags"
+@page "/board/workspace/settings/tags"
 @attribute [RequireWorkspacePermission(WorkspacePermission.UpdateWorkspaceSettings)]
 @using TimeTracker.Api.Shared.Constants
-@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Settings
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Tags
 @using Layout = TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<WorkspaceSettingsTabsBlock ActiveSection="general">
-    <SettingsBlock />
+<WorkspaceSettingsTabsBlock ActiveSection="tags">
+    <TagsBlock />
 </WorkspaceSettingsTabsBlock>

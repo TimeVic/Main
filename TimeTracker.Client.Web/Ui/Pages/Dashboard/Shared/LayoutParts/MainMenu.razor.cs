@@ -2,6 +2,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using TimeTracker.Api.Shared.Constants;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.Security;
@@ -17,7 +18,8 @@ public partial class MainMenu: IDisposable
         string Icon,
         string Url,
         string? GroupName = null,
-        params WorkspacePermission[] RequiredPermissions
+        WorkspacePermission[]? RequiredPermissions = null,
+        Func<bool>? IsVisible = null
     );
     
     private string Text(string key) => DashboardLocalizer[key].Value;
@@ -35,44 +37,51 @@ public partial class MainMenu: IDisposable
     {
         new(Text("Summary"), "fa-regular fa-bar-chart", UrlService.GetDashboardUrl("report/summary")),
         new(Text("TimeEntries"), "fa-regular fa-clock", UrlService.GetDashboardUrl()),
-        new(
-            Text("Money"),
-            "fa-solid fa-chart-pie",
-            UrlService.GetDashboardUrl("money"),
-            "",
-            WorkspacePermission.ReadWorkspaceFinancialSummary
-        ),
         new(Text("Tasks"), "fa-regular fa-square-check", UrlService.GetDashboardUrl("tasks")),
         new(Text("Notes"), "fa-regular fa-note-sticky", UrlService.GetDashboardUrl("notes")),
         new(
             Text("MemberPayments"),
             "fa-regular fa-credit-card",
             UrlService.GetDashboardUrl("member-payments"),
-            "",
-            WorkspacePermission.ReadMemberPayment
+            Text("Operations"),
+            [WorkspacePermission.ReadMemberPayment],
+            () => IsTeamAdministrator
         ),
         new(
             Text("ClientPayments"),
             "fa-solid fa-money-bill-transfer",
             UrlService.GetDashboardUrl("client-payments"),
-            "",
-            WorkspacePermission.ReadClientPayment,
-            WorkspacePermission.ReadWorkspaceFinancialSummary
+            IsTeamAdministrator ? Text("Operations") : string.Empty,
+            [WorkspacePermission.ReadClientPayment],
+            () => IsSoloWorkspace || IsTeamAdministrator
+        ),
+        new(
+            Text("WorkspaceMoney"),
+            "fa-solid fa-chart-pie",
+            UrlService.GetDashboardUrl("money"),
+            Text("Reports"),
+            [WorkspacePermission.ReadWorkspaceFinancialSummary],
+            () => IsTeamAdministrator
         ),
         new(
             Text("UserPaymentReport_Menu"),
             "fa-solid fa-wallet",
             UrlService.GetDashboardUrl("report/user-payments"),
             Text("Reports"),
-            WorkspacePermission.ReadUserPaymentReport
+            [WorkspacePermission.ReadUserPaymentReport]
         ),
-        new(Text("TimeEntriesReportTitle"), "fa-regular fa-clock", UrlService.GetDashboardUrl("report/time-entries"), Text("Reports")),
+        new(
+            Text("TimeEntriesReportTitle"),
+            "fa-regular fa-clock",
+            UrlService.GetDashboardUrl("report/time-entries"),
+            Text("Reports")
+        ),
         new(
             string.Empty,
             "fa-solid fa-sliders",
             UrlService.GetDashboardUrl("workspace/settings"),
             null,
-            WorkspacePermission.UpdateWorkspaceSettings
+            [WorkspacePermission.UpdateWorkspaceSettings]
         ),
     };
 
@@ -133,10 +142,20 @@ public partial class MainMenu: IDisposable
 
     private bool HasMenuItemAccess(MenuItemModel item)
     {
+        if (item.IsVisible?.Invoke() == false)
+        {
+            return false;
+        }
+
         return !WorkspacePermissionsState.Value.IsLoaded
-            || item.RequiredPermissions.Length == 0
+            || item.RequiredPermissions is not { Length: > 0 }
             || item.RequiredPermissions.All(SecurityManager.HasPermission);
     }
+
+    private bool IsSoloWorkspace => AuthState.Value.Workspace?.Mode == WorkspaceMode.Solo;
+
+    private bool IsTeamAdministrator => AuthState.Value.Workspace?.Mode == WorkspaceMode.Team
+        && AuthState.Value.IsRoleAdmin;
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs args)
     {
