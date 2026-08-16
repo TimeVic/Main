@@ -120,6 +120,8 @@ dotnet test ./TimeTracker.Tests.Unit.Business
 Run test projects strictly one at a time because they share the same test database.
 Wait until the current `dotnet test` process has fully exited before starting another test project. Do not run test projects, filtered test runs, or retries in parallel.
 
+**API test organization:** Keep tests for a single API URL in one dedicated test file. Do not add tests for another URL to that file; create or extend the target URL's test file instead. A test may cover multiple URLs only when the scenario requires their interaction; document that reason in the test name or a short English comment.
+
 ---
 
 ## AutoMapper
