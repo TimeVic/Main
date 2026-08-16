@@ -7,20 +7,13 @@ node('build-node') {
     String testScriptParameters = '--logger=trx --no-restore --no-build --results-directory=./results'
     String postresUserPassword = 'postgres'
 
+    String dbNameApi = 'test_api'
+    String dbNameBusiness = 'test_business'
+
+    String dbConnectionApi = "User ID=postgres;Password=${postresUserPassword};Host=localhost;Port=5432;Database=${dbNameApi};Pooling=true;Include Error Detail=true;Log Parameters=true;"
+    String dbConnectionBusiness = "User ID=postgres;Password=${postresUserPassword};Host=localhost;Port=5432;Database=${dbNameBusiness};Pooling=true;Include Error Detail=true;Log Parameters=true;"
+
     Map<String, String> containerEnvVars = [
-        // Zookeeper
-        'ZOOKEEPER_CLIENT_PORT': 2181,
-        'ZOOKEEPER_TICK_TIME': 2000,
-    
-        // Kafka
-        'KAFKA_HOME': "./devops/common/binable/kafka",
-        'KAFKA_BROKER_ID': 1,
-        'KAFKA_ZOOKEEPER_CONNECT': "localhost:2181",
-        'KAFKA_LISTENERS': "INSIDE://:9092,OUTSIDE://:9094",
-        'KAFKA_ADVERTISED_LISTENERS': "INSIDE://:9092,OUTSIDE://localhost:9094",
-        'KAFKA_LISTENER_SECURITY_PROTOCOL_MAP': "INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT",
-        'KAFKA_INTER_BROKER_LISTENER_NAME': "INSIDE",
-    
         // Postgres
         'POSTGRES_CONNECTION_RETRIES': 5,
         'POSTGRES_USER': postresUserPassword,
@@ -30,8 +23,6 @@ node('build-node') {
         // Redis
         'Redis__Server': "localhost:6379",
 
-        'ConnectionStrings__DefaultConnection': "User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=postgres;Pooling=true;Include Error Detail=true;Log Parameters=true;",
-        'Kafka__Servers': "localhost:9094",
         'Hibernate__IsShowSql': "false"
     ]
 
@@ -110,30 +101,16 @@ node('build-node') {
                 '''
             }
 
-            // runStage(Stage.ASSIGN_PERMISSIONS) {
-            //     sh 'chmod -R 700 $KAFKA_HOME'
-            //     sh 'chmod -R 700 ./devops/common/kafka/boot.sh'
-            //     sh 'chmod -R 770 ./devops/common/zookeeper/boot.sh'
-            // }
-
-            // runStage(Stage.INIT_ZOOKEEPER) {
-            //     sh './devops/common/zookeeper/boot.sh &'
-            //     sh 'until nc -z localhost 2181; do sleep 1; done'
-            //     echo "Zookeeper is started"
-            // }
-
-            // runStage(Stage.INIT_KAFKA) {
-            //     sh './devops/common/kafka/boot.sh &'
-            //     sh 'until nc -z localhost 9094; do sleep 1; done'
-            //     echo "Kafka is started"
-            // }
-
             runStage(Stage.INIT_DB) {
                 sh 'pg_ctlcluster 16 main start'
                 sh 'pg_isready'
                 sh "sudo -u postgres psql -c \"ALTER USER postgres PASSWORD '$postresUserPassword';\""
-                sh "PGPASSWORD=postgres psql -h localhost --username=$postresUserPassword --dbname=$postresUserPassword -c \"select 1\""
-                echo 'Postgre SQL is started'
+                sh "PGPASSWORD=$postresUserPassword psql -h localhost --username=postgres --dbname=postgres -c \"select 1\""
+                sh "sudo -u postgres psql -c \"DROP DATABASE IF EXISTS ${dbNameApi};\""
+                sh "sudo -u postgres psql -c \"CREATE DATABASE ${dbNameApi};\""
+                sh "sudo -u postgres psql -c \"DROP DATABASE IF EXISTS ${dbNameBusiness};\""
+                sh "sudo -u postgres psql -c \"CREATE DATABASE ${dbNameBusiness};\""
+                echo 'Postgre SQL is started and databases are created'
             }
 
             runStage(Stage.INIT_REDIS) {
@@ -145,20 +122,29 @@ node('build-node') {
             }
 
             runStage(Stage.RUN_MIGRATIONS) {
-                sh 'dotnet run --no-restore --no-build --project ./TimeTracker.Migrations'
+                sh """
+                    ConnectionStrings__DefaultConnection="${dbConnectionApi}" dotnet run --no-restore --no-build --project ./TimeTracker.Migrations
+                    ConnectionStrings__DefaultConnection="${dbConnectionBusiness}" dotnet run --no-restore --no-build --project ./TimeTracker.Migrations
+                """
             }
 
-            runStage(Stage.RUN_API_UNIT_TESTS) {
-                sh "dotnet test ${testScriptParameters} --verbosity=normal ./TimeTracker.Tests.Integration.Api"
-            }
-
-            runStage(Stage.RUN_BUSINESS_LOGIC_UNIT_TESTS) {
-                sh "dotnet test ${testScriptParameters} --verbosity=normal ./TimeTracker.Tests.Integration.Business"
-            }
-
-            runStage(Stage.RUN_BUSINESS_UNIT_TESTS) {
-                sh "dotnet test ${testScriptParameters} --verbosity=normal ./TimeTracker.Tests.Unit.Business"
-            }
+            parallel(
+                'API Integration Tests': {
+                    runStage(Stage.RUN_API_UNIT_TESTS) {
+                        sh "ConnectionStrings__DefaultConnection=\"${dbConnectionApi}\" dotnet test ${testScriptParameters} --verbosity=normal ./TimeTracker.Tests.Integration.Api"
+                    }
+                },
+                'Business Integration Tests': {
+                    runStage(Stage.RUN_BUSINESS_LOGIC_UNIT_TESTS) {
+                        sh "ConnectionStrings__DefaultConnection=\"${dbConnectionBusiness}\" dotnet test ${testScriptParameters} --verbosity=normal ./TimeTracker.Tests.Integration.Business"
+                    }
+                },
+                'Business Unit Tests': {
+                    runStage(Stage.RUN_BUSINESS_UNIT_TESTS) {
+                        sh "dotnet test ${testScriptParameters} --verbosity=normal ./TimeTracker.Tests.Unit.Business"
+                    }
+                }
+            )
         }
     } as Closure<String>))
 }
@@ -169,9 +155,6 @@ enum Stage {
     ADD_GCLOUD_CREDENTIALS('Add GCloud credentials'),
     BUILD('Build projects'),
     SET_VARS('Set environment vars'),
-    ASSIGN_PERMISSIONS('Assign Permissions'),
-    INIT_ZOOKEEPER('Init Zookeeper'),
-    INIT_KAFKA('Init Kafka'),
     INIT_DB('Init DB'),
     INIT_REDIS('Init Redis'),
     RUN_MIGRATIONS('Run migrations'),
