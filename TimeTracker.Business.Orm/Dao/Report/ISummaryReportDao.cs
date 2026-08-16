@@ -1,6 +1,8 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Orm.Dto.Reports.Summary;
 
+using TimeTracker.Business.Orm.Dto.Reports.TeamSummary;
+
 namespace TimeTracker.Business.Orm.Dao.Report;
 
 public interface ISummaryReportDao: IDomainService
@@ -36,6 +38,18 @@ public interface ISummaryReportDao: IDomainService
     Task<ICollection<ByWeeksReportItemDto>> GetReportByWeekAsync(
         Guid workspaceId,
         Guid userId,
+        DateTime startDate,
+        DateTime endDate
+    );
+
+    Task<ICollection<TeamSummaryByDaysReportItemDto>> GetTeamReportByDayAsync(
+        Guid workspaceId,
+        DateTime startDate,
+        DateTime endDate
+    );
+
+    Task<ICollection<TeamSummaryMemberReportItemDto>> GetTeamReportByMemberAsync(
+        Guid workspaceId,
         DateTime startDate,
         DateTime endDate
     );

@@ -850,4 +850,21 @@
   <data name="WorkspaceMoney_Profit" xml:space="preserve"><value>Profit</value></data>
   <data name="WorkspaceMoney_PerHour" xml:space="preserve"><value>/h</value></data>
   <data name="WorkspaceMoney_NoDetails" xml:space="preserve"><value>No project work in this report.</value></data>
+  <data name="SummaryTabPersonal" xml:space="preserve"><value>Personal</value></data>
+  <data name="SummaryTabTeam" xml:space="preserve"><value>Team</value></data>
+  <data name="TeamSummary" xml:space="preserve"><value>Team summary</value></data>
+  <data name="TeamSummaryHelper" xml:space="preserve"><value>Financial performance across your workspace for the selected period.</value></data>
+  <data name="TeamDurationHelper" xml:space="preserve"><value>All time logged by workspace members</value></data>
+  <data name="ClientBillable" xml:space="preserve"><value>Client billable</value></data>
+  <data name="ClientBillableHelper" xml:space="preserve"><value>Billable work valued at client rates</value></data>
+  <data name="TeamLaborCost" xml:space="preserve"><value>Team labor cost</value></data>
+  <data name="TeamLaborCostHelper" xml:space="preserve"><value>Cost of recorded work at member rates</value></data>
+  <data name="GrossProfit" xml:space="preserve"><value>Gross profit</value></data>
+  <data name="GrossProfitHelper" xml:space="preserve"><value>Client billable minus team labor cost</value></data>
+  <data name="TeamSummaryChartHelper" xml:space="preserve"><value>Client billable and team labor cost for each day.</value></data>
+  <data name="TeamPerformance" xml:space="preserve"><value>Team performance</value></data>
+  <data name="TeamPerformanceHelper" xml:space="preserve"><value>Each member's contribution to workspace margin.</value></data>
+  <data name="Margin" xml:space="preserve"><value>Margin</value></data>
+  <data name="MarginPercent" xml:space="preserve"><value>Margin (%)</value></data>
+  <data name="NoTeamActivitySelectedPeriod" xml:space="preserve"><value>No team activity in the selected period.</value></data>
 </root>

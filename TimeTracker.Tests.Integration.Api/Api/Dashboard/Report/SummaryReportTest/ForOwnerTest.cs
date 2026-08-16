@@ -17,7 +17,7 @@ namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.Report.SummaryReportTe
 
 public class ForOwnerTest: BaseTest
 {
-    private readonly string Url = "/dashboard/report/summary";
+    private readonly string Url = "/dashboard/report/summary/personal";
     
     private readonly UserEntity _user;
     private readonly string _jwtToken;

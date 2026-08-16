@@ -4,19 +4,41 @@
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Summary.Parts
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared
+@using TimeTracker.Client.Core.Services.Security
 
 @inherits BaseReactiveComponent
 @layout Layout
 
-<FilterForm/>
+@if (CanViewTeamSummary)
+{
+    <div class="mb-6 inline-flex rounded-lg bg-gray-100 p-1">
+        <button class="@GetTabClass(SummaryTab.Personal)" @onclick="() => SelectTab(SummaryTab.Personal)">
+            @DashboardLocalizer["SummaryTabPersonal"]
+        </button>
+        <button class="@GetTabClass(SummaryTab.Team)" @onclick="() => SelectTab(SummaryTab.Team)">
+            @DashboardLocalizer["SummaryTabTeam"]
+        </button>
+    </div>
+}
+
+<FilterForm IsTeamSummary="@IsTeamSummary"/>
 
 @if (!_state.Value.IsLoading)
 {
-    var grouppedByString = @_state.Value.SummaryReportFilter.PeriodType.GetDisplayName();
+    var groupedByString = @_state.Value.SummaryReportFilter.PeriodType.GetDisplayName();
 
-    <PeriodAnalyticsSection/>
-    <SummaryChartSection Items="@_byDateItems" PeriodLabel="@grouppedByString"/>
-    <GroupedSummaryTableSection ReportData="@_state.Value.SummaryReportData" PeriodLabel="@grouppedByString"/>
+    @if (IsTeamSummary)
+    {
+        <TeamPeriodAnalyticsSection Totals="@_state.Value.TeamSummaryReportData?.Totals"/>
+        <TeamSummaryChartSection Items="@_teamByDateItems" PeriodLabel="@groupedByString"/>
+        <TeamPerformanceTableSection Items="@_state.Value.TeamSummaryReportData?.Members"/>
+    }
+    else
+    {
+        <PeriodAnalyticsSection/>
+        <SummaryChartSection Items="@_byDateItems" PeriodLabel="@groupedByString"/>
+        <GroupedSummaryTableSection ReportData="@_state.Value.SummaryReportData" PeriodLabel="@groupedByString"/>
+    }
 }
 else
 {

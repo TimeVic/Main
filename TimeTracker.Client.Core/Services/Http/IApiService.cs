@@ -163,6 +163,12 @@ public interface IApiService
         SummaryReportType reportType
     );
 
+    Task<TeamSummaryReportResponse?> ReportsGetTeamSummaryReportAsync(
+        Guid workspaceId,
+        DateTime startDate,
+        DateTime endTime
+    );
+
     Task<WorkspaceFinancialSummaryReportResponse?> ReportsGetWorkspaceFinancialSummaryAsync(Guid workspaceId);
 
     Task<UserPaymentReportResponse?> ReportsGetUserPaymentReportAsync(Guid workspaceId, DateTime endDate);

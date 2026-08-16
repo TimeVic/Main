@@ -12,11 +12,24 @@ namespace TimeTracker.Client.Core.Services.Http
             SummaryReportType reportType
         )
         {
-            return await PostAsync<SummaryReportResponse?>(ApiUrl.ReportSummary, new SummaryReportRequest()
+            return await PostAsync<SummaryReportResponse?>(ApiUrl.ReportSummaryPersonal, new SummaryReportRequest()
             {
                 StartTime = startDate,
                 EndTime = endTime,
                 Type = reportType
+            });
+        }
+
+        public async Task<TeamSummaryReportResponse?> ReportsGetTeamSummaryReportAsync(
+            Guid workspaceId,
+            DateTime startDate,
+            DateTime endTime
+        )
+        {
+            return await PostAsync<TeamSummaryReportResponse?>(ApiUrl.ReportSummaryTeam, new TeamSummaryReportRequest
+            {
+                StartTime = startDate,
+                EndTime = endTime
             });
         }
 

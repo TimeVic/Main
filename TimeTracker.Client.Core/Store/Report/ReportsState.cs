@@ -11,6 +11,8 @@ public record ReportsState
 {
     public SummaryReportResponse? SummaryReportData { get; set; }
 
+    public TeamSummaryReportResponse? TeamSummaryReportData { get; set; }
+
     public WorkspaceFinancialSummaryReportResponse? WorkspaceFinancialSummaryData { get; set; }
 
     public UserPaymentReportResponse? UserPaymentReportData { get; set; }

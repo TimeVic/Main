@@ -27,6 +27,15 @@ public class ReportReducers
             SummaryReportData = action.ReportData
         };
     }
+
+    [ReducerMethod]
+    public static ReportsState Reducer(ReportsState state, ReportSetTeamSummaryReportAction action)
+    {
+        return state with
+        {
+            TeamSummaryReportData = action.ReportData
+        };
+    }
     
     [ReducerMethod]
     public static ReportsState Reducer(ReportsState state, ReportSetSummaryReportFilterAction action)

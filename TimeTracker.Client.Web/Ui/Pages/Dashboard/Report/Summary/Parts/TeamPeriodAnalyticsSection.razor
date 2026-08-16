@@ -1,0 +1,40 @@
+@using TimeTracker.Api.Shared.Dto.Model.Report.TeamSummary
+@using TimeTracker.Business.Extensions
+@using TimeTracker.Client.Web.Ui.Shared.Components
+
+<section class="mt-10 space-y-4">
+    <SummarySectionHeader
+        Title="@DashboardLocalizer["TeamSummary"].Value"
+        HelperText="@DashboardLocalizer["TeamSummaryHelper"].Value"/>
+
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <SummaryMetricCard
+            Title="@DashboardLocalizer["Duration"].Value"
+            HelperText="@DashboardLocalizer["TeamDurationHelper"].Value"
+            IconClass="fa-regular fa-clock">
+            <Value>@(Totals?.Duration ?? TimeSpan.Zero).ToReadableShortString()</Value>
+        </SummaryMetricCard>
+
+        <SummaryMetricCard
+            Title="@DashboardLocalizer["ClientBillable"].Value"
+            HelperText="@DashboardLocalizer["ClientBillableHelper"].Value"
+            IconClass="fa-solid fa-file-invoice-dollar">
+            <Value><AmountDisplay Amount="@(Totals?.ClientBillable ?? 0m)"/></Value>
+        </SummaryMetricCard>
+
+        <SummaryMetricCard
+            Title="@DashboardLocalizer["TeamLaborCost"].Value"
+            HelperText="@DashboardLocalizer["TeamLaborCostHelper"].Value"
+            IconClass="fa-solid fa-users">
+            <Value><AmountDisplay Amount="@(Totals?.TeamLaborCost ?? 0m)"/></Value>
+        </SummaryMetricCard>
+
+        <SummaryMetricCard
+            Title="@DashboardLocalizer["GrossProfit"].Value"
+            HelperText="@DashboardLocalizer["GrossProfitHelper"].Value"
+            Variant="@ProfitVariant"
+            IconClass="fa-solid fa-chart-line">
+            <Value><AmountDisplay Amount="@GrossProfit"/></Value>
+        </SummaryMetricCard>
+    </div>
+</section>

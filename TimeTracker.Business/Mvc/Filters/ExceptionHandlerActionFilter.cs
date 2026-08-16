@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Dto;
 using TimeTracker.Business.Common.Exceptions;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Services.Http;
 
 namespace TimeTracker.Business.Mvc.Filters;
@@ -40,6 +41,12 @@ public class ExceptionHandlerActionFilter : ActionFilterAttribute
                 response.ErrorCode = exception.GetType().Name;
                 response.Message = "User not authorized(action executing)";
                 statusCode = (int)HttpStatusCode.Unauthorized;
+            }
+            else if (exception is ForbiddenException)
+            {
+                response.ErrorCode = exception.GetType().Name;
+                response.Message = exception.Message;
+                statusCode = (int)HttpStatusCode.Forbidden;
             }
             else if (exception is IDomainException)
             {
