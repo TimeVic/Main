@@ -209,19 +209,24 @@ node('build-node') {
         }
     }
 
-    stage('Build main image') {
-        withCredentials([file(credentialsId: 'timevic_production_gcloud_credentials', variable: 'FILE')]) {
-            sh 'cp $FILE .credentials/google.json'
+    parallel(
+        'Build main image': {
+            stage('Build main image') {
+                withCredentials([file(credentialsId: 'timevic_production_gcloud_credentials', variable: 'FILE')]) {
+                    sh 'cp $FILE .credentials/google.json'
+                }
+                withCredentials([file(credentialsId: 'timevic_production_firebase_credentials', variable: 'FILE')]) {
+                    sh 'cp $FILE .credentials/firebase-credentials.json'
+                }
+                dockerHelper.buildAndSave(mainContainer, imageCommonTmpName)
+            }
+        },
+        'Build web image': {
+            stage('Build web image') {
+                dockerHelper.buildAndSave(webAppContainer, imageWebTmpName)
+            }
         }
-        withCredentials([file(credentialsId: 'timevic_production_firebase_credentials', variable: 'FILE')]) {
-            sh 'cp $FILE .credentials/firebase-credentials.json'
-        }
-        dockerHelper.buildAndSave(mainContainer, imageCommonTmpName)
-    }
-
-    stage('Build web image') {
-        dockerHelper.buildAndSave(webAppContainer, imageWebTmpName)
-    }
+    )
 
     if (params.NEW_VERSION) {
         stage('Create GIT tag') {
@@ -272,8 +277,14 @@ if (shouldRunDeployment) {
 node('web-node') {
 
     stage('Load container') {
-        dockerHelper.loadFromFile(imageCommonTmpName)
-        dockerHelper.loadFromFile(imageWebTmpName)
+        parallel(
+            'Load main image': {
+                dockerHelper.loadFromFile(imageCommonTmpName)
+            },
+            'Load web image': {
+                dockerHelper.loadFromFile(imageWebTmpName)
+            }
+        )
     }
 
     stage('Stop containers') {
