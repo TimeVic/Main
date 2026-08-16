@@ -13,6 +13,10 @@ public partial class FilterForm
 
     public SummaryReportFilterState _filterState => _reportsState.Value.SummaryReportFilter;
 
+    private string FilterGridClass => IsTeamSummary
+        ? "grid gap-4 md:grid-cols-2"
+        : "grid gap-4 md:grid-cols-2 xl:grid-cols-4";
+
     private void OnChangeReportType(SummaryReportType? type)
     {
         if (_filterState.ReportType == type || type == null)

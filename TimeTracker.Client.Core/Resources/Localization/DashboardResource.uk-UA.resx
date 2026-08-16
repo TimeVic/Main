@@ -260,6 +260,7 @@
   <data name="TimeWorkspaceDescription" xml:space="preserve"><value>Активний таймер завжди під рукою, поки ви працюєте з рештою workspace.</value></data>
   <data name="SummaryEmptyMessage" xml:space="preserve"><value>Почніть трекати час, щоб побачити записи.</value></data>
   <data name="ReportFilterHelper" xml:space="preserve"><value>Змініть групування або період, щоб оновити графік і таблицю.</value></data>
+  <data name="TeamSummaryFilterHelper" xml:space="preserve"><value>Змініть період, щоб оновити фінансові показники команди, графік і внесок учасників.</value></data>
   <data name="SearchByDescription" xml:space="preserve"><value>Пошук за описом...</value></data>
   <data name="NoTimeEntriesFilterMessage" xml:space="preserve"><value>Записів часу не знайдено. Спробуйте змінити фільтри.</value></data>
   <data name="Billable" xml:space="preserve"><value>Оплачуваний</value></data>

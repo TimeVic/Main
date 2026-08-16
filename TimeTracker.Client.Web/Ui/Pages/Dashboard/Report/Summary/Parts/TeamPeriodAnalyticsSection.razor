@@ -12,7 +12,7 @@
             Title="@DashboardLocalizer["Duration"].Value"
             HelperText="@DashboardLocalizer["TeamDurationHelper"].Value"
             IconClass="fa-regular fa-clock">
-            <Value>@(Totals?.Duration ?? TimeSpan.Zero).ToReadableShortString()</Value>
+            <Value>@((Totals?.Duration ?? TimeSpan.Zero).ToReadableShortString())</Value>
         </SummaryMetricCard>
 
         <SummaryMetricCard
