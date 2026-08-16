@@ -146,16 +146,4 @@ else
         </LumexNavbarItem>
     }
 
-    @if (settingsItem != null)
-    {
-        <LumexNavbarItem>
-            <LumexLink
-                Href="@settingsItem.Url"
-                Class="@GetMenuLinkClass(settingsItem)"
-                Color="@(IsMenuItemSelected(settingsItem) ? ThemeColor.Primary : ThemeColor.Default)"
-                Underline="@Underline.None">
-                <i class="@settingsItem.Icon"></i>
-            </LumexLink>
-        </LumexNavbarItem>
-    }
 }

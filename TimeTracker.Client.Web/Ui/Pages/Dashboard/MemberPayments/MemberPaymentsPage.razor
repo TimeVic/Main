@@ -1,7 +1,11 @@
 @page "/board/{WorkspaceId:guid}/member-payments"
 @page "/board/member-payments"
+@attribute [RequireWorkspacePermission(WorkspacePermission.ReadMemberPayment)]
+@attribute [RequireWorkspaceRole(MembershipAccessType.Owner, MembershipAccessType.Manager)]
 
 @using TimeTracker.Client.Core.Constants.Ui
+@using TimeTracker.Api.Shared.Constants
+@using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.MemberPayments.Parts
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.MemberPayments.Parts.Modals
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared

@@ -1,0 +1,13 @@
+@page "/board/{WorkspaceId:guid}/workspace/settings/integrations"
+@page "/board/workspace/settings/integrations"
+@attribute [RequireWorkspacePermission(WorkspacePermission.UpdateWorkspaceSettings)]
+@using TimeTracker.Api.Shared.Constants
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Integrations
+@using Layout = TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+<WorkspaceSettingsTabsBlock ActiveSection="integrations">
+    <IntegrationsBlock />
+</WorkspaceSettingsTabsBlock>

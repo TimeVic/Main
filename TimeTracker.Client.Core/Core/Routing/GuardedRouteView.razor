@@ -28,6 +28,7 @@
     protected override void OnInitialized()
     {
         WorkspacePermissionsState.StateChanged += OnPermissionsChanged;
+        AuthState.StateChanged += OnAuthStateChanged;
     }
 
     protected override void OnParametersSet()
@@ -42,12 +43,20 @@
             .Cast<RequireWorkspacePermissionAttribute>()
             .ToList();
 
-        if (!attributes.Any() || !WorkspacePermissionsState.Value.IsLoaded)
+        if (attributes.Any()
+            && WorkspacePermissionsState.Value.IsLoaded
+            && !attributes.All(attribute => SecurityManager.HasPermission(attribute.Permission)))
         {
-            return true;
+            return false;
         }
 
-        return attributes.All(attribute => SecurityManager.HasPermission(attribute.Permission));
+        var roleAttributes = RouteData.PageType
+            .GetCustomAttributes(typeof(RequireWorkspaceRoleAttribute), true)
+            .Cast<RequireWorkspaceRoleAttribute>()
+            .ToList();
+
+        return AuthState.Value.Workspace == null
+            || roleAttributes.All(attribute => attribute.AllowedRoles.Contains(AuthState.Value.AccessLevel));
     }
 
     private void CheckRouteAccess()
@@ -78,8 +87,18 @@
         });
     }
 
+    private void OnAuthStateChanged(object? sender, EventArgs args)
+    {
+        InvokeAsync(() =>
+        {
+            CheckRouteAccess();
+            StateHasChanged();
+        });
+    }
+
     public void Dispose()
     {
         WorkspacePermissionsState.StateChanged -= OnPermissionsChanged;
+        AuthState.StateChanged -= OnAuthStateChanged;
     }
 }
