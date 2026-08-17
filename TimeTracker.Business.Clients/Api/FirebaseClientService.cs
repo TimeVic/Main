@@ -51,7 +51,7 @@ public class FirebaseClientService: IFirebaseClientService
         });
     }
 
-    public Task<bool> SendMessage(string toToken, string title, string body)
+    public Task<bool> SendMessage(string toToken, string title, string body, string? link = null)
     {
         var message = new Message()
         {
@@ -66,6 +66,18 @@ public class FirebaseClientService: IFirebaseClientService
                 }
             }
         };
+
+        if (!string.IsNullOrWhiteSpace(link))
+        {
+            message.Data = new Dictionary<string, string>
+            {
+                ["url"] = link
+            };
+            message.Webpush.FcmOptions = new WebpushFcmOptions
+            {
+                Link = link
+            };
+        }
 
         return SendMessage(message);
     }

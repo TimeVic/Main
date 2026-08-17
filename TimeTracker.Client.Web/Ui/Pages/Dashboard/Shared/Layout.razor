@@ -14,7 +14,7 @@
 <div class="min-h-screen flex flex-col bg-white text-slate-800">
     @if (CommonState.Value.IsInitialized)
     {
-        <InitializationContainer>
+        <InitializationContainer IsRegisterPushNotificationToken="true">
             <MainHeader></MainHeader>
             <main class="flex-1 px-4 py-6 sm:px-6 lg:px-8">
                 @if (AuthState.Value.User != null && DemoAccountConstants.IsDemoEmail(AuthState.Value.User.Email))
