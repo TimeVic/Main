@@ -1,9 +1,12 @@
 using Domain.Abstractions;
 using TimeTracker.Business.Clients.Smtp.Core;
+using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Notifications.Core;
 
 public interface IEmailTemplateService : IDomainService
 {
-    Task<EmailBuilder> GetEmailBuilderAsync(string templateName, string recipientEmail);
+    EmailBuilder GetEmailBuilder(string templateName, UserEntity recipient);
+
+    EmailBuilder GetEmailBuilder(string templateName, string languageCode);
 }

@@ -1,20 +1,16 @@
-﻿using System.Net;
-using System.Web;
-using Notification.Abstractions;
+﻿using Notification.Abstractions;
 
 namespace TimeTracker.Business.Notifications.Senders.TimeEntry
 {
     public class TimeEntryAutoStoppedNotificationItemContext : INotificationItemContext
     {
-        public string ToAddress { get; set; } = string.Empty;
+        public Guid UserId { get; set; }
 
         public TimeEntryAutoStoppedNotificationItemContext() {}
 
-        public TimeEntryAutoStoppedNotificationItemContext(
-            string toAddress    
-        )
+        public TimeEntryAutoStoppedNotificationItemContext(Guid userId)
         {
-            ToAddress = toAddress;
+            UserId = userId;
         }
     }
 }

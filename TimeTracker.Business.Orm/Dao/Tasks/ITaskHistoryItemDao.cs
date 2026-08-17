@@ -10,4 +10,6 @@ public interface ITaskHistoryItemDao: IDomainService
     Task<TaskHistoryItemEntity> Create(TaskEntity task, UserEntity user, bool isNewTask = false);
 
     Task<ICollection<TaskHistoryItemEntity>> GetBatchToNotify(int timeoutInSeconds = 30);
+
+    Task<TaskHistoryItemEntity?> GetByIdAsync(Guid id);
 }

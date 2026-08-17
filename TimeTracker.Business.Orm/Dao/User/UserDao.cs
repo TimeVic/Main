@@ -37,21 +37,13 @@ public class UserDao: BaseDao, IUserDao
             .FirstOrDefaultAsync();
     }
 
-    public async Task<string?> GetLanguageCodeByEmailAsync(string email)
-    {
-        return await Session.Query<UserEntity>()
-            .Where(item => item.Email == email.Trim().ToLower())
-            .Select(item => item.Language.Code)
-            .FirstOrDefaultAsync();
-    }
-    
     public async Task<UserEntity?> GetById(Guid id)
     {
         return await Session.Query<UserEntity>()
             .Where(item => item.Id == id)
             .FirstOrDefaultAsync();
     }
-    
+
     public async Task<UserEntity?> GetByVerificationToken(string token)
     {
         return await Session.Query<UserEntity>()

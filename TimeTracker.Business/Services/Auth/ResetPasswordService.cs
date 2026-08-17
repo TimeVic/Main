@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Persistence.Transactions.Behaviors;
+﻿using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Utils;
@@ -17,13 +16,11 @@ public class ResetPasswordService: IResetPasswordService
     private readonly IPasswordService _passwordService;
     private readonly IQueueService _queueService;
     private readonly IDbSessionProvider _sessionProvider;
-    private readonly string? _frontendUrl;
 
     public ResetPasswordService(
         IUserResetPasswordRequestDao resetPasswordRequestDao,
         IPasswordService passwordService,
         IQueueService queueService,
-        IConfiguration configuration,
         IDbSessionProvider sessionProvider
     )
     {
@@ -31,12 +28,11 @@ public class ResetPasswordService: IResetPasswordService
         _passwordService = passwordService;
         _queueService = queueService;
         _sessionProvider = sessionProvider;
-        _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
     }
 
     public async Task<UserResetPasswordRequestEntity?> Generate(UserEntity user)
     {
-        var actualRequest = await _resetPasswordRequestDao.GetLast(user);
+        var actualRequest = await _resetPasswordRequestDao.GetAsync(user: user);
         if (actualRequest != null)
         {
             if (!actualRequest.IsExpired)
@@ -52,16 +48,14 @@ public class ResetPasswordService: IResetPasswordService
 
         await _queueService.PushNotificationAsync(new ResetPasswordNotificationContext()
         {
-            FrontendUrl = _frontendUrl,
-            VerificationToken = actualRequest.VerificationToken!,
-            ToAddress = actualRequest.User.Email
+            ResetPasswordRequestId = actualRequest.Id
         });
         return actualRequest;
     }
     
     public async Task ChangePassword(string token, string password)
     {
-        var actualRequest = await _resetPasswordRequestDao.GetByToken(token);
+        var actualRequest = await _resetPasswordRequestDao.GetAsync(verificationToken: token);
         if (actualRequest == null)
         {
             throw new RecordNotFoundException();
@@ -78,7 +72,7 @@ public class ResetPasswordService: IResetPasswordService
         
         await _queueService.PushNotificationAsync(new PasswordHasBeenChangedNotificationContext()
         {
-            ToAddress = actualRequest.User.Email
+            UserId = actualRequest.User.Id
         });
     }
 }

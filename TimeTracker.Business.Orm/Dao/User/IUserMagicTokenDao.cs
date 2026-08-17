@@ -7,5 +7,5 @@ public interface IUserMagicTokenDao : IDomainService
 {
     Task<UserMagicTokenEntity> GenerateNew(UserEntity user);
 
-    Task<UserMagicTokenEntity?> GetByToken(string token);
+    Task<UserMagicTokenEntity?> GetAsync(Guid? id = null, string? token = null);
 }

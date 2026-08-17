@@ -163,7 +163,7 @@ public class AuthorizationService: IAuthorizationService
 
     public async Task<AuthResultDto> LoginByMagicToken(string token)
     {
-        var magicToken = await _magicTokenDao.GetByToken(token);
+        var magicToken = await _magicTokenDao.GetAsync(token: token);
         if (magicToken == null || magicToken.IsExpired)
         {
             throw new RecordNotFoundException();

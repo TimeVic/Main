@@ -1,8 +1,8 @@
-﻿using TimeTracker.Business.Extensions;
-using TimeTracker.Business.Notifications.Senders.Tasks;
+﻿using TimeTracker.Business.Notifications.Senders.Tasks;
 using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Services.Queue;
 
 namespace TimeTracker.Business.Services.Notification;
@@ -24,62 +24,19 @@ public partial class NotificationBgJobService
         return true;
     }
 
-    private Dictionary<string, string?> BuildTaskUpdatedChangeSet(TaskHistoryItemEntity historyItem)
-    {
-        var result = new Dictionary<string, string?>();
-        var task = historyItem.Task;
-        if (historyItem.Title != task.Title)
-            result.Add("New title", task.Title);
-        if (historyItem.Description != task.Description)
-            result.Add("New description", task.Description);
-        if (historyItem.Tags != task.TagsString)
-            result.Add("New tags", task.TagsString);
-        if (
-            historyItem.Attachments != task.AttachmentsString
-            && !string.IsNullOrEmpty(historyItem.Attachments)
-            && !string.IsNullOrEmpty(task.AttachmentsString)
-        )
-            result.Add("", "Added new attachments");
-        if (historyItem.StartTime != task.StartTime)
-            result.Add("New start time", historyItem.StartTime?.ToString() ?? "Not set");
-        if (historyItem.EndTime != task.EndTime)
-            result.Add("New end time", historyItem.EndTime?.ToString() ?? "Not set");
-        if (historyItem.Status != task.Status)
-            result.Add("Status changed", $"{historyItem.Status.GetDisplayName()} -> {task.Status.GetDisplayName()}");
-        if (historyItem.Priority != task.Priority)
-            result.Add("Priority changed", $"{historyItem.Priority.GetDisplayName()} -> {task.Priority.GetDisplayName()}");
-        if (historyItem.IsArchived != task.IsArchived && historyItem.IsArchived)
-            result.Add("", "Archived the task");
-        if (historyItem.AssigneeUser.Id != task.User.Id)
-            result.Add("Assigned to", task.User.Name);
-        if (historyItem.TaskList.Id != task.TaskList.Id)
-            result.Add("New task list", task.TaskList.Name);
-
-        return result;
-    }
-
     private async Task SendTaskUpdatedNotification(TaskHistoryItemEntity historyItem)
     {
-        var changeSet = BuildTaskUpdatedChangeSet(historyItem);
-        if (!changeSet.Any())
+        var receivers = new List<UserEntity>()
         {
-            return;
-        }
-        var receivers = new List<string>()
-        {
-            historyItem.AssigneeUser.Email,
-            historyItem.Task.Workspace.CreatedUser.Email
+            historyItem.AssigneeUser,
+            historyItem.Task.Workspace.CreatedUser
         };
-        foreach (var receiverEmail in receivers.DistinctBy(item => item))
+        foreach (var receiver in receivers.DistinctBy(item => item.Id))
         {
             await _queueService.PushNotificationAsync(new TaskChangedNotificationContext()
             {
-                UserName = historyItem.User.Name,
-                ToAddress = receiverEmail,
-                TaskId = historyItem.Task.Id,
-                WorkspaceId = historyItem.Task.Workspace.Id,
-                TaskTitle = historyItem.Task.Title,
-                ChangeSet = changeSet
+                TaskHistoryItemId = historyItem.Id,
+                RecipientUserId = receiver.Id
             });    
         }
     }

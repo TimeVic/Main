@@ -92,12 +92,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Tasks.Comments.Actions
             {
                 await _queueService.PushNotificationAsync(new SetCommentNotificationContext()
                 {
-                    ToAddress = receiver.Email,
-                    Comment = comment.Comment,
-                    TaskId = comment.Task!.Id,
-                    WorkspaceId = comment.Task.Workspace.Id,
-                    IsUpdated = true,
-                    OwnerName = comment.User!.Name
+                    TaskCommentId = comment.Id,
+                    RecipientUserId = receiver.Id
                 });
             }
         }

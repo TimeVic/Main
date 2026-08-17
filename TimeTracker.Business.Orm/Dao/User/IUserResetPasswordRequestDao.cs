@@ -6,9 +6,11 @@ namespace TimeTracker.Business.Orm.Dao.User;
 
 public interface IUserResetPasswordRequestDao: IDomainService
 {
-    Task<UserResetPasswordRequestEntity?> GetLast(UserEntity user);
-
     Task<UserResetPasswordRequestEntity> GenerateNew(UserEntity user);
 
-    Task<UserResetPasswordRequestEntity?> GetByToken(string token);
+    Task<UserResetPasswordRequestEntity?> GetAsync(
+        Guid? id = null,
+        string? verificationToken = null,
+        UserEntity? user = null
+    );
 }

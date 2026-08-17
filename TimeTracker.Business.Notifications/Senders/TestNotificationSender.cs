@@ -20,13 +20,14 @@ namespace TimeTracker.Business.Notifications.Senders
             _emailTemplateService = emailTemplateService;
         }
 
-        public async Task HandleAsync(
+        public Task HandleAsync(
             TestNotificationItemContext context, 
             CancellationToken cancellationToken = default
         )
         {
-            var emailBuilder = await _emailTemplateService.GetEmailBuilderAsync("TestNotification.htm", context.ToAddress);
+            var emailBuilder = _emailTemplateService.GetEmailBuilder("TestNotification.htm", "en");
             _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
+            return Task.CompletedTask;
         }
     }
 }

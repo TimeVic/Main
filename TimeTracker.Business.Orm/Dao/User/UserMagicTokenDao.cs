@@ -27,10 +27,19 @@ public class UserMagicTokenDao : IUserMagicTokenDao
         return token;
     }
 
-    public async Task<UserMagicTokenEntity?> GetByToken(string token)
+    public async Task<UserMagicTokenEntity?> GetAsync(Guid? id = null, string? token = null)
     {
-        return await _sessionProvider.CurrentSession.Query<UserMagicTokenEntity>()
-            .Where(item => item.Token == token)
-            .FirstOrDefaultAsync();
+        if (id == null && string.IsNullOrWhiteSpace(token))
+            throw new ArgumentException("Either id or token must be provided.");
+
+        IQueryable<UserMagicTokenEntity> query = _sessionProvider.CurrentSession.Query<UserMagicTokenEntity>()
+            .Fetch(item => item.User)
+            .ThenFetch(user => user.Language);
+        if (id.HasValue)
+            query = query.Where(item => item.Id == id.Value);
+        if (!string.IsNullOrWhiteSpace(token))
+            query = query.Where(item => item.Token == token);
+
+        return await query.FirstOrDefaultAsync();
     }
 }

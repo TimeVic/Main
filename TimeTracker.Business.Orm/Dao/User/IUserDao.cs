@@ -12,10 +12,8 @@ public interface IUserDao: IDomainService
     
     Task<UserEntity?> GetByEmail(string email);
 
-    Task<string?> GetLanguageCodeByEmailAsync(string email);
-
     Task<UserEntity?> GetById(Guid id);
-    
+
     Task<UserEntity> CreatePendingUser(string email);
 
     Task<UserEntity?> GetByVerificationToken(string token);

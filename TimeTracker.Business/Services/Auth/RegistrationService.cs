@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Persistence.Transactions.Behaviors;
+﻿using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Utils;
@@ -23,12 +22,10 @@ public class RegistrationService: IRegistrationService
     private readonly IWorkspaceAccessService _workspaceAccessService;
     private readonly IPasswordService _passwordService;
     private readonly ILanguageDao _languageDao;
-    private readonly string _frontendUrl = string.Empty;
 
     public RegistrationService(
         IUserDao userDao,
         IQueueService queueService,
-        IConfiguration configuration,
         IWorkspaceDao workspaceDao,
         IWorkspaceAccessService workspaceAccessService,
         IPasswordService passwordService,
@@ -41,7 +38,6 @@ public class RegistrationService: IRegistrationService
         _workspaceAccessService = workspaceAccessService;
         _passwordService = passwordService;
         _languageDao = languageDao;
-        _frontendUrl = configuration.GetValue<string>("App:FrontendUrl")!;
     }
 
     public async Task<UserEntity> CreatePendingUser(string email, string? languageCode = null)
@@ -112,11 +108,7 @@ public class RegistrationService: IRegistrationService
 
     private async Task SendRegistrationNotificationAsync(UserEntity user)
     {
-        await _queueService.PushNotificationAsync(new RegistrationNotificationItemContext(
-            user.Email,
-            _frontendUrl,
-            user.VerificationToken!
-        ));
+        await _queueService.PushNotificationAsync(new RegistrationNotificationItemContext(user.Id));
     }
     
     public async Task<UserEntity> ActivateUser(string verificationToken, string password)
@@ -137,7 +129,7 @@ public class RegistrationService: IRegistrationService
         
         await _queueService.PushNotificationAsync(new EmailVerifiedNotificationItemContext()
         {
-            ToAddress = user.Email
+            UserId = user.Id
         });
         return user;
     }
