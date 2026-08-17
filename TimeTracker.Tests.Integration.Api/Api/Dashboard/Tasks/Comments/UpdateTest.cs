@@ -101,7 +101,7 @@ public class UpdateTest: BaseTest
         Assert.Contains(
             GraylogClient.EmailLogs,
             item => item.EmailTo == _user.Email
-                && item.EmailBody.Contains("updated")
+                && item.EmailBody.Contains("commented on a task:")
                 && item.EmailBody.Contains($"{_task.Id}")
         );
     }

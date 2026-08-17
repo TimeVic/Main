@@ -95,7 +95,7 @@ public class AddTest: BaseTest
         Assert.Contains(
             GraylogClient.EmailLogs,
             item => item.EmailTo == _user.Email
-            && item.EmailBody.Contains("added")
+            && item.EmailBody.Contains("commented on a task:")
             && item.EmailBody.Contains($"{_task.Id}")
         );
     }

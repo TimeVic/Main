@@ -1,4 +1,5 @@
-﻿using NHibernate.Transform;
+﻿using NHibernate.Linq;
+using NHibernate.Transform;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
@@ -59,6 +60,24 @@ public class TaskHistoryItemDao: ITaskHistoryItemDao
         };
         await _dbSessionProvider.CurrentSession.SaveAsync(historyItem);
         return historyItem;
+    }
+
+    public async Task<TaskHistoryItemEntity?> GetByIdAsync(Guid id)
+    {
+        return await _dbSessionProvider.CurrentSession.Query<TaskHistoryItemEntity>()
+            .Fetch(item => item.User)
+            .Fetch(item => item.AssigneeUser)
+            .Fetch(item => item.Task)
+            .ThenFetch(task => task.User)
+            .Fetch(item => item.Task)
+            .ThenFetch(task => task.TaskList)
+            .ThenFetch(taskList => taskList.Project)
+            .ThenFetch(project => project.Client)
+            .ThenFetch(client => client.Workspace)
+            .Fetch(item => item.TaskList)
+            .ThenFetch(taskList => taskList.Project)
+            .Where(item => item.Id == id)
+            .FirstOrDefaultAsync();
     }
     
     public async Task<ICollection<TaskHistoryItemEntity>> GetBatchToNotify(int timeoutInSeconds = 30)

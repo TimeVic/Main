@@ -38,6 +38,11 @@ public class TaskDao: ITaskDao
     public async Task<TaskEntity?> GetById(Guid taskId)
     {
         return await _sessionProvider.CurrentSession.Query<TaskEntity>()
+            .Fetch(item => item.User)
+            .Fetch(item => item.TaskList)
+            .ThenFetch(taskList => taskList.Project)
+            .ThenFetch(project => project.Client)
+            .ThenFetch(client => client.Workspace)
             .Where(item => item.Id == taskId)
             .FirstOrDefaultAsync();
     }

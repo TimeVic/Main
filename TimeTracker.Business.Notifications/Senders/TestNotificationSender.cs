@@ -9,14 +9,15 @@ namespace TimeTracker.Business.Notifications.Senders
     public class TestNotificationSender : IAsyncQueueHandler<TestNotificationItemContext>
     {
         private readonly ISmtpClientService _smtpClientService;
-        private readonly EmailFactory _emailFactory;
+        private readonly IEmailTemplateService _emailTemplateService;
 
         public TestNotificationSender(
-            ISmtpClientService smtpClientService
+            ISmtpClientService smtpClientService,
+            IEmailTemplateService emailTemplateService
         )
         {
             _smtpClientService = smtpClientService;
-            _emailFactory = new EmailFactory();
+            _emailTemplateService = emailTemplateService;
         }
 
         public Task HandleAsync(
@@ -24,7 +25,7 @@ namespace TimeTracker.Business.Notifications.Senders
             CancellationToken cancellationToken = default
         )
         {
-            var emailBuilder = _emailFactory.GetEmailBuilder("TestNotification.htm");
+            var emailBuilder = _emailTemplateService.GetEmailBuilder("TestNotification.htm", "en");
             _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
             return Task.CompletedTask;
         }

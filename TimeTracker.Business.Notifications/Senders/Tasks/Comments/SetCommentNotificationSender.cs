@@ -5,37 +5,49 @@ using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Clients.Smtp.Core;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Notifications.Core;
+using TimeTracker.Business.Orm.Dao.Tasks;
+using TimeTracker.Business.Orm.Dao.User;
 
 namespace TimeTracker.Business.Notifications.Senders.Tasks.Comments
 {
     public class SetCommentNotificationSender : IAsyncQueueHandler<SetCommentNotificationContext>
     {
         private readonly ISmtpClientService _smtpClientService;
-        private readonly EmailFactory _emailFactory;
+        private readonly IEmailTemplateService _emailTemplateService;
+        private readonly ITaskCommentDao _taskCommentDao;
+        private readonly IUserDao _userDao;
         private readonly string? _frontendUrl;
 
         public SetCommentNotificationSender(
             ISmtpClientService smtpClientService,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IEmailTemplateService emailTemplateService,
+            ITaskCommentDao taskCommentDao,
+            IUserDao userDao
         )
         {
             _smtpClientService = smtpClientService;
             _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
-            _emailFactory = new EmailFactory();
+            _emailTemplateService = emailTemplateService;
+            _taskCommentDao = taskCommentDao;
+            _userDao = userDao;
         }
 
-        public Task HandleAsync(
+        public async Task HandleAsync(
             SetCommentNotificationContext context, 
             CancellationToken cancellationToken = default
         )
         {
-            var emailBuilder = _emailFactory.GetEmailBuilder("TaskCommentSetNotification.htm");
-            emailBuilder.AddPlaceholder("UserName", context.OwnerName);
-            emailBuilder.AddPlaceholder("Comment", MarkdownHelper.ToHtml(context.Comment));
-            emailBuilder.AddPlaceholder("TaskLink", $"{_frontendUrl?.TrimEnd('/')}/board/{context.WorkspaceId}/task/{context.TaskId}");
-            emailBuilder.AddPlaceholder("ChangeMessage", context.IsUpdated ? "updated" : "added");
-            _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
-            return Task.CompletedTask;
+            var taskComment = await _taskCommentDao.GetById(context.TaskCommentId);
+            var recipient = await _userDao.GetById(context.RecipientUserId);
+            if (taskComment?.User == null || recipient == null)
+                return;
+
+            var emailBuilder = _emailTemplateService.GetEmailBuilder("TaskCommentSetNotification.htm", recipient);
+            emailBuilder.AddPlaceholder("UserName", taskComment.User.Name);
+            emailBuilder.AddPlaceholder("Comment", MarkdownHelper.ToHtml(taskComment.Comment));
+            emailBuilder.AddPlaceholder("TaskLink", $"{_frontendUrl?.TrimEnd('/')}/board/{taskComment.Task.Workspace.Id}/task/{taskComment.Task.Id}");
+            _smtpClientService.SendEmail(recipient.Email, emailBuilder, null);
         }
     }
 }

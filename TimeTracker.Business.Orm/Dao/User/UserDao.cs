@@ -36,14 +36,14 @@ public class UserDao: BaseDao, IUserDao
             .Where(item => item.Email == email.Trim().ToLower())
             .FirstOrDefaultAsync();
     }
-    
+
     public async Task<UserEntity?> GetById(Guid id)
     {
         return await Session.Query<UserEntity>()
             .Where(item => item.Id == id)
             .FirstOrDefaultAsync();
     }
-    
+
     public async Task<UserEntity?> GetByVerificationToken(string token)
     {
         return await Session.Query<UserEntity>()

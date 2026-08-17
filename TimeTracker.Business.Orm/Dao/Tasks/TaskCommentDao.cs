@@ -23,6 +23,12 @@ public class TaskCommentDao: ITaskCommentDao
     public async Task<TaskCommentEntity?> GetById(Guid taskCommentId)
     {
         return await _sessionProvider.CurrentSession.Query<TaskCommentEntity>()
+            .Fetch(item => item.User)
+            .Fetch(item => item.Task)
+            .ThenFetch(task => task.TaskList)
+            .ThenFetch(taskList => taskList.Project)
+            .ThenFetch(project => project.Client)
+            .ThenFetch(client => client.Workspace)
             .Where(item => item.Id == taskCommentId)
             .FirstOrDefaultAsync();
     }

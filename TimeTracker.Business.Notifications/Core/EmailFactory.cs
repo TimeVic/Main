@@ -6,48 +6,33 @@ namespace TimeTracker.Business.Notifications.Core
 {
     public class EmailFactory
     {
-        // cached email templates
         private static readonly ConcurrentDictionary<string, EmailTemplateModel> _cachedTemplates = new();
 
-        private string _layoutName = "_EmailLayout.htm"; // layout file name like "_EmailLayout.htm"
-        private string _layoutTemplate; // cached content of the layout file
-
-        public EmailFactory()
+        public EmailTemplateModel GetEmailTemplate(string templateName, string languageCode)
         {
-            // load cached layout
-            _layoutTemplate = LoadFile(_layoutName); // load this only once, on initialization
-        }
-
-        public EmailTemplateModel GetEmailTemplate(string templateName)
-        {
-            if (_cachedTemplates.ContainsKey(templateName))
+            var normalizedLanguageCode = NormalizeLanguageCode(languageCode);
+            var cacheKey = $"{normalizedLanguageCode}/{templateName}";
+            if (_cachedTemplates.TryGetValue(cacheKey, out var cachedTemplate))
             {
-                if (_cachedTemplates.TryGetValue(templateName, out var cachedTemplate))
-                {
-                    return cachedTemplate;
-                }
+                return cachedTemplate;
             }
 
-            var res = LoadEmailTemplate(templateName);
-            // if some other thread inserted the value, it will ignore our value and return what other thread has inserted
-            _cachedTemplates.GetOrAdd(templateName, res);
-            return res;
+            var template = LoadEmailTemplate(templateName, normalizedLanguageCode);
+            return _cachedTemplates.GetOrAdd(cacheKey, template);
         }
 
-        public EmailBuilder GetEmailBuilder(string templateName)
+        public EmailBuilder GetEmailBuilder(string templateName, string languageCode)
         {
-            var et = GetEmailTemplate(templateName);
+            var et = GetEmailTemplate(templateName, languageCode);
             var res = new EmailBuilder(et.BodyTemplate, et.SubjectTemplate);
             return res;
         }
 
-        private string LoadFile(string templateName)
+        private string LoadFile(string templateName, string languageCode)
         {
             var assembly = GetType().Assembly;
-            // TODO: Receive location from the config
-            //var localeCode = LocalizationUtils.CultureCode().ToLower();
-            var localeCode = "en";
-            var layoutResourcePath = $"{assembly.GetName().Name}.Templates.Emails.{localeCode}.{templateName}";
+            var resourceLanguageCode = languageCode.Replace('-', '_');
+            var layoutResourcePath = $"{assembly.GetName().Name}.Templates.Emails.{resourceLanguageCode}.{templateName}";
             var resource = assembly.GetManifestResourceStream(layoutResourcePath);
             if (resource == null)
             {
@@ -59,15 +44,10 @@ namespace TimeTracker.Business.Notifications.Core
             }
         }
 
-        private EmailTemplateModel LoadEmailTemplate(string templateName)
+        private EmailTemplateModel LoadEmailTemplate(string templateName, string languageCode)
         {
-            var contentTemplate = LoadFile(templateName);
-            string subjectTemplate = string.Empty; // it is OK to return it empty, that would save some stringBuilder object in EmailBuilder object
-
-            // SUBJECT TEMPLATE
-            // it is stored in the content template file in the following format:
-            // <!-- <subject>This is email subject, {placeholders} blah blah </subject> -->
-            // now we need to extract SUBJECT TEMPLATE into its own string, and remove it from contentTemplate
+            var contentTemplate = LoadFile(templateName, languageCode);
+            string subjectTemplate = string.Empty;
 
             var subjectRegex = @"<!--\s*<subject>(?<subjectText>[^<]*)</subject>\s*-->";
             var subjectMatch = Regex.Match(contentTemplate, subjectRegex, RegexOptions.IgnoreCase);
@@ -82,12 +62,17 @@ namespace TimeTracker.Business.Notifications.Core
                 );
             }
 
-            // return results
             var res = new EmailTemplateModel();
-            res.BodyTemplate = _layoutTemplate.Replace("{body}", contentTemplate); // merge layout and content
+            var layoutTemplate = LoadFile("_EmailLayout.htm", languageCode);
+            res.BodyTemplate = layoutTemplate.Replace("{body}", contentTemplate);
             res.SubjectTemplate = subjectTemplate;
 
             return res;
+        }
+
+        private static string NormalizeLanguageCode(string? languageCode)
+        {
+            return string.Equals(languageCode, "uk-UA", StringComparison.OrdinalIgnoreCase) ? "uk-UA" : "en";
         }
     }
 }

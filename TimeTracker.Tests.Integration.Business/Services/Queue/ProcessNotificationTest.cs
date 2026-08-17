@@ -5,11 +5,9 @@ using TimeTracker.Business.Notifications.Senders.Tasks.Comments;
 using TimeTracker.Business.Notifications.Senders.User;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
-using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Queue;
-using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Business.Core;
@@ -19,16 +17,18 @@ namespace TimeTracker.Tests.Integration.Business.Services.Queue;
 public class ProcessNotificationTest: BaseTest
 {
     private readonly IQueueService _queueService;
-    private readonly IDataFactory<UserEntity> _userFactory;
     private readonly IUserSeeder _userSeeder;
     private readonly ITaskSeeder _taskSeeder;
+    private readonly ITaskCommentDao _taskCommentDao;
+    private readonly ITaskHistoryItemDao _taskHistoryItemDao;
 
     public ProcessNotificationTest(): base()
     {
         _queueService = Scope.Resolve<IQueueService>();
         _taskSeeder = Scope.Resolve<ITaskSeeder>();
-        _userFactory = Scope.Resolve<IDataFactory<UserEntity>>();
         _userSeeder = Scope.Resolve<IUserSeeder>();
+        _taskCommentDao = Scope.Resolve<ITaskCommentDao>();
+        _taskHistoryItemDao = Scope.Resolve<ITaskHistoryItemDao>();
         _queueDao.CompleteAllPending().Wait();
     }
 
@@ -53,13 +53,8 @@ public class ProcessNotificationTest: BaseTest
     [Fact]
     public async Task ShouldProcessRegistrationNotification()
     {
-        var fakeUser = _userFactory.Generate();
         var expectedUser = await _userSeeder.CreatePendingAsync();
-        var testContext = new RegistrationNotificationItemContext(
-            fakeUser.Email,
-            "http://fron.url",
-            expectedUser.VerificationToken!
-        );
+        var testContext = new RegistrationNotificationItemContext(expectedUser.Id);
 
         await _queueService.PushNotificationAsync(testContext);
 
@@ -68,7 +63,7 @@ public class ProcessNotificationTest: BaseTest
         
         var actualEmail = GraylogClient.EmailLogs.LastOrDefault();
         Assert.NotNull(actualEmail);
-        Assert.Contains(testContext.ToAddress, actualEmail.EmailTo);
+        Assert.Contains(expectedUser.Email, actualEmail.EmailTo);
         Assert.Contains(expectedUser.VerificationToken!, actualEmail.EmailBody);
     }
     
@@ -77,17 +72,11 @@ public class ProcessNotificationTest: BaseTest
     {
         var task = await _taskSeeder.CreateAsync();
         var expectedUser = await _userSeeder.CreateActivatedAsync();
+        var taskHistoryItem = await _taskHistoryItemDao.Create(task, expectedUser);
         var testContext = new TaskChangedNotificationContext()
         {
-            ToAddress = expectedUser.Email,
-            ChangeSet = new Dictionary<string, string?>()
-            {
-                { "test", "test" }
-            },
-            TaskId = task.Id,
-            WorkspaceId = task.Workspace.Id,
-            TaskTitle = "Task title",
-            UserName = expectedUser.Name
+            TaskHistoryItemId = taskHistoryItem.Id,
+            RecipientUserId = expectedUser.Id
         };
 
         await _queueService.PushNotificationAsync(testContext);
@@ -97,7 +86,7 @@ public class ProcessNotificationTest: BaseTest
         
         var actualEmail = GraylogClient.EmailLogs.LastOrDefault();
         Assert.NotNull(actualEmail);
-        Assert.Contains(testContext.ToAddress, actualEmail.EmailTo);
+        Assert.Contains(expectedUser.Email, actualEmail.EmailTo);
         Assert.Contains($"/board/{task.Workspace.Id}/task/{task.Id}", actualEmail.EmailBody);
     }
 
@@ -106,13 +95,11 @@ public class ProcessNotificationTest: BaseTest
     {
         var task = await _taskSeeder.CreateAsync();
         var expectedUser = await _userSeeder.CreateActivatedAsync();
+        var taskComment = await _taskCommentDao.AddAsync(task, expectedUser, "Test comment");
         var testContext = new SetCommentNotificationContext()
         {
-            ToAddress = expectedUser.Email,
-            Comment = "Test comment",
-            TaskId = task.Id,
-            WorkspaceId = task.Workspace.Id,
-            OwnerName = expectedUser.Name
+            TaskCommentId = taskComment.Id,
+            RecipientUserId = expectedUser.Id
         };
 
         await _queueService.PushNotificationAsync(testContext);
@@ -122,7 +109,7 @@ public class ProcessNotificationTest: BaseTest
 
         var actualEmail = GraylogClient.EmailLogs.LastOrDefault();
         Assert.NotNull(actualEmail);
-        Assert.Contains(testContext.ToAddress, actualEmail.EmailTo);
+        Assert.Contains(expectedUser.Email, actualEmail.EmailTo);
         Assert.Contains($"/board/{task.Workspace.Id}/task/{task.Id}", actualEmail.EmailBody);
     }
 }

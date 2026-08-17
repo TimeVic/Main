@@ -3,28 +3,34 @@ using Notification.Abstractions;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Clients.Smtp.Core;
 using TimeTracker.Business.Notifications.Core;
+using TimeTracker.Business.Orm.Dao.User;
 
 namespace TimeTracker.Business.Notifications.Senders.TimeEntry
 {
     public class TimeEntryAutoStoppedNotificationSender : IAsyncQueueHandler<TimeEntryAutoStoppedNotificationItemContext>
     {
         private readonly ISmtpClientService _smtpClientService;
-        private readonly EmailFactory _emailFactory;
+        private readonly IEmailTemplateService _emailTemplateService;
+        private readonly IUserDao _userDao;
 
-        public TimeEntryAutoStoppedNotificationSender(ISmtpClientService smtpClientService)
+        public TimeEntryAutoStoppedNotificationSender(ISmtpClientService smtpClientService, IEmailTemplateService emailTemplateService, IUserDao userDao)
         {
             _smtpClientService = smtpClientService;
-            _emailFactory = new EmailFactory();
+            _emailTemplateService = emailTemplateService;
+            _userDao = userDao;
         }
 
-        public Task HandleAsync(
+        public async Task HandleAsync(
             TimeEntryAutoStoppedNotificationItemContext context, 
             CancellationToken cancellationToken = default
         )
         {
-            var emailBuilder = _emailFactory.GetEmailBuilder("TimeEntryAutoStoppedNotification.htm");
-            _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
-            return Task.CompletedTask;
+            var user = await _userDao.GetById(context.UserId);
+            if (user == null)
+                return;
+
+            var emailBuilder = _emailTemplateService.GetEmailBuilder("TimeEntryAutoStoppedNotification.htm", user);
+            _smtpClientService.SendEmail(user.Email, emailBuilder, null);
         }
     }
 }
