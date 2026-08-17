@@ -126,7 +126,7 @@ public class GetWorkspacePermissionsTest: BaseTest
         var actual = await response.GetJsonDataAsync<GetWorkspacePermissionsResponse>();
         var writeAccessPermissions = new[]
         {
-            WorkspacePermission.UpdateWorkspaceSettings,
+            WorkspacePermission.UpdateWorkspace,
             WorkspacePermission.UpdateWorkspaceMembers,
             WorkspacePermission.CreateProject,
             WorkspacePermission.UpdateProject,

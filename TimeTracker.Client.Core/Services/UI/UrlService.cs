@@ -98,9 +98,7 @@ public class UrlService
             : GetWorkspaceIdFromDashboardUrl() ?? _authState.Value.Workspace?.Id;
         if (!selectedWorkspaceId.HasValue)
         {
-            return string.IsNullOrEmpty(normalizedPath)
-                ? "/board"
-                : $"/board/{normalizedPath}";
+            return "/error/403";
         }
 
         return string.IsNullOrEmpty(normalizedPath)

@@ -37,7 +37,7 @@ public class SecurityManager: ISecurityManager
     public ICollection<ProjectDto> GetSharedProjects(UserDto? user = null)
     {
         user ??= _authState.Value.User;
-        if (_authState.Value.Workspace?.IsFullAccess ?? false)
+        if (_authState.Value.IsRoleAdmin)
         {
             return _projectState.Value.List;
         }

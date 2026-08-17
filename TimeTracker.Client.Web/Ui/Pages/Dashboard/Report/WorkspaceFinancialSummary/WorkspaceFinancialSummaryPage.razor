@@ -1,7 +1,5 @@
 @page "/board/{WorkspaceId:guid}/money"
 @page "/board/{WorkspaceId:guid}/report/workspace-financial-summary"
-@page "/board/money"
-@page "/board/report/workspace-financial-summary"
 @attribute [RequireWorkspacePermission(WorkspacePermission.ReadWorkspaceFinancialSummary, "report/user-payments")]
 @using Fluxor
 @using TimeTracker.Api.Shared.Constants

@@ -9,7 +9,7 @@
     }
     @if (IsLink)
     {
-        @* <FluentAnchor href="@($"/board/task/{AuthState.Value.Workspace!.Id}/{InternalTask.TaskId}")" target="_blank"> *@
+        @* <FluentAnchor href="@($"/board/{AuthState.Value.Workspace!.Id}/task/{InternalTask.TaskId}")" target="_blank"> *@
         @*     <FluentBadge *@
         @*         Class="@($"{Class} d-flex align-items-center")" *@
         @*         Style="@(IsClickable ? "cursor: pointer" : string.Empty)" *@

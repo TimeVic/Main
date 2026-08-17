@@ -44,7 +44,7 @@ public partial class NotesPage
 
     private bool IsDocumentDirty => State.IsDocumentDirty;
 
-    private bool CanEditNotes => SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspaceSettings);
+    private bool CanEditNotes => SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspace);
 
     private string SaveStateLabel
     {

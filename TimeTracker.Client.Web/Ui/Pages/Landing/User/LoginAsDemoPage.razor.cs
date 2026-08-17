@@ -35,7 +35,7 @@ public partial class LoginAsDemoPage
                 throw new Exception("Empty demo response");
             }
             _authorizationService.Login(response.User);
-            _navigationManager.NavigateTo(SiteUrl.DashboardBase);
+            _navigationManager.NavigateTo(UrlService.GetDashboardUrl());
         }
         catch (Exception)
         {

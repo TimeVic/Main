@@ -34,7 +34,7 @@ public partial class SocialLoginButtonsBlock
     {
         var apiUrl = (Configuration.GetValue<string>("ApiUrl") ?? string.Empty).TrimEnd('/');
         var signInUrl = $"{apiUrl}/integration/social/SignIn/{providerName}";
-        var dashboardUrl = UrlService.ToAbsoluteUrl(SiteUrl.DashboardBase);
+        var dashboardUrl = UrlService.ToAbsoluteUrl(SiteUrl.Login);
         var currentUrl = NavigationManager.Uri;
 
         return QueryHelpers.AddQueryString(

@@ -3,7 +3,7 @@ namespace TimeTracker.Api.Shared.Constants;
 public enum WorkspacePermission
 {
     ReadWorkspaceSettings = 1,
-    UpdateWorkspaceSettings,
+    UpdateWorkspace,
     ReadWorkspaceMembers,
     UpdateWorkspaceMembers,
     CreateProject,
