@@ -8,12 +8,13 @@ using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Web.Services.UI;
 using TimeTracker.Client.Web.Services.Workspace;
 using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Permissions;
 using TimeTracker.Client.Core.Store.Workspace;
 using TimeTracker.Client.Core.Services.Security;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts;
 
-public partial class MainHeader
+public partial class MainHeader : IDisposable
 {
     private static readonly NavbarSlots NavbarClasses = new()
     {
@@ -35,6 +36,9 @@ public partial class MainHeader
 
     [Inject]
     private ISecurityManager SecurityManager { get; set; } = null!;
+
+    [Inject]
+    private IState<WorkspacePermissionsState> WorkspacePermissionsState { get; set; } = null!;
     
     private bool _isShowAddWorkspaceModal = false;
     private bool _isInviteTeamModalOpened;
@@ -47,6 +51,12 @@ public partial class MainHeader
         && SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspaceMembers);
 
     private bool IsWorkspaceSettingsAvailable => SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspace);
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        WorkspacePermissionsState.StateChanged += OnWorkspacePermissionsStateChanged;
+    }
 
     private void OnSelectWorkspace(WorkspaceDto? workspace)
     {
@@ -73,6 +83,16 @@ public partial class MainHeader
     {
         _isInviteTeamModalOpened = true;
         return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        WorkspacePermissionsState.StateChanged -= OnWorkspacePermissionsStateChanged;
+    }
+
+    private void OnWorkspacePermissionsStateChanged(object? sender, EventArgs args)
+    {
+        _ = InvokeAsync(StateHasChanged);
     }
 
 }

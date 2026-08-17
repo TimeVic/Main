@@ -2,6 +2,7 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Services.UI;
+using TimeTracker.Client.Core.Store.Permissions;
 
 namespace TimeTracker.Client.Core.Store.Auth.Effects;
 
@@ -27,27 +28,33 @@ public class SelectWorkspaceEffect : Effect<SelectWorkspaceAction>
 
     public override async Task HandleAsync(SelectWorkspaceAction action, IDispatcher dispatcher)
     {
+        var selectedWorkspace = action.Workspace;
+
         try
         {
             var user = await _apiService.UserSelectWorkspaceAsync(action.Workspace.Id);
             if (user != null)
             {
                 dispatcher.Dispatch(new UpdateUserAction(user));
-                dispatcher.Dispatch(new SetWorkspaceAction(user.SelectedWorkspace ?? action.Workspace));
+                selectedWorkspace = user.SelectedWorkspace ?? action.Workspace;
+                dispatcher.Dispatch(new SetWorkspaceAction(selectedWorkspace));
             }
             else
             {
-                dispatcher.Dispatch(new SetWorkspaceAction(action.Workspace));
+                dispatcher.Dispatch(new SetWorkspaceAction(selectedWorkspace));
             }
         }
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            dispatcher.Dispatch(new SetWorkspaceAction(action.Workspace));
+            dispatcher.Dispatch(new SetWorkspaceAction(selectedWorkspace));
         }
 
+        dispatcher.Dispatch(new ReloadWorkspacePermissionsAction());
+        var destinationPath = action.DestinationPath
+            ?? (selectedWorkspace.Mode.HasValue ? string.Empty : "workspace/choose-mode");
         _navigationManager.NavigateTo(
-            _urlService.GetDashboardUrl(workspaceId: action.Workspace.Id),
+            _urlService.GetDashboardUrl(destinationPath, selectedWorkspace.Id),
             forceLoad: true
         );
     }

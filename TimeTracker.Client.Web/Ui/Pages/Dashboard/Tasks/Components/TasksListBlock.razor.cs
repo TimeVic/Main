@@ -1,7 +1,9 @@
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Store.Client;
 using TimeTracker.Client.Core.Store.Project;
 using TimeTracker.Client.Core.Store.TasksList;
@@ -33,6 +35,9 @@ public partial class TasksListBlock : IDisposable
     [Inject]
     public NavigationManager NavigationManager { get; set; } = null!;
 
+    [Inject]
+    private ISecurityManager SecurityManager { get; set; } = null!;
+
     private readonly HashSet<Guid> _expandedClientIds = [];
     private readonly HashSet<Guid> _expandedProjectIds = [];
     private string? _taskListSearch;
@@ -56,6 +61,10 @@ public partial class TasksListBlock : IDisposable
         .OrderBy(client => client.Name);
 
     private bool IsSearching => !string.IsNullOrWhiteSpace(_taskListSearch);
+
+    private bool IsCanCreateClient => SecurityManager.HasPermission(WorkspacePermission.CreateClient);
+
+    private bool IsCanCreateProject => SecurityManager.HasPermission(WorkspacePermission.CreateProject);
 
     private IEnumerable<TaskListDto> _searchResults => _tasksListState.Value.List
         .Where(MatchesSearch)
@@ -149,12 +158,22 @@ public partial class TasksListBlock : IDisposable
 
     private Task OpenAddClientModal()
     {
+        if (!IsCanCreateClient)
+        {
+            return Task.CompletedTask;
+        }
+
         _isAddClientModalOpened = true;
         return Task.CompletedTask;
     }
 
     private Task OpenAddProjectModal(ClientDto client)
     {
+        if (!IsCanCreateProject)
+        {
+            return Task.CompletedTask;
+        }
+
         _clientForNewProject = client;
         _isAddProjectModalOpened = true;
         return Task.CompletedTask;

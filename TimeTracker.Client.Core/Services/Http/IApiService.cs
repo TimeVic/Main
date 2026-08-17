@@ -8,6 +8,7 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Security;
 using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Business.Common.Dto;
 using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
@@ -67,6 +68,8 @@ public interface IApiService
     Task UserChangePasswordAsync(ChangePasswordRequest request);
 
     Task LogoutAsync();
+
+    Task<GetWorkspacePermissionsResponse?> GetWorkspacePermissionsAsync(Guid workspaceId);
 
     Task<UserDto?> UserSelectWorkspaceAsync(Guid workspaceId);
 

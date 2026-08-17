@@ -60,7 +60,7 @@ public partial class AddWorkspaceModal
                 model = new AddRequest();
                 await OnAdded.InvokeAsync(workspace);
                 await modal.CloseAsync();
-                WorkspaceInitializationService.ChangeWorkspace(workspace);
+                WorkspaceInitializationService.ChangeWorkspace(workspace, "workspace/choose-mode");
             }
         }
         catch (Exception e)

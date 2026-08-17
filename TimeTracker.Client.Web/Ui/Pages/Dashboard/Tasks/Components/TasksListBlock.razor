@@ -104,12 +104,15 @@
                             {
                                 <div class="ml-5 px-3 py-2">
                                     <p class="text-xs text-slate-500">@DashboardLocalizer["TasksListBlock_ClientHasNoProjects"]</p>
-                                    <button
-                                        type="button"
-                                        class="mt-1 text-xs font-medium text-blue-600 hover:text-blue-700"
-                                        @onclick="@(() => OpenAddProjectModal(client))">
-                                        <i class="fa-solid fa-plus mr-1 text-[10px]"></i>@DashboardLocalizer["AddProject"]
-                                    </button>
+                                    @if (IsCanCreateProject)
+                                    {
+                                        <button
+                                            type="button"
+                                            class="mt-1 text-xs font-medium text-blue-600 hover:text-blue-700"
+                                            @onclick="@(() => OpenAddProjectModal(client))">
+                                            <i class="fa-solid fa-plus mr-1 text-[10px]"></i>@DashboardLocalizer["AddProject"]
+                                        </button>
+                                    }
                                 </div>
                             }
 
@@ -222,12 +225,15 @@
                 {
                     <div class="px-3 py-2">
                         <p class="text-sm text-slate-600">@DashboardLocalizer["TasksListBlock_NoClients"]</p>
-                        <button
-                            type="button"
-                            class="mt-1 text-xs font-medium text-blue-600 hover:text-blue-700"
-                            @onclick="OpenAddClientModal">
-                            <i class="fa-solid fa-plus mr-1 text-[10px]"></i>@DashboardLocalizer["AddClient"]
-                        </button>
+                        @if (IsCanCreateClient)
+                        {
+                            <button
+                                type="button"
+                                class="mt-1 text-xs font-medium text-blue-600 hover:text-blue-700"
+                                @onclick="OpenAddClientModal">
+                                <i class="fa-solid fa-plus mr-1 text-[10px]"></i>@DashboardLocalizer["AddClient"]
+                            </button>
+                        }
                     </div>
                 }
             }
