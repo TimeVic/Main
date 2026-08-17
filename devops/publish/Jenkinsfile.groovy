@@ -19,6 +19,18 @@ def mainContainer = new DockerContainer(
     dockerFile: 'devops/publish/common/Dockerfile',
 );
 
+def apiContainer = new DockerContainer(
+    name: "timevic-main-${environmentKey}",
+    tagName: "timevic-api-${environmentKey}",
+    dockerFile: 'devops/publish/common/Dockerfile',
+);
+
+def workerContainer = new DockerContainer(
+    name: "timevic-main-${environmentKey}",
+    tagName: "timevic-worker-${environmentKey}",
+    dockerFile: 'devops/publish/common/Dockerfile',
+);
+
 def migrationContainer = new DockerContainer(
     name: "timevic-main-${environmentKey}",
     dockerFile: 'devops/publish/common/Dockerfile',
@@ -87,6 +99,10 @@ node('build-node') {
         imageWebTmpName = "${containerSharedDir}/${environmentKey}_web_latest"
         imageCommonTmpName = "${containerSharedDir}/${environmentKey}_common_latest"
         mainContainer.name = "timevic-main-${environmentKey}"
+        apiContainer.name = "timevic-main-${environmentKey}"
+        apiContainer.tagName = "timevic-api-${environmentKey}"
+        workerContainer.name = "timevic-main-${environmentKey}"
+        workerContainer.tagName = "timevic-worker-${environmentKey}"
         migrationContainer.name = "timevic-main-${environmentKey}"
         webAppContainer.name = "timevic-web-${environmentKey}"
 
@@ -288,13 +304,17 @@ node('web-node') {
     }
 
     stage('Stop containers') {
-        dockerHelper.stopContainer(webAppContainer)
-
-        mainContainer.tagName = "timevic-api-${environmentKey}";
-        dockerHelper.stopContainer(mainContainer)
-
-        mainContainer.tagName = "timevic-worker-${environmentKey}";
-        dockerHelper.stopContainer(mainContainer)
+        parallel(
+            'Stop web app': {
+                dockerHelper.stopContainer(webAppContainer)
+            },
+            'Stop API': {
+                dockerHelper.stopContainer(apiContainer)
+            },
+            'Stop worker': {
+                dockerHelper.stopContainer(workerContainer)
+            }
+        )
     }
 
     stage('Run migrations') {
@@ -305,45 +325,49 @@ node('web-node') {
         dockerHelper.runContainer(migrationContainer)
     }
 
-    stage('Run common API') {
-        mainContainer.tagName = "timevic-api-${environmentKey}";
-         if (effectiveEnvironment == 'Production')
-        {
-            mainContainer.port = '6200:80';
-        }
-        else if (effectiveEnvironment == 'Development')
-        {
-            mainContainer.port = '8215:80';
-        }
+    parallel(
+        'Run common API': {
+            stage('Run common API') {
+                if (effectiveEnvironment == 'Production')
+                {
+                    apiContainer.port = '6200:80';
+                }
+                else if (effectiveEnvironment == 'Development')
+                {
+                    apiContainer.port = '8215:80';
+                }
 
-        mainContainer.envVariables = envVariables.clone()
-        mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Api')
-        mainContainer.envVariables.put('App__Name', 'Api')
-        dockerHelper.runContainer(mainContainer)
-    }
+                apiContainer.envVariables = envVariables.clone()
+                apiContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.Api')
+                apiContainer.envVariables.put('App__Name', 'Api')
+                dockerHelper.runContainer(apiContainer)
+            }
+        },
+        'Run worker': {
+            stage('Run worker') {
+                workerContainer.port = '';
 
-    stage('Run worker') {
-        mainContainer.tagName = "timevic-worker-${environmentKey}";
-        mainContainer.port = '';
-
-        mainContainer.envVariables = envVariables.clone()
-        mainContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerServices')
-        mainContainer.envVariables.put('App__Name', 'Worker')
-        dockerHelper.runContainer(mainContainer)
-    }
-
-    stage('Run web app') {
-        if (effectiveEnvironment == 'Production')
-        {
-            webAppContainer.port = '6201:80';
+                workerContainer.envVariables = envVariables.clone()
+                workerContainer.envVariables.put('PROJECT_DIR', 'TimeTracker.WorkerServices')
+                workerContainer.envVariables.put('App__Name', 'Worker')
+                dockerHelper.runContainer(workerContainer)
+            }
+        },
+        'Run web app': {
+            stage('Run web app') {
+                if (effectiveEnvironment == 'Production')
+                {
+                    webAppContainer.port = '6201:80';
+                }
+                else if (effectiveEnvironment == 'Development')
+                {
+                    webAppContainer.port = '8216:80';
+                }
+                webAppContainer.envVariables.put('App__Name', 'WebClient')
+                dockerHelper.runContainer(webAppContainer)
+            }
         }
-        else if (effectiveEnvironment == 'Development')
-        {
-            webAppContainer.port = '8216:80';
-        }
-        webAppContainer.envVariables.put('App__Name', 'WebClient')
-        dockerHelper.runContainer(webAppContainer)
-    }
+    )
     
 //     stage('CleanUp') {
 //         sh '''
