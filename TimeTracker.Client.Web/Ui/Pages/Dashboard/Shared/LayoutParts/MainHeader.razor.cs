@@ -46,7 +46,7 @@ public partial class MainHeader
         && AuthState.Value.IsRoleAdmin
         && SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspaceMembers);
 
-    private bool IsWorkspaceSettingsAvailable => SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspaceSettings);
+    private bool IsWorkspaceSettingsAvailable => SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspace);
 
     private void OnSelectWorkspace(WorkspaceDto? workspace)
     {

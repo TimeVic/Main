@@ -12,7 +12,7 @@ public class ClientPermissionService : IClientPermissionService
         new Dictionary<WorkspacePermission, AccessLevel>
         {
             [WorkspacePermission.ReadWorkspaceSettings] = AccessLevel.Read,
-            [WorkspacePermission.UpdateWorkspaceSettings] = AccessLevel.Write,
+            [WorkspacePermission.UpdateWorkspace] = AccessLevel.Write,
             [WorkspacePermission.ReadWorkspaceMembers] = AccessLevel.Read,
             [WorkspacePermission.UpdateWorkspaceMembers] = AccessLevel.Write,
             [WorkspacePermission.CreateProject] = AccessLevel.Write,

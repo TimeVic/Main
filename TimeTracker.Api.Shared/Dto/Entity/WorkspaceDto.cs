@@ -18,8 +18,4 @@ public class WorkspaceDto: BaseDto
 
     public bool IsCreatedByCurrentUser { get; set; }
 
-    public bool IsFullAccess
-    {
-        get => CurrentUserAccess is MembershipAccessType.Manager or MembershipAccessType.Owner;
-    }
 }

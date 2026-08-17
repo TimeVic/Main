@@ -39,7 +39,7 @@ public partial class MagicLoginPage
                 return;
             }
             _authorizationService.Login(loginResponse.User);
-            _navigationManager.NavigateTo(SiteUrl.DashboardBase);
+            _navigationManager.NavigateTo(UrlService.GetDashboardUrl());
         }
         catch (Exception)
         {

@@ -26,7 +26,7 @@
             @if (AuthState.Value.IsLoggedIn)
             {
                 <a 
-                    href="@SiteUrl.Dashboard_TimeEntry" 
+                    href="@UrlService.GetDashboardUrl()"
                     class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
                 >
                     <i class="fa-regular fa-chart-bar"></i>

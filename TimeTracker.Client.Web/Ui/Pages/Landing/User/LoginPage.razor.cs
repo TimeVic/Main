@@ -50,7 +50,7 @@ public partial class LoginPage
 
         if (CommonState.Value.IsInitialized && AuthState.Value.IsLoggedIn)
         {
-            NavigationManager.NavigateTo(SiteUrl.DashboardBase, replace: true);
+            NavigationManager.NavigateTo(UrlService.GetDashboardUrl(), replace: true);
         }
     }
 
@@ -76,7 +76,7 @@ public partial class LoginPage
                 throw new Exception("Login error");
             }
             _authorizationService.Login(loginResponse.User);
-            _navigationManager.NavigateTo(SiteUrl.DashboardBase);
+            _navigationManager.NavigateTo(UrlService.GetDashboardUrl());
         }
         catch (Exception)
         {

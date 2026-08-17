@@ -37,9 +37,12 @@
     [Inject]
     private NavigationManager NavigationManager { get; set; } = default!;
 
+    [Inject]
+    private UrlService UrlService { get; set; } = default!;
+
     private void GoToDashboard()
     {
-        NavigationManager.NavigateTo(SiteUrl.Dashboard_TimeEntry);
+        NavigationManager.NavigateTo(UrlService.GetDashboardUrl());
     }
 
 }

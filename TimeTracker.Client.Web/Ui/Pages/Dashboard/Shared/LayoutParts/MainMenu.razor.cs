@@ -81,7 +81,7 @@ public partial class MainMenu: IDisposable
             "fa-solid fa-sliders",
             UrlService.GetDashboardUrl("workspace/settings"),
             null,
-            [WorkspacePermission.UpdateWorkspaceSettings]
+            [WorkspacePermission.UpdateWorkspace]
         ),
     };
 

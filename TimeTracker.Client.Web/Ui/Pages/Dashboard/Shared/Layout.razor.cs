@@ -49,13 +49,15 @@ public partial class Layout: IDisposable
     private void CheckWorkspaceModeRedirect(string? targetLocation = null)
     {
         var workspace = AuthState.Value.Workspace;
-        if (workspace != null && !workspace.Mode.HasValue && workspace.IsFullAccess)
+        if (workspace != null
+            && !workspace.Mode.HasValue
+            && _securityManager.HasPermission(WorkspacePermission.UpdateWorkspace))
         {
             var currentPath = (targetLocation ?? _navigationManager.GetPath()).ToLower();
             if (!currentPath.Contains("choose-mode"))
             {
                 _navigationManager.NavigateTo(
-                    SiteUrl.Workspace_ChooseMode,
+                    _urlService.GetDashboardUrl("workspace/choose-mode", workspace.Id),
                     replace: true
                 );
             }
@@ -66,7 +68,7 @@ public partial class Layout: IDisposable
             if (currentPath.Contains("member-payments"))
             {
                 _navigationManager.NavigateTo(
-                    SiteUrl.Dashboard_TimeEntry,
+                    _urlService.GetDashboardUrl(workspaceId: workspace.Id),
                     replace: true
                 );
             }

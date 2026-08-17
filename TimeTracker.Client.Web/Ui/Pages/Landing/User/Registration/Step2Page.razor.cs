@@ -59,7 +59,7 @@ public partial class Step2Page
             if (registrationResponse == null)
                 throw new Exception("Login error");
             _authorizationService.Login(registrationResponse.User);
-            _navigationManager.NavigateTo(SiteUrl.DashboardBase);
+            _navigationManager.NavigateTo(UrlService.GetDashboardUrl());
         }
         catch (Exception)
         {

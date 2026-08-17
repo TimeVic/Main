@@ -1,5 +1,7 @@
 ﻿using Fluxor;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
+using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Store.Auth;
 
@@ -27,6 +29,14 @@ public class LoadListEffect: Effect<LoadListAction>
 
     public override async Task HandleAsync(LoadListAction action, IDispatcher dispatcher)
     {
+        if (_authState.Value.Workspace?.Mode == WorkspaceMode.Solo)
+        {
+            dispatcher.Dispatch(
+                new SetListItemsAction(new GetListResponse(new List<WorkspaceMemberDto>(), 0))
+            );
+            return;
+        }
+
         try
         {
             var isLoad = action.IsReload || !action.IsReload && !_state.Value.IsLoaded;
