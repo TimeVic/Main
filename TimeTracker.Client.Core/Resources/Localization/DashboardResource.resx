@@ -489,6 +489,9 @@
   <data name="SelectTags" xml:space="preserve"><value>Select tags</value></data>
   <data name="DurationInput_InvalidFormat" xml:space="preserve"><value>Use formats like 1h 30m, 2d, 1w or 01:30</value></data>
   <data name="AttachmentsBlock_DeleteAttachment" xml:space="preserve"><value>Delete attachment</value></data>
+  <data name="AttachmentsBlock_CopyImage" xml:space="preserve"><value>Copy original image</value></data>
+  <data name="AttachmentsBlock_ImageCopied" xml:space="preserve"><value>Image copied to clipboard</value></data>
+  <data name="AttachmentsBlock_ImageCopyError" xml:space="preserve"><value>Unable to copy image to clipboard</value></data>
   <data name="FileUploader_Uploading" xml:space="preserve"><value>Uploading...</value></data>
   <data name="FileUploader_SelectFiles" xml:space="preserve"><value>Select files</value></data>
   <data name="ProjectsDropDown_AddFirstClient" xml:space="preserve"><value>Add first client</value></data>

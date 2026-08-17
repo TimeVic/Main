@@ -41,24 +41,48 @@
                             </div>
                         }
                     </a>
-                    @if (AllowDelete)
+                    @if (IsImageAttachment(attachment) || AllowDelete)
                     {
-                        <button
-                            type="button"
-                            class="absolute right-2 top-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/90 text-slate-500 opacity-0 shadow-sm transition hover:bg-red-50 hover:text-red-600 focus:opacity-100 group-hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-70"
-                            title="@DashboardLocalizer["AttachmentsBlock_DeleteAttachment"]"
-                            disabled="@IsAttachmentDeleting(attachment)"
-                            @onclick="@(() => OnDeleteAttachment(attachment))"
-                            @onclick:stopPropagation="true">
-                            @if (IsAttachmentDeleting(attachment))
+                        <div class="absolute right-2 top-2 z-20 flex gap-1 opacity-0 transition focus-within:opacity-100 group-hover:opacity-100">
+                            @if (IsImageAttachment(attachment))
                             {
-                                <LumexSpinner Size="@Size.Small" />
+                                <button
+                                    type="button"
+                                    class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/90 text-slate-500 shadow-sm transition hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-70"
+                                    title="@DashboardLocalizer["AttachmentsBlock_CopyImage"]"
+                                    aria-label="@DashboardLocalizer["AttachmentsBlock_CopyImage"]"
+                                    disabled="@IsAttachmentCopying(attachment)"
+                                    @onclick="@(() => OnCopyImage(attachment))">
+                                    @if (IsAttachmentCopying(attachment))
+                                    {
+                                        <LumexSpinner Size="@Size.Small" />
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-regular fa-copy text-sm"></i>
+                                    }
+                                </button>
                             }
-                            else
+                            @if (AllowDelete)
                             {
-                                <i class="fa-regular fa-trash-can text-sm"></i>
+                                <button
+                                    type="button"
+                                    class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/90 text-slate-500 shadow-sm transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-70"
+                                    title="@DashboardLocalizer["AttachmentsBlock_DeleteAttachment"]"
+                                    aria-label="@DashboardLocalizer["AttachmentsBlock_DeleteAttachment"]"
+                                    disabled="@IsAttachmentDeleting(attachment)"
+                                    @onclick="@(() => OnDeleteAttachment(attachment))">
+                                    @if (IsAttachmentDeleting(attachment))
+                                    {
+                                        <LumexSpinner Size="@Size.Small" />
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-regular fa-trash-can text-sm"></i>
+                                    }
+                                </button>
                             }
-                        </button>
+                        </div>
                     }
                 </div>
             }
