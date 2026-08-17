@@ -9,23 +9,22 @@ namespace TimeTracker.Business.Notifications.Senders.User
     public class ResetPasswordNotificationSender : IAsyncQueueHandler<ResetPasswordNotificationContext>
     {
         private readonly ISmtpClientService _smtpClientService;
-        private readonly EmailFactory _emailFactory;
+        private readonly IEmailTemplateService _emailTemplateService;
 
-        public ResetPasswordNotificationSender(ISmtpClientService smtpClientService)
+        public ResetPasswordNotificationSender(ISmtpClientService smtpClientService, IEmailTemplateService emailTemplateService)
         {
             _smtpClientService = smtpClientService;
-            _emailFactory = new EmailFactory();
+            _emailTemplateService = emailTemplateService;
         }
 
-        public Task HandleAsync(
+        public async Task HandleAsync(
             ResetPasswordNotificationContext context, 
             CancellationToken cancellationToken = default
         )
         {
-            var emailBuilder = _emailFactory.GetEmailBuilder("ResetPasswordNotification.htm");
+            var emailBuilder = await _emailTemplateService.GetEmailBuilderAsync("ResetPasswordNotification.htm", context.ToAddress);
             emailBuilder.AddPlaceholder("resetPasswordUrl", context.ResetPasswordUrl);
             _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
-            return Task.CompletedTask;
         }
     }
 }

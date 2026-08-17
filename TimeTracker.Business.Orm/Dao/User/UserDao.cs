@@ -36,6 +36,14 @@ public class UserDao: BaseDao, IUserDao
             .Where(item => item.Email == email.Trim().ToLower())
             .FirstOrDefaultAsync();
     }
+
+    public async Task<string?> GetLanguageCodeByEmailAsync(string email)
+    {
+        return await Session.Query<UserEntity>()
+            .Where(item => item.Email == email.Trim().ToLower())
+            .Select(item => item.Language.Code)
+            .FirstOrDefaultAsync();
+    }
     
     public async Task<UserEntity?> GetById(Guid id)
     {

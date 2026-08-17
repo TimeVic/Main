@@ -29,32 +29,11 @@
       <ProjectReference Include="..\TimeTracker.Business.Clients\TimeTracker.Business.Clients.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Common\TimeTracker.Business.Common.csproj" />
       <ProjectReference Include="..\TimeTracker.Business.Extensions\TimeTracker.Business.Extensions.csproj" />
+      <ProjectReference Include="..\TimeTracker.Business.Orm\TimeTracker.Business.Orm.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Templates\Emails\en\_EmailLayout.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\PasswordHasBeenChangedNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\ResetPasswordNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\TaskCommentSetNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\TaskReminderNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\TimeEntryAutoStoppedNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\_EmailLayout.htm" />
-      <None Remove="Templates\Emails\en\EmailVerificationNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\EmailVerificationNotification.htm" />
-      <None Remove="Templates\Emails\en\TestNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\TestNotification.htm" />
-      <None Remove="Templates\Emails\en\RegistrationNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\RegistrationNotification.htm" />
-      <None Remove="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\UserEmailVerifiedNotification.htm" />
-      <None Remove="Templates\Emails\en\TaskChangedNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\TaskChangedNotification.htm" />
-      <None Remove="Templates\Emails\en\MagicLoginNotification.htm" />
-      <EmbeddedResource Include="Templates\Emails\en\MagicLoginNotification.htm" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Services\" />
+      <EmbeddedResource Include="Templates\Emails\**\*.htm" />
     </ItemGroup>
 
 </Project>

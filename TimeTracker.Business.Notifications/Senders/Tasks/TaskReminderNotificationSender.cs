@@ -13,19 +13,20 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
     {
         private readonly ISmtpClientService _smtpClientService;
         private readonly IFirebaseClientService _firebaseClientService;
-        private readonly EmailFactory _emailFactory;
+        private readonly IEmailTemplateService _emailTemplateService;
         private readonly string? _frontendUrl;
 
         public TaskReminderNotificationSender(
             ISmtpClientService smtpClientService,
             IFirebaseClientService firebaseClientService,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IEmailTemplateService emailTemplateService
         )
         {
             _smtpClientService = smtpClientService;
             _firebaseClientService = firebaseClientService;
             _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
-            _emailFactory = new EmailFactory();
+            _emailTemplateService = emailTemplateService;
         }
 
         public async Task HandleAsync(
@@ -38,7 +39,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
 
         private async Task SendEmailNotification(TaskReminderNotificationContext context)
         {
-            var emailBuilder = _emailFactory.GetEmailBuilder("TaskReminderNotification.htm");
+            var emailBuilder = await _emailTemplateService.GetEmailBuilderAsync("TaskReminderNotification.htm", context.ToEmailAddress);
             emailBuilder.AddPlaceholder("userName", context.UserName);
             emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl?.TrimEnd('/')}/board/{context.WorkspaceId}/task/{context.TaskId}");
             emailBuilder.AddPlaceholder("taskTitle", context.TaskTitle);
@@ -47,7 +48,7 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks
         
         private async Task SendGcmNotification(TaskReminderNotificationContext context)
         {
-            var emailBuilder = _emailFactory.GetEmailBuilder("TaskReminderNotification.htm");
+            var emailBuilder = await _emailTemplateService.GetEmailBuilderAsync("TaskReminderNotification.htm", context.ToEmailAddress);
             emailBuilder.AddPlaceholder("userName", context.UserName);
             emailBuilder.AddPlaceholder("taskLink", $"{_frontendUrl?.TrimEnd('/')}/board/{context.WorkspaceId}/task/{context.TaskId}");
             emailBuilder.AddPlaceholder("taskTitle", context.TaskTitle);

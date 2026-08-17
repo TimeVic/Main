@@ -11,31 +11,31 @@ namespace TimeTracker.Business.Notifications.Senders.Tasks.Comments
     public class SetCommentNotificationSender : IAsyncQueueHandler<SetCommentNotificationContext>
     {
         private readonly ISmtpClientService _smtpClientService;
-        private readonly EmailFactory _emailFactory;
+        private readonly IEmailTemplateService _emailTemplateService;
         private readonly string? _frontendUrl;
 
         public SetCommentNotificationSender(
             ISmtpClientService smtpClientService,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IEmailTemplateService emailTemplateService
         )
         {
             _smtpClientService = smtpClientService;
             _frontendUrl = configuration.GetValue<string>("App:FrontendUrl");
-            _emailFactory = new EmailFactory();
+            _emailTemplateService = emailTemplateService;
         }
 
-        public Task HandleAsync(
+        public async Task HandleAsync(
             SetCommentNotificationContext context, 
             CancellationToken cancellationToken = default
         )
         {
-            var emailBuilder = _emailFactory.GetEmailBuilder("TaskCommentSetNotification.htm");
+            var emailBuilder = await _emailTemplateService.GetEmailBuilderAsync("TaskCommentSetNotification.htm", context.ToAddress);
             emailBuilder.AddPlaceholder("UserName", context.OwnerName);
             emailBuilder.AddPlaceholder("Comment", MarkdownHelper.ToHtml(context.Comment));
             emailBuilder.AddPlaceholder("TaskLink", $"{_frontendUrl?.TrimEnd('/')}/board/{context.WorkspaceId}/task/{context.TaskId}");
             emailBuilder.AddPlaceholder("ChangeMessage", context.IsUpdated ? "updated" : "added");
             _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
-            return Task.CompletedTask;
         }
     }
 }

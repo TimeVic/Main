@@ -9,22 +9,21 @@ namespace TimeTracker.Business.Notifications.Senders.TimeEntry
     public class TimeEntryAutoStoppedNotificationSender : IAsyncQueueHandler<TimeEntryAutoStoppedNotificationItemContext>
     {
         private readonly ISmtpClientService _smtpClientService;
-        private readonly EmailFactory _emailFactory;
+        private readonly IEmailTemplateService _emailTemplateService;
 
-        public TimeEntryAutoStoppedNotificationSender(ISmtpClientService smtpClientService)
+        public TimeEntryAutoStoppedNotificationSender(ISmtpClientService smtpClientService, IEmailTemplateService emailTemplateService)
         {
             _smtpClientService = smtpClientService;
-            _emailFactory = new EmailFactory();
+            _emailTemplateService = emailTemplateService;
         }
 
-        public Task HandleAsync(
+        public async Task HandleAsync(
             TimeEntryAutoStoppedNotificationItemContext context, 
             CancellationToken cancellationToken = default
         )
         {
-            var emailBuilder = _emailFactory.GetEmailBuilder("TimeEntryAutoStoppedNotification.htm");
+            var emailBuilder = await _emailTemplateService.GetEmailBuilderAsync("TimeEntryAutoStoppedNotification.htm", context.ToAddress);
             _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
-            return Task.CompletedTask;
         }
     }
 }

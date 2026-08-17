@@ -8,22 +8,21 @@ namespace TimeTracker.Business.Notifications.Senders.User;
 public class MagicLoginNotificationSender : IAsyncQueueHandler<MagicLoginNotificationItemContext>
 {
     private readonly ISmtpClientService _smtpClientService;
-    private readonly EmailFactory _emailFactory;
+    private readonly IEmailTemplateService _emailTemplateService;
 
-    public MagicLoginNotificationSender(ISmtpClientService smtpClientService)
+    public MagicLoginNotificationSender(ISmtpClientService smtpClientService, IEmailTemplateService emailTemplateService)
     {
         _smtpClientService = smtpClientService;
-        _emailFactory = new EmailFactory();
+        _emailTemplateService = emailTemplateService;
     }
 
-    public Task HandleAsync(
+    public async Task HandleAsync(
         MagicLoginNotificationItemContext context,
         CancellationToken cancellationToken = default
     )
     {
-        var emailBuilder = _emailFactory.GetEmailBuilder("MagicLoginNotification.htm");
+        var emailBuilder = await _emailTemplateService.GetEmailBuilderAsync("MagicLoginNotification.htm", context.ToAddress);
         emailBuilder.AddPlaceholder("loginUrl", context.LoginUrl);
         _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
-        return Task.CompletedTask;
     }
 }

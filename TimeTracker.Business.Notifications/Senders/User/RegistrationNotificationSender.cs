@@ -9,23 +9,22 @@ namespace TimeTracker.Business.Notifications.Senders.User
     public class RegistrationNotificationSender : IAsyncQueueHandler<RegistrationNotificationItemContext>
     {
         private readonly ISmtpClientService _smtpClientService;
-        private readonly EmailFactory _emailFactory;
+        private readonly IEmailTemplateService _emailTemplateService;
 
-        public RegistrationNotificationSender(ISmtpClientService smtpClientService)
+        public RegistrationNotificationSender(ISmtpClientService smtpClientService, IEmailTemplateService emailTemplateService)
         {
             _smtpClientService = smtpClientService;
-            _emailFactory = new EmailFactory();
+            _emailTemplateService = emailTemplateService;
         }
 
-        public Task HandleAsync(
+        public async Task HandleAsync(
             RegistrationNotificationItemContext context, 
             CancellationToken cancellationToken = default
         )
         {
-            var emailBuilder = _emailFactory.GetEmailBuilder("RegistrationNotification.htm");
+            var emailBuilder = await _emailTemplateService.GetEmailBuilderAsync("RegistrationNotification.htm", context.ToAddress);
             emailBuilder.AddPlaceholder("verificationUrl", context.VerificationUrl);
             _smtpClientService.SendEmail(context.ToAddress, emailBuilder, null);
-            return Task.CompletedTask;
         }
     }
 }
