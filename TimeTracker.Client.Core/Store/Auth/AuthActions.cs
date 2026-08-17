@@ -20,4 +20,4 @@ public record struct UpdateUserAction(UserDto User);
 
 public record struct LoadCurrentUserAction();
 
-public record struct SelectWorkspaceAction(WorkspaceDto Workspace);
+public record struct SelectWorkspaceAction(WorkspaceDto Workspace, string? DestinationPath = null);

@@ -7,3 +7,5 @@ public record struct SetWorkspacePermissionsAction(GetWorkspacePermissionsRespon
 public record struct SetWorkspacePermissionsLoadingAction(bool IsLoading);
 
 public record struct ClearWorkspacePermissionsAction();
+
+public record struct ReloadWorkspacePermissionsAction(TaskCompletionSource? CompletionSource = null);

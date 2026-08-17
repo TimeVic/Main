@@ -1,8 +1,5 @@
 ﻿using Fluxor;
-using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Security;
-using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.Http;
@@ -70,7 +67,9 @@ public class WorkspaceInitializationService
     {
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(false));
         _dispatcher.Dispatch(new LoadCurrentUserAction());
-        await LoadWorkspacePermissionsAsync();
+        var permissionsCompletionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        _dispatcher.Dispatch(new ReloadWorkspacePermissionsAction(permissionsCompletionSource));
+        await permissionsCompletionSource.Task;
         _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.WorkspaceMembers.LoadListAction(isReload));
         _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Project.LoadListAction(isReload));
         _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Client.LoadListAction(isReload));
@@ -82,59 +81,12 @@ public class WorkspaceInitializationService
         // Task.Run(() => _fcmService.SetNotificationToken());
     }
 
-    private async Task LoadWorkspacePermissionsAsync()
-    {
-        var workspaceId = _authState.Value.Workspace?.Id;
-        if (workspaceId == null)
-        {
-            _dispatcher.Dispatch(new ClearWorkspacePermissionsAction());
-            return;
-        }
-
-        try
-        {
-            _dispatcher.Dispatch(new SetWorkspacePermissionsLoadingAction(true));
-            var response = await _apiService.GetWorkspacePermissionsAsync(workspaceId.Value);
-            if (response != null)
-            {
-                _dispatcher.Dispatch(new SetWorkspacePermissionsAction(response));
-            }
-            else
-            {
-                _dispatcher.Dispatch(
-                    new SetWorkspacePermissionsAction(
-                        new GetWorkspacePermissionsResponse
-                        {
-                            Permissions = new List<WorkspacePermission>()
-                        }
-                    )
-                );
-            }
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, e.Message);
-            _dispatcher.Dispatch(
-                new SetWorkspacePermissionsAction(
-                    new GetWorkspacePermissionsResponse
-                    {
-                        Permissions = new List<WorkspacePermission>()
-                    }
-                )
-            );
-        }
-        finally
-        {
-            _dispatcher.Dispatch(new SetWorkspacePermissionsLoadingAction(false));
-        }
-    }
-    
-    public void ChangeWorkspace(WorkspaceDto workspace)
+    public void ChangeWorkspace(WorkspaceDto workspace, string? destinationPath = null)
     {
         if (workspace.Id == _authState.Value.Workspace?.Id)
         {
             return;
         }
-        _dispatcher.Dispatch(new SelectWorkspaceAction(workspace));
+        _dispatcher.Dispatch(new SelectWorkspaceAction(workspace, destinationPath));
     }
 }

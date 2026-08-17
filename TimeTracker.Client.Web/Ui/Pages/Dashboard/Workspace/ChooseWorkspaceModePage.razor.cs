@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Permissions;
 using TimeTracker.Client.Core.Store.Workspace;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Services.Security;
@@ -62,6 +63,7 @@ public partial class ChooseWorkspaceModePage
             if (updatedWorkspace != null)
             {
                 Dispatcher.Dispatch(new SetWorkspaceAction(updatedWorkspace));
+                Dispatcher.Dispatch(new ReloadWorkspacePermissionsAction());
                 NavigationManager.NavigateTo(UrlService.GetDashboardUrl(workspaceId: WorkspaceId), replace: true);
             }
         }
