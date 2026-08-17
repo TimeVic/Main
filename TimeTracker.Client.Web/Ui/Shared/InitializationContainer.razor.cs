@@ -5,6 +5,7 @@ using Microsoft.JSInterop;
 using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Web.Services;
+using TimeTracker.Client.Web.Services.Notification;
 using TimeTracker.Client.Web.Services.Validation;
 using TimeTracker.Client.Web.Services.Workspace;
 using TimeTracker.Client.Core.Store.Auth;
@@ -20,6 +21,9 @@ public partial class InitializationContainer : IDisposable
     private ActiveTimeEntrySynchronizationTimer? _activeTimeEntrySynchronizationTimer;
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public bool IsRegisterPushNotificationToken { get; set; }
 
     [Inject]
     protected IJSRuntime Js { get; set; }
@@ -46,6 +50,12 @@ public partial class InitializationContainer : IDisposable
     protected WorkspaceInitializationService WorkspaceInitializationService { get; set; }
 
     [Inject]
+    protected FcmService FcmService { get; set; } = null!;
+
+    [Inject]
+    protected ILogger<InitializationContainer> Logger { get; set; } = null!;
+
+    [Inject]
     protected UrlService UrlService { get; set; }
     
     [Inject]
@@ -65,6 +75,19 @@ public partial class InitializationContainer : IDisposable
 
             WorkspaceInitializationService.Init();
             await WorkspaceInitializationService.AfterInit();
+
+            if (IsRegisterPushNotificationToken)
+            {
+                try
+                {
+                    await FcmService.SetNotificationToken();
+                }
+                catch (Exception exception)
+                {
+                    Logger.LogWarning(exception, "Unable to register the browser push notification token");
+                }
+            }
+
             StartActiveTimeEntrySynchronization();
 
             if (!workspaceId.HasValue && AuthState.Value.Workspace != null)

@@ -15,3 +15,36 @@ let firebaseConfig = {
 
 let app = firebase.initializeApp(firebaseConfig);
 let messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
+    const notificationUrl = payload.fcmOptions?.link ?? payload.data?.url;
+    const notification = payload.notification ?? {};
+
+    self.registration.showNotification(notification.title ?? 'TimeVic', {
+        body: notification.body,
+        icon: notification.icon,
+        data: {
+            url: notificationUrl
+        }
+    });
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const notificationUrl = event.notification.data?.url;
+    if (!notificationUrl) {
+        return;
+    }
+
+    event.waitUntil((async () => {
+        const windowClients = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+        const existingClient = windowClients.find((client) => client.url.startsWith(self.location.origin));
+
+        if (existingClient) {
+            await existingClient.navigate(notificationUrl);
+            return existingClient.focus();
+        }
+
+        return clients.openWindow(notificationUrl);
+    })());
+});

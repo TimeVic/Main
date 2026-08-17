@@ -3,7 +3,7 @@ using Notification.Abstractions;
 using TimeTracker.Business.Clients.Smtp;
 using TimeTracker.Business.Clients.Smtp.Core;
 using TimeTracker.Business.Notifications.Core;
-using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Orm.Dao;
 
 namespace TimeTracker.Business.Notifications.Senders.TimeEntry
 {
@@ -11,13 +11,17 @@ namespace TimeTracker.Business.Notifications.Senders.TimeEntry
     {
         private readonly ISmtpClientService _smtpClientService;
         private readonly IEmailTemplateService _emailTemplateService;
-        private readonly IUserDao _userDao;
+        private readonly ITimeEntryDao _timeEntryDao;
 
-        public TimeEntryAutoStoppedNotificationSender(ISmtpClientService smtpClientService, IEmailTemplateService emailTemplateService, IUserDao userDao)
+        public TimeEntryAutoStoppedNotificationSender(
+            ISmtpClientService smtpClientService,
+            IEmailTemplateService emailTemplateService,
+            ITimeEntryDao timeEntryDao
+        )
         {
             _smtpClientService = smtpClientService;
             _emailTemplateService = emailTemplateService;
-            _userDao = userDao;
+            _timeEntryDao = timeEntryDao;
         }
 
         public async Task HandleAsync(
@@ -25,12 +29,13 @@ namespace TimeTracker.Business.Notifications.Senders.TimeEntry
             CancellationToken cancellationToken = default
         )
         {
-            var user = await _userDao.GetById(context.UserId);
-            if (user == null)
+            var timeEntry = await _timeEntryDao.GetByIdAsync(context.TimeEntryId);
+            if (timeEntry == null)
                 return;
 
-            var emailBuilder = _emailTemplateService.GetEmailBuilder("TimeEntryAutoStoppedNotification.htm", user);
-            _smtpClientService.SendEmail(user.Email, emailBuilder, null);
+            var emailBuilder = _emailTemplateService.GetEmailBuilder("TimeEntryAutoStoppedNotification.htm", timeEntry.User);
+            emailBuilder.AddPlaceholder("projectName", timeEntry.Project?.Name ?? "—");
+            _smtpClientService.SendEmail(timeEntry.User.Email, emailBuilder, null);
         }
     }
 }

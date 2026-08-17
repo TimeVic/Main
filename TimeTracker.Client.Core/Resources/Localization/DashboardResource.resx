@@ -26,6 +26,7 @@
   <data name="Operations" xml:space="preserve"><value>Operations</value></data>
   <data name="TimeEntries" xml:space="preserve"><value>Time Entries</value></data>
   <data name="TimeEntriesReport" xml:space="preserve"><value>Time entries report</value></data>
+  <data name="TimeEntry_Autostopped" xml:space="preserve"><value>Auto-stopped</value></data>
   <data name="Projects" xml:space="preserve"><value>Projects</value></data>
   <data name="Tasks" xml:space="preserve"><value>Tasks</value></data>
   <data name="Clients" xml:space="preserve"><value>Clients</value></data>

@@ -4,13 +4,13 @@ namespace TimeTracker.Business.Notifications.Senders.TimeEntry
 {
     public class TimeEntryAutoStoppedNotificationItemContext : INotificationItemContext
     {
-        public Guid UserId { get; set; }
+        public Guid TimeEntryId { get; set; }
 
         public TimeEntryAutoStoppedNotificationItemContext() {}
 
-        public TimeEntryAutoStoppedNotificationItemContext(Guid userId)
+        public TimeEntryAutoStoppedNotificationItemContext(Guid timeEntryId)
         {
-            UserId = userId;
+            TimeEntryId = timeEntryId;
         }
     }
 }

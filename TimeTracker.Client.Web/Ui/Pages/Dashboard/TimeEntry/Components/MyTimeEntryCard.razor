@@ -100,6 +100,10 @@
 
     @* Duration *@
     <span class="w-16 shrink-0 text-right font-mono text-sm font-semibold text-slate-700">
+        @if (Entry.IsAutostopped)
+        {
+            <span class="mr-1 text-amber-600" title="@DashboardLocalizer["TimeEntry_Autostopped"]">⚠️</span>
+        }
         @_timeParsingService.TimeSpanToTimeString(Entry.Duration, true)
     </span>
 

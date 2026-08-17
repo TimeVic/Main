@@ -14,6 +14,7 @@ public class TimeEntryDto: BaseDto
     
     public decimal? HourlyRate { get; set; }
     public bool IsBillable { get; set; }
+    public bool IsAutostopped { get; set; }
     public bool IsSynced { get; set; }
     public DateTime CreatedAt { get; set; }
     public ProjectDto? Project { get; set; }
@@ -56,6 +57,7 @@ public class TimeEntryDto: BaseDto
         StartTime = fromEntry.StartTime;
         HourlyRate = fromEntry.HourlyRate;
         IsBillable = fromEntry.IsBillable;
+        IsAutostopped = fromEntry.IsAutostopped;
         Task = fromEntry.Task;
         IsSynced = fromEntry.IsSynced;
     }

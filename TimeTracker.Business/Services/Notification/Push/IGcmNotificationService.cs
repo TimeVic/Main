@@ -1,5 +1,6 @@
 ﻿using Domain.Abstractions;
 using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 
 namespace TimeTracker.Business.Services.Notification.Push;
@@ -14,4 +15,6 @@ public interface IGcmNotificationService: IDomainService
         UserEntity performedUsed,
         bool isChanged
     );
+
+    Task SendTimeEntryRunningTooLongNotification(TimeEntryEntity timeEntry);
 }

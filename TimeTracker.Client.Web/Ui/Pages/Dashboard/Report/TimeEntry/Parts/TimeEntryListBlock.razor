@@ -76,6 +76,10 @@
 
             <TemplateColumn Title="@DashboardLocalizer["Duration"].Value" TItem="TimeEntryDto" Align="Align.End">
                 <span class="whitespace-nowrap font-mono font-semibold text-slate-700">
+                    @if (context.IsAutostopped)
+                    {
+                        <span class="mr-1 text-amber-600" title="@DashboardLocalizer["TimeEntry_Autostopped"]">⚠️</span>
+                    }
                     @_timeParsingService.TimeSpanToTimeString(context.Duration, true)
                 </span>
             </TemplateColumn>

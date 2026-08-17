@@ -26,6 +26,7 @@
   <data name="Operations" xml:space="preserve"><value>Операції</value></data>
   <data name="TimeEntries" xml:space="preserve"><value>Записи часу</value></data>
   <data name="TimeEntriesReport" xml:space="preserve"><value>Звіт по записах часу</value></data>
+  <data name="TimeEntry_Autostopped" xml:space="preserve"><value>Автозупинено</value></data>
   <data name="Projects" xml:space="preserve"><value>Проєкти</value></data>
   <data name="Tasks" xml:space="preserve"><value>Задачі</value></data>
   <data name="Clients" xml:space="preserve"><value>Клієнти</value></data>

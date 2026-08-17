@@ -21,6 +21,8 @@ namespace TimeTracker.Business.Orm.Dao;
 public class TimeEntryDao: BaseDao, ITimeEntryDao
 {
     private const int MaxCreatedItemsIfStopped = 10;
+    private const string AutoStoppedDescriptionMarker = "[Auto-stopped]";
+    private static readonly TimeSpan AutoStoppedDuration = TimeSpan.FromHours(8);
     
     private readonly ILogger<TimeEntryDao> _logger;
     private readonly IProjectDao _projectDao;
@@ -41,7 +43,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             return null;
         return await Session.GetAsync<TimeEntryEntity>(id);
     }  
-    
+
     public async Task<ListDto<TimeEntryEntity>> GetListAsync(
         WorkspaceEntity workspace,
         int page,
@@ -493,5 +495,38 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .Where(entry => entry.EndTime == null)
             .Where(entry => entry.Workspace.Id == workspace.Id)
             .ToListAsync();
+    }
+
+    public async Task<ICollection<TimeEntryEntity>> GetActiveEntriesStartedBeforeAsync(DateTime startedBefore)
+    {
+        var timeEntries = await Session.Query<TimeEntryEntity>()
+            .Where(entry => entry.EndTime == null)
+            .Where(entry => entry.IsMarkedToDelete == false)
+            .Where(entry => entry.StartTime < startedBefore)
+            .Fetch(entry => entry.Workspace)
+            .Fetch(entry => entry.User)
+            .ThenFetchMany(user => user.NotificationTokens)
+            .ToListAsync();
+
+        return timeEntries
+            .DistinctBy(entry => entry.Id)
+            .ToList();
+    }
+
+    public async Task AutoStopAsync(TimeEntryEntity timeEntry)
+    {
+        if (!timeEntry.IsActive)
+        {
+            return;
+        }
+
+        timeEntry.EndTime = timeEntry.StartTime.Add(AutoStoppedDuration);
+        timeEntry.IsAutostopped = true;
+        timeEntry.UpdatedAt = DateTime.UtcNow;
+        timeEntry.Description = string.IsNullOrWhiteSpace(timeEntry.Description)
+            ? AutoStoppedDescriptionMarker
+            : $"{timeEntry.Description.TrimEnd()}\n{AutoStoppedDescriptionMarker}";
+
+        await Session.SaveAsync(timeEntry);
     }
 }

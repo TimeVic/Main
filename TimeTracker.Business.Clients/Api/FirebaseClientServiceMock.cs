@@ -23,7 +23,7 @@ public class FirebaseClientServiceMock: IFirebaseClientService
         SentMessages.Clear();
     }
     
-    public Task<bool> SendMessage(string toToken, string title, string body)
+    public Task<bool> SendMessage(string toToken, string title, string body, string? link = null)
     {
         var message = new Message()
         {
@@ -37,6 +37,18 @@ public class FirebaseClientServiceMock: IFirebaseClientService
                 }
             }
         };
+
+        if (!string.IsNullOrWhiteSpace(link))
+        {
+            message.Data = new Dictionary<string, string>
+            {
+                ["url"] = link
+            };
+            message.Webpush.FcmOptions = new WebpushFcmOptions
+            {
+                Link = link
+            };
+        }
 
         return SendMessage(message);
     }
