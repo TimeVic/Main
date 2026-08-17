@@ -49,6 +49,7 @@ public partial class AttachmentsBlock
     public ILogger<AttachmentsBlock> _logger { get; set; }
 
     private readonly HashSet<Guid> _deletingAttachmentIds = new();
+    private readonly HashSet<Guid> _copyingAttachmentIds = new();
 
     private bool IsVisible => !HideWhenEmpty || Files.Any() || UploadingFiles.Any();
 
@@ -74,6 +75,11 @@ public partial class AttachmentsBlock
     private bool IsAttachmentDeleting(StoredFileDto attachment)
     {
         return _deletingAttachmentIds.Contains(attachment.Id);
+    }
+
+    private bool IsAttachmentCopying(StoredFileDto attachment)
+    {
+        return _copyingAttachmentIds.Contains(attachment.Id);
     }
 
     private string GetUploadingAttachmentExtension(UploadingAttachment attachment)
@@ -106,6 +112,38 @@ public partial class AttachmentsBlock
         finally
         {
             _deletingAttachmentIds.Remove(attachment.Id);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task OnCopyImage(StoredFileDto attachment)
+    {
+        if (!_copyingAttachmentIds.Add(attachment.Id))
+        {
+            return;
+        }
+
+        await InvokeAsync(StateHasChanged);
+        try
+        {
+            var isCopied = await Js.InvokeAsync<bool>("copyImageToClipboard", [GetAttachmentUrl(attachment)]);
+            if (isCopied)
+            {
+                ToastService.ShowSuccess(DashboardLocalizer["AttachmentsBlock_ImageCopied"].Value);
+            }
+            else
+            {
+                ToastService.ShowError(DashboardLocalizer["AttachmentsBlock_ImageCopyError"].Value);
+            }
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Failed to copy image attachment {AttachmentId} to clipboard", attachment.Id);
+            ToastService.ShowError(DashboardLocalizer["AttachmentsBlock_ImageCopyError"].Value);
+        }
+        finally
+        {
+            _copyingAttachmentIds.Remove(attachment.Id);
             await InvokeAsync(StateHasChanged);
         }
     }

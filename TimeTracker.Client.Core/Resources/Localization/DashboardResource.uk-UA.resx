@@ -489,6 +489,9 @@
   <data name="SelectTags" xml:space="preserve"><value>Виберіть теги</value></data>
   <data name="DurationInput_InvalidFormat" xml:space="preserve"><value>Використовуйте формат на кшталт 1h 30m, 2d, 1w або 01:30</value></data>
   <data name="AttachmentsBlock_DeleteAttachment" xml:space="preserve"><value>Видалити вкладення</value></data>
+  <data name="AttachmentsBlock_CopyImage" xml:space="preserve"><value>Скопіювати оригінал зображення</value></data>
+  <data name="AttachmentsBlock_ImageCopied" xml:space="preserve"><value>Зображення скопійовано в буфер обміну</value></data>
+  <data name="AttachmentsBlock_ImageCopyError" xml:space="preserve"><value>Не вдалося скопіювати зображення в буфер обміну</value></data>
   <data name="FileUploader_Uploading" xml:space="preserve"><value>Завантаження...</value></data>
   <data name="FileUploader_SelectFiles" xml:space="preserve"><value>Вибрати файли</value></data>
   <data name="ProjectsDropDown_AddFirstClient" xml:space="preserve"><value>Додати першого клієнта</value></data>

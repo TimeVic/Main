@@ -151,6 +151,31 @@ window.copyToClipboard = async (text) => {
     }
 };
 
+window.copyImageToClipboard = async (url) => {
+    try {
+        if (!navigator.clipboard?.write || typeof ClipboardItem === "undefined") {
+            return false;
+        }
+
+        const response = await fetch(url, { credentials: "include" });
+        if (!response.ok) {
+            return false;
+        }
+
+        const image = await response.blob();
+        if (!image.type.startsWith("image/")) {
+            return false;
+        }
+
+        await navigator.clipboard.write([
+            new ClipboardItem({ [image.type]: image })
+        ]);
+        return true;
+    } catch (err) {
+        return false;
+    }
+};
+
 
 window.scrollHelper = {
 
