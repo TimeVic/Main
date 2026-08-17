@@ -3,7 +3,6 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.Http;
-using TimeTracker.Client.Web.Services.Notification;
 using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Common;
 using TimeTracker.Client.Core.Store.Permissions;
@@ -20,7 +19,6 @@ public class WorkspaceInitializationService
 
     public WorkspaceInitializationService(
         IDispatcher dispatcher,
-        FcmService fcmService,
         IState<AuthState> authState,
         ApiService apiService,
         ILogger<WorkspaceInitializationService> logger
@@ -78,7 +76,6 @@ public class WorkspaceInitializationService
         
         _dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Tag.LoadListAction());
         _dispatcher.Dispatch(new SetIsWorkspaceInitializedAction(true));
-        // Task.Run(() => _fcmService.SetNotificationToken());
     }
 
     public void ChangeWorkspace(WorkspaceDto workspace, string? destinationPath = null)

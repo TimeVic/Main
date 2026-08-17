@@ -23,6 +23,7 @@ public class Startup
         services.AddHostedService<Services.Queue.NotificationProcessingHostedService>();
         services.AddHostedService<Services.Queue.ExternalClientProcessingHostedService>();
         services.AddHostedService<Services.Tasks.TaskNotificationHostedService>();
+        services.AddHostedService<Services.TimeEntry.AntiForgetTimerHostedService>();
         services.AddHostedService<Services.Workspace.WorkspaceHardDeletionHostedService>();
     }
 

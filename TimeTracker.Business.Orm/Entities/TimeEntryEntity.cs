@@ -18,6 +18,8 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual string? RedmineId { get; set; }
         public virtual long? JiraId { get; set; }
         public virtual bool IsMarkedToDelete { get; set; }
+        public virtual bool IsAutostopped { get; set; }
+        public virtual DateTime? AutoStopWarningSentAt { get; set; }
         public virtual string TimeZone { get; set; } = "UTC";
         
         #region Relationships

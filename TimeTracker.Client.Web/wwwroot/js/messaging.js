@@ -15,17 +15,33 @@ let messaging = firebase.messaging();
 
 messaging.onMessage((payload) => {
     console.log('Message received: ', payload);
-    new Notification(payload.notification.title, payload.notification);
+    const notification = new Notification(payload.notification.title, payload.notification);
+    const notificationUrl = payload.fcmOptions?.link ?? payload.data?.url;
+
+    notification.onclick = () => {
+        notification.close();
+        window.focus();
+
+        if (notificationUrl) {
+            window.location.assign(notificationUrl);
+        }
+    };
 });
 
 export function getToken() {
     return new Promise(resolve => {
+        if (!('Notification' in window) || Notification.permission !== 'granted') {
+            resolve('');
+            return;
+        }
+
         messaging.getToken({ vapidKey: 'BIyPXPr213LclQcFJgg3IfVOyLFDfBS8GV4f3LrHNEmckpWVMPq6lcUpcEByLacUReItPkO4eiw-uhdC2IFQ0lg' })
             .then((currentToken) => {
                 console.info('GCM Token ', currentToken);
                 resolve(currentToken);
-            }).catch((err) => {
+        }).catch((err) => {
             console.log('An error occurred while retrieving token. ', err);
+            resolve('');
         });        
     });
 }

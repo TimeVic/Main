@@ -120,6 +120,25 @@ public class GetListTest: BaseTest
     }
 
     [Fact]
+    public async Task ShouldReturnAutoStoppedFlag()
+    {
+        var entry = await _timeEntrySeeder.CreateAsync(_defaultWorkspace, _user);
+        entry.IsAutostopped = true;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new GetListRequest
+        {
+            Page = 1
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<GetListResponse>();
+        var actualEntry = Assert.Single(actualDto.List.Items, item => item.Id == entry.Id);
+
+        Assert.True(actualEntry.IsAutostopped);
+    }
+
+    [Fact]
     public async Task ShouldNotSplitSingleDayBetweenPages()
     {
         var project = await _projectSeeder.CreateAsync(_defaultWorkspace);

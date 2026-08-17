@@ -3,7 +3,9 @@ using TimeTracker.Business.Clients.Api;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Orm.Entities.Tasks;
+using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
+using TimeTracker.Business.Services.Http;
 
 namespace TimeTracker.Business.Services.Notification.Push;
 
@@ -12,22 +14,26 @@ public class GcmNotificationService: IGcmNotificationService
     private readonly IUserNotificationTokenDao _userNotificationTokenDao;
     private readonly IDbSessionProvider _sessionProvider;
     private readonly IFirebaseClientService _firebaseClient;
+    private readonly IUrlService _urlService;
 
     public GcmNotificationService(
         IUserNotificationTokenDao userNotificationTokenDao,
         IDbSessionProvider sessionProvider,
-        IFirebaseClientService firebaseClient
+        IFirebaseClientService firebaseClient,
+        IUrlService urlService
     )
     {
         _userNotificationTokenDao = userNotificationTokenDao;
         _sessionProvider = sessionProvider;
         _firebaseClient = firebaseClient;
+        _urlService = urlService;
     }
 
     private async Task SendGcmNotification(
         ICollection<UserNotificationTokenEntity> tokens,
         string title,
-        string body
+        string body,
+        string? link = null
     )
     {
         foreach (var token in tokens)
@@ -35,7 +41,8 @@ public class GcmNotificationService: IGcmNotificationService
             var isSent = await _firebaseClient.SendMessage(
                 token.Token,
                 title,
-                body
+                body,
+                link
             );
             if (!isSent)
             {
@@ -68,6 +75,16 @@ public class GcmNotificationService: IGcmNotificationService
             receiverUser.NotificationTokens,
             performedUsed.Name + (isChanged ? " changed" : " added") + " comment:",
             comment.Comment.Truncate(200, true)
+        );
+    }
+
+    public async Task SendTimeEntryRunningTooLongNotification(TimeEntryEntity timeEntry)
+    {
+        await SendGcmNotification(
+            timeEntry.User.NotificationTokens,
+            "TimeVic timer reminder",
+            "Your timer has been running for more than 10 hours.",
+            _urlService.ToFrontendAbsoluteUrl($"/board/{timeEntry.Workspace.Id}")
         );
     }
 }

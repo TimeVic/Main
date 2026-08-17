@@ -41,6 +41,10 @@ public interface ITimeEntryDao: IDomainService
 
     Task<ICollection<TimeEntryEntity>> GetActiveEntriesAsync(WorkspaceEntity workspace);
 
+    Task<ICollection<TimeEntryEntity>> GetActiveEntriesStartedBeforeAsync(DateTime startedBefore);
+
+    Task AutoStopAsync(TimeEntryEntity timeEntry);
+
     Task<ListDto<TimeEntryEntity>> GetListAsync(
         WorkspaceEntity workspace,
         int page,
