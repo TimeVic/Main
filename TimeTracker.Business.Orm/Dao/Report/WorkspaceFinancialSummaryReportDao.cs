@@ -1,6 +1,5 @@
 using Autofac;
 using NHibernate.Transform;
-using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao.Common;
 using TimeTracker.Business.Orm.Dto.Reports;
 using TimeTracker.Business.Orm.Dto.Reports.WorkspaceFinancialSummary;
@@ -15,7 +14,7 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
 
     public async Task<ICollection<FinancialClientBalanceItemDto>> GetClientBalancesAsync(Guid workspaceId)
     {
-        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialClientBalances"))
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialSummary.ClientBalances"))
             .SetParameter("workspaceId", workspaceId)
             .SetResultTransformer(Transformers.AliasToBean<FinancialClientBalanceItemDto>())
             .ListAsync<FinancialClientBalanceItemDto>();
@@ -27,7 +26,7 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
         DateTime endDate
     )
     {
-        return await Session.CreateSQLQuery(ReadSqlQuery("Report.UserPaymentReportProjectEarnings"))
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.UserPaymentReport.ProjectEarnings"))
             .SetParameter("workspaceId", workspaceId)
             .SetParameter("userId", userId)
             .SetParameter("endDate", endDate)
@@ -37,7 +36,7 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
 
     public async Task<ICollection<UserPaymentReportClientPaymentItemDto>> GetUserPaymentReportClientPaymentsAsync(Guid workspaceId, DateTime endDate)
     {
-        return await Session.CreateSQLQuery(ReadSqlQuery("Report.UserPaymentReportClientPayments"))
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.UserPaymentReport.ClientPayments"))
             .SetParameter("workspaceId", workspaceId)
             .SetParameter("endDate", endDate)
             .SetResultTransformer(Transformers.AliasToBean<UserPaymentReportClientPaymentItemDto>())
@@ -46,7 +45,7 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
 
     public async Task<ICollection<FinancialMemberBalanceItemDto>> GetMemberBalancesAsync(Guid workspaceId)
     {
-        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialMemberBalances"))
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialSummary.MemberBalances"))
             .SetParameter("workspaceId", workspaceId)
             .SetResultTransformer(Transformers.AliasToBean<FinancialMemberBalanceItemDto>())
             .ListAsync<FinancialMemberBalanceItemDto>();
@@ -54,7 +53,7 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
 
     public async Task<ICollection<FinancialClientProjectItemDto>> GetClientProjectBreakdownAsync(Guid workspaceId)
     {
-        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialClientProjects"))
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialSummary.ClientProjects"))
             .SetParameter("workspaceId", workspaceId)
             .SetResultTransformer(Transformers.AliasToBean<FinancialClientProjectItemDto>())
             .ListAsync<FinancialClientProjectItemDto>();
@@ -62,7 +61,7 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
 
     public async Task<ICollection<FinancialMemberProjectItemDto>> GetMemberProjectBreakdownAsync(Guid workspaceId)
     {
-        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialMemberProjects"))
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialSummary.MemberProjects"))
             .SetParameter("workspaceId", workspaceId)
             .SetResultTransformer(Transformers.AliasToBean<FinancialMemberProjectItemDto>())
             .ListAsync<FinancialMemberProjectItemDto>();
@@ -70,7 +69,7 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
 
     public async Task<ICollection<FinancialProjectProfitabilityItemDto>> GetProjectProfitabilityAsync(Guid workspaceId)
     {
-        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialProjectProfitability"))
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialSummary.ProjectProfitability"))
             .SetParameter("workspaceId", workspaceId)
             .SetResultTransformer(Transformers.AliasToBean<FinancialProjectProfitabilityItemDto>())
             .ListAsync<FinancialProjectProfitabilityItemDto>();

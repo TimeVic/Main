@@ -70,10 +70,10 @@ namespace TimeTracker.Client.Core.Services.Http
             );
         }
 
-        public async Task<GetSharedClientReportTasksResponse?> ReportsGetPublicSharedClientReportTasksAsync(string token)
+        public async Task<GetSharedClientReportTasksResponse?> ReportsGetPublicSharedClientReportTasksAsync(string token, Guid projectId, int page)
         {
             return await GetAsync<GetSharedClientReportTasksResponse?>(
-                $"{ApiUrl.PublicSharedClientReport}/{Uri.EscapeDataString(token)}/get-tasks"
+                $"{ApiUrl.PublicSharedClientReport}/{Uri.EscapeDataString(token)}/get-tasks?projectId={projectId}&page={page}"
             );
         }
     }

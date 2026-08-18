@@ -1,7 +1,5 @@
 ﻿using Autofac;
 using NHibernate.Transform;
-using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Business.Orm.Dao.Common;
 using TimeTracker.Business.Orm.Dto.Reports;
@@ -20,7 +18,7 @@ public class TimeEntryReportsDao: BaseDao, ITimeEntryReportsDao
         DateTime endDate
     )
     {
-        return await Session.CreateSQLQuery(ReadSqlQuery("Report.ProjectMemberPayments"))
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.ProjectMemberPayments.Payments"))
             .SetParameter("workspaceId", workspaceId)
             .SetParameter("userId", userId)
             .SetParameter("endDate", endDate.EndOfDay())

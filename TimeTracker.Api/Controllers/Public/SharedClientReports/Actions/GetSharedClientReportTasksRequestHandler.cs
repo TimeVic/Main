@@ -16,6 +16,6 @@ public class GetSharedClientReportTasksRequestHandler : IAsyncRequestHandler<Get
     public async Task<GetSharedClientReportTasksResponse> ExecuteAsync(GetSharedClientReportTasksRequest request)
     {
         var report = await _sharedClientReportService.GetActiveAsync(request.Token, isRequireTasks: true);
-        return await _sharedClientReportService.GetTasksAsync(report);
+        return await _sharedClientReportService.GetTasksAsync(report, request.ProjectId, request.Page);
     }
 }

@@ -13,7 +13,7 @@ public partial class SummaryReportDao
     )
     {
         return await GetTeamReportAsync<TeamSummaryByDaysReportItemDto>(
-            "Report.TeamSummaryByDay",
+            "Report.TeamSummary.ByDay",
             workspaceId,
             startDate,
             endDate
@@ -27,7 +27,7 @@ public partial class SummaryReportDao
     )
     {
         return await GetTeamReportAsync<TeamSummaryMemberReportItemDto>(
-            "Report.TeamSummaryByMember",
+            "Report.TeamSummary.ByMember",
             workspaceId,
             startDate,
             endDate

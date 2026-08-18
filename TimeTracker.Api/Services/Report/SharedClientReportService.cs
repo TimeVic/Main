@@ -1,33 +1,28 @@
-using Microsoft.AspNetCore.Http;
 using TimeTracker.Api.Shared.Dto.Model.Report.SharedClientReport;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Helpers;
+using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Report;
-using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
-using TimeTracker.Business.Orm.Entities.Tasks;
 
 namespace TimeTracker.Api.Services.Report;
 
 public class SharedClientReportService : ISharedClientReportService
 {
     private readonly ISharedClientReportDao _sharedClientReportDao;
-    private readonly IWorkspaceFinancialSummaryReportDao _reportDao;
-    private readonly ITaskDao _taskDao;
+    private readonly IClientFinancialReportDataDao _reportDataDao;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public SharedClientReportService(
         ISharedClientReportDao sharedClientReportDao,
-        IWorkspaceFinancialSummaryReportDao reportDao,
-        ITaskDao taskDao,
+        IClientFinancialReportDataDao reportDataDao,
         IHttpContextAccessor httpContextAccessor
     )
     {
         _sharedClientReportDao = sharedClientReportDao;
-        _reportDao = reportDao;
-        _taskDao = taskDao;
+        _reportDataDao = reportDataDao;
         _httpContextAccessor = httpContextAccessor;
     }
 
@@ -49,33 +44,32 @@ public class SharedClientReportService : ISharedClientReportService
 
     public async Task<GetSharedClientReportResponse> GetReportAsync(SharedClientReportEntity report)
     {
-        var projects = await _reportDao.GetClientProjectBreakdownAsync(report.Client.Workspace.Id);
+        var projects = await _reportDataDao.GetProjectBreakdownAsync(report.Client);
         var projectDtos = projects
-            .Where(item => item.ClientId == report.Client.Id)
             .Select(item => new SharedClientReportProjectDto
-        {
-            Id = item.ProjectId,
-            Name = item.ProjectName,
-            Duration = item.Duration,
-            Earned = item.EarnedAmount
-        }).ToList();
-        var paymentDtos = report.Client.ClientPayments
-            .OrderByDescending(item => item.PaymentTime)
-            .ThenByDescending(item => item.CreatedAt)
+            {
+                Id = item.ProjectId,
+                Name = item.ProjectName,
+                Duration = item.Duration,
+                Earned = item.EarnedAmount
+            })
+            .ToList();
+        var paymentDtos = (await _reportDataDao.GetPaymentsAsync(report.Client))
             .Select(item => new SharedClientReportPaymentDto
-        {
-            PaymentTime = item.PaymentTime,
-            Amount = item.Amount,
-            ProjectName = item.Project?.Name,
-            Description = item.Description
-        }).ToList();
+            {
+                PaymentTime = item.PaymentTime,
+                Amount = item.Amount,
+                ProjectName = item.ProjectName,
+                Description = item.Description
+            })
+            .ToList();
 
         return new GetSharedClientReportResponse
         {
             ClientName = report.Client.Name,
             WorkspaceName = report.Client.Workspace.Name,
             CultureCode = GetCultureCode(report),
-            CurrencyCode = report.Client.Workspace.Currency?.Code,
+            CurrencyCode = report.Client.Workspace.Currency.Code,
             IsShowTasks = report.IsShowTasks,
             Projects = projectDtos,
             Payments = paymentDtos,
@@ -96,33 +90,27 @@ public class SharedClientReportService : ISharedClientReportService
             ?? CultureCodeHelper.EnglishCultureCode;
     }
 
-    public async Task<GetSharedClientReportTasksResponse> GetTasksAsync(SharedClientReportEntity report)
+    public async Task<GetSharedClientReportTasksResponse> GetTasksAsync(SharedClientReportEntity report, Guid projectId, int page)
     {
-        var taskLists = report.Client.Projects
-            .SelectMany(project => project.TaskLists)
-            .ToList();
-        var tasks = new List<TaskEntity>();
-        foreach (var taskList in taskLists)
-        {
-            var taskListTasks = await _taskDao.GetList(taskList: taskList);
-            tasks.AddRange(taskListTasks.Items);
-        }
-        var durationsByTaskId = await _taskDao.GetTrackedDurationByTaskIds(tasks.Select(item => item.Id).ToList());
+        var project = report.Client.Projects.FirstOrDefault(item => item.Id == projectId);
+        RecordNotFoundException.ThrowIfNull(project);
+        var taskItems = await _reportDataDao.GetTasksAsync(project, page);
 
         return new GetSharedClientReportTasksResponse
         {
-            Tasks = tasks
-                .Where(item => durationsByTaskId.TryGetValue(item.Id, out var duration) && duration > TimeSpan.Zero)
+            Tasks = taskItems.Items
                 .Select(item => new SharedClientReportTaskDto
                 {
                     Id = item.Id,
-                    ProjectId = item.TaskList.Project.Id,
+                    ProjectId = item.ProjectId,
                     Title = item.Title,
-                    Duration = durationsByTaskId[item.Id]
+                    Duration = item.Duration
                 })
-                .OrderByDescending(item => item.Duration)
-                .ThenBy(item => item.Title)
-                .ToList()
+                .ToList(),
+            TotalCount = taskItems.TotalCount,
+            PageSize = PaginationUtils.DefaultPageSize,
+            TotalPages = PaginationUtils.CalculateTotalPages(taskItems.TotalCount),
+            IsHasMore = page * PaginationUtils.DefaultPageSize < taskItems.TotalCount
         };
     }
 }

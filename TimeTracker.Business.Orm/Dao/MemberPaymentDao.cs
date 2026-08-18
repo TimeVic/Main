@@ -104,7 +104,7 @@ public class MemberPaymentDao: IMemberPaymentDao
         await _sessionProvider.CurrentSession.SaveAsync(payment);
         return payment;
     }
-    
+
     public async Task<ListDto<MemberPaymentEntity>> GetListAsync(WorkspaceMemberEntity member, int page)
     {
         var offset = PaginationUtils.CalculateOffset(page);

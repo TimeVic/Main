@@ -181,7 +181,7 @@ public interface IApiService
 
     Task<GetSharedClientReportResponse?> ReportsGetPublicSharedClientReportAsync(string token);
 
-    Task<GetSharedClientReportTasksResponse?> ReportsGetPublicSharedClientReportTasksAsync(string token);
+    Task<GetSharedClientReportTasksResponse?> ReportsGetPublicSharedClientReportTasksAsync(string token, Guid projectId, int page);
 
     Task<TagDto?> TagAddAsync(TagAddRequest model);
 

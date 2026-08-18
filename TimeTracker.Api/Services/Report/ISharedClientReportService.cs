@@ -10,5 +10,5 @@ public interface ISharedClientReportService : IDomainService
 
     Task<GetSharedClientReportResponse> GetReportAsync(SharedClientReportEntity report);
 
-    Task<GetSharedClientReportTasksResponse> GetTasksAsync(SharedClientReportEntity report);
+    Task<GetSharedClientReportTasksResponse> GetTasksAsync(SharedClientReportEntity report, Guid projectId, int page);
 }
