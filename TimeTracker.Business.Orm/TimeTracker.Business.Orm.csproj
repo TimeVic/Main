@@ -67,6 +67,12 @@
       <EmbeddedResource Include="Queries\Sql\Report\WorkspaceFinancialMemberProjects.sql" />
       <None Remove="Queries\Sql\Report\WorkspaceFinancialProjectProfitability.sql" />
       <EmbeddedResource Include="Queries\Sql\Report\WorkspaceFinancialProjectProfitability.sql" />
+      <None Remove="Queries\Sql\Report\SharedClientReportProjects.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SharedClientReportProjects.sql" />
+      <None Remove="Queries\Sql\Report\SharedClientReportPayments.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SharedClientReportPayments.sql" />
+      <None Remove="Queries\Sql\Report\SharedClientReportTasks.sql" />
+      <EmbeddedResource Include="Queries\Sql\Report\SharedClientReportTasks.sql" />
     </ItemGroup>
 
     <ItemGroup>

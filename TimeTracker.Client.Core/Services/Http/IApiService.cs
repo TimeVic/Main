@@ -8,6 +8,7 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Security;
 using TimeTracker.Business.Common.Constants.Reports;
 using TimeTracker.Business.Common.Dto;
@@ -175,6 +176,15 @@ public interface IApiService
     Task<WorkspaceFinancialSummaryReportResponse?> ReportsGetWorkspaceFinancialSummaryAsync(Guid workspaceId);
 
     Task<UserPaymentReportResponse?> ReportsGetUserPaymentReportAsync(Guid workspaceId, DateTime endDate);
+
+    Task<ClientShareReportSettingsResponse?> ReportsSetClientShareSettingsAsync(
+        Guid clientId,
+        ClientShareReportSettingsRequest request
+    );
+
+    Task<GetSharedClientReportResponse?> ReportsGetPublicSharedClientReportAsync(string token);
+
+    Task<GetSharedClientReportTasksResponse?> ReportsGetPublicSharedClientReportTasksAsync(string token);
 
     Task<TagDto?> TagAddAsync(TagAddRequest model);
 

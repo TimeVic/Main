@@ -44,6 +44,30 @@ public class WorkspaceFinancialSummaryReportDao : BaseDao, IWorkspaceFinancialSu
             .ListAsync<UserPaymentReportClientPaymentItemDto>();
     }
 
+    public async Task<ICollection<SharedClientReportProjectItemDto>> GetSharedClientReportProjectsAsync(Guid clientId)
+    {
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.SharedClientReportProjects"))
+            .SetParameter("clientId", clientId)
+            .SetResultTransformer(Transformers.AliasToBean<SharedClientReportProjectItemDto>())
+            .ListAsync<SharedClientReportProjectItemDto>();
+    }
+
+    public async Task<ICollection<SharedClientReportPaymentItemDto>> GetSharedClientReportPaymentsAsync(Guid clientId)
+    {
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.SharedClientReportPayments"))
+            .SetParameter("clientId", clientId)
+            .SetResultTransformer(Transformers.AliasToBean<SharedClientReportPaymentItemDto>())
+            .ListAsync<SharedClientReportPaymentItemDto>();
+    }
+
+    public async Task<ICollection<SharedClientReportTaskItemDto>> GetSharedClientReportTasksAsync(Guid clientId)
+    {
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.SharedClientReportTasks"))
+            .SetParameter("clientId", clientId)
+            .SetResultTransformer(Transformers.AliasToBean<SharedClientReportTaskItemDto>())
+            .ListAsync<SharedClientReportTaskItemDto>();
+    }
+
     public async Task<ICollection<FinancialMemberBalanceItemDto>> GetMemberBalancesAsync(Guid workspaceId)
     {
         return await Session.CreateSQLQuery(ReadSqlQuery("Report.WorkspaceFinancialMemberBalances"))

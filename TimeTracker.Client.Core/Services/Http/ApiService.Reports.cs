@@ -1,5 +1,6 @@
 ﻿using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport;
 using TimeTracker.Business.Common.Constants.Reports;
 namespace TimeTracker.Client.Core.Services.Http
 {
@@ -51,6 +52,31 @@ namespace TimeTracker.Client.Core.Services.Http
                 {
                     EndDate = endDate
                 }
+            );
+        }
+
+        public async Task<ClientShareReportSettingsResponse?> ReportsSetClientShareSettingsAsync(
+            Guid clientId,
+            ClientShareReportSettingsRequest request
+        )
+        {
+            return await PostAsync<ClientShareReportSettingsResponse?>(
+                $"{ApiUrl.ReportClientShareSettings}/{clientId}",
+                request
+            );
+        }
+
+        public async Task<GetSharedClientReportResponse?> ReportsGetPublicSharedClientReportAsync(string token)
+        {
+            return await GetAsync<GetSharedClientReportResponse?>(
+                $"{ApiUrl.PublicSharedClientReport}/{Uri.EscapeDataString(token)}"
+            );
+        }
+
+        public async Task<GetSharedClientReportTasksResponse?> ReportsGetPublicSharedClientReportTasksAsync(string token)
+        {
+            return await GetAsync<GetSharedClientReportTasksResponse?>(
+                $"{ApiUrl.PublicSharedClientReport}/{Uri.EscapeDataString(token)}/get-tasks"
             );
         }
     }

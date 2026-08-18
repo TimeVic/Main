@@ -78,6 +78,10 @@ public class ApiUrl
 
     public const string ReportUserPayment = "dashboard/report/user-payments";
 
+    public const string ReportClientShareSettings = "dashboard/report/share/client";
+
+    public const string PublicSharedClientReport = "public/shared/report/client";
+
     #endregion
 
     #region Workspace Member

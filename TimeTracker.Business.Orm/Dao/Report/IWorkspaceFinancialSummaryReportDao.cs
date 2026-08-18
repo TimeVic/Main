@@ -17,6 +17,12 @@ public interface IWorkspaceFinancialSummaryReportDao : IDomainService
         DateTime endDate
     );
 
+    Task<ICollection<SharedClientReportProjectItemDto>> GetSharedClientReportProjectsAsync(Guid clientId);
+
+    Task<ICollection<SharedClientReportPaymentItemDto>> GetSharedClientReportPaymentsAsync(Guid clientId);
+
+    Task<ICollection<SharedClientReportTaskItemDto>> GetSharedClientReportTasksAsync(Guid clientId);
+
     Task<ICollection<FinancialClientBalanceItemDto>> GetClientBalancesAsync(Guid workspaceId);
 
     Task<ICollection<FinancialClientProjectItemDto>> GetClientProjectBreakdownAsync(Guid workspaceId);

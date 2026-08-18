@@ -828,6 +828,40 @@
   <data name="UserPaymentReport_UnpaidDebt" xml:space="preserve"><value>Заборгованість</value></data>
   <data name="UserPaymentReport_FullySettled" xml:space="preserve"><value>Повністю закрито</value></data>
   <data name="UserPaymentReport_NoProjects" xml:space="preserve"><value>Немає зафіксованих годин за проєктами</value></data>
+  <data name="ClientShareReport_Title" xml:space="preserve"><value>Налаштування доступу до звіту</value></data>
+  <data name="ClientShareReport_Description" xml:space="preserve"><value>Керуйте посиланням на live-звіт для {0}.</value></data>
+  <data name="ClientShareReport_LinkAccess" xml:space="preserve"><value>Доступ за посиланням</value></data>
+  <data name="ClientShareReport_LinkAccessDescription" xml:space="preserve"><value>Кожен, хто має це посилання, зможе переглянути звіт клієнта.</value></data>
+  <data name="ClientShareReport_Link" xml:space="preserve"><value>Посилання на звіт</value></data>
+  <data name="ClientShareReport_Copy" xml:space="preserve"><value>Копіювати</value></data>
+  <data name="ClientShareReport_InactiveHint" xml:space="preserve"><value>Посилання неактивне й не відкриває звіт.</value></data>
+  <data name="ClientShareReport_Regenerate" xml:space="preserve"><value>Оновити посилання</value></data>
+  <data name="ClientShareReport_ShowTasks" xml:space="preserve"><value>Показувати деталізацію до задач</value></data>
+  <data name="ClientShareReport_Regenerated" xml:space="preserve"><value>Посилання на звіт оновлено.</value></data>
+  <data name="ClientShareReport_Copied" xml:space="preserve"><value>Посилання на звіт скопійовано.</value></data>
+  <data name="ClientShareReport_Open" xml:space="preserve"><value>Поділитися з клієнтом</value></data>
+  <data name="SharedClientReport_MetaTitle" xml:space="preserve"><value>Звіт для клієнта | TimeVic</value></data>
+  <data name="SharedClientReport_MetaDescription" xml:space="preserve"><value>Live-звіт про роботу й оплати для клієнта, створений у TimeVic.</value></data>
+  <data name="SharedClientReport_UnavailableTitle" xml:space="preserve"><value>Цей звіт недоступний</value></data>
+  <data name="SharedClientReport_UnavailableDescription" xml:space="preserve"><value>Посилання може бути неактивним, застарілим або заміненим новим.</value></data>
+  <data name="SharedClientReport_Header" xml:space="preserve"><value>Звіт для клієнта {0} від воркспейсу {1}</value></data>
+  <data name="SharedClientReport_EarnedDescription" xml:space="preserve"><value>Уся виконана оплачувана робота</value></data>
+  <data name="SharedClientReport_ReceivedDescription" xml:space="preserve"><value>Зафіксовані отримані оплати</value></data>
+  <data name="SharedClientReport_PaymentPending" xml:space="preserve"><value>Очікує оплати</value></data>
+  <data name="SharedClientReport_Advance" xml:space="preserve"><value>Профіцит (аванс)</value></data>
+  <data name="SharedClientReport_ProjectsTitle" xml:space="preserve"><value>Деталізація за проєктами</value></data>
+  <data name="SharedClientReport_ProjectsDescription" xml:space="preserve"><value>Оплачувана робота, зафіксована для цього клієнта.</value></data>
+  <data name="SharedClientReport_NoProjects" xml:space="preserve"><value>Оплачувану роботу за проєктами ще не зафіксовано.</value></data>
+  <data name="SharedClientReport_NoTasks" xml:space="preserve"><value>У цьому проєкті немає задач із затреканим часом.</value></data>
+  <data name="SharedClientReport_ShowMoreTasks" xml:space="preserve"><value>Показати ще {0} задач</value></data>
+  <data name="SharedClientReport_PaymentsTitle" xml:space="preserve"><value>Історія оплат</value></data>
+  <data name="SharedClientReport_PaymentsDescription" xml:space="preserve"><value>Оплати, зафіксовані від цього клієнта.</value></data>
+  <data name="SharedClientReport_NoPayments" xml:space="preserve"><value>Оплат ще не зафіксовано.</value></data>
+  <data name="SharedClientReport_Date" xml:space="preserve"><value>Дата</value></data>
+  <data name="SharedClientReport_Note" xml:space="preserve"><value>Примітка</value></data>
+  <data name="SharedClientReport_Footer" xml:space="preserve"><value>Цей звіт автоматично сформовано в системі обліку часу TimeVic. Працюєте з фрілансерами чи субпідрядниками? Контролюйте час, бюджети та виплати безкоштовно.</value></data>
+  <data name="SharedClientReport_TryTimeVic" xml:space="preserve"><value>Спробувати TimeVic безкоштовно</value></data>
+  <data name="SharedClientReport_TasksLoadError" xml:space="preserve"><value>Не вдалося завантажити деталізацію задач.</value></data>
   <data name="WorkspaceMoney_FunnelClientFlow" xml:space="preserve"><value>Клієнтський потік</value></data>
   <data name="WorkspaceMoney_FunnelTeamCost" xml:space="preserve"><value>Витрати на команду</value></data>
   <data name="WorkspaceMoney_FunnelProfit" xml:space="preserve"><value>Дохід власника</value></data>
