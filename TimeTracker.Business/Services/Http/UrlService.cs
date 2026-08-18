@@ -30,6 +30,11 @@ public class UrlService: IUrlService
         return $"{frontendUrl}{relativePath}";
     }
 
+    public string ToSharedClientReportUrl(string token)
+    {
+        return ToFrontendAbsoluteUrl($"/shared/report/client/{token}");
+    }
+
     private string GetCurrentRequestBaseUrl()
     {
         var request = _httpContextAccessor.HttpContext?.Request;

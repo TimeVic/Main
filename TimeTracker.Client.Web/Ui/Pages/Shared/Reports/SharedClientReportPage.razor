@@ -1,0 +1,189 @@
+@page "/shared/report/client/{Token}"
+@page "/uk/shared/report/client/{Token}"
+@using System.Globalization
+@using TimeTracker.Api.Shared.Dto.Model.Report.SharedClientReport
+@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport
+@using TimeTracker.Business.Extensions
+@using Layout = TimeTracker.Client.Web.Ui.Pages.Shared.Reports.SharedClientReportLayout
+
+@inherits BaseReactiveComponent
+@layout Layout
+
+<SeoHead
+    Title="@DashboardLocalizer["SharedClientReport_MetaTitle"]"
+    Description="@DashboardLocalizer["SharedClientReport_MetaDescription"]"
+    Robots="noindex, nofollow"/>
+
+@if (_isLoading)
+{
+    <main class="flex min-h-screen items-center justify-center"><LumexSpinner/></main>
+}
+else if (_report == null)
+{
+    <main class="mx-auto flex min-h-screen max-w-lg items-center px-6 text-center">
+        <div class="w-full rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-500"><i class="fa-solid fa-link-slash"></i></div>
+            <h1 class="mt-4 text-xl font-bold text-slate-900">@DashboardLocalizer["SharedClientReport_UnavailableTitle"]</h1>
+            <p class="mt-2 text-sm text-slate-600">@DashboardLocalizer["SharedClientReport_UnavailableDescription"]</p>
+        </div>
+    </main>
+}
+else
+{
+    <header class="border-b border-slate-200 bg-white">
+        <div class="mx-auto grid max-w-6xl grid-cols-1 items-center gap-3 px-5 py-5 md:grid-cols-[1fr_auto_1fr] md:px-8">
+            <AppLogoBlock
+                IsShowBeta="false"
+                LogoClass="h-8 w-auto"
+                LogoWidth="148"
+                LogoHeight="32"/>
+            <p class="text-center text-sm font-medium text-slate-600">@string.Format(DashboardLocalizer["SharedClientReport_Header"].Value, _report.ClientName, _report.WorkspaceName)</p>
+        </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl space-y-8 px-5 py-8 md:px-8 md:py-10">
+        <section class="grid gap-4 md:grid-cols-3">
+            <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">@DashboardLocalizer["TotalEarned"]</p>
+                <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900">@FormatAmount(_report.Totals.Earned)</p>
+                <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["SharedClientReport_EarnedDescription"]</p>
+            </article>
+            <article class="rounded-2xl border border-emerald-200 bg-emerald-50/40 p-5 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-wider text-emerald-800">@DashboardLocalizer["TotalReceived"]</p>
+                <p class="mt-2 text-3xl font-bold tracking-tight text-emerald-700">@FormatAmount(_report.Totals.Received)</p>
+                <p class="mt-1 text-xs text-emerald-700/80">@DashboardLocalizer["SharedClientReport_ReceivedDescription"]</p>
+            </article>
+            <article class="@($"rounded-2xl border p-5 shadow-sm {GetBalanceCardClass()}")">
+                <div class="flex items-start justify-between gap-3">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider">@DashboardLocalizer["OutstandingBalance"]</p>
+                        <p class="mt-2 text-3xl font-bold tracking-tight">@FormatAmount(Math.Abs(_report.Totals.Outstanding))</p>
+                        <span class="mt-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold @GetBalanceBadgeClass()">
+                            <i class="fa-solid @(_report.Totals.Outstanding > 0 ? "fa-clock" : "fa-shield-halved")"></i>
+                            @GetBalanceText()
+                        </span>
+                    </div>
+                    <i class="fa-solid @(_report.Totals.Outstanding > 0 ? "fa-circle-exclamation" : "fa-shield-heart") text-lg"></i>
+                </div>
+            </article>
+        </section>
+
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div class="border-b border-slate-100 px-5 py-4">
+                <h2 class="font-semibold text-slate-900">@DashboardLocalizer["SharedClientReport_ProjectsTitle"]</h2>
+                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["SharedClientReport_ProjectsDescription"]</p>
+            </div>
+            @if (!_report.Projects.Any())
+            {
+                <p class="px-5 py-8 text-center text-sm text-slate-500">@DashboardLocalizer["SharedClientReport_NoProjects"]</p>
+            }
+            else
+            {
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-100 text-sm">
+                        <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            <tr>
+                                <th class="px-5 py-3 text-left">@DashboardLocalizer["Project"]</th>
+                                <th class="px-5 py-3 text-right">@DashboardLocalizer["Hours"]</th>
+                                <th class="px-5 py-3 text-right">@DashboardLocalizer["Earned"]</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            @foreach (var project in _report.Projects)
+                            {
+                                var isExpanded = _expandedProjectIds.Contains(project.Id);
+                                <tr class="@(_report.IsShowTasks ? "cursor-pointer hover:bg-slate-50" : string.Empty)" @onclick="() => ToggleProjectAsync(project.Id)">
+                                    <td class="px-5 py-4 font-semibold text-slate-800">
+                                        @if (_report.IsShowTasks)
+                                        {
+                                            <i class="mr-2 fa-solid @(isExpanded ? "fa-chevron-down" : "fa-chevron-right") text-xs text-slate-400"></i>
+                                        }
+                                        @project.Name
+                                    </td>
+                                    <td class="px-5 py-4 text-right font-mono text-slate-600">@project.Duration.ToReadableShortString()</td>
+                                    <td class="px-5 py-4 text-right font-semibold text-slate-900">@FormatAmount(project.Earned)</td>
+                                </tr>
+                                @if (isExpanded && _report.IsShowTasks)
+                                {
+                                    <tr class="bg-slate-50/70">
+                                        <td colspan="3" class="px-5 py-4">
+                                            @if (_isTasksLoading)
+                                            {
+                                                <div class="flex justify-center py-4"><LumexSpinner/></div>
+                                            }
+                                            else
+                                            {
+                                                var tasks = GetProjectTasks(project.Id);
+                                                @if (!tasks.Any())
+                                                {
+                                                    <p class="py-2 text-sm text-slate-500">@DashboardLocalizer["SharedClientReport_NoTasks"]</p>
+                                                }
+                                                else
+                                                {
+                                                    <ul class="space-y-2">
+                                                        @foreach (var task in GetVisibleTasks(project.Id))
+                                                        {
+                                                            <li class="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm">
+                                                                <span class="font-medium text-slate-700">@task.Title</span>
+                                                                <span class="shrink-0 font-mono text-xs text-slate-500">@task.Duration.ToReadableShortString()</span>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                    @if (tasks.Count > TasksPreviewLimit && !_fullyExpandedTaskProjectIds.Contains(project.Id))
+                                                    {
+                                                        <button
+                                                            type="button"
+                                                            class="mt-3 inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                                                            @onclick:stopPropagation="true"
+                                                            @onclick="() => _fullyExpandedTaskProjectIds.Add(project.Id)">
+                                                            <i class="fa-regular fa-file-lines"></i>
+                                                            @string.Format(DashboardLocalizer["SharedClientReport_ShowMoreTasks"].Value, tasks.Count - TasksPreviewLimit)
+                                                        </button>
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </section>
+
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <div class="border-b border-slate-100 px-5 py-4">
+                <h2 class="font-semibold text-slate-900">@DashboardLocalizer["SharedClientReport_PaymentsTitle"]</h2>
+                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["SharedClientReport_PaymentsDescription"]</p>
+            </div>
+            @if (!_report.Payments.Any())
+            {
+                <p class="px-5 py-8 text-center text-sm text-slate-500">@DashboardLocalizer["SharedClientReport_NoPayments"]</p>
+            }
+            else
+            {
+                <div class="overflow-x-auto">
+                    <table class="min-w-[680px] w-full divide-y divide-slate-100 text-sm">
+                        <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                            <tr><th class="px-5 py-3 text-left">@DashboardLocalizer["SharedClientReport_Date"]</th><th class="px-5 py-3 text-right">@DashboardLocalizer["Amount"]</th><th class="px-5 py-3 text-left">@DashboardLocalizer["Project"]</th><th class="px-5 py-3 text-left">@DashboardLocalizer["SharedClientReport_Note"]</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            @foreach (var payment in _report.Payments)
+                            {
+                                <tr><td class="px-5 py-3.5 text-slate-600">@payment.PaymentTime.ToString("d MMM yyyy", CultureInfo.CurrentUICulture)</td><td class="px-5 py-3.5 text-right font-semibold text-emerald-700">@FormatAmount(payment.Amount)</td><td class="px-5 py-3.5 text-slate-700">@(payment.ProjectName ?? "—")</td><td class="max-w-xs truncate px-5 py-3.5 text-slate-500">@(payment.Description ?? "—")</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+        <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-7 text-center md:flex-row md:px-8 md:text-left">
+            <p class="max-w-3xl text-sm leading-6 text-slate-600">@DashboardLocalizer["SharedClientReport_Footer"]</p>
+            <a href="/signup" class="inline-flex shrink-0 items-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"><i class="fa-solid fa-stopwatch"></i>@DashboardLocalizer["SharedClientReport_TryTimeVic"]</a>
+        </div>
+    </footer>
+}

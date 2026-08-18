@@ -1,4 +1,6 @@
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
+using TimeTracker.Api.Shared.Dto.Model.Report.UserPaymentReport;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Store.Report;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.UserPayment;
@@ -6,10 +8,16 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.UserPayment;
 public partial class UserPaymentReportPage
 {
     private readonly HashSet<Guid> _expandedClientIds = [];
+    private Guid _sharingClientId;
+    private string _sharingClientName = string.Empty;
+    private bool _isShareModalOpened;
 
     private UserPaymentReportResponse? _report => ReportsState.Value.UserPaymentReportData;
 
     private UserPaymentReportFilterState _filterState => ReportsState.Value.UserPaymentReportFilter;
+
+    private bool IsCanShareClientReport => AuthState.Value.Workspace?.CurrentUserAccess
+        is MembershipAccessType.Owner or MembershipAccessType.Manager;
 
     protected override async Task OnInitializedAsync()
     {
@@ -23,6 +31,19 @@ public partial class UserPaymentReportPage
         {
             _expandedClientIds.Remove(clientId);
         }
+    }
+
+    private void OpenShareModal(UserPaymentReportClientDto client)
+    {
+        _sharingClientId = client.Id;
+        _sharingClientName = client.Name;
+        _isShareModalOpened = true;
+    }
+
+    private Task OnShareModalOpenedChanged(bool isOpened)
+    {
+        _isShareModalOpened = isOpened;
+        return Task.CompletedTask;
     }
 
     private string GetClientPaymentsUrl(Guid clientId)
