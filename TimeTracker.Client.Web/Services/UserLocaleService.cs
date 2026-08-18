@@ -2,6 +2,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Client.Core.Services;
 
 namespace TimeTracker.Client.Web.Services;
@@ -80,8 +81,7 @@ public class UserLocaleService : IUserLocaleService
 
     private static string NormalizeCultureName(string? cultureName)
     {
-        return cultureName == ILocalizationUrlService.UkrainianCultureName
-            ? ILocalizationUrlService.UkrainianCultureName
-            : ILocalizationUrlService.EnglishCultureName;
+        return CultureCodeHelper.GetSupportedCultureCode(cultureName)
+            ?? CultureCodeHelper.EnglishCultureCode;
     }
 }

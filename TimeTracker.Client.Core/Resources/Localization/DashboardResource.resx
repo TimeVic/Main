@@ -846,7 +846,8 @@
   <data name="SharedClientReport_EarnedDescription" xml:space="preserve"><value>Total billable work</value></data>
   <data name="SharedClientReport_ReceivedDescription" xml:space="preserve"><value>Payments received</value></data>
   <data name="SharedClientReport_PaymentPending" xml:space="preserve"><value>Payment pending</value></data>
-  <data name="SharedClientReport_Advance" xml:space="preserve"><value>Surplus (advance)</value></data>
+  <data name="SharedClientReport_AdvanceBalance" xml:space="preserve"><value>On balance: {0}</value></data>
+  <data name="SharedClientReport_PaidInFull" xml:space="preserve"><value>Paid in full</value></data>
   <data name="SharedClientReport_ProjectsTitle" xml:space="preserve"><value>Project details</value></data>
   <data name="SharedClientReport_ProjectsDescription" xml:space="preserve"><value>Billable work recorded for this client.</value></data>
   <data name="SharedClientReport_NoProjects" xml:space="preserve"><value>No billable project work has been recorded yet.</value></data>

@@ -12,7 +12,8 @@
 <SeoHead
     Title="@DashboardLocalizer["SharedClientReport_MetaTitle"]"
     Description="@DashboardLocalizer["SharedClientReport_MetaDescription"]"
-    Robots="noindex, nofollow"/>
+    Robots="noindex, nofollow"
+    Language="@(_report?.CultureCode ?? CultureInfo.CurrentUICulture.Name)"/>
 
 @if (_isLoading)
 {
@@ -43,6 +44,7 @@ else
 
     <main class="mx-auto max-w-6xl space-y-8 px-5 py-8 md:px-8 md:py-10">
         <section class="grid gap-4 md:grid-cols-3">
+            @{ var balance = GetBalancePresentation(); }
             <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">@DashboardLocalizer["TotalEarned"]</p>
                 <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900">@FormatAmount(_report.Totals.Earned)</p>
@@ -53,17 +55,17 @@ else
                 <p class="mt-2 text-3xl font-bold tracking-tight text-emerald-700">@FormatAmount(_report.Totals.Received)</p>
                 <p class="mt-1 text-xs text-emerald-700/80">@DashboardLocalizer["SharedClientReport_ReceivedDescription"]</p>
             </article>
-            <article class="@($"rounded-2xl border p-5 shadow-sm {GetBalanceCardClass()}")">
+            <article class="@($"rounded-2xl border p-5 shadow-sm {balance.CardClass}")">
                 <div class="flex items-start justify-between gap-3">
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider">@DashboardLocalizer["OutstandingBalance"]</p>
-                        <p class="mt-2 text-3xl font-bold tracking-tight">@FormatAmount(Math.Abs(_report.Totals.Outstanding))</p>
-                        <span class="mt-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold @GetBalanceBadgeClass()">
-                            <i class="fa-solid @(_report.Totals.Outstanding > 0 ? "fa-clock" : "fa-shield-halved")"></i>
-                            @GetBalanceText()
+                        <p class="mt-2 text-3xl font-bold tracking-tight">@balance.CardAmount</p>
+                        <span class="mt-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold @balance.BadgeClass">
+                            <i class="fa-solid @balance.BadgeIcon"></i>
+                            @balance.BadgeText
                         </span>
                     </div>
-                    <i class="fa-solid @(_report.Totals.Outstanding > 0 ? "fa-circle-exclamation" : "fa-shield-heart") text-lg"></i>
+                    <i class="fa-solid @balance.CardIcon text-lg"></i>
                 </div>
             </article>
         </section>
@@ -105,8 +107,9 @@ else
                                 </tr>
                                 @if (isExpanded && _report.IsShowTasks)
                                 {
-                                    <tr class="bg-slate-50/70">
-                                        <td colspan="3" class="px-5 py-4">
+                                    <tr>
+                                        <td colspan="3" class="p-0">
+                                            <div class="bg-slate-50 py-4 pl-6 pr-5">
                                             @if (_isTasksLoading)
                                             {
                                                 <div class="flex justify-center py-4"><LumexSpinner/></div>
@@ -142,6 +145,7 @@ else
                                                     }
                                                 }
                                             }
+                                            </div>
                                         </td>
                                     </tr>
                                 }

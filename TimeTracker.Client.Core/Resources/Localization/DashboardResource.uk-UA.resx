@@ -848,7 +848,8 @@
   <data name="SharedClientReport_EarnedDescription" xml:space="preserve"><value>Уся виконана оплачувана робота</value></data>
   <data name="SharedClientReport_ReceivedDescription" xml:space="preserve"><value>Зафіксовані отримані оплати</value></data>
   <data name="SharedClientReport_PaymentPending" xml:space="preserve"><value>Очікує оплати</value></data>
-  <data name="SharedClientReport_Advance" xml:space="preserve"><value>Профіцит (аванс)</value></data>
+  <data name="SharedClientReport_AdvanceBalance" xml:space="preserve"><value>На балансі: {0}</value></data>
+  <data name="SharedClientReport_PaidInFull" xml:space="preserve"><value>Повністю оплачено</value></data>
   <data name="SharedClientReport_ProjectsTitle" xml:space="preserve"><value>Деталізація за проєктами</value></data>
   <data name="SharedClientReport_ProjectsDescription" xml:space="preserve"><value>Оплачувана робота, зафіксована для цього клієнта.</value></data>
   <data name="SharedClientReport_NoProjects" xml:space="preserve"><value>Оплачувану роботу за проєктами ще не зафіксовано.</value></data>

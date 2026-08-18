@@ -2,15 +2,28 @@ using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Model.Report.SharedClientReport;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport;
+using TimeTracker.Client.Web.Services;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Shared.Reports;
 
 public partial class SharedClientReportPage
 {
+    private sealed record BalancePresentation(
+        string CardAmount,
+        string BadgeText,
+        string CardClass,
+        string BadgeClass,
+        string BadgeIcon,
+        string CardIcon
+    );
+
     private const int TasksPreviewLimit = 10;
 
     [Parameter]
     public string Token { get; set; } = string.Empty;
+
+    [Inject]
+    private ILocalizationUrlService LocalizationUrlService { get; set; } = null!;
 
     private readonly HashSet<Guid> _expandedProjectIds = [];
     private readonly HashSet<Guid> _fullyExpandedTaskProjectIds = [];
@@ -32,6 +45,10 @@ public partial class SharedClientReportPage
         try
         {
             _report = await ApiService.ReportsGetPublicSharedClientReportAsync(Token);
+            if (_report != null)
+            {
+                LocalizationUrlService.ApplyCulture(_report.CultureCode);
+            }
         }
         catch (Exception)
         {
@@ -115,24 +132,40 @@ public partial class SharedClientReportPage
             : $"{amount.ToString("N2", CultureInfo.CurrentUICulture)} {currencyCode}";
     }
 
-    private string GetBalanceCardClass()
+    private BalancePresentation GetBalancePresentation()
     {
-        return _report!.Totals.Outstanding > 0
-            ? "border-red-200 bg-red-50/40 text-red-700"
-            : "border-emerald-200 bg-emerald-50/40 text-emerald-700";
-    }
+        var outstanding = _report!.Totals.Outstanding;
+        if (outstanding > 0)
+        {
+            return new BalancePresentation(
+                FormatAmount(outstanding),
+                DashboardLocalizer["SharedClientReport_PaymentPending"].Value,
+                "border-red-200 bg-red-50/40 text-red-700",
+                "bg-red-100 text-red-700",
+                "fa-clock",
+                "fa-circle-exclamation"
+            );
+        }
 
-    private string GetBalanceBadgeClass()
-    {
-        return _report!.Totals.Outstanding > 0
-            ? "bg-red-100 text-red-700"
-            : "bg-emerald-100 text-emerald-700";
-    }
+        if (outstanding < 0)
+        {
+            return new BalancePresentation(
+                FormatAmount(0),
+                string.Format(DashboardLocalizer["SharedClientReport_AdvanceBalance"].Value, FormatAmount(Math.Abs(outstanding))),
+                "border-emerald-200 bg-emerald-50/40 text-emerald-700",
+                "bg-emerald-100 text-emerald-700",
+                "fa-shield-halved",
+                "fa-shield-heart"
+            );
+        }
 
-    private string GetBalanceText()
-    {
-        return _report!.Totals.Outstanding > 0
-            ? DashboardLocalizer["SharedClientReport_PaymentPending"].Value
-            : DashboardLocalizer["SharedClientReport_Advance"].Value;
+        return new BalancePresentation(
+            FormatAmount(0),
+            DashboardLocalizer["SharedClientReport_PaidInFull"].Value,
+            "border-slate-200 bg-slate-50 text-slate-700",
+            "bg-slate-200 text-slate-700",
+            "fa-circle-check",
+            "fa-circle-check"
+        );
     }
 }

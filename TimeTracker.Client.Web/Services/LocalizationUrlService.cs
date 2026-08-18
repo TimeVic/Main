@@ -1,4 +1,5 @@
 using System.Globalization;
+using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Client.Core.Constants;
 
 namespace TimeTracker.Client.Web.Services;
@@ -18,9 +19,8 @@ public class LocalizationUrlService : ILocalizationUrlService
 
     public void ApplyCulture(string cultureName)
     {
-        var normalizedCultureName = cultureName == ILocalizationUrlService.UkrainianCultureName
-            ? ILocalizationUrlService.UkrainianCultureName
-            : ILocalizationUrlService.EnglishCultureName;
+        var normalizedCultureName = CultureCodeHelper.GetSupportedCultureCode(cultureName)
+            ?? CultureCodeHelper.EnglishCultureCode;
         var culture = new CultureInfo(normalizedCultureName);
         CultureInfo.DefaultThreadCurrentCulture = culture;
         CultureInfo.DefaultThreadCurrentUICulture = culture;
@@ -44,5 +44,7 @@ public class LocalizationUrlService : ILocalizationUrlService
     }
 
     public string GetLocalizedUrl(string path, string targetCulture)
-        => targetCulture == ILocalizationUrlService.UkrainianCultureName ? GetUkrainianUrl(path) : GetEnglishUrl(path);
+        => CultureCodeHelper.GetSupportedCultureCode(targetCulture) == CultureCodeHelper.UkrainianCultureCode
+            ? GetUkrainianUrl(path)
+            : GetEnglishUrl(path);
 }

@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Http;
 using TimeTracker.Api.Shared.Dto.Model.Report.SharedClientReport;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Report;
 using TimeTracker.Business.Orm.Dao.Tasks;
@@ -14,16 +16,19 @@ public class SharedClientReportService : ISharedClientReportService
     private readonly ISharedClientReportDao _sharedClientReportDao;
     private readonly IWorkspaceFinancialSummaryReportDao _reportDao;
     private readonly ITaskDao _taskDao;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public SharedClientReportService(
         ISharedClientReportDao sharedClientReportDao,
         IWorkspaceFinancialSummaryReportDao reportDao,
-        ITaskDao taskDao
+        ITaskDao taskDao,
+        IHttpContextAccessor httpContextAccessor
     )
     {
         _sharedClientReportDao = sharedClientReportDao;
         _reportDao = reportDao;
         _taskDao = taskDao;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<SharedClientReportEntity> GetActiveAsync(string token, bool isRequireTasks = false)
@@ -69,6 +74,7 @@ public class SharedClientReportService : ISharedClientReportService
         {
             ClientName = report.Client.Name,
             WorkspaceName = report.Client.Workspace.Name,
+            CultureCode = GetCultureCode(report),
             CurrencyCode = report.Client.Workspace.Currency?.Code,
             IsShowTasks = report.IsShowTasks,
             Projects = projectDtos,
@@ -79,6 +85,15 @@ public class SharedClientReportService : ISharedClientReportService
                 Received = paymentDtos.Sum(item => item.Amount)
             }
         };
+    }
+
+    private string GetCultureCode(SharedClientReportEntity report)
+    {
+        var browserCulture = _httpContextAccessor.HttpContext?.Request.Headers.AcceptLanguage.ToString();
+        var workspaceOwnerCulture = report.Client.Workspace.CreatedUser.Language.Code;
+        return CultureCodeHelper.GetSupportedCultureCode(browserCulture)
+            ?? CultureCodeHelper.GetSupportedCultureCode(workspaceOwnerCulture)
+            ?? CultureCodeHelper.EnglishCultureCode;
     }
 
     public async Task<GetSharedClientReportTasksResponse> GetTasksAsync(SharedClientReportEntity report)

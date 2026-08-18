@@ -91,6 +91,24 @@ public class GetReportTest : BaseTest
     }
 
     [Fact]
+    public async Task AnonymousUserGetsCultureFromAcceptLanguageHeader()
+    {
+        HttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "uk-UA,uk;q=0.9,en;q=0.8");
+        try
+        {
+            var response = await GetRequestAsAnonymousAsync(_activeUrl);
+            response.EnsureSuccessStatusCode();
+
+            var report = await response.GetJsonDataAsync<GetSharedClientReportResponse>();
+            Assert.Equal("uk-UA", report.CultureCode);
+        }
+        finally
+        {
+            HttpClient.DefaultRequestHeaders.Remove("Accept-Language");
+        }
+    }
+
+    [Fact]
     public async Task InactiveClientReportReturnsNotFound()
     {
         var response = await GetRequestAsAnonymousAsync(_inactiveUrl);

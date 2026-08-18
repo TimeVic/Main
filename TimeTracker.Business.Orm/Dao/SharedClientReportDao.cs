@@ -18,6 +18,8 @@ public class SharedClientReportDao : ISharedClientReportDao
         return await _sessionProvider.CurrentSession.Query<SharedClientReportEntity>()
             .Fetch(item => item.Client)
             .ThenFetch(item => item.Workspace)
+            .ThenFetch(item => item.CreatedUser)
+            .ThenFetch(item => item.Language)
             .FirstOrDefaultAsync(item => item.Client.Id == clientId);
     }
 
@@ -26,6 +28,8 @@ public class SharedClientReportDao : ISharedClientReportDao
         return await _sessionProvider.CurrentSession.Query<SharedClientReportEntity>()
             .Fetch(item => item.Client)
             .ThenFetch(item => item.Workspace)
+            .ThenFetch(item => item.CreatedUser)
+            .ThenFetch(item => item.Language)
             .FirstOrDefaultAsync(item => item.Token == token);
     }
 
