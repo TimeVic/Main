@@ -55,7 +55,7 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                 </nav>
             </div>
 
-            <div class="grid min-h-[30rem] lg:grid-cols-[minmax(0,1fr)_17rem]">
+            <div class="task-detail-grid grid @(IsFullPage ? "min-h-[30rem]" : "min-h-0") lg:grid-cols-[minmax(0,1fr)_17rem]">
                 <main class="@MainContentClass">
                     @if (_activeTab == TaskDetailTab.Overview)
                     {
