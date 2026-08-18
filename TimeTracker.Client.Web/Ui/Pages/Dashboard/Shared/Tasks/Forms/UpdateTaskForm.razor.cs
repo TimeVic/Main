@@ -94,13 +94,13 @@ public partial class UpdateTaskForm: IDisposable
     private string EstimateInputHint => _task.ExternalSourceType == ExternalSourceType.Jira
         ? DashboardLocalizer["UpdateTaskForm_JiraEstimateHint"].Value
         : DashboardLocalizer["UpdateTaskForm_ManualEstimateHint"].Value;
-    private string TabsContainerClass => IsFullPage ? "px-5 lg:px-7" : "px-1";
+    private string TabsContainerClass => IsFullPage ? "task-detail-tabs-nav px-5 lg:px-7" : "task-detail-tabs-nav px-1";
     private string MainContentClass => IsFullPage
         ? "task-detail-tab-content min-w-0 px-5 py-6 lg:px-7"
         : "task-detail-tab-content min-w-0 px-1 py-5 lg:pr-6";
     private string SidebarClass => IsFullPage
-        ? "border-t border-slate-200 bg-slate-50/50 px-5 py-6 lg:border-l lg:border-t-0"
-        : "border-t border-slate-200 bg-slate-50/50 px-4 py-5 lg:border-l lg:border-t-0";
+        ? "task-detail-sidebar border-t border-slate-200 bg-slate-50/50 px-5 py-6 lg:border-l lg:border-t-0"
+        : "task-detail-sidebar border-t border-slate-200 bg-slate-50/50 px-4 py-5 lg:border-l lg:border-t-0";
 
     private string GetTabClass(TaskDetailTab tab) => tab == _activeTab
         ? "border-blue-600 text-blue-700"
