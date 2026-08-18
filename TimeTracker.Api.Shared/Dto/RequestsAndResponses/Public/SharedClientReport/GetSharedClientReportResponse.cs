@@ -9,6 +9,8 @@ public class GetSharedClientReportResponse : IResponse
 
     public string WorkspaceName { get; set; } = string.Empty;
 
+    public string CultureCode { get; set; } = "en";
+
     public string? CurrencyCode { get; set; }
 
     public bool IsShowTasks { get; set; }

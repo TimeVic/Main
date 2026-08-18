@@ -27,9 +27,10 @@ using TimeTracker.Client.Web.Services.LastOpenedEntity;
 using TimeTracker.Client.Web.Services.Http;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using TimeTracker.Business.Common.Helpers;
 
 var currentAssembly = typeof(Program).Assembly;
-var defaultCulture = new CultureInfo("en");
+var defaultCulture = new CultureInfo(CultureCodeHelper.EnglishCultureCode);
 CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
 CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 

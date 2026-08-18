@@ -33,6 +33,9 @@ public partial class SeoHead
     [Parameter]
     public string? PublicPagePath { get; set; }
 
+    [Parameter]
+    public string? Language { get; set; }
+
     protected string? ResolvedCanonicalUrl { get; private set; }
 
     protected IReadOnlyCollection<SeoAlternateUrl> AlternateUrls { get; private set; } = [];
@@ -45,7 +48,9 @@ public partial class SeoHead
         {
             ResolvedCanonicalUrl = CanonicalUrl;
             AlternateUrls = [];
-            DocumentLanguage = ILocalizationUrlService.EnglishCultureName;
+            DocumentLanguage = string.IsNullOrWhiteSpace(Language)
+                ? ILocalizationUrlService.EnglishCultureName
+                : Language;
             return;
         }
 
