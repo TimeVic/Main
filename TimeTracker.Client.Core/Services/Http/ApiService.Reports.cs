@@ -55,13 +55,10 @@ namespace TimeTracker.Client.Core.Services.Http
             );
         }
 
-        public async Task<ClientShareReportSettingsResponse?> ReportsSetClientShareSettingsAsync(
-            Guid clientId,
-            ClientShareReportSettingsRequest request
-        )
+        public async Task<ClientShareReportSettingsResponse?> ReportsSetClientShareSettingsAsync(ClientShareReportSettingsRequest request)
         {
             return await PostAsync<ClientShareReportSettingsResponse?>(
-                $"{ApiUrl.ReportClientShareSettings}/{clientId}",
+                ApiUrl.ReportClientShareSettings,
                 request
             );
         }

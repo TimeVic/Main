@@ -8,7 +8,7 @@ public class SharedClientReportMapping : BaseGuidMappings<SharedClientReportEnti
 {
     public SharedClientReportMapping()
     {
-        Table("shared_client_reports");
+        Table("report_shared_clients");
 
         Map(x => x.Token).Length(64).Unique();
         Map(x => x.IsActive);

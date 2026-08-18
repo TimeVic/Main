@@ -8,7 +8,7 @@ public class _89_CreateSharedClientReports : MyMigration
 {
     public override void Up()
     {
-        Create.Table("shared_client_reports")
+        Create.Table("report_shared_clients")
             .WithColumn("id").AsGuid().PrimaryKey().Unique().NotNullable()
             .WithColumn("client_id").AsGuid().NotNullable().Unique()
             .WithColumn("token").AsString(64).NotNullable().Unique()
@@ -18,7 +18,7 @@ public class _89_CreateSharedClientReports : MyMigration
             .WithColumn("updated_at").AsCustom("timestamp").Nullable();
 
         Create.ForeignKey()
-            .FromTable("shared_client_reports").ForeignColumn("client_id")
+            .FromTable("report_shared_clients").ForeignColumn("client_id")
             .ToTable("clients").PrimaryColumn("id")
             .OnDelete(System.Data.Rule.Cascade);
 

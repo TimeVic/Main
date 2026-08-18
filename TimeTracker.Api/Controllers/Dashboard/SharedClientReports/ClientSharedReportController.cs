@@ -12,12 +12,11 @@ namespace TimeTracker.Api.Controllers.Dashboard.SharedClientReports;
 [Route("/dashboard/report/share/client")]
 public class ClientSharedReportController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
-    [HttpPost("{clientId:guid}")]
+    [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public Task<IActionResult> SetSettings(Guid clientId, [FromBody] ClientShareReportSettingsRequest request)
+    public Task<IActionResult> SetSettings([FromBody] ClientShareReportSettingsRequest request)
     {
-        request.ClientId = clientId;
         return this.RequestAsync()
             .For<ClientShareReportSettingsResponse>()
             .With(request);

@@ -1,4 +1,4 @@
-namespace TimeTracker.Client.Web.Ui.Pages.SharedReport;
+namespace TimeTracker.Client.Web.Ui.Pages.Shared.Reports;
 
 public partial class SharedClientReportLayout
 {

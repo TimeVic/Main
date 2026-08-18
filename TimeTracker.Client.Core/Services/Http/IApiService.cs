@@ -177,10 +177,7 @@ public interface IApiService
 
     Task<UserPaymentReportResponse?> ReportsGetUserPaymentReportAsync(Guid workspaceId, DateTime endDate);
 
-    Task<ClientShareReportSettingsResponse?> ReportsSetClientShareSettingsAsync(
-        Guid clientId,
-        ClientShareReportSettingsRequest request
-    );
+    Task<ClientShareReportSettingsResponse?> ReportsSetClientShareSettingsAsync(ClientShareReportSettingsRequest request);
 
     Task<GetSharedClientReportResponse?> ReportsGetPublicSharedClientReportAsync(string token);
 

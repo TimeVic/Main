@@ -70,7 +70,7 @@ public class ClientShareReportSettingsRequestHandler : IAsyncRequestHandler<Clie
             IsActive = report.IsActive,
             IsShowTasks = report.IsShowTasks,
             Token = report.Token,
-            ShareUrl = _urlService.ToFrontendAbsoluteUrl($"/shared/report/client/{report.Token}")
+            ShareUrl = _urlService.ToSharedClientReportUrl(report.Token)
         };
     }
 

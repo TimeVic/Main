@@ -3,7 +3,9 @@ using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Report;
+using TimeTracker.Business.Orm.Dao.Tasks;
 using TimeTracker.Business.Orm.Entities;
+using TimeTracker.Business.Orm.Entities.Tasks;
 
 namespace TimeTracker.Api.Services.Report;
 
@@ -11,14 +13,17 @@ public class SharedClientReportService : ISharedClientReportService
 {
     private readonly ISharedClientReportDao _sharedClientReportDao;
     private readonly IWorkspaceFinancialSummaryReportDao _reportDao;
+    private readonly ITaskDao _taskDao;
 
     public SharedClientReportService(
         ISharedClientReportDao sharedClientReportDao,
-        IWorkspaceFinancialSummaryReportDao reportDao
+        IWorkspaceFinancialSummaryReportDao reportDao,
+        ITaskDao taskDao
     )
     {
         _sharedClientReportDao = sharedClientReportDao;
         _reportDao = reportDao;
+        _taskDao = taskDao;
     }
 
     public async Task<SharedClientReportEntity> GetActiveAsync(string token, bool isRequireTasks = false)
@@ -39,20 +44,24 @@ public class SharedClientReportService : ISharedClientReportService
 
     public async Task<GetSharedClientReportResponse> GetReportAsync(SharedClientReportEntity report)
     {
-        var projects = await _reportDao.GetSharedClientReportProjectsAsync(report.Client.Id);
-        var payments = await _reportDao.GetSharedClientReportPaymentsAsync(report.Client.Id);
-        var projectDtos = projects.Select(item => new SharedClientReportProjectDto
+        var projects = await _reportDao.GetClientProjectBreakdownAsync(report.Client.Workspace.Id);
+        var projectDtos = projects
+            .Where(item => item.ClientId == report.Client.Id)
+            .Select(item => new SharedClientReportProjectDto
         {
             Id = item.ProjectId,
             Name = item.ProjectName,
             Duration = item.Duration,
-            Earned = item.Earned
+            Earned = item.EarnedAmount
         }).ToList();
-        var paymentDtos = payments.Select(item => new SharedClientReportPaymentDto
+        var paymentDtos = report.Client.ClientPayments
+            .OrderByDescending(item => item.PaymentTime)
+            .ThenByDescending(item => item.CreatedAt)
+            .Select(item => new SharedClientReportPaymentDto
         {
             PaymentTime = item.PaymentTime,
             Amount = item.Amount,
-            ProjectName = item.ProjectName,
+            ProjectName = item.Project?.Name,
             Description = item.Description
         }).ToList();
 
@@ -74,16 +83,31 @@ public class SharedClientReportService : ISharedClientReportService
 
     public async Task<GetSharedClientReportTasksResponse> GetTasksAsync(SharedClientReportEntity report)
     {
-        var tasks = await _reportDao.GetSharedClientReportTasksAsync(report.Client.Id);
+        var taskLists = report.Client.Projects
+            .SelectMany(project => project.TaskLists)
+            .ToList();
+        var tasks = new List<TaskEntity>();
+        foreach (var taskList in taskLists)
+        {
+            var taskListTasks = await _taskDao.GetList(taskList: taskList);
+            tasks.AddRange(taskListTasks.Items);
+        }
+        var durationsByTaskId = await _taskDao.GetTrackedDurationByTaskIds(tasks.Select(item => item.Id).ToList());
+
         return new GetSharedClientReportTasksResponse
         {
-            Tasks = tasks.Select(item => new SharedClientReportTaskDto
-            {
-                Id = item.TaskId,
-                ProjectId = item.ProjectId,
-                Title = item.TaskTitle,
-                Duration = item.Duration
-            }).ToList()
+            Tasks = tasks
+                .Where(item => durationsByTaskId.TryGetValue(item.Id, out var duration) && duration > TimeSpan.Zero)
+                .Select(item => new SharedClientReportTaskDto
+                {
+                    Id = item.Id,
+                    ProjectId = item.TaskList.Project.Id,
+                    Title = item.Title,
+                    Duration = durationsByTaskId[item.Id]
+                })
+                .OrderByDescending(item => item.Duration)
+                .ThenBy(item => item.Title)
+                .ToList()
         };
     }
 }

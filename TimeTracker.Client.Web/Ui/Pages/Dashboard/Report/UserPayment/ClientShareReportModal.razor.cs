@@ -34,8 +34,9 @@ public partial class ClientShareReportModal
         _isLoading = true;
         try
         {
-            var settings = await ApiService.ReportsSetClientShareSettingsAsync(ClientId, new ClientShareReportSettingsRequest
+            var settings = await ApiService.ReportsSetClientShareSettingsAsync(new ClientShareReportSettingsRequest
             {
+                ClientId = ClientId,
                 IsActive = false,
                 IsShowTasks = true
             });
@@ -75,8 +76,9 @@ public partial class ClientShareReportModal
 
     private async Task SaveAsync(bool isRegenerateToken = false)
     {
-        var settings = await ApiService.ReportsSetClientShareSettingsAsync(ClientId, new ClientShareReportSettingsRequest
+        var settings = await ApiService.ReportsSetClientShareSettingsAsync(new ClientShareReportSettingsRequest
         {
+            ClientId = ClientId,
             IsActive = _isActive,
             IsShowTasks = _isShowTasks,
             IsUpdateSettings = true,

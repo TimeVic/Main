@@ -48,7 +48,7 @@ public class ExceptionHandlerActionFilter : ActionFilterAttribute
                 response.Message = exception.Message;
                 statusCode = (int)HttpStatusCode.Forbidden;
             }
-            else if (exception is PublicSharedReportNotFoundException)
+            else if (exception is INotFoundDomainException)
             {
                 response.ErrorCode = exception.GetType().Name;
                 response.Message = exception.Message;

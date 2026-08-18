@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Model.Report.SharedClientReport;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport;
 
-namespace TimeTracker.Client.Web.Ui.Pages.SharedReport;
+namespace TimeTracker.Client.Web.Ui.Pages.Shared.Reports;
 
 public partial class SharedClientReportPage
 {

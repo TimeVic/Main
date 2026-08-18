@@ -25,7 +25,7 @@ public class SettingsTest : BaseTest
         var projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         (_ownerToken, _, _workspace) = UserSeeder.CreateAuthorizedAsync().Result;
         _client = projectSeeder.CreateAsync(_workspace).Result.Client;
-        _url = $"/{ApiUrl.ReportClientShareSettings}/{_client.Id}";
+        _url = $"/{ApiUrl.ReportClientShareSettings}";
     }
 
     [Fact]
@@ -33,6 +33,7 @@ public class SettingsTest : BaseTest
     {
         var initialResponse = await PostRequestAsync(_url, _ownerToken, new ClientShareReportSettingsRequest
         {
+            ClientId = _client.Id,
             IsActive = true,
             IsShowTasks = true,
             IsUpdateSettings = true
@@ -42,6 +43,7 @@ public class SettingsTest : BaseTest
 
         var regeneratedResponse = await PostRequestAsync(_url, _ownerToken, new ClientShareReportSettingsRequest
         {
+            ClientId = _client.Id,
             IsActive = true,
             IsShowTasks = false,
             IsUpdateSettings = true,
@@ -65,6 +67,7 @@ public class SettingsTest : BaseTest
 
         var response = await PostRequestAsync(_url, userToken, new ClientShareReportSettingsRequest
         {
+            ClientId = _client.Id,
             IsActive = true,
             IsShowTasks = true,
             IsUpdateSettings = true
