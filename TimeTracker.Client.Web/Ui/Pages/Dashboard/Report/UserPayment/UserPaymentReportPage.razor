@@ -2,9 +2,9 @@
 @attribute [RequireWorkspacePermission(WorkspacePermission.ReadUserPaymentReport)]
 @using TimeTracker.Api.Shared.Constants
 @using Fluxor
+@using LumexUI.Common
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Core.Store.Report
-@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Parts
 @using TimeTracker.Client.Web.Ui.Shared.Components
 @using Layout = TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
 
@@ -19,13 +19,20 @@
         IsOpened="@_isShareModalOpened"
         IsOpenedChanged="OnShareModalOpenedChanged"/>
 
-    <MemberPaymentsSummaryHeader
-        EndDate="@_filterState.EndDate"
-        EndDateChanged="OnEndDateChanged"/>
-
-    <section>
-        <h1 class="text-2xl font-bold tracking-tight text-slate-900">@DashboardLocalizer["UserPaymentReport_Title"]</h1>
-        <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserPaymentReport_Description"]</p>
+    <section class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900">@DashboardLocalizer["UserPaymentReport_Title"]</h1>
+            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserPaymentReport_Description"]</p>
+        </div>
+        <div class="w-full sm:w-64">
+            <LumexDatebox
+                TValue="DateTime?"
+                Value="@_filterState.EndDate"
+                ValueChanged="OnEndDateChanged"
+                Variant="InputVariant.Outlined"
+                LabelPlacement="LabelPlacement.Outside"
+                Label="@DashboardLocalizer["DateEnd"].Value"/>
+        </div>
     </section>
 
     @if (ReportsState.Value.IsLoading)
@@ -107,10 +114,7 @@
         </section>
 
         <section class="space-y-3">
-            <div>
-                <h2 class="text-base font-semibold text-slate-900">@DashboardLocalizer["UserPaymentReport_ClientBalances"]</h2>
-                <p class="text-xs text-slate-500">@DashboardLocalizer["UserPaymentReport_ClientBalancesDescription"]</p>
-            </div>
+            <h2 class="text-base font-semibold text-slate-900">@DashboardLocalizer["UserPaymentReport_ClientBalances"]</h2>
 
             <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs">
                 <div class="overflow-x-auto">

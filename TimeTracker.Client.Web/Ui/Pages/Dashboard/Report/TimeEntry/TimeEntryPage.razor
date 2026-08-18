@@ -5,11 +5,13 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-<div>
-    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">@DashboardLocalizer["Report"]</p>
-    <h1 class="mt-2 text-2xl font-semibold text-slate-900">@DashboardLocalizer["TimeEntries"]</h1>
+<div class="space-y-6">
+    <div>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">@DashboardLocalizer["TimeEntries"]</h1>
+        <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["TimeEntriesReport_Description"]</p>
+    </div>
+
+    <FilterForm/>
+
+    <TimeEntryListBlock/>
 </div>
-
-<FilterForm/>
-
-<TimeEntryListBlock/>

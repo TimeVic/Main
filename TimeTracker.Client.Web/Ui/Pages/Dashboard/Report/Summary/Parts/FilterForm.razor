@@ -4,13 +4,6 @@
 @inherits BaseReactiveComponent
 
 <LumexCard Class="border-slate-200 bg-slate-50/50 shadow-none">
-    <LumexCardHeader>
-        <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">@DashboardLocalizer["Filter"]</p>
-            <h2 class="mt-2 text-lg font-semibold text-slate-900">@DashboardLocalizer["SummaryReportParameters"]</h2>
-            <p class="mt-1 text-sm text-slate-500">@(IsTeamSummary ? DashboardLocalizer["TeamSummaryFilterHelper"].Value : DashboardLocalizer["ReportFilterHelper"].Value)</p>
-        </div>
-    </LumexCardHeader>
     <LumexCardBody>
         <div class="@FilterGridClass">
             @if (!IsTeamSummary)

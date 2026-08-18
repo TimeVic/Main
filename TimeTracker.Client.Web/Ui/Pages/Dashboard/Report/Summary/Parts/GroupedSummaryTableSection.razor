@@ -6,9 +6,7 @@
     <LumexCardHeader>
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <SummarySectionHeader
-                Overline="@DashboardLocalizer["Table"].Value"
-                Title="@DashboardLocalizer["GroupedSummary"].Value"
-                HelperText="@DashboardLocalizer["DetailedRowsSelectedGrouping"].Value"/>
+                Title="@DashboardLocalizer["GroupedSummary"].Value"/>
             @if (!string.IsNullOrWhiteSpace(PeriodLabel))
             {
                 <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">@PeriodLabel</span>
