@@ -19,7 +19,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     )
     {
         return await GetReportAsync<ByMonthsReportItemDto>(
-            "Report.SummaryByMonth",
+            "Report.Summary.ByMonth",
             workspaceId,
             userId,
             startDate,

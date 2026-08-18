@@ -110,7 +110,7 @@ else
                                     <tr>
                                         <td colspan="3" class="p-0">
                                             <div class="bg-slate-50 py-4 pl-6 pr-5">
-                                            @if (_isTasksLoading)
+                                            @if (IsTasksLoading(project.Id) && !GetProjectTasks(project.Id).Any())
                                             {
                                                 <div class="flex justify-center py-4"><LumexSpinner/></div>
                                             }
@@ -124,7 +124,7 @@ else
                                                 else
                                                 {
                                                     <ul class="space-y-2">
-                                                        @foreach (var task in GetVisibleTasks(project.Id))
+                                                        @foreach (var task in tasks)
                                                         {
                                                             <li class="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm">
                                                                 <span class="font-medium text-slate-700">@task.Title</span>
@@ -132,16 +132,20 @@ else
                                                             </li>
                                                         }
                                                     </ul>
-                                                    @if (tasks.Count > TasksPreviewLimit && !_fullyExpandedTaskProjectIds.Contains(project.Id))
+                                                    @if (IsHasMoreTasks(project.Id))
                                                     {
                                                         <button
                                                             type="button"
                                                             class="mt-3 inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                                                             @onclick:stopPropagation="true"
-                                                            @onclick="() => _fullyExpandedTaskProjectIds.Add(project.Id)">
+                                                            @onclick="() => LoadMoreTasksAsync(project.Id)">
                                                             <i class="fa-regular fa-file-lines"></i>
-                                                            @string.Format(DashboardLocalizer["SharedClientReport_ShowMoreTasks"].Value, tasks.Count - TasksPreviewLimit)
+                                                            @DashboardLocalizer["TaskComments_LoadMore"]
                                                         </button>
+                                                    }
+                                                    @if (IsTasksLoading(project.Id) && tasks.Any())
+                                                    {
+                                                        <div class="mt-3 flex justify-center"><LumexSpinner/></div>
                                                     }
                                                 }
                                             }

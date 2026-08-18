@@ -1,15 +1,8 @@
-﻿using NHibernate;
-using NHibernate.Transform;
-using Persistence.Transactions.Behaviors;
-using TimeTracker.Business.Common.Constants;
-using TimeTracker.Business.Common.Constants.Reports;
-using TimeTracker.Business.Extensions;
-using TimeTracker.Business.Orm.Dto.Reports.Summary;
-using TimeTracker.Business.Orm.Entities;
+﻿using TimeTracker.Business.Orm.Dto.Reports.Summary;
 
 namespace TimeTracker.Business.Orm.Dao.Report;
 
-public partial class SummaryReportDao: ISummaryReportDao
+public partial class SummaryReportDao
 {
     public async Task<ICollection<ByProjectsReportItemDto>> GetReportByProjectAsync(
         Guid workspaceId,
@@ -19,7 +12,7 @@ public partial class SummaryReportDao: ISummaryReportDao
     )
     {
         return await GetReportAsync<ByProjectsReportItemDto>(
-            "Report.SummaryByProject",
+            "Report.Summary.ByProject",
             workspaceId,
             userId,
             startDate,

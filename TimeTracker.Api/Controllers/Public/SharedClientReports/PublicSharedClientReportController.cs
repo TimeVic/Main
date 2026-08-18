@@ -21,8 +21,8 @@ public class PublicSharedClientReportController(ILifetimeScope scope) : MainApiC
     [HttpGet("{token}/get-tasks")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public Task<IActionResult> GetTasks(string token)
+    public Task<IActionResult> GetTasks(string token, [FromQuery] Guid projectId, [FromQuery] int page = 1)
         => this.RequestAsync()
             .For<GetSharedClientReportTasksResponse>()
-            .With(new GetSharedClientReportTasksRequest { Token = token });
+            .With(new GetSharedClientReportTasksRequest { Token = token, ProjectId = projectId, Page = page });
 }

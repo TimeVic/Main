@@ -8,6 +8,12 @@ namespace TimeTracker.Client.Web.Ui.Pages.Shared.Reports;
 
 public partial class SharedClientReportPage
 {
+    private sealed record ProjectTasksState(
+        List<SharedClientReportTaskDto> Tasks,
+        int Page,
+        bool IsHasMore
+    );
+
     private sealed record BalancePresentation(
         string CardAmount,
         string BadgeText,
@@ -17,8 +23,6 @@ public partial class SharedClientReportPage
         string CardIcon
     );
 
-    private const int TasksPreviewLimit = 10;
-
     [Parameter]
     public string Token { get; set; } = string.Empty;
 
@@ -26,21 +30,18 @@ public partial class SharedClientReportPage
     private ILocalizationUrlService LocalizationUrlService { get; set; } = null!;
 
     private readonly HashSet<Guid> _expandedProjectIds = [];
-    private readonly HashSet<Guid> _fullyExpandedTaskProjectIds = [];
-    private readonly Dictionary<Guid, List<SharedClientReportTaskDto>> _tasksByProjectId = [];
+    private readonly Dictionary<Guid, ProjectTasksState> _tasksByProjectId = [];
     private GetSharedClientReportResponse? _report;
     private bool _isLoading = true;
-    private bool _isTasksLoading;
-    private bool _isTasksLoaded;
+    private Guid? _loadingProjectId;
 
     protected override async Task OnParametersSetAsync()
     {
         _isLoading = true;
         _report = null;
         _expandedProjectIds.Clear();
-        _fullyExpandedTaskProjectIds.Clear();
         _tasksByProjectId.Clear();
-        _isTasksLoaded = false;
+        _loadingProjectId = null;
 
         try
         {
@@ -73,55 +74,77 @@ public partial class SharedClientReportPage
             return;
         }
 
-        if (_isTasksLoaded)
-        {
-            return;
-        }
-
-        _isTasksLoading = true;
         try
         {
-            var response = await ApiService.ReportsGetPublicSharedClientReportTasksAsync(Token);
-            foreach (var task in response?.Tasks ?? [])
+            if (_tasksByProjectId.ContainsKey(projectId))
             {
-                if (!_tasksByProjectId.TryGetValue(task.ProjectId, out var tasks))
-                {
-                    tasks = [];
-                    _tasksByProjectId[task.ProjectId] = tasks;
-                }
-
-                tasks.Add(task);
+                return;
             }
 
-            foreach (var tasks in _tasksByProjectId.Values)
-            {
-                tasks.Sort((left, right) => right.Duration.CompareTo(left.Duration));
-            }
-
-            _isTasksLoaded = true;
+            await LoadProjectTasksAsync(projectId, isReset: true);
         }
         catch (Exception)
         {
             _expandedProjectIds.Remove(projectId);
             ToastService.ShowError(DashboardLocalizer["SharedClientReport_TasksLoadError"].Value);
         }
-        finally
-        {
-            _isTasksLoading = false;
-        }
     }
 
     private List<SharedClientReportTaskDto> GetProjectTasks(Guid projectId)
     {
-        return _tasksByProjectId.GetValueOrDefault(projectId, []);
+        return _tasksByProjectId.TryGetValue(projectId, out var state)
+            ? state.Tasks
+            : [];
     }
 
-    private IEnumerable<SharedClientReportTaskDto> GetVisibleTasks(Guid projectId)
+    private bool IsTasksLoading(Guid projectId)
     {
-        var tasks = GetProjectTasks(projectId);
-        return _fullyExpandedTaskProjectIds.Contains(projectId)
-            ? tasks
-            : tasks.Take(TasksPreviewLimit);
+        return _loadingProjectId == projectId;
+    }
+
+    private bool IsHasMoreTasks(Guid projectId)
+    {
+        return _tasksByProjectId.TryGetValue(projectId, out var state) && state.IsHasMore;
+    }
+
+    private async Task LoadMoreTasksAsync(Guid projectId)
+    {
+        try
+        {
+            await LoadProjectTasksAsync(projectId);
+        }
+        catch (Exception)
+        {
+            ToastService.ShowError(DashboardLocalizer["SharedClientReport_TasksLoadError"].Value);
+        }
+    }
+
+    private async Task LoadProjectTasksAsync(Guid projectId, bool isReset = false)
+    {
+        _loadingProjectId = projectId;
+        try
+        {
+            var page = 1;
+            var tasks = new List<SharedClientReportTaskDto>();
+            if (!isReset && _tasksByProjectId.TryGetValue(projectId, out var currentState))
+            {
+                page = currentState.Page + 1;
+                tasks = currentState.Tasks.ToList();
+            }
+
+            var response = await ApiService.ReportsGetPublicSharedClientReportTasksAsync(Token, projectId, page);
+            if (response == null)
+            {
+                return;
+            }
+
+            tasks.AddRange(response.Tasks);
+            _tasksByProjectId[projectId] = new ProjectTasksState(tasks, page, response.IsHasMore);
+        }
+        finally
+        {
+            _loadingProjectId = null;
+        }
     }
 
     private string FormatAmount(decimal amount)

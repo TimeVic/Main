@@ -61,6 +61,27 @@ public class SettingsTest : BaseTest
     }
 
     [Fact]
+    public async Task OwnerCanManageClientReportLinkInSoloWorkspace()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await DbSessionProvider.CurrentSession.UpdateAsync(_workspace);
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(_url, _ownerToken, new ClientShareReportSettingsRequest
+        {
+            ClientId = _client.Id,
+            IsActive = true,
+            IsShowTasks = true,
+            IsUpdateSettings = true
+        }, _workspace.Id);
+        response.EnsureSuccessStatusCode();
+
+        var settings = await response.GetJsonDataAsync<ClientShareReportSettingsResponse>();
+        Assert.True(settings.IsActive);
+        Assert.True(settings.Token.Length >= 40);
+    }
+
+    [Fact]
     public async Task WorkspaceUserCannotManageClientReportLink()
     {
         var (userToken, _, _) = await _userSeeder.CreateAuthorizedAndShareAsync(_workspace, MembershipAccessType.User);
