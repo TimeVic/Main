@@ -1,4 +1,4 @@
-﻿@page "/board/{WorkspaceId:guid}/report/summary"
+@page "/board/{WorkspaceId:guid}/report/summary"
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Summary.Parts
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts
@@ -8,40 +8,48 @@
 @inherits BaseReactiveComponent
 @layout Layout
 
-@if (CanViewTeamSummary)
-{
-    <div class="mb-6 inline-flex rounded-lg bg-gray-100 p-1">
-        <button class="@GetTabClass(SummaryTab.Personal)" @onclick="() => SelectTab(SummaryTab.Personal)">
-            @DashboardLocalizer["SummaryTabPersonal"]
-        </button>
-        <button class="@GetTabClass(SummaryTab.Team)" @onclick="() => SelectTab(SummaryTab.Team)">
-            @DashboardLocalizer["SummaryTabTeam"]
-        </button>
+<div class="space-y-6">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900">@DashboardLocalizer["Summary"]</h1>
+            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["SummaryReport_Description"]</p>
+        </div>
+        @if (CanViewTeamSummary)
+        {
+            <div class="inline-flex rounded-lg bg-gray-100 p-1">
+                <button class="@GetTabClass(SummaryTab.Personal)" @onclick="() => SelectTab(SummaryTab.Personal)">
+                    @DashboardLocalizer["SummaryTabPersonal"]
+                </button>
+                <button class="@GetTabClass(SummaryTab.Team)" @onclick="() => SelectTab(SummaryTab.Team)">
+                    @DashboardLocalizer["SummaryTabTeam"]
+                </button>
+            </div>
+        }
     </div>
-}
 
-<FilterForm IsTeamSummary="@IsTeamSummary"/>
+    <FilterForm IsTeamSummary="@IsTeamSummary"/>
 
-@if (!_state.Value.IsLoading)
-{
-    var groupedByString = @_state.Value.SummaryReportFilter.PeriodType.GetDisplayName();
-
-    @if (IsTeamSummary)
+    @if (!_state.Value.IsLoading)
     {
-        <TeamPeriodAnalyticsSection Totals="@_state.Value.TeamSummaryReportData?.Totals"/>
-        <TeamSummaryChartSection Items="@_teamByDateItems" PeriodLabel="@groupedByString"/>
-        <TeamPerformanceTableSection Items="@_state.Value.TeamSummaryReportData?.Members"/>
+        var groupedByString = @_state.Value.SummaryReportFilter.PeriodType.GetDisplayName();
+
+        @if (IsTeamSummary)
+        {
+            <TeamPeriodAnalyticsSection Totals="@_state.Value.TeamSummaryReportData?.Totals"/>
+            <TeamSummaryChartSection Items="@_teamByDateItems" PeriodLabel="@groupedByString"/>
+            <TeamPerformanceTableSection Items="@_state.Value.TeamSummaryReportData?.Members"/>
+        }
+        else
+        {
+            <PeriodAnalyticsSection/>
+            <SummaryChartSection Items="@_byDateItems" PeriodLabel="@groupedByString"/>
+            <GroupedSummaryTableSection ReportData="@_state.Value.SummaryReportData" PeriodLabel="@groupedByString"/>
+        }
     }
     else
     {
-        <PeriodAnalyticsSection/>
-        <SummaryChartSection Items="@_byDateItems" PeriodLabel="@groupedByString"/>
-        <GroupedSummaryTableSection ReportData="@_state.Value.SummaryReportData" PeriodLabel="@groupedByString"/>
+        <div class="h-100 flex items-center justify-center">
+            <LumexSpinner />    
+        </div>
     }
-}
-else
-{
-    <div class="h-100 flex items-center justify-center">
-        <LumexSpinner />    
-    </div>
-}
+</div>

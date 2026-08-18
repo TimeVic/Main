@@ -22,10 +22,12 @@
   <data name="NewWorkspace" xml:space="preserve"><value>Новий робочий простір</value></data>
   <data name="Dashboard" xml:space="preserve"><value>Дашборд</value></data>
   <data name="Summary" xml:space="preserve"><value>Зведення</value></data>
+  <data name="SummaryReport_Description" xml:space="preserve"><value>Аналізуйте розподіл часу, результати команди та заробіток за вибраний період.</value></data>
   <data name="Reports" xml:space="preserve"><value>Звіти</value></data>
   <data name="Operations" xml:space="preserve"><value>Операції</value></data>
   <data name="TimeEntries" xml:space="preserve"><value>Записи часу</value></data>
   <data name="TimeEntriesReport" xml:space="preserve"><value>Звіт по записах часу</value></data>
+  <data name="TimeEntriesReport_Description" xml:space="preserve"><value>Переглядайте та фільтруйте зафіксовані записи часу за проєктами й учасниками.</value></data>
   <data name="TimeEntry_Autostopped" xml:space="preserve"><value>Автозупинено</value></data>
   <data name="Projects" xml:space="preserve"><value>Проєкти</value></data>
   <data name="Tasks" xml:space="preserve"><value>Задачі</value></data>

@@ -22,10 +22,12 @@
   <data name="NewWorkspace" xml:space="preserve"><value>New workspace</value></data>
   <data name="Dashboard" xml:space="preserve"><value>Dashboard</value></data>
   <data name="Summary" xml:space="preserve"><value>Summary</value></data>
+  <data name="SummaryReport_Description" xml:space="preserve"><value>Analyze time distribution, team performance, and earnings for the selected period.</value></data>
   <data name="Reports" xml:space="preserve"><value>Reports</value></data>
   <data name="Operations" xml:space="preserve"><value>Operations</value></data>
   <data name="TimeEntries" xml:space="preserve"><value>Time Entries</value></data>
   <data name="TimeEntriesReport" xml:space="preserve"><value>Time entries report</value></data>
+  <data name="TimeEntriesReport_Description" xml:space="preserve"><value>View and filter tracked time entries across projects and members.</value></data>
   <data name="TimeEntry_Autostopped" xml:space="preserve"><value>Auto-stopped</value></data>
   <data name="Projects" xml:space="preserve"><value>Projects</value></data>
   <data name="Tasks" xml:space="preserve"><value>Tasks</value></data>
