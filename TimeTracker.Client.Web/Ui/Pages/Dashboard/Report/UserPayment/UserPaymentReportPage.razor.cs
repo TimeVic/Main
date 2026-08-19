@@ -16,8 +16,7 @@ public partial class UserPaymentReportPage
 
     private UserPaymentReportFilterState _filterState => ReportsState.Value.UserPaymentReportFilter;
 
-    private bool IsCanShareClientReport => AuthState.Value.Workspace?.CurrentUserAccess
-        is MembershipAccessType.Owner or MembershipAccessType.Manager;
+    private bool IsCanShareClientReport => AuthState.Value.Workspace?.IsWorkspaceAdmin == true;
 
     protected override async Task OnInitializedAsync()
     {

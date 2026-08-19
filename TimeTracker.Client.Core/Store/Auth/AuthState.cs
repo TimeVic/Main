@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants;
 
@@ -21,6 +21,8 @@ public record AuthState
     public bool IsRoleUser => AccessLevel == MembershipAccessType.User;
 
     public bool IsRoleAdmin => AccessLevel is MembershipAccessType.Owner or MembershipAccessType.Manager;
+
+    public bool IsRoleOwner => AccessLevel == MembershipAccessType.Owner;
 
     public AuthState() { }
 }

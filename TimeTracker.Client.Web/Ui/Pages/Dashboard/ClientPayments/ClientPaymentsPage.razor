@@ -21,7 +21,7 @@
 <div class="space-y-6">
     <section class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-900">@DashboardLocalizer["ClientPayments"]</h1>
+            <h1 class="text-2xl font-semibold text-slate-900">@DashboardLocalizer["ClientPayments"]</h1>
             <p class="mt-1 text-sm text-slate-500">
                 @DashboardLocalizer["ClientPaymentsDescription"]
             </p>
@@ -41,26 +41,26 @@
 
     <section class="grid gap-4 md:grid-cols-3">
         <LumexCard>
-            <LumexCardBody>
+            <LumexCardBody Class="p-4">
                 <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["Received"]</p>
-                <p class="mt-2 text-2xl font-semibold text-emerald-700">
+                <p class="mt-2 text-2xl font-bold text-emerald-700">
                     <AmountDisplay Amount="@FilteredTotal"></AmountDisplay>
                 </p>
-                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["PaymentsMatchingCurrentFilters"]</p>
+                <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["PaymentsMatchingCurrentFilters"]</p>
             </LumexCardBody>
         </LumexCard>
         <LumexCard>
-            <LumexCardBody>
+            <LumexCardBody Class="p-4">
                 <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["ClientsPaid"]</p>
-                <p class="mt-2 text-2xl font-semibold text-slate-900">@PaidClientsCount</p>
-                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UniqueClientsFilteredList"]</p>
+                <p class="mt-2 text-2xl font-bold text-slate-900">@PaidClientsCount</p>
+                <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UniqueClientsFilteredList"]</p>
             </LumexCardBody>
         </LumexCard>
         <LumexCard>
-            <LumexCardBody>
+            <LumexCardBody Class="p-4">
                 <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["OutstandingBalance"]</p>
-                <p class="mt-2 text-2xl font-semibold text-slate-900">@DashboardLocalizer["NotTracked"]</p>
-                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["ClientPaymentsRecordedSeparately"]</p>
+                <p class="mt-2 text-2xl font-bold text-slate-900">@DashboardLocalizer["NotTracked"]</p>
+                <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["ClientPaymentsRecordedSeparately"]</p>
             </LumexCardBody>
         </LumexCard>
     </section>

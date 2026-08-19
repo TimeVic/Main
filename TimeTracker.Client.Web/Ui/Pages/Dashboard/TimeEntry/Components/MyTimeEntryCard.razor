@@ -1,7 +1,7 @@
 @using LumexUI.Common
 @using TimeTracker.Business.Extensions
 
-<div class="group flex h-[54px] cursor-pointer items-center gap-3 border-b border-slate-100 bg-white px-4 py-2.5 text-sm transition-colors hover:border-blue-200 hover:bg-blue-50"
+<div class="group flex h-[46px] cursor-pointer items-center gap-3 border-b border-slate-100 bg-white px-4 py-2 text-sm transition-colors hover:border-blue-200 hover:bg-blue-50"
      @onclick="@(() => OnEdit.InvokeAsync(Entry))">
 
     @* Description (or task title fallback) — takes all remaining space *@
@@ -130,16 +130,25 @@
             </LumexDropdownTrigger>
             <LumexDropdownMenu>
                 <LumexDropdownItem OnClick="@(() => OnEdit.InvokeAsync(Entry))">
-                    <span class="flex items-center gap-2"><i class="fa-regular fa-pen-to-square w-4"></i> @DashboardLocalizer["Edit"]</span>
+                    <span class="flex items-center gap-2">
+                        <i class="fa-regular fa-pen-to-square w-4"></i>
+                        <span>@DashboardLocalizer["Edit"]</span>
+                    </span>
                 </LumexDropdownItem>
                 <LumexDropdownItem OnClick="@(() => OnClone.InvokeAsync(Entry))">
-                    <span class="flex items-center gap-2"><i class="fa-regular fa-clone w-4"></i> @DashboardLocalizer["Duplicate"]</span>
+                    <span class="flex items-center gap-2">
+                        <i class="fa-regular fa-clone w-4"></i>
+                        <span>@DashboardLocalizer["Duplicate"]</span>
+                    </span>
                 </LumexDropdownItem>
                 <LumexDropdownItem
                     Color="@ThemeColor.Danger"
                     Class="text-danger"
                     OnClick="@(() => OnDelete.InvokeAsync(Entry))">
-                    <span class="flex items-center gap-2"><i class="fa-regular fa-trash-can w-4"></i> @DashboardLocalizer["Delete"]</span>
+                    <span class="flex items-center gap-2">
+                        <i class="fa-regular fa-trash-can w-4"></i>
+                        <span>@DashboardLocalizer["Delete"]</span>
+                    </span>
                 </LumexDropdownItem>
             </LumexDropdownMenu>
         </LumexDropdown>

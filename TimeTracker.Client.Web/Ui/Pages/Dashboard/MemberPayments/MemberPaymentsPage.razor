@@ -17,13 +17,24 @@
     IsOpened="_isShowAddMemberPaymentModal" 
     IsOpenedChanged="isOpened => _isShowAddMemberPaymentModal = isOpened"/>
 
-<LumexCard>
-    <LumexCardBody>
-        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["Payments"]</p>
-        <p class="mt-2 text-2xl font-semibold text-slate-900">@_state.Value.TotalCount</p>
-        <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["SavedCurrentWorkspace"]</p>
-    </LumexCardBody>
-</LumexCard>
+<div class="space-y-6">
+    <section class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold text-slate-900">@DashboardLocalizer["MemberPayments"]</h1>
+            <p class="mt-1 text-sm text-slate-500">
+                @DashboardLocalizer["MemberPaymentsDescription"]
+            </p>
+        </div>
+    </section>
+
+    <LumexCard>
+        <LumexCardBody Class="p-4">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["Payments"]</p>
+            <p class="mt-2 text-2xl font-bold text-slate-900">@_state.Value.TotalCount</p>
+            <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["SavedCurrentWorkspace"]</p>
+        </LumexCardBody>
+    </LumexCard>
+</div>
 
 <LumexCard Class="mt-6 overflow-x-auto pb-2">
     <LumexCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -58,7 +69,9 @@
     <LumexCardBody>
         @if (_state.Value.TotalCount == 0)
         {
-            <div class="px-4 py-8 text-center text-sm text-slate-500">@DashboardLocalizer["NoPaymentsAddedHelper"]</div>
+            <div class="px-4 py-8 text-center text-sm text-slate-500">
+                @DashboardLocalizer["NoPaymentsAddedHelper"]
+            </div>
         }
         else
         {

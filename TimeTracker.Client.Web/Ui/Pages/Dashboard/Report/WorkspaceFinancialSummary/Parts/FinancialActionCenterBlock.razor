@@ -31,8 +31,31 @@
                     @foreach (var item in clientDebts)
                     {
                         <li class="flex items-center justify-between gap-4 py-3">
-                            <div><p class="font-medium text-slate-800">@item.Client.Name</p><p class="text-sm font-semibold text-red-700"><AmountDisplay Amount="@item.Outstanding"/></p></div>
-                            <button class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50" @onclick="() => CopyReminderAsync(item.Client.Name, item.Outstanding)"><i class="fa-regular fa-copy mr-1"></i>@DashboardLocalizer["WorkspaceMoney_Remind"]</button>
+                            <div>
+                                <p class="font-medium text-slate-800">@item.Client.Name</p>
+                                <p class="text-sm font-semibold text-red-700">
+                                    <AmountDisplay Amount="@item.Outstanding"/>
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                @if (IsCanShareClientReport)
+                                {
+                                    <button
+                                        type="button"
+                                        class="rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+                                        title="@DashboardLocalizer["ClientShareReport_Open"]"
+                                        @onclick="() => OnShareClient.InvokeAsync((item.Client.Id, item.Client.Name))">
+                                        <i class="fa-solid fa-link"></i>
+                                    </button>
+                                }
+                                <button
+                                    type="button"
+                                    class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                                    @onclick="() => CopyReminderAsync(item.Client.Name, item.Outstanding)">
+                                    <i class="fa-regular fa-copy mr-1"></i>
+                                    @DashboardLocalizer["WorkspaceMoney_Remind"]
+                                </button>
+                            </div>
                         </li>
                     }
                 </ul>
@@ -50,8 +73,19 @@
                     @foreach (var item in memberDebts)
                     {
                         <li class="flex items-center justify-between gap-4 py-3">
-                            <div><p class="font-medium text-slate-800">@item.User.Name</p><p class="text-sm font-semibold text-red-700"><AmountDisplay Amount="@item.Owed"/></p></div>
-                            <button class="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700" @onclick="() => OnPayMember.InvokeAsync(item.MemberId)"><i class="fa-solid fa-plus mr-1"></i>@DashboardLocalizer["WorkspaceMoney_PayMember"]</button>
+                            <div>
+                                <p class="font-medium text-slate-800">@item.User.Name</p>
+                                <p class="text-sm font-semibold text-red-700">
+                                    <AmountDisplay Amount="@item.Owed"/>
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                class="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-emerald-700"
+                                @onclick="() => OnPayMember.InvokeAsync(item.MemberId)">
+                                <i class="fa-solid fa-plus mr-1"></i>
+                                @DashboardLocalizer["WorkspaceMoney_PayMember"]
+                            </button>
                         </li>
                     }
                 </ul>

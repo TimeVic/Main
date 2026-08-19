@@ -6,7 +6,7 @@
     Color="ThemeColor.Primary"
     FullWidth="true">
     <LumexTab Title="@DashboardLocalizer["WorkspaceMoney_ClientBalancesTab"]">
-        <ClientBalancesTabBlock/>
+        <ClientBalancesTabBlock OnShareClient="OnShareClient"/>
     </LumexTab>
     <LumexTab Title="@DashboardLocalizer["WorkspaceMoney_TeamSettlementsTab"]">
         <TeamSettlementsTabBlock/>
@@ -15,3 +15,8 @@
         <ProjectProfitabilityTabBlock/>
     </LumexTab>
 </LumexTabs>
+
+@code {
+    [Parameter]
+    public EventCallback<(Guid ClientId, string ClientName)> OnShareClient { get; set; }
+}

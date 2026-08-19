@@ -45,12 +45,12 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     <tr>
-                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Client"]</th>
-                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Hours"]</th>
-                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Earned"]</th>
-                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Received"]</th>
-                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Balance"]</th>
-                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Status"]</th>
+                        <th class="px-3 py-2 text-left">@DashboardLocalizer["Client"]</th>
+                        <th class="px-3 py-2 text-right">@DashboardLocalizer["Hours"]</th>
+                        <th class="px-3 py-2 text-right">@DashboardLocalizer["Earned"]</th>
+                        <th class="px-3 py-2 text-right">@DashboardLocalizer["Received"]</th>
+                        <th class="px-3 py-2 text-right">@DashboardLocalizer["Balance"]</th>
+                        <th class="px-3 py-2 text-left">@DashboardLocalizer["Status"]</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -58,11 +58,19 @@
                     {
                         var status = GetClientStatus(item.Outstanding);
                         <tr class="hover:bg-slate-50/50">
-                            <td class="px-4 py-3 font-medium text-slate-800">@(item.Client?.Name ?? DashboardLocalizer["NoClient"].Value)</td>
-                            <td class="px-4 py-3 text-right text-slate-600">@item.Duration.ToReadableShortString()</td>
-                            <td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.Earned"/></td>
-                            <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@item.Received"/></td>
-                            <td class="px-4 py-3 text-right font-semibold @GetBalanceTextClass(item.Outstanding)">
+                            <td class="px-3 py-2 font-medium text-slate-800">
+                                @(item.Client?.Name ?? DashboardLocalizer["NoClient"].Value)
+                            </td>
+                            <td class="px-3 py-2 text-right text-slate-600">
+                                @item.Duration.ToReadableShortString()
+                            </td>
+                            <td class="px-3 py-2 text-right">
+                                <AmountDisplay Amount="@item.Earned"/>
+                            </td>
+                            <td class="px-3 py-2 text-right text-emerald-700">
+                                <AmountDisplay Amount="@item.Received"/>
+                            </td>
+                            <td class="px-3 py-2 text-right font-semibold @GetBalanceTextClass(item.Outstanding)">
                                 @if (item.Outstanding == 0)
                                 {
                                     <span>@DashboardLocalizer["Settled"]</span>
@@ -70,23 +78,37 @@
                                 else
                                 {
                                     <AmountDisplay Amount="@Math.Abs(item.Outstanding)"/>
-                                    <span title="@(item.Outstanding > 0 ? DueTooltip : CreditTooltip)">@(item.Outstanding > 0 ? DashboardLocalizer["Due"].Value : DashboardLocalizer["Credit"].Value)</span>
+                                    <span title="@(item.Outstanding > 0 ? DueTooltip : CreditTooltip)">
+                                        @(item.Outstanding > 0 ? DashboardLocalizer["Due"].Value : DashboardLocalizer["Credit"].Value)
+                                    </span>
                                 }
                             </td>
-                            <td class="px-4 py-3">
-                                <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold @status.Class" title="@status.Tooltip">@status.Text</span>
+                            <td class="px-3 py-2">
+                                <span
+                                    class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold @status.Class"
+                                    title="@status.Tooltip">
+                                    @status.Text
+                                </span>
                             </td>
                         </tr>
                     }
                     <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
-                        <td class="px-4 py-3">@DashboardLocalizer["Total"]</td>
-                        <td class="px-4 py-3 text-right">@items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()</td>
-                        <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.Earned)"/></td>
-                        <td class="px-4 py-3 text-right text-emerald-700"><AmountDisplay Amount="@items.Sum(i => i.Received)"/></td>
-                        <td class="px-4 py-3 text-right @GetBalanceTextClass(items.Sum(i => i.Outstanding))">
+                        <td class="px-3 py-2">
+                            @DashboardLocalizer["Total"]
+                        </td>
+                        <td class="px-3 py-2 text-right">
+                            @items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()
+                        </td>
+                        <td class="px-3 py-2 text-right">
+                            <AmountDisplay Amount="@items.Sum(i => i.Earned)"/>
+                        </td>
+                        <td class="px-3 py-2 text-right text-emerald-700">
+                            <AmountDisplay Amount="@items.Sum(i => i.Received)"/>
+                        </td>
+                        <td class="px-3 py-2 text-right @GetBalanceTextClass(items.Sum(i => i.Outstanding))">
                             <AmountDisplay Amount="@items.Sum(i => i.Outstanding)"/>
                         </td>
-                        <td class="px-4 py-3"></td>
+                        <td class="px-3 py-2"></td>
                     </tr>
                 </tbody>
             </table>

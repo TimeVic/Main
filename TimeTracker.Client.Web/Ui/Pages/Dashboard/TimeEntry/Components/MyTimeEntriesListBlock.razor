@@ -38,12 +38,12 @@
         {
             <Virtualize
                 Items="@listItems"
-                ItemSize="54"
+                ItemSize="46"
                 OverscanCount="5"
                 Context="listItem">
                 @if (listItem is DateHeaderListItem dateHeader)
                 {
-                    <div class="flex h-[54px] items-center justify-between border border-slate-200 bg-slate-50 px-4">
+                    <div class="flex h-[42px] items-center justify-between border border-slate-200 bg-slate-50 px-4">
                         <span class="text-xs font-semibold text-slate-600">@dateHeader.Date.ToString("ddd, MMM d")</span>
                         <LumexPopover>
                             <LumexPopoverTrigger>

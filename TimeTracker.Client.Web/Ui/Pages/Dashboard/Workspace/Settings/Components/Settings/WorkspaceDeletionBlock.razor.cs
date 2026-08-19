@@ -13,7 +13,7 @@ public partial class WorkspaceDeletionBlock
 
     private WorkspaceDto? Workspace => AuthState.Value.Workspace;
 
-    private bool IsDeletionAvailable => Workspace?.CurrentUserAccess == MembershipAccessType.Owner
+    private bool IsDeletionAvailable => Workspace?.IsWorkspaceOwner == true
         && Workspace.IsDefault == false;
 
     private Task OpenConfirmation()

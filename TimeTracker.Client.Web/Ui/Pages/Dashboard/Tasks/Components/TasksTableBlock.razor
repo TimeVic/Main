@@ -108,7 +108,7 @@
                 <Virtualize
                     @ref="_virtualize"
                     Items="Tasks"
-                    ItemSize="84"
+                    ItemSize="72"
                     SpacerElement="tr"
                     OverscanCount="5"
                     Context="task">
@@ -128,19 +128,25 @@
                         @ondragover="@(() => OnDragOver(task))"
                         @ondrop="@(() => OnDrop(task))"
                         @ondragend="@OnDragEnd">
-                        <td class="border-t border-slate-200 px-3 py-2.5 align-top">
+                        <td class="border-t border-slate-200 px-3 py-2 align-top">
                             <div class="flex flex-col items-center">
                                 <LumexCheckbox
                                     Value="IsTaskBoardSelected(task.Id)"
                                     ValueChanged="@(() => ToggleTaskBoardSelection(task.Id))"/>
                             </div>
                         </td>
-                        <td class="cursor-pointer border-t border-slate-200 px-2 py-2.5 align-top @GetSelectedTaskClass(task.Id)" @onclick="@(() => OpenTaskEditor(task))">
+                        <td class="cursor-pointer border-t border-slate-200 px-2 py-2 align-top @GetSelectedTaskClass(task.Id)" @onclick="@(() => OpenTaskEditor(task))">
                             <div class="flex">
                                 <div class="min-w-0 flex-1 space-y-1.5">
                                     <div class="flex min-w-0 items-start gap-2">
-                                        <span class="mt-0.5 shrink-0 rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-600">@task.FormattedId</span>
-                                        <a href="@GetTaskUrl(task)" title="@task.Title" @onclick:preventDefault="true" class="min-w-0 flex-1 break-words text-left text-sm font-semibold leading-5 text-slate-900 transition group-hover:text-blue-700 hover:text-blue-700 @GetTaskTitleClass(task)">
+                                        <span class="mt-0.5 shrink-0 rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-600">
+                                            @task.FormattedId
+                                        </span>
+                                        <a
+                                            href="@GetTaskUrl(task)"
+                                            title="@task.Title"
+                                            @onclick:preventDefault="true"
+                                            class="min-w-0 flex-1 break-words text-left text-sm font-semibold leading-5 text-slate-900 transition group-hover:text-blue-700 hover:text-blue-700 @GetTaskTitleClass(task)">
                                             @GetTaskListTitle(task.Title)
                                         </a>
                                     </div>
@@ -176,7 +182,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="hidden border-t border-slate-200 px-2 py-2.5 align-top lg:table-cell">
+                        <td class="hidden border-t border-slate-200 px-2 py-2 align-top lg:table-cell">
                             <EnumDropDown
                                 TItem="TaskStatus"
                                 Class="whitespace-nowrap"
@@ -187,7 +193,7 @@
                                 Value="@task.Status"
                                 ValueChanged="(value) => OnChangeStatusTask(task, value)"/>
                         </td>
-                        <td class="hidden border-t border-slate-200 px-2 py-2.5 align-top lg:table-cell">
+                        <td class="hidden border-t border-slate-200 px-2 py-2 align-top lg:table-cell">
                             <EnumDropDown
                                 TItem="TaskPriority"
                                 Class="whitespace-nowrap"
@@ -198,7 +204,7 @@
                                 Value="@task.Priority"
                                 ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                         </td>
-                        <td class="hidden border-t border-slate-200 px-2 py-2.5 align-top lg:table-cell">
+                        <td class="hidden border-t border-slate-200 px-2 py-2 align-top lg:table-cell">
                             <div class="flex items-center gap-2" title="@task.User?.Email">
                                 <UserAvatarBlock
                                     User="@task.User"
@@ -209,7 +215,7 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="border-t border-slate-200 px-2 py-2.5 align-top text-right">
+                        <td class="border-t border-slate-200 px-2 py-2 align-top text-right">
                             <div class="flex items-center justify-end gap-1">
                                 <TaskTimeTrackerButton Task="@task" />
                                 <LumexDropdown>

@@ -152,6 +152,17 @@ Wait until the current `dotnet test` process has fully exited before starting an
   - For component-scoped styles, create `*.razor.less` files, not `*.razor.css`. The build generates `*.razor.css` from LESS, and generated CSS files are gitignored.
   - In case when page component is too big(more that 200 lines) create separate page component and partial component, create separated directory for this page component, create separated directory for this partial components.
   - If added component used more that 1 place it should be placed in the nearest shared directory
+  - Do not write inline HTML; all HTML and Razor templates must be properly formatted with opening and closing tags/elements placed on new lines and indented appropriately.
+
+## Lumex UI Guidelines
+
+- Lumex UI is built on **Tailwind CSS v4** and uses **TailwindMerge.NET** for automatic conflict resolution when applying custom `Class` attributes.
+- **Component Slots**: Customize multi-slot components via child sub-components (e.g. `<LumexCardBody Class="p-4">`), slot objects (`Classes="@(new CardSlots() { Body = "p-4" })"`), or `data-slot` CSS selectors.
+- **Forms & Inputs**:
+  - For standard dashboard forms, use `Variant="InputVariant.Outlined"` and `LabelPlacement="LabelPlacement.Outside"` to keep input styling uniform.
+  - Standardize modal sizes with `Size="ModalSize.Small"` or `ModalSize.Medium` (avoid `ModalSize.Large` for small forms).
+- **Enums & Tokens**: Utilize Lumex enums (`ThemeColor`, `Variant`, `InputVariant`, `LabelPlacement`, `Size`) instead of ad-hoc classes whenever supported.
+- **Documentation Index**: Refer to [https://lumexui.org/llms.txt](https://lumexui.org/llms.txt) for component list and API documentation.
 
 ## Database
  - Create migrations using FluentMigrator mechanism(classes, helpers, etc.) if it's possible

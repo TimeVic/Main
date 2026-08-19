@@ -5,7 +5,7 @@
 @using LumexUI.Common
 @using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Core.Store.Report
-@using TimeTracker.Client.Web.Ui.Shared.Components
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Shared
 @using Layout = TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
 
 @inherits BaseReactiveComponent
@@ -19,10 +19,12 @@
         IsOpened="@_isShareModalOpened"
         IsOpenedChanged="OnShareModalOpenedChanged"/>
 
-    <section class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <section class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-900">@DashboardLocalizer["UserPaymentReport_Title"]</h1>
-            <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["UserPaymentReport_Description"]</p>
+            <h1 class="text-2xl font-semibold text-slate-900">@DashboardLocalizer["UserPaymentReport_Title"]</h1>
+            <p class="mt-1 text-sm text-slate-500">
+                @DashboardLocalizer["UserPaymentReport_Description"]
+            </p>
         </div>
         <div class="w-full sm:w-64">
             <LumexDatebox
@@ -55,78 +57,56 @@
     }
     else
     {
-        <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <LumexCard Class="relative overflow-hidden border-slate-200/80 bg-white shadow-xs">
-                <LumexCardBody Class="p-5">
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">@DashboardLocalizer["TotalEarned"]</p>
-                            <p class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-                                <AmountDisplay Amount="@_report.Totals.Earned"/>
-                            </p>
-                            <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UserPaymentReport_EarnedSubtitle"]</p>
-                        </div>
-                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                            <i class="fa-solid fa-sack-dollar text-base"></i>
-                        </div>
-                    </div>
+        <section class="grid gap-4 md:grid-cols-3">
+            <LumexCard>
+                <LumexCardBody Class="p-4">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["TotalEarned"]</p>
+                    <p class="mt-2 text-2xl font-bold text-slate-900">
+                        <AmountDisplay Amount="@_report.Totals.Earned"/>
+                    </p>
+                    <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UserPaymentReport_EarnedSubtitle"]</p>
                 </LumexCardBody>
             </LumexCard>
 
-            <LumexCard Class="relative overflow-hidden border-emerald-200/80 bg-emerald-50/30 shadow-xs">
-                <LumexCardBody Class="p-5">
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-emerald-800">@DashboardLocalizer["TotalReceived"]</p>
-                            <p class="mt-2 text-3xl font-bold tracking-tight text-emerald-700">
-                                <AmountDisplay Amount="@_report.Totals.Received"/>
-                            </p>
-                            <p class="mt-1 text-xs text-emerald-700/80">@DashboardLocalizer["UserPaymentReport_ReceivedSubtitle"]</p>
-                        </div>
-                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
-                            <i class="fa-solid fa-hand-holding-dollar text-base"></i>
-                        </div>
-                    </div>
+            <LumexCard>
+                <LumexCardBody Class="p-4">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["TotalReceived"]</p>
+                    <p class="mt-2 text-2xl font-bold text-emerald-700">
+                        <AmountDisplay Amount="@_report.Totals.Received"/>
+                    </p>
+                    <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UserPaymentReport_ReceivedSubtitle"]</p>
                 </LumexCardBody>
             </LumexCard>
 
-            <LumexCard Class="@($"relative overflow-hidden shadow-xs sm:col-span-2 lg:col-span-1 {GetOutstandingCardClass(_report.Totals.Outstanding)}")">
-                <LumexCardBody Class="p-5">
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider @GetOutstandingTextClass(_report.Totals.Outstanding)">@DashboardLocalizer["OutstandingBalance"]</p>
-                            <p class="mt-2 text-3xl font-bold tracking-tight @GetOutstandingTextClass(_report.Totals.Outstanding)">
-                                <AmountDisplay Amount="@_report.Totals.Outstanding"/>
-                            </p>
-                            <div class="mt-2">
-                                <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium @GetOutstandingBadgeClass(_report.Totals.Outstanding)">
-                                    <span class="h-1.5 w-1.5 rounded-full @GetStatusDotClass(_report.Totals.Outstanding)"></span>
-                                    @GetOutstandingBadgeText(_report.Totals.Outstanding)
-                                </span>
-                            </div>
-                        </div>
-                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl @(_report.Totals.Outstanding > 0 ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-700")">
-                            <i class="fa-solid @(_report.Totals.Outstanding > 0 ? "fa-circle-exclamation" : "fa-scale-balanced") text-base"></i>
-                        </div>
-                    </div>
+            <LumexCard>
+                <LumexCardBody Class="p-4">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">@DashboardLocalizer["OutstandingBalance"]</p>
+                    <p class="mt-2 text-2xl font-bold @GetOutstandingTextClass(_report.Totals.Outstanding)">
+                        <AmountDisplay Amount="@_report.Totals.Outstanding"/>
+                    </p>
+                    <p class="mt-1 text-xs text-slate-500">@GetOutstandingBadgeText(_report.Totals.Outstanding)</p>
                 </LumexCardBody>
             </LumexCard>
         </section>
 
-        <section class="space-y-3">
-            <h2 class="text-base font-semibold text-slate-900">@DashboardLocalizer["UserPaymentReport_ClientBalances"]</h2>
-
-            <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs">
+        <LumexCard Class="overflow-hidden">
+            <LumexCardHeader Class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm font-semibold text-slate-900">@DashboardLocalizer["UserPaymentReport_ClientBalances"]</p>
+                    <p class="text-sm text-slate-500">@DashboardLocalizer["UserPaymentReport_ClientBalancesDescription"]</p>
+                </div>
+            </LumexCardHeader>
+            <LumexCardBody Class="p-0">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-slate-200 text-sm">
                         <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
                             <tr>
-                                <th class="px-4 py-3.5 text-left">@DashboardLocalizer["Client"]</th>
-                                <th class="px-4 py-3.5 text-right">@DashboardLocalizer["Hours"]</th>
-                                <th class="px-4 py-3.5 text-right">@DashboardLocalizer["Earned"]</th>
-                                <th class="px-4 py-3.5 text-right">@DashboardLocalizer["Received"]</th>
-                                <th class="px-4 py-3.5 text-right">@DashboardLocalizer["Balance"]</th>
-                                <th class="px-4 py-3.5 text-center">@DashboardLocalizer["Status"]</th>
+                                <th class="px-3 py-2 text-left">@DashboardLocalizer["Client"]</th>
+                                <th class="px-3 py-2 text-right">@DashboardLocalizer["Hours"]</th>
+                                <th class="px-3 py-2 text-right">@DashboardLocalizer["Earned"]</th>
+                                <th class="px-3 py-2 text-right">@DashboardLocalizer["Received"]</th>
+                                <th class="px-3 py-2 text-right">@DashboardLocalizer["Balance"]</th>
+                                <th class="px-3 py-2 text-center">@DashboardLocalizer["Status"]</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
@@ -136,7 +116,7 @@
                                 <tr
                                     class="@($"group cursor-pointer transition-colors hover:bg-slate-50/80 {(isExpanded ? "bg-slate-50/90 font-medium" : "")}")"
                                     @onclick="() => ToggleClient(client.Id)">
-                                    <td class="px-4 py-3.5 text-slate-900">
+                                    <td class="px-3 py-2 text-slate-900">
                                         <div class="flex items-center gap-2.5">
                                             <button
                                                 type="button"
@@ -146,21 +126,21 @@
                                             <span class="font-semibold text-slate-800">@client.Name</span>
                                         </div>
                                     </td>
-                                    <td class="px-4 py-3.5 text-right">
+                                    <td class="px-3 py-2 text-right">
                                         <span class="inline-block rounded bg-slate-100 px-2 py-0.5 font-mono text-xs font-medium text-slate-700">
                                             @client.Duration.ToReadableShortString()
                                         </span>
                                     </td>
-                                    <td class="px-4 py-3.5 text-right font-medium text-slate-800">
+                                    <td class="px-3 py-2 text-right font-medium text-slate-800">
                                         <AmountDisplay Amount="@client.Earned"/>
                                     </td>
-                                    <td class="px-4 py-3.5 text-right font-medium text-emerald-700">
+                                    <td class="px-3 py-2 text-right font-medium text-emerald-700">
                                         <AmountDisplay Amount="@client.Received"/>
                                     </td>
-                                    <td class="px-4 py-3.5 text-right font-bold @GetOutstandingTextClass(client.Outstanding)">
+                                    <td class="px-3 py-2 text-right font-bold @GetOutstandingTextClass(client.Outstanding)">
                                         <AmountDisplay Amount="@client.Outstanding"/>
                                     </td>
-                                    <td class="px-4 py-3.5 text-center">
+                                    <td class="px-3 py-2 text-center">
                                         <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold @GetStatusBadgeClass(client.Outstanding)">
                                             <span class="h-1.5 w-1.5 rounded-full @GetStatusDotClass(client.Outstanding)"></span>
                                             @GetStatus(client.Outstanding)
@@ -172,7 +152,7 @@
                                     <tr class="bg-slate-50/50">
                                         <td
                                             colspan="6"
-                                            class="px-4 py-4 sm:px-6">
+                                            class="px-4 py-3 sm:px-6">
                                             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
                                                 <div class="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-2xs">
                                                     <div>
@@ -211,13 +191,13 @@
                                                                         @foreach (var project in client.Projects)
                                                                         {
                                                                             <tr class="hover:bg-slate-50/50">
-                                                                                <td class="py-2.5 font-medium text-slate-700">
+                                                                                <td class="py-2 font-medium text-slate-700">
                                                                                     @project.Name
                                                                                 </td>
-                                                                                <td class="py-2.5 text-right font-mono text-slate-600">
+                                                                                <td class="py-2 text-right font-mono text-slate-600">
                                                                                     @project.Duration.ToReadableShortString()
                                                                                 </td>
-                                                                                <td class="py-2.5 text-right font-semibold text-slate-800">
+                                                                                <td class="py-2 text-right font-semibold text-slate-800">
                                                                                     <AmountDisplay Amount="@project.Earned"/>
                                                                                 </td>
                                                                             </tr>
@@ -318,7 +298,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </section>
+            </LumexCardBody>
+        </LumexCard>
     }
 </div>

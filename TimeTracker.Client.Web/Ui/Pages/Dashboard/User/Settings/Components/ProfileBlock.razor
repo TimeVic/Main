@@ -11,7 +11,7 @@
         </div>
     </LumexCardHeader>
     <LumexCardBody>
-        <div class="space-y-5">
+        <div class="max-w-xl space-y-5">
             <div>
                 <p class="mb-3 text-sm font-medium text-slate-700">@DashboardLocalizer["UserSettings_Avatar"]</p>
                 <div class="flex flex-wrap items-center gap-4">
@@ -40,7 +40,7 @@
                                         class="opacity-75"
                                         fill="currentColor"
                                         d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                                </svg>
+                                    </svg>
                             </div>
                         }
                     </div>
@@ -106,6 +106,8 @@
                 <LumexSelect
                     TValue="string"
                     Label="@DashboardLocalizer["Language"].Value"
+                    LabelPlacement="@LabelPlacement.Outside"
+                    Variant="InputVariant.Outlined"
                     @bind-Value="_selectedLanguage">
                     <LumexSelectItem
                         Value="@ILocalizationUrlService.EnglishCultureName"
