@@ -9,6 +9,8 @@ public record NotesState
 {
     public IReadOnlyList<NoteTreeNodeDto> FlatNodes { get; init; } = [];
 
+    public NoteVisibility ActiveMode { get; init; } = NoteVisibility.Workspace;
+
     public HashSet<Guid> ExpandedNodeIds { get; init; } = [];
 
     public Guid? SelectedNoteId { get; init; }

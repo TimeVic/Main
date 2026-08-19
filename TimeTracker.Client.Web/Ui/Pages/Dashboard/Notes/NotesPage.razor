@@ -1,5 +1,6 @@
 @page "/board/{WorkspaceId:guid}/notes"
 @using LumexUI.Common
+@using TimeTracker.Business.Common.Constants.Notes
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components.Modals
 @using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
@@ -18,6 +19,7 @@
     IsOpened="State.IsCreateFolderModalOpened"
     IsSaving="State.IsCreatingNode"
     ParentId="State.ActiveParentId"
+    Visibility="@ActiveModalVisibility"
     IsOpenedChanged="@OnCreateFolderModalChanged"
     OnSubmit="@CreateFolder"/>
 
@@ -25,6 +27,7 @@
     IsOpened="State.IsCreateNoteModalOpened"
     IsSaving="State.IsCreatingNode"
     ParentId="State.ActiveParentId"
+    Visibility="@ActiveModalVisibility"
     IsOpenedChanged="@OnCreateNoteModalChanged"
     OnSubmit="@CreateDocument"/>
 
@@ -61,28 +64,52 @@
             <h1 class="text-2xl font-semibold text-slate-900">@DashboardLocalizer["Notes"]</h1>
             <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["Notes_PageSubtitle"]</p>
         </div>
-        @if (CanEditNotes)
-        {
-        <div class="flex flex-wrap items-center gap-2">
-            <CustomButton
-                Variant="Variant.Outlined"
-                Color="ThemeColor.Default"
-                OnClick="@(() => OpenCreateFolderModal(null))">
-                <StartContent>
-                    <i class="fa-regular fa-folder"></i>
-                </StartContent>
-                <ChildContent>@DashboardLocalizer["NewFolder"]</ChildContent>
-            </CustomButton>
-            <CustomButton
-                Color="ThemeColor.Primary"
-                OnClick="@(() => OpenCreateNoteModal(null))">
-                <StartContent>
-                    <i class="fa-solid fa-plus"></i>
-                </StartContent>
-                <ChildContent>@DashboardLocalizer["NewNote"]</ChildContent>
-            </CustomButton>
+        <div class="flex flex-wrap items-center gap-3">
+            @if (!IsSoloWorkspace)
+            {
+                <div class="inline-flex rounded-xl border border-slate-200 bg-slate-100 p-1">
+                    <button
+                        type="button"
+                        class="@GetModeButtonClass(NoteVisibility.Workspace)"
+                        title="@DashboardLocalizer["Notes_ModeWorkspace_Subtitle"].Value"
+                        @onclick="@(() => SetMode(NoteVisibility.Workspace))">
+                        <i class="fa-solid fa-users mr-1.5 text-xs"></i>
+                        <span>@DashboardLocalizer["Notes_ModeWorkspace"]</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="@GetModeButtonClass(NoteVisibility.Private)"
+                        title="@DashboardLocalizer["Notes_ModePrivate_Subtitle"].Value"
+                        @onclick="@(() => SetMode(NoteVisibility.Private))">
+                        <i class="fa-solid fa-user-lock mr-1.5 text-xs"></i>
+                        <span>@DashboardLocalizer["Notes_ModePrivate"]</span>
+                    </button>
+                </div>
+            }
+
+            @if (CanEditNotes)
+            {
+                <div class="flex flex-wrap items-center gap-2">
+                    <CustomButton
+                        Variant="Variant.Outlined"
+                        Color="ThemeColor.Default"
+                        OnClick="@(() => OpenCreateFolderModal(null))">
+                        <StartContent>
+                            <i class="fa-regular fa-folder"></i>
+                        </StartContent>
+                        <ChildContent>@DashboardLocalizer["NewFolder"]</ChildContent>
+                    </CustomButton>
+                    <CustomButton
+                        Color="ThemeColor.Primary"
+                        OnClick="@(() => OpenCreateNoteModal(null))">
+                        <StartContent>
+                            <i class="fa-solid fa-plus"></i>
+                        </StartContent>
+                        <ChildContent>@DashboardLocalizer["NewNote"]</ChildContent>
+                    </CustomButton>
+                </div>
+            }
         </div>
-        }
     </div>
 
     @if (!string.IsNullOrWhiteSpace(TreeError))
@@ -102,6 +129,7 @@
                 HandleLabel="@DashboardLocalizer["Notes_ResizeTreePanel"].Value">
                 <StartContent>
                     <NotesTreeBlock
+                        ActiveMode="@ActiveMode"
                         TreeNodes="@TreeNodes"
                         ExpandedNodeIds="@State.ExpandedNodeIds"
                         SelectedNoteId="@State.SelectedNoteId"

@@ -18,6 +18,9 @@ public partial class CreateFolderModal
     public Guid? ParentId { get; set; }
 
     [Parameter]
+    public NoteVisibility Visibility { get; set; } = NoteVisibility.Workspace;
+
+    [Parameter]
     public EventCallback<bool> IsOpenedChanged { get; set; }
 
     [Parameter]
@@ -34,6 +37,7 @@ public partial class CreateFolderModal
     protected override void OnParametersSet()
     {
         _model.ParentId = ParentId;
+        _model.Visibility = Visibility;
         if (!IsOpened)
         {
             ResetModel();
@@ -69,7 +73,7 @@ public partial class CreateFolderModal
     {
         _model.ParentId = ParentId;
         _model.Title = string.Empty;
-        _model.Visibility = NoteVisibility.Workspace;
+        _model.Visibility = Visibility;
         _model.SortOrder = null;
     }
 }

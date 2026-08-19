@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
+using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Models;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Components;
 
 public partial class NotesTreeBlock
 {
+    [Parameter]
+    public NoteVisibility ActiveMode { get; set; } = NoteVisibility.Workspace;
+
     [Parameter]
     public IReadOnlyList<NoteTreeNodeModel> TreeNodes { get; set; } = Array.Empty<NoteTreeNodeModel>();
 

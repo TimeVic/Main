@@ -1,5 +1,6 @@
 using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Client.Core.Store.Auth;
 
@@ -7,10 +8,49 @@ namespace TimeTracker.Client.Core.Store.Notes;
 
 public class NotesReducers
 {
-    [ReducerMethod(typeof(SetWorkspaceAction))]
-    public static NotesState ReducerOnWorkspaceChanged(NotesState state)
+    [ReducerMethod]
+    public static NotesState ReducerOnWorkspaceChanged(NotesState state, SetWorkspaceAction action)
     {
-        return new NotesState();
+        return new NotesState
+        {
+            ActiveMode = action.Workspace?.Mode == WorkspaceMode.Solo
+                ? NoteVisibility.Private
+                : NoteVisibility.Workspace
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState ReducerOnLogin(NotesState state, LoginAction action)
+    {
+        return new NotesState
+        {
+            ActiveMode = action.Workspace?.Mode == WorkspaceMode.Solo
+                ? NoteVisibility.Private
+                : NoteVisibility.Workspace
+        };
+    }
+
+    [ReducerMethod]
+    public static NotesState SetNotesActiveModeReducer(NotesState state, SetNotesActiveModeAction action)
+    {
+        if (state.ActiveMode == action.Mode)
+        {
+            return state;
+        }
+
+        var isSelectionInDifferentMode = state.CurrentDocument != null && state.CurrentDocument.Visibility != action.Mode;
+
+        return state with
+        {
+            ActiveMode = action.Mode,
+            SelectedNoteId = isSelectionInDifferentMode ? null : state.SelectedNoteId,
+            CurrentDocument = isSelectionInDifferentMode ? null : state.CurrentDocument,
+            CurrentContent = isSelectionInDifferentMode ? null : state.CurrentContent,
+            EditorTitle = isSelectionInDifferentMode ? string.Empty : state.EditorTitle,
+            EditorMarkdown = isSelectionInDifferentMode ? string.Empty : state.EditorMarkdown,
+            IsEditingDocument = isSelectionInDifferentMode ? false : state.IsEditingDocument,
+            IsSaveError = isSelectionInDifferentMode ? false : state.IsSaveError
+        };
     }
 
     [ReducerMethod]

@@ -58,7 +58,7 @@ public abstract class NoteRequestHandlerBase
         TaskDao = taskDao;
     }
 
-    protected async Task<WorkspaceContext> GetWorkspaceContextAsync(AccessLevel accessLevel = AccessLevel.Write)
+    protected async Task<WorkspaceContext> GetWorkspaceContextAsync(AccessLevel accessLevel = AccessLevel.Read)
     {
         var user = await ApiRequestService.GetCurrentUser();
         var workspaceId = ApiRequestService.GetCurrentWorkspaceId();
@@ -131,6 +131,29 @@ public abstract class NoteRequestHandlerBase
         }
 
         return parent;
+    }
+
+    protected async Task EnsureCanUseVisibilityAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        NoteVisibility visibility
+    )
+    {
+        if (visibility == NoteVisibility.Workspace && (workspace.Mode == WorkspaceMode.Solo || !await SecurityManager.HasAccess(AccessLevel.Write, user, workspace)))
+        {
+            throw new HasNoAccessException();
+        }
+    }
+
+    protected static void EnsureMatchingParentVisibility(
+        NoteNodeEntity? parent,
+        NoteVisibility visibility
+    )
+    {
+        if (parent != null && parent.Visibility != visibility)
+        {
+            throw new DataValidationException("Child note visibility must match parent visibility");
+        }
     }
 
     protected async Task EnsureFolderIsNotMovedIntoItselfOrDescendantAsync(

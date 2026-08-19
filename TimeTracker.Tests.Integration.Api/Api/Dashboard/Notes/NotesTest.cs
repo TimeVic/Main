@@ -73,7 +73,7 @@ public class NotesTest : BaseTest
     [Fact]
     public async Task GetTreeReturnsSharedNotesAndTheirParentFoldersForWorkspaceUser()
     {
-        var folder = await CreateFolderAsync("Shared folder");
+        var folder = await CreateFolderAsync("Shared folder", visibility: NoteVisibility.Workspace);
         var document = await CreateDocumentAsync(
             "Owner.md",
             "# Owner",
@@ -523,18 +523,211 @@ public class NotesTest : BaseTest
         return await HttpClient.PostAsync(url, JsonContent.Create(data));
     }
 
+    [Fact]
+    public async Task CreateDocumentRejectsParentWithDifferentVisibility()
+    {
+        var privateFolder = await CreateFolderAsync("Private Folder", visibility: NoteVisibility.Private);
+        var responseWorkspaceUnderPrivate = await PostRequestAsync(CreateDocumentUrl, _jwtToken, new CreateNoteDocumentRequest
+        {
+            ParentId = privateFolder.Id,
+            Title = "WorkspaceInPrivate.md",
+            Visibility = NoteVisibility.Workspace
+        }, _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, responseWorkspaceUnderPrivate.StatusCode);
+
+        var workspaceFolder = await CreateFolderAsync("Workspace Folder", visibility: NoteVisibility.Workspace);
+        var responsePrivateUnderWorkspace = await PostRequestAsync(CreateDocumentUrl, _jwtToken, new CreateNoteDocumentRequest
+        {
+            ParentId = workspaceFolder.Id,
+            Title = "PrivateInWorkspace.md",
+            Visibility = NoteVisibility.Private
+        }, _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, responsePrivateUnderWorkspace.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateFolderRejectsParentWithDifferentVisibility()
+    {
+        var privateFolder = await CreateFolderAsync("Private Folder", visibility: NoteVisibility.Private);
+        var responseWorkspaceUnderPrivate = await PostRequestAsync(CreateFolderUrl, _jwtToken, new CreateNoteFolderRequest
+        {
+            ParentId = privateFolder.Id,
+            Title = "Subfolder",
+            Visibility = NoteVisibility.Workspace
+        }, _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, responseWorkspaceUnderPrivate.StatusCode);
+
+        var workspaceFolder = await CreateFolderAsync("Workspace Folder", visibility: NoteVisibility.Workspace);
+        var responsePrivateUnderWorkspace = await PostRequestAsync(CreateFolderUrl, _jwtToken, new CreateNoteFolderRequest
+        {
+            ParentId = workspaceFolder.Id,
+            Title = "Subfolder",
+            Visibility = NoteVisibility.Private
+        }, _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, responsePrivateUnderWorkspace.StatusCode);
+    }
+
+    [Fact]
+    public async Task MoveNodeRejectsMovingIntoParentWithDifferentVisibility()
+    {
+        var privateFolder = await CreateFolderAsync("Private Folder", visibility: NoteVisibility.Private);
+        var workspaceFolder = await CreateFolderAsync("Workspace Folder", visibility: NoteVisibility.Workspace);
+        var privateDoc = await CreateDocumentAsync("Private.md", "# Private", visibility: NoteVisibility.Private);
+        var workspaceDoc = await CreateDocumentAsync("Workspace.md", "# Workspace", visibility: NoteVisibility.Workspace);
+
+        var movePrivateToWorkspaceResponse = await PostRequestAsync(MoveNodeUrl, _jwtToken, new MoveNoteNodeRequest
+        {
+            NoteId = privateDoc.Id,
+            ParentId = workspaceFolder.Id
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, movePrivateToWorkspaceResponse.StatusCode);
+
+        var moveWorkspaceToPrivateResponse = await PostRequestAsync(MoveNodeUrl, _jwtToken, new MoveNoteNodeRequest
+        {
+            NoteId = workspaceDoc.Id,
+            ParentId = privateFolder.Id
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, moveWorkspaceToPrivateResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateDocumentRejectsChangingVisibilityIfParentHasDifferentVisibility()
+    {
+        var workspaceFolder = await CreateFolderAsync("Workspace Folder", visibility: NoteVisibility.Workspace);
+        var workspaceDoc = await CreateDocumentAsync("Doc.md", "# Content", workspaceFolder.Id, NoteVisibility.Workspace);
+
+        var updateResponse = await PostRequestAsync(UpdateDocumentUrl, _jwtToken, new UpdateNoteDocumentRequest
+        {
+            NoteId = workspaceDoc.Id,
+            Title = "Doc.md",
+            Visibility = NoteVisibility.Private
+        }, _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, updateResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task WorkspaceUserCanCreateAndManageOwnPrivateNotes()
+    {
+        var (userToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+
+        var folder = await CreateFolderAsync("My Private Folder", token: userToken, visibility: NoteVisibility.Private);
+        var document = await CreateDocumentAsync(
+            "My Note.md",
+            "# My Private Content",
+            folder.Id,
+            NoteVisibility.Private,
+            userToken
+        );
+
+        var loadedDocument = await GetDocumentAsync(document.Id, userToken);
+        Assert.Equal("My Note.md", loadedDocument.Title);
+
+        var userTree = await GetTreeAsync(userToken);
+        Assert.Contains(userTree.Nodes, item => item.Id == folder.Id);
+        Assert.Contains(userTree.Nodes, item => item.Id == document.Id);
+    }
+
+    [Fact]
+    public async Task WorkspaceUserCannotCreateWorkspaceDocumentOrFolder()
+    {
+        var (userToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+
+        var createFolderResponse = await PostRequestAsync(CreateFolderUrl, userToken, new CreateNoteFolderRequest
+        {
+            Title = "Workspace Folder",
+            Visibility = NoteVisibility.Workspace
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, createFolderResponse.StatusCode);
+
+        var createDocResponse = await PostRequestAsync(CreateDocumentUrl, userToken, new CreateNoteDocumentRequest
+        {
+            Title = "Workspace Doc.md",
+            Visibility = NoteVisibility.Workspace
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, createDocResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task WorkspaceUserCannotAccessOtherMembersPrivateDocument()
+    {
+        var (userAToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(_workspace, MembershipAccessType.User);
+        var (userBToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(_workspace, MembershipAccessType.User);
+
+        var privateDocA = await CreateDocumentAsync(
+            "UserA.md",
+            "# User A Private",
+            visibility: NoteVisibility.Private,
+            token: userAToken
+        );
+
+        var response = await PostRequestAsync(GetDocumentUrl, userBToken, new GetNoteDocumentRequest
+        {
+            NoteId = privateDocA.Id
+        }, _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetTreeIsolatesPrivateNotesBetweenDifferentUsers()
+    {
+        var (userAToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(_workspace, MembershipAccessType.User);
+        var (userBToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(_workspace, MembershipAccessType.User);
+
+        var privateDocA = await CreateDocumentAsync(
+            "UserA.md",
+            "# User A",
+            visibility: NoteVisibility.Private,
+            token: userAToken
+        );
+        var privateDocB = await CreateDocumentAsync(
+            "UserB.md",
+            "# User B",
+            visibility: NoteVisibility.Private,
+            token: userBToken
+        );
+        var workspaceDoc = await CreateDocumentAsync(
+            "Shared.md",
+            "# Shared",
+            visibility: NoteVisibility.Workspace
+        );
+
+        var treeA = await GetTreeAsync(userAToken);
+        var treeB = await GetTreeAsync(userBToken);
+
+        Assert.Contains(treeA.Nodes, item => item.Id == privateDocA.Id);
+        Assert.DoesNotContain(treeA.Nodes, item => item.Id == privateDocB.Id);
+        Assert.Contains(treeA.Nodes, item => item.Id == workspaceDoc.Id);
+
+        Assert.Contains(treeB.Nodes, item => item.Id == privateDocB.Id);
+        Assert.DoesNotContain(treeB.Nodes, item => item.Id == privateDocA.Id);
+        Assert.Contains(treeB.Nodes, item => item.Id == workspaceDoc.Id);
+    }
+
     private async Task<NoteTreeNodeDto> CreateFolderAsync(
         string title,
         Guid? parentId = null,
         string? token = null,
-        Guid? workspaceId = null
+        Guid? workspaceId = null,
+        NoteVisibility visibility = NoteVisibility.Private
     )
     {
         var response = await PostRequestAsync(CreateFolderUrl, token ?? _jwtToken, new CreateNoteFolderRequest
         {
             ParentId = parentId,
             Title = title,
-            Visibility = NoteVisibility.Private
+            Visibility = visibility
         }, workspaceId ?? _workspace.Id);
         response.EnsureSuccessStatusCode();
         return await response.GetJsonDataAsync<NoteTreeNodeDto>();
@@ -654,6 +847,76 @@ public class NotesTest : BaseTest
         }, _workspace.Id);
         response.EnsureSuccessStatusCode();
         return await response.GetJsonDataAsync<NoteLinkDto>();
+    }
+
+    [Fact]
+    public async Task SoloWorkspaceCannotCreateWorkspaceDocument()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await FlushDbChanges();
+
+        var responseWorkspace = await PostRequestAsync(CreateDocumentUrl, _jwtToken, new CreateNoteDocumentRequest
+        {
+            Title = "WorkspaceInSolo.md",
+            Visibility = NoteVisibility.Workspace
+        }, _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, responseWorkspace.StatusCode);
+
+        var responsePrivate = await PostRequestAsync(CreateDocumentUrl, _jwtToken, new CreateNoteDocumentRequest
+        {
+            Title = "PrivateInSolo.md",
+            Visibility = NoteVisibility.Private
+        }, _workspace.Id);
+
+        responsePrivate.EnsureSuccessStatusCode();
+        var document = await responsePrivate.GetJsonDataAsync<NoteDocumentDto>();
+        Assert.Equal(NoteVisibility.Private, document.Visibility);
+        Assert.Equal("PrivateInSolo.md", document.Title);
+    }
+
+    [Fact]
+    public async Task SoloWorkspaceCannotCreateWorkspaceFolder()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await FlushDbChanges();
+
+        var responseWorkspace = await PostRequestAsync(CreateFolderUrl, _jwtToken, new CreateNoteFolderRequest
+        {
+            Title = "WorkspaceFolderInSolo",
+            Visibility = NoteVisibility.Workspace
+        }, _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, responseWorkspace.StatusCode);
+
+        var responsePrivate = await PostRequestAsync(CreateFolderUrl, _jwtToken, new CreateNoteFolderRequest
+        {
+            Title = "PrivateFolderInSolo",
+            Visibility = NoteVisibility.Private
+        }, _workspace.Id);
+
+        responsePrivate.EnsureSuccessStatusCode();
+        var folder = await responsePrivate.GetJsonDataAsync<NoteTreeNodeDto>();
+        Assert.Equal(NoteVisibility.Private, folder.Visibility);
+        Assert.Equal("PrivateFolderInSolo", folder.Title);
+    }
+
+    [Fact]
+    public async Task SoloWorkspaceCannotUpdateDocumentToWorkspaceVisibility()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await FlushDbChanges();
+
+        var privateDoc = await CreateDocumentAsync("PrivateInSolo.md", "# Private", visibility: NoteVisibility.Private);
+
+        var response = await PostRequestAsync(UpdateDocumentUrl, _jwtToken, new UpdateNoteDocumentRequest
+        {
+            NoteId = privateDoc.Id,
+            Title = "UpdatedTitle.md",
+            Visibility = NoteVisibility.Workspace
+        }, _workspace.Id);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     private async Task<GetLinkedNotesResponse> GetLinkedNotesAsync(Guid projectId, string? token = null)

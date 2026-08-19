@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Notes;
+using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Notes;
 using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Api.Shared.Constants;
@@ -25,6 +27,9 @@ public partial class NotesPage
     private IState<NotesState> NotesState { get; set; } = null!;
 
     [Inject]
+    private IState<AuthState> AuthState { get; set; } = null!;
+
+    [Inject]
     private ISecurityManager SecurityManager { get; set; } = null!;
 
     [Parameter]
@@ -36,7 +41,14 @@ public partial class NotesPage
 
     private NotesState State => NotesState.Value;
 
-    private IReadOnlyList<NoteTreeNodeModel> TreeNodes => NotesTreeBuilder.BuildNotesTree(State.FlatNodes, Logger);
+    private bool IsSoloWorkspace => AuthState.Value.Workspace?.Mode == WorkspaceMode.Solo;
+
+    private NoteVisibility ActiveMode => IsSoloWorkspace ? NoteVisibility.Private : State.ActiveMode;
+
+    private IReadOnlyList<NoteTreeNodeModel> TreeNodes => NotesTreeBuilder.BuildNotesTree(
+        State.FlatNodes.Where(item => item.Visibility == ActiveMode).ToList(),
+        Logger
+    );
 
     private string? TreeError => string.IsNullOrWhiteSpace(State.TreeErrorLocalizationKey)
         ? null
@@ -44,7 +56,29 @@ public partial class NotesPage
 
     private bool IsDocumentDirty => State.IsDocumentDirty;
 
-    private bool CanEditNotes => SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspace);
+    private bool CanEditNotes => IsSoloWorkspace
+        || State.ActiveMode == NoteVisibility.Private
+        || SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspace);
+
+    private NoteVisibility ActiveModalVisibility => IsSoloWorkspace
+        ? NoteVisibility.Private
+        : (State.ActiveParentId.HasValue
+            ? State.FlatNodes.FirstOrDefault(item => item.Id == State.ActiveParentId.Value)?.Visibility ?? State.ActiveMode
+            : State.ActiveMode);
+
+    private Task SetMode(NoteVisibility mode)
+    {
+        Dispatcher.Dispatch(new SetNotesActiveModeAction(mode));
+        return Task.CompletedTask;
+    }
+
+    private string GetModeButtonClass(NoteVisibility mode)
+    {
+        var isActive = State.ActiveMode == mode;
+        return isActive
+            ? "inline-flex items-center rounded-lg bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-900 shadow-sm transition"
+            : "inline-flex items-center rounded-lg px-3.5 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 transition";
+    }
 
     private string SaveStateLabel
     {
@@ -76,6 +110,11 @@ public partial class NotesPage
 
     protected override void OnParametersSet()
     {
+        if (IsSoloWorkspace && State.ActiveMode != NoteVisibility.Private)
+        {
+            Dispatcher.Dispatch(new SetNotesActiveModeAction(NoteVisibility.Private));
+        }
+
         if (_isInitialized && InitialNoteId == _lastInitialNoteId)
         {
             return;

@@ -764,6 +764,13 @@
   <data name="ProjectNotes_Description" xml:space="preserve"><value>Notes linked to this project for scope, billing and delivery context.</value></data>
   <data name="NoteVisibility_Private" xml:space="preserve"><value>Private</value></data>
   <data name="NoteVisibility_Workspace" xml:space="preserve"><value>Workspace</value></data>
+  <data name="Notes_ModeWorkspace" xml:space="preserve"><value>Workspace</value></data>
+  <data name="Notes_ModeWorkspace_Subtitle" xml:space="preserve"><value>Shared with all workspace members</value></data>
+  <data name="Notes_ModePrivate" xml:space="preserve"><value>Private</value></data>
+  <data name="Notes_ModePrivate_Subtitle" xml:space="preserve"><value>Only visible to you</value></data>
+  <data name="Notes_EmptyWorkspaceDescription" xml:space="preserve"><value>No workspace notes yet. Create shared notes for your team.</value></data>
+  <data name="Notes_EmptyPrivateDescription" xml:space="preserve"><value>No private notes yet. Create notes visible only to you.</value></data>
+  <data name="Notes_ParentVisibilityMismatch" xml:space="preserve"><value>Parent and child notes must have the same visibility.</value></data>
   <data name="NoteLinkEntityType_Client" xml:space="preserve"><value>Client</value></data>
   <data name="NoteLinkEntityType_Project" xml:space="preserve"><value>Project</value></data>
   <data name="NoteLinkEntityType_Task" xml:space="preserve"><value>Task</value></data>

@@ -97,6 +97,46 @@ public class HasAccessToNoteTest : BaseTest
         Assert.False(hasAccess);
     }
 
+    [Theory]
+    [InlineData(AccessLevel.Read)]
+    [InlineData(AccessLevel.Write)]
+    public async Task ShouldHaveReadAndWriteAccessIfUserRoleCreatedPrivateNote(AccessLevel accessLevel)
+    {
+        var user = await _userSeeder.CreateActivatedAndShareAsync(_workspace, MembershipAccessType.User);
+        var note = await CreateNoteAsync(NoteVisibility.Private, user);
+
+        var hasAccess = await _securityManager.HasAccess(accessLevel, user, note);
+
+        Assert.True(hasAccess);
+    }
+
+    [Theory]
+    [InlineData(AccessLevel.Read)]
+    [InlineData(AccessLevel.Write)]
+    public async Task ShouldHaveNoAccessIfUserRoleAccessesOtherUserPrivateNote(AccessLevel accessLevel)
+    {
+        var userA = await _userSeeder.CreateActivatedAndShareAsync(_workspace, MembershipAccessType.User);
+        var userB = await _userSeeder.CreateActivatedAndShareAsync(_workspace, MembershipAccessType.User);
+        var note = await CreateNoteAsync(NoteVisibility.Private, userA);
+
+        var hasAccess = await _securityManager.HasAccess(accessLevel, userB, note);
+
+        Assert.False(hasAccess);
+    }
+
+    [Theory]
+    [InlineData(AccessLevel.Read)]
+    [InlineData(AccessLevel.Write)]
+    public async Task ShouldHaveNoAccessIfOwnerAccessesOtherMemberPrivateNote(AccessLevel accessLevel)
+    {
+        var member = await _userSeeder.CreateActivatedAndShareAsync(_workspace, MembershipAccessType.User);
+        var note = await CreateNoteAsync(NoteVisibility.Private, member);
+
+        var hasAccess = await _securityManager.HasAccess(accessLevel, _owner, note);
+
+        Assert.False(hasAccess);
+    }
+
     private async Task<NoteNodeEntity> CreateNoteAsync(NoteVisibility visibility, UserEntity createdByUser)
     {
         var note = await _noteDao.CreateNodeAsync(
