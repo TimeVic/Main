@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
 
-namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.UserPayment;
+namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Shared;
 
 public partial class ClientShareReportModal
 {

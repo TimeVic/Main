@@ -5,6 +5,7 @@
 @using TimeTracker.Api.Shared.Constants
 @using TimeTracker.Client.Core.Store.Report
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.MemberPayments.Parts.Modals
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Shared
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.WorkspaceFinancialSummary.Parts
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared
 @using TimeTracker.Client.Web.Ui.Shared.Components
@@ -18,6 +19,12 @@
     IsOpened="_isPayoutModalOpened"
     IsOpenedChanged="OnPayoutModalStateChanged"
     InitialMemberId="_selectedMemberId"/>
+
+<ClientShareReportModal
+    ClientId="@_sharingClientId"
+    ClientName="@_sharingClientName"
+    IsOpened="@_isShareModalOpened"
+    IsOpenedChanged="OnShareModalOpenedChanged"/>
 
 <div class="space-y-6">
     <section>
@@ -43,7 +50,9 @@
     else
     {
         <FinancialFunnelBlock/>
-        <FinancialActionCenterBlock OnPayMember="OpenPayoutModal"/>
-        <FinancialReportTabsBlock/>
+        <FinancialActionCenterBlock
+            OnPayMember="OpenPayoutModal"
+            OnShareClient="OpenShareModal"/>
+        <FinancialReportTabsBlock OnShareClient="OpenShareModal"/>
     }
 </div>

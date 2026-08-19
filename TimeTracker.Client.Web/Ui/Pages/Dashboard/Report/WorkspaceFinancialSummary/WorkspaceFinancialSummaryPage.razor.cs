@@ -15,6 +15,10 @@ public partial class WorkspaceFinancialSummaryPage
 
     private Guid _selectedMemberId;
 
+    private Guid _sharingClientId;
+    private string _sharingClientName = string.Empty;
+    private bool _isShareModalOpened;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -35,5 +39,18 @@ public partial class WorkspaceFinancialSummaryPage
         {
             Dispatcher.Dispatch(new ReportFetchWorkspaceFinancialSummaryAction());
         }
+    }
+
+    private void OpenShareModal((Guid ClientId, string ClientName) client)
+    {
+        _sharingClientId = client.ClientId;
+        _sharingClientName = client.ClientName;
+        _isShareModalOpened = true;
+    }
+
+    private Task OnShareModalOpenedChanged(bool isOpened)
+    {
+        _isShareModalOpened = isOpened;
+        return Task.CompletedTask;
     }
 }
