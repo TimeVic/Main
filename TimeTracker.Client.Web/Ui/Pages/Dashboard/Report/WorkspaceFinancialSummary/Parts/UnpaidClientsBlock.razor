@@ -27,25 +27,25 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     <tr>
-                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Client"]</th>
-                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Balance"]</th>
-                        <th class="px-4 py-3 text-left">@DashboardLocalizer["LastPayment"]</th>
-                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Status"]</th>
+                        <th class="px-3 py-2 text-left">@DashboardLocalizer["Client"]</th>
+                        <th class="px-3 py-2 text-right">@DashboardLocalizer["Balance"]</th>
+                        <th class="px-3 py-2 text-left">@DashboardLocalizer["LastPayment"]</th>
+                        <th class="px-3 py-2 text-left">@DashboardLocalizer["Status"]</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @foreach (var item in items)
                     {
                         <tr class="hover:bg-slate-50/50">
-                            <td class="px-4 py-3 font-medium text-slate-800">@(item.Client?.Name ?? DashboardLocalizer["NoClient"].Value)</td>
-                            <td class="px-4 py-3 text-right font-semibold text-red-700">
+                            <td class="px-3 py-2 font-medium text-slate-800">@(item.Client?.Name ?? DashboardLocalizer["NoClient"].Value)</td>
+                            <td class="px-3 py-2 text-right font-semibold text-red-700">
                                 <AmountDisplay Amount="@item.Outstanding"/>
                                 <span title="@DashboardLocalizer["ClientBalancesTableBlock_DueTooltip"]">@DashboardLocalizer["Due"]</span>
                             </td>
-                            <td class="px-4 py-3 text-slate-500">
+                            <td class="px-3 py-2 text-slate-500">
                                 @(item.LastPaymentDate.HasValue ? item.LastPaymentDate.Value.ToString("MMM d, yyyy") : "—")
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-3 py-2">
                                 <span class="inline-flex rounded-full px-2 py-0.5 text-xs font-semibold @(item.Received > 0 ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700")">
                                     @(item.Received > 0 ? DashboardLocalizer["PartiallyPaid"].Value : DashboardLocalizer["Due"].Value)
                                 </span>

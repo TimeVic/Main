@@ -21,17 +21,24 @@
 
 <div class="space-y-6">
     <section>
-        <h1 class="text-2xl font-bold tracking-tight text-slate-900">@DashboardLocalizer["WorkspaceMoney"]</h1>
+        <h1 class="text-2xl font-semibold text-slate-900">@DashboardLocalizer["WorkspaceMoney"]</h1>
         <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["WorkspaceMoneyDescription"]</p>
     </section>
 
     @if (_state.Value.IsLoading)
     {
-        <div class="flex justify-center rounded-2xl border border-slate-200 bg-white py-10"><LumexSpinner/></div>
+        <div class="flex justify-center rounded-2xl border border-slate-200 bg-white py-10">
+            <LumexSpinner/>
+        </div>
     }
     else if (_reportData == null || (_reportData.ClientBalances.Count == 0 && _reportData.MemberBalances.Count == 0))
     {
-        <LumexCard Class="border-dashed border-slate-200 bg-slate-50 shadow-none"><LumexCardBody><p class="text-sm font-medium text-slate-700">@DashboardLocalizer["NoTrackedWorkYet"]</p><p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["WorkspaceFinancialSummaryPage_NoTrackedWorkDescription"]</p></LumexCardBody></LumexCard>
+        <LumexCard Class="border-dashed border-slate-200 bg-slate-50 shadow-none">
+            <LumexCardBody>
+                <p class="text-sm font-medium text-slate-700">@DashboardLocalizer["NoTrackedWorkYet"]</p>
+                <p class="mt-1 text-sm text-slate-500">@DashboardLocalizer["WorkspaceFinancialSummaryPage_NoTrackedWorkDescription"]</p>
+            </LumexCardBody>
+        </LumexCard>
     }
     else
     {

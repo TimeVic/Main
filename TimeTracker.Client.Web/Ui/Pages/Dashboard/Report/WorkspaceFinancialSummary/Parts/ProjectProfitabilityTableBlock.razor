@@ -35,46 +35,64 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     <tr>
-                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Project"]</th>
-                        <th class="px-4 py-3 text-left">@DashboardLocalizer["Client"]</th>
-                        <th class="px-4 py-3 text-right">@DashboardLocalizer["Hours"]</th>
-                        <th class="px-4 py-3 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_ClientEarned"]</th>
-                        <th class="px-4 py-3 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_MemberEarnings"]</th>
-                        <th class="px-4 py-3 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_EstimatedMargin"]</th>
-                        <th class="px-4 py-3 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_MarginPercent"]</th>
+                        <th class="px-3 py-2 text-left">@DashboardLocalizer["Project"]</th>
+                        <th class="px-3 py-2 text-left">@DashboardLocalizer["Client"]</th>
+                        <th class="px-3 py-2 text-right">@DashboardLocalizer["Hours"]</th>
+                        <th class="px-3 py-2 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_ClientEarned"]</th>
+                        <th class="px-3 py-2 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_MemberEarnings"]</th>
+                        <th class="px-3 py-2 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_EstimatedMargin"]</th>
+                        <th class="px-3 py-2 text-right">@DashboardLocalizer["ProjectProfitabilityTableBlock_MarginPercent"]</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @foreach (var item in items)
                     {
                         <tr class="hover:bg-slate-50/50">
-                            <td class="px-4 py-3 font-medium text-slate-800">@item.Project.Name</td>
-                            <td class="px-4 py-3 text-slate-600">@(item.Client?.Name ?? "—")</td>
-                            <td class="px-4 py-3 text-right text-slate-600">@item.Duration.ToReadableShortString()</td>
-                            <td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.ClientEarned"/></td>
-                            <td class="px-4 py-3 text-right"><AmountDisplay Amount="@item.TeamCost"/></td>
-                            <td class="px-4 py-3 text-right font-semibold @(item.EstimatedMargin < 0 ? "text-red-700" : "text-emerald-700")">
+                            <td class="px-3 py-2 font-medium text-slate-800">
+                                @item.Project.Name
+                            </td>
+                            <td class="px-3 py-2 text-slate-600">
+                                @(item.Client?.Name ?? "—")
+                            </td>
+                            <td class="px-3 py-2 text-right text-slate-600">
+                                @item.Duration.ToReadableShortString()
+                            </td>
+                            <td class="px-3 py-2 text-right">
+                                <AmountDisplay Amount="@item.ClientEarned"/>
+                            </td>
+                            <td class="px-3 py-2 text-right">
+                                <AmountDisplay Amount="@item.TeamCost"/>
+                            </td>
+                            <td class="px-3 py-2 text-right font-semibold @(item.EstimatedMargin < 0 ? "text-red-700" : "text-emerald-700")">
                                 <AmountDisplay Amount="@item.EstimatedMargin"/>
                             </td>
-                            <td class="px-4 py-3 text-right @(item.MarginPercent < 0 ? "text-red-700" : "text-slate-700")">
+                            <td class="px-3 py-2 text-right @(item.MarginPercent < 0 ? "text-red-700" : "text-slate-700")">
                                 @(item.ClientEarned == 0 ? "—" : $"{Math.Round(item.MarginPercent.GetValueOrDefault(), 0)}%")
                             </td>
                         </tr>
                     }
                     <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
-                        <td class="px-4 py-3">@DashboardLocalizer["Total"]</td>
-                        <td class="px-4 py-3"></td>
-                        <td class="px-4 py-3 text-right">@items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()</td>
-                        <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.ClientEarned)"/></td>
+                        <td class="px-3 py-2">
+                            @DashboardLocalizer["Total"]
+                        </td>
+                        <td class="px-3 py-2"></td>
+                        <td class="px-3 py-2 text-right">
+                            @items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()
+                        </td>
+                        <td class="px-3 py-2 text-right">
+                            <AmountDisplay Amount="@items.Sum(i => i.ClientEarned)"/>
+                        </td>
                         @{
                             var totalMargin = items.Sum(i => i.EstimatedMargin);
                             var totalEarned = items.Sum(i => i.ClientEarned);
                         }
-                        <td class="px-4 py-3 text-right"><AmountDisplay Amount="@items.Sum(i => i.TeamCost)"/></td>
-                        <td class="px-4 py-3 text-right @(totalMargin < 0 ? "text-red-700" : "text-emerald-700")">
+                        <td class="px-3 py-2 text-right">
+                            <AmountDisplay Amount="@items.Sum(i => i.TeamCost)"/>
+                        </td>
+                        <td class="px-3 py-2 text-right @(totalMargin < 0 ? "text-red-700" : "text-emerald-700")">
                             <AmountDisplay Amount="@totalMargin"/>
                         </td>
-                        <td class="px-4 py-3 text-right">
+                        <td class="px-3 py-2 text-right">
                             @(totalEarned == 0 ? "—" : $"{Math.Round(totalMargin / totalEarned * 100, 0)}%")
                         </td>
                     </tr>

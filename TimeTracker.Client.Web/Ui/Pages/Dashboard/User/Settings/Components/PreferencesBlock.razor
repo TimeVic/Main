@@ -16,6 +16,8 @@
             <LumexSelect
                 TValue="string"
                 Label="@DashboardLocalizer["Language"].Value"
+                LabelPlacement="@LabelPlacement.Outside"
+                Variant="InputVariant.Outlined"
                 @bind-Value="_selectedLanguage">
                 <LumexSelectItem Value="@ILocalizationUrlService.EnglishCultureName">
                     <span class="inline-flex items-center gap-2">
