@@ -1,4 +1,5 @@
 @using LumexUI.Common
+@using TimeTracker.Business.Common.Constants.Notes
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Notes.Models
 
 @inherits BaseReactiveComponent
@@ -55,7 +56,7 @@
         else if (!TreeNodes.Any())
         {
             <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
-                <p>@DashboardLocalizer["Notes_EmptyDescription"]</p>
+                <p>@(ActiveMode == NoteVisibility.Workspace ? DashboardLocalizer["Notes_EmptyWorkspaceDescription"] : DashboardLocalizer["Notes_EmptyPrivateDescription"])</p>
                 @if (IsEditingAllowed)
                 {
                     <CustomButton

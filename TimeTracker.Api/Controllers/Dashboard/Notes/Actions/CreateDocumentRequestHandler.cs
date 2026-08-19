@@ -2,7 +2,10 @@ using Api.Requests.Abstractions;
 using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Notes;
+using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Notes;
 using TimeTracker.Business.Orm.Dao.Tasks;
@@ -30,7 +33,11 @@ public class CreateDocumentRequestHandler : NoteRequestHandlerBase, IAsyncReques
     public async Task<NoteDocumentDto> ExecuteAsync(CreateNoteDocumentRequest request)
     {
         var context = await GetWorkspaceContextAsync();
+        await EnsureCanUseVisibilityAsync(context.Workspace, context.User, request.Visibility);
+
         var parent = await GetValidParentAsync(context.Workspace, context.User, request.ParentId);
+        EnsureMatchingParentVisibility(parent, request.Visibility);
+
         var links = request.Links ?? new List<NoteLinkRequestDto>();
         EnsureNoDuplicateLinks(links);
 

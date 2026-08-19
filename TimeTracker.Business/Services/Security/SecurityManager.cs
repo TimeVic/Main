@@ -1,4 +1,4 @@
-﻿using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Extensions;
@@ -246,15 +246,23 @@ public class SecurityManager: ISecurityManager
     private async Task<bool> HasAccessToNoteNode(AccessLevel accessLevel, UserEntity user, NoteNodeEntity noteNode)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, noteNode.Workspace);
+        if (accessType == null)
+        {
+            return false;
+        }
+
+        if (noteNode.Visibility == NoteVisibility.Private)
+        {
+            return noteNode.CreatedByUser.Id == user.Id;
+        }
+
         if (accessType is MembershipAccessType.Owner or MembershipAccessType.Manager)
         {
-            return noteNode.Visibility == NoteVisibility.Workspace
-                || noteNode.CreatedByUser.Id == user.Id;
+            return true;
         }
 
         return accessLevel == AccessLevel.Read
-            && accessType == MembershipAccessType.User
-            && noteNode.Visibility == NoteVisibility.Workspace;
+            && accessType == MembershipAccessType.User;
     }
     
     private async Task<bool> HasAccessToGoalsTracker(AccessLevel accessLevel, UserEntity user, GoalsTrackerEntity goalsTrackerEntity)

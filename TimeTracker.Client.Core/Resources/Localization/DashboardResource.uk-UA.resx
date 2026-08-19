@@ -765,7 +765,14 @@
   <data name="Notes_ProjectNoteDefaultTitle" xml:space="preserve"><value>Нотатка: {0}</value></data>
   <data name="ProjectNotes_Description" xml:space="preserve"><value>Нотатки, привʼязані до проєкту: скоуп, оплати й робочий контекст.</value></data>
   <data name="NoteVisibility_Private" xml:space="preserve"><value>Приватна</value></data>
-  <data name="NoteVisibility_Workspace" xml:space="preserve"><value>Workspace</value></data>
+  <data name="NoteVisibility_Workspace" xml:space="preserve"><value>Простір</value></data>
+  <data name="Notes_ModeWorkspace" xml:space="preserve"><value>Спільні</value></data>
+  <data name="Notes_ModeWorkspace_Subtitle" xml:space="preserve"><value>Доступні всім учасникам простору</value></data>
+  <data name="Notes_ModePrivate" xml:space="preserve"><value>Приватні</value></data>
+  <data name="Notes_ModePrivate_Subtitle" xml:space="preserve"><value>Доступні лише вам</value></data>
+  <data name="Notes_EmptyWorkspaceDescription" xml:space="preserve"><value>У просторі ще немає спільних нотаток. Створіть нотатку для команди.</value></data>
+  <data name="Notes_EmptyPrivateDescription" xml:space="preserve"><value>У вас ще немає приватних нотаток. Створіть нотатку, доступну лише вам.</value></data>
+  <data name="Notes_ParentVisibilityMismatch" xml:space="preserve"><value>Видимість батьківської та дочірньої нотатки має збігатися.</value></data>
   <data name="NoteLinkEntityType_Client" xml:space="preserve"><value>Клієнт</value></data>
   <data name="NoteLinkEntityType_Project" xml:space="preserve"><value>Проєкт</value></data>
   <data name="NoteLinkEntityType_Task" xml:space="preserve"><value>Задача</value></data>

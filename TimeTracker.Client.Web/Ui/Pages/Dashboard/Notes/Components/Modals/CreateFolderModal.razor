@@ -31,13 +31,6 @@
                                 @bind-Value="_model.Title"/>
                             <CustomValidationMessage For="@(() => _model.Title)"/>
                         </div>
-                        <EnumDropDown
-                            TItem="NoteVisibility"
-                            Class="min-w-0 max-w-full"
-                            FullWidth="true"
-                            Label="@DashboardLocalizer["Visibility"].Value"
-                            Value="@_model.Visibility"
-                            ValueChanged="@OnVisibilityChanged"/>
                         <CustomValidationSummary/>
                     </div>
                 </EditForm>

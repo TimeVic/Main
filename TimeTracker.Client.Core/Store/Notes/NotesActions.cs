@@ -7,6 +7,8 @@ namespace TimeTracker.Client.Core.Store.Notes;
 
 public record struct LoadNotesTreeAction(bool IsReload = false, Guid? InitialNoteId = null);
 
+public record struct SetNotesActiveModeAction(NoteVisibility Mode);
+
 public record struct SetNotesTreeAction(IReadOnlyList<NoteTreeNodeDto> Nodes);
 
 public record struct SetNotesTreeLoadingAction(bool IsLoading);
