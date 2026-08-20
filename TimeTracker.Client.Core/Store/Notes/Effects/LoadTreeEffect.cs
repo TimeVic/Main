@@ -2,10 +2,12 @@ using Fluxor;
 using Microsoft.Extensions.Localization;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Client.Core.Localization;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Services.UI;
+using TimeTracker.Client.Core.Store.Auth;
 
 namespace TimeTracker.Client.Core.Store.Notes.Effects;
 
@@ -13,6 +15,7 @@ public class LoadTreeEffect : Effect<LoadNotesTreeAction>
 {
     private readonly IApiService _apiService;
     private readonly IState<NotesState> _state;
+    private readonly IState<AuthState> _authState;
     private readonly ILogger<LoadTreeEffect> _logger;
     private readonly IToastService _toastService;
     private readonly IStringLocalizer<DashboardResource> _localizer;
@@ -20,6 +23,7 @@ public class LoadTreeEffect : Effect<LoadNotesTreeAction>
     public LoadTreeEffect(
         IApiService apiService,
         IState<NotesState> state,
+        IState<AuthState> authState,
         ILogger<LoadTreeEffect> logger,
         IToastService toastService,
         IStringLocalizer<DashboardResource> localizer
@@ -27,6 +31,7 @@ public class LoadTreeEffect : Effect<LoadNotesTreeAction>
     {
         _apiService = apiService;
         _state = state;
+        _authState = authState;
         _logger = logger;
         _toastService = toastService;
         _localizer = localizer;
@@ -47,7 +52,12 @@ public class LoadTreeEffect : Effect<LoadNotesTreeAction>
         dispatcher.Dispatch(new SetNotesTreeErrorAction(null));
         try
         {
-            var response = await _apiService.NotesGetTreeAsync(new GetNotesTreeRequest());
+            var isSoloWorkspace = _authState.Value.Workspace?.Mode == WorkspaceMode.Solo;
+            NoteVisibility? visibility = isSoloWorkspace ? null : (action.Visibility ?? _state.Value.ActiveMode);
+            var response = await _apiService.NotesGetTreeAsync(new GetNotesTreeRequest
+            {
+                Visibility = visibility
+            });
             var nodes = response?.Nodes?.ToList() ?? [];
             dispatcher.Dispatch(new SetNotesTreeAction(nodes));
             SelectInitialNoteIfNeeded(action.InitialNoteId, nodes, dispatcher);

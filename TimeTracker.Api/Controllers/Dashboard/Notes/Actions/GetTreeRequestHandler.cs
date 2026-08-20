@@ -3,6 +3,7 @@ using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Notes;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Notes;
 using TimeTracker.Business.Orm.Dao.Tasks;
@@ -30,7 +31,8 @@ public class GetTreeRequestHandler : NoteRequestHandlerBase, IAsyncRequestHandle
     public async Task<GetNotesTreeResponse> ExecuteAsync(GetNotesTreeRequest request)
     {
         var context = await GetWorkspaceContextAsync(AccessLevel.Read);
-        var nodes = await NoteDao.GetTreeAsync(context.Workspace, request.IncludeArchived);
+        var visibility = request.Visibility ?? NoteVisibility.Private;
+        var nodes = await NoteDao.GetTreeAsync(context.Workspace, request.IncludeArchived, visibility);
         var availableNodes = await GetAvailableNotesAsync(context.User, nodes, AccessLevel.Read);
         var availableNodeIds = availableNodes.Select(item => item.Id).ToHashSet();
 

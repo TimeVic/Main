@@ -85,7 +85,10 @@ public class NotesTest : BaseTest
             MembershipAccessType.User
         );
 
-        var response = await PostRequestAsync(GetTreeUrl, userToken, new GetNotesTreeRequest(), _workspace.Id);
+        var response = await PostRequestAsync(GetTreeUrl, userToken, new GetNotesTreeRequest
+        {
+            Visibility = NoteVisibility.Workspace
+        }, _workspace.Id);
         response.EnsureSuccessStatusCode();
         var tree = await response.GetJsonDataAsync<GetNotesTreeResponse>();
 
@@ -705,14 +708,19 @@ public class NotesTest : BaseTest
 
         var treeA = await GetTreeAsync(userAToken);
         var treeB = await GetTreeAsync(userBToken);
+        var workspaceTreeA = await GetTreeAsync(userAToken, visibility: NoteVisibility.Workspace);
 
         Assert.Contains(treeA.Nodes, item => item.Id == privateDocA.Id);
         Assert.DoesNotContain(treeA.Nodes, item => item.Id == privateDocB.Id);
-        Assert.Contains(treeA.Nodes, item => item.Id == workspaceDoc.Id);
+        Assert.DoesNotContain(treeA.Nodes, item => item.Id == workspaceDoc.Id);
 
         Assert.Contains(treeB.Nodes, item => item.Id == privateDocB.Id);
         Assert.DoesNotContain(treeB.Nodes, item => item.Id == privateDocA.Id);
-        Assert.Contains(treeB.Nodes, item => item.Id == workspaceDoc.Id);
+        Assert.DoesNotContain(treeB.Nodes, item => item.Id == workspaceDoc.Id);
+
+        Assert.Contains(workspaceTreeA.Nodes, item => item.Id == workspaceDoc.Id);
+        Assert.DoesNotContain(workspaceTreeA.Nodes, item => item.Id == privateDocA.Id);
+        Assert.DoesNotContain(workspaceTreeA.Nodes, item => item.Id == privateDocB.Id);
     }
 
     private async Task<NoteTreeNodeDto> CreateFolderAsync(
@@ -754,11 +762,16 @@ public class NotesTest : BaseTest
         return await GetDocumentAsync(document.Id, token, workspaceId);
     }
 
-    private async Task<GetNotesTreeResponse> GetTreeAsync(string? token = null, Guid? workspaceId = null)
+    private async Task<GetNotesTreeResponse> GetTreeAsync(
+        string? token = null,
+        Guid? workspaceId = null,
+        NoteVisibility? visibility = null
+    )
     {
         var response = await PostRequestAsync(GetTreeUrl, token ?? _jwtToken, new GetNotesTreeRequest
         {
-            IncludeArchived = false
+            IncludeArchived = false,
+            Visibility = visibility
         }, workspaceId ?? _workspace.Id);
         response.EnsureSuccessStatusCode();
         return await response.GetJsonDataAsync<GetNotesTreeResponse>();
@@ -917,6 +930,62 @@ public class NotesTest : BaseTest
         }, _workspace.Id);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetTreeFiltersByWorkspaceAndPrivateVisibility()
+    {
+        var workspaceDoc = await CreateDocumentAsync("SharedDoc.md", "# Shared", visibility: NoteVisibility.Workspace);
+        var privateDoc = await CreateDocumentAsync("PrivateDoc.md", "# Private", visibility: NoteVisibility.Private);
+
+        // When filtering by Workspace visibility
+        var workspaceTree = await GetTreeAsync(visibility: NoteVisibility.Workspace);
+        Assert.Contains(workspaceTree.Nodes, item => item.Id == workspaceDoc.Id);
+        Assert.DoesNotContain(workspaceTree.Nodes, item => item.Id == privateDoc.Id);
+
+        // When filtering by Private visibility
+        var privateTree = await GetTreeAsync(visibility: NoteVisibility.Private);
+        Assert.Contains(privateTree.Nodes, item => item.Id == privateDoc.Id);
+        Assert.DoesNotContain(privateTree.Nodes, item => item.Id == workspaceDoc.Id);
+
+        // When no visibility specified, defaults to Private
+        var defaultTree = await GetTreeAsync(visibility: null);
+        Assert.Contains(defaultTree.Nodes, item => item.Id == privateDoc.Id);
+        Assert.DoesNotContain(defaultTree.Nodes, item => item.Id == workspaceDoc.Id);
+    }
+
+    [Fact]
+    public async Task SoloWorkspaceGetTreeReturnsPrivateNotesWhenVisibilityIsNull()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
+        await FlushDbChanges();
+
+        var privateDoc = await CreateDocumentAsync("SoloPrivateDoc.md", "# Private in Solo", visibility: NoteVisibility.Private);
+
+        var tree = await GetTreeAsync(visibility: null);
+        Assert.Contains(tree.Nodes, item => item.Id == privateDoc.Id);
+    }
+
+    [Fact]
+    public async Task GetTreeWithFolderHierarchyFiltersByVisibility()
+    {
+        var workspaceFolder = await CreateFolderAsync("SharedFolder", visibility: NoteVisibility.Workspace);
+        var workspaceDoc = await CreateDocumentAsync("SharedInFolder.md", "# Shared", parentId: workspaceFolder.Id, visibility: NoteVisibility.Workspace);
+
+        var privateFolder = await CreateFolderAsync("PrivateFolder", visibility: NoteVisibility.Private);
+        var privateDoc = await CreateDocumentAsync("PrivateInFolder.md", "# Private", parentId: privateFolder.Id, visibility: NoteVisibility.Private);
+
+        var workspaceTree = await GetTreeAsync(visibility: NoteVisibility.Workspace);
+        Assert.Contains(workspaceTree.Nodes, item => item.Id == workspaceFolder.Id);
+        Assert.Contains(workspaceTree.Nodes, item => item.Id == workspaceDoc.Id);
+        Assert.DoesNotContain(workspaceTree.Nodes, item => item.Id == privateFolder.Id);
+        Assert.DoesNotContain(workspaceTree.Nodes, item => item.Id == privateDoc.Id);
+
+        var privateTree = await GetTreeAsync(visibility: NoteVisibility.Private);
+        Assert.Contains(privateTree.Nodes, item => item.Id == privateFolder.Id);
+        Assert.Contains(privateTree.Nodes, item => item.Id == privateDoc.Id);
+        Assert.DoesNotContain(privateTree.Nodes, item => item.Id == workspaceFolder.Id);
+        Assert.DoesNotContain(privateTree.Nodes, item => item.Id == workspaceDoc.Id);
     }
 
     private async Task<GetLinkedNotesResponse> GetLinkedNotesAsync(Guid projectId, string? token = null)
