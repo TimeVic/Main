@@ -1,7 +1,5 @@
 using Autofac;
-using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Services.Notification;
-using TimeTracker.Business.Services.Queue;
 using TimeTracker.WorkerServices.Core;
 
 namespace TimeTracker.WorkerServices.Services.Tasks
@@ -10,23 +8,21 @@ namespace TimeTracker.WorkerServices.Services.Tasks
     {
         private readonly ITaskNotificationService _taskNotificationService;
 
-        public TaskNotificationHostedService() : base()
+        protected override bool IsContinuous => true;
+        protected override bool IsEnableLogging => false;
+
+        // Poll every 5 seconds — same cadence as the original inner loop delay
+        protected override int GetPollingIntervalMs() => 5000;
+
+        public TaskNotificationHostedService(ILifetimeScope rootScope) : base(rootScope)
         {
             _taskNotificationService = DiScope.Resolve<ITaskNotificationService>();
-            ServiceName = "TaskNotificationHostedService";
         }
 
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
         {
-            Log($"Worker started at: {DateTime.Now}");
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                await _taskNotificationService.NotifyAboutTaskChanges();
-                await _taskNotificationService.SendReminderNotification();
-                await DbSessionProvider.PerformCommitAsync(true, cancellationToken);
-                DbSessionProvider.CurrentSession.Clear();
-                await Task.Delay(5000, cancellationToken);
-            }
+            await _taskNotificationService.NotifyAboutTaskChanges();
+            await _taskNotificationService.SendReminderNotification();
         }
     }
 }

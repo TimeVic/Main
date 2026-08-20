@@ -1,123 +1,94 @@
 ﻿using Autofac;
 using NCrontab;
 using Persistence.Transactions.Behaviors;
-using Serilog.Extensions.Autofac.DependencyInjection;
-using TimeTracker.Business;
-using TimeTracker.Business.Helpers;
-using TimeTracker.Business.Logging;
 using TimeTracker.Business.Orm.Dao;
 using Microsoft.Extensions.Logging;
 
 namespace TimeTracker.WorkerServices.Core;
 
-public abstract class ABackgroundService: BackgroundService
+public abstract class ABackgroundService : BackgroundService
 {
     protected readonly ILogger<ABackgroundService> _logger;
     private readonly CrontabSchedule _crontabScheduler;
 
     protected string ServiceName = "BackgroundService";
     protected readonly IQueueDao QueueDao;
-    
+
     private DateTime _nextTickTime;
     protected ILifetimeScope DiScope { get; set; }
     protected readonly IDbSessionProvider DbSessionProvider;
-    private CancellationToken _cancellationToken;
 
-    private bool _isShouldRunWork
-    {
-        get => DateTime.UtcNow > _nextTickTime;
-    }
+    // When true, DoWorkAsync is called every GetPollingIntervalMs() regardless of cron schedule.
+    // When false, the cron expression controls execution timing.
+    protected virtual bool IsContinuous => false;
+
+    private bool _isShouldRunWork => IsContinuous || DateTime.UtcNow > _nextTickTime;
 
     protected virtual bool IsEnableLogging { get; set; } = true;
-    
-    public ABackgroundService()
-    {   
-        var builder = new ContainerBuilder();
-        builder.RegisterAssemblyModules(
-            typeof(BusinessAssemblyMarker).Assembly
-        );
-        
-        var configuration = ApplicationHelper.BuildConfiguration();
-        builder.RegisterInstance(configuration)
-            .As<IConfiguration>()
-            .SingleInstance();
-        
-        // Logger
-        var serilogConfiguration = LoggerInitializer.GetSerilogBuilder(false);        
-        builder.RegisterSerilog(serilogConfiguration);
-        
-        var diContainer = builder.Build();
-        DiScope = diContainer.BeginLifetimeScope();
-        
+
+    protected ABackgroundService(ILifetimeScope rootScope)
+    {
+        // Create a child scope per service so each service gets its own IDbSessionProvider
+        // while sharing a single NHibernate SessionFactory (registered as SingleInstance).
+        DiScope = rootScope.BeginLifetimeScope();
+
         _logger = DiScope.Resolve<ILogger<ABackgroundService>>();
         QueueDao = DiScope.Resolve<IQueueDao>();
-        try
-        {
-            DbSessionProvider = DiScope.Resolve<IDbSessionProvider>();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message, e);
-            throw;
-        }
-        
         DbSessionProvider = DiScope.Resolve<IDbSessionProvider>();
-        _crontabScheduler = CrontabSchedule.Parse(
-            GetCrontabExpression()
-        );
+
+        _crontabScheduler = CrontabSchedule.Parse(GetCrontabExpression());
         UpdateNextTickTime();
-        ServiceName = this.GetType().Name;
+        ServiceName = GetType().Name;
     }
-    
+
+    protected virtual int GetPollingIntervalMs() => 1000;
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _cancellationToken = stoppingToken;
         Log("Processing Hosted Service is starting.");
-        
-        stoppingToken.Register(() =>
-        {
-            Log($"Processing Hosted Service is stopping because cancelled.");
-        });
 
-        await Task.Run(async () =>
+        while (!stoppingToken.IsCancellationRequested)
         {
-            while (!_cancellationToken.IsCancellationRequested)
+            if (_isShouldRunWork)
             {
-                if (_isShouldRunWork)
+                var startTime = DateTime.UtcNow;
+                try
                 {
-                    var startTime = DateTime.UtcNow;
-                    try
-                    {
-                        await DoWorkAsync(_cancellationToken);
-                        await QueueDao.Flush();
-                        await DbSessionProvider.PerformCommitAsync(true, stoppingToken);
-                    }
-                    catch (Exception e)
-                    {
-                        QueueDao.Clear();
-                        _logger.LogError(e, e.Message);
-                    }
-                    finally
-                    {
-                        DbSessionProvider.CloseCurrentSession();
-                    }
-
-                    var difference = DateTime.UtcNow - startTime;
-                    if (IsEnableLogging)
-                    {
-                        Log("Duration of work: " + difference.ToString("g"));
-                    }
-                    UpdateNextTickTime();
+                    await DoWorkAsync(stoppingToken);
+                    await QueueDao.Flush();
+                    await DbSessionProvider.PerformCommitAsync(true, stoppingToken);
+                }
+                catch (Exception e)
+                {
+                    QueueDao.Clear();
+                    _logger.LogError(e, e.Message);
+                }
+                finally
+                {
+                    DbSessionProvider.CloseCurrentSession();
                 }
 
-                Thread.Sleep(1000);
+                if (IsEnableLogging)
+                    Log("Duration of work: " + (DateTime.UtcNow - startTime).ToString("g"));
+
+                if (!IsContinuous)
+                    UpdateNextTickTime();
             }
-        }, _cancellationToken);
+
+            try
+            {
+                await Task.Delay(GetPollingIntervalMs(), stoppingToken);
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+        }
     }
 
     public override async Task StopAsync(CancellationToken stoppingToken)
     {
-        Log($"Processing Hosted Service is stopping.");
+        Log("Processing Hosted Service is stopping.");
         await base.StopAsync(stoppingToken);
     }
 
@@ -129,7 +100,7 @@ public abstract class ABackgroundService: BackgroundService
 
     protected void Log(string message)
     {
-        _logger.LogInformation($"{ServiceName}: {message}");
+        _logger.LogInformation("{ServiceName}: {Message}", ServiceName, message);
     }
 
     public override void Dispose()
@@ -138,7 +109,7 @@ public abstract class ABackgroundService: BackgroundService
         DiScope.Dispose();
         base.Dispose();
     }
-    
+
     protected virtual string GetCrontabExpression() => "* * * * *";
 
     protected abstract Task DoWorkAsync(CancellationToken cancellationToken);
