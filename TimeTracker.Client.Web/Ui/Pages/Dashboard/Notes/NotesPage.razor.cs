@@ -168,12 +168,6 @@ public partial class NotesPage
         return Task.CompletedTask;
     }
 
-    private Task OnVisibilityChanged(NoteVisibility visibility)
-    {
-        Dispatcher.Dispatch(new SetNoteEditorVisibilityAction(visibility));
-        return Task.CompletedTask;
-    }
-
     private Task StartDocumentEditing()
     {
         Dispatcher.Dispatch(new StartNoteDocumentEditingAction());
