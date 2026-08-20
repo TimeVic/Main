@@ -128,7 +128,10 @@ public partial class NotesPage
     private void LoadTree()
     {
         _lastInitialNoteId = InitialNoteId;
-        Dispatcher.Dispatch(new LoadNotesTreeAction(InitialNoteId: InitialNoteId));
+        Dispatcher.Dispatch(new LoadNotesTreeAction(
+            InitialNoteId: InitialNoteId,
+            Visibility: IsSoloWorkspace ? null : ActiveMode
+        ));
     }
 
     private Task ToggleExpanded(Guid noteId)

@@ -79,11 +79,22 @@ public class NoteDao : INoteDao
             .FirstOrDefaultAsync();
     }
 
-    public async Task<ICollection<NoteNodeEntity>> GetTreeAsync(WorkspaceEntity workspace, bool isIncludeArchived)
+    public async Task<ICollection<NoteNodeEntity>> GetTreeAsync(
+        WorkspaceEntity workspace,
+        bool isIncludeArchived,
+        NoteVisibility? visibility = null
+    )
     {
-        var items = await _sessionProvider.CurrentSession.Query<NoteNodeEntity>()
+        var query = _sessionProvider.CurrentSession.Query<NoteNodeEntity>()
             .Where(item => item.Workspace.Id == workspace.Id)
-            .Where(item => isIncludeArchived || item.ArchivedAt == null)
+            .Where(item => isIncludeArchived || item.ArchivedAt == null);
+
+        if (visibility.HasValue)
+        {
+            query = query.Where(item => item.Visibility == visibility.Value);
+        }
+
+        var items = await query
             .Fetch(item => item.Parent)
             .Fetch(item => item.CreatedByUser)
             .ToListAsync();

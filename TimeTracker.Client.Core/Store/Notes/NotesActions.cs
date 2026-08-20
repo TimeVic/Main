@@ -5,7 +5,11 @@ using TimeTracker.Business.Common.Constants.Notes;
 
 namespace TimeTracker.Client.Core.Store.Notes;
 
-public record struct LoadNotesTreeAction(bool IsReload = false, Guid? InitialNoteId = null);
+public record struct LoadNotesTreeAction(
+    bool IsReload = false,
+    Guid? InitialNoteId = null,
+    NoteVisibility? Visibility = null
+);
 
 public record struct SetNotesActiveModeAction(NoteVisibility Mode);
 
