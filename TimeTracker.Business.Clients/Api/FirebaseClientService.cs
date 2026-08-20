@@ -10,45 +10,61 @@ namespace TimeTracker.Business.Clients.Api;
 public class FirebaseClientService: IFirebaseClientService
 {
     private const string CredentialsFilepath = "../../../../.credentials/firebase-credentials.json";
+    private static readonly object FirebaseAppInitializationLock = new();
+    private static FirebaseApp? _firebaseApp;
  
     private readonly ILogger<FirebaseClientService> _logger;
-    private readonly IConfiguration _configuration;
 
-    private readonly GoogleCredential _credentials;
-    
     public FirebaseClientService(
         ILogger<FirebaseClientService> logger,
         IConfiguration configuration
     )
     {
         _logger = logger;
-        _configuration = configuration;
+
+        var credentials = BuildCredentials(configuration);
+        EnsureDefaultFirebaseAppInitialized(credentials);
+    }
+
+    private static GoogleCredential BuildCredentials(IConfiguration configuration)
+    {
         var filePath = Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath);
         if (File.Exists(filePath))
         {
             using var credentialsStream = new FileStream(
-                Path.Combine(AssemblyUtils.GetAssemblyPath(), CredentialsFilepath),
+                filePath,
                 FileMode.Open,
                 FileAccess.Read
             );
-            _credentials = CredentialFactory.FromStream<ServiceAccountCredential>(credentialsStream).ToGoogleCredential();
-        }
-        else
-        {
-            var jsonConfiguration = _configuration.GetValue<string>("Google:Firebase:Credentials")
-                                    ?? throw new FileNotFoundException("Firebase credentials configuration not found");
-            _credentials = CredentialFactory.FromJson<ServiceAccountCredential>(jsonConfiguration).ToGoogleCredential();
-        }
-        
-        if (_credentials == null)
-        {
-            throw new FileNotFoundException($"Firebase credentials file not found");
+            return CredentialFactory.FromStream<ServiceAccountCredential>(credentialsStream).ToGoogleCredential();
         }
 
-        FirebaseApp.Create(new AppOptions()
+        var jsonConfiguration = configuration.GetValue<string>("Google:Firebase:Credentials")
+                                ?? throw new FileNotFoundException("Firebase credentials configuration not found");
+        return CredentialFactory.FromJson<ServiceAccountCredential>(jsonConfiguration).ToGoogleCredential();
+    }
+
+    private static void EnsureDefaultFirebaseAppInitialized(GoogleCredential credentials)
+    {
+        lock (FirebaseAppInitializationLock)
         {
-            Credential = _credentials
-        });
+            if (_firebaseApp != null)
+            {
+                return;
+            }
+
+            try
+            {
+                _firebaseApp = FirebaseApp.DefaultInstance;
+            }
+            catch (InvalidOperationException)
+            {
+                _firebaseApp = FirebaseApp.Create(new AppOptions
+                {
+                    Credential = credentials
+                });
+            }
+        }
     }
 
     public Task<bool> SendMessage(string toToken, string title, string body, string? link = null)

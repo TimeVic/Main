@@ -1,5 +1,4 @@
 using Autofac;
-using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Services.Queue;
 using TimeTracker.WorkerServices.Core;
@@ -10,27 +9,17 @@ namespace TimeTracker.WorkerServices.Services.Queue
     {
         private readonly IQueueService _queueService;
 
-        public DefaultProcessingHostedService() : base()
+        protected override bool IsContinuous => true;
+        protected override bool IsEnableLogging => false;
+
+        public DefaultProcessingHostedService(ILifetimeScope rootScope) : base(rootScope)
         {
             _queueService = DiScope.Resolve<IQueueService>();
-            ServiceName = "DefaultProcessingHostedService";
         }
 
         protected override async Task DoWorkAsync(CancellationToken cancellationToken)
         {
-            Log($"Worker started at: {DateTime.Now}");
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                await _queueService.ProcessAsync(
-                    QueueChannel.Default,
-                    cancellationToken
-                );
-                await DbSessionProvider.PerformCommitAsync(true, cancellationToken);
-                DbSessionProvider.CurrentSession.Clear();
-                await Task.Delay(1000, cancellationToken);
-            }
+            await _queueService.ProcessAsync(QueueChannel.Default, cancellationToken);
         }
-        
-        protected override string GetCrontabExpression() => "* * * * *";
     }
 }

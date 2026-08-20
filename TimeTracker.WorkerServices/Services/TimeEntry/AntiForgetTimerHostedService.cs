@@ -8,10 +8,9 @@ internal class AntiForgetTimerHostedService : ABackgroundService
 {
     private readonly IAntiForgetTimerService _antiForgetTimerService;
 
-    public AntiForgetTimerHostedService() : base()
+    public AntiForgetTimerHostedService(ILifetimeScope rootScope) : base(rootScope)
     {
         _antiForgetTimerService = DiScope.Resolve<IAntiForgetTimerService>();
-        ServiceName = nameof(AntiForgetTimerHostedService);
     }
 
     protected override Task DoWorkAsync(CancellationToken cancellationToken)

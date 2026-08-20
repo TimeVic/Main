@@ -12,12 +12,11 @@ internal class WorkspaceHardDeletionHostedService : ABackgroundService
     private readonly IWorkspaceDeletionService _workspaceDeletionService;
     private readonly ILogger<WorkspaceHardDeletionHostedService> _workspaceLogger;
 
-    public WorkspaceHardDeletionHostedService() : base()
+    public WorkspaceHardDeletionHostedService(ILifetimeScope rootScope) : base(rootScope)
     {
         _workspaceDao = DiScope.Resolve<IWorkspaceDao>();
         _workspaceDeletionService = DiScope.Resolve<IWorkspaceDeletionService>();
         _workspaceLogger = DiScope.Resolve<ILogger<WorkspaceHardDeletionHostedService>>();
-        ServiceName = nameof(WorkspaceHardDeletionHostedService);
     }
 
     protected override async Task DoWorkAsync(CancellationToken cancellationToken)
