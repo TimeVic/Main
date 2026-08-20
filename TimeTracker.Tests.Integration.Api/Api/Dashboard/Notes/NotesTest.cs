@@ -662,6 +662,146 @@ public class NotesTest : BaseTest
     }
 
     [Fact]
+    public async Task WorkspaceUserCannotUpdateOrDeleteWorkspaceDocumentOrFolder()
+    {
+        var (userToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+
+        var workspaceFolder = await CreateFolderAsync("Shared Folder", visibility: NoteVisibility.Workspace);
+        var workspaceDoc = await CreateDocumentAsync("Shared Doc.md", "# Shared", workspaceFolder.Id, NoteVisibility.Workspace);
+
+        // Update document
+        var updateDocResponse = await PostRequestAsync(UpdateDocumentUrl, userToken, new UpdateNoteDocumentRequest
+        {
+            NoteId = workspaceDoc.Id,
+            Title = "Hacked.md",
+            Visibility = NoteVisibility.Workspace
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, updateDocResponse.StatusCode);
+
+        // Update content
+        var updateContentResponse = await PostRequestAsync(UpdateContentUrl, userToken, new UpdateNoteContentRequest
+        {
+            NoteId = workspaceDoc.Id,
+            MarkdownContent = "# Hacked content"
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, updateContentResponse.StatusCode);
+
+        // Rename
+        var renameResponse = await PostRequestAsync(RenameNodeUrl, userToken, new RenameNoteNodeRequest
+        {
+            NoteId = workspaceFolder.Id,
+            Title = "Renamed Folder"
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, renameResponse.StatusCode);
+
+        // Move
+        var moveResponse = await PostRequestAsync(MoveNodeUrl, userToken, new MoveNoteNodeRequest
+        {
+            NoteId = workspaceDoc.Id,
+            ParentId = null
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, moveResponse.StatusCode);
+
+        // Archive
+        var archiveResponse = await PostRequestAsync(ArchiveNodeUrl, userToken, new ArchiveNoteNodeRequest
+        {
+            NoteId = workspaceDoc.Id
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, archiveResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task WorkspaceManagerCanUpdateWorkspaceDocumentAndContent()
+    {
+        var (managerToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.Manager
+        );
+
+        var workspaceFolder = await CreateFolderAsync("Shared Folder", visibility: NoteVisibility.Workspace);
+        var workspaceDoc = await CreateDocumentAsync("Shared Doc.md", "# Shared", workspaceFolder.Id, NoteVisibility.Workspace);
+
+        // Update document
+        var updateDocResponse = await PostRequestAsync(UpdateDocumentUrl, managerToken, new UpdateNoteDocumentRequest
+        {
+            NoteId = workspaceDoc.Id,
+            Title = "Updated Shared Doc.md",
+            Visibility = NoteVisibility.Workspace
+        }, _workspace.Id);
+        updateDocResponse.EnsureSuccessStatusCode();
+
+        // Update content
+        var updateContentResponse = await PostRequestAsync(UpdateContentUrl, managerToken, new UpdateNoteContentRequest
+        {
+            NoteId = workspaceDoc.Id,
+            MarkdownContent = "# Manager updated content"
+        }, _workspace.Id);
+        updateContentResponse.EnsureSuccessStatusCode();
+
+        // Rename
+        var renameResponse = await PostRequestAsync(RenameNodeUrl, managerToken, new RenameNoteNodeRequest
+        {
+            NoteId = workspaceFolder.Id,
+            Title = "Manager Renamed Folder"
+        }, _workspace.Id);
+        renameResponse.EnsureSuccessStatusCode();
+
+        // Archive
+        var archiveResponse = await PostRequestAsync(ArchiveNodeUrl, managerToken, new ArchiveNoteNodeRequest
+        {
+            NoteId = workspaceDoc.Id
+        }, _workspace.Id);
+        archiveResponse.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task WorkspaceUserCanUpdateOwnPrivateDocumentAndFolder()
+    {
+        var (userToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+
+        var privateFolder = await CreateFolderAsync("User Folder", token: userToken, visibility: NoteVisibility.Private);
+        var privateDoc = await CreateDocumentAsync("User Doc.md", "# Private", privateFolder.Id, NoteVisibility.Private, token: userToken);
+
+        // Update document
+        var updateDocResponse = await PostRequestAsync(UpdateDocumentUrl, userToken, new UpdateNoteDocumentRequest
+        {
+            NoteId = privateDoc.Id,
+            Title = "Updated User Doc.md",
+            Visibility = NoteVisibility.Private
+        }, _workspace.Id);
+        updateDocResponse.EnsureSuccessStatusCode();
+
+        // Update content
+        var updateContentResponse = await PostRequestAsync(UpdateContentUrl, userToken, new UpdateNoteContentRequest
+        {
+            NoteId = privateDoc.Id,
+            MarkdownContent = "# Updated user content"
+        }, _workspace.Id);
+        updateContentResponse.EnsureSuccessStatusCode();
+
+        // Rename
+        var renameResponse = await PostRequestAsync(RenameNodeUrl, userToken, new RenameNoteNodeRequest
+        {
+            NoteId = privateFolder.Id,
+            Title = "Renamed User Folder"
+        }, _workspace.Id);
+        renameResponse.EnsureSuccessStatusCode();
+
+        // Archive
+        var archiveResponse = await PostRequestAsync(ArchiveNodeUrl, userToken, new ArchiveNoteNodeRequest
+        {
+            NoteId = privateDoc.Id
+        }, _workspace.Id);
+        archiveResponse.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
     public async Task WorkspaceUserCannotAccessOtherMembersPrivateDocument()
     {
         var (userAToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(_workspace, MembershipAccessType.User);

@@ -54,9 +54,6 @@ public partial class NoteEditorBlock
     public EventCallback<string> MarkdownContentChanged { get; set; }
 
     [Parameter]
-    public EventCallback<NoteVisibility> VisibilityChanged { get; set; }
-
-    [Parameter]
     public EventCallback OnEdit { get; set; }
 
     [Parameter]
@@ -133,11 +130,6 @@ public partial class NoteEditorBlock
     private async Task OnMarkdownChanged(string value)
     {
         await MarkdownContentChanged.InvokeAsync(value);
-    }
-
-    private async Task OnVisibilityChanged(NoteVisibility? visibility)
-    {
-        await VisibilityChanged.InvokeAsync(visibility ?? NoteVisibility.Workspace);
     }
 
     private async Task OnEditClick()
