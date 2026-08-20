@@ -72,8 +72,23 @@ public class HasAccessToNoteTest : BaseTest
     }
 
     [Fact]
-    public async Task ShouldHaveReadOnlyAccessIfUserRoleReadsWorkspaceNote()
+    public async Task ShouldHaveReadAndWriteAccessIfUserRoleAccessesWorkspaceNoteInTeamMode()
     {
+        _workspace.Mode = WorkspaceMode.Team;
+        var user = await _userSeeder.CreateActivatedAndShareAsync(_workspace, MembershipAccessType.User);
+        var note = await CreateNoteAsync(NoteVisibility.Workspace, _owner);
+
+        var hasReadAccess = await _securityManager.HasAccess(AccessLevel.Read, user, note);
+        var hasWriteAccess = await _securityManager.HasAccess(AccessLevel.Write, user, note);
+
+        Assert.True(hasReadAccess);
+        Assert.True(hasWriteAccess);
+    }
+
+    [Fact]
+    public async Task ShouldHaveReadOnlyAccessIfUserRoleReadsWorkspaceNoteInSoloMode()
+    {
+        _workspace.Mode = WorkspaceMode.Solo;
         var user = await _userSeeder.CreateActivatedAndShareAsync(_workspace, MembershipAccessType.User);
         var note = await CreateNoteAsync(NoteVisibility.Workspace, _owner);
 

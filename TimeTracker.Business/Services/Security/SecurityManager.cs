@@ -261,8 +261,25 @@ public class SecurityManager: ISecurityManager
             return true;
         }
 
-        return accessLevel == AccessLevel.Read
-            && accessType == MembershipAccessType.User;
+        if (accessType == MembershipAccessType.User)
+        {
+            if (noteNode.Workspace.Mode == WorkspaceMode.Team)
+            {
+                if (accessLevel == AccessLevel.Read)
+                {
+                    return true;
+                }
+
+                if (accessLevel == AccessLevel.Write)
+                {
+                    return noteNode.Type == NoteNodeType.Document;
+                }
+            }
+
+            return accessLevel == AccessLevel.Read;
+        }
+
+        return false;
     }
     
     private async Task<bool> HasAccessToGoalsTracker(AccessLevel accessLevel, UserEntity user, GoalsTrackerEntity goalsTrackerEntity)

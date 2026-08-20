@@ -3,6 +3,8 @@ using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Notes;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Notes;
 using TimeTracker.Business.Orm.Dao.Tasks;

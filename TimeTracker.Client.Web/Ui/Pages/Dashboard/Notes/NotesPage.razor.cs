@@ -56,8 +56,13 @@ public partial class NotesPage
 
     private bool IsDocumentDirty => State.IsDocumentDirty;
 
-    private bool CanEditNotes => IsSoloWorkspace
+    private bool CanManageTree => IsSoloWorkspace
         || State.ActiveMode == NoteVisibility.Private
+        || SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspace);
+
+    private bool CanEditDocument => IsSoloWorkspace
+        || State.ActiveMode == NoteVisibility.Private
+        || AuthState.Value.Workspace?.Mode == WorkspaceMode.Team
         || SecurityManager.HasPermission(WorkspacePermission.UpdateWorkspace);
 
     private NoteVisibility ActiveModalVisibility => IsSoloWorkspace

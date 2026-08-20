@@ -4,6 +4,7 @@ using TimeTracker.Api.Shared.Dto.Entity.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Constants.Notes;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dao.Notes;
@@ -33,6 +34,8 @@ public class MoveNodeRequestHandler : NoteRequestHandlerBase, IAsyncRequestHandl
     {
         var context = await GetWorkspaceContextAsync();
         var note = await GetNoteAsync(context.Workspace, context.User, request.NoteId, AccessLevel.Write);
+        await EnsureCanUseVisibilityAsync(context.Workspace, context.User, note.Visibility);
+
         var parent = await GetValidParentAsync(context.Workspace, context.User, request.ParentId);
         EnsureMatchingParentVisibility(parent, note.Visibility);
 

@@ -13,7 +13,7 @@
     Title="@($"TimeVic - {DashboardLocalizer["Notes"]}")"
     Robots="@SiteMetadata.NoIndexRobots" />
 
-@if (CanEditNotes)
+@if (CanManageTree)
 {
 <CreateFolderModal
     IsOpened="State.IsCreateFolderModalOpened"
@@ -47,7 +47,7 @@
     OnSubmit="@MoveNode"/>
 }
 
-@if (CanEditNotes && State.NodeToArchive != null)
+@if (CanManageTree && State.NodeToArchive != null)
 {
     <ConfirmationModal
         Title="@DashboardLocalizer["Notes_ArchiveConfirmTitle"].Value"
@@ -112,7 +112,7 @@
                         SelectedNoteId="@State.SelectedNoteId"
                         IsLoading="State.IsTreeLoading"
                         IsEmbedded="true"
-                        IsEditingAllowed="@CanEditNotes"
+                        IsEditingAllowed="@CanManageTree"
                         ToggleExpandedRequested="@ToggleExpanded"
                         SelectNodeRequested="@SelectDocument"
                         CreateFolderRequested="@OpenCreateFolderModal"
@@ -131,7 +131,7 @@
                         IsSaving="State.IsDocumentSaving"
                         IsDirty="@IsDocumentDirty"
                         IsEditing="State.IsEditingDocument"
-                        IsEditingAllowed="@CanEditNotes"
+                        IsEditingAllowed="@CanEditDocument"
                         IsEmbedded="true"
                         SaveStateLabel="@SaveStateLabel"
                         SaveStateClass="@SaveStateClass"

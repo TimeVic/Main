@@ -179,8 +179,7 @@ public class NotesTest : BaseTest
         var response = await PostRequestAsync(UpdateDocumentUrl, _jwtToken, new UpdateNoteDocumentRequest
         {
             NoteId = document.Id,
-            Title = "Deploy updated.md",
-            Visibility = NoteVisibility.Workspace
+            Title = "Deploy updated.md"
         }, _workspace.Id);
         response.EnsureSuccessStatusCode();
         await UpdateContentAsync(document.Id, "# Updated");
@@ -197,7 +196,7 @@ public class NotesTest : BaseTest
     public async Task GetHistoryReturnsDocumentSnapshots()
     {
         var document = await CreateDocumentAsync("Deploy.md", "# Deploy");
-        await UpdateDocumentAsync(document.Id, "Deploy updated.md", "# Updated", NoteVisibility.Workspace);
+        await UpdateDocumentAsync(document.Id, "Deploy updated.md", "# Updated");
         var response = await PostRequestAsync(MoveNodeUrl, _jwtToken, new MoveNoteNodeRequest
         {
             NoteId = document.Id,
@@ -274,8 +273,7 @@ public class NotesTest : BaseTest
         var response = await PostRequestAsync(UpdateDocumentUrl, _jwtToken, new UpdateNoteDocumentRequest
         {
             NoteId = folder.Id,
-            Title = "Folder",
-            Visibility = NoteVisibility.Private
+            Title = "Folder"
         }, _workspace.Id);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -598,7 +596,7 @@ public class NotesTest : BaseTest
     }
 
     [Fact]
-    public async Task UpdateDocumentRejectsChangingVisibilityIfParentHasDifferentVisibility()
+    public async Task UpdateDocumentPreservesVisibility()
     {
         var workspaceFolder = await CreateFolderAsync("Workspace Folder", visibility: NoteVisibility.Workspace);
         var workspaceDoc = await CreateDocumentAsync("Doc.md", "# Content", workspaceFolder.Id, NoteVisibility.Workspace);
@@ -606,11 +604,13 @@ public class NotesTest : BaseTest
         var updateResponse = await PostRequestAsync(UpdateDocumentUrl, _jwtToken, new UpdateNoteDocumentRequest
         {
             NoteId = workspaceDoc.Id,
-            Title = "Doc.md",
-            Visibility = NoteVisibility.Private
+            Title = "UpdatedDoc.md"
         }, _workspace.Id);
+        updateResponse.EnsureSuccessStatusCode();
 
-        Assert.Equal(HttpStatusCode.BadRequest, updateResponse.StatusCode);
+        var updatedDoc = await updateResponse.GetJsonDataAsync<NoteDocumentDto>();
+        Assert.Equal(NoteVisibility.Workspace, updatedDoc.Visibility);
+        Assert.Equal("UpdatedDoc.md", updatedDoc.Title);
     }
 
     [Fact]
@@ -662,8 +662,9 @@ public class NotesTest : BaseTest
     }
 
     [Fact]
-    public async Task WorkspaceUserCannotUpdateOrDeleteWorkspaceDocumentOrFolder()
+    public async Task WorkspaceUserCanUpdateWorkspaceDocumentAndContentInTeamMode()
     {
+        _workspace.Mode = WorkspaceMode.Team;
         var (userToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
             _workspace,
             MembershipAccessType.User
@@ -672,24 +673,44 @@ public class NotesTest : BaseTest
         var workspaceFolder = await CreateFolderAsync("Shared Folder", visibility: NoteVisibility.Workspace);
         var workspaceDoc = await CreateDocumentAsync("Shared Doc.md", "# Shared", workspaceFolder.Id, NoteVisibility.Workspace);
 
-        // Update document
+        // Update document (Title)
         var updateDocResponse = await PostRequestAsync(UpdateDocumentUrl, userToken, new UpdateNoteDocumentRequest
         {
             NoteId = workspaceDoc.Id,
-            Title = "Hacked.md",
-            Visibility = NoteVisibility.Workspace
+            Title = "Updated Shared Doc.md"
         }, _workspace.Id);
-        Assert.Equal(HttpStatusCode.BadRequest, updateDocResponse.StatusCode);
+        updateDocResponse.EnsureSuccessStatusCode();
 
-        // Update content
+        var updatedDoc = await updateDocResponse.GetJsonDataAsync<NoteDocumentDto>();
+        Assert.NotNull(updatedDoc);
+        Assert.Equal("Updated Shared Doc.md", updatedDoc.Title);
+
+        // Update content (Markdown)
         var updateContentResponse = await PostRequestAsync(UpdateContentUrl, userToken, new UpdateNoteContentRequest
         {
             NoteId = workspaceDoc.Id,
-            MarkdownContent = "# Hacked content"
+            MarkdownContent = "# User updated content"
         }, _workspace.Id);
-        Assert.Equal(HttpStatusCode.BadRequest, updateContentResponse.StatusCode);
+        updateContentResponse.EnsureSuccessStatusCode();
 
-        // Rename
+        var updatedContent = await updateContentResponse.GetJsonDataAsync<NoteContentDto>();
+        Assert.NotNull(updatedContent);
+        Assert.Equal("# User updated content", updatedContent.MarkdownContent);
+    }
+
+    [Fact]
+    public async Task WorkspaceUserCannotCreateOrArchiveOrMoveWorkspaceDocumentOrFolderInTeamMode()
+    {
+        _workspace.Mode = WorkspaceMode.Team;
+        var (userToken, _, _) = await UserSeeder.CreateAuthorizedAndShareAsync(
+            _workspace,
+            MembershipAccessType.User
+        );
+
+        var workspaceFolder = await CreateFolderAsync("Shared Folder", visibility: NoteVisibility.Workspace);
+        var workspaceDoc = await CreateDocumentAsync("Shared Doc.md", "# Shared", workspaceFolder.Id, NoteVisibility.Workspace);
+
+        // Rename folder
         var renameResponse = await PostRequestAsync(RenameNodeUrl, userToken, new RenameNoteNodeRequest
         {
             NoteId = workspaceFolder.Id,
@@ -705,12 +726,19 @@ public class NotesTest : BaseTest
         }, _workspace.Id);
         Assert.Equal(HttpStatusCode.BadRequest, moveResponse.StatusCode);
 
-        // Archive
-        var archiveResponse = await PostRequestAsync(ArchiveNodeUrl, userToken, new ArchiveNoteNodeRequest
+        // Archive document
+        var archiveDocResponse = await PostRequestAsync(ArchiveNodeUrl, userToken, new ArchiveNoteNodeRequest
         {
             NoteId = workspaceDoc.Id
         }, _workspace.Id);
-        Assert.Equal(HttpStatusCode.BadRequest, archiveResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, archiveDocResponse.StatusCode);
+
+        // Archive folder
+        var archiveFolderResponse = await PostRequestAsync(ArchiveNodeUrl, userToken, new ArchiveNoteNodeRequest
+        {
+            NoteId = workspaceFolder.Id
+        }, _workspace.Id);
+        Assert.Equal(HttpStatusCode.BadRequest, archiveFolderResponse.StatusCode);
     }
 
     [Fact]
@@ -728,8 +756,7 @@ public class NotesTest : BaseTest
         var updateDocResponse = await PostRequestAsync(UpdateDocumentUrl, managerToken, new UpdateNoteDocumentRequest
         {
             NoteId = workspaceDoc.Id,
-            Title = "Updated Shared Doc.md",
-            Visibility = NoteVisibility.Workspace
+            Title = "Updated Shared Doc.md"
         }, _workspace.Id);
         updateDocResponse.EnsureSuccessStatusCode();
 
@@ -772,8 +799,7 @@ public class NotesTest : BaseTest
         var updateDocResponse = await PostRequestAsync(UpdateDocumentUrl, userToken, new UpdateNoteDocumentRequest
         {
             NoteId = privateDoc.Id,
-            Title = "Updated User Doc.md",
-            Visibility = NoteVisibility.Private
+            Title = "Updated User Doc.md"
         }, _workspace.Id);
         updateDocResponse.EnsureSuccessStatusCode();
 
@@ -950,15 +976,13 @@ public class NotesTest : BaseTest
     private async Task UpdateDocumentAsync(
         Guid noteId,
         string title,
-        string markdownContent,
-        NoteVisibility visibility
+        string markdownContent
     )
     {
         var response = await PostRequestAsync(UpdateDocumentUrl, _jwtToken, new UpdateNoteDocumentRequest
         {
             NoteId = noteId,
-            Title = title,
-            Visibility = visibility
+            Title = title
         }, _workspace.Id);
         response.EnsureSuccessStatusCode();
         await UpdateContentAsync(noteId, markdownContent);
@@ -1055,7 +1079,7 @@ public class NotesTest : BaseTest
     }
 
     [Fact]
-    public async Task SoloWorkspaceCannotUpdateDocumentToWorkspaceVisibility()
+    public async Task SoloWorkspaceUpdateDocumentPreservesPrivateVisibility()
     {
         _workspace.Mode = WorkspaceMode.Solo;
         await FlushDbChanges();
@@ -1065,11 +1089,13 @@ public class NotesTest : BaseTest
         var response = await PostRequestAsync(UpdateDocumentUrl, _jwtToken, new UpdateNoteDocumentRequest
         {
             NoteId = privateDoc.Id,
-            Title = "UpdatedTitle.md",
-            Visibility = NoteVisibility.Workspace
+            Title = "UpdatedTitle.md"
         }, _workspace.Id);
+        response.EnsureSuccessStatusCode();
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var updatedDoc = await response.GetJsonDataAsync<NoteDocumentDto>();
+        Assert.Equal(NoteVisibility.Private, updatedDoc.Visibility);
+        Assert.Equal("UpdatedTitle.md", updatedDoc.Title);
     }
 
     [Fact]

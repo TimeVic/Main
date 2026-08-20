@@ -14,7 +14,4 @@ public class UpdateNoteDocumentRequest : IRequest<NoteDocumentDto>
     [Required]
     [StringLength(200, MinimumLength = 1)]
     public string Title { get; set; } = string.Empty;
-
-    [Required]
-    public NoteVisibility Visibility { get; set; }
 }
