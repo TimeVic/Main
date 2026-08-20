@@ -141,11 +141,4 @@ public partial class NoteEditorBlock
     {
         await OnCancel.InvokeAsync();
     }
-
-    private string GetVisibilityLabel()
-    {
-        var key = $"{nameof(NoteVisibility)}_{Visibility}";
-        var localized = DashboardLocalizer[key];
-        return localized.ResourceNotFound ? Visibility.ToString() : localized.Value;
-    }
 }
