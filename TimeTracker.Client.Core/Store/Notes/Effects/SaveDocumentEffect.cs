@@ -51,15 +51,13 @@ public class SaveDocumentEffect : Effect<SaveNoteDocumentAction>
         {
             var document = currentDocument;
             var content = currentContent;
-            var isMetadataChanged = _state.Value.EditorTitle != currentDocument.Title
-                || _state.Value.EditorVisibility != currentDocument.Visibility;
+            var isMetadataChanged = _state.Value.EditorTitle != currentDocument.Title;
             if (isMetadataChanged)
             {
                 document = await _apiService.NotesUpdateDocumentAsync(new UpdateNoteDocumentRequest
                 {
                     NoteId = currentDocument.Id,
-                    Title = _state.Value.EditorTitle,
-                    Visibility = _state.Value.EditorVisibility
+                    Title = _state.Value.EditorTitle
                 }) ?? throw new InvalidOperationException("Notes update response is empty.");
             }
 

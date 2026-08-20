@@ -36,11 +36,7 @@ public class UpdateDocumentRequestHandler : NoteRequestHandlerBase, IAsyncReques
         var note = await GetNoteAsync(context.Workspace, context.User, request.NoteId, AccessLevel.Write);
         EnsureDocument(note);
 
-        await EnsureCanUseVisibilityAsync(context.Workspace, context.User, request.Visibility);
-        EnsureMatchingParentVisibility(note.Parent, request.Visibility);
-
         note.Title = NormalizeTitle(request.Title);
-        note.Visibility = request.Visibility;
         SetUpdatedBy(note, context.User);
         await NoteDao.SaveNodeAsync(note);
 
