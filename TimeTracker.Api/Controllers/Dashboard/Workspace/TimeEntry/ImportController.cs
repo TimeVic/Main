@@ -16,7 +16,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.TimeEntry;
 public class ImportController(ILifetimeScope scope) : MainApiControllerBase(scope)
 {
     [HttpPost]
-    [RequestSizeLimit(FileStorage.MaxFileSize)]
+    [RequestSizeLimit(FileAcceptConstants.MaxCsvFileSize)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Import([FromForm] ImportRequest request)

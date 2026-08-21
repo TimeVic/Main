@@ -1,4 +1,4 @@
-﻿using Domain.Abstractions;
+using Domain.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Persistence.Transactions.Behaviors;
@@ -21,7 +21,7 @@ namespace TimeTracker.Business.Services.Storage;
 
 public partial class FileStorage: IFileStorage
 {
-    public const int MaxFileSize = 1024 * 1024 * 50; // 15Mb
+    public const int MaxFileSize = (int)FileAcceptConstants.MaxDefaultFileSize;
 
     private readonly IDbSessionProvider _dbSessionProvider;
     private readonly ILogger<IFileStorage> _logger;

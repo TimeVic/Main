@@ -50,12 +50,12 @@ namespace TimeTracker.Client.Core.Services.Http
         {
             var data = new Dictionary<string, object>()
             {
-                { "SourceType", sourceType },
+                { "SourceType", (int)sourceType },
                 { "IsBillable", isBillable }
             };
             if (hourlyRate.HasValue)
             {
-                data.Add("HourlyRate", hourlyRate.Value);
+                data.Add("HourlyRate", hourlyRate.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
             }
             return await MultipartFormDataRequestAsync<ImportResponse?>(
                 ApiUrl.WorkspaceTimeEntryImport,

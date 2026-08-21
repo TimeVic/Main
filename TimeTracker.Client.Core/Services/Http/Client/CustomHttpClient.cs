@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
+using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Client.Core.Converters.Json;
@@ -34,6 +35,10 @@ public class CustomHttpClient
 
         _apiUrl = configuration.GetValue<string>("ApiUrl")!;
         _maxFileSizeInMb = configuration.GetValue<int>("MaxFileSize");
+        if (_maxFileSizeInMb <= 0)
+        {
+            _maxFileSizeInMb = FileAcceptConstants.MaxDefaultFileSizeInMb;
+        }
     }
     
     public async Task<TResponse?> RequestAsync<TResponse>(string requestUri, object data, HttpMethod httpMethod)
