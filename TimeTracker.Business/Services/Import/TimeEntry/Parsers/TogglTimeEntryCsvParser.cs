@@ -5,15 +5,15 @@ using TimeTracker.Business.Services.Import.TimeEntry.Model;
 
 namespace TimeTracker.Business.Services.Import.TimeEntry.Parsers;
 
-public class ClockifyTimeEntryCsvParser : BaseTimeEntryCsvParser
+public class TogglTimeEntryCsvParser : BaseTimeEntryCsvParser
 {
-    private static readonly string[] RequiredHeaders = ["Start Date", "Start Time", "End Date", "End Time"];
+    private static readonly string[] RequiredHeaders = ["Start date", "Start time", "End date", "End time"];
 
-    private readonly ILogger<ClockifyTimeEntryCsvParser> _logger;
+    private readonly ILogger<TogglTimeEntryCsvParser> _logger;
 
-    public override TimeEntryImportSourceType SourceType => TimeEntryImportSourceType.Clockify;
+    public override TimeEntryImportSourceType SourceType => TimeEntryImportSourceType.Toggl;
 
-    public ClockifyTimeEntryCsvParser(ILogger<ClockifyTimeEntryCsvParser> logger)
+    public TogglTimeEntryCsvParser(ILogger<TogglTimeEntryCsvParser> logger)
     {
         _logger = logger;
     }
@@ -32,7 +32,7 @@ public class ClockifyTimeEntryCsvParser : BaseTimeEntryCsvParser
         }
 
         csv.ReadHeader();
-        ValidateRequiredHeaders(csv.HeaderRecord, RequiredHeaders, "Clockify");
+        ValidateRequiredHeaders(csv.HeaderRecord, RequiredHeaders, "Toggl");
 
         var entries = new List<TimeEntryImportModel>();
 
@@ -40,21 +40,21 @@ public class ClockifyTimeEntryCsvParser : BaseTimeEntryCsvParser
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var startDateStr = GetFieldValue(csv, "Start Date");
-            var startTimeStr = GetFieldValue(csv, "Start Time");
-            var endDateStr = GetFieldValue(csv, "End Date");
-            var endTimeStr = GetFieldValue(csv, "End Time");
+            var startDateStr = GetFieldValue(csv, "Start date") ?? GetFieldValue(csv, "Start Date");
+            var startTimeStr = GetFieldValue(csv, "Start time") ?? GetFieldValue(csv, "Start Time");
+            var endDateStr = GetFieldValue(csv, "End date") ?? GetFieldValue(csv, "End Date");
+            var endTimeStr = GetFieldValue(csv, "End time") ?? GetFieldValue(csv, "End Time");
 
             if (string.IsNullOrWhiteSpace(startDateStr) || string.IsNullOrWhiteSpace(startTimeStr))
             {
-                _logger.LogWarning("Skipping Clockify CSV row due to missing Start Date or Start Time.");
+                _logger.LogWarning("Skipping Toggl CSV row due to missing Start date or Start time.");
                 continue;
             }
 
             if (!TryParseDateTime(startDateStr, startTimeStr, out var startTime))
             {
                 _logger.LogWarning(
-                    "Skipping Clockify CSV row: unable to parse start timestamp '{StartDate} {StartTime}'.",
+                    "Skipping Toggl CSV row: unable to parse start timestamp '{StartDate} {StartTime}'.",
                     startDateStr,
                     startTimeStr
                 );
@@ -69,7 +69,7 @@ public class ClockifyTimeEntryCsvParser : BaseTimeEntryCsvParser
                     if (parsedEnd < startTime)
                     {
                         _logger.LogWarning(
-                            "Skipping Clockify CSV row: EndTime {EndTime} is earlier than StartTime {StartTime}.",
+                            "Skipping Toggl CSV row: EndTime {EndTime} is earlier than StartTime {StartTime}.",
                             parsedEnd,
                             startTime
                         );
@@ -80,7 +80,7 @@ public class ClockifyTimeEntryCsvParser : BaseTimeEntryCsvParser
                 else
                 {
                     _logger.LogWarning(
-                        "Skipping Clockify CSV row: unable to parse end timestamp '{EndDate} {EndTime}'.",
+                        "Skipping Toggl CSV row: unable to parse end timestamp '{EndDate} {EndTime}'.",
                         endDateStr,
                         endTimeStr
                     );
@@ -101,9 +101,12 @@ public class ClockifyTimeEntryCsvParser : BaseTimeEntryCsvParser
             var isBillable = ParseIsBillable(GetFieldValue(csv, "Billable"));
             var hourlyRate = ParseHourlyRate(
                 GetFieldValue(csv, "Rate"),
+                GetFieldValue(csv, "Hourly rate"),
                 GetFieldValue(csv, "Hourly Rate"),
                 GetFieldValue(csv, "Hourly Rate (USD)"),
-                GetFieldValue(csv, "Rate (USD)")
+                GetFieldValue(csv, "Rate (USD)"),
+                GetFieldValue(csv, "Amount (USD)"),
+                GetFieldValue(csv, "Amount")
             );
 
             entries.Add(new TimeEntryImportModel
