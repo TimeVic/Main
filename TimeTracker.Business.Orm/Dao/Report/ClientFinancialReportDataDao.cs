@@ -22,11 +22,7 @@ public class ClientFinancialReportDataDao(ILifetimeScope scope, IWorkspaceFinanc
 
     public async Task<ICollection<ClientFinancialReportPaymentItemDto>> GetPaymentsAsync(ClientEntity client)
     {
-        var queryName = client.Workspace.Mode == WorkspaceMode.Team
-            ? "Report.ClientFinancialReport.TeamPayments"
-            : "Report.ClientFinancialReport.ClientPayments";
-
-        return await Session.CreateSQLQuery(ReadSqlQuery(queryName))
+        return await Session.CreateSQLQuery(ReadSqlQuery("Report.ClientFinancialReport.ClientPayments"))
             .SetParameter("clientId", client.Id)
             .SetResultTransformer(Transformers.AliasToBean<ClientFinancialReportPaymentItemDto>())
             .ListAsync<ClientFinancialReportPaymentItemDto>();

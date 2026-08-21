@@ -136,7 +136,7 @@ public class GetReportTest : BaseTest
     }
 
     [Fact]
-    public async Task TeamWorkspaceSharedReportUsesClientAndMemberPayments()
+    public async Task TeamWorkspaceSharedReportUsesOnlyClientPayments()
     {
         _workspace.Mode = WorkspaceMode.Team;
         await DbSessionProvider.CurrentSession.UpdateAsync(_workspace);
@@ -148,12 +148,11 @@ public class GetReportTest : BaseTest
         response.EnsureSuccessStatusCode();
 
         var report = await response.GetJsonDataAsync<GetSharedClientReportResponse>();
-        Assert.Equal(105, report.Totals.Received);
-        Assert.Equal(3, report.Payments.Count);
-        Assert.Contains(report.Payments, item => item.Description == "Initial payment");
-        Assert.Contains(report.Payments, item => item.Description == "Team payout");
-        Assert.Contains(report.Payments, item => item.Description == "Second payout");
-        Assert.Equal("Second payout", report.Payments.First().Description);
+        Assert.Equal(50, report.Totals.Received);
+        Assert.Single(report.Payments);
+        Assert.Equal("Initial payment", report.Payments.Single().Description);
+        Assert.DoesNotContain(report.Payments, item => item.Description == "Team payout");
+        Assert.DoesNotContain(report.Payments, item => item.Description == "Second payout");
     }
 
     [Fact]

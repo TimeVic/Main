@@ -63,8 +63,6 @@
       <EmbeddedResource Include="Queries\Sql\Report\UserPaymentReport\ClientPayments.sql" />
       <None Remove="Queries\Sql\Report\ClientFinancialReport\ClientPayments.sql" />
       <EmbeddedResource Include="Queries\Sql\Report\ClientFinancialReport\ClientPayments.sql" />
-      <None Remove="Queries\Sql\Report\ClientFinancialReport\TeamPayments.sql" />
-      <EmbeddedResource Include="Queries\Sql\Report\ClientFinancialReport\TeamPayments.sql" />
       <None Remove="Queries\Sql\Report\ClientFinancialReport\Tasks.sql" />
       <EmbeddedResource Include="Queries\Sql\Report\ClientFinancialReport\Tasks.sql" />
       <None Remove="Queries\Sql\Report\ClientFinancialReport\TasksCount.sql" />
