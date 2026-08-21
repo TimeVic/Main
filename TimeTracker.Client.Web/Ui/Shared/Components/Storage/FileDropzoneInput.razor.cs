@@ -10,7 +10,7 @@ public partial class FileDropzoneInput
     public string Accept { get; set; } = FileAcceptConstants.Default;
 
     [Parameter]
-    public long MaxFileSize { get; set; } = 10 * 1024 * 1024; // 10 MB
+    public long MaxFileSize { get; set; } = FileAcceptConstants.MaxCsvFileSize; // 10 MB
 
     [Parameter]
     public string? Title { get; set; }

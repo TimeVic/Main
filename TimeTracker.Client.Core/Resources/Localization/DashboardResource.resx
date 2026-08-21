@@ -941,4 +941,5 @@
   <data name="WorkspaceSettings_Import_ViewEntries" xml:space="preserve"><value>View Time Entries</value></data>
   <data name="WorkspaceSettings_Import_SelectedFile" xml:space="preserve"><value>Selected file</value></data>
   <data name="WorkspaceSettings_Import_RemoveFile" xml:space="preserve"><value>Remove file</value></data>
+  <data name="FileDropzone_MaxSizeHint" xml:space="preserve"><value>Max file size: {0}</value></data>
 </root>

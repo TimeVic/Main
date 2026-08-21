@@ -1,6 +1,7 @@
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace.TimeEntry;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Storage;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Http;
@@ -34,6 +35,11 @@ public class ImportRequestHandler : IAsyncRequestHandler<ImportRequest, ImportRe
         if (request.File == null || request.File.Length == 0)
         {
             throw new IncorrectFileException("File was not provided or is empty");
+        }
+
+        if (request.File.Length > FileAcceptConstants.MaxCsvFileSize)
+        {
+            throw new IncorrectFileException($"File size cannot exceed {FileAcceptConstants.MaxCsvFileSizeInMb} MB");
         }
 
         var user = await _apiRequestService.GetCurrentUser();

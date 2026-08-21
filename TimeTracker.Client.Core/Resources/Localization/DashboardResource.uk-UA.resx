@@ -943,4 +943,5 @@
   <data name="WorkspaceSettings_Import_ViewEntries" xml:space="preserve"><value>Переглянути записи часу</value></data>
   <data name="WorkspaceSettings_Import_SelectedFile" xml:space="preserve"><value>Обраний файл</value></data>
   <data name="WorkspaceSettings_Import_RemoveFile" xml:space="preserve"><value>Видалити файл</value></data>
+  <data name="FileDropzone_MaxSizeHint" xml:space="preserve"><value>Максимальний розмір файлу: {0}</value></data>
 </root>
