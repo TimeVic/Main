@@ -53,17 +53,12 @@ public class FirebaseClientService: IFirebaseClientService
                 return;
             }
 
-            try
+            // DefaultInstance returns null when no default app has been created yet.
+            // Reuse the existing instance to avoid 'The default FirebaseApp already exists' on restarts.
+            _firebaseApp = FirebaseApp.DefaultInstance ?? FirebaseApp.Create(new AppOptions
             {
-                _firebaseApp = FirebaseApp.DefaultInstance;
-            }
-            catch (InvalidOperationException)
-            {
-                _firebaseApp = FirebaseApp.Create(new AppOptions
-                {
-                    Credential = credentials
-                });
-            }
+                Credential = credentials
+            });
         }
     }
 

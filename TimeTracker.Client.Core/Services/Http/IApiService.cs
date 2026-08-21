@@ -52,6 +52,10 @@ using TimeEntrySetRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dash
 using TimeEntryStartRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.StartRequest;
 using TimeEntryStartResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.StartResponse;
 using TimeEntryStopRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.StopRequest;
+using TimeTracker.Api.Shared.Constants;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace.TimeEntry;
+using TimeTracker.Business.Common.Constants.Import;
+using Microsoft.AspNetCore.Components.Forms;
 using WorkspaceMemberGetListRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember.GetListRequest;
 using WorkspaceMemberGetListResponse = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember.GetListResponse;
 using WorkspaceMemberUpdateRequest = TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember.UpdateRequest;
@@ -227,6 +231,13 @@ public interface IApiService
     Task<WorkspaceDto?> WorkspaceSetModeAsync(TimeTracker.Business.Common.Constants.WorkspaceMode mode);
 
     Task WorkspaceDeleteAsync(WorkspaceDeleteRequest request);
+
+    Task<ImportResponse?> WorkspaceTimeEntryImportAsync(
+        TimeEntryImportSourceType sourceType,
+        bool isBillable,
+        decimal? hourlyRate,
+        IBrowserFile file
+    );
 
     Task<WorkspaceMemberDto?> WorkspaceMemberAddAsync(Guid workspaceId, string email);
 

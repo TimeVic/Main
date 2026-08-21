@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using Microsoft.AspNetCore.Http;
@@ -193,7 +193,8 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         string url,
         string? token = null,
         Dictionary<string, object>? data = null,
-        IFormFile? file = null
+        IFormFile? file = null,
+        Guid? workspaceId = null
     )
     {
         await FlushDbChanges();
@@ -201,7 +202,7 @@ public class BaseTest: IClassFixture<ApiCustomWebApplicationFactory>, IDisposabl
         if (!string.IsNullOrEmpty(token))
         {
             HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            await SetWorkspaceHeaderAsync(token);
+            await SetWorkspaceHeaderAsync(token, workspaceId);
         }
         using var multipartFormContent = new MultipartFormDataContent();
         if (data != null)

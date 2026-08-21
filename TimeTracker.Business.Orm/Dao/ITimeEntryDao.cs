@@ -1,4 +1,4 @@
-﻿using Domain.Abstractions;
+using Domain.Abstractions;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
@@ -59,4 +59,11 @@ public interface ITimeEntryDao: IDomainService
         int page
     );
 
+    Task<IReadOnlyList<TimeEntryEntity>> GetListInRangeAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        DateTime minDate,
+        DateTime maxDate,
+        CancellationToken cancellationToken = default
+    );
 }

@@ -2,24 +2,46 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants.Storage;
-using TimeTracker.Business.Common.Extensions;
 
 namespace TimeTracker.Client.Web.Ui.Shared.Components.Storage;
 
 public partial class AttachmentsUploadBlock : IDisposable
 {
-    [Parameter] public Guid EntityId { get; set; }
-    [Parameter] public StorageEntityType EntityType { get; set; }
-    [Parameter] public ICollection<StoredFileDto> Files { get; set; } = new List<StoredFileDto>();
-    [Parameter] public EventCallback<ICollection<StoredFileDto>> FilesChanged { get; set; }
-    [Parameter] public string Hint { get; set; } = string.Empty;
-    [Parameter] public string Class { get; set; } = string.Empty;
+    [Parameter]
+    public Guid EntityId { get; set; }
 
-    [Inject] private ILogger<AttachmentsUploadBlock> Logger { get; set; } = null!;
+    [Parameter]
+    public StorageEntityType EntityType { get; set; }
+
+    [Parameter]
+    public ICollection<StoredFileDto> Files { get; set; } = new List<StoredFileDto>();
+
+    [Parameter]
+    public EventCallback<ICollection<StoredFileDto>> FilesChanged { get; set; }
+
+    [Parameter]
+    public string Hint { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Class { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? Accept { get; set; }
+
+    [Inject]
+    private ILogger<AttachmentsUploadBlock> Logger { get; set; } = null!;
 
     private readonly List<AttachmentsBlock.UploadingAttachment> _uploadingFiles = [];
     private bool _isDisposed;
-    private string AcceptTypes => string.Join(",", StoredFileType.Attachment.GetAllowedMimeTypes());
+
+    private string ResolvedAcceptTypes => !string.IsNullOrEmpty(Accept)
+        ? Accept
+        : EntityType switch
+        {
+            StorageEntityType.Task => FileAcceptConstants.Tasks,
+            StorageEntityType.NoteNode => FileAcceptConstants.Notes,
+            _ => FileAcceptConstants.Default
+        };
 
     private async Task OnFilesSelected(InputFileChangeEventArgs args)
     {

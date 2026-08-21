@@ -18,6 +18,9 @@ Solution folders in `TimeTracker.sln`: **Infrastructure** (reusable cross-cuttin
 
 All API endpoints use a custom `IAsyncRequestHandler<TRequest, TResponse>` pattern — **not** MediatR.
 
+**Workspace Context:**
+The current active workspace ID is passed from clients in the `Workspace-Id` HTTP header (`AuthConstants.WorkspaceIdHeaderName`), not as part of the request payload or route. Request handlers retrieve it via `_apiRequestService.GetCurrentWorkspaceId()` and resolve the entity via `_userDao.GetUsersWorkspace(user, workspaceId)`.
+
 **Controller layout:**
 ```
 Controllers/Dashboard/TimeEntry/
