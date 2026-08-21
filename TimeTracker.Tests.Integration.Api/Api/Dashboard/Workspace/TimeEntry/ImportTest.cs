@@ -149,4 +149,30 @@ public class ImportTest : BaseTest
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task ShouldImportTogglCsv()
+    {
+        var fileToUpload = CreateFormFile("toggl_export_all_cases.csv");
+        var response = await PostMultipartFormDataRequestAsync(
+            Url,
+            _jwtToken,
+            new Dictionary<string, object>
+            {
+                { "SourceType", TimeEntryImportSourceType.Toggl },
+                { "IsBillable", false }
+            },
+            fileToUpload
+        );
+        response.EnsureSuccessStatusCode();
+
+        var actualData = await response.GetJsonDataAsync<ImportResponse>();
+        Assert.Equal(6, actualData.TotalCount);
+        Assert.Equal(5, actualData.ImportedCount);
+        Assert.Equal(1, actualData.SkippedCount);
+
+        await FlushDbChanges(true);
+        var entries = await _timeEntryDao.GetListAsync(_workspace, 1, user: _user);
+        Assert.Equal(5, entries.TotalCount);
+    }
 }

@@ -28,6 +28,10 @@
                     <i class="fa-solid fa-clock text-blue-600" aria-hidden="true"></i>
                     <span>Clockify</span>
                 </div>
+                <div class="inline-flex items-center gap-2 rounded-2xl bg-white/80 px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
+                    <i class="fa-solid fa-hourglass-half text-rose-500" aria-hidden="true"></i>
+                    <span>Toggl</span>
+                </div>
             </div>
         </div>
     </div>
@@ -99,6 +103,14 @@
                                     <span>@DashboardLocalizer["WorkspaceSettings_Import_SourceClockify"]</span>
                                 </span>
                             </LumexSelectItem>
+                            <LumexSelectItem
+                                Value="@TimeEntryImportSourceType.Toggl"
+                                TextValue="@DashboardLocalizer["WorkspaceSettings_Import_SourceToggl"].Value">
+                                <span class="inline-flex items-center gap-2">
+                                    <i class="fa-solid fa-hourglass-half text-rose-500" aria-hidden="true"></i>
+                                    <span>@DashboardLocalizer["WorkspaceSettings_Import_SourceToggl"]</span>
+                                </span>
+                            </LumexSelectItem>
                         </LumexSelect>
                     </div>
 
@@ -123,7 +135,9 @@
                                 @DashboardLocalizer["WorkspaceSettings_Import_IsBillable"]
                             </p>
                             <p class="mt-1 text-xs text-slate-500">
-                                @DashboardLocalizer["WorkspaceSettings_Import_IsBillable_Helper"]
+                                @(_selectedSource == TimeEntryImportSourceType.Toggl
+                                    ? DashboardLocalizer["WorkspaceSettings_Import_IsBillable_Helper_Toggl"]
+                                    : DashboardLocalizer["WorkspaceSettings_Import_IsBillable_Helper"])
                             </p>
                         </div>
                     </div>

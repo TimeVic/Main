@@ -321,4 +321,65 @@ public class TimeEntryImportServiceTest : BaseTest
             );
         });
     }
+
+    [Fact]
+    public async Task ShouldImportTogglCsvSuccessfully()
+    {
+        using var stream = GetStubStream("toggl_export_all_cases.csv");
+
+        var result = await _importService.ImportAsync(
+            _user,
+            _workspace,
+            stream,
+            TimeEntryImportSourceType.Toggl,
+            defaultIsBillable: false,
+            defaultHourlyRate: 60m
+        );
+
+        Assert.Equal(6, result.TotalCount);
+        Assert.Equal(5, result.ImportedCount);
+        Assert.Equal(1, result.SkippedCount); // 1 duplicate skipped
+
+        await FlushDbChanges();
+
+        var listDto = await _timeEntryDao.GetListAsync(_workspace, 1, user: _user);
+        Assert.Equal(5, listDto.TotalCount);
+    }
+
+    [Fact]
+    public async Task ShouldRespectTogglIndividualBillableField()
+    {
+        using var stream = GetStubStream("toggl_export_all_cases.csv");
+
+        var result = await _importService.ImportAsync(
+            _user,
+            _workspace,
+            stream,
+            TimeEntryImportSourceType.Toggl,
+            defaultIsBillable: false,
+            defaultHourlyRate: 60m
+        );
+
+        await FlushDbChanges();
+
+        var listDto = await _timeEntryDao.GetListAsync(_workspace, 1, user: _user);
+        // Entry with Task 1 Description had Billable="Yes"
+        var billableEntry = listDto.Items.First(e => e.Description == "Task 1 Description");
+        Assert.True(billableEntry.IsBillable);
+
+        // Entry with Task 3 Description had Billable="No"
+        var nonBillableEntry = listDto.Items.First(e => e.Description == "Task 3 Description");
+        Assert.False(nonBillableEntry.IsBillable);
+
+        // Client without project created project "Default" with client "Client 2"
+        var clientNoProjEntry = listDto.Items.First(e => e.Description == "Client without project");
+        Assert.NotNull(clientNoProjEntry.Project);
+        Assert.Equal("Default", clientNoProjEntry.Project.Name);
+        Assert.Equal("Client 2", clientNoProjEntry.Project.Client.Name);
+
+        // Project without client created client "Toggl" with project "Project 1"
+        Assert.NotNull(billableEntry.Project);
+        Assert.Equal("Project 1", billableEntry.Project.Name);
+        Assert.Equal("Toggl", billableEntry.Project.Client.Name);
+    }
 }
