@@ -37,7 +37,8 @@ namespace TimeTracker.Business.Orm.Entities
         #region Calculated
 
         public virtual bool IsSynced => !string.IsNullOrEmpty(RedmineId) 
-            || !string.IsNullOrEmpty(ClickUpId);
+            || !string.IsNullOrEmpty(ClickUpId)
+            || JiraId != null;
 
         public virtual bool IsActive => EndTime == null;
 
