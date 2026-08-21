@@ -1,0 +1,5 @@
+"Project","Client","Description","Task","User","Group","Email","Tags","Start Date","Start Time","End Date","End Time"
+"P1","C1","Valid row","","User","","u@u.com","","04/11/2026","10:00","04/11/2026","11:00"
+"P2","C2","Invalid dates row","","User","","u@u.com","","invalid_date","invalid_time","04/11/2026","11:00"
+"P3","C3","End before start","","User","","u@u.com","","04/11/2026","12:00","04/11/2026","10:00"
+"P4","C4","Another valid row","","User","","u@u.com","","04/11/2026","13:00","04/11/2026","14:00"

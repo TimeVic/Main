@@ -920,4 +920,25 @@
   <data name="Margin" xml:space="preserve"><value>Margin</value></data>
   <data name="MarginPercent" xml:space="preserve"><value>Margin (%)</value></data>
   <data name="NoTeamActivitySelectedPeriod" xml:space="preserve"><value>No team activity in the selected period.</value></data>
+  <data name="SettingsPage_ImportTab" xml:space="preserve"><value>Import</value></data>
+  <data name="WorkspaceSettings_Import_Title" xml:space="preserve"><value>Import Time Entries</value></data>
+  <data name="WorkspaceSettings_Import_Description" xml:space="preserve"><value>Import tracked time entries from external services like Clockify using CSV files.</value></data>
+  <data name="WorkspaceSettings_Import_Source" xml:space="preserve"><value>Import Source</value></data>
+  <data name="WorkspaceSettings_Import_SourceClockify" xml:space="preserve"><value>Clockify (CSV)</value></data>
+  <data name="WorkspaceSettings_Import_IsBillable" xml:space="preserve"><value>Mark entries as billable</value></data>
+  <data name="WorkspaceSettings_Import_IsBillable_Helper" xml:space="preserve"><value>Clockify CSV export does not contain billable status. This setting will be applied to imported entries.</value></data>
+  <data name="WorkspaceSettings_Import_HourlyRate" xml:space="preserve"><value>Hourly Rate</value></data>
+  <data name="WorkspaceSettings_Import_HourlyRate_Helper" xml:space="preserve"><value>Applied to billable entries when no project rate is configured.</value></data>
+  <data name="WorkspaceSettings_Import_Button" xml:space="preserve"><value>Import Time Entries</value></data>
+  <data name="WorkspaceSettings_Import_Uploading" xml:space="preserve"><value>Importing...</value></data>
+  <data name="WorkspaceSettings_Import_Success_Title" xml:space="preserve"><value>Import Completed</value></data>
+  <data name="WorkspaceSettings_Import_Success_Message" xml:space="preserve"><value>Successfully imported {0} time entries ({1} skipped as duplicates).</value></data>
+  <data name="WorkspaceSettings_Import_Dropzone_Title" xml:space="preserve"><value>Click or drag &amp; drop CSV file here</value></data>
+  <data name="WorkspaceSettings_Import_Dropzone_Subtitle" xml:space="preserve"><value>Supports Clockify CSV export files up to 10 MB</value></data>
+  <data name="WorkspaceSettings_Import_InvalidFileType" xml:space="preserve"><value>Please select a valid CSV file (.csv)</value></data>
+  <data name="WorkspaceSettings_Import_FileSizeExceeded" xml:space="preserve"><value>File size exceeds the maximum allowed limit of {0} MB</value></data>
+  <data name="WorkspaceSettings_Import_SelectAnotherFile" xml:space="preserve"><value>Import another file</value></data>
+  <data name="WorkspaceSettings_Import_ViewEntries" xml:space="preserve"><value>View Time Entries</value></data>
+  <data name="WorkspaceSettings_Import_SelectedFile" xml:space="preserve"><value>Selected file</value></data>
+  <data name="WorkspaceSettings_Import_RemoveFile" xml:space="preserve"><value>Remove file</value></data>
 </root>

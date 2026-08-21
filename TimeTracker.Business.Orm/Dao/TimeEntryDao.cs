@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Criterion;
@@ -528,5 +528,23 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             : $"{timeEntry.Description.TrimEnd()}\n{AutoStoppedDescriptionMarker}";
 
         await Session.SaveAsync(timeEntry);
+    }
+
+    public async Task<IReadOnlyList<TimeEntryEntity>> GetListInRangeAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        DateTime minDate,
+        DateTime maxDate,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var minDateUtc = DateTime.SpecifyKind(minDate, DateTimeKind.Utc);
+        var maxDateUtc = DateTime.SpecifyKind(maxDate, DateTimeKind.Utc);
+
+        return await Session.Query<TimeEntryEntity>()
+            .Fetch(e => e.Project)
+            .Where(e => e.Workspace.Id == workspace.Id && e.User.Id == user.Id && !e.IsMarkedToDelete)
+            .Where(e => e.StartTime >= minDateUtc && e.StartTime <= maxDateUtc)
+            .ToListAsync(cancellationToken);
     }
 }

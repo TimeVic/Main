@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Components.Forms;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace.TimeEntry;
+using TimeTracker.Business.Common.Constants.Import;
 using TimeTracker.Business.Common.Dto;
 namespace TimeTracker.Client.Core.Services.Http
 {
@@ -36,6 +39,29 @@ namespace TimeTracker.Client.Core.Services.Http
         public async Task WorkspaceDeleteAsync(DeleteRequest request)
         {
             await PostAsync<object>(ApiUrl.WorkspaceDelete, request);
+        }
+
+        public async Task<ImportResponse?> WorkspaceTimeEntryImportAsync(
+            TimeEntryImportSourceType sourceType,
+            bool isBillable,
+            decimal? hourlyRate,
+            IBrowserFile file
+        )
+        {
+            var data = new Dictionary<string, object>()
+            {
+                { "SourceType", sourceType },
+                { "IsBillable", isBillable }
+            };
+            if (hourlyRate.HasValue)
+            {
+                data.Add("HourlyRate", hourlyRate.Value);
+            }
+            return await MultipartFormDataRequestAsync<ImportResponse?>(
+                ApiUrl.WorkspaceTimeEntryImport,
+                data,
+                file
+            );
         }
     }
 }

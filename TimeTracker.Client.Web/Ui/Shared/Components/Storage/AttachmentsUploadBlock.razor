@@ -5,9 +5,18 @@
 @inherits BaseReactiveComponent
 
 <div class="@Class">
-    <div class="relative flex min-h-24 items-center justify-center overflow-hidden rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 text-center text-sm text-slate-500 transition hover:border-blue-400 hover:bg-blue-50">
-        <InputFile class="absolute inset-0 z-10 h-full w-full cursor-copy opacity-0" OnChange="@OnFilesSelected" multiple accept="@AcceptTypes" />
-        <div class="pointer-events-none flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up text-base text-slate-400"></i><span>@Hint</span></div>
-    </div>
-    <AttachmentsBlock Class="mt-4" ListClass="flex flex-wrap gap-3" PreviewItemClass="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50" EntityId="@EntityId" EntityType="@EntityType" Files="@Files" UploadingFiles="@_uploadingFiles" FilesChanged="@OnFilesChanged" />
+    <FileDropzoneInput
+        Accept="@ResolvedAcceptTypes"
+        Multiple="true"
+        Title="@Hint"
+        OnFilesSelected="@OnFilesSelected" />
+    <AttachmentsBlock
+        Class="mt-4"
+        ListClass="flex flex-wrap gap-3"
+        PreviewItemClass="relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
+        EntityId="@EntityId"
+        EntityType="@EntityType"
+        Files="@Files"
+        UploadingFiles="@_uploadingFiles"
+        FilesChanged="@OnFilesChanged" />
 </div>

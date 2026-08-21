@@ -1,0 +1,66 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Business.Common.Constants.Storage
+
+@inherits BaseReactiveComponent
+
+<div class="w-full @Class">
+    @if (Multiple || File == null)
+    {
+        <div class="relative flex @MinHeightClass w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/50 p-5 text-center transition-all hover:border-blue-500 hover:bg-blue-50/40">
+            <InputFile
+                class="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+                accept="@Accept"
+                multiple="@Multiple"
+                disabled="@Disabled"
+                OnChange="@OnInputFileChange" />
+            <div class="pointer-events-none flex flex-col items-center gap-2">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100/80 text-blue-600">
+                    <i class="fa-solid fa-cloud-arrow-up text-lg" aria-hidden="true"></i>
+                </div>
+                <p class="text-sm font-semibold text-slate-700">
+                    @(Title ?? DashboardLocalizer["WorkspaceSettings_Import_Dropzone_Title"].Value)
+                </p>
+                @if (!string.IsNullOrEmpty(Subtitle))
+                {
+                    <p class="text-xs text-slate-500">
+                        @Subtitle
+                    </p>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="flex items-center gap-3 overflow-hidden">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                    <i class="fa-solid fa-file-csv text-lg" aria-hidden="true"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <p class="truncate text-sm font-medium text-slate-900">
+                        @File.Name
+                    </p>
+                    <p class="text-xs text-slate-500">
+                        @FormatFileSize(File.Size)
+                    </p>
+                </div>
+            </div>
+            <button
+                type="button"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+                title="@DashboardLocalizer["WorkspaceSettings_Import_RemoveFile"]"
+                disabled="@Disabled"
+                @onclick="@OnRemoveFile">
+                <i class="fa-solid fa-xmark text-sm" aria-hidden="true"></i>
+            </button>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <p class="mt-1.5 text-xs text-rose-600">
+            @_errorMessage
+        </p>
+    }
+</div>

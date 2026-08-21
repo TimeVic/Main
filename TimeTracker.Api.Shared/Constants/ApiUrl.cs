@@ -100,6 +100,7 @@ public class ApiUrl
     public const string WorkspaceUpdate = "dashboard/workspace/update";
     public const string WorkspaceSetMode = "dashboard/workspace/set-mode";
     public const string WorkspaceDelete = "dashboard/workspace/delete";
+    public const string WorkspaceTimeEntryImport = "dashboard/workspace/time-entry/import";
     
     #endregion
 

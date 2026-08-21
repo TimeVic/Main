@@ -26,9 +26,19 @@
                     <span>@DashboardLocalizer["Members"]</span>
                 </LumexLink>
             }
-            <LumexLink Href="@UrlService.GetDashboardUrl("workspace/settings/integrations")" Class="@GetTabClass("integrations")" Underline="@Underline.None">
+            <LumexLink
+                Href="@UrlService.GetDashboardUrl("workspace/settings/integrations")"
+                Class="@GetTabClass("integrations")"
+                Underline="@Underline.None">
                 <i class="fa-solid fa-plug-circle-check" aria-hidden="true"></i>
                 <span>@DashboardLocalizer["Integrations"]</span>
+            </LumexLink>
+            <LumexLink
+                Href="@UrlService.GetDashboardUrl("workspace/settings/import")"
+                Class="@GetTabClass("import")"
+                Underline="@Underline.None">
+                <i class="fa-solid fa-file-import" aria-hidden="true"></i>
+                <span>@DashboardLocalizer["SettingsPage_ImportTab"]</span>
             </LumexLink>
         </div>
     </nav>

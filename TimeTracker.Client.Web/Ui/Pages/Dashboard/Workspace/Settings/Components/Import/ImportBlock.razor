@@ -1,0 +1,158 @@
+@using LumexUI
+@using LumexUI.Common
+@using Microsoft.AspNetCore.Components.Forms
+@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace.TimeEntry
+@using TimeTracker.Business.Common.Constants.Import
+@using TimeTracker.Business.Common.Constants.Storage
+@using TimeTracker.Client.Web.Ui.Shared.Components.Storage
+
+@inherits BaseReactiveComponent
+
+<div class="space-y-6">
+    <div class="rounded-3xl border border-blue-200 bg-blue-50/70 p-5 text-slate-900">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div class="max-w-3xl">
+                <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">
+                    <i class="fa-solid fa-file-import" aria-hidden="true"></i>
+                    <span>@DashboardLocalizer["SettingsPage_ImportTab"]</span>
+                </div>
+                <h2 class="mt-2 text-lg font-semibold text-slate-900">
+                    @DashboardLocalizer["WorkspaceSettings_Import_Title"]
+                </h2>
+                <p class="mt-2 text-sm leading-6 text-slate-600">
+                    @DashboardLocalizer["WorkspaceSettings_Import_Description"]
+                </p>
+            </div>
+            <div class="flex shrink-0 items-center gap-2">
+                <div class="inline-flex items-center gap-2 rounded-2xl bg-white/80 px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm">
+                    <i class="fa-solid fa-clock text-blue-600" aria-hidden="true"></i>
+                    <span>Clockify</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (_importResult != null)
+    {
+        <LumexCard>
+            <LumexCardBody Class="p-6">
+                <div class="flex flex-col items-center justify-center text-center">
+                    <div class="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                        <i class="fa-solid fa-check text-2xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="mt-4 text-lg font-semibold text-slate-900">
+                        @DashboardLocalizer["WorkspaceSettings_Import_Success_Title"]
+                    </h3>
+                    <p class="mt-2 text-sm text-slate-600">
+                        @string.Format(
+                            DashboardLocalizer["WorkspaceSettings_Import_Success_Message"].Value,
+                            _importResult.ImportedCount,
+                            _importResult.SkippedCount
+                        )
+                    </p>
+                    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+                        <LumexLink
+                            Href="@UrlService.GetDashboardUrl("time-entry")"
+                            Class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors"
+                            Underline="@Underline.None">
+                            <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                            <span>@DashboardLocalizer["WorkspaceSettings_Import_ViewEntries"]</span>
+                        </LumexLink>
+                        <CustomButton
+                            Color="ThemeColor.Default"
+                            Variant="Variant.Outlined"
+                            OnClick="@OnResetImport">
+                            @DashboardLocalizer["WorkspaceSettings_Import_SelectAnotherFile"]
+                        </CustomButton>
+                    </div>
+                </div>
+            </LumexCardBody>
+        </LumexCard>
+    }
+    else
+    {
+        <LumexCard>
+            <LumexCardHeader Class="p-6 pb-0">
+                <div>
+                    <h3 class="text-base font-semibold text-slate-900">
+                        @DashboardLocalizer["WorkspaceSettings_Import_Title"]
+                    </h3>
+                    <p class="mt-1 text-sm text-slate-500">
+                        @DashboardLocalizer["WorkspaceSettings_Import_Description"]
+                    </p>
+                </div>
+            </LumexCardHeader>
+            <LumexCardBody Class="space-y-6 p-6">
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <LumexSelect
+                            TValue="TimeEntryImportSourceType"
+                            Label="@DashboardLocalizer["WorkspaceSettings_Import_Source"].Value"
+                            LabelPlacement="@LabelPlacement.Outside"
+                            Variant="InputVariant.Outlined"
+                            @bind-Value="_selectedSource">
+                            <LumexSelectItem
+                                Value="@TimeEntryImportSourceType.Clockify"
+                                TextValue="@DashboardLocalizer["WorkspaceSettings_Import_SourceClockify"].Value">
+                                <span class="inline-flex items-center gap-2">
+                                    <i class="fa-solid fa-clock text-blue-500" aria-hidden="true"></i>
+                                    <span>@DashboardLocalizer["WorkspaceSettings_Import_SourceClockify"]</span>
+                                </span>
+                            </LumexSelectItem>
+                        </LumexSelect>
+                    </div>
+
+                    <div>
+                        <LumexTextbox
+                            @bind-Value="_hourlyRateString"
+                            Label="@DashboardLocalizer["WorkspaceSettings_Import_HourlyRate"].Value"
+                            Placeholder="0.00"
+                            FullWidth="true" />
+                        <p class="mt-1.5 text-xs text-slate-400">
+                            @DashboardLocalizer["WorkspaceSettings_Import_HourlyRate_Helper"]
+                        </p>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 bg-slate-50/50 p-4">
+                    <div class="flex items-start gap-3">
+                        <LumexCheckbox
+                            @bind-Value="_isBillable" />
+                        <div class="pt-0.5">
+                            <p class="text-sm font-medium text-slate-800">
+                                @DashboardLocalizer["WorkspaceSettings_Import_IsBillable"]
+                            </p>
+                            <p class="mt-1 text-xs text-slate-500">
+                                @DashboardLocalizer["WorkspaceSettings_Import_IsBillable_Helper"]
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <FileDropzoneInput
+                        Accept="@FileAcceptConstants.Csv"
+                        Subtitle="@DashboardLocalizer["WorkspaceSettings_Import_Dropzone_Subtitle"].Value"
+                        @bind-File="_selectedFile"
+                        Disabled="@_isImporting" />
+                </div>
+
+                <div class="flex justify-end border-t border-slate-100 pt-5">
+                    <CustomButton
+                        Color="ThemeColor.Primary"
+                        Variant="Variant.Solid"
+                        IsLoading="@_isImporting"
+                        Disabled="@(_selectedFile == null || _isImporting)"
+                        OnClick="@OnImportClick">
+                        <StartContent>
+                            <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                        </StartContent>
+                        <ChildContent>
+                            @DashboardLocalizer["WorkspaceSettings_Import_Button"]
+                        </ChildContent>
+                    </CustomButton>
+                </div>
+            </LumexCardBody>
+        </LumexCard>
+    }
+</div>

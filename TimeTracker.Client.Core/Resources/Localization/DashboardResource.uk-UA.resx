@@ -922,4 +922,25 @@
   <data name="Margin" xml:space="preserve"><value>Маржа</value></data>
   <data name="MarginPercent" xml:space="preserve"><value>Маржа (%)</value></data>
   <data name="NoTeamActivitySelectedPeriod" xml:space="preserve"><value>За обраний період команда не має активності.</value></data>
+  <data name="SettingsPage_ImportTab" xml:space="preserve"><value>Імпорт</value></data>
+  <data name="WorkspaceSettings_Import_Title" xml:space="preserve"><value>Імпорт записів часу</value></data>
+  <data name="WorkspaceSettings_Import_Description" xml:space="preserve"><value>Імпортуйте затреканий час із зовнішніх сервісів, таких як Clockify, за допомогою CSV файлів.</value></data>
+  <data name="WorkspaceSettings_Import_Source" xml:space="preserve"><value>Джерело імпорту</value></data>
+  <data name="WorkspaceSettings_Import_SourceClockify" xml:space="preserve"><value>Clockify (CSV)</value></data>
+  <data name="WorkspaceSettings_Import_IsBillable" xml:space="preserve"><value>Позначати записи як оплачувані</value></data>
+  <data name="WorkspaceSettings_Import_IsBillable_Helper" xml:space="preserve"><value>Експорт Clockify CSV не містить статусу оплачуваності. Це налаштування буде застосовано до імпортованих записів.</value></data>
+  <data name="WorkspaceSettings_Import_HourlyRate" xml:space="preserve"><value>Погодинна ставка</value></data>
+  <data name="WorkspaceSettings_Import_HourlyRate_Helper" xml:space="preserve"><value>Застосовується для оплачуваних записів, якщо для проєкту не налаштовано ставку.</value></data>
+  <data name="WorkspaceSettings_Import_Button" xml:space="preserve"><value>Імпортувати записи часу</value></data>
+  <data name="WorkspaceSettings_Import_Uploading" xml:space="preserve"><value>Імпортування...</value></data>
+  <data name="WorkspaceSettings_Import_Success_Title" xml:space="preserve"><value>Імпорт завершено</value></data>
+  <data name="WorkspaceSettings_Import_Success_Message" xml:space="preserve"><value>Успішно імпортовано {0} записів часу ({1} пропущено як дублікати).</value></data>
+  <data name="WorkspaceSettings_Import_Dropzone_Title" xml:space="preserve"><value>Натисніть або перетягніть CSV файл сюди</value></data>
+  <data name="WorkspaceSettings_Import_Dropzone_Subtitle" xml:space="preserve"><value>Підтримуються CSV файли експорту Clockify розміром до 10 МБ</value></data>
+  <data name="WorkspaceSettings_Import_InvalidFileType" xml:space="preserve"><value>Будь ласка, виберіть коректний CSV файл (.csv)</value></data>
+  <data name="WorkspaceSettings_Import_FileSizeExceeded" xml:space="preserve"><value>Розмір файлу перевищує максимально допустимий ліміт {0} МБ</value></data>
+  <data name="WorkspaceSettings_Import_SelectAnotherFile" xml:space="preserve"><value>Імпортувати інший файл</value></data>
+  <data name="WorkspaceSettings_Import_ViewEntries" xml:space="preserve"><value>Переглянути записи часу</value></data>
+  <data name="WorkspaceSettings_Import_SelectedFile" xml:space="preserve"><value>Обраний файл</value></data>
+  <data name="WorkspaceSettings_Import_RemoveFile" xml:space="preserve"><value>Видалити файл</value></data>
 </root>
