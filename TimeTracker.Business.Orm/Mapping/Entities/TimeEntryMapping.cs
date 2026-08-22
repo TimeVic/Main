@@ -1,3 +1,4 @@
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Extensions;
 using TimeTracker.Business.Orm.Mapping.Common;
@@ -25,6 +26,7 @@ public class TimeEntryMapping: BaseGuidMappings<TimeEntryEntity>
         Map(x => x.IsAutostopped);
         Map(x => x.AutoStopWarningSentAt).DateTimeNullable();
         Map(x => x.TimeZone);
+        Map(x => x.Status).CustomType<TimeEntryStatus>().CustomSqlType("smallint").Not.Nullable();
         
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
@@ -60,5 +62,19 @@ public class TimeEntryMapping: BaseGuidMappings<TimeEntryEntity>
             .FetchType.Select()
             .LazyLoad()
             .Cascade.None();
+
+        HasMany(x => x.Approvals)
+            .KeyColumn("time_entry_id")
+            .Fetch.Select()
+            .LazyLoad()
+            .Cascade.AllDeleteOrphan()
+            .Inverse();
+
+        HasMany(x => x.Rejections)
+            .KeyColumn("time_entry_id")
+            .Fetch.Select()
+            .LazyLoad()
+            .Cascade.AllDeleteOrphan()
+            .Inverse();
     }
 }

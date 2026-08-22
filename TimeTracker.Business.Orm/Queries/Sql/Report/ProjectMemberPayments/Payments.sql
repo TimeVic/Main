@@ -3,14 +3,7 @@ with time_entry_amounts as (
         p.id as ProjectId,
         c.id as ClientId,
         extract(epoch from sum(te.end_time - te.start_time)) as TotalDurationAsEpoch,
-        sum(
-            round(
-                (te.hourly_rate / 60 / 60)
-                    *
-                extract(epoch from te.end_time - te.start_time),
-                2
-            )
-        ) as AmountOriginal
+        sum(fn_calculate_amount(te.start_time, te.end_time, te.hourly_rate, te.is_billable)) as AmountOriginal
     from time_entries te
              left join projects p on p.id = te.project_id
              left join clients c on c.id = p.client_id
@@ -19,6 +12,7 @@ with time_entry_amounts as (
       and te.is_billable = true
       and te.end_time is not null
       and te.end_time <= :endDate
+      and te.status = 3
     group by p.id, c.id
 ),
 report_rows as (

@@ -103,4 +103,47 @@ public class HasAccessToTimeEntryTest: BaseTest
         hasAccess = await _securityManager.HasAccess(AccessLevel.Write, otherUser, timeEntry);
         Assert.True(hasAccess);
     }
+
+    [Fact]
+    public async Task ShouldLockPendingAndApprovedEntriesWhenApprovalsEnabledInTeamMode()
+    {
+        var developer = await _userSeeder.CreateActivatedAsync();
+        _ownWorkspace.Mode = WorkspaceMode.Team;
+        _ownWorkspace.IsApprovalsEnabled = true;
+
+        await _workspaceAccessService.ShareAccessAsync(_ownWorkspace, developer, MembershipAccessType.User);
+
+        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_ownWorkspace, developer)).First();
+        timeEntry.Status = TimeEntryStatus.Pending;
+
+        // Neither owner nor developer can write to Pending
+        Assert.False(await _securityManager.HasAccess(AccessLevel.Write, _owner, timeEntry));
+        Assert.False(await _securityManager.HasAccess(AccessLevel.Write, developer, timeEntry));
+
+        // Neither owner nor developer can write to Approved
+        timeEntry.Status = TimeEntryStatus.Approved;
+        Assert.False(await _securityManager.HasAccess(AccessLevel.Write, _owner, timeEntry));
+        Assert.False(await _securityManager.HasAccess(AccessLevel.Write, developer, timeEntry));
+
+        // Draft and Rejected can be modified only by author
+        timeEntry.Status = TimeEntryStatus.Draft;
+        Assert.True(await _securityManager.HasAccess(AccessLevel.Write, developer, timeEntry));
+        Assert.False(await _securityManager.HasAccess(AccessLevel.Write, _owner, timeEntry));
+
+        timeEntry.Status = TimeEntryStatus.Rejected;
+        Assert.True(await _securityManager.HasAccess(AccessLevel.Write, developer, timeEntry));
+        Assert.False(await _securityManager.HasAccess(AccessLevel.Write, _owner, timeEntry));
+    }
+
+    [Fact]
+    public async Task ShouldAllowOwnerToWriteApprovedInSoloMode()
+    {
+        _ownWorkspace.Mode = WorkspaceMode.Solo;
+        _ownWorkspace.IsApprovalsEnabled = false;
+
+        var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
+        timeEntry.Status = TimeEntryStatus.Approved;
+
+        Assert.True(await _securityManager.HasAccess(AccessLevel.Write, _owner, timeEntry));
+    }
 }

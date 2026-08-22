@@ -13,6 +13,7 @@ public class WorkspaceDto: BaseDto
     public CurrencyDto Currency { get; set; } = null!;
     public string TimeZone { get; set; } = string.Empty;
     public WorkspaceMode? Mode { get; set; }
+    public bool IsApprovalsEnabled { get; set; }
     
     public MembershipAccessType? CurrentUserAccess { get; set; }
 

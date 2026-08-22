@@ -10,6 +10,7 @@ from (
                     and te.internal_task_id is not null
                     and te.end_time is not null
                     and te.is_marked_to_delete = false
+                    and te.status = 3
                   group by te.internal_task_id
               ) tracked
                   inner join tasks t on t.id = tracked.task_id

@@ -14,12 +14,15 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
         [StringLength(30, MinimumLength = 3)]
         [IsTimeZone]
         public string TimeZone { get; set; } = "UTC";
+
+        public bool? IsApprovalsEnabled { get; set; }
         
         public void Fill(WorkspaceDto workspace)
         {
             Name = workspace.Name;
             CurrencyId = workspace.Currency.Id;
             TimeZone = workspace.TimeZone;
+            IsApprovalsEnabled = workspace.IsApprovalsEnabled;
         }
     }
 }

@@ -3,7 +3,7 @@ with earned_by_client as (
         p.client_id                                                                                          as ClientId,
         sum(extract(epoch from te.end_time - te.start_time))                                                 as DurationAsEpoch,
         -- Financial reports must only use billable entries with a rate fixed on the time entry.
-        sum(round(te.hourly_rate / 60.0 / 60.0 * extract(epoch from te.end_time - te.start_time), 2)) as EarnedAmount
+        sum(fn_calculate_amount(te.start_time, te.end_time, te.hourly_rate, te.is_billable)) as EarnedAmount
     from time_entries te
              inner join projects p on p.id = te.project_id
     where te.workspace_id = :workspaceId
@@ -11,6 +11,7 @@ with earned_by_client as (
       and te.is_billable = true
       and te.hourly_rate is not null
       and p.client_id is not null
+      and te.status = 3
     group by p.client_id
 ),
 received_by_client as (

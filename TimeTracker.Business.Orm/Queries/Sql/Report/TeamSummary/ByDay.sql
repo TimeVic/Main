@@ -1,8 +1,8 @@
 select
     cast(x.day as timestamp) as Date,
     sum(extract(epoch from x.duration)) as DurationAsEpoch,
-    sum(case when te.is_billable and te.hourly_rate is not null then round(extract(epoch from x.duration) / 3600.0 * te.hourly_rate, 2) else 0 end) as ClientBillableOriginal,
-    sum(round(extract(epoch from x.duration) / 3600.0 * coalesce(wmpa.hourly_rate, 0), 2)) as TeamLaborCostOriginal
+    sum(fn_calculate_amount(x.duration, te.hourly_rate, te.is_billable)) as ClientBillableOriginal,
+    sum(fn_calculate_amount(x.duration, coalesce(wmpa.hourly_rate, 0), true)) as TeamLaborCostOriginal
 from time_entries te
          inner join workspaces w on w.id = te.workspace_id
          inner join workspace_members wm on wm.user_id = te.user_id and wm.workspace_id = te.workspace_id

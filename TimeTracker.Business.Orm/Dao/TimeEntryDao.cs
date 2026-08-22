@@ -3,7 +3,9 @@ using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Linq;
+using NHibernate.Transform;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Dto;
 using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dao.Common;
@@ -249,6 +251,11 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .FetchMany(item => item.Avatars)
             .ToListAsync();
 
+        await Session.Query<TimeEntryRejectEntity>()
+            .Where(item => entryIds.Contains(item.TimeEntry.Id))
+            .Fetch(item => item.User)
+            .ToListAsync();
+
         var entriesById = entries.ToDictionary(item => item.Id);
         return entryIds
             .Select(entryId => entriesById[entryId])
@@ -272,6 +279,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             throw new DataInconsistencyException("New time entry can not be created before active exists");
         }
         
+        var isApproved = workspace.Mode == WorkspaceMode.Solo || !workspace.IsApprovalsEnabled;
         var entry = new TimeEntryEntity
         {
             IsBillable = isBillable,
@@ -282,6 +290,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             User = user,
             Task = internalTask,
             TimeZone = workspace.TimeZone,
+            Status = isApproved ? TimeEntryStatus.Approved : TimeEntryStatus.Draft,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -323,8 +332,10 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             );
         }
         
+        var result = new List<TimeEntryEntity>();
         foreach (var activeTimeEntry in activeTimeEntries)
         {
+            result.Add(activeTimeEntry);
             if (activeTimeEntry.StartTime > endTime)
             {
                 throw new DataInconsistencyException("End time can not be less than Start time");
@@ -356,9 +367,8 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
 
             if (startTimeLocal.Date == endTimeLocal.Date)
             {
-                // Same local day — no splitting needed.
+                // Same local day — no splitting needed
                 activeTimeEntry.EndTime = endTime;
-                await Session.SaveAsync(activeTimeEntry);
                 continue;
             }
 
@@ -406,12 +416,14 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
                     );
                 }
 
+                result.Add(newTimeEntry);
+
                 copyStartLocal = copyStartLocal.AddDays(1);
                 createdItemsCount++;
             }
         }
         
-        return activeTimeEntries;
+        return result;
     }
     
     public async Task<TimeEntryEntity> SetAsync(
@@ -436,11 +448,13 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .FirstOrDefaultAsync();
         if (timeEntry == null)
         {
+            var isApproved = workspace.Mode == WorkspaceMode.Solo || !workspace.IsApprovalsEnabled;
             timeEntry = new TimeEntryEntity()
             {
                 Workspace = workspace,
                 User = user,
                 TimeZone = workspace.TimeZone,
+                Status = isApproved ? TimeEntryStatus.Approved : TimeEntryStatus.Draft,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -476,7 +490,10 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             }
         }
 
-        await Session.SaveAsync(timeEntry);
+        if (timeEntry.IsNew)
+        {
+            await Session.SaveAsync(timeEntry);
+        }
         return timeEntry;
     }
 
@@ -526,8 +543,6 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         timeEntry.Description = string.IsNullOrWhiteSpace(timeEntry.Description)
             ? AutoStoppedDescriptionMarker
             : $"{timeEntry.Description.TrimEnd()}\n{AutoStoppedDescriptionMarker}";
-
-        await Session.SaveAsync(timeEntry);
     }
 
     public async Task<IReadOnlyList<TimeEntryEntity>> GetListInRangeAsync(
@@ -546,5 +561,40 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .Where(e => e.Workspace.Id == workspace.Id && e.User.Id == user.Id && !e.IsMarkedToDelete)
             .Where(e => e.StartTime >= minDateUtc && e.StartTime <= maxDateUtc)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<TimeEntryApprovalStatusSummaryDto> GetApprovalStatusSummaryAsync(
+        WorkspaceEntity workspace,
+        UserEntity user
+    )
+    {
+        var raw = await Session.CreateSQLQuery(ReadSqlQuery("TimeEntry.GetApprovalStatusSummary"))
+            .AddScalar("DraftCount", NHibernateUtil.Int32)
+            .AddScalar("DraftDurationSeconds", NHibernateUtil.Double)
+            .AddScalar("DraftAmount", NHibernateUtil.Decimal)
+            .AddScalar("PendingCount", NHibernateUtil.Int32)
+            .AddScalar("PendingDurationSeconds", NHibernateUtil.Double)
+            .AddScalar("PendingAmount", NHibernateUtil.Decimal)
+            .AddScalar("RejectedCount", NHibernateUtil.Int32)
+            .AddScalar("LatestRejectionReason", NHibernateUtil.String)
+            .SetParameter("workspaceId", workspace.Id)
+            .SetParameter("userId", user.Id)
+            .SetParameter("statusDraft", (int)TimeEntryStatus.Draft)
+            .SetParameter("statusPending", (int)TimeEntryStatus.Pending)
+            .SetParameter("statusRejected", (int)TimeEntryStatus.Rejected)
+            .SetResultTransformer(Transformers.AliasToBean<TimeEntryApprovalStatusSummaryItemDto>())
+            .UniqueResultAsync<TimeEntryApprovalStatusSummaryItemDto>();
+
+        return new TimeEntryApprovalStatusSummaryDto
+        {
+            DraftCount = raw?.DraftCount ?? 0,
+            DraftDuration = TimeSpan.FromSeconds(raw?.DraftDurationSeconds ?? 0),
+            DraftAmount = raw?.DraftAmount ?? 0,
+            PendingCount = raw?.PendingCount ?? 0,
+            PendingDuration = TimeSpan.FromSeconds(raw?.PendingDurationSeconds ?? 0),
+            PendingAmount = raw?.PendingAmount ?? 0,
+            RejectedCount = raw?.RejectedCount ?? 0,
+            LatestRejectionReason = raw?.LatestRejectionReason
+        };
     }
 }

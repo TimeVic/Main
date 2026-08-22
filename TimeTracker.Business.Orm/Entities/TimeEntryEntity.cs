@@ -1,3 +1,4 @@
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Orm.Core;
 using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
@@ -21,6 +22,7 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual bool IsAutostopped { get; set; }
         public virtual DateTime? AutoStopWarningSentAt { get; set; }
         public virtual string TimeZone { get; set; } = "UTC";
+        public virtual TimeEntryStatus Status { get; set; } = TimeEntryStatus.Draft;
         
         #region Relationships
         public virtual WorkspaceEntity Workspace { get; set; } = null!;
@@ -32,6 +34,10 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual TaskEntity? Task { get; set; }
         
         public virtual ICollection<TagEntity> Tags { get; set; } = new List<TagEntity>();
+
+        public virtual ICollection<TimeEntryApprovalEntity> Approvals { get; set; } = new List<TimeEntryApprovalEntity>();
+
+        public virtual ICollection<TimeEntryRejectEntity> Rejections { get; set; } = new List<TimeEntryRejectEntity>();
         #endregion
         
         #region Calculated
@@ -45,6 +51,8 @@ namespace TimeTracker.Business.Orm.Entities
         public virtual TimeSpan Duration => EndTime != null ? EndTime.Value - StartTime : TimeSpan.Zero;
 
         public virtual string? ExternalTaskId => Task?.ExternalTaskId;
+
+        public virtual string? LatestRejectComment => Rejections.OrderByDescending(r => r.CreatedAt).FirstOrDefault()?.Reason;
 
         #endregion
     }

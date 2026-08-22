@@ -66,7 +66,8 @@ namespace TimeTracker.Api.Controllers.Dashboard.Workspace.Actions
                 request.Name,
                 currency,
                 request.TimeZone,
-                request.Description
+                request.Description,
+                request.IsApprovalsEnabled
             );
             var response = _mapper.Map<WorkspaceDto>(workspace);
             response.CurrentUserAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
