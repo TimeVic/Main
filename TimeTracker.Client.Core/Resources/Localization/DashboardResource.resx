@@ -979,4 +979,7 @@
   <data name="Approvals_Card_SubmitSingle" xml:space="preserve"><value>Submit for approval</value></data>
   <data name="Approvals_Report_PendingHint" xml:space="preserve"><value>+ {0} pending approval</value></data>
   <data name="Approvals_Report_SubmitDrafts" xml:space="preserve"><value>Submit</value></data>
+  <data name="Approvals_WorkspaceSetting_Enable" xml:space="preserve"><value>Enable Time Approvals</value></data>
+  <data name="Approvals_WorkspaceSetting_Enable_Description" xml:space="preserve"><value>Require managers to review and approve time entries before they are counted as earned.</value></data>
+  <data name="Approvals_WorkspaceSetting_OnlyInTeamMode" xml:space="preserve"><value>Available only in {0}</value></data>
 </root>
