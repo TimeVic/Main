@@ -48,6 +48,12 @@
                     Underline="@Underline.None">
                     <i class="@item.Icon"></i>
                     <span>@item.Name</span>
+                    @if (item.BadgeCount > 0)
+                    {
+                        <span class="ml-auto inline-flex items-center justify-center rounded-full bg-red-600 px-2 py-0.5 text-xs font-bold text-white">
+                            @item.BadgeCount
+                        </span>
+                    }
                 </LumexLink>
             </LumexNavbarMenuItem>
         }
@@ -85,6 +91,9 @@ else
 
     @if (groupedItems.Any())
     {
+        var hasGroupBadge = groupedItems.SelectMany(g => g).Any(i => i.BadgeCount > 0);
+        var totalGroupBadgeCount = groupedItems.SelectMany(g => g).Sum(i => i.BadgeCount);
+
         <LumexNavbarItem>
             <LumexDropdown ShowArrow="@true"
                            Radius="@Radius.Small">
@@ -94,6 +103,12 @@ else
                           tabindex="0">
                         <i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i>
                         <span class="hidden sm:inline">@DashboardLocalizer["Payments"]</span>
+                        @if (hasGroupBadge)
+                        {
+                            <span class="inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-2xs font-bold leading-none text-white">
+                                @totalGroupBadgeCount
+                            </span>
+                        }
                         <i class="fa-solid fa-chevron-down text-xs text-slate-400" aria-hidden="true"></i>
                     </span>
                 </LumexDropdownTrigger>
@@ -112,7 +127,15 @@ else
                                     </span>
                                 </StartContent>
                                 <ChildContent>
-                                    @item.Name
+                                    <div class="flex items-center justify-between w-full gap-2">
+                                        <span>@item.Name</span>
+                                        @if (item.BadgeCount > 0)
+                                        {
+                                            <span class="inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-2xs font-bold text-white">
+                                                @item.BadgeCount
+                                            </span>
+                                        }
+                                    </div>
                                 </ChildContent>
                             </LumexDropdownItem>
                         }
@@ -136,7 +159,15 @@ else
                                     </span>
                                 </StartContent>
                                 <ChildContent>
-                                    @item.Name
+                                    <div class="flex items-center justify-between w-full gap-2">
+                                        <span>@item.Name</span>
+                                        @if (item.BadgeCount > 0)
+                                        {
+                                            <span class="inline-flex items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-2xs font-bold text-white">
+                                                @item.BadgeCount
+                                            </span>
+                                        }
+                                    </div>
                                 </ChildContent>
                             </LumexDropdownItem>
                         }

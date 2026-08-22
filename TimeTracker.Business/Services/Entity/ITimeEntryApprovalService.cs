@@ -1,5 +1,6 @@
 using Domain.Abstractions;
 using TimeTracker.Business.Common.Dto;
+using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -43,4 +44,14 @@ public interface ITimeEntryApprovalService : IDomainService
     );
 
     Task<TimeEntryApprovalStatusSummaryDto> GetStatusSummaryAsync(UserEntity user, WorkspaceEntity workspace);
+
+    Task<IReadOnlyList<TimeEntryApprovalSubmitterItemDto>> GetSubmittersAsync(UserEntity manager, WorkspaceEntity workspace);
+
+    Task<IReadOnlyList<TimeEntryEntity>> GetDetailsAsync(
+        UserEntity manager,
+        WorkspaceEntity workspace,
+        UserEntity user,
+        DateTime startDate,
+        DateTime endDate
+    );
 }

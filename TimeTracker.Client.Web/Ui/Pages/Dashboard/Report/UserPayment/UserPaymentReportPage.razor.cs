@@ -18,10 +18,26 @@ public partial class UserPaymentReportPage
 
     private bool IsCanShareClientReport => AuthState.Value.Workspace?.IsWorkspaceAdmin == true;
 
+    private bool IsApprovalsEnabled => AuthState.Value.Workspace?.IsApprovalsEnabled ?? false;
+
+    private TimeTracker.Business.Common.Dto.TimeEntryApprovalStatusSummaryDto? _approvalSummary;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         Dispatcher.Dispatch(new ReportFetchUserPaymentReportAction());
+
+        if (IsApprovalsEnabled)
+        {
+            try
+            {
+                _approvalSummary = await ApiService.TimeEntryApprovalGetStatusAsync();
+            }
+            catch
+            {
+                // Background error ignored
+            }
+        }
     }
 
     private void ToggleClient(Guid clientId)

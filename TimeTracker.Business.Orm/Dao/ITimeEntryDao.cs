@@ -72,4 +72,15 @@ public interface ITimeEntryDao: IDomainService
         WorkspaceEntity workspace,
         UserEntity user
     );
+
+    Task<IReadOnlyList<TimeEntryApprovalSubmitterItemDto>> GetApprovalSubmittersAsync(
+        WorkspaceEntity workspace
+    );
+
+    Task<IReadOnlyList<TimeEntryEntity>> GetApprovalDetailsAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        DateTime startDate,
+        DateTime endDate
+    );
 }

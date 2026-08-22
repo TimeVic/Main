@@ -33,6 +33,8 @@
 }
 
 <section class="space-y-3">
+    <TimeEntryApprovalBannerBlock />
+
     <div>
         @if (listItems.Any())
         {
@@ -87,6 +89,7 @@
                         OnClone="OnCloneTimeEntry"
                         OnOpenTask="(entry) => _taskToEdit = entry.Task"
                         OnDelete="(entry) => _timeEntryToDelete = entry"
+                        OnSubmitForApproval="OnSubmitForApprovalTimeEntry"
                     />
                 }
             </Virtualize>

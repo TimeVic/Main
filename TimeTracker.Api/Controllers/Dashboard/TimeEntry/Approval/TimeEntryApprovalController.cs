@@ -51,4 +51,16 @@ public class TimeEntryApprovalController(ILifetimeScope scope) : MainApiControll
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public Task<IActionResult> Reject([FromBody] RejectRequest request)
         => this.RequestAsync().For<PaginatedListDto<TimeEntryDto>>().With(request);
+
+    [HttpPost("submitters")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> GetSubmitters([FromBody] GetSubmittersRequest request)
+        => this.RequestAsync().For<GetSubmittersResponse>().With(request);
+
+    [HttpPost("details")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> GetDetails([FromBody] GetApprovalDetailsRequest request)
+        => this.RequestAsync().For<GetApprovalDetailsResponse>().With(request);
 }

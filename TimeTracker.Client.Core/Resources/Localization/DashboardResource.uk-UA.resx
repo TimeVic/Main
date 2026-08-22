@@ -946,4 +946,39 @@
   <data name="WorkspaceSettings_Import_SelectedFile" xml:space="preserve"><value>Обраний файл</value></data>
   <data name="WorkspaceSettings_Import_RemoveFile" xml:space="preserve"><value>Видалити файл</value></data>
   <data name="FileDropzone_MaxSizeHint" xml:space="preserve"><value>Максимальний розмір файлу: {0}</value></data>
+  <data name="Approvals_Menu" xml:space="preserve"><value>Затвердження часу</value></data>
+  <data name="Approvals_Title" xml:space="preserve"><value>Затвердження часу</value></data>
+  <data name="Approvals_Description" xml:space="preserve"><value>Перевіряйте та затверджуйте поданні записи часу учасників команди.</value></data>
+  <data name="Approvals_Submitters" xml:space="preserve"><value>Список табелів</value></data>
+  <data name="Approvals_EmptySubmitters" xml:space="preserve"><value>Немає записів часу, що очікують на перевірку</value></data>
+  <data name="Approvals_Week" xml:space="preserve"><value>Тиждень {0} ({1} - {2})</value></data>
+  <data name="Approvals_TotalSubmitted" xml:space="preserve"><value>Подано</value></data>
+  <data name="Approvals_BulkApprove" xml:space="preserve"><value>Затвердити всі {0}</value></data>
+  <data name="Approvals_BulkReject" xml:space="preserve"><value>Відхилити</value></data>
+  <data name="Approvals_Unapprove" xml:space="preserve"><value>Скасувати затвердження</value></data>
+  <data name="Approvals_QuickSelfApprove" xml:space="preserve"><value>Затвердити мій час</value></data>
+  <data name="Approvals_Kpi_DeveloperCost" xml:space="preserve"><value>Нараховано розробнику</value></data>
+  <data name="Approvals_Kpi_DeveloperCost_Description" xml:space="preserve"><value>Сума до виплати за внутрішньою ставкою</value></data>
+  <data name="Approvals_Kpi_ClientBudget" xml:space="preserve"><value>Бюджет клієнта</value></data>
+  <data name="Approvals_Kpi_ClientBudget_Description" xml:space="preserve"><value>Сума до виставлення клієнту</value></data>
+  <data name="Approvals_Kpi_ProjectMargin" xml:space="preserve"><value>Проєктна маржа</value></data>
+  <data name="Approvals_Kpi_ProjectMargin_Description" xml:space="preserve"><value>Відсоток чистого прибутку агентства</value></data>
+  <data name="Approvals_Project" xml:space="preserve"><value>Проєкт</value></data>
+  <data name="Approvals_Task" xml:space="preserve"><value>Задача</value></data>
+  <data name="Approvals_NoTask" xml:space="preserve"><value>Без задачі</value></data>
+  <data name="Approvals_NoProject" xml:space="preserve"><value>Без проєкту</value></data>
+  <data name="Approvals_RejectModal_Title" xml:space="preserve"><value>Відхилення записів часу</value></data>
+  <data name="Approvals_RejectModal_ReasonLabel" xml:space="preserve"><value>Причина відхилення</value></data>
+  <data name="Approvals_RejectModal_ReasonPlaceholder" xml:space="preserve"><value>Наприклад: Юра, виправ описку в часі за середу</value></data>
+  <data name="Approvals_RejectModal_Confirm" xml:space="preserve"><value>Відхилити записи</value></data>
+  <data name="Approvals_Status_Pending" xml:space="preserve"><value>Очікує підтвердження</value></data>
+  <data name="Approvals_Status_Approved" xml:space="preserve"><value>Затверджено</value></data>
+  <data name="Approvals_Status_Rejected" xml:space="preserve"><value>Відхилено</value></data>
+  <data name="Approvals_Status_Draft" xml:space="preserve"><value>Чернетка</value></data>
+  <data name="Approvals_Banner_Text" xml:space="preserve"><value>У вас є {0} (на суму {1}) невідправленого часу за цей тиждень.</value></data>
+  <data name="Approvals_Banner_SubmitButton" xml:space="preserve"><value>Відправити на апрув</value></data>
+  <data name="Approvals_Banner_SuccessMessage" xml:space="preserve"><value>Записи часу відправлено на перевірку</value></data>
+  <data name="Approvals_Card_SubmitSingle" xml:space="preserve"><value>Відправити на перевірку</value></data>
+  <data name="Approvals_Report_PendingHint" xml:space="preserve"><value>+ {0} очікує підтвердження</value></data>
+  <data name="Approvals_Report_SubmitDrafts" xml:space="preserve"><value>Відправити</value></data>
 </root>

@@ -1,0 +1,86 @@
+using Api.Requests.Abstractions;
+using TimeTracker.Api.Shared.Dto.Model.TimeEntry.Approval;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.Approval;
+using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Extensions;
+using TimeTracker.Business.Orm.Dao.User;
+using TimeTracker.Business.Services.Entity;
+using TimeTracker.Business.Services.Http;
+using TimeTracker.Business.Services.Security;
+
+namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Approval.Actions;
+
+public class GetSubmittersRequestHandler : IAsyncRequestHandler<GetSubmittersRequest, GetSubmittersResponse>
+{
+    private readonly IApiRequestService _apiRequestService;
+    private readonly IUserDao _userDao;
+    private readonly ISecurityManager _securityManager;
+    private readonly ITimeEntryApprovalService _approvalService;
+
+    public GetSubmittersRequestHandler(
+        IApiRequestService apiRequestService,
+        IUserDao userDao,
+        ISecurityManager securityManager,
+        ITimeEntryApprovalService approvalService
+    )
+    {
+        _apiRequestService = apiRequestService;
+        _userDao = userDao;
+        _securityManager = securityManager;
+        _approvalService = approvalService;
+    }
+
+    public async Task<GetSubmittersResponse> ExecuteAsync(GetSubmittersRequest request)
+    {
+        var user = await _apiRequestService.GetCurrentUser();
+        var workspace = await _userDao.GetUsersWorkspace(user, _apiRequestService.GetCurrentWorkspaceId());
+        RecordNotFoundException.ThrowIfNull(workspace, "Workspace not found");
+
+        var rawItems = await _approvalService.GetSubmittersAsync(user, workspace);
+
+        var items = rawItems.Select(item =>
+        {
+            var status = TimeEntryStatus.Approved;
+            if (item.PendingCount > 0)
+            {
+                status = TimeEntryStatus.Pending;
+            }
+            else if (item.RejectedCount > 0)
+            {
+                status = TimeEntryStatus.Rejected;
+            }
+            else if (item.DraftCount > 0)
+            {
+                status = TimeEntryStatus.Draft;
+            }
+
+            return new TimeEntryApprovalSubmitterDto
+            {
+                UserId = item.UserId,
+                UserName = string.IsNullOrWhiteSpace(item.UserName) ? item.Email : item.UserName,
+                Email = item.Email,
+                PeriodStartDate = item.PeriodStartDate,
+                PeriodEndDate = item.PeriodEndDate,
+                WeekNumber = item.PeriodStartDate.GetIso8601WeekOfYear(),
+                TotalDuration = TimeSpan.FromSeconds(item.TotalDurationSeconds),
+                TotalDeveloperAmount = item.TotalDeveloperAmount,
+                TotalClientAmount = item.TotalClientAmount,
+                PendingCount = item.PendingCount,
+                DraftCount = item.DraftCount,
+                ApprovedCount = item.ApprovedCount,
+                RejectedCount = item.RejectedCount,
+                Status = status,
+                IsCurrentUser = item.UserId == user.Id
+            };
+        }).ToList();
+
+        var pendingUsersCount = items.Where(i => i.PendingCount > 0).Select(i => i.UserId).Distinct().Count();
+
+        return new GetSubmittersResponse
+        {
+            Items = items,
+            TotalPendingUsersCount = pendingUsersCount
+        };
+    }
+}
