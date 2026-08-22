@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Services.Format;
 using TimeTracker.Business.Extensions;
 using TimeTracker.Client.Core.Store.Auth;
@@ -27,6 +28,9 @@ public partial class MyTimeEntryCard
     [Parameter]
     public EventCallback<TimeEntryDto> OnOpenTask { get; set; }
 
+    [Parameter]
+    public EventCallback<TimeEntryDto> OnSubmitForApproval { get; set; }
+
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; } = null!;
 
@@ -34,6 +38,12 @@ public partial class MyTimeEntryCard
     private IState<AuthState> _authState { get; set; } = null!;
 
     private string? _currencySymbol => _authState.Value.Workspace?.Currency.Symbol;
+
+    private bool IsApprovalsEnabled => _authState.Value.Workspace?.IsApprovalsEnabled ?? false;
+
+    private bool CanEditOrDelete => !IsApprovalsEnabled || Entry.Status is not (TimeEntryStatus.Approved or TimeEntryStatus.Pending);
+
+    private bool CanSubmitForApproval => IsApprovalsEnabled && Entry.Status is TimeEntryStatus.Draft or TimeEntryStatus.Rejected;
 
     private string GetProjectLabel()
     {

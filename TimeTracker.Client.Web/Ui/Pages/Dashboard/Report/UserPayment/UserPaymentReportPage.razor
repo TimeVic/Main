@@ -64,7 +64,17 @@
                     <p class="mt-2 text-2xl font-bold text-slate-900">
                         <AmountDisplay Amount="@_report.Totals.Earned"/>
                     </p>
-                    <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UserPaymentReport_EarnedSubtitle"]</p>
+                    @if (IsApprovalsEnabled && _approvalSummary != null && _approvalSummary.PendingAmount > 0)
+                    {
+                        var symbol = AuthState.Value.Workspace?.Currency?.Symbol ?? "$";
+                        <p class="mt-1 text-xs font-semibold text-amber-600">
+                            @string.Format(DashboardLocalizer["Approvals_Report_PendingHint"].Value, $"{symbol}{_approvalSummary.PendingAmount:0.00}")
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["UserPaymentReport_EarnedSubtitle"]</p>
+                    }
                 </LumexCardBody>
             </LumexCard>
 

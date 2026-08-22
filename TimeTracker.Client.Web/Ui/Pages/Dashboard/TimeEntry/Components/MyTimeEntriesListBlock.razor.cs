@@ -118,4 +118,10 @@ public partial class MyTimeEntriesListBlock
         Dispatcher.Dispatch(new SetSelectedPageAction(selectedPage));
         Dispatcher.Dispatch(new LoadListAction());
     }
+
+    private async Task OnSubmitForApprovalTimeEntry(TimeEntryDto entry)
+    {
+        await ApiService.TimeEntryApprovalSubmitAsync(entry.Id);
+        Dispatcher.Dispatch(new LoadListAction());
+    }
 }

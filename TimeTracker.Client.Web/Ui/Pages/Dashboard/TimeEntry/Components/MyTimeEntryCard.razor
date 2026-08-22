@@ -1,8 +1,9 @@
 @using LumexUI.Common
+@using TimeTracker.Business.Common.Constants
 @using TimeTracker.Business.Extensions
 
-<div class="group flex h-[46px] cursor-pointer items-center gap-3 border-b border-slate-100 bg-white px-4 py-2 text-sm transition-colors hover:border-blue-200 hover:bg-blue-50"
-     @onclick="@(() => OnEdit.InvokeAsync(Entry))">
+<div class="group flex h-[46px] @(CanEditOrDelete ? "cursor-pointer" : "cursor-default") items-center gap-3 border-b border-slate-100 bg-white px-4 py-2 text-sm transition-colors hover:border-blue-200 hover:bg-blue-50"
+     @onclick="@(() => { if (CanEditOrDelete) OnEdit.InvokeAsync(Entry); })">
 
     @* Description (or task title fallback) — takes all remaining space *@
     <span class="min-w-0 flex-1 truncate @(string.IsNullOrWhiteSpace(Entry.Description) && Entry.Task == null ? "text-slate-300" : "text-slate-700")">
@@ -16,6 +17,10 @@
 
     @* Indicators *@
     <div class="hidden md:flex shrink-0 items-center gap-1" @onclick:stopPropagation="true">
+        <TimeEntryApprovalStatusBlock
+            Entry="@Entry"
+            IsApprovalsEnabled="@IsApprovalsEnabled" />
+
         @if (Entry.Task != null)
         {
             <button
@@ -109,6 +114,20 @@
 
     @* Actions *@
     <div class="shrink-0 flex items-center gap-1" @onclick:stopPropagation="true">
+        @if (CanSubmitForApproval)
+        {
+            <CustomButton
+                OnClick="@(() => OnSubmitForApproval.InvokeAsync(Entry))"
+                Size="Size.Small"
+                Color="ThemeColor.Primary"
+                Variant="Variant.Light"
+                IconOnly="true"
+                Title="@DashboardLocalizer["Approvals_Card_SubmitSingle"].Value">
+                <ChildContent>
+                    <i class="fa-solid fa-paper-plane text-blue-600"></i>
+                </ChildContent>
+            </CustomButton>
+        }
         <CustomButton
             OnClick="@(() => OnClone.InvokeAsync(Entry))"
             Size="Size.Small"
@@ -129,27 +148,42 @@
                 </LumexButton>
             </LumexDropdownTrigger>
             <LumexDropdownMenu>
-                <LumexDropdownItem OnClick="@(() => OnEdit.InvokeAsync(Entry))">
-                    <span class="flex items-center gap-2">
-                        <i class="fa-regular fa-pen-to-square w-4"></i>
-                        <span>@DashboardLocalizer["Edit"]</span>
-                    </span>
-                </LumexDropdownItem>
+                @if (CanSubmitForApproval)
+                {
+                    <LumexDropdownItem OnClick="@(() => OnSubmitForApproval.InvokeAsync(Entry))">
+                        <span class="flex items-center gap-2 text-blue-600">
+                            <i class="fa-solid fa-paper-plane w-4"></i>
+                            <span>@DashboardLocalizer["Approvals_Card_SubmitSingle"]</span>
+                        </span>
+                    </LumexDropdownItem>
+                }
+                @if (CanEditOrDelete)
+                {
+                    <LumexDropdownItem OnClick="@(() => OnEdit.InvokeAsync(Entry))">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-regular fa-pen-to-square w-4"></i>
+                            <span>@DashboardLocalizer["Edit"]</span>
+                        </span>
+                    </LumexDropdownItem>
+                }
                 <LumexDropdownItem OnClick="@(() => OnClone.InvokeAsync(Entry))">
                     <span class="flex items-center gap-2">
                         <i class="fa-regular fa-clone w-4"></i>
                         <span>@DashboardLocalizer["Duplicate"]</span>
                     </span>
                 </LumexDropdownItem>
-                <LumexDropdownItem
-                    Color="@ThemeColor.Danger"
-                    Class="text-danger"
-                    OnClick="@(() => OnDelete.InvokeAsync(Entry))">
-                    <span class="flex items-center gap-2">
-                        <i class="fa-regular fa-trash-can w-4"></i>
-                        <span>@DashboardLocalizer["Delete"]</span>
-                    </span>
-                </LumexDropdownItem>
+                @if (CanEditOrDelete)
+                {
+                    <LumexDropdownItem
+                        Color="@ThemeColor.Danger"
+                        Class="text-danger"
+                        OnClick="@(() => OnDelete.InvokeAsync(Entry))">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-regular fa-trash-can w-4"></i>
+                            <span>@DashboardLocalizer["Delete"]</span>
+                        </span>
+                    </LumexDropdownItem>
+                }
             </LumexDropdownMenu>
         </LumexDropdown>
     </div>

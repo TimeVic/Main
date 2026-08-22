@@ -944,4 +944,39 @@
   <data name="WorkspaceSettings_Import_SelectedFile" xml:space="preserve"><value>Selected file</value></data>
   <data name="WorkspaceSettings_Import_RemoveFile" xml:space="preserve"><value>Remove file</value></data>
   <data name="FileDropzone_MaxSizeHint" xml:space="preserve"><value>Max file size: {0}</value></data>
+  <data name="Approvals_Menu" xml:space="preserve"><value>Approvals</value></data>
+  <data name="Approvals_Title" xml:space="preserve"><value>Time Approvals</value></data>
+  <data name="Approvals_Description" xml:space="preserve"><value>Review and approve submitted time entries from team members.</value></data>
+  <data name="Approvals_Submitters" xml:space="preserve"><value>Submitters</value></data>
+  <data name="Approvals_EmptySubmitters" xml:space="preserve"><value>No time entries submitted for approval</value></data>
+  <data name="Approvals_Week" xml:space="preserve"><value>Week {0} ({1} - {2})</value></data>
+  <data name="Approvals_TotalSubmitted" xml:space="preserve"><value>Submitted</value></data>
+  <data name="Approvals_BulkApprove" xml:space="preserve"><value>Approve all {0}</value></data>
+  <data name="Approvals_BulkReject" xml:space="preserve"><value>Reject</value></data>
+  <data name="Approvals_Unapprove" xml:space="preserve"><value>Unapprove</value></data>
+  <data name="Approvals_QuickSelfApprove" xml:space="preserve"><value>Approve my hours</value></data>
+  <data name="Approvals_Kpi_DeveloperCost" xml:space="preserve"><value>Accrued to developer</value></data>
+  <data name="Approvals_Kpi_DeveloperCost_Description" xml:space="preserve"><value>Payout at internal member rate</value></data>
+  <data name="Approvals_Kpi_ClientBudget" xml:space="preserve"><value>Client budget</value></data>
+  <data name="Approvals_Kpi_ClientBudget_Description" xml:space="preserve"><value>Billable amount for client</value></data>
+  <data name="Approvals_Kpi_ProjectMargin" xml:space="preserve"><value>Project margin</value></data>
+  <data name="Approvals_Kpi_ProjectMargin_Description" xml:space="preserve"><value>Agency profit margin percentage</value></data>
+  <data name="Approvals_Project" xml:space="preserve"><value>Project</value></data>
+  <data name="Approvals_Task" xml:space="preserve"><value>Task</value></data>
+  <data name="Approvals_NoTask" xml:space="preserve"><value>Without task</value></data>
+  <data name="Approvals_NoProject" xml:space="preserve"><value>Without project</value></data>
+  <data name="Approvals_RejectModal_Title" xml:space="preserve"><value>Reject time entries</value></data>
+  <data name="Approvals_RejectModal_ReasonLabel" xml:space="preserve"><value>Rejection reason</value></data>
+  <data name="Approvals_RejectModal_ReasonPlaceholder" xml:space="preserve"><value>e.g., Please fix typo in Wednesday time</value></data>
+  <data name="Approvals_RejectModal_Confirm" xml:space="preserve"><value>Reject entries</value></data>
+  <data name="Approvals_Status_Pending" xml:space="preserve"><value>Pending approval</value></data>
+  <data name="Approvals_Status_Approved" xml:space="preserve"><value>Approved</value></data>
+  <data name="Approvals_Status_Rejected" xml:space="preserve"><value>Rejected</value></data>
+  <data name="Approvals_Status_Draft" xml:space="preserve"><value>Draft</value></data>
+  <data name="Approvals_Banner_Text" xml:space="preserve"><value>You have {0} ({1}) of unsubmitted time for this week.</value></data>
+  <data name="Approvals_Banner_SubmitButton" xml:space="preserve"><value>Submit for approval</value></data>
+  <data name="Approvals_Banner_SuccessMessage" xml:space="preserve"><value>Time entries submitted for approval</value></data>
+  <data name="Approvals_Card_SubmitSingle" xml:space="preserve"><value>Submit for approval</value></data>
+  <data name="Approvals_Report_PendingHint" xml:space="preserve"><value>+ {0} pending approval</value></data>
+  <data name="Approvals_Report_SubmitDrafts" xml:space="preserve"><value>Submit</value></data>
 </root>

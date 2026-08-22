@@ -597,4 +597,51 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             LatestRejectionReason = raw?.LatestRejectionReason
         };
     }
+
+    public async Task<IReadOnlyList<TimeEntryApprovalSubmitterItemDto>> GetApprovalSubmittersAsync(
+        WorkspaceEntity workspace
+    )
+    {
+        var raw = await Session.CreateSQLQuery(ReadSqlQuery("TimeEntry.GetApprovalSubmitters"))
+            .AddScalar("UserId", NHibernateUtil.Guid)
+            .AddScalar("UserName", NHibernateUtil.String)
+            .AddScalar("Email", NHibernateUtil.String)
+            .AddScalar("PeriodStartDate", NHibernateUtil.DateTime)
+            .AddScalar("PeriodEndDate", NHibernateUtil.DateTime)
+            .AddScalar("TotalDurationSeconds", NHibernateUtil.Double)
+            .AddScalar("TotalDeveloperAmount", NHibernateUtil.Decimal)
+            .AddScalar("TotalClientAmount", NHibernateUtil.Decimal)
+            .AddScalar("PendingCount", NHibernateUtil.Int32)
+            .AddScalar("DraftCount", NHibernateUtil.Int32)
+            .AddScalar("ApprovedCount", NHibernateUtil.Int32)
+            .AddScalar("RejectedCount", NHibernateUtil.Int32)
+            .SetParameter("workspaceId", workspace.Id)
+            .SetParameter("statusPending", (int)TimeEntryStatus.Pending)
+            .SetParameter("statusDraft", (int)TimeEntryStatus.Draft)
+            .SetParameter("statusApproved", (int)TimeEntryStatus.Approved)
+            .SetParameter("statusRejected", (int)TimeEntryStatus.Rejected)
+            .SetResultTransformer(Transformers.AliasToBean<TimeEntryApprovalSubmitterItemDto>())
+            .ListAsync<TimeEntryApprovalSubmitterItemDto>();
+
+        return raw.ToList();
+    }
+
+    public async Task<IReadOnlyList<TimeEntryEntity>> GetApprovalDetailsAsync(
+        WorkspaceEntity workspace,
+        UserEntity user,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        return await Session.Query<TimeEntryEntity>()
+            .Where(e => e.Workspace.Id == workspace.Id && e.User.Id == user.Id && !e.IsMarkedToDelete)
+            .Where(e => e.EndTime != null)
+            .Where(e => e.StartTime >= startDate && e.StartTime <= endDate)
+            .Fetch(e => e.Project)
+            .ThenFetch(p => p!.Client)
+            .Fetch(e => e.Task)
+            .Fetch(e => e.User)
+            .OrderBy(e => e.StartTime)
+            .ToListAsync();
+    }
 }

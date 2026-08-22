@@ -8,6 +8,7 @@ using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Permissions;
+using TimeTracker.Client.Core.Store.TimeEntry.Approvals;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts;
 
@@ -19,8 +20,12 @@ public partial class MainMenu: IDisposable
         string Url,
         string? GroupName = null,
         WorkspacePermission[]? RequiredPermissions = null,
-        Func<bool>? IsVisible = null
-    );
+        Func<bool>? IsVisible = null,
+        Func<int>? GetBadgeCount = null
+    )
+    {
+        public int BadgeCount => GetBadgeCount?.Invoke() ?? 0;
+    }
     
     private string Text(string key) => DashboardLocalizer[key].Value;
 
@@ -29,6 +34,9 @@ public partial class MainMenu: IDisposable
 
     [Inject]
     public IState<WorkspacePermissionsState> WorkspacePermissionsState { get; set; } = null!;
+
+    [Inject]
+    public IState<ApprovalsState> ApprovalsState { get; set; } = null!;
 
     [Parameter]
     public bool IsMobile { get; set; }
@@ -39,6 +47,15 @@ public partial class MainMenu: IDisposable
         new(Text("TimeEntries"), "fa-regular fa-clock", UrlService.GetDashboardUrl()),
         new(Text("Tasks"), "fa-regular fa-square-check", UrlService.GetDashboardUrl("tasks")),
         new(Text("Notes"), "fa-regular fa-note-sticky", UrlService.GetDashboardUrl("notes")),
+        new(
+            Text("Approvals_Menu"),
+            "fa-solid fa-clipboard-check",
+            UrlService.GetDashboardUrl("approvals"),
+            Text("Operations"),
+            null,
+            () => IsTeamAdministrator && (AuthState.Value.Workspace?.IsApprovalsEnabled ?? false),
+            () => ApprovalsState.Value.PendingUsersCount
+        ),
         new(
             Text("MemberPayments"),
             "fa-regular fa-credit-card",
@@ -92,6 +109,12 @@ public partial class MainMenu: IDisposable
         base.OnInitialized();
         NavigationManager.LocationChanged += OnLocationChanged;
         WorkspacePermissionsState.StateChanged += OnWorkspacePermissionsChanged;
+        ApprovalsState.StateChanged += OnApprovalsStateChanged;
+
+        if (IsTeamAdministrator && (AuthState.Value.Workspace?.IsApprovalsEnabled ?? false))
+        {
+            Dispatcher.Dispatch(new FetchSubmittersAction());
+        }
     }
 
     private void OnMenuItemSelected(string itemUrl)
@@ -167,9 +190,15 @@ public partial class MainMenu: IDisposable
         InvokeAsync(StateHasChanged);
     }
 
+    private void OnApprovalsStateChanged(object? sender, EventArgs args)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
     public void Dispose()
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
         WorkspacePermissionsState.StateChanged -= OnWorkspacePermissionsChanged;
+        ApprovalsState.StateChanged -= OnApprovalsStateChanged;
     }
 }

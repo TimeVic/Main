@@ -7,6 +7,7 @@ using TimeTracker.Business.Common.Exceptions.Common;
 using TimeTracker.Business.Common.Dto;
 using TimeTracker.Business.Notifications.Senders.TimeEntry;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -283,6 +284,24 @@ public class TimeEntryApprovalService : ITimeEntryApprovalService
     public async Task<TimeEntryApprovalStatusSummaryDto> GetStatusSummaryAsync(UserEntity user, WorkspaceEntity workspace)
     {
         return await _timeEntryDao.GetApprovalStatusSummaryAsync(workspace, user);
+    }
+
+    public async Task<IReadOnlyList<TimeEntryApprovalSubmitterItemDto>> GetSubmittersAsync(UserEntity manager, WorkspaceEntity workspace)
+    {
+        await AssertHasManagerAccessAsync(manager, workspace);
+        return await _timeEntryDao.GetApprovalSubmittersAsync(workspace);
+    }
+
+    public async Task<IReadOnlyList<TimeEntryEntity>> GetDetailsAsync(
+        UserEntity manager,
+        WorkspaceEntity workspace,
+        UserEntity user,
+        DateTime startDate,
+        DateTime endDate
+    )
+    {
+        await AssertHasManagerAccessAsync(manager, workspace);
+        return await _timeEntryDao.GetApprovalDetailsAsync(workspace, user, startDate, endDate);
     }
 
     private async Task AssertHasManagerAccessAsync(UserEntity user, WorkspaceEntity workspace)

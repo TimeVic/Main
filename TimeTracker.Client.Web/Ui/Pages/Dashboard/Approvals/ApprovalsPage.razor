@@ -1,0 +1,62 @@
+@page "/board/{WorkspaceId:guid}/approvals"
+@using Fluxor
+@using LumexUI
+@using TimeTracker.Api.Shared.Constants
+@using TimeTracker.Client.Core.Store.TimeEntry.Approvals
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Approvals.Components
+@using TimeTracker.Client.Web.Ui.Shared.Components.Layout
+@using Layout = TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Layout
+
+@inherits BaseReactiveComponent
+@inject IState<ApprovalsState> ApprovalsState
+@layout Layout
+
+<div class="space-y-6">
+    <RejectReasonModal
+        IsOpened="@_isRejectModalOpened"
+        OnConfirm="@OnConfirmReject"
+        OnCancel="@(() => _isRejectModalOpened = false)" />
+
+    <section class="flex flex-col gap-2">
+        <h1 class="text-2xl font-semibold text-slate-900">@DashboardLocalizer["Approvals_Title"]</h1>
+        <p class="text-sm text-slate-500">
+            @DashboardLocalizer["Approvals_Description"]
+        </p>
+    </section>
+
+    @if (!string.IsNullOrWhiteSpace(ApprovalsState.Value.ErrorMessage))
+    {
+        <div class="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            @ApprovalsState.Value.ErrorMessage
+        </div>
+    }
+
+    <LumexCard Class="overflow-hidden border-slate-200 bg-white shadow-sm">
+        <LumexCardBody Class="p-0">
+            <ResizableSplitBlock
+                Class="min-h-[720px]"
+                DefaultStartPaneWidth="320"
+                MinStartPaneWidth="260"
+                MaxStartPaneWidth="460"
+                HandleLabel="@DashboardLocalizer["Approvals_Submitters"].Value">
+                <StartContent>
+                    <SubmittersListBlock
+                        Submitters="@ApprovalsState.Value.Submitters"
+                        SelectedSubmitter="@ApprovalsState.Value.SelectedSubmitter"
+                        IsLoading="@ApprovalsState.Value.IsLoading"
+                        SubmitterSelected="@OnSubmitterSelected"
+                        OnSelfApproveRequested="@OnSelfApprove" />
+                </StartContent>
+                <EndContent>
+                    <ApprovalDetailsBlock
+                        Details="@ApprovalsState.Value.Details"
+                        IsLoading="@ApprovalsState.Value.IsDetailsLoading"
+                        IsActionProcessing="@ApprovalsState.Value.IsActionProcessing"
+                        ApproveRequested="@OnApproveEntries"
+                        RejectRequested="@OnOpenRejectModal"
+                        UnapproveRequested="@OnUnapproveEntries" />
+                </EndContent>
+            </ResizableSplitBlock>
+        </LumexCardBody>
+    </LumexCard>
+</div>

@@ -33,6 +33,19 @@ public class ApiUrl
     
     #endregion
     
+    #region Time Entry Approval
+    
+    public const string TimeEntryApprovalStatus = "dashboard/time-entry/approval/status";
+    public const string TimeEntryApprovalSubmit = "dashboard/time-entry/approval/submit";
+    public const string TimeEntryApprovalSubmitPeriod = "dashboard/time-entry/approval/submit-period";
+    public const string TimeEntryApprovalApprove = "dashboard/time-entry/approval/approve";
+    public const string TimeEntryApprovalReject = "dashboard/time-entry/approval/reject";
+    public const string TimeEntryApprovalUnapprove = "dashboard/time-entry/approval/unapprove";
+    public const string TimeEntryApprovalSubmitters = "dashboard/time-entry/approval/submitters";
+    public const string TimeEntryApprovalDetails = "dashboard/time-entry/approval/details";
+    
+    #endregion
+    
     #region Project
     
     public const string ProjectAdd = "dashboard/project/add";

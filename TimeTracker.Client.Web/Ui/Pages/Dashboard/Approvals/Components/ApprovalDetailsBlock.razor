@@ -1,0 +1,351 @@
+@using LumexUI
+@using LumexUI.Common
+@using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Api.Shared.Dto.Model.TimeEntry.Approval
+@using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.Approval
+@using TimeTracker.Business.Common.Constants
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.Shared
+@inherits BaseReactiveComponent
+
+<div class="flex h-full flex-col bg-white">
+    @if (IsLoading)
+    {
+        <div class="flex flex-1 items-center justify-center py-16">
+            <LumexSpinner />
+        </div>
+    }
+    else if (Details == null)
+    {
+        <div class="flex flex-1 items-center justify-center p-8 text-center">
+            <div class="max-w-md">
+                <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+                    <i class="fa-solid fa-arrow-pointer text-xl"></i>
+                </div>
+                <p class="text-base font-semibold text-slate-800">Select a submitter</p>
+                <p class="mt-1 text-xs text-slate-500">Choose an employee from the left panel to review and approve their submitted hours.</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        @* Panel Header *@
+        <div class="flex flex-col gap-4 border-b border-slate-200 p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <div class="flex items-center gap-3">
+                    <h2 class="text-xl font-bold text-slate-900">@Details.UserName</h2>
+                    <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
+                        @GetPeriodLabel()
+                    </span>
+                </div>
+                <p class="mt-1 text-xs text-slate-500">
+                    <span>@DashboardLocalizer["TotalDuration"]: </span>
+                    <span class="font-semibold text-slate-800">@_timeParsingService.TimeSpanToTimeString(Details.TotalDuration, true)</span>
+                </p>
+            </div>
+
+            @* Main Action Buttons *@
+            <div class="flex flex-wrap items-center gap-2.5">
+                @if (HasPendingOrDraftEntries)
+                {
+                    <CustomButton
+                        Color="@ThemeColor.Primary"
+                        Variant="Variant.Solid"
+                        Radius="@Radius.Medium"
+                        Disabled="@IsActionProcessing"
+                        OnClick="@(() => OnApproveEntries(AllEntryIds))">
+                        <i class="fa-solid fa-check mr-1.5"></i>
+                        <span>@GetBulkApproveButtonLabel()</span>
+                    </CustomButton>
+
+                    <CustomButton
+                        Color="@ThemeColor.Danger"
+                        Variant="Variant.Outlined"
+                        Radius="@Radius.Medium"
+                        Disabled="@IsActionProcessing"
+                        OnClick="@(() => OnOpenRejectModal(AllEntryIds))">
+                        <i class="fa-solid fa-xmark mr-1.5"></i>
+                        <span>@DashboardLocalizer["Approvals_BulkReject"]</span>
+                    </CustomButton>
+                }
+
+                @if (HasApprovedEntries)
+                {
+                    <CustomButton
+                        Color="@ThemeColor.Default"
+                        Variant="Variant.Light"
+                        Radius="@Radius.Medium"
+                        Disabled="@IsActionProcessing"
+                        OnClick="@(() => OnUnapproveEntries(ApprovedEntryIds))">
+                        <i class="fa-solid fa-rotate-left mr-1.5"></i>
+                        <span>@DashboardLocalizer["Approvals_Unapprove"]</span>
+                    </CustomButton>
+                }
+            </div>
+        </div>
+
+        @* Content Scroll Area *@
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+            @* KPI Analytics Cards *@
+            <section class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                @* Developer Payout *@
+                <LumexCard Class="border border-slate-200 bg-slate-50/50 shadow-2xs">
+                    <LumexCardBody Class="p-4">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                            @DashboardLocalizer["Approvals_Kpi_DeveloperCost"]
+                        </p>
+                        <p class="mt-2 text-2xl font-bold text-slate-900">
+                            <AmountDisplay Amount="@Details.TotalDeveloperAmount" />
+                        </p>
+                        <p class="mt-1 text-xs text-slate-400">@DashboardLocalizer["Approvals_Kpi_DeveloperCost_Description"]</p>
+                    </LumexCardBody>
+                </LumexCard>
+
+                @* Client Budget *@
+                <LumexCard Class="border border-slate-200 bg-slate-50/50 shadow-2xs">
+                    <LumexCardBody Class="p-4">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                            @DashboardLocalizer["Approvals_Kpi_ClientBudget"]
+                        </p>
+                        <p class="mt-2 text-2xl font-bold text-emerald-700">
+                            <AmountDisplay Amount="@Details.TotalClientAmount" />
+                        </p>
+                        <p class="mt-1 text-xs text-slate-400">@DashboardLocalizer["Approvals_Kpi_ClientBudget_Description"]</p>
+                    </LumexCardBody>
+                </LumexCard>
+
+                @* Profit Margin *@
+                <LumexCard Class="border border-slate-200 bg-slate-50/50 shadow-2xs">
+                    <LumexCardBody Class="p-4">
+                        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                            @DashboardLocalizer["Approvals_Kpi_ProjectMargin"]
+                        </p>
+                        <p class="mt-2 text-2xl font-bold @(Details.ProfitMarginPercent >= 0 ? "text-blue-700" : "text-red-600")">
+                            @Details.ProfitMarginPercent.ToString("0.0")%
+                        </p>
+                        <p class="mt-1 text-xs text-slate-400">@DashboardLocalizer["Approvals_Kpi_ProjectMargin_Description"]</p>
+                    </LumexCardBody>
+                </LumexCard>
+            </section>
+
+            @* Projects & Tasks Collapsible Accordions *@
+            <section class="space-y-4">
+                @foreach (var project in Details.Projects)
+                {
+                    var projectEntryIds = project.Tasks.SelectMany(t => t.Entries).Select(e => e.Id).ToList();
+
+                    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xs">
+                        @* Project Section Header *@
+                        <div class="flex flex-col gap-2 border-b border-slate-100 bg-slate-50/80 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-700">
+                                    <i class="fa-solid fa-folder text-xs"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <h3 class="truncate text-sm font-bold text-slate-900">
+                                        @project.ProjectName
+                                        @if (!string.IsNullOrWhiteSpace(project.ClientName))
+                                        {
+                                            <span class="ml-1 text-xs font-normal text-slate-500">(@project.ClientName)</span>
+                                        }
+                                    </h3>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 shrink-0">
+                                <span class="rounded bg-slate-200/80 px-2 py-0.5 font-mono text-xs font-semibold text-slate-700">
+                                    @_timeParsingService.TimeSpanToTimeString(project.TotalDuration, true)
+                                </span>
+                                <span class="text-xs font-bold text-slate-900">
+                                    <AmountDisplay Amount="@project.TotalDeveloperAmount" />
+                                </span>
+
+                                @* Project level actions *@
+                                <div class="flex items-center gap-1 border-l border-slate-200 pl-2">
+                                    <button
+                                        type="button"
+                                        title="@DashboardLocalizer["Approve"]"
+                                        class="inline-flex h-7 w-7 items-center justify-center rounded-lg text-emerald-600 hover:bg-emerald-50"
+                                        @onclick="@(() => OnApproveEntries(projectEntryIds))">
+                                        <i class="fa-solid fa-check text-xs"></i>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        title="@DashboardLocalizer["Reject"]"
+                                        class="inline-flex h-7 w-7 items-center justify-center rounded-lg text-red-600 hover:bg-red-50"
+                                        @onclick="@(() => OnOpenRejectModal(projectEntryIds))">
+                                        <i class="fa-solid fa-xmark text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Tasks list *@
+                        <div class="divide-y divide-slate-100">
+                            @foreach (var task in project.Tasks)
+                            {
+                                var taskKey = $"{project.ProjectId}_{task.TaskId}_{task.Title}";
+                                var isExpanded = IsTaskExpanded(taskKey);
+                                var taskEntryIds = task.Entries.Select(e => e.Id).ToList();
+
+                                <div>
+                                    @* Task Accordion Header *@
+                                    <div
+                                        class="flex cursor-pointer items-center justify-between px-4 py-2.5 transition hover:bg-slate-50"
+                                        @onclick="@(() => ToggleTaskExpansion(taskKey))">
+                                        <div class="flex items-center gap-2.5 min-w-0">
+                                            <i class="@($"fa-solid fa-chevron-right text-xs text-slate-400 transition-transform duration-200 {(isExpanded ? "rotate-90 text-slate-600" : "")}")"></i>
+                                            <div class="flex items-center gap-2 min-w-0">
+                                                <i class="fa-regular fa-square-check text-xs text-slate-500"></i>
+                                                <span class="truncate text-xs font-semibold text-slate-800">
+                                                    @task.Title
+                                                </span>
+                                                @if (!string.IsNullOrWhiteSpace(task.ExternalTaskId) && task.ExternalTaskId != task.Title)
+                                                {
+                                                    <span class="rounded bg-blue-50 px-1.5 py-0.5 text-3xs font-medium text-blue-600">
+                                                        @task.ExternalTaskId
+                                                    </span>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center gap-3 shrink-0" @onclick:stopPropagation="true">
+                                            <span class="font-mono text-xs font-medium text-slate-600">
+                                                @_timeParsingService.TimeSpanToTimeString(task.TotalDuration, true)
+                                            </span>
+
+                                            @* Task level micro-actions *@
+                                            <div class="flex items-center gap-0.5">
+                                                <button
+                                                    type="button"
+                                                    title="@DashboardLocalizer["Approve"]"
+                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-emerald-600 hover:bg-emerald-100/60"
+                                                    @onclick="@(() => OnApproveEntries(taskEntryIds))">
+                                                    <i class="fa-solid fa-check text-2xs"></i>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    title="@DashboardLocalizer["Reject"]"
+                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-red-600 hover:bg-red-100/60"
+                                                    @onclick="@(() => OnOpenRejectModal(taskEntryIds))">
+                                                    <i class="fa-solid fa-xmark text-2xs"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @* Expanded Task Detail Rows *@
+                                    @if (isExpanded)
+                                    {
+                                        <div class="bg-slate-50/60 px-4 py-2 border-t border-slate-100 space-y-1.5">
+                                            @foreach (var entry in task.Entries)
+                                            {
+                                                <div
+                                                    @key="entry.Id"
+                                                    class="flex items-center justify-between gap-3 rounded-xl border border-slate-200/80 bg-white px-3 py-2 text-xs shadow-2xs">
+                                                    @* Date and description *@
+                                                    <div class="flex items-center gap-3 min-w-0 flex-1">
+                                                        <span class="shrink-0 font-mono text-2xs text-slate-500">
+                                                            @entry.StartTimeOffset.ToString("dd.MM.yyyy")
+                                                        </span>
+                                                        <span class="truncate text-slate-700 @(string.IsNullOrWhiteSpace(entry.Description) ? "italic text-slate-400" : "")">
+                                                            @(string.IsNullOrWhiteSpace(entry.Description) ? "No description" : entry.Description)
+                                                        </span>
+                                                    </div>
+
+                                                    @* Status icon, duration and row actions *@
+                                                    <div class="flex items-center gap-3 shrink-0">
+                                                        @* Status Icon with popover tooltip *@
+                                                        @if (entry.Status == TimeEntryStatus.Approved)
+                                                        {
+                                                            <LumexPopover>
+                                                                <LumexPopoverTrigger>
+                                                                    <span class="inline-flex cursor-pointer items-center text-emerald-500">
+                                                                        <i class="fa-solid fa-circle-check text-sm"></i>
+                                                                    </span>
+                                                                </LumexPopoverTrigger>
+                                                                <LumexPopoverContent>
+                                                                    <p class="text-xs font-semibold text-emerald-700">@DashboardLocalizer["Approvals_Status_Approved"]</p>
+                                                                </LumexPopoverContent>
+                                                            </LumexPopover>
+                                                        }
+                                                        else if (entry.Status == TimeEntryStatus.Pending)
+                                                        {
+                                                            <LumexPopover>
+                                                                <LumexPopoverTrigger>
+                                                                    <span class="inline-flex cursor-pointer items-center text-amber-500">
+                                                                        <i class="fa-solid fa-clock text-sm"></i>
+                                                                    </span>
+                                                                </LumexPopoverTrigger>
+                                                                <LumexPopoverContent>
+                                                                    <p class="text-xs font-semibold text-amber-700">@DashboardLocalizer["Approvals_Status_Pending"]</p>
+                                                                </LumexPopoverContent>
+                                                            </LumexPopover>
+                                                        }
+                                                        else if (entry.Status == TimeEntryStatus.Rejected)
+                                                        {
+                                                            <LumexPopover>
+                                                                <LumexPopoverTrigger>
+                                                                    <span class="inline-flex cursor-pointer items-center text-red-500">
+                                                                        <i class="fa-solid fa-circle-exclamation text-sm"></i>
+                                                                    </span>
+                                                                </LumexPopoverTrigger>
+                                                                <LumexPopoverContent>
+                                                                    <div class="p-1 space-y-1 max-w-[220px]">
+                                                                        <p class="text-xs font-semibold text-red-700">@DashboardLocalizer["Approvals_Status_Rejected"]</p>
+                                                                        @if (!string.IsNullOrWhiteSpace(entry.LatestRejectComment))
+                                                                        {
+                                                                            <p class="text-xs text-slate-600">@entry.LatestRejectComment</p>
+                                                                        }
+                                                                    </div>
+                                                                </LumexPopoverContent>
+                                                            </LumexPopover>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="inline-flex items-center text-slate-400" title="@DashboardLocalizer["Approvals_Status_Draft"]">
+                                                                <i class="fa-regular fa-circle text-xs"></i>
+                                                            </span>
+                                                        }
+
+                                                        @* Duration *@
+                                                        <span class="font-mono font-semibold text-slate-800">
+                                                            @_timeParsingService.TimeSpanToTimeString(entry.Duration, true)
+                                                        </span>
+
+                                                        @* Row Micro Actions *@
+                                                        <div class="flex items-center gap-1 border-l border-slate-100 pl-2">
+                                                            @if (entry.Status != TimeEntryStatus.Approved)
+                                                            {
+                                                                <button
+                                                                    type="button"
+                                                                    title="@DashboardLocalizer["Approve"]"
+                                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-emerald-600 hover:bg-emerald-50"
+                                                                    @onclick="@(() => OnApproveEntries([entry.Id]))">
+                                                                    <i class="fa-solid fa-check text-2xs"></i>
+                                                                </button>
+                                                            }
+                                                            @if (entry.Status != TimeEntryStatus.Rejected)
+                                                            {
+                                                                <button
+                                                                    type="button"
+                                                                    title="@DashboardLocalizer["Reject"]"
+                                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-red-600 hover:bg-red-50"
+                                                                    @onclick="@(() => OnOpenRejectModal([entry.Id]))">
+                                                                    <i class="fa-solid fa-xmark text-2xs"></i>
+                                                                </button>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </section>
+        </div>
+    }
+</div>

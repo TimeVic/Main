@@ -8,6 +8,7 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.Approval;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Security;
 using TimeTracker.Business.Common.Constants.Reports;
@@ -246,4 +247,15 @@ public interface IApiService
     Task<WorkspaceMemberGetListResponse?> WorkspaceMemberGetListAsync(WorkspaceMemberGetListRequest model);
 
     Task WorkspaceMemberDeleteAsync(Guid memberId);
+
+    #region Time Entry Approval
+    Task<TimeEntryApprovalStatusSummaryDto?> TimeEntryApprovalGetStatusAsync();
+    Task<TimeEntryDto?> TimeEntryApprovalSubmitAsync(Guid timeEntryId);
+    Task<PaginatedListDto<TimeEntryDto>?> TimeEntryApprovalSubmitPeriodAsync(DateTime startDate, DateTime endDate);
+    Task<PaginatedListDto<TimeEntryDto>?> TimeEntryApprovalApproveAsync(ICollection<Guid> timeEntryIds);
+    Task<PaginatedListDto<TimeEntryDto>?> TimeEntryApprovalRejectAsync(ICollection<Guid> timeEntryIds, string reason);
+    Task<TimeEntryDto?> TimeEntryApprovalUnapproveAsync(Guid timeEntryId);
+    Task<GetSubmittersResponse?> TimeEntryApprovalGetSubmittersAsync();
+    Task<GetApprovalDetailsResponse?> TimeEntryApprovalGetDetailsAsync(Guid userId, DateTime startDate, DateTime endDate);
+    #endregion
 }
