@@ -981,4 +981,7 @@
   <data name="Approvals_Card_SubmitSingle" xml:space="preserve"><value>Відправити на перевірку</value></data>
   <data name="Approvals_Report_PendingHint" xml:space="preserve"><value>+ {0} очікує підтвердження</value></data>
   <data name="Approvals_Report_SubmitDrafts" xml:space="preserve"><value>Відправити</value></data>
+  <data name="Approvals_WorkspaceSetting_Enable" xml:space="preserve"><value>Увімкнути затвердження часу</value></data>
+  <data name="Approvals_WorkspaceSetting_Enable_Description" xml:space="preserve"><value>Вимагати від менеджерів перевірки та затвердження записів часу перед їх зарахуванням до оплати.</value></data>
+  <data name="Approvals_WorkspaceSetting_OnlyInTeamMode" xml:space="preserve"><value>Доступно лише в режимі {0}</value></data>
 </root>
