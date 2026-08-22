@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Persistence.Transactions.Behaviors;
+using Microsoft.Extensions.Logging;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
@@ -15,19 +14,16 @@ public class TimeEntryService : ITimeEntryService
     private readonly ILogger<TimeEntryService> _logger;
     private readonly ITimeEntryDao _timeEntryDao;
     private readonly IQueueService _queueService;
-    private readonly IDbSessionProvider _dbSessionProvider;
 
     public TimeEntryService(
         ILogger<TimeEntryService> logger,
         ITimeEntryDao timeEntryDao,
-        IQueueService queueService,
-        IDbSessionProvider dbSessionProvider
+        IQueueService queueService
     )
     {
         _logger = logger;
         _timeEntryDao = timeEntryDao;
         _queueService = queueService;
-        _dbSessionProvider = dbSessionProvider;
     }
 
     public async Task<ICollection<TimeEntryEntity>> StopActiveAsync(
@@ -64,7 +60,6 @@ public class TimeEntryService : ITimeEntryService
     public async Task DeleteAsync(TimeEntryEntity timeEntry)
     {
         timeEntry.IsMarkedToDelete = true;
-        await _dbSessionProvider.CurrentSession.SaveAsync(timeEntry);
         await _queueService.PushExternalClientAsync(new SendDeleteTimeEntryIntegrationRequestContext());
     }
 }

@@ -75,7 +75,6 @@ public class WorkspaceDao : BaseDao, IWorkspaceDao
     {
         workspace.Mode = mode;
         workspace.UpdatedAt = DateTime.UtcNow;
-        await Session.SaveOrUpdateAsync(workspace);
         return workspace;
     }
 
@@ -84,15 +83,19 @@ public class WorkspaceDao : BaseDao, IWorkspaceDao
         string name,
         CurrencyEntity currency,
         string timeZone = "UTC",
-        string? description = null
+        string? description = null,
+        bool? isApprovalsEnabled = null
     )
     {
         workspace.Name = name;
         workspace.Currency = currency;
         workspace.TimeZone = timeZone;
         workspace.Description = description;
+        if (isApprovalsEnabled.HasValue)
+        {
+            workspace.IsApprovalsEnabled = workspace.Mode == WorkspaceMode.Team && isApprovalsEnabled.Value;
+        }
         workspace.UpdatedAt = DateTime.UtcNow;
-        await Session.SaveOrUpdateAsync(workspace);
         return workspace;
     }
 

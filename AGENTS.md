@@ -61,6 +61,7 @@ Handlers implement `IAsyncRequestHandler<TRequest, TResponse>` and are auto-regi
 - **`SnakeCaseConvention`** automatically converts `PascalCase` → `snake_case` for table/column names; explicit overrides go in the mapping class.
 - **Transactions**: `CommitPerformerMiddleware` wraps each request in a transaction (commit on success, rollback on exception). Do not manually commit in handlers.
 - When adding or changing DAO list methods, check for potential N+1 queries caused by lazy-loaded relationships used by DTO mapping or response construction; use explicit eager fetching/projections for those relationships.
+- **Entity State & Persistence**: Do NOT call `SaveAsync` or `SaveOrUpdateAsync` on existing entities that are already loaded/tracked in the NHibernate session. NHibernate's dirty tracking automatically detects property changes and flushes/persists them upon transaction commit (`CommitPerformerMiddleware`) or `FlushDbChanges()`. Only newly created entities (`IsNew` is true or unattached instances) require `await Session.SaveAsync(entity)` (unless handled by cascade).
 - Run/apply migrations by executing only the `TimeTracker.Migrations` project: `dotnet run --project ./TimeTracker.Migrations`
 - Init DateTime fields with DateTime.UtcNow by default 
 

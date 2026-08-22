@@ -21,6 +21,7 @@ public class WorkspaceProfile : Profile
                     Description = src.Description,
                     TimeZone = src.TimeZone,
                     Mode = src.Mode,
+                    IsApprovalsEnabled = src.IsApprovalsEnabled,
                     Currency = mapper.Mapper.Map<CurrencyDto>(src.Currency),
                 };
             });

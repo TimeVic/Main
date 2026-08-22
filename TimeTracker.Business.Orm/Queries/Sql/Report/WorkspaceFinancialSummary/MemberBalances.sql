@@ -5,7 +5,7 @@ with cost_by_member as (
         u.user_name                                                                                          as UserName,
         u.email                                                                                              as Email,
         sum(extract(epoch from te.end_time - te.start_time))                                                 as DurationAsEpoch,
-        sum(round(coalesce(wmpa.hourly_rate, 0) / 60.0 / 60.0 * extract(epoch from te.end_time - te.start_time), 2)) as CostAmount
+        sum(fn_calculate_amount(te.start_time, te.end_time, coalesce(wmpa.hourly_rate, 0), true))           as CostAmount
     from time_entries te
              inner join workspace_members wm on wm.user_id = te.user_id and wm.workspace_id = te.workspace_id
              inner join users u on u.id = wm.user_id
@@ -14,6 +14,7 @@ with cost_by_member as (
       and te.end_time is not null
       and te.is_billable = true
       and te.hourly_rate is not null
+      and te.status = 3
     group by wm.id, u.id, u.user_name, u.email
 ),
 paidout_by_member as (

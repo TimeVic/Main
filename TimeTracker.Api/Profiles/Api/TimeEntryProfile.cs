@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Extensions;
@@ -30,7 +30,9 @@ public class TimeEntryProfile : Profile
                     Task = task,
                     StartTime = src.StartTime,
                     EndTime = src.EndTime,
-                    TimeZone = src.TimeZone
+                    TimeZone = src.TimeZone,
+                    Status = src.Status,
+                    LatestRejectComment = src.LatestRejectComment
                 };
             });
     }

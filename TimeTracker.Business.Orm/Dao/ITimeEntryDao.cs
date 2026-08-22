@@ -1,5 +1,6 @@
 using Domain.Abstractions;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Dto;
 using TimeTracker.Business.Orm.Dto;
 using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
@@ -65,5 +66,10 @@ public interface ITimeEntryDao: IDomainService
         DateTime minDate,
         DateTime maxDate,
         CancellationToken cancellationToken = default
+    );
+
+    Task<TimeEntryApprovalStatusSummaryDto> GetApprovalStatusSummaryAsync(
+        WorkspaceEntity workspace,
+        UserEntity user
     );
 }

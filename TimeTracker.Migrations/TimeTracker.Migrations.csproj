@@ -45,6 +45,9 @@
       <None Update="SQLFiles\Procedures\fn_split_time_entry_by_day.sql">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="SQLFiles\Procedures\fn_calculate_amount.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

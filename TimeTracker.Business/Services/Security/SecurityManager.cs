@@ -144,17 +144,42 @@ public class SecurityManager: ISecurityManager
     private async Task<bool> HasAccessToTimeEntry(AccessLevel accessLevel, UserEntity user, TimeEntryEntity timeEntry)
     {
         var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, timeEntry.Workspace);
-        return accessType == MembershipAccessType.Owner 
-            || accessType == MembershipAccessType.Manager
-            || (
-                accessLevel == AccessLevel.Write 
-                && accessType == MembershipAccessType.User
-                && timeEntry.User.Id == user.Id
-            )
-            || (
-                accessLevel == AccessLevel.Read 
-                && accessType == MembershipAccessType.User
-            );
+        if (accessType == null)
+        {
+            return false;
+        }
+
+        if (accessLevel == AccessLevel.Read)
+        {
+            return accessType is MembershipAccessType.Owner or MembershipAccessType.Manager
+                || accessType == MembershipAccessType.User;
+        }
+
+        if (accessLevel == AccessLevel.Write)
+        {
+            if (timeEntry.Workspace.Mode == WorkspaceMode.Solo)
+            {
+                return accessType == MembershipAccessType.Owner;
+            }
+
+            if (timeEntry.Workspace.IsApprovalsEnabled)
+            {
+                if (timeEntry.Status is TimeEntryStatus.Pending or TimeEntryStatus.Approved)
+                {
+                    return false;
+                }
+
+                if (timeEntry.Status is TimeEntryStatus.Draft or TimeEntryStatus.Rejected)
+                {
+                    return timeEntry.User.Id == user.Id;
+                }
+            }
+
+            return accessType is MembershipAccessType.Owner or MembershipAccessType.Manager
+                || (accessType == MembershipAccessType.User && timeEntry.User.Id == user.Id);
+        }
+
+        return false;
     }
     
     private async Task<bool> HasAccessToClientAsync(AccessLevel accessLevel, UserEntity user, ClientEntity client)

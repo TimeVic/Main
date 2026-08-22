@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Common.Attributes;
 using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Extensions;
 
 namespace TimeTracker.Api.Shared.Dto.Entity;
@@ -16,6 +17,8 @@ public class TimeEntryDto: BaseDto
     public bool IsBillable { get; set; }
     public bool IsAutostopped { get; set; }
     public bool IsSynced { get; set; }
+    public TimeEntryStatus Status { get; set; } = TimeEntryStatus.Draft;
+    public string? LatestRejectComment { get; set; }
     public DateTime CreatedAt { get; set; }
     public ProjectDto? Project { get; set; }
     public UserDto User { get; set; } = null!;
@@ -60,5 +63,7 @@ public class TimeEntryDto: BaseDto
         IsAutostopped = fromEntry.IsAutostopped;
         Task = fromEntry.Task;
         IsSynced = fromEntry.IsSynced;
+        Status = fromEntry.Status;
+        LatestRejectComment = fromEntry.LatestRejectComment;
     }
 }

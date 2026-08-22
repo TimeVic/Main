@@ -33,6 +33,7 @@
 
     <ItemGroup>
       <EmbeddedResource Include="Queries\Sql\TimeEntry\GetListGroupedByDayIds.sql" />
+      <EmbeddedResource Include="Queries\Sql\TimeEntry\GetApprovalStatusSummary.sql" />
       <None Remove="Hibernate\hibernate.hbm.xml" />
       <EmbeddedResource Include="Hibernate\hibernate.hbm.xml" />
       <None Remove="Queries\Test\TestNamedQuery.hbm.xml" />
