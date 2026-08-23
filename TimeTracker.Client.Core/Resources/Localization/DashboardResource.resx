@@ -984,4 +984,8 @@
   <data name="Approvals_WorkspaceSetting_OnlyInTeamMode" xml:space="preserve"><value>Available only in {0}</value></data>
   <data name="Approvals_Banner_ApproveButton" xml:space="preserve"><value>Approve my hours for the week</value></data>
   <data name="Approvals_Card_ApproveSingle" xml:space="preserve"><value>Mark as Approved</value></data>
+  <data name="Approvals_SelectSubmitter" xml:space="preserve"><value>Select a team member</value></data>
+  <data name="Approvals_SelectSubmitter_Description" xml:space="preserve"><value>Choose a team member from the list to review and approve their time entries.</value></data>
+  <data name="Approvals_NoDescription" xml:space="preserve"><value>No description</value></data>
+  <data name="Approvals_CurrentUserBadge" xml:space="preserve"><value>You</value></data>
 </root>

@@ -32,7 +32,7 @@ public class FetchSubmittersEffect : Effect<FetchSubmittersAction>
                 dispatcher.Dispatch(new SetSubmittersAction(response));
 
                 // Auto fetch details for selected submitter if available
-                var selected = _state.Value.SelectedSubmitter ?? response.Items.FirstOrDefault();
+                var selected = _state.Value.SelectedSubmitter;
                 if (selected != null)
                 {
                     dispatcher.Dispatch(new FetchApprovalDetailsAction(
@@ -40,6 +40,10 @@ public class FetchSubmittersEffect : Effect<FetchSubmittersAction>
                         selected.PeriodStartDate,
                         selected.PeriodEndDate
                     ));
+                }
+                else
+                {
+                    dispatcher.Dispatch(new SetApprovalDetailsAction(null));
                 }
             }
         }

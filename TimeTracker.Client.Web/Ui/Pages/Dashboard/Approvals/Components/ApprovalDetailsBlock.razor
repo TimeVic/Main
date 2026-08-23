@@ -21,8 +21,8 @@
                 <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
                     <i class="fa-solid fa-arrow-pointer text-xl"></i>
                 </div>
-                <p class="text-base font-semibold text-slate-800">Select a submitter</p>
-                <p class="mt-1 text-xs text-slate-500">Choose an employee from the left panel to review and approve their submitted hours.</p>
+                <p class="text-base font-semibold text-slate-800">@DashboardLocalizer["Approvals_SelectSubmitter"]</p>
+                <p class="mt-1 text-xs text-slate-500">@DashboardLocalizer["Approvals_SelectSubmitter_Description"]</p>
             </div>
         </div>
     }
@@ -248,7 +248,7 @@
                                                             @entry.StartTimeOffset.ToString("dd.MM.yyyy")
                                                         </span>
                                                         <span class="truncate text-slate-700 @(string.IsNullOrWhiteSpace(entry.Description) ? "italic text-slate-400" : "")">
-                                                            @(string.IsNullOrWhiteSpace(entry.Description) ? "No description" : entry.Description)
+                                                            @(string.IsNullOrWhiteSpace(entry.Description) ? DashboardLocalizer["Approvals_NoDescription"].Value : entry.Description)
                                                         </span>
                                                     </div>
 
