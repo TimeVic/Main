@@ -1,4 +1,5 @@
 using Fluxor;
+using TimeTracker.Api.Shared.Dto.Model.TimeEntry.Approval;
 
 namespace TimeTracker.Client.Core.Store.TimeEntry.Approvals;
 
@@ -7,22 +8,23 @@ public class ApprovalsReducers
     [ReducerMethod]
     public static ApprovalsState SetSubmittersReducer(ApprovalsState state, SetSubmittersAction action)
     {
-        var selected = state.SelectedSubmitter;
-        if (selected != null)
+        TimeEntryApprovalSubmitterDto? selected = null;
+        if (state.SelectedSubmitter != null)
         {
             selected = action.Response.Items.FirstOrDefault(i =>
-                i.UserId == selected.UserId && i.PeriodStartDate == selected.PeriodStartDate
-            ) ?? action.Response.Items.FirstOrDefault();
+                i.UserId == state.SelectedSubmitter.UserId && i.PeriodStartDate == state.SelectedSubmitter.PeriodStartDate
+            );
         }
-        else
-        {
-            selected = action.Response.Items.FirstOrDefault();
-        }
+
+        var isSameSelected = selected != null && state.SelectedSubmitter != null
+            && selected.UserId == state.SelectedSubmitter.UserId
+            && selected.PeriodStartDate == state.SelectedSubmitter.PeriodStartDate;
 
         return state with
         {
             Submitters = action.Response.Items,
             SelectedSubmitter = selected,
+            Details = isSameSelected ? state.Details : null,
             IsLoading = false,
             ErrorMessage = null
         };
@@ -31,9 +33,14 @@ public class ApprovalsReducers
     [ReducerMethod]
     public static ApprovalsState SelectSubmitterReducer(ApprovalsState state, SelectSubmitterAction action)
     {
+        var isSameSelected = action.Submitter != null && state.SelectedSubmitter != null
+            && action.Submitter.UserId == state.SelectedSubmitter.UserId
+            && action.Submitter.PeriodStartDate == state.SelectedSubmitter.PeriodStartDate;
+
         return state with
         {
-            SelectedSubmitter = action.Submitter
+            SelectedSubmitter = action.Submitter,
+            Details = isSameSelected ? state.Details : null
         };
     }
 

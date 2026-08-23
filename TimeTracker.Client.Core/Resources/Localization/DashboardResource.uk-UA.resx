@@ -986,4 +986,8 @@
   <data name="Approvals_WorkspaceSetting_OnlyInTeamMode" xml:space="preserve"><value>Доступно лише в режимі {0}</value></data>
   <data name="Approvals_Banner_ApproveButton" xml:space="preserve"><value>Затвердити мої записи за тиждень</value></data>
   <data name="Approvals_Card_ApproveSingle" xml:space="preserve"><value>Затвердити запис</value></data>
+  <data name="Approvals_SelectSubmitter" xml:space="preserve"><value>Оберіть учасника команди</value></data>
+  <data name="Approvals_SelectSubmitter_Description" xml:space="preserve"><value>Оберіть учасника команди зі списку, щоб переглянути та затвердити його записи часу.</value></data>
+  <data name="Approvals_NoDescription" xml:space="preserve"><value>Без опису</value></data>
+  <data name="Approvals_CurrentUserBadge" xml:space="preserve"><value>Ви</value></data>
 </root>
