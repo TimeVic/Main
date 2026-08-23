@@ -33,7 +33,6 @@ public interface IWorkspaceDao: IDomainService
         string name,
         CurrencyEntity currency,
         string timeZone = "UTC",
-        string? description = null,
-        bool? isApprovalsEnabled = null
+        string? description = null
     );
 }

@@ -990,4 +990,15 @@
   <data name="Approvals_SelectSubmitter_Description" xml:space="preserve"><value>Оберіть учасника команди зі списку, щоб переглянути та затвердити його записи часу.</value></data>
   <data name="Approvals_NoDescription" xml:space="preserve"><value>Без опису</value></data>
   <data name="Approvals_CurrentUserBadge" xml:space="preserve"><value>Ви</value></data>
+  <data name="WorkspaceModeInfoCard_Title" xml:space="preserve"><value>Режим воркспейсу</value></data>
+  <data name="WorkspaceModeInfoCard_Badge_Solo" xml:space="preserve"><value>🧘 Solo (Індивідуальний)</value></data>
+  <data name="WorkspaceModeInfoCard_Badge_Team" xml:space="preserve"><value>👥 Team (Командний з апрувами)</value></data>
+  <data name="WorkspaceModeInfoCard_Description_Solo" xml:space="preserve"><value>Цей воркспейс спроектовано для максимально швидкої та вільної індивідуальної роботи. Усі затрекані години миттєво враховуються у ваших фінансових звітах і відразу доступні для клієнтів. Процедура затвердження часу (Approvals) відсутня — ви можете вільно редагувати будь-які записи без обмежень.</value></data>
+  <data name="WorkspaceModeInfoCard_Description_Team" xml:space="preserve"><value>Цей воркспейс налаштовано для професійного контролю фінансів у команді. Для захисту бюджетів та виплат активовано режим затвердження годин (Approvals). Записи часу проходять безпечний життєвий цикл: вони починаються як приватні чернетки розробника і блокуються для змін після затвердження менеджером, гарантуючи залізобетонну точність клієнтських інвойсів.</value></data>
+  <data name="WorkspaceModeInfoCard_Cta_Solo_Prefix" xml:space="preserve"><value>Потрібно підключити команду?</value></data>
+  <data name="WorkspaceModeInfoCard_Cta_Solo_Text" xml:space="preserve"><value>Тип цього воркспейсу зафіксовано для стабільності ваших звітів. Щоб працювати з колегами, нараховувати їм виплати та затверджувати години, просто</value></data>
+  <data name="WorkspaceModeInfoCard_Cta_Solo_Link" xml:space="preserve"><value>Створіть новий воркспейс у режимі Team ➕</value></data>
+  <data name="WorkspaceModeInfoCard_Note_Team_Prefix" xml:space="preserve"><value>Чому не можна змінити режим?</value></data>
+  <data name="WorkspaceModeInfoCard_Note_Team_Text" xml:space="preserve"><value>Ми блокуємо зміну режиму «на льоту», щоб ваші історичні фінансові звіти, баланси виплат та надіслані клієнтам посилання не попливли через випадкову зміну налаштувань. Якщо вам потрібен простий простір без контролю — ви можете створити Solo-воркспейс за 10 секунд</value></data>
+  <data name="WorkspaceModeInfoCard_Note_Team_Link" xml:space="preserve"><value>Створити воркспейс ➕</value></data>
 </root>

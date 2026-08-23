@@ -18,7 +18,6 @@ public partial class TimeEntryApprovalBannerBlock
     private TimeEntryApprovalStatusSummaryDto? _summary;
     private bool _isSubmitting;
 
-    private bool IsApprovalsEnabled => AuthState.Value.Workspace?.IsApprovalsEnabled ?? false;
 
     protected override async Task OnInitializedAsync()
     {

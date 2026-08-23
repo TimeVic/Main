@@ -46,7 +46,6 @@ public class TimeEntryApprovalServiceTest : BaseTest
         _manager = _userSeeder.CreateActivatedAsync().Result;
         _developer = _userSeeder.CreateActivatedAsync().Result;
         _workspace = _workspaceSeeder.CreateSeveralAsync(_owner).Result.First();
-        _workspace.IsApprovalsEnabled = true;
         _workspace.Mode = WorkspaceMode.Team;
         FlushDbChanges().Wait();
 

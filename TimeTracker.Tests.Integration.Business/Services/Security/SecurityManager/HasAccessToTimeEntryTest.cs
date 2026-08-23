@@ -109,7 +109,6 @@ public class HasAccessToTimeEntryTest: BaseTest
     {
         var developer = await _userSeeder.CreateActivatedAsync();
         _ownWorkspace.Mode = WorkspaceMode.Team;
-        _ownWorkspace.IsApprovalsEnabled = true;
 
         await _workspaceAccessService.ShareAccessAsync(_ownWorkspace, developer, MembershipAccessType.User);
 
@@ -139,7 +138,6 @@ public class HasAccessToTimeEntryTest: BaseTest
     public async Task ShouldAllowOwnerToWriteApprovedInSoloMode()
     {
         _ownWorkspace.Mode = WorkspaceMode.Solo;
-        _ownWorkspace.IsApprovalsEnabled = false;
 
         var timeEntry = (await _timeEntrySeeder.CreateSeveralAsync(_ownWorkspace, _owner)).First();
         timeEntry.Status = TimeEntryStatus.Approved;

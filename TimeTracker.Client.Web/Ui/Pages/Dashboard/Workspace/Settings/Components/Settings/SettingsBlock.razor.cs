@@ -5,6 +5,8 @@ using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Common;
 using TimeTracker.Client.Core.Store.Workspace;
 
+using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Components;
+
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Settings;
 
 public partial class SettingsBlock
@@ -16,4 +18,5 @@ public partial class SettingsBlock
     public IState<WorkspaceState> _workspaceState { get; set; }
     
     private WorkspaceDto? _workspace => _authState.Value.Workspace;
+    private bool _isShowAddWorkspaceModal = false;
 }

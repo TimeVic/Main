@@ -162,7 +162,6 @@ public class SecurityManager: ISecurityManager
                 return accessType == MembershipAccessType.Owner;
             }
 
-            if (timeEntry.Workspace.IsApprovalsEnabled)
             {
                 if (timeEntry.Status is TimeEntryStatus.Pending or TimeEntryStatus.Approved)
                 {
