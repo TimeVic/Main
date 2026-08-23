@@ -104,4 +104,45 @@ public class GetApprovalDetailsTest : BaseTest
         Assert.NotEmpty(firstTask.Entries);
         Assert.Equal(entry.Id, firstTask.Entries.First().Id);
     }
+
+    [Fact]
+    public async Task DraftEntriesAreExcludedFromDetails()
+    {
+        var now = DateTime.UtcNow;
+        var startOfWeek = now.StartOfWeek();
+        var endOfWeek = startOfWeek.AddDays(6).EndOfDay();
+
+        var pendingEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _developer, 1)).First();
+        pendingEntry.StartTime = startOfWeek.AddDays(1).AddHours(9);
+        pendingEntry.EndTime = pendingEntry.StartTime.AddHours(3);
+        pendingEntry.Status = TimeEntryStatus.Pending;
+
+        var draftEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _developer, 1)).First();
+        draftEntry.StartTime = startOfWeek.AddDays(2).AddHours(9);
+        draftEntry.EndTime = draftEntry.StartTime.AddHours(2);
+        draftEntry.Status = TimeEntryStatus.Draft;
+
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _ownerJwtToken, new GetApprovalDetailsRequest
+        {
+            UserId = _developer.Id,
+            StartDate = startOfWeek,
+            EndDate = endOfWeek
+        }, _defaultWorkspace.Id);
+        response.EnsureSuccessStatusCode();
+
+        var actual = await response.GetJsonDataAsync<GetApprovalDetailsResponse>();
+        Assert.NotNull(actual);
+        Assert.Equal(TimeSpan.FromHours(3), actual.TotalDuration);
+
+        var returnedEntryIds = actual.Projects
+            .SelectMany(p => p.Tasks)
+            .SelectMany(t => t.Entries)
+            .Select(e => e.Id)
+            .ToList();
+
+        Assert.Contains(pendingEntry.Id, returnedEntryIds);
+        Assert.DoesNotContain(draftEntry.Id, returnedEntryIds);
+    }
 }

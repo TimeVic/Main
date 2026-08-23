@@ -620,6 +620,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .SetParameter("statusDraft", (int)TimeEntryStatus.Draft)
             .SetParameter("statusApproved", (int)TimeEntryStatus.Approved)
             .SetParameter("statusRejected", (int)TimeEntryStatus.Rejected)
+            .SetParameter("ownerAccessType", (int)MembershipAccessType.Owner)
             .SetResultTransformer(Transformers.AliasToBean<TimeEntryApprovalSubmitterItemDto>())
             .ListAsync<TimeEntryApprovalSubmitterItemDto>();
 
@@ -637,6 +638,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .Where(e => e.Workspace.Id == workspace.Id && e.User.Id == user.Id && !e.IsMarkedToDelete)
             .Where(e => e.EndTime != null)
             .Where(e => e.StartTime >= startDate && e.StartTime <= endDate)
+            .Where(e => e.Status != TimeEntryStatus.Draft)
             .Fetch(e => e.Project)
             .ThenFetch(p => p!.Client)
             .Fetch(e => e.Task)

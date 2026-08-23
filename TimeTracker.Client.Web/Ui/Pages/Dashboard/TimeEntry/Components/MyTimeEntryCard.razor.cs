@@ -41,6 +41,8 @@ public partial class MyTimeEntryCard
 
     private bool IsApprovalsEnabled => _authState.Value.Workspace?.IsApprovalsEnabled ?? false;
 
+    private bool IsOwner => _authState.Value.IsRoleOwner;
+
     private bool CanEditOrDelete => !IsApprovalsEnabled || Entry.Status is not (TimeEntryStatus.Approved or TimeEntryStatus.Pending);
 
     private bool CanSubmitForApproval => IsApprovalsEnabled && Entry.Status is TimeEntryStatus.Draft or TimeEntryStatus.Rejected;

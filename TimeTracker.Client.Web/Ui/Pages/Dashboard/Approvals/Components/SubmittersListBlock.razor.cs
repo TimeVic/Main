@@ -21,9 +21,6 @@ public partial class SubmittersListBlock
     [Parameter]
     public EventCallback<TimeEntryApprovalSubmitterDto> SubmitterSelected { get; set; }
 
-    [Parameter]
-    public EventCallback<TimeEntryApprovalSubmitterDto> OnSelfApproveRequested { get; set; }
-
     private string _searchQuery = string.Empty;
 
     private IEnumerable<TimeEntryApprovalSubmitterDto> FilteredSubmitters =>

@@ -53,6 +53,8 @@ public partial class TimeEntryApprovalBannerBlock
         return string.Format(template, durationStr, amountStr);
     }
 
+    private bool IsOwner => AuthState.Value.IsRoleOwner;
+
     private async Task OnSubmitForApproval()
     {
         _isSubmitting = true;
@@ -63,6 +65,7 @@ public partial class TimeEntryApprovalBannerBlock
             var endDate = startDate.AddDays(6).EndOfDay();
 
             await ApiService.TimeEntryApprovalSubmitPeriodAsync(startDate, endDate);
+
             await RefreshStatusAsync();
             Dispatcher.Dispatch(new LoadListAction());
             await OnSubmitted.InvokeAsync();

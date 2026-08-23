@@ -64,26 +64,4 @@ public partial class ApprovalsPage
     {
         Dispatcher.Dispatch(new UnapproveEntriesAction(entryIds));
     }
-
-    private void OnSelfApprove(TimeEntryApprovalSubmitterDto submitter)
-    {
-        // If current submitter is selected, use details entry ids; otherwise fetch submitter's details to approve
-        if (ApprovalsState.Value.Details?.UserId == submitter.UserId
-            && ApprovalsState.Value.Details?.PeriodStartDate == submitter.PeriodStartDate)
-        {
-            var entryIds = ApprovalsState.Value.Details.Projects
-                .SelectMany(p => p.Tasks)
-                .SelectMany(t => t.Entries)
-                .Select(e => e.Id)
-                .ToList();
-            if (entryIds.Any())
-            {
-                Dispatcher.Dispatch(new ApproveEntriesAction(entryIds));
-            }
-        }
-        else
-        {
-            OnSubmitterSelected(submitter);
-        }
-    }
 }

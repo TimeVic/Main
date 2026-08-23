@@ -151,9 +151,17 @@
                 @if (CanSubmitForApproval)
                 {
                     <LumexDropdownItem OnClick="@(() => OnSubmitForApproval.InvokeAsync(Entry))">
-                        <span class="flex items-center gap-2 text-blue-600">
-                            <i class="fa-solid fa-paper-plane w-4"></i>
-                            <span>@DashboardLocalizer["Approvals_Card_SubmitSingle"]</span>
+                        <span class="flex items-center gap-2 @(IsOwner ? "text-emerald-600" : "text-blue-600")">
+                            @if (IsOwner)
+                            {
+                                <i class="fa-solid fa-circle-check w-4"></i>
+                                <span>@DashboardLocalizer["Approvals_Card_ApproveSingle"]</span>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-paper-plane w-4"></i>
+                                <span>@DashboardLocalizer["Approvals_Card_SubmitSingle"]</span>
+                            }
                         </span>
                     </LumexDropdownItem>
                 }

@@ -6,6 +6,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
+using TimeTracker.Business.Services.Security;
 using TimeTracker.Business.Testing.Seeders.Entity;
 using TimeTracker.Tests.Integration.Api.Core;
 
@@ -15,16 +16,27 @@ public class SubmitTest : BaseTest
 {
     private readonly string Url = "/dashboard/time-entry/approval/submit";
 
-    private readonly UserEntity _user;
-    private readonly string _jwtToken;
+    private readonly UserEntity _owner;
+    private readonly UserEntity _developer;
+    private readonly string _ownerJwtToken;
+    private readonly string _developerJwtToken;
     private readonly WorkspaceEntity _defaultWorkspace;
     private readonly ITimeEntrySeeder _timeEntrySeeder;
+    private readonly IWorkspaceAccessService _workspaceAccessService;
 
     public SubmitTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
+        _workspaceAccessService = ServiceProvider.GetRequiredService<IWorkspaceAccessService>();
 
-        (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_ownerJwtToken, _owner, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        (_developerJwtToken, _developer, _) = UserSeeder.CreateAuthorizedAsync().Result;
+
+        _defaultWorkspace.Mode = WorkspaceMode.Team;
+        _defaultWorkspace.IsApprovalsEnabled = true;
+        FlushDbChanges().Wait();
+
+        _workspaceAccessService.ShareAccessAsync(_defaultWorkspace, _developer, MembershipAccessType.User).Wait();
     }
 
     [Fact]
@@ -35,14 +47,14 @@ public class SubmitTest : BaseTest
     }
 
     [Fact]
-    public async Task ShouldSubmitEntryForApproval()
+    public async Task DeveloperSubmitTransitionsToPending()
     {
-        var entry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _user, 1)).First();
+        var entry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _developer, 1)).First();
         entry.EndTime = entry.StartTime.AddHours(1);
         entry.Status = TimeEntryStatus.Draft;
         await FlushDbChanges();
 
-        var response = await PostRequestAsync(Url, _jwtToken, new SubmitRequest
+        var response = await PostRequestAsync(Url, _developerJwtToken, new SubmitRequest
         {
             TimeEntryId = entry.Id
         }, _defaultWorkspace.Id);
@@ -52,5 +64,25 @@ public class SubmitTest : BaseTest
         Assert.NotNull(actual);
         Assert.Equal(entry.Id, actual.Id);
         Assert.Equal(TimeEntryStatus.Pending, actual.Status);
+    }
+
+    [Fact]
+    public async Task OwnerSubmitDirectlyApproves()
+    {
+        var entry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _owner, 1)).First();
+        entry.EndTime = entry.StartTime.AddHours(1);
+        entry.Status = TimeEntryStatus.Draft;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _ownerJwtToken, new SubmitRequest
+        {
+            TimeEntryId = entry.Id
+        }, _defaultWorkspace.Id);
+        response.EnsureSuccessStatusCode();
+
+        var actual = await response.GetJsonDataAsync<TimeEntryDto>();
+        Assert.NotNull(actual);
+        Assert.Equal(entry.Id, actual.Id);
+        Assert.Equal(TimeEntryStatus.Approved, actual.Status);
     }
 }

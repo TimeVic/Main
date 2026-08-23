@@ -20,7 +20,7 @@
 
         <div class="shrink-0 flex items-center gap-2">
             <CustomButton
-                Color="@ThemeColor.Primary"
+                Color="@(IsOwner ? ThemeColor.Success : ThemeColor.Primary)"
                 Variant="Variant.Solid"
                 Size="Size.Small"
                 Radius="@Radius.Medium"
@@ -30,11 +30,17 @@
                 {
                     <LumexSpinner Size="Size.Small" Color="ThemeColor.Default" Class="mr-1.5" />
                 }
+                else if (IsOwner)
+                {
+                    <i class="fa-solid fa-circle-check mr-1.5 text-xs"></i>
+                }
                 else
                 {
                     <i class="fa-solid fa-paper-plane mr-1.5 text-xs"></i>
                 }
-                <span>@DashboardLocalizer["Approvals_Banner_SubmitButton"]</span>
+                <span>
+                    @(IsOwner ? DashboardLocalizer["Approvals_Banner_ApproveButton"] : DashboardLocalizer["Approvals_Banner_SubmitButton"])
+                </span>
             </CustomButton>
         </div>
     </div>

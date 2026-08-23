@@ -260,7 +260,7 @@ public class TimeEntryApprovalServiceTest : BaseTest
     }
 
     [Fact]
-    public async Task OwnerAndManagerTimeEntries_ShouldFollowSameApprovalLifecycle()
+    public async Task OwnerAndManagerTimeEntries_ShouldFollowApprovalLifecycle()
     {
         var ownerEntry = await _timeEntryDao.SetAsync(_owner, _workspace, new TimeTracker.Business.Orm.Dto.TimeEntry.TimeEntryCreationDto
         {
@@ -270,16 +270,26 @@ public class TimeEntryApprovalServiceTest : BaseTest
         });
         Assert.Equal(TimeEntryStatus.Draft, ownerEntry.Status);
 
-        // Owner submits own entry
-        var submitted = await _approvalService.SubmitAsync(_owner, ownerEntry);
-        Assert.Equal(TimeEntryStatus.Pending, submitted.Status);
+        // Owner submits own entry -> directly Approved
+        var ownerSubmitted = await _approvalService.SubmitAsync(_owner, ownerEntry);
+        Assert.Equal(TimeEntryStatus.Approved, ownerSubmitted.Status);
 
-        // Manager approves owner's entry
-        var approved = await _approvalService.ApproveAsync(_manager, submitted);
+        // Manager submits own entry -> Pending
+        var managerEntry = await _timeEntryDao.SetAsync(_manager, _workspace, new TimeTracker.Business.Orm.Dto.TimeEntry.TimeEntryCreationDto
+        {
+            StartTime = DateTime.UtcNow.AddHours(-3),
+            EndTime = DateTime.UtcNow.AddHours(-1),
+            Description = "Manager entry for approval"
+        });
+        var managerSubmitted = await _approvalService.SubmitAsync(_manager, managerEntry);
+        Assert.Equal(TimeEntryStatus.Pending, managerSubmitted.Status);
+
+        // Owner approves manager's entry
+        var approved = await _approvalService.ApproveAsync(_owner, managerSubmitted);
         Assert.Equal(TimeEntryStatus.Approved, approved.Status);
 
         // Unapprove back to draft
-        var unapproved = await _approvalService.UnapproveAsync(_manager, approved);
+        var unapproved = await _approvalService.UnapproveAsync(_owner, approved);
         Assert.Equal(TimeEntryStatus.Draft, unapproved.Status);
     }
 }
