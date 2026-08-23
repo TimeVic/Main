@@ -15,9 +15,6 @@ public class TimeEntryApprovalSubmitterDto : IResponse
     public decimal TotalDeveloperAmount { get; set; }
     public decimal TotalClientAmount { get; set; }
     public int PendingCount { get; set; }
-    public int DraftCount { get; set; }
-    public int ApprovedCount { get; set; }
-    public int RejectedCount { get; set; }
     public TimeEntryStatus Status { get; set; }
     public bool IsCurrentUser { get; set; }
 }

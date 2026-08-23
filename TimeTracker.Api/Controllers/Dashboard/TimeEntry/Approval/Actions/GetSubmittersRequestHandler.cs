@@ -39,40 +39,20 @@ public class GetSubmittersRequestHandler : IAsyncRequestHandler<GetSubmittersReq
 
         var rawItems = await _approvalService.GetSubmittersAsync(user, workspace);
 
-        var items = rawItems.Select(item =>
+        var items = rawItems.Select(item => new TimeEntryApprovalSubmitterDto
         {
-            var status = TimeEntryStatus.Approved;
-            if (item.PendingCount > 0)
-            {
-                status = TimeEntryStatus.Pending;
-            }
-            else if (item.RejectedCount > 0)
-            {
-                status = TimeEntryStatus.Rejected;
-            }
-            else if (item.DraftCount > 0)
-            {
-                status = TimeEntryStatus.Draft;
-            }
-
-            return new TimeEntryApprovalSubmitterDto
-            {
-                UserId = item.UserId,
-                UserName = string.IsNullOrWhiteSpace(item.UserName) ? item.Email : item.UserName,
-                Email = item.Email,
-                PeriodStartDate = item.PeriodStartDate,
-                PeriodEndDate = item.PeriodEndDate,
-                WeekNumber = item.PeriodStartDate.GetIso8601WeekOfYear(),
-                TotalDuration = TimeSpan.FromSeconds(item.TotalDurationSeconds),
-                TotalDeveloperAmount = item.TotalDeveloperAmount,
-                TotalClientAmount = item.TotalClientAmount,
-                PendingCount = item.PendingCount,
-                DraftCount = item.DraftCount,
-                ApprovedCount = item.ApprovedCount,
-                RejectedCount = item.RejectedCount,
-                Status = status,
-                IsCurrentUser = item.UserId == user.Id
-            };
+            UserId = item.UserId,
+            UserName = string.IsNullOrWhiteSpace(item.UserName) ? item.Email : item.UserName,
+            Email = item.Email,
+            PeriodStartDate = item.PeriodStartDate,
+            PeriodEndDate = item.PeriodEndDate,
+            WeekNumber = item.PeriodStartDate.GetIso8601WeekOfYear(),
+            TotalDuration = TimeSpan.FromSeconds(item.TotalDurationSeconds),
+            TotalDeveloperAmount = item.TotalDeveloperAmount,
+            TotalClientAmount = item.TotalClientAmount,
+            PendingCount = item.PendingCount,
+            Status = TimeEntryStatus.Pending,
+            IsCurrentUser = item.UserId == user.Id
         }).ToList();
 
         var pendingUsersCount = items.Where(i => i.PendingCount > 0).Select(i => i.UserId).Distinct().Count();

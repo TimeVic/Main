@@ -106,7 +106,7 @@ public class GetApprovalDetailsTest : BaseTest
     }
 
     [Fact]
-    public async Task DraftEntriesAreExcludedFromDetails()
+    public async Task NonPendingEntriesAreExcludedFromDetails()
     {
         var now = DateTime.UtcNow;
         var startOfWeek = now.StartOfWeek();
@@ -121,6 +121,16 @@ public class GetApprovalDetailsTest : BaseTest
         draftEntry.StartTime = startOfWeek.AddDays(2).AddHours(9);
         draftEntry.EndTime = draftEntry.StartTime.AddHours(2);
         draftEntry.Status = TimeEntryStatus.Draft;
+
+        var approvedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _developer, 1)).First();
+        approvedEntry.StartTime = startOfWeek.AddDays(3).AddHours(9);
+        approvedEntry.EndTime = approvedEntry.StartTime.AddHours(2);
+        approvedEntry.Status = TimeEntryStatus.Approved;
+
+        var rejectedEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _developer, 1)).First();
+        rejectedEntry.StartTime = startOfWeek.AddDays(4).AddHours(9);
+        rejectedEntry.EndTime = rejectedEntry.StartTime.AddHours(2);
+        rejectedEntry.Status = TimeEntryStatus.Rejected;
 
         await FlushDbChanges();
 
@@ -144,5 +154,7 @@ public class GetApprovalDetailsTest : BaseTest
 
         Assert.Contains(pendingEntry.Id, returnedEntryIds);
         Assert.DoesNotContain(draftEntry.Id, returnedEntryIds);
+        Assert.DoesNotContain(approvedEntry.Id, returnedEntryIds);
+        Assert.DoesNotContain(rejectedEntry.Id, returnedEntryIds);
     }
 }

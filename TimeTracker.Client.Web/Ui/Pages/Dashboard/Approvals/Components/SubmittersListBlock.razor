@@ -53,26 +53,11 @@
                     
                     <div class="flex items-start justify-between gap-2">
                         <div class="flex items-center gap-2.5 min-w-0">
-                            @* Status Indicator Dot *@
-                            @if (submitter.PendingCount > 0)
-                            {
-                                <span class="relative flex h-2.5 w-2.5 shrink-0" title="@DashboardLocalizer["Approvals_Status_Pending"]">
-                                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
-                                    <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-500"></span>
-                                </span>
-                            }
-                            else if (submitter.RejectedCount > 0)
-                            {
-                                <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-red-500" title="@DashboardLocalizer["Approvals_Status_Rejected"]"></span>
-                            }
-                            else if (submitter.ApprovedCount > 0 && submitter.DraftCount == 0)
-                            {
-                                <i class="fa-solid fa-circle-check text-xs text-emerald-500 shrink-0" title="@DashboardLocalizer["Approvals_Status_Approved"]"></i>
-                            }
-                            else
-                            {
-                                <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-slate-400" title="@DashboardLocalizer["Approvals_Status_Draft"]"></span>
-                            }
+                            @* Status Indicator Dot (always Pending) *@
+                            <span class="relative flex h-2.5 w-2.5 shrink-0" title="@DashboardLocalizer["Approvals_Status_Pending"]">
+                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
+                                <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+                            </span>
 
                             @* Name and Email *@
                             <div class="min-w-0 flex-1">
