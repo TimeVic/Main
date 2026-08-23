@@ -14,5 +14,4 @@ public record ApprovalsState
     public IReadOnlyList<TimeEntryApprovalSubmitterDto> Submitters { get; init; } = [];
     public TimeEntryApprovalSubmitterDto? SelectedSubmitter { get; init; }
     public GetApprovalDetailsResponse? Details { get; init; }
-    public int PendingUsersCount { get; init; }
 }

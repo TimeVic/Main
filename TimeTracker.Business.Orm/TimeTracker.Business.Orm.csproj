@@ -35,6 +35,7 @@
       <EmbeddedResource Include="Queries\Sql\TimeEntry\GetListGroupedByDayIds.sql" />
       <EmbeddedResource Include="Queries\Sql\TimeEntry\GetApprovalStatusSummary.sql" />
       <EmbeddedResource Include="Queries\Sql\TimeEntry\GetApprovalSubmitters.sql" />
+      <EmbeddedResource Include="Queries\Sql\Dashboard\GetCounters.sql" />
       <None Remove="Hibernate\hibernate.hbm.xml" />
       <EmbeddedResource Include="Hibernate\hibernate.hbm.xml" />
       <None Remove="Queries\Test\TestNamedQuery.hbm.xml" />

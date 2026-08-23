@@ -55,12 +55,9 @@ public class GetSubmittersRequestHandler : IAsyncRequestHandler<GetSubmittersReq
             IsCurrentUser = item.UserId == user.Id
         }).ToList();
 
-        var pendingUsersCount = items.Where(i => i.PendingCount > 0).Select(i => i.UserId).Distinct().Count();
-
         return new GetSubmittersResponse
         {
-            Items = items,
-            TotalPendingUsersCount = pendingUsersCount
+            Items = items
         };
     }
 }

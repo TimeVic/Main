@@ -2,11 +2,12 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Client.Core.Services.Http;
+using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Permissions;
 using TimeTracker.Client.Core.Store.Workspace;
-using TimeTracker.Client.Core.Services.Http;
-using TimeTracker.Client.Core.Services.Security;
+using TimeTracker.Client.Web.Services.Workspace;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace;
 
@@ -17,6 +18,9 @@ public partial class ChooseWorkspaceModePage
 
     [Inject]
     private ISecurityManager SecurityManager { get; set; } = null!;
+
+    [Inject]
+    private WorkspaceInitializationService WorkspaceInitializationService { get; set; } = null!;
 
     protected override void OnInitialized()
     {
@@ -62,8 +66,7 @@ public partial class ChooseWorkspaceModePage
             var updatedWorkspace = await ApiService.WorkspaceSetModeAsync(mode);
             if (updatedWorkspace != null)
             {
-                Dispatcher.Dispatch(new SetWorkspaceAction(updatedWorkspace));
-                Dispatcher.Dispatch(new ReloadWorkspacePermissionsAction());
+                await WorkspaceInitializationService.InitializeWorkspaceAsync(WorkspaceId);
                 NavigationManager.NavigateTo(UrlService.GetDashboardUrl(workspaceId: WorkspaceId), replace: true);
             }
         }

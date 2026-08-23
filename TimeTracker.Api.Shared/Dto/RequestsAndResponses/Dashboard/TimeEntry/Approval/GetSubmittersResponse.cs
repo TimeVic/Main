@@ -6,5 +6,4 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.Ap
 public class GetSubmittersResponse : IResponse
 {
     public IReadOnlyList<TimeEntryApprovalSubmitterDto> Items { get; set; } = new List<TimeEntryApprovalSubmitterDto>();
-    public int TotalPendingUsersCount { get; set; }
 }
