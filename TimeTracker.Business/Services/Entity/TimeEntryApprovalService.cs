@@ -56,8 +56,17 @@ public class TimeEntryApprovalService : ITimeEntryApprovalService
             throw new RecordCanNotBeModifiedException("Only Draft or Rejected time entries can be submitted");
         }
 
-        timeEntry.Status = TimeEntryStatus.Pending;
-        timeEntry.UpdatedAt = DateTime.UtcNow;
+        var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, timeEntry.Workspace);
+        if (accessType == MembershipAccessType.Owner)
+        {
+            await MarkAsApprovedAsync(user, timeEntry);
+        }
+        else
+        {
+            timeEntry.Status = TimeEntryStatus.Pending;
+            timeEntry.UpdatedAt = DateTime.UtcNow;
+        }
+
         return timeEntry;
     }
 
@@ -75,10 +84,20 @@ public class TimeEntryApprovalService : ITimeEntryApprovalService
             .Where(e => e.StartTime >= startDate && e.StartTime <= endDate)
             .ToListAsync();
 
+        var accessType = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
+        var isOwner = accessType == MembershipAccessType.Owner;
+
         foreach (var entry in entries)
         {
-            entry.Status = TimeEntryStatus.Pending;
-            entry.UpdatedAt = DateTime.UtcNow;
+            if (isOwner)
+            {
+                await MarkAsApprovedAsync(user, entry);
+            }
+            else
+            {
+                entry.Status = TimeEntryStatus.Pending;
+                entry.UpdatedAt = DateTime.UtcNow;
+            }
         }
 
         return entries;
@@ -93,19 +112,7 @@ public class TimeEntryApprovalService : ITimeEntryApprovalService
             throw new RecordCanNotBeModifiedException("Active time entry cannot be approved");
         }
 
-        timeEntry.Status = TimeEntryStatus.Approved;
-        timeEntry.UpdatedAt = DateTime.UtcNow;
-
-        var approval = new TimeEntryApprovalEntity
-        {
-            TimeEntry = timeEntry,
-            User = user,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-        timeEntry.Approvals.Add(approval);
-
-        await _sessionProvider.CurrentSession.SaveAsync(approval);
+        await MarkAsApprovedAsync(user, timeEntry);
         return timeEntry;
     }
 
@@ -129,19 +136,7 @@ public class TimeEntryApprovalService : ITimeEntryApprovalService
 
         foreach (var entry in entries)
         {
-            entry.Status = TimeEntryStatus.Approved;
-            entry.UpdatedAt = DateTime.UtcNow;
-
-            var approval = new TimeEntryApprovalEntity
-            {
-                TimeEntry = entry,
-                User = user,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-            entry.Approvals.Add(approval);
-
-            await _sessionProvider.CurrentSession.SaveAsync(approval);
+            await MarkAsApprovedAsync(user, entry);
         }
 
         return entries;
@@ -156,20 +151,7 @@ public class TimeEntryApprovalService : ITimeEntryApprovalService
             throw new RecordCanNotBeModifiedException("Rejection reason is required");
         }
 
-        timeEntry.Status = TimeEntryStatus.Rejected;
-        timeEntry.UpdatedAt = DateTime.UtcNow;
-
-        var rejection = new TimeEntryRejectEntity
-        {
-            TimeEntry = timeEntry,
-            User = user,
-            Reason = reason.Trim(),
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-        timeEntry.Rejections.Add(rejection);
-
-        await _sessionProvider.CurrentSession.SaveAsync(rejection);
+        await CreateRejectionAsync(user, timeEntry, reason);
 
         await _queueService.PushNotificationAsync(new TimeEntriesRejectedNotificationItemContext(
             timeEntry.User.Id,
@@ -210,20 +192,7 @@ public class TimeEntryApprovalService : ITimeEntryApprovalService
 
         foreach (var entry in entries)
         {
-            entry.Status = TimeEntryStatus.Rejected;
-            entry.UpdatedAt = DateTime.UtcNow;
-
-            var rejection = new TimeEntryRejectEntity
-            {
-                TimeEntry = entry,
-                User = user,
-                Reason = reason.Trim(),
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-            entry.Rejections.Add(rejection);
-
-            await _sessionProvider.CurrentSession.SaveAsync(rejection);
+            await CreateRejectionAsync(user, entry, reason);
             rejectedEntries.Add(entry);
 
             if (!userEntryMap.ContainsKey(entry.User.Id))
@@ -302,6 +271,39 @@ public class TimeEntryApprovalService : ITimeEntryApprovalService
     {
         await AssertHasManagerAccessAsync(manager, workspace);
         return await _timeEntryDao.GetApprovalDetailsAsync(workspace, user, startDate, endDate);
+    }
+
+    private async Task MarkAsApprovedAsync(UserEntity approver, TimeEntryEntity entry)
+    {
+        entry.Status = TimeEntryStatus.Approved;
+        entry.UpdatedAt = DateTime.UtcNow;
+
+        var approval = new TimeEntryApprovalEntity
+        {
+            TimeEntry = entry,
+            User = approver,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+        entry.Approvals.Add(approval);
+        await _sessionProvider.CurrentSession.SaveAsync(approval);
+    }
+
+    private async Task CreateRejectionAsync(UserEntity rejecter, TimeEntryEntity entry, string reason)
+    {
+        entry.Status = TimeEntryStatus.Rejected;
+        entry.UpdatedAt = DateTime.UtcNow;
+
+        var rejection = new TimeEntryRejectEntity
+        {
+            TimeEntry = entry,
+            User = rejecter,
+            Reason = reason.Trim(),
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+        entry.Rejections.Add(rejection);
+        await _sessionProvider.CurrentSession.SaveAsync(rejection);
     }
 
     private async Task AssertHasManagerAccessAsync(UserEntity user, WorkspaceEntity workspace)

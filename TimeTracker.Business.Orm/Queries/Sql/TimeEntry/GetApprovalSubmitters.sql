@@ -18,8 +18,10 @@ left join workspace_member_project_accesses wmpa on wmpa.workspace_member_id = w
 where te.workspace_id = :workspaceId
   and te.is_marked_to_delete = false
   and te.end_time is not null
+  and te.status in (:statusPending, :statusRejected, :statusApproved)
+  and wm.membership_access_type_id != :ownerAccessType
 group by u.id, u.user_name, u.email, date_trunc('week', te.start_time)
+having count(case when te.status = :statusPending then 1 end) > 0
 order by 
-  (count(case when te.status = :statusPending then 1 end) > 0) desc,
   date_trunc('week', te.start_time) desc,
   u.user_name asc;

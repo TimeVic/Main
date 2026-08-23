@@ -100,20 +100,6 @@
                             <AmountDisplay Amount="@submitter.TotalDeveloperAmount" />
                         </span>
                     </div>
-
-                    @* Self-approval quick button *@
-                    @if (submitter.IsCurrentUser && (submitter.DraftCount > 0 || submitter.PendingCount > 0))
-                    {
-                        <div class="mt-2 pt-1.5 border-t border-slate-100 flex justify-end" @onclick:stopPropagation="true">
-                            <button
-                                type="button"
-                                class="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-2 py-1 text-3xs font-semibold text-white shadow-xs transition hover:bg-blue-700"
-                                @onclick="@(() => OnSelfApproveRequested.InvokeAsync(submitter))">
-                                <i class="fa-solid fa-check text-3xs"></i>
-                                <span>@DashboardLocalizer["Approvals_QuickSelfApprove"]</span>
-                            </button>
-                        </div>
-                    }
                 </div>
             }
         }

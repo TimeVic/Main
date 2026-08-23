@@ -25,6 +25,9 @@ public class GetStatusTest : BaseTest
         _timeEntrySeeder = ServiceProvider.GetRequiredService<ITimeEntrySeeder>();
 
         (_jwtToken, _user, _defaultWorkspace) = UserSeeder.CreateAuthorizedAsync().Result;
+        _defaultWorkspace.Mode = WorkspaceMode.Team;
+        _defaultWorkspace.IsApprovalsEnabled = true;
+        FlushDbChanges().Wait();
     }
 
     [Fact]

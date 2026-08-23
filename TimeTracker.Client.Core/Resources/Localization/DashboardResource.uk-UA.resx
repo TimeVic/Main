@@ -984,4 +984,6 @@
   <data name="Approvals_WorkspaceSetting_Enable" xml:space="preserve"><value>Увімкнути затвердження часу</value></data>
   <data name="Approvals_WorkspaceSetting_Enable_Description" xml:space="preserve"><value>Вимагати від менеджерів перевірки та затвердження записів часу перед їх зарахуванням до оплати.</value></data>
   <data name="Approvals_WorkspaceSetting_OnlyInTeamMode" xml:space="preserve"><value>Доступно лише в режимі {0}</value></data>
+  <data name="Approvals_Banner_ApproveButton" xml:space="preserve"><value>Затвердити мої записи за тиждень</value></data>
+  <data name="Approvals_Card_ApproveSingle" xml:space="preserve"><value>Затвердити запис</value></data>
 </root>

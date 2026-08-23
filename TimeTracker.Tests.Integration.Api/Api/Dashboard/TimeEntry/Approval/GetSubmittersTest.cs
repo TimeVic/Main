@@ -73,4 +73,36 @@ public class GetSubmittersTest : BaseTest
         Assert.Equal(1, submitter.PendingCount);
         Assert.Equal(TimeEntryStatus.Pending, submitter.Status);
     }
+
+    [Fact]
+    public async Task OwnerHoursAreExcludedFromSubmittersList()
+    {
+        var ownerEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _owner, 1)).First();
+        ownerEntry.EndTime = ownerEntry.StartTime.AddHours(5);
+        ownerEntry.Status = TimeEntryStatus.Pending;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _ownerJwtToken, new GetSubmittersRequest(), _defaultWorkspace.Id);
+        response.EnsureSuccessStatusCode();
+
+        var actual = await response.GetJsonDataAsync<GetSubmittersResponse>();
+        Assert.NotNull(actual);
+        Assert.DoesNotContain(actual.Items, i => i.UserId == _owner.Id);
+    }
+
+    [Fact]
+    public async Task DeveloperWithOnlyDraftEntriesIsNotInSubmittersList()
+    {
+        var devEntry = (await _timeEntrySeeder.CreateSeveralAsync(_defaultWorkspace, _developer, 1)).First();
+        devEntry.EndTime = devEntry.StartTime.AddHours(5);
+        devEntry.Status = TimeEntryStatus.Draft;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _ownerJwtToken, new GetSubmittersRequest(), _defaultWorkspace.Id);
+        response.EnsureSuccessStatusCode();
+
+        var actual = await response.GetJsonDataAsync<GetSubmittersResponse>();
+        Assert.NotNull(actual);
+        Assert.DoesNotContain(actual.Items, i => i.UserId == _developer.Id);
+    }
 }
