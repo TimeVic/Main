@@ -50,7 +50,6 @@ public class SelectWorkspaceEffect : Effect<SelectWorkspaceAction>
             dispatcher.Dispatch(new SetWorkspaceAction(selectedWorkspace));
         }
 
-        dispatcher.Dispatch(new ReloadWorkspacePermissionsAction());
         var destinationPath = action.DestinationPath
             ?? (selectedWorkspace.Mode.HasValue ? string.Empty : "workspace/choose-mode");
         _navigationManager.NavigateTo(

@@ -20,6 +20,11 @@ public class ApiUrl
     public const string UserUpdateSettings = "dashboard/user/update-settings";
     public const string UserChangePassword = "dashboard/user/change-password";
     #endregion
+
+    #region Dashboard
+    public const string DashboardInit = "dashboard/init";
+    public const string DashboardCounters = "dashboard/counters";
+    #endregion
     
     #region Time Entry
     
@@ -115,12 +120,6 @@ public class ApiUrl
     public const string WorkspaceDelete = "dashboard/workspace/delete";
     public const string WorkspaceTimeEntryImport = "dashboard/workspace/time-entry/import";
     
-    #endregion
-
-    #region Security
-
-    public const string WorkspacePermissions = "dashboard/security/permissions/workspace";
-
     #endregion
     
     #region List

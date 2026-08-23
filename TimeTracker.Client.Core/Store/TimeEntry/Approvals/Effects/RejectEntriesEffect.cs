@@ -25,6 +25,7 @@ public class RejectEntriesEffect : Effect<RejectEntriesAction>
             dispatcher.Dispatch(new SetIsActionProcessingAction(true));
             await _apiService.TimeEntryApprovalRejectAsync(action.TimeEntryIds, action.Reason);
             dispatcher.Dispatch(new FetchSubmittersAction());
+            dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Dashboard.FetchCountersAction());
         }
         catch (Exception e)
         {

@@ -25,6 +25,7 @@ public class ApproveEntriesEffect : Effect<ApproveEntriesAction>
             dispatcher.Dispatch(new SetIsActionProcessingAction(true));
             await _apiService.TimeEntryApprovalApproveAsync(action.TimeEntryIds);
             dispatcher.Dispatch(new FetchSubmittersAction());
+            dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Dashboard.FetchCountersAction());
         }
         catch (Exception e)
         {

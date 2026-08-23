@@ -22,7 +22,6 @@ public class ApprovalsReducers
         return state with
         {
             Submitters = action.Response.Items,
-            PendingUsersCount = action.Response.TotalPendingUsersCount,
             SelectedSubmitter = selected,
             IsLoading = false,
             ErrorMessage = null

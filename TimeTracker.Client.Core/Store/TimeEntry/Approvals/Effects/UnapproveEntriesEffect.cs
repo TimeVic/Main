@@ -28,6 +28,7 @@ public class UnapproveEntriesEffect : Effect<UnapproveEntriesAction>
                 await _apiService.TimeEntryApprovalUnapproveAsync(id);
             }
             dispatcher.Dispatch(new FetchSubmittersAction());
+            dispatcher.Dispatch(new TimeTracker.Client.Core.Store.Dashboard.FetchCountersAction());
         }
         catch (Exception e)
         {

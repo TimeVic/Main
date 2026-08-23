@@ -8,6 +8,8 @@ using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Notes;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Report;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Init;
+using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Counters;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry.Approval;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.SharedClientReport;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Security;
@@ -75,7 +77,9 @@ public interface IApiService
 
     Task LogoutAsync();
 
-    Task<GetWorkspacePermissionsResponse?> GetWorkspacePermissionsAsync(Guid workspaceId);
+    Task<DashboardInitResponse?> DashboardInitAsync();
+
+    Task<GetCountersResponse?> DashboardGetCountersAsync();
 
     Task<UserDto?> UserSelectWorkspaceAsync(Guid workspaceId);
 

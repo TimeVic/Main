@@ -13,8 +13,8 @@ public class WorkspacePermissionsReducers
     {
         return state with
         {
-            WorkspaceId = action.Response.WorkspaceId,
-            Permissions = action.Response.Permissions,
+            WorkspaceId = action.WorkspaceId,
+            Permissions = action.Permissions,
             IsLoaded = true
         };
     }

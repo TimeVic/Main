@@ -66,7 +66,6 @@ public class GetSubmittersTest : BaseTest
         var actual = await response.GetJsonDataAsync<GetSubmittersResponse>();
         Assert.NotNull(actual);
         Assert.NotEmpty(actual.Items);
-        Assert.Equal(1, actual.TotalPendingUsersCount);
 
         var submitter = actual.Items.First(i => i.UserId == _developer.Id);
         Assert.Equal(_developer.Name, submitter.UserName);

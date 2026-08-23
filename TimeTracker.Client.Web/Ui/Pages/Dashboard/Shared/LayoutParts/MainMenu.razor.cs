@@ -7,8 +7,8 @@ using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.Security;
 using TimeTracker.Client.Core.Store.Auth;
+using TimeTracker.Client.Core.Store.Dashboard;
 using TimeTracker.Client.Core.Store.Permissions;
-using TimeTracker.Client.Core.Store.TimeEntry.Approvals;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.LayoutParts;
 
@@ -36,7 +36,7 @@ public partial class MainMenu: IDisposable
     public IState<WorkspacePermissionsState> WorkspacePermissionsState { get; set; } = null!;
 
     [Inject]
-    public IState<ApprovalsState> ApprovalsState { get; set; } = null!;
+    public IState<DashboardState> DashboardState { get; set; } = null!;
 
     [Parameter]
     public bool IsMobile { get; set; }
@@ -54,7 +54,7 @@ public partial class MainMenu: IDisposable
             Text("Operations"),
             null,
             () => IsTeamAdministrator && (AuthState.Value.Workspace?.IsApprovalsEnabled ?? false),
-            () => ApprovalsState.Value.PendingUsersCount
+            () => DashboardState.Value.Counters.PendingApprovalsCount
         ),
         new(
             Text("MemberPayments"),
@@ -109,12 +109,7 @@ public partial class MainMenu: IDisposable
         base.OnInitialized();
         NavigationManager.LocationChanged += OnLocationChanged;
         WorkspacePermissionsState.StateChanged += OnWorkspacePermissionsChanged;
-        ApprovalsState.StateChanged += OnApprovalsStateChanged;
-
-        if (IsTeamAdministrator && (AuthState.Value.Workspace?.IsApprovalsEnabled ?? false))
-        {
-            Dispatcher.Dispatch(new FetchSubmittersAction());
-        }
+        DashboardState.StateChanged += OnDashboardStateChanged;
     }
 
     private void OnMenuItemSelected(string itemUrl)
@@ -190,7 +185,7 @@ public partial class MainMenu: IDisposable
         InvokeAsync(StateHasChanged);
     }
 
-    private void OnApprovalsStateChanged(object? sender, EventArgs args)
+    private void OnDashboardStateChanged(object? sender, EventArgs args)
     {
         InvokeAsync(StateHasChanged);
     }
@@ -199,6 +194,6 @@ public partial class MainMenu: IDisposable
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
         WorkspacePermissionsState.StateChanged -= OnWorkspacePermissionsChanged;
-        ApprovalsState.StateChanged -= OnApprovalsStateChanged;
+        DashboardState.StateChanged -= OnDashboardStateChanged;
     }
 }

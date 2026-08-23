@@ -1,6 +1,7 @@
-﻿using Fluxor;
+using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
+using TimeTracker.Business.Common.Dto;
 
 namespace TimeTracker.Client.Core.Store.Dashboard;
 
@@ -15,8 +16,10 @@ public record struct MyTasksState(
 [FeatureState]
 public record DashboardState
 {
-    public MyTasksState MyTasks = new ()
+    public MyTasksState MyTasks { get; init; } = new ()
     {
         List = new List<TaskDto>()
     };
+
+    public DashboardCountersDto Counters { get; init; } = new();
 }
