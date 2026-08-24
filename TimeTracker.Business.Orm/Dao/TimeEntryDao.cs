@@ -453,7 +453,6 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
                 Workspace = workspace,
                 User = user,
                 TimeZone = workspace.TimeZone,
-                Status = isApproved ? TimeEntryStatus.Approved : TimeEntryStatus.Draft,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };

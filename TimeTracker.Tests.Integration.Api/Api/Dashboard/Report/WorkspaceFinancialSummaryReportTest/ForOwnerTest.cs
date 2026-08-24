@@ -49,12 +49,17 @@ public class ForOwnerTest : BaseTest
         _client = _project.Client!;
 
         var entry = _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
+        {
             StartTime = DateTime.UtcNow.StartOfDay().AddHours(9),
             EndTime = DateTime.UtcNow.StartOfDay().AddHours(11),
             IsBillable = true,
             HourlyRate = 100
         }, _project).Result;
         entry.Status = TimeEntryStatus.Approved;
+        DbSessionProvider.CurrentSession.UpdateAsync(entry).Wait();
+        FlushDbChanges().Wait();
+    }
+
     [Fact]
     public async Task AnonymousCanNotAccess()
     {
@@ -195,28 +200,35 @@ public class ForOwnerTest : BaseTest
         var entry1 = await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
         {
             StartTime = DateTime.UtcNow.StartOfDay().AddHours(12),
+            EndTime = DateTime.UtcNow.StartOfDay().AddHours(13),
             IsBillable = false,
             HourlyRate = 100
         }, _project);
         entry1.Status = TimeEntryStatus.Approved;
 
         var entry2 = await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
+        {
             StartTime = DateTime.UtcNow.StartOfDay().AddHours(14),
             EndTime = DateTime.UtcNow.StartOfDay().AddHours(15),
+            IsBillable = true,
             HourlyRate = null
         }, _project);
         entry2.Status = TimeEntryStatus.Approved;
 
         var entry3 = await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
         {
+            StartTime = DateTime.UtcNow.StartOfDay().AddHours(16),
             EndTime = DateTime.UtcNow.StartOfDay().AddHours(17),
             IsBillable = true,
+            HourlyRate = 60
         }, _project);
         entry3.Status = TimeEntryStatus.Approved;
         await FlushDbChanges();
 
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
+        });
+        response.EnsureSuccessStatusCode();
 
         var data = await response.GetJsonDataAsync<WorkspaceFinancialSummaryReportResponse>();
         Assert.NotNull(data?.Totals);
@@ -247,12 +259,15 @@ public class ForOwnerTest : BaseTest
             EndTime = startTime.AddHours(2),
             IsBillable = true,
             HourlyRate = 100
+        }, _project);
         memberEntry.Status = TimeEntryStatus.Approved;
         await FlushDbChanges();
 
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest());
         response.EnsureSuccessStatusCode();
 
+        var data = await response.GetJsonDataAsync<WorkspaceFinancialSummaryReportResponse>();
+        Assert.NotNull(data?.Totals);
         Assert.Equal(400, data.Totals.ClientEarned);
         Assert.Equal(80, data.Totals.TeamCost);
         Assert.Equal(320, data.Totals.EstimatedMargin);
