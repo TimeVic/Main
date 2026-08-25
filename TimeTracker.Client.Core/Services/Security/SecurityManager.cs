@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants;
@@ -69,4 +69,41 @@ public class SecurityManager: ISecurityManager
             )
             .ToList();
     }
+
+    public bool CanEditTimeEntry(TimeEntryDto? timeEntry)
+    {
+        if (timeEntry == null)
+        {
+            return false;
+        }
+
+        var workspace = _authState.Value.Workspace;
+        var user = _authState.Value.User;
+        if (workspace == null || user == null)
+        {
+            return false;
+        }
+
+        if (workspace.Mode == WorkspaceMode.Solo)
+        {
+            return _authState.Value.IsRoleOwner;
+        }
+
+        if (workspace.Mode == WorkspaceMode.Team)
+        {
+            if (timeEntry.Status is TimeEntryStatus.Pending or TimeEntryStatus.Approved)
+            {
+                return false;
+            }
+
+            if (timeEntry.Status is TimeEntryStatus.Draft or TimeEntryStatus.Rejected)
+            {
+                return timeEntry.User == null || timeEntry.User.Id == user.Id;
+            }
+        }
+
+        return _authState.Value.IsRoleAdmin || timeEntry.User == null || timeEntry.User.Id == user.Id;
+    }
+
+    public bool CanDeleteTimeEntry(TimeEntryDto? timeEntry) => CanEditTimeEntry(timeEntry);
 }

@@ -113,7 +113,10 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                                     </div>
                                     <div class="flex shrink-0 items-center gap-3">
                                         <span class="text-sm font-semibold text-slate-700">@entry.Duration.ToReadableShortString()</span>
-                                        <button type="button" class="text-xs font-medium text-blue-600" @onclick="@(() => _timeEntryToEdit = entry)">@DashboardLocalizer["Edit"]</button>
+                                        @if (_securityManager.CanEditTimeEntry(entry))
+                                        {
+                                            <button type="button" class="text-xs font-medium text-blue-600 hover:underline" @onclick="@(() => _timeEntryToEdit = entry)">@DashboardLocalizer["Edit"]</button>
+                                        }
                                     </div>
                                 </div>
                             </ItemTemplate>

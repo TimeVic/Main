@@ -35,15 +35,18 @@ public partial class MyTimeEntryCard
     private ITimeParsingService _timeParsingService { get; set; } = null!;
 
     [Inject]
+    private ISecurityManager SecurityManager { get; set; } = null!;
+
+    [Inject]
     private IState<AuthState> _authState { get; set; } = null!;
 
     private string? _currencySymbol => _authState.Value.Workspace?.Currency.Symbol;
 
-
     private bool IsOwner => _authState.Value.IsRoleOwner;
     private bool IsTeamWorkspace => _authState.Value.Workspace?.Mode == WorkspaceMode.Team;
 
-    private bool CanEditOrDelete => !IsTeamWorkspace || Entry.Status is not (TimeEntryStatus.Approved or TimeEntryStatus.Pending);
+    private bool CanEditOrDelete => SecurityManager.CanEditTimeEntry(Entry);
+    private bool CanDelete => SecurityManager.CanDeleteTimeEntry(Entry);
 
     private bool CanSubmitForApproval => IsTeamWorkspace && Entry.Status is TimeEntryStatus.Draft or TimeEntryStatus.Rejected;
 
