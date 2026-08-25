@@ -199,6 +199,11 @@ public partial class MarkdownEdit
     {
         var editorState = await UiHelperService.GetTextAreaState(_editor);
         var result = ApplyMarkdownFormat(editorState, format);
+        if (MaxLength > 0 && result.Value.Length > MaxLength)
+        {
+            return;
+        }
+
         _editValue = result.Value;
         _pendingMarkdownFormat = result;
         await OnEditValueChanged();

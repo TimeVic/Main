@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Constants.Task;
@@ -19,7 +19,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Tasks
         [StringLength(512)]
         public string? ExternalTaskId { get; set; }
         
-        [StringLength(10000)]
+        [StringLength(30000)]
         public string? Description { get; set; }
 
         public TimeSpan? OriginalEstimate { get; set; }
