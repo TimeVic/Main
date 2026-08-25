@@ -17,7 +17,7 @@ public partial class TimeEntryApprovalBannerBlock
 
     private TimeEntryApprovalStatusSummaryDto? _summary;
     private bool _isSubmitting;
-
+    private bool IsTeamWorkspace => AuthState.Value.Workspace?.Mode == TimeTracker.Business.Common.Constants.WorkspaceMode.Team;
 
     protected override async Task OnInitializedAsync()
     {
@@ -27,7 +27,7 @@ public partial class TimeEntryApprovalBannerBlock
 
     public async Task RefreshStatusAsync()
     {
-        if (!IsApprovalsEnabled) return;
+        if (!IsTeamWorkspace) return;
 
         try
         {

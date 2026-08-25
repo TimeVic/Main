@@ -31,6 +31,8 @@ public partial class ApprovalDetailsBlock
     public EventCallback<ICollection<Guid>> UnapproveRequested { get; set; }
 
     private readonly HashSet<string> _expandedTaskKeys = [];
+    private Guid? _lastLoadedUserId;
+    private DateTime? _lastLoadedPeriodStart;
 
     private ICollection<Guid> AllEntryIds =>
         Details?.Projects.SelectMany(p => p.Tasks).SelectMany(t => t.Entries).Select(e => e.Id).ToList() ?? [];
@@ -51,14 +53,23 @@ public partial class ApprovalDetailsBlock
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        // Auto-expand all tasks by default
-        if (Details != null && !_expandedTaskKeys.Any())
+        if (Details != null)
         {
-            foreach (var project in Details.Projects)
+            var isDifferentSubmitterOrPeriod = Details.UserId != _lastLoadedUserId
+                || Details.PeriodStartDate != _lastLoadedPeriodStart;
+
+            if (isDifferentSubmitterOrPeriod)
             {
-                foreach (var task in project.Tasks)
+                _lastLoadedUserId = Details.UserId;
+                _lastLoadedPeriodStart = Details.PeriodStartDate;
+                _expandedTaskKeys.Clear();
+
+                foreach (var project in Details.Projects)
                 {
-                    _expandedTaskKeys.Add($"{project.ProjectId}_{task.TaskId}_{task.Title}");
+                    foreach (var task in project.Tasks)
+                    {
+                        _expandedTaskKeys.Add($"{project.ProjectId}_{task.TaskId}_{task.Title}");
+                    }
                 }
             }
         }
@@ -97,6 +108,7 @@ public partial class ApprovalDetailsBlock
 
     private async Task OnApproveEntries(ICollection<Guid> entryIds)
     {
+        if (IsActionProcessing) return;
         if (entryIds.Any())
         {
             await ApproveRequested.InvokeAsync(entryIds);
@@ -105,6 +117,7 @@ public partial class ApprovalDetailsBlock
 
     private async Task OnOpenRejectModal(ICollection<Guid> entryIds)
     {
+        if (IsActionProcessing) return;
         if (entryIds.Any())
         {
             await RejectRequested.InvokeAsync(entryIds);
@@ -113,6 +126,7 @@ public partial class ApprovalDetailsBlock
 
     private async Task OnUnapproveEntries(ICollection<Guid> entryIds)
     {
+        if (IsActionProcessing) return;
         if (entryIds.Any())
         {
             await UnapproveRequested.InvokeAsync(entryIds);

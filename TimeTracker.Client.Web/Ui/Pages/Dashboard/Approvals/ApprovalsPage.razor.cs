@@ -26,6 +26,7 @@ public partial class ApprovalsPage
 
     private bool IsAuthorizedManager =>
         AuthState.Value.Workspace?.Mode == WorkspaceMode.Team
+        && AuthState.Value.IsRoleAdmin;
 
     private void OnSubmitterSelected(TimeEntryApprovalSubmitterDto submitter)
     {

@@ -64,7 +64,7 @@
                     <p class="mt-2 text-2xl font-bold text-slate-900">
                         <AmountDisplay Amount="@_report.Totals.Earned"/>
                     </p>
-                    @if (IsApprovalsEnabled && _approvalSummary != null && _approvalSummary.PendingAmount > 0)
+                    @if (IsTeamWorkspace && _approvalSummary != null && _approvalSummary.PendingAmount > 0)
                     {
                         var symbol = AuthState.Value.Workspace?.Currency?.Symbol ?? "$";
                         <p class="mt-1 text-xs font-semibold text-amber-600">

@@ -41,10 +41,11 @@ public partial class MyTimeEntryCard
 
 
     private bool IsOwner => _authState.Value.IsRoleOwner;
+    private bool IsTeamWorkspace => _authState.Value.Workspace?.Mode == WorkspaceMode.Team;
 
-    private bool CanEditOrDelete => !IsApprovalsEnabled || Entry.Status is not (TimeEntryStatus.Approved or TimeEntryStatus.Pending);
+    private bool CanEditOrDelete => !IsTeamWorkspace || Entry.Status is not (TimeEntryStatus.Approved or TimeEntryStatus.Pending);
 
-    private bool CanSubmitForApproval => IsApprovalsEnabled && Entry.Status is TimeEntryStatus.Draft or TimeEntryStatus.Rejected;
+    private bool CanSubmitForApproval => IsTeamWorkspace && Entry.Status is TimeEntryStatus.Draft or TimeEntryStatus.Rejected;
 
     private string GetProjectLabel()
     {

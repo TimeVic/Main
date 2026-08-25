@@ -53,6 +53,7 @@ public partial class MainMenu: IDisposable
             UrlService.GetDashboardUrl("approvals"),
             Text("Operations"),
             null,
+            () => IsTeamAdministrator,
             () => DashboardState.Value.Counters.PendingApprovalsCount
         ),
         new(
