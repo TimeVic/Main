@@ -86,26 +86,32 @@
 
             <TemplateColumn Title="" TItem="TimeEntryDto" Align="Align.End">
                 <div class="flex items-center justify-end gap-1">
-                    <CustomButton
-                        Size="Size.Small"
-                        Color="ThemeColor.Default"
-                        Variant="Variant.Light"
-                        IconOnly="true"
-                        OnClick="@(() => _timeEntryToEdit = context)">
-                        <ChildContent>
-                            <i class="fa-regular fa-pen-to-square text-slate-400"></i>
-                        </ChildContent>
-                    </CustomButton>
-                    <CustomButton
-                        Size="Size.Small"
-                        Color="ThemeColor.Danger"
-                        Variant="Variant.Light"
-                        IconOnly="true"
-                        OnClick="@(() => _timeEntryToDelete = context)">
-                        <ChildContent>
-                            <i class="fa-regular fa-trash-can text-slate-400"></i>
-                        </ChildContent>
-                    </CustomButton>
+                    @if (SecurityManager.CanEditTimeEntry(context))
+                    {
+                        <CustomButton
+                            Size="Size.Small"
+                            Color="ThemeColor.Default"
+                            Variant="Variant.Light"
+                            IconOnly="true"
+                            OnClick="@(() => _timeEntryToEdit = context)">
+                            <ChildContent>
+                                <i class="fa-regular fa-pen-to-square text-slate-400"></i>
+                            </ChildContent>
+                        </CustomButton>
+                    }
+                    @if (SecurityManager.CanDeleteTimeEntry(context))
+                    {
+                        <CustomButton
+                            Size="Size.Small"
+                            Color="ThemeColor.Danger"
+                            Variant="Variant.Light"
+                            IconOnly="true"
+                            OnClick="@(() => _timeEntryToDelete = context)">
+                            <ChildContent>
+                                <i class="fa-regular fa-trash-can text-slate-400"></i>
+                            </ChildContent>
+                        </CustomButton>
+                    }
                 </div>
             </TemplateColumn>
         </ChildContent>

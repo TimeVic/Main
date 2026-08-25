@@ -15,6 +15,9 @@ public partial class TimeEntryListBlock
     [Inject]
     private ITimeParsingService _timeParsingService { get; set; } = null!;
 
+    [Inject]
+    private ISecurityManager SecurityManager { get; set; } = null!;
+
     private TimeEntryDto? _timeEntryToEdit;
     private TimeEntryDto? _timeEntryToDelete;
 
