@@ -76,6 +76,7 @@ else if (!string.IsNullOrEmpty(_task.TaskList?.Name))
                                 IsEditMode="false"
                                 Value="@_model.Description"
                                 ValueChanged="@OnDescriptionChanged"
+                                MaxLength="30000"
                                 EmptyText="@DashboardLocalizer["TaskDescription_Empty"].Value"
                                 Placeholder="@DashboardLocalizer["TaskDescription"].Value"
                                 RowsMin="4" />
