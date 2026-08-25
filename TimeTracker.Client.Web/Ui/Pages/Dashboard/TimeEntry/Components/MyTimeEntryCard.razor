@@ -19,7 +19,7 @@
     <div class="hidden md:flex shrink-0 items-center gap-1" @onclick:stopPropagation="true">
         <TimeEntryApprovalStatusBlock
             Entry="@Entry"
-            IsApprovalsEnabled="@IsApprovalsEnabled" />
+            IsApprovalsEnabled="@IsTeamWorkspace" />
 
         @if (Entry.Task != null)
         {

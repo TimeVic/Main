@@ -8,7 +8,7 @@
 @inherits BaseReactiveComponent
 
 <div class="flex h-full flex-col bg-white">
-    @if (IsLoading)
+    @if (IsLoading && Details == null)
     {
         <div class="flex flex-1 items-center justify-center py-16">
             <LumexSpinner />
@@ -159,19 +159,21 @@
                                     <AmountDisplay Amount="@project.TotalDeveloperAmount" />
                                 </span>
 
-                                @* Project level actions *@
+                                 @* Project level actions *@
                                 <div class="flex items-center gap-1 border-l border-slate-200 pl-2">
                                     <button
                                         type="button"
+                                        disabled="@IsActionProcessing"
                                         title="@DashboardLocalizer["Approve"]"
-                                        class="inline-flex h-7 w-7 items-center justify-center rounded-lg text-emerald-600 hover:bg-emerald-50"
+                                        class="inline-flex h-7 w-7 items-center justify-center rounded-lg text-emerald-600 hover:bg-emerald-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                                         @onclick="@(() => OnApproveEntries(projectEntryIds))">
                                         <i class="fa-solid fa-check text-xs"></i>
                                     </button>
                                     <button
                                         type="button"
+                                        disabled="@IsActionProcessing"
                                         title="@DashboardLocalizer["Reject"]"
-                                        class="inline-flex h-7 w-7 items-center justify-center rounded-lg text-red-600 hover:bg-red-50"
+                                        class="inline-flex h-7 w-7 items-center justify-center rounded-lg text-red-600 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                                         @onclick="@(() => OnOpenRejectModal(projectEntryIds))">
                                         <i class="fa-solid fa-xmark text-xs"></i>
                                     </button>
@@ -217,15 +219,17 @@
                                             <div class="flex items-center gap-0.5">
                                                 <button
                                                     type="button"
+                                                    disabled="@IsActionProcessing"
                                                     title="@DashboardLocalizer["Approve"]"
-                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-emerald-600 hover:bg-emerald-100/60"
+                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-emerald-600 hover:bg-emerald-100/60 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                                                     @onclick="@(() => OnApproveEntries(taskEntryIds))">
                                                     <i class="fa-solid fa-check text-2xs"></i>
                                                 </button>
                                                 <button
                                                     type="button"
+                                                    disabled="@IsActionProcessing"
                                                     title="@DashboardLocalizer["Reject"]"
-                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-red-600 hover:bg-red-100/60"
+                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-red-600 hover:bg-red-100/60 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                                                     @onclick="@(() => OnOpenRejectModal(taskEntryIds))">
                                                     <i class="fa-solid fa-xmark text-2xs"></i>
                                                 </button>
@@ -318,8 +322,9 @@
                                                             {
                                                                 <button
                                                                     type="button"
+                                                                    disabled="@IsActionProcessing"
                                                                     title="@DashboardLocalizer["Approve"]"
-                                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-emerald-600 hover:bg-emerald-50"
+                                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-emerald-600 hover:bg-emerald-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                                                                     @onclick="@(() => OnApproveEntries([entry.Id]))">
                                                                     <i class="fa-solid fa-check text-2xs"></i>
                                                                 </button>
@@ -328,8 +333,9 @@
                                                             {
                                                                 <button
                                                                     type="button"
+                                                                    disabled="@IsActionProcessing"
                                                                     title="@DashboardLocalizer["Reject"]"
-                                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-red-600 hover:bg-red-50"
+                                                                    class="inline-flex h-6 w-6 items-center justify-center rounded text-red-600 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                                                                     @onclick="@(() => OnOpenRejectModal([entry.Id]))">
                                                                     <i class="fa-solid fa-xmark text-2xs"></i>
                                                                 </button>

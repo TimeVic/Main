@@ -17,7 +17,7 @@ public partial class UserPaymentReportPage
     private UserPaymentReportFilterState _filterState => ReportsState.Value.UserPaymentReportFilter;
 
     private bool IsCanShareClientReport => AuthState.Value.Workspace?.IsWorkspaceAdmin == true;
-
+    private bool IsTeamWorkspace => AuthState.Value.Workspace?.Mode == WorkspaceMode.Team;
 
     private TimeTracker.Business.Common.Dto.TimeEntryApprovalStatusSummaryDto? _approvalSummary;
 
@@ -26,7 +26,7 @@ public partial class UserPaymentReportPage
         await base.OnInitializedAsync();
         Dispatcher.Dispatch(new ReportFetchUserPaymentReportAction());
 
-        if (IsApprovalsEnabled)
+        if (IsTeamWorkspace)
         {
             try
             {

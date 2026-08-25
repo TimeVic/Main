@@ -23,7 +23,7 @@
 
     @* Submitters list *@
     <div class="flex-1 overflow-y-auto p-2 space-y-1.5">
-        @if (IsLoading)
+        @if (IsLoading && !Submitters.Any())
         {
             <div class="flex justify-center py-8">
                 <LumexSpinner Size="Size.Small" />
