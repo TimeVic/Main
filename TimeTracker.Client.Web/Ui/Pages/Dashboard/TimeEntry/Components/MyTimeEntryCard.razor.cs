@@ -39,7 +39,6 @@ public partial class MyTimeEntryCard
 
     private string? _currencySymbol => _authState.Value.Workspace?.Currency.Symbol;
 
-    private bool IsApprovalsEnabled => _authState.Value.Workspace?.IsApprovalsEnabled ?? false;
 
     private bool IsOwner => _authState.Value.IsRoleOwner;
 

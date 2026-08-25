@@ -13,7 +13,6 @@ namespace TimeTracker.Business.Orm.Entities.Workspaces
         public virtual required string TimeZone { get; set; }
         public virtual string? Description { get; set; }
         public virtual WorkspaceMode? Mode { get; set; }
-        public virtual bool IsApprovalsEnabled { get; set; }
         
         #region Relationships
 

@@ -49,7 +49,6 @@ public class GetCountersRequestHandler : IAsyncRequestHandler<GetCountersRequest
         var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
         DashboardCountersDto counters;
         if (userAccess is MembershipAccessType.Owner or MembershipAccessType.Manager
-            && workspace.IsApprovalsEnabled
             && workspace.Mode == WorkspaceMode.Team)
         {
             counters = await _dashboardDao.GetCountersAsync(workspace);

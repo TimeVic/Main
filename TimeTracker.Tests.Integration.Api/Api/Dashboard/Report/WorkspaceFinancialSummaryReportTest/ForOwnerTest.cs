@@ -48,13 +48,16 @@ public class ForOwnerTest : BaseTest
         _project = _projectSeeder.CreateAsync(_workspace).Result;
         _client = _project.Client!;
 
-        _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
+        var entry = _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
         {
             StartTime = DateTime.UtcNow.StartOfDay().AddHours(9),
             EndTime = DateTime.UtcNow.StartOfDay().AddHours(11),
             IsBillable = true,
             HourlyRate = 100
-        }, _project).Wait();
+        }, _project).Result;
+        entry.Status = TimeEntryStatus.Approved;
+        DbSessionProvider.CurrentSession.UpdateAsync(entry).Wait();
+        FlushDbChanges().Wait();
     }
 
     [Fact]
@@ -194,29 +197,33 @@ public class ForOwnerTest : BaseTest
     {
         _project.DefaultHourlyRate = 1000;
 
-        await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
+        var entry1 = await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
         {
             StartTime = DateTime.UtcNow.StartOfDay().AddHours(12),
             EndTime = DateTime.UtcNow.StartOfDay().AddHours(13),
             IsBillable = false,
             HourlyRate = 100
         }, _project);
+        entry1.Status = TimeEntryStatus.Approved;
 
-        await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
+        var entry2 = await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
         {
             StartTime = DateTime.UtcNow.StartOfDay().AddHours(14),
             EndTime = DateTime.UtcNow.StartOfDay().AddHours(15),
             IsBillable = true,
             HourlyRate = null
         }, _project);
+        entry2.Status = TimeEntryStatus.Approved;
 
-        await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
+        var entry3 = await _timeEntryDao.SetAsync(_owner, _workspace, new TimeEntryCreationDto
         {
             StartTime = DateTime.UtcNow.StartOfDay().AddHours(16),
             EndTime = DateTime.UtcNow.StartOfDay().AddHours(17),
             IsBillable = true,
             HourlyRate = 60
         }, _project);
+        entry3.Status = TimeEntryStatus.Approved;
+        await FlushDbChanges();
 
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest
         {
@@ -246,13 +253,15 @@ public class ForOwnerTest : BaseTest
             new List<ProjectAccessModel> { new() { Project = _project, HourlyRate = 40 } }
         );
         var startTime = DateTime.UtcNow.StartOfDay().AddHours(12);
-        await _timeEntryDao.SetAsync(member, _workspace, new TimeEntryCreationDto
+        var memberEntry = await _timeEntryDao.SetAsync(member, _workspace, new TimeEntryCreationDto
         {
             StartTime = startTime,
             EndTime = startTime.AddHours(2),
             IsBillable = true,
             HourlyRate = 100
         }, _project);
+        memberEntry.Status = TimeEntryStatus.Approved;
+        await FlushDbChanges();
 
         var response = await PostRequestAsync(_url, _ownerToken, new WorkspaceFinancialSummaryReportRequest());
         response.EnsureSuccessStatusCode();

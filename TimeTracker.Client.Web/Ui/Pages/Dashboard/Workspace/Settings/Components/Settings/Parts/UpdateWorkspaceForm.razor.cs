@@ -24,12 +24,7 @@ public partial class UpdateWorkspaceForm
     private UpdateRequest model = new();
     private EditForm _form;
 
-    private bool IsApprovalsEnabled
-    {
-        get => model.IsApprovalsEnabled ?? false;
-        set => model.IsApprovalsEnabled = value;
-    }
-    
+
     protected override async Task OnInitializedAsync()
     {
         _timeZones = TimeZoneInfo.GetSystemTimeZones();

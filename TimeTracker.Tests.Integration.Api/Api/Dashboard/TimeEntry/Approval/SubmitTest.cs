@@ -33,7 +33,6 @@ public class SubmitTest : BaseTest
         (_developerJwtToken, _developer, _) = UserSeeder.CreateAuthorizedAsync().Result;
 
         _defaultWorkspace.Mode = WorkspaceMode.Team;
-        _defaultWorkspace.IsApprovalsEnabled = true;
         FlushDbChanges().Wait();
 
         _workspaceAccessService.ShareAccessAsync(_defaultWorkspace, _developer, MembershipAccessType.User).Wait();

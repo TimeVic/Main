@@ -41,7 +41,6 @@ public class GetCountersTest : BaseTest
     public async Task OwnerCanGetPendingApprovalsCount()
     {
         _workspace.Mode = WorkspaceMode.Team;
-        _workspace.IsApprovalsEnabled = true;
 
         var member1 = await _userSeeder.CreateActivatedAsync();
         var member2 = await _userSeeder.CreateActivatedAsync();
@@ -78,7 +77,6 @@ public class GetCountersTest : BaseTest
     public async Task OwnerOwnEntriesExcludedFromPendingApprovalsCount()
     {
         _workspace.Mode = WorkspaceMode.Team;
-        _workspace.IsApprovalsEnabled = true;
 
         var ownerEntry = (await _timeEntrySeeder.CreateSeveralAsync(_workspace, _owner, 1)).First();
         ownerEntry.EndTime = ownerEntry.StartTime.AddHours(2);
@@ -98,7 +96,6 @@ public class GetCountersTest : BaseTest
     public async Task RegularMemberGetsZeroPendingApprovalsCount()
     {
         _workspace.Mode = WorkspaceMode.Team;
-        _workspace.IsApprovalsEnabled = true;
 
         var (memberJwtToken, member, _) = await _userSeeder.CreateAuthorizedAsync();
         await _workspaceAccessService.ShareAccessAsync(_workspace, member, MembershipAccessType.User);

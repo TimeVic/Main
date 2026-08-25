@@ -988,4 +988,15 @@
   <data name="Approvals_SelectSubmitter_Description" xml:space="preserve"><value>Choose a team member from the list to review and approve their time entries.</value></data>
   <data name="Approvals_NoDescription" xml:space="preserve"><value>No description</value></data>
   <data name="Approvals_CurrentUserBadge" xml:space="preserve"><value>You</value></data>
+  <data name="WorkspaceModeInfoCard_Title" xml:space="preserve"><value>Workspace Mode</value></data>
+  <data name="WorkspaceModeInfoCard_Badge_Solo" xml:space="preserve"><value>🧘 Solo</value></data>
+  <data name="WorkspaceModeInfoCard_Badge_Team" xml:space="preserve"><value>👥 Team (With Approvals)</value></data>
+  <data name="WorkspaceModeInfoCard_Description_Solo" xml:space="preserve"><value>This workspace is designed for maximum speed and individual work. All tracked hours are instantly reflected in your financial reports and available to clients. The approval process (Approvals) is disabled — you can freely edit any entries without restrictions.</value></data>
+  <data name="WorkspaceModeInfoCard_Description_Team" xml:space="preserve"><value>This workspace is configured for professional team financial control. To protect budgets and payouts, the Approvals Mode is enabled. Time entries follow a secure lifecycle: they start as private developer drafts and are locked after manager approval, ensuring total accuracy of client invoices.</value></data>
+  <data name="WorkspaceModeInfoCard_Cta_Solo_Prefix" xml:space="preserve"><value>Need to add a team?</value></data>
+  <data name="WorkspaceModeInfoCard_Cta_Solo_Text" xml:space="preserve"><value>This workspace type is locked to maintain the stability of your reports. To work with colleagues, manage payouts, and approve hours, simply</value></data>
+  <data name="WorkspaceModeInfoCard_Cta_Solo_Link" xml:space="preserve"><value>Create a new Team workspace ➕</value></data>
+  <data name="WorkspaceModeInfoCard_Note_Team_Prefix" xml:space="preserve"><value>Why can't the mode be changed?</value></data>
+  <data name="WorkspaceModeInfoCard_Note_Team_Text" xml:space="preserve"><value>We lock the workspace mode to prevent historical financial reports, member balances, and shared client links from breaking. If you need a simple workspace without controls, you can create a Solo workspace in 10 seconds</value></data>
+  <data name="WorkspaceModeInfoCard_Note_Team_Link" xml:space="preserve"><value>Create Workspace ➕</value></data>
 </root>

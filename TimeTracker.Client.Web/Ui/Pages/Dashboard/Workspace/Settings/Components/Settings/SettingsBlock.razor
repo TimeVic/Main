@@ -1,9 +1,12 @@
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Components
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Settings
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Settings.Parts
 
 @inherits BaseReactiveComponent
 
 <section class="space-y-6">
+    <WorkspaceModeInfoBlock OnCreateWorkspaceClicked="@(() => _isShowAddWorkspaceModal = true)" />
+
     <LumexCard>
         <LumexCardHeader>
             <div>
@@ -43,4 +46,8 @@
     </LumexCard>
 
     <WorkspaceDeletionBlock></WorkspaceDeletionBlock>
+
+    <AddWorkspaceModal
+        IsOpened="_isShowAddWorkspaceModal"
+        IsOpenedChanged="@((isOpened) => _isShowAddWorkspaceModal = isOpened)" />
 </section>

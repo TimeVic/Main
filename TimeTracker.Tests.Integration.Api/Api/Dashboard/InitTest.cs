@@ -53,7 +53,6 @@ public class InitTest : BaseTest
     public async Task ShouldReceiveInitData()
     {
         _workspace.Mode = WorkspaceMode.Team;
-        _workspace.IsApprovalsEnabled = true;
 
         var clients = await _clientSeeder.CreateSeveralAsync(_workspace, 2);
         var project1 = await _projectSeeder.CreateAsync(_workspace, clients.First());

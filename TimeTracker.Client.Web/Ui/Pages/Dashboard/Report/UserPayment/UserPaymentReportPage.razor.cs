@@ -18,7 +18,6 @@ public partial class UserPaymentReportPage
 
     private bool IsCanShareClientReport => AuthState.Value.Workspace?.IsWorkspaceAdmin == true;
 
-    private bool IsApprovalsEnabled => AuthState.Value.Workspace?.IsApprovalsEnabled ?? false;
 
     private TimeTracker.Business.Common.Dto.TimeEntryApprovalStatusSummaryDto? _approvalSummary;
 

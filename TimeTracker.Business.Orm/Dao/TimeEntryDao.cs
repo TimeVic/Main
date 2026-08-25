@@ -279,7 +279,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             throw new DataInconsistencyException("New time entry can not be created before active exists");
         }
         
-        var isApproved = workspace.Mode == WorkspaceMode.Solo || !workspace.IsApprovalsEnabled;
+        var isApproved = workspace.Mode != WorkspaceMode.Team;
         var entry = new TimeEntryEntity
         {
             IsBillable = isBillable,
@@ -448,7 +448,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .FirstOrDefaultAsync();
         if (timeEntry == null)
         {
-            var isApproved = workspace.Mode == WorkspaceMode.Solo || !workspace.IsApprovalsEnabled;
+            var isApproved = workspace.Mode != WorkspaceMode.Team;
             timeEntry = new TimeEntryEntity()
             {
                 Workspace = workspace,

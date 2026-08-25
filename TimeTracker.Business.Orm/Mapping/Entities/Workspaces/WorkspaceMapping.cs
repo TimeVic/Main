@@ -16,7 +16,6 @@ public class WorkspaceMapping: BaseGuidMappings<WorkspaceEntity>
         Map(x => x.TimeZone);
         Map(x => x.IsDefault);
         Map(x => x.Mode).EnumNullable<WorkspaceMode>();
-        Map(x => x.IsApprovalsEnabled);
         Map(x => x.CreatedAt).DateTime();
         Map(x => x.UpdatedAt).DateTimeNullable();
         Map(x => x.DeletedAt).DateTimeNullable();
