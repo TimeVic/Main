@@ -448,11 +448,13 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             .FirstOrDefaultAsync();
         if (timeEntry == null)
         {
+            var isApproved = workspace.Mode != WorkspaceMode.Team;
             timeEntry = new TimeEntryEntity()
             {
                 Workspace = workspace,
                 User = user,
                 TimeZone = workspace.TimeZone,
+                Status = isApproved ? TimeEntryStatus.Approved : TimeEntryStatus.Draft,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
