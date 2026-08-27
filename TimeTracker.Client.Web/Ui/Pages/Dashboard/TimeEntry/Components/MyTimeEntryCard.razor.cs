@@ -82,4 +82,17 @@ public partial class MyTimeEntryCard
 
         return Entry.HourlyRate.Value.ToMoneyFormat(_currencySymbol);
     }
+
+    /// <summary>
+    /// Returns StartTime converted to the current workspace timezone for display.
+    /// </summary>
+    private DateTimeOffset GetStartTimeInWorkspaceTz()
+        => Entry.StartTime.ToDateTimeOffset(CurrentTimeZone);
+
+    /// <summary>
+    /// Returns EndTime converted to the current workspace timezone for display,
+    /// or null when the entry is still active.
+    /// </summary>
+    private DateTimeOffset? GetEndTimeInWorkspaceTz()
+        => Entry.EndTime.ToDateTimeOffset(CurrentTimeZone);
 }

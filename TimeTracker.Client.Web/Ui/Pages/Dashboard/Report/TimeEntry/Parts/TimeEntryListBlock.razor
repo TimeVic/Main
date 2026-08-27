@@ -1,5 +1,6 @@
 @using LumexUI.Common
 @using TimeTracker.Api.Shared.Dto.Entity
+@using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry.Manage
 @using TimeTracker.Client.Web.Ui.Shared.Components.Dialogs
 @using TimeTracker.Client.Web.Ui.Shared.Components.List
@@ -43,7 +44,7 @@
         <ChildContent>
             <TemplateColumn Title="@DashboardLocalizer["Date"].Value" TItem="TimeEntryDto">
                 <span class="whitespace-nowrap text-slate-600">
-                    @context.StartTimeOffset.ToString("MMM d, yyyy")
+                    @context.StartTime.ToDateTimeOffset(AuthState.Value.Workspace?.TimeZone ?? TimeZoneInfo.Local.Id).ToString("MMM d, yyyy")
                 </span>
             </TemplateColumn>
 
