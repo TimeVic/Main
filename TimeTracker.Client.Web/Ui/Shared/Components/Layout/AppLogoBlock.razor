@@ -11,11 +11,11 @@
         }
         <div class="@LogoWrapClass">
             <img
-                src="/assets/brand/timevic-logo-horizontal.svg"
-                alt="TimeVic"
-                class="@LogoClass"
-                width="@LogoWidth"
-                height="@LogoHeight" />
+            src="/assets/brand/timevic-logo-horizontal.svg"
+            alt="TimeVic"
+            class="@LogoClass"
+            width="@LogoWidth"
+            height="@LogoHeight" />
             @if (IsShowBeta)
             {
                 <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-700">@SharedLocalizer["AppLogo_BetaBadge"]</span>
@@ -56,4 +56,4 @@
     private string LogoUrl => string.IsNullOrWhiteSpace(Url)
         ? LocalizationUrlService.GetLocalizedUrl(SiteUrl.Main, CurrentCulture)
         : Url;
-}
+}}
