@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Fast Time Tracking &amp; Smart Timesheet Approvals — TimeVic</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Instant one-click timer for Solo mode and a reliable, permanent timesheet approval process with Split View interface for teams.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>time tracking, timesheet approvals, team time tracker, split view approvals, locked approved hours, TimeVic time approvals, solo mode time tracker, freelance time tracking</value>
+  </data>
+  <data name="Hero_Badge" xml:space="preserve">
+    <value>Fast Tracking &amp; Approval Engine</value>
+  </data>
+  <data name="Hero_Title" xml:space="preserve">
+    <value>Track Time in One Click, Approve Weeks in Seconds</value>
+  </data>
+  <data name="Hero_Subtitle" xml:space="preserve">
+    <value>Frictionless tracking for freelancers and professional timesheet control for teams with automatic locking of approved records.</value>
+  </data>
+  <data name="Hero_Cta_Start" xml:space="preserve">
+    <value>Start tracking for free</value>
+  </data>
+  <data name="Hero_Cta_Demo" xml:space="preserve">
+    <value>View demo dashboard</value>
+  </data>
+  <data name="Hero_Subtext" xml:space="preserve">
+    <value>No credit card required • Instant start in 30 seconds</value>
+  </data>
+  <data name="Hero_Pill_Solo" xml:space="preserve">
+    <value>Solo Mode: Zero Bureaucracy</value>
+  </data>
+  <data name="Hero_Pill_Approvals" xml:space="preserve">
+    <value>Split View Team Approvals</value>
+  </data>
+  <data name="Hero_Pill_Locking" xml:space="preserve">
+    <value>Strict Backend Auto-Lock</value>
+  </data>
+  <data name="Block1_Badge" xml:space="preserve">
+    <value>Solo Freelancers &amp; Developers</value>
+  </data>
+  <data name="Block1_Title" xml:space="preserve">
+    <value>Ultimate Freedom: One-Click Solo Time Tracking</value>
+  </data>
+  <data name="Block1_Description" xml:space="preserve">
+    <value>For individual developers and freelancers, the approval procedure is completely disabled. You can start the timer, edit, or delete any of your entries at any moment. Maximum speed and productivity with zero overhead.</value>
+  </data>
+  <data name="Block1_Item1_Title" xml:space="preserve">
+    <value>Instant One-Click Timer</value>
+  </data>
+  <data name="Block1_Item1_Desc" xml:space="preserve">
+    <value>Start and stop tracking immediately with one click. Switch tasks seamlessly without mandatory forms or friction.</value>
+  </data>
+  <data name="Block1_Item2_Title" xml:space="preserve">
+    <value>Total Editing Freedom</value>
+  </data>
+  <data name="Block1_Item2_Desc" xml:space="preserve">
+    <value>Adjust time entries, descriptions, and projects at any time. Fix typos or delete accidental records instantly.</value>
+  </data>
+  <data name="Block1_Item3_Title" xml:space="preserve">
+    <value>Direct Financial Visibility</value>
+  </data>
+  <data name="Block1_Item3_Desc" xml:space="preserve">
+    <value>Tracked hours immediately translate into your personal earned totals and reports without awaiting any manager approvals.</value>
+  </data>
+  <data name="Block2_Badge" xml:space="preserve">
+    <value>Team Timesheet Approvals</value>
+  </data>
+  <data name="Block2_Title" xml:space="preserve">
+    <value>Smart Team Approvals &amp; Developer Privacy</value>
+  </data>
+  <data name="Block2_Description" xml:space="preserve">
+    <value>In Team Mode, timesheet approvals are enabled by default. All time entries automatically undergo a structured review cycle, protecting your financial reports from accidental retroactive changes. Developer drafts remain strictly private until submitted, and managers review timesheets via an intuitive Split View interface.</value>
+  </data>
+  <data name="Block2_Item1_Title" xml:space="preserve">
+    <value>Draft Privacy (No-Draft Rule)</value>
+  </data>
+  <data name="Block2_Item1_Desc" xml:space="preserve">
+    <value>Work in progress belongs exclusively to the developer. Managers only see time entries once they are formally submitted for the week.</value>
+  </data>
+  <data name="Block2_Item2_Title" xml:space="preserve">
+    <value>Fast Split View Review</value>
+  </data>
+  <data name="Block2_Item2_Desc" xml:space="preserve">
+    <value>Review team members' weekly timesheets side-by-side with task context, billable tags, and total summaries without context switching.</value>
+  </data>
+  <data name="Block2_Item3_Title" xml:space="preserve">
+    <value>Transparent Rejections with Reasons</value>
+  </data>
+  <data name="Block2_Item3_Desc" xml:space="preserve">
+    <value>Managers provide clear feedback when rejecting an entry, allowing developers to adjust the record and resubmit quickly.</value>
+  </data>
+  <data name="Block3_Badge" xml:space="preserve">
+    <value>Accounting &amp; Data Security</value>
+  </data>
+  <data name="Block3_Title" xml:space="preserve">
+    <value>Safe Accounting: Auto-Locking of Approved Hours</value>
+  </data>
+  <data name="Block3_Description" xml:space="preserve">
+    <value>Once a manager approves a team member's hours, they transition to Approved status and are strictly locked against modifications on the backend. Zero accidental retroactive edits and complete financial consistency.</value>
+  </data>
+  <data name="Block3_Item1_Title" xml:space="preserve">
+    <value>Backend Immutability Guarantee</value>
+  </data>
+  <data name="Block3_Item1_Desc" xml:space="preserve">
+    <value>Approved records cannot be altered, moved, or deleted by anyone, protecting your accounting from accidental revisions.</value>
+  </data>
+  <data name="Block3_Item2_Title" xml:space="preserve">
+    <value>Permanent Approval Rules</value>
+  </data>
+  <data name="Block3_Item2_Desc" xml:space="preserve">
+    <value>In Team Mode, approval rules are permanently enforced to maintain historical integrity and eliminate retroactive revisions.</value>
+  </data>
+  <data name="Block3_Item3_Title" xml:space="preserve">
+    <value>Audit-Ready Financial Records</value>
+  </data>
+  <data name="Block3_Item3_Desc" xml:space="preserve">
+    <value>Approved entries feed directly into subcontractor payout balances and client invoices with unquestionable accuracy.</value>
+  </data>
+  <data name="Cta_Title" xml:space="preserve">
+    <value>Take Control of Your Time and Team Approvals</value>
+  </data>
+  <data name="Cta_Subtitle" xml:space="preserve">
+    <value>Start tracking solo with zero overhead, or use smart team approvals for foolproof accounting. Free, no credit card required.</value>
+  </data>
+  <data name="Cta_Button_Register" xml:space="preserve">
+    <value>Create free account</value>
+  </data>
+  <data name="Cta_Button_Demo" xml:space="preserve">
+    <value>Try interactive demo</value>
+  </data>
+  <data name="SoloMode_TrackingActive" xml:space="preserve">
+    <value>Solo Tracking Active</value>
+  </data>
+  <data name="SoloMode_NoApprovals" xml:space="preserve">
+    <value>No Approvals Needed</value>
+  </data>
+  <data name="SoloMode_CurrentTask" xml:space="preserve">
+    <value>Current Task</value>
+  </data>
+  <data name="SoloMode_TaskTitle" xml:space="preserve">
+    <value>Core API Auth &amp; Token Validation</value>
+  </data>
+  <data name="SoloMode_Client" xml:space="preserve">
+    <value>Client: Fintech Global</value>
+  </data>
+  <data name="SoloMode_Entry1_Title" xml:space="preserve">
+    <value>Refactoring responsive dashboard layout</value>
+  </data>
+  <data name="SoloMode_Entry2_Title" xml:space="preserve">
+    <value>Client sprint review &amp; roadmap alignment</value>
+  </data>
+  <data name="SoloMode_IncomeCalcTitle" xml:space="preserve">
+    <value>Immediate Income Calculation</value>
+  </data>
+  <data name="SoloMode_Ready" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="StrictLocking_ProtectionActive" xml:space="preserve">
+    <value>Backend Protection Active</value>
+  </data>
+  <data name="StrictLocking_LockedBadge" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="StrictLocking_ApprovedPeriod" xml:space="preserve">
+    <value>Approved Period</value>
+  </data>
+  <data name="StrictLocking_PeriodDate" xml:space="preserve">
+    <value>Week of Aug 24 – Aug 30</value>
+  </data>
+  <data name="StrictLocking_ApprovedByOwner" xml:space="preserve">
+    <value>Approved by Workspace Owner</value>
+  </data>
+  <data name="StrictLocking_Billable" xml:space="preserve">
+    <value>Billable</value>
+  </data>
+  <data name="StrictLocking_Entry1_Title" xml:space="preserve">
+    <value>Patient Portal UI • Wireframes &amp; Auth</value>
+  </data>
+  <data name="StrictLocking_Entry1_Sub" xml:space="preserve">
+    <value>Alex • 12:00:00 •</value>
+  </data>
+  <data name="StrictLocking_ReadOnly" xml:space="preserve">
+    <value>Read-Only</value>
+  </data>
+  <data name="StrictLocking_Entry2_Title" xml:space="preserve">
+    <value>Crypto Wallet Dashboard • Charts</value>
+  </data>
+  <data name="StrictLocking_Entry2_Sub" xml:space="preserve">
+    <value>John • 17:00:00 •</value>
+  </data>
+  <data name="StrictLocking_GuaranteeTitle" xml:space="preserve">
+    <value>Immutable Records Guarantee</value>
+  </data>
+  <data name="StrictLocking_GuaranteeSub" xml:space="preserve">
+    <value>Zero Dispute Risk</value>
+  </data>
+</root>

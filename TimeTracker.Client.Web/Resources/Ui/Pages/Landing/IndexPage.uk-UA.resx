@@ -21,6 +21,54 @@
   <data name="Meta_Keywords" xml:space="preserve">
     <value>облік часу для фрилансерів, облік оплат клієнтів, борги клієнтів, погодинна ставка, дохід фрилансера, неоплачена робота</value>
   </data>
+  <data name="Hero_Mode_Solo" xml:space="preserve">
+    <value>Solo Mode</value>
+  </data>
+  <data name="Hero_Mode_Team" xml:space="preserve">
+    <value>Team Mode</value>
+  </data>
+  <data name="Hero_Solo_Badge" xml:space="preserve">
+    <value>Для фрилансерів та соло-розробників</value>
+  </data>
+  <data name="Hero_Solo_Title" xml:space="preserve">
+    <value>Миттєвий облік часу та звітність для фрілансерів</value>
+  </data>
+  <data name="Hero_Solo_Description" xml:space="preserve">
+    <value>Запускайте таймер в один клік, пишіть приватні замітки та миттєво діліться з клієнтами живими фінансовими звітами.</value>
+  </data>
+  <data name="Hero_Solo_Feature1_Title" xml:space="preserve">
+    <value>Приватні Markdown-нотатки</value>
+  </data>
+  <data name="Hero_Solo_Feature1_Desc" xml:space="preserve">
+    <value>Структуруйте документацію, клієнтські домовленості та нотатки поруч із таймером.</value>
+  </data>
+  <data name="Hero_Solo_Feature2_Title" xml:space="preserve">
+    <value>Живі клієнтські звіти</value>
+  </data>
+  <data name="Hero_Solo_Feature2_Desc" xml:space="preserve">
+    <value>Діліться посиланням на актуальний фінансовий звіт із залишком і закритими оплатами.</value>
+  </data>
+  <data name="Hero_Team_Badge" xml:space="preserve">
+    <value>Для невеликих IT-студій та команд</value>
+  </data>
+  <data name="Hero_Team_Title" xml:space="preserve">
+    <value>Облік часу та фінансів під ключ для невеликих IT-студій</value>
+  </data>
+  <data name="Hero_Team_Description" xml:space="preserve">
+    <value>Автоматичний розрахунок зарплат, узгодження годин (Approvals) в один клік та реальна маржинальність проєктів на одному дашборді.</value>
+  </data>
+  <data name="Hero_Team_Feature1_Title" xml:space="preserve">
+    <value>Апруви годин команди</value>
+  </data>
+  <data name="Hero_Team_Feature1_Desc" xml:space="preserve">
+    <value>Розробники відправляють години на перевірку в один клік, менеджер апрувить і блокує зміни.</value>
+  </data>
+  <data name="Hero_Team_Feature2_Title" xml:space="preserve">
+    <value>Захист ставок розробників</value>
+  </data>
+  <data name="Hero_Team_Feature2_Desc" xml:space="preserve">
+    <value>Розробники бачать лише свою внутрішню ставку, а власник — реальну маржинальність проєктів.</value>
+  </data>
   <data name="Content_ForFreelanceDevelopersWorkingWithMultipleClients" xml:space="preserve">
     <value>Для фрилансерів, які ведуть кілька клієнтів</value>
   </data>

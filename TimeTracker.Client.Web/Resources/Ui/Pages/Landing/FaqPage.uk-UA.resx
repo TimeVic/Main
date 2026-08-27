@@ -276,6 +276,24 @@
   <data name="Content_KnowHowMuchYouEarnedAndWhoStillOwesYou" xml:space="preserve">
     <value>Знай, скільки зароблено і хто ще винен гроші</value>
   </data>
+  <data name="Title_DoDevelopersSeeClientRates" xml:space="preserve">
+    <value>Чи бачать розробники фінансові ставки клієнтів?</value>
+  </data>
+  <data name="Content_DoDevelopersSeeClientRates" xml:space="preserve">
+    <value>Ні, у командному режимі розробники бачать виключно свої персональні заробітки за внутрішньою ставкою (Member Rate). Комерційна таємниця компанії надійно захищена.</value>
+  </data>
+  <data name="Title_HowDoesCustomCurrencyWork" xml:space="preserve">
+    <value>Як працює власна валюта воркспейсу (наприклад, знак ₵)?</value>
+  </data>
+  <data name="Content_HowDoesCustomCurrencyWork" xml:space="preserve">
+    <value>Ви можете обрати будь-яку стандартну валюту (USD, EUR, UAH) або використовувати кастомні умовні одиниці (внутрішні коїни воркспейсу) для розрахунків усередині вашої команди.</value>
+  </data>
+  <data name="Title_HowOftenClientReportsUpdated" xml:space="preserve">
+    <value>Як часто оновлюються дані в гостьовому звіті для клієнта?</value>
+  </data>
+  <data name="Content_HowOftenClientReportsUpdated" xml:space="preserve">
+    <value>Дані оновлюються в реальному часі, але клієнт бачить тільки ті записи, які менеджер офіційно затвердив (Approved). Будь-які чернетки чи помилки розробників клієнту не відображаються.</value>
+  </data>
   <data name="Content_NoSetupComplexityJustAddAClientSetARate" xml:space="preserve">
     <value>Без складного налаштування: додай клієнта, вкажи ставку і трекай час.</value>
   </data>

@@ -1,0 +1,80 @@
+@using TimeTracker.Client.Web.Ui.Pages.Landing
+@namespace TimeTracker.Client.Web.Ui.Pages.Landing.TasksAndNotes.Parts
+@inject IStringLocalizer<TasksAndNotesPage> Localizer
+
+<section class="border-b border-slate-200 bg-slate-50/50 py-16 sm:py-24">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+            <div class="relative order-2 lg:order-1 lg:col-span-6">
+                <div class="relative rounded-2xl sm:rounded-3xl border border-slate-200 bg-slate-900/5 p-2 sm:p-3 shadow-xl ring-1 ring-slate-900/5">
+                    <div class="overflow-hidden rounded-xl sm:rounded-2xl border border-slate-200/80 bg-white">
+                        <img
+                            src="/img/features/notes_page_team_mode_user_0.png"
+                            alt="@Localizer["Block2_Title"]"
+                            class="w-full h-auto object-cover"
+                            loading="lazy" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-1 lg:order-2 lg:col-span-6">
+                <div class="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1.5 text-xs font-semibold text-indigo-700">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>@Localizer["Block2_Badge"]</span>
+                </div>
+
+                <h3 class="mt-4 text-2xl font-bold text-slate-950 sm:text-3xl lg:text-4xl leading-tight">
+                    @Localizer["Block2_Title"]
+                </h3>
+
+                <p class="mt-4 text-base text-slate-600 sm:text-lg leading-relaxed">
+                    @Localizer["Block2_Description"]
+                </p>
+
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-start gap-4 rounded-2xl border border-slate-200/70 bg-white p-4 transition hover:border-indigo-200 hover:bg-indigo-50/30">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm">
+                            <i class="fa-solid fa-table-columns text-sm"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-base font-semibold text-slate-900">
+                                @Localizer["Block2_Item1_Title"]
+                            </h4>
+                            <p class="mt-1 text-sm text-slate-600 leading-relaxed">
+                                @Localizer["Block2_Item1_Desc"]
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 rounded-2xl border border-slate-200/70 bg-white p-4 transition hover:border-indigo-200 hover:bg-indigo-50/30">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-600 text-white shadow-sm">
+                            <i class="fa-solid fa-shield-halved text-sm"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-base font-semibold text-slate-900">
+                                @Localizer["Block2_Item2_Title"]
+                            </h4>
+                            <p class="mt-1 text-sm text-slate-600 leading-relaxed">
+                                @Localizer["Block2_Item2_Desc"]
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 rounded-2xl border border-slate-200/70 bg-white p-4 transition hover:border-indigo-200 hover:bg-indigo-50/30">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+                            <i class="fa-brands fa-markdown text-base"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-base font-semibold text-slate-900">
+                                @Localizer["Block2_Item3_Title"]
+                            </h4>
+                            <p class="mt-1 text-sm text-slate-600 leading-relaxed">
+                                @Localizer["Block2_Item3_Desc"]
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

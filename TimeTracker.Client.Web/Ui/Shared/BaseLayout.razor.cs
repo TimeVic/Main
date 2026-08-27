@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Client.Core.Constants;
 using TimeTracker.Client.Core.Core.Extensions;
@@ -51,6 +51,8 @@ public partial class BaseLayout
                 || normalizedPath.StartsWith(SiteUrl.Pricing)
                 || normalizedPath.StartsWith(SiteUrl.PrivacyPolicy)
                 || normalizedPath.StartsWith(SiteUrl.TermsOfService)
+                || normalizedPath.StartsWith(SiteUrl.FeaturesReportsAndPayouts)
+                || normalizedPath.StartsWith("/features")
                 || normalizedPath.StartsWith(SiteUrl.Login)
                 || normalizedPath.StartsWith(SiteUrl.LoginAsDemo)
                 || normalizedPath.StartsWith(SiteUrl.Registration_Step1)

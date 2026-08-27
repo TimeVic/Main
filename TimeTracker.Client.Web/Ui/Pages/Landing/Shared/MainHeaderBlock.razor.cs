@@ -25,6 +25,12 @@ public partial class MainHeaderBlock
 
     protected string NavHomeUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.Main, CurrentCulture);
 
+    protected string NavReportsAndPayoutsUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.FeaturesReportsAndPayouts, CurrentCulture);
+
+    protected string NavTimeAndApprovalsUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.FeaturesTimeAndApprovals, CurrentCulture);
+
+    protected string NavTasksAndNotesUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.FeaturesTasksAndNotes, CurrentCulture);
+
     protected string NavUseCasesUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.UseCases, CurrentCulture);
 
     protected string NavPricingUrl => LocalizationUrlService.GetLocalizedUrl(SiteUrl.Pricing, CurrentCulture);

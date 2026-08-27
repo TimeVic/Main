@@ -13,117 +13,69 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Meta_Title" xml:space="preserve">
-    <value>TimeVic Pricing — Free Time and Income Tracker for Freelancers</value>
+    <value>Simple &amp; Honest Pricing — TimeVic</value>
   </data>
   <data name="Meta_Description" xml:space="preserve">
-    <value>TimeVic is free. Track billable hours, calculate earnings, record client payments, and see outstanding balances — no credit card required.</value>
+    <value>TimeVic is completely free during public beta. Get unrestricted access to time and financial tracking without limits.</value>
   </data>
   <data name="Meta_Keywords" xml:space="preserve">
-    <value>TimeVic pricing, free time tracker, freelance income tracker free, client payment tracker free, no credit card time tracking</value>
+    <value>TimeVic pricing, free time tracker, freelance income tracker, client payment tracker, time tracking public beta</value>
   </data>
-  <data name="Content_TrackYourWork" xml:space="preserve">
-    <value>Track your work.</value>
+  <data name="Pricing_Header_Title" xml:space="preserve">
+    <value>Simple and honest pricing</value>
   </data>
-  <data name="Content_UnderstandYourMoney" xml:space="preserve">
-    <value>Understand your money.</value>
+  <data name="Pricing_Header_Subtitle" xml:space="preserve">
+    <value>TimeVic is in active public beta. Currently, all features are 100% free for everyone.</value>
   </data>
-  <data name="Content_SeeHowMuchYouVeEarnedWhatSBeenPaid" xml:space="preserve">
-    <value>See how much you've earned, what's been paid, and who still owes you — without spreadsheets.</value>
+  <data name="Pricing_Badge_PublicBeta" xml:space="preserve">
+    <value>🚀 Public Beta</value>
   </data>
-  <data name="Content_SeeHowItWorks" xml:space="preserve">
-    <value>See how it works</value>
+  <data name="Pricing_Card_Title" xml:space="preserve">
+    <value>🎁 Full Featured Free Access</value>
   </data>
-  <data name="Content_Free0" xml:space="preserve">
-    <value>Free — $0</value>
+  <data name="Pricing_Card_Description" xml:space="preserve">
+    <value>We are building TimeVic to be the ultimate tool for freelancers and digital agencies. During our public beta phase, you get unrestricted access to all features:</value>
   </data>
-  <data name="Content_Month" xml:space="preserve">
-    <value>/month</value>
+  <data name="Pricing_Feature_Workspaces_Bold" xml:space="preserve">
+    <value>Unlimited Workspaces</value>
   </data>
-  <data name="Content_FromHoursToMoneyClarity" xml:space="preserve">
-    <value>From hours to money clarity</value>
+  <data name="Pricing_Feature_Workspaces_Text" xml:space="preserve">
+    <value>(Both Solo and Team modes)</value>
   </data>
-  <data name="Content_TrackWork" xml:space="preserve">
-    <value>Track work</value>
+  <data name="Pricing_Feature_Finance_Bold" xml:space="preserve">
+    <value>Complete Financial Suite</value>
   </data>
-  <data name="Content_LogTimeByClientProjectAndTask" xml:space="preserve">
-    <value>Log time by client, project, and task.</value>
+  <data name="Pricing_Feature_Finance_Text" xml:space="preserve">
+    <value>(Payout balances and project profitability reports)</value>
   </data>
-  <data name="Content_TurnTimeIntoMoney" xml:space="preserve">
-    <value>Turn time into money</value>
+  <data name="Pricing_Feature_Approvals_Bold" xml:space="preserve">
+    <value>Smart Timesheet Approvals</value>
   </data>
-  <data name="Content_AutomaticallyCalculateEarningsUsingHourlyRates" xml:space="preserve">
-    <value>Automatically calculate earnings using hourly rates.</value>
+  <data name="Pricing_Feature_Approvals_Text" xml:space="preserve">
+    <value></value>
   </data>
-  <data name="Content_Earned" xml:space="preserve">
-    <value>earned</value>
+  <data name="Pricing_Feature_TasksNotes_Bold" xml:space="preserve">
+    <value>Integrated Tasks &amp; Markdown Notes</value>
   </data>
-  <data name="Content_TrackPayments" xml:space="preserve">
-    <value>Track payments</value>
+  <data name="Pricing_Feature_TasksNotes_Text" xml:space="preserve">
+    <value></value>
   </data>
-  <data name="Content_RecordWhatClientsHavePaidYou" xml:space="preserve">
-    <value>Record what clients have paid you.</value>
+  <data name="Pricing_Feature_Members_Bold" xml:space="preserve">
+    <value>Unlimited team members</value>
   </data>
-  <data name="Content_Paid" xml:space="preserve">
-    <value>paid</value>
+  <data name="Pricing_Feature_Members_Text" xml:space="preserve">
+    <value>per workspace (no hidden limits)</value>
   </data>
-  <data name="Content_SeeWhatSMissing" xml:space="preserve">
-    <value>See what's missing</value>
+  <data name="Pricing_Card_NoCreditCard" xml:space="preserve">
+    <value>No credit card required. Create your workspace and start tracking in 10 seconds.</value>
   </data>
-  <data name="Content_InstantlySeeUnpaidWorkAndOutstandingBalances" xml:space="preserve">
-    <value>Instantly see unpaid work and outstanding balances.</value>
+  <data name="Pricing_Card_Cta" xml:space="preserve">
+    <value>Create Free Workspace</value>
   </data>
-  <data name="Content_Unpaid" xml:space="preserve">
-    <value>unpaid</value>
+  <data name="Pricing_Transparency_Title" xml:space="preserve">
+    <value>Why is it free?</value>
   </data>
-  <data name="Content_WhatYouCanDoWithTimevic" xml:space="preserve">
-    <value>What you can do with TimeVic</value>
-  </data>
-  <data name="Content_BuiltForRealFreelanceWork" xml:space="preserve">
-    <value>Built for real freelance work</value>
-  </data>
-  <data name="Content_CreatedFromASimpleProblem" xml:space="preserve">
-    <value>TimeVic was created from a simple problem: freelance work becomes messy when time, payments, and clients are spread across spreadsheets and different tools.</value>
-  </data>
-  <data name="Content_SoWeBuiltSomethingSimpler" xml:space="preserve">
-    <value>So we built something simpler for ourselves.</value>
-  </data>
-  <data name="Content_APlaceTo" xml:space="preserve">
-    <value>A place to:</value>
-  </data>
-  <data name="Content_ListItem_TrackWork" xml:space="preserve">
-    <value>track work</value>
-  </data>
-  <data name="Content_ListItem_UnderstandEarnings" xml:space="preserve">
-    <value>understand earnings</value>
-  </data>
-  <data name="Content_ListItem_RecordPayments" xml:space="preserve">
-    <value>record payments</value>
-  </data>
-  <data name="Content_ListItem_SeeUnpaidBalances" xml:space="preserve">
-    <value>see unpaid balances</value>
-  </data>
-  <data name="Content_IfItsUsefulForYouToo" xml:space="preserve">
-    <value>If it's useful for you too — use it.</value>
-  </data>
-  <data name="Content_FreeNoCreditCard" xml:space="preserve">
-    <value>Free. No credit card required.</value>
-  </data>
-  <data name="Content_StartTrackingYourTimeAndIncome" xml:space="preserve">
-    <value>Start tracking your time and income</value>
-  </data>
-  <data name="Capability_TimeTrackingPerClientAndProject" xml:space="preserve">
-    <value>Time tracking per client and project</value>
-  </data>
-  <data name="Capability_HourlyRatesAutomaticEarningsCalculation" xml:space="preserve">
-    <value>Hourly rates → automatic earnings calculation</value>
-  </data>
-  <data name="Capability_PaymentTracking" xml:space="preserve">
-    <value>Payment tracking</value>
-  </data>
-  <data name="Capability_PaidVsUnpaidOverview" xml:space="preserve">
-    <value>Paid vs unpaid overview</value>
-  </data>
-  <data name="Capability_ClientLevelSummaries" xml:space="preserve">
-    <value>Client-level summaries</value>
+  <data name="Pricing_Transparency_Text" xml:space="preserve">
+    <value>We want to build the best product on the market together with our early users. Your feedback is our top priority. While we plan to introduce paid tiers for larger teams in the future, we will notify you well in advance. The core features you use today will always remain highly accessible.</value>
   </data>
 </root>

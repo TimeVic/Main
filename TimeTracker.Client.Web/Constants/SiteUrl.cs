@@ -13,6 +13,9 @@ public static class SiteUrl
     public static readonly string Pricing = "/pricing";
     public static readonly string PrivacyPolicy = "/privacy-policy";
     public static readonly string TermsOfService = "/terms-of-service";
+    public static readonly string FeaturesReportsAndPayouts = "/features/reports-and-payouts";
+    public static readonly string FeaturesTimeAndApprovals = "/features/time-and-approvals";
+    public static readonly string FeaturesTasksAndNotes = "/features/tasks-and-notes";
     
     public static readonly string Registration_Step1 = "/signup";
     public static readonly string Registration_Step2 = "/registration/step2";

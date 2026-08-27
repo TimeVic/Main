@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Інтегровані завдання та Markdown-нотатки в таймері — TimeVic</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Все в одному місці. Ведіть списки завдань, створюйте бази знань та регламенти у вбудованому Markdown-редакторі безпосередньо у таймері.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>завдання та нотатки, таск-трекер, markdown нотатки, база знань, регламенти для команди, облік часу задач, TimeVic завдання, тайм-трекер з нотатками</value>
+  </data>
+  <data name="Hero_Badge" xml:space="preserve">
+    <value>Завдання та База Знань</value>
+  </data>
+  <data name="Hero_Title" xml:space="preserve">
+    <value>Завдання, замітки та таймер в одній вкладці браузера</value>
+  </data>
+  <data name="Hero_Subtitle" xml:space="preserve">
+    <value>Більше не потрібно тримати відкритими три різні сервіси. Керуйте завданнями, ведіть проектну документацію та трекайте час в єдиному швидкому інтерфейсі.</value>
+  </data>
+  <data name="Hero_Cta_Start" xml:space="preserve">
+    <value>Почати безкоштовно</value>
+  </data>
+  <data name="Hero_Cta_Demo" xml:space="preserve">
+    <value>Демонстраційний кабінет</value>
+  </data>
+  <data name="Hero_Subtext" xml:space="preserve">
+    <value>Без кредитної картки • Миттєвий старт за 30 секунд</value>
+  </data>
+  <data name="Hero_Pill_Tasks" xml:space="preserve">
+    <value>Лаконічний таск-трекер</value>
+  </data>
+  <data name="Hero_Pill_Wiki" xml:space="preserve">
+    <value>Markdown база знань</value>
+  </data>
+  <data name="Hero_Pill_Bridge" xml:space="preserve">
+    <value>Запуск таймера в один клік</value>
+  </data>
+  <data name="Block1_Badge" xml:space="preserve">
+    <value>Інтеграція задач</value>
+  </data>
+  <data name="Block1_Title" xml:space="preserve">
+    <value>Лаконічний таск-трекер для швидкого старту</value>
+  </data>
+  <data name="Block1_Description" xml:space="preserve">
+    <value>Створюйте задачі, прив'язуйте до них записи таймера, групуйте за проєктами та ведіть команду за спринтами. Нічого зайвого — тільки фокус на виконанні задач.</value>
+  </data>
+  <data name="Block1_Item1_Title" xml:space="preserve">
+    <value>Миттєвий запуск із задач</value>
+  </data>
+  <data name="Block1_Item1_Desc" xml:space="preserve">
+    <value>Запускайте таймер безпосередньо з рядка або картки задачі. Затреканий час автоматично прив'язується до таски та потрапляє до звітів.</value>
+  </data>
+  <data name="Block1_Item2_Title" xml:space="preserve">
+    <value>Групування за проєктами та спринтами</value>
+  </data>
+  <data name="Block1_Item2_Desc" xml:space="preserve">
+    <value>Структуруйте роботу за клієнтами, проєктами та списками (To Do, In Progress, Backlog). Відстежуйте естімейти та виконавців.</value>
+  </data>
+  <data name="Block1_Item3_Title" xml:space="preserve">
+    <value>Жодної зайвої бюрократії</value>
+  </data>
+  <data name="Block1_Item3_Desc" xml:space="preserve">
+    <value>Швидке створення задач без перевантажених обов'язкових полів. Зручні фільтри та швидкий пошук для всієї команди.</value>
+  </data>
+  <data name="Block2_Badge" xml:space="preserve">
+    <value>База Знань та Вікі</value>
+  </data>
+  <data name="Block2_Title" xml:space="preserve">
+    <value>Повноцінний Markdown-редактор із двома просторами</value>
+  </data>
+  <data name="Block2_Description" xml:space="preserve">
+    <value>Організуйте регламенти та ТЗ у вкладці «Спільні» (Workspace) для всієї команди або ведіть особисті чернетки у вкладці «Приватні» (Private).</value>
+  </data>
+  <data name="Block2_Item1_Title" xml:space="preserve">
+    <value>Два ізольовані простори</value>
+  </data>
+  <data name="Block2_Item1_Desc" xml:space="preserve">
+    <value>Перемикайтеся між загальною командною базою знань та персональним простором для чернеток в один клік.</value>
+  </data>
+  <data name="Block2_Item2_Title" xml:space="preserve">
+    <value>Надійні права доступу</value>
+  </data>
+  <data name="Block2_Item2_Desc" xml:space="preserve">
+    <value>Звичайні розробники можуть вільно наповнювати базу знань, але захищені від випадкового видалення спільних папок та регламентів.</value>
+  </data>
+  <data name="Block2_Item3_Title" xml:space="preserve">
+    <value>Повноцінний Markdown</value>
+  </data>
+  <data name="Block2_Item3_Desc" xml:space="preserve">
+    <value>Форматуйте код із підсвіткою синтаксису, створюйте чеклісти, таблиці та структуруйте технічні інструкції.</value>
+  </data>
+  <data name="Block3_Badge" xml:space="preserve">
+    <value>Вбудований таймер</value>
+  </data>
+  <data name="Block3_Title" xml:space="preserve">
+    <value>Запуск таймера в один клік прямо із завдання</value>
+  </data>
+  <data name="Block3_Description" xml:space="preserve">
+    <value>Забудьте про ручне копіювання назв завдань у таймер. Просто відкрийте картку завдання та натисніть «Запустити таймер». Система автоматично прив'яже затрекані години до потрібної задачі, проєкту та клієнта.</value>
+  </data>
+  <data name="Block3_Item1_Title" xml:space="preserve">
+    <value>Миттєвий запуск таймера</value>
+  </data>
+  <data name="Block3_Item1_Desc" xml:space="preserve">
+    <value>Велика кнопка «Запустити таймер» у модальному вікні таски одразу вмикає відлік без зайвих дій.</value>
+  </data>
+  <data name="Block3_Item2_Title" xml:space="preserve">
+    <value>Автоматична прив'язка контексту</value>
+  </data>
+  <data name="Block3_Item2_Desc" xml:space="preserve">
+    <value>Затреканий час автоматично асоціюється з потрібним проєктом, списком та клієнтом.</value>
+  </data>
+  <data name="Block3_Item3_Title" xml:space="preserve">
+    <value>Синхронізація зі звітами</value>
+  </data>
+  <data name="Block3_Item3_Desc" xml:space="preserve">
+    <value>Усі зафіксовані години відразу потрапляють у табелі, звіти та баланси виплат.</value>
+  </data>
+  <data name="Cta_Title" xml:space="preserve">
+    <value>Готові об'єднати завдання, базу знань та тайм-трекінг?</value>
+  </data>
+  <data name="Cta_Subtitle" xml:space="preserve">
+    <value>Спробуйте TimeVic вже сьогодні безкоштовно. Створюйте завдання, ведіть документацію та контролюйте робочі години в єдиному швидкому сервісі.</value>
+  </data>
+  <data name="Cta_Button_Register" xml:space="preserve">
+    <value>Почати безкоштовно</value>
+  </data>
+  <data name="Cta_Button_Demo" xml:space="preserve">
+    <value>Демонстраційний кабінет</value>
+  </data>
+</root>
