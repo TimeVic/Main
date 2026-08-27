@@ -69,6 +69,12 @@
   <data name="Hero_Team_Feature2_Desc" xml:space="preserve">
     <value>Розробники бачать лише свою внутрішню ставку, а власник — реальну маржинальність проєктів.</value>
   </data>
+  <data name="Hero_Team_Feature3_Title" xml:space="preserve">
+    <value>Запрошуйте команду в 2 кліки</value>
+  </data>
+  <data name="Hero_Team_Feature3_Desc" xml:space="preserve">
+    <value>Створіть воркспейс, надішліть посилання розробникам — і вони вже готові трекати час. Повністю безкоштовно та без лімітів на кількість користувачів під час публічної бети.</value>
+  </data>
   <data name="Content_ForFreelanceDevelopersWorkingWithMultipleClients" xml:space="preserve">
     <value>Для фрилансерів, які ведуть кілька клієнтів</value>
   </data>

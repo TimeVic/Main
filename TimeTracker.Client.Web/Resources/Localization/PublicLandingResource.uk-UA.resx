@@ -16,37 +16,37 @@
     <value>ОБЛІК ЧАСУ ТА ФІНАНСІВ</value>
   </data>
   <data name="AppLogo_BetaBadge" xml:space="preserve">
-    <value>Beta</value>
+    <value>Бета</value>
   </data>
   <data name="Nav_Home" xml:space="preserve">
     <value>Головна</value>
   </data>
   <data name="Nav_Features" xml:space="preserve">
-    <value>Функції</value>
+    <value>Можливості</value>
   </data>
   <data name="Nav_ReportsAndPayouts" xml:space="preserve">
-    <value>Звіти та Оплати</value>
+    <value>Звіти та Виплати</value>
   </data>
   <data name="Nav_ReportsAndPayouts_Desc" xml:space="preserve">
-    <value>Автоматичні виплати та маржинальність</value>
+    <value>Автоматичний розрахунок виплат і маржинальність</value>
   </data>
   <data name="Nav_TimeAndApprovals" xml:space="preserve">
-    <value>Трекінг та Апруви</value>
+    <value>Час та Апруви</value>
   </data>
   <data name="Nav_TimeAndApprovals_Desc" xml:space="preserve">
-    <value>Розумне затвердження годин команди</value>
+    <value>Розумне узгодження годин для команд</value>
   </data>
   <data name="Nav_TasksAndNotes" xml:space="preserve">
-    <value>Завдання та Нотатки</value>
+    <value>Завдання та Вікі</value>
   </data>
   <data name="Nav_TasksAndNotes_Desc" xml:space="preserve">
-    <value>Інтегрована база знань та таски</value>
+    <value>Вбудовані нотатки та база знань</value>
   </data>
   <data name="Nav_UseCases" xml:space="preserve">
     <value>Сценарії</value>
   </data>
   <data name="Nav_Pricing" xml:space="preserve">
-    <value>Ціни</value>
+    <value>Тарифи</value>
   </data>
   <data name="Nav_FAQ" xml:space="preserve">
     <value>FAQ</value>
@@ -59,6 +59,9 @@
   </data>
   <data name="CTA_CreateWorkspace" xml:space="preserve">
     <value>Створити воркспейс</value>
+  </data>
+  <data name="CTA_CreateFreeAccount" xml:space="preserve">
+    <value>Створити безкоштовний акаунт</value>
   </data>
   <data name="CTA_Dashboard" xml:space="preserve">
     <value>Кабінет</value>

@@ -60,6 +60,9 @@
   <data name="CTA_CreateWorkspace" xml:space="preserve">
     <value>Create workspace</value>
   </data>
+  <data name="CTA_CreateFreeAccount" xml:space="preserve">
+    <value>Create free account</value>
+  </data>
   <data name="CTA_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>

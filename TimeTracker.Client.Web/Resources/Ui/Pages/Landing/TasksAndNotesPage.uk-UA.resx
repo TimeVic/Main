@@ -46,7 +46,7 @@
     <value>Markdown база знань</value>
   </data>
   <data name="Hero_Pill_Bridge" xml:space="preserve">
-    <value>Запуск таймера в один клік</value>
+    <value>Вбудований запуск таймера</value>
   </data>
   <data name="Block1_Badge" xml:space="preserve">
     <value>Інтеграція задач</value>
@@ -103,7 +103,7 @@
     <value>Форматуйте код із підсвіткою синтаксису, створюйте чеклісти, таблиці та структуруйте технічні інструкції.</value>
   </data>
   <data name="Block3_Badge" xml:space="preserve">
-    <value>Вбудований таймер</value>
+    <value>Вбудований запуск таймера</value>
   </data>
   <data name="Block3_Title" xml:space="preserve">
     <value>Запуск таймера в один клік прямо із завдання</value>
