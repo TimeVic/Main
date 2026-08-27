@@ -82,7 +82,7 @@
     <value>Smart Team Approvals &amp; Developer Privacy</value>
   </data>
   <data name="Block2_Description" xml:space="preserve">
-    <value>In Team Mode, timesheet approvals are enabled by default. All time entries automatically undergo a structured review cycle, protecting your financial reports from accidental retroactive changes. Developer drafts remain strictly private until submitted, and managers review timesheets via an intuitive Split View interface.</value>
+    <value>In Team Mode, timesheet approvals are enabled by default. Tracked hours automatically follow a secure review workflow, locking approved data and protecting your financial reports from retroactive changes.</value>
   </data>
   <data name="Block2_Item1_Title" xml:space="preserve">
     <value>Draft Privacy (No-Draft Rule)</value>

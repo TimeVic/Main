@@ -69,6 +69,12 @@
   <data name="Hero_Team_Feature2_Desc" xml:space="preserve">
     <value>Developers see their payout rates, while workspace owners track true company margins.</value>
   </data>
+  <data name="Hero_Team_Feature3_Title" xml:space="preserve">
+    <value>Invite your team in 2 clicks</value>
+  </data>
+  <data name="Hero_Team_Feature3_Desc" xml:space="preserve">
+    <value>Create a workspace, share the link with your developers, and start tracking. 100% free with unlimited seats during our public beta phase.</value>
+  </data>
   <data name="Content_ForFreelanceDevelopersWorkingWithMultipleClients" xml:space="preserve">
     <value>For freelance developers working with multiple clients</value>
   </data>
