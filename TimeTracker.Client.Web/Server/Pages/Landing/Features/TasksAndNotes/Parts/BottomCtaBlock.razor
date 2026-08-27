@@ -1,0 +1,47 @@
+@using TimeTracker.Client.Web.Services
+@using TimeTracker.Client.Web.Ui.Pages.Landing
+@namespace TimeTracker.Client.Web.Ui.Pages.Landing.TasksAndNotes.Parts
+@inject IStringLocalizer<TasksAndNotesPage> Localizer
+@inject IStringLocalizer<PublicLandingResource> SharedLocalizer
+@inject ILocalizationUrlService LocalizationUrlService
+@inject NavigationManager NavigationManager
+
+<section class="relative overflow-hidden bg-slate-950 py-16 sm:py-24 text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(79,70,229,0.22),_transparent_60%)] pointer-events-none"></div>
+    <div class="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl leading-tight">
+            @Localizer["Cta_Title"]
+        </h2>
+
+        <p class="mx-auto mt-6 max-w-2xl text-base text-slate-300 sm:text-lg leading-relaxed">
+            @Localizer["Cta_Subtitle"]
+        </p>
+
+        <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
+                href="@LocalizedUrl(SiteUrl.Registration_Step1)"
+                class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 px-8 py-4 text-base font-semibold text-white shadow-xl shadow-blue-500/25 transition hover:bg-blue-500 sm:w-auto">
+                <i class="fa-solid fa-rocket"></i>
+                <span>@Localizer["Cta_Button_Register"]</span>
+            </a>
+            <a
+                href="@LocalizedUrl(SiteUrl.LoginAsDemo)"
+                class="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white/20 bg-white/5 px-8 py-4 text-base font-semibold text-white backdrop-blur transition hover:bg-white/10 sm:w-auto">
+                <i class="fa-regular fa-eye"></i>
+                <span>@Localizer["Cta_Button_Demo"]</span>
+            </a>
+        </div>
+
+        <p class="mt-4 text-xs text-slate-400 sm:text-sm">
+            @SharedLocalizer["CTA_NoCreditCardRequired"]
+        </p>
+    </div>
+</section>
+
+@code {
+    private string CurrentPath => new Uri(NavigationManager.Uri).AbsolutePath;
+
+    private string CurrentCulture => LocalizationUrlService.GetCurrentCultureName(CurrentPath);
+
+    private string LocalizedUrl(string path) => LocalizationUrlService.GetLocalizedUrl(path, CurrentCulture);
+}

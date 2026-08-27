@@ -13,13 +13,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppLogo_Eyebrow" xml:space="preserve">
-    <value>Freelance income tracker</value>
+    <value>TIME &amp; FINANCE TRACKER</value>
   </data>
   <data name="AppLogo_BetaBadge" xml:space="preserve">
     <value>Beta</value>
   </data>
   <data name="Nav_Home" xml:space="preserve">
     <value>Home</value>
+  </data>
+  <data name="Nav_Features" xml:space="preserve">
+    <value>Features</value>
+  </data>
+  <data name="Nav_ReportsAndPayouts" xml:space="preserve">
+    <value>Reports &amp; Payouts</value>
+  </data>
+  <data name="Nav_ReportsAndPayouts_Desc" xml:space="preserve">
+    <value>Automated payouts and margin tracking</value>
+  </data>
+  <data name="Nav_TimeAndApprovals" xml:space="preserve">
+    <value>Time &amp; Approvals</value>
+  </data>
+  <data name="Nav_TimeAndApprovals_Desc" xml:space="preserve">
+    <value>Smart team hours approval</value>
+  </data>
+  <data name="Nav_TasksAndNotes" xml:space="preserve">
+    <value>Tasks &amp; Notes</value>
+  </data>
+  <data name="Nav_TasksAndNotes_Desc" xml:space="preserve">
+    <value>Integrated knowledge base &amp; tasks</value>
   </data>
   <data name="Nav_UseCases" xml:space="preserve">
     <value>Use cases</value>
@@ -35,6 +56,9 @@
   </data>
   <data name="Nav_TermsOfService" xml:space="preserve">
     <value>Terms of Service</value>
+  </data>
+  <data name="CTA_CreateWorkspace" xml:space="preserve">
+    <value>Create workspace</value>
   </data>
   <data name="CTA_Dashboard" xml:space="preserve">
     <value>Dashboard</value>

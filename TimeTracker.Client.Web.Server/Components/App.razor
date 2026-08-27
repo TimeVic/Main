@@ -56,6 +56,8 @@ else
         "/uk/use-cases",
         "/pricing",
         "/uk/pricing",
+        "/features",
+        "/uk/features",
         "/privacy-policy",
         "/uk/privacy-policy",
         "/terms-of-service",
@@ -71,7 +73,9 @@ else
         {
             var path = HttpContext.Request.Path.HasValue ? HttpContext.Request.Path.Value! : "/";
             var normalizedPath = path.Length > 1 ? path.TrimEnd('/') : path;
-            return StaticServerPaths.Contains(normalizedPath);
+            return StaticServerPaths.Contains(normalizedPath)
+                || normalizedPath.StartsWith("/features/", StringComparison.OrdinalIgnoreCase)
+                || normalizedPath.StartsWith("/uk/features/", StringComparison.OrdinalIgnoreCase);
         }
     }
 

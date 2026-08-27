@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Automatic Financial Reports &amp; Developer Payout Balances — TimeVic</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Forget spreadsheets. TimeVic automatically calculates project margins, subcontractor payouts, and generates live client reports.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>automated financial reports, developer payout balances, project profitability tracker, subcontractor payouts, live client reports, freelance agency time tracking, workspace margin</value>
+  </data>
+  <data name="Hero_Badge" xml:space="preserve">
+    <value>Financial Engine for Agencies &amp; Subcontractors</value>
+  </data>
+  <data name="Hero_Title" xml:space="preserve">
+    <value>Agency Financial Control Without Manual Spreadsheet Hell</value>
+  </data>
+  <data name="Hero_Subtitle" xml:space="preserve">
+    <value>Automated developer payout calculations, real-time project profitability, and live guest reporting for clients in one elegant interface.</value>
+  </data>
+  <data name="Hero_Cta_Start" xml:space="preserve">
+    <value>Start tracking for free</value>
+  </data>
+  <data name="Hero_Cta_Demo" xml:space="preserve">
+    <value>View demo dashboard</value>
+  </data>
+  <data name="Hero_Subtext" xml:space="preserve">
+    <value>No credit card required • Instant start in 30 seconds</value>
+  </data>
+  <data name="Hero_Pill_Payouts" xml:space="preserve">
+    <value>Subcontractor Payouts</value>
+  </data>
+  <data name="Hero_Pill_Margin" xml:space="preserve">
+    <value>Real-Time Profit Margin</value>
+  </data>
+  <data name="Hero_Pill_GuestReports" xml:space="preserve">
+    <value>Live Guest Client Reports</value>
+  </data>
+  <data name="Block1_Badge" xml:space="preserve">
+    <value>Team Financial Transparency</value>
+  </data>
+  <data name="Block1_Title" xml:space="preserve">
+    <value>Personal Payment Report for Every Team Member</value>
+  </data>
+  <data name="Block1_Description" xml:space="preserve">
+    <value>Team members see their earned hours, received payouts/advances, and real-time outstanding balance to be paid. Total financial transparency eliminates end-of-month payment disputes.</value>
+  </data>
+  <data name="Block1_Item1_Title" xml:space="preserve">
+    <value>Real-Time Outstanding Balance</value>
+  </data>
+  <data name="Block1_Item1_Desc" xml:space="preserve">
+    <value>Both developer and manager always see the exact remaining balance due without calculating spreadsheets.</value>
+  </data>
+  <data name="Block1_Item2_Title" xml:space="preserve">
+    <value>Custom Workspace Currency</value>
+  </data>
+  <data name="Block1_Item2_Desc" xml:space="preserve">
+    <value>Full flexibility to calculate earnings in any currency (USD, EUR, UAH, ₵ or internal unit tokens).</value>
+  </data>
+  <data name="Block1_Item3_Title" xml:space="preserve">
+    <value>Zero Month-End Payment Disputes</value>
+  </data>
+  <data name="Block1_Item3_Desc" xml:space="preserve">
+    <value>Synchronized records of worked hours, advances, and payouts keep financial expectations aligned.</value>
+  </data>
+  <data name="Block2_Badge" xml:space="preserve">
+    <value>Workspace Owner Analytics</value>
+  </data>
+  <data name="Block2_Title" xml:space="preserve">
+    <value>Workspace Summary &amp; Project Profitability</value>
+  </data>
+  <data name="Block2_Description" xml:space="preserve">
+    <value>Agency owners see net profit in real time. The platform calculates project margin by taking the difference between client billing rates and developer cost rates, keeping internal pay rates confidential.</value>
+  </data>
+  <data name="Block2_Item1_Title" xml:space="preserve">
+    <value>Client Billing vs Developer Cost</value>
+  </data>
+  <data name="Block2_Item1_Desc" xml:space="preserve">
+    <value>Assign separate billable rates for clients and internal payout rates for team members effortlessly.</value>
+  </data>
+  <data name="Block2_Item2_Title" xml:space="preserve">
+    <value>Strict Cost Rate Privacy</value>
+  </data>
+  <data name="Block2_Item2_Desc" xml:space="preserve">
+    <value>Developers never see client billing totals, owner margin, or payout rates of other team members.</value>
+  </data>
+  <data name="Block2_Item3_Title" xml:space="preserve">
+    <value>Instant Net Margin &amp; Revenue</value>
+  </data>
+  <data name="Block2_Item3_Desc" xml:space="preserve">
+    <value>Monitor Client Earned, Client Received, Member Payouts, and Owner Net Profit across all projects at a glance.</value>
+  </data>
+  <data name="Block3_Badge" xml:space="preserve">
+    <value>Client Transparency</value>
+  </data>
+  <data name="Block3_Title" xml:space="preserve">
+    <value>Live Client Reports via Secure Shared Links</value>
+  </data>
+  <data name="Block3_Description" xml:space="preserve">
+    <value>No more tedious PDF exports or manual email updates. Send clients secure live branded links where they can check approved billable hours, project task breakdown, and transparent payment status whenever they want.</value>
+  </data>
+  <data name="Block3_Item1_Title" xml:space="preserve">
+    <value>Instant Passwordless Links</value>
+  </data>
+  <data name="Block3_Item1_Desc" xml:space="preserve">
+    <value>Clients view live reports through secure unique URLs without creating accounts or entering passwords.</value>
+  </data>
+  <data name="Block3_Item2_Title" xml:space="preserve">
+    <value>Approved Task Breakdowns</value>
+  </data>
+  <data name="Block3_Item2_Desc" xml:space="preserve">
+    <value>Clients only see approved billable time and connected task milestones tailored specifically for them.</value>
+  </data>
+  <data name="Block3_Item3_Title" xml:space="preserve">
+    <value>Clear Payment &amp; Balance Ledger</value>
+  </data>
+  <data name="Block3_Item3_Desc" xml:space="preserve">
+    <value>Shows total billed work, received client payments, and the outstanding balance due in seconds.</value>
+  </data>
+  <data name="Comparison_Badge" xml:space="preserve">
+    <value>Why Switch</value>
+  </data>
+  <data name="Comparison_Title" xml:space="preserve">
+    <value>Spreadsheet Chaos vs Automated Agency Engine</value>
+  </data>
+  <data name="Comparison_Excel_Title" xml:space="preserve">
+    <value>Manual Spreadsheets &amp; Broken Formulas</value>
+  </data>
+  <data name="Comparison_TimeVic_Title" xml:space="preserve">
+    <value>TimeVic Automated Financial Platform</value>
+  </data>
+  <data name="Comparison_Point1_Excel" xml:space="preserve">
+    <value>Hours wasted every month manually aggregating timesheets and recalculating balances</value>
+  </data>
+  <data name="Comparison_Point1_TimeVic" xml:space="preserve">
+    <value>Instant real-time calculations as work is tracked, with zero manual overhead</value>
+  </data>
+  <data name="Comparison_Point2_Excel" xml:space="preserve">
+    <value>High risk of accidentally exposing internal subcontractor rates or client invoices</value>
+  </data>
+  <data name="Comparison_Point2_TimeVic" xml:space="preserve">
+    <value>Strict role-based isolation: members see only their payouts; owners see total margins</value>
+  </data>
+  <data name="Comparison_Point3_Excel" xml:space="preserve">
+    <value>Tedious PDF exports and repeated email back-and-forth answering payment questions</value>
+  </data>
+  <data name="Comparison_Point3_TimeVic" xml:space="preserve">
+    <value>Self-serve live client reports with approved task breakdowns and real-time ledger</value>
+  </data>
+  <data name="Comparison_Point4_Excel" xml:space="preserve">
+    <value>Unclear payment balances, missed advance deductions, and payout arguments</value>
+  </data>
+  <data name="Comparison_Point4_TimeVic" xml:space="preserve">
+    <value>Crystal-clear Outstanding Balance tracking for every team member and client</value>
+  </data>
+  <data name="Cta_Title" xml:space="preserve">
+    <value>Take Full Financial Control of Your Agency Today</value>
+  </data>
+  <data name="Cta_Subtitle" xml:space="preserve">
+    <value>Start tracking developer hours, project margins, and client balances in minutes. Free, with no credit card required.</value>
+  </data>
+  <data name="Cta_Button_Register" xml:space="preserve">
+    <value>Create free account</value>
+  </data>
+  <data name="Cta_Button_Demo" xml:space="preserve">
+    <value>Try interactive demo</value>
+  </data>
+</root>

@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Простий тайм-трекінг та розумне затвердження годин — TimeVic</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Швидкий запуск таймера для Solo-режиму та надійний перманентний процес узгодження годин з інтерфейсом Split View для команд.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>тайм-трекінг, затвердження годин, погодження таймшитів, облік часу для команд, блокування затвердженого часу, TimeVic approvals, solo mode тайм-трекер</value>
+  </data>
+  <data name="Hero_Badge" xml:space="preserve">
+    <value>Швидкий трекінг та система апрувів</value>
+  </data>
+  <data name="Hero_Title" xml:space="preserve">
+    <value>Трекайте час в один клік, затверджуйте тижні за секунди</value>
+  </data>
+  <data name="Hero_Subtitle" xml:space="preserve">
+    <value>Безшовна робота для фрілансерів без бюрократії та професійний контроль часу для команд з автоматичним блокуванням затверджених записів.</value>
+  </data>
+  <data name="Hero_Cta_Start" xml:space="preserve">
+    <value>Почати безкоштовно</value>
+  </data>
+  <data name="Hero_Cta_Demo" xml:space="preserve">
+    <value>Демонстраційний кабінет</value>
+  </data>
+  <data name="Hero_Subtext" xml:space="preserve">
+    <value>Без кредитної картки • Миттєвий старт за 30 секунд</value>
+  </data>
+  <data name="Hero_Pill_Solo" xml:space="preserve">
+    <value>Solo Mode без бюрократії</value>
+  </data>
+  <data name="Hero_Pill_Approvals" xml:space="preserve">
+    <value>Split View узгодження для команд</value>
+  </data>
+  <data name="Hero_Pill_Locking" xml:space="preserve">
+    <value>Автоблокування затверджених годин</value>
+  </data>
+  <data name="Block1_Badge" xml:space="preserve">
+    <value>Індивідуальний трекінг</value>
+  </data>
+  <data name="Block1_Title" xml:space="preserve">
+    <value>Свобода редагування та запуск в один клік (Solo Mode)</value>
+  </data>
+  <data name="Block1_Description" xml:space="preserve">
+    <value>Для індивідуальних розробників процедура апрувів повністю вимкнена. Ви можете запускати таймер, редагувати або видаляти будь-які свої записи в будь-який момент. Повна швидкість без зайвих кліків.</value>
+  </data>
+  <data name="Block1_Item1_Title" xml:space="preserve">
+    <value>Миттєвий запуск таймера</value>
+  </data>
+  <data name="Block1_Item1_Desc" xml:space="preserve">
+    <value>Запускайте та зупиняйте облік одним кліком. Перемикайте задачі без заповнення складних обов'язкових форм.</value>
+  </data>
+  <data name="Block1_Item2_Title" xml:space="preserve">
+    <value>Повна свобода редагування</value>
+  </data>
+  <data name="Block1_Item2_Desc" xml:space="preserve">
+    <value>Змінюйте тривалість, опис та проєкти у будь-який момент. Виправляйте або видаляйте помилкові записи без обмежень.</value>
+  </data>
+  <data name="Block1_Item3_Title" xml:space="preserve">
+    <value>Миттєвий розрахунок заробленого</value>
+  </data>
+  <data name="Block1_Item3_Desc" xml:space="preserve">
+    <value>Затреканий час одразу враховується у зароблених коштах та фінансових звітах без очікування перевірок.</value>
+  </data>
+  <data name="Block2_Badge" xml:space="preserve">
+    <value>Командний режим та апруви</value>
+  </data>
+  <data name="Block2_Title" xml:space="preserve">
+    <value>Розумні Апруви та приватність розробників</value>
+  </data>
+  <data name="Block2_Description" xml:space="preserve">
+    <value>У командному режимі (Team Mode) система затвердження годин (Approvals) працює за замовчуванням. Всі записи автоматично проходять цикл узгодження, захищаючи ваші фінансові звіти від випадкових змін заднім числом. Чернетки (Draft) розробника залишаються приватними до відправки, а менеджер перевіряє поданий час через зручний двохпанельний інтерфейс (Split View).</value>
+  </data>
+  <data name="Block2_Item1_Title" xml:space="preserve">
+    <value>Приватність чернеток (No-Draft Rule)</value>
+  </data>
+  <data name="Block2_Item1_Desc" xml:space="preserve">
+    <value>Поточні записи належать тільки розробнику. Менеджер бачить години лише після їх офіційного подання за тиждень.</value>
+  </data>
+  <data name="Block2_Item2_Title" xml:space="preserve">
+    <value>Двохпанельний інтерфейс Split View</value>
+  </data>
+  <data name="Block2_Item2_Desc" xml:space="preserve">
+    <value>Перевіряйте тижневі таймшити учасників команди поруч із контекстом задач, тегами та загальними сумами.</value>
+  </data>
+  <data name="Block2_Item3_Title" xml:space="preserve">
+    <value>Прозоре відхилення з коментарем</value>
+  </data>
+  <data name="Block2_Item3_Desc" xml:space="preserve">
+    <value>Менеджер вказує точну причину відхилення, що дозволяє розробнику швидко виправити запис і повторно надіслати на розгляд.</value>
+  </data>
+  <data name="Block3_Badge" xml:space="preserve">
+    <value>Безпека та захист бухгалтерії</value>
+  </data>
+  <data name="Block3_Title" xml:space="preserve">
+    <value>Блокування затверджених годин для захисту бухгалтерії</value>
+  </data>
+  <data name="Block3_Description" xml:space="preserve">
+    <value>Як тільки менеджер затверджує години співробітника, вони переходять у статус Approved і строго блокуються від змін на бэкенді. Ніяких «випадкових» правок заднім числом.</value>
+  </data>
+  <data name="Block3_Item1_Title" xml:space="preserve">
+    <value>Гарантія незмінності на бекенді</value>
+  </data>
+  <data name="Block3_Item1_Desc" xml:space="preserve">
+    <value>Затверджені записи неможливо змінити чи видалити, що на 100% захищає бухгалтерські розрахунки від спотворень.</value>
+  </data>
+  <data name="Block3_Item2_Title" xml:space="preserve">
+    <value>Перманентність правил узгодження</value>
+  </data>
+  <data name="Block3_Item2_Desc" xml:space="preserve">
+    <value>У командному режимі процедура затвердження діє постійно, гарантуючи надійність фінансової історії для всієї команди.</value>
+  </data>
+  <data name="Block3_Item3_Title" xml:space="preserve">
+    <value>Надійні фінансові звіти</value>
+  </data>
+  <data name="Block3_Item3_Desc" xml:space="preserve">
+    <value>Затверджений час безпосередньо формує виплати розробникам та рахунки клієнтам із абсолютною точністю.</value>
+  </data>
+  <data name="Cta_Title" xml:space="preserve">
+    <value>Організуйте швидкий трекінг та надійні апруви вже сьогодні</value>
+  </data>
+  <data name="Cta_Subtitle" xml:space="preserve">
+    <value>Трекайте час соло без бюрократії або використовуйте розумні командні апруви для безпечної бухгалтерії. Безкоштовно, без кредитної картки.</value>
+  </data>
+  <data name="Cta_Button_Register" xml:space="preserve">
+    <value>Створити безкоштовний акаунт</value>
+  </data>
+  <data name="Cta_Button_Demo" xml:space="preserve">
+    <value>Спробувати інтерактивне демо</value>
+  </data>
+  <data name="SoloMode_TrackingActive" xml:space="preserve">
+    <value>Індивідуальний облік активний</value>
+  </data>
+  <data name="SoloMode_NoApprovals" xml:space="preserve">
+    <value>Без необхідності апрувів</value>
+  </data>
+  <data name="SoloMode_CurrentTask" xml:space="preserve">
+    <value>Поточне завдання</value>
+  </data>
+  <data name="SoloMode_TaskTitle" xml:space="preserve">
+    <value>Авторизація Core API та валідація токенів</value>
+  </data>
+  <data name="SoloMode_Client" xml:space="preserve">
+    <value>Клієнт: Fintech Global</value>
+  </data>
+  <data name="SoloMode_Entry1_Title" xml:space="preserve">
+    <value>Рефакторинг адаптивного лейауту дашборду</value>
+  </data>
+  <data name="SoloMode_Entry2_Title" xml:space="preserve">
+    <value>Спринт-рев'ю з клієнтом та узгодження роадмапу</value>
+  </data>
+  <data name="SoloMode_IncomeCalcTitle" xml:space="preserve">
+    <value>Миттєвий розрахунок заробленого</value>
+  </data>
+  <data name="SoloMode_Ready" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="StrictLocking_ProtectionActive" xml:space="preserve">
+    <value>Бекенд-захист активний</value>
+  </data>
+  <data name="StrictLocking_LockedBadge" xml:space="preserve">
+    <value>Заблоковано</value>
+  </data>
+  <data name="StrictLocking_ApprovedPeriod" xml:space="preserve">
+    <value>Затверджений період</value>
+  </data>
+  <data name="StrictLocking_PeriodDate" xml:space="preserve">
+    <value>Тиждень 24 серп – 30 серп</value>
+  </data>
+  <data name="StrictLocking_ApprovedByOwner" xml:space="preserve">
+    <value>Затверджено власником воркспейсу</value>
+  </data>
+  <data name="StrictLocking_Billable" xml:space="preserve">
+    <value>До оплати</value>
+  </data>
+  <data name="StrictLocking_Entry1_Title" xml:space="preserve">
+    <value>Patient Portal UI • Вайрфрейми та Auth</value>
+  </data>
+  <data name="StrictLocking_Entry1_Sub" xml:space="preserve">
+    <value>Олексій • 12:00:00 •</value>
+  </data>
+  <data name="StrictLocking_ReadOnly" xml:space="preserve">
+    <value>Тільки читання</value>
+  </data>
+  <data name="StrictLocking_Entry2_Title" xml:space="preserve">
+    <value>Crypto Wallet Dashboard • Графіки</value>
+  </data>
+  <data name="StrictLocking_Entry2_Sub" xml:space="preserve">
+    <value>Іван • 17:00:00 •</value>
+  </data>
+  <data name="StrictLocking_GuaranteeTitle" xml:space="preserve">
+    <value>Гарантія незмінності записів</value>
+  </data>
+  <data name="StrictLocking_GuaranteeSub" xml:space="preserve">
+    <value>Нульовий ризик суперечок</value>
+  </data>
+</root>

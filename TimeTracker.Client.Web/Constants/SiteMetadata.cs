@@ -24,11 +24,11 @@ public static class SiteMetadata
     public const string FaqKeywords =
         "TimeVic FAQ, freelance developer income tracker, unpaid client balance tracker, payment tracking for freelancers, time tracking earnings";
 
-    public const string PricingTitle = "TimeVic Pricing — Free Time and Income Tracker for Freelancers";
+    public const string PricingTitle = "Simple & Honest Pricing — TimeVic";
     public const string PricingDescription =
-        "TimeVic is free. Track billable hours, calculate earnings, record client payments, and see outstanding balances — no credit card required.";
+        "TimeVic is completely free during public beta. Get unrestricted access to time and financial tracking without limits.";
     public const string PricingKeywords =
-        "TimeVic pricing, free time tracker, freelance income tracker free, client payment tracker free, no credit card time tracking";
+        "TimeVic pricing, free time tracker, freelance income tracker, client payment tracker, time tracking public beta";
 
     public const string RegistrationTitle = "Create a TimeVic Account — Freelance Time and Income Tracker";
     public const string RegistrationDescription =

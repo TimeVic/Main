@@ -21,6 +21,54 @@
   <data name="Meta_Keywords" xml:space="preserve">
     <value>freelance developer time tracker, income tracker, client billing tracker, paid unpaid work tracker, project time tracking, timesheet app, Jira time tracking</value>
   </data>
+  <data name="Hero_Mode_Solo" xml:space="preserve">
+    <value>Solo Mode</value>
+  </data>
+  <data name="Hero_Mode_Team" xml:space="preserve">
+    <value>Team Mode</value>
+  </data>
+  <data name="Hero_Solo_Badge" xml:space="preserve">
+    <value>For Solo Developers &amp; Freelancers</value>
+  </data>
+  <data name="Hero_Solo_Title" xml:space="preserve">
+    <value>Instant time tracking and reporting for freelancers</value>
+  </data>
+  <data name="Hero_Solo_Description" xml:space="preserve">
+    <value>Start the timer in one click, write private notes, and instantly share live financial reports with clients.</value>
+  </data>
+  <data name="Hero_Solo_Feature1_Title" xml:space="preserve">
+    <value>Private Markdown Notes</value>
+  </data>
+  <data name="Hero_Solo_Feature1_Desc" xml:space="preserve">
+    <value>Keep folder structures, snippets, and client agreements right next to your timer.</value>
+  </data>
+  <data name="Hero_Solo_Feature2_Title" xml:space="preserve">
+    <value>Live Client Reports</value>
+  </data>
+  <data name="Hero_Solo_Feature2_Desc" xml:space="preserve">
+    <value>Share live payment and income reports with clients in one click.</value>
+  </data>
+  <data name="Hero_Team_Badge" xml:space="preserve">
+    <value>For Boutique IT Studios &amp; Teams</value>
+  </data>
+  <data name="Hero_Team_Title" xml:space="preserve">
+    <value>Turnkey time &amp; financial tracking for boutique IT studios</value>
+  </data>
+  <data name="Hero_Team_Description" xml:space="preserve">
+    <value>Automated payroll calculation, one-click time approvals, and real project profitability on a single dashboard.</value>
+  </data>
+  <data name="Hero_Team_Feature1_Title" xml:space="preserve">
+    <value>One-Click Approvals</value>
+  </data>
+  <data name="Hero_Team_Feature1_Desc" xml:space="preserve">
+    <value>Review, approve, and lock team hours before invoicing clients.</value>
+  </data>
+  <data name="Hero_Team_Feature2_Title" xml:space="preserve">
+    <value>Protected Member Rates</value>
+  </data>
+  <data name="Hero_Team_Feature2_Desc" xml:space="preserve">
+    <value>Developers see their payout rates, while workspace owners track true company margins.</value>
+  </data>
   <data name="Content_ForFreelanceDevelopersWorkingWithMultipleClients" xml:space="preserve">
     <value>For freelance developers working with multiple clients</value>
   </data>

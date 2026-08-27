@@ -276,6 +276,24 @@
   <data name="Content_KnowHowMuchYouEarnedAndWhoStillOwesYou" xml:space="preserve">
     <value>Know how much you earned — and who still owes you</value>
   </data>
+  <data name="Title_DoDevelopersSeeClientRates" xml:space="preserve">
+    <value>Do developers see client billing rates in team mode?</value>
+  </data>
+  <data name="Content_DoDevelopersSeeClientRates" xml:space="preserve">
+    <value>No. In team mode, developers only see their personal earnings based on their internal rate (Member Rate). Company billing rates and client financial details remain completely protected and confidential.</value>
+  </data>
+  <data name="Title_HowDoesCustomCurrencyWork" xml:space="preserve">
+    <value>How does custom workspace currency work (e.g. the ₵ sign)?</value>
+  </data>
+  <data name="Content_HowDoesCustomCurrencyWork" xml:space="preserve">
+    <value>You can choose any standard currency (USD, EUR, UAH) or define custom credit units (such as internal workspace coins ₵) for calculations and accounting within your team.</value>
+  </data>
+  <data name="Title_HowOftenClientReportsUpdated" xml:space="preserve">
+    <value>How often is data updated in guest client reports?</value>
+  </data>
+  <data name="Content_HowOftenClientReportsUpdated" xml:space="preserve">
+    <value>Data updates in real time, but the client only sees entries that have been officially approved (Approved) by a manager. Any drafts, in-progress timers, or developer mistakes are never shown to the client.</value>
+  </data>
   <data name="Content_NoSetupComplexityJustAddAClientSetARate" xml:space="preserve">
     <value>No setup complexity. Just add a client, set a rate, and track time.</value>
   </data>

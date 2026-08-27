@@ -13,117 +13,69 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Meta_Title" xml:space="preserve">
-    <value>Ціни TimeVic — безкоштовний трекер часу і доходів для фрилансерів</value>
+    <value>Тарифи та умови використання — TimeVic</value>
   </data>
   <data name="Meta_Description" xml:space="preserve">
-    <value>TimeVic безкоштовний. Відстежуй час, рахуй дохід, фіксуй оплати клієнтів і контролюй неоплачені суми — без банківської картки.</value>
+    <value>TimeVic повністю безкоштовний на етапі публічного бета-тестування. Отримуйте повний доступ до обліку часу та фінансів без лімітів.</value>
   </data>
   <data name="Meta_Keywords" xml:space="preserve">
-    <value>ціни TimeVic, безкоштовний облік часу, облік оплат клієнтів, фриланс дохід, безкоштовний трекер для фрилансерів</value>
+    <value>тарифи TimeVic, умови використання, безкоштовний облік часу, облік фінансів, публічна бета, трекер часу</value>
   </data>
-  <data name="Content_TrackYourWork" xml:space="preserve">
-    <value>Відстежуй роботу.</value>
+  <data name="Pricing_Header_Title" xml:space="preserve">
+    <value>Простий та чесний підхід до тарифів</value>
   </data>
-  <data name="Content_UnderstandYourMoney" xml:space="preserve">
-    <value>Розумій свій дохід.</value>
+  <data name="Pricing_Header_Subtitle" xml:space="preserve">
+    <value>TimeVic знаходиться на стадії активного розвитку. Зараз усі функції повністю безкоштовні для всіх.</value>
   </data>
-  <data name="Content_SeeHowMuchYouVeEarnedWhatSBeenPaid" xml:space="preserve">
-    <value>Дивись, скільки зароблено, що оплачено і хто ще не розрахувався — без таблиць.</value>
+  <data name="Pricing_Badge_PublicBeta" xml:space="preserve">
+    <value>🚀 Public Beta</value>
   </data>
-  <data name="Content_SeeHowItWorks" xml:space="preserve">
-    <value>Подивитись сценарії</value>
+  <data name="Pricing_Card_Title" xml:space="preserve">
+    <value>🎁 Безкоштовний доступ до всіх можливостей</value>
   </data>
-  <data name="Content_Free0" xml:space="preserve">
-    <value>Free — $0</value>
+  <data name="Pricing_Card_Description" xml:space="preserve">
+    <value>Ми створюємо TimeVic як ідеальний інструмент для фрілансерів та діджитал-агентств. На етапі публічного бета-тестування ви отримуєте повний доступ до всього функціоналу без обмежень:</value>
   </data>
-  <data name="Content_Month" xml:space="preserve">
-    <value>/місяць</value>
+  <data name="Pricing_Feature_Workspaces_Bold" xml:space="preserve">
+    <value>Безліч воркспейсів</value>
   </data>
-  <data name="Content_FromHoursToMoneyClarity" xml:space="preserve">
-    <value>Від годин до ясності у фінансах</value>
+  <data name="Pricing_Feature_Workspaces_Text" xml:space="preserve">
+    <value>(Solo та Team режими)</value>
   </data>
-  <data name="Content_TrackWork" xml:space="preserve">
-    <value>Облік часу</value>
+  <data name="Pricing_Feature_Finance_Bold" xml:space="preserve">
+    <value>Повний фінансовий модуль</value>
   </data>
-  <data name="Content_LogTimeByClientProjectAndTask" xml:space="preserve">
-    <value>Записуй час по клієнтах, проєктах і задачах.</value>
+  <data name="Pricing_Feature_Finance_Text" xml:space="preserve">
+    <value>(Звіти про виплати та маржинальність)</value>
   </data>
-  <data name="Content_TurnTimeIntoMoney" xml:space="preserve">
-    <value>Погодинні ставки</value>
+  <data name="Pricing_Feature_Approvals_Bold" xml:space="preserve">
+    <value>Автоматичне затвердження годин</value>
   </data>
-  <data name="Content_AutomaticallyCalculateEarningsUsingHourlyRates" xml:space="preserve">
-    <value>TimeVic автоматично рахує зароблену суму за ставками.</value>
+  <data name="Pricing_Feature_Approvals_Text" xml:space="preserve">
+    <value>(Approvals)</value>
   </data>
-  <data name="Content_Earned" xml:space="preserve">
-    <value>зароблено</value>
+  <data name="Pricing_Feature_TasksNotes_Bold" xml:space="preserve">
+    <value>Вбудовані завдання та Markdown-нотатки</value>
   </data>
-  <data name="Content_TrackPayments" xml:space="preserve">
-    <value>Оплати клієнтів</value>
+  <data name="Pricing_Feature_TasksNotes_Text" xml:space="preserve">
+    <value></value>
   </data>
-  <data name="Content_RecordWhatClientsHavePaidYou" xml:space="preserve">
-    <value>Фіксуй, що клієнти вже оплатили.</value>
+  <data name="Pricing_Feature_Members_Bold" xml:space="preserve">
+    <value>Необмежена кількість користувачів</value>
   </data>
-  <data name="Content_Paid" xml:space="preserve">
-    <value>оплачено</value>
+  <data name="Pricing_Feature_Members_Text" xml:space="preserve">
+    <value>у команді (без жодних лімітів)</value>
   </data>
-  <data name="Content_SeeWhatSMissing" xml:space="preserve">
-    <value>Неоплачені суми</value>
+  <data name="Pricing_Card_NoCreditCard" xml:space="preserve">
+    <value>Жодних прив'язок кредитних карт. Створюйте воркспейс та починайте роботу за 10 секунд.</value>
   </data>
-  <data name="Content_InstantlySeeUnpaidWorkAndOutstandingBalances" xml:space="preserve">
-    <value>Бач відкритий залишок і роботу, яку ще не оплатили.</value>
+  <data name="Pricing_Card_Cta" xml:space="preserve">
+    <value>Створити безкоштовний воркспейс</value>
   </data>
-  <data name="Content_Unpaid" xml:space="preserve">
-    <value>неоплачено</value>
+  <data name="Pricing_Transparency_Title" xml:space="preserve">
+    <value>Чому безкоштовно?</value>
   </data>
-  <data name="Content_WhatYouCanDoWithTimevic" xml:space="preserve">
-    <value>Що можна робити з TimeVic</value>
-  </data>
-  <data name="Content_BuiltForRealFreelanceWork" xml:space="preserve">
-    <value>Створено для реальної фриланс-роботи</value>
-  </data>
-  <data name="Content_CreatedFromASimpleProblem" xml:space="preserve">
-    <value>TimeVic зʼявився через просту проблему: фриланс-робота швидко стає хаотичною, коли час, оплати та клієнти розкидані по таблицях і різних сервісах.</value>
-  </data>
-  <data name="Content_SoWeBuiltSomethingSimpler" xml:space="preserve">
-    <value>Тому ми зробили простіший інструмент для себе.</value>
-  </data>
-  <data name="Content_APlaceTo" xml:space="preserve">
-    <value>Місце, де можна:</value>
-  </data>
-  <data name="Content_ListItem_TrackWork" xml:space="preserve">
-    <value>трекати роботу</value>
-  </data>
-  <data name="Content_ListItem_UnderstandEarnings" xml:space="preserve">
-    <value>розуміти свій дохід</value>
-  </data>
-  <data name="Content_ListItem_RecordPayments" xml:space="preserve">
-    <value>фіксувати оплати</value>
-  </data>
-  <data name="Content_ListItem_SeeUnpaidBalances" xml:space="preserve">
-    <value>бачити неоплачену роботу</value>
-  </data>
-  <data name="Content_IfItsUsefulForYouToo" xml:space="preserve">
-    <value>Якщо це корисно і вам — користуйтесь.</value>
-  </data>
-  <data name="Content_FreeNoCreditCard" xml:space="preserve">
-    <value>Безкоштовно. Без банківської картки.</value>
-  </data>
-  <data name="Content_StartTrackingYourTimeAndIncome" xml:space="preserve">
-    <value>Почни безкоштовно вести час, дохід і оплати</value>
-  </data>
-  <data name="Capability_TimeTrackingPerClientAndProject" xml:space="preserve">
-    <value>Облік часу</value>
-  </data>
-  <data name="Capability_HourlyRatesAutomaticEarningsCalculation" xml:space="preserve">
-    <value>Клієнти та проєкти</value>
-  </data>
-  <data name="Capability_PaymentTracking" xml:space="preserve">
-    <value>Погодинні ставки</value>
-  </data>
-  <data name="Capability_PaidVsUnpaidOverview" xml:space="preserve">
-    <value>Звіти по доходу</value>
-  </data>
-  <data name="Capability_ClientLevelSummaries" xml:space="preserve">
-    <value>Облік оплат клієнтів і контроль неоплачених сум</value>
+  <data name="Pricing_Transparency_Text" xml:space="preserve">
+    <value>Ми хочемо побудувати найкращий продукт на ринку разом із вами. Нам важливий ваш зворотній зв'язок. У майбутньому ми плануємо додати платні тарифи для великих команд, але ми заздалегідь попередимо вас про будь-які зміни. Поточний базовий функціонал залишиться максимально доступним.</value>
   </data>
 </root>

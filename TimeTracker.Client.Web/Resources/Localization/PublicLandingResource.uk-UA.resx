@@ -13,13 +13,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppLogo_Eyebrow" xml:space="preserve">
-    <value>Облік доходу фрилансера</value>
+    <value>ОБЛІК ЧАСУ ТА ФІНАНСІВ</value>
   </data>
   <data name="AppLogo_BetaBadge" xml:space="preserve">
     <value>Beta</value>
   </data>
   <data name="Nav_Home" xml:space="preserve">
     <value>Головна</value>
+  </data>
+  <data name="Nav_Features" xml:space="preserve">
+    <value>Функції</value>
+  </data>
+  <data name="Nav_ReportsAndPayouts" xml:space="preserve">
+    <value>Звіти та Оплати</value>
+  </data>
+  <data name="Nav_ReportsAndPayouts_Desc" xml:space="preserve">
+    <value>Автоматичні виплати та маржинальність</value>
+  </data>
+  <data name="Nav_TimeAndApprovals" xml:space="preserve">
+    <value>Трекінг та Апруви</value>
+  </data>
+  <data name="Nav_TimeAndApprovals_Desc" xml:space="preserve">
+    <value>Розумне затвердження годин команди</value>
+  </data>
+  <data name="Nav_TasksAndNotes" xml:space="preserve">
+    <value>Завдання та Нотатки</value>
+  </data>
+  <data name="Nav_TasksAndNotes_Desc" xml:space="preserve">
+    <value>Інтегрована база знань та таски</value>
   </data>
   <data name="Nav_UseCases" xml:space="preserve">
     <value>Сценарії</value>
@@ -35,6 +56,9 @@
   </data>
   <data name="Nav_TermsOfService" xml:space="preserve">
     <value>Умови користування</value>
+  </data>
+  <data name="CTA_CreateWorkspace" xml:space="preserve">
+    <value>Створити воркспейс</value>
   </data>
   <data name="CTA_Dashboard" xml:space="preserve">
     <value>Кабінет</value>
@@ -124,7 +148,7 @@
     <value>Продукт</value>
   </data>
   <data name="Footer_Description" xml:space="preserve">
-    <value>TimeVic допомагає фрилансерам вести облік часу, доходу, оплат і боргів клієнтів.</value>
+    <value>TimeVic допомагає фрілансерам вести облік часу, доходу, оплат і боргів клієнтів.</value>
   </data>
   <data name="Footer_AuthorName" xml:space="preserve">
     <value>Georgy Shira</value>

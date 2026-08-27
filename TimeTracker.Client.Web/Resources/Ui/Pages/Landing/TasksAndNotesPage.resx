@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Integrated Tasks &amp; Markdown Notes in Time Tracker — TimeVic</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Everything in one place. Manage task lists, build knowledge bases and guidelines in an integrated Markdown editor right inside your time tracker.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>tasks and notes, task tracker, markdown notes, team knowledge base, project documentation, time tracking with tasks, TimeVic tasks, developer notes</value>
+  </data>
+  <data name="Hero_Badge" xml:space="preserve">
+    <value>Tasks &amp; Knowledge Base</value>
+  </data>
+  <data name="Hero_Title" xml:space="preserve">
+    <value>Tasks, Notes, and Time Tracking in a Single Browser Tab</value>
+  </data>
+  <data name="Hero_Subtitle" xml:space="preserve">
+    <value>Stop jumping between three different apps. Manage your task list, write markdown documentation, and track hours inside one unified workspace.</value>
+  </data>
+  <data name="Hero_Cta_Start" xml:space="preserve">
+    <value>Start tracking for free</value>
+  </data>
+  <data name="Hero_Cta_Demo" xml:space="preserve">
+    <value>View demo dashboard</value>
+  </data>
+  <data name="Hero_Subtext" xml:space="preserve">
+    <value>No credit card required • Instant start in 30 seconds</value>
+  </data>
+  <data name="Hero_Pill_Tasks" xml:space="preserve">
+    <value>Lightweight Task Tracker</value>
+  </data>
+  <data name="Hero_Pill_Wiki" xml:space="preserve">
+    <value>Markdown Knowledge Base</value>
+  </data>
+  <data name="Hero_Pill_Bridge" xml:space="preserve">
+    <value>One-Click Task Timer</value>
+  </data>
+  <data name="Block1_Badge" xml:space="preserve">
+    <value>Tasks Integration</value>
+  </data>
+  <data name="Block1_Title" xml:space="preserve">
+    <value>Lightweight &amp; Focused Task Tracker</value>
+  </data>
+  <data name="Block1_Description" xml:space="preserve">
+    <value>Create tasks, link timer entries to them, group by projects, and lead your team through sprints. Zero clutter, pure focus on execution.</value>
+  </data>
+  <data name="Block1_Item1_Title" xml:space="preserve">
+    <value>Instant Timer Binding</value>
+  </data>
+  <data name="Block1_Item1_Desc" xml:space="preserve">
+    <value>Launch the timer directly from any task row or modal card. Tracked hours automatically attach to the task and sync with timesheet reports.</value>
+  </data>
+  <data name="Block1_Item2_Title" xml:space="preserve">
+    <value>Project &amp; Sprint Grouping</value>
+  </data>
+  <data name="Block1_Item2_Desc" xml:space="preserve">
+    <value>Structure work by client, project, and custom task lists (To Do, In Progress, Backlog). Track estimates and team assignments at a glance.</value>
+  </data>
+  <data name="Block1_Item3_Title" xml:space="preserve">
+    <value>Zero Bureaucracy &amp; Fast Filters</value>
+  </data>
+  <data name="Block1_Item3_Desc" xml:space="preserve">
+    <value>Create tasks in seconds without endless mandatory fields. Fast keyboard-friendly filters keep your workflow seamless.</value>
+  </data>
+  <data name="Block2_Badge" xml:space="preserve">
+    <value>Knowledge Base &amp; Wiki</value>
+  </data>
+  <data name="Block2_Title" xml:space="preserve">
+    <value>Beautiful Markdown Wiki with Two Workspaces</value>
+  </data>
+  <data name="Block2_Description" xml:space="preserve">
+    <value>Organize team guidelines, specifications, and SOPs in the Workspace tab, or keep personal drafts and technical snippets in your Private space.</value>
+  </data>
+  <data name="Block2_Item1_Title" xml:space="preserve">
+    <value>Workspace &amp; Private Spaces</value>
+  </data>
+  <data name="Block2_Item1_Desc" xml:space="preserve">
+    <value>Switch between shared team documentation and your own private scratchpad with a single click.</value>
+  </data>
+  <data name="Block2_Item2_Title" xml:space="preserve">
+    <value>Granular Permissions &amp; Safety</value>
+  </data>
+  <data name="Block2_Item2_Desc" xml:space="preserve">
+    <value>Developers can freely create and enrich documentation, while deletion of shared folders and critical company guidelines is protected.</value>
+  </data>
+  <data name="Block2_Item3_Title" xml:space="preserve">
+    <value>Full Markdown &amp; Code Support</value>
+  </data>
+  <data name="Block2_Item3_Desc" xml:space="preserve">
+    <value>Write with syntax highlighting, nested headers, task lists, and structured tables built for modern development teams.</value>
+  </data>
+  <data name="Block3_Badge" xml:space="preserve">
+    <value>One-Click Timer</value>
+  </data>
+  <data name="Block3_Title" xml:space="preserve">
+    <value>Start Tracking Directly from Any Task Card</value>
+  </data>
+  <data name="Block3_Description" xml:space="preserve">
+    <value>Stop wasting time copying task names into your tracker. Open any task card and click "Start timer". TimeVic automatically links your tracked hours to the respective task, project, and client.</value>
+  </data>
+  <data name="Block3_Item1_Title" xml:space="preserve">
+    <value>Instant One-Click Timer</value>
+  </data>
+  <data name="Block3_Item1_Desc" xml:space="preserve">
+    <value>The prominent "Start timer" button in the task modal starts tracking instantly without friction.</value>
+  </data>
+  <data name="Block3_Item2_Title" xml:space="preserve">
+    <value>Automatic Context Binding</value>
+  </data>
+  <data name="Block3_Item2_Desc" xml:space="preserve">
+    <value>Tracked hours automatically inherit project, task list, and client associations.</value>
+  </data>
+  <data name="Block3_Item3_Title" xml:space="preserve">
+    <value>Instant Report Sync</value>
+  </data>
+  <data name="Block3_Item3_Desc" xml:space="preserve">
+    <value>Every recorded entry immediately syncs with your timesheets, financial reports, and payouts.</value>
+  </data>
+  <data name="Cta_Title" xml:space="preserve">
+    <value>Ready to Unify Tasks, Knowledge Base &amp; Time Tracking?</value>
+  </data>
+  <data name="Cta_Subtitle" xml:space="preserve">
+    <value>Try TimeVic for free today. Manage tasks, build documentation, and track work hours in one modern workspace.</value>
+  </data>
+  <data name="Cta_Button_Register" xml:space="preserve">
+    <value>Start tracking for free</value>
+  </data>
+  <data name="Cta_Button_Demo" xml:space="preserve">
+    <value>Explore interactive demo</value>
+  </data>
+</root>

@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Meta_Title" xml:space="preserve">
+    <value>Автоматичні фінансові звіти та баланси виплат розробникам — TimeVic</value>
+  </data>
+  <data name="Meta_Description" xml:space="preserve">
+    <value>Забудьте про Excel. TimeVic автоматично розраховує маржинальність проєктів, виплати субпідрядникам та формує живі звіти для клієнтів.</value>
+  </data>
+  <data name="Meta_Keywords" xml:space="preserve">
+    <value>автоматичні фінансові звіти, баланси виплат розробникам, маржинальність проєктів, виплати субпідрядникам, живі звіти для клієнтів, облік часу для студій, маржа воркспейсу</value>
+  </data>
+  <data name="Hero_Badge" xml:space="preserve">
+    <value>Фінансовий рушій для студій та розробників</value>
+  </data>
+  <data name="Hero_Title" xml:space="preserve">
+    <value>Фінансовий контроль вашої студії без ручної роботи в Excel</value>
+  </data>
+  <data name="Hero_Subtitle" xml:space="preserve">
+    <value>Автоматичний розрахунок виплат команді, маржинальності проєктів та живі гостьові звіти для клієнтів в одному інтерфейсі.</value>
+  </data>
+  <data name="Hero_Cta_Start" xml:space="preserve">
+    <value>Почати безкоштовно</value>
+  </data>
+  <data name="Hero_Cta_Demo" xml:space="preserve">
+    <value>Демонстраційний кабінет</value>
+  </data>
+  <data name="Hero_Subtext" xml:space="preserve">
+    <value>Без кредитної картки • Миттєвий старт за 30 секунд</value>
+  </data>
+  <data name="Hero_Pill_Payouts" xml:space="preserve">
+    <value>Виплати команді</value>
+  </data>
+  <data name="Hero_Pill_Margin" xml:space="preserve">
+    <value>Маржинальність у реальному часі</value>
+  </data>
+  <data name="Hero_Pill_GuestReports" xml:space="preserve">
+    <value>Живі клієнтські звіти</value>
+  </data>
+  <data name="Block1_Badge" xml:space="preserve">
+    <value>Фінансова прозорість для команди</value>
+  </data>
+  <data name="Block1_Title" xml:space="preserve">
+    <value>Персональний баланс для кожного розробника (My Payment Report)</value>
+  </data>
+  <data name="Block1_Description" xml:space="preserve">
+    <value>Розробник бачить свої зароблені години, отримані аванси та актуальний залишок до виплати (Outstanding Balance) у реальному часі. Повна прозорість виключає суперечки про гроші наприкінці місяця.</value>
+  </data>
+  <data name="Block1_Item1_Title" xml:space="preserve">
+    <value>Актуальний залишок до виплати</value>
+  </data>
+  <data name="Block1_Item1_Desc" xml:space="preserve">
+    <value>І розробник, і менеджер бачать точну суму до виплати без складання складних формул у таблицях.</value>
+  </data>
+  <data name="Block1_Item2_Title" xml:space="preserve">
+    <value>Кастомна валюта воркспейсу</value>
+  </data>
+  <data name="Block1_Item2_Desc" xml:space="preserve">
+    <value>Повна свобода вести облік у будь-якій валюті чи умовних одиницях (USD, EUR, UAH, ₵ або внутрішні токени).</value>
+  </data>
+  <data name="Block1_Item3_Title" xml:space="preserve">
+    <value>Жодних фінансових непорозумінь</value>
+  </data>
+  <data name="Block1_Item3_Desc" xml:space="preserve">
+    <value>Єдине джерело правди для затреканих годин, виплачених коштів та передоплат.</value>
+  </data>
+  <data name="Block2_Badge" xml:space="preserve">
+    <value>Аналітика для власника</value>
+  </data>
+  <data name="Block2_Title" xml:space="preserve">
+    <value>Зведений дашборд воркспейсу та маржинальність проєктів</value>
+  </data>
+  <data name="Block2_Description" xml:space="preserve">
+    <value>Власник бачить чистий прибуток студії у реальному часі. Система автоматично розраховує маржу на основі різниці між ставкою для клієнта та ставкою розробника, зберігаючи внутрішні рейти в суворому секреті від команди.</value>
+  </data>
+  <data name="Block2_Item1_Title" xml:space="preserve">
+    <value>Рейт для клієнта vs Собівартість розробника</value>
+  </data>
+  <data name="Block2_Item1_Desc" xml:space="preserve">
+    <value>Задавайте окремо клієнтські погодинні ставки та виплати розробникам з автоматичним підрахунком маржі.</value>
+  </data>
+  <data name="Block2_Item2_Title" xml:space="preserve">
+    <value>Сувора конфіденційність ставок</value>
+  </data>
+  <data name="Block2_Item2_Desc" xml:space="preserve">
+    <value>Учасники ніколи не бачать рахунків клієнтів, загальної виручки студії чи ставок інших колег.</value>
+  </data>
+  <data name="Block2_Item3_Title" xml:space="preserve">
+    <value>Чистий прибуток та маржа наживо</value>
+  </data>
+  <data name="Block2_Item3_Desc" xml:space="preserve">
+    <value>Миттєвий контроль ключових метрик: Зароблено з клієнтів, Отримано, Виплати команді та Чистий прибуток власника.</value>
+  </data>
+  <data name="Block3_Badge" xml:space="preserve">
+    <value>Прозорість для клієнтів</value>
+  </data>
+  <data name="Block3_Title" xml:space="preserve">
+    <value>Автоматичні звіти для клієнтів (Shared Client Reports)</value>
+  </data>
+  <data name="Block3_Description" xml:space="preserve">
+    <value>Більше ніякого ручного експорту PDF та відправки листів. Надайте клієнту живе брендоване посилання, де він у будь-який момент побачить тільки затверджений час за своїми задачами, статус виконання проєкту та прозорі бюджети.</value>
+  </data>
+  <data name="Block3_Item1_Title" xml:space="preserve">
+    <value>Доступ за захищеним посиланням без логіну</value>
+  </data>
+  <data name="Block3_Item1_Desc" xml:space="preserve">
+    <value>Клієнти відкривають звіт за унікальним токеном без необхідності реєструвати акаунт чи запам'ятовувати пароль.</value>
+  </data>
+  <data name="Block3_Item2_Title" xml:space="preserve">
+    <value>Деталізація затверджених задач</value>
+  </data>
+  <data name="Block3_Item2_Desc" xml:space="preserve">
+    <value>Клієнт бачить тільки підтверджений робочий час та зв'язані задачі без внутрішніх технічних деталей.</value>
+  </data>
+  <data name="Block3_Item3_Title" xml:space="preserve">
+    <value>Зрозуміла історія оплат та баланс</value>
+  </data>
+  <data name="Block3_Item3_Desc" xml:space="preserve">
+    <value>Прозора зведена інформація: Всього виставлено, Оплачено клієнтом та Залишок до сплати.</value>
+  </data>
+  <data name="Comparison_Badge" xml:space="preserve">
+    <value>Чому TimeVic</value>
+  </data>
+  <data name="Comparison_Title" xml:space="preserve">
+    <value>Хаос в Excel проти автоматизованого рушія студії</value>
+  </data>
+  <data name="Comparison_Excel_Title" xml:space="preserve">
+    <value>Ручні таблиці Excel та розриви формул</value>
+  </data>
+  <data name="Comparison_TimeVic_Title" xml:space="preserve">
+    <value>Автоматичний фінансовий дашборд TimeVic</value>
+  </data>
+  <data name="Comparison_Point1_Excel" xml:space="preserve">
+    <value>Години щомісячної ручної агрегації таймшитів і повторного зведення балансів</value>
+  </data>
+  <data name="Comparison_Point1_TimeVic" xml:space="preserve">
+    <value>Миттєвий автоматичний розрахунок у реальному часі одразу під час фіксації годин</value>
+  </data>
+  <data name="Comparison_Point2_Excel" xml:space="preserve">
+    <value>Високий ризик випадково надіслати клієнту внутрішні виплати чи рейт підрядника</value>
+  </data>
+  <data name="Comparison_Point2_TimeVic" xml:space="preserve">
+    <value>Суворе розділення прав: розробники бачать лише свої виплати, власник — маржу</value>
+  </data>
+  <data name="Comparison_Point3_Excel" xml:space="preserve">
+    <value>Генерація PDF, форматування таблиць і нескінченні листи "скільки залишилося сплатити"</value>
+  </data>
+  <data name="Comparison_Point3_TimeVic" xml:space="preserve">
+    <value>Живі самообслуговувані гостьові звіти із задачами та актуальним станом оплат</value>
+  </data>
+  <data name="Comparison_Point4_Excel" xml:space="preserve">
+    <value>Плутанина із залишками, забуті аванси та затяжні суперечки в кінці місяця</value>
+  </data>
+  <data name="Comparison_Point4_TimeVic" xml:space="preserve">
+    <value>Прозорий розрахунок Outstanding Balance для кожного розробника та клієнта</value>
+  </data>
+  <data name="Cta_Title" xml:space="preserve">
+    <value>Отримайте повний фінансовий контроль вашої студії вже сьогодні</value>
+  </data>
+  <data name="Cta_Subtitle" xml:space="preserve">
+    <value>Почніть обліковувати години розробників, маржинальність проєктів та баланси клієнтів за лічені хвилини. Безкоштовно, без кредитної картки.</value>
+  </data>
+  <data name="Cta_Button_Register" xml:space="preserve">
+    <value>Створити безкоштовний акаунт</value>
+  </data>
+  <data name="Cta_Button_Demo" xml:space="preserve">
+    <value>Спробувати інтерактивне демо</value>
+  </data>
+</root>

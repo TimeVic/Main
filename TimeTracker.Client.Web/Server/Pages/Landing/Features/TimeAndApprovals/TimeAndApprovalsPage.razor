@@ -1,0 +1,30 @@
+@page "/features/time-and-approvals"
+@page "/uk/features/time-and-approvals"
+@attribute [Microsoft.AspNetCore.Components.ExcludeFromInteractiveRouting]
+
+@using LumexUI.Common
+@using TimeTracker.Client.Web.Services
+@using TimeTracker.Client.Web.Ui.Pages.Landing.TimeAndApprovals.Parts
+@using Layout = TimeTracker.Client.Web.Server.Shared.StaticLandingLayout
+@namespace TimeTracker.Client.Web.Ui.Pages.Landing
+@layout Layout
+
+@inject IStringLocalizer<PublicLandingResource> SharedLocalizer
+@inject IStringLocalizer<TimeAndApprovalsPage> Localizer
+@inject ILocalizationUrlService LocalizationUrlService
+@inject NavigationManager NavigationManager
+
+<SeoHead
+    Title="@Localizer["Meta_Title"]"
+    Description="@Localizer["Meta_Description"]"
+    Keywords="@Localizer["Meta_Keywords"]"
+    Robots="@SiteMetadata.IndexRobots"
+    PublicPagePath="@SiteUrl.FeaturesTimeAndApprovals" />
+
+<main class="bg-white text-slate-950">
+    <HeroBlock />
+    <SoloModeBlock />
+    <TeamModeBlock />
+    <StrictLockingBlock />
+    <BottomCtaBlock />
+</main>
