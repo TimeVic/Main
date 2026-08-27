@@ -139,4 +139,5 @@ public class FirebaseClientService: IFirebaseClientService
         }
         return false;
     }
+    
 }
