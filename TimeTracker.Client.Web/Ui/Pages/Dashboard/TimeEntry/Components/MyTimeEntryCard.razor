@@ -96,11 +96,11 @@
         }
     </div>
 
-    @* Time range *@
+    @* Time range — displayed in the current workspace timezone *@
     <div class="hidden sm:flex shrink-0 items-center gap-1 font-mono text-xs text-slate-400">
-        <span>@_timeParsingService.DateTimeToTimeString(Entry.StartTimeOffset)</span>
+        <span>@_timeParsingService.DateTimeToTimeString(GetStartTimeInWorkspaceTz())</span>
         <span>-</span>
-        <span>@_timeParsingService.DateTimeToTimeString(Entry.EndTimeTimeOffset)</span>
+        <span>@_timeParsingService.DateTimeToTimeString(GetEndTimeInWorkspaceTz())</span>
     </div>
 
     @* Duration *@

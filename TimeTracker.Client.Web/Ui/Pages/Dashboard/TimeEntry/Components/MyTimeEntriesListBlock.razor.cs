@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Business.Common.Services.Format;
+using TimeTracker.Business.Extensions;
 using TimeTracker.Client.Core.Store.TimeEntry;
 
 namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.TimeEntry.Components;
@@ -54,8 +55,11 @@ public partial class MyTimeEntriesListBlock
 
     private ICollection<ListItem> GetListItems()
     {
+        var workspaceTz = AuthState.Value.Workspace?.TimeZone ?? TimeZoneInfo.Local.Id;
         return _state.Value.ListToShow
-            .GroupBy(item => item.StartTimeOffset.Date)
+            // Group by date in the current workspace timezone so entries recorded
+            // in a different timezone are still bucketed under the correct local day.
+            .GroupBy(item => item.StartTime.ToDateTimeOffset(workspaceTz).Date)
             .SelectMany(group =>
             {
                 var entries = group.ToList();
