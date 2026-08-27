@@ -1,7 +1,6 @@
 @page "/faq"
 @page "/uk/faq"
 @attribute [Microsoft.AspNetCore.Components.ExcludeFromInteractiveRouting]
-@using LumexUI.Common
 @using TimeTracker.Client.Web.Services
 @using Layout = TimeTracker.Client.Web.Server.Shared.StaticLandingLayout
 @namespace TimeTracker.Client.Web.Ui.Pages.Landing
@@ -89,54 +88,74 @@
                         </p>
                     </div>
 
-                    <LumexAccordion
-                        Variant="@AccordionVariant.Splitted"
-                        SelectionMode="@SelectionMode.Multiple"
-                        ShowDividers="@false"
-                        ItemClasses="@FaqItemClasses">
-                        <LumexAccordionItem Id="product-what" Title="@Localizer["Title_WhatIsTimevic"]" Expanded="true">
-                            <p>
-                                @Localizer["Content_TimevicIsAnIncomeTrackingToolForFreelanceDevelopersWho"]
-                            </p>
-                            <p class="mt-3">
-                                @Localizer["Content_ItTurnsTrackedWorkIntoClearNumbersHowMuchYou"]
-                            </p>
-                            <p class="mt-3">
-                                @Localizer["Content_TheGoalIsSimpleFinancialClarityFromClientWork"]
-                            </p>
-                        </LumexAccordionItem>
+                    <div class="space-y-3">
+                        <details id="product-what" open class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_WhatIsTimevic"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>
+                                    @Localizer["Content_TimevicIsAnIncomeTrackingToolForFreelanceDevelopersWho"]
+                                </p>
+                                <p class="mt-3">
+                                    @Localizer["Content_ItTurnsTrackedWorkIntoClearNumbersHowMuchYou"]
+                                </p>
+                                <p class="mt-3">
+                                    @Localizer["Content_TheGoalIsSimpleFinancialClarityFromClientWork"]
+                                </p>
+                            </div>
+                        </details>
 
-                        <LumexAccordionItem Id="product-time-tracker" Title="@Localizer["Title_IsTimevicJustATimeTracker"]" Expanded="true">
-                            <p>@Localizer["Content_No"]</p>
-                            <p class="mt-3">
-                                @Localizer["Content_TimeTrackingIsOnlyTheInput"]
-                            </p>
-                            <p class="mt-3">
-                                @Localizer["Content_TheOutputIsIncomeVisibilityEarnedMoneyPaidMoneyAnd"]
-                            </p>
-                        </LumexAccordionItem>
+                        <details id="product-time-tracker" open class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_IsTimevicJustATimeTracker"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>@Localizer["Content_No"]</p>
+                                <p class="mt-3">
+                                    @Localizer["Content_TimeTrackingIsOnlyTheInput"]
+                                </p>
+                                <p class="mt-3">
+                                    @Localizer["Content_TheOutputIsIncomeVisibilityEarnedMoneyPaidMoneyAnd"]
+                                </p>
+                            </div>
+                        </details>
 
-                        <LumexAccordionItem Id="product-for" Title="@Localizer["Title_WhoIsTimevicFor"]">
-                            <p>
-                                @Localizer["Content_TimevicIsForFreelanceDevelopersWhoWorkWithMultipleClients"]
-                            </p>
-                            <p class="mt-3">
-                                @Localizer["Content_IfYouNeedToKnowWhatEachClientOwesYou"]
-                            </p>
-                        </LumexAccordionItem>
+                        <details id="product-for" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_WhoIsTimevicFor"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>
+                                    @Localizer["Content_TimevicIsForFreelanceDevelopersWhoWorkWithMultipleClients"]
+                                </p>
+                                <p class="mt-3">
+                                    @Localizer["Content_IfYouNeedToKnowWhatEachClientOwesYou"]
+                                </p>
+                            </div>
+                        </details>
 
-                        <LumexAccordionItem Id="product-spreadsheet" Title="@Localizer["Title_WhyNotJustUseATimeTrackerAndASpreadsheet"]">
-                            <p>
-                                @Localizer["Content_YouCanButThenYouDoTheMoneyWorkManually"]
-                            </p>
-                            <p class="mt-3">
-                                @Localizer["Content_YouHaveToCalculateEarningsLogPaymentsSomewhereElseAnd"]
-                            </p>
-                            <p class="mt-3">
-                                @Localizer["Content_TimevicKeepsThatInOnePlaceSoYourTrackedWork"]
-                            </p>
-                        </LumexAccordionItem>
-                    </LumexAccordion>
+                        <details id="product-spreadsheet" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_WhyNotJustUseATimeTrackerAndASpreadsheet"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>
+                                    @Localizer["Content_YouCanButThenYouDoTheMoneyWorkManually"]
+                                </p>
+                                <p class="mt-3">
+                                    @Localizer["Content_YouHaveToCalculateEarningsLogPaymentsSomewhereElseAnd"]
+                                </p>
+                                <p class="mt-3">
+                                    @Localizer["Content_TimevicKeepsThatInOnePlaceSoYourTrackedWork"]
+                                </p>
+                            </div>
+                        </details>
+                    </div>
                 </section>
 
                 <section aria-labelledby="faq-money-payments" class="scroll-mt-24">
@@ -153,74 +172,112 @@
                             </p>
                         </div>
 
-                        <LumexAccordion
-                            Variant="@AccordionVariant.Splitted"
-                            SelectionMode="@SelectionMode.Multiple"
-                            ShowDividers="@false"
-                            ItemClasses="@FaqItemClasses">
-                            <LumexAccordionItem Id="money-calculate" Title="@Localizer["Title_HowDoesTimevicCalculateEarnings"]">
-                                <p>
-                                    @Localizer["Content_YouSetAnHourlyRateForTheWorkYouTrack"]
-                                </p>
-                                <p class="mt-3">
-                                    @Localizer["Content_TimevicConvertsThoseHoursIntoEarnedIncomeAutomaticallySoYou"]
-                                </p>
-                            </LumexAccordionItem>
+                        <div class="space-y-3">
+                            <details id="money-calculate" class="faq-item">
+                                <summary class="faq-summary">
+                                    <span class="faq-title">@Localizer["Title_HowDoesTimevicCalculateEarnings"]</span>
+                                    <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                                </summary>
+                                <div class="faq-content">
+                                    <p>
+                                        @Localizer["Content_YouSetAnHourlyRateForTheWorkYouTrack"]
+                                    </p>
+                                    <p class="mt-3">
+                                        @Localizer["Content_TimevicConvertsThoseHoursIntoEarnedIncomeAutomaticallySoYou"]
+                                    </p>
+                                </div>
+                            </details>
 
-                            <LumexAccordionItem Id="money-payments" Title="@Localizer["Title_CanITrackPaymentsFromClients"]">
-                                <p>
-                                    @Localizer["Content_Yes"]
-                                </p>
-                                <p class="mt-3">
-                                    @Localizer["Content_YouCanRecordClientPaymentsAndCompareThemDirectlyAgainst"]
-                                </p>
-                                <p class="mt-3">
-                                    @Localizer["Content_ThatGivesYouAClearSplitBetweenPaidWorkAnd"]
-                                </p>
-                            </LumexAccordionItem>
+                            <details id="money-payments" class="faq-item">
+                                <summary class="faq-summary">
+                                    <span class="faq-title">@Localizer["Title_CanITrackPaymentsFromClients"]</span>
+                                    <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                                </summary>
+                                <div class="faq-content">
+                                    <p>
+                                        @Localizer["Content_Yes"]
+                                    </p>
+                                    <p class="mt-3">
+                                        @Localizer["Content_YouCanRecordClientPaymentsAndCompareThemDirectlyAgainst"]
+                                    </p>
+                                    <p class="mt-3">
+                                        @Localizer["Content_ThatGivesYouAClearSplitBetweenPaidWorkAnd"]
+                                    </p>
+                                </div>
+                            </details>
 
-                            <LumexAccordionItem Id="money-unpaid" Title="@Localizer["Title_WhatHappensIfAClientHasnTPaidYet"]">
-                                <p>
-                                    @Localizer["Content_TimevicHighlightsTheUnpaidWorkAndTheOutstandingBalance"]
-                                </p>
-                                <p class="mt-3">
-                                    @Localizer["Content_YouAlwaysKnowWhichClientStillOwesYouMoneyAnd"]
-                                </p>
-                            </LumexAccordionItem>
+                            <details id="money-unpaid" class="faq-item">
+                                <summary class="faq-summary">
+                                    <span class="faq-title">@Localizer["Title_WhatHappensIfAClientHasnTPaidYet"]</span>
+                                    <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                                </summary>
+                                <div class="faq-content">
+                                    <p>
+                                        @Localizer["Content_TimevicHighlightsTheUnpaidWorkAndTheOutstandingBalance"]
+                                    </p>
+                                    <p class="mt-3">
+                                        @Localizer["Content_YouAlwaysKnowWhichClientStillOwesYouMoneyAnd"]
+                                    </p>
+                                </div>
+                            </details>
 
-                            <LumexAccordionItem Id="money-paid-unpaid-client" Title="@Localizer["Title_CanISeePaidVsUnpaidWorkPerClient"]">
-                                <p>
-                                    @Localizer["Content_Yes"]
-                                </p>
-                                <p class="mt-3">
-                                    @Localizer["Content_TimevicHelpsYouReviewEarnedPaidAndOutstandingAmountsFor"]
-                                </p>
-                            </LumexAccordionItem>
+                            <details id="money-paid-unpaid-client" class="faq-item">
+                                <summary class="faq-summary">
+                                    <span class="faq-title">@Localizer["Title_CanISeePaidVsUnpaidWorkPerClient"]</span>
+                                    <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                                </summary>
+                                <div class="faq-content">
+                                    <p>
+                                        @Localizer["Content_Yes"]
+                                    </p>
+                                    <p class="mt-3">
+                                        @Localizer["Content_TimevicHelpsYouReviewEarnedPaidAndOutstandingAmountsFor"]
+                                    </p>
+                                </div>
+                            </details>
 
-                            <LumexAccordionItem Id="money-owes" Title="@Localizer["Title_CanISeeWhoOwesMeMoney"]">
-                                <p>
-                                    @Localizer["Content_Yes"]
-                                </p>
-                                <p class="mt-3">
-                                    @Localizer["Content_ThePlatformMakesUnpaidBalancesVisibleSoYouCanSee"]
-                                </p>
-                            </LumexAccordionItem>
+                            <details id="money-owes" class="faq-item">
+                                <summary class="faq-summary">
+                                    <span class="faq-title">@Localizer["Title_CanISeeWhoOwesMeMoney"]</span>
+                                    <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                                </summary>
+                                <div class="faq-content">
+                                    <p>
+                                        @Localizer["Content_Yes"]
+                                    </p>
+                                    <p class="mt-3">
+                                        @Localizer["Content_ThePlatformMakesUnpaidBalancesVisibleSoYouCanSee"]
+                                    </p>
+                                </div>
+                            </details>
 
-                            <LumexAccordionItem Id="money-invoicing" Title="@Localizer["Title_DoesTimevicReplaceInvoicingTools"]">
-                                <p>
-                                    @Localizer["Content_No"]
-                                </p>
-                                <p class="mt-3">
-                                    @Localizer["Content_TimevicIsFocusedOnEarningsPaymentsAndOutstandingBalancesIt"]
-                                </p>
-                            </LumexAccordionItem>
+                            <details id="money-invoicing" class="faq-item">
+                                <summary class="faq-summary">
+                                    <span class="faq-title">@Localizer["Title_DoesTimevicReplaceInvoicingTools"]</span>
+                                    <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                                </summary>
+                                <div class="faq-content">
+                                    <p>
+                                        @Localizer["Content_No"]
+                                    </p>
+                                    <p class="mt-3">
+                                        @Localizer["Content_TimevicIsFocusedOnEarningsPaymentsAndOutstandingBalancesIt"]
+                                    </p>
+                                </div>
+                            </details>
 
-                            <LumexAccordionItem Id="money-member-rates" Title="@Localizer["Title_DoDevelopersSeeClientRates"]">
-                                <p>
-                                    @Localizer["Content_DoDevelopersSeeClientRates"]
-                                </p>
-                            </LumexAccordionItem>
-                        </LumexAccordion>
+                            <details id="money-member-rates" class="faq-item">
+                                <summary class="faq-summary">
+                                    <span class="faq-title">@Localizer["Title_DoDevelopersSeeClientRates"]</span>
+                                    <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                                </summary>
+                                <div class="faq-content">
+                                    <p>
+                                        @Localizer["Content_DoDevelopersSeeClientRates"]
+                                    </p>
+                                </div>
+                            </details>
+                        </div>
                     </div>
                 </section>
 
@@ -233,52 +290,84 @@
                         </p>
                     </div>
 
-                    <LumexAccordion
-                        Variant="@AccordionVariant.Splitted"
-                        SelectionMode="@SelectionMode.Multiple"
-                        ShowDividers="@false"
-                        ItemClasses="@FaqItemClasses">
-                        <LumexAccordionItem Id="usage-every-minute" Title="@Localizer["Title_DoINeedToTrackEveryMinute"]">
-                            <p>@Localizer["Content_No"]</p>
-                            <p class="mt-3">
-                                @Localizer["Content_YouCanTrackAsMuchOrAsLittleAsYou"]
-                            </p>
-                        </LumexAccordionItem>
+                    <div class="space-y-3">
+                        <details id="usage-every-minute" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_DoINeedToTrackEveryMinute"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>@Localizer["Content_No"]</p>
+                                <p class="mt-3">
+                                    @Localizer["Content_YouCanTrackAsMuchOrAsLittleAsYou"]
+                                </p>
+                            </div>
+                        </details>
 
-                        <LumexAccordionItem Id="usage-multiple-clients" Title="@Localizer["Title_CanIManageMultipleClients"]">
-                            <p>
-                                @Localizer["Content_YesTimevicIsBuiltForMultipleClientsMultipleProjectsAnd"]
-                            </p>
-                        </LumexAccordionItem>
+                        <details id="usage-multiple-clients" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_CanIManageMultipleClients"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>
+                                    @Localizer["Content_YesTimevicIsBuiltForMultipleClientsMultipleProjectsAnd"]
+                                </p>
+                            </div>
+                        </details>
 
-                        <LumexAccordionItem Id="usage-custom-currency" Title="@Localizer["Title_HowDoesCustomCurrencyWork"]">
-                            <p>
-                                @Localizer["Content_HowDoesCustomCurrencyWork"]
-                            </p>
-                        </LumexAccordionItem>
+                        <details id="usage-custom-currency" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_HowDoesCustomCurrencyWork"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>
+                                    @Localizer["Content_HowDoesCustomCurrencyWork"]
+                                </p>
+                            </div>
+                        </details>
 
-                        <LumexAccordionItem Id="usage-guest-reports-approvals" Title="@Localizer["Title_HowOftenClientReportsUpdated"]">
-                            <p>
-                                @Localizer["Content_HowOftenClientReportsUpdated"]
-                            </p>
-                        </LumexAccordionItem>
+                        <details id="usage-guest-reports-approvals" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_HowOftenClientReportsUpdated"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>
+                                    @Localizer["Content_HowOftenClientReportsUpdated"]
+                                </p>
+                            </div>
+                        </details>
 
-                        <LumexAccordionItem Id="usage-task-managers" Title="@Localizer["Title_DoesTimevicReplaceJiraOrTaskManagers"]">
-                            <p>@Localizer["Content_No"]</p>
-                            <p class="mt-3">
-                                @Localizer["Content_TimevicIsNotATaskManager"]
-                            </p>
-                            <p class="mt-3">
-                                @Localizer["Content_TasksAreSimpleOptionalAndOnlyExistToSupportTime"]
-                            </p>
-                        </LumexAccordionItem>
+                        <details id="usage-task-managers" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_DoesTimevicReplaceJiraOrTaskManagers"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>@Localizer["Content_No"]</p>
+                                <p class="mt-3">
+                                    @Localizer["Content_TimevicIsNotATaskManager"]
+                                </p>
+                                <p class="mt-3">
+                                    @Localizer["Content_TasksAreSimpleOptionalAndOnlyExistToSupportTime"]
+                                </p>
+                            </div>
+                        </details>
 
-                        <LumexAccordionItem Id="usage-attach-time" Title="@Localizer["Title_CanIAttachTimeToTasks"]">
-                            <p>
-                                @Localizer["Content_YesYouCanAttachTimeEntriesToTasksWhenYou"]
-                            </p>
-                        </LumexAccordionItem>
-                    </LumexAccordion>
+                        <details id="usage-attach-time" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_CanIAttachTimeToTasks"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>
+                                    @Localizer["Content_YesYouCanAttachTimeEntriesToTasksWhenYou"]
+                                </p>
+                            </div>
+                        </details>
+                    </div>
                 </section>
 
                 <section aria-labelledby="faq-pricing-access" class="scroll-mt-24">
@@ -290,23 +379,31 @@
                         </p>
                     </div>
 
-                    <LumexAccordion
-                        Variant="@AccordionVariant.Splitted"
-                        SelectionMode="@SelectionMode.Multiple"
-                        ShowDividers="@false"
-                        ItemClasses="@FaqItemClasses">
-                        <LumexAccordionItem Id="pricing-free" Title="@Localizer["Title_IsTimevicFree"]">
-                            <p>
-                                @Localizer["Content_YesTimevicIsFreeToUse"]
-                            </p>
-                        </LumexAccordionItem>
+                    <div class="space-y-3">
+                        <details id="pricing-free" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_IsTimevicFree"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>
+                                    @Localizer["Content_YesTimevicIsFreeToUse"]
+                                </p>
+                            </div>
+                        </details>
 
-                        <LumexAccordionItem Id="pricing-install" Title="@Localizer["Title_DoINeedToInstallAnything"]">
-                            <p>
-                                @Localizer["Content_NoTimevicWorksInYourBrowser"]
-                            </p>
-                        </LumexAccordionItem>
-                    </LumexAccordion>
+                        <details id="pricing-install" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_DoINeedToInstallAnything"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>
+                                    @Localizer["Content_NoTimevicWorksInYourBrowser"]
+                                </p>
+                            </div>
+                        </details>
+                    </div>
                 </section>
 
                 <section aria-labelledby="faq-getting-started" class="scroll-mt-24">
@@ -318,30 +415,38 @@
                         </p>
                     </div>
 
-                    <LumexAccordion
-                        Variant="@AccordionVariant.Splitted"
-                        SelectionMode="@SelectionMode.Multiple"
-                        ShowDividers="@false"
-                        ItemClasses="@FaqItemClasses">
-                        <LumexAccordionItem Id="getting-started-how" Title="@Localizer["Title_HowDoIStart"]">
-                            <ol class="list-decimal space-y-1 pl-5">
-                                <li>@Localizer["Content_AddAClient"]</li>
-                                <li>@Localizer["Content_CreateAProject"]</li>
-                                <li>@Localizer["Content_SetAnHourlyRate"]</li>
-                                <li>@Localizer["Content_TrackTime"]</li>
-                            </ol>
-                            <p class="mt-3">@Localizer["Content_YouWillImmediatelySeeHowMuchYouEarnedFromThe"]</p>
-                        </LumexAccordionItem>
+                    <div class="space-y-3">
+                        <details id="getting-started-how" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_HowDoIStart"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <ol class="list-decimal space-y-1 pl-5">
+                                    <li>@Localizer["Content_AddAClient"]</li>
+                                    <li>@Localizer["Content_CreateAProject"]</li>
+                                    <li>@Localizer["Content_SetAnHourlyRate"]</li>
+                                    <li>@Localizer["Content_TrackTime"]</li>
+                                </ol>
+                                <p class="mt-3">@Localizer["Content_YouWillImmediatelySeeHowMuchYouEarnedFromThe"]</p>
+                            </div>
+                        </details>
 
-                        <LumexAccordionItem Id="getting-started-value" Title="@Localizer["Title_HowLongDoesItTakeToSeeValue"]">
-                            <p>
-                                @Localizer["Content_About2Minutes"]
-                            </p>
-                            <p class="mt-3">
-                                @Localizer["Content_AsSoonAsYouAddAClientSetARate"]
-                            </p>
-                        </LumexAccordionItem>
-                    </LumexAccordion>
+                        <details id="getting-started-value" class="faq-item">
+                            <summary class="faq-summary">
+                                <span class="faq-title">@Localizer["Title_HowLongDoesItTakeToSeeValue"]</span>
+                                <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                            </summary>
+                            <div class="faq-content">
+                                <p>
+                                    @Localizer["Content_About2Minutes"]
+                                </p>
+                                <p class="mt-3">
+                                    @Localizer["Content_AsSoonAsYouAddAClientSetARate"]
+                                </p>
+                            </div>
+                        </details>
+                    </div>
                 </section>
             </div>
         </div>
@@ -375,13 +480,4 @@
     private string CurrentCulture => LocalizationUrlService.GetCurrentCultureName(CurrentPath);
 
     private string LocalizedUrl(string path) => LocalizationUrlService.GetLocalizedUrl(path, CurrentCulture);
-
-    private static readonly AccordionItemSlots FaqItemClasses = new()
-    {
-        Base = "rounded-[1.5rem] border border-slate-200 bg-white shadow-sm transition-shadow duration-200 hover:shadow-md",
-        Trigger = "py-5 gap-4",
-        Title = "text-base font-semibold leading-6 text-slate-950 sm:text-lg",
-        Content = "pb-5 text-sm leading-7 text-slate-600 sm:text-base",
-        Indicator = "text-slate-400 transition-transform duration-200"
-    };
 }
