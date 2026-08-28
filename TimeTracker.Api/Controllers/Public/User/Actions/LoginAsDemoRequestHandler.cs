@@ -105,7 +105,7 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
 
         var email = DemoAccountConstants.GenerateEmail();
         var user = await _userDao.CreatePendingUser(email);
-        user.UserName = "jоhn_deere";
+        user.UserName = "john_deere";
         user.VerificationTime = DateTime.UtcNow;
         user.VerificationToken = null;
         _passwordService.SetUserPassword(user, Guid.NewGuid().ToString());
@@ -344,4 +344,5 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         int DayOffset,
         string Description
     );
+    
 }

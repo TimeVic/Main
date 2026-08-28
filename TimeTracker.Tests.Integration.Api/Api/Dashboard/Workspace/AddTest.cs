@@ -62,7 +62,7 @@ public class AddTest: BaseTest
     }
 
     [Fact]
-    public async Task ShouldNotAddMoreThanFiveActiveCustomWorkspaces()
+    public async Task ShouldNotAddMoreThanMaxActiveCustomWorkspaces()
     {
         await _workspaceSeeder.CreateSeveralAsync(_user, GlobalConstants.MaxActiveCreatedWorkspaces);
         await FlushDbChanges();
@@ -78,7 +78,7 @@ public class AddTest: BaseTest
     }
 
     [Fact]
-    public async Task ShouldAddWhenOneOfFiveCreatedWorkspacesIsDeleted()
+    public async Task ShouldAddWhenOneOfCreatedWorkspacesIsDeleted()
     {
         var workspaces = await _workspaceSeeder.CreateSeveralAsync(_user, GlobalConstants.MaxActiveCreatedWorkspaces);
         await FlushDbChanges();
