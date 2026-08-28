@@ -1,4 +1,4 @@
-﻿using Api.Requests.Abstractions;
+using Api.Requests.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.Transactions.Behaviors;
 using AspNetCore.ApiControllers.Extensions;
@@ -22,10 +22,10 @@ public class UserController : MainApiControllerBase
     [HttpGet("login/as-demo")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<IActionResult> LoginAsDemo()
+    public Task<IActionResult> LoginAsDemo([FromQuery] LoginAsDemoRequest? request = null)
         => this.RequestAsync()
             .For<LoginResponseDto>()
-            .With(new LoginAsDemoRequest());
+            .With(request ?? new LoginAsDemoRequest());
 
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]

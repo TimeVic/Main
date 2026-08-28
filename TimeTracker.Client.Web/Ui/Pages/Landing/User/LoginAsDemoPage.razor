@@ -23,7 +23,7 @@
                 </div>
                 <h2 class="mt-6 text-xl font-semibold text-slate-900">@Localizer["Content_SomethingWentWrong"]</h2>
                 <p class="mt-2 text-sm text-slate-500">@Localizer["Content_CouldNotLoadTheDemoAccountPleaseTryAgain"]</p>
-                <a href="@LocalizedUrl(SiteUrl.LoginAsDemo)"
+                <a href="@LocalizedUrl(string.IsNullOrWhiteSpace(Mode) ? SiteUrl.LoginAsDemo : $"{SiteUrl.LoginAsDemo}?mode={Mode}")"
                    class="mt-6 inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
                     <i class="fa-solid fa-rotate-right"></i>
                     <span>@Localizer["Content_Retry"]</span>

@@ -1,7 +1,9 @@
-﻿using TimeTracker.Api.Shared.Constants;
+using TimeTracker.Api.Shared.Constants;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Users;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Public.User;
+using TimeTracker.Business.Common.Constants;
+
 namespace TimeTracker.Client.Core.Services.Http
 {
     public partial class ApiService
@@ -11,9 +13,10 @@ namespace TimeTracker.Client.Core.Services.Http
             return await PostAsync<LoginResponseDto?>(ApiUrl.Login, model);
         }
 
-        public async Task<LoginResponseDto?> LoginAsDemoAsync()
+        public async Task<LoginResponseDto?> LoginAsDemoAsync(WorkspaceMode mode = WorkspaceMode.Solo)
         {
-            return await GetAsync<LoginResponseDto?>(ApiUrl.LoginAsDemo);
+            var url = $"{ApiUrl.LoginAsDemo}?mode={mode}";
+            return await GetAsync<LoginResponseDto?>(url);
         }
 
         public async Task<bool> LoginMagicAsync(LoginMagicRequest model)

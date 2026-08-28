@@ -1,3 +1,5 @@
+using TimeTracker.Business.Common.Constants;
+
 namespace TimeTracker.Client.Web.Constants;
 
 public static class SiteUrl
@@ -22,6 +24,9 @@ public static class SiteUrl
         
     public static readonly string Login = "/login";
     public static readonly string LoginAsDemo = "/demo";
+    public static readonly string LoginAsDemoSolo = "/demo?mode=Solo";
+    public static readonly string LoginAsDemoTeam = "/demo?mode=Team";
+    public static string GetLoginAsDemoUrl(WorkspaceMode mode = WorkspaceMode.Solo) => $"/demo?mode={mode}";
     public static readonly string LoginMagicVerify = "/login/magic/{0}";
     public static readonly string ForgotPassword = "/user/password-reset";
         
