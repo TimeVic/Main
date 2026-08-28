@@ -1,14 +1,12 @@
 using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate.Linq;
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Dao;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
-using TimeTracker.Business.Services.Queue;
 using TimeTracker.Business.Testing.Factories;
 using TimeTracker.Business.Testing.Seeders.Entity.Task;
 using TimeTracker.Tests.Integration.Api.Core;
@@ -20,7 +18,6 @@ public partial class StartTest: BaseTest
 {
     private readonly string Url = "/dashboard/time-entry/start";
     
-    private readonly IQueueService _queueService;
     private readonly UserEntity _user;
     private readonly IDataFactory<TimeEntryEntity> _timeEntryFactory;
     private readonly string _jwtToken;
@@ -31,7 +28,6 @@ public partial class StartTest: BaseTest
 
     public StartTest(ApiCustomWebApplicationFactory factory) : base(factory)
     {
-        _queueService = ServiceProvider.GetRequiredService<IQueueService>();
         _timeEntryDao = ServiceProvider.GetRequiredService<ITimeEntryDao>();
         _projectSeeder = ServiceProvider.GetRequiredService<IProjectSeeder>();
         _taskSeeder = ServiceProvider.GetRequiredService<ITaskSeeder>();
@@ -42,20 +38,14 @@ public partial class StartTest: BaseTest
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var response = await PostRequestAsAnonymousAsync(Url, new StartRequest()
-        {
-            StartTime = DateTime.UtcNow.AddSeconds(1)
-        });
+        var response = await PostRequestAsAnonymousAsync(Url, new StartRequest());
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
     
     [Fact]
     public async Task ShouldStartEmpty()
     {
-        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
-        {
-            StartTime = DateTime.UtcNow
-        });
+        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest());
         response.EnsureSuccessStatusCode();
 
         var actualDto = (await response.GetJsonDataAsync<StartResponse>()).ActiveTimeEntry;
@@ -70,15 +60,9 @@ public partial class StartTest: BaseTest
     [Fact]
     public async Task ShouldNotStart2ItemsIfRequestIsAsync()
     {
-        await PostRequestAsync(Url, _jwtToken, new StartRequest()
-        {
-            StartTime = DateTime.UtcNow.AddSeconds(1)
-        });
+        await PostRequestAsync(Url, _jwtToken, new StartRequest());
         await _timeEntryDao.StopActiveAsync(_defaultWorkspace, _user, DateTime.UtcNow.AddHours(1));
-        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
-        {
-            StartTime = DateTime.UtcNow.AddSeconds(1)
-        });
+        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest());
         await response.GetJsonDataAsync();
         response.EnsureSuccessStatusCode();
 
@@ -96,12 +80,11 @@ public partial class StartTest: BaseTest
             _defaultWorkspace,
             DateTime.UtcNow.AddMinutes(-1)
         );
-        var newStartTime = DateTime.UtcNow;
+        var requestStartedAt = DateTime.UtcNow;
 
         var response = await PostRequestAsync(Url, _jwtToken, new StartRequest
         {
-            Description = "New active entry",
-            StartTime = newStartTime
+            Description = "New active entry"
         });
         response.EnsureSuccessStatusCode();
 
@@ -114,8 +97,8 @@ public partial class StartTest: BaseTest
         Assert.Null(activeEntry.EndTime);
         Assert.NotNull(startResponse.StoppedTimeEntry);
         Assert.Equal(currentEntry.Id, startResponse.StoppedTimeEntry.Id);
-        Assert.Equal(newStartTime, startResponse.StoppedTimeEntry.EndTime);
-        Assert.True((currentEntry.EndTime!.Value - newStartTime).Duration() < TimeSpan.FromMicroseconds(1));
+        Assert.InRange(startResponse.StoppedTimeEntry.EndTime!.Value, requestStartedAt, DateTime.UtcNow);
+        Assert.True((currentEntry.EndTime!.Value - startResponse.StoppedTimeEntry.EndTime.Value).Duration() < TimeSpan.FromMicroseconds(1));
     }
 
     [Fact]
@@ -128,8 +111,7 @@ public partial class StartTest: BaseTest
         {
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
-            IsBillable = fakeTimeEntry.IsBillable,
-            StartTime = DateTime.UtcNow.AddSeconds(1)
+            IsBillable = fakeTimeEntry.IsBillable
         });
         response.EnsureSuccessStatusCode();
 
@@ -143,18 +125,15 @@ public partial class StartTest: BaseTest
     }
     
     [Fact]
-    public async Task StartTimeShouldBeSameAsLocal()
+    public async Task StartTimeShouldBeSetByServer()
     {
-        var expectedStartTime = DateTime.UtcNow.AddMinutes(13);
-        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest()
-        {
-            StartTime = expectedStartTime
-        });
+        var requestStartedAt = DateTime.UtcNow;
+        var response = await PostRequestAsync(Url, _jwtToken, new StartRequest());
         response.EnsureSuccessStatusCode();
 
         var actualDto = (await response.GetJsonDataAsync<StartResponse>()).ActiveTimeEntry;
         Assert.NotEqual(Guid.Empty, actualDto.Id);
-        Assert.Equal(expectedStartTime, actualDto.StartTime);
+        Assert.InRange(actualDto.StartTime, requestStartedAt, DateTime.UtcNow);
     }
     
     [Fact]
@@ -171,8 +150,6 @@ public partial class StartTest: BaseTest
         {
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
-            StartTime = DateTime.UtcNow.AddSeconds(1),
-            
             IsBillable = null,
             HourlyRate = null
         });
@@ -196,8 +173,7 @@ public partial class StartTest: BaseTest
         {
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
-            StartTime = DateTime.UtcNow.AddSeconds(1),
-            
+
             IsBillable = true,
             HourlyRate = null
         });

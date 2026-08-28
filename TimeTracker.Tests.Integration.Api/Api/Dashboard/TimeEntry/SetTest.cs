@@ -6,6 +6,7 @@ using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Extensions;
 using TimeTracker.Business.Orm.Constants;
 using TimeTracker.Business.Orm.Dao;
+using TimeTracker.Business.Orm.Dto.TimeEntry;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
@@ -205,5 +206,73 @@ public class SetTest: BaseTest
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.Equal(expectedHourlyRate, actualDto.HourlyRate);
+    }
+
+    [Fact]
+    public async Task ShouldUseCurrentWorkspaceTimeZoneWhenUpdatingExistingEntry()
+    {
+        const string previousTimeZone = "Asia/Tokyo";
+        const string currentTimeZone = "America/New_York";
+        var startTime = new DateTime(2026, 7, 1, 8, 0, 0, DateTimeKind.Utc);
+        var timeEntry = await _timeEntryDao.SetAsync(_user, _defaultWorkspace, new TimeEntryCreationDto
+        {
+            StartTime = startTime,
+            EndTime = startTime.AddHours(1)
+        });
+        timeEntry.TimeZone = previousTimeZone;
+
+        _defaultWorkspace.TimeZone = currentTimeZone;
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new SetRequest
+        {
+            Id = timeEntry.Id,
+            StartTime = new DateTime(2026, 7, 1, 10, 0, 0, DateTimeKind.Utc),
+            EndTime = new DateTime(2026, 7, 1, 11, 0, 0, DateTimeKind.Utc)
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        Assert.Equal(currentTimeZone, actualDto.TimeZone);
+        Assert.Equal(new DateTime(2026, 7, 1, 14, 0, 0, DateTimeKind.Utc), actualDto.StartTime);
+        Assert.Equal(new DateTime(2026, 7, 1, 15, 0, 0, DateTimeKind.Utc), actualDto.EndTime);
+    }
+
+    [Fact]
+    public async Task ShouldMoveInvalidDstWallClockTimeToFirstValidMinute()
+    {
+        _defaultWorkspace.TimeZone = "America/New_York";
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new SetRequest
+        {
+            // 02:30 does not exist on the 2026 spring DST transition in New York.
+            StartTime = new DateTime(2026, 3, 8, 2, 30, 0, DateTimeKind.Utc),
+            EndTime = new DateTime(2026, 3, 8, 3, 30, 0, DateTimeKind.Utc)
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        Assert.Equal(new DateTime(2026, 3, 8, 7, 0, 0, DateTimeKind.Utc), actualDto.StartTime);
+        Assert.Equal(new DateTime(2026, 3, 8, 7, 30, 0, DateTimeKind.Utc), actualDto.EndTime);
+    }
+
+    [Fact]
+    public async Task ShouldUseLaterOccurrenceForAmbiguousDstWallClockTime()
+    {
+        _defaultWorkspace.TimeZone = "America/New_York";
+        await FlushDbChanges();
+
+        var response = await PostRequestAsync(Url, _jwtToken, new SetRequest
+        {
+            // 01:30 occurs twice on the 2026 autumn DST transition in New York.
+            StartTime = new DateTime(2026, 11, 1, 1, 30, 0, DateTimeKind.Utc),
+            EndTime = new DateTime(2026, 11, 1, 2, 30, 0, DateTimeKind.Utc)
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
+        Assert.Equal(new DateTime(2026, 11, 1, 6, 30, 0, DateTimeKind.Utc), actualDto.StartTime);
+        Assert.Equal(new DateTime(2026, 11, 1, 7, 30, 0, DateTimeKind.Utc), actualDto.EndTime);
     }
 }

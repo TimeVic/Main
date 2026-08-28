@@ -87,6 +87,7 @@ public class UserTimeZoneDateConverter: JsonConverter<DateTime>
     )
     {
         var dt = (DateTime)reader.Value;
+
         // ConvertTimeToUtc throws Argument_ConvertMismatch when Kind == Utc.
         // Treat any incoming value as "user-local" (Unspecified) before converting.
         var unspecified = DateTime.SpecifyKind(dt, DateTimeKind.Unspecified);

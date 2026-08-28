@@ -1,7 +1,5 @@
-using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Business.Common.Extensions;
-using TimeTracker.Business.Testing.Seeders.Entity;
 
 namespace TimeTracker.Tests.Integration.Api.Api.Dashboard.TimeEntry;
 
@@ -20,7 +18,6 @@ public partial class StartTest
             ProjectId = project.Id,
             Description = fakeTimeEntry.Description,
             IsBillable = fakeTimeEntry.IsBillable,
-            StartTime = DateTime.UtcNow.AddSeconds(1),
             InternalTaskId = task.Id
         });
         response.EnsureSuccessStatusCode();

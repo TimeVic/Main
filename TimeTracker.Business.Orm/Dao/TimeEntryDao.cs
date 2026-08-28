@@ -61,7 +61,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         var query = Session.QueryOver<TimeEntryEntity>()
             .Inner.JoinAlias(item => item.User, () => rootUserAlias)
             .Left.JoinAlias(item => item.Project, () => rootProjectAlias)
-            .Left.JoinAlias(() => rootProjectAlias!.Client, () => rootClientAlias)
+            .Left.JoinAlias(() => rootProjectAlias.Client, () => rootClientAlias)
             .Left.JoinAlias(item => item.Task, () => rootTaskAlias)
             .OrderBy(item => item.StartTime).Desc
             .Where(item => item.Workspace.Id == workspace.Id && item.IsMarkedToDelete == false);
@@ -70,15 +70,15 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         {
             if (filter.ClientId.HasValue)
             {
-                query = query.And(() => rootClientAlias!.Id == filter.ClientId);
+                query = query.And(() => rootClientAlias.Id == filter.ClientId);
             }
             if (filter.ProjectId.HasValue)
             {
-                query = query.And(() => rootProjectAlias!.Id == filter.ProjectId);
+                query = query.And(() => rootProjectAlias.Id == filter.ProjectId);
             }
             if (filter.TaskId.HasValue)
             {
-                query = query.And(() => rootTaskAlias!.Id == filter.TaskId);
+                query = query.And(() => rootTaskAlias.Id == filter.TaskId);
             }
             if (filter.IsBillable.HasValue)
             {
@@ -86,7 +86,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             }
             if (filter.MemberId.HasValue)
             {
-                query = query.And(() => rootUserAlias!.Id == filter.MemberId);
+                query = query.And(() => rootUserAlias.Id == filter.MemberId);
             }
             if (!string.IsNullOrEmpty(filter.Search))
             {
@@ -119,10 +119,10 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             WorkspaceMemberEntity workspaceMemberAlias = null!;
             var allowedIdsSubQuery = QueryOver.Of<TimeEntryEntity>()
                 .Inner.JoinAlias(item => item.Project, () => projectAlias)
-                .Inner.JoinAlias(item => projectAlias!.MemberProjectAccess, () => projectAccessAlias)
-                .Inner.JoinAlias(() => projectAccessAlias!.WorkspaceMember, () => workspaceMemberAlias)
+                .Inner.JoinAlias(item => projectAlias.MemberProjectAccess, () => projectAccessAlias)
+                .Inner.JoinAlias(() => projectAccessAlias.WorkspaceMember, () => workspaceMemberAlias)
                 .And(
-                    item => workspaceMemberAlias!.User.Id == user.Id 
+                    item => workspaceMemberAlias.User.Id == user.Id
                         && workspaceMemberAlias.Workspace.Id == workspace.Id
                 )
                 .Select(
@@ -137,7 +137,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
                         allowedIdsSubQuery.DetachedCriteria
                     ),
                     Restrictions.Eq(
-                        Projections.Property(() => rootUserAlias!.Id),
+                            Projections.Property(() => rootUserAlias.Id),
                         user.Id
                     )
                 )
@@ -271,7 +271,8 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         string? description = "",
         Guid? projectId = null,
         decimal? hourlyRate = null,
-        TaskEntity? internalTask = null
+        TaskEntity? internalTask = null,
+        string? timeZoneId = null
     )
     {
         if (await GetActiveEntryAsync(workspace, user) != null)
@@ -289,7 +290,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
             Workspace = workspace,
             User = user,
             Task = internalTask,
-            TimeZone = workspace.TimeZone,
+            TimeZone = timeZoneId ?? workspace.TimeZone,
             Status = isApproved ? TimeEntryStatus.Approved : TimeEntryStatus.Draft,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
@@ -400,7 +401,8 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
                     description: activeTimeEntry.Description,
                     projectId: activeTimeEntry.Project?.Id,
                     hourlyRate: activeTimeEntry.HourlyRate,
-                    internalTask: activeTimeEntry.Task
+                    internalTask: activeTimeEntry.Task,
+                    timeZoneId: activeTimeEntry.TimeZone
                 );
 
                 if (copyStartLocal.Date == endTimeLocal.Date)
@@ -459,6 +461,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
                 UpdatedAt = DateTime.UtcNow
             };
         }
+
         if (timeEntry.Task != null)
         {
             timeEntry.Project = timeEntry.Task.TaskList.Project;
@@ -471,6 +474,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         timeEntry.Description = timeEntryDto.Description;
         timeEntry.HourlyRate = timeEntryDto.HourlyRate;
         timeEntry.IsBillable = timeEntryDto.IsBillable;
+        timeEntry.TimeZone = workspace.TimeZone;
         timeEntry.StartTime = timeEntryDto.StartTime;
         
         // According same day
@@ -489,6 +493,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
                 timeEntry.EndTime = timeEntryDto.EndTime;
             }
         }
+
 
         if (timeEntry.IsNew)
         {

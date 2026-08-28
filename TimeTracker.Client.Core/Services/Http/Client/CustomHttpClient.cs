@@ -41,13 +41,13 @@ public class CustomHttpClient
         }
     }
     
-    public async Task<TResponse?> RequestAsync<TResponse>(string requestUri, object data, HttpMethod httpMethod)
+    public async Task<TResponse?> RequestAsync<TResponse>(string requestUri, object? data, HttpMethod httpMethod)
     {
         var responseString = await RequestAsync(requestUri, data, httpMethod);
         return Deserialize<TResponse>(responseString);
     }
     
-    public async Task<string> RequestAsync(string requestUri, object data, HttpMethod httpMethod)
+    public async Task<string> RequestAsync(string requestUri, object? data, HttpMethod httpMethod)
     {   
         // create request object
         var request = new HttpRequestMessage(httpMethod, $"{_apiUrl}/{requestUri}");
@@ -59,7 +59,10 @@ public class CustomHttpClient
         {
             data ??= new { };
             request.Content = new StringContent(
-                JsonHelper.SerializeToString(data, DateTimeZoneHandling.Utc), 
+                JsonHelper.SerializeToString(
+                    data,
+                    DateTimeZoneHandling.Utc
+                ),
                 System.Text.Encoding.UTF8, 
                 "application/json"
             );

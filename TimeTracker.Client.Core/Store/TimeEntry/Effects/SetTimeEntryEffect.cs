@@ -2,14 +2,12 @@
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Services.UI;
-using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Project;
 
 namespace TimeTracker.Client.Core.Store.TimeEntry.Effects;
 
 public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
 {
-    private readonly IState<AuthState> _authState;
     private readonly IState<ProjectState> _projectState;
     private readonly IApiService _apiService;
     private readonly ILogger<SetTimeEntryEffect> _logger;
@@ -17,14 +15,12 @@ public class SetTimeEntryEffect: Effect<SaveTimeEntryAction>
 
     public SetTimeEntryEffect(
         IApiService apiService,
-        IState<AuthState> authState,
         IState<ProjectState> projectState,
         ILogger<SetTimeEntryEffect> logger,
         IToastService toastService
     )
     {
         _apiService = apiService;
-        _authState = authState;
         _projectState = projectState;
         _logger = logger;
         _toastService = toastService;

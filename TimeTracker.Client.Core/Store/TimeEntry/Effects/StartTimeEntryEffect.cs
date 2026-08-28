@@ -2,13 +2,10 @@
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
-using TimeTracker.Business.Extensions;
 using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Services.UI;
-using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Project;
-using TimeTracker.Client.Core.Store.Tasks;
 
 namespace TimeTracker.Client.Core.Store.TimeEntry.Effects;
 
@@ -47,10 +44,8 @@ public class StartTimeEntryEffect: Effect<StartTimeEntryAction>
             {
                 project = action.InternalTask?.TaskList.Project;
             }
-            var startTime = DateTime.UtcNow;
             var response = await _apiService.TimeEntryStartAsync(new StartRequest()
             {
-                StartTime = startTime,
                 IsBillable = project != null ? project.IsBillableByDefault : action.IsBillable,
                 ProjectId = action.Project?.Id,
                 Description = action.Description,

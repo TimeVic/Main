@@ -6,12 +6,29 @@ namespace TimeTracker.Business.Common.Helpers;
 
 public static class JsonHelper
 {
-    public static string SerializeToString(object data, DateTimeZoneHandling? dateTimeZoneHandling = null)
+    public static string SerializeToString(
+        object data,
+        DateTimeZoneHandling? dateTimeZoneHandling = null,
+        List<JsonConverter>? converters = null,
+        IContractResolver? contractResolver = null
+    )
     {
-        return JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings()
+        var settings = new JsonSerializerSettings()
         {
             DateTimeZoneHandling = dateTimeZoneHandling ?? DateTimeZoneHandling.Utc
-        });
+        };
+
+        if (converters != null)
+        {
+            settings.Converters = converters;
+        }
+
+        if (contractResolver != null)
+        {
+            settings.ContractResolver = contractResolver;
+        }
+
+        return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
     }
     
     public static byte[]? SerializeToBytes(object data)

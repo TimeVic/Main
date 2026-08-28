@@ -22,7 +22,8 @@ public interface ITimeEntryDao: IDomainService
         string? description = null,
         Guid? projectId = null,
         decimal? hourlyRate = null,
-        TaskEntity? internalTask = null
+        TaskEntity? internalTask = null,
+        string? timeZoneId = null
     );
     
     Task<ICollection<TimeEntryEntity>> StopActiveAsync(
