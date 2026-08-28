@@ -20,11 +20,9 @@ public partial class AddMemberModal
     [Parameter]
     public EventCallback<bool> IsOpenedChanged { get; set; }
 
-    [Inject]
-    private IState<WorkspaceMembersState> _state { get; set; } = default!;
-
     private InviteModel _model = new();
     private EditForm _form = default!;
+    private bool _isLoading;
 
     private async Task Submit()
     {
@@ -33,8 +31,33 @@ public partial class AddMemberModal
             return;
         }
 
-        Dispatcher.Dispatch(new AddNewMemberAction(_model.Email));
-        await OnCloseModal();
+        _isLoading = true;
+        try
+        {
+            var workspaceId = UrlService.GetWorkspaceIdFromDashboardUrl()
+                ?? AuthState.Value.Workspace?.Id;
+            if (workspaceId.HasValue)
+            {
+                var member = await ApiService.WorkspaceMemberAddAsync(workspaceId.Value, _model.Email);
+                if (member != null)
+                {
+                    Dispatcher.Dispatch(new LoadListAction(true));
+                    ToastService.ShowInfo(DashboardLocalizer["AddMemberModal_InvitationSent"].Value);
+                    await OnCloseModal();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            ToastService.ShowError(string.IsNullOrWhiteSpace(e.Message)
+                ? DashboardLocalizer["AddMemberModal_InvitationError"].Value
+                : e.Message);
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+        StateHasChanged();
     }
 
     private async Task OnCloseModal()

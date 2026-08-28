@@ -618,6 +618,8 @@
   <data name="AddMemberModal_Description" xml:space="preserve"><value>Надішліть запрошення до workspace на email.</value></data>
   <data name="AddMemberModal_MemberEmail" xml:space="preserve"><value>Email учасника</value></data>
   <data name="AddMemberModal_InviteMember" xml:space="preserve"><value>Запросити учасника</value></data>
+  <data name="AddMemberModal_InvitationSent" xml:space="preserve"><value>Запрошення до workspace надіслано</value></data>
+  <data name="AddMemberModal_InvitationError" xml:space="preserve"><value>Помилка запрошення учасника</value></data>
   <data name="UpdateMemberModal_Title" xml:space="preserve"><value>Редагувати “{0}”</value></data>
   <data name="UpdateMemberModal_Description" xml:space="preserve"><value>Змініть рівень доступу і налаштуйте доступ до проєктів для цього учасника.</value></data>
   <data name="UpdateMemberModal_AccessLevel" xml:space="preserve"><value>Рівень доступу</value></data>
