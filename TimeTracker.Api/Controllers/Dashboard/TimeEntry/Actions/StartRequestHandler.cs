@@ -23,7 +23,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
         private readonly IUserDao _userDao;
         private readonly IProjectDao _projectDao;
         private readonly IDbSessionProvider _sessionProvider;
-        private readonly ITimeEntryDao _timeEntryDao;
         private readonly ISecurityManager _securityManager;
         private readonly IProjectService _projectService;
         private readonly IWorkspaceAccessService _workspaceAccessService;
@@ -36,7 +35,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             IUserDao userDao,
             IProjectDao projectDao,
             IDbSessionProvider sessionProvider,
-            ITimeEntryDao timeEntryDao,
             ISecurityManager securityManager,
             IProjectService projectService,
             IWorkspaceAccessService workspaceAccessService,
@@ -49,7 +47,6 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             _userDao = userDao;
             _projectDao = projectDao;
             _sessionProvider = sessionProvider;
-            _timeEntryDao = timeEntryDao;
             _securityManager = securityManager;
             _projectService = projectService;
             _workspaceAccessService = workspaceAccessService;
@@ -82,7 +79,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
             }
 
             // Stops the current entry and starts the new one in the request transaction.
-            var stoppedTimeEntry = (await _timeEntryService.StopActiveAsync(workspace, user, request.StartTime))
+            var stoppedTimeEntry = (await _timeEntryService.StopActiveAsync(workspace, user))
                 .FirstOrDefault();
 
             var userAccess = await _workspaceAccessService.GetAccessTypeAsync(user, workspace);
@@ -95,10 +92,9 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
                 request.HourlyRate = await _projectService.GetUsersHourlyRateForProject(user, project);
             }
 
-            var timeEntry = await _timeEntryDao.StartNewAsync(
+            var timeEntry = await _timeEntryService.StartAsync(
                 user,
                 workspace,
-                request.StartTime,
                 isBillable: isBillable,
                 description: request.Description,
                 projectId: request.ProjectId,

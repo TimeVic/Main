@@ -42,10 +42,7 @@ public class StopTest: BaseTest
     [Fact]
     public async Task NonAuthorizedCanNotDoIt()
     {
-        var response = await PostRequestAsAnonymousAsync(Url, new StopRequest()
-        {
-            EndTime = DateTime.UtcNow.AddHours(1)
-        });
+        var response = await PostRequestAsAnonymousAsync(Url, new StopRequest());
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
     
@@ -55,18 +52,17 @@ public class StopTest: BaseTest
         var expectedEntry = await _timeEntryDao.StartNewAsync(
             _user,
             _defaultWorkspace,
-            DateTime.UtcNow.AddSeconds(1)
+            DateTime.UtcNow.AddMinutes(-1)
         );
         
-        var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
-        {
-            EndTime = DateTime.UtcNow.AddHours(1)
-        });
+        var stopRequestedAt = DateTime.UtcNow;
+        var response = await PostRequestAsync(Url, _jwtToken, new StopRequest());
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.Equal(expectedEntry.Id, actualDto.Id);
         Assert.NotNull(actualDto.EndTime);
+        Assert.InRange(actualDto.EndTime.Value, stopRequestedAt, DateTime.UtcNow);
 
         await DbSessionProvider.CurrentSession.RefreshAsync(_defaultWorkspace);
         Assert.False(await _workspaceDao.HasActiveTimeEntriesAsync(_defaultWorkspace));
@@ -78,10 +74,7 @@ public class StopTest: BaseTest
     [Fact]
     public async Task ShouldReturnNullIfNotActive()
     {
-        var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
-        {
-            EndTime = DateTime.UtcNow.AddHours(1)
-        });
+        var response = await PostRequestAsync(Url, _jwtToken, new StopRequest());
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
@@ -103,16 +96,17 @@ public class StopTest: BaseTest
             internalTask: task
         );
         
-        var response = await PostRequestAsync(Url, _jwtToken, new StopRequest()
-        {
-            EndTime = startTime.AddHours(1)
-        });
+        var response = await PostRequestAsync(Url, _jwtToken, new StopRequest());
         response.EnsureSuccessStatusCode();
 
         var actualDto = await response.GetJsonDataAsync<TimeEntryDto>();
         Assert.Equal(expectedEntry.Id, actualDto.Id);
         Assert.NotNull(actualDto.Task);
         Assert.Equal(task.Id, actualDto.Task.Id);
-        Assert.Equal(TimeSpan.FromHours(1), actualDto.Task.TrackedDuration);
+        Assert.InRange(
+            actualDto.Task.TrackedDuration,
+            TimeSpan.FromHours(2),
+            TimeSpan.FromHours(2).Add(TimeSpan.FromMinutes(1))
+        );
     }
 }

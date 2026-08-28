@@ -7,17 +7,12 @@ namespace TimeTracker.Client.Core.Services.DateTimes;
 public class UserDateTimeProviderService: IDisposable
 {
     private readonly IState<AuthState> _authState;
-    private TimeZoneInfo _userTimeZone;
 
     public UserDateTimeProviderService(
         IState<AuthState> authState
     )
     {
         _authState = authState;
-        _userTimeZone = TimeZoneInfo.Local;
-        SetUserTimeZone();
-        
-        _authState.StateChanged += OnAuthStateChanged;
     }
 
     /// <summary>
@@ -26,28 +21,64 @@ public class UserDateTimeProviderService: IDisposable
     /// </summary>
     public DateTimeOffset GetCurrentTime()
     {
-        return DateTime.UtcNow.ToDateTimeOffset(_userTimeZone.Id);
+        var tz = GetTimeZone();
+        return DateTime.UtcNow.ToDateTimeOffset(tz.Id);
     }
     
     public TimeZoneInfo GetTimeZone()
     {
-        return _userTimeZone;
-    }
-    
-    private void OnAuthStateChanged(object? sender, EventArgs e)
-    {
-        SetUserTimeZone();
+        var tzId = _authState.Value.Workspace?.TimeZone;
+        return ResolveTimeZone(tzId);
     }
 
-    private void SetUserTimeZone()
+    /// <summary>
+    /// Resolves timezone by id with UTC fallback.
+    /// If id is not provided, uses current workspace timezone.
+    /// </summary>
+    public TimeZoneInfo ResolveTimeZone(string? timeZoneId = null)
     {
-        _userTimeZone = _authState.Value.Workspace?.TimeZone != null
-            ? TimeZoneInfo.FindSystemTimeZoneById(_authState.Value.Workspace.TimeZone)
-            : TimeZoneInfo.Local;
+        var tzId = string.IsNullOrWhiteSpace(timeZoneId)
+            ? _authState.Value.Workspace?.TimeZone
+            : timeZoneId;
+
+        if (string.IsNullOrWhiteSpace(tzId))
+        {
+            return TimeZoneInfo.Utc;
+        }
+
+        try
+        {
+            return TimeZoneInfo.FindSystemTimeZoneById(tzId);
+        }
+        catch (Exception)
+        {
+            return TimeZoneInfo.Utc;
+        }
+    }
+
+
+    /// <summary>
+    /// Converts UTC instant to wall-clock value in provided timezone (or workspace timezone).
+    /// </summary>
+    public DateTime ConvertUtcToWallClock(DateTime value, string? timeZoneId = null)
+    {
+        var utc = value.Kind switch
+        {
+            DateTimeKind.Utc => value,
+            DateTimeKind.Local => value.ToUniversalTime(),
+            _ => DateTime.SpecifyKind(value, DateTimeKind.Utc)
+        };
+
+        var timeZone = ResolveTimeZone(timeZoneId);
+        return TimeZoneInfo.ConvertTimeFromUtc(utc, timeZone);
+    }
+
+    public DateTime? ConvertUtcToWallClock(DateTime? value, string? timeZoneId = null)
+    {
+        return value.HasValue ? ConvertUtcToWallClock(value.Value, timeZoneId) : null;
     }
 
     public void Dispose()
     {
-        _authState.StateChanged -= OnAuthStateChanged;
     }
 }

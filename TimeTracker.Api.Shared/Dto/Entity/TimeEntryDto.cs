@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Api.Requests.Abstractions;
 using TimeTracker.Api.Shared.Common.Attributes;
 using TimeTracker.Api.Shared.Dto.Entity.Common;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
@@ -56,6 +55,7 @@ public class TimeEntryDto: BaseDto
         Id = fromEntry.Id;
         Description = fromEntry.Description;
         Project = fromEntry.Project;
+        TimeZone = fromEntry.TimeZone;
         EndTime = fromEntry.EndTime;
         StartTime = fromEntry.StartTime;
         HourlyRate = fromEntry.HourlyRate;

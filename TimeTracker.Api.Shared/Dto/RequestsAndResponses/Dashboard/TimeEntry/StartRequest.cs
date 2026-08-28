@@ -18,7 +18,5 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry
         [IsPositive]
         public decimal? HourlyRate { get; set; }
         
-        [Required]
-        public DateTime StartTime { get; set; }
     }
 }

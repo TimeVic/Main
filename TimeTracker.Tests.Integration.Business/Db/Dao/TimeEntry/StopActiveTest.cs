@@ -427,4 +427,28 @@ public class StopActiveTest: BaseTest
         Assert.Equal(endTime.Hour,   entry3.EndTime!.Value.Hour);
         Assert.Equal(endTime.Minute, entry3.EndTime.Value.Minute);
     }
+
+    [Fact]
+    public async Task ShouldKeepEntryTimeZoneWhenWorkspaceTimeZoneChangesBeforeDaySplit()
+    {
+        const string entryTimeZone = "Asia/Tokyo";
+        _workspace.TimeZone = entryTimeZone;
+        await DbSessionProvider.CurrentSession.SaveAsync(_workspace);
+        await FlushDbChanges();
+
+        var startTime = new DateTime(2026, 1, 15, 22, 0, 0, DateTimeKind.Utc);
+        var endTime = new DateTime(2026, 1, 16, 20, 0, 0, DateTimeKind.Utc);
+        await _timeEntryDao.StartNewAsync(_user, _workspace, startTime);
+        await FlushDbChanges();
+
+        _workspace.TimeZone = "America/New_York";
+        await FlushDbChanges();
+
+        await _timeEntryDao.StopActiveAsync(_workspace, _user, endTime);
+        await FlushDbChanges();
+
+        var entries = await _timeEntryDao.GetListAsync(_workspace, 1);
+        Assert.Equal(2, entries.TotalCount);
+        Assert.All(entries.Items, entry => Assert.Equal(entryTimeZone, entry.TimeZone));
+    }
 }

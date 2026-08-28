@@ -54,8 +54,7 @@ namespace TimeTracker.Api.Controllers.Dashboard.TimeEntry.Actions
 
             var timeEntries = await _timeEntryService.StopActiveAsync(
                 workspace!,
-                user,
-                request.EndTime
+                user
             );
 
             var timeEntry = timeEntries.FirstOrDefault();

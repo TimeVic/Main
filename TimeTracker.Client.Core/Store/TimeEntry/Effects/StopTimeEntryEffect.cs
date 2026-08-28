@@ -1,12 +1,9 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
-using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
-using TimeTracker.Business.Extensions;
 using TimeTracker.Client.Core.Core.Extensions;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Services.UI;
-using TimeTracker.Client.Core.Store.Auth;
 using TimeTracker.Client.Core.Store.Tasks;
 
 namespace TimeTracker.Client.Core.Store.TimeEntry.Effects;
@@ -36,10 +33,7 @@ public class StopTimeEntryEffect: Effect<StopActiveTimeEntryAction>
         try
         {
             dispatcher.Dispatch(new SetIsTimeEntryProcessingAction(true));
-            var stoppedTimeEntry = await _apiService.TimeEntryStopAsync(new StopRequest()
-            {
-                EndTime = DateTime.UtcNow
-            });
+            var stoppedTimeEntry = await _apiService.TimeEntryStopAsync();
             if (stoppedTimeEntry?.Task != null)
             {
                 dispatcher.Dispatch(new UpdateListItemsAction(new[] { stoppedTimeEntry.Task }));

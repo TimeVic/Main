@@ -1,7 +1,4 @@
-@using LumexUI
 @using LumexUI.Common
-@using LumexUI.Shared.Icons
-@using Markdig.Extensions.TaskLists
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Tasks.Modals
 
 @inherits BaseReactiveComponent
@@ -19,8 +16,7 @@
 <LumexModal 
     Open="true" 
     OnClose="@OnCloseModal"
-    Size="ModalSize.Large"
-    @ref="modal">
+    Size="ModalSize.Large">
     <LumexModalContent>
         <LumexModalHeader Class="flex items-center gap-3">
             <div class="flex items-center gap-3">
@@ -33,7 +29,6 @@
         <LumexModalBody Class="pt-3">
             <EditForm
                 Context="form"
-                @ref="_form"
                 EditContext="_editContext"
                 novalidate>
                 <DataAnnotationsValidator/>
@@ -79,7 +74,7 @@
                     </LumexCard>
                     <LumexCard>
                         <LumexCardBody>
-                            <div class="grid gap-4 @(_isActiveTimeEntry ? "sm:grid-cols-2" : "sm:grid-cols-3")">
+                            <div class="grid gap-4 @(IsActiveTimeEntry ? "sm:grid-cols-2" : "sm:grid-cols-3")">
                                 <div>
                                     <LumexDatebox 
                                         TValue="DateTime?"
@@ -87,7 +82,7 @@
                                         Required="true"
                                         Value="@_model.StartTime.Date"
                                         ValueChanged="OnDateChanged"
-                                        Disabled="_isActiveTimeEntry"
+                                        Disabled="IsActiveTimeEntry"
                                         Label="@DashboardLocalizer["Date"]"/>
                                 </div>
                                 <div>
@@ -95,11 +90,11 @@
                                         Label="@DashboardLocalizer["Start"]"
                                         Value="@_model.StartTime"
                                         ValueChanged="@OnChangeStartTime"
-                                        Disabled="_isActiveTimeEntry"
+                                        Disabled="IsActiveTimeEntry"
                                         FullWidth="true"
                                     />
                                 </div>
-                                @if (!_isActiveTimeEntry)
+                                @if (!IsActiveTimeEntry)
                                 {
                                     <div>
                                         <TimeEditField
@@ -114,8 +109,12 @@
                             <p class="mt-2 text-sm text-slate-700">
                                 @DashboardLocalizer["Duration"]:
                                 <span class="font-semibold text-slate-900">
-                                    @_timeParsingService.TimeSpanToTimeString(_displayDuration, true)
+                                    @_timeParsingService.TimeSpanToTimeString(DisplayDuration, true)
                                 </span>
+                            </p>
+                            <p class="mt-1 text-xs text-slate-500">
+                                Time zone:
+                                <span class="font-semibold text-slate-700">@GetTimeZoneLabel()</span>
                             </p>
                         </LumexCardBody>
                     </LumexCard>
@@ -127,7 +126,7 @@
                                 <label class="mb-2 block text-sm font-medium text-slate-700">@DashboardLocalizer["Description"]</label>
                                 <InputTextArea
                                     Value="@_model.Description"
-                                    ValueChanged="@OnDescriptionChanged"
+                                    ValueChanged="@(async (string? description) => await OnDescriptionChanged(description ?? string.Empty))"
                                     ValueExpression="() => _model.Description"
                                     AdditionalAttributes="@(new Dictionary<string, object>
                                                           {

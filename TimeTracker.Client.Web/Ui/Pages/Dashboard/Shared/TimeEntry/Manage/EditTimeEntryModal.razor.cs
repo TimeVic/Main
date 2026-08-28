@@ -20,27 +20,28 @@ public partial class EditTimeEntryModal: IDisposable
     public EventCallback OnClose { get; set; }
     
     [Inject]
-    private ITimeParsingService _timeParsingService { get; set; }
+    private ITimeParsingService _timeParsingService { get; set; } = default!;
     
     [Inject] 
-    private IState<TimeEntryState> _state { get; set; }
+    private IState<TimeEntryState> _state { get; set; } = default!;
     
     [Inject]
-    private UserDateTimeProviderService _dateTimeProviderService { get; set; }
+    private UserDateTimeProviderService _dateTimeProviderService { get; set; } = default!;
     
     private TimeEntryDto _model = new();
-    private EditForm _form;
-    private LumexModal modal;
-    private EditContext _editContext;
+    private EditContext _editContext = default!;
     private System.Timers.Timer? _timer;
-    private bool _isAddTaskModalOpened = false;
-    private bool _isActiveTimeEntry => _state.Value.ActiveEntry != null && _state.Value.ActiveEntry.Id == Entry.Id;
+    private bool _isAddTaskModalOpened;
+
+    private bool IsActiveTimeEntry => _state.Value.ActiveEntry != null && _state.Value.ActiveEntry.Id == Entry.Id;
+
+    private string TimeZoneId => _dateTimeProviderService.GetTimeZone().Id;
     
-    private TimeSpan _displayDuration
+    private TimeSpan DisplayDuration
     {
         get
         {
-            if (_isActiveTimeEntry)
+            if (IsActiveTimeEntry)
                 return _dateTimeProviderService.GetCurrentTime() - Entry.StartTimeOffset;
             return _model.Duration;
         }
@@ -50,10 +51,16 @@ public partial class EditTimeEntryModal: IDisposable
     {
         _editContext = new EditContext(_model);
         _model.UpdateFrom(Entry);
-        await base.OnInitializedAsync();
+        _model.TimeZone = TimeZoneId;
+
+        // Set interprets form values in the current workspace timezone.
+        _model.StartTime = _dateTimeProviderService.ConvertUtcToWallClock(_model.StartTime, TimeZoneId);
+        _model.EndTime = _dateTimeProviderService.ConvertUtcToWallClock(_model.EndTime, TimeZoneId);
+
         _editContext.OnFieldChanged += OnFormFieldChanged;
+        await base.OnInitializedAsync();
         
-        if (_isActiveTimeEntry)
+        if (IsActiveTimeEntry)
         {
             _timer = new System.Timers.Timer(300);
             _timer.Elapsed += (_, _) => InvokeAsync(StateHasChanged);
@@ -63,7 +70,7 @@ public partial class EditTimeEntryModal: IDisposable
 
     public void Dispose()
     {
-        _editContext?.OnFieldChanged -= OnFormFieldChanged;
+        _editContext.OnFieldChanged -= OnFormFieldChanged;
         _timer?.Dispose();
     }
     
@@ -169,5 +176,10 @@ public partial class EditTimeEntryModal: IDisposable
     {
         _model.HourlyRate = hourlyRate;
         await UpdateTimeEntry();
+    }
+
+    private string GetTimeZoneLabel()
+    {
+        return TimeZoneId;
     }
 }
