@@ -616,6 +616,8 @@
   <data name="AddMemberModal_Description" xml:space="preserve"><value>Send a workspace invitation by email.</value></data>
   <data name="AddMemberModal_MemberEmail" xml:space="preserve"><value>Member email</value></data>
   <data name="AddMemberModal_InviteMember" xml:space="preserve"><value>Invite member</value></data>
+  <data name="AddMemberModal_InvitationSent" xml:space="preserve"><value>Workspace invitation was sent</value></data>
+  <data name="AddMemberModal_InvitationError" xml:space="preserve"><value>Member invitation error</value></data>
   <data name="UpdateMemberModal_Title" xml:space="preserve"><value>Edit "{0}"</value></data>
   <data name="UpdateMemberModal_Description" xml:space="preserve"><value>Change access level and configure per-project access for this member.</value></data>
   <data name="UpdateMemberModal_AccessLevel" xml:space="preserve"><value>Access level</value></data>

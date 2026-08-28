@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using TimeTracker.Client.Core.Services.Http;
 using TimeTracker.Client.Core.Services.UI;
 using TimeTracker.Client.Core.Store.Auth;
@@ -10,14 +10,14 @@ public class AddEffect: Effect<AddNewMemberAction>
     private readonly IState<AuthState> _authState;
     private readonly IState<WorkspaceMembersState> _state;
     private readonly IApiService _apiService;
-    private readonly ILogger<LoadListEffect> _logger;
+    private readonly ILogger<AddEffect> _logger;
     private readonly IToastService _notificationService;
 
     public AddEffect(
         IApiService apiService,
         IState<AuthState> authState,
         IState<WorkspaceMembersState> state,
-        ILogger<LoadListEffect> logger,
+        ILogger<AddEffect> logger,
         IToastService notificationService
     )
     {
@@ -40,8 +40,8 @@ public class AddEffect: Effect<AddNewMemberAction>
         }
         catch (Exception e)
         {
-            _logger.LogError(e.Message, e);
-            _notificationService.ShowError("Member invitation error");
+            _logger.LogError(e, e.Message);
+            _notificationService.ShowError(e.Message);
         }
         finally
         {
