@@ -11,9 +11,9 @@ namespace TimeTracker.Client.Core.Services.Http
             return await PostAsync<StartResponse>(ApiUrl.TimeEntryStart, model);
         }
 
-        public async Task<TimeEntryDto?> TimeEntryStopAsync(StopRequest model)
+        public async Task<TimeEntryDto?> TimeEntryStopAsync()
         {
-            return await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryStop, model);
+            return await PostAsync<TimeEntryDto>(ApiUrl.TimeEntryStop, new StopRequest());
         }
 
         public async Task<GetActiveResponse?> TimeEntryGetActiveAsync()
