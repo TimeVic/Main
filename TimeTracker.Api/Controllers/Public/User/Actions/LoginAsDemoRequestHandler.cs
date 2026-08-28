@@ -73,6 +73,17 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
     public async Task<LoginResponseDto> ExecuteAsync(LoginAsDemoRequest request)
     {
         var demoUser = await GetOrCreateDemoUserAsync();
+        var targetMode = request.Mode ?? WorkspaceMode.Solo;
+
+        var workspaces = await _userDao.GetUsersWorkspaces(demoUser);
+        var targetWorkspace = workspaces.FirstOrDefault(w => w.Mode == targetMode)
+            ?? workspaces.FirstOrDefault(w => w.IsDefault)
+            ?? workspaces.FirstOrDefault();
+
+        if (targetWorkspace != null)
+        {
+            await _userDao.SelectWorkspaceAsync(demoUser, targetWorkspace);
+        }
 
         var loginResponse = await _authorizationService.Login(demoUser);
         var userDto = await _userDtoBuilder.BuildAsync(loginResponse.User);
@@ -111,22 +122,25 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         var eur = currencies.FirstOrDefault(c => c.Code == "EUR") ?? usd;
         var gbp = currencies.FirstOrDefault(c => c.Code == "GBP") ?? usd;
 
-        // Workspace 1 – main workspace (default), UTC / USD
+        // Workspace 1 – main workspace (default), UTC / USD, Solo mode
         var ws1 = await _workspaceDao.CreateWorkspaceAsync(user, "🚀 My Startup", isDefault: true);
         await _workspaceAccessService.ShareAccessAsync(ws1, user, MembershipAccessType.Owner);
         await _workspaceDao.UpdateWorkspaceAsync(ws1, ws1.Name, usd, "UTC", "Main demo workspace");
+        await _workspaceDao.SetModeAsync(ws1, WorkspaceMode.Solo);
         await SeedWorkspace1Async(ws1, user);
 
-        // Workspace 2 – US timezone / EUR
+        // Workspace 2 – US timezone / EUR, Team mode
         var ws2 = await _workspaceDao.CreateWorkspaceAsync(user, "🌍 European Office");
         await _workspaceAccessService.ShareAccessAsync(ws2, user, MembershipAccessType.Owner);
         await _workspaceDao.UpdateWorkspaceAsync(ws2, ws2.Name, eur, "America/New_York", null);
+        await _workspaceDao.SetModeAsync(ws2, WorkspaceMode.Team);
         await SeedWorkspace2Async(ws2, user);
 
-        // Workspace 3 – Berlin / GBP (intentionally sparse)
+        // Workspace 3 – Berlin / GBP (intentionally sparse), Solo mode
         var ws3 = await _workspaceDao.CreateWorkspaceAsync(user, "🏢 Berlin Hub");
         await _workspaceAccessService.ShareAccessAsync(ws3, user, MembershipAccessType.Owner);
         await _workspaceDao.UpdateWorkspaceAsync(ws3, ws3.Name, gbp, "Europe/Berlin", null);
+        await _workspaceDao.SetModeAsync(ws3, WorkspaceMode.Solo);
         // just a few clients, no projects
         await _clientDao.CreateAsync(ws3, "Prospect Corp");
         await _clientDao.CreateAsync(ws3, "🤝 Partnership Ltd");
@@ -220,6 +234,19 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
         tasks.Add(await _taskDao.AddTaskAsync(list5, user, "Stabilize smoke tests", priority: TaskPriority.High));
         tasks.Add(await _taskDao.AddTaskAsync(list5, user, "Add reporting screenshots", priority: TaskPriority.Medium));
 
+        // Add team members for the Team workspace
+        var member1 = await _userDao.CreatePendingUser($"sarah_{Guid.NewGuid():N}@team.timevic.com");
+        member1.UserName = "sarah_connor";
+        member1.VerificationTime = DateTime.UtcNow;
+        _passwordService.SetUserPassword(member1, Guid.NewGuid().ToString());
+        await _workspaceAccessService.ShareAccessAsync(ws, member1, MembershipAccessType.User);
+
+        var member2 = await _userDao.CreatePendingUser($"alex_{Guid.NewGuid():N}@team.timevic.com");
+        member2.UserName = "alex_murphy";
+        member2.VerificationTime = DateTime.UtcNow;
+        _passwordService.SetUserPassword(member2, Guid.NewGuid().ToString());
+        await _workspaceAccessService.ShareAccessAsync(ws, member2, MembershipAccessType.User);
+
         await SeedMemberPaymentsAsync(ws, user, new[]
         {
             new DemoMemberPaymentSeed(project1, 780, -24, "Campaign kickoff payment"),
@@ -229,7 +256,15 @@ public class LoginAsDemoRequestHandler : IAsyncRequestHandler<LoginAsDemoRequest
             new DemoMemberPaymentSeed(project4, 360, -4, "QA automation setup"),
             new DemoMemberPaymentSeed(project3, 300, -2, "Client balance adjustment")
         });
+        await SeedMemberPaymentsAsync(ws, member1, new[]
+        {
+            new DemoMemberPaymentSeed(project1, 520, -12, "Frontend implementation milestone"),
+            new DemoMemberPaymentSeed(project2, 340, -5, "Analytics integration fee")
+        });
+
         await SeedTimeEntriesAsync(ws, user, tasks);
+        await SeedTimeEntriesAsync(ws, member1, tasks.Take(4).ToList());
+        await SeedTimeEntriesAsync(ws, member2, tasks.Skip(3).Take(4).ToList());
     }
 
     private async Task<ProjectEntity> CreateDemoProjectAsync(

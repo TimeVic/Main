@@ -95,4 +95,51 @@ public class LoginAsDemoTest : BaseTest
         Assert.NotEqual(data1.User.Id, data2.User.Id);
         Assert.NotEqual(data1.User.Email, data2.User.Email);
     }
+
+    [Fact]
+    public async Task ShouldReturnSoloModeByDefault()
+    {
+        var response = await GetRequestAsAnonymousAsync(Url);
+        response.EnsureSuccessStatusCode();
+
+        var responseData = await response.GetJsonDataAsync<LoginResponseDto>();
+        Assert.NotNull(responseData.User.SelectedWorkspace);
+        Assert.Equal(WorkspaceMode.Solo, responseData.User.SelectedWorkspace.Mode);
+    }
+
+    [Fact]
+    public async Task ShouldReturnTeamModeWhenRequested()
+    {
+        var response = await GetRequestAsAnonymousAsync($"{Url}?mode=Team");
+        response.EnsureSuccessStatusCode();
+
+        var responseData = await response.GetJsonDataAsync<LoginResponseDto>();
+        Assert.NotNull(responseData.User.SelectedWorkspace);
+        Assert.Equal(WorkspaceMode.Team, responseData.User.SelectedWorkspace.Mode);
+    }
+
+    [Fact]
+    public async Task ShouldReturnSoloModeWhenRequestedExplicitly()
+    {
+        var response = await GetRequestAsAnonymousAsync($"{Url}?mode=Solo");
+        response.EnsureSuccessStatusCode();
+
+        var responseData = await response.GetJsonDataAsync<LoginResponseDto>();
+        Assert.NotNull(responseData.User.SelectedWorkspace);
+        Assert.Equal(WorkspaceMode.Solo, responseData.User.SelectedWorkspace.Mode);
+    }
+
+    [Fact]
+    public async Task ShouldCreateWorkspacesWithDifferentModes()
+    {
+        var response = await GetRequestAsAnonymousAsync(Url);
+        response.EnsureSuccessStatusCode();
+
+        var demoUser = await _userDao.GetLastDemoUserAsync();
+        Assert.NotNull(demoUser);
+
+        var workspaces = await _userDao.GetUsersWorkspaces(demoUser);
+        Assert.Contains(workspaces, w => w.Mode == WorkspaceMode.Solo);
+        Assert.Contains(workspaces, w => w.Mode == WorkspaceMode.Team);
+    }
 }
