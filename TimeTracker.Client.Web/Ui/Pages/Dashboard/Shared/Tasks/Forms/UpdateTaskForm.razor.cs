@@ -219,7 +219,9 @@ public partial class UpdateTaskForm: IDisposable
     {
         if (member == null)
             return;
-        _model.UserId = member.Id;
+        // Fix: Use User.Id instead of WorkspaceMember.Id for task assignment
+        _model.UserId = member.User.Id;
+        _task.User = member.User;
         SubmitForm();
     }
 
