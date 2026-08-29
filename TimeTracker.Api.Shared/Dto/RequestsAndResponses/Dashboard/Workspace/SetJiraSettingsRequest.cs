@@ -8,7 +8,7 @@ namespace TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.Workspace
     public class SetJiraSettingsRequest : IRequest<WorkspaceSettingsJiraDto>
     {
         [Required]
-        [Url]
+        [IsUrl]
         [StringLength(255)]
         public virtual string? Url { get; set; }
         

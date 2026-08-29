@@ -1,21 +1,28 @@
+@using System.Globalization
 @using Fluxor
-@using TimeTracker.Business.Extensions
 @using TimeTracker.Client.Core.Store.Auth
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
-<span class="amount-display @Class">
-    <span>@FormattedAmount</span>
+<span class="amount-display inline-flex items-baseline @Class">
+    @if (!string.IsNullOrWhiteSpace(CurrencySymbol))
+    {
+        <span class="amount-symbol mr-0.5 text-[0.8em] font-normal opacity-70 select-none">@CurrencySymbol</span>
+    }
+    <span class="amount-value font-inherit">@FormattedNumber</span>
 </span>
 
 @code {
     [Inject]
-    public IState<AuthState> AuthState { get; set; }
+    public IState<AuthState> AuthState { get; set; } = null!;
 
     [Parameter]
     public decimal Amount { get; set; }
 
     [Parameter]
-    public string Class { get; set; }
+    public string Class { get; set; } = string.Empty;
 
-    private string FormattedAmount => Amount.ToMoneyFormat(AuthState.Value.Workspace?.Currency.Symbol);
+    private string CurrencySymbol => AuthState.Value.Workspace?.Currency?.Symbol ?? "$";
+
+    private string FormattedNumber => Amount.ToString("#,##0.00", CultureInfo.InvariantCulture);
 }
+
