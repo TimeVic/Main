@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
@@ -74,9 +74,26 @@ public partial class MembersDropDown
     
     protected override void UpdateSelectedItem()
     {
-        _selectedItem = _list.FirstOrDefault(
-            item => (_userId is not null && item.User.Id == _userId) || item.Id.ToString() == _selectedId
-        );
+        if (!string.IsNullOrEmpty(_selectedId) && _selectedId != Guid.Empty.ToString())
+        {
+            _selectedItem = _list.FirstOrDefault(item => item.Id.ToString() == _selectedId);
+            if (_selectedItem != null)
+            {
+                _userId = _selectedItem.User.Id;
+            }
+        }
+        else if (_userId.HasValue && _userId.Value != Guid.Empty)
+        {
+            _selectedItem = _list.FirstOrDefault(item => item.User.Id == _userId.Value);
+            if (_selectedItem != null)
+            {
+                _selectedId = _selectedItem.Id.ToString();
+            }
+        }
+        else
+        {
+            _selectedItem = null;
+        }
     }
 
     private Task OnOpenChanged(bool isOpen)

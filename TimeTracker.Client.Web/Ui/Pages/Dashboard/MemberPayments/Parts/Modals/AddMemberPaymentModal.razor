@@ -1,4 +1,4 @@
-﻿@using LumexUI
+@using LumexUI
 @using LumexUI.Common
 @using LumexUI.Shared.Icons
 @using TimeTracker.Client.Core.Constants.Ui
@@ -58,7 +58,7 @@
                             Size="Size.Small"
                             Required="true"
                             @bind-Value="@model.Amount"
-                            Label="@DashboardLocalizer["Received"].Value"/>
+                            Label="@DashboardLocalizer["Amount"].Value"/>
                         <CustomValidationMessage For="@(() => model.Amount)" />
                     </div>
                     <div class="md:col-span-2">

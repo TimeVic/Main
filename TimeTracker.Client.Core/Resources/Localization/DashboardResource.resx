@@ -34,6 +34,7 @@
   <data name="Clients" xml:space="preserve"><value>Clients</value></data>
   <data name="Payments" xml:space="preserve"><value>Payments</value></data>
   <data name="MemberPayments" xml:space="preserve"><value>Member Payments</value></data>
+  <data name="MemberPayments_PaidOut" xml:space="preserve"><value>Paid Out</value></data>
   <data name="ClientPayments" xml:space="preserve"><value>Client Payments</value></data>
   <data name="PaymentsReport" xml:space="preserve"><value>Payments report</value></data>
   <data name="Money" xml:space="preserve"><value>Money</value></data>
@@ -309,7 +310,7 @@
   <data name="EditClientPayment" xml:space="preserve"><value>Edit client payment</value></data>
   <data name="EditClientPaymentHelper" xml:space="preserve"><value>Update the amount, date, client, project, or note.</value></data>
   <data name="SavedCurrentWorkspace" xml:space="preserve"><value>Saved for the current workspace</value></data>
-  <data name="MemberPaymentsDescription" xml:space="preserve"><value>Track payments received from clients for completed work on workspace projects.</value></data>
+  <data name="MemberPaymentsDescription" xml:space="preserve"><value>Track payments made to workspace team members for completed work.</value></data>
   <data name="NoPaymentsAddedHelper" xml:space="preserve"><value>No payments added yet. Use the add button to create the first payment.</value></data>
   <data name="Report" xml:space="preserve"><value>Report</value></data>
   <data name="BillableValueTrackedWork" xml:space="preserve"><value>Billable value of tracked work</value></data>
