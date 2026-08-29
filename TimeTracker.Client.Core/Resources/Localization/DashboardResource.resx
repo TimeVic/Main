@@ -1001,4 +1001,12 @@
   <data name="WorkspaceModeInfoCard_Note_Team_Prefix" xml:space="preserve"><value>Why can't the mode be changed?</value></data>
   <data name="WorkspaceModeInfoCard_Note_Team_Text" xml:space="preserve"><value>We lock the workspace mode to prevent historical financial reports, member balances, and shared client links from breaking. If you need a simple workspace without controls, you can create a Solo workspace in 10 seconds</value></data>
   <data name="WorkspaceModeInfoCard_Note_Team_Link" xml:space="preserve"><value>Create Workspace ➕</value></data>
+  <data name="Support_Tooltip" xml:space="preserve"><value>Support &amp; Feedback</value></data>
+  <data name="Support_Modal_Title" xml:space="preserve"><value>💬 Support &amp; Feedback</value></data>
+  <data name="Support_Modal_Description" xml:space="preserve"><value>TimeVic is in active public beta. We read and process every piece of feedback manually. Found a bug, a calculation error, or want to suggest a feature? Let's talk!</value></data>
+  <data name="Support_Btn_Discord" xml:space="preserve"><value>Join our Discord Server</value></data>
+  <data name="Support_Btn_Discord_Description" xml:space="preserve"><value>Chat directly with developers and community</value></data>
+  <data name="Support_Btn_Email" xml:space="preserve"><value>Email us at {0}</value></data>
+  <data name="Support_Btn_Email_Description" xml:space="preserve"><value>For private inquiries and detailed bug reports</value></data>
+  <data name="Support_Close" xml:space="preserve"><value>Close</value></data>
 </root>
