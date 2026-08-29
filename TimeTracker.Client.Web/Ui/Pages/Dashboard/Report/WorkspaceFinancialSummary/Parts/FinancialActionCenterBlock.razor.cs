@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components;
+using TimeTracker.Api.Shared.Dto.Model.Report.WorkspaceFinancialSummary;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Client.Core.Services.UI;
 
@@ -7,7 +8,7 @@ namespace TimeTracker.Client.Web.Ui.Pages.Dashboard.Report.WorkspaceFinancialSum
 public partial class FinancialActionCenterBlock
 {
     [Parameter]
-    public EventCallback<Guid> OnPayMember { get; set; }
+    public EventCallback<WorkspaceFinancialMemberBalanceDto> OnPayMember { get; set; }
 
     [Parameter]
     public EventCallback<(Guid ClientId, string ClientName)> OnShareClient { get; set; }

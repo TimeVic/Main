@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using LumexUI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -21,6 +21,12 @@ public partial class AddMemberPaymentModal : IDisposable
 
     [Parameter]
     public Guid InitialMemberId { get; set; }
+
+    [Parameter]
+    public decimal? InitialAmount { get; set; }
+
+    [Parameter]
+    public Guid InitialProjectId { get; set; }
     
     [Inject]
     public ILogger<AddMemberPaymentModal> _logger { get; set; }
@@ -55,6 +61,14 @@ public partial class AddMemberPaymentModal : IDisposable
             if (InitialMemberId != Guid.Empty)
             {
                 model.MemberId = InitialMemberId;
+            }
+            if (InitialAmount.HasValue && InitialAmount.Value > 0)
+            {
+                model.Amount = InitialAmount.Value;
+            }
+            if (InitialProjectId != Guid.Empty)
+            {
+                model.ProjectId = InitialProjectId;
             }
         }
 

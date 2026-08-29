@@ -34,6 +34,7 @@
   <data name="Clients" xml:space="preserve"><value>Клієнти</value></data>
   <data name="Payments" xml:space="preserve"><value>Оплати</value></data>
   <data name="MemberPayments" xml:space="preserve"><value>Оплати учасникам</value></data>
+  <data name="MemberPayments_PaidOut" xml:space="preserve"><value>Виплачено</value></data>
   <data name="ClientPayments" xml:space="preserve"><value>Оплати клієнтів</value></data>
   <data name="PaymentsReport" xml:space="preserve"><value>Звіт по оплатах</value></data>
   <data name="Money" xml:space="preserve"><value>Гроші</value></data>
@@ -309,7 +310,7 @@
   <data name="EditClientPayment" xml:space="preserve"><value>Редагувати оплату клієнта</value></data>
   <data name="EditClientPaymentHelper" xml:space="preserve"><value>Оновіть суму, дату, клієнта, проєкт або примітку.</value></data>
   <data name="SavedCurrentWorkspace" xml:space="preserve"><value>Збережено для поточного workspace</value></data>
-  <data name="MemberPaymentsDescription" xml:space="preserve"><value>Фіксуйте оплати за виконану роботу по проєктах workspace.</value></data>
+  <data name="MemberPaymentsDescription" xml:space="preserve"><value>Фіксуйте виплати учасникам за виконану роботу по проєктах workspace.</value></data>
   <data name="NoPaymentsAddedHelper" xml:space="preserve"><value>Оплат ще немає. Натисніть додати, щоб створити першу оплату.</value></data>
   <data name="Report" xml:space="preserve"><value>Звіт</value></data>
   <data name="BillableValueTrackedWork" xml:space="preserve"><value>Оплачувана сума затреканої роботи</value></data>
