@@ -123,9 +123,18 @@ public partial class MyTimeEntriesListBlock
         Dispatcher.Dispatch(new LoadListAction());
     }
 
+    private TimeEntryApprovalBannerBlock? _approvalBanner;
+
     private async Task OnSubmitForApprovalTimeEntry(TimeEntryDto entry)
     {
-        await ApiService.TimeEntryApprovalSubmitAsync(entry.Id);
-        Dispatcher.Dispatch(new LoadListAction());
+        var updatedEntry = await ApiService.TimeEntryApprovalSubmitAsync(entry.Id);
+        if (updatedEntry != null)
+        {
+            Dispatcher.Dispatch(new UpdateTimeEntryAction(updatedEntry));
+            if (_approvalBanner != null)
+            {
+                await _approvalBanner.RefreshStatusAsync();
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Fluxor;
+using Fluxor;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Business.Common.Constants;
 // using TimeTracker.Client.Core.Store.Tasks;
@@ -116,23 +116,73 @@ public class TimeEntryReducers
     [ReducerMethod]
     public static TimeEntryState UpdateTimeEntryActionReducer(TimeEntryState state, UpdateTimeEntryAction action)
     {
-        state.List = state.List.Select(item =>
+        var list = state.List.Select(item =>
         {
             if (item.Id == action.TimeEntry.Id)
+            {
                 item.UpdateFrom(action.TimeEntry);
+            }
             return item;
         }).ToList();
-        state.FilteredList = state.FilteredList.Select(item =>
+
+        var filteredList = state.FilteredList.Select(item =>
         {
             if (item.Id == action.TimeEntry.Id)
+            {
                 item.UpdateFrom(action.TimeEntry);
+            }
             return item;
         }).ToList();
-        if (state.ActiveEntry != null && state.ActiveEntry?.Id == action.TimeEntry.Id)
+
+        var activeEntry = state.ActiveEntry;
+        if (activeEntry != null && activeEntry.Id == action.TimeEntry.Id)
         {
-            state.ActiveEntry.UpdateFrom(action.TimeEntry);
+            activeEntry.UpdateFrom(action.TimeEntry);
         }
-        return state;
+
+        return state with
+        {
+            List = list,
+            FilteredList = filteredList,
+            ActiveEntry = activeEntry
+        };
+    }
+
+    [ReducerMethod]
+    public static TimeEntryState UpdateTimeEntriesActionReducer(TimeEntryState state, UpdateTimeEntriesAction action)
+    {
+        var updatedMap = action.TimeEntries.ToDictionary(item => item.Id);
+
+        var list = state.List.Select(item =>
+        {
+            if (updatedMap.TryGetValue(item.Id, out var updated))
+            {
+                item.UpdateFrom(updated);
+            }
+            return item;
+        }).ToList();
+
+        var filteredList = state.FilteredList.Select(item =>
+        {
+            if (updatedMap.TryGetValue(item.Id, out var updated))
+            {
+                item.UpdateFrom(updated);
+            }
+            return item;
+        }).ToList();
+
+        var activeEntry = state.ActiveEntry;
+        if (activeEntry != null && updatedMap.TryGetValue(activeEntry.Id, out var updatedActive))
+        {
+            activeEntry.UpdateFrom(updatedActive);
+        }
+
+        return state with
+        {
+            List = list,
+            FilteredList = filteredList,
+            ActiveEntry = activeEntry
+        };
     }
     
     [ReducerMethod]

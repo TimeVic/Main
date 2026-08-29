@@ -63,10 +63,13 @@ public partial class TimeEntryApprovalBannerBlock
             var startDate = now.StartOfWeek();
             var endDate = startDate.AddDays(6).EndOfDay();
 
-            await ApiService.TimeEntryApprovalSubmitPeriodAsync(startDate, endDate);
+            var response = await ApiService.TimeEntryApprovalSubmitPeriodAsync(startDate, endDate);
+            if (response?.Items != null && response.Items.Any())
+            {
+                Dispatcher.Dispatch(new UpdateTimeEntriesAction(response.Items));
+            }
 
             await RefreshStatusAsync();
-            Dispatcher.Dispatch(new LoadListAction());
             await OnSubmitted.InvokeAsync();
         }
         catch
