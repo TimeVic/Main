@@ -1,4 +1,4 @@
-﻿using TimeTracker.Api.Shared.Dto;
+using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.Task;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.TimeEntry;
@@ -28,6 +28,8 @@ public record struct AddTimeEntryToListAction(TimeEntryDto TimeEntry);
 public record struct SaveTimeEntryAction(TimeEntryDto TimeEntry, bool IsSetProjectDefaults = false);
 
 public record struct UpdateTimeEntryAction(TimeEntryDto TimeEntry);
+
+public record struct UpdateTimeEntriesAction(ICollection<TimeEntryDto> TimeEntries);
 
 public record struct SetTimeEntryIsListLoading(bool IsLoading);
 

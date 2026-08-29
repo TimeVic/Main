@@ -103,6 +103,21 @@ public partial class UserPaymentReportPage
         return DashboardLocalizer["UserPaymentReport_FullySettled"].Value;
     }
 
+    private string GetOutstandingBadgeLabel(decimal outstanding)
+    {
+        if (outstanding > 0)
+        {
+            return DashboardLocalizer["UserPaymentReport_ToPayout"].Value;
+        }
+
+        if (outstanding < 0)
+        {
+            return DashboardLocalizer["UserPaymentReport_Prepaid"].Value;
+        }
+
+        return DashboardLocalizer["UserPaymentReport_FullySettled"].Value;
+    }
+
     private static string GetStatusBadgeClass(decimal outstanding)
     {
         return outstanding > 0
@@ -117,20 +132,36 @@ public partial class UserPaymentReportPage
 
     private static string GetOutstandingTextClass(decimal outstanding)
     {
-        return outstanding > 0 ? "text-red-700" : "text-emerald-700";
+        if (outstanding > 0)
+        {
+            return "text-emerald-600";
+        }
+
+        return "text-slate-900";
     }
 
     private static string GetOutstandingCardClass(decimal outstanding)
     {
-        return outstanding > 0
-            ? "border-red-200 bg-red-50/40"
-            : "border-emerald-200 bg-emerald-50/40";
+        if (outstanding < 0)
+        {
+            return "border border-amber-200/80 bg-amber-50/40";
+        }
+
+        return "border border-slate-200 bg-white";
     }
 
     private static string GetOutstandingBadgeClass(decimal outstanding)
     {
-        return outstanding > 0
-            ? "bg-red-100/80 text-red-700 border border-red-200"
-            : "bg-emerald-100/80 text-emerald-700 border border-emerald-200";
+        if (outstanding > 0)
+        {
+            return "bg-emerald-50 text-emerald-700 border border-emerald-200/60";
+        }
+
+        if (outstanding < 0)
+        {
+            return "bg-amber-100 text-amber-800 border border-amber-200";
+        }
+
+        return "bg-slate-100 text-slate-600 border border-slate-200";
     }
 }

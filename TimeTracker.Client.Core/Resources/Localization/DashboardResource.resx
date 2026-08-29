@@ -1009,4 +1009,9 @@
   <data name="Support_Btn_Email" xml:space="preserve"><value>Email us at {0}</value></data>
   <data name="Support_Btn_Email_Description" xml:space="preserve"><value>For private inquiries and detailed bug reports</value></data>
   <data name="Support_Close" xml:space="preserve"><value>Close</value></data>
+  <data name="UserPaymentReport_ToPayout" xml:space="preserve"><value>To Payout</value></data>
+  <data name="UserPaymentReport_Prepaid" xml:space="preserve"><value>Prepaid</value></data>
+  <data name="TaskModal_MoreOptions" xml:space="preserve"><value>More options</value></data>
+  <data name="TaskModal_FewerOptions" xml:space="preserve"><value>Fewer options</value></data>
+  <data name="Validation_InvalidUrl" xml:space="preserve"><value>Please enter a valid URL (e.g. https://example.com)</value></data>
 </root>

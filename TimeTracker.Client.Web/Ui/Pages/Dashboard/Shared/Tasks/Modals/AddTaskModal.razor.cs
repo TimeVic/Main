@@ -37,9 +37,15 @@ public partial class AddTaskModal
     private AddRequest model = new();
     private bool _isLoading = false;
     private bool _isValid = false;
+    private bool _isShowMoreOptions = false;
     private EditForm _form;
     private LumexModal modal;
     private TaskListDto? _selectedTaskList;
+
+    private void ToggleMoreOptions()
+    {
+        _isShowMoreOptions = !_isShowMoreOptions;
+    }
 
     protected override void OnParametersSet()
     {

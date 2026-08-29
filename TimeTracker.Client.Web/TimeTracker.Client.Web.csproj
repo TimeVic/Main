@@ -344,8 +344,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <!-- Include Server directory for SSR/Landing page scoped LESS styles (e.g. FaqPage.razor.less) -->
         <LessFiles
-            Include="Ui\**\*.less"
+            Include="Ui\**\*.less;Server\**\*.less"
             Exclude="node_modules\**\*.less;wwwroot\**\*.less;styles\**\*.less;Ignore\**\*.less"
         />
         <GeneratedLessCssFiles Include="@(LessFiles->'%(RelativeDir)%(Filename).css')" />

@@ -36,8 +36,9 @@
             Title="@DashboardLocalizer["MoneyOverviewBlock_UnpaidByClients"].Value"
             HelperText="@DashboardLocalizer["OutstandingBalanceHelper"].Value"
             TooltipText="@DashboardLocalizer["ClientBalancesTableBlock_DueTooltip"].Value"
-            Variant="@(_totals?.ClientOutstanding > 0 ? "danger" : "neutral")"
-            Emphasis="@(_totals?.ClientOutstanding > 0)"
+            Variant="@GetClientOutstandingVariant(_totals?.ClientOutstanding ?? 0)"
+            BadgeText="@GetClientOutstandingBadge(_totals?.ClientOutstanding ?? 0)"
+            Emphasis="@((_totals?.ClientOutstanding ?? 0) != 0)"
             IconClass="fa-solid fa-triangle-exclamation">
             <Value>
                 <AmountDisplay Amount="@(_totals?.ClientOutstanding ?? 0)"/>
@@ -105,4 +106,17 @@
 
     private WorkspaceFinancialSummaryTotalsDto? _totals
         => _data?.Totals;
+
+    private string GetClientOutstandingVariant(decimal outstanding)
+    {
+        if (outstanding < 0) return "amber";
+        return "neutral";
+    }
+
+    private string GetClientOutstandingBadge(decimal outstanding)
+    {
+        if (outstanding > 0) return DashboardLocalizer["UserPaymentReport_UnpaidDebt"].Value;
+        if (outstanding < 0) return DashboardLocalizer["UserPaymentReport_Prepaid"].Value;
+        return string.Empty;
+    }
 }
