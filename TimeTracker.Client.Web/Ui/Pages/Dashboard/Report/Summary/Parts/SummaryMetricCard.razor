@@ -4,7 +4,11 @@
     <LumexCardBody Class="flex h-full flex-col p-4">
         <div class="flex items-start justify-between gap-3">
             <p class="@TitleClass" title="@TooltipText">@Title</p>
-            @if (!string.IsNullOrWhiteSpace(IconClass))
+            @if (!string.IsNullOrWhiteSpace(BadgeText))
+            {
+                <span class="@BadgeClass">@BadgeText</span>
+            }
+            else if (!string.IsNullOrWhiteSpace(IconClass))
             {
                 <span class="@IconContainerClass">
                     <i class="@IconClass"></i>
@@ -55,6 +59,9 @@
     public string IconClass { get; set; } = string.Empty;
 
     [Parameter]
+    public string BadgeText { get; set; } = string.Empty;
+
+    [Parameter]
     public string ActionText { get; set; } = string.Empty;
 
     [Parameter]
@@ -69,6 +76,7 @@
             {
                 "success" => $"{baseClass} border-emerald-100 bg-emerald-50/50",
                 "danger" => $"{baseClass} border-red-200 bg-red-100/80 shadow-md shadow-red-100/70",
+                "warning" or "amber" => $"{baseClass} border-amber-200/80 bg-amber-50/40",
                 _ => $"{baseClass} border-slate-200 bg-white"
             };
         }
@@ -82,6 +90,7 @@
             {
                 "success" => "text-xs font-semibold uppercase tracking-wide text-emerald-700",
                 "danger" => "text-xs font-semibold uppercase tracking-wide text-red-600",
+                "warning" or "amber" => "text-xs font-semibold uppercase tracking-wide text-amber-800",
                 _ => "text-xs font-semibold uppercase tracking-wide text-slate-500"
             };
         }
@@ -96,6 +105,7 @@
             {
                 "success" => "text-emerald-700",
                 "danger" => "text-red-700",
+                "warning" or "amber" => "text-slate-900",
                 _ => "text-slate-900"
             };
             return $"mt-2 {sizeClass} leading-tight {colorClass}";
@@ -104,9 +114,12 @@
 
     private string HelperClass
     {
-        get => Variant == "danger"
-            ? "mt-1 text-xs font-medium text-red-700"
-            : "mt-1 text-xs text-slate-500";
+        get => Variant switch
+        {
+            "danger" => "mt-1 text-xs font-medium text-red-700",
+            "warning" or "amber" => "mt-1 text-xs text-amber-700",
+            _ => "mt-1 text-xs text-slate-500"
+        };
     }
 
     private string IconContainerClass
@@ -117,7 +130,22 @@
             {
                 "success" => "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs",
                 "danger" => "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-200 text-red-700 text-xs",
+                "warning" or "amber" => "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-800 text-xs",
                 _ => "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 text-xs"
+            };
+        }
+    }
+
+    private string BadgeClass
+    {
+        get
+        {
+            return Variant switch
+            {
+                "success" => "inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/60",
+                "danger" => "inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium bg-red-50 text-red-700 border border-red-200",
+                "warning" or "amber" => "inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200",
+                _ => "inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200"
             };
         }
     }

@@ -71,28 +71,28 @@
                             </td>
                         </tr>
                     }
-                    <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
+                    <tr class="border-t-2 border-slate-200/80 bg-slate-50 font-semibold text-slate-900">
                         <td class="px-3 py-2">
                             @DashboardLocalizer["Total"]
                         </td>
                         <td class="px-3 py-2"></td>
-                        <td class="px-3 py-2 text-right">
+                        <td class="px-3 py-2 text-right font-mono text-xs text-slate-900">
                             @items.Aggregate(TimeSpan.Zero, (a, i) => a + i.Duration).ToReadableShortString()
                         </td>
-                        <td class="px-3 py-2 text-right">
+                        <td class="px-3 py-2 text-right font-semibold text-slate-900">
                             <AmountDisplay Amount="@items.Sum(i => i.ClientEarned)"/>
                         </td>
                         @{
                             var totalMargin = items.Sum(i => i.EstimatedMargin);
                             var totalEarned = items.Sum(i => i.ClientEarned);
                         }
-                        <td class="px-3 py-2 text-right">
+                        <td class="px-3 py-2 text-right font-semibold text-slate-900">
                             <AmountDisplay Amount="@items.Sum(i => i.TeamCost)"/>
                         </td>
-                        <td class="px-3 py-2 text-right @(totalMargin < 0 ? "text-red-700" : "text-emerald-700")">
+                        <td class="px-3 py-2 text-right font-semibold @(totalMargin < 0 ? "text-red-700" : "text-emerald-700")">
                             <AmountDisplay Amount="@totalMargin"/>
                         </td>
-                        <td class="px-3 py-2 text-right">
+                        <td class="px-3 py-2 text-right font-semibold text-slate-900">
                             @(totalEarned == 0 ? "—" : $"{Math.Round(totalMargin / totalEarned * 100, 0)}%")
                         </td>
                     </tr>

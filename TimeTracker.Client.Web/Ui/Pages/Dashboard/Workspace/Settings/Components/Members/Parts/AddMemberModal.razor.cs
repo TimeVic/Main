@@ -10,7 +10,7 @@ public partial class AddMemberModal
     private sealed class InviteModel
     {
         [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.EmailAddress]
+        [System.ComponentModel.DataAnnotations.EmailAddress(ErrorMessage = "Please enter a valid email address (e.g. user@example.com)")]
         public string Email { get; set; } = string.Empty;
     }
 

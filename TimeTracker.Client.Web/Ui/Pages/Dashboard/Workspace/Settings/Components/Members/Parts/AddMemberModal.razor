@@ -35,11 +35,9 @@
                         Type="InputType.Email"
                         Placeholder="member@email.com"
                         Variant="InputVariant.Outlined"
+                        ShowValidationState="true"
                         @bind-Value="_model.Email"/>
-                    <CustomValidationMessage For="@(() => _model.Email)"/>
                 </div>
-
-                <CustomValidationSummary/>
             </EditForm>
         </LumexModalBody>
         <LumexModalFooter>
