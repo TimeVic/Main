@@ -1,0 +1,77 @@
+@using LumexUI
+@using LumexUI.Common
+@using LumexUI.Shared.Icons
+@inherits BaseReactiveComponent
+
+<LumexModal
+    Open="IsOpened"
+    OnClose="@OnCloseModal"
+    Size="ModalSize.Small"
+    @ref="_modal">
+    <LumexModalContent>
+        <LumexModalHeader Class="flex items-center gap-3">
+            <div class="flex items-start gap-3.5">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 ring-1 ring-blue-100">
+                    <i class="fa-solid fa-headset text-lg" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-slate-900">
+                        @DashboardLocalizer["Support_Modal_Title"]
+                    </h3>
+                    <p class="mt-1 text-xs leading-relaxed text-slate-500">
+                        @DashboardLocalizer["Support_Modal_Description"]
+                    </p>
+                </div>
+            </div>
+        </LumexModalHeader>
+
+        <LumexModalBody Class="space-y-3 pt-2">
+            <a
+                href="@DiscordUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex w-full items-center gap-3.5 rounded-2xl bg-[#5865F2] p-4 text-left text-white shadow-sm transition-all hover:bg-[#4752C4] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#5865F2]">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white transition-transform group-hover:scale-105">
+                    <i class="fa-brands fa-discord text-xl" aria-hidden="true"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="text-sm font-semibold leading-tight">
+                        @DashboardLocalizer["Support_Btn_Discord"]
+                    </div>
+                    <div class="mt-0.5 text-xs text-white/80">
+                        @DashboardLocalizer["Support_Btn_Discord_Description"]
+                    </div>
+                </div>
+                <i class="fa-solid fa-arrow-up-right-from-square shrink-0 text-xs text-white/70 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true"></i>
+            </a>
+
+            <a
+                href="@EmailMailtoHref"
+                class="group flex w-full items-center gap-3.5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-left text-slate-800 transition-all hover:border-slate-300 hover:bg-slate-100/80 hover:shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-slate-700 shadow-xs ring-1 ring-slate-200 transition-transform group-hover:scale-105">
+                    <i class="fa-regular fa-envelope text-lg text-slate-600" aria-hidden="true"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="text-sm font-semibold leading-tight text-slate-900">
+                        @string.Format(DashboardLocalizer["Support_Btn_Email"].Value, SupportEmail)
+                    </div>
+                    <div class="mt-0.5 text-xs text-slate-500">
+                        @DashboardLocalizer["Support_Btn_Email_Description"]
+                    </div>
+                </div>
+                <i class="fa-solid fa-arrow-right shrink-0 text-xs text-slate-400 transition-transform group-hover:translate-x-0.5" aria-hidden="true"></i>
+            </a>
+        </LumexModalBody>
+
+        <LumexModalFooter>
+            <CustomButton
+                FullWidth="@true"
+                OnClick="@OnCloseModal"
+                Color="@ThemeColor.Default"
+                Variant="@Variant.Outlined"
+                Radius="@Radius.Medium">
+                @DashboardLocalizer["Support_Close"]
+            </CustomButton>
+        </LumexModalFooter>
+    </LumexModalContent>
+</LumexModal>

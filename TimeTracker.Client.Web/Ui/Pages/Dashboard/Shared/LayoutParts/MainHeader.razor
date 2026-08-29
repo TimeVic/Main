@@ -5,6 +5,7 @@
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.TimeEntry
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Components
 @using TimeTracker.Client.Web.Ui.Pages.Dashboard.Workspace.Settings.Components.Members.Parts
+@using TimeTracker.Client.Web.Ui.Pages.Dashboard.Shared.Modals
 @using TimeTracker.Client.Web.Ui.Shared.Components.Layout
 @inherits BaseReactiveComponent
 
@@ -21,6 +22,10 @@
         IsOpened="_isInviteTeamModalOpened"
         IsOpenedChanged="@((isOpened) => _isInviteTeamModalOpened = isOpened)" />
 }
+
+<SupportModal
+    IsOpened="_isSupportModalOpened"
+    IsOpenedChanged="@((isOpened) => _isSupportModalOpened = isOpened)" />
 
 <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
     <LumexNavbar
@@ -56,6 +61,16 @@
         </LumexNavbarContent>
 
         <LumexNavbarContent Align="@Align.End" Class="shrink-0 gap-2">
+            <LumexNavbarItem>
+                <button
+                    type="button"
+                    class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200"
+                    title="@DashboardLocalizer["Support_Tooltip"]"
+                    aria-label="@DashboardLocalizer["Support_Tooltip"]"
+                    @onclick="@OpenSupportModal">
+                    <i class="fa-regular fa-circle-question text-lg" aria-hidden="true"></i>
+                </button>
+            </LumexNavbarItem>
             @if (IsTeamInvitationAvailable)
             {
                 <LumexNavbarItem>

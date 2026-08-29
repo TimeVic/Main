@@ -1004,6 +1004,14 @@
   <data name="WorkspaceModeInfoCard_Note_Team_Prefix" xml:space="preserve"><value>Чому не можна змінити режим?</value></data>
   <data name="WorkspaceModeInfoCard_Note_Team_Text" xml:space="preserve"><value>Ми блокуємо зміну режиму «на льоту», щоб ваші історичні фінансові звіти, баланси виплат та надіслані клієнтам посилання не попливли через випадкову зміну налаштувань. Якщо вам потрібен простий простір без контролю — ви можете створити Solo-воркспейс за 10 секунд</value></data>
   <data name="WorkspaceModeInfoCard_Note_Team_Link" xml:space="preserve"><value>Створити воркспейс ➕</value></data>
+  <data name="Support_Tooltip" xml:space="preserve"><value>Підтримка та відгуки</value></data>
+  <data name="Support_Modal_Title" xml:space="preserve"><value>💬 Зворотний зв'язок та підтримка</value></data>
+  <data name="Support_Modal_Description" xml:space="preserve"><value>TimeVic знаходиться на стадії активної публічної бети. Ми читаємо та розбираємо кожен відгук вручну. Знайшли баг, помилку в розрахунках або хочете запропонувати фічу? Зв'яжіться з нами!</value></data>
+  <data name="Support_Btn_Discord" xml:space="preserve"><value>Приєднатися до нашого Discord</value></data>
+  <data name="Support_Btn_Discord_Description" xml:space="preserve"><value>Спілкуйтеся напряму з розробниками та спільнотою</value></data>
+  <data name="Support_Btn_Email" xml:space="preserve"><value>Написати нам на {0}</value></data>
+  <data name="Support_Btn_Email_Description" xml:space="preserve"><value>Для приватних запитів та детальних звітів про помилки</value></data>
+  <data name="Support_Close" xml:space="preserve"><value>Закрити</value></data>
   <data name="UserPaymentReport_ToPayout" xml:space="preserve"><value>До виплати</value></data>
   <data name="UserPaymentReport_Prepaid" xml:space="preserve"><value>Аванс</value></data>
   <data name="TaskModal_MoreOptions" xml:space="preserve"><value>Додаткові параметри</value></data>

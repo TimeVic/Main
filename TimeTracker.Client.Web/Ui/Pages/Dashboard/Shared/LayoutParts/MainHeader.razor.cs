@@ -42,6 +42,7 @@ public partial class MainHeader : IDisposable
     
     private bool _isShowAddWorkspaceModal = false;
     private bool _isInviteTeamModalOpened;
+    private bool _isSupportModalOpened;
     private bool IsWorkspaceCreationAvailable => WorkspaceState.Value.IsLoaded
         && WorkspaceState.Value.List.Count(item => item.IsCreatedByCurrentUser && item.IsDefault == false)
             < GlobalConstants.MaxActiveCreatedWorkspaces;
@@ -82,6 +83,12 @@ public partial class MainHeader : IDisposable
     private Task OpenInviteTeamModal()
     {
         _isInviteTeamModalOpened = true;
+        return Task.CompletedTask;
+    }
+
+    private Task OpenSupportModal()
+    {
+        _isSupportModalOpened = true;
         return Task.CompletedTask;
     }
 
