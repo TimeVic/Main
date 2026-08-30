@@ -12,6 +12,18 @@ public interface IUserDao: IDomainService
     
     Task<UserEntity?> GetByEmail(string email);
 
+    Task<UserEntity?> GetByLogin(string login);
+
+    Task<UserEntity?> GetByLoginOrEmail(string loginOrEmail);
+
+    Task<ICollection<UserEntity>> FindByLogin(string query, int take = 10);
+
+    Task<string> GenerateUniqueLogin(string email);
+
+    Task<bool> IsLoginExistsAsync(string login, Guid? excludeUserId = null);
+
+    Task<UserEntity> ChangeLoginAsync(UserEntity user, string newLogin);
+
     Task<UserEntity?> GetById(Guid id);
 
     Task<UserEntity> CreatePendingUser(string email);

@@ -72,6 +72,14 @@ public interface IApiService
 
     Task<UserDto?> UserGetCurrentAsync();
 
+    Task<UserDto?> UserUpdateSettingsAsync(UpdateSettingsRequest request);
+
+    Task<UserDto?> UserChangeLoginAsync(string login);
+
+    Task<SearchResponse?> UserSearchAsync(string query, int take = 10);
+
+    Task<bool> UserCheckLoginAsync(string login);
+
     Task UserChangePasswordAsync(ChangePasswordRequest request);
 
     Task LogoutAsync();

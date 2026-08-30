@@ -19,6 +19,7 @@ public class UserProfile : Profile
                     Id = src.Id,
                     UserName = src.UserName,
                     Email = src.Email,
+                    Login = src.Login,
                     Timezone = src.Timezone,
                     Language = mapper.Mapper.Map<LanguageDto>(src.Language),
                     Avatar = latestAvatar != null ? mapper.Mapper.Map<StoredFileDto>(latestAvatar) : null

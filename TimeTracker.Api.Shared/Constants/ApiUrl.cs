@@ -18,6 +18,9 @@ public class ApiUrl
     public const string SetNotificationToken = "dashboard/user/set-notification-token";
     public const string UserSelectWorkspace = "dashboard/user/select-workspace";
     public const string UserUpdateSettings = "dashboard/user/update-settings";
+    public const string UserChangeLogin = "dashboard/user/change-login";
+    public const string UserSearch = "dashboard/user/search";
+    public const string UserCheckLogin = "dashboard/user/check-login";
     public const string UserChangePassword = "dashboard/user/change-password";
     #endregion
 
@@ -219,7 +222,7 @@ public class ApiUrl
     #endregion
     
     #region Messaging
-    
+
     public const string MessagingChannelInit = "messaging/channel/init";
     public const string MessagingChannelCreate = "messaging/channel/create";
     public const string MessagingChannelGetList = "messaging/channel/get-list";

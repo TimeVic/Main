@@ -56,6 +56,30 @@ public class LoginTest: BaseTest
         Assert.NotNull(actualAccessToken);
         Assert.Contains(actualAccessToken.JwtTokens, item => item.Token == jwtToken);
     }
+
+    [Fact]
+    public async Task ShouldLoginWithLoginHandle()
+    {
+        var expectedPassword = "test password";
+        var user = await UserSeeder.CreateActivatedAsync(expectedPassword);
+        Assert.NotNull(user.Login);
+
+        var response = await PostRequestAsAnonymousAsync(Url, new LoginRequest()
+        {
+            Email = user.Login,
+            Password = expectedPassword,
+            ReCaptcha = "captcha"
+        });
+        response.EnsureSuccessStatusCode();
+        var responseData = await response.GetJsonDataAsync<LoginResponseDto>();
+        var jwtToken = response.GetSetCookieValue(HttpCookieKeyEnum.JwtToken.GetKey());
+        var accessToken = response.GetSetCookieValue(HttpCookieKeyEnum.AccessToken.GetKey());
+
+        Assert.True(_jwtService.IsValidJwt(jwtToken!));
+        Assert.NotEmpty(accessToken);
+        Assert.Equal(user.Id, responseData.User.Id);
+        Assert.Equal(user.Login, responseData.User.Login);
+    }
     
     [Fact]
     public async Task ShouldFailIfIncorrectPassword()

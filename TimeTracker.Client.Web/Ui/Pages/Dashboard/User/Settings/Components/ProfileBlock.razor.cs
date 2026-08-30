@@ -174,6 +174,7 @@ public partial class ProfileBlock
             Id = user.Id,
             UserName = user.UserName,
             Email = user.Email,
+            Login = user.Login,
             Timezone = user.Timezone,
             DefaultWorkspace = user.DefaultWorkspace,
             SelectedWorkspace = user.SelectedWorkspace,

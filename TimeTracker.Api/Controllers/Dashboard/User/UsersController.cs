@@ -45,6 +45,30 @@ public class UsersController(ILifetimeScope scope) : MainApiControllerBase(scope
             .For<UserDto>()
             .With(request);
 
+    [HttpPost("change-login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> ChangeLogin([FromBody] ChangeLoginRequest request)
+        => this.RequestAsync()
+            .For<UserDto>()
+            .With(request);
+
+    [HttpPost("search")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> Search([FromBody] SearchRequest request)
+        => this.RequestAsync()
+            .For<SearchResponse>()
+            .With(request);
+
+    [HttpPost("check-login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public Task<IActionResult> CheckLogin([FromBody] CheckLoginRequest request)
+        => this.RequestAsync()
+            .For<CheckLoginResponse>()
+            .With(request);
+
     [HttpPost("change-password")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

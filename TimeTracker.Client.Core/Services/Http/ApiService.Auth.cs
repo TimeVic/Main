@@ -56,6 +56,39 @@ namespace TimeTracker.Client.Core.Services.Http
             return await GetAsync<UserDto?>(ApiUrl.UserCurrent);
         }
 
+        public async Task<UserDto?> UserChangeLoginAsync(string login)
+        {
+            return await PostAsync<UserDto?>(ApiUrl.UserChangeLogin, new ChangeLoginRequest
+            {
+                Login = login
+            });
+        }
+
+        public async Task<SearchResponse?> UserSearchAsync(string query, int take = 10)
+        {
+            return await PostAsync<SearchResponse?>(ApiUrl.UserSearch, new SearchRequest
+            {
+                Query = query,
+                Take = take
+            });
+        }
+
+        public async Task<bool> UserCheckLoginAsync(string login)
+        {
+            try
+            {
+                var response = await PostAsync<CheckLoginResponse?>(ApiUrl.UserCheckLogin, new CheckLoginRequest
+                {
+                    Login = login
+                });
+                return response?.IsAvailable ?? false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public async Task LogoutAsync()
         {
             await PostAsync<object>(ApiUrl.Logout);

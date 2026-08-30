@@ -15,6 +15,15 @@ public static class StringUtils
         }
         return paths.First().ToLower();
     }
+
+    public static string NormalizeLogin(string? login)
+    {
+        if (string.IsNullOrWhiteSpace(login))
+        {
+            return string.Empty;
+        }
+        return login.Trim().TrimStart('@').ToLower();
+    }
     
     public static string BytesToString(long byteCount)
     {

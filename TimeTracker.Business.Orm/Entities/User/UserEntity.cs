@@ -10,6 +10,7 @@ namespace TimeTracker.Business.Orm.Entities.User
     {
         public virtual string? UserName { get; set; }
         public virtual required string Email { get; set; }
+        public virtual string? Login { get; set; }
         public virtual required string Timezone { get; set; }
         public virtual string? VerificationToken { get; set; }
         public virtual DateTime? VerificationTime { get; set; }
@@ -34,7 +35,9 @@ namespace TimeTracker.Business.Orm.Entities.User
 
         public virtual bool IsActivated => VerificationTime.HasValue;
 
-        public virtual string Name => string.IsNullOrEmpty(UserName) ? Email : UserName;
+        public virtual string Name => !string.IsNullOrWhiteSpace(UserName) 
+            ? UserName 
+            : (!string.IsNullOrWhiteSpace(Login) ? $"@{Login}" : Email);
         
         public virtual WorkspaceEntity DefaultWorkspace => CreatedWorkspaces.First(item => item.IsDefault);
         
