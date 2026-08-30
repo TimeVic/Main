@@ -38,6 +38,10 @@ namespace TimeTracker.Business.Orm.Entities.User
         public virtual string Name => !string.IsNullOrWhiteSpace(UserName) 
             ? UserName 
             : (!string.IsNullOrWhiteSpace(Login) ? $"@{Login}" : Email);
+
+        public virtual string FormattedLogin => !string.IsNullOrWhiteSpace(Login)
+            ? $"@{Login}"
+            : Email;
         
         public virtual WorkspaceEntity DefaultWorkspace => CreatedWorkspaces.First(item => item.IsDefault);
         

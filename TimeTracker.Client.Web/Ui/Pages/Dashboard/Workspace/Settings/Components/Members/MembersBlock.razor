@@ -49,8 +49,8 @@
             Title="@DashboardLocalizer["Name"].Value"
             Property="@(p => p.User.Name)"/>
         <LumexUI.PropertyColumn
-            Title="@DashboardLocalizer["Email"].Value"
-            Property="@(p => !string.IsNullOrEmpty(p.User.Login) ? $"@{p.User.Login}" : p.User.Email)"/>
+            Title="@DashboardLocalizer["Login"].Value"
+            Property="@(p => p.User.FormattedLogin)"/>
         <LumexUI.PropertyColumn
             Title="@DashboardLocalizer["MembersBlock_Access"].Value"
             Property="@(p => p.Access.ToString())"/>

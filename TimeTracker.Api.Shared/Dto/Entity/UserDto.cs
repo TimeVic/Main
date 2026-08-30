@@ -18,6 +18,11 @@ public class UserDto: BaseDto
     {
         get => !string.IsNullOrEmpty(UserName) ? UserName : (!string.IsNullOrEmpty(Login) ? $"@{Login}" : Email);
     }
+
+    public string FormattedLogin
+    {
+        get => !string.IsNullOrEmpty(Login) ? $"@{Login}" : Email;
+    }
     
     public string Initials
     {

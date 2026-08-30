@@ -70,4 +70,31 @@ public class CheckLoginTest : BaseTest
         var actualResponse = await response.GetJsonDataAsync<CheckLoginResponse>();
         Assert.True(actualResponse.IsAvailable);
     }
+
+    [Theory]
+    [InlineData("a")]
+    [InlineData("ab")]
+    [InlineData("invalid user")]
+    [InlineData("user@domain")]
+    [InlineData("user#name")]
+    public async Task ShouldReturnBadRequestIfLoginIsInvalid(string invalidLogin)
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new CheckLoginRequest
+        {
+            Login = invalidLogin
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ShouldReturnBadRequestIfLoginIsEmpty()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new CheckLoginRequest
+        {
+            Login = string.Empty
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }

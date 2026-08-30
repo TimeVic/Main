@@ -75,4 +75,30 @@ public class SearchTest : BaseTest
         Assert.NotEmpty(actualResponse.Items);
         Assert.Contains(actualResponse.Items, u => u.Login == uniqueLogin);
     }
+
+    [Fact]
+    public async Task ShouldReturnEmptyIfUserNotFound()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new SearchRequest
+        {
+            Query = "non_existing_user_query_9999999"
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualResponse = await response.GetJsonDataAsync<SearchResponse>();
+        Assert.NotNull(actualResponse);
+        Assert.Empty(actualResponse.Items);
+        Assert.Equal(0, actualResponse.TotalCount);
+    }
+
+    [Fact]
+    public async Task ShouldReturnBadRequestIfQueryIsEmpty()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new SearchRequest
+        {
+            Query = string.Empty
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }

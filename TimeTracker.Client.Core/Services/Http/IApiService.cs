@@ -1,3 +1,4 @@
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
@@ -251,7 +252,7 @@ public interface IApiService
         IBrowserFile file
     );
 
-    Task<WorkspaceMemberDto?> WorkspaceMemberAddAsync(Guid workspaceId, string email);
+    Task<WorkspaceMemberDto?> WorkspaceMemberAddAsync(Guid workspaceId, string email, MembershipAccessType access = MembershipAccessType.User);
 
     Task<WorkspaceMemberDto?> WorkspaceMemberUpdateAsync(WorkspaceMemberUpdateRequest request);
 

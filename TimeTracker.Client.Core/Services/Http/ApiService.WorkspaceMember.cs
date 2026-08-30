@@ -2,17 +2,19 @@
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
 using TimeTracker.Business.Common.Constants;
+
 namespace TimeTracker.Client.Core.Services.Http
 {
     public partial class ApiService
     {
-        public async Task<WorkspaceMemberDto?> WorkspaceMemberAddAsync(Guid workspaceId, string email)
+        public async Task<WorkspaceMemberDto?> WorkspaceMemberAddAsync(Guid workspaceId, string email, MembershipAccessType access = MembershipAccessType.User)
         {
             return await PostAsync<WorkspaceMemberDto>(
                 ApiUrl.WorkspaceMemberAdd,
                 new AddRequest()
                 {
-                    Email = email
+                    Email = email,
+                    Access = access
                 }
             );
         }

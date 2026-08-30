@@ -84,4 +84,31 @@ public class ChangeLoginTest : BaseTest
         var responseData = await response.GetJsonResponseAsync<object>();
         Assert.Equal("RecordIsExistsException", responseData.ErrorCode);
     }
+
+    [Theory]
+    [InlineData("a")]
+    [InlineData("ab")]
+    [InlineData("invalid user")]
+    [InlineData("user@domain")]
+    [InlineData("user#name")]
+    public async Task ShouldReturnBadRequestIfLoginIsInvalid(string invalidLogin)
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new ChangeLoginRequest
+        {
+            Login = invalidLogin
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ShouldReturnBadRequestIfLoginIsEmpty()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new ChangeLoginRequest
+        {
+            Login = string.Empty
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }
