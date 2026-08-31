@@ -94,9 +94,12 @@ public class RegistrationService: IRegistrationService
         }
 
         var userName = StringUtils.GetUserNameFromEmail(user.Email);
+        var formattedName = !string.IsNullOrWhiteSpace(userName)
+            ? userName.FirstCharToUpper()
+            : (!string.IsNullOrWhiteSpace(user.Login) ? user.Login.FirstCharToUpper() : "My");
         var workspaceName = string.Format(
             UserResources.DefaultWorkspaceName,
-            userName?.FirstCharToUpper()
+            formattedName
         );
         var workspace = await _workspaceDao.CreateWorkspaceAsync(
             user,

@@ -1,10 +1,28 @@
-﻿namespace TimeTracker.Business.Common.Utils;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TimeTracker.Business.Common.Utils;
 
 public static class StringUtils
 {
-    public static string? GetUserNameFromEmail(string email)
+    private static readonly EmailAddressAttribute EmailValidator = new();
+
+    public static bool IsEmail(string? value)
     {
-        if (string.IsNullOrEmpty(email))
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+        var trimmed = value.Trim();
+        if (trimmed.StartsWith('@') || trimmed.EndsWith('@') || !trimmed.Contains('@'))
+        {
+            return false;
+        }
+        return EmailValidator.IsValid(trimmed);
+    }
+
+    public static string? GetUserNameFromEmail(string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
         {
             return null;
         }
@@ -13,7 +31,8 @@ public static class StringUtils
         {
             return null;
         }
-        return paths.First().ToLower();
+        var userName = paths.First().Trim().ToLower();
+        return string.IsNullOrEmpty(userName) ? null : userName;
     }
 
     public static string NormalizeLogin(string? login)

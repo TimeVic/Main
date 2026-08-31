@@ -5,6 +5,7 @@ using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.RequestsAndResponses.Dashboard.WorkspaceMember;
 using TimeTracker.Business.Common.Constants;
 using TimeTracker.Business.Common.Exceptions.Api;
+using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dao.User;
 using TimeTracker.Business.Services.Auth;
 using TimeTracker.Business.Services.Http;
@@ -48,18 +49,19 @@ namespace TimeTracker.Api.Controllers.Dashboard.WorkspaceMember.Actions
             }
 
             UserEntity? user;
-            var cleanInput = request.Email.Trim().TrimStart('@');
-            if (request.Email.Contains('@'))
+            var trimmedInput = request.Email.Trim();
+            if (StringUtils.IsEmail(trimmedInput))
             {
-                user = await _userDao.GetByEmail(request.Email.Trim());
+                user = await _userDao.GetByEmail(trimmedInput);
                 if (user is not { IsActivated: true })
                 {
-                    user = await _registrationService.CreatePendingUser(request.Email.Trim());
+                    user = await _registrationService.CreatePendingUser(trimmedInput);
                 }
             }
             else
             {
-                user = await _userDao.GetByLogin(cleanInput);
+                var cleanLogin = StringUtils.NormalizeLogin(trimmedInput);
+                user = await _userDao.GetByLogin(cleanLogin);
                 if (user == null)
                 {
                     throw new RecordNotFoundException("User with this login not found");

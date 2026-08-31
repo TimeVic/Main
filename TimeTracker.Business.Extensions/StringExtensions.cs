@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -6,6 +7,22 @@ namespace TimeTracker.Business.Extensions
 {
     public static class StringExtensions
     {
+        private static readonly EmailAddressAttribute EmailValidator = new();
+
+        public static bool IsEmail(this string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+            var trimmed = value.Trim();
+            if (trimmed.StartsWith('@') || trimmed.EndsWith('@') || !trimmed.Contains('@'))
+            {
+                return false;
+            }
+            return EmailValidator.IsValid(trimmed);
+        }
+
         public static byte[] ToByteArray(this string str)
         {
             return System.Text.UTF8Encoding.Default.GetBytes(str);
@@ -244,20 +261,17 @@ namespace TimeTracker.Business.Extensions
                 .Replace("\\r", "\n");
         }
         
-        public static string FirstCharToUpper(this string input) =>
-            input switch
-            {
-                null => throw new ArgumentNullException(nameof(input)),
-                "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
-                _ => input.First().ToString().ToUpper() + input.ToLower().Substring(1)
-            };
+        public static string FirstCharToUpper(this string? input) =>
+            string.IsNullOrEmpty(input)
+                ? string.Empty
+                : input[0].ToString().ToUpper() + (input.Length > 1 ? input[1..].ToLower() : "");
         
         public static string Truncate(this string value, int maxLength, bool isAddDots = true)
         {
             if (string.IsNullOrEmpty(value)) 
                 return value;
             var dots = isAddDots ? "..." : "";
-            return value.Length <= maxLength ? value : $"{value[..maxLength]}${dots}"; 
+            return value.Length <= maxLength ? value : $"{value[..maxLength]}{dots}"; 
         }
 
         public static byte[] GetUtf8Bytes(this string value)
