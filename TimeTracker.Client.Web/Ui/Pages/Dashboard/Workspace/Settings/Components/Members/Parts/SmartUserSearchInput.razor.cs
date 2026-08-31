@@ -1,3 +1,4 @@
+using LumexUI.Common;
 using Microsoft.AspNetCore.Components;
 using TimeTracker.Api.Shared.Dto.Entity;
 
@@ -21,6 +22,15 @@ public partial class SmartUserSearchInput : IDisposable
     public EventCallback<UserDto> OnUserSelected { get; set; }
 
     [Parameter]
+    public string? Label { get; set; }
+
+    [Parameter]
+    public LabelPlacement LabelPlacement { get; set; } = LabelPlacement.Outside;
+
+    [Parameter]
+    public InputVariant Variant { get; set; } = InputVariant.Outlined;
+
+    [Parameter]
     public string? Placeholder { get; set; }
 
     [Parameter]
@@ -35,9 +45,8 @@ public partial class SmartUserSearchInput : IDisposable
     private bool _isEmailMode;
     private CancellationTokenSource? _debounceCts;
 
-    private async Task OnInputChanged(ChangeEventArgs e)
+    private async Task OnValueChanged(string input)
     {
-        var input = e.Value?.ToString() ?? string.Empty;
         Value = input;
         await ValueChanged.InvokeAsync(Value);
 
