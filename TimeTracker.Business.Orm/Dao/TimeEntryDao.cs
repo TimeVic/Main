@@ -610,7 +610,7 @@ public class TimeEntryDao: BaseDao, ITimeEntryDao
         var raw = await Session.CreateSQLQuery(ReadSqlQuery("TimeEntry.GetApprovalSubmitters"))
             .AddScalar("UserId", NHibernateUtil.Guid)
             .AddScalar("UserName", NHibernateUtil.String)
-            .AddScalar("Email", NHibernateUtil.String)
+            .AddScalar("Login", NHibernateUtil.String)
             .AddScalar("PeriodStartDate", NHibernateUtil.DateTime)
             .AddScalar("PeriodEndDate", NHibernateUtil.DateTime)
             .AddScalar("TotalDurationSeconds", NHibernateUtil.Double)

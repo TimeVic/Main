@@ -67,7 +67,7 @@ public class GetSubmittersTest : BaseTest
         Assert.NotEmpty(actual.Items);
 
         var submitter = actual.Items.First(i => i.UserId == _developer.Id);
-        Assert.Equal(_developer.Name, submitter.UserName);
+        Assert.Equal(_developer.Login, submitter.Login);
         Assert.Equal(1, submitter.PendingCount);
         Assert.Equal(TimeEntryStatus.Pending, submitter.Status);
     }

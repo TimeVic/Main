@@ -7,7 +7,7 @@ public class TimeEntryApprovalSubmitterDto : IResponse
 {
     public Guid UserId { get; set; }
     public string UserName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
+    public string Login { get; set; } = string.Empty;
     public DateTime PeriodStartDate { get; set; }
     public DateTime PeriodEndDate { get; set; }
     public int WeekNumber { get; set; }
