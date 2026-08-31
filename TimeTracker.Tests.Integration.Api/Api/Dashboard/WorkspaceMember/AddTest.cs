@@ -115,6 +115,23 @@ public class AddTest: BaseTest
     }
 
     [Fact]
+    public async Task ShouldAddByLoginWithAtPrefix()
+    {
+        var activeUser = await _userSeeder.CreateActivatedAsync();
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            Email = $"@{activeUser.Login!}",
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualMembership = await response.GetJsonDataAsync<WorkspaceMemberDto>();
+        Assert.NotEqual(Guid.Empty, actualMembership.Id);
+        Assert.NotNull(actualMembership.User);
+        Assert.Equal(activeUser.Id, actualMembership.User.Id);
+        Assert.Equal(MembershipAccessType.User, actualMembership.Access);
+    }
+
+    [Fact]
     public async Task ShouldNotAddIfUserNotFoundByLogin()
     {
         var nonExistentLogin = "non_existent_login_" + new Random().Next(10000, 99999);
