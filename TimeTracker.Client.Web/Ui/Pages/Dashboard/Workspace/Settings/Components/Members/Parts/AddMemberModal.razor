@@ -1,5 +1,6 @@
 @using LumexUI
 @using LumexUI.Common
+@using TimeTracker.Business.Common.Constants
 @using TimeTracker.Client.Core.Ui.Shared.Components.Form.Validation
 
 @inherits BaseReactiveComponent
@@ -28,13 +29,24 @@
                 novalidate>
                 <DataAnnotationsValidator/>
 
-                <div class="pt-1">
-                    <label class="block text-xs font-semibold text-slate-700 mb-1.5">
-                        @DashboardLocalizer["AddMemberModal_MemberEmail"]
-                    </label>
-                    <SmartUserSearchInput
-                        @bind-Value="_model.EmailOrLogin" />
-                    <ValidationMessage For="@(() => _model.EmailOrLogin)" Class="text-xs text-rose-500 mt-1" />
+                <div class="space-y-4">
+                    <div class="pt-1">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5">
+                            @DashboardLocalizer["AddMemberModal_MemberEmail"]
+                        </label>
+                        <SmartUserSearchInput
+                            @bind-Value="_model.EmailOrLogin" />
+                        <ValidationMessage For="@(() => _model.EmailOrLogin)" Class="text-xs text-rose-500 mt-1" />
+                    </div>
+
+                    <div>
+                        <EnumDropDown
+                            TItem="MembershipAccessType"
+                            Label="@DashboardLocalizer["UpdateMemberModal_AccessLevel"]"
+                            AllowedValues="_allowedAccessLevels"
+                            Value="@_model.Access"
+                            ValueChanged="@(v => _model.Access = v ?? MembershipAccessType.User)"/>
+                    </div>
                 </div>
             </EditForm>
         </LumexModalBody>
