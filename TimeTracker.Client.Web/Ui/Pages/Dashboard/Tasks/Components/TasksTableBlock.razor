@@ -205,7 +205,7 @@
                                 ValueChanged="(value) => OnChangePriorityTask(task, value)"/>
                         </td>
                         <td class="hidden border-t border-slate-200 px-2 py-2 align-top lg:table-cell">
-                            <div class="flex items-center gap-2" title="@task.User?.Email">
+                            <div class="flex items-center gap-2" title="@task.User?.FormattedLogin">
                                 <UserAvatarBlock
                                     User="@task.User"
                                     SizeClass="h-7 w-7"

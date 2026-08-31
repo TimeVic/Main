@@ -1015,4 +1015,6 @@
   <data name="TaskModal_MoreOptions" xml:space="preserve"><value>More options</value></data>
   <data name="TaskModal_FewerOptions" xml:space="preserve"><value>Fewer options</value></data>
   <data name="Validation_InvalidUrl" xml:space="preserve"><value>Please enter a valid URL (e.g. https://example.com)</value></data>
+  <data name="SmartUserSearchInput_Placeholder" xml:space="preserve"><value>Enter login or email...</value></data>
+  <data name="SmartUserSearchInput_NewUserHint" xml:space="preserve"><value>✨ New user. An invite to complete registration will be sent.</value></data>
 </root>

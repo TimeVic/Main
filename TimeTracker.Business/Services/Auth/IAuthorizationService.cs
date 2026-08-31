@@ -7,7 +7,7 @@ namespace TimeTracker.Business.Services.Auth;
 
 public interface IAuthorizationService: IDomainService
 {
-    Task<AuthResultDto> Login(string email, string password);
+    Task<AuthResultDto> Login(string emailOrLogin, string password);
 
     Task<AuthResultDto> Login(UserEntity user);
 
@@ -19,7 +19,7 @@ public interface IAuthorizationService: IDomainService
 
     Guid? GetCurrentLoggedInUserId();
 
-    Task<UserMagicTokenEntity> GenerateMagicToken(string email);
+    Task<UserMagicTokenEntity> GenerateMagicToken(string emailOrLogin);
 
     Task<AuthResultDto> LoginByMagicToken(string token);
 }

@@ -49,6 +49,7 @@ public class GetCurrentTest : BaseTest
         var actualUser = await response.GetJsonDataAsync<UserDto>();
         Assert.Equal(_user.Id, actualUser.Id);
         Assert.Equal(_user.Email, actualUser.Email);
+        Assert.Equal(_user.Login, actualUser.Login);
         Assert.Equal(_user.UserName, actualUser.UserName);
         Assert.Equal(_user.Timezone, actualUser.Timezone);
         Assert.NotNull(actualUser.DefaultWorkspace);

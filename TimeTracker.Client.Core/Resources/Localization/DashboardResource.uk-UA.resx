@@ -1017,4 +1017,6 @@
   <data name="TaskModal_MoreOptions" xml:space="preserve"><value>Додаткові параметри</value></data>
   <data name="TaskModal_FewerOptions" xml:space="preserve"><value>Менше параметрів</value></data>
   <data name="Validation_InvalidUrl" xml:space="preserve"><value>Вкажіть коректну URL-адресу (наприклад, https://example.com)</value></data>
+  <data name="SmartUserSearchInput_Placeholder" xml:space="preserve"><value>Введіть логін або email...</value></data>
+  <data name="SmartUserSearchInput_NewUserHint" xml:space="preserve"><value>✨ Новий користувач. Буде надіслано інвайт для завершення реєстрації.</value></data>
 </root>

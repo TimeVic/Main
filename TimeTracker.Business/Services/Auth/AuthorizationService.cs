@@ -80,9 +80,9 @@ public class AuthorizationService: IAuthorizationService
     
     #endregion
     
-    public async Task<AuthResultDto> Login(string email, string password)
+    public async Task<AuthResultDto> Login(string emailOrLogin, string password)
     {
-        var user = await _userDao.GetByEmail(email);
+        var user = await _userDao.GetByLoginOrEmail(emailOrLogin);
         if (user is not { IsActivated: true })
         {
             throw new RecordNotFoundException();
@@ -151,9 +151,9 @@ public class AuthorizationService: IAuthorizationService
         );
     }
 
-    public async Task<UserMagicTokenEntity> GenerateMagicToken(string email)
+    public async Task<UserMagicTokenEntity> GenerateMagicToken(string emailOrLogin)
     {
-        var user = await _userDao.GetByEmail(email);
+        var user = await _userDao.GetByLoginOrEmail(emailOrLogin);
         if (user is not { IsActivated: true })
         {
             throw new RecordNotFoundException();

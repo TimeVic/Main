@@ -42,8 +42,8 @@ public class GetSubmittersRequestHandler : IAsyncRequestHandler<GetSubmittersReq
         var items = rawItems.Select(item => new TimeEntryApprovalSubmitterDto
         {
             UserId = item.UserId,
-            UserName = string.IsNullOrWhiteSpace(item.UserName) ? item.Email : item.UserName,
-            Email = item.Email,
+            UserName = string.IsNullOrWhiteSpace(item.UserName) ? item.Login : item.UserName,
+            Login = item.Login,
             PeriodStartDate = item.PeriodStartDate,
             PeriodEndDate = item.PeriodEndDate,
             WeekNumber = item.PeriodStartDate.GetIso8601WeekOfYear(),

@@ -1,3 +1,4 @@
+using TimeTracker.Business.Common.Constants;
 using TimeTracker.Api.Shared.Dto;
 using TimeTracker.Api.Shared.Dto.Entity;
 using TimeTracker.Api.Shared.Dto.Entity.GoalsTracker;
@@ -71,6 +72,14 @@ public interface IApiService
     Task<bool> CheckIsLoggedInAsync();
 
     Task<UserDto?> UserGetCurrentAsync();
+
+    Task<UserDto?> UserUpdateSettingsAsync(UpdateSettingsRequest request);
+
+    Task<UserDto?> UserChangeLoginAsync(string login);
+
+    Task<SearchResponse?> UserSearchAsync(string query, int take = 10);
+
+    Task<bool> UserCheckLoginAsync(string login);
 
     Task UserChangePasswordAsync(ChangePasswordRequest request);
 
@@ -243,7 +252,7 @@ public interface IApiService
         IBrowserFile file
     );
 
-    Task<WorkspaceMemberDto?> WorkspaceMemberAddAsync(Guid workspaceId, string email);
+    Task<WorkspaceMemberDto?> WorkspaceMemberAddAsync(Guid workspaceId, string email, MembershipAccessType access = MembershipAccessType.User);
 
     Task<WorkspaceMemberDto?> WorkspaceMemberUpdateAsync(WorkspaceMemberUpdateRequest request);
 

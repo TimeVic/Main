@@ -9,9 +9,8 @@ public partial class AddMemberModal
 {
     private sealed class InviteModel
     {
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.EmailAddress(ErrorMessage = "Please enter a valid email address (e.g. user@example.com)")]
-        public string Email { get; set; } = string.Empty;
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Please enter an email address or login")]
+        public string EmailOrLogin { get; set; } = string.Empty;
     }
 
     [Parameter]
@@ -38,7 +37,7 @@ public partial class AddMemberModal
                 ?? AuthState.Value.Workspace?.Id;
             if (workspaceId.HasValue)
             {
-                var member = await ApiService.WorkspaceMemberAddAsync(workspaceId.Value, _model.Email);
+                var member = await ApiService.WorkspaceMemberAddAsync(workspaceId.Value, _model.EmailOrLogin);
                 if (member != null)
                 {
                     Dispatcher.Dispatch(new LoadListAction(true));

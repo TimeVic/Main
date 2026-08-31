@@ -1,7 +1,7 @@
 select
     u.id as "UserId",
-    coalesce(nullif(u.user_name, ''), u.email) as "UserName",
-    u.email as "Email",
+    coalesce(nullif(u.user_name, ''), u.login, u.email) as "UserName",
+    coalesce(u.login, u.email) as "Login",
     date_trunc('week', te.start_time) as "PeriodStartDate",
     (date_trunc('week', te.start_time) + interval '6 days 23 hours 59 minutes 59 seconds') as "PeriodEndDate",
     extract(epoch from sum(te.end_time - te.start_time)) as "TotalDurationSeconds",
@@ -17,7 +17,7 @@ where te.workspace_id = :workspaceId
   and te.end_time is not null
   and te.status = :statusPending
   and wm.membership_access_type_id != :ownerAccessType
-group by u.id, u.user_name, u.email, date_trunc('week', te.start_time)
+group by u.id, u.user_name, u.login, u.email, date_trunc('week', te.start_time)
 having count(case when te.status = :statusPending then 1 end) > 0
 order by 
   date_trunc('week', te.start_time) desc,

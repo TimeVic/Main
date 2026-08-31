@@ -28,7 +28,7 @@ public partial class SubmittersListBlock
             ? Submitters
             : Submitters.Where(s =>
                 s.UserName.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase)
-                || s.Email.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase));
+                || s.Login.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase));
 
     private async Task OnSelectSubmitter(TimeEntryApprovalSubmitterDto submitter)
     {

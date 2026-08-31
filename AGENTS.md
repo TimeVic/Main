@@ -1,9 +1,12 @@
 # AGENTS.md – TimeVic (TimeTracker) Codebase Guide
 
-## Architecture Overview
+---
 
-**TimeVic** is an ASP.NET Core time-tracking platform (.NET 10, `global.json` pins SDK with `rollForward: latestMajor`). Key runnable projects:
+## 1. System & Architecture Overview
 
+**TimeVic** is an ASP.NET Core time-tracking platform (.NET 10, `global.json` pins SDK with `rollForward: latestMajor`).
+
+### Key Projects
 | Project | Role |
 |---|---|
 | `TimeTracker.Api` | REST API + SignalR WebSocket host |
@@ -12,27 +15,49 @@
 
 Solution folders in `TimeTracker.sln`: **Infrastructure** (reusable cross-cutting libs), **Business**, **Tests**.
 
+### Dependency Injection (Autofac)
+- DI uses **Autofac modules** (not standard `IServiceCollection`). Each assembly exposes modules via `RegisterAssemblyModules(assembly)`.
+- `IDomainService` → `InstancePerDependency`; `IScopedDomainService` → `InstancePerLifetimeScope`.
+- DAOs implement `IDomainService` and are resolved from scope automatically.
+- Key modules in `TimeTracker.Business/Di/Autofac/Modules/`: `DbModule`, `DomainModule`, `QueueModule`, `NotificationsModule`, `ExternalClientsModule`.
+
+### Configuration
+- `appsettings.json` → `appsettings.{ASPNETCORE_ENVIRONMENT}.json` → `appsettings.Local.json` (gitignored for local secrets).
+- DB connection key: `ConnectionStrings:DefaultConnection`.
+- Set `Hibernate:IsShowSql: true` to log SQL queries.
+
 ---
 
-## Request/Handler Pattern (NOT MediatR)
+## 2. Task Workflow & Implementation Standards
 
+- **Strict Adherence to Plan**: When an implementation plan or task specification is formed or provided, all listed items, components, DTOs, subtasks, and UX details must be strictly tracked and completed.
+- **Mandatory Pre-Completion Verification**: Before reporting a task as complete, perform a line-by-line verification against the original implementation plan and user requests to ensure no planned component, helper, validation, or flow was skipped.
+- **English Only**: Write all comments, code documentation, and commit/task notes in English.
+- **No Git Commits**: Do not create git commits directly unless explicitly requested.
+- **Issue Fix Documentation**: When adding a fix for a specific issue or bug, add a concise comment describing the resolved problem. Avoid meaningless comments like `@* Added: Invalid *@`.
+
+---
+
+## 3. Backend Architecture & API Standards
+
+### Request / Handler Pattern (NOT MediatR)
 All API endpoints use a custom `IAsyncRequestHandler<TRequest, TResponse>` pattern — **not** MediatR.
 
 **Workspace Context:**
 The current active workspace ID is passed from clients in the `Workspace-Id` HTTP header (`AuthConstants.WorkspaceIdHeaderName`), not as part of the request payload or route. Request handlers retrieve it via `_apiRequestService.GetCurrentWorkspaceId()` and resolve the entity via `_userDao.GetUsersWorkspace(user, workspaceId)`.
 
-**Controller layout:**
+**Controller Layout & Dispatch:**
 ```
 Controllers/Dashboard/TimeEntry/
-  TimeEntryController.cs          ← thin, just routes
+  TimeEntryController.cs          ← thin controller, route definitions only
   Actions/
-    StartRequestHandler.cs        ← all logic lives here
+    StartRequestHandler.cs        ← all business/action logic lives here
     StopRequestHandler.cs
 ```
 
 Controllers extend `MainApiControllerBase(ILifetimeScope scope)` and dispatch via:
 ```csharp
-// With response:
+// With response payload:
 => this.RequestAsync().For<TimeEntryDto>().With(request);
 
 // Without response (void):
@@ -41,202 +66,159 @@ Controllers extend `MainApiControllerBase(ILifetimeScope scope)` and dispatch vi
 
 Handlers implement `IAsyncRequestHandler<TRequest, TResponse>` and are auto-registered by Autofac in `ApiModule.cs` using `AsClosedTypesOf`.
 
----
+### DTOs & AutoMapper
+- One class/DTO per file.
+- Entity→DTO mapping profiles live in `TimeTracker.Api/Profiles/Api/` (one `Profile` per entity, e.g. `TimeEntryProfile`).
+- DTOs live in `TimeTracker.Api.Shared/Dto/Entity/`.
+- Request / Response types live in `TimeTracker.Api.Shared/Dto/RequestsAndResponses/`.
 
-## Dependency Injection (Autofac)
+### Exception & Error Handling
+- Domain exceptions implement `IDomainException` → intercepted by `ExceptionHandlerActionFilter` → returns HTTP 400:
+  ```json
+  { "status": "fail", "errorCode": "ExceptionClassName", "message": "..." }
+  ```
+- Use static helper methods on pre-built exceptions:
+  - `RecordNotFoundException.ThrowIfNull(entity)` (when an entity is missing)
+  - `throw new HasNoAccessException()` (when permission is denied)
+  - `throw new RecordIsExistsException()` (on unique constraint / duplication conflict)
+  - See `TimeTracker.Business.Common/Exceptions/Api`.
+- Non-domain exceptions produce HTTP 500 with `"Server error"` (details logged via Serilog).
 
-- DI uses **Autofac modules** (not `IServiceCollection`). Each assembly exposes modules via `RegisterAssemblyModules(assembly)`.
-- `IDomainService` → `InstancePerDependency`; `IScopedDomainService` → `InstancePerLifetimeScope`
-- DAOs implement `IDomainService` and are resolved from scope automatically.
-- Key modules: `DbModule`, `DomainModule`, `QueueModule`, `NotificationsModule`, `ExternalClientsModule` (all in `TimeTracker.Business/Di/Autofac/Modules/`).
-
----
-
-## ORM & Database
-
-- **NHibernate + FluentNHibernate** against **PostgreSQL** (port `5433` by default in appsettings).
-- All entities extend `AEntity` (provides `Id: Guid`, `CreatedAt`, `UpdatedAt`, `DeletedAt`, `IsDeleted`, `IsNew`).
-- IDs are **UUID v7** (`GuidV7Generator`) — always generated by the app, never the DB.
-- Mappings live in `TimeTracker.Business.Orm/Mapping/Entities/`, extend `BaseGuidMappings<T>`.
-- **`SnakeCaseConvention`** automatically converts `PascalCase` → `snake_case` for table/column names; explicit overrides go in the mapping class.
-- **Transactions**: `CommitPerformerMiddleware` wraps each request in a transaction (commit on success, rollback on exception). Do not manually commit in handlers.
-- When adding or changing DAO list methods, check for potential N+1 queries caused by lazy-loaded relationships used by DTO mapping or response construction; use explicit eager fetching/projections for those relationships.
-- **Entity State & Persistence**: Do NOT call `SaveAsync` or `SaveOrUpdateAsync` on existing entities that are already loaded/tracked in the NHibernate session. NHibernate's dirty tracking automatically detects property changes and flushes/persists them upon transaction commit (`CommitPerformerMiddleware`) or `FlushDbChanges()`. Only newly created entities (`IsNew` is true or unattached instances) require `await Session.SaveAsync(entity)` (unless handled by cascade).
-- Run/apply migrations by executing only the `TimeTracker.Migrations` project: `dotnet run --project ./TimeTracker.Migrations`
-- Init DateTime fields with DateTime.UtcNow by default 
-
----
-
-## Queue System
-
-Internal DB-backed queue (3 channels: `Default`, `Notifications`, `ExternalClient`).
+### Queue System
+Internal DB-backed queue with 3 channels: `Default`, `Notifications`, `ExternalClient`.
 
 **To enqueue work:**
 1. Create a context class implementing `IQueueItemContext`, `INotificationItemContext`, or `IExternalServiceItemContext`.
 2. Create a handler implementing `IAsyncQueueHandler<TContext>` (auto-registered via `QueueModule`).
 3. Push via `IQueueService.PushDefaultAsync(ctx)` / `PushNotificationAsync(ctx)` / `PushExternalClientAsync(ctx)`.
 
-Context type is serialized as JSON; its `FullName` is stored for handler resolution at runtime. See `QueueService.cs` and `TimeTracker.WorkerServices/Services/Queue/` for the worker loop.
+Context type is serialized as JSON; its `FullName` is stored for handler resolution at runtime. See `QueueService.cs` and `TimeTracker.WorkerServices/Services/Queue/`.
 
 ---
 
-## Exception Handling
+## 4. ORM, Database & Migrations
 
-Domain exceptions implement `IDomainException` → caught by `ExceptionHandlerActionFilter` → HTTP 400 with:
-```json
-{ "status": "fail", "errorCode": "ExceptionClassName", "message": "..." }
-```
-Non-domain exceptions → HTTP 500 with `"Server error"` (details logged via Serilog).
+### NHibernate & Entities
+- **PostgreSQL** (default port `5433` in testing/appsettings).
+- All entities extend `AEntity` (provides `Id: Guid`, `CreatedAt`, `UpdatedAt`, `DeletedAt`, `IsDeleted`, `IsNew`).
+- Primary keys are **UUID v7** (`GuidV7Generator`) — generated by the application, never the database.
+- Mappings live in `TimeTracker.Business.Orm/Mapping/Entities/` and extend `BaseGuidMappings<T>`.
+- **`SnakeCaseConvention`** converts `PascalCase` → `snake_case` automatically for table and column names; specify explicit overrides in the mapping class only when needed.
+- Initialize `DateTime` fields with `DateTime.UtcNow` by default.
 
-Use the static helpers on pre-built exceptions: `RecordNotFoundException.ThrowIfNull(entity)` or throw `new HasNoAccessException()`. See `TimeTracker.Business.Common/Exceptions/`.
+### Transactions & Persistence
+- `CommitPerformerMiddleware` wraps each HTTP request in a transaction (commits on success, rolls back on exception). Do not manually commit in handlers.
+- **Entity State & Persistence**: Do NOT call `SaveAsync` or `SaveOrUpdateAsync` on existing entities loaded in the NHibernate session. NHibernate dirty tracking automatically flushes changes on transaction commit (`CommitPerformerMiddleware`) or `FlushDbChanges()`.
+- Call `await Session.SaveAsync(entity)` **only** for newly created entities (`IsNew` is true or unattached instances).
+- **Avoid N+1 queries**: When adding or modifying DAO query methods, check for potential N+1 queries from lazy-loaded relationships during DTO mapping; use explicit eager fetching or projections.
+
+### Database Migrations
+- Create migrations using FluentMigrator mechanisms (classes, helpers, etc.).
+- Use `timestamp` column type for date/time fields.
+- Do not specify custom names for indexes created with FluentMigrator; use `Create.Index()` default naming. Specify explicit index names only for raw `CREATE INDEX` SQL.
+- Run migrations strictly via the `TimeTracker.Migrations` project:
+  ```bash
+  dotnet run --project ./TimeTracker.Migrations
+  ```
 
 ---
 
-## Testing
+## 5. Frontend & Blazor Standards
 
-Three test projects:
+### Component Structure & File Conventions
+- **Page components**: `<SomeName>Page.razor` (e.g. `LoginPage.razor`).
+- **Partial/block components**: `<SomeName>Block.razor` (e.g. `ProfileBlock.razor`).
+- **Layout components**: `<SomeName>Layout.razor` (e.g. `MainLayout.razor`).
+- **Form components**: `<SomeName>Select.razor`, `<SomeName>Input.razor`, etc.
+- **Code-behind**: Create a `*.razor.cs` file for each component when additional business logic is needed.
+- **Styles**: Create `*.razor.less` files for component-scoped styles (do **not** edit `*.razor.css` directly; CSS is generated from LESS during build and gitignored).
+- **Component Decomposition**: If a page/component exceeds 200 lines, decompose it into sub-blocks/partial components with dedicated child directories.
+- **Shared Placement**: If a component is used in more than 1 place, place it in the nearest `Shared/` directory.
 
-| Project | Type | Base class |
+### HTML & Razor Formatting Rules
+- Do not write inline HTML.
+- All HTML and Razor templates must be formatted with opening and closing tags on new lines and indented appropriately.
+- When a Blazor component has more than one attribute, place each attribute on a separate line.
+
+### Lumex UI & Tailwind CSS Guidelines
+- Built on **Tailwind CSS v4** and uses **TailwindMerge.NET** for automatic class conflict resolution.
+- **Slots**: Customize multi-slot components via child sub-components (e.g. `<LumexCardBody Class="p-4">`), slot objects (`Classes="@(new CardSlots() { Body = "p-4" })"`), or `data-slot` selectors.
+- **Forms & Inputs**:
+  - For standard dashboard forms, use `Variant="InputVariant.Outlined"` and `LabelPlacement="LabelPlacement.Outside"`.
+  - Standardize modal sizes with `Size="ModalSize.Small"` or `ModalSize.Medium` (avoid `ModalSize.Large` for small forms).
+- **Enums & Tokens**: Use Lumex enums (`ThemeColor`, `Variant`, `InputVariant`, `LabelPlacement`, `Size`) instead of hardcoded ad-hoc CSS classes.
+- **Documentation**: Refer to [https://lumexui.org/llms.txt](https://lumexui.org/llms.txt) for component specifications.
+
+### Localization Rules for UI Components
+Do not hardcode user-facing text in Razor/HTML/C# components. All visible strings must be added to localization resource files for both supported locales:
+- `en` — English (default)
+- `uk-UA` — Ukrainian
+
+**Key Guidelines:**
+- Use descriptive keys (e.g. `Hero_Title`, `Button_Save`, `Menu_Settings`, `Payments_OutstandingBalance`). Avoid generic keys like `Text1`, `Label3`.
+- Use `IStringLocalizer<T>` or project localization abstractions.
+- Keep resource keys strictly identical across both locales. Do not leave English fallbacks in `uk-UA`.
+- Do not localize brand/product names (`TimeVic`, `Jira`, `CSV`, `PDF`).
+- For public SEO pages, localize `page title`, `meta description`, `CTA labels`, `navigation labels`, and `footer labels`.
+
+**Terminology Conventions:**
+- **English**: Keep wording concise, clear, product-focused for freelancers (`earned`, `paid`, `outstanding`, `client`, `project`, `time entry`). Use short labels like `Search` instead of verbose placeholders.
+- **Ukrainian**: Adapt naturally for freelancers/small teams:
+  - `проєкт` (not `проект`)
+  - `облік часу` (for formal time tracking UI)
+  - `трекати`, `затрекано`, `затреканий` (acceptable in product context)
+  - `Earned` → `Зароблено`
+  - `Paid` → `Оплачено`
+  - `Outstanding Balance` → `Неоплачений залишок`
+  - `Time Entries` → `Записи часу`
+  - `Payments` → `Оплати`
+  - `Clients` → `Клієнти`
+  - `Projects` → `Проєкти`
+
+---
+
+## 6. Testing Standards
+
+### Test Projects Overview
+| Project | Type | Base Class / Environment |
 |---|---|---|
-| `TimeTracker.Tests.Integration.Api` | API integration (HTTP) | `BaseTest : IClassFixture<ApiCustomWebApplicationFactory>` |
-| `TimeTracker.Tests.Integration.Business` | Business/DAO integration | `BaseTest` (builds Autofac container directly) |
-| `TimeTracker.Tests.Unit.Business` | Unit | `BaseUnitTest` |
+| `TimeTracker.Tests.Integration.Api` | API integration (HTTP endpoints) | `BaseTest : IClassFixture<ApiCustomWebApplicationFactory>` |
+| `TimeTracker.Tests.Integration.Business` | Business & DAO integration | `BaseTest` (builds Autofac container directly) |
+| `TimeTracker.Tests.Unit.Business` | Unit tests | `BaseUnitTest` |
 
-**Key testing patterns:**
-- DB is wiped before each test via `IDbCleanUpService.CleanUp()` (called in base constructor).
-- Use `IUserSeeder.CreateAuthorizedAsync()` to get `(jwtToken, user, defaultWorkspace)`.
-- Use `IDataFactory<TEntity>` for Faker-generated entity stubs (`.Generate()`).
-- Call `FlushDbChanges()` before assertions that re-query the DB; use `FlushAndRefreshEntity(entity)` to reload NHibernate-tracked objects.
-- External services are mocked: `SmtpClientServiceMock`, `FirebaseClientServiceMock`, `ClickUpClientMock`, `RedmineClientMock`, `JiraClientMock`.
-- Queue processing in tests: `await QueueProcess(QueueChannel.Default)` (flushes pending items and runs handlers synchronously).
-- To generate data use factories `IDataFactory<SomeEntity>`
-- To seed data use `ISeeder<EntityName>` (e.g. `ITimeEntrySeeder`, `IWorkspaceSeeder`)
+### Test Execution Rules
+- **Run strictly sequentially**: Run test projects and test suites one at a time because they share a single test database (`port 5433`, credentials in `appsettings.Testing.json`).
+- Wait until the current `dotnet test` process exits completely before starting another run. **Never run test suites in parallel**.
+- Test database is automatically cleaned before each test via `IDbCleanUpService.CleanUp()` in `BaseTest`.
 
-**Run tests:**
 ```bash
 dotnet test ./TimeTracker.Tests.Integration.Api
 dotnet test ./TimeTracker.Tests.Integration.Business
 dotnet test ./TimeTracker.Tests.Unit.Business
 ```
 
-**Prerequisites:** PostgreSQL running on port `5433` with credentials from `appsettings.Testing.json`.
+### Test Data, Seeding & Utilities
+- **Factories**: Use `IDataFactory<TEntity>` (e.g. `_userFactory.Generate()`) for Faker-generated entity stubs.
+- **Seeders**: Use `IUserSeeder.CreateAuthorizedAsync()` to obtain `(jwtToken, user, defaultWorkspace)` or entity seeders (`ITimeEntrySeeder`, `IWorkspaceSeeder`).
+- **Session Flushing**: Call `await FlushDbChanges()` before re-querying the database in assertions; use `FlushAndRefreshEntity(entity)` to reload NHibernate tracked instances.
+- **Queue Processing**: Process background queues synchronously in tests via `await QueueProcess(QueueChannel.Default)` (or `QueueChannel.Notifications`).
+- **Mocks**: External services are pre-mocked (`SmtpClientServiceMock`, `FirebaseClientServiceMock`, `ClickUpClientMock`, `RedmineClientMock`, `JiraClientMock`).
 
-Run test projects strictly one at a time because they share the same test database.
-Wait until the current `dotnet test` process has fully exited before starting another test project. Do not run test projects, filtered test runs, or retries in parallel.
-
-**API test organization:** Keep tests for a single API URL in one dedicated test file. Do not add tests for another URL to that file; create or extend the target URL's test file instead. A test may cover multiple URLs only when the scenario requires their interaction; document that reason in the test name or a short English comment.
+### Test Organization & Coverage Requirements
+- **One Dedicated File per API Route**: Keep tests for a single API URL in one dedicated test file. Do not mix unrelated routes into one test file.
+- **Multi-URL Scenarios**: A test may cover multiple URLs only when testing their explicit interaction (document this in the test name or with a short comment).
+- **Mandatory Negative Flow Coverage**: Every new or modified API endpoint must include tests for negative and edge scenarios:
+  - Unauthorized access (`PostRequestAsAnonymousAsync` → 401 Unauthorized).
+  - Validation failures (`[Required]`, custom validation attributes, empty/malformed inputs → 400 BadRequest).
+  - Missing entities (`RecordNotFoundException` → 400 BadRequest).
+  - Duplicate / conflicting records (`RecordIsExistsException` → 400 BadRequest).
+  - Permission and role restrictions (`HasNoAccessException` → 400 BadRequest).
 
 ---
 
-## AutoMapper
+## 7. Code Style & General Conventions
 
-- Entity→DTO mappings live in `TimeTracker.Api/Profiles/Api/` (one `Profile` per entity, e.g. `TimeEntryProfile`).
-- DTOs live in `TimeTracker.Api.Shared/Dto/Entity/`.
-- Request/Response types live in `TimeTracker.Api.Shared/Dto/RequestsAndResponses/`.
-
----
-
-## Configuration
-
-`appsettings.json` → `appsettings.{ASPNETCORE_ENVIRONMENT}.json` → `appsettings.Local.json` (gitignored for local secrets). DB connection key is `ConnectionStrings:DefaultConnection`. Set `Hibernate:IsShowSql: true` to log SQL queries.
-
-## Additional requirenments
-
- - Write all comments and notes in English
- - Comments like " @* Added: Invalid *@" non needed(with simple action description)
- - Do not create GIT commits
-
-## Blazor requirenments
-  - Format of the page components: <SomeName>Page.razor(SomePage.razor)
-  - Format of the partial components: <SomeName>Block.razor(SomeBlock.razor)
-  - Format of the components which used as layout: <SomeName>Layout.razor(SomeLayout.razor)
-  - Format of the form component: <SomeName>Select.razor, <SomeName>Input.razor, etc.
-  - For a Blazor component with more than one attribute, place each attribute on a separate line.
-  - For each component create *.razor.cs file. Only if additional business logic needed.
-  - For component-scoped styles, create `*.razor.less` files, not `*.razor.css`. The build generates `*.razor.css` from LESS, and generated CSS files are gitignored.
-  - In case when page component is too big(more that 200 lines) create separate page component and partial component, create separated directory for this page component, create separated directory for this partial components.
-  - If added component used more that 1 place it should be placed in the nearest shared directory
-  - Do not write inline HTML; all HTML and Razor templates must be properly formatted with opening and closing tags/elements placed on new lines and indented appropriately.
-
-## Lumex UI Guidelines
-
-- Lumex UI is built on **Tailwind CSS v4** and uses **TailwindMerge.NET** for automatic conflict resolution when applying custom `Class` attributes.
-- **Component Slots**: Customize multi-slot components via child sub-components (e.g. `<LumexCardBody Class="p-4">`), slot objects (`Classes="@(new CardSlots() { Body = "p-4" })"`), or `data-slot` CSS selectors.
-- **Forms & Inputs**:
-  - For standard dashboard forms, use `Variant="InputVariant.Outlined"` and `LabelPlacement="LabelPlacement.Outside"` to keep input styling uniform.
-  - Standardize modal sizes with `Size="ModalSize.Small"` or `ModalSize.Medium` (avoid `ModalSize.Large` for small forms).
-- **Enums & Tokens**: Utilize Lumex enums (`ThemeColor`, `Variant`, `InputVariant`, `LabelPlacement`, `Size`) instead of ad-hoc classes whenever supported.
-- **Documentation Index**: Refer to [https://lumexui.org/llms.txt](https://lumexui.org/llms.txt) for component list and API documentation.
-
-## Database
- - Create migrations using FluentMigrator mechanism(classes, helpers, etc.) if it's possible
- - To apply/execute database migrations, you only need to run the `TimeTracker.Migrations` project: `dotnet run --project ./TimeTracker.Migrations`
- - Use 'timestamp' column type for date/time fields by default for migrations
- - Do not specify custom names for indexes created with FluentMigrator; use `Create.Index()` default naming. Specify an explicit name for indexes created with raw `CREATE INDEX` SQL.
-
-## API requests and handlers
- - Use exception which implemets IDomainException to return correct error code from the API request(TimeTracker.Business.Common/Exceptions/Api). sHow example: RecordNotFoundException.ThrowIfNull - use if record not found.
-
-## Common
- - Property or var names with boolean values should be started with prefix "Is". Incorrect: GroupByClient, Correct: IsGroupByClient 
- - Sub Classes/Interfecaes/Records and etc. should placed in the top of the class
- - Interface names should be started with prefix "I". Incorrect: ProjectService, Correct: IProjectService 
- - If added some fix of the specific issue, bug, etc., add comment with description of the resolved issue
-
-## Localization rules for UI components
-
-When creating or changing public pages or dashboard components, do not hardcode user-facing text directly in Razor/HTML/C# components.
-
-All visible UI strings must be added to localization resources for both supported locales:
-
-- `en` — English/default
-- `uk-UA` — Ukrainian
-
-Use stable, descriptive resource keys, for example:
-
-- `Hero_Title`
-- `Hero_Subtitle`
-- `Button_Save`
-- `Button_Cancel`
-- `Menu_Settings`
-- `Dashboard_TotalEarned`
-- `Payments_OutstandingBalance`
-
-Avoid generic keys like `Text1`, `Title2`, `Label3`.
-
-For English texts:
-- keep wording simple, clear, and product-focused
-- emphasize TimeVic as an income/time/payment tracking tool for freelancers
-- prefer terms like `earned`, `paid`, `outstanding`, `client`, `project`, `time entry`
-- for dashboard UI, prefer the shortest natural label that preserves the meaning; use concise labels such as `Search` instead of explanatory placeholder text when the context already makes the subject clear
-
-For Ukrainian texts:
-- do not use machine-like direct translation
-- adapt wording for Ukrainian freelancers and small teams
-- use `проєкт`, not `проект`
-- use `облік часу` for formal UI labels
-- `трекати`, `затрекано`, `затреканий` are acceptable in product/contextual text
-- for dashboard UI, prefer the shortest natural label that preserves the meaning; use concise labels such as `Пошук` instead of explanatory placeholder text when the context already makes the subject clear
-- translate key financial terms consistently:
-    - `Earned` -> `Зароблено`
-    - `Paid` -> `Оплачено`
-    - `Outstanding Balance` -> `Неоплачений залишок`
-    - `Time Entries` -> `Записи часу`
-    - `Payments` -> `Оплати`
-    - `Clients` -> `Клієнти`
-    - `Projects` -> `Проєкти`
-
-When adding a new component:
-1. Add all English strings to the `en` resource file.
-2. Add matching Ukrainian strings to the `uk-UA` resource file.
-3. Use `IStringLocalizer<T>` or the existing project localization abstraction.
-4. Keep resource keys identical between locales.
-5. Do not leave fallback English text in Ukrainian UI.
-6. Do not localize brand/product names such as `TimeVic`, `Jira`, `CSV`, `PDF`.
-
-For public SEO pages, also localize:
-- page title
-- meta description
-- CTA labels
-- navigation labels
-- footer labels
+- **Boolean Naming**: Property, field, and variable names with boolean values must start with the prefix `Is` or `Has` (e.g. `IsGroupByClient`, `HasAccess`; incorrect: `GroupByClient`).
+- **Interface Naming**: Interface names must start with `I` (e.g. `IProjectService`, `IUserDao`).
+- **Class Member Ordering**: Nested classes, interfaces, records, and types must be placed at the top of the enclosing class.
+- **One Class per File**: Keep each class, interface, DTO, and request/response type in its own separate `.cs` file.

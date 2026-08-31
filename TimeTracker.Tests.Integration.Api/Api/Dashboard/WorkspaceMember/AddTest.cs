@@ -98,6 +98,65 @@ public class AddTest: BaseTest
     }
 
     [Fact]
+    public async Task ShouldAddByLogin()
+    {
+        var activeUser = await _userSeeder.CreateActivatedAsync();
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            Email = activeUser.Login!,
+        });
+        response.EnsureSuccessStatusCode();
+
+        var actualMembership = await response.GetJsonDataAsync<WorkspaceMemberDto>();
+        Assert.NotEqual(Guid.Empty, actualMembership.Id);
+        Assert.NotNull(actualMembership.User);
+        Assert.Equal(activeUser.Id, actualMembership.User.Id);
+        Assert.Equal(MembershipAccessType.User, actualMembership.Access);
+    }
+
+    [Fact]
+    public async Task ShouldNotAddIfUserNotFoundByLogin()
+    {
+        var nonExistentLogin = "non_existent_login_" + new Random().Next(10000, 99999);
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            Email = nonExistentLogin,
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordNotFoundException().GetTypeName(), error.ErrorCode);
+    }
+
+    [Fact]
+    public async Task ShouldNotAddIfAlreadySharedByLogin()
+    {
+        var activeUser = await _userSeeder.CreateActivatedAsync();
+        await _workspaceAccessService.ShareAccessAsync(
+            _workspace,
+            activeUser,
+            MembershipAccessType.User
+        );
+
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            Email = activeUser.Login!,
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var error = await response.GetJsonResponseAsync<object>();
+        Assert.Equal(new RecordIsExistsException().GetTypeName(), error.ErrorCode);
+    }
+
+    [Fact]
+    public async Task ShouldNotAddIfEmailOrLoginIsEmpty()
+    {
+        var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()
+        {
+            Email = string.Empty,
+        });
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
     public async Task ShouldSendRegistrationInvitationToNewMember()
     {
         var response = await PostRequestAsync(Url, _jwtToken, new AddRequest()

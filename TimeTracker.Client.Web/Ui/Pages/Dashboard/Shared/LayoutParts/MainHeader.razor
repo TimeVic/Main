@@ -117,7 +117,7 @@
                                 <UserAvatarBlock User="@AuthState.Value.User" SizeClass="h-8 w-8" Class="text-[11px]" />
                                 <div class="inline-flex flex-col items-start">
                                     <span class="text-small text-default-600">@AuthState.Value.User?.Name</span>
-                                    <span class="text-tiny text-default-500">@AuthState.Value.User?.Email</span>
+                                    <span class="text-tiny text-default-500">@AuthState.Value.User?.FormattedLogin</span>
                                 </div>
                             </div>
                         </LumexDropdownItem>
@@ -174,7 +174,7 @@
             {
                 <LumexNavbarItem>
                     <LumexLink
-                        Href="@UrlService.GetDashboardUrl("workspace/settings")"
+                        Href='@UrlService.GetDashboardUrl("workspace/settings")'
                         Class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-200"
                         Underline="@Underline.None">
                         <i class="fa-solid fa-sliders" aria-hidden="true"></i>

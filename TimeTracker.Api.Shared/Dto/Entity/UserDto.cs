@@ -10,16 +10,23 @@ public class UserDto: BaseDto
     
     public string Email { get; set; } = string.Empty;
     
+    public string? Login { get; set; }
+    
     public string Timezone { get; set; } = string.Empty;
 
     public string Name
     {
-        get => string.IsNullOrEmpty(UserName) ? Email : UserName;
+        get => !string.IsNullOrEmpty(UserName) ? UserName : (!string.IsNullOrEmpty(Login) ? $"@{Login}" : Email);
+    }
+
+    public string FormattedLogin
+    {
+        get => !string.IsNullOrEmpty(Login) ? $"@{Login}" : Email;
     }
     
     public string Initials
     {
-        get => Name.GetFirstUpperLetters(2);
+        get => Name.TrimStart('@').GetFirstUpperLetters(2);
     }
     
     public WorkspaceDto? DefaultWorkspace { get; set; }

@@ -12,6 +12,7 @@ public class UserMapping: BaseGuidMappings<UserEntity>
         
         Map(x => x.UserName);
         Map(x => x.Email);
+        Map(x => x.Login);
         Map(x => x.Timezone);
         Map(x => x.VerificationToken);
         Map(x => x.VerificationTime).DateTimeNullable();

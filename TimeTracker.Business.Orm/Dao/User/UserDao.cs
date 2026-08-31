@@ -1,7 +1,9 @@
-﻿using Autofac;
+﻿using System.Text.RegularExpressions;
+using Autofac;
 using NHibernate.Linq;
 using Persistence.Transactions.Behaviors;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Utils;
 using TimeTracker.Business.Orm.Dao.Common;
 using TimeTracker.Business.Orm.Entities;
@@ -37,6 +39,88 @@ public class UserDao: BaseDao, IUserDao
             .FirstOrDefaultAsync();
     }
 
+    public async Task<UserEntity?> GetByLogin(string login)
+    {
+        var cleanLogin = StringUtils.NormalizeLogin(login);
+        return await Session.Query<UserEntity>()
+            .Where(item => item.Login == cleanLogin)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<UserEntity?> GetByLoginOrEmail(string loginOrEmail)
+    {
+        var clean = loginOrEmail.Trim().ToLower();
+        if (clean.Contains('@'))
+        {
+            return await GetByEmail(clean);
+        }
+        var cleanLogin = StringUtils.NormalizeLogin(clean);
+        return await Session.Query<UserEntity>()
+            .Where(item => item.Login == cleanLogin || item.Email == clean)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<ICollection<UserEntity>> FindByLogin(string query, int take = 10)
+    {
+        var cleanQuery = StringUtils.NormalizeLogin(query);
+        if (string.IsNullOrWhiteSpace(cleanQuery))
+        {
+            return new List<UserEntity>();
+        }
+        return await Session.Query<UserEntity>()
+            .Where(item => item.Login != null && item.Login.Contains(cleanQuery))
+            .Take(take)
+            .ToListAsync();
+    }
+
+    public async Task<string> GenerateUniqueLogin(string email)
+    {
+        var emailPrefix = StringUtils.GetUserNameFromEmail(email) ?? "user";
+        var cleanLogin = Regex.Replace(emailPrefix.ToLower(), @"[^a-z0-9]+", "_").Trim('_');
+        if (string.IsNullOrEmpty(cleanLogin))
+        {
+            cleanLogin = "user";
+        }
+        else if (cleanLogin.Length < 3)
+        {
+            cleanLogin = cleanLogin.PadRight(3, '0');
+        }
+
+        var candidate = cleanLogin;
+        var suffix = 1;
+        while (await IsLoginExistsAsync(candidate))
+        {
+            candidate = $"{cleanLogin}_{suffix}";
+            suffix++;
+        }
+        return candidate;
+    }
+
+    public async Task<bool> IsLoginExistsAsync(string login, Guid? excludeUserId = null)
+    {
+        var cleanLogin = StringUtils.NormalizeLogin(login);
+        var query = Session.Query<UserEntity>()
+            .Where(item => item.Login == cleanLogin);
+        if (excludeUserId.HasValue)
+        {
+            query = query.Where(item => item.Id != excludeUserId.Value);
+        }
+        return await query.AnyAsync();
+    }
+
+    public async Task<UserEntity> ChangeLoginAsync(UserEntity user, string newLogin)
+    {
+        var cleanLogin = StringUtils.NormalizeLogin(newLogin);
+        if (await IsLoginExistsAsync(cleanLogin, user.Id))
+        {
+            throw new RecordIsExistsException("User with this login already exists");
+        }
+        user.Login = cleanLogin;
+        user.UpdatedAt = DateTime.UtcNow;
+        await Session.SaveAsync(user);
+        return user;
+    }
+
     public async Task<UserEntity?> GetById(Guid id)
     {
         return await Session.Query<UserEntity>()
@@ -53,9 +137,11 @@ public class UserDao: BaseDao, IUserDao
     
     public async Task<UserEntity> CreatePendingUser(string email)
     {
+        var login = await GenerateUniqueLogin(email);
         var user = new UserEntity
         {
             Email = email.Trim().ToLower(),
+            Login = login,
             VerificationToken = SecurityUtil.GetRandomString(32),
             VerificationTime = null,
             PasswordHash = [],
