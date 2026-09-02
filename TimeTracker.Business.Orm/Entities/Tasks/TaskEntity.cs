@@ -14,6 +14,7 @@ namespace TimeTracker.Business.Orm.Entities.Tasks
     {
         public virtual long TaskId { get; set; }
         public virtual TaskStatus Status { get; set; }
+        public virtual ExtendedTaskStatus ExtendedStatus { get; set; }
         public virtual TaskPriority Priority { get; set; }
         public virtual required string Title { get; set; }
         public virtual string? Description { get; set; }

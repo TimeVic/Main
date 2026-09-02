@@ -25,6 +25,7 @@ public class TaskProfile : Profile
                     PositionIndex = src.PositionIndex,
                     TaskId = src.TaskId,
                     Status = src.Status,
+                    ExtendedStatus = src.ExtendedStatus,
                     Priority = src.Priority,
                     Title = src.Title,
                     Description = src.Description,

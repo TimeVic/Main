@@ -241,7 +241,7 @@ public class GetListTest: BaseTest
         var tasks = await _taskSeeder.CreateSeveralAsync(_taskList, expectedCounter);
         foreach (var task in tasks)
         {
-            task.Status = TaskStatus.InProgress;;
+            task.Status = TaskStatus.ToDo;;
             await DbSessionProvider.CurrentSession.SaveAsync(task);
         }
         
@@ -250,7 +250,7 @@ public class GetListTest: BaseTest
             TaskListId = _taskList.Id,
             Filter = new GetListFilterRequest()
             {
-                Status = TaskStatus.InProgress
+                Status = TaskStatus.ToDo
             }
         });
         response.EnsureSuccessStatusCode();

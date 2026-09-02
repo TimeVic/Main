@@ -62,7 +62,6 @@ namespace TimeTracker.Client.Core.Services.Http
                 {
                     TaskStatus.Backlog,
                     TaskStatus.ToDo,
-                    TaskStatus.InProgress,
                 },
                 SearchString = searchString,
                 EndTime = DateTime.UtcNow.AddMonths(12)

@@ -21,7 +21,7 @@ public record TasksState
 
     public bool IsTaskSaving { get; set; }
 
-    public HashSet<TaskStatus> ExpandedStatuses { get; init; } = [TaskStatus.InProgress, TaskStatus.ToDo];
+    public HashSet<TaskStatus> ExpandedStatuses { get; init; } = [TaskStatus.ToDo];
     
     public bool IsLoaded { get; set; } = false;
 

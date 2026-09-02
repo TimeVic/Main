@@ -15,11 +15,9 @@ public partial class TasksBoardBlock : IDisposable
     public IState<TasksState> TasksState { get; set; }
 
     // Keep these instances stable so task updates do not reset Virtualize's cached item range.
-    private readonly List<TaskDto> _inProgressTasks = [];
     private readonly List<TaskDto> _todoTasks = [];
     private readonly List<TaskDto> _backlogTasks = [];
     private readonly List<TaskDto> _doneTasks = [];
-    private long _inProgressTasksVersion;
     private long _todoTasksVersion;
     private long _backlogTasksVersion;
     private long _doneTasksVersion;
@@ -96,7 +94,6 @@ public partial class TasksBoardBlock : IDisposable
             GetTaskSection(task).Add(task);
         }
 
-        _inProgressTasksVersion++;
         _todoTasksVersion++;
         _backlogTasksVersion++;
         _doneTasksVersion++;
@@ -151,7 +148,6 @@ public partial class TasksBoardBlock : IDisposable
 
     private List<TaskDto> GetTaskSection(TaskDto task) => task.Status switch
     {
-        TaskStatus.InProgress => _inProgressTasks,
         TaskStatus.Backlog => _backlogTasks,
         TaskStatus.Done => _doneTasks,
         _ => _todoTasks
@@ -180,12 +176,6 @@ public partial class TasksBoardBlock : IDisposable
 
     private void IncrementVersion(List<TaskDto> tasks)
     {
-        if (ReferenceEquals(tasks, _inProgressTasks))
-        {
-            _inProgressTasksVersion++;
-            return;
-        }
-
         if (ReferenceEquals(tasks, _todoTasks))
         {
             _todoTasksVersion++;
@@ -203,7 +193,6 @@ public partial class TasksBoardBlock : IDisposable
 
     private IEnumerable<List<TaskDto>> GetTaskSections()
     {
-        yield return _inProgressTasks;
         yield return _todoTasks;
         yield return _backlogTasks;
         yield return _doneTasks;

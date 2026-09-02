@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Orm.Entities;
 using TimeTracker.Business.Orm.Entities.Tasks;
@@ -9,6 +10,7 @@ using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.ExternalClients.ClickUp.Model;
 using TimeTracker.Business.Services.ExternalClients.Dto;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Business.Services.ExternalClients.ClickUp;
 
@@ -98,6 +100,11 @@ public partial class ClickUpClient
             externalTaskId
         );
         timeEntry.Task = task;
+        if (timeEntry.IsActive)
+        {
+            task.Status = TaskStatus.ToDo;
+            await _dbSessionProvider.CurrentSession.SaveOrUpdateAsync(task);
+        }
         await _dbSessionProvider.CurrentSession.SaveAsync(timeEntry);
         return task;
     }

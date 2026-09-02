@@ -28,7 +28,6 @@ public partial class TaskCard
     {
         TaskStatus.Backlog,
         TaskStatus.ToDo,
-        TaskStatus.InProgress,
         TaskStatus.Done
     };
 

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using TimeTracker.Business.Common.Constants;
+using TimeTracker.Business.Common.Constants.Task;
 using TimeTracker.Business.Common.Exceptions.Api;
 using TimeTracker.Business.Common.Helpers;
 using TimeTracker.Business.Orm.Entities;
@@ -9,6 +10,7 @@ using TimeTracker.Business.Orm.Entities.Tasks;
 using TimeTracker.Business.Orm.Entities.User;
 using TimeTracker.Business.Orm.Entities.Workspaces;
 using TimeTracker.Business.Services.ExternalClients.Jira.Dto;
+using TaskStatus = TimeTracker.Business.Common.Constants.Task.TaskStatus;
 
 namespace TimeTracker.Business.Services.ExternalClients.Jira;
 
@@ -52,6 +54,11 @@ public partial class JiraClient
         var externalTask = await GetValidatedTaskAsync(taskList.Project.Client.Workspace, timeEntry.User, externalTaskId);
         var task = await CreateTaskAsync(taskList, timeEntry.User, externalTaskId, externalTask);
         timeEntry.Task = task;
+        if (timeEntry.IsActive)
+        {
+            task.Status = TaskStatus.ToDo;
+            await _dbSessionProvider.CurrentSession.SaveOrUpdateAsync(task);
+        }
         await _dbSessionProvider.CurrentSession.SaveAsync(timeEntry);
         return task;
     }
